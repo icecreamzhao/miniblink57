@@ -12,6 +12,7 @@
 #include "SkSystemEventTypes.h"
 #include "SkTime.h"
 
+<<<<<<< HEAD
 #define SK_EventDelayInval "\xd" \
                            "n"   \
                            "\xa" \
@@ -30,10 +31,32 @@ SkWindow::SkWindow()
 
 SkWindow::~SkWindow()
 {
+=======
+#define SK_EventDelayInval "\xd" "n" "\xa" "l"
+
+SkWindow::SkWindow()
+    : fSurfaceProps(SkSurfaceProps::kLegacyFontHost_InitType)
+    , fFocusView(NULL)
+{
+    fClicks.reset();
+    fWaitingOnInval = false;
+
+#ifdef SK_BUILD_FOR_WINCE
+    fColorType = kRGB_565_SkColorType;
+#else
+    fColorType = kN32_SkColorType;
+#endif
+
+    fMatrix.reset();
+}
+
+SkWindow::~SkWindow() {
+>>>>>>> miniblink49
     fClicks.deleteAll();
     fMenus.deleteAll();
 }
 
+<<<<<<< HEAD
 SkSurface* SkWindow::createSurface()
 {
     const SkBitmap& bm = this->getBitmap();
@@ -52,18 +75,38 @@ void SkWindow::setMatrix(const SkMatrix& matrix)
 
 void SkWindow::preConcat(const SkMatrix& matrix)
 {
+=======
+SkSurface* SkWindow::createSurface() {
+    const SkBitmap& bm = this->getBitmap();
+    return SkSurface::NewRasterDirect(bm.info(), bm.getPixels(), bm.rowBytes(), &fSurfaceProps);
+}
+
+void SkWindow::setMatrix(const SkMatrix& matrix) {
+    if (fMatrix != matrix) {
+        fMatrix = matrix;
+        this->inval(NULL);
+    }
+}
+
+void SkWindow::preConcat(const SkMatrix& matrix) {
+>>>>>>> miniblink49
     SkMatrix m;
     m.setConcat(fMatrix, matrix);
     this->setMatrix(m);
 }
 
+<<<<<<< HEAD
 void SkWindow::postConcat(const SkMatrix& matrix)
 {
+=======
+void SkWindow::postConcat(const SkMatrix& matrix) {
+>>>>>>> miniblink49
     SkMatrix m;
     m.setConcat(matrix, fMatrix);
     this->setMatrix(m);
 }
 
+<<<<<<< HEAD
 void SkWindow::resize(const SkImageInfo& info)
 {
     if (fBitmap.info() != info) {
@@ -92,6 +135,27 @@ void SkWindow::setColorType(SkColorType ct, sk_sp<SkColorSpace> cs)
 
 bool SkWindow::handleInval(const SkRect* localR)
 {
+=======
+void SkWindow::setColorType(SkColorType ct) {
+    this->resize(fBitmap.width(), fBitmap.height(), ct);
+}
+
+void SkWindow::resize(int width, int height, SkColorType ct) {
+    if (ct == kUnknown_SkColorType)
+        ct = fColorType;
+
+    if (width != fBitmap.width() || height != fBitmap.height() || ct != fColorType) {
+        fColorType = ct;
+        fBitmap.allocPixels(SkImageInfo::Make(width, height,
+                                              ct, kPremul_SkAlphaType));
+
+        this->setSize(SkIntToScalar(width), SkIntToScalar(height));
+        this->inval(NULL);
+    }
+}
+
+bool SkWindow::handleInval(const SkRect* localR) {
+>>>>>>> miniblink49
     SkIRect ir;
 
     if (localR) {
@@ -104,8 +168,13 @@ bool SkWindow::handleInval(const SkRect* localR)
         devR.round(&ir);
     } else {
         ir.set(0, 0,
+<<<<<<< HEAD
             SkScalarRoundToInt(this->width()),
             SkScalarRoundToInt(this->height()));
+=======
+               SkScalarRoundToInt(this->width()),
+               SkScalarRoundToInt(this->height()));
+>>>>>>> miniblink49
     }
     fDirtyRgn.op(ir, SkRegion::kUnion_Op);
 
@@ -113,6 +182,7 @@ bool SkWindow::handleInval(const SkRect* localR)
     return true;
 }
 
+<<<<<<< HEAD
 void SkWindow::forceInvalAll()
 {
     fDirtyRgn.setRect(0, 0,
@@ -120,13 +190,45 @@ void SkWindow::forceInvalAll()
         SkScalarCeilToInt(this->height()));
 }
 
+=======
+void SkWindow::forceInvalAll() {
+    fDirtyRgn.setRect(0, 0,
+                      SkScalarCeilToInt(this->width()),
+                      SkScalarCeilToInt(this->height()));
+}
+
+#if defined(SK_BUILD_FOR_WINCE) && defined(USE_GX_SCREEN)
+    #include <windows.h>
+    #include <gx.h>
+    extern GXDisplayProperties gDisplayProps;
+#endif
+
+>>>>>>> miniblink49
 #ifdef SK_SIMULATE_FAILED_MALLOC
 extern bool gEnableControlledThrow;
 #endif
 
+<<<<<<< HEAD
 bool SkWindow::update(SkIRect* updateArea)
 {
     if (!fDirtyRgn.isEmpty()) {
+=======
+bool SkWindow::update(SkIRect* updateArea) {
+    if (!fDirtyRgn.isEmpty()) {
+#if defined(SK_BUILD_FOR_WINCE) && defined(USE_GX_SCREEN)
+        SkBitmap bm = this->getBitmap();
+
+        char* buffer = (char*)GXBeginDraw();
+        SkASSERT(buffer);
+
+        RECT    rect;
+        GetWindowRect((HWND)((SkOSWindow*)this)->getHWND(), &rect);
+        buffer += rect.top * gDisplayProps.cbyPitch + rect.left * gDisplayProps.cbxPitch;
+
+        bm.setPixels(buffer);
+#endif
+
+>>>>>>> miniblink49
         SkAutoTUnref<SkSurface> surface(this->createSurface());
         SkCanvas* canvas = surface->getCanvas();
 
@@ -147,7 +249,11 @@ bool SkWindow::update(SkIRect* updateArea)
 #endif
 #ifdef SK_BUILD_FOR_WIN32
         //try {
+<<<<<<< HEAD
         this->draw(canvas);
+=======
+            this->draw(canvas);
+>>>>>>> miniblink49
         //}
         //catch (...) {
         //}
@@ -158,18 +264,33 @@ bool SkWindow::update(SkIRect* updateArea)
         gEnableControlledThrow = false;
 #endif
 
+<<<<<<< HEAD
+=======
+#if defined(SK_BUILD_FOR_WINCE) && defined(USE_GX_SCREEN)
+        GXEndDraw();
+#endif
+
+>>>>>>> miniblink49
         return true;
     }
     return false;
 }
 
+<<<<<<< HEAD
 bool SkWindow::handleChar(SkUnichar uni)
 {
+=======
+bool SkWindow::handleChar(SkUnichar uni) {
+>>>>>>> miniblink49
     if (this->onHandleChar(uni))
         return true;
 
     SkView* focus = this->getFocusView();
+<<<<<<< HEAD
     if (focus == nullptr)
+=======
+    if (focus == NULL)
+>>>>>>> miniblink49
         focus = this;
 
     SkEvent evt(SK_EventType_Unichar);
@@ -177,8 +298,12 @@ bool SkWindow::handleChar(SkUnichar uni)
     return focus->doEvent(evt);
 }
 
+<<<<<<< HEAD
 bool SkWindow::handleKey(SkKey key)
 {
+=======
+bool SkWindow::handleKey(SkKey key) {
+>>>>>>> miniblink49
     if (key == kNONE_SkKey)
         return false;
 
@@ -188,7 +313,11 @@ bool SkWindow::handleKey(SkKey key)
     // send an event to the focus-view
     {
         SkView* focus = this->getFocusView();
+<<<<<<< HEAD
         if (focus == nullptr)
+=======
+        if (focus == NULL)
+>>>>>>> miniblink49
             focus = this;
 
         SkEvent evt(SK_EventType_Key);
@@ -198,15 +327,24 @@ bool SkWindow::handleKey(SkKey key)
     }
 
     if (key == kUp_SkKey || key == kDown_SkKey) {
+<<<<<<< HEAD
         if (this->moveFocus(key == kUp_SkKey ? kPrev_FocusDirection : kNext_FocusDirection) == nullptr)
             this->onSetFocusView(nullptr);
+=======
+        if (this->moveFocus(key == kUp_SkKey ? kPrev_FocusDirection : kNext_FocusDirection) == NULL)
+            this->onSetFocusView(NULL);
+>>>>>>> miniblink49
         return true;
     }
     return false;
 }
 
+<<<<<<< HEAD
 bool SkWindow::handleKeyUp(SkKey key)
 {
+=======
+bool SkWindow::handleKeyUp(SkKey key) {
+>>>>>>> miniblink49
     if (key == kNONE_SkKey)
         return false;
 
@@ -216,7 +354,11 @@ bool SkWindow::handleKeyUp(SkKey key)
     //send an event to the focus-view
     {
         SkView* focus = this->getFocusView();
+<<<<<<< HEAD
         if (focus == nullptr)
+=======
+        if (focus == NULL)
+>>>>>>> miniblink49
             focus = this;
 
         //should this one be the same?
@@ -228,23 +370,36 @@ bool SkWindow::handleKeyUp(SkKey key)
     return false;
 }
 
+<<<<<<< HEAD
 void SkWindow::addMenu(SkOSMenu* menu)
 {
+=======
+void SkWindow::addMenu(SkOSMenu* menu) {
+>>>>>>> miniblink49
     *fMenus.append() = menu;
     this->onAddMenu(menu);
 }
 
+<<<<<<< HEAD
 void SkWindow::setTitle(const char title[])
 {
     if (nullptr == title) {
+=======
+void SkWindow::setTitle(const char title[]) {
+    if (NULL == title) {
+>>>>>>> miniblink49
         title = "";
     }
     fTitle.set(title);
     this->onSetTitle(title);
 }
 
+<<<<<<< HEAD
 bool SkWindow::onEvent(const SkEvent& evt)
 {
+=======
+bool SkWindow::onEvent(const SkEvent& evt) {
+>>>>>>> miniblink49
     if (evt.isType(SK_EventDelayInval)) {
         for (SkRegion::Iterator iter(fDirtyRgn); !iter.done(); iter.next())
             this->onHandleInval(iter.rect());
@@ -254,15 +409,23 @@ bool SkWindow::onEvent(const SkEvent& evt)
     return this->INHERITED::onEvent(evt);
 }
 
+<<<<<<< HEAD
 bool SkWindow::onGetFocusView(SkView** focus) const
 {
+=======
+bool SkWindow::onGetFocusView(SkView** focus) const {
+>>>>>>> miniblink49
     if (focus)
         *focus = fFocusView;
     return true;
 }
 
+<<<<<<< HEAD
 bool SkWindow::onSetFocusView(SkView* focus)
 {
+=======
+bool SkWindow::onSetFocusView(SkView* focus) {
+>>>>>>> miniblink49
     if (fFocusView != focus) {
         if (fFocusView)
             fFocusView->onFocusChange(false);
@@ -273,6 +436,7 @@ bool SkWindow::onSetFocusView(SkView* focus)
     return true;
 }
 
+<<<<<<< HEAD
 void SkWindow::onHandleInval(const SkIRect&)
 {
 }
@@ -295,12 +459,35 @@ bool SkWindow::onHandleKeyUp(SkKey)
 bool SkWindow::handleClick(int x, int y, Click::State state, void* owner,
     unsigned modifierKeys)
 {
+=======
+void SkWindow::onHandleInval(const SkIRect&) {
+}
+
+bool SkWindow::onHandleChar(SkUnichar) {
+    return false;
+}
+
+bool SkWindow::onHandleKey(SkKey) {
+    return false;
+}
+
+bool SkWindow::onHandleKeyUp(SkKey) {
+    return false;
+}
+
+bool SkWindow::handleClick(int x, int y, Click::State state, void *owner,
+                           unsigned modifierKeys) {
+>>>>>>> miniblink49
     return this->onDispatchClick(x, y, state, owner, modifierKeys);
 }
 
 bool SkWindow::onDispatchClick(int x, int y, Click::State state,
+<<<<<<< HEAD
     void* owner, unsigned modifierKeys)
 {
+=======
+                               void* owner, unsigned modifierKeys) {
+>>>>>>> miniblink49
     bool handled = false;
 
     // First, attempt to find an existing click with this owner.
@@ -313,6 +500,7 @@ bool SkWindow::onDispatchClick(int x, int y, Click::State state,
     }
 
     switch (state) {
+<<<<<<< HEAD
     case Click::kDown_State: {
         if (index != -1) {
             delete fClicks[index];
@@ -346,12 +534,48 @@ bool SkWindow::onDispatchClick(int x, int y, Click::State state,
     default:
         // Do nothing
         break;
+=======
+        case Click::kDown_State: {
+            if (index != -1) {
+                delete fClicks[index];
+                fClicks.remove(index);
+            }
+            Click* click = this->findClickHandler(SkIntToScalar(x),
+                                                  SkIntToScalar(y), modifierKeys);
+
+            if (click) {
+                click->fOwner = owner;
+                *fClicks.append() = click;
+                SkView::DoClickDown(click, x, y, modifierKeys);
+                handled = true;
+            }
+            break;
+        }
+        case Click::kMoved_State:
+            if (index != -1) {
+                SkView::DoClickMoved(fClicks[index], x, y, modifierKeys);
+                handled = true;
+            }
+            break;
+        case Click::kUp_State:
+            if (index != -1) {
+                SkView::DoClickUp(fClicks[index], x, y, modifierKeys);
+                delete fClicks[index];
+                fClicks.remove(index);
+                handled = true;
+            }
+            break;
+        default:
+            // Do nothing
+            break;
+>>>>>>> miniblink49
     }
     return handled;
 }
 
 #if SK_SUPPORT_GPU
 
+<<<<<<< HEAD
 #include "GrContext.h"
 #include "SkGr.h"
 #include "gl/GrGLInterface.h"
@@ -375,6 +599,18 @@ GrRenderTarget* SkWindow::renderTarget(const AttachmentInfo& attachmentInfo,
     desc.fConfig = grContext->caps()->srgbSupport() && SkImageInfoIsGammaCorrect(info()) && (attachmentInfo.fColorBits != 30)
         ? kSkiaGamma8888_GrPixelConfig
         : kSkia8888_GrPixelConfig;
+=======
+#include "gl/GrGLInterface.h"
+#include "gl/GrGLUtil.h"
+#include "SkGr.h"
+
+GrRenderTarget* SkWindow::renderTarget(const AttachmentInfo& attachmentInfo,
+        const GrGLInterface* interface, GrContext* grContext) {
+    GrBackendRenderTargetDesc desc;
+    desc.fWidth = SkScalarRoundToInt(this->width());
+    desc.fHeight = SkScalarRoundToInt(this->height());
+    desc.fConfig = kSkia8888_GrPixelConfig;
+>>>>>>> miniblink49
     desc.fOrigin = kBottomLeft_GrSurfaceOrigin;
     desc.fSampleCnt = attachmentInfo.fSampleCount;
     desc.fStencilBits = attachmentInfo.fStencilBits;

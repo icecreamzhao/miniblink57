@@ -33,6 +33,7 @@ namespace blink {
 
 class WebDeviceOrientationData;
 
+<<<<<<< HEAD
 class DeviceOrientationData final
     : public GarbageCollected<DeviceOrientationData> {
 public:
@@ -41,6 +42,12 @@ public:
         const Nullable<double>& beta,
         const Nullable<double>& gamma,
         bool absolute);
+=======
+class DeviceOrientationData final : public GarbageCollected<DeviceOrientationData> {
+public:
+    static DeviceOrientationData* create();
+    static DeviceOrientationData* create(const Nullable<double>& alpha, const Nullable<double>& beta, const Nullable<double>& gamma, const Nullable<bool>& absolute = false);
+>>>>>>> miniblink49
     static DeviceOrientationData* create(const WebDeviceOrientationData&);
     DEFINE_INLINE_TRACE() { }
 
@@ -51,20 +58,32 @@ public:
     bool canProvideAlpha() const;
     bool canProvideBeta() const;
     bool canProvideGamma() const;
+<<<<<<< HEAD
+=======
+    bool canProvideAbsolute() const;
+>>>>>>> miniblink49
 
     bool canProvideEventData() const;
 
 private:
     DeviceOrientationData();
+<<<<<<< HEAD
     DeviceOrientationData(const Nullable<double>& alpha,
         const Nullable<double>& beta,
         const Nullable<double>& gamma,
         bool absolute);
+=======
+    DeviceOrientationData(const Nullable<double>& alpha, const Nullable<double>& beta, const Nullable<double>& gamma, const Nullable<bool>& absolute);
+>>>>>>> miniblink49
 
     Nullable<double> m_alpha;
     Nullable<double> m_beta;
     Nullable<double> m_gamma;
+<<<<<<< HEAD
     bool m_absolute;
+=======
+    Nullable<bool> m_absolute;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

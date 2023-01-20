@@ -32,47 +32,31 @@
 #define InertEffect_h
 
 #include "core/CoreExport.h"
-#include "core/animation/AnimationEffectReadOnly.h"
+#include "core/animation/AnimationEffect.h"
 #include "core/animation/EffectModel.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-// Lightweight subset of KeyframeEffect.
-// Used to transport data for deferred KeyframeEffect construction and one off
-// Interpolation sampling.
-class CORE_EXPORT InertEffect final : public AnimationEffectReadOnly {
+class CORE_EXPORT InertEffect final : public AnimationEffect {
 public:
-    static InertEffect* create(EffectModel*,
-        const Timing&,
-        bool paused,
-        double inheritedTime);
-    void sample(Vector<RefPtr<Interpolation>>&) const;
+    static PassRefPtrWillBeRawPtr<InertEffect> create(PassRefPtrWillBeRawPtr<EffectModel>, const Timing&, bool paused, double inheritedTime);
+    void sample(OwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>>&);
     EffectModel* model() const { return m_model.get(); }
     bool paused() const { return m_paused; }
-
-    bool isInertEffect() const final { return true; }
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    void updateChildrenAndEffects() const override { }
-    double calculateTimeToEffectChange(bool forwards,
-        double inheritedTime,
-        double timeToNextIteration) const override;
+    virtual void updateChildrenAndEffects() const override { }
+    virtual double calculateTimeToEffectChange(bool forwards, double inheritedTime, double timeToNextIteration) const override;
 
 private:
-    InertEffect(EffectModel*, const Timing&, bool paused, double inheritedTime);
-    Member<EffectModel> m_model;
+    InertEffect(PassRefPtrWillBeRawPtr<EffectModel>, const Timing&, bool paused, double inheritedTime);
+    RefPtrWillBeMember<EffectModel> m_model;
     bool m_paused;
     double m_inheritedTime;
 };
-
-DEFINE_TYPE_CASTS(InertEffect,
-    AnimationEffectReadOnly,
-    animationEffect,
-    animationEffect->isInertEffect(),
-    animationEffect.isInertEffect());
 
 } // namespace blink
 

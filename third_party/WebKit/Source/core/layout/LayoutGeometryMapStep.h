@@ -29,55 +29,45 @@
 
 #include "platform/geometry/LayoutSize.h"
 #include "platform/transforms/TransformationMatrix.h"
-#include "wtf/Allocator.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
 
 namespace blink {
 
 class LayoutObject;
 
-enum GeometryInfoFlag {
-    AccumulatingTransform = 1 << 0,
-    IsNonUniform = 1
-        << 1, // Mapping depends on the input point, e.g. because of CSS columns.
-    IsFixedPosition = 1 << 2,
-    ContainsFixedPosition = 1 << 3,
-};
-typedef unsigned GeometryInfoFlags;
-
 // Stores data about how to map from one layoutObject to its container.
 struct LayoutGeometryMapStep {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     LayoutGeometryMapStep(const LayoutGeometryMapStep& o)
         : m_layoutObject(o.m_layoutObject)
         , m_offset(o.m_offset)
         , m_offsetForFixedPosition(o.m_offsetForFixedPosition)
-        , m_offsetForStickyPosition(o.m_offsetForStickyPosition)
-        , m_flags(o.m_flags)
+        , m_accumulatingTransform(o.m_accumulatingTransform)
+        , m_isNonUniform(o.m_isNonUniform)
+        , m_isFixedPosition(o.m_isFixedPosition)
+        , m_hasTransform(o.m_hasTransform)
     {
         ASSERT(!o.m_transform);
     }
-    LayoutGeometryMapStep(const LayoutObject* layoutObject,
-        GeometryInfoFlags flags)
+    LayoutGeometryMapStep(const LayoutObject* layoutObject, bool accumulatingTransform, bool isNonUniform, bool isFixedPosition, bool hasTransform)
         : m_layoutObject(layoutObject)
-        , m_flags(flags)
+        , m_accumulatingTransform(accumulatingTransform)
+        , m_isNonUniform(isNonUniform)
+        , m_isFixedPosition(isFixedPosition)
+        , m_hasTransform(hasTransform)
     {
     }
     const LayoutObject* m_layoutObject;
     LayoutSize m_offset;
-    std::unique_ptr<TransformationMatrix>
-        m_transform; // Includes offset if non-null.
-    // If m_offsetForFixedPosition could only apply to the fixed position steps,
-    // we may be able to merge with m_offsetForStickyPosition and simplify
-    // mapping.
+    OwnPtr<TransformationMatrix> m_transform; // Includes offset if non-null.
     LayoutSize m_offsetForFixedPosition;
-    LayoutSize m_offsetForStickyPosition;
-    GeometryInfoFlags m_flags;
+    bool m_accumulatingTransform;
+    bool m_isNonUniform; // Mapping depends on the input point, e.g. because of CSS columns.
+    bool m_isFixedPosition;
+    bool m_hasTransform;
 };
 
 } // namespace blink
 
-WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(
-    blink::LayoutGeometryMapStep);
+WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(blink::LayoutGeometryMapStep);
 
 #endif // LayoutGeometryMapStep_h

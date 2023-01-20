@@ -23,11 +23,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/BitVector.h"
 
 #include "wtf/LeakAnnotations.h"
 #include "wtf/PrintStream.h"
 #include "wtf/allocator/Partitions.h"
+=======
+#include "config.h"
+#include "BitVector.h"
+
+#include "wtf/LeakAnnotations.h"
+#include "wtf/PartitionAlloc.h"
+#include "wtf/Partitions.h"
+#include "wtf/PrintStream.h"
+>>>>>>> miniblink49
 #include <algorithm>
 #include <string.h>
 
@@ -36,12 +46,21 @@ namespace WTF {
 void BitVector::setSlow(const BitVector& other)
 {
     uintptr_t newBitsOrPointer;
+<<<<<<< HEAD
     if (other.isInline()) {
         newBitsOrPointer = other.m_bitsOrPointer;
     } else {
         OutOfLineBits* newOutOfLineBits = OutOfLineBits::create(other.size());
         memcpy(newOutOfLineBits->bits(), other.bits(), byteCount(other.size()));
         newBitsOrPointer = bitwiseCast<uintptr_t>(newOutOfLineBits) >> 1;
+=======
+    if (other.isInline())
+        newBitsOrPointer = other.m_bitsOrPointer;
+    else {
+        OutOfLineBits* newOutOfLineBits = OutOfLineBits::create(other.size());
+        memcpy(newOutOfLineBits->bits(), other.bits(), byteCount(other.size()));
+        newBitsOrPointer = bitwise_cast<uintptr_t>(newOutOfLineBits) >> 1;
+>>>>>>> miniblink49
     }
     if (!isInline())
         OutOfLineBits::destroy(outOfLineBits());
@@ -75,23 +94,38 @@ BitVector::OutOfLineBits* BitVector::OutOfLineBits::create(size_t numBits)
 {
     // Because of the way BitVector stores the pointer, memory tools
     // will erroneously report a leak here.
+<<<<<<< HEAD
     WTF_INTERNAL_LEAK_SANITIZER_DISABLED_SCOPE;
     numBits = (numBits + bitsInPointer() - 1) & ~(bitsInPointer() - static_cast<size_t>(1));
     size_t size = sizeof(OutOfLineBits) + sizeof(uintptr_t) * (numBits / bitsInPointer());
     void* allocation = Partitions::bufferMalloc(
         size, WTF_HEAP_PROFILER_TYPE_NAME(OutOfLineBits));
+=======
+    WTF_ANNOTATE_SCOPED_MEMORY_LEAK;
+    numBits = (numBits + bitsInPointer() - 1) & ~(bitsInPointer() - 1);
+    size_t size = sizeof(OutOfLineBits) + sizeof(uintptr_t) * (numBits / bitsInPointer());
+    void* allocation = partitionAllocGeneric(Partitions::bufferPartition(), size, "OutOfLineBits::create");
+>>>>>>> miniblink49
     OutOfLineBits* result = new (NotNull, allocation) OutOfLineBits(numBits);
     return result;
 }
 
 void BitVector::OutOfLineBits::destroy(OutOfLineBits* outOfLineBits)
 {
+<<<<<<< HEAD
     Partitions::bufferFree(outOfLineBits);
+=======
+    partitionFreeGeneric(Partitions::bufferPartition(), outOfLineBits);
+>>>>>>> miniblink49
 }
 
 void BitVector::resizeOutOfLine(size_t numBits)
 {
+<<<<<<< HEAD
     DCHECK_GT(numBits, maxInlineBits());
+=======
+    ASSERT(numBits > maxInlineBits());
+>>>>>>> miniblink49
     OutOfLineBits* newOutOfLineBits = OutOfLineBits::create(numBits);
     size_t newNumWords = newOutOfLineBits->numWords();
     if (isInline()) {
@@ -101,6 +135,7 @@ void BitVector::resizeOutOfLine(size_t numBits)
     } else {
         if (numBits > size()) {
             size_t oldNumWords = outOfLineBits()->numWords();
+<<<<<<< HEAD
             memcpy(newOutOfLineBits->bits(), outOfLineBits()->bits(),
                 oldNumWords * sizeof(void*));
             memset(newOutOfLineBits->bits() + oldNumWords, 0,
@@ -112,6 +147,15 @@ void BitVector::resizeOutOfLine(size_t numBits)
         OutOfLineBits::destroy(outOfLineBits());
     }
     m_bitsOrPointer = bitwiseCast<uintptr_t>(newOutOfLineBits) >> 1;
+=======
+            memcpy(newOutOfLineBits->bits(), outOfLineBits()->bits(), oldNumWords * sizeof(void*));
+            memset(newOutOfLineBits->bits() + oldNumWords, 0, (newNumWords - oldNumWords) * sizeof(void*));
+        } else
+            memcpy(newOutOfLineBits->bits(), outOfLineBits()->bits(), newOutOfLineBits->numWords() * sizeof(void*));
+        OutOfLineBits::destroy(outOfLineBits());
+    }
+    m_bitsOrPointer = bitwise_cast<uintptr_t>(newOutOfLineBits) >> 1;
+>>>>>>> miniblink49
 }
 
 void BitVector::dump(PrintStream& out)

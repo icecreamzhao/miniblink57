@@ -20,20 +20,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/events/ClipboardEvent.h"
 
 namespace blink {
 
-ClipboardEvent::ClipboardEvent(const AtomicString& eventType,
-    bool canBubble,
-    bool cancelable,
-    DataTransfer* clipboardData)
-    : Event(eventType, canBubble, cancelable)
-    , m_clipboardData(clipboardData)
+ClipboardEvent::ClipboardEvent()
 {
 }
 
-ClipboardEvent::~ClipboardEvent() { }
+ClipboardEvent::ClipboardEvent(const AtomicString& eventType, bool canBubble, bool cancelable, DataTransfer* clipboardData)
+    : Event(eventType, canBubble, cancelable), m_clipboardData(clipboardData)
+{
+}
+
+ClipboardEvent::~ClipboardEvent()
+{
+}
 
 const AtomicString& ClipboardEvent::interfaceName() const
 {

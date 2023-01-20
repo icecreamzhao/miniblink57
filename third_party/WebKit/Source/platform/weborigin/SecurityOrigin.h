@@ -29,6 +29,7 @@
 #ifndef SecurityOrigin_h
 #define SecurityOrigin_h
 
+<<<<<<< HEAD
 #include "base/gtest_prod_util.h"
 #include "platform/PlatformExport.h"
 #include "platform/weborigin/Suborigin.h"
@@ -36,20 +37,32 @@
 #include "wtf/ThreadSafeRefCounted.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "platform/PlatformExport.h"
+#include "wtf/ThreadSafeRefCounted.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class KURL;
+<<<<<<< HEAD
 class URLSecurityOriginMap;
 
 class PLATFORM_EXPORT SecurityOrigin : public RefCounted<SecurityOrigin> {
     WTF_MAKE_NONCOPYABLE(SecurityOrigin);
 
+=======
+class SecurityOriginCache;
+
+class PLATFORM_EXPORT SecurityOrigin : public RefCounted<SecurityOrigin> {
+>>>>>>> miniblink49
 public:
     static PassRefPtr<SecurityOrigin> create(const KURL&);
     static PassRefPtr<SecurityOrigin> createUnique();
 
     static PassRefPtr<SecurityOrigin> createFromString(const String&);
+<<<<<<< HEAD
     static PassRefPtr<SecurityOrigin> create(const String& protocol,
         const String& host,
         int port);
@@ -59,6 +72,11 @@ public:
         const String& suborigin);
 
     static void setMap(URLSecurityOriginMap*);
+=======
+    static PassRefPtr<SecurityOrigin> create(const String& protocol, const String& host, int port);
+
+    static void setCache(SecurityOriginCache*);
+>>>>>>> miniblink49
 
     // Some URL schemes use nested URLs for their security context. For example,
     // filesystem URLs look like the following:
@@ -88,11 +106,14 @@ public:
     String domain() const { return m_domain; }
     unsigned short port() const { return m_port; }
 
+<<<<<<< HEAD
     // |port()| will return 0 if the port is the default for an origin. This
     // method instead returns the effective port, even if it is the default port
     // (e.g. "http" => 80).
     unsigned short effectivePort() const { return m_effectivePort; }
 
+=======
+>>>>>>> miniblink49
     // Returns true if a given URL is secure, based either directly on its
     // own protocol, or, when relevant, on the protocol of its "inner URL"
     // Protocols like blob: and filesystem: fall into this latter category.
@@ -109,11 +130,14 @@ public:
     // familiar with Suborigins, you probably want canAccess() for now.
     // Suborigins is a spec in progress, and where it should be enforced is
     // still in flux. See https://crbug.com/336894 for more details.
+<<<<<<< HEAD
     //
     // TODO(jww): Once the Suborigin spec has become more settled, and we are
     // confident in the correctness of our implementation, canAccess should be
     // made to check the suborigin and this should be turned into
     // canAccessBypassSuborigin check, which should be the exceptional case.
+=======
+>>>>>>> miniblink49
     bool canAccessCheckSuborigins(const SecurityOrigin*) const;
 
     // Returns true if this SecurityOrigin can read content retrieved from
@@ -127,11 +151,14 @@ public:
     // Suborigins, you probably want canRequest() for now. Suborigins is a spec
     // in progress, and where it should be enforced is still in flux. See
     // https://crbug.com/336894 for more details.
+<<<<<<< HEAD
     //
     // TODO(jww): Once the Suborigin spec has become more settled, and we are
     // confident in the correctness of our implementation, canRequest should be
     // made to check the suborigin and this should be turned into
     // canRequestBypassSuborigin check, which should be the exceptional case.
+=======
+>>>>>>> miniblink49
     bool canRequestNoSuborigin(const KURL&) const;
 
     // Returns true if drawing an image from this URL taints a canvas from
@@ -148,11 +175,15 @@ public:
     // machine or over the network from a
     // cryptographically-authenticated origin, as described in
     // https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy.
+<<<<<<< HEAD
     bool isPotentiallyTrustworthy() const;
 
     // Returns a human-readable error message describing that a non-secure
     // origin's access to a feature is denied.
     static String isPotentiallyTrustworthyErrorMessage();
+=======
+    bool isPotentiallyTrustworthy(String& errorMessage) const;
+>>>>>>> miniblink49
 
     // Returns true if this SecurityOrigin can load local resources, such
     // as images, iframes, and style sheets, and can link to local URLs.
@@ -176,15 +207,22 @@ public:
     //
     // WARNING: This is an extremely powerful ability. Use with caution!
     void grantUniversalAccess();
+<<<<<<< HEAD
     bool isGrantedUniversalAccess() const { return m_universalAccess; }
+=======
+>>>>>>> miniblink49
 
     bool canAccessDatabase() const { return !isUnique(); }
     bool canAccessLocalStorage() const { return !isUnique(); }
     bool canAccessSharedWorkers() const { return !isUnique(); }
+<<<<<<< HEAD
     bool canAccessServiceWorkers() const
     {
         return !isUnique() && !hasSuborigin();
     }
+=======
+    bool canAccessServiceWorkers() const { return !isUnique(); }
+>>>>>>> miniblink49
     bool canAccessCookies() const { return !isUnique(); }
     bool canAccessPasswordManager() const { return !isUnique(); }
     bool canAccessFileSystem() const { return !isUnique(); }
@@ -215,6 +253,7 @@ public:
     // only ever be called once per SecurityOrigin(). If it is called on a
     // SecurityOrigin that has already had a suborigin assigned, it will hit a
     // RELEASE_ASSERT().
+<<<<<<< HEAD
     bool hasSuborigin() const { return !m_suborigin.name().isNull(); }
     const Suborigin* suborigin() const { return &m_suborigin; }
     void addSuborigin(const Suborigin&);
@@ -223,6 +262,16 @@ public:
     // denies access. If either SecurityOrigin sets this flag, the access
     // check will fail.
     void blockLocalAccessFromLocalOrigin();
+=======
+    void addSuborigin(const String&);
+    bool hasSuborigin() const { return !m_suboriginName.isNull(); }
+    const String& suboriginName() const { return m_suboriginName; }
+
+    // Marks a file:// origin as being in a domain defined by its path.
+    // FIXME 81578: The naming of this is confusing. Files with restricted access to other local files
+    // still can have other privileges that can be remembered, thereby not making them unique.
+    void enforceFilePathSeparation();
+>>>>>>> miniblink49
 
     // Convert this SecurityOrigin into a string. The string
     // representation of a SecurityOrigin is similar to a URL, except it
@@ -236,9 +285,12 @@ public:
     // we shouldTreatURLSchemeAsNoAccess.
     String toString() const;
     AtomicString toAtomicString() const;
+<<<<<<< HEAD
     // Same as toString above, but ignores Suborigin, if present. This is
     // generally not what you want.
     String toPhysicalOriginString() const;
+=======
+>>>>>>> miniblink49
 
     // Similar to toString(), but does not take into account any factors that
     // could make the string return "null".
@@ -246,12 +298,20 @@ public:
     AtomicString toRawAtomicString() const;
 
     // This method checks for equality, ignoring the value of document.domain
+<<<<<<< HEAD
     // (and whether it was set) but considering the host. It is used for
     // postMessage.
     bool isSameSchemeHostPort(const SecurityOrigin*) const;
     bool isSameSchemeHostPortAndSuborigin(const SecurityOrigin*) const;
 
     static bool areSameSchemeHostPort(const KURL& a, const KURL& b);
+=======
+    // (and whether it was set) but considering the host. It is used for postMessage.
+    bool isSameSchemeHostPort(const SecurityOrigin*) const;
+    bool isSameSchemeHostPortAndSuborigin(const SecurityOrigin*) const;
+
+    bool needsDatabaseIdentifierQuirkForFiles() const { return m_needsDatabaseIdentifierQuirkForFiles; }
+>>>>>>> miniblink49
 
     static const KURL& urlWithUniqueSecurityOrigin();
 
@@ -261,6 +321,7 @@ public:
     //   - Grant universal access.
     //   - Grant loading of local resources.
     //   - Use path-based file:// origins.
+<<<<<<< HEAD
     struct PrivilegeData {
         bool m_universalAccess;
         bool m_canLoadLocalResources;
@@ -282,6 +343,20 @@ private:
     FRIEND_TEST_ALL_PREFIXES(SecurityOriginTest, SuboriginsParsing);
     FRIEND_TEST_ALL_PREFIXES(SecurityOriginTest,
         SuboriginsIsSameSchemeHostPortAndSuborigin);
+=======
+    //
+    // Note: It is dangerous to change the privileges of an origin
+    // at any other time than during initialization.
+    void transferPrivilegesFrom(const SecurityOrigin&);
+
+private:
+    // FIXME: After the merge with the Chromium repo, this should be refactored
+    // to use FRIEND_TEST in base/gtest_prod_util.h.
+    friend class SecurityOriginTest;
+    friend class SecurityOriginTest_Suborigins_Test;
+    friend class SecurityOriginTest_SuboriginsParsing_Test;
+    friend class SecurityOriginTest_SuboriginsIsSameSchemeHostPortAndSuborigin_Test;
+>>>>>>> miniblink49
 
     SecurityOrigin();
     explicit SecurityOrigin(const KURL&);
@@ -289,6 +364,7 @@ private:
 
     // FIXME: Rename this function to something more semantic.
     bool passesFileCheck(const SecurityOrigin*) const;
+<<<<<<< HEAD
     void buildRawString(StringBuilder&, bool includeSuborigin) const;
 
     String toRawStringIgnoreSuborigin() const;
@@ -297,19 +373,34 @@ private:
         String&,
         String&,
         String&);
+=======
+    void buildRawString(StringBuilder&) const;
+
+    static bool deserializeSuboriginAndHost(const String&, String&, String&);
+>>>>>>> miniblink49
 
     String m_protocol;
     String m_host;
     String m_domain;
+<<<<<<< HEAD
     Suborigin m_suborigin;
     unsigned short m_port;
     unsigned short m_effectivePort;
+=======
+    String m_suboriginName;
+    unsigned short m_port;
+>>>>>>> miniblink49
     bool m_isUnique;
     bool m_universalAccess;
     bool m_domainWasSetInDOM;
     bool m_canLoadLocalResources;
+<<<<<<< HEAD
     bool m_blockLocalAccessFromLocalOrigin;
     bool m_isUniqueOriginPotentiallyTrustworthy;
+=======
+    bool m_enforceFilePathSeparation;
+    bool m_needsDatabaseIdentifierQuirkForFiles;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

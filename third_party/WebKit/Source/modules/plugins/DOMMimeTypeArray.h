@@ -22,22 +22,37 @@
 #define DOMMimeTypeArray_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "modules/plugins/DOMMimeType.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+=======
+#include "core/frame/DOMWindowProperty.h"
+#include "modules/plugins/DOMMimeType.h"
+#include "platform/heap/Handle.h"
+#include "wtf/Forward.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class LocalFrame;
 class PluginData;
 
+<<<<<<< HEAD
 class DOMMimeTypeArray final : public GarbageCollected<DOMMimeTypeArray>,
                                public ScriptWrappable,
                                public ContextClient {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(DOMMimeTypeArray);
 
+=======
+class DOMMimeTypeArray final : public GarbageCollectedFinalized<DOMMimeTypeArray>, public ScriptWrappable, public DOMWindowProperty {
+    DEFINE_WRAPPERTYPEINFO();
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMMimeTypeArray);
+>>>>>>> miniblink49
 public:
     static DOMMimeTypeArray* create(LocalFrame* frame)
     {

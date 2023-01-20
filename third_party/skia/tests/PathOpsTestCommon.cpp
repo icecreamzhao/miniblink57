@@ -13,8 +13,12 @@
 #include "SkReduceOrder.h"
 #include "SkTSort.h"
 
+<<<<<<< HEAD
 static double calc_t_div(const SkDCubic& cubic, double precision, double start)
 {
+=======
+static double calc_t_div(const SkDCubic& cubic, double precision, double start) {
+>>>>>>> miniblink49
     const double adjust = sqrt(3.) / 36;
     SkDCubic sub;
     const SkDCubic* cPtr;
@@ -37,8 +41,12 @@ static double calc_t_div(const SkDCubic& cubic, double precision, double start)
     return t;
 }
 
+<<<<<<< HEAD
 static bool add_simple_ts(const SkDCubic& cubic, double precision, SkTArray<double, true>* ts)
 {
+=======
+static bool add_simple_ts(const SkDCubic& cubic, double precision, SkTArray<double, true>* ts) {
+>>>>>>> miniblink49
     double tDiv = calc_t_div(cubic, precision, 0);
     if (tDiv >= 1) {
         return true;
@@ -51,8 +59,12 @@ static bool add_simple_ts(const SkDCubic& cubic, double precision, SkTArray<doub
 }
 
 static void addTs(const SkDCubic& cubic, double precision, double start, double end,
+<<<<<<< HEAD
     SkTArray<double, true>* ts)
 {
+=======
+        SkTArray<double, true>* ts) {
+>>>>>>> miniblink49
     double tDiv = calc_t_div(cubic, precision, 0);
     double parts = ceil(1.0 / tDiv);
     for (double index = 0; index < parts; ++index) {
@@ -63,8 +75,12 @@ static void addTs(const SkDCubic& cubic, double precision, double start, double 
     }
 }
 
+<<<<<<< HEAD
 static void toQuadraticTs(const SkDCubic* cubic, double precision, SkTArray<double, true>* ts)
 {
+=======
+static void toQuadraticTs(const SkDCubic* cubic, double precision, SkTArray<double, true>* ts) {
+>>>>>>> miniblink49
     SkReduceOrder reducer;
     int order = reducer.reduce(*cubic, SkReduceOrder::kAllow_Quadratics);
     if (order < 3) {
@@ -88,7 +104,11 @@ static void toQuadraticTs(const SkDCubic* cubic, double precision, SkTArray<doub
     while (next < inflections) {
         if (!approximately_equal(inflectT[start], inflectT[next])) {
             ++start;
+<<<<<<< HEAD
             ++next;
+=======
+        ++next;
+>>>>>>> miniblink49
             continue;
         }
         memmove(&inflectT[start], &inflectT[next], sizeof(inflectT[0]) * (--inflections - start));
@@ -134,8 +154,12 @@ static void toQuadraticTs(const SkDCubic* cubic, double precision, SkTArray<doub
     addTs(*cubic, precision, 0, 1, ts);
 }
 
+<<<<<<< HEAD
 void CubicToQuads(const SkDCubic& cubic, double precision, SkTArray<SkDQuad, true>& quads)
 {
+=======
+void CubicToQuads(const SkDCubic& cubic, double precision, SkTArray<SkDQuad, true>& quads) {
+>>>>>>> miniblink49
     SkTArray<double, true> ts;
     toQuadraticTs(&cubic, precision, &ts);
     if (ts.count() <= 0) {
@@ -165,8 +189,12 @@ void CubicToQuads(const SkDCubic& cubic, double precision, SkTArray<SkDQuad, tru
     }
 }
 
+<<<<<<< HEAD
 void CubicPathToQuads(const SkPath& cubicPath, SkPath* quadPath)
 {
+=======
+void CubicPathToQuads(const SkPath& cubicPath, SkPath* quadPath) {
+>>>>>>> miniblink49
     quadPath->reset();
     SkDCubic cubic;
     SkTArray<SkDQuad, true> quads;
@@ -175,6 +203,7 @@ void CubicPathToQuads(const SkPath& cubicPath, SkPath* quadPath)
     SkPoint pts[4];
     while ((verb = iter.next(pts)) != SkPath::kDone_Verb) {
         switch (verb) {
+<<<<<<< HEAD
         case SkPath::kMove_Verb:
             quadPath->moveTo(pts[0].fX, pts[0].fY);
             continue;
@@ -202,12 +231,45 @@ void CubicPathToQuads(const SkPath& cubicPath, SkPath* quadPath)
         default:
             SkDEBUGFAIL("bad verb");
             return;
+=======
+            case SkPath::kMove_Verb:
+                quadPath->moveTo(pts[0].fX, pts[0].fY);
+                continue;
+            case SkPath::kLine_Verb:
+                quadPath->lineTo(pts[1].fX, pts[1].fY);
+                break;
+            case SkPath::kQuad_Verb:
+                quadPath->quadTo(pts[1].fX, pts[1].fY, pts[2].fX, pts[2].fY);
+                break;
+            case SkPath::kCubic_Verb:
+                quads.reset();
+                cubic.set(pts);
+                CubicToQuads(cubic, cubic.calcPrecision(), quads);
+                for (int index = 0; index < quads.count(); ++index) {
+                    SkPoint qPts[2] = {
+                        quads[index][1].asSkPoint(),
+                        quads[index][2].asSkPoint()
+                    };
+                    quadPath->quadTo(qPts[0].fX, qPts[0].fY, qPts[1].fX, qPts[1].fY);
+                }
+                break;
+            case SkPath::kClose_Verb:
+                 quadPath->close();
+                break;
+            default:
+                SkDEBUGFAIL("bad verb");
+                return;
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 void CubicPathToSimple(const SkPath& cubicPath, SkPath* simplePath)
 {
+=======
+void CubicPathToSimple(const SkPath& cubicPath, SkPath* simplePath) {
+>>>>>>> miniblink49
     simplePath->reset();
     SkDCubic cubic;
     SkPath::RawIter iter(cubicPath);
@@ -215,6 +277,7 @@ void CubicPathToSimple(const SkPath& cubicPath, SkPath* simplePath)
     SkPoint pts[4];
     while ((verb = iter.next(pts)) != SkPath::kDone_Verb) {
         switch (verb) {
+<<<<<<< HEAD
         case SkPath::kMove_Verb:
             simplePath->moveTo(pts[0].fX, pts[0].fY);
             continue;
@@ -251,10 +314,49 @@ void CubicPathToSimple(const SkPath& cubicPath, SkPath* simplePath)
         default:
             SkDEBUGFAIL("bad verb");
             return;
+=======
+            case SkPath::kMove_Verb:
+                simplePath->moveTo(pts[0].fX, pts[0].fY);
+                continue;
+            case SkPath::kLine_Verb:
+                simplePath->lineTo(pts[1].fX, pts[1].fY);
+                break;
+            case SkPath::kQuad_Verb:
+                simplePath->quadTo(pts[1].fX, pts[1].fY, pts[2].fX, pts[2].fY);
+                break;
+            case SkPath::kCubic_Verb: {
+                cubic.set(pts);
+                double tInflects[2];
+                int inflections = cubic.findInflections(tInflects);
+                if (inflections > 1 && tInflects[0] > tInflects[1]) {
+                    SkTSwap(tInflects[0], tInflects[1]);
+                }
+                double lo = 0;
+                for (int index = 0; index <= inflections; ++index) {
+                    double hi = index < inflections ? tInflects[index] : 1;
+                    SkDCubic part = cubic.subDivide(lo, hi);
+                    SkPoint cPts[3];
+                    cPts[0] = part[1].asSkPoint();
+                    cPts[1] = part[2].asSkPoint();
+                    cPts[2] = part[3].asSkPoint();
+                    simplePath->cubicTo(cPts[0].fX, cPts[0].fY, cPts[1].fX, cPts[1].fY,
+                            cPts[2].fX, cPts[2].fY);
+                    lo = hi;
+                }
+                break;
+            } 
+            case SkPath::kClose_Verb:
+                 simplePath->close();
+                break;
+            default:
+                SkDEBUGFAIL("bad verb");
+                return;
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 static bool SkDoubleIsNaN(double x)
 {
     return x != x;
@@ -262,6 +364,13 @@ static bool SkDoubleIsNaN(double x)
 
 bool ValidBounds(const SkPathOpsBounds& bounds)
 {
+=======
+static bool SkDoubleIsNaN(double x) {
+    return x != x;
+}
+
+bool ValidBounds(const SkPathOpsBounds& bounds) {
+>>>>>>> miniblink49
     if (SkScalarIsNaN(bounds.fLeft)) {
         return false;
     }
@@ -274,8 +383,12 @@ bool ValidBounds(const SkPathOpsBounds& bounds)
     return !SkScalarIsNaN(bounds.fBottom);
 }
 
+<<<<<<< HEAD
 bool ValidConic(const SkDConic& conic)
 {
+=======
+bool ValidConic(const SkDConic& conic) {
+>>>>>>> miniblink49
     for (int index = 0; index < SkDConic::kPointCount; ++index) {
         if (!ValidPoint(conic[index])) {
             return false;
@@ -287,8 +400,12 @@ bool ValidConic(const SkDConic& conic)
     return true;
 }
 
+<<<<<<< HEAD
 bool ValidCubic(const SkDCubic& cubic)
 {
+=======
+bool ValidCubic(const SkDCubic& cubic) {
+>>>>>>> miniblink49
     for (int index = 0; index < 4; ++index) {
         if (!ValidPoint(cubic[index])) {
             return false;
@@ -297,8 +414,12 @@ bool ValidCubic(const SkDCubic& cubic)
     return true;
 }
 
+<<<<<<< HEAD
 bool ValidLine(const SkDLine& line)
 {
+=======
+bool ValidLine(const SkDLine& line) {
+>>>>>>> miniblink49
     for (int index = 0; index < 2; ++index) {
         if (!ValidPoint(line[index])) {
             return false;
@@ -307,16 +428,24 @@ bool ValidLine(const SkDLine& line)
     return true;
 }
 
+<<<<<<< HEAD
 bool ValidPoint(const SkDPoint& pt)
 {
+=======
+bool ValidPoint(const SkDPoint& pt) {
+>>>>>>> miniblink49
     if (SkDoubleIsNaN(pt.fX)) {
         return false;
     }
     return !SkDoubleIsNaN(pt.fY);
 }
 
+<<<<<<< HEAD
 bool ValidPoints(const SkPoint* pts, int count)
 {
+=======
+bool ValidPoints(const SkPoint* pts, int count) {
+>>>>>>> miniblink49
     for (int index = 0; index < count; ++index) {
         if (SkScalarIsNaN(pts[index].fX)) {
             return false;
@@ -328,8 +457,12 @@ bool ValidPoints(const SkPoint* pts, int count)
     return true;
 }
 
+<<<<<<< HEAD
 bool ValidQuad(const SkDQuad& quad)
 {
+=======
+bool ValidQuad(const SkDQuad& quad) {
+>>>>>>> miniblink49
     for (int index = 0; index < 3; ++index) {
         if (!ValidPoint(quad[index])) {
             return false;
@@ -338,8 +471,12 @@ bool ValidQuad(const SkDQuad& quad)
     return true;
 }
 
+<<<<<<< HEAD
 bool ValidVector(const SkDVector& v)
 {
+=======
+bool ValidVector(const SkDVector& v) {
+>>>>>>> miniblink49
     if (SkDoubleIsNaN(v.fX)) {
         return false;
     }

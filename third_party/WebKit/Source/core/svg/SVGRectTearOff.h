@@ -37,19 +37,12 @@
 
 namespace blink {
 
-class SVGRectTearOff : public SVGPropertyTearOff<SVGRect>,
-                       public ScriptWrappable {
+class SVGRectTearOff : public SVGPropertyTearOff<SVGRect>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SVGRectTearOff* create(
-        SVGRect* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    static PassRefPtrWillBeRawPtr<SVGRectTearOff> create(PassRefPtrWillBeRawPtr<SVGRect> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
     {
-        return new SVGRectTearOff(target, contextElement, propertyIsAnimVal,
-            attributeName);
+        return adoptRefWillBeNoop(new SVGRectTearOff(target, contextElement, propertyIsAnimVal, attributeName));
     }
 
     void setX(float, ExceptionState&);
@@ -61,13 +54,8 @@ public:
     float width() { return target()->width(); }
     float height() { return target()->height(); }
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
-    SVGRectTearOff(SVGRect*,
-        SVGElement* contextElement,
-        PropertyIsAnimValType,
-        const QualifiedName& attributeName = QualifiedName::null());
+    SVGRectTearOff(PassRefPtrWillBeRawPtr<SVGRect>, SVGElement* contextElement, PropertyIsAnimValType, const QualifiedName& attributeName = QualifiedName::null());
 };
 
 } // namespace blink

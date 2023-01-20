@@ -28,10 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIMessageEvent
 
 [
     Constructor(DOMString type, optional MIDIMessageEventInit eventInitDict)
 ] interface MIDIMessageEvent : Event {
+=======
+// http://webaudio.github.io/web-midi-api/#idl-def-MIDIMessageEvent
+
+[
+    Constructor(DOMString type, optional MIDIMessageEventInit eventInitDict),
+] interface MIDIMessageEvent : Event {
+    readonly attribute double receivedTime;
+>>>>>>> miniblink49
     readonly attribute Uint8Array data;
 };

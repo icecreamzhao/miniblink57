@@ -1,13 +1,20 @@
 include_rules = [
     "+bindings",
     "+core",
+<<<<<<< HEAD
+=======
+    "+heap",
+>>>>>>> miniblink49
     "-modules",
     "+modules/EventModules.h",
     "+modules/EventTargetModules.h",
     "+modules/ModulesExport.h",
     "+modules/mediastream",
     "+modules/webaudio",
+<<<<<<< HEAD
     "+modules/worklet",
+=======
+>>>>>>> miniblink49
     "+platform",
     "+public/platform",
     "-web",

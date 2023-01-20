@@ -17,10 +17,17 @@
 
 // This is designed to emulate about 4 screens of textual content
 
+<<<<<<< HEAD
 class PicturePlaybackBench : public Benchmark {
 public:
     PicturePlaybackBench(const char name[])
     {
+=======
+
+class PicturePlaybackBench : public Benchmark {
+public:
+    PicturePlaybackBench(const char name[])  {
+>>>>>>> miniblink49
         fName.printf("picture_playback_%s", name);
         fPictureWidth = SkIntToScalar(PICTURE_WIDTH);
         fPictureHeight = SkIntToScalar(PICTURE_HEIGHT);
@@ -32,6 +39,7 @@ public:
         PICTURE_HEIGHT = 4000,
         TEXT_SIZE = 10
     };
+<<<<<<< HEAD
 
 protected:
     virtual const char* onGetName()
@@ -46,6 +54,19 @@ protected:
         SkCanvas* pCanvas = recorder.beginRecording(PICTURE_WIDTH, PICTURE_HEIGHT, nullptr, 0);
         this->recordCanvas(pCanvas);
         sk_sp<SkPicture> picture(recorder.finishRecordingAsPicture());
+=======
+protected:
+    virtual const char* onGetName() {
+        return fName.c_str();
+    }
+
+    virtual void onDraw(const int loops, SkCanvas* canvas) {
+
+        SkPictureRecorder recorder;
+        SkCanvas* pCanvas = recorder.beginRecording(PICTURE_WIDTH, PICTURE_HEIGHT, NULL, 0);
+        this->recordCanvas(pCanvas);
+        SkAutoTUnref<SkPicture> picture(recorder.endRecording());
+>>>>>>> miniblink49
 
         const SkPoint translateDelta = getTranslateDelta(loops);
 
@@ -56,22 +77,33 @@ protected:
     }
 
     virtual void recordCanvas(SkCanvas* canvas) = 0;
+<<<<<<< HEAD
     virtual SkPoint getTranslateDelta(int N)
     {
         SkIPoint canvasSize = onGetSize();
         return SkPoint::Make(SkIntToScalar((PICTURE_WIDTH - canvasSize.fX) / N),
             SkIntToScalar((PICTURE_HEIGHT - canvasSize.fY) / N));
+=======
+    virtual SkPoint getTranslateDelta(int N) {
+        SkIPoint canvasSize = onGetSize();
+        return SkPoint::Make(SkIntToScalar((PICTURE_WIDTH - canvasSize.fX)/N),
+                             SkIntToScalar((PICTURE_HEIGHT- canvasSize.fY)/N));
+>>>>>>> miniblink49
     }
 
     SkString fName;
     SkScalar fPictureWidth;
     SkScalar fPictureHeight;
     SkScalar fTextSize;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 class TextPlaybackBench : public PicturePlaybackBench {
 public:
     TextPlaybackBench()
@@ -82,6 +114,14 @@ public:
 protected:
     void recordCanvas(SkCanvas* canvas) override
     {
+=======
+
+class TextPlaybackBench : public PicturePlaybackBench {
+public:
+    TextPlaybackBench() : INHERITED("drawText") { }
+protected:
+    void recordCanvas(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setTextSize(fTextSize);
         paint.setColor(SK_ColorBLACK);
@@ -96,7 +136,10 @@ protected:
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef PicturePlaybackBench INHERITED;
 };
@@ -105,6 +148,7 @@ class PosTextPlaybackBench : public PicturePlaybackBench {
 public:
     PosTextPlaybackBench(bool drawPosH)
         : INHERITED(drawPosH ? "drawPosTextH" : "drawPosText")
+<<<<<<< HEAD
         , fDrawPosH(drawPosH)
     {
     }
@@ -112,6 +156,11 @@ public:
 protected:
     void recordCanvas(SkCanvas* canvas) override
     {
+=======
+        , fDrawPosH(drawPosH) { }
+protected:
+    void recordCanvas(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setTextSize(fTextSize);
         paint.setColor(SK_ColorBLACK);
@@ -143,21 +192,34 @@ protected:
         }
         delete[] adv;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     bool fDrawPosH;
     typedef PicturePlaybackBench INHERITED;
 };
 
+<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////
 
 DEF_BENCH(return new TextPlaybackBench();)
 DEF_BENCH(return new PosTextPlaybackBench(true);)
 DEF_BENCH(return new PosTextPlaybackBench(false);)
+=======
+
+///////////////////////////////////////////////////////////////////////////////
+
+DEF_BENCH( return new TextPlaybackBench(); )
+DEF_BENCH( return new PosTextPlaybackBench(true); )
+DEF_BENCH( return new PosTextPlaybackBench(false); )
+>>>>>>> miniblink49
 
 // Chrome draws into small tiles with impl-side painting.
 // This benchmark measures the relative performance of our bounding-box hierarchies,
 // both when querying tiles perfectly and when not.
+<<<<<<< HEAD
 enum BBH { kNone,
     kRTree };
 enum Mode { kTiled,
@@ -184,10 +246,25 @@ public:
         case kRandom:
             fName.append("_random");
             break;
+=======
+enum BBH  { kNone, kRTree };
+enum Mode { kTiled, kRandom };
+class TiledPlaybackBench : public Benchmark {
+public:
+    TiledPlaybackBench(BBH bbh, Mode mode) : fBBH(bbh), fMode(mode), fName("tiled_playback") {
+        switch (fBBH) {
+            case kNone:     fName.append("_none"    ); break;
+            case kRTree:    fName.append("_rtree"   ); break;
+        }
+        switch (fMode) {
+            case kTiled:  fName.append("_tiled" ); break;
+            case kRandom: fName.append("_random"); break;
+>>>>>>> miniblink49
         }
     }
 
     const char* onGetName() override { return fName.c_str(); }
+<<<<<<< HEAD
     SkIPoint onGetSize() override { return SkIPoint::Make(1024, 1024); }
 
     void onDelayedSetup() override
@@ -199,10 +276,20 @@ public:
         case kRTree:
             factory.reset(new SkRTreeFactory);
             break;
+=======
+    SkIPoint onGetSize() override { return SkIPoint::Make(1024,1024); }
+
+    void onPreDraw() override {
+        SkAutoTDelete<SkBBHFactory> factory;
+        switch (fBBH) {
+            case kNone:                                                 break;
+            case kRTree:    factory.reset(new SkRTreeFactory);          break;
+>>>>>>> miniblink49
         }
 
         SkPictureRecorder recorder;
         SkCanvas* canvas = recorder.beginRecording(1024, 1024, factory);
+<<<<<<< HEAD
         SkRandom rand;
         for (int i = 0; i < 10000; i++) {
             SkScalar x = rand.nextRangeScalar(0, 1024),
@@ -219,12 +306,30 @@ public:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+            SkRandom rand;
+            for (int i = 0; i < 10000; i++) {
+                SkScalar x = rand.nextRangeScalar(0, 1024),
+                         y = rand.nextRangeScalar(0, 1024),
+                         w = rand.nextRangeScalar(0, 128),
+                         h = rand.nextRangeScalar(0, 128);
+                SkPaint paint;
+                paint.setColor(rand.nextU());
+                paint.setAlpha(0xFF);
+                canvas->drawRect(SkRect::MakeXYWH(x,y,w,h), paint);
+            }
+        fPic.reset(recorder.endRecording());
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         for (int i = 0; i < loops; i++) {
             // This inner loop guarantees we make the same choices for all bench variants.
             SkRandom rand;
             for (int j = 0; j < 10; j++) {
                 SkScalar x = 0, y = 0;
                 switch (fMode) {
+<<<<<<< HEAD
                 case kTiled:
                     x = SkScalar(256 * rand.nextULessThan(4));
                     y = SkScalar(256 * rand.nextULessThan(4));
@@ -236,12 +341,24 @@ public:
                 }
                 SkAutoCanvasRestore ar(canvas, true /*save now*/);
                 canvas->clipRect(SkRect::MakeXYWH(x, y, 256, 256));
+=======
+                    case kTiled:  x = SkScalar(256 * rand.nextULessThan(4));
+                                  y = SkScalar(256 * rand.nextULessThan(4));
+                                  break;
+                    case kRandom: x = rand.nextRangeScalar(0, 768);
+                                  y = rand.nextRangeScalar(0, 768);
+                                  break;
+                }
+                SkAutoCanvasRestore ar(canvas, true/*save now*/);
+                canvas->clipRect(SkRect::MakeXYWH(x,y,256,256));
+>>>>>>> miniblink49
                 fPic->playback(canvas);
             }
         }
     }
 
 private:
+<<<<<<< HEAD
     BBH fBBH;
     Mode fMode;
     SkString fName;
@@ -252,3 +369,15 @@ DEF_BENCH(return new TiledPlaybackBench(kNone, kRandom);)
 DEF_BENCH(return new TiledPlaybackBench(kNone, kTiled);)
 DEF_BENCH(return new TiledPlaybackBench(kRTree, kRandom);)
 DEF_BENCH(return new TiledPlaybackBench(kRTree, kTiled);)
+=======
+    BBH                     fBBH;
+    Mode                    fMode;
+    SkString                fName;
+    SkAutoTUnref<SkPicture> fPic;
+};
+
+DEF_BENCH( return new TiledPlaybackBench(kNone,     kRandom); )
+DEF_BENCH( return new TiledPlaybackBench(kNone,     kTiled ); )
+DEF_BENCH( return new TiledPlaybackBench(kRTree,    kRandom); )
+DEF_BENCH( return new TiledPlaybackBench(kRTree,    kTiled ); )
+>>>>>>> miniblink49

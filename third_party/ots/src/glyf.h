@@ -14,9 +14,18 @@
 namespace ots {
 
 struct OpenTypeGLYF {
+<<<<<<< HEAD
     std::vector<std::pair<const uint8_t*, size_t> > iov;
 };
 
 } // namespace ots
 
 #endif // OTS_GLYF_H_
+=======
+  std::vector<std::pair<const uint8_t*, size_t> > iov;
+};
+
+}  // namespace ots
+
+#endif  // OTS_GLYF_H_
+>>>>>>> miniblink49

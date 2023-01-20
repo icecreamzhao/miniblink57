@@ -3,8 +3,7 @@
  * Copyright (C) 1999 Antti Koivisto <koivisto@kde.org>
  * Copyright (C) 2006 Allan Sandfeld Jensen <kde@carewolf.com>
  * Copyright (C) 2006 Samuel Weinig <sam.weinig@gmail.com>
- * Copyright (C) 2004, 2005, 2006, 2007, 2009, 2010 Apple Inc.
- *               All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2009, 2010 Apple Inc. All rights reserved.
  * Copyright (C) 2010 Patrick Gansterer <paroga@paroga.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -27,53 +26,55 @@
 #ifndef LayoutImageResource_h
 #define LayoutImageResource_h
 
-#include "core/loader/resource/ImageResourceContent.h"
+#include "core/fetch/ImageResource.h"
+#include "core/fetch/ResourcePtr.h"
 #include "core/style/StyleImage.h"
 
 namespace blink {
 
 class LayoutObject;
 
-class LayoutImageResource
-    : public GarbageCollectedFinalized<LayoutImageResource> {
-    WTF_MAKE_NONCOPYABLE(LayoutImageResource);
-
+class LayoutImageResource {
+    WTF_MAKE_NONCOPYABLE(LayoutImageResource); WTF_MAKE_FAST_ALLOCATED(LayoutImageResource);
 public:
     virtual ~LayoutImageResource();
 
-    static LayoutImageResource* create() { return new LayoutImageResource; }
+    static PassOwnPtr<LayoutImageResource> create()
+    {
+        return adoptPtr(new LayoutImageResource);
+    }
 
     virtual void initialize(LayoutObject*);
     virtual void shutdown();
 
-    void setImageResource(ImageResourceContent*);
-    ImageResourceContent* cachedImage() const { return m_cachedImage.get(); }
+    void setImageResource(ImageResource*);
+    ImageResource* cachedImage() const { return m_cachedImage.get(); }
     virtual bool hasImage() const { return m_cachedImage; }
 
     void resetAnimation();
-    bool maybeAnimated() const;
 
-    virtual PassRefPtr<Image> image(const IntSize&, float) const;
-    virtual bool errorOccurred() const
+    virtual PassRefPtr<Image> image(int /* width */ = 0, int /* height */ = 0) const
     {
-        return m_cachedImage && m_cachedImage->errorOccurred();
+        return m_cachedImage ? m_cachedImage->imageForLayoutObject(m_layoutObject) : Image::nullImage();
     }
+    virtual bool errorOccurred() const { return m_cachedImage && m_cachedImage->errorOccurred(); }
 
-    virtual bool imageHasRelativeSize() const
-    {
-        return m_cachedImage ? m_cachedImage->imageHasRelativeSize() : false;
-    }
+    virtual void setContainerSizeForLayoutObject(const IntSize&);
+    virtual bool imageHasRelativeWidth() const { return m_cachedImage ? m_cachedImage->imageHasRelativeWidth() : false; }
+    virtual bool imageHasRelativeHeight() const { return m_cachedImage ? m_cachedImage->imageHasRelativeHeight() : false; }
 
-    virtual LayoutSize imageSize(float multiplier) const;
+    virtual LayoutSize imageSize(float multiplier) const { return getImageSize(multiplier, ImageResource::NormalSize); }
+    virtual LayoutSize intrinsicSize(float multiplier) const { return getImageSize(multiplier, ImageResource::IntrinsicSize); }
 
     virtual WrappedImagePtr imagePtr() const { return m_cachedImage.get(); }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_cachedImage); }
 
 protected:
     LayoutImageResource();
     LayoutObject* m_layoutObject;
-    Member<ImageResourceContent> m_cachedImage;
+    ResourcePtr<ImageResource> m_cachedImage;
+
+private:
+    LayoutSize getImageSize(float multiplier, ImageResource::SizeType) const;
 };
 
 } // namespace blink

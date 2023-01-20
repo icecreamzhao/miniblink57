@@ -13,22 +13,34 @@
 #include "SkString.h"
 
 class ChunkAllocBench : public Benchmark {
+<<<<<<< HEAD
     SkString fName;
     size_t fMinSize;
 
 public:
     ChunkAllocBench(size_t minSize)
     {
+=======
+    SkString    fName;
+    size_t      fMinSize;
+public:
+    ChunkAllocBench(size_t minSize)  {
+>>>>>>> miniblink49
         fMinSize = minSize;
         fName.printf("chunkalloc_" SK_SIZE_T_SPECIFIER, minSize);
     }
 
+<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
+=======
+    bool isSuitableFor(Backend backend) override {
+>>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
 protected:
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -36,6 +48,13 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
+=======
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas*) override {
+>>>>>>> miniblink49
         size_t inc = fMinSize >> 4;
         SkASSERT(inc > 0);
         size_t total = fMinSize * 64;
@@ -58,5 +77,11 @@ private:
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_BENCH(return new ChunkAllocBench(64);)
 DEF_BENCH(return new ChunkAllocBench(8 * 1024);)
+=======
+DEF_BENCH( return new ChunkAllocBench(64); )
+DEF_BENCH( return new ChunkAllocBench(8*1024); )
+
+>>>>>>> miniblink49

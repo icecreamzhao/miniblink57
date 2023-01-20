@@ -33,6 +33,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class MODULES_EXPORT SpeechRecognitionResult final
     : public GarbageCollected<SpeechRecognitionResult>,
       public ScriptWrappable {
@@ -42,6 +43,12 @@ public:
     static SpeechRecognitionResult* create(
         const HeapVector<Member<SpeechRecognitionAlternative>>&,
         bool final);
+=======
+class MODULES_EXPORT SpeechRecognitionResult final : public GarbageCollected<SpeechRecognitionResult>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static SpeechRecognitionResult* create(const HeapVector<Member<SpeechRecognitionAlternative>>&, bool final);
+>>>>>>> miniblink49
 
     unsigned length() { return m_alternatives.size(); }
     SpeechRecognitionAlternative* item(unsigned index);
@@ -50,9 +57,13 @@ public:
     DECLARE_TRACE();
 
 private:
+<<<<<<< HEAD
     SpeechRecognitionResult(
         const HeapVector<Member<SpeechRecognitionAlternative>>&,
         bool final);
+=======
+    SpeechRecognitionResult(const HeapVector<Member<SpeechRecognitionAlternative>>&, bool final);
+>>>>>>> miniblink49
 
     bool m_final;
     HeapVector<Member<SpeechRecognitionAlternative>> m_alternatives;

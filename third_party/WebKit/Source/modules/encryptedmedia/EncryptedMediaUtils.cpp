@@ -2,12 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/encryptedmedia/EncryptedMediaUtils.h"
 
 namespace blink {
 
 namespace {
 
+<<<<<<< HEAD
     const char kTemporary[] = "temporary";
     const char kPersistentLicense[] = "persistent-license";
 
@@ -15,6 +20,14 @@ namespace {
 
 WebEncryptedMediaInitDataType EncryptedMediaUtils::convertToInitDataType(
     const String& initDataType)
+=======
+const char kTemporary[] = "temporary";
+const char kPersistentLicense[] = "persistent-license";
+
+} // namespace
+
+WebEncryptedMediaInitDataType EncryptedMediaUtils::convertToInitDataType(const String& initDataType)
+>>>>>>> miniblink49
 {
     if (initDataType == "cenc")
         return WebEncryptedMediaInitDataType::Cenc;
@@ -27,8 +40,12 @@ WebEncryptedMediaInitDataType EncryptedMediaUtils::convertToInitDataType(
     return WebEncryptedMediaInitDataType::Unknown;
 }
 
+<<<<<<< HEAD
 String EncryptedMediaUtils::convertFromInitDataType(
     WebEncryptedMediaInitDataType initDataType)
+=======
+String EncryptedMediaUtils::convertFromInitDataType(WebEncryptedMediaInitDataType initDataType)
+>>>>>>> miniblink49
 {
     switch (initDataType) {
     case WebEncryptedMediaInitDataType::Cenc:
@@ -43,12 +60,20 @@ String EncryptedMediaUtils::convertFromInitDataType(
         return String();
     }
 
+<<<<<<< HEAD
     NOTREACHED();
     return String();
 }
 
 WebEncryptedMediaSessionType EncryptedMediaUtils::convertToSessionType(
     const String& sessionType)
+=======
+    ASSERT_NOT_REACHED();
+    return String();
+}
+
+WebEncryptedMediaSessionType EncryptedMediaUtils::convertToSessionType(const String& sessionType)
+>>>>>>> miniblink49
 {
     if (sessionType == kTemporary)
         return WebEncryptedMediaSessionType::Temporary;
@@ -59,8 +84,12 @@ WebEncryptedMediaSessionType EncryptedMediaUtils::convertToSessionType(
     return WebEncryptedMediaSessionType::Unknown;
 }
 
+<<<<<<< HEAD
 String EncryptedMediaUtils::convertFromSessionType(
     WebEncryptedMediaSessionType sessionType)
+=======
+String EncryptedMediaUtils::convertFromSessionType(WebEncryptedMediaSessionType sessionType)
+>>>>>>> miniblink49
 {
     switch (sessionType) {
     case WebEncryptedMediaSessionType::Temporary:
@@ -71,11 +100,19 @@ String EncryptedMediaUtils::convertFromSessionType(
     case WebEncryptedMediaSessionType::PersistentReleaseMessage:
     case WebEncryptedMediaSessionType::Unknown:
         // Chromium should not use Unknown.
+<<<<<<< HEAD
         NOTREACHED();
         return String();
     }
 
     NOTREACHED();
+=======
+        ASSERT_NOT_REACHED();
+        return String();
+    }
+
+    ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
     return String();
 }
 

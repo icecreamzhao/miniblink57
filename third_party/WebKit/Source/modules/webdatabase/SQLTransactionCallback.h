@@ -35,14 +35,22 @@ namespace blink {
 
 class SQLTransaction;
 
+<<<<<<< HEAD
 class SQLTransactionCallback
     : public GarbageCollectedFinalized<SQLTransactionCallback> {
+=======
+class SQLTransactionCallback : public GarbageCollectedFinalized<SQLTransactionCallback> {
+>>>>>>> miniblink49
 public:
     virtual ~SQLTransactionCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
     virtual bool handleEvent(SQLTransaction*) = 0;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif // SQLTransactionCallback_h

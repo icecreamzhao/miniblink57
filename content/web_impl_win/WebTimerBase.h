@@ -28,8 +28,8 @@
 
 #include <wtf/Noncopyable.h>
 #include <wtf/Threading.h>
+#include <wtf/FastAllocBase.h>
 #include <wtf/Vector.h>
-#include <wtf/allocator/PartitionAllocator.h>
 #include <vector>
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/public/platform/WebThread.h"
@@ -48,9 +48,7 @@ class TimerHeapElement;
 class WebThreadImpl;
 
 class WebTimerBase {
-    WTF_MAKE_NONCOPYABLE(WebTimerBase);
-    WTF_MAKE_FAST_ALLOCATED(WebTimerBase);
-    //WTF_USE_ALLOCATOR(WebTimerBase, WTF::PartitionAllocator);
+    WTF_MAKE_NONCOPYABLE(WebTimerBase); WTF_MAKE_FAST_ALLOCATED(WebTimerBase);
 public:
     static WebTimerBase* create(WebThreadImpl* threadTimers, const blink::WebTraceLocation& location, blink::WebThread::Task* task, int priority)
     {
@@ -86,11 +84,6 @@ public:
     const blink::WebTraceLocation& getTraceLocation()
     {
         return m_location;
-    }
-
-    const blink::WebThread::Task* getTask() const
-    {
-        return m_task;
     }
 
 private:

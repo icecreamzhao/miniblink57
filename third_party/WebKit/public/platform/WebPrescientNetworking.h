@@ -37,8 +37,11 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 enum class WebNavigationHintType;
 
+=======
+>>>>>>> miniblink49
 class WebPrescientNetworking {
 public:
     virtual ~WebPrescientNetworking() { }
@@ -47,10 +50,16 @@ public:
     // the host resolution latency.
     virtual void prefetchDNS(const WebString& hostname) { }
 
+<<<<<<< HEAD
     virtual void preconnect(const WebURL& url, const bool allowCredentials) { }
 
     // Send a hint that a navigation to |url| is likely to happen.
     virtual void sendNavigationHint(const WebURL& url, WebNavigationHintType) { }
+=======
+    virtual void preconnect(const WebURL& url) { }
+
+    virtual void preconnect(const WebURL& url, const bool allowCredentials) { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

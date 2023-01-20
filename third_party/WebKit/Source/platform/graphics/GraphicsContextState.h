@@ -30,6 +30,7 @@
 #define GraphicsContextState_h
 
 #include "platform/graphics/DrawLooperBuilder.h"
+<<<<<<< HEAD
 #include "platform/graphics/GraphicsTypes.h"
 #include "platform/graphics/StrokeData.h"
 #include "third_party/skia/include/core/SkColorFilter.h"
@@ -39,12 +40,24 @@
 #include "wtf/Noncopyable.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
+=======
+#include "platform/graphics/Gradient.h"
+#include "platform/graphics/GraphicsTypes.h"
+#include "platform/graphics/Path.h"
+#include "platform/graphics/StrokeData.h"
+#include "platform/graphics/skia/SkiaUtils.h"
+#include "third_party/skia/include/core/SkColorFilter.h"
+#include "third_party/skia/include/core/SkPaint.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 // Encapsulates the state information we store for each pushed graphics state.
 // Only GraphicsContext can use this class.
 class PLATFORM_EXPORT GraphicsContextState final {
+<<<<<<< HEAD
     USING_FAST_MALLOC(GraphicsContextState);
 
 public:
@@ -57,6 +70,17 @@ public:
         const GraphicsContextState& other)
     {
         return WTF::wrapUnique(new GraphicsContextState(other));
+=======
+public:
+    static PassOwnPtr<GraphicsContextState> create()
+    {
+        return adoptPtr(new GraphicsContextState());
+    }
+
+    static PassOwnPtr<GraphicsContextState> createAndCopy(const GraphicsContextState& other)
+    {
+        return adoptPtr(new GraphicsContextState(other));
+>>>>>>> miniblink49
     }
 
     void copy(const GraphicsContextState&);
@@ -64,17 +88,31 @@ public:
     // SkPaint objects that reflect the current state. If the length of the
     // path to be stroked is known, pass it in for correct dash or dot placement.
     const SkPaint& strokePaint(int strokedPathLength = 0) const;
+<<<<<<< HEAD
     const SkPaint& fillPaint() const { return m_fillPaint; }
+=======
+    const SkPaint& fillPaint() const;
+>>>>>>> miniblink49
 
     uint16_t saveCount() const { return m_saveCount; }
     void incrementSaveCount() { ++m_saveCount; }
     void decrementSaveCount() { --m_saveCount; }
 
     // Stroke data
+<<<<<<< HEAD
     Color strokeColor() const { return m_strokePaint.getColor(); }
     void setStrokeColor(const Color&);
 
     const StrokeData& getStrokeData() const { return m_strokeData; }
+=======
+    Color strokeColor() const { return m_strokeColor; }
+    void setStrokeColor(const Color&);
+
+    Gradient* strokeGradient() const { return m_strokeGradient.get(); }
+    void setStrokeGradient(const PassRefPtr<Gradient>, float);
+
+    const StrokeData& strokeData() const { return m_strokeData; }
+>>>>>>> miniblink49
     void setStrokeStyle(StrokeStyle);
     void setStrokeThickness(float);
     void setLineCap(LineCap);
@@ -83,6 +121,7 @@ public:
     void setLineDash(const DashArray&, float);
 
     // Fill data
+<<<<<<< HEAD
     Color fillColor() const { return m_fillPaint.getColor(); }
     void setFillColor(const Color&);
 
@@ -113,6 +152,28 @@ public:
     {
         return m_interpolationQuality;
     }
+=======
+    Color fillColor() const { return m_fillColor; }
+    void setFillColor(const Color&);
+
+    Gradient* fillGradient() const { return m_fillGradient.get(); }
+    void setFillGradient(const PassRefPtr<Gradient>, float);
+
+    // Shadow. (This will need tweaking if we use draw loopers for other things.)
+    SkDrawLooper* drawLooper() const { return m_looper.get(); }
+    void setDrawLooper(PassRefPtr<SkDrawLooper>);
+    void clearDrawLooper();
+
+    // Text. (See TextModeFill & friends.)
+    TextDrawingModeFlags textDrawingMode() const { return m_textDrawingMode; }
+    void setTextDrawingMode(TextDrawingModeFlags mode) { m_textDrawingMode = mode; }
+
+    SkColorFilter* colorFilter() const { return m_colorFilter.get(); }
+    void setColorFilter(PassRefPtr<SkColorFilter>);
+
+    // Image interpolation control.
+    InterpolationQuality interpolationQuality() const { return m_interpolationQuality; }
+>>>>>>> miniblink49
     void setInterpolationQuality(InterpolationQuality);
 
     bool shouldAntialias() const { return m_shouldAntialias; }
@@ -123,6 +184,7 @@ private:
     explicit GraphicsContextState(const GraphicsContextState&);
     GraphicsContextState& operator=(const GraphicsContextState&);
 
+<<<<<<< HEAD
     // This is mutable to enable dash path effect updates when the paint is
     // fetched for use.
     mutable SkPaint m_strokePaint;
@@ -132,6 +194,26 @@ private:
 
     TextDrawingModeFlags m_textDrawingMode;
 
+=======
+    // These are mutbale to enable gradient updates when the paints are fetched for use.
+    mutable SkPaint m_strokePaint;
+    mutable SkPaint m_fillPaint;
+
+    StrokeData m_strokeData;
+
+    Color m_strokeColor;
+    RefPtr<Gradient> m_strokeGradient;
+
+    Color m_fillColor;
+    RefPtr<Gradient> m_fillGradient;
+
+    RefPtr<SkDrawLooper> m_looper;
+
+    TextDrawingModeFlags m_textDrawingMode;
+
+    RefPtr<SkColorFilter> m_colorFilter;
+
+>>>>>>> miniblink49
     InterpolationQuality m_interpolationQuality;
 
     uint16_t m_saveCount;

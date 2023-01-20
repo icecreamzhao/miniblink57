@@ -29,14 +29,10 @@
 
 namespace blink {
 
-template <>
-const SVGEnumerationStringEntries&
-getStaticStringEntries<CompositeOperationType>();
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<CompositeOperationType>();
 
-class SVGFECompositeElement final
-    : public SVGFilterPrimitiveStandardAttributes {
+class SVGFECompositeElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGFECompositeElement);
 
@@ -46,10 +42,7 @@ public:
     SVGAnimatedNumber* k4() { return m_k4.get(); }
     SVGAnimatedString* in1() { return m_in1.get(); }
     SVGAnimatedString* in2() { return m_in2.get(); }
-    SVGAnimatedEnumeration<CompositeOperationType>* svgOperator()
-    {
-        return m_svgOperator.get();
-    }
+    SVGAnimatedEnumeration<CompositeOperationType>* svgOperator() { return m_svgOperator.get(); }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -58,15 +51,15 @@ private:
 
     bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
+    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
 
-    Member<SVGAnimatedNumber> m_k1;
-    Member<SVGAnimatedNumber> m_k2;
-    Member<SVGAnimatedNumber> m_k3;
-    Member<SVGAnimatedNumber> m_k4;
-    Member<SVGAnimatedString> m_in1;
-    Member<SVGAnimatedString> m_in2;
-    Member<SVGAnimatedEnumeration<CompositeOperationType>> m_svgOperator;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_k1;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_k2;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_k3;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_k4;
+    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    RefPtrWillBeMember<SVGAnimatedString> m_in2;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<CompositeOperationType>> m_svgOperator;
 };
 
 } // namespace blink

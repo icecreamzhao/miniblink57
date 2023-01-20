@@ -2,10 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "platform/fonts/FontCache.h"
 
 #include "platform/fonts/SimpleFontData.h"
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+#include "platform/fonts/FontCache.h"
+
+#include "platform/fonts/SimpleFontData.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -16,8 +24,12 @@ TEST(FontCacheAndroid, fallbackFontForCharacter)
     const UChar32 testChar = 228;
 
     FontDescription fontDescription;
+<<<<<<< HEAD
     fontDescription.setLocale("zh");
     ASSERT_EQ(USCRIPT_SIMPLIFIED_HAN, fontDescription.script());
+=======
+    fontDescription.setScript(USCRIPT_SIMPLIFIED_HAN);
+>>>>>>> miniblink49
     fontDescription.setGenericFamily(FontDescription::StandardFamily);
 
     FontCache* fontCache = FontCache::fontCache();

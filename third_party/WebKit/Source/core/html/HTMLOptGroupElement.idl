@@ -20,6 +20,6 @@
 // https://html.spec.whatwg.org/#the-optgroup-element
 
 interface HTMLOptGroupElement : HTMLElement {
-    [CEReactions, Reflect] attribute boolean disabled;
-    [CEReactions, Reflect] attribute DOMString label;
+    [Reflect] attribute boolean disabled;
+    [Reflect] attribute DOMString label;
 };

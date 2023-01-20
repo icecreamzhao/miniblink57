@@ -8,8 +8,13 @@
 #ifndef GrBitmapTextGeoProc_DEFINED
 #define GrBitmapTextGeoProc_DEFINED
 
+<<<<<<< HEAD
 #include "GrGeometryProcessor.h"
 #include "GrProcessor.h"
+=======
+#include "GrProcessor.h"
+#include "GrGeometryProcessor.h"
+>>>>>>> miniblink49
 
 class GrGLBitmapTextGeoProc;
 class GrInvariantOutput;
@@ -21,6 +26,7 @@ class GrInvariantOutput;
  */
 class GrBitmapTextGeoProc : public GrGeometryProcessor {
 public:
+<<<<<<< HEAD
     static sk_sp<GrGeometryProcessor> Make(GrColor color, GrTexture* tex, const GrTextureParams& p,
         GrMaskFormat format, const SkMatrix& localMatrix,
         bool usesLocalCoords)
@@ -30,6 +36,16 @@ public:
     }
 
     virtual ~GrBitmapTextGeoProc() { }
+=======
+    static GrGeometryProcessor* Create(GrColor color, GrTexture* tex, const GrTextureParams& p,
+                                       GrMaskFormat format, const SkMatrix& localMatrix,
+                                       bool usesLocalCoords) {
+        return SkNEW_ARGS(GrBitmapTextGeoProc, (color, tex, p, format, localMatrix,
+                usesLocalCoords));
+    }
+
+    virtual ~GrBitmapTextGeoProc() {}
+>>>>>>> miniblink49
 
     const char* name() const override { return "Texture"; }
 
@@ -43,6 +59,7 @@ public:
     const SkMatrix& localMatrix() const { return fLocalMatrix; }
     bool usesLocalCoords() const { return fUsesLocalCoords; }
 
+<<<<<<< HEAD
     void getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
 
     GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps& caps) const override;
@@ -59,6 +76,27 @@ private:
     const Attribute* fInColor;
     const Attribute* fInTextureCoords;
     GrMaskFormat fMaskFormat;
+=======
+    virtual void getGLProcessorKey(const GrBatchTracker& bt,
+                                   const GrGLSLCaps& caps,
+                                   GrProcessorKeyBuilder* b) const override;
+
+    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
+                                                     const GrGLSLCaps& caps) const override;
+
+private:
+    GrBitmapTextGeoProc(GrColor, GrTexture* texture, const GrTextureParams& params,
+                        GrMaskFormat format, const SkMatrix& localMatrix, bool usesLocalCoords);
+
+    GrColor          fColor;
+    SkMatrix         fLocalMatrix;
+    bool             fUsesLocalCoords;
+    GrTextureAccess  fTextureAccess;
+    const Attribute* fInPosition;
+    const Attribute* fInColor;
+    const Attribute* fInTextureCoords;
+    GrMaskFormat     fMaskFormat;
+>>>>>>> miniblink49
 
     GR_DECLARE_GEOMETRY_PROCESSOR_TEST;
 

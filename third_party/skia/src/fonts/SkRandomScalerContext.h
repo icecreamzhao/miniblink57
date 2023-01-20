@@ -18,6 +18,7 @@
 
 class SkRandomTypeface : public SkTypeface {
 public:
+<<<<<<< HEAD
     SkRandomTypeface(sk_sp<SkTypeface> proxy, const SkPaint&, bool fakeit);
 
     SkTypeface* proxy() const { return fProxy.get(); }
@@ -26,6 +27,16 @@ public:
 protected:
     SkScalerContext* onCreateScalerContext(const SkScalerContextEffects&,
         const SkDescriptor*) const override;
+=======
+    SkRandomTypeface(SkTypeface* proxy, const SkPaint&, bool fakeit);
+    virtual ~SkRandomTypeface();
+
+    SkTypeface* proxy() const { return fProxy; }
+    const SkPaint& paint() const { return fPaint; }
+
+protected:
+    SkScalerContext* onCreateScalerContext(const SkDescriptor*) const override;
+>>>>>>> miniblink49
     void onFilterRec(SkScalerContextRec*) const override;
     SkAdvancedTypefaceMetrics* onGetAdvancedTypefaceMetrics(
         PerGlyphInfo,
@@ -35,7 +46,11 @@ protected:
     void onGetFontDescriptor(SkFontDescriptor*, bool* isLocal) const override;
 
     int onCharsToGlyphs(const void* chars, Encoding encoding,
+<<<<<<< HEAD
         uint16_t glyphs[], int glyphCount) const override;
+=======
+                        uint16_t glyphs[], int glyphCount) const override;
+>>>>>>> miniblink49
     int onCountGlyphs() const override;
     int onGetUPEM() const override;
 
@@ -44,12 +59,21 @@ protected:
 
     int onGetTableTags(SkFontTableTag tags[]) const override;
     size_t onGetTableData(SkFontTableTag, size_t offset,
+<<<<<<< HEAD
         size_t length, void* data) const override;
 
 private:
     sk_sp<SkTypeface> fProxy;
     SkPaint fPaint;
     bool fFakeIt;
+=======
+                          size_t length, void* data) const override;
+
+private:
+    SkTypeface* fProxy;
+    SkPaint     fPaint;
+    bool        fFakeIt;
+>>>>>>> miniblink49
 };
 
 #endif

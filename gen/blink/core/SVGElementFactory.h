@@ -5,7 +5,6 @@
 #ifndef SVGElementFactory_h
 #define SVGElementFactory_h
 
-#include "core/dom/Document.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/PassRefPtr.h"
@@ -17,10 +16,10 @@ class SVGElement;
 
 class SVGElementFactory {
 public:
-    static SVGElement* createSVGElement(
+    static PassRefPtrWillBeRawPtr<SVGElement> createSVGElement(
         const AtomicString& localName,
         Document&,
-        CreateElementFlags flags = CreatedByParser);
+        bool createdByParser = true);
 };
 
 } // namespace blink

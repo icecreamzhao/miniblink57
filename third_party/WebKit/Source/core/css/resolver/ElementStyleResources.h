@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -25,8 +24,6 @@
 #define ElementStyleResources_h
 
 #include "core/CSSPropertyNames.h"
-#include "core/css/CSSPropertyIDTemplates.h"
-#include "platform/CrossOriginAttributeValue.h"
 #include "platform/graphics/Color.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
@@ -34,47 +31,48 @@
 
 namespace blink {
 
+class CSSCursorImageValue;
+class CSSImageValue;
 class CSSImageGeneratorValue;
 class CSSImageSetValue;
-class CSSImageValue;
-class CSSURIValue;
+class CSSSVGDocumentValue;
 class CSSValue;
-class ComputedStyle;
-class Document;
-class SVGElementProxy;
+class FilterOperation;
 class StyleImage;
-class StylePendingImage;
+class TextLinkColors;
+
+typedef WillBeHeapHashMap<RawPtrWillBeMember<FilterOperation>, RefPtrWillBeMember<CSSSVGDocumentValue>> PendingSVGDocumentMap;
+typedef WillBeHeapHashMap<CSSPropertyID, RefPtrWillBeMember<CSSValue>> PendingImagePropertyMap;
 
 // Holds information about resources, requested by stylesheets.
 // Lifetime: per-element style resolve.
 class ElementStyleResources {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(ElementStyleResources);
-
 public:
-    ElementStyleResources(Document&, float deviceScaleFactor);
+    ElementStyleResources();
 
-    StyleImage* styleImage(CSSPropertyID, const CSSValue&);
-    StyleImage* cachedOrPendingFromValue(CSSPropertyID, const CSSImageValue&);
-    StyleImage* setOrPendingFromValue(CSSPropertyID, const CSSImageSetValue&);
-    SVGElementProxy& cachedOrPendingFromValue(const CSSURIValue&);
+    PassRefPtr<StyleImage> styleImage(Document&, const TextLinkColors&, Color currentColor, CSSPropertyID, CSSValue*);
 
-    void loadPendingResources(ComputedStyle*);
+    PassRefPtr<StyleImage> generatedOrPendingFromValue(CSSPropertyID, CSSImageGeneratorValue*);
+    PassRefPtr<StyleImage> cachedOrPendingFromValue(Document&, CSSPropertyID, CSSImageValue*);
+    PassRefPtr<StyleImage> setOrPendingFromValue(CSSPropertyID, CSSImageSetValue*);
+    PassRefPtr<StyleImage> cursorOrPendingFromValue(CSSPropertyID, CSSCursorImageValue*);
+
+    const PendingImagePropertyMap& pendingImageProperties() const { return m_pendingImageProperties; }
+    const PendingSVGDocumentMap& pendingSVGDocuments() const { return m_pendingSVGDocuments; }
+
+    void clearPendingImageProperties();
+    void clearPendingSVGDocuments();
+
+    float deviceScaleFactor() const { return m_deviceScaleFactor; }
+    void setDeviceScaleFactor(float deviceScaleFactor) { m_deviceScaleFactor = deviceScaleFactor; }
+
+    void addPendingSVGDocument(FilterOperation*, CSSSVGDocumentValue*);
 
 private:
-    StyleImage* generatedOrPendingFromValue(CSSPropertyID,
-        const CSSImageGeneratorValue&);
-
-    void loadPendingSVGDocuments(ComputedStyle*);
-    void loadPendingImages(ComputedStyle*);
-
-    StyleImage* loadPendingImage(
-        ComputedStyle*,
-        StylePendingImage*,
-        CrossOriginAttributeValue = CrossOriginAttributeNotSet);
-
-    Member<Document> m_document;
-    HashSet<CSSPropertyID> m_pendingImageProperties;
+    PendingImagePropertyMap m_pendingImageProperties;
+    PendingSVGDocumentMap m_pendingSVGDocuments;
     float m_deviceScaleFactor;
 };
 

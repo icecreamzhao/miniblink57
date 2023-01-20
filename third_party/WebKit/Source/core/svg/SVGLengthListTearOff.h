@@ -37,37 +37,18 @@
 namespace blink {
 
 class SVGLengthListTearOff final
-    : public SVGListPropertyTearOffHelper<SVGLengthListTearOff, SVGLengthList>,
-      public ScriptWrappable {
+    : public SVGListPropertyTearOffHelper<SVGLengthListTearOff, SVGLengthList>
+    , public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SVGLengthListTearOff* create(
-        SVGLengthList* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    static PassRefPtrWillBeRawPtr<SVGLengthListTearOff> create(PassRefPtrWillBeRawPtr<SVGLengthList> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
     {
-        return new SVGLengthListTearOff(target, contextElement, propertyIsAnimVal,
-            attributeName);
-    }
-
-    DEFINE_INLINE_VIRTUAL_TRACE_WRAPPERS()
-    {
-        visitor->traceWrappers(contextElement());
+        return adoptRefWillBeNoop(new SVGLengthListTearOff(target, contextElement, propertyIsAnimVal, attributeName));
     }
 
 private:
-    SVGLengthListTearOff(
-        SVGLengthList* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
-        : SVGListPropertyTearOffHelper<SVGLengthListTearOff, SVGLengthList>(
-            target,
-            contextElement,
-            propertyIsAnimVal,
-            attributeName)
+    SVGLengthListTearOff(PassRefPtrWillBeRawPtr<SVGLengthList> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
+        : SVGListPropertyTearOffHelper<SVGLengthListTearOff, SVGLengthList>(target, contextElement, propertyIsAnimVal, attributeName)
     {
     }
 };

@@ -6,23 +6,34 @@
 #define RespondWithObserver_h
 
 #include "core/dom/ContextLifecycleObserver.h"
+<<<<<<< HEAD
 #include "core/events/EventTarget.h"
 #include "modules/ModulesExport.h"
 #include "modules/serviceworkers/WaitUntilObserver.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebURLRequest.h"
 #include "public/platform/modules/serviceworker/WebServiceWorkerResponseError.h"
+=======
+#include "modules/ModulesExport.h"
+#include "platform/heap/Handle.h"
+#include "public/platform/WebServiceWorkerResponseError.h"
+#include "public/platform/WebURLRequest.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class ExceptionState;
 class ExecutionContext;
+<<<<<<< HEAD
 class ScriptPromise;
+=======
+>>>>>>> miniblink49
 class ScriptState;
 class ScriptValue;
 
 // This class observes the service worker's handling of a FetchEvent and
 // notifies the client.
+<<<<<<< HEAD
 class MODULES_EXPORT RespondWithObserver
     : public GarbageCollectedFinalized<RespondWithObserver>,
       public ContextLifecycleObserver {
@@ -87,6 +98,37 @@ private:
     // WaitUntilObserver::ThenFunction but RespondWith needs to have a strong
     // reference to the WaitUntilObserver.
     Member<WaitUntilObserver> m_observer;
+=======
+class MODULES_EXPORT RespondWithObserver final : public GarbageCollectedFinalized<RespondWithObserver>, public ContextLifecycleObserver {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(RespondWithObserver);
+public:
+    static RespondWithObserver* create(ExecutionContext*, int eventID, WebURLRequest::FetchRequestMode, WebURLRequest::FrameType);
+
+    void contextDestroyed() override;
+
+    void didDispatchEvent(bool defaultPrevented);
+
+    // Observes the promise and delays calling didHandleFetchEvent() until the
+    // given promise is resolved or rejected.
+    void respondWith(ScriptState*, const ScriptValue&, ExceptionState&);
+
+    void responseWasRejected(WebServiceWorkerResponseError);
+    void responseWasFulfilled(const ScriptValue&);
+
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+    class ThenFunction;
+
+    RespondWithObserver(ExecutionContext*, int eventID, WebURLRequest::FetchRequestMode, WebURLRequest::FrameType);
+
+    int m_eventID;
+    WebURLRequest::FetchRequestMode m_requestMode;
+    WebURLRequest::FrameType m_frameType;
+
+    enum State { Initial, Pending, Done };
+    State m_state;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

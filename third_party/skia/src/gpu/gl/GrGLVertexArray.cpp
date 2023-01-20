@@ -6,6 +6,7 @@
  */
 
 #include "GrGLVertexArray.h"
+<<<<<<< HEAD
 #include "GrGLBuffer.h"
 #include "GrGLGpu.h"
 
@@ -44,6 +45,20 @@ void GrGLAttribArrayState::set(GrGLGpu* gpu,
     GrGLsizei stride,
     GrGLvoid* offset)
 {
+=======
+#include "GrGLGpu.h"
+
+
+
+void GrGLAttribArrayState::set(GrGLGpu* gpu,
+                               int index,
+                               GrGLuint vertexBufferID,
+                               GrGLint size,
+                               GrGLenum type,
+                               GrGLboolean normalized,
+                               GrGLsizei stride,
+                               GrGLvoid* offset) {
+>>>>>>> miniblink49
     SkASSERT(index >= 0 && index < fAttribArrayStates.count());
     AttribArrayState* array = &fAttribArrayStates[index];
     if (!array->fEnableIsValid || !array->fEnabled) {
@@ -51,6 +66,7 @@ void GrGLAttribArrayState::set(GrGLGpu* gpu,
         array->fEnableIsValid = true;
         array->fEnabled = true;
     }
+<<<<<<< HEAD
     if (array->fVertexBufferUniqueID != vertexBuffer->getUniqueID() || array->fType != type || array->fStride != stride || array->fOffset != offset) {
         gpu->bindBuffer(kVertex_GrBufferType, vertexBuffer);
         const AttribLayout& layout = gLayouts[type];
@@ -63,13 +79,37 @@ void GrGLAttribArrayState::set(GrGLGpu* gpu,
         }
         array->fVertexBufferUniqueID = vertexBuffer->getUniqueID();
         array->fType = type;
+=======
+    if (!array->fAttribPointerIsValid ||
+        array->fVertexBufferID != vertexBufferID ||
+        array->fSize != size ||
+        array->fNormalized != normalized ||
+        array->fStride != stride ||
+        array->fOffset != offset) {
+
+        gpu->bindVertexBuffer(vertexBufferID);
+        GR_GL_CALL(gpu->glInterface(), VertexAttribPointer(index,
+                                                           size,
+                                                           type,
+                                                           normalized,
+                                                           stride,
+                                                           offset));
+        array->fAttribPointerIsValid = true;
+        array->fVertexBufferID = vertexBufferID;
+        array->fSize = size;
+        array->fNormalized = normalized;
+>>>>>>> miniblink49
         array->fStride = stride;
         array->fOffset = offset;
     }
 }
 
+<<<<<<< HEAD
 void GrGLAttribArrayState::disableUnusedArrays(const GrGLGpu* gpu, uint64_t usedMask)
 {
+=======
+void GrGLAttribArrayState::disableUnusedArrays(const GrGLGpu* gpu, uint64_t usedMask) {
+>>>>>>> miniblink49
     int count = fAttribArrayStates.count();
     for (int i = 0; i < count; ++i) {
         if (!(usedMask & 0x1)) {
@@ -91,6 +131,7 @@ void GrGLAttribArrayState::disableUnusedArrays(const GrGLGpu* gpu, uint64_t used
 GrGLVertexArray::GrGLVertexArray(GrGLint id, int attribCount)
     : fID(id)
     , fAttribArrays(attribCount)
+<<<<<<< HEAD
     , fIndexBufferUniqueID(SK_InvalidUniqueID)
 {
 }
@@ -99,23 +140,54 @@ GrGLAttribArrayState* GrGLVertexArray::bind(GrGLGpu* gpu)
 {
     if (0 == fID) {
         return nullptr;
+=======
+    , fIndexBufferIDIsValid(false) {
+}
+
+GrGLAttribArrayState* GrGLVertexArray::bind(GrGLGpu* gpu) {
+    if (0 == fID) {
+        return NULL;
+>>>>>>> miniblink49
     }
     gpu->bindVertexArray(fID);
     return &fAttribArrays;
 }
 
+<<<<<<< HEAD
 GrGLAttribArrayState* GrGLVertexArray::bindWithIndexBuffer(GrGLGpu* gpu, const GrGLBuffer* ibuff)
 {
     GrGLAttribArrayState* state = this->bind(gpu);
     if (state && fIndexBufferUniqueID != ibuff->getUniqueID()) {
         GR_GL_CALL(gpu->glInterface(), BindBuffer(GR_GL_ELEMENT_ARRAY_BUFFER, ibuff->bufferID()));
         fIndexBufferUniqueID = ibuff->getUniqueID();
+=======
+GrGLAttribArrayState* GrGLVertexArray::bindWithIndexBuffer(GrGLGpu* gpu, GrGLuint ibufferID) {
+    GrGLAttribArrayState* state = this->bind(gpu);
+    if (state) {
+        if (!fIndexBufferIDIsValid || ibufferID != fIndexBufferID) {            
+            GR_GL_CALL(gpu->glInterface(), BindBuffer(GR_GL_ELEMENT_ARRAY_BUFFER, ibufferID));
+            fIndexBufferIDIsValid = true;
+            fIndexBufferID = ibufferID;
+        }
+>>>>>>> miniblink49
     }
     return state;
 }
 
+<<<<<<< HEAD
 void GrGLVertexArray::invalidateCachedState()
 {
     fAttribArrays.invalidate();
     fIndexBufferUniqueID = SK_InvalidUniqueID;
+=======
+void GrGLVertexArray::notifyIndexBufferDelete(GrGLuint bufferID) {
+    if (fIndexBufferIDIsValid && bufferID == fIndexBufferID) {
+        fIndexBufferID = 0;
+    }
+ }
+
+void GrGLVertexArray::invalidateCachedState() {
+    fAttribArrays.invalidate();
+    fIndexBufferIDIsValid = false;
+>>>>>>> miniblink49
 }

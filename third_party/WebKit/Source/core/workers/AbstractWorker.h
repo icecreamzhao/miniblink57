@@ -32,11 +32,14 @@
 #define AbstractWorker_h
 
 #include "core/CoreExport.h"
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/dom/ActiveDOMObject.h"
 #include "core/events/EventListener.h"
 #include "core/events/EventTarget.h"
 #include "platform/heap/Handle.h"
-#include "wtf/Forward.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
+#include "wtf/text/AtomicStringHash.h"
 
 namespace blink {
 
@@ -44,30 +47,23 @@ class ExceptionState;
 class KURL;
 class ExecutionContext;
 
-class CORE_EXPORT AbstractWorker : public EventTargetWithInlineData,
-                                   public ContextLifecycleObserver {
-    USING_GARBAGE_COLLECTED_MIXIN(AbstractWorker);
-
+class CORE_EXPORT AbstractWorker : public EventTargetWithInlineData, public RefCountedWillBeNoBase<AbstractWorker>, public ActiveDOMObject {
+    REFCOUNTED_EVENT_TARGET(AbstractWorker);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(AbstractWorker);
 public:
     // EventTarget APIs
-    ExecutionContext* getExecutionContext() const final
-    {
-        return ContextLifecycleObserver::getExecutionContext();
-    }
+    virtual ExecutionContext* executionContext() const override final { return ActiveDOMObject::executionContext(); }
 
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(error);
 
     AbstractWorker(ExecutionContext*);
-    ~AbstractWorker() override;
+    virtual ~AbstractWorker();
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    // Helper function that converts a URL to an absolute URL and checks the
-    // result for validity.
-    KURL resolveURL(const String& url,
-        ExceptionState&,
-        WebURLRequest::RequestContext);
+    // Helper function that converts a URL to an absolute URL and checks the result for validity.
+    KURL resolveURL(const String& url, ExceptionState&);
 };
 
 } // namespace blink

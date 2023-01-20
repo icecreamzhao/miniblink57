@@ -31,13 +31,9 @@ class HTMLDimension;
 class HTMLFrameSetElement;
 class MouseEvent;
 
-enum FrameEdge { LeftFrameEdge,
-    RightFrameEdge,
-    TopFrameEdge,
-    BottomFrameEdge };
+enum FrameEdge { LeftFrameEdge, RightFrameEdge, TopFrameEdge, BottomFrameEdge };
 
 struct FrameEdgeInfo {
-    STACK_ALLOCATED();
     FrameEdgeInfo(bool preventResize = false, bool allowBorder = true)
         : m_preventResize(4)
         , m_allowBorder(4)
@@ -49,14 +45,8 @@ struct FrameEdgeInfo {
     bool preventResize(FrameEdge edge) const { return m_preventResize[edge]; }
     bool allowBorder(FrameEdge edge) const { return m_allowBorder[edge]; }
 
-    void setPreventResize(FrameEdge edge, bool preventResize)
-    {
-        m_preventResize[edge] = preventResize;
-    }
-    void setAllowBorder(FrameEdge edge, bool allowBorder)
-    {
-        m_allowBorder[edge] = allowBorder;
-    }
+    void setPreventResize(FrameEdge edge, bool preventResize) { m_preventResize[edge] = preventResize; }
+    void setAllowBorder(FrameEdge edge, bool allowBorder) { m_allowBorder[edge] = allowBorder; }
 
 private:
     Vector<bool> m_preventResize;
@@ -66,18 +56,10 @@ private:
 class LayoutFrameSet final : public LayoutBox {
 public:
     LayoutFrameSet(HTMLFrameSetElement*);
-    ~LayoutFrameSet() override;
+    virtual ~LayoutFrameSet();
 
-    LayoutObject* firstChild() const
-    {
-        ASSERT(children() == virtualChildren());
-        return children()->firstChild();
-    }
-    LayoutObject* lastChild() const
-    {
-        ASSERT(children() == virtualChildren());
-        return children()->lastChild();
-    }
+    LayoutObject* firstChild() const { ASSERT(children() == virtualChildren()); return children()->firstChild(); }
+    LayoutObject* lastChild() const { ASSERT(children() == virtualChildren()); return children()->lastChild(); }
 
     // If you have a LayoutFrameSet, use firstChild or lastChild instead.
     void slowFirstChild() const = delete;
@@ -90,11 +72,6 @@ public:
 
     bool userResize(MouseEvent*);
 
-#ifdef TENCENT_FITSCREEN_FRAEME_FLATTEN
-    bool flattenFrameSet() const;
-    void positionFramesWithFlattening();
-#endif
-
     bool canResizeRow(const IntPoint&) const;
     bool canResizeColumn(const IntPoint&) const;
 
@@ -102,9 +79,7 @@ public:
     HTMLFrameSetElement* frameSet() const;
 
     class GridAxis {
-        DISALLOW_NEW();
         WTF_MAKE_NONCOPYABLE(GridAxis);
-
     public:
         GridAxis();
         void resize(int);
@@ -117,30 +92,24 @@ public:
         int m_splitResizeOffset;
     };
 
-    const GridAxis& rows() const { return m_rows; }
-    const GridAxis& columns() const { return m_cols; }
+    const GridAxis& rows() { return m_rows; }
+    const GridAxis& columns() { return m_cols; }
 
-    const char* name() const override { return "LayoutFrameSet"; }
+    virtual const char* name() const override { return "LayoutFrameSet"; }
 
 private:
     static const int noSplit = -1;
 
-    LayoutObjectChildList* virtualChildren() override { return children(); }
-    const LayoutObjectChildList* virtualChildren() const override
-    {
-        return children();
-    }
+    virtual LayoutObjectChildList* virtualChildren() override { return children(); }
+    virtual const LayoutObjectChildList* virtualChildren() const override { return children(); }
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectFrameSet || LayoutBox::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectFrameSet || LayoutBox::isOfType(type); }
 
-    void layout() override;
-    void paint(const PaintInfo&, const LayoutPoint&) const override;
-    void computePreferredLogicalWidths() override;
-    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
-    CursorDirective getCursor(const LayoutPoint&, Cursor&) const override;
+    virtual void layout() override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&) override;
+    virtual void computePreferredLogicalWidths() override;
+    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
+    virtual CursorDirective getCursor(const LayoutPoint&, Cursor&) const override;
 
     void setIsResizing(bool);
 
@@ -154,11 +123,6 @@ private:
 
     void startResizing(GridAxis&, int position);
     void continueResizing(GridAxis&, int position);
-
-    bool paintedOutputOfObjectHasNoEffectRegardlessOfSize() const override
-    {
-        return false;
-    }
 
     LayoutObjectChildList m_children;
 

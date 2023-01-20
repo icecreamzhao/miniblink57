@@ -31,61 +31,73 @@
 #ifndef WorkerInspectorController_h
 #define WorkerInspectorController_h
 
-#include "core/inspector/InspectorSession.h"
+#include "core/inspector/InspectorBaseAgent.h"
+#include "core/inspector/InspectorRuntimeAgent.h"
 #include "core/inspector/InspectorTaskRunner.h"
-#include "public/platform/WebThread.h"
-#include "wtf/Allocator.h"
+#include "wtf/FastAllocBase.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
+#include "wtf/OwnPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
+class AsyncCallTracker;
+class InjectedScriptManager;
+class InspectorBackendDispatcher;
+class InspectorFrontend;
+class InspectorFrontendChannel;
+class InspectorStateClient;
 class InstrumentingAgents;
-class WorkerThread;
+class WorkerDebuggerAgent;
+class WorkerGlobalScope;
+class WorkerRuntimeAgent;
 class WorkerThreadDebugger;
 
-class WorkerInspectorController final
-    : public GarbageCollectedFinalized<WorkerInspectorController>,
-      public InspectorSession::Client,
-      private WebThread::TaskObserver {
+class WorkerInspectorController : public RefCountedWillBeGarbageCollectedFinalized<WorkerInspectorController>, public InspectorRuntimeAgent::Client {
     WTF_MAKE_NONCOPYABLE(WorkerInspectorController);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(WorkerInspectorController);
 public:
-    static WorkerInspectorController* create(WorkerThread*);
-    ~WorkerInspectorController() override;
+    explicit WorkerInspectorController(WorkerGlobalScope*);
+    ~WorkerInspectorController();
     DECLARE_TRACE();
 
-    InstrumentingAgents* instrumentingAgents() const
-    {
-        return m_instrumentingAgents.get();
-    }
-
+    void registerModuleAgent(PassOwnPtrWillBeRawPtr<InspectorAgent>);
     void connectFrontend();
     void disconnectFrontend();
+    void restoreInspectorStateFromCookie(const String& inspectorCookie);
     void dispatchMessageFromFrontend(const String&);
     void dispose();
-    void flushProtocolNotifications();
+    void interruptAndDispatchInspectorCommands();
+
+    void workerContextInitialized(bool pauseOnStart);
 
 private:
-    WorkerInspectorController(WorkerThread*, WorkerThreadDebugger*);
+    friend InstrumentingAgents* instrumentationForWorkerGlobalScope(WorkerGlobalScope*);
 
-    // InspectorSession::Client implementation.
-    void sendProtocolMessage(int sessionId,
-        int callId,
-        const String& response,
-        const String& state) override;
+    // InspectorRuntimeAgent::Client implementation.
+    void pauseOnStart();
+    void resumeStartup() override;
+    bool isRunRequired() override;
 
-    // WebThread::TaskObserver implementation.
-    void willProcessTask() override;
-    void didProcessTask() override;
-
-    WorkerThreadDebugger* m_debugger;
-    WorkerThread* m_thread;
-    Member<InstrumentingAgents> m_instrumentingAgents;
-    Member<InspectorSession> m_session;
+    RawPtrWillBeMember<WorkerGlobalScope> m_workerGlobalScope;
+    OwnPtr<InspectorStateClient> m_stateClient;
+    OwnPtrWillBeMember<InspectorCompositeState> m_state;
+    RefPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
+    OwnPtrWillBeMember<InjectedScriptManager> m_injectedScriptManager;
+    OwnPtrWillBeMember<WorkerThreadDebugger> m_workerThreadDebugger;
+    InspectorAgentRegistry m_agents;
+    OwnPtr<InspectorFrontendChannel> m_frontendChannel;
+    OwnPtr<InspectorFrontend> m_frontend;
+    RefPtrWillBeMember<InspectorBackendDispatcher> m_backendDispatcher;
+    RawPtrWillBeMember<WorkerDebuggerAgent> m_workerDebuggerAgent;
+    OwnPtrWillBeMember<AsyncCallTracker> m_asyncCallTracker;
+    RawPtrWillBeMember<WorkerRuntimeAgent> m_workerRuntimeAgent;
+    OwnPtr<InspectorTaskRunner> m_inspectorTaskRunner;
+    OwnPtr<InspectorTaskRunner::IgnoreInterruptsScope> m_beforeInitlizedScope;
+    bool m_paused;
 };
 
-} // namespace blink
+}
 
 #endif // WorkerInspectorController_h

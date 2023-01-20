@@ -12,11 +12,18 @@
       'target_name': 'pathops_skpclip',
       'type': 'executable',
       'include_dirs': [
+<<<<<<< HEAD
         '../include/private',
+=======
+>>>>>>> miniblink49
         '../src/core',
         '../src/effects',
         '../src/lazy',
         '../src/pathops',
+<<<<<<< HEAD
+=======
+        '../src/pipe/utils',
+>>>>>>> miniblink49
         '../src/utils',
       ],
       'dependencies': [
@@ -26,7 +33,11 @@
         'tools.gyp:resources',
       ],
       'sources': [
+<<<<<<< HEAD
         '../tests/PathOpsDebug.cpp',
+=======
+		'../tests/PathOpsDebug.cpp',
+>>>>>>> miniblink49
         '../tests/PathOpsSkpClipTest.cpp',
       ],
       'conditions': [

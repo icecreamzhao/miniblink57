@@ -5,19 +5,28 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkTypes.h"
 #if defined(SK_BUILD_FOR_WIN32)
 
 #include "SkLeanWindows.h"
 #include "SkOSFile.h"
+=======
+#include "SkOSFile.h"
+
+>>>>>>> miniblink49
 #include "SkTFitsIn.h"
 
 #include <io.h>
 #include <stdio.h>
 #include <sys/stat.h>
 
+<<<<<<< HEAD
 bool sk_exists(const char* path, SkFILE_Flags flags)
 {
+=======
+bool sk_exists(const char *path, SkFILE_Flags flags) {
+>>>>>>> miniblink49
     int mode = 0; // existence
     if (flags & kRead_SkFILE_Flag) {
         mode |= 4; // read
@@ -34,8 +43,12 @@ typedef struct {
     ULONGLONG fMsbSize;
 } SkFILEID;
 
+<<<<<<< HEAD
 static bool sk_ino(FILE* f, SkFILEID* id)
 {
+=======
+static bool sk_ino(SkFILE* f, SkFILEID* id) {
+>>>>>>> miniblink49
     int fileno = _fileno((FILE*)f);
     if (fileno < 0) {
         return false;
@@ -58,6 +71,7 @@ static bool sk_ino(FILE* f, SkFILEID* id)
     return true;
 }
 
+<<<<<<< HEAD
 bool sk_fidentical(FILE* a, FILE* b)
 {
     SkFILEID aID, bID;
@@ -65,10 +79,19 @@ bool sk_fidentical(FILE* a, FILE* b)
         && aID.fLsbSize == bID.fLsbSize
         && aID.fMsbSize == bID.fMsbSize
         && aID.fVolume == bID.fVolume;
+=======
+bool sk_fidentical(SkFILE* a, SkFILE* b) {
+    SkFILEID aID, bID;
+    return sk_ino(a, &aID) && sk_ino(b, &bID)
+           && aID.fLsbSize == bID.fLsbSize
+           && aID.fMsbSize == bID.fMsbSize
+           && aID.fVolume == bID.fVolume;
+>>>>>>> miniblink49
 }
 
 class SkAutoNullKernelHandle : SkNoncopyable {
 public:
+<<<<<<< HEAD
     SkAutoNullKernelHandle(const HANDLE handle)
         : fHandle(handle)
     {
@@ -77,11 +100,18 @@ public:
     operator HANDLE() const { return fHandle; }
     bool isValid() const { return SkToBool(fHandle); }
 
+=======
+    SkAutoNullKernelHandle(const HANDLE handle) : fHandle(handle) { }
+    ~SkAutoNullKernelHandle() { CloseHandle(fHandle); }
+    operator HANDLE() const { return fHandle; }
+    bool isValid() const { return SkToBool(fHandle); }
+>>>>>>> miniblink49
 private:
     HANDLE fHandle;
 };
 typedef SkAutoNullKernelHandle SkAutoWinMMap;
 
+<<<<<<< HEAD
 void sk_fmunmap(const void* addr, size_t)
 {
     UnmapViewOfFile(addr);
@@ -130,6 +160,54 @@ void* sk_fmmap(FILE* f, size_t* length)
     int fileno = sk_fileno(f);
     if (fileno < 0) {
         return nullptr;
+=======
+void sk_fmunmap(const void* addr, size_t) {
+    UnmapViewOfFile(addr);
+}
+
+void* sk_fdmmap(int fileno, size_t* length) {
+//     HANDLE file = (HANDLE)_get_osfhandle(fileno);
+//     if (INVALID_HANDLE_VALUE == file) {
+//         return NULL;
+//     }
+// 
+//     LARGE_INTEGER fileSize;
+//     if (0 == GetFileSizeEx(file, &fileSize)) {
+//         //TODO: use SK_TRACEHR(GetLastError(), "Could not get file size.") to report.
+//         return NULL;
+//     }
+//     if (!SkTFitsIn<size_t>(fileSize.QuadPart)) {
+//         return NULL;
+//     }
+// 
+//     SkAutoWinMMap mmap(CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, NULL));
+//     if (!mmap.isValid()) {
+//         //TODO: use SK_TRACEHR(GetLastError(), "Could not create file mapping.") to report.
+//         return NULL;
+//     }
+// 
+//     // Eventually call UnmapViewOfFile
+//     void* addr = MapViewOfFile(mmap, FILE_MAP_READ, 0, 0, 0);
+//     if (NULL == addr) {
+//         //TODO: use SK_TRACEHR(GetLastError(), "Could not map view of file.") to report.
+//         return NULL;
+//     }
+// 
+//     *length = static_cast<size_t>(fileSize.QuadPart);
+//     return addr;
+    DebugBreak();
+    return nullptr;
+}
+
+int sk_fileno(SkFILE* f) {
+    return _fileno((FILE*)f);
+}
+
+void* sk_fmmap(SkFILE* f, size_t* length) {
+    int fileno = sk_fileno(f);
+    if (fileno < 0) {
+        return NULL;
+>>>>>>> miniblink49
     }
 
     return sk_fdmmap(fileno, length);
@@ -138,6 +216,7 @@ void* sk_fmmap(FILE* f, size_t* length)
 ////////////////////////////////////////////////////////////////////////////
 
 struct SkOSFileIterData {
+<<<<<<< HEAD
     SkOSFileIterData()
         : fHandle(0)
         , fPath16(nullptr)
@@ -152,13 +231,28 @@ static uint16_t* concat_to_16(const char src[], const char suffix[])
 {
     size_t i, len = strlen(src);
     size_t len2 = 3 + (suffix ? strlen(suffix) : 0);
+=======
+    SkOSFileIterData() : fHandle(0), fPath16(NULL) { }
+    HANDLE fHandle;
+    uint16_t* fPath16;
+};
+SK_COMPILE_ASSERT(sizeof(SkOSFileIterData) <= SkOSFile::Iter::kStorageSize, not_enough_space);
+
+static uint16_t* concat_to_16(const char src[], const char suffix[]) {
+    size_t  i, len = strlen(src);
+    size_t  len2 = 3 + (suffix ? strlen(suffix) : 0);
+>>>>>>> miniblink49
     uint16_t* dst = (uint16_t*)sk_malloc_throw((len + len2) * sizeof(uint16_t));
 
     for (i = 0; i < len; i++) {
         dst[i] = src[i];
     }
 
+<<<<<<< HEAD
     if (i > 0 && dst[i - 1] != '/') {
+=======
+    if (i > 0 && dst[i-1] != '/') {
+>>>>>>> miniblink49
         dst[i++] = '/';
     }
     dst[i++] = '*';
@@ -174,6 +268,7 @@ static uint16_t* concat_to_16(const char src[], const char suffix[])
     return dst;
 }
 
+<<<<<<< HEAD
 SkOSFile::Iter::Iter() { new (fSelf.get()) SkOSFileIterData; }
 
 SkOSFile::Iter::Iter(const char path[], const char suffix[])
@@ -184,6 +279,18 @@ SkOSFile::Iter::Iter(const char path[], const char suffix[])
 
 SkOSFile::Iter::~Iter()
 {
+=======
+SkOSFile::Iter::Iter() {
+    SkNEW_PLACEMENT(fSelf.get(), SkOSFileIterData);
+}
+
+SkOSFile::Iter::Iter(const char path[], const char suffix[]) {
+    SkNEW_PLACEMENT(fSelf.get(), SkOSFileIterData);
+    this->reset(path, suffix);
+}
+
+SkOSFile::Iter::~Iter() {
+>>>>>>> miniblink49
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
     sk_free(self.fPath16);
     if (self.fHandle) {
@@ -192,14 +299,22 @@ SkOSFile::Iter::~Iter()
     self.~SkOSFileIterData();
 }
 
+<<<<<<< HEAD
 void SkOSFile::Iter::reset(const char path[], const char suffix[])
 {
+=======
+void SkOSFile::Iter::reset(const char path[], const char suffix[]) {
+>>>>>>> miniblink49
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
     if (self.fHandle) {
         ::FindClose(self.fHandle);
         self.fHandle = 0;
     }
+<<<<<<< HEAD
     if (nullptr == path) {
+=======
+    if (NULL == path) {
+>>>>>>> miniblink49
         path = "";
     }
 
@@ -207,17 +322,28 @@ void SkOSFile::Iter::reset(const char path[], const char suffix[])
     self.fPath16 = concat_to_16(path, suffix);
 }
 
+<<<<<<< HEAD
 static bool is_magic_dir(const uint16_t dir[])
 {
+=======
+static bool is_magic_dir(const uint16_t dir[]) {
+>>>>>>> miniblink49
     // return true for "." and ".."
     return dir[0] == '.' && (dir[1] == 0 || (dir[1] == '.' && dir[2] == 0));
 }
 
+<<<<<<< HEAD
 static bool get_the_file(HANDLE handle, SkString* name, WIN32_FIND_DATAW* dataPtr, bool getDir)
 {
     WIN32_FIND_DATAW data;
 
     if (nullptr == dataPtr) {
+=======
+static bool get_the_file(HANDLE handle, SkString* name, WIN32_FIND_DATAW* dataPtr, bool getDir) {
+    WIN32_FIND_DATAW    data;
+
+    if (NULL == dataPtr) {
+>>>>>>> miniblink49
         if (::FindNextFileW(handle, &data))
             dataPtr = &data;
         else
@@ -226,7 +352,13 @@ static bool get_the_file(HANDLE handle, SkString* name, WIN32_FIND_DATAW* dataPt
 
     for (;;) {
         if (getDir) {
+<<<<<<< HEAD
             if ((dataPtr->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && !is_magic_dir((uint16_t*)dataPtr->cFileName)) {
+=======
+            if ((dataPtr->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+                !is_magic_dir((uint16_t*)dataPtr->cFileName))
+            {
+>>>>>>> miniblink49
                 break;
             }
         } else {
@@ -245,6 +377,7 @@ static bool get_the_file(HANDLE handle, SkString* name, WIN32_FIND_DATAW* dataPt
     return true;
 }
 
+<<<<<<< HEAD
 bool SkOSFile::Iter::next(SkString* name, bool getDir)
 {
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
@@ -253,6 +386,15 @@ bool SkOSFile::Iter::next(SkString* name, bool getDir)
 
     if (self.fHandle == 0) { // our first time
         if (self.fPath16 == nullptr || *self.fPath16 == 0) { // check for no path
+=======
+bool SkOSFile::Iter::next(SkString* name, bool getDir) {
+    SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
+    WIN32_FIND_DATAW    data;
+    WIN32_FIND_DATAW*   dataPtr = NULL;
+
+    if (self.fHandle == 0) {  // our first time
+        if (self.fPath16 == NULL || *self.fPath16 == 0) {  // check for no path
+>>>>>>> miniblink49
             return false;
         }
 
@@ -263,5 +405,8 @@ bool SkOSFile::Iter::next(SkString* name, bool getDir)
     }
     return self.fHandle != (HANDLE)~0 && get_the_file(self.fHandle, name, dataPtr, getDir);
 }
+<<<<<<< HEAD
 
 #endif //defined(SK_BUILD_FOR_WIN32)
+=======
+>>>>>>> miniblink49

@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "bindings/core/v8/DOMWrapperWorld.h"
 
 #include "bindings/core/v8/DOMDataStore.h"
@@ -40,95 +41,44 @@
 #include "bindings/core/v8/WrapperTypeInfo.h"
 #include "core/dom/ExecutionContext.h"
 #include "wtf/HashTraits.h"
-#include "wtf/PtrUtil.h"
 #include "wtf/StdLibExtras.h"
-#include <memory>
 
 namespace blink {
 
-class DOMObjectHolderBase {
-    USING_FAST_MALLOC(DOMObjectHolderBase);
-
-public:
-    DOMObjectHolderBase(v8::Isolate* isolate, v8::Local<v8::Value> wrapper)
-        : m_wrapper(isolate, wrapper)
-        , m_world(0)
-    {
-    }
-    virtual ~DOMObjectHolderBase() { }
-
-    DOMWrapperWorld* world() const { return m_world; }
-    void setWorld(DOMWrapperWorld* world) { m_world = world; }
-    void setWeak(
-        void (*callback)(const v8::WeakCallbackInfo<DOMObjectHolderBase>&))
-    {
-        m_wrapper.setWeak(this, callback);
-    }
-
-private:
-    ScopedPersistent<v8::Value> m_wrapper;
-    DOMWrapperWorld* m_world;
-};
-
-template <typename T>
-class DOMObjectHolder : public DOMObjectHolderBase {
-public:
-    static std::unique_ptr<DOMObjectHolder<T>>
-    create(v8::Isolate* isolate, T* object, v8::Local<v8::Value> wrapper)
-    {
-        return WTF::wrapUnique(new DOMObjectHolder(isolate, object, wrapper));
-    }
-
-private:
-    DOMObjectHolder(v8::Isolate* isolate, T* object, v8::Local<v8::Value> wrapper)
-        : DOMObjectHolderBase(isolate, wrapper)
-        , m_object(object)
-    {
-    }
-
-    Persistent<T> m_object;
-};
-
 unsigned DOMWrapperWorld::isolatedWorldCount = 0;
+DOMWrapperWorld* DOMWrapperWorld::worldOfInitializingWindow = 0;
 
-PassRefPtr<DOMWrapperWorld> DOMWrapperWorld::create(v8::Isolate* isolate,
-    int worldId)
+PassRefPtr<DOMWrapperWorld> DOMWrapperWorld::create(v8::Isolate* isolate, int worldId, int extensionGroup)
 {
-    return adoptRef(new DOMWrapperWorld(isolate, worldId));
+    return adoptRef(new DOMWrapperWorld(isolate, worldId, extensionGroup));
 }
 
-DOMWrapperWorld::DOMWrapperWorld(v8::Isolate* isolate, int worldId)
+DOMWrapperWorld::DOMWrapperWorld(v8::Isolate* isolate, int worldId, int extensionGroup)
     : m_worldId(worldId)
-    , m_domDataStore(
-          WTF::wrapUnique(new DOMDataStore(isolate, isMainWorld())))
+    , m_extensionGroup(extensionGroup)
+    , m_domDataStore(adoptPtr(new DOMDataStore(isolate, isMainWorld())))
 {
-    if (worldId == WorkerWorldId) {
-        workerWorld() = this;
-    }
 }
 
 DOMWrapperWorld& DOMWrapperWorld::mainWorld()
 {
     ASSERT(isMainThread());
-    DEFINE_STATIC_REF(
-        DOMWrapperWorld, cachedMainWorld,
-        (DOMWrapperWorld::create(v8::Isolate::GetCurrent(), MainWorldId)));
+    DEFINE_STATIC_REF(DOMWrapperWorld, cachedMainWorld, (DOMWrapperWorld::create(v8::Isolate::GetCurrent(), MainWorldId, mainWorldExtensionGroup)));
     return *cachedMainWorld;
 }
 
-DOMWrapperWorld*& DOMWrapperWorld::workerWorld()
+DOMWrapperWorld& DOMWrapperWorld::privateScriptIsolatedWorld()
 {
-    DEFINE_THREAD_SAFE_STATIC_LOCAL(ThreadSpecific<DOMWrapperWorld*>, workerWorld,
-        new ThreadSpecific<DOMWrapperWorld*>);
-    return *workerWorld;
-}
-
-PassRefPtr<DOMWrapperWorld> DOMWrapperWorld::fromWorldId(v8::Isolate* isolate,
-    int worldId)
-{
-    if (worldId == MainWorldId)
-        return &mainWorld();
-    return ensureIsolatedWorld(isolate, worldId);
+    ASSERT(isMainThread());
+    DEFINE_STATIC_LOCAL(RefPtr<DOMWrapperWorld>, cachedPrivateScriptIsolatedWorld, ());
+    if (!cachedPrivateScriptIsolatedWorld) {
+        cachedPrivateScriptIsolatedWorld = DOMWrapperWorld::create(v8::Isolate::GetCurrent(), PrivateScriptIsolatedWorldId, privateScriptIsolatedWorldExtensionGroup);
+        // This name must match the string in DevTools used to guard the
+        // privateScriptInspection experiment.
+        DOMWrapperWorld::setIsolatedWorldHumanReadableName(PrivateScriptIsolatedWorldId, "private script");
+        isolatedWorldCount++;
+    }
+    return *cachedPrivateScriptIsolatedWorld;
 }
 
 typedef HashMap<int, DOMWrapperWorld*> WorldMap;
@@ -139,65 +89,13 @@ static WorldMap& isolatedWorldMap()
     return map;
 }
 
-void DOMWrapperWorld::allWorldsInMainThread(
-    Vector<RefPtr<DOMWrapperWorld>>& worlds)
+void DOMWrapperWorld::allWorldsInMainThread(Vector<RefPtr<DOMWrapperWorld>>& worlds)
 {
     ASSERT(isMainThread());
-    worlds.push_back(&mainWorld());
+    worlds.append(&mainWorld());
     WorldMap& isolatedWorlds = isolatedWorldMap();
-    for (WorldMap::iterator it = isolatedWorlds.begin();
-         it != isolatedWorlds.end(); ++it)
-        worlds.push_back(it->value);
-}
-
-void DOMWrapperWorld::markWrappersInAllWorlds(
-    ScriptWrappable* scriptWrappable,
-    const ScriptWrappableVisitor* visitor)
-{
-    // Handle marking in per-worker wrapper worlds.
-    if (!isMainThread()) {
-        DCHECK(ThreadState::current()->isolate());
-        DOMWrapperWorld* worker = workerWorld();
-        if (worker) {
-            DOMDataStore& dataStore = worker->domDataStore();
-            if (dataStore.containsWrapper(scriptWrappable)) {
-                dataStore.markWrapper(scriptWrappable);
-            }
-        }
-        return;
-    }
-
-    scriptWrappable->markWrapper(visitor);
-    WorldMap& isolatedWorlds = isolatedWorldMap();
-    for (auto& world : isolatedWorlds.values()) {
-        DOMDataStore& dataStore = world->domDataStore();
-        if (dataStore.containsWrapper(scriptWrappable)) {
-            // Marking for the isolated worlds
-            dataStore.markWrapper(scriptWrappable);
-        }
-    }
-}
-
-void DOMWrapperWorld::setWrapperReferencesInAllWorlds(
-    const v8::Persistent<v8::Object>& parent,
-    ScriptWrappable* scriptWrappable,
-    v8::Isolate* isolate)
-{
-    if (!scriptWrappable)
-        return;
-    // Marking for the main world
-    if (scriptWrappable->containsWrapper())
-        scriptWrappable->setReference(parent, isolate);
-    if (!isMainThread())
-        return;
-    WorldMap& isolatedWorlds = isolatedWorldMap();
-    for (auto& world : isolatedWorlds.values()) {
-        DOMDataStore& dataStore = world->domDataStore();
-        if (dataStore.containsWrapper(scriptWrappable)) {
-            // Marking for the isolated worlds
-            dataStore.setReference(parent, scriptWrappable, isolate);
-        }
-    }
+    for (WorldMap::iterator it = isolatedWorlds.begin(); it != isolatedWorlds.end(); ++it)
+        worlds.append(it->value);
 }
 
 DOMWrapperWorld::~DOMWrapperWorld()
@@ -224,33 +122,30 @@ DOMWrapperWorld::~DOMWrapperWorld()
 void DOMWrapperWorld::dispose()
 {
     m_domObjectHolders.clear();
-    m_domDataStore.reset();
-    if (isWorkerWorld())
-        workerWorld() = nullptr;
+    m_domDataStore.clear();
 }
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
 static bool isIsolatedWorldId(int worldId)
 {
-    return MainWorldId < worldId && worldId < IsolatedWorldIdLimit;
+    return MainWorldId < worldId  && worldId < IsolatedWorldIdLimit;
 }
 #endif
 
-PassRefPtr<DOMWrapperWorld> DOMWrapperWorld::ensureIsolatedWorld(
-    v8::Isolate* isolate,
-    int worldId)
+PassRefPtr<DOMWrapperWorld> DOMWrapperWorld::ensureIsolatedWorld(v8::Isolate* isolate, int worldId, int extensionGroup)
 {
     ASSERT(isIsolatedWorldId(worldId));
 
     WorldMap& map = isolatedWorldMap();
-    WorldMap::AddResult result = map.add(worldId, nullptr);
+    WorldMap::AddResult result = map.add(worldId, 0);
     RefPtr<DOMWrapperWorld> world = result.storedValue->value;
     if (world) {
         ASSERT(world->worldId() == worldId);
+        ASSERT(world->extensionGroup() == extensionGroup);
         return world.release();
     }
 
-    world = DOMWrapperWorld::create(isolate, worldId);
+    world = DOMWrapperWorld::create(isolate, worldId, extensionGroup);
     result.storedValue->value = world.get();
     isolatedWorldCount++;
     return world.release();
@@ -272,18 +167,16 @@ SecurityOrigin* DOMWrapperWorld::isolatedWorldSecurityOrigin()
     return it == origins.end() ? 0 : it->value.get();
 }
 
-void DOMWrapperWorld::setIsolatedWorldSecurityOrigin(
-    int worldId,
-    PassRefPtr<SecurityOrigin> securityOrigin)
+void DOMWrapperWorld::setIsolatedWorldSecurityOrigin(int worldId, PassRefPtr<SecurityOrigin> securityOrigin)
 {
     ASSERT(isIsolatedWorldId(worldId));
     if (securityOrigin)
-        isolatedWorldSecurityOrigins().set(worldId, std::move(securityOrigin));
+        isolatedWorldSecurityOrigins().set(worldId, securityOrigin);
     else
         isolatedWorldSecurityOrigins().remove(worldId);
 }
 
-typedef HashMap<int, String> IsolatedWorldHumanReadableNameMap;
+typedef HashMap<int, String > IsolatedWorldHumanReadableNameMap;
 static IsolatedWorldHumanReadableNameMap& isolatedWorldHumanReadableNames()
 {
     ASSERT(isMainThread());
@@ -297,17 +190,14 @@ String DOMWrapperWorld::isolatedWorldHumanReadableName()
     return isolatedWorldHumanReadableNames().get(worldId());
 }
 
-void DOMWrapperWorld::setIsolatedWorldHumanReadableName(
-    int worldId,
-    const String& humanReadableName)
+void DOMWrapperWorld::setIsolatedWorldHumanReadableName(int worldId, const String& humanReadableName)
 {
     ASSERT(isIsolatedWorldId(worldId));
     isolatedWorldHumanReadableNames().set(worldId, humanReadableName);
 }
 
 typedef HashMap<int, bool> IsolatedWorldContentSecurityPolicyMap;
-static IsolatedWorldContentSecurityPolicyMap&
-isolatedWorldContentSecurityPolicies()
+static IsolatedWorldContentSecurityPolicyMap& isolatedWorldContentSecurityPolicies()
 {
     ASSERT(isMainThread());
     DEFINE_STATIC_LOCAL(IsolatedWorldContentSecurityPolicyMap, map, ());
@@ -322,9 +212,7 @@ bool DOMWrapperWorld::isolatedWorldHasContentSecurityPolicy()
     return it == policies.end() ? false : it->value;
 }
 
-void DOMWrapperWorld::setIsolatedWorldContentSecurityPolicy(
-    int worldId,
-    const String& policy)
+void DOMWrapperWorld::setIsolatedWorldContentSecurityPolicy(int worldId, const String& policy)
 {
     ASSERT(isIsolatedWorldId(worldId));
     if (!policy.isEmpty())
@@ -333,37 +221,21 @@ void DOMWrapperWorld::setIsolatedWorldContentSecurityPolicy(
         isolatedWorldContentSecurityPolicies().remove(worldId);
 }
 
-template <typename T>
-void DOMWrapperWorld::registerDOMObjectHolder(v8::Isolate* isolate,
-    T* object,
-    v8::Local<v8::Value> wrapper)
-{
-    registerDOMObjectHolderInternal(
-        DOMObjectHolder<T>::create(isolate, object, wrapper));
-}
-
-template void DOMWrapperWorld::registerDOMObjectHolder(v8::Isolate*,
-    ScriptFunction*,
-    v8::Local<v8::Value>);
-
-void DOMWrapperWorld::registerDOMObjectHolderInternal(
-    std::unique_ptr<DOMObjectHolderBase> holderBase)
+void DOMWrapperWorld::registerDOMObjectHolderInternal(PassOwnPtr<DOMObjectHolderBase> holderBase)
 {
     ASSERT(!m_domObjectHolders.contains(holderBase.get()));
     holderBase->setWorld(this);
     holderBase->setWeak(&DOMWrapperWorld::weakCallbackForDOMObjectHolder);
-    m_domObjectHolders.add(std::move(holderBase));
+    m_domObjectHolders.add(holderBase);
 }
 
-void DOMWrapperWorld::unregisterDOMObjectHolder(
-    DOMObjectHolderBase* holderBase)
+void DOMWrapperWorld::unregisterDOMObjectHolder(DOMObjectHolderBase* holderBase)
 {
     ASSERT(m_domObjectHolders.contains(holderBase));
     m_domObjectHolders.remove(holderBase);
 }
 
-void DOMWrapperWorld::weakCallbackForDOMObjectHolder(
-    const v8::WeakCallbackInfo<DOMObjectHolderBase>& data)
+void DOMWrapperWorld::weakCallbackForDOMObjectHolder(const v8::WeakCallbackInfo<DOMObjectHolderBase>& data)
 {
     DOMObjectHolderBase* holderBase = data.GetParameter();
     holderBase->world()->unregisterDOMObjectHolder(holderBase);

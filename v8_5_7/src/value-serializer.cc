@@ -969,7 +969,11 @@ Maybe<double> ValueDeserializer::ReadDouble() {
   double value;
   memcpy(&value, position_, sizeof(double));
   position_ += sizeof(double);
+<<<<<<< HEAD
   if (std_isnan(value)) value = std::numeric_limits<double>::quiet_NaN();
+=======
+  if (std::isnan(value)) value = std::numeric_limits<double>::quiet_NaN();
+>>>>>>> miniblink49
   return Just(value);
 }
 

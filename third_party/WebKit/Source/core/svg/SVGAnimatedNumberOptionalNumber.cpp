@@ -17,29 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGAnimatedNumberOptionalNumber.h"
 
 #include "core/svg/SVGElement.h"
 
 namespace blink {
 
-SVGAnimatedNumberOptionalNumber::SVGAnimatedNumberOptionalNumber(
-    SVGElement* contextElement,
-    const QualifiedName& attributeName,
-    float initialFirstValue,
-    float initialSecondValue)
-    : SVGAnimatedPropertyCommon<SVGNumberOptionalNumber>(
-        contextElement,
-        attributeName,
-        SVGNumberOptionalNumber::create(
-            SVGNumber::create(initialFirstValue),
-            SVGNumber::create(initialSecondValue)))
-    , m_firstNumber(SVGAnimatedNumber::create(contextElement,
-          attributeName,
-          baseValue()->firstNumber()))
-    , m_secondNumber(SVGAnimatedNumber::create(contextElement,
-          attributeName,
-          baseValue()->secondNumber()))
+SVGAnimatedNumberOptionalNumber::SVGAnimatedNumberOptionalNumber(SVGElement* contextElement, const QualifiedName& attributeName, float initialFirstValue, float initialSecondValue)
+    : SVGAnimatedPropertyCommon<SVGNumberOptionalNumber>(contextElement, attributeName,
+        SVGNumberOptionalNumber::create(SVGNumber::create(initialFirstValue), SVGNumber::create(initialSecondValue)))
+    , m_firstNumber(SVGAnimatedNumber::create(contextElement, attributeName, baseValue()->firstNumber()))
+    , m_secondNumber(SVGAnimatedNumber::create(contextElement, attributeName, baseValue()->secondNumber()))
 {
     m_firstNumber->setParentOptionalNumber(this);
     m_secondNumber->setParentOptionalNumber(this);
@@ -52,7 +42,7 @@ DEFINE_TRACE(SVGAnimatedNumberOptionalNumber)
     SVGAnimatedPropertyCommon<SVGNumberOptionalNumber>::trace(visitor);
 }
 
-void SVGAnimatedNumberOptionalNumber::setAnimatedValue(SVGPropertyBase* value)
+void SVGAnimatedNumberOptionalNumber::setAnimatedValue(PassRefPtrWillBeRawPtr<SVGPropertyBase> value)
 {
     SVGAnimatedPropertyCommon<SVGNumberOptionalNumber>::setAnimatedValue(value);
     m_firstNumber->setAnimatedValue(currentValue()->firstNumber());
@@ -68,7 +58,8 @@ void SVGAnimatedNumberOptionalNumber::animationEnded()
 
 bool SVGAnimatedNumberOptionalNumber::needsSynchronizeAttribute()
 {
-    return m_firstNumber->needsSynchronizeAttribute() || m_secondNumber->needsSynchronizeAttribute();
+    return m_firstNumber->needsSynchronizeAttribute()
+        || m_secondNumber->needsSynchronizeAttribute();
 }
 
-} // namespace blink
+}

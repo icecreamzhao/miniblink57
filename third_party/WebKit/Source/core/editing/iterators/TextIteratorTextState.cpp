@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
- * rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
  * Copyright (C) 2005 Alexey Proskuryakov.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,9 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/editing/iterators/TextIteratorTextState.h"
-
-#include "core/layout/LayoutText.h"
 
 namespace blink {
 
@@ -40,50 +38,44 @@ TextIteratorTextState::TextIteratorTextState(bool emitsOriginalText)
     , m_hasEmitted(false)
     , m_lastCharacter(0)
     , m_emitsOriginalText(emitsOriginalText)
-    , m_textStartOffset(0)
-{
-}
+    { }
 
 UChar TextIteratorTextState::characterAt(unsigned index) const
 {
-    SECURITY_DCHECK(index < static_cast<unsigned>(length()));
+    ASSERT_WITH_SECURITY_IMPLICATION(index < static_cast<unsigned>(length()));
     if (!(index < static_cast<unsigned>(length())))
         return 0;
 
     if (m_singleCharacterBuffer) {
-        DCHECK_EQ(index, 0u);
-        DCHECK_EQ(length(), 1);
+        ASSERT(!index);
+        ASSERT(length() == 1);
         return m_singleCharacterBuffer;
     }
 
     return string()[positionStartOffset() + index];
 }
 
-String TextIteratorTextState::substring(unsigned position,
-    unsigned length) const
+String TextIteratorTextState::substring(unsigned position, unsigned length) const
 {
-    SECURITY_DCHECK(position <= static_cast<unsigned>(this->length()));
-    SECURITY_DCHECK(position + length <= static_cast<unsigned>(this->length()));
+    ASSERT_WITH_SECURITY_IMPLICATION(position <= static_cast<unsigned>(this->length()));
+    ASSERT_WITH_SECURITY_IMPLICATION(position + length <= static_cast<unsigned>(this->length()));
     if (!length)
         return emptyString();
     if (m_singleCharacterBuffer) {
-        DCHECK_EQ(position, 0u);
-        DCHECK_EQ(length, 1u);
+        ASSERT(!position);
+        ASSERT(length == 1);
         return String(&m_singleCharacterBuffer, 1);
     }
     return string().substring(positionStartOffset() + position, length);
 }
 
-void TextIteratorTextState::appendTextToStringBuilder(
-    StringBuilder& builder,
-    unsigned position,
-    unsigned maxLength) const
+void TextIteratorTextState::appendTextToStringBuilder(StringBuilder& builder, unsigned position, unsigned maxLength) const
 {
     unsigned lengthToAppend = std::min(static_cast<unsigned>(length()) - position, maxLength);
     if (!lengthToAppend)
         return;
     if (m_singleCharacterBuffer) {
-        DCHECK_EQ(position, 0u);
+        ASSERT(!position);
         builder.append(m_singleCharacterBuffer);
     } else {
         builder.append(string(), positionStartOffset() + position, lengthToAppend);
@@ -101,7 +93,6 @@ void TextIteratorTextState::updateForReplacedElement(Node* baseNode)
 
     m_textLength = 0;
     m_lastCharacter = 0;
-    m_textStartOffset = 0;
 }
 
 void TextIteratorTextState::emitAltText(Node* node)
@@ -109,7 +100,6 @@ void TextIteratorTextState::emitAltText(Node* node)
     m_text = toHTMLElement(node)->altText();
     m_textLength = m_text.length();
     m_lastCharacter = m_textLength ? m_text[m_textLength - 1] : 0;
-    m_textStartOffset = 0;
 }
 
 void TextIteratorTextState::flushPositionOffsets() const
@@ -122,47 +112,35 @@ void TextIteratorTextState::flushPositionOffsets() const
     m_positionOffsetBaseNode = nullptr;
 }
 
-void TextIteratorTextState::spliceBuffer(UChar c,
-    Node* textNode,
-    Node* offsetBaseNode,
-    int textStartOffset,
-    int textEndOffset)
+void TextIteratorTextState::emitCharacter(UChar c, Node* textNode, Node* offsetBaseNode, int textStartOffset, int textEndOffset)
 {
-    DCHECK(textNode);
+    ASSERT(textNode);
     m_hasEmitted = true;
 
     // Remember information with which to construct the TextIterator::range().
-    // NOTE: textNode is often not a text node, so the range will specify child
-    // nodes of positionNode
+    // NOTE: textNode is often not a text node, so the range will specify child nodes of positionNode
     m_positionNode = textNode;
     m_positionOffsetBaseNode = offsetBaseNode;
     m_positionStartOffset = textStartOffset;
     m_positionEndOffset = textEndOffset;
 
-    // remember information with which to construct the TextIterator::characters()
-    // and length()
+    // remember information with which to construct the TextIterator::characters() and length()
     m_singleCharacterBuffer = c;
-    DCHECK(m_singleCharacterBuffer);
+    ASSERT(m_singleCharacterBuffer);
     m_textLength = 1;
 
     // remember some iteration state
     m_lastCharacter = c;
-    m_textStartOffset = 0;
 }
 
-void TextIteratorTextState::emitText(Node* textNode,
-    LayoutText* layoutObject,
-    int textStartOffset,
-    int textEndOffset)
+void TextIteratorTextState::emitText(Node* textNode, LayoutText* layoutObject, int textStartOffset, int textEndOffset)
 {
-    DCHECK(textNode);
+    ASSERT(textNode);
     m_text = m_emitsOriginalText ? layoutObject->originalText() : layoutObject->text();
-    DCHECK(!m_text.isEmpty());
-    DCHECK_LE(0, textStartOffset);
-    DCHECK_LT(textStartOffset, static_cast<int>(m_text.length()));
-    DCHECK_LE(0, textEndOffset);
-    DCHECK_LE(textEndOffset, static_cast<int>(m_text.length()));
-    DCHECK_LE(textStartOffset, textEndOffset);
+    ASSERT(!m_text.isEmpty());
+    ASSERT(0 <= textStartOffset && textStartOffset < static_cast<int>(m_text.length()));
+    ASSERT(0 <= textEndOffset && textEndOffset <= static_cast<int>(m_text.length()));
+    ASSERT(textStartOffset <= textEndOffset);
 
     m_positionNode = textNode;
     m_positionOffsetBaseNode = nullptr;
@@ -173,36 +151,12 @@ void TextIteratorTextState::emitText(Node* textNode,
     m_lastCharacter = m_text[textEndOffset - 1];
 
     m_hasEmitted = true;
-    m_textStartOffset = layoutObject->textStartOffset();
 }
 
-void TextIteratorTextState::appendTextTo(ForwardsTextBuffer* output,
-    unsigned position,
-    unsigned lengthToAppend) const
+EphemeralRange TextIteratorTextState::range() const
 {
-    SECURITY_DCHECK(position + lengthToAppend <= static_cast<unsigned>(length()));
-    // Make sure there's no integer overflow.
-    SECURITY_DCHECK(position + lengthToAppend >= position);
-    if (!lengthToAppend)
-        return;
-    DCHECK(output);
-    if (m_singleCharacterBuffer) {
-        DCHECK_EQ(position, 0u);
-        DCHECK_EQ(length(), 1);
-        output->pushCharacters(m_singleCharacterBuffer, 1);
-        return;
-    }
-    if (positionNode()) {
-        flushPositionOffsets();
-        unsigned offset = positionStartOffset() + position;
-        if (string().is8Bit())
-            output->pushRange(string().characters8() + offset, lengthToAppend);
-        else
-            output->pushRange(string().characters16() + offset, lengthToAppend);
-        return;
-    }
-    // We shouldn't be attempting to append text that doesn't exist.
-    NOTREACHED();
+    flushPositionOffsets();
+    return EphemeralRange(Position(positionNode(), positionStartOffset()), Position(positionNode(), positionEndOffset()));
 }
 
 } // namespace blink

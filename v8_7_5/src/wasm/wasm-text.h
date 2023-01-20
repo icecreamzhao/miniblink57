@@ -13,6 +13,7 @@
 namespace v8 {
 
 namespace debug {
+<<<<<<< HEAD
     struct WasmDisassemblyOffsetTableEntry;
 } // namespace debug
 
@@ -36,3 +37,28 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_WASM_WASM_TEXT_H_
+=======
+struct WasmDisassemblyOffsetTableEntry;
+}  // namespace debug
+
+namespace internal {
+namespace wasm {
+
+// Forward declaration.
+struct WasmModule;
+struct ModuleWireBytes;
+
+// Generate disassembly according to official text format.
+// Output disassembly to the given output stream, and optionally return an
+// offset table of <byte offset, line, column> via the given pointer.
+void PrintWasmText(
+    const WasmModule *module, const ModuleWireBytes &wire_bytes,
+    uint32_t func_index, std::ostream &os,
+    std::vector<debug::WasmDisassemblyOffsetTableEntry> *offset_table);
+
+}  // namespace wasm
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_WASM_WASM_TEXT_H_
+>>>>>>> miniblink49

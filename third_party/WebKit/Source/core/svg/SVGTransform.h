@@ -32,40 +32,43 @@ class FloatSize;
 class SVGTransformTearOff;
 
 enum SVGTransformType {
-    kSvgTransformUnknown = 0,
-    kSvgTransformMatrix = 1,
-    kSvgTransformTranslate = 2,
-    kSvgTransformScale = 3,
-    kSvgTransformRotate = 4,
-    kSvgTransformSkewx = 5,
-    kSvgTransformSkewy = 6
+    SVG_TRANSFORM_UNKNOWN = 0,
+    SVG_TRANSFORM_MATRIX = 1,
+    SVG_TRANSFORM_TRANSLATE = 2,
+    SVG_TRANSFORM_SCALE = 3,
+    SVG_TRANSFORM_ROTATE = 4,
+    SVG_TRANSFORM_SKEWX = 5,
+    SVG_TRANSFORM_SKEWY = 6
 };
 
-class SVGTransform final : public SVGPropertyBase {
+class SVGTransform : public SVGPropertyBase {
 public:
     typedef SVGTransformTearOff TearOffType;
 
-    enum ConstructionMode { ConstructIdentityTransform,
-        ConstructZeroTransform };
+    enum ConstructionMode {
+        ConstructIdentityTransform,
+        ConstructZeroTransform
+    };
 
-    static SVGTransform* create() { return new SVGTransform(); }
-
-    static SVGTransform* create(
-        SVGTransformType type,
-        ConstructionMode mode = ConstructIdentityTransform)
+    static PassRefPtrWillBeRawPtr<SVGTransform> create()
     {
-        return new SVGTransform(type, mode);
+        return adoptRefWillBeNoop(new SVGTransform());
     }
 
-    static SVGTransform* create(const AffineTransform& affineTransform)
+    static PassRefPtrWillBeRawPtr<SVGTransform> create(SVGTransformType type, ConstructionMode mode = ConstructIdentityTransform)
     {
-        return new SVGTransform(affineTransform);
+        return adoptRefWillBeNoop(new SVGTransform(type, mode));
+    }
+
+    static PassRefPtrWillBeRawPtr<SVGTransform> create(const AffineTransform& affineTransform)
+    {
+        return adoptRefWillBeNoop(new SVGTransform(affineTransform));
     }
 
     ~SVGTransform() override;
 
-    SVGTransform* clone() const;
-    SVGPropertyBase* cloneForAnimation(const String&) const override;
+    PassRefPtrWillBeRawPtr<SVGTransform> clone() const;
+    PassRefPtrWillBeRawPtr<SVGPropertyBase> cloneForAnimation(const String&) const override;
 
     SVGTransformType transformType() const { return m_transformType; }
 
@@ -91,28 +94,17 @@ public:
 
     String valueAsString() const override;
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement* contextElement) override;
-    float calculateDistance(SVGPropertyBase* to,
-        SVGElement* contextElement) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement* contextElement) override;
 
     static AnimatedPropertyType classType() { return AnimatedTransform; }
-    AnimatedPropertyType type() const override { return classType(); }
 
 private:
     SVGTransform();
     SVGTransform(SVGTransformType, ConstructionMode);
     explicit SVGTransform(const AffineTransform&);
-    SVGTransform(SVGTransformType,
-        float,
-        const FloatPoint&,
-        const AffineTransform&);
+    SVGTransform(SVGTransformType, float, const FloatPoint&, const AffineTransform&);
 
     SVGTransformType m_transformType;
     float m_angle;

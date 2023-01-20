@@ -2,176 +2,110 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
+
 #include "core/workers/WorkerInspectorProxy.h"
 
-#include "core/dom/ExecutionContextTask.h"
-#include "core/frame/FrameConsole.h"
-#include "core/inspector/IdentifiersFactory.h"
+#include "core/dom/CrossThreadTask.h"
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/inspector/WorkerInspectorController.h"
-#include "core/workers/WorkerGlobalScope.h"
 #include "core/workers/WorkerThread.h"
-#include "platform/WebTaskRunner.h"
-#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/Task.h"
+#include "platform/TraceEvent.h"
 #include "platform/weborigin/KURL.h"
 #include "public/platform/WebTraceLocation.h"
 
 namespace blink {
 
-namespace {
-
-    static WorkerInspectorProxy::WorkerInspectorProxySet& inspectorProxies()
-    {
-        DEFINE_STATIC_LOCAL(WorkerInspectorProxy::WorkerInspectorProxySet, proxies,
-            ());
-        return proxies;
-    }
-
-} // namespace
-
-const WorkerInspectorProxy::WorkerInspectorProxySet&
-WorkerInspectorProxy::allProxies()
-{
-    return inspectorProxies();
-}
-
 WorkerInspectorProxy::WorkerInspectorProxy()
     : m_workerThread(nullptr)
-    , m_document(nullptr)
+    , m_executionContext(nullptr)
     , m_pageInspector(nullptr)
+    , m_workerGlobalScopeProxy(nullptr)
 {
 }
 
-WorkerInspectorProxy* WorkerInspectorProxy::create()
+PassOwnPtr<WorkerInspectorProxy> WorkerInspectorProxy::create()
 {
-    return new WorkerInspectorProxy();
+    return adoptPtr(new WorkerInspectorProxy());
 }
 
-WorkerInspectorProxy::~WorkerInspectorProxy() { }
-
-const String& WorkerInspectorProxy::inspectorId()
+WorkerInspectorProxy::~WorkerInspectorProxy()
 {
-    if (m_inspectorId.isEmpty())
-        m_inspectorId = "dedicated:" + IdentifiersFactory::createIdentifier();
-    return m_inspectorId;
 }
 
-WorkerThreadStartMode WorkerInspectorProxy::workerStartMode(
-    Document* document)
-{
-    if (InspectorInstrumentation::shouldWaitForDebuggerOnWorkerStart(document))
-        return PauseWorkerGlobalScopeOnStart;
-    return DontPauseWorkerGlobalScopeOnStart;
-}
-
-void WorkerInspectorProxy::workerThreadCreated(Document* document,
-    WorkerThread* workerThread,
-    const KURL& url)
+void WorkerInspectorProxy::workerThreadCreated(ExecutionContext* context, WorkerThread* workerThread, const KURL& url)
 {
     m_workerThread = workerThread;
-    m_document = document;
-    m_url = url.getString();
-    inspectorProxies().add(this);
-    // We expect everyone starting worker thread to synchronously ask for
-    // workerStartMode right before.
-    bool waitingForDebugger = InspectorInstrumentation::shouldWaitForDebuggerOnWorkerStart(document);
-    InspectorInstrumentation::didStartWorker(document, this, waitingForDebugger);
+    m_executionContext = context;
+    InspectorInstrumentation::didStartWorker(context, this, url);
 }
 
 void WorkerInspectorProxy::workerThreadTerminated()
 {
-    if (m_workerThread) {
-        DCHECK(inspectorProxies().contains(this));
-        inspectorProxies().remove(this);
-        InspectorInstrumentation::workerTerminated(m_document, this);
-    }
-
+    if (m_workerThread)
+        InspectorInstrumentation::workerTerminated(m_executionContext, this);
     m_workerThread = nullptr;
     m_pageInspector = nullptr;
-    m_document = nullptr;
 }
 
-void WorkerInspectorProxy::dispatchMessageFromWorker(const String& message)
+static void connectToWorkerGlobalScopeInspectorTask(WorkerThread* workerThread)
 {
-    if (m_pageInspector)
-        m_pageInspector->dispatchMessageFromWorker(this, message);
+    workerThread->workerGlobalScope()->workerInspectorController()->connectFrontend();
 }
 
-void WorkerInspectorProxy::addConsoleMessageFromWorker(
-    MessageLevel level,
-    const String& message,
-    std::unique_ptr<SourceLocation> location)
-{
-    if (LocalFrame* frame = m_document->frame())
-        frame->console().addMessageFromWorker(level, message, std::move(location),
-            m_inspectorId);
-}
-
-static void connectToWorkerGlobalScopeInspectorTask(
-    WorkerThread* workerThread)
-{
-    if (WorkerInspectorController* inspector = workerThread->workerInspectorController())
-        inspector->connectFrontend();
-}
-
-void WorkerInspectorProxy::connectToInspector(
-    WorkerInspectorProxy::PageInspector* pageInspector)
+void WorkerInspectorProxy::connectToInspector(WorkerInspectorProxy::PageInspector* pageInspector)
 {
     if (!m_workerThread)
         return;
-    DCHECK(!m_pageInspector);
+    ASSERT(!m_pageInspector);
     m_pageInspector = pageInspector;
-    m_workerThread->appendDebuggerTask(
-        crossThreadBind(connectToWorkerGlobalScopeInspectorTask,
-            crossThreadUnretained(m_workerThread)));
+    addDebuggerTaskForWorker(FROM_HERE, adoptPtr(new Task(threadSafeBind(connectToWorkerGlobalScopeInspectorTask, AllowCrossThreadAccess(m_workerThread)))));
 }
 
-static void disconnectFromWorkerGlobalScopeInspectorTask(
-    WorkerThread* workerThread)
+static void disconnectFromWorkerGlobalScopeInspectorTask(WorkerThread* workerThread)
 {
-    if (WorkerInspectorController* inspector = workerThread->workerInspectorController())
-        inspector->disconnectFrontend();
+    workerThread->workerGlobalScope()->workerInspectorController()->disconnectFrontend();
 }
 
-void WorkerInspectorProxy::disconnectFromInspector(
-    WorkerInspectorProxy::PageInspector* pageInspector)
+void WorkerInspectorProxy::disconnectFromInspector()
 {
-    DCHECK(m_pageInspector == pageInspector);
     m_pageInspector = nullptr;
-    if (m_workerThread)
-        m_workerThread->appendDebuggerTask(
-            crossThreadBind(disconnectFromWorkerGlobalScopeInspectorTask,
-                crossThreadUnretained(m_workerThread)));
+    if (!m_workerThread)
+        return;
+    addDebuggerTaskForWorker(FROM_HERE, adoptPtr(new Task(threadSafeBind(disconnectFromWorkerGlobalScopeInspectorTask, AllowCrossThreadAccess(m_workerThread)))));
 }
 
-static void dispatchOnInspectorBackendTask(const String& message,
-    WorkerThread* workerThread)
+static void dispatchOnInspectorBackendTask(const String& message, WorkerThread* workerThread)
 {
-    if (WorkerInspectorController* inspector = workerThread->workerInspectorController())
-        inspector->dispatchMessageFromFrontend(message);
+    workerThread->workerGlobalScope()->workerInspectorController()->dispatchMessageFromFrontend(message);
 }
 
 void WorkerInspectorProxy::sendMessageToInspector(const String& message)
 {
-    if (m_workerThread)
-        m_workerThread->appendDebuggerTask(
-            crossThreadBind(dispatchOnInspectorBackendTask, message,
-                crossThreadUnretained(m_workerThread)));
+    if (!m_workerThread)
+        return;
+    addDebuggerTaskForWorker(FROM_HERE, adoptPtr(new Task(threadSafeBind(dispatchOnInspectorBackendTask, message, AllowCrossThreadAccess(m_workerThread)))));
+    m_workerThread->interruptAndDispatchInspectorCommands();
 }
 
-void WorkerInspectorProxy::writeTimelineStartedEvent(const String& sessionId)
+void WorkerInspectorProxy::writeTimelineStartedEvent(const String& sessionId, const String& workerId)
 {
     if (!m_workerThread)
         return;
-    TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"),
-        "TracingSessionIdForWorker", TRACE_EVENT_SCOPE_THREAD,
-        "data", InspectorTracingSessionIdForWorkerEvent::data(sessionId, inspectorId(), m_workerThread));
+    TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "TracingSessionIdForWorker", TRACE_EVENT_SCOPE_THREAD, "data", InspectorTracingSessionIdForWorkerEvent::data(sessionId, workerId, m_workerThread));
 }
 
-DEFINE_TRACE(WorkerInspectorProxy)
+static void runDebuggerTaskForWorker(WorkerThread* workerThread)
 {
-    visitor->trace(m_document);
+    workerThread->runDebuggerTask(WorkerThread::DontWaitForMessage);
+}
+
+void WorkerInspectorProxy::addDebuggerTaskForWorker(const WebTraceLocation& location, PassOwnPtr<WebThread::Task> task)
+{
+    m_workerThread->appendDebuggerTask(task);
+    m_workerThread->backingThread().postTask(location, new Task(threadSafeBind(&runDebuggerTaskForWorker, AllowCrossThreadAccess(m_workerThread))));
 }
 
 } // namespace blink

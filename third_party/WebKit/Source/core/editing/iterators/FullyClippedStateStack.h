@@ -7,15 +7,11 @@
 
 #include "core/editing/EditingStrategy.h"
 #include "core/editing/iterators/BitStack.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
-template <typename Strategy>
-class CORE_TEMPLATE_CLASS_EXPORT FullyClippedStateStackAlgorithm final
-    : public BitStack {
-    STACK_ALLOCATED();
-
+template<typename Strategy>
+class FullyClippedStateStackAlgorithm : public BitStack {
 public:
     FullyClippedStateStackAlgorithm();
     ~FullyClippedStateStackAlgorithm();
@@ -24,10 +20,8 @@ public:
     void setUpFullyClippedStack(Node*);
 };
 
-extern template class CORE_EXTERN_TEMPLATE_EXPORT
-    FullyClippedStateStackAlgorithm<EditingStrategy>;
-extern template class CORE_EXTERN_TEMPLATE_EXPORT
-    FullyClippedStateStackAlgorithm<EditingInFlatTreeStrategy>;
+extern template class FullyClippedStateStackAlgorithm<EditingStrategy>;
+extern template class FullyClippedStateStackAlgorithm<EditingInComposedTreeStrategy>;
 
 using FullyClippedStateStack = FullyClippedStateStackAlgorithm<EditingStrategy>;
 

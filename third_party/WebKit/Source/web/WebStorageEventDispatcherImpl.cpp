@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebStorageEventDispatcher.h"
 
 #include "modules/storage/StorageArea.h"
@@ -35,10 +39,15 @@
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/WebURL.h"
 #include "web/WebViewImpl.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 void WebStorageEventDispatcher::dispatchLocalStorageEvent(
+<<<<<<< HEAD
     const WebString& key,
     const WebString& oldValue,
     const WebString& newValue,
@@ -65,6 +74,29 @@ void WebStorageEventDispatcher::dispatchSessionStorageEvent(
     StorageArea::dispatchSessionStorageEvent(
         key, oldValue, newValue, securityOrigin.get(), pageURL, sessionNamespace,
         sourceAreaInstance);
+=======
+        const WebString& key, const WebString& oldValue,
+        const WebString& newValue, const WebURL& origin,
+        const WebURL& pageURL, WebStorageArea* sourceAreaInstance,
+        bool originatedInProcess)
+{
+    RefPtr<SecurityOrigin> securityOrigin = SecurityOrigin::create(origin);
+    StorageArea::dispatchLocalStorageEvent(
+            key, oldValue, newValue, securityOrigin.get(), pageURL,
+            sourceAreaInstance, originatedInProcess);
+}
+
+void WebStorageEventDispatcher::dispatchSessionStorageEvent(
+        const WebString& key, const WebString& oldValue,
+        const WebString& newValue, const WebURL& origin,
+        const WebURL& pageURL, const WebStorageNamespace& sessionNamespace,
+        WebStorageArea* sourceAreaInstance, bool originatedInProcess)
+{
+    RefPtr<SecurityOrigin> securityOrigin = SecurityOrigin::create(origin);
+    StorageArea::dispatchSessionStorageEvent(
+            key, oldValue, newValue, securityOrigin.get(), pageURL,
+            sessionNamespace, sourceAreaInstance, originatedInProcess);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

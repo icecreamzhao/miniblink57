@@ -28,15 +28,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/image-decoders/FastSharedBufferReader.h"
 #include "platform/image-decoders/SegmentReader.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+
+#include "platform/image-decoders/FastSharedBufferReader.h"
+
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
 namespace {
 
+<<<<<<< HEAD
     const unsigned kDefaultTestSize = 4 * SharedBuffer::kSegmentSize;
 
     void prepareReferenceData(char* buffer, size_t size)
@@ -75,6 +84,15 @@ namespace {
             segmentReaders[2] = copyToDataSegmentReader(segmentReaders[0]);
         }
     };
+=======
+const unsigned kDefaultTestSize = 4 * SharedBuffer::kSegmentSize;
+
+void prepareReferenceData(char* buffer, size_t size)
+{
+    for (size_t i = 0; i < size; ++i)
+        buffer[i] = i;
+}
+>>>>>>> miniblink49
 
 } // namespace
 
@@ -85,6 +103,7 @@ TEST(FastSharedBufferReaderTest, nonSequentialReads)
     RefPtr<SharedBuffer> data = SharedBuffer::create();
     data->append(referenceData, sizeof(referenceData));
 
+<<<<<<< HEAD
     SegmentReaders readerStruct(data);
     for (auto segmentReader : readerStruct.segmentReaders) {
         FastSharedBufferReader reader(segmentReader);
@@ -99,6 +118,17 @@ TEST(FastSharedBufferReaderTest, nonSequentialReads)
             ASSERT_FALSE(
                 memcmp(block, referenceData + dataPosition, sizeof(tempBuffer)));
         }
+=======
+    FastSharedBufferReader reader(data);
+
+    // Read size is prime such there will be a segment-spanning
+    // read eventually.
+    char tempBuffer[17];
+    for (size_t dataPosition = 0; dataPosition + sizeof(tempBuffer) < sizeof(referenceData); dataPosition += sizeof(tempBuffer)) {
+        const char* block = reader.getConsecutiveData(
+            dataPosition, sizeof(tempBuffer), tempBuffer);
+        ASSERT_FALSE(memcmp(block, referenceData + dataPosition, sizeof(tempBuffer)));
+>>>>>>> miniblink49
     }
 }
 
@@ -109,6 +139,7 @@ TEST(FastSharedBufferReaderTest, readBackwards)
     RefPtr<SharedBuffer> data = SharedBuffer::create();
     data->append(referenceData, sizeof(referenceData));
 
+<<<<<<< HEAD
     SegmentReaders readerStruct(data);
     for (auto segmentReader : readerStruct.segmentReaders) {
         FastSharedBufferReader reader(segmentReader);
@@ -123,6 +154,17 @@ TEST(FastSharedBufferReaderTest, readBackwards)
                 referenceData + sizeof(referenceData) - dataOffset,
                 sizeof(tempBuffer)));
         }
+=======
+    FastSharedBufferReader reader(data);
+
+    // Read size is prime such there will be a segment-spanning
+    // read eventually.
+    char tempBuffer[17];
+    for (size_t dataOffset = sizeof(tempBuffer); dataOffset < sizeof(referenceData); dataOffset += sizeof(tempBuffer)) {
+        const char* block = reader.getConsecutiveData(
+            sizeof(referenceData) - dataOffset, sizeof(tempBuffer), tempBuffer);
+        ASSERT_FALSE(memcmp(block, referenceData + sizeof(referenceData) - dataOffset, sizeof(tempBuffer)));
+>>>>>>> miniblink49
     }
 }
 
@@ -133,12 +175,18 @@ TEST(FastSharedBufferReaderTest, byteByByte)
     RefPtr<SharedBuffer> data = SharedBuffer::create();
     data->append(referenceData, sizeof(referenceData));
 
+<<<<<<< HEAD
     SegmentReaders readerStruct(data);
     for (auto segmentReader : readerStruct.segmentReaders) {
         FastSharedBufferReader reader(segmentReader);
         for (size_t i = 0; i < sizeof(referenceData); ++i) {
             ASSERT_EQ(referenceData[i], reader.getOneByte(i));
         }
+=======
+    FastSharedBufferReader reader(data);
+    for (size_t i = 0; i < sizeof(referenceData); ++i) {
+        ASSERT_EQ(referenceData[i], reader.getOneByte(i));
+>>>>>>> miniblink49
     }
 }
 
@@ -152,6 +200,7 @@ TEST(FastSharedBufferReaderTest, readAllOverlappingLastSegmentBoundary)
     RefPtr<SharedBuffer> data = SharedBuffer::create();
     data->append(referenceData, dataSize);
 
+<<<<<<< HEAD
     SegmentReaders readerStruct(data);
     for (auto segmentReader : readerStruct.segmentReaders) {
         FastSharedBufferReader reader(segmentReader);
@@ -246,6 +295,13 @@ TEST(SegmentReaderTest, variableSegments)
         position += length;
     }
     EXPECT_EQ(position, dataSize);
+=======
+    char buffer[dataSize];
+    FastSharedBufferReader reader(data);
+    reader.getConsecutiveData(0, dataSize, buffer);
+
+    ASSERT_FALSE(memcmp(buffer, referenceData, dataSize));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

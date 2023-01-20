@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,10 +9,19 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkBlurMask.h"
 #include "SkEndian.h"
 #include "SkMath.h"
 #include "SkTemplates.h"
+=======
+
+#include "SkBlurMask.h"
+#include "SkMath.h"
+#include "SkTemplates.h"
+#include "SkEndian.h"
+
+>>>>>>> miniblink49
 
 // This constant approximates the scaling done in the software path's
 // "high quality" mode, in SkBlurMask::Blur() (1 / sqrt(3)).
@@ -19,6 +32,7 @@
 // all the blur tests.
 static const SkScalar kBLUR_SIGMA_SCALE = 0.57735f;
 
+<<<<<<< HEAD
 SkScalar SkBlurMask::ConvertRadiusToSigma(SkScalar radius)
 {
     return radius > 0 ? kBLUR_SIGMA_SCALE * radius + 0.5f : 0.0f;
@@ -26,6 +40,13 @@ SkScalar SkBlurMask::ConvertRadiusToSigma(SkScalar radius)
 
 SkScalar SkBlurMask::ConvertSigmaToRadius(SkScalar sigma)
 {
+=======
+SkScalar SkBlurMask::ConvertRadiusToSigma(SkScalar radius) {
+    return radius > 0 ? kBLUR_SIGMA_SCALE * radius + 0.5f : 0.0f;
+}
+
+SkScalar SkBlurMask::ConvertSigmaToRadius(SkScalar sigma) {
+>>>>>>> miniblink49
     return sigma > 0.5f ? (sigma - 0.5f) / kBLUR_SIGMA_SCALE : 0.0f;
 }
 
@@ -76,8 +97,13 @@ SkScalar SkBlurMask::ConvertSigmaToRadius(SkScalar sigma)
  *      }
  */
 static int boxBlur(const uint8_t* src, int src_y_stride, uint8_t* dst,
+<<<<<<< HEAD
     int leftRadius, int rightRadius, int width, int height,
     bool transpose)
+=======
+                   int leftRadius, int rightRadius, int width, int height,
+                   bool transpose)
+>>>>>>> miniblink49
 {
     int diameter = leftRadius + rightRadius;
     int kernelSize = diameter + 1;
@@ -96,10 +122,17 @@ static int boxBlur(const uint8_t* src, int src_y_stride, uint8_t* dst,
             *dptr = 0;
             dptr += dst_x_stride;
         }
+<<<<<<< HEAD
 #define LEFT_BORDER_ITER                \
     sum += *right++;                    \
     *dptr = (sum * scale + half) >> 24; \
     dptr += dst_x_stride;
+=======
+#define LEFT_BORDER_ITER \
+            sum += *right++; \
+            *dptr = (sum * scale + half) >> 24; \
+            dptr += dst_x_stride;
+>>>>>>> miniblink49
 
         int x = 0;
 #ifdef UNROLL_SEPARABLE_LOOPS
@@ -126,9 +159,15 @@ static int boxBlur(const uint8_t* src, int src_y_stride, uint8_t* dst,
             LEFT_BORDER_ITER
         }
 #undef LEFT_BORDER_ITER
+<<<<<<< HEAD
 #define TRIVIAL_ITER                    \
     *dptr = (sum * scale + half) >> 24; \
     dptr += dst_x_stride;
+=======
+#define TRIVIAL_ITER \
+            *dptr = (sum * scale + half) >> 24; \
+            dptr += dst_x_stride;
+>>>>>>> miniblink49
         x = width;
 #ifdef UNROLL_SEPARABLE_LOOPS
         for (; x < diameter - 16; x += 16) {
@@ -154,11 +193,19 @@ static int boxBlur(const uint8_t* src, int src_y_stride, uint8_t* dst,
             TRIVIAL_ITER
         }
 #undef TRIVIAL_ITER
+<<<<<<< HEAD
 #define CENTER_ITER                     \
     sum += *right++;                    \
     *dptr = (sum * scale + half) >> 24; \
     sum -= *left++;                     \
     dptr += dst_x_stride;
+=======
+#define CENTER_ITER \
+            sum += *right++; \
+            *dptr = (sum * scale + half) >> 24; \
+            sum -= *left++; \
+            dptr += dst_x_stride;
+>>>>>>> miniblink49
 
         x = diameter;
 #ifdef UNROLL_SEPARABLE_LOOPS
@@ -185,10 +232,17 @@ static int boxBlur(const uint8_t* src, int src_y_stride, uint8_t* dst,
             CENTER_ITER
         }
 #undef CENTER_ITER
+<<<<<<< HEAD
 #define RIGHT_BORDER_ITER               \
     *dptr = (sum * scale + half) >> 24; \
     sum -= *left++;                     \
     dptr += dst_x_stride;
+=======
+#define RIGHT_BORDER_ITER \
+            *dptr = (sum * scale + half) >> 24; \
+            sum -= *left++; \
+            dptr += dst_x_stride;
+>>>>>>> miniblink49
 
         x = 0;
 #ifdef UNROLL_SEPARABLE_LOOPS
@@ -278,8 +332,13 @@ static int boxBlur(const uint8_t* src, int src_y_stride, uint8_t* dst,
  */
 
 static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
+<<<<<<< HEAD
     int radius, int width, int height,
     bool transpose, uint8_t outer_weight)
+=======
+                         int radius, int width, int height,
+                         bool transpose, uint8_t outer_weight)
+>>>>>>> miniblink49
 {
     int diameter = radius * 2;
     int kernelSize = diameter + 1;
@@ -300,6 +359,7 @@ static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
         const uint8_t* left = right;
         int x = 0;
 
+<<<<<<< HEAD
 #define LEFT_BORDER_ITER                                                      \
     inner_sum = outer_sum;                                                    \
     outer_sum += *right++;                                                    \
@@ -308,6 +368,16 @@ static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
 
 #ifdef UNROLL_SEPARABLE_LOOPS
         for (; x < border - 16; x += 16) {
+=======
+#define LEFT_BORDER_ITER \
+            inner_sum = outer_sum; \
+            outer_sum += *right++; \
+            *dptr = (outer_sum * outer_scale + inner_sum * inner_scale + half) >> 24; \
+            dptr += dst_x_stride;
+
+#ifdef UNROLL_SEPARABLE_LOOPS
+        for (;x < border - 16; x += 16) {
+>>>>>>> miniblink49
             LEFT_BORDER_ITER
             LEFT_BORDER_ITER
             LEFT_BORDER_ITER
@@ -327,7 +397,11 @@ static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
         }
 #endif
 
+<<<<<<< HEAD
         for (; x < border; ++x) {
+=======
+        for (;x < border; ++x) {
+>>>>>>> miniblink49
             LEFT_BORDER_ITER
         }
 #undef LEFT_BORDER_ITER
@@ -337,12 +411,21 @@ static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
         }
         x = diameter;
 
+<<<<<<< HEAD
 #define CENTER_ITER                                                           \
     inner_sum = outer_sum - *left;                                            \
     outer_sum += *right++;                                                    \
     *dptr = (outer_sum * outer_scale + inner_sum * inner_scale + half) >> 24; \
     dptr += dst_x_stride;                                                     \
     outer_sum -= *left++;
+=======
+#define CENTER_ITER \
+            inner_sum = outer_sum - *left; \
+            outer_sum += *right++; \
+            *dptr = (outer_sum * outer_scale + inner_sum * inner_scale + half) >> 24; \
+            dptr += dst_x_stride; \
+            outer_sum -= *left++;
+>>>>>>> miniblink49
 
 #ifdef UNROLL_SEPARABLE_LOOPS
         for (; x < width - 16; x += 16) {
@@ -369,11 +452,19 @@ static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
         }
 #undef CENTER_ITER
 
+<<<<<<< HEAD
 #define RIGHT_BORDER_ITER                                                     \
     inner_sum = outer_sum - *left++;                                          \
     *dptr = (outer_sum * outer_scale + inner_sum * inner_scale + half) >> 24; \
     dptr += dst_x_stride;                                                     \
     outer_sum = inner_sum;
+=======
+        #define RIGHT_BORDER_ITER \
+            inner_sum = outer_sum - *left++; \
+            *dptr = (outer_sum * outer_scale + inner_sum * inner_scale + half) >> 24; \
+            dptr += dst_x_stride; \
+            outer_sum = inner_sum;
+>>>>>>> miniblink49
 
         x = 0;
 #ifdef UNROLL_SEPARABLE_LOOPS
@@ -405,7 +496,11 @@ static int boxBlurInterp(const uint8_t* src, int src_y_stride, uint8_t* dst,
     return new_width;
 }
 
+<<<<<<< HEAD
 static void get_adjusted_radii(SkScalar passRadius, int* loRadius, int* hiRadius)
+=======
+static void get_adjusted_radii(SkScalar passRadius, int *loRadius, int *hiRadius)
+>>>>>>> miniblink49
 {
     *loRadius = *hiRadius = SkScalarCeilToInt(passRadius);
     if (SkIntToScalar(*hiRadius) - passRadius > 0.5f) {
@@ -416,10 +511,16 @@ static void get_adjusted_radii(SkScalar passRadius, int* loRadius, int* hiRadius
 #include "SkColorPriv.h"
 
 static void merge_src_with_blur(uint8_t dst[], int dstRB,
+<<<<<<< HEAD
     const uint8_t src[], int srcRB,
     const uint8_t blur[], int blurRB,
     int sw, int sh)
 {
+=======
+                                const uint8_t src[], int srcRB,
+                                const uint8_t blur[], int blurRB,
+                                int sw, int sh) {
+>>>>>>> miniblink49
     dstRB -= sw;
     srcRB -= sw;
     blurRB -= sw;
@@ -437,10 +538,16 @@ static void merge_src_with_blur(uint8_t dst[], int dstRB,
 }
 
 static void clamp_with_orig(uint8_t dst[], int dstRowBytes,
+<<<<<<< HEAD
     const uint8_t src[], int srcRowBytes,
     int sw, int sh,
     SkBlurStyle style)
 {
+=======
+                            const uint8_t src[], int srcRowBytes,
+                            int sw, int sh,
+                            SkBlurStyle style) {
+>>>>>>> miniblink49
     int x;
     while (--sh >= 0) {
         switch (style) {
@@ -476,15 +583,24 @@ static void clamp_with_orig(uint8_t dst[], int dstRowBytes,
 // we use a local function to wrap the class static method to work around
 // a bug in gcc98
 void SkMask_FreeImage(uint8_t* image);
+<<<<<<< HEAD
 void SkMask_FreeImage(uint8_t* image)
 {
+=======
+void SkMask_FreeImage(uint8_t* image) {
+>>>>>>> miniblink49
     SkMask::FreeImage(image);
 }
 
 bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
+<<<<<<< HEAD
     SkScalar sigma, SkBlurStyle style, SkBlurQuality quality,
     SkIPoint* margin, bool force_quality)
 {
+=======
+                         SkScalar sigma, SkBlurStyle style, SkBlurQuality quality,
+                         SkIPoint* margin, bool force_quality) {
+>>>>>>> miniblink49
 
     if (src.fFormat != SkMask::kA8_Format) {
         return false;
@@ -499,12 +615,20 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
     if (kHigh_SkBlurQuality == quality) {
         // For the high quality path the 3 pass box blur kernel width is
         // 6*rad+1 while the full Gaussian width is 6*sigma.
+<<<<<<< HEAD
         passRadius = sigma - (1 / 6.0f);
+=======
+        passRadius = sigma - (1/6.0f);
+>>>>>>> miniblink49
     } else {
         // For the low quality path we only attempt to cover 3*sigma of the
         // Gaussian blur area (1.5*sigma on each side). The single pass box
         // blur's kernel size is 2*rad+1.
+<<<<<<< HEAD
         passRadius = 1.5f * sigma - 0.5f;
+=======
+        passRadius = 1.5f*sigma - 0.5f;
+>>>>>>> miniblink49
     }
 
     // highQuality: use three box blur passes as a cheap way
@@ -520,7 +644,11 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
         return false;
     }
 
+<<<<<<< HEAD
     int ry = rx; // only do square blur for now
+=======
+    int ry = rx;    // only do square blur for now
+>>>>>>> miniblink49
 
     int padx = passCount * rx;
     int pady = passCount * ry;
@@ -529,15 +657,24 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
         margin->set(padx, pady);
     }
     dst->fBounds.set(src.fBounds.fLeft - padx, src.fBounds.fTop - pady,
+<<<<<<< HEAD
         src.fBounds.fRight + padx, src.fBounds.fBottom + pady);
 
     dst->fRowBytes = dst->fBounds.width();
     dst->fFormat = SkMask::kA8_Format;
     dst->fImage = nullptr;
+=======
+                     src.fBounds.fRight + padx, src.fBounds.fBottom + pady);
+
+    dst->fRowBytes = dst->fBounds.width();
+    dst->fFormat = SkMask::kA8_Format;
+    dst->fImage = NULL;
+>>>>>>> miniblink49
 
     if (src.fImage) {
         size_t dstSize = dst->computeImageSize();
         if (0 == dstSize) {
+<<<<<<< HEAD
             return false; // too big to allocate, abort
         }
 
@@ -550,6 +687,20 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
         // build the blurry destination
         SkAutoTMalloc<uint8_t> tmpBuffer(dstSize);
         uint8_t* tp = tmpBuffer.get();
+=======
+            return false;   // too big to allocate, abort
+        }
+
+        int             sw = src.fBounds.width();
+        int             sh = src.fBounds.height();
+        const uint8_t*  sp = src.fImage;
+        uint8_t*        dp = SkMask::AllocImage(dstSize);
+        SkAutoTCallVProc<uint8_t, SkMask_FreeImage> autoCall(dp);
+
+        // build the blurry destination
+        SkAutoTMalloc<uint8_t>  tmpBuffer(dstSize);
+        uint8_t*                tp = tmpBuffer.get();
+>>>>>>> miniblink49
         int w = sw, h = sh;
 
         if (outerWeight == 255) {
@@ -558,6 +709,7 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
             if (kHigh_SkBlurQuality == quality) {
                 // Do three X blurs, with a transpose on the final one.
                 w = boxBlur(sp, src.fRowBytes, tp, loRadius, hiRadius, w, h, false);
+<<<<<<< HEAD
                 w = boxBlur(tp, w, dp, hiRadius, loRadius, w, h, false);
                 w = boxBlur(dp, w, tp, hiRadius, hiRadius, w, h, true);
                 // Do three Y blurs, with a transpose on the final one.
@@ -567,11 +719,23 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
             } else {
                 w = boxBlur(sp, src.fRowBytes, tp, rx, rx, w, h, true);
                 h = boxBlur(tp, h, dp, ry, ry, h, w, true);
+=======
+                w = boxBlur(tp, w,             dp, hiRadius, loRadius, w, h, false);
+                w = boxBlur(dp, w,             tp, hiRadius, hiRadius, w, h, true);
+                // Do three Y blurs, with a transpose on the final one.
+                h = boxBlur(tp, h,             dp, loRadius, hiRadius, h, w, false);
+                h = boxBlur(dp, h,             tp, hiRadius, loRadius, h, w, false);
+                h = boxBlur(tp, h,             dp, hiRadius, hiRadius, h, w, true);
+            } else {
+                w = boxBlur(sp, src.fRowBytes, tp, rx, rx, w, h, true);
+                h = boxBlur(tp, h,             dp, ry, ry, h, w, true);
+>>>>>>> miniblink49
             }
         } else {
             if (kHigh_SkBlurQuality == quality) {
                 // Do three X blurs, with a transpose on the final one.
                 w = boxBlurInterp(sp, src.fRowBytes, tp, rx, w, h, false, outerWeight);
+<<<<<<< HEAD
                 w = boxBlurInterp(tp, w, dp, rx, w, h, false, outerWeight);
                 w = boxBlurInterp(dp, w, tp, rx, w, h, true, outerWeight);
                 // Do three Y blurs, with a transpose on the final one.
@@ -581,6 +745,17 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
             } else {
                 w = boxBlurInterp(sp, src.fRowBytes, tp, rx, w, h, true, outerWeight);
                 h = boxBlurInterp(tp, h, dp, ry, h, w, true, outerWeight);
+=======
+                w = boxBlurInterp(tp, w,             dp, rx, w, h, false, outerWeight);
+                w = boxBlurInterp(dp, w,             tp, rx, w, h, true, outerWeight);
+                // Do three Y blurs, with a transpose on the final one.
+                h = boxBlurInterp(tp, h,             dp, ry, h, w, false, outerWeight);
+                h = boxBlurInterp(dp, h,             tp, ry, h, w, false, outerWeight);
+                h = boxBlurInterp(tp, h,             dp, ry, h, w, true, outerWeight);
+            } else {
+                w = boxBlurInterp(sp, src.fRowBytes, tp, rx, w, h, true, outerWeight);
+                h = boxBlurInterp(tp, h,             dp, ry, h, w, true, outerWeight);
+>>>>>>> miniblink49
             }
         }
 
@@ -591,6 +766,7 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
             // now we allocate the "real" dst, mirror the size of src
             size_t srcSize = src.computeImageSize();
             if (0 == srcSize) {
+<<<<<<< HEAD
                 return false; // too big to allocate, abort
             }
             dst->fImage = SkMask::AllocImage(srcSize);
@@ -604,6 +780,21 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
                 dst->fRowBytes, sp, src.fRowBytes, sw, sh, style);
         }
         (void)autoCall.release();
+=======
+                return false;   // too big to allocate, abort
+            }
+            dst->fImage = SkMask::AllocImage(srcSize);
+            merge_src_with_blur(dst->fImage, src.fRowBytes,
+                                sp, src.fRowBytes,
+                                dp + passCount * (rx + ry * dst->fRowBytes),
+                                dst->fRowBytes, sw, sh);
+            SkMask::FreeImage(dp);
+        } else if (style != kNormal_SkBlurStyle) {
+            clamp_with_orig(dp + passCount * (rx + ry * dst->fRowBytes),
+                            dst->fRowBytes, sp, src.fRowBytes, sw, sh, style);
+        }
+        (void)autoCall.detach();
+>>>>>>> miniblink49
     }
 
     if (style == kInner_SkBlurStyle) {
@@ -650,8 +841,12 @@ bool SkBlurMask::BoxBlur(SkMask* dst, const SkMask& src,
    },1]
 */
 
+<<<<<<< HEAD
 static float gaussianIntegral(float x)
 {
+=======
+static float gaussianIntegral(float x) {
+>>>>>>> miniblink49
     if (x > 1.5f) {
         return 0.0f;
     }
@@ -659,6 +854,7 @@ static float gaussianIntegral(float x)
         return 1.0f;
     }
 
+<<<<<<< HEAD
     float x2 = x * x;
     float x3 = x2 * x;
 
@@ -666,6 +862,15 @@ static float gaussianIntegral(float x)
         return 0.5625f - (x3 / 6.0f - 3.0f * x2 * 0.25f + 1.125f * x);
     }
     if (x > -0.5f) {
+=======
+    float x2 = x*x;
+    float x3 = x2*x;
+
+    if ( x > 0.5f ) {
+        return 0.5625f - (x3 / 6.0f - 3.0f * x2 * 0.25f + 1.125f * x);
+    }
+    if ( x > -0.5f ) {
+>>>>>>> miniblink49
         return 0.5f - (0.75f * x - x3 / 3.0f);
     }
     return 0.4375f + (-x3 / 6.0f - 3.0f * x2 * 0.25f - 1.125f * x);
@@ -682,6 +887,7 @@ static float gaussianIntegral(float x)
     memory returned in profile_out.
 */
 
+<<<<<<< HEAD
 uint8_t* SkBlurMask::ComputeBlurProfile(SkScalar sigma)
 {
     int size = SkScalarCeilToInt(6 * sigma);
@@ -699,6 +905,24 @@ uint8_t* SkBlurMask::ComputeBlurProfile(SkScalar sigma)
     }
 
     return profile;
+=======
+void SkBlurMask::ComputeBlurProfile(SkScalar sigma, uint8_t **profile_out) {
+    int size = SkScalarCeilToInt(6*sigma);
+
+    int center = size >> 1;
+    uint8_t *profile = SkNEW_ARRAY(uint8_t, size);
+
+    float invr = 1.f/(2*sigma);
+
+    profile[0] = 255;
+    for (int x = 1 ; x < size ; ++x) {
+        float scaled_x = (center - x - .5f) * invr;
+        float gi = gaussianIntegral(scaled_x);
+        profile[x] = 255 - (uint8_t) (255.f * gi);
+    }
+
+    *profile_out = profile;
+>>>>>>> miniblink49
 }
 
 // TODO MAYBE: Maintain a profile cache to avoid recomputing this for
@@ -708,8 +932,12 @@ uint8_t* SkBlurMask::ComputeBlurProfile(SkScalar sigma)
 // Implementation adapted from Michael Herf's approach:
 // http://stereopsis.com/shadowrect/
 
+<<<<<<< HEAD
 uint8_t SkBlurMask::ProfileLookup(const uint8_t* profile, int loc, int blurred_width, int sharp_width)
 {
+=======
+uint8_t SkBlurMask::ProfileLookup(const uint8_t *profile, int loc, int blurred_width, int sharp_width) {
+>>>>>>> miniblink49
     int dx = SkAbs32(((loc << 1) + 1) - blurred_width) - sharp_width; // how far are we from the original edge?
     int ox = dx >> 1;
     if (ox < 0) {
@@ -719,16 +947,24 @@ uint8_t SkBlurMask::ProfileLookup(const uint8_t* profile, int loc, int blurred_w
     return profile[ox];
 }
 
+<<<<<<< HEAD
 void SkBlurMask::ComputeBlurredScanline(uint8_t* pixels, const uint8_t* profile,
     unsigned int width, SkScalar sigma)
 {
 
     unsigned int profile_size = SkScalarCeilToInt(6 * sigma);
+=======
+void SkBlurMask::ComputeBlurredScanline(uint8_t *pixels, const uint8_t *profile,
+                                        unsigned int width, SkScalar sigma) {
+
+    unsigned int profile_size = SkScalarCeilToInt(6*sigma);
+>>>>>>> miniblink49
     SkAutoTMalloc<uint8_t> horizontalScanline(width);
 
     unsigned int sw = width - profile_size;
     // nearest odd number less than the profile size represents the center
     // of the (2x scaled) profile
+<<<<<<< HEAD
     int center = (profile_size & ~1) - 1;
 
     int w = sw - center;
@@ -766,17 +1002,62 @@ bool SkBlurMask::BlurRect(SkScalar sigma, SkMask* dst,
 
     int sw = SkScalarFloorToInt(src.width());
     int sh = SkScalarFloorToInt(src.height());
+=======
+    int center = ( profile_size & ~1 ) - 1;
+
+    int w = sw - center;
+
+    for (unsigned int x = 0 ; x < width ; ++x) {
+       if (profile_size <= sw) {
+           pixels[x] = ProfileLookup(profile, x, width, w);
+       } else {
+           float span = float(sw)/(2*sigma);
+           float giX = 1.5f - (x+.5f)/(2*sigma);
+           pixels[x] = (uint8_t) (255 * (gaussianIntegral(giX) - gaussianIntegral(giX + span)));
+       }
+    }
+}
+
+bool SkBlurMask::BlurRect(SkScalar sigma, SkMask *dst,
+                          const SkRect &src, SkBlurStyle style,
+                          SkIPoint *margin, SkMask::CreateMode createMode) {
+    int profile_size = SkScalarCeilToInt(6*sigma);
+
+    int pad = profile_size/2;
+    if (margin) {
+        margin->set( pad, pad );
+    }
+
+    dst->fBounds.set(SkScalarRoundToInt(src.fLeft - pad),
+                     SkScalarRoundToInt(src.fTop - pad),
+                     SkScalarRoundToInt(src.fRight + pad),
+                     SkScalarRoundToInt(src.fBottom + pad));
+
+    dst->fRowBytes = dst->fBounds.width();
+    dst->fFormat = SkMask::kA8_Format;
+    dst->fImage = NULL;
+
+    int             sw = SkScalarFloorToInt(src.width());
+    int             sh = SkScalarFloorToInt(src.height());
+>>>>>>> miniblink49
 
     if (createMode == SkMask::kJustComputeBounds_CreateMode) {
         if (style == kInner_SkBlurStyle) {
             dst->fBounds.set(SkScalarRoundToInt(src.fLeft),
+<<<<<<< HEAD
                 SkScalarRoundToInt(src.fTop),
                 SkScalarRoundToInt(src.fRight),
                 SkScalarRoundToInt(src.fBottom)); // restore trimmed bounds
+=======
+                             SkScalarRoundToInt(src.fTop),
+                             SkScalarRoundToInt(src.fRight),
+                             SkScalarRoundToInt(src.fBottom)); // restore trimmed bounds
+>>>>>>> miniblink49
             dst->fRowBytes = sw;
         }
         return true;
     }
+<<<<<<< HEAD
 
     SkAutoTDeleteArray<uint8_t> profile(ComputeBlurProfile(sigma));
 
@@ -786,22 +1067,47 @@ bool SkBlurMask::BlurRect(SkScalar sigma, SkMask* dst,
     }
 
     uint8_t* dp = SkMask::AllocImage(dstSize);
+=======
+    uint8_t *profile = NULL;
+
+    ComputeBlurProfile(sigma, &profile);
+    SkAutoTDeleteArray<uint8_t> ada(profile);
+
+    size_t dstSize = dst->computeImageSize();
+    if (0 == dstSize) {
+        return false;   // too big to allocate, abort
+    }
+
+    uint8_t*        dp = SkMask::AllocImage(dstSize);
+>>>>>>> miniblink49
 
     dst->fImage = dp;
 
     int dstHeight = dst->fBounds.height();
     int dstWidth = dst->fBounds.width();
 
+<<<<<<< HEAD
     uint8_t* outptr = dp;
+=======
+    uint8_t *outptr = dp;
+>>>>>>> miniblink49
 
     SkAutoTMalloc<uint8_t> horizontalScanline(dstWidth);
     SkAutoTMalloc<uint8_t> verticalScanline(dstHeight);
 
+<<<<<<< HEAD
     ComputeBlurredScanline(horizontalScanline, profile.get(), dstWidth, sigma);
     ComputeBlurredScanline(verticalScanline, profile.get(), dstHeight, sigma);
 
     for (int y = 0; y < dstHeight; ++y) {
         for (int x = 0; x < dstWidth; x++) {
+=======
+    ComputeBlurredScanline(horizontalScanline, profile, dstWidth, sigma);
+    ComputeBlurredScanline(verticalScanline, profile, dstHeight, sigma);
+
+    for (int y = 0 ; y < dstHeight ; ++y) {
+        for (int x = 0 ; x < dstWidth ; x++) {
+>>>>>>> miniblink49
             unsigned int maskval = SkMulDiv255Round(horizontalScanline[x], verticalScanline[y]);
             *(outptr++) = maskval;
         }
@@ -811,17 +1117,27 @@ bool SkBlurMask::BlurRect(SkScalar sigma, SkMask* dst,
         // now we allocate the "real" dst, mirror the size of src
         size_t srcSize = (size_t)(src.width() * src.height());
         if (0 == srcSize) {
+<<<<<<< HEAD
             return false; // too big to allocate, abort
         }
         dst->fImage = SkMask::AllocImage(srcSize);
         for (int y = 0; y < sh; y++) {
             uint8_t* blur_scanline = dp + (y + pad) * dstWidth + pad;
             uint8_t* inner_scanline = dst->fImage + y * sw;
+=======
+            return false;   // too big to allocate, abort
+        }
+        dst->fImage = SkMask::AllocImage(srcSize);
+        for (int y = 0 ; y < sh ; y++) {
+            uint8_t *blur_scanline = dp + (y+pad)*dstWidth + pad;
+            uint8_t *inner_scanline = dst->fImage + y*sw;
+>>>>>>> miniblink49
             memcpy(inner_scanline, blur_scanline, sw);
         }
         SkMask::FreeImage(dp);
 
         dst->fBounds.set(SkScalarRoundToInt(src.fLeft),
+<<<<<<< HEAD
             SkScalarRoundToInt(src.fTop),
             SkScalarRoundToInt(src.fRight),
             SkScalarRoundToInt(src.fBottom)); // restore trimmed bounds
@@ -835,6 +1151,21 @@ bool SkBlurMask::BlurRect(SkScalar sigma, SkMask* dst,
     } else if (style == kSolid_SkBlurStyle) {
         for (int y = pad; y < dstHeight - pad; y++) {
             uint8_t* dst_scanline = dp + y * dstWidth + pad;
+=======
+                         SkScalarRoundToInt(src.fTop),
+                         SkScalarRoundToInt(src.fRight),
+                         SkScalarRoundToInt(src.fBottom)); // restore trimmed bounds
+        dst->fRowBytes = sw;
+
+    } else if (style == kOuter_SkBlurStyle) {
+        for (int y = pad ; y < dstHeight-pad ; y++) {
+            uint8_t *dst_scanline = dp + y*dstWidth + pad;
+            memset(dst_scanline, 0, sw);
+        }
+    } else if (style == kSolid_SkBlurStyle) {
+        for (int y = pad ; y < dstHeight-pad ; y++) {
+            uint8_t *dst_scanline = dp + y*dstWidth + pad;
+>>>>>>> miniblink49
             memset(dst_scanline, 0xff, sw);
         }
     }
@@ -844,10 +1175,16 @@ bool SkBlurMask::BlurRect(SkScalar sigma, SkMask* dst,
     return true;
 }
 
+<<<<<<< HEAD
 bool SkBlurMask::BlurRRect(SkScalar sigma, SkMask* dst,
     const SkRRect& src, SkBlurStyle style,
     SkIPoint* margin, SkMask::CreateMode createMode)
 {
+=======
+bool SkBlurMask::BlurRRect(SkScalar sigma, SkMask *dst,
+                           const SkRRect &src, SkBlurStyle style,
+                           SkIPoint *margin, SkMask::CreateMode createMode) {
+>>>>>>> miniblink49
     // Temporary for now -- always fail, should cause caller to fall back
     // to old path.  Plumbing just to land API and parallelize effort.
 
@@ -859,8 +1196,12 @@ bool SkBlurMask::BlurRRect(SkScalar sigma, SkMask* dst,
 // useful for correctness comparisons.
 
 bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
+<<<<<<< HEAD
     SkBlurStyle style, SkIPoint* margin)
 {
+=======
+                                 SkBlurStyle style, SkIPoint* margin) {
+>>>>>>> miniblink49
 
     if (src.fFormat != SkMask::kA8_Format) {
         return false;
@@ -868,7 +1209,11 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
 
     float variance = sigma * sigma;
 
+<<<<<<< HEAD
     int windowSize = SkScalarCeilToInt(sigma * 6);
+=======
+    int windowSize = SkScalarCeilToInt(sigma*6);
+>>>>>>> miniblink49
     // round window size up to nearest odd number
     windowSize |= 1;
 
@@ -879,10 +1224,17 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
     gaussWindow[halfWindow] = 1;
 
     float windowSum = 1;
+<<<<<<< HEAD
     for (int x = 1; x <= halfWindow; ++x) {
         float gaussian = expf(-x * x / (2 * variance));
         gaussWindow[halfWindow + x] = gaussWindow[halfWindow - x] = gaussian;
         windowSum += 2 * gaussian;
+=======
+    for (int x = 1 ; x <= halfWindow ; ++x) {
+        float gaussian = expf(-x*x / (2*variance));
+        gaussWindow[halfWindow + x] = gaussWindow[halfWindow-x] = gaussian;
+        windowSum += 2*gaussian;
+>>>>>>> miniblink49
     }
 
     // leave the filter un-normalized for now; we will divide by the normalization
@@ -890,7 +1242,11 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
 
     int pad = halfWindow;
     if (margin) {
+<<<<<<< HEAD
         margin->set(pad, pad);
+=======
+        margin->set( pad, pad );
+>>>>>>> miniblink49
     }
 
     dst->fBounds = src.fBounds;
@@ -898,12 +1254,17 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
 
     dst->fRowBytes = dst->fBounds.width();
     dst->fFormat = SkMask::kA8_Format;
+<<<<<<< HEAD
     dst->fImage = nullptr;
+=======
+    dst->fImage = NULL;
+>>>>>>> miniblink49
 
     if (src.fImage) {
 
         size_t dstSize = dst->computeImageSize();
         if (0 == dstSize) {
+<<<<<<< HEAD
             return false; // too big to allocate, abort
         }
 
@@ -913,20 +1274,40 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
 
         const uint8_t* srcPixels = src.fImage;
         uint8_t* dstPixels = SkMask::AllocImage(dstSize);
+=======
+            return false;   // too big to allocate, abort
+        }
+
+        int             srcWidth = src.fBounds.width();
+        int             srcHeight = src.fBounds.height();
+        int             dstWidth = dst->fBounds.width();
+
+        const uint8_t*  srcPixels = src.fImage;
+        uint8_t*        dstPixels = SkMask::AllocImage(dstSize);
+>>>>>>> miniblink49
         SkAutoTCallVProc<uint8_t, SkMask_FreeImage> autoCall(dstPixels);
 
         // do the actual blur.  First, make a padded copy of the source.
         // use double pad so we never have to check if we're outside anything
 
+<<<<<<< HEAD
         int padWidth = srcWidth + 4 * pad;
+=======
+        int padWidth = srcWidth + 4*pad;
+>>>>>>> miniblink49
         int padHeight = srcHeight;
         int padSize = padWidth * padHeight;
 
         SkAutoTMalloc<uint8_t> padPixels(padSize);
         memset(padPixels, 0, padSize);
 
+<<<<<<< HEAD
         for (int y = 0; y < srcHeight; ++y) {
             uint8_t* padptr = padPixels + y * padWidth + 2 * pad;
+=======
+        for (int y = 0 ; y < srcHeight; ++y) {
+            uint8_t* padptr = padPixels + y * padWidth + 2*pad;
+>>>>>>> miniblink49
             const uint8_t* srcptr = srcPixels + y * srcWidth;
             memcpy(padptr, srcptr, srcWidth);
         }
@@ -935,6 +1316,7 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
         // also double-pad the intermediate result so that the second blur doesn't
         // have to do extra conditionals.
 
+<<<<<<< HEAD
         int tmpWidth = padHeight + 4 * pad;
         int tmpHeight = padWidth - 2 * pad;
         int tmpSize = tmpWidth * tmpHeight;
@@ -949,6 +1331,22 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
                 uint8_t* windowCenter = srcScanline + x;
                 for (int i = -pad; i <= pad; ++i) {
                     *outPixel += gaussWindow[pad + i] * windowCenter[i];
+=======
+        int tmpWidth = padHeight + 4*pad;
+        int tmpHeight = padWidth - 2*pad;
+        int tmpSize = tmpWidth * tmpHeight;
+
+        SkAutoTMalloc<float> tmpImage(tmpSize);
+        memset(tmpImage, 0, tmpSize*sizeof(tmpImage[0]));
+
+        for (int y = 0 ; y < padHeight ; ++y) {
+            uint8_t *srcScanline = padPixels + y*padWidth;
+            for (int x = pad ; x < padWidth - pad ; ++x) {
+                float *outPixel = tmpImage + (x-pad)*tmpWidth + y + 2*pad; // transposed output
+                uint8_t *windowCenter = srcScanline + x;
+                for (int i = -pad ; i <= pad ; ++i) {
+                    *outPixel += gaussWindow[pad+i]*windowCenter[i];
+>>>>>>> miniblink49
                 }
                 *outPixel /= windowSum;
             }
@@ -958,6 +1356,7 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
         // the transpose again; these transposes guarantee that we read memory in
         // linear order.
 
+<<<<<<< HEAD
         for (int y = 0; y < tmpHeight; ++y) {
             float* srcScanline = tmpImage + y * tmpWidth;
             for (int x = pad; x < tmpWidth - pad; ++x) {
@@ -970,6 +1369,20 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
                 uint8_t* outPixel = dstPixels + (x - pad) * dstWidth + y; // transposed output
                 int integerPixel = int(finalValue + 0.5f);
                 *outPixel = SkClampMax(SkClampPos(integerPixel), 255);
+=======
+        for (int y = 0 ; y < tmpHeight ; ++y) {
+            float *srcScanline = tmpImage + y*tmpWidth;
+            for (int x = pad ; x < tmpWidth - pad ; ++x) {
+                float *windowCenter = srcScanline + x;
+                float finalValue = 0;
+                for (int i = -pad ; i <= pad ; ++i) {
+                    finalValue += gaussWindow[pad+i]*windowCenter[i];
+                }
+                finalValue /= windowSum;
+                uint8_t *outPixel = dstPixels + (x-pad)*dstWidth + y; // transposed output
+                int integerPixel = int(finalValue + 0.5f);
+                *outPixel = SkClampMax( SkClampPos(integerPixel), 255 );
+>>>>>>> miniblink49
             }
         }
 
@@ -980,11 +1393,16 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
             // now we allocate the "real" dst, mirror the size of src
             size_t srcSize = src.computeImageSize();
             if (0 == srcSize) {
+<<<<<<< HEAD
                 return false; // too big to allocate, abort
+=======
+                return false;   // too big to allocate, abort
+>>>>>>> miniblink49
             }
             dst->fImage = SkMask::AllocImage(srcSize);
             merge_src_with_blur(dst->fImage, src.fRowBytes,
                 srcPixels, src.fRowBytes,
+<<<<<<< HEAD
                 dstPixels + pad * dst->fRowBytes + pad,
                 dst->fRowBytes, srcWidth, srcHeight);
             SkMask::FreeImage(dstPixels);
@@ -993,6 +1411,16 @@ bool SkBlurMask::BlurGroundTruth(SkScalar sigma, SkMask* dst, const SkMask& src,
                 dst->fRowBytes, srcPixels, src.fRowBytes, srcWidth, srcHeight, style);
         }
         (void)autoCall.release();
+=======
+                dstPixels + pad*dst->fRowBytes + pad,
+                dst->fRowBytes, srcWidth, srcHeight);
+            SkMask::FreeImage(dstPixels);
+        } else if (style != kNormal_SkBlurStyle) {
+            clamp_with_orig(dstPixels + pad*dst->fRowBytes + pad,
+                dst->fRowBytes, srcPixels, src.fRowBytes, srcWidth, srcHeight, style);
+        }
+        (void)autoCall.detach();
+>>>>>>> miniblink49
     }
 
     if (style == kInner_SkBlurStyle) {

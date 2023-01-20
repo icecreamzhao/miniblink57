@@ -27,29 +27,35 @@
 #define HTMLParserScheduler_h
 
 #include "core/html/parser/NestingLevelIncrementer.h"
-#include "platform/WebTaskRunner.h"
-#include "wtf/Allocator.h"
+#include "platform/scheduler/CancellableTaskFactory.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/RefPtr.h"
-#include <memory>
 
 namespace blink {
 
+class Document;
 class HTMLDocumentParser;
-class WebTaskRunner;
 
-class PumpSession : public NestingLevelIncrementer {
+class ActiveParserSession : public NestingLevelIncrementer {
     STACK_ALLOCATED();
-
 public:
-    PumpSession(unsigned& nestingLevel);
+    ActiveParserSession(unsigned& nestingLevel, Document*);
+    ~ActiveParserSession();
+
+private:
+    RefPtrWillBeMember<Document> m_document;
+};
+
+class PumpSession : public ActiveParserSession {
+    STACK_ALLOCATED();
+public:
+    PumpSession(unsigned& nestingLevel, Document*);
     ~PumpSession();
 };
 
-class SpeculationsPumpSession : public NestingLevelIncrementer {
-    STACK_ALLOCATED();
-
+class SpeculationsPumpSession : public ActiveParserSession {
 public:
-    SpeculationsPumpSession(unsigned& nestingLevel);
+    SpeculationsPumpSession(unsigned& nestingLevel, Document*);
     ~SpeculationsPumpSession();
 
     double elapsedTime() const;
@@ -61,19 +67,17 @@ private:
     size_t m_processedElementTokens;
 };
 
-class HTMLParserScheduler final
-    : public GarbageCollectedFinalized<HTMLParserScheduler> {
-    WTF_MAKE_NONCOPYABLE(HTMLParserScheduler);
-
+class HTMLParserScheduler {
+    WTF_MAKE_NONCOPYABLE(HTMLParserScheduler); WTF_MAKE_FAST_ALLOCATED(HTMLParserScheduler);
 public:
-    static HTMLParserScheduler* create(HTMLDocumentParser* parser,
-        RefPtr<WebTaskRunner> loadingTaskRunner)
+    static PassOwnPtr<HTMLParserScheduler> create(HTMLDocumentParser* parser)
     {
-        return new HTMLParserScheduler(parser, std::move(loadingTaskRunner));
+        return adoptPtr(new HTMLParserScheduler(parser));
     }
     ~HTMLParserScheduler();
 
-    bool isScheduledForResume() const;
+    bool isScheduledForResume() const { return m_isSuspendedWithActiveTimer || m_cancellableContinueParse.isPending(); }
+
     void scheduleForResume();
     bool yieldIfNeeded(const SpeculationsPumpSession&, bool startingScript);
 
@@ -89,23 +93,18 @@ public:
     void suspend();
     void resume();
 
-    void detach(); // Clear active tasks if any.
-
-    DECLARE_TRACE();
-
 private:
-    HTMLParserScheduler(HTMLDocumentParser*, RefPtr<WebTaskRunner>);
+    explicit HTMLParserScheduler(HTMLDocumentParser*);
 
     bool shouldYield(const SpeculationsPumpSession&, bool startingScript) const;
     void continueParsing();
 
-    Member<HTMLDocumentParser> m_parser;
-    RefPtr<WebTaskRunner> m_loadingTaskRunner;
+    HTMLDocumentParser* m_parser;
 
-    TaskHandle m_cancellableContinueParseTaskHandle;
+    CancellableTaskFactory m_cancellableContinueParse;
     bool m_isSuspendedWithActiveTimer;
 };
 
-} // namespace blink
+}
 
 #endif

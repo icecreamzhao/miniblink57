@@ -22,20 +22,14 @@
 
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatRect.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 class LayoutObject;
 
 class SVGTextQuery {
-    STACK_ALLOCATED();
-
 public:
-    SVGTextQuery(LayoutObject* layoutObject)
-        : m_queryRootLayoutObject(layoutObject)
-    {
-    }
+    SVGTextQuery(LayoutObject* layoutObject) : m_queryRootLayoutObject(layoutObject) { }
 
     unsigned numberOfCharacters() const;
     float textLength() const;
@@ -50,6 +44,6 @@ private:
     LayoutObject* m_queryRootLayoutObject;
 };
 
-} // namespace blink
+}
 
 #endif

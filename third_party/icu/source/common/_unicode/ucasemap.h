@@ -19,9 +19,15 @@
 #ifndef __UCASEMAP_H__
 #define __UCASEMAP_H__
 
+<<<<<<< HEAD
 #include "unicode/localpointer.h"
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/localpointer.h"
+>>>>>>> miniblink49
 
 /**
  * \file
@@ -66,8 +72,13 @@ typedef struct UCaseMap UCaseMap; /**< C typedef for struct UCaseMap. @stable IC
  * @see U_TITLECASE_NO_BREAK_ADJUSTMENT
  * @stable ICU 3.4
  */
+<<<<<<< HEAD
 U_STABLE UCaseMap* U_EXPORT2
 ucasemap_open(const char* locale, uint32_t options, UErrorCode* pErrorCode);
+=======
+U_STABLE UCaseMap * U_EXPORT2
+ucasemap_open(const char *locale, uint32_t options, UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Close a UCaseMap service object.
@@ -75,7 +86,11 @@ ucasemap_open(const char* locale, uint32_t options, UErrorCode* pErrorCode);
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 ucasemap_close(UCaseMap* csm);
+=======
+ucasemap_close(UCaseMap *csm);
+>>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -102,8 +117,13 @@ U_NAMESPACE_END
  * @return locale ID
  * @stable ICU 3.4
  */
+<<<<<<< HEAD
 U_STABLE const char* U_EXPORT2
 ucasemap_getLocale(const UCaseMap* csm);
+=======
+U_STABLE const char * U_EXPORT2
+ucasemap_getLocale(const UCaseMap *csm);
+>>>>>>> miniblink49
 
 /**
  * Get the options bit set that is used for case folding and string comparisons.
@@ -112,7 +132,11 @@ ucasemap_getLocale(const UCaseMap* csm);
  * @stable ICU 3.4
  */
 U_STABLE uint32_t U_EXPORT2
+<<<<<<< HEAD
 ucasemap_getOptions(const UCaseMap* csm);
+=======
+ucasemap_getOptions(const UCaseMap *csm);
+>>>>>>> miniblink49
 
 /**
  * Set the locale ID that is used for language-dependent case mappings.
@@ -126,7 +150,11 @@ ucasemap_getOptions(const UCaseMap* csm);
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 ucasemap_setLocale(UCaseMap* csm, const char* locale, UErrorCode* pErrorCode);
+=======
+ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Set the options bit set that is used for case folding and string comparisons.
@@ -140,7 +168,11 @@ ucasemap_setLocale(UCaseMap* csm, const char* locale, UErrorCode* pErrorCode);
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 ucasemap_setOptions(UCaseMap* csm, uint32_t options, UErrorCode* pErrorCode);
+=======
+ucasemap_setOptions(UCaseMap *csm, uint32_t options, UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Do not lowercase non-initial parts of words when titlecasing.
@@ -192,8 +224,13 @@ ucasemap_setOptions(UCaseMap* csm, uint32_t options, UErrorCode* pErrorCode);
  * @return titlecasing break iterator
  * @stable ICU 3.8
  */
+<<<<<<< HEAD
 U_STABLE const UBreakIterator* U_EXPORT2
 ucasemap_getBreakIterator(const UCaseMap* csm);
+=======
+U_STABLE const UBreakIterator * U_EXPORT2
+ucasemap_getBreakIterator(const UCaseMap *csm);
+>>>>>>> miniblink49
 
 /**
  * Set the break iterator that is used for titlecasing.
@@ -216,7 +253,11 @@ ucasemap_getBreakIterator(const UCaseMap* csm);
  * @stable ICU 3.8
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 ucasemap_setBreakIterator(UCaseMap* csm, UBreakIterator* iterToAdopt, UErrorCode* pErrorCode);
+=======
+ucasemap_setBreakIterator(UCaseMap *csm, UBreakIterator *iterToAdopt, UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Titlecase a UTF-16 string. This function is almost a duplicate of u_strToTitle(),
@@ -265,10 +306,17 @@ ucasemap_setBreakIterator(UCaseMap* csm, UBreakIterator* iterToAdopt, UErrorCode
  * @stable ICU 3.8
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ucasemap_toTitle(UCaseMap* csm,
     UChar* dest, int32_t destCapacity,
     const UChar* src, int32_t srcLength,
     UErrorCode* pErrorCode);
+=======
+ucasemap_toTitle(UCaseMap *csm,
+                 UChar *dest, int32_t destCapacity,
+                 const UChar *src, int32_t srcLength,
+                 UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 #endif
 
@@ -296,10 +344,17 @@ ucasemap_toTitle(UCaseMap* csm,
  * @stable ICU 3.4
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ucasemap_utf8ToLower(const UCaseMap* csm,
     char* dest, int32_t destCapacity,
     const char* src, int32_t srcLength,
     UErrorCode* pErrorCode);
+=======
+ucasemap_utf8ToLower(const UCaseMap *csm,
+                     char *dest, int32_t destCapacity,
+                     const char *src, int32_t srcLength,
+                     UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Uppercase the characters in a UTF-8 string.
@@ -325,10 +380,17 @@ ucasemap_utf8ToLower(const UCaseMap* csm,
  * @stable ICU 3.4
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ucasemap_utf8ToUpper(const UCaseMap* csm,
     char* dest, int32_t destCapacity,
     const char* src, int32_t srcLength,
     UErrorCode* pErrorCode);
+=======
+ucasemap_utf8ToUpper(const UCaseMap *csm,
+                     char *dest, int32_t destCapacity,
+                     const char *src, int32_t srcLength,
+                     UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
@@ -377,10 +439,17 @@ ucasemap_utf8ToUpper(const UCaseMap* csm,
  * @stable ICU 3.8
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ucasemap_utf8ToTitle(UCaseMap* csm,
     char* dest, int32_t destCapacity,
     const char* src, int32_t srcLength,
     UErrorCode* pErrorCode);
+=======
+ucasemap_utf8ToTitle(UCaseMap *csm,
+                    char *dest, int32_t destCapacity,
+                    const char *src, int32_t srcLength,
+                    UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 #endif
 
@@ -415,9 +484,16 @@ ucasemap_utf8ToTitle(UCaseMap* csm,
  * @stable ICU 3.8
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ucasemap_utf8FoldCase(const UCaseMap* csm,
     char* dest, int32_t destCapacity,
     const char* src, int32_t srcLength,
     UErrorCode* pErrorCode);
+=======
+ucasemap_utf8FoldCase(const UCaseMap *csm,
+                      char *dest, int32_t destCapacity,
+                      const char *src, int32_t srcLength,
+                      UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 #endif

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/html/track/AutomaticTrackSelection.h"
 
 #include "core/html/track/TextTrack.h"
@@ -12,12 +13,13 @@ namespace blink {
 
 class TrackGroup {
     STACK_ALLOCATED();
-
 public:
-    enum GroupKind { CaptionsAndSubtitles,
+    enum GroupKind {
+        CaptionsAndSubtitles,
         Description,
         Chapter,
-        Metadata };
+        Metadata
+    };
 
     explicit TrackGroup(GroupKind kind)
         : visibleTrack(nullptr)
@@ -27,9 +29,9 @@ public:
     {
     }
 
-    HeapVector<Member<TextTrack>> tracks;
-    Member<TextTrack> visibleTrack;
-    Member<TextTrack> defaultTrack;
+    WillBeHeapVector<RefPtrWillBeMember<TextTrack>> tracks;
+    RefPtrWillBeMember<TextTrack> visibleTrack;
+    RefPtrWillBeMember<TextTrack> defaultTrack;
     GroupKind kind;
     bool hasSrcLang;
 };
@@ -49,14 +51,13 @@ static int textTrackLanguageSelectionScore(const TextTrack& track)
 
 static int textTrackSelectionScore(const TextTrack& track)
 {
-    if (!track.isVisualKind())
+    if (track.kind() != TextTrack::captionsKeyword() && track.kind() != TextTrack::subtitlesKeyword())
         return 0;
 
     return textTrackLanguageSelectionScore(track);
 }
 
-AutomaticTrackSelection::AutomaticTrackSelection(
-    const Configuration& configuration)
+AutomaticTrackSelection::AutomaticTrackSelection(const Configuration& configuration)
     : m_configuration(configuration)
 {
 }
@@ -70,33 +71,34 @@ const AtomicString& AutomaticTrackSelection::preferredTrackKind() const
     return nullAtom;
 }
 
-void AutomaticTrackSelection::performAutomaticTextTrackSelection(
-    const TrackGroup& group)
+void AutomaticTrackSelection::performAutomaticTextTrackSelection(const TrackGroup& group)
 {
-    DCHECK(group.tracks.size());
+    ASSERT(group.tracks.size());
 
     // First, find the track in the group that should be enabled (if any).
-    HeapVector<Member<TextTrack>> currentlyEnabledTracks;
-    TextTrack* trackToEnable = nullptr;
-    TextTrack* defaultTrack = nullptr;
-    TextTrack* preferredTrack = nullptr;
-    TextTrack* fallbackTrack = nullptr;
+    WillBeHeapVector<RefPtrWillBeMember<TextTrack>> currentlyEnabledTracks;
+    RefPtrWillBeRawPtr<TextTrack> trackToEnable = nullptr;
+    RefPtrWillBeRawPtr<TextTrack> defaultTrack = nullptr;
+    RefPtrWillBeRawPtr<TextTrack> preferredTrack = nullptr;
+    RefPtrWillBeRawPtr<TextTrack> fallbackTrack = nullptr;
+
     int highestTrackScore = 0;
 
-    for (const auto& textTrack : group.tracks) {
+    for (size_t i = 0; i < group.tracks.size(); ++i) {
+        RefPtrWillBeRawPtr<TextTrack> textTrack = group.tracks[i];
+
         if (m_configuration.disableCurrentlyEnabledTracks && textTrack->mode() == TextTrack::showingKeyword())
-            currentlyEnabledTracks.push_back(textTrack);
+            currentlyEnabledTracks.append(textTrack);
 
         int trackScore = textTrackSelectionScore(*textTrack);
 
         if (textTrack->kind() == preferredTrackKind())
             trackScore += 1;
         if (trackScore) {
-            // * If the text track kind is subtitles or captions and the user has
-            // indicated an interest in having a track with this text track kind, text
-            // track language, and text track label enabled, and there is no other
-            // text track in the media element's list of text tracks with a text track
-            // kind of either subtitles or captions whose text track mode is showing
+            // * If the text track kind is subtitles or captions and the user has indicated an interest in having a
+            // track with this text track kind, text track language, and text track label enabled, and there is no
+            // other text track in the media element's list of text tracks with a text track kind of either subtitles
+            // or captions whose text track mode is showing
             //    Let the text track mode be showing.
             if (trackScore > highestTrackScore) {
                 preferredTrack = textTrack;
@@ -108,9 +110,8 @@ void AutomaticTrackSelection::performAutomaticTextTrackSelection(
             if (!fallbackTrack)
                 fallbackTrack = textTrack;
         } else if (!group.visibleTrack && !defaultTrack && textTrack->isDefault()) {
-            // * If the track element has a default attribute specified, and there is
-            // no other text track in the media element's list of text tracks whose
-            // text track mode is showing or showing by default
+            // * If the track element has a default attribute specified, and there is no other text track in the media
+            // element's list of text tracks whose text track mode is showing or showing by default
             //    Let the text track mode be showing by default.
             defaultTrack = textTrack;
         }
@@ -123,14 +124,16 @@ void AutomaticTrackSelection::performAutomaticTextTrackSelection(
         trackToEnable = defaultTrack;
 
     if (!trackToEnable && m_configuration.forceEnableSubtitleOrCaptionTrack && group.kind == TrackGroup::CaptionsAndSubtitles) {
-        if (fallbackTrack)
+        if (fallbackTrack) {
             trackToEnable = fallbackTrack;
-        else
+        } else {
             trackToEnable = group.tracks[0];
+        }
     }
 
     if (currentlyEnabledTracks.size()) {
-        for (const auto& textTrack : currentlyEnabledTracks) {
+        for (size_t i = 0; i < currentlyEnabledTracks.size(); ++i) {
+            RefPtrWillBeRawPtr<TextTrack> textTrack = currentlyEnabledTracks[i];
             if (textTrack != trackToEnable)
                 textTrack->setMode(TextTrack::disabledKeyword());
         }
@@ -140,10 +143,9 @@ void AutomaticTrackSelection::performAutomaticTextTrackSelection(
         trackToEnable->setMode(TextTrack::showingKeyword());
 }
 
-void AutomaticTrackSelection::enableDefaultMetadataTextTracks(
-    const TrackGroup& group)
+void AutomaticTrackSelection::enableDefaultMetadataTextTracks(const TrackGroup& group)
 {
-    DCHECK(group.tracks.size());
+    ASSERT(group.tracks.size());
 
     // https://html.spec.whatwg.org/multipage/embedded-content.html#honor-user-preferences-for-automatic-text-track-selection
 
@@ -168,7 +170,7 @@ void AutomaticTrackSelection::perform(TextTrackList& textTracks)
     TrackGroup metadataTracks(TrackGroup::Metadata);
 
     for (size_t i = 0; i < textTracks.length(); ++i) {
-        TextTrack* textTrack = textTracks.anonymousIndexedGetter(i);
+        RefPtrWillBeRawPtr<TextTrack> textTrack = textTracks.item(i);
         if (!textTrack)
             continue;
 
@@ -181,7 +183,7 @@ void AutomaticTrackSelection::perform(TextTrackList& textTracks)
         } else if (kind == TextTrack::chaptersKeyword()) {
             currentGroup = &chapterTracks;
         } else {
-            DCHECK_EQ(kind, TextTrack::metadataKeyword());
+            ASSERT(kind == TextTrack::metadataKeyword());
             currentGroup = &metadataTracks;
         }
 
@@ -190,19 +192,18 @@ void AutomaticTrackSelection::perform(TextTrackList& textTracks)
         if (!currentGroup->defaultTrack && textTrack->isDefault())
             currentGroup->defaultTrack = textTrack;
 
-        // Do not add this track to the group if it has already been automatically
-        // configured as we only want to perform selection once per track so that
-        // adding another track after the initial configuration doesn't reconfigure
-        // every track - only those that should be changed by the new addition. For
-        // example all metadata tracks are disabled by default, and we don't want a
-        // track that has been enabled by script to be disabled automatically when a
-        // new metadata track is added later.
+        // Do not add this track to the group if it has already been automatically configured
+        // as we only want to perform selection once per track so that adding another track
+        // after the initial configuration doesn't reconfigure every track - only those that
+        // should be changed by the new addition. For example all metadata tracks are
+        // disabled by default, and we don't want a track that has been enabled by script
+        // to be disabled automatically when a new metadata track is added later.
         if (textTrack->hasBeenConfigured())
             continue;
 
         if (textTrack->language().length())
             currentGroup->hasSrcLang = true;
-        currentGroup->tracks.push_back(textTrack);
+        currentGroup->tracks.append(textTrack);
     }
 
     if (captionAndSubtitleTracks.tracks.size())

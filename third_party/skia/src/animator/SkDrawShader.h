@@ -18,11 +18,17 @@ class SkDrawBitmapShader : public SkDrawShader {
     SkDrawBitmapShader();
     bool add() override;
     SkShader* getShader() override;
+<<<<<<< HEAD
 
 protected:
     SkBool filterBitmap;
     SkBaseBitmap* image;
 
+=======
+protected:
+    SkBool filterBitmap;
+    SkBaseBitmap* image;
+>>>>>>> miniblink49
 private:
     typedef SkDrawShader INHERITED;
 };

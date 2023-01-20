@@ -9,10 +9,9 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "bindings/core/v8/USVStringOrURLSearchParams.h"
 #include "platform/heap/Handle.h"
-#include "platform/network/EncodedFormData.h"
+//#include "platform/network/EncodedFormData.h"
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
-#include <base/gtest_prod_util.h>
 #include <utility>
 
 namespace blink {
@@ -24,8 +23,8 @@ typedef USVStringOrURLSearchParams URLSearchParamsInit;
 
 class CORE_EXPORT URLSearchParams final
     : public GarbageCollectedFinalized<URLSearchParams>,
-      public ScriptWrappable,
-      public PairIterable<String, String> {
+    public ScriptWrappable,
+    public PairIterable<String, String>{
     DEFINE_WRAPPERTYPEINFO();
 
 public:
@@ -50,17 +49,17 @@ public:
     void setInput(const String&);
 
     // Internal helpers
-    PassRefPtr<EncodedFormData> toEncodedFormData() const;
+    //PassRefPtr<EncodedFormData> toEncodedFormData() const;
     const Vector<std::pair<String, String>>& params() const { return m_params; }
 
-#if DCHECK_IS_ON()
+#ifdef ASSERT
     DOMURL* urlObject() const;
 #endif
 
     DECLARE_TRACE();
 
 private:
-    FRIEND_TEST_ALL_PREFIXES(URLSearchParamsTest, EncodedFormData);
+    //FRIEND_TEST_ALL_PREFIXES(URLSearchParamsTest, EncodedFormData);
 
     explicit URLSearchParams(const String&, DOMURL* = nullptr);
     explicit URLSearchParams(URLSearchParams*);
@@ -74,6 +73,6 @@ private:
     WeakMember<DOMURL> m_urlObject;
 };
 
-} // namespace blink
+}  // namespace blink
 
-#endif // URLSearchParams_h
+#endif  // URLSearchParams_h

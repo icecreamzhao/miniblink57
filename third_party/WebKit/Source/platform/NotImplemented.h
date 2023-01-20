@@ -30,6 +30,7 @@
 #include "wtf/Assertions.h"
 
 #if LOG_DISABLED
+<<<<<<< HEAD
 #define notImplemented() ((void)0)
 #else
 
@@ -40,6 +41,22 @@ PLATFORM_EXPORT void* notImplementedLoggingChannel();
 #define notImplemented() \
     do {                 \
         *(int*)1 = 1;    \
+=======
+    #define notImplemented() ((void)0)
+#else
+
+namespace blink {
+PLATFORM_EXPORT WTFLogChannel* notImplementedLoggingChannel();
+} // namespace blink
+
+#define notImplemented() do { \
+        static bool havePrinted = false; \
+        if (!havePrinted) { \
+            WTFLogVerbose(__FILE__, __LINE__, WTF_PRETTY_FUNCTION, blink::notImplementedLoggingChannel(), "UNIMPLEMENTED: "); \
+            havePrinted = true; \
+        } \
+        DebugBreak(); \
+>>>>>>> miniblink49
     } while (0)
 
 #endif // NDEBUG

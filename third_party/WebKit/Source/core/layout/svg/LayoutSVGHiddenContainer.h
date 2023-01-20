@@ -26,41 +26,26 @@ namespace blink {
 
 class SVGElement;
 
-// This class is for containers which are never drawn, but do need to support
-// style <defs>, <linearGradient>, <radialGradient> are all good examples
+// This class is for containers which are never drawn, but do need to support style
+// <defs>, <linearGradient>, <radialGradient> are all good examples
 class LayoutSVGHiddenContainer : public LayoutSVGContainer {
 public:
     explicit LayoutSVGHiddenContainer(SVGElement*);
 
-    const char* name() const override { return "LayoutSVGHiddenContainer"; }
+    virtual const char* name() const override { return "LayoutSVGHiddenContainer"; }
 
 protected:
-    void layout() override;
+    virtual void layout() override;
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSVGHiddenContainer || LayoutSVGContainer::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVGHiddenContainer || LayoutSVGContainer::isOfType(type); }
 
 private:
-    // LayoutSVGHiddenContainer paints nothing.
-    void paint(const PaintInfo&, const LayoutPoint&) const final { }
-    bool paintedOutputOfObjectHasNoEffectRegardlessOfSize() const final
-    {
-        return true;
-    }
-    LayoutRect absoluteVisualRect() const final { return LayoutRect(); }
-    FloatRect visualRectInLocalSVGCoordinates() const final
-    {
-        return FloatRect();
-    }
-    void absoluteQuads(Vector<FloatQuad>&,
-        MapCoordinatesFlags mode = 0) const final { }
+    virtual void paint(const PaintInfo&, const LayoutPoint&) override final;
+    virtual LayoutRect clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject*, const PaintInvalidationState* = nullptr) const override final { return LayoutRect(); }
+    virtual void absoluteQuads(Vector<FloatQuad>&, bool* wasFixed) const override final;
 
-    bool nodeAtFloatPoint(HitTestResult&,
-        const FloatPoint& pointInParent,
-        HitTestAction) final;
+    virtual bool nodeAtFloatPoint(HitTestResult&, const FloatPoint& pointInParent, HitTestAction) override final;
 };
-} // namespace blink
+}
 
 #endif // LayoutSVGHiddenContainer_h

@@ -26,7 +26,10 @@
 #ifndef PODInterval_h
 #define PODInterval_h
 
+<<<<<<< HEAD
 #include "platform/heap/Handle.h"
+=======
+>>>>>>> miniblink49
 #ifndef NDEBUG
 #include "wtf/text/StringBuilder.h"
 #endif
@@ -62,15 +65,23 @@ namespace blink {
 // available:
 //
 //   template<> struct ValueToString<T> {
+<<<<<<< HEAD
 //       static String toString(const T& t);
 //   };
 //   template<> struct ValueToString<UserData> {
 //       static String toString(const UserData& t);
+=======
+//       static String string(const T& t);
+//   };
+//   template<> struct ValueToString<UserData> {
+//       static String string(const UserData& t);
+>>>>>>> miniblink49
 //   };
 //
 // Note that this class requires a copy constructor and assignment
 // operator in order to be stored in the red-black tree.
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
 #ifndef NDEBUG
@@ -82,6 +93,15 @@ template <class T, class UserData = void*>
 class PODInterval {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
+=======
+#ifndef NDEBUG
+template<class T>
+struct ValueToString;
+#endif
+
+template<class T, class UserData = void*>
+class PODInterval {
+>>>>>>> miniblink49
 public:
     // Constructor from endpoints. This constructor only works when the
     // UserData type is a pointer or other type which can be initialized
@@ -123,7 +143,14 @@ public:
 
     // Returns true if this interval is "less" than the other. The
     // comparison is performed on the low endpoints of the intervals.
+<<<<<<< HEAD
     bool operator<(const PODInterval& other) const { return low() < other.low(); }
+=======
+    bool operator<(const PODInterval& other) const
+    {
+        return low() < other.low();
+    }
+>>>>>>> miniblink49
 
     // Returns true if this interval is strictly equal to the other,
     // including comparison of the user data.
@@ -140,6 +167,7 @@ public:
     String toString() const
     {
         StringBuilder builder;
+<<<<<<< HEAD
         builder.append("[PODInterval (");
         builder.append(ValueToString<T>::toString(low()));
         builder.append(", ");
@@ -148,6 +176,16 @@ public:
         builder.append(ValueToString<UserData>::toString(data()));
         builder.append(", maxHigh=");
         builder.append(ValueToString<T>::toString(maxHigh()));
+=======
+        builder.appendLiteral("[PODInterval (");
+        builder.append(ValueToString<T>::string(low()));
+        builder.appendLiteral(", ");
+        builder.append(ValueToString<T>::string(high()));
+        builder.appendLiteral("), data=");
+        builder.append(ValueToString<UserData>::string(data()));
+        builder.appendLiteral(", maxHigh=");
+        builder.append(ValueToString<T>::string(maxHigh()));
+>>>>>>> miniblink49
         builder.append(']');
         return builder.toString();
     }
@@ -156,7 +194,10 @@ public:
 private:
     T m_low;
     T m_high;
+<<<<<<< HEAD
     GC_PLUGIN_IGNORE("crbug.com/513116")
+=======
+>>>>>>> miniblink49
     UserData m_data;
     T m_maxHigh;
 };

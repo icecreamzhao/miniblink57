@@ -23,20 +23,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/track/TrackEvent.h"
 
-#include "bindings/core/v8/VideoTrackOrAudioTrackOrTextTrack.h"
+#include "bindings/core/v8/UnionTypesCore.h"
 #include "core/html/track/AudioTrack.h"
 #include "core/html/track/TextTrack.h"
 #include "core/html/track/VideoTrack.h"
-#include "public/platform/WebMediaPlayer.h"
 
 namespace blink {
 
-TrackEvent::TrackEvent() { }
+TrackEvent::TrackEvent()
+{
+}
 
-TrackEvent::TrackEvent(const AtomicString& type,
-    const TrackEventInit& initializer)
+TrackEvent::TrackEvent(const AtomicString& type, const TrackEventInit& initializer)
     : Event(type, initializer)
 {
     if (!initializer.hasTrack())
@@ -50,10 +51,12 @@ TrackEvent::TrackEvent(const AtomicString& type,
     else if (track.isTextTrack())
         m_track = track.getAsTextTrack();
     else
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
 }
 
-TrackEvent::~TrackEvent() { }
+TrackEvent::~TrackEvent()
+{
+}
 
 const AtomicString& TrackEvent::interfaceName() const
 {
@@ -66,17 +69,17 @@ void TrackEvent::track(VideoTrackOrAudioTrackOrTextTrack& returnValue)
         return;
 
     switch (m_track->type()) {
-    case WebMediaPlayer::TextTrack:
+    case TrackBase::TextTrack:
         returnValue.setTextTrack(toTextTrack(m_track.get()));
         break;
-    case WebMediaPlayer::AudioTrack:
+    case TrackBase::AudioTrack:
         returnValue.setAudioTrack(toAudioTrack(m_track.get()));
         break;
-    case WebMediaPlayer::VideoTrack:
+    case TrackBase::VideoTrack:
         returnValue.setVideoTrack(toVideoTrack(m_track.get()));
         break;
     default:
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
     }
 }
 

@@ -26,10 +26,16 @@
 #ifndef MediaKeys_h
 #define MediaKeys_h
 
+<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/dom/ContextLifecycleObserver.h"
+=======
+#include "bindings/core/v8/ScriptPromise.h"
+#include "bindings/core/v8/ScriptWrappable.h"
+#include "core/dom/ActiveDOMObject.h"
+>>>>>>> miniblink49
 #include "core/dom/DOMArrayPiece.h"
 #include "platform/Timer.h"
 #include "public/platform/WebContentDecryptionModule.h"
@@ -38,7 +44,10 @@
 #include "public/platform/WebVector.h"
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -51,6 +60,7 @@ class WebContentDecryptionModule;
 
 // References are held by JS and HTMLMediaElement.
 // The WebContentDecryptionModule has the same lifetime as this object.
+<<<<<<< HEAD
 class MediaKeys : public GarbageCollectedFinalized<MediaKeys>,
                   public ActiveScriptWrappable<MediaKeys>,
                   public ContextLifecycleObserver,
@@ -86,12 +96,31 @@ public:
 
     // The previously reserved and accepted HTMLMediaElement is no longer
     // using this object.
+=======
+class MediaKeys : public GarbageCollectedFinalized<MediaKeys>, public ActiveDOMObject, public ScriptWrappable {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaKeys);
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static MediaKeys* create(ExecutionContext*, const WebVector<WebEncryptedMediaSessionType>& supportedSessionTypes, PassOwnPtr<WebContentDecryptionModule>);
+    ~MediaKeys() override;
+
+    MediaKeySession* createSession(ScriptState*, const String& sessionTypeString, ExceptionState&);
+
+    ScriptPromise setServerCertificate(ScriptState*, const DOMArrayPiece& serverCertificate);
+
+    // Indicates that the provided HTMLMediaElement wants to use this object.
+    // Returns true if no other HTMLMediaElement currently references this
+    // object, false otherwise. Will take a weak reference to HTMLMediaElement.
+    bool setMediaElement(HTMLMediaElement*);
+    // Indicates that no HTMLMediaElement is currently using this object.
+>>>>>>> miniblink49
     void clearMediaElement();
 
     WebContentDecryptionModule* contentDecryptionModule();
 
     DECLARE_VIRTUAL_TRACE();
 
+<<<<<<< HEAD
     // ContextLifecycleObserver implementation.
     // FIXME: This class could derive from ContextLifecycleObserver
     // again (http://crbug.com/483722).
@@ -112,10 +141,30 @@ private:
 
     const WebVector<WebEncryptedMediaSessionType> m_supportedSessionTypes;
     std::unique_ptr<WebContentDecryptionModule> m_cdm;
+=======
+    // ActiveDOMObject implementation.
+    // FIXME: This class could derive from ContextLifecycleObserver
+    // again once hasPendingActivity() is moved to ScriptWrappable
+    // (http://crbug.com/483722).
+    void contextDestroyed() override;
+    bool hasPendingActivity() const override;
+    void stop() override;
+
+private:
+    MediaKeys(ExecutionContext*, const WebVector<WebEncryptedMediaSessionType>& supportedSessionTypes, PassOwnPtr<WebContentDecryptionModule>);
+    class PendingAction;
+
+    bool sessionTypeSupported(WebEncryptedMediaSessionType);
+    void timerFired(Timer<MediaKeys>*);
+
+    const WebVector<WebEncryptedMediaSessionType> m_supportedSessionTypes;
+    OwnPtr<WebContentDecryptionModule> m_cdm;
+>>>>>>> miniblink49
 
     // Keep track of the HTMLMediaElement that references this object. Keeping
     // a WeakMember so that HTMLMediaElement's lifetime isn't dependent on
     // this object.
+<<<<<<< HEAD
     // Note that the referenced HTMLMediaElement must be destroyed
     // before this object. This is due to WebMediaPlayerImpl (owned by
     // HTMLMediaElement) possibly having a pointer to Decryptor created
@@ -126,6 +175,9 @@ private:
     // (i.e. a setMediaKeys operation is in progress). Destruction of this
     // object will be prevented until the setMediaKeys() completes.
     bool m_reservedForMediaElement;
+=======
+    RawPtrWillBeWeakMember<HTMLMediaElement> m_mediaElement;
+>>>>>>> miniblink49
 
     HeapDeque<Member<PendingAction>> m_pendingActions;
     Timer<MediaKeys> m_timer;

@@ -38,32 +38,16 @@
 namespace blink {
 
 class EventListener;
-class ExecutionContext;
+class ExecutiionContext;
 class LocalFrame;
 class Node;
 class QualifiedName;
-class SourceLocation;
 
-V8LazyEventListener* createAttributeEventListener(
-    Node*,
-    const QualifiedName&,
-    const AtomicString& value,
-    const AtomicString& eventParameterName);
-V8LazyEventListener* createAttributeEventListener(
-    LocalFrame*,
-    const QualifiedName&,
-    const AtomicString& value,
-    const AtomicString& eventParameterName);
-v8::Local<v8::Object> eventListenerHandler(ExecutionContext*, EventListener*);
-v8::Local<v8::Function> eventListenerEffectiveFunction(
-    v8::Isolate*,
-    v8::Local<v8::Object> handler);
-void getFunctionLocation(v8::Local<v8::Function>,
-    String& scriptId,
-    int& lineNumber,
-    int& columnNumber);
-std::unique_ptr<SourceLocation> getFunctionLocation(ExecutionContext*,
-    EventListener*);
+PassRefPtr<V8LazyEventListener> createAttributeEventListener(Node*, const QualifiedName&, const AtomicString& value, const AtomicString& eventParameterName);
+PassRefPtr<V8LazyEventListener> createAttributeEventListener(LocalFrame*, const QualifiedName&, const AtomicString& value, const AtomicString& eventParameterName);
+ScriptValue eventListenerHandler(ExecutionContext*, EventListener*);
+ScriptState* eventListenerHandlerScriptState(LocalFrame*, EventListener*);
+bool eventListenerHandlerLocation(ExecutionContext*, EventListener*, String& scriptId, int& lineNumber, int& columnNumber);
 
 } // namespace blink
 

@@ -24,6 +24,7 @@
 
 namespace WTF {
 
+<<<<<<< HEAD
 enum HexConversionMode { Lowercase,
     Uppercase };
 
@@ -42,16 +43,58 @@ template <typename T>
 inline void appendByteAsHex(unsigned char byte,
     T& destination,
     HexConversionMode mode = Uppercase)
+=======
+enum HexConversionMode {
+    Lowercase,
+    Uppercase
+};
+
+namespace Internal {
+
+const LChar lowerHexDigits[17] = "0123456789abcdef";
+const LChar upperHexDigits[17] = "0123456789ABCDEF";
+inline const LChar* hexDigitsForMode(HexConversionMode mode)
+{
+    return mode == Lowercase ? lowerHexDigits : upperHexDigits;
+}
+
+} // namespace Internal
+
+template<typename T>
+inline void appendByteAsHex(unsigned char byte, T& destination, HexConversionMode mode = Uppercase)
+>>>>>>> miniblink49
 {
     const LChar* hexDigits = Internal::hexDigitsForMode(mode);
     destination.append(hexDigits[byte >> 4]);
     destination.append(hexDigits[byte & 0xF]);
 }
 
+<<<<<<< HEAD
 template <typename T>
 inline void appendUnsignedAsHex(unsigned number,
     T& destination,
     HexConversionMode mode = Uppercase)
+=======
+template<typename T>
+inline void placeByteAsHexCompressIfPossible(unsigned char byte, T& destination, unsigned& index, HexConversionMode mode = Uppercase)
+{
+    const LChar* hexDigits = Internal::hexDigitsForMode(mode);
+    if (byte >= 0x10)
+        destination[index++] = hexDigits[byte >> 4];
+    destination[index++] = hexDigits[byte & 0xF];
+}
+
+template<typename T>
+inline void placeByteAsHex(unsigned char byte, T& destination, HexConversionMode mode = Uppercase)
+{
+    const LChar* hexDigits = Internal::hexDigitsForMode(mode);
+    *destination++ = hexDigits[byte >> 4];
+    *destination++ = hexDigits[byte & 0xF];
+}
+
+template<typename T>
+inline void appendUnsignedAsHex(unsigned number, T& destination, HexConversionMode mode = Uppercase)
+>>>>>>> miniblink49
 {
     const LChar* hexDigits = Internal::hexDigitsForMode(mode);
     Vector<LChar, 8> result;
@@ -63,6 +106,7 @@ inline void appendUnsignedAsHex(unsigned number,
     destination.append(result.data(), result.size());
 }
 
+<<<<<<< HEAD
 // Same as appendUnsignedAsHex, but using exactly 'desiredDigits' for the
 // conversion.
 template <typename T>
@@ -72,6 +116,13 @@ inline void appendUnsignedAsHexFixedSize(unsigned number,
     HexConversionMode mode = Uppercase)
 {
     DCHECK(desiredDigits);
+=======
+// Same as appendUnsignedAsHex, but using exactly 'desiredDigits' for the conversion.
+template<typename T>
+inline void appendUnsignedAsHexFixedSize(unsigned number, T& destination, unsigned desiredDigits, HexConversionMode mode = Uppercase)
+{
+    ASSERT(desiredDigits);
+>>>>>>> miniblink49
 
     const LChar* hexDigits = Internal::hexDigitsForMode(mode);
     Vector<LChar, 8> result;
@@ -80,7 +131,11 @@ inline void appendUnsignedAsHexFixedSize(unsigned number,
         number >>= 4;
     } while (result.size() < desiredDigits);
 
+<<<<<<< HEAD
     DCHECK_EQ(result.size(), desiredDigits);
+=======
+    ASSERT(result.size() == desiredDigits);
+>>>>>>> miniblink49
     destination.append(result.data(), result.size());
 }
 
@@ -89,6 +144,11 @@ inline void appendUnsignedAsHexFixedSize(unsigned number,
 using WTF::appendByteAsHex;
 using WTF::appendUnsignedAsHex;
 using WTF::appendUnsignedAsHexFixedSize;
+<<<<<<< HEAD
+=======
+using WTF::placeByteAsHex;
+using WTF::placeByteAsHexCompressIfPossible;
+>>>>>>> miniblink49
 using WTF::Lowercase;
 
 #endif // HexNumber_h

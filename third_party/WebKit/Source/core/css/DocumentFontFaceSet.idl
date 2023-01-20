@@ -28,9 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://dev.w3.org/csswg/css-font-loading/#font-face-source
+// http://dev.w3.org/csswg/css-font-loading/#font-face-source
 
-// TODO(foolip): This should be a FontFaceSource interface implemented by
+// TODO(philipj): This should be a FontFaceSource interface implemented by
 // Document and WorkerGlobalScope.
 partial interface Document {
     [MeasureAs=DocumentFonts] readonly attribute FontFaceSet fonts;

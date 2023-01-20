@@ -1,9 +1,14 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 
 #include "SampleCode.h"
 #include "SkCanvas.h"
@@ -19,10 +24,25 @@ static void draw_rect(SkCanvas* canvas, const SkRect& r, const SkPaint& p)
 
     SkPaint frame(p);
     frame.setShader(nullptr);
+=======
+#include "SampleCode.h"
+#include "SkColorPriv.h"
+#include "SkGradientShader.h"
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkUtils.h"
+
+static void draw_rect(SkCanvas* canvas, const SkRect& r, const SkPaint& p) {
+    canvas->drawRect(r, p);
+
+    SkPaint frame(p);
+    frame.setShader(NULL);
+>>>>>>> miniblink49
     frame.setStyle(SkPaint::kStroke_Style);
     canvas->drawRect(r, frame);
 }
 
+<<<<<<< HEAD
 static void draw_gradient(SkCanvas* canvas)
 {
     SkRect r = { 0, 0, SkIntToScalar(256), SkIntToScalar(32) };
@@ -30,6 +50,17 @@ static void draw_gradient(SkCanvas* canvas)
     SkColor colors[] = { 0xFF000000, 0xFFFF0000 };
     SkPaint p;
     p.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, 2, SkShader::kClamp_TileMode));
+=======
+static void draw_gradient(SkCanvas* canvas) {
+    SkRect r = { 0, 0, SkIntToScalar(256), SkIntToScalar(32) };
+    SkPoint pts[] = { { r.fLeft, r.fTop }, { r.fRight, r.fTop } };
+    SkColor colors[] = { 0xFF000000, 0xFFFF0000 };
+    SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL, 2,
+                                                 SkShader::kClamp_TileMode);
+
+    SkPaint p;
+    p.setShader(s)->unref();
+>>>>>>> miniblink49
     draw_rect(canvas, r, p);
 
     canvas->translate(0, SkIntToScalar(40));
@@ -37,8 +68,12 @@ static void draw_gradient(SkCanvas* canvas)
     draw_rect(canvas, r, p);
 }
 
+<<<<<<< HEAD
 static bool test_pathregion()
 {
+=======
+static bool test_pathregion() {
+>>>>>>> miniblink49
     SkPath path;
     SkRegion region;
     path.moveTo(25071800.f, -141823808.f);
@@ -53,8 +88,12 @@ static bool test_pathregion()
     return region.setPath(path, clip); // <-- !! DOWN !!
 }
 
+<<<<<<< HEAD
 static SkBitmap make_bitmap()
 {
+=======
+static SkBitmap make_bitmap() {
+>>>>>>> miniblink49
     SkPMColor c[256];
     for (int i = 0; i < 256; i++) {
         c[i] = SkPackARGB32(0xFF, i, 0, 0);
@@ -63,7 +102,11 @@ static SkBitmap make_bitmap()
 
     SkBitmap bm;
     bm.allocPixels(SkImageInfo::Make(256, 32, kIndex_8_SkColorType, kPremul_SkAlphaType),
+<<<<<<< HEAD
         nullptr, ctable);
+=======
+                   NULL, ctable);
+>>>>>>> miniblink49
     ctable->unref();
 
     bm.lockPixels();
@@ -78,6 +121,7 @@ static SkBitmap make_bitmap()
 }
 
 class DitherBitmapView : public SampleView {
+<<<<<<< HEAD
     SkBitmap fBM8;
     SkBitmap fBM32;
     bool fResult;
@@ -85,6 +129,13 @@ class DitherBitmapView : public SampleView {
 public:
     DitherBitmapView()
     {
+=======
+    SkBitmap    fBM8;
+    SkBitmap    fBM32;
+    bool        fResult;
+public:
+    DitherBitmapView() {
+>>>>>>> miniblink49
         fResult = test_pathregion();
         fBM8 = make_bitmap();
         fBM8.copyTo(&fBM32, kN32_SkColorType);
@@ -94,8 +145,12 @@ public:
 
 protected:
     // overrides from SkEventSink
+<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
+=======
+    virtual bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "DitherBitmap");
             return true;
@@ -103,6 +158,7 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     static void setBitmapOpaque(SkBitmap* bm, bool isOpaque)
     {
         SkAutoLockPixels alp(*bm); // needed for ctable
@@ -111,6 +167,14 @@ protected:
 
     static void draw2(SkCanvas* canvas, const SkBitmap& bm)
     {
+=======
+    static void setBitmapOpaque(SkBitmap* bm, bool isOpaque) {
+        SkAutoLockPixels alp(*bm);  // needed for ctable
+        bm->setAlphaType(isOpaque ? kOpaque_SkAlphaType : kPremul_SkAlphaType);
+    }
+
+    static void draw2(SkCanvas* canvas, const SkBitmap& bm) {
+>>>>>>> miniblink49
         SkPaint paint;
         SkBitmap bitmap(bm);
 
@@ -128,6 +192,7 @@ protected:
         canvas->drawBitmap(bitmap, x, SkIntToScalar(bm.height() + 10), &paint);
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
         canvas->translate(SkIntToScalar(20), SkIntToScalar(20));
@@ -137,6 +202,16 @@ protected:
         draw2(canvas, fBM32);
 
         canvas->translate(0, SkIntToScalar(fBM8.height() * 3));
+=======
+    virtual void onDrawContent(SkCanvas* canvas) {
+        canvas->translate(SkIntToScalar(20), SkIntToScalar(20));
+
+        draw2(canvas, fBM8);
+        canvas->translate(0, SkIntToScalar(fBM8.height() *3));
+        draw2(canvas, fBM32);
+
+        canvas->translate(0, SkIntToScalar(fBM8.height() *3));
+>>>>>>> miniblink49
         draw_gradient(canvas);
 
         char resultTrue[] = "SkRegion::setPath returned true";

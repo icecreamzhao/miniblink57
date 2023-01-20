@@ -42,8 +42,12 @@
 #include "SkPoint.h"
 #include "SkRect.h"
 #include "SkTypeface.h"
+<<<<<<< HEAD
 //#include "SkUtils.h"
 #include "third_party/skia/include/private/SkFixed.h"
+=======
+#include "SkUtils.h"
+>>>>>>> miniblink49
 #include "platform/fonts/FontCache.h"
 #include "platform/fonts/FontPlatformData.h"
 #include "platform/fonts/SimpleFontData.h"
@@ -262,7 +266,11 @@ static hb_position_t harfBuzzGetGlyphVerticalAdvance(hb_font_t* hbFont, void* fo
     HarfBuzzFontData* hbFontData = reinterpret_cast<HarfBuzzFontData*>(fontData);
     const OpenTypeVerticalData* verticalData = hbFontData->m_simpleFontData->verticalData();
     if (!verticalData)
+<<<<<<< HEAD
         return SkiaScalarToHarfBuzzPosition(hbFontData->m_simpleFontData->getFontMetrics().height());
+=======
+        return SkiaScalarToHarfBuzzPosition(hbFontData->m_simpleFontData->fontMetrics().height());
+>>>>>>> miniblink49
 
     Glyph theGlyph = glyph;
     float advanceHeight = -verticalData->advanceHeight(hbFontData->m_simpleFontData.get(), theGlyph);
@@ -320,12 +328,15 @@ static hb_font_funcs_t* harfBuzzSkiaGetFontFuncs()
 }
 
 #if !OS(MACOSX)
+<<<<<<< HEAD
 
 void __cdecl hbDestroyFuncWrap(void *user_data)
 {
     free(user_data);
 }
 
+=======
+>>>>>>> miniblink49
 static hb_blob_t* harfBuzzSkiaGetTable(hb_face_t* face, hb_tag_t tag, void* userData)
 {
     SkTypeface* typeface = reinterpret_cast<SkTypeface*>(userData);
@@ -335,11 +346,16 @@ static hb_blob_t* harfBuzzSkiaGetTable(hb_face_t* face, hb_tag_t tag, void* user
         return 0;
     }
 
+<<<<<<< HEAD
     char* buffer = reinterpret_cast<char*>(malloc(tableSize));
+=======
+    char* buffer = reinterpret_cast<char*>(fastMalloc(tableSize));
+>>>>>>> miniblink49
     if (!buffer)
         return 0;
     size_t actualSize = typeface->getTableData(tag, 0, tableSize, buffer);
     if (tableSize != actualSize) {
+<<<<<<< HEAD
         free(buffer);
         return 0;
     }
@@ -349,6 +365,17 @@ static hb_blob_t* harfBuzzSkiaGetTable(hb_face_t* face, hb_tag_t tag, void* user
 #endif
 
 static void __cdecl destroyHarfBuzzFontData(void* userData)
+=======
+        fastFree(buffer);
+        return 0;
+    }
+
+    return hb_blob_create(const_cast<char*>(buffer), tableSize, HB_MEMORY_MODE_WRITABLE, buffer, fastFree);
+}
+#endif
+
+static void destroyHarfBuzzFontData(void* userData)
+>>>>>>> miniblink49
 {
     HarfBuzzFontData* hbFontData = reinterpret_cast<HarfBuzzFontData*>(userData);
     delete hbFontData;

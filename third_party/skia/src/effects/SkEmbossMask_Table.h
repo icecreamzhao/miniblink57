@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkTypes.h"
 
 static const uint16_t gInvSqrtTable[128 * 128] = {
@@ -1033,4 +1041,8 @@ static const uint16_t gInvSqrtTable[128 * 128] = {
     0x00CC, 0x00CC, 0x00CB, 0x00CB, 0x00CA, 0x00C9, 0x00C9, 0x00C7, 0x00C7, 0x00C6, 0x00C5, 0x00C5, 0x00C4, 0x00C3, 0x00C3, 0x00C1,
     0x00C0, 0x00C0, 0x00BF, 0x00BE, 0x00BE, 0x00BD, 0x00BC, 0x00BC, 0x00BB, 0x00BA, 0x00BA, 0x00B9, 0x00B8, 0x00B8, 0x00B7, 0x00B6
 };
+<<<<<<< HEAD
 #define kDeltaUsedToBuildTable 32
+=======
+#define kDeltaUsedToBuildTable  32
+>>>>>>> miniblink49

@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     void Builtins::Generate_FrameDropperTrampoline(MacroAssembler* masm)
     {
         DebugCodegen::GenerateFrameDropperTrampoline(masm);
@@ -22,3 +23,15 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
+=======
+void Builtins::Generate_FrameDropperTrampoline(MacroAssembler* masm) {
+  DebugCodegen::GenerateFrameDropperTrampoline(masm);
+}
+
+void Builtins::Generate_HandleDebuggerStatement(MacroAssembler* masm) {
+  DebugCodegen::GenerateHandleDebuggerStatement(masm);
+}
+
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

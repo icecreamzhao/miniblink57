@@ -26,10 +26,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+<<<<<<< HEAD
 #include "platform/graphics/StrokeData.h"
 #include "third_party/skia/include/effects/SkDashPathEffect.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
+=======
+#include "config.h"
+#include "platform/graphics/StrokeData.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,17 +51,29 @@ void StrokeData::setLineDash(const DashArray& dashes, float dashOffset)
         // If no dash is set, revert to solid stroke
         // FIXME: do we need to set NoStroke in some cases?
         m_style = SolidStroke;
+<<<<<<< HEAD
         m_dash.reset();
+=======
+        m_dash.clear();
+>>>>>>> miniblink49
         return;
     }
 
     size_t count = !(dashLength % 2) ? dashLength : dashLength * 2;
+<<<<<<< HEAD
     std::unique_ptr<SkScalar[]> intervals = wrapArrayUnique(new SkScalar[count]);
+=======
+    OwnPtr<SkScalar[]> intervals = adoptArrayPtr(new SkScalar[count]);
+>>>>>>> miniblink49
 
     for (unsigned i = 0; i < count; i++)
         intervals[i] = dashes[i % dashLength];
 
+<<<<<<< HEAD
     m_dash = SkDashPathEffect::Make(intervals.get(), count, dashOffset);
+=======
+    m_dash = adoptRef(SkDashPathEffect::Create(intervals.get(), count, dashOffset));
+>>>>>>> miniblink49
 }
 
 void StrokeData::setupPaint(SkPaint* paint, int length) const
@@ -72,18 +91,30 @@ void StrokeData::setupPaintDashPathEffect(SkPaint* paint, int length) const
 {
     float width = m_thickness;
     if (m_dash) {
+<<<<<<< HEAD
         paint->setPathEffect(m_dash);
+=======
+        paint->setPathEffect(m_dash.get());
+>>>>>>> miniblink49
     } else {
         switch (m_style) {
         case NoStroke:
         case SolidStroke:
         case DoubleStroke:
+<<<<<<< HEAD
         case WavyStroke: // FIXME: https://crbug.com/229574
+=======
+        case WavyStroke: // FIXME: https://code.google.com/p/chromium/issues/detail?id=229574
+>>>>>>> miniblink49
             paint->setPathEffect(0);
             return;
         case DashedStroke:
             width = dashRatio * width;
+<<<<<<< HEAD
         // Fall through.
+=======
+            // Fall through.
+>>>>>>> miniblink49
         case DottedStroke:
             // Truncate the width, since we don't want fuzzy dots or dashes.
             int dashLength = static_cast<int>(width);
@@ -105,8 +136,13 @@ void StrokeData::setupPaintDashPathEffect(SkPaint* paint, int length) const
             }
             SkScalar dashLengthSk = SkIntToScalar(dashLength);
             SkScalar intervals[2] = { dashLengthSk, dashLengthSk };
+<<<<<<< HEAD
             paint->setPathEffect(
                 SkDashPathEffect::Make(intervals, 2, SkIntToScalar(phase)));
+=======
+            RefPtr<SkDashPathEffect> pathEffect = adoptRef(SkDashPathEffect::Create(intervals, 2, SkIntToScalar(phase)));
+            paint->setPathEffect(pathEffect.get());
+>>>>>>> miniblink49
         }
     }
 }

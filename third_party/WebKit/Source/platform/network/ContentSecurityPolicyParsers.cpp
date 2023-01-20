@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/network/ContentSecurityPolicyParsers.h"
 
 #include "wtf/ASCIICType.h"
@@ -66,4 +70,13 @@ bool isMediaTypeCharacter(UChar c)
     return !isASCIISpace(c) && c != '/';
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+WTF::StringUTF8Adaptor normalizeSource(const String& source)
+{
+    return WTF::StringUTF8Adaptor(source, WTF::StringUTF8Adaptor::Normalize, WTF::EntitiesForUnencodables);
+}
+
+} // namespace
+>>>>>>> miniblink49

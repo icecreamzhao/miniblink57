@@ -1,14 +1,23 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #include "SkColorFilter.h"
+=======
+#include "gm.h"
+>>>>>>> miniblink49
 #include "SkPath.h"
 #include "SkRegion.h"
 #include "SkShader.h"
 #include "SkUtils.h"
+<<<<<<< HEAD
 #include "gm.h"
 
 // effects
@@ -29,13 +38,42 @@ static void makebm(SkBitmap* bm, SkColorType ct, int w, int h)
     paint.setDither(true);
     paint.setShader(SkGradientShader::MakeLinear(pts, colors, pos, SK_ARRAY_COUNT(colors),
         SkShader::kClamp_TileMode));
+=======
+#include "SkColorPriv.h"
+#include "SkColorFilter.h"
+#include "SkTypeface.h"
+
+// effects
+#include "SkGradientShader.h"
+#include "SkBlurDrawLooper.h"
+
+static void makebm(SkBitmap* bm, SkColorType ct, int w, int h) {
+    bm->allocPixels(SkImageInfo::Make(w, h, ct, kPremul_SkAlphaType));
+    bm->eraseColor(SK_ColorTRANSPARENT);
+
+    SkCanvas    canvas(*bm);
+    SkPoint     pts[] = { { 0, 0 }, { SkIntToScalar(w), SkIntToScalar(h)} };
+    SkColor     colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE };
+    SkScalar    pos[] = { 0, SK_Scalar1/2, SK_Scalar1 };
+    SkPaint     paint;
+
+    paint.setDither(true);
+    paint.setShader(SkGradientShader::CreateLinear(pts, colors, pos,
+                SK_ARRAY_COUNT(colors), SkShader::kClamp_TileMode))->unref();
+>>>>>>> miniblink49
     canvas.drawPaint(paint);
 }
 
 static void setup(SkPaint* paint, const SkBitmap& bm, bool filter,
+<<<<<<< HEAD
     SkShader::TileMode tmx, SkShader::TileMode tmy)
 {
     paint->setShader(SkShader::MakeBitmapShader(bm, tmx, tmy));
+=======
+                  SkShader::TileMode tmx, SkShader::TileMode tmy) {
+    SkShader* shader = SkShader::CreateBitmapShader(bm, tmx, tmy);
+    paint->setShader(shader)->unref();
+>>>>>>> miniblink49
     paint->setFilterQuality(filter ? kLow_SkFilterQuality : kNone_SkFilterQuality);
 }
 
@@ -47,6 +85,7 @@ static const SkColorType gColorTypes[] = {
 class TilingGM : public skiagm::GM {
 public:
     TilingGM(bool powerOfTwoSize)
+<<<<<<< HEAD
         : fPowerOfTwoSize(powerOfTwoSize)
     {
     }
@@ -54,13 +93,26 @@ public:
     SkBitmap fTexture[SK_ARRAY_COUNT(gColorTypes)];
 
 protected:
+=======
+            : fPowerOfTwoSize(powerOfTwoSize) {
+    }
+
+    SkBitmap    fTexture[SK_ARRAY_COUNT(gColorTypes)];
+
+protected:
+
+>>>>>>> miniblink49
     enum {
         kPOTSize = 32,
         kNPOTSize = 21,
     };
 
+<<<<<<< HEAD
     SkString onShortName() override
     {
+=======
+    SkString onShortName() override {
+>>>>>>> miniblink49
         SkString name("tilemodes");
         if (!fPowerOfTwoSize) {
             name.append("_npot");
@@ -70,14 +122,19 @@ protected:
 
     SkISize onISize() override { return SkISize::Make(880, 560); }
 
+<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
+=======
+    void onOnceBeforeDraw() override {
+>>>>>>> miniblink49
         int size = fPowerOfTwoSize ? kPOTSize : kNPOTSize;
         for (size_t i = 0; i < SK_ARRAY_COUNT(gColorTypes); i++) {
             makebm(&fTexture[i], gColorTypes[i], size, size);
         }
     }
 
+<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
 
@@ -92,6 +149,21 @@ protected:
 
         static const SkShader::TileMode gModes[] = { SkShader::kClamp_TileMode, SkShader::kRepeat_TileMode, SkShader::kMirror_TileMode };
         static const char* gModeNames[] = { "C", "R", "M" };
+=======
+    void onDraw(SkCanvas* canvas) override {
+
+        int size = fPowerOfTwoSize ? kPOTSize : kNPOTSize;
+
+        SkRect r = { 0, 0, SkIntToScalar(size*2), SkIntToScalar(size*2) };
+
+        static const char* gConfigNames[] = { "8888", "565", "4444" };
+
+        static const bool           gFilters[] = { false, true };
+        static const char*          gFilterNames[] = {     "point",                     "bilinear" };
+
+        static const SkShader::TileMode gModes[] = { SkShader::kClamp_TileMode, SkShader::kRepeat_TileMode, SkShader::kMirror_TileMode };
+        static const char*          gModeNames[] = {    "C",                    "R",                   "M" };
+>>>>>>> miniblink49
 
         SkScalar y = SkIntToScalar(24);
         SkScalar x = SkIntToScalar(10);
@@ -106,7 +178,11 @@ protected:
                 str.printf("[%s,%s]", gModeNames[kx], gModeNames[ky]);
 
                 p.setTextAlign(SkPaint::kCenter_Align);
+<<<<<<< HEAD
                 canvas->drawText(str.c_str(), str.size(), x + r.width() / 2, y, p);
+=======
+                canvas->drawText(str.c_str(), str.size(), x + r.width()/2, y, p);
+>>>>>>> miniblink49
 
                 x += r.width() * 4 / 3;
             }
@@ -120,8 +196,13 @@ protected:
                 for (size_t kx = 0; kx < SK_ARRAY_COUNT(gModes); kx++) {
                     for (size_t ky = 0; ky < SK_ARRAY_COUNT(gModes); ky++) {
                         SkPaint paint;
+<<<<<<< HEAD
 #if 1 // Temporary change to regen bitmap before each draw. This may help tracking down an issue \
     // on SGX where resizing NPOT textures to POT textures exhibits a driver bug.
+=======
+#if 1 // Temporary change to regen bitmap before each draw. This may help tracking down an issue
+      // on SGX where resizing NPOT textures to POT textures exhibits a driver bug.
+>>>>>>> miniblink49
                         if (!fPowerOfTwoSize) {
                             makebm(&fTexture[i], gColorTypes[i], size, size);
                         }
@@ -159,6 +240,7 @@ private:
 static const int gWidth = 32;
 static const int gHeight = 32;
 
+<<<<<<< HEAD
 static sk_sp<SkShader> make_bm(SkShader::TileMode tx, SkShader::TileMode ty)
 {
     SkBitmap bm;
@@ -195,10 +277,45 @@ public:
     Tiling2GM(ShaderProc proc, const char name[])
         : fProc(proc)
     {
+=======
+static SkShader* make_bm(SkShader::TileMode tx, SkShader::TileMode ty) {
+    SkBitmap bm;
+    makebm(&bm, kN32_SkColorType, gWidth, gHeight);
+    return SkShader::CreateBitmapShader(bm, tx, ty);
+}
+
+static SkShader* make_grad(SkShader::TileMode tx, SkShader::TileMode ty) {
+    SkPoint pts[] = { { 0, 0 }, { SkIntToScalar(gWidth), SkIntToScalar(gHeight)} };
+    SkPoint center = { SkIntToScalar(gWidth)/2, SkIntToScalar(gHeight)/2 };
+    SkScalar rad = SkIntToScalar(gWidth)/2;
+    SkColor colors[] = { 0xFFFF0000, 0xFF0044FF };
+
+    int index = (int)ty;
+    switch (index % 3) {
+        case 0:
+            return SkGradientShader::CreateLinear(pts, colors, NULL, SK_ARRAY_COUNT(colors), tx);
+        case 1:
+            return SkGradientShader::CreateRadial(center, rad, colors, NULL, SK_ARRAY_COUNT(colors), tx);
+        case 2:
+            return SkGradientShader::CreateSweep(center.fX, center.fY, colors, NULL, SK_ARRAY_COUNT(colors));
+    }
+
+    return NULL;
+}
+
+typedef SkShader* (*ShaderProc)(SkShader::TileMode, SkShader::TileMode);
+
+class Tiling2GM : public skiagm::GM {
+    ShaderProc fProc;
+    SkString   fName;
+public:
+    Tiling2GM(ShaderProc proc, const char name[]) : fProc(proc) {
+>>>>>>> miniblink49
         fName.printf("tilemode_%s", name);
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return fName;
@@ -213,6 +330,21 @@ protected:
         const SkScalar w = SkIntToScalar(gWidth);
         const SkScalar h = SkIntToScalar(gHeight);
         SkRect r = { -w, -h, w * 2, h * 2 };
+=======
+
+    SkString onShortName() override {
+        return fName;
+    }
+
+    SkISize onISize() override { return SkISize::Make(880, 560); }
+
+    void onDraw(SkCanvas* canvas) override {
+        canvas->scale(SkIntToScalar(3)/2, SkIntToScalar(3)/2);
+
+        const SkScalar w = SkIntToScalar(gWidth);
+        const SkScalar h = SkIntToScalar(gHeight);
+        SkRect r = { -w, -h, w*2, h*2 };
+>>>>>>> miniblink49
 
         static const SkShader::TileMode gModes[] = {
             SkShader::kClamp_TileMode, SkShader::kRepeat_TileMode, SkShader::kMirror_TileMode
@@ -231,7 +363,11 @@ protected:
 
         for (size_t kx = 0; kx < SK_ARRAY_COUNT(gModes); kx++) {
             SkString str(gModeNames[kx]);
+<<<<<<< HEAD
             canvas->drawText(str.c_str(), str.size(), x + r.width() / 2, y, p);
+=======
+            canvas->drawText(str.c_str(), str.size(), x + r.width()/2, y, p);
+>>>>>>> miniblink49
             x += r.width() * 4 / 3;
         }
 
@@ -242,12 +378,20 @@ protected:
             x = SkIntToScalar(16) + w;
 
             SkString str(gModeNames[ky]);
+<<<<<<< HEAD
             canvas->drawText(str.c_str(), str.size(), x, y + h / 2, p);
+=======
+            canvas->drawText(str.c_str(), str.size(), x, y + h/2, p);
+>>>>>>> miniblink49
 
             x += SkIntToScalar(50);
             for (size_t kx = 0; kx < SK_ARRAY_COUNT(gModes); kx++) {
                 SkPaint paint;
+<<<<<<< HEAD
                 paint.setShader(fProc(gModes[kx], gModes[ky]));
+=======
+                paint.setShader(fProc(gModes[kx], gModes[ky]))->unref();
+>>>>>>> miniblink49
 
                 canvas->save();
                 canvas->translate(x, y);
@@ -266,7 +410,14 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new TilingGM(true);)
 DEF_GM(return new TilingGM(false);)
 DEF_GM(return new Tiling2GM(make_bm, "bitmap");)
 DEF_GM(return new Tiling2GM(make_grad, "gradient");)
+=======
+DEF_GM( return new TilingGM(true); )
+DEF_GM( return new TilingGM(false); )
+DEF_GM( return new Tiling2GM(make_bm, "bitmap"); )
+DEF_GM( return new Tiling2GM(make_grad, "gradient"); )
+>>>>>>> miniblink49

@@ -141,7 +141,11 @@ xmlHashComputeQKey(xmlHashTablePtr table,
  *
  * Returns the newly created object, or NULL if an error occured.
  */
+<<<<<<< HEAD
 xmlHashTablePtr XMLCALL
+=======
+xmlHashTablePtr
+>>>>>>> miniblink49
 xmlHashCreate(int size) {
     xmlHashTablePtr table;
   
@@ -172,7 +176,11 @@ xmlHashCreate(int size) {
  *
  * Returns the newly created object, or NULL if an error occured.
  */
+<<<<<<< HEAD
 xmlHashTablePtr XMLCALL
+=======
+xmlHashTablePtr
+>>>>>>> miniblink49
 xmlHashCreateDict(int size, xmlDictPtr dict) {
     xmlHashTablePtr table;
 
@@ -284,7 +292,11 @@ xmlHashGrow(xmlHashTablePtr table, int size) {
  * Free the hash @table and its contents. The userdata is
  * deallocated with @f if provided.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlHashFree(xmlHashTablePtr table, xmlHashDeallocator f) {
     int i;
     xmlHashEntryPtr iter;
@@ -339,7 +351,11 @@ xmlHashFree(xmlHashTablePtr table, xmlHashDeallocator f) {
  *
  * Returns 0 the addition succeeded and -1 in case of error.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashAddEntry(xmlHashTablePtr table, const xmlChar *name, void *userdata) {
     return(xmlHashAddEntry3(table, name, NULL, NULL, userdata));
 }
@@ -356,7 +372,11 @@ xmlHashAddEntry(xmlHashTablePtr table, const xmlChar *name, void *userdata) {
  *
  * Returns 0 the addition succeeded and -1 in case of error.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashAddEntry2(xmlHashTablePtr table, const xmlChar *name,
 	        const xmlChar *name2, void *userdata) {
     return(xmlHashAddEntry3(table, name, name2, NULL, userdata));
@@ -375,7 +395,11 @@ xmlHashAddEntry2(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns 0 the addition succeeded and -1 in case of error.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashUpdateEntry(xmlHashTablePtr table, const xmlChar *name,
 	           void *userdata, xmlHashDeallocator f) {
     return(xmlHashUpdateEntry3(table, name, NULL, NULL, userdata, f));
@@ -395,7 +419,11 @@ xmlHashUpdateEntry(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns 0 the addition succeeded and -1 in case of error.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashUpdateEntry2(xmlHashTablePtr table, const xmlChar *name,
 	           const xmlChar *name2, void *userdata,
 		   xmlHashDeallocator f) {
@@ -411,7 +439,11 @@ xmlHashUpdateEntry2(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns the pointer to the userdata
  */
+<<<<<<< HEAD
 void * XMLCALL
+=======
+void *
+>>>>>>> miniblink49
 xmlHashLookup(xmlHashTablePtr table, const xmlChar *name) {
     return(xmlHashLookup3(table, name, NULL, NULL));
 }
@@ -426,7 +458,11 @@ xmlHashLookup(xmlHashTablePtr table, const xmlChar *name) {
  *
  * Returns the pointer to the userdata
  */
+<<<<<<< HEAD
 void * XMLCALL
+=======
+void *
+>>>>>>> miniblink49
 xmlHashLookup2(xmlHashTablePtr table, const xmlChar *name,
 	      const xmlChar *name2) {
     return(xmlHashLookup3(table, name, name2, NULL));
@@ -442,7 +478,11 @@ xmlHashLookup2(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns the pointer to the userdata
  */
+<<<<<<< HEAD
 void * XMLCALL
+=======
+void *
+>>>>>>> miniblink49
 xmlHashQLookup(xmlHashTablePtr table, const xmlChar *prefix,
                const xmlChar *name) {
     return(xmlHashQLookup3(table, prefix, name, NULL, NULL, NULL, NULL));
@@ -460,7 +500,11 @@ xmlHashQLookup(xmlHashTablePtr table, const xmlChar *prefix,
  *
  * Returns the pointer to the userdata
  */
+<<<<<<< HEAD
 void * XMLCALL
+=======
+void *
+>>>>>>> miniblink49
 xmlHashQLookup2(xmlHashTablePtr table, const xmlChar *prefix,
                 const xmlChar *name, const xmlChar *prefix2,
 	        const xmlChar *name2) {
@@ -481,7 +525,11 @@ xmlHashQLookup2(xmlHashTablePtr table, const xmlChar *prefix,
  *
  * Returns 0 the addition succeeded and -1 in case of error.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashAddEntry3(xmlHashTablePtr table, const xmlChar *name,
 	         const xmlChar *name2, const xmlChar *name3,
 		 void *userdata) {
@@ -597,7 +645,11 @@ xmlHashAddEntry3(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns 0 the addition succeeded and -1 in case of error.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashUpdateEntry3(xmlHashTablePtr table, const xmlChar *name,
 	           const xmlChar *name2, const xmlChar *name3,
 		   void *userdata, xmlHashDeallocator f) {
@@ -719,7 +771,11 @@ xmlHashUpdateEntry3(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns the a pointer to the userdata
  */
+<<<<<<< HEAD
 void * XMLCALL
+=======
+void *
+>>>>>>> miniblink49
 xmlHashLookup3(xmlHashTablePtr table, const xmlChar *name, 
 	       const xmlChar *name2, const xmlChar *name3) {
     unsigned long key;
@@ -763,7 +819,11 @@ xmlHashLookup3(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns the a pointer to the userdata
  */
+<<<<<<< HEAD
 void * XMLCALL
+=======
+void *
+>>>>>>> miniblink49
 xmlHashQLookup3(xmlHashTablePtr table,
                 const xmlChar *prefix, const xmlChar *name,
 		const xmlChar *prefix2, const xmlChar *name2,
@@ -809,7 +869,11 @@ stubHashScannerFull (void *payload, void *data, const xmlChar *name,
  *
  * Scan the hash @table and applied @f to each value.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlHashScan(xmlHashTablePtr table, xmlHashScanner f, void *data) {
     stubData stubdata;
     stubdata.data = data;
@@ -825,7 +889,11 @@ xmlHashScan(xmlHashTablePtr table, xmlHashScanner f, void *data) {
  *
  * Scan the hash @table and applied @f to each value.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlHashScanFull(xmlHashTablePtr table, xmlHashScannerFull f, void *data) {
     int i, nb;
     xmlHashEntryPtr iter;
@@ -876,7 +944,11 @@ xmlHashScanFull(xmlHashTablePtr table, xmlHashScannerFull f, void *data) {
  * (@name, @name2, @name3) tuple. If one of the names is null,
  * the comparison is considered to match.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlHashScan3(xmlHashTablePtr table, const xmlChar *name, 
 	     const xmlChar *name2, const xmlChar *name3,
 	     xmlHashScanner f, void *data) {
@@ -897,7 +969,11 @@ xmlHashScan3(xmlHashTablePtr table, const xmlChar *name,
  * (@name, @name2, @name3) tuple. If one of the names is null,
  * the comparison is considered to match.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlHashScanFull3(xmlHashTablePtr table, const xmlChar *name, 
 		 const xmlChar *name2, const xmlChar *name3,
 		 xmlHashScannerFull f, void *data) {
@@ -939,7 +1015,11 @@ xmlHashScanFull3(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns the new table or NULL in case of error.
  */
+<<<<<<< HEAD
 xmlHashTablePtr XMLCALL
+=======
+xmlHashTablePtr
+>>>>>>> miniblink49
 xmlHashCopy(xmlHashTablePtr table, xmlHashCopier f) {
     int i;
     xmlHashEntryPtr iter;
@@ -978,7 +1058,11 @@ xmlHashCopy(xmlHashTablePtr table, xmlHashCopier f) {
  * Returns the number of elements in the hash table or
  * -1 in case of error
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashSize(xmlHashTablePtr table) {
     if (table == NULL)
 	return(-1);
@@ -997,7 +1081,11 @@ xmlHashSize(xmlHashTablePtr table) {
  *
  * Returns 0 if the removal succeeded and -1 in case of error or not found.
  */
+<<<<<<< HEAD
 int XMLCALL xmlHashRemoveEntry(xmlHashTablePtr table, const xmlChar *name,
+=======
+int xmlHashRemoveEntry(xmlHashTablePtr table, const xmlChar *name,
+>>>>>>> miniblink49
 		       xmlHashDeallocator f) {
     return(xmlHashRemoveEntry3(table, name, NULL, NULL, f));
 }
@@ -1015,7 +1103,11 @@ int XMLCALL xmlHashRemoveEntry(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns 0 if the removal succeeded and -1 in case of error or not found.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashRemoveEntry2(xmlHashTablePtr table, const xmlChar *name,
 			const xmlChar *name2, xmlHashDeallocator f) {
     return(xmlHashRemoveEntry3(table, name, name2, NULL, f));
@@ -1035,7 +1127,11 @@ xmlHashRemoveEntry2(xmlHashTablePtr table, const xmlChar *name,
  *
  * Returns 0 if the removal succeeded and -1 in case of error or not found.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlHashRemoveEntry3(xmlHashTablePtr table, const xmlChar *name,
     const xmlChar *name2, const xmlChar *name3, xmlHashDeallocator f) {
     unsigned long key;

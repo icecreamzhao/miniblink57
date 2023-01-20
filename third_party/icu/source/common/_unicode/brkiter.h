@@ -41,6 +41,7 @@ U_NAMESPACE_END
 
 #else
 
+<<<<<<< HEAD
 #include "unicode/chariter.h"
 #include "unicode/locid.h"
 #include "unicode/strenum.h"
@@ -49,6 +50,16 @@ U_NAMESPACE_END
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
 #include "unicode/utext.h"
+=======
+#include "unicode/uobject.h"
+#include "unicode/unistr.h"
+#include "unicode/chariter.h"
+#include "unicode/locid.h"
+#include "unicode/ubrk.h"
+#include "unicode/strenum.h"
+#include "unicode/utext.h"
+#include "unicode/umisc.h"
+>>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -148,6 +159,10 @@ public:
      */
     virtual CharacterIterator& getText(void) const = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
       *  Get a UText for the text being analyzed.
       *  The returned UText is a shallow clone of the UText used internally
@@ -162,7 +177,11 @@ public:
       *           UText was provided, it will always be returned.
       * @stable ICU 3.4
       */
+<<<<<<< HEAD
     virtual UText* getUText(UText* fillIn, UErrorCode& status) const = 0;
+=======
+     virtual UText *getUText(UText *fillIn, UErrorCode &status) const = 0;
+>>>>>>> miniblink49
 
     /**
      * Change the text over which this operates. The text boundary is
@@ -170,7 +189,11 @@ public:
      * @param text The UnicodeString used to change the text.
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     virtual void setText(const UnicodeString& text) = 0;
+=======
+    virtual void  setText(const UnicodeString &text) = 0;
+>>>>>>> miniblink49
 
     /**
      * Reset the break iterator to operate over the text represented by
@@ -190,7 +213,11 @@ public:
      * @param status receives any error codes.
      * @stable ICU 3.4
      */
+<<<<<<< HEAD
     virtual void setText(UText* text, UErrorCode& status) = 0;
+=======
+    virtual void  setText(UText *text, UErrorCode &status) = 0;
+>>>>>>> miniblink49
 
     /**
      * Change the text over which this operates. The text boundary is
@@ -200,7 +227,11 @@ public:
      * @param it The CharacterIterator used to change the text.
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     virtual void adoptText(CharacterIterator* it) = 0;
+=======
+    virtual void  adoptText(CharacterIterator* it) = 0;
+>>>>>>> miniblink49
 
     enum {
         /**
@@ -289,7 +320,11 @@ public:
      */
     virtual int32_t next(int32_t n) = 0;
 
+<<<<<<< HEAD
     /**
+=======
+   /**
+>>>>>>> miniblink49
      * For RuleBasedBreakIterators, return the status tag from the 
      * break rule that determined the most recently
      * returned break position.
@@ -305,7 +340,11 @@ public:
      */
     virtual int32_t getRuleStatus() const;
 
+<<<<<<< HEAD
     /**
+=======
+   /**
+>>>>>>> miniblink49
     * For RuleBasedBreakIterators, get the status (tag) values from the break rule(s) 
     * that determined the most recently returned break position.
     * <p>
@@ -333,7 +372,11 @@ public:
     * @see getRuleStatus
     * @stable ICU 52
     */
+<<<<<<< HEAD
     virtual int32_t getRuleStatusVec(int32_t* fillInVec, int32_t capacity, UErrorCode& status);
+=======
+    virtual int32_t getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status);
+>>>>>>> miniblink49
 
     /**
      * Create BreakIterator for word-breaks using the given locale.
@@ -470,8 +513,13 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
+<<<<<<< HEAD
         const Locale& displayLocale,
         UnicodeString& name);
+=======
+                                         const Locale& displayLocale,
+                                         UnicodeString& name);
+>>>>>>> miniblink49
 
     /**
      * Get name of the object for the desired Locale, in the langauge of the
@@ -482,7 +530,11 @@ public:
      * @stable ICU 2.0
      */
     static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
+<<<<<<< HEAD
         UnicodeString& name);
+=======
+                                         UnicodeString& name);
+>>>>>>> miniblink49
 
     /**
      * Deprecated functionality. Use clone() instead.
@@ -503,10 +555,16 @@ public:
      *
      * @deprecated ICU 52. Use clone() instead.
      */
+<<<<<<< HEAD
     virtual BreakIterator* createBufferClone(void* stackBuffer,
         int32_t& BufferSize,
         UErrorCode& status)
         = 0;
+=======
+    virtual BreakIterator *  createBufferClone(void *stackBuffer,
+                                               int32_t &BufferSize,
+                                               UErrorCode &status) = 0;
+>>>>>>> miniblink49
 
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -537,9 +595,15 @@ public:
      * @stable ICU 2.4
      */
     static URegistryKey U_EXPORT2 registerInstance(BreakIterator* toAdopt,
+<<<<<<< HEAD
         const Locale& locale,
         UBreakIteratorType kind,
         UErrorCode& status);
+=======
+                                        const Locale& locale,
+                                        UBreakIteratorType kind,
+                                        UErrorCode& status);
+>>>>>>> miniblink49
 
     /**
      * Unregister a previously-registered BreakIterator using the key returned from the
@@ -578,8 +642,13 @@ public:
      *  @return the locale
      *  @internal
      */
+<<<<<<< HEAD
     const char* getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
 #endif /* U_HIDE_INTERNAL_API */
+=======
+    const char *getLocaleID(ULocDataLocaleType type, UErrorCode& status) const;
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
     /**
      *  Set the subject text string upon which the break iterator is operating
@@ -606,10 +675,17 @@ public:
      *
      * @stable ICU 49
      */
+<<<<<<< HEAD
     virtual BreakIterator& refreshInputText(UText* input, UErrorCode& status) = 0;
 
 private:
     static BreakIterator* buildInstance(const Locale& loc, const char* type, int32_t kind, UErrorCode& status);
+=======
+    virtual BreakIterator &refreshInputText(UText *input, UErrorCode &status) = 0;
+
+ private:
+    static BreakIterator* buildInstance(const Locale& loc, const char *type, int32_t kind, UErrorCode& status);
+>>>>>>> miniblink49
     static BreakIterator* createInstance(const Locale& loc, int32_t kind, UErrorCode& status);
     static BreakIterator* makeInstance(const Locale& loc, int32_t kind, UErrorCode& status);
 
@@ -622,6 +698,7 @@ protected:
     /** @internal */
     BreakIterator();
     /** @internal */
+<<<<<<< HEAD
     BreakIterator(const BreakIterator& other)
         : UObject(other)
     {
@@ -630,6 +707,13 @@ protected:
     BreakIterator(const Locale& valid, const Locale& actual);
 
 private:
+=======
+    BreakIterator (const BreakIterator &other) : UObject(other) {}
+    /** @internal */
+    BreakIterator (const Locale& valid, const Locale& actual);
+private:
+
+>>>>>>> miniblink49
     /** @internal */
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     char validLocale[ULOC_FULLNAME_CAPACITY];

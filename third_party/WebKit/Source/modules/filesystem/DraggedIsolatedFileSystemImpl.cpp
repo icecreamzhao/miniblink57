@@ -28,12 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/DraggedIsolatedFileSystemImpl.h"
 
 #include "core/dom/ExecutionContext.h"
 #include "modules/filesystem/DOMFileSystem.h"
 #include "platform/Supplementable.h"
 #include "platform/weborigin/SecurityOrigin.h"
+<<<<<<< HEAD
 
 namespace blink {
 
@@ -54,6 +59,20 @@ DOMFileSystem* DraggedIsolatedFileSystemImpl::getDOMFileSystem(
     return draggedIsolatedFileSystem->m_filesystems
         .add(fileSystemId, DOMFileSystem::createIsolatedFileSystem(executionContext, fileSystemId))
         .storedValue->value;
+=======
+#include "wtf/MainThread.h"
+
+namespace blink {
+
+DOMFileSystem* DraggedIsolatedFileSystemImpl::getDOMFileSystem(DataObject* host, ExecutionContext* executionContext)
+{
+    DraggedIsolatedFileSystemImpl* draggedIsolatedFileSystem = from(host);
+    if (!draggedIsolatedFileSystem)
+        return 0;
+    if (!draggedIsolatedFileSystem->m_filesystem)
+        draggedIsolatedFileSystem->m_filesystem = DOMFileSystem::createIsolatedFileSystem(executionContext, host->filesystemId());
+    return draggedIsolatedFileSystem->m_filesystem.get();
+>>>>>>> miniblink49
 }
 
 // static
@@ -63,15 +82,27 @@ const char* DraggedIsolatedFileSystemImpl::supplementName()
     return "DraggedIsolatedFileSystemImpl";
 }
 
+<<<<<<< HEAD
 DraggedIsolatedFileSystemImpl* DraggedIsolatedFileSystemImpl::from(
     DataObject* dataObject)
 {
     return static_cast<DraggedIsolatedFileSystemImpl*>(
         Supplement<DataObject>::from(dataObject, supplementName()));
+=======
+DraggedIsolatedFileSystemImpl* DraggedIsolatedFileSystemImpl::from(DataObject* dataObject)
+{
+    return static_cast<DraggedIsolatedFileSystemImpl*>(HeapSupplement<DataObject>::from(dataObject, supplementName()));
+}
+
+DraggedIsolatedFileSystemImpl::DraggedIsolatedFileSystemImpl(DataObject& host, const String& filesystemId)
+{
+    host.setFilesystemId(filesystemId);
+>>>>>>> miniblink49
 }
 
 DEFINE_TRACE(DraggedIsolatedFileSystemImpl)
 {
+<<<<<<< HEAD
     visitor->trace(m_filesystems);
     Supplement<DataObject>::trace(visitor);
 }
@@ -82,6 +113,16 @@ void DraggedIsolatedFileSystemImpl::prepareForDataObject(
     DraggedIsolatedFileSystemImpl* fileSystem = new DraggedIsolatedFileSystemImpl();
     DraggedIsolatedFileSystemImpl::provideTo(
         *dataObject, DraggedIsolatedFileSystemImpl::supplementName(), fileSystem);
+=======
+    visitor->trace(m_filesystem);
+    HeapSupplement<DataObject>::trace(visitor);
+}
+
+void DraggedIsolatedFileSystemImpl::prepareForDataObject(DataObject* dataObject, const String& filesystemId)
+{
+    DraggedIsolatedFileSystemImpl* fileSystem = create(*dataObject, filesystemId);
+    DraggedIsolatedFileSystemImpl::provideTo(*dataObject, DraggedIsolatedFileSystemImpl::supplementName(), fileSystem);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

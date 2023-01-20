@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/frame/NavigatorID.h"
 
 #if !OS(MACOSX) && !OS(WIN)
@@ -56,8 +57,12 @@ String NavigatorID::appVersion()
     return agent.substring(agent.find('/') + 1);
 }
 
+char* g_navigatorPlatform = nullptr;
+
 String NavigatorID::platform()
 {
+    if (g_navigatorPlatform)
+        return g_navigatorPlatform;
 #if OS(MACOSX)
     // Match Safari and Mozilla on Mac x86.
     return "MacIntel";
@@ -66,12 +71,9 @@ String NavigatorID::platform()
     return "Win32";
 #else // Unix-like systems
     struct utsname osname;
-    DEFINE_THREAD_SAFE_STATIC_LOCAL(ThreadSpecific<String>, platformName,
-        new ThreadSpecific<String>());
+    AtomicallyInitializedStaticReference(ThreadSpecific<String>, platformName, new ThreadSpecific<String>());
     if (platformName->isNull()) {
-        *platformName = String(uname(&osname) >= 0
-                ? String(osname.sysname) + String(" ") + String(osname.machine)
-                : emptyString());
+        *platformName = String(uname(&osname) >= 0 ? String(osname.sysname) + String(" ") + String(osname.machine) : emptyString());
     }
     return *platformName;
 #endif

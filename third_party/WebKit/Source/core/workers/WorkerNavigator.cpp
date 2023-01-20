@@ -24,6 +24,8 @@
  *
  */
 
+#include "config.h"
+
 #include "core/workers/WorkerNavigator.h"
 
 namespace blink {
@@ -33,7 +35,9 @@ WorkerNavigator::WorkerNavigator(const String& userAgent)
 {
 }
 
-WorkerNavigator::~WorkerNavigator() { }
+WorkerNavigator::~WorkerNavigator()
+{
+}
 
 String WorkerNavigator::userAgent() const
 {
@@ -42,7 +46,7 @@ String WorkerNavigator::userAgent() const
 
 DEFINE_TRACE(WorkerNavigator)
 {
-    Supplementable<WorkerNavigator>::trace(visitor);
+    HeapSupplementable<WorkerNavigator>::trace(visitor);
 }
 
 } // namespace blink

@@ -9,6 +9,7 @@
 #include "SkTSort.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 #include <stdlib.h>
 
 extern "C" {
@@ -20,24 +21,45 @@ static int compare_int(const void* a, const void* b)
 
 static void rand_array(SkRandom& rand, int array[], int n)
 {
+=======
+extern "C" {
+    static int compare_int(const void* a, const void* b) {
+        return *(const int*)a - *(const int*)b;
+    }
+}
+
+static void rand_array(SkRandom& rand, int array[], int n) {
+>>>>>>> miniblink49
     for (int j = 0; j < n; j++) {
         array[j] = rand.nextS() & 0xFF;
     }
 }
 
 static void check_sort(skiatest::Reporter* reporter, const char label[],
+<<<<<<< HEAD
     const int array[], const int reference[], int n)
 {
     for (int j = 0; j < n; ++j) {
         if (array[j] != reference[j]) {
             ERRORF(reporter, "%sSort [%d] failed %d %d",
                 label, n, array[j], reference[j]);
+=======
+                       const int array[], const int reference[], int n) {
+    for (int j = 0; j < n; ++j) {
+        if (array[j] != reference[j]) {
+            ERRORF(reporter, "%sSort [%d] failed %d %d",
+                   label, n, array[j], reference[j]);
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(Sort, reporter)
 {
+=======
+DEF_TEST(Sort, reporter) {
+>>>>>>> miniblink49
     /** An array of random numbers to be sorted. */
     int randomArray[500];
     /** The reference sort of the random numbers. */
@@ -45,7 +67,11 @@ DEF_TEST(Sort, reporter)
     /** The random numbers are copied into this array, sorted by an SkSort,
         then this array is compared against the reference sort. */
     int workingArray[SK_ARRAY_COUNT(randomArray)];
+<<<<<<< HEAD
     SkRandom rand;
+=======
+    SkRandom    rand;
+>>>>>>> miniblink49
 
     for (int i = 0; i < 10000; i++) {
         int count = rand.nextRangeU(1, SK_ARRAY_COUNT(randomArray));

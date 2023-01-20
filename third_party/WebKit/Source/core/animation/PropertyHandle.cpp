@@ -2,25 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/animation/PropertyHandle.h"
-
-#include "wtf/text/AtomicStringHash.h"
 
 namespace blink {
 
 bool PropertyHandle::operator==(const PropertyHandle& other) const
 {
-    if (m_handleType != other.m_handleType)
+    if (handleType != other.handleType)
         return false;
 
-    switch (m_handleType) {
+    switch (handleType) {
     case HandleCSSProperty:
-    case HandlePresentationAttribute:
-        return m_cssProperty == other.m_cssProperty;
-    case HandleCSSCustomProperty:
-        return m_propertyName == other.m_propertyName;
+        return property == other.property;
     case HandleSVGAttribute:
-        return m_svgAttribute == other.m_svgAttribute;
+        return attribute == other.attribute;
     default:
         return true;
     }
@@ -28,19 +24,15 @@ bool PropertyHandle::operator==(const PropertyHandle& other) const
 
 unsigned PropertyHandle::hash() const
 {
-    switch (m_handleType) {
+    switch (handleType) {
     case HandleCSSProperty:
-        return m_cssProperty;
-    case HandleCSSCustomProperty:
-        return AtomicStringHash::hash(m_propertyName);
-    case HandlePresentationAttribute:
-        return -m_cssProperty;
+        return property;
     case HandleSVGAttribute:
-        return QualifiedNameHash::hash(*m_svgAttribute);
+        return QualifiedNameHash::hash(*attribute);
     default:
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return 0;
     }
 }
 
-} // namespace blink
+}

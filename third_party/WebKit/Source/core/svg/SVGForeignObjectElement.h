@@ -21,15 +21,16 @@
 #define SVGForeignObjectElement_h
 
 #include "core/SVGNames.h"
+#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGGraphicsElement.h"
+#include "core/svg/SVGURIReference.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class SVGForeignObjectElement final : public SVGGraphicsElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGForeignObjectElement);
 
@@ -43,9 +44,9 @@ public:
 private:
     explicit SVGForeignObjectElement(Document&);
 
-    void collectStyleForPresentationAttribute(const QualifiedName&,
-        const AtomicString&,
-        MutableStylePropertySet*) override;
+    bool isPresentationAttribute(const QualifiedName&) const override;
+    bool isPresentationAttributeWithSVGDOM(const QualifiedName&) const override;
+    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
     void svgAttributeChanged(const QualifiedName&) override;
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
@@ -53,10 +54,10 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    Member<SVGAnimatedLength> m_x;
-    Member<SVGAnimatedLength> m_y;
-    Member<SVGAnimatedLength> m_width;
-    Member<SVGAnimatedLength> m_height;
+    RefPtrWillBeMember<SVGAnimatedLength> m_x;
+    RefPtrWillBeMember<SVGAnimatedLength> m_y;
+    RefPtrWillBeMember<SVGAnimatedLength> m_width;
+    RefPtrWillBeMember<SVGAnimatedLength> m_height;
 };
 
 } // namespace blink

@@ -33,27 +33,18 @@ public:
     static const int defaultTrackLength;
 
     explicit LayoutSlider(HTMLInputElement*);
-    ~LayoutSlider() override;
+    virtual ~LayoutSlider();
 
     bool inDragMode() const;
 
-    const char* name() const override { return "LayoutSlider"; }
+    virtual const char* name() const override { return "LayoutSlider"; }
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSlider || LayoutFlexibleBox::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSlider || LayoutFlexibleBox::isOfType(type); }
 
-    int baselinePosition(
-        FontBaseline,
-        bool firstLine,
-        LineDirectionMode,
-        LinePositionMode = PositionOnContainingLine) const override;
-    void computeIntrinsicLogicalWidths(
-        LayoutUnit& minLogicalWidth,
-        LayoutUnit& maxLogicalWidth) const override;
-    void layout() override;
+    virtual int baselinePosition(FontBaseline, bool firstLine, LineDirectionMode, LinePositionMode = PositionOnContainingLine) const override;
+    virtual void computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const override;
+    virtual void layout() override;
 
     SliderThumbElement* sliderThumbElement() const;
 };

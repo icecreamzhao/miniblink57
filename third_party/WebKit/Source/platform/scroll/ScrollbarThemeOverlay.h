@@ -35,6 +35,7 @@ namespace blink {
 // than Mac. Mac's overlay scrollbars are in ScrollbarThemeMac*.
 class PLATFORM_EXPORT ScrollbarThemeOverlay : public ScrollbarTheme {
 public:
+<<<<<<< HEAD
     enum HitTestBehavior { AllowHitTest,
         DisallowHitTest };
 
@@ -55,10 +56,18 @@ public:
         float newPosition) const override;
 
     ScrollbarPart invalidateOnEnabledChange() const override;
+=======
+    enum HitTestBehavior { AllowHitTest, DisallowHitTest };
+
+    ScrollbarThemeOverlay(int thumbThickness, int scrollbarMargin, HitTestBehavior);
+    ScrollbarThemeOverlay(int thumbThickness, int scrollbarMargin, HitTestBehavior, Color);
+    ~ScrollbarThemeOverlay() override {}
+>>>>>>> miniblink49
 
     int scrollbarThickness(ScrollbarControlSize) override;
     int scrollbarMargin() const override;
     bool usesOverlayScrollbars() const override;
+<<<<<<< HEAD
     double overlayScrollbarFadeOutDelaySeconds() const override;
     double overlayScrollbarFadeOutDurationSeconds() const override;
 
@@ -83,6 +92,22 @@ public:
     ScrollbarPart hitTest(const ScrollbarThemeClient&, const IntPoint&) override;
 
     static ScrollbarThemeOverlay& mobileTheme();
+=======
+
+    int thumbPosition(ScrollbarThemeClient*) override;
+    int thumbLength(ScrollbarThemeClient*) override;
+
+    bool hasButtons(ScrollbarThemeClient*) override { return false; }
+    bool hasThumb(ScrollbarThemeClient*) override;
+
+    IntRect backButtonRect(ScrollbarThemeClient*, ScrollbarPart, bool painting = false) override;
+    IntRect forwardButtonRect(ScrollbarThemeClient*, ScrollbarPart, bool painting = false) override;
+    IntRect trackRect(ScrollbarThemeClient*, bool painting = false) override;
+    int thumbThickness(ScrollbarThemeClient*) override;
+
+    void paintThumb(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) override;
+    ScrollbarPart hitTest(ScrollbarThemeClient*, const IntPoint&) override;
+>>>>>>> miniblink49
 
 private:
     int m_thumbThickness;

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,9 +9,14 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkBuffer.h"
 
 #include <string.h>
+=======
+
+#include "SkBuffer.h"
+>>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +31,11 @@ void SkRBuffer::readNoSizeCheck(void* buffer, size_t size)
 const void* SkRBuffer::skip(size_t size)
 {
     const void* result = fPos;
+<<<<<<< HEAD
     readNoSizeCheck(nullptr, size);
+=======
+    readNoSizeCheck(NULL, size);
+>>>>>>> miniblink49
     return result;
 }
 
@@ -34,9 +47,14 @@ size_t SkRBuffer::skipToAlign4()
     return n;
 }
 
+<<<<<<< HEAD
 bool SkRBufferWithSizeCheck::read(void* buffer, size_t size)
 {
     fError = fError || (size > static_cast<size_t>(fStop - fPos));
+=======
+bool SkRBufferWithSizeCheck::read(void* buffer, size_t size) {
+    fError = fError || (fPos + size > fStop);
+>>>>>>> miniblink49
     if (!fError && (size > 0)) {
         readNoSizeCheck(buffer, size);
     }
@@ -46,8 +64,13 @@ bool SkRBufferWithSizeCheck::read(void* buffer, size_t size)
 void* SkWBuffer::skip(size_t size)
 {
     void* result = fPos;
+<<<<<<< HEAD
     writeNoSizeCheck(nullptr, size);
     return fData == nullptr ? nullptr : result;
+=======
+    writeNoSizeCheck(NULL, size);
+    return fData == NULL ? NULL : result;
+>>>>>>> miniblink49
 }
 
 void SkWBuffer::writeNoSizeCheck(const void* buffer, size_t size)
@@ -63,7 +86,12 @@ size_t SkWBuffer::padToAlign4()
     size_t pos = this->pos();
     size_t n = SkAlign4(pos) - pos;
 
+<<<<<<< HEAD
     if (n && fData) {
+=======
+    if (n && fData)
+    {
+>>>>>>> miniblink49
         char* p = fPos;
         char* stop = p + n;
         do {
@@ -82,7 +110,11 @@ size_t SkWBuffer::padToAlign4()
         SkASSERT(((size_t)buffer & 3) == 0);
     }
 #else
+<<<<<<< HEAD
 #define AssertBuffer32(buffer)
+=======
+    #define AssertBuffer32(buffer)
+>>>>>>> miniblink49
 #endif
 
 void* sk_buffer_write_int32(void* buffer, int32_t value)

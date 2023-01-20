@@ -44,8 +44,7 @@ namespace blink {
 // must not exceed the lifetime of the passed handle.
 class V8CustomXPathNSResolver final : public XPathNSResolver {
 public:
-    static V8CustomXPathNSResolver* create(ScriptState*,
-        v8::Local<v8::Object> resolver);
+    static V8CustomXPathNSResolver* create(ScriptState*, v8::Local<v8::Object> resolver);
 
     AtomicString lookupNamespaceURI(const String& prefix) override;
 

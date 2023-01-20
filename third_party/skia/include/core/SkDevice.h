@@ -8,6 +8,7 @@
 #ifndef SkDevice_DEFINED
 #define SkDevice_DEFINED
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColor.h"
 #include "SkRefCnt.h"
@@ -18,6 +19,18 @@ class SkClipStack;
 class SkDraw;
 class SkDrawFilter;
 class SkImageFilterCache;
+=======
+#include "SkRefCnt.h"
+#include "SkBitmap.h"
+#include "SkCanvas.h"
+#include "SkColor.h"
+#include "SkImageFilter.h"
+#include "SkSurfaceProps.h"
+
+class SkClipStack;
+class SkDraw;
+class SkDrawFilter;
+>>>>>>> miniblink49
 struct SkIRect;
 class SkMatrix;
 class SkMetaData;
@@ -41,6 +54,7 @@ public:
     virtual SkImageInfo imageInfo() const;
 
     /**
+<<<<<<< HEAD
      *  Return SurfaceProps for this device.
      */
     const SkSurfaceProps& surfaceProps() const
@@ -49,24 +63,35 @@ public:
     }
 
     /**
+=======
+>>>>>>> miniblink49
      *  Return the bounds of the device in the coordinate space of the root
      *  canvas. The root device will have its top-left at 0,0, but other devices
      *  such as those associated with saveLayer may have a non-zero origin.
      */
+<<<<<<< HEAD
     void getGlobalBounds(SkIRect* bounds) const
     {
+=======
+    void getGlobalBounds(SkIRect* bounds) const {
+>>>>>>> miniblink49
         SkASSERT(bounds);
         const SkIPoint& origin = this->getOrigin();
         bounds->setXYWH(origin.x(), origin.y(), this->width(), this->height());
     }
 
+<<<<<<< HEAD
     SkIRect getGlobalBounds() const
     {
+=======
+    SkIRect getGlobalBounds() const {
+>>>>>>> miniblink49
         SkIRect bounds;
         this->getGlobalBounds(&bounds);
         return bounds;
     }
 
+<<<<<<< HEAD
     int width() const
     {
         return this->imageInfo().width();
@@ -79,6 +104,17 @@ public:
 
     bool isOpaque() const
     {
+=======
+    int width() const {
+        return this->imageInfo().width();
+    }
+
+    int height() const {
+        return this->imageInfo().height();
+    }
+
+    bool isOpaque() const {
+>>>>>>> miniblink49
         return this->imageInfo().isOpaque();
     }
 
@@ -112,12 +148,17 @@ public:
     /**
      * Return the device's associated gpu render target, or NULL.
      */
+<<<<<<< HEAD
     virtual GrRenderTarget* accessRenderTarget() { return nullptr; }
 
     /**
      * Don't call this!
      */
     virtual GrDrawContext* accessDrawContext() { return nullptr; }
+=======
+    virtual GrRenderTarget* accessRenderTarget() { return NULL; }
+
+>>>>>>> miniblink49
 
     /**
      *  Return the device's origin: its offset in device coordinates from
@@ -131,8 +172,12 @@ public:
      * and SkCanvas' SkBaseDevice & SkBitmap -taking ctors). It allows the
      * devices to prepare for drawing (e.g., locking their pixels, etc.)
      */
+<<<<<<< HEAD
     virtual void onAttachToCanvas(SkCanvas*)
     {
+=======
+    virtual void onAttachToCanvas(SkCanvas*) {
+>>>>>>> miniblink49
         SkASSERT(!fAttachedToCanvas);
 #ifdef SK_DEBUG
         fAttachedToCanvas = true;
@@ -145,8 +190,12 @@ public:
      * is invoked from setDevice (for the displaced device), restore and
      * possibly from SkCanvas' dtor.
      */
+<<<<<<< HEAD
     virtual void onDetachFromCanvas()
     {
+=======
+    virtual void onDetachFromCanvas() {
+>>>>>>> miniblink49
         SkASSERT(fAttachedToCanvas);
 #ifdef SK_DEBUG
         fAttachedToCanvas = false;
@@ -155,12 +204,21 @@ public:
 
 protected:
     enum TileUsage {
+<<<<<<< HEAD
         kPossible_TileUsage, //!< the created device may be drawn tiled
         kNever_TileUsage, //!< the created device will never be drawn tiled
     };
 
     struct TextFlags {
         uint32_t fFlags; // SkPaint::getFlags()
+=======
+        kPossible_TileUsage,    //!< the created device may be drawn tiled
+        kNever_TileUsage,       //!< the created device will never be drawn tiled
+    };
+
+    struct TextFlags {
+        uint32_t    fFlags;     // SkPaint::getFlags()
+>>>>>>> miniblink49
     };
 
     /**
@@ -187,8 +245,13 @@ protected:
      *  in the clipstack, you will arrive at an equivalent region to the one
      *  passed in).
      */
+<<<<<<< HEAD
     virtual void setMatrixClip(const SkMatrix&, const SkRegion&,
         const SkClipStack&) {};
+=======
+     virtual void setMatrixClip(const SkMatrix&, const SkRegion&,
+                                const SkClipStack&) {};
+>>>>>>> miniblink49
 
     /** These are called inside the per-device-layer loop for each draw call.
      When these are called, we have already applied any saveLayer operations,
@@ -197,6 +260,7 @@ protected:
      */
     virtual void drawPaint(const SkDraw&, const SkPaint& paint) = 0;
     virtual void drawPoints(const SkDraw&, SkCanvas::PointMode mode, size_t count,
+<<<<<<< HEAD
         const SkPoint[], const SkPaint& paint)
         = 0;
     virtual void drawRect(const SkDraw&, const SkRect& r,
@@ -212,6 +276,19 @@ protected:
     // Default impl calls drawPath()
     virtual void drawDRRect(const SkDraw&, const SkRRect& outer,
         const SkRRect& inner, const SkPaint&);
+=======
+                            const SkPoint[], const SkPaint& paint) = 0;
+    virtual void drawRect(const SkDraw&, const SkRect& r,
+                          const SkPaint& paint) = 0;
+    virtual void drawOval(const SkDraw&, const SkRect& oval,
+                          const SkPaint& paint) = 0;
+    virtual void drawRRect(const SkDraw&, const SkRRect& rr,
+                           const SkPaint& paint) = 0;
+
+    // Default impl calls drawPath()
+    virtual void drawDRRect(const SkDraw&, const SkRRect& outer,
+                            const SkRRect& inner, const SkPaint&);
+>>>>>>> miniblink49
 
     /**
      *  If pathIsMutable, then the implementation is allowed to cast path to a
@@ -225,6 +302,7 @@ protected:
      *  pre-concated with the current matrix.
      */
     virtual void drawPath(const SkDraw&, const SkPath& path,
+<<<<<<< HEAD
         const SkPaint& paint,
         const SkMatrix* prePathMatrix = NULL,
         bool pathIsMutable = false)
@@ -235,12 +313,22 @@ protected:
     virtual void drawSprite(const SkDraw&, const SkBitmap& bitmap,
         int x, int y, const SkPaint& paint)
         = 0;
+=======
+                          const SkPaint& paint,
+                          const SkMatrix* prePathMatrix = NULL,
+                          bool pathIsMutable = false) = 0;
+    virtual void drawBitmap(const SkDraw&, const SkBitmap& bitmap,
+                            const SkMatrix& matrix, const SkPaint& paint) = 0;
+    virtual void drawSprite(const SkDraw&, const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint) = 0;
+>>>>>>> miniblink49
 
     /**
      *  The default impl. will create a bitmap-shader from the bitmap,
      *  and call drawRect with it.
      */
     virtual void drawBitmapRect(const SkDraw&, const SkBitmap&,
+<<<<<<< HEAD
         const SkRect* srcOrNull, const SkRect& dst,
         const SkPaint& paint,
         SkCanvas::SrcRectConstraint)
@@ -253,12 +341,26 @@ protected:
         const SkPaint&, SkCanvas::SrcRectConstraint);
     virtual void drawImageNine(const SkDraw&, const SkImage*, const SkIRect& center,
         const SkRect& dst, const SkPaint&);
+=======
+                                const SkRect* srcOrNull, const SkRect& dst,
+                                const SkPaint& paint,
+                                SkCanvas::DrawBitmapRectFlags flags) = 0;
+    virtual void drawBitmapNine(const SkDraw&, const SkBitmap&, const SkIRect& center,
+                               const SkRect& dst, const SkPaint&);
+
+    virtual void drawImage(const SkDraw&, const SkImage*, SkScalar x, SkScalar y, const SkPaint&);
+    virtual void drawImageRect(const SkDraw&, const SkImage*, const SkRect* src, const SkRect& dst,
+                               const SkPaint&);
+    virtual void drawImageNine(const SkDraw&, const SkImage*, const SkIRect& center,
+                               const SkRect& dst, const SkPaint&);
+>>>>>>> miniblink49
 
     /**
      *  Does not handle text decoration.
      *  Decorations (underline and stike-thru) will be handled by SkCanvas.
      */
     virtual void drawText(const SkDraw&, const void* text, size_t len,
+<<<<<<< HEAD
         SkScalar x, SkScalar y, const SkPaint& paint)
         = 0;
     virtual void drawPosText(const SkDraw&, const void* text, size_t len,
@@ -283,16 +385,44 @@ protected:
         const SkColor[], int count, SkXfermode::Mode, const SkPaint&);
 
     virtual void drawAnnotation(const SkDraw&, const SkRect&, const char[], SkData*) { }
+=======
+                          SkScalar x, SkScalar y, const SkPaint& paint) = 0;
+    virtual void drawPosText(const SkDraw&, const void* text, size_t len,
+                             const SkScalar pos[], int scalarsPerPos,
+                             const SkPoint& offset, const SkPaint& paint) = 0;
+    virtual void drawVertices(const SkDraw&, SkCanvas::VertexMode, int vertexCount,
+                              const SkPoint verts[], const SkPoint texs[],
+                              const SkColor colors[], SkXfermode* xmode,
+                              const uint16_t indices[], int indexCount,
+                              const SkPaint& paint) = 0;
+    // default implementation unrolls the blob runs.
+    virtual void drawTextBlob(const SkDraw&, const SkTextBlob*, SkScalar x, SkScalar y,
+                              const SkPaint& paint, SkDrawFilter* drawFilter);
+    // default implementation calls drawVertices
+    virtual void drawPatch(const SkDraw&, const SkPoint cubics[12], const SkColor colors[4],
+                           const SkPoint texCoords[4], SkXfermode* xmode, const SkPaint& paint);
+
+    // default implementation calls drawPath
+    virtual void drawAtlas(const SkDraw&, const SkImage* atlas, const SkRSXform[], const SkRect[],
+                           const SkColor[], int count, SkXfermode::Mode, const SkPaint&);
+>>>>>>> miniblink49
 
     /** The SkDevice passed will be an SkDevice which was returned by a call to
         onCreateDevice on this device with kNeverTile_TileExpectation.
      */
     virtual void drawDevice(const SkDraw&, SkBaseDevice*, int x, int y,
+<<<<<<< HEAD
         const SkPaint&)
         = 0;
 
     virtual void drawTextOnPath(const SkDraw&, const void* text, size_t len, const SkPath&,
         const SkMatrix*, const SkPaint&);
+=======
+                            const SkPaint&) = 0;
+
+    virtual void drawTextOnPath(const SkDraw&, const void* text, size_t len, const SkPath&,
+                                const SkMatrix*, const SkPaint&);
+>>>>>>> miniblink49
 
     bool readPixels(const SkImageInfo&, void* dst, size_t rowBytes, int x, int y);
 
@@ -304,10 +434,37 @@ protected:
     */
     virtual const SkBitmap& onAccessBitmap() = 0;
 
+<<<<<<< HEAD
     virtual GrContext* context() const { return nullptr; }
 
 protected:
     virtual sk_sp<SkSurface> makeSurface(const SkImageInfo&, const SkSurfaceProps&);
+=======
+    /**
+     *  Override and return true for filters that the device can handle
+     *  intrinsically. Doing so means that SkCanvas will pass-through this
+     *  filter to drawSprite and drawDevice (and potentially filterImage).
+     *  Returning false means the SkCanvas will have apply the filter itself,
+     *  and just pass the resulting image to the device.
+     */
+    virtual bool canHandleImageFilter(const SkImageFilter*) { return false; }
+
+    /**
+     *  Related (but not required) to canHandleImageFilter, this method returns
+     *  true if the device could apply the filter to the src bitmap and return
+     *  the result (and updates offset as needed).
+     *  If the device does not recognize or support this filter,
+     *  it just returns false and leaves result and offset unchanged.
+     */
+    virtual bool filterImage(const SkImageFilter*, const SkBitmap&,
+                             const SkImageFilter::Context&,
+                             SkBitmap* /*result*/, SkIPoint* /*offset*/) {
+        return false;
+    }
+
+protected:
+    virtual SkSurface* newSurface(const SkImageInfo&, const SkSurfaceProps&) { return NULL; }
+>>>>>>> miniblink49
     virtual bool onPeekPixels(SkPixmap*) { return false; }
 
     /**
@@ -328,6 +485,13 @@ protected:
 
     virtual bool onAccessPixels(SkPixmap*) { return false; }
 
+<<<<<<< HEAD
+=======
+    const SkSurfaceProps& surfaceProps() const {
+        return fSurfaceProps;
+    }
+
+>>>>>>> miniblink49
     /**
      *  PRIVATE / EXPERIMENTAL -- do not call
      *  This entry point gives the backend an opportunity to take over the rendering
@@ -339,6 +503,7 @@ protected:
      *  perform the main rendering loop (by return false from here).
      */
     virtual bool EXPERIMENTAL_drawPicture(SkCanvas*, const SkPicture*, const SkMatrix*,
+<<<<<<< HEAD
         const SkPaint*);
 
     struct CreateInfo {
@@ -372,6 +537,27 @@ protected:
         const TileUsage fTileUsage;
         const SkPixelGeometry fPixelGeometry;
         const bool fForImageFilter;
+=======
+                                          const SkPaint*);
+
+    struct CreateInfo {
+        static SkPixelGeometry AdjustGeometry(const SkImageInfo&, TileUsage, SkPixelGeometry);
+
+        // The constructor may change the pixel geometry based on other parameters.
+        CreateInfo(const SkImageInfo& info,
+                   TileUsage tileUsage,
+                   SkPixelGeometry geo,
+                   bool forImageFilter = false)
+            : fInfo(info)
+            , fTileUsage(tileUsage)
+            , fPixelGeometry(AdjustGeometry(info, tileUsage, geo))
+            , fForImageFilter(forImageFilter) {}
+
+        const SkImageInfo       fInfo;
+        const TileUsage         fTileUsage;
+        const SkPixelGeometry   fPixelGeometry;
+        const bool              fForImageFilter;
+>>>>>>> miniblink49
     };
 
     /**
@@ -385,6 +571,7 @@ protected:
      *  and the caller may then decide to explicitly create a bitmapdevice, knowing that later
      *  it could not call drawDevice with it (but it could call drawSprite or drawBitmap).
      */
+<<<<<<< HEAD
     virtual SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*)
     {
         return NULL;
@@ -399,20 +586,37 @@ protected:
     // A helper function used by derived classes to log the scale factor of a bitmap or image draw.
     static void LogDrawScaleFactor(const SkMatrix&, SkFilterQuality);
 
+=======
+    virtual SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*) {
+        return NULL;
+    }
+
+>>>>>>> miniblink49
 private:
     friend class SkCanvas;
     friend struct DeviceCM; //for setMatrixClip
     friend class SkDraw;
     friend class SkDrawIter;
     friend class SkDeviceFilteredPaint;
+<<<<<<< HEAD
     friend class SkNoPixelsBitmapDevice;
+=======
+    friend class SkImageFilter::Proxy;
+    friend class SkDeferredDevice;    // for newSurface
+    friend class SkNoPixelsBitmapDevice;
+
+>>>>>>> miniblink49
     friend class SkSurface_Raster;
 
     // used to change the backend's pixels (and possibly config/rowbytes)
     // but cannot change the width/height, so there should be no change to
     // any clip information.
     // TODO: move to SkBitmapDevice
+<<<<<<< HEAD
     virtual void replaceBitmapBackendForRasterSurface(const SkBitmap&) { }
+=======
+    virtual void replaceBitmapBackendForRasterSurface(const SkBitmap&) {}
+>>>>>>> miniblink49
 
     virtual bool forceConservativeRasterClip() const { return false; }
 
@@ -421,16 +625,28 @@ private:
 
     /** Causes any deferred drawing to the device to be completed.
      */
+<<<<<<< HEAD
     virtual void flush() { }
 
     virtual SkImageFilterCache* getImageFilterCache() { return NULL; }
 
     SkIPoint fOrigin;
+=======
+    virtual void flush() {}
+
+    virtual SkImageFilter::Cache* getImageFilterCache() { return NULL; }
+
+    SkIPoint    fOrigin;
+>>>>>>> miniblink49
     SkMetaData* fMetaData;
     SkSurfaceProps fSurfaceProps;
 
 #ifdef SK_DEBUG
+<<<<<<< HEAD
     bool fAttachedToCanvas;
+=======
+    bool        fAttachedToCanvas;
+>>>>>>> miniblink49
 #endif
 
     typedef SkRefCnt INHERITED;

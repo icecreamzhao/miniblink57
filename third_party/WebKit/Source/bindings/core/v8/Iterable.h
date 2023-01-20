@@ -15,8 +15,7 @@ namespace blink {
 template <typename KeyType, typename ValueType>
 class Iterable {
 public:
-    Iterator* keysForBinding(ScriptState* scriptState,
-        ExceptionState& exceptionState)
+    Iterator* keysForBinding(ScriptState* scriptState, ExceptionState& exceptionState)
     {
         IterationSource* source = this->startIteration(scriptState, exceptionState);
         if (!source)
@@ -24,8 +23,7 @@ public:
         return new IterableIterator<KeySelector>(source);
     }
 
-    Iterator* valuesForBinding(ScriptState* scriptState,
-        ExceptionState& exceptionState)
+    Iterator* valuesForBinding(ScriptState* scriptState, ExceptionState& exceptionState)
     {
         IterationSource* source = this->startIteration(scriptState, exceptionState);
         if (!source)
@@ -33,8 +31,7 @@ public:
         return new IterableIterator<ValueSelector>(source);
     }
 
-    Iterator* entriesForBinding(ScriptState* scriptState,
-        ExceptionState& exceptionState)
+    Iterator* entriesForBinding(ScriptState* scriptState, ExceptionState& exceptionState)
     {
         IterationSource* source = this->startIteration(scriptState, exceptionState);
         if (!source)
@@ -42,18 +39,14 @@ public:
         return new IterableIterator<EntrySelector>(source);
     }
 
-    void forEachForBinding(ScriptState* scriptState,
-        const ScriptValue& thisValue,
-        const ScriptValue& callback,
-        const ScriptValue& thisArg,
-        ExceptionState& exceptionState)
+    void forEachForBinding(ScriptState* scriptState, const ScriptValue& thisValue, const ScriptValue& callback, const ScriptValue& thisArg, ExceptionState& exceptionState)
     {
         IterationSource* source = this->startIteration(scriptState, exceptionState);
 
         v8::Isolate* isolate = scriptState->isolate();
         v8::TryCatch tryCatch(isolate);
 
-        v8::Local<v8::Object> creationContext(thisValue.v8Value().As<v8::Object>());
+        v8::Local<v8::Object> creationContext(scriptState->context()->Global());
         v8::Local<v8::Function> v8Callback(callback.v8Value().As<v8::Function>());
         v8::Local<v8::Value> v8ThisArg(thisArg.v8Value());
         v8::Local<v8::Value> args[3];
@@ -69,8 +62,8 @@ public:
 
             ASSERT(!exceptionState.hadException());
 
-            args[0] = ToV8(value, creationContext, isolate);
-            args[1] = ToV8(key, creationContext, isolate);
+            args[0] = toV8(value, creationContext, isolate);
+            args[1] = toV8(key, creationContext, isolate);
             if (args[0].IsEmpty() || args[1].IsEmpty()) {
                 if (tryCatch.HasCaught())
                     exceptionState.rethrowV8Exception(tryCatch.Exception());
@@ -78,10 +71,7 @@ public:
             }
 
             v8::Local<v8::Value> result;
-            if (!V8ScriptRunner::callFunction(v8Callback,
-                    scriptState->getExecutionContext(),
-                    v8ThisArg, 3, args, isolate)
-                     .ToLocal(&result)) {
+            if (!V8ScriptRunner::callFunction(v8Callback, scriptState->executionContext(), v8ThisArg, 3, args, isolate).ToLocal(&result)) {
                 exceptionState.rethrowV8Exception(tryCatch.Exception());
                 return;
             }
@@ -92,8 +82,8 @@ public:
     public:
         virtual ~IterationSource() { }
 
-        // If end of iteration has been reached or an exception thrown: return
-        // false.  Otherwise: set |key| and |value| and return true.
+        // If end of iteration has been reached or an exception thrown: return false.
+        // Otherwise: set |key| and |value| and return true.
         virtual bool next(ScriptState*, KeyType&, ValueType&, ExceptionState&) = 0;
 
         DEFINE_INLINE_VIRTUAL_TRACE() { }
@@ -103,37 +93,26 @@ private:
     virtual IterationSource* startIteration(ScriptState*, ExceptionState&) = 0;
 
     struct KeySelector {
-        STATIC_ONLY(KeySelector);
-        static const KeyType& select(ScriptState*,
-            const KeyType& key,
-            const ValueType& value)
+        static const KeyType& select(ScriptState*, const KeyType& key, const ValueType& value)
         {
             return key;
         }
     };
     struct ValueSelector {
-        STATIC_ONLY(ValueSelector);
-        static const ValueType& select(ScriptState*,
-            const KeyType& key,
-            const ValueType& value)
+        static const ValueType& select(ScriptState*, const KeyType& key, const ValueType& value)
         {
             return value;
         }
     };
     struct EntrySelector {
-        STATIC_ONLY(EntrySelector);
-        static Vector<ScriptValue, 2> select(ScriptState* scriptState,
-            const KeyType& key,
-            const ValueType& value)
+        static Vector<ScriptValue, 2> select(ScriptState* scriptState, const KeyType& key, const ValueType& value)
         {
             v8::Local<v8::Object> creationContext = scriptState->context()->Global();
             v8::Isolate* isolate = scriptState->isolate();
 
             Vector<ScriptValue, 2> entry;
-            entry.push_back(
-                ScriptValue(scriptState, ToV8(key, creationContext, isolate)));
-            entry.push_back(
-                ScriptValue(scriptState, ToV8(value, creationContext, isolate)));
+            entry.append(ScriptValue(scriptState, toV8(key, creationContext, isolate)));
+            entry.append(ScriptValue(scriptState, toV8(value, creationContext, isolate)));
             return entry;
         }
     };
@@ -146,8 +125,7 @@ private:
         {
         }
 
-        ScriptValue next(ScriptState* scriptState,
-            ExceptionState& exceptionState) override
+        ScriptValue next(ScriptState* scriptState, ExceptionState& exceptionState) override
         {
             KeyType key;
             ValueType value;
@@ -155,13 +133,10 @@ private:
             if (!m_source->next(scriptState, key, value, exceptionState))
                 return v8IteratorResultDone(scriptState);
 
-            return v8IteratorResult(scriptState,
-                Selector::select(scriptState, key, value));
+            return v8IteratorResult(scriptState, Selector::select(scriptState, key, value));
         }
 
-        ScriptValue next(ScriptState* scriptState,
-            ScriptValue,
-            ExceptionState& exceptionState) override
+        ScriptValue next(ScriptState* scriptState, ScriptValue, ExceptionState& exceptionState) override
         {
             return next(scriptState, exceptionState);
         }
@@ -177,8 +152,7 @@ private:
     };
 };
 
-// Utiltity mixin base-class for classes implementing IDL interfaces with
-// "iterable<T>".
+// Utiltity mixin base-class for classes implementing IDL interfaces with "iterable<T>".
 template <typename ValueType>
 class ValueIterable : public Iterable<unsigned, ValueType> {
 public:
@@ -187,8 +161,7 @@ public:
         return this->valuesForBinding(scriptState, exceptionState);
     }
 
-    class IterationSource
-        : public Iterable<unsigned, ValueType>::IterationSource {
+    class IterationSource : public Iterable<unsigned, ValueType>::IterationSource {
     public:
         IterationSource()
             : m_index(0)
@@ -197,8 +170,7 @@ public:
 
         ~IterationSource() override { }
 
-        // If end of iteration has been reached or an exception thrown: return
-        // false.
+        // If end of iteration has been reached or an exception thrown: return false.
         // Otherwise: set |value| and return true.
         // Note: |this->m_index| is the index being accessed.
         virtual bool next(ScriptState*, ValueType&, ExceptionState&) = 0;
@@ -207,10 +179,7 @@ public:
         unsigned m_index;
 
     private:
-        bool next(ScriptState* scriptState,
-            unsigned& key,
-            ValueType& value,
-            ExceptionState& exceptionState) final
+        bool next(ScriptState* scriptState, unsigned& key, ValueType& value, ExceptionState& exceptionState) final
         {
             if (!next(scriptState, value, exceptionState))
                 return false;
@@ -221,8 +190,7 @@ public:
     };
 };
 
-// Utiltity mixin base-class for classes implementing IDL interfaces with
-// "iterable<T1, T2>".
+// Utiltity mixin base-class for classes implementing IDL interfaces with "iterable<T1, T2>".
 template <typename KeyType, typename ValueType>
 class PairIterable : public Iterable<KeyType, ValueType> {
 public:

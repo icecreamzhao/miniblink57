@@ -20,29 +20,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/dom/LiveNodeList.h"
 
 namespace blink {
 
 namespace {
 
-    class IsMatch {
-        STACK_ALLOCATED();
+class IsMatch {
+public:
+    IsMatch(const LiveNodeList& list)
+        : m_list(list)
+    { }
 
-    public:
-        IsMatch(const LiveNodeList& list)
-            : m_list(&list)
-        {
-        }
+    bool operator() (const Element& element) const
+    {
+        return m_list.elementMatches(element);
+    }
 
-        bool operator()(const Element& element) const
-        {
-            return m_list->elementMatches(element);
-        }
-
-    private:
-        Member<const LiveNodeList> m_list;
-    };
+private:
+    const LiveNodeList& m_list;
+};
 
 } // namespace
 
@@ -76,20 +74,14 @@ Element* LiveNodeList::traverseToLast() const
     return ElementTraversal::lastWithin(rootNode(), IsMatch(*this));
 }
 
-Element* LiveNodeList::traverseForwardToOffset(unsigned offset,
-    Element& currentElement,
-    unsigned& currentOffset) const
+Element* LiveNodeList::traverseForwardToOffset(unsigned offset, Element& currentElement, unsigned& currentOffset) const
 {
-    return traverseMatchingElementsForwardToOffset(
-        currentElement, &rootNode(), offset, currentOffset, IsMatch(*this));
+    return traverseMatchingElementsForwardToOffset(currentElement, &rootNode(), offset, currentOffset, IsMatch(*this));
 }
 
-Element* LiveNodeList::traverseBackwardToOffset(unsigned offset,
-    Element& currentElement,
-    unsigned& currentOffset) const
+Element* LiveNodeList::traverseBackwardToOffset(unsigned offset, Element& currentElement, unsigned& currentOffset) const
 {
-    return traverseMatchingElementsBackwardToOffset(
-        currentElement, &rootNode(), offset, currentOffset, IsMatch(*this));
+    return traverseMatchingElementsBackwardToOffset(currentElement, &rootNode(), offset, currentOffset, IsMatch(*this));
 }
 
 DEFINE_TRACE(LiveNodeList)

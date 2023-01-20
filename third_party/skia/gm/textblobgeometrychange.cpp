@@ -19,6 +19,7 @@ public:
     TextBlobGeometryChange() { }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("textblobgeometrychange");
@@ -31,6 +32,17 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    SkString onShortName() override {
+        return SkString("textblobgeometrychange");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(kWidth, kHeight);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         const char text[] = "Hamburgefons";
 
         SkPaint paint;
@@ -45,6 +57,7 @@ protected:
 
         SkAutoTUnref<const SkTextBlob> blob(builder.build());
 
+<<<<<<< HEAD
         SkImageInfo info = SkImageInfo::MakeN32(200, 200, kPremul_SkAlphaType,
             sk_ref_sp(canvas->imageInfo().colorSpace()));
         SkSurfaceProps canvasProps(SkSurfaceProps::kLegacyFontHost_InitType);
@@ -70,6 +83,32 @@ protected:
         c->clear(0x00ffffff);
         c->drawTextBlob(blob.get(), 10, 150, paint);
         surface->draw(canvas, 0, 0, nullptr);
+=======
+        SkImageInfo info = SkImageInfo::MakeN32Premul(200, 200);
+        SkSurfaceProps props(0, kUnknown_SkPixelGeometry);
+        SkAutoTUnref<SkSurface> surface(canvas->newSurface(info, &props));
+        if (surface) {
+            SkCanvas* c = surface->getCanvas();
+
+            // LCD text on white background
+            SkRect rect = SkRect::MakeLTRB(0.f, 0.f, SkIntToScalar(kWidth), kHeight / 2.f);
+            SkPaint rectPaint;
+            rectPaint.setColor(0xffffffff);
+            canvas->drawRect(rect, rectPaint);
+            canvas->drawTextBlob(blob.get(), 10, 50, paint);
+
+            // This should not look garbled since we should disable LCD text in this case
+            // (i.e., unknown pixel geometry)
+            c->clear(0x00ffffff);
+            c->drawTextBlob(blob.get(), 10, 150, paint);
+            surface->draw(canvas, 0, 0, nullptr);
+        } else {
+            const char* text = "This test requires a surface";
+            size_t len = strlen(text);
+            SkPaint paint;
+            canvas->drawText(text, len, 10, 100, paint);
+        }
+>>>>>>> miniblink49
     }
 
 private:
@@ -81,5 +120,9 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new TextBlobGeometryChange;)
+=======
+DEF_GM( return SkNEW(TextBlobGeometryChange); )
+>>>>>>> miniblink49
 }

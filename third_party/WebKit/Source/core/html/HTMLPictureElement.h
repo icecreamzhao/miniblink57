@@ -11,13 +11,10 @@ namespace blink {
 
 class HTMLPictureElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLPictureElement);
 
     void sourceOrMediaChanged();
-    void removeListenerFromSourceChildren();
-    void addListenerToSourceChildren();
 
 protected:
     explicit HTMLPictureElement(Document&);

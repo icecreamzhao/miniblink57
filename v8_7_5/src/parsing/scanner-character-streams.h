@@ -5,12 +5,17 @@
 #ifndef V8_PARSING_SCANNER_CHARACTER_STREAMS_H_
 #define V8_PARSING_SCANNER_CHARACTER_STREAMS_H_
 
+<<<<<<< HEAD
 #include "include/v8.h" // for v8::ScriptCompiler
+=======
+#include "include/v8.h"  // for v8::ScriptCompiler
+>>>>>>> miniblink49
 #include "src/globals.h"
 
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     template <typename T>
     class Handle;
     class Utf16CharacterStream;
@@ -35,3 +40,29 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_PARSING_SCANNER_CHARACTER_STREAMS_H_
+=======
+template <typename T>
+class Handle;
+class Utf16CharacterStream;
+class RuntimeCallStats;
+class String;
+
+class V8_EXPORT_PRIVATE ScannerStream {
+ public:
+  static Utf16CharacterStream* For(Isolate* isolate, Handle<String> data);
+  static Utf16CharacterStream* For(Isolate* isolate, Handle<String> data,
+                                   int start_pos, int end_pos);
+  static Utf16CharacterStream* For(
+      ScriptCompiler::ExternalSourceStream* source_stream,
+      ScriptCompiler::StreamedSource::Encoding encoding);
+
+  static std::unique_ptr<Utf16CharacterStream> ForTesting(const char* data);
+  static std::unique_ptr<Utf16CharacterStream> ForTesting(const char* data,
+                                                          size_t length);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_PARSING_SCANNER_CHARACTER_STREAMS_H_
+>>>>>>> miniblink49

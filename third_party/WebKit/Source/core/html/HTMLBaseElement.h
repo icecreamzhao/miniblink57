@@ -29,7 +29,6 @@ namespace blink {
 
 class HTMLBaseElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLBaseElement);
 
@@ -40,7 +39,7 @@ private:
     explicit HTMLBaseElement(Document&);
 
     bool isURLAttribute(const Attribute&) const override;
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;
 };

@@ -30,7 +30,11 @@
 #include "platform/heap/Handle.h"
 #include "platform/text/PlatformLocale.h"
 #include "public/web/WebColorChooserClient.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -38,6 +42,7 @@ class ColorChooserClient;
 class LocalFrame;
 class WebColorChooser;
 
+<<<<<<< HEAD
 class ColorChooserUIController
     : public GarbageCollectedFinalized<ColorChooserUIController>,
       public WebColorChooserClient,
@@ -49,6 +54,14 @@ public:
         ColorChooserClient* client)
     {
         return new ColorChooserUIController(frame, client);
+=======
+class ColorChooserUIController : public NoBaseWillBeGarbageCollectedFinalized<ColorChooserUIController>, public WebColorChooserClient, public ColorChooser {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ColorChooserUIController);
+public:
+    static PassOwnPtrWillBeRawPtr<ColorChooserUIController> create(LocalFrame* frame, ColorChooserClient* client)
+    {
+        return adoptPtrWillBeNoop(new ColorChooserUIController(frame, client));
+>>>>>>> miniblink49
     }
 
     ~ColorChooserUIController() override;
@@ -69,10 +82,18 @@ protected:
     ColorChooserUIController(LocalFrame*, ColorChooserClient*);
 
     void openColorChooser();
+<<<<<<< HEAD
     std::unique_ptr<WebColorChooser> m_chooser;
     Member<ColorChooserClient> m_client;
 
     Member<LocalFrame> m_frame;
+=======
+    OwnPtr<WebColorChooser> m_chooser;
+    RawPtrWillBeMember<ColorChooserClient> m_client;
+
+private:
+    RawPtrWillBeMember<LocalFrame> m_frame;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

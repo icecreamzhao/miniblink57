@@ -28,7 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/heap/Heap.h"
+=======
+#include "config.h"
+
+#include "platform/EventTracer.h"
+#include "platform/heap/Heap.h"
+#include "wtf/CryptographicallyRandomNumber.h"
+#include "wtf/MainThread.h"
+>>>>>>> miniblink49
 #include <base/bind.h>
 #include <base/test/launcher/unit_test_launcher.h>
 #include <base/test/test_suite.h>
@@ -38,24 +47,45 @@
 
 class BlinkTestEnvironmentScope {
 public:
+<<<<<<< HEAD
     BlinkTestEnvironmentScope() { content::SetUpBlinkTestEnvironment(); }
     ~BlinkTestEnvironmentScope() { content::TearDownBlinkTestEnvironment(); }
+=======
+    BlinkTestEnvironmentScope()
+    {
+        content::SetUpBlinkTestEnvironment();
+    }
+    ~BlinkTestEnvironmentScope()
+    {
+        content::TearDownBlinkTestEnvironment();
+    }
+>>>>>>> miniblink49
 };
 
 int runHelper(base::TestSuite* testSuite)
 {
     BlinkTestEnvironmentScope blinkTestEnvironment;
+<<<<<<< HEAD
     blink::ThreadState* currentThreadState = blink::ThreadState::current();
     currentThreadState->registerTraceDOMWrappers(nullptr, nullptr, nullptr,
         nullptr);
     int result = testSuite->Run();
     currentThreadState->collectAllGarbage();
+=======
+    blink::ThreadState::current()->registerTraceDOMWrappers(0, 0);
+    int result = testSuite->Run();
+    blink::Heap::collectAllGarbage();
+>>>>>>> miniblink49
     return result;
 }
 
 int main(int argc, char** argv)
 {
     base::TestSuite testSuite(argc, argv);
+<<<<<<< HEAD
     return base::LaunchUnitTests(
         argc, argv, base::Bind(runHelper, base::Unretained(&testSuite)));
+=======
+    return base::LaunchUnitTests(argc, argv, base::Bind(runHelper, base::Unretained(&testSuite)));
+>>>>>>> miniblink49
 }

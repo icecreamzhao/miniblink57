@@ -23,6 +23,11 @@ enum SkEncodedFormat {
     kPKM_SkEncodedFormat,
     kKTX_SkEncodedFormat,
     kASTC_SkEncodedFormat,
+<<<<<<< HEAD
     kDNG_SkEncodedFormat,
 };
 #endif // SkEncodedFormat_DEFINED
+=======
+};
+#endif  // SkEncodedFormat_DEFINED
+>>>>>>> miniblink49

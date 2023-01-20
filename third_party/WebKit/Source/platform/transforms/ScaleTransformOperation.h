@@ -29,20 +29,30 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT ScaleTransformOperation final
     : public TransformOperation {
 public:
     static PassRefPtr<ScaleTransformOperation> create(double sx,
         double sy,
         OperationType type)
+=======
+class PLATFORM_EXPORT ScaleTransformOperation : public TransformOperation {
+public:
+    static PassRefPtr<ScaleTransformOperation> create(double sx, double sy, OperationType type)
+>>>>>>> miniblink49
     {
         return adoptRef(new ScaleTransformOperation(sx, sy, 1, type));
     }
 
+<<<<<<< HEAD
     static PassRefPtr<ScaleTransformOperation> create(double sx,
         double sy,
         double sz,
         OperationType type)
+=======
+    static PassRefPtr<ScaleTransformOperation> create(double sx, double sy, double sz, OperationType type)
+>>>>>>> miniblink49
     {
         return adoptRef(new ScaleTransformOperation(sx, sy, sz, type));
     }
@@ -57,6 +67,7 @@ public:
     {
         transform.scale3d(m_x, m_y, m_z);
     }
+<<<<<<< HEAD
     PassRefPtr<TransformOperation> blend(const TransformOperation* from,
         double progress,
         bool blendToIdentity = false) override;
@@ -69,6 +80,14 @@ public:
 private:
     OperationType type() const override { return m_type; }
     OperationType primitiveType() const final { return Scale3D; }
+=======
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+
+    static bool isMatchingOperationType(OperationType type) { return type == Scale || type == ScaleX || type == ScaleY || type == ScaleZ || type == Scale3D; }
+
+private:
+    OperationType type() const override { return m_type; }
+>>>>>>> miniblink49
 
     bool operator==(const TransformOperation& o) const override
     {
@@ -78,8 +97,11 @@ private:
         return m_x == s->m_x && m_y == s->m_y && m_z == s->m_z;
     }
 
+<<<<<<< HEAD
     PassRefPtr<TransformOperation> zoom(double factor) final { return this; }
 
+=======
+>>>>>>> miniblink49
     ScaleTransformOperation(double sx, double sy, double sz, OperationType type)
         : m_x(sx)
         , m_y(sy)

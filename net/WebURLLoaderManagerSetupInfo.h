@@ -12,7 +12,6 @@ struct SetupDataInfo {
     CURLoption sizeOption;
     curl_off_t size;
     bool islongLong;
-    bool chunkedTransfer;
     WTF::Vector<FlattenHTTPBodyElement*> flattenElements;
 
     ~SetupDataInfo()

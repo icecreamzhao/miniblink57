@@ -36,6 +36,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class DatabaseClientImpl final
     : public GarbageCollectedFinalized<DatabaseClientImpl>,
       public DatabaseClient {
@@ -43,14 +44,24 @@ class DatabaseClientImpl final
 
 public:
     static DatabaseClientImpl* create();
+=======
+class DatabaseClientImpl final : public NoBaseWillBeGarbageCollectedFinalized<DatabaseClientImpl>, public DatabaseClient {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DatabaseClientImpl);
+public:
+    static PassOwnPtrWillBeRawPtr<DatabaseClientImpl> create();
+>>>>>>> miniblink49
 
     ~DatabaseClientImpl() override;
     DECLARE_VIRTUAL_TRACE();
 
+<<<<<<< HEAD
     bool allowDatabase(ExecutionContext*,
         const String& name,
         const String& displayName,
         unsigned estimatedSize) override;
+=======
+    bool allowDatabase(ExecutionContext*, const String& name, const String& displayName, unsigned long estimatedSize) override;
+>>>>>>> miniblink49
 
 private:
     DatabaseClientImpl();

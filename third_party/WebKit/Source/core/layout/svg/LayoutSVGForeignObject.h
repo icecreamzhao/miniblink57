@@ -27,66 +27,41 @@ namespace blink {
 
 class SVGForeignObjectElement;
 
-// LayoutSVGForeignObject is the LayoutObject associated with <foreignobject>.
-// http://www.w3.org/TR/SVG/extend.html#ForeignObjectElement
-//
-// Foreign object is a way of inserting arbitrary non-SVG content into SVG.
-// A good example of this is HTML in SVG. Because of this, CSS content has to
-// be aware of SVG: e.g. when determining containing blocks we stop at the
-// enclosing foreign object (see LayoutObject::canContainFixedPositionObjects).
-//
-// Note that SVG is also allowed in HTML with the HTML5 parsing rules so SVG
-// content also has to be aware of CSS objects.
-// See http://www.w3.org/TR/html5/syntax.html#elements-0 with the rules for
-// 'foreign elements'. TODO(jchaffraix): Find a better place for this paragraph.
 class LayoutSVGForeignObject final : public LayoutSVGBlock {
 public:
     explicit LayoutSVGForeignObject(SVGForeignObjectElement*);
-    ~LayoutSVGForeignObject() override;
+    virtual ~LayoutSVGForeignObject();
 
-    const char* name() const override { return "LayoutSVGForeignObject"; }
+    virtual const char* name() const override { return "LayoutSVGForeignObject"; }
 
-    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
+    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
 
-    void paint(const PaintInfo&, const LayoutPoint&) const override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&) override;
 
-    void layout() override;
+    virtual void layout() override;
 
-    FloatRect objectBoundingBox() const override
-    {
-        return FloatRect(FloatPoint(), FloatSize(size()));
-    }
-    FloatRect strokeBoundingBox() const override { return objectBoundingBox(); }
-    FloatRect visualRectInLocalSVGCoordinates() const override
-    {
-        return objectBoundingBox();
-    }
+    virtual FloatRect objectBoundingBox() const override { return FloatRect(FloatPoint(), m_viewport.size()); }
+    virtual FloatRect strokeBoundingBox() const override { return FloatRect(FloatPoint(), m_viewport.size()); }
+    virtual FloatRect paintInvalidationRectInLocalCoordinates() const override { return FloatRect(FloatPoint(), m_viewport.size()); }
 
-    bool nodeAtFloatPoint(HitTestResult&,
-        const FloatPoint& pointInParent,
-        HitTestAction) override;
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSVGForeignObject || LayoutSVGBlock::isOfType(type);
-    }
+    virtual bool nodeAtFloatPoint(HitTestResult&, const FloatPoint& pointInParent, HitTestAction) override;
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVGForeignObject || LayoutSVGBlock::isOfType(type); }
 
-    void setNeedsTransformUpdate() override { m_needsTransformUpdate = true; }
+    virtual void setNeedsTransformUpdate() override { m_needsTransformUpdate = true; }
 
-    AffineTransform localToSVGParentTransform() const override;
+    FloatRect viewportRect() { return m_viewport; }
 
 private:
-    LayoutUnit elementX() const;
-    LayoutUnit elementY() const;
-    LayoutUnit elementWidth() const;
-    LayoutUnit elementHeight() const;
-    void updateLogicalWidth() override;
-    void computeLogicalHeight(LayoutUnit logicalHeight,
-        LayoutUnit logicalTop,
-        LogicalExtentComputedValues&) const override;
+    virtual void updateLogicalWidth() override;
+    virtual void computeLogicalHeight(LayoutUnit logicalHeight, LayoutUnit logicalTop, LogicalExtentComputedValues&) const override;
 
-    bool m_needsTransformUpdate;
+    virtual const AffineTransform& localToParentTransform() const override;
+
+    bool m_needsTransformUpdate : 1;
+    FloatRect m_viewport;
+    mutable AffineTransform m_localToParentTransform;
 };
 
-} // namespace blink
+}
 
 #endif

@@ -8,9 +8,15 @@
 #ifndef BenchLogger_DEFINED
 #define BenchLogger_DEFINED
 
+<<<<<<< HEAD
 #include "SkString.h"
 #include "SkTypes.h"
 #include <stdio.h>
+=======
+#include <stdio.h>
+#include "SkString.h"
+#include "SkTypes.h"
+>>>>>>> miniblink49
 
 class SkFILEWStream;
 
@@ -46,8 +52,12 @@ public:
      * Log the progress of the bench tool to both stdout and the log file specified by SetLogFile,
      * if any, taking a C style string as input.
      */
+<<<<<<< HEAD
     void logProgress(const char msg[])
     {
+=======
+    void logProgress(const char msg[]) {
+>>>>>>> miniblink49
         this->nativeLogProgress(msg);
         this->fileWrite(msg, strlen(msg));
     }
@@ -56,14 +66,19 @@ public:
      * Log the progress of the bench tool to both stdout and the log file specified by SetLogFile,
      * if any, taking an SkString as input.
      */
+<<<<<<< HEAD
     void logProgress(const SkString& str)
     {
+=======
+    void logProgress(const SkString& str) {
+>>>>>>> miniblink49
         this->nativeLogProgress(str.c_str());
         this->fileWrite(str.c_str(), str.size());
     }
 
 private:
 #ifdef SK_BUILD_FOR_ANDROID
+<<<<<<< HEAD
     void nativeLogError(const char msg[])
     {
         SkDebugf("%s", msg);
@@ -78,6 +93,13 @@ private:
     {
         SkDebugf("%s", msg);
     }
+=======
+    void nativeLogError(const char msg[]) { SkDebugf("%s", msg); }
+#else
+    void nativeLogError(const char msg[]) { fprintf(stderr, "%s", msg); }
+#endif
+    void nativeLogProgress(const char msg[]) { SkDebugf("%s", msg); }
+>>>>>>> miniblink49
 
     void fileWrite(const char msg[], size_t size);
 

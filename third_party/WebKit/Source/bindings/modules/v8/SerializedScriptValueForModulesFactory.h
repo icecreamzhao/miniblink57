@@ -10,28 +10,18 @@
 
 namespace blink {
 
-class SerializedScriptValueForModulesFactory final
-    : public SerializedScriptValueFactory {
-    USING_FAST_MALLOC(SerializedScriptValueForModulesFactory);
+class SerializedScriptValueForModulesFactory final : public SerializedScriptValueFactory {
     WTF_MAKE_NONCOPYABLE(SerializedScriptValueForModulesFactory);
-
 public:
-    SerializedScriptValueForModulesFactory()
-        : SerializedScriptValueFactory()
-    {
-    }
+    SerializedScriptValueForModulesFactory() : SerializedScriptValueFactory() { }
 
-    PassRefPtr<SerializedScriptValue> create(v8::Isolate*,
-        v8::Local<v8::Value>,
-        Transferables*,
-        WebBlobInfoArray*,
-        ExceptionState&) override;
+    PassRefPtr<SerializedScriptValue> create(v8::Isolate*, v8::Local<v8::Value>, MessagePortArray*, ArrayBufferArray*, WebBlobInfoArray*, ExceptionState&) override;
+    PassRefPtr<SerializedScriptValue> create(v8::Isolate*, const String&) override;
 
 protected:
-    v8::Local<v8::Value> deserialize(SerializedScriptValue*,
-        v8::Isolate*,
-        MessagePortArray*,
-        const WebBlobInfoArray*) override;
+    ScriptValueSerializer::Status doSerialize(v8::Local<v8::Value>, SerializedScriptValueWriter&, MessagePortArray*, ArrayBufferArray*, WebBlobInfoArray*, BlobDataHandleMap&, v8::TryCatch&, String& errorMessage, v8::Isolate*) override;
+
+    v8::Local<v8::Value> deserialize(String& data, BlobDataHandleMap& blobDataHandles, ArrayBufferContentsArray*, v8::Isolate*, MessagePortArray* messagePorts, const WebBlobInfoArray*) override;
 };
 
 } // namespace blink

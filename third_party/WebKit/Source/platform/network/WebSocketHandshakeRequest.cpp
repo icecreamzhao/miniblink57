@@ -28,10 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/network/WebSocketHandshakeRequest.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebSocketHandshakeRequest::WebSocketHandshakeRequest(const KURL& url)
     : m_url(url)
 {
@@ -52,6 +57,26 @@ WebSocketHandshakeRequest::~WebSocketHandshakeRequest() { }
 void WebSocketHandshakeRequest::addAndMergeHeader(HTTPHeaderMap* map,
     const AtomicString& name,
     const AtomicString& value)
+=======
+WebSocketHandshakeRequest::WebSocketHandshakeRequest(const KURL& url) : m_url(url)
+{
+}
+
+WebSocketHandshakeRequest::WebSocketHandshakeRequest()
+{
+}
+
+WebSocketHandshakeRequest::WebSocketHandshakeRequest(const WebSocketHandshakeRequest& request)
+    : m_url(request.m_url), m_headerFields(request.m_headerFields), m_headersText(request.m_headersText)
+{
+}
+
+WebSocketHandshakeRequest::~WebSocketHandshakeRequest()
+{
+}
+
+void WebSocketHandshakeRequest::addAndMergeHeader(HTTPHeaderMap* map, const AtomicString& name, const AtomicString& value)
+>>>>>>> miniblink49
 {
     HTTPHeaderMap::AddResult result = map->add(name, value);
     if (!result.isNewEntry) {

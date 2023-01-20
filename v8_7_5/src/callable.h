@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class Code;
 
     // Associates a body of code with an interface descriptor.
@@ -34,3 +35,25 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_CALLABLE_H_
+=======
+class Code;
+
+// Associates a body of code with an interface descriptor.
+class Callable final {
+ public:
+  Callable(Handle<Code> code, CallInterfaceDescriptor descriptor)
+      : code_(code), descriptor_(descriptor) {}
+
+  Handle<Code> code() const { return code_; }
+  CallInterfaceDescriptor descriptor() const { return descriptor_; }
+
+ private:
+  const Handle<Code> code_;
+  const CallInterfaceDescriptor descriptor_;
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_CALLABLE_H_
+>>>>>>> miniblink49

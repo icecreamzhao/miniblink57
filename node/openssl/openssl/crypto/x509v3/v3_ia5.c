@@ -58,17 +58,10 @@
  */
 
 #include <stdio.h>
-#include <string.h>
-
+#include "cryptlib.h"
 #include <openssl/asn1.h>
 #include <openssl/conf.h>
-#include <openssl/err.h>
-#include <openssl/mem.h>
-#include <openssl/obj.h>
 #include <openssl/x509v3.h>
-
-#include "../internal.h"
-
 
 static char *i2s_ASN1_IA5STRING(X509V3_EXT_METHOD *method,
                                 ASN1_IA5STRING *ia5);
@@ -92,10 +85,10 @@ static char *i2s_ASN1_IA5STRING(X509V3_EXT_METHOD *method,
     if (!ia5 || !ia5->length)
         return NULL;
     if (!(tmp = OPENSSL_malloc(ia5->length + 1))) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_I2S_ASN1_IA5STRING, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
-    OPENSSL_memcpy(tmp, ia5->data, ia5->length);
+    memcpy(tmp, ia5->data, ia5->length);
     tmp[ia5->length] = 0;
     return tmp;
 }
@@ -105,7 +98,8 @@ static ASN1_IA5STRING *s2i_ASN1_IA5STRING(X509V3_EXT_METHOD *method,
 {
     ASN1_IA5STRING *ia5;
     if (!str) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NULL_ARGUMENT);
+        X509V3err(X509V3_F_S2I_ASN1_IA5STRING,
+                  X509V3_R_INVALID_NULL_ARGUMENT);
         return NULL;
     }
     if (!(ia5 = M_ASN1_IA5STRING_new()))
@@ -115,8 +109,11 @@ static ASN1_IA5STRING *s2i_ASN1_IA5STRING(X509V3_EXT_METHOD *method,
         M_ASN1_IA5STRING_free(ia5);
         goto err;
     }
+#ifdef CHARSET_EBCDIC
+    ebcdic2ascii(ia5->data, ia5->data, ia5->length);
+#endif                          /* CHARSET_EBCDIC */
     return ia5;
  err:
-    OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+    X509V3err(X509V3_F_S2I_ASN1_IA5STRING, ERR_R_MALLOC_FAILURE);
     return NULL;
 }

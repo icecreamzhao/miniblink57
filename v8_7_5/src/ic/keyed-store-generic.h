@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class KeyedStoreGenericGenerator {
     public:
         template <class T>
@@ -46,3 +47,40 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_IC_KEYED_STORE_GENERIC_H_
+=======
+class KeyedStoreGenericGenerator {
+ public:
+  template <class T>
+  using TNode = compiler::TNode<T>;
+
+  static void Generate(compiler::CodeAssemblerState* state);
+
+  // Building block for fast path of Object.assign implementation.
+  static void SetProperty(compiler::CodeAssemblerState* state,
+                          TNode<Context> context, TNode<JSReceiver> receiver,
+                          TNode<BoolT> is_simple_receiver, TNode<Name> name,
+                          TNode<Object> value, LanguageMode language_mode);
+
+  // Same as above but more generic. I.e. the receiver can by anything and the
+  // key does not have to be unique. Essentially the same as KeyedStoreGeneric.
+  static void SetProperty(compiler::CodeAssemblerState* state,
+                          TNode<Context> context, TNode<Object> receiver,
+                          TNode<Object> key, TNode<Object> value,
+                          LanguageMode language_mode);
+
+  static void SetPropertyInLiteral(compiler::CodeAssemblerState* state,
+                                   TNode<Context> context,
+                                   TNode<JSObject> receiver, TNode<Object> key,
+                                   TNode<Object> value);
+};
+
+class StoreICUninitializedGenerator {
+ public:
+  static void Generate(compiler::CodeAssemblerState* state);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_IC_KEYED_STORE_GENERIC_H_
+>>>>>>> miniblink49

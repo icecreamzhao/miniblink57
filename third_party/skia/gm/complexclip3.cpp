@@ -1,12 +1,22 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkPath.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
@@ -15,12 +25,17 @@ static const SkColor gPathColor = SK_ColorYELLOW;
 class ComplexClip3GM : public GM {
 public:
     ComplexClip3GM(bool doSimpleClipFirst)
+<<<<<<< HEAD
         : fDoSimpleClipFirst(doSimpleClipFirst)
     {
+=======
+        : fDoSimpleClipFirst(doSimpleClipFirst) {
+>>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName()
     {
         SkString str;
@@ -32,12 +47,28 @@ protected:
 
     virtual void onDraw(SkCanvas* canvas)
     {
+=======
+
+    SkString onShortName() {
+        SkString str;
+        str.printf("complexclip3_%s", fDoSimpleClipFirst ? "simple" : "complex");
+        return str;
+    }    
+
+    SkISize onISize() { return SkISize::Make(1000, 950); }
+
+    virtual void onDraw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPath clipSimple;
         clipSimple.addCircle(SkIntToScalar(70), SkIntToScalar(50), SkIntToScalar(20));
 
         SkRect r1 = { 10, 20, 70, 80 };
         SkPath clipComplex;
+<<<<<<< HEAD
         clipComplex.moveTo(SkIntToScalar(40), SkIntToScalar(50));
+=======
+        clipComplex.moveTo(SkIntToScalar(40),  SkIntToScalar(50));
+>>>>>>> miniblink49
         clipComplex.arcTo(r1, SkIntToScalar(30), SkIntToScalar(300), false);
         clipComplex.close();
 
@@ -50,11 +81,16 @@ protected:
 
         SkPaint paint;
         paint.setAntiAlias(true);
+<<<<<<< HEAD
         sk_tool_utils::set_portable_typeface(&paint);
+=======
+        sk_tool_utils::set_portable_typeface_always(&paint);
+>>>>>>> miniblink49
         paint.setTextSize(SkIntToScalar(20));
 
         static const struct {
             SkRegion::Op fOp;
+<<<<<<< HEAD
             const char* fName;
         } gOps[] = {
             { SkRegion::kIntersect_Op, "I" },
@@ -62,6 +98,15 @@ protected:
             { SkRegion::kUnion_Op, "U" },
             { SkRegion::kXOR_Op, "X" },
             { SkRegion::kReverseDifference_Op, "R" }
+=======
+            const char*  fName;
+        } gOps[] = {
+            {SkRegion::kIntersect_Op,         "I"},
+            {SkRegion::kDifference_Op,        "D" },
+            {SkRegion::kUnion_Op,             "U"},
+            {SkRegion::kXOR_Op,               "X"  },
+            {SkRegion::kReverseDifference_Op, "R"}
+>>>>>>> miniblink49
         };
 
         canvas->translate(SkIntToScalar(20), SkIntToScalar(20));
@@ -82,8 +127,15 @@ protected:
                         bool doInvB = SkToBool(invB);
                         canvas->save();
                         // set clip
+<<<<<<< HEAD
                         firstClip->setFillType(doInvA ? SkPath::kInverseEvenOdd_FillType : SkPath::kEvenOdd_FillType);
                         secondClip->setFillType(doInvB ? SkPath::kInverseEvenOdd_FillType : SkPath::kEvenOdd_FillType);
+=======
+                        firstClip->setFillType(doInvA ? SkPath::kInverseEvenOdd_FillType :
+                                               SkPath::kEvenOdd_FillType);
+                        secondClip->setFillType(doInvB ? SkPath::kInverseEvenOdd_FillType :
+                                                SkPath::kEvenOdd_FillType);
+>>>>>>> miniblink49
                         canvas->clipPath(*firstClip, SkRegion::kIntersect_Op, doAAA);
                         canvas->clipPath(*secondClip, gOps[op].fOp, doAAB);
 
@@ -92,10 +144,15 @@ protected:
                         canvas->drawRect(r, pathPaint);
                         canvas->restore();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
                         SkScalar txtX = SkIntToScalar(10);
                         paint.setColor(SK_ColorBLACK);
                         SkString str;
                         str.printf("%s%s %s %s%s", doAAA ? "A" : "B",
+<<<<<<< HEAD
                             doInvA ? "I" : "N",
                             gOps[op].fName,
                             doAAB ? "A" : "B",
@@ -107,6 +164,19 @@ protected:
                             canvas->translate(SkIntToScalar(150), 0);
                         } else {
                             canvas->translate(SkIntToScalar(120), 0);
+=======
+                                                   doInvA ? "I" : "N",
+                                                   gOps[op].fName,
+                                                   doAAB ? "A" : "B",
+                                                   doInvB ? "I" : "N");
+
+                        canvas->drawText(str.c_str(), strlen(str.c_str()), txtX, SkIntToScalar(130),
+                                         paint);
+                        if (doInvB) {
+                            canvas->translate(SkIntToScalar(150),0);
+                        } else {
+                            canvas->translate(SkIntToScalar(120),0);
+>>>>>>> miniblink49
                         }
                     }
                 }
@@ -125,7 +195,13 @@ private:
 //////////////////////////////////////////////////////////////////////////////
 
 // Simple clip first
+<<<<<<< HEAD
 DEF_GM(return new ComplexClip3GM(true);)
 // Complex clip first
 DEF_GM(return new ComplexClip3GM(false);)
+=======
+DEF_GM( return new ComplexClip3GM(true); )
+// Complex clip first
+DEF_GM( return new ComplexClip3GM(false); )
+>>>>>>> miniblink49
 }

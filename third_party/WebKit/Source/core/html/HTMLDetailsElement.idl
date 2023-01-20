@@ -20,5 +20,5 @@
 // https://html.spec.whatwg.org/#the-details-element
 
 interface HTMLDetailsElement : HTMLElement {
-    [CEReactions, Reflect] attribute boolean open;
+    [Reflect] attribute boolean open;
 };

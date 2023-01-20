@@ -23,14 +23,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLEntitySearch.h"
 
 #include "core/html/parser/HTMLEntityTable.h"
 
 namespace blink {
 
-static const HTMLEntityTableEntry* halfway(const HTMLEntityTableEntry* left,
-    const HTMLEntityTableEntry* right)
+static const HTMLEntityTableEntry* halfway(const HTMLEntityTableEntry* left, const HTMLEntityTableEntry* right)
 {
     return &left[(right - left) / 2];
 }
@@ -43,9 +43,7 @@ HTMLEntitySearch::HTMLEntitySearch()
 {
 }
 
-HTMLEntitySearch::CompareResult HTMLEntitySearch::compare(
-    const HTMLEntityTableEntry* entry,
-    UChar nextCharacter) const
+HTMLEntitySearch::CompareResult HTMLEntitySearch::compare(const HTMLEntityTableEntry* entry, UChar nextCharacter) const
 {
     if (entry->length < m_currentLength + 1)
         return Before;
@@ -56,8 +54,7 @@ HTMLEntitySearch::CompareResult HTMLEntitySearch::compare(
     return entryNextCharacter < nextCharacter ? Before : After;
 }
 
-const HTMLEntityTableEntry* HTMLEntitySearch::findFirst(
-    UChar nextCharacter) const
+const HTMLEntityTableEntry* HTMLEntitySearch::findFirst(UChar nextCharacter) const
 {
     const HTMLEntityTableEntry* left = m_first;
     const HTMLEntityTableEntry* right = m_last;
@@ -82,8 +79,7 @@ const HTMLEntityTableEntry* HTMLEntitySearch::findFirst(
     return right;
 }
 
-const HTMLEntityTableEntry* HTMLEntitySearch::findLast(
-    UChar nextCharacter) const
+const HTMLEntityTableEntry* HTMLEntitySearch::findLast(UChar nextCharacter) const
 {
     const HTMLEntityTableEntry* left = m_first;
     const HTMLEntityTableEntry* right = m_last;
@@ -129,4 +125,4 @@ void HTMLEntitySearch::advance(UChar nextCharacter)
     m_mostRecentMatch = m_first;
 }
 
-} // namespace blink
+}

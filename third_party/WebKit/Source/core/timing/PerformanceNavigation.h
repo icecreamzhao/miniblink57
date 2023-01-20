@@ -33,23 +33,16 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/frame/DOMWindowProperty.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class LocalFrame;
-class ScriptState;
-class ScriptValue;
 
-// Legacy support for NT1(https://www.w3.org/TR/navigation-timing/).
-class CORE_EXPORT PerformanceNavigation final
-    : public GarbageCollected<PerformanceNavigation>,
-      public ScriptWrappable,
-      public ContextClient {
+class CORE_EXPORT PerformanceNavigation final : public GarbageCollectedFinalized<PerformanceNavigation>, public ScriptWrappable, public DOMWindowProperty {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(PerformanceNavigation);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PerformanceNavigation);
 public:
     static PerformanceNavigation* create(LocalFrame* frame)
     {
@@ -57,16 +50,14 @@ public:
     }
 
     enum PerformanceNavigationType {
-        kTypeNavigate,
-        kTypeReload,
-        kTypeBackForward,
-        kTypeReserved = 255
+        TYPE_NAVIGATE,
+        TYPE_RELOAD,
+        TYPE_BACK_FORWARD,
+        TYPE_RESERVED = 255
     };
 
     unsigned short type() const;
     unsigned short redirectCount() const;
-
-    ScriptValue toJSONForBinding(ScriptState*) const;
 
     DECLARE_VIRTUAL_TRACE();
 

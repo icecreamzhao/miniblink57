@@ -23,115 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/canvas/CanvasRenderingContext.h"
 
-#include "core/html/canvas/CanvasContextCreationAttributes.h"
 #include "core/html/canvas/CanvasImageSource.h"
-#include "platform/RuntimeEnabledFeatures.h"
 #include "platform/weborigin/SecurityOrigin.h"
-
-const char* const kLinearRGBCanvasColorSpaceName = "linear-rgb";
-const char* const kSRGBCanvasColorSpaceName = "srgb";
-const char* const kLegacyCanvasColorSpaceName = "legacy-srgb";
 
 namespace blink {
 
-CanvasRenderingContext::CanvasRenderingContext(
-    HTMLCanvasElement* canvas,
-    OffscreenCanvas* offscreenCanvas,
-    const CanvasContextCreationAttributes& attrs)
-    : m_canvas(canvas)
-    , m_offscreenCanvas(offscreenCanvas)
-    , m_colorSpace(kLegacyCanvasColorSpace)
-    , m_creationAttributes(attrs)
+CanvasRenderingContext::CanvasRenderingContext(HTMLCanvasElement* canvas)
+    : ActiveDOMObject(&canvas->document())
+    , m_canvas(canvas)
 {
-    if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled() && RuntimeEnabledFeatures::colorCorrectRenderingEnabled()) {
-        if (m_creationAttributes.colorSpace() == kSRGBCanvasColorSpaceName)
-            m_colorSpace = kSRGBCanvasColorSpace;
-        else if (m_creationAttributes.colorSpace() == kLinearRGBCanvasColorSpaceName)
-            m_colorSpace = kLinearRGBCanvasColorSpace;
-    }
-    // Make m_creationAttributes reflect the effective colorSpace rather than the
-    // requested one
-    m_creationAttributes.setColorSpace(colorSpaceAsString());
+    suspendIfNeeded();
 }
 
-WTF::String CanvasRenderingContext::colorSpaceAsString() const
-{
-    switch (m_colorSpace) {
-    case kSRGBCanvasColorSpace:
-        return kSRGBCanvasColorSpaceName;
-    case kLinearRGBCanvasColorSpace:
-        return kLinearRGBCanvasColorSpaceName;
-    case kLegacyCanvasColorSpace:
-        return kLegacyCanvasColorSpaceName;
-    };
-    CHECK(false);
-    return "";
-}
-
-sk_sp<SkColorSpace> CanvasRenderingContext::skColorSpace() const
-{
-    switch (m_colorSpace) {
-    case kSRGBCanvasColorSpace:
-        return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
-    case kLinearRGBCanvasColorSpace:
-        //return SkColorSpace::MakeNamed(SkColorSpace::kSRGBLinear_Named);
-        DebugBreak();
-    case kLegacyCanvasColorSpace:
-        if (RuntimeEnabledFeatures::colorCorrectRenderingEnabled()) {
-            // Legacy colorspace ensures color matching with CSS is preserved.
-            // So if CSS is color corrected from sRGB to display space, then
-            // canvas must do the same
-            return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
-        }
-        return nullptr;
-    };
-    CHECK(false);
-    DebugBreak();
-    return nullptr;
-}
-
-ColorBehavior CanvasRenderingContext::colorBehaviorForMediaDrawnToCanvas()
-    const
-{
-    sk_sp<SkColorSpace> colorSpace = skColorSpace();
-    if (colorSpace) {
-        return ColorBehavior::transformTo(std::move(colorSpace));
-    }
-    return ColorBehavior::transformToGlobalTarget();
-}
-
-SkColorType CanvasRenderingContext::colorType() const
-{
-    switch (m_colorSpace) {
-    case kLinearRGBCanvasColorSpace:
-        return kRGBA_F16_SkColorType;
-    default:
-        return kN32_SkColorType;
-    }
-}
-
-void CanvasRenderingContext::dispose()
-{
-    // HTMLCanvasElement and CanvasRenderingContext have a circular reference.
-    // When the pair is no longer reachable, their destruction order is non-
-    // deterministic, so the first of the two to be destroyed needs to notify
-    // the other in order to break the circular reference.  This is to avoid
-    // an error when CanvasRenderingContext2D::didProcessTask() is invoked
-    // after the HTMLCanvasElement is destroyed.
-    if (canvas()) {
-        canvas()->detachContext();
-        m_canvas = nullptr;
-    }
-    if (offscreenCanvas()) {
-        offscreenCanvas()->detachContext();
-        m_offscreenCanvas = nullptr;
-    }
-}
-
-CanvasRenderingContext::ContextType CanvasRenderingContext::contextTypeFromId(
-    const String& id)
+CanvasRenderingContext::ContextType CanvasRenderingContext::contextTypeFromId(const String& id)
 {
     if (id == "2d")
         return Context2d;
@@ -141,46 +48,36 @@ CanvasRenderingContext::ContextType CanvasRenderingContext::contextTypeFromId(
         return ContextWebgl;
     if (id == "webgl2")
         return ContextWebgl2;
-    if (id == "bitmaprenderer" && RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-        return ContextImageBitmap;
-    }
+
     return ContextTypeCount;
 }
 
-CanvasRenderingContext::ContextType
-CanvasRenderingContext::resolveContextTypeAliases(
-    CanvasRenderingContext::ContextType type)
+CanvasRenderingContext::ContextType CanvasRenderingContext::resolveContextTypeAliases(CanvasRenderingContext::ContextType type)
 {
     if (type == ContextExperimentalWebgl)
         return ContextWebgl;
     return type;
 }
 
-bool CanvasRenderingContext::wouldTaintOrigin(
-    CanvasImageSource* imageSource,
-    SecurityOrigin* destinationSecurityOrigin)
+bool CanvasRenderingContext::wouldTaintOrigin(CanvasImageSource* imageSource)
 {
     const KURL& sourceURL = imageSource->sourceURL();
     bool hasURL = (sourceURL.isValid() && !sourceURL.isAboutBlankURL());
 
     if (hasURL) {
-        if (sourceURL.protocolIsData() || m_cleanURLs.contains(sourceURL.getString()))
+        if (sourceURL.protocolIsData() || m_cleanURLs.contains(sourceURL.string()))
             return false;
-        if (m_dirtyURLs.contains(sourceURL.getString()))
+        if (m_dirtyURLs.contains(sourceURL.string()))
             return true;
     }
 
-    DCHECK_EQ(!canvas(),
-        !!destinationSecurityOrigin); // Must have one or the other
-    bool taintOrigin = imageSource->wouldTaintOrigin(
-        destinationSecurityOrigin ? destinationSecurityOrigin
-                                  : canvas()->getSecurityOrigin());
+    bool taintOrigin = imageSource->wouldTaintOrigin(canvas()->securityOrigin());
 
     if (hasURL) {
         if (taintOrigin)
-            m_dirtyURLs.add(sourceURL.getString());
+            m_dirtyURLs.add(sourceURL.string());
         else
-            m_cleanURLs.add(sourceURL.getString());
+            m_cleanURLs.add(sourceURL.string());
     }
     return taintOrigin;
 }
@@ -188,7 +85,17 @@ bool CanvasRenderingContext::wouldTaintOrigin(
 DEFINE_TRACE(CanvasRenderingContext)
 {
     visitor->trace(m_canvas);
-    visitor->trace(m_offscreenCanvas);
+    ActiveDOMObject::trace(visitor);
+}
+
+bool CanvasRenderingContext::hasPendingActivity() const
+{
+    return false;
+}
+
+void CanvasRenderingContext::didMoveToNewDocument(Document* document)
+{
+    ActiveDOMObject::didMoveToNewExecutionContext(document);
 }
 
 } // namespace blink

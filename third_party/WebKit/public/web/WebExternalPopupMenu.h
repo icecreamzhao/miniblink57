@@ -38,8 +38,11 @@ struct WebRect;
 class WebExternalPopupMenu {
 public:
     virtual void show(const WebRect& bounds) = 0;
+<<<<<<< HEAD
     // Close the popup menu widget. This function should not call
     // WebExternalPopupMenuClient functions.
+=======
+>>>>>>> miniblink49
     virtual void close() = 0;
 };
 

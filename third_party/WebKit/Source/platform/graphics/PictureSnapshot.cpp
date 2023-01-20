@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/PictureSnapshot.h"
 
 #include "platform/geometry/IntSize.h"
@@ -117,6 +118,74 @@ PassRefPtr<PictureSnapshot> PictureSnapshot::load(
 //         canvas->restore();
 //     }
 //     return adoptRef(new PictureSnapshot(recorder.finishRecordingAsPicture()));
+=======
+#include "config.h"
+#include "platform/graphics/PictureSnapshot.h"
+
+#include "platform/graphics/ImageBuffer.h"
+#include "platform/graphics/ImageSource.h"
+#include "platform/graphics/LoggingCanvas.h"
+#include "platform/graphics/ProfilingCanvas.h"
+#include "platform/graphics/ReplayingCanvas.h"
+#include "platform/image-decoders/ImageDecoder.h"
+#include "platform/image-decoders/ImageFrame.h"
+#include "platform/image-encoders/skia/PNGImageEncoder.h"
+#include "third_party/skia/include/core/SkBitmapDevice.h"
+#include "third_party/skia/include/core/SkPictureRecorder.h"
+#include "third_party/skia/include/core/SkStream.h"
+#include "wtf/HexNumber.h"
+#include "wtf/text/Base64.h"
+#include "wtf/text/TextEncoding.h"
+
+namespace blink {
+
+PictureSnapshot::PictureSnapshot(PassRefPtr<const SkPicture> picture)
+    : m_picture(picture)
+{
+}
+
+static bool decodeBitmap(const void* data, size_t length, SkBitmap* result)
+{
+    RefPtr<SharedBuffer> buffer = SharedBuffer::create(static_cast<const char*>(data), length);
+    OwnPtr<ImageDecoder> imageDecoder = ImageDecoder::create(*buffer, ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileIgnored);
+    if (!imageDecoder)
+        return false;
+    imageDecoder->setData(buffer.get(), true);
+    ImageFrame* frame = imageDecoder->frameBufferAtIndex(0);
+    if (!frame)
+        return true;
+    *result = frame->getSkBitmap();
+    return true;
+}
+
+PassRefPtr<PictureSnapshot> PictureSnapshot::load(const Vector<RefPtr<TilePictureStream>>& tiles)
+{
+    ASSERT(!tiles.isEmpty());
+    Vector<RefPtr<SkPicture>> pictures;
+    pictures.reserveCapacity(tiles.size());
+    FloatRect unionRect;
+    for (const auto& tileStream : tiles) {
+        SkMemoryStream stream(tileStream->data.begin(), tileStream->data.size());
+        RefPtr<SkPicture> picture = adoptRef(SkPicture::CreateFromStream(&stream, decodeBitmap));
+        if (!picture)
+            return nullptr;
+        FloatRect cullRect(picture->cullRect());
+        cullRect.moveBy(tileStream->layerOffset);
+        unionRect.unite(cullRect);
+        pictures.append(picture);
+    }
+    if (tiles.size() == 1)
+        return adoptRef(new PictureSnapshot(pictures[0]));
+    SkPictureRecorder recorder;
+    SkCanvas* canvas = recorder.beginRecording(unionRect.width(), unionRect.height(), 0, 0);
+    for (size_t i = 0; i < pictures.size(); ++i) {
+        canvas->save();
+        canvas->translate(tiles[i]->layerOffset.x() - unionRect.x(), tiles[i]->layerOffset.y() - unionRect.y());
+        pictures[i]->playback(canvas, 0);
+        canvas->restore();
+    }
+    return adoptRef(new PictureSnapshot(adoptRef(recorder.endRecordingAsPicture())));
+>>>>>>> miniblink49
 }
 
 bool PictureSnapshot::isEmpty() const
@@ -124,6 +193,7 @@ bool PictureSnapshot::isEmpty() const
     return m_picture->cullRect().isEmpty();
 }
 
+<<<<<<< HEAD
 std::unique_ptr<Vector<char>> PictureSnapshot::replay(unsigned fromStep,
     unsigned toStep,
     double scale) const
@@ -215,6 +285,65 @@ std::unique_ptr<JSONArray> PictureSnapshot::snapshotCommandLog() const
 //     return canvas.log();
     DebugBreak();
     return nullptr;
+=======
+PassOwnPtr<Vector<char>> PictureSnapshot::replay(unsigned fromStep, unsigned toStep, double scale) const
+{
+    const SkIRect bounds = m_picture->cullRect().roundOut();
+    SkBitmap bitmap;
+    bitmap.allocPixels(SkImageInfo::MakeN32Premul(bounds.width(), bounds.height()));
+    bitmap.eraseARGB(0, 0, 0, 0);
+    {
+        ReplayingCanvas canvas(bitmap, fromStep, toStep);
+        canvas.scale(scale, scale);
+        canvas.resetStepCount();
+        m_picture->playback(&canvas, &canvas);
+    }
+    OwnPtr<Vector<char>> base64Data = adoptPtr(new Vector<char>());
+    Vector<char> encodedImage;
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    if (!PNGImageEncoder::encode(bitmap, reinterpret_cast<Vector<unsigned char>*>(&encodedImage)))
+        return nullptr;
+#endif // MINIBLINK_NOT_IMPLEMENTED
+    notImplemented();
+    base64Encode(encodedImage, *base64Data);
+    return base64Data.release();
+}
+
+PassOwnPtr<PictureSnapshot::Timings> PictureSnapshot::profile(unsigned minRepeatCount, double minDuration, const FloatRect* clipRect) const
+{
+    OwnPtr<PictureSnapshot::Timings> timings = adoptPtr(new PictureSnapshot::Timings());
+    timings->reserveCapacity(minRepeatCount);
+    const SkIRect bounds = m_picture->cullRect().roundOut();
+    SkBitmap bitmap;
+    bitmap.allocPixels(SkImageInfo::MakeN32Premul(bounds.width(), bounds.height()));
+    bitmap.eraseARGB(0, 0, 0, 0);
+
+    double now = WTF::monotonicallyIncreasingTime();
+    double stopTime = now + minDuration;
+    for (unsigned step = 0; step < minRepeatCount || now < stopTime; ++step) {
+        timings->append(Vector<double>());
+        Vector<double>* currentTimings = &timings->last();
+        if (timings->size() > 1)
+            currentTimings->reserveCapacity(timings->begin()->size());
+        ProfilingCanvas canvas(bitmap);
+        if (clipRect) {
+            canvas.clipRect(SkRect::MakeXYWH(clipRect->x(), clipRect->y(), clipRect->width(), clipRect->height()));
+            canvas.resetStepCount();
+        }
+        canvas.setTimings(currentTimings);
+        m_picture->playback(&canvas);
+        now = WTF::monotonicallyIncreasingTime();
+    }
+    return timings.release();
+}
+
+PassRefPtr<JSONArray> PictureSnapshot::snapshotCommandLog() const
+{
+    const SkIRect bounds = m_picture->cullRect().roundOut();
+    LoggingCanvas canvas(bounds.width(), bounds.height());
+    m_picture->playback(&canvas);
+    return canvas.log();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

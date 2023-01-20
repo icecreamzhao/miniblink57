@@ -63,7 +63,12 @@
  */
 
 /* event notification */
+<<<<<<< HEAD
 typedef enum iJIT_jvm_event {
+=======
+typedef enum iJIT_jvm_event
+{
+>>>>>>> miniblink49
 
     /* shutdown  */
 
@@ -78,7 +83,11 @@ typedef enum iJIT_jvm_event {
      * issued after method code jitted into memory but before code is executed
      * EventSpecificData is an iJIT_Method_Load
      */
+<<<<<<< HEAD
     iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED = 13,
+=======
+    iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED=13,
+>>>>>>> miniblink49
 
     /* issued before unload. Method code will no longer be executed, but code
      * and info are still in memory. The VTune profiler may capture method
@@ -101,9 +110,16 @@ typedef enum iJIT_jvm_event {
     iJVM_EVENT_TYPE_LEAVE_NIDS
 } iJIT_JVM_EVENT;
 
+<<<<<<< HEAD
 typedef enum _iJIT_ModeFlags {
     /* No need to Notify VTune, since VTune is not running */
     iJIT_NO_NOTIFICATIONS = 0x0000,
+=======
+typedef enum _iJIT_ModeFlags
+{
+    /* No need to Notify VTune, since VTune is not running */
+    iJIT_NO_NOTIFICATIONS          = 0x0000,
+>>>>>>> miniblink49
 
     /* when turned on the jit must call
      * iJIT_NotifyEvent
@@ -112,7 +128,11 @@ typedef enum _iJIT_ModeFlags {
      * )
      * for all the method already jitted
      */
+<<<<<<< HEAD
     iJIT_BE_NOTIFY_ON_LOAD = 0x0001,
+=======
+    iJIT_BE_NOTIFY_ON_LOAD         = 0x0001,
+>>>>>>> miniblink49
 
     /* when turned on the jit must call
      * iJIT_NotifyEvent
@@ -120,7 +140,11 @@ typedef enum _iJIT_ModeFlags {
      *     iJVM_EVENT_TYPE_METHOD_UNLOAD_FINISHED,
      *  ) for all the method that are unloaded
      */
+<<<<<<< HEAD
     iJIT_BE_NOTIFY_ON_UNLOAD = 0x0002,
+=======
+    iJIT_BE_NOTIFY_ON_UNLOAD       = 0x0002,
+>>>>>>> miniblink49
 
     /* when turned on the jit must instrument all
      * the currently jited code with calls on
@@ -132,6 +156,7 @@ typedef enum _iJIT_ModeFlags {
      * the currently jited code with calls
      * on method exit
      */
+<<<<<<< HEAD
     iJIT_BE_NOTIFY_ON_METHOD_EXIT = 0x0008
 
 } iJIT_ModeFlags;
@@ -140,19 +165,43 @@ typedef enum _iJIT_ModeFlags {
 typedef enum _iJIT_IsProfilingActiveFlags {
     /* No profiler is running. Currently not used */
     iJIT_NOTHING_RUNNING = 0x0000,
+=======
+    iJIT_BE_NOTIFY_ON_METHOD_EXIT  = 0x0008
+
+} iJIT_ModeFlags;
+
+
+ /* Flags used by iJIT_IsProfilingActive() */
+typedef enum _iJIT_IsProfilingActiveFlags
+{
+    /* No profiler is running. Currently not used */
+    iJIT_NOTHING_RUNNING           = 0x0000,
+>>>>>>> miniblink49
 
     /* Sampling is running. This is the default value
      * returned by iJIT_IsProfilingActive()
      */
+<<<<<<< HEAD
     iJIT_SAMPLING_ON = 0x0001,
 
     /* Call Graph is running */
     iJIT_CALLGRAPH_ON = 0x0002
+=======
+    iJIT_SAMPLING_ON               = 0x0001,
+
+      /* Call Graph is running */
+    iJIT_CALLGRAPH_ON              = 0x0002
+>>>>>>> miniblink49
 
 } iJIT_IsProfilingActiveFlags;
 
 /* Enumerator for the environment of methods*/
+<<<<<<< HEAD
 typedef enum _iJDEnvironmentType {
+=======
+typedef enum _iJDEnvironmentType
+{
+>>>>>>> miniblink49
     iJDE_JittingAPI = 2
 } iJDEnvironmentType;
 
@@ -164,6 +213,7 @@ typedef enum _iJDEnvironmentType {
  * iJVM_EVENT_TYPE_METHOD_UNLOAD_START
  */
 
+<<<<<<< HEAD
 typedef struct _iJIT_Method_Id {
     /* Id of the method (same as the one passed in
    * the iJIT_Method_Load struct
@@ -171,6 +221,17 @@ typedef struct _iJIT_Method_Id {
     unsigned int method_id;
 
 } * piJIT_Method_Id, iJIT_Method_Id;
+=======
+typedef struct _iJIT_Method_Id
+{
+   /* Id of the method (same as the one passed in
+   * the iJIT_Method_Load struct
+   */
+    unsigned int       method_id;
+
+} *piJIT_Method_Id, iJIT_Method_Id;
+
+>>>>>>> miniblink49
 
 /* structure for the events:
  * iJVM_EVENT_TYPE_ENTER_NIDS,
@@ -178,6 +239,7 @@ typedef struct _iJIT_Method_Id {
  * iJVM_EVENT_TYPE_EXCEPTION_OCCURRED_NIDS
  */
 
+<<<<<<< HEAD
 typedef struct _iJIT_Method_NIDS {
     /* unique method ID */
     unsigned int method_id;
@@ -188,11 +250,25 @@ typedef struct _iJIT_Method_NIDS {
     /* method name (just the method, without the class) */
     char* method_name;
 } * piJIT_Method_NIDS, iJIT_Method_NIDS;
+=======
+typedef struct _iJIT_Method_NIDS
+{
+    /* unique method ID */
+    unsigned int       method_id;
+
+    /* NOTE: no need to fill this field, it's filled by VTune */
+    unsigned int       stack_id;
+
+    /* method name (just the method, without the class) */
+    char*              method_name;
+} *piJIT_Method_NIDS, iJIT_Method_NIDS;
+>>>>>>> miniblink49
 
 /* structures for the events:
  * iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED
  */
 
+<<<<<<< HEAD
 typedef struct _LineNumberInfo {
     /* x86 Offset from the beginning of the method*/
     unsigned int Offset;
@@ -205,15 +281,36 @@ typedef struct _LineNumberInfo {
 typedef struct _iJIT_Method_Load {
     /* unique method ID - can be any unique value, (except 0 - 999) */
     unsigned int method_id;
+=======
+typedef struct _LineNumberInfo
+{
+  /* x86 Offset from the beginning of the method*/
+  unsigned int Offset;
+
+  /* source line number from the beginning of the source file */
+  unsigned int LineNumber;
+
+} *pLineNumberInfo, LineNumberInfo;
+
+typedef struct _iJIT_Method_Load
+{
+    /* unique method ID - can be any unique value, (except 0 - 999) */
+    unsigned int        method_id;
+>>>>>>> miniblink49
 
     /* method name (can be with or without the class and signature, in any case
      * the class name will be added to it)
      */
+<<<<<<< HEAD
     char* method_name;
+=======
+    char*               method_name;
+>>>>>>> miniblink49
 
     /* virtual address of that method - This determines the method range for the
      * iJVM_EVENT_TYPE_ENTER/LEAVE_METHOD_ADDR events
      */
+<<<<<<< HEAD
     void* method_load_address;
 
     /* Size in memory - Must be exact */
@@ -244,6 +341,38 @@ typedef struct _iJIT_Method_Load {
     iJDEnvironmentType env;
 
 } * piJIT_Method_Load, iJIT_Method_Load;
+=======
+    void*               method_load_address;
+
+    /* Size in memory - Must be exact */
+    unsigned int        method_size;
+
+    /* Line Table size in number of entries - Zero if none */
+    unsigned int        line_number_size;
+
+    /* Pointer to the beginning of the line numbers info array */
+    pLineNumberInfo     line_number_table;
+
+    /* unique class ID */
+    unsigned int        class_id;
+
+    /* class file name */
+    char*               class_file_name;
+
+    /* source file name */
+    char*               source_file_name;
+
+    /* bits supplied by the user for saving in the JIT file */
+    void*               user_data;
+
+    /* the size of the user data buffer */
+    unsigned int        user_data_size;
+
+    /* NOTE: no need to fill this field, it's filled by VTune */
+    iJDEnvironmentType  env;
+
+} *piJIT_Method_Load, iJIT_Method_Load;
+>>>>>>> miniblink49
 
 /* API Functions */
 #ifdef __cplusplus
@@ -251,6 +380,7 @@ extern "C" {
 #endif
 
 #ifndef CDECL
+<<<<<<< HEAD
 #if defined WIN32 || defined _WIN32
 #define CDECL __cdecl
 #else /* defined WIN32 || defined _WIN32 */
@@ -260,11 +390,23 @@ extern "C" {
 #define CDECL __attribute__((cdecl))
 #endif /* _M_X64 || _M_AMD64 || __x86_64__ */
 #endif /* defined WIN32 || defined _WIN32 */
+=======
+#  if defined WIN32 || defined _WIN32
+#    define CDECL __cdecl
+#  else /* defined WIN32 || defined _WIN32 */
+#    if defined _M_X64 || defined _M_AMD64 || defined __x86_64__
+#      define CDECL /* not actual on x86_64 platform */
+#    else  /* _M_X64 || _M_AMD64 || __x86_64__ */
+#      define CDECL __attribute__ ((cdecl))
+#    endif /* _M_X64 || _M_AMD64 || __x86_64__ */
+#  endif /* defined WIN32 || defined _WIN32 */
+>>>>>>> miniblink49
 #endif /* CDECL */
 
 #define JITAPI CDECL
 
 /* called when the settings are changed with new settings */
+<<<<<<< HEAD
 typedef void (*iJIT_ModeChangedEx)(void* UserData, iJIT_ModeFlags Flags);
 
 int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void* EventSpecificData);
@@ -272,6 +414,15 @@ int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void* EventSpecificData);
 /* The new mode call back routine */
 void JITAPI iJIT_RegisterCallbackEx(void* userdata,
     iJIT_ModeChangedEx NewModeCallBackFuncEx);
+=======
+typedef void (*iJIT_ModeChangedEx)(void *UserData, iJIT_ModeFlags Flags);
+
+int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventSpecificData);
+
+/* The new mode call back routine */
+void JITAPI iJIT_RegisterCallbackEx(void *userdata,
+                                    iJIT_ModeChangedEx NewModeCallBackFuncEx);
+>>>>>>> miniblink49
 
 iJIT_IsProfilingActiveFlags JITAPI iJIT_IsProfilingActive(void);
 

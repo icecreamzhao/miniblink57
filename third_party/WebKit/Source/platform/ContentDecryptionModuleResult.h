@@ -15,12 +15,17 @@ class WebContentDecryptionModule;
 class WebString;
 
 // Used to notify completion of a CDM operation.
+<<<<<<< HEAD
 class ContentDecryptionModuleResult
     : public GarbageCollectedFinalized<ContentDecryptionModuleResult> {
+=======
+class ContentDecryptionModuleResult : public GarbageCollectedFinalized<ContentDecryptionModuleResult> {
+>>>>>>> miniblink49
 public:
     virtual ~ContentDecryptionModuleResult() { }
 
     virtual void complete() = 0;
+<<<<<<< HEAD
     virtual void completeWithContentDecryptionModule(
         WebContentDecryptionModule*)
         = 0;
@@ -31,6 +36,11 @@ public:
         unsigned long systemCode,
         const WebString&)
         = 0;
+=======
+    virtual void completeWithContentDecryptionModule(WebContentDecryptionModule*) = 0;
+    virtual void completeWithSession(WebContentDecryptionModuleResult::SessionStatus) = 0;
+    virtual void completeWithError(WebContentDecryptionModuleException, unsigned long systemCode, const WebString&) = 0;
+>>>>>>> miniblink49
 
     WebContentDecryptionModuleResult result()
     {

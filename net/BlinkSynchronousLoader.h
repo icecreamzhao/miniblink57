@@ -7,10 +7,10 @@ public:
     BlinkSynchronousLoader(blink::WebURLError&, blink::WebURLResponse&, Vector<char>&);
     ~BlinkSynchronousLoader();
 
-    void didReceiveResponse(const blink::WebURLResponse&) override;
-    void didReceiveData(const char* data, int dataLength) override;
-    void didFinishLoading(double finishTime, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) override;
-    void didFail(const blink::WebURLError&, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) override;
+    virtual void didReceiveResponse(blink::WebURLLoader*, const blink::WebURLResponse&);
+    virtual void didReceiveData(blink::WebURLLoader*, const char* data, int dataLength, int encodedDataLength);
+    virtual void didFinishLoading(blink::WebURLLoader* loader, double finishTime, int64_t totalEncodedDataLength);
+    virtual void didFail(blink::WebURLLoader*, const blink::WebURLError&);
 
 private:
     blink::WebURLError& m_error;
@@ -30,21 +30,21 @@ inline BlinkSynchronousLoader::~BlinkSynchronousLoader()
 
 }
 
-inline void BlinkSynchronousLoader::didReceiveResponse(const blink::WebURLResponse& response)
+inline void BlinkSynchronousLoader::didReceiveResponse(blink::WebURLLoader*, const blink::WebURLResponse& response)
 {
     m_response = response;
 }
 
-inline void BlinkSynchronousLoader::didReceiveData(const char* data, int dataLength)
+inline void BlinkSynchronousLoader::didReceiveData(blink::WebURLLoader*, const char* data, int dataLength, int encodedDataLength)
 {
     m_data.append(data, dataLength);
 }
 
-inline void BlinkSynchronousLoader::didFinishLoading(double finishTime, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength)
+inline void BlinkSynchronousLoader::didFinishLoading(blink::WebURLLoader* loader, double finishTime, int64_t totalEncodedDataLength)
 {
 }
 
-inline void BlinkSynchronousLoader::didFail(const blink::WebURLError& error, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength)
+inline void BlinkSynchronousLoader::didFail(blink::WebURLLoader*, const blink::WebURLError& error)
 {
     m_error = error;
 }

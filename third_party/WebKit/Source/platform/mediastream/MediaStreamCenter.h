@@ -34,10 +34,16 @@
 #include "platform/PlatformExport.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebMediaStreamCenterClient.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -46,12 +52,19 @@ class MediaStreamComponent;
 class MediaStreamDescriptor;
 class WebMediaStream;
 class WebMediaStreamCenter;
+<<<<<<< HEAD
 
 class PLATFORM_EXPORT MediaStreamCenter final
     : public WebMediaStreamCenterClient {
     USING_FAST_MALLOC(MediaStreamCenter);
     WTF_MAKE_NONCOPYABLE(MediaStreamCenter);
 
+=======
+class WebMediaStreamTrack;
+
+class PLATFORM_EXPORT MediaStreamCenter final : public WebMediaStreamCenterClient {
+    WTF_MAKE_NONCOPYABLE(MediaStreamCenter);
+>>>>>>> miniblink49
 public:
     ~MediaStreamCenter() override;
 
@@ -59,10 +72,15 @@ public:
 
     void didCreateMediaStreamTrack(MediaStreamComponent*);
     void didSetMediaStreamTrackEnabled(MediaStreamComponent*);
+<<<<<<< HEAD
     void didSetContentHint(MediaStreamComponent*);
     bool didStopMediaStreamTrack(MediaStreamComponent*);
     std::unique_ptr<AudioSourceProvider> createWebAudioSourceFromMediaStreamTrack(
         MediaStreamComponent*);
+=======
+    bool didStopMediaStreamTrack(MediaStreamComponent*);
+    PassOwnPtr<AudioSourceProvider> createWebAudioSourceFromMediaStreamTrack(MediaStreamComponent*);
+>>>>>>> miniblink49
 
     void didCreateMediaStream(MediaStreamDescriptor*);
     void didCreateMediaStreamAndTracks(MediaStreamDescriptor*);
@@ -76,7 +94,11 @@ public:
 private:
     MediaStreamCenter();
 
+<<<<<<< HEAD
     std::unique_ptr<WebMediaStreamCenter> m_private;
+=======
+    OwnPtr<WebMediaStreamCenter> m_private;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

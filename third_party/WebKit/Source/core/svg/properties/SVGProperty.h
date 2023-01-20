@@ -34,6 +34,8 @@
 #include "core/svg/properties/SVGPropertyInfo.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -41,38 +43,42 @@ namespace blink {
 class SVGElement;
 class SVGAnimationElement;
 
-class SVGPropertyBase : public GarbageCollectedFinalized<SVGPropertyBase> {
+class SVGPropertyBase : public RefCountedWillBeGarbageCollectedFinalized<SVGPropertyBase> {
     WTF_MAKE_NONCOPYABLE(SVGPropertyBase);
 
 public:
     // Properties do not have a primitive type by default
     typedef void PrimitiveType;
 
-    virtual ~SVGPropertyBase() { }
+    virtual ~SVGPropertyBase()
+    {
+#if !ENABLE(OILPAN)
+        // Oilpan: a property can legitimately be swept out along with its list,
+        // hence this cannot be made to hold.
+        ASSERT(!m_ownerList);
+#endif
+    }
 
     // FIXME: remove this in WebAnimations transition.
-    // This is used from SVGAnimatedNewPropertyAnimator for its animate-by-string
-    // implementation.
-    virtual SVGPropertyBase* cloneForAnimation(const String&) const = 0;
+    // This is used from SVGAnimatedNewPropertyAnimator for its animate-by-string implementation.
+    virtual PassRefPtrWillBeRawPtr<SVGPropertyBase> cloneForAnimation(const String&) const = 0;
 
     virtual String valueAsString() const = 0;
 
-    // FIXME: remove below and just have this inherit AnimatableValue in
-    // WebAnimations transition.
-    virtual void add(SVGPropertyBase*, SVGElement*) = 0;
-    virtual void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement*)
-        = 0;
-    virtual float calculateDistance(SVGPropertyBase* to, SVGElement*) = 0;
+    // FIXME: remove below and just have this inherit AnimatableValue in WebAnimations transition.
+    virtual void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) = 0;
+    virtual void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) = 0;
+    virtual float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) = 0;
 
-    virtual AnimatedPropertyType type() const = 0;
+    AnimatedPropertyType type()
+    {
+        return m_type;
+    }
 
-    SVGPropertyBase* ownerList() const { return m_ownerList; }
+    SVGPropertyBase* ownerList() const
+    {
+        return m_ownerList;
+    }
 
     void setOwnerList(SVGPropertyBase* ownerList)
     {
@@ -82,27 +88,24 @@ public:
         m_ownerList = ownerList;
     }
 
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_ownerList);
+    }
 
 protected:
-    SVGPropertyBase()
-        : m_ownerList(nullptr)
+    explicit SVGPropertyBase(AnimatedPropertyType type)
+        : m_type(type)
+        , m_ownerList(nullptr)
     {
     }
 
 private:
-    // Oilpan: the back reference to the owner should be a Member, but this can
-    // create cycles when SVG properties meet the off-heap InterpolationValue
-    // hierarchy.  Not tracing it is safe, albeit an undesirable state of affairs.
-    // See http://crbug.com/528275 for the detail.
-    UntracedMember<SVGPropertyBase> m_ownerList;
+    const AnimatedPropertyType m_type;
+
+    RawPtrWillBeMember<SVGPropertyBase> m_ownerList;
 };
 
-#define DEFINE_SVG_PROPERTY_TYPE_CASTS(thisType)        \
-    DEFINE_TYPE_CASTS(thisType, SVGPropertyBase, value, \
-        value->type() == thisType::classType(),         \
-        value.type() == thisType::classType());
-
-} // namespace blink
+}
 
 #endif // SVGProperty_h

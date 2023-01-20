@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkDrawOval.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -20,8 +24,12 @@ const SkMemberInfo SkOval::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkOval);
 
+<<<<<<< HEAD
 bool SkOval::draw(SkAnimateMaker& maker)
 {
+=======
+bool SkOval::draw(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawOval(fRect, *maker.fPaint);
     return false;

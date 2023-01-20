@@ -10,17 +10,16 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef PointerLockController_h
@@ -38,12 +37,11 @@ class Document;
 class Page;
 class PlatformMouseEvent;
 
-class CORE_EXPORT PointerLockController final
-    : public GarbageCollected<PointerLockController> {
+class CORE_EXPORT PointerLockController final : public NoBaseWillBeGarbageCollected<PointerLockController> {
     WTF_MAKE_NONCOPYABLE(PointerLockController);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(PointerLockController);
 public:
-    static PointerLockController* create(Page*);
+    static PassOwnPtrWillBeRawPtr<PointerLockController> create(Page*);
 
     void requestPointerLock(Element* target);
     void requestPointerUnlock();
@@ -55,8 +53,7 @@ public:
     void didAcquirePointerLock();
     void didNotAcquirePointerLock();
     void didLosePointerLock();
-    void dispatchLockedMouseEvent(const PlatformMouseEvent&,
-        const AtomicString& eventType);
+    void dispatchLockedMouseEvent(const PlatformMouseEvent&, const AtomicString& eventType);
 
     DECLARE_TRACE();
 
@@ -66,10 +63,10 @@ private:
     void enqueueEvent(const AtomicString& type, Element*);
     void enqueueEvent(const AtomicString& type, Document*);
 
-    Member<Page> m_page;
+    RawPtrWillBeMember<Page> m_page;
     bool m_lockPending;
-    Member<Element> m_element;
-    Member<Document> m_documentOfRemovedElementWhileWaitingForUnlock;
+    RefPtrWillBeMember<Element> m_element;
+    RefPtrWillBeMember<Document> m_documentOfRemovedElementWhileWaitingForUnlock;
 };
 
 } // namespace blink

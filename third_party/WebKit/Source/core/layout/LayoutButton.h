@@ -21,51 +21,39 @@
 #ifndef LayoutButton_h
 #define LayoutButton_h
 
-#include "core/editing/EditingUtilities.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/layout/LayoutFlexibleBox.h"
 
 namespace blink {
 
-// LayoutButtons are just like normal flexboxes except that they will generate
-// an anonymous block child.
-// For inputs, they will also generate an anonymous LayoutText and keep its
-// style and content up to date as the button changes.
+// LayoutButtons are just like normal flexboxes except that they will generate an anonymous block child.
+// For inputs, they will also generate an anonymous LayoutText and keep its style and content up
+// to date as the button changes.
 class LayoutButton final : public LayoutFlexibleBox {
 public:
     explicit LayoutButton(Element*);
-    ~LayoutButton() override;
+    virtual ~LayoutButton();
 
-    const char* name() const override { return "LayoutButton"; }
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectLayoutButton || LayoutFlexibleBox::isOfType(type);
-    }
+    virtual const char* name() const override { return "LayoutButton"; }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectLayoutButton || LayoutFlexibleBox::isOfType(type); }
 
-    bool canBeSelectionLeaf() const override
-    {
-        return node() && hasEditableStyle(*node());
-    }
+    virtual bool canBeSelectionLeaf() const override { return node() && node()->hasEditableStyle(); }
+    virtual bool canCollapseAnonymousBlockChild() const override { return true; }
 
-    void addChild(LayoutObject* newChild,
-        LayoutObject* beforeChild = nullptr) override;
-    void removeChild(LayoutObject*) override;
-    void removeLeftoverAnonymousBlock(LayoutBlock*) override { }
-    bool createsAnonymousWrapper() const override { return true; }
+    virtual void addChild(LayoutObject* newChild, LayoutObject *beforeChild = nullptr) override;
+    virtual void removeChild(LayoutObject*) override;
+    virtual void removeLeftoverAnonymousBlock(LayoutBlock*) override { }
+    virtual bool createsAnonymousWrapper() const override { return true; }
 
-    bool hasControlClip() const override;
-    LayoutRect controlClipRect(const LayoutPoint&) const override;
+    virtual bool hasControlClip() const override;
+    virtual LayoutRect controlClipRect(const LayoutPoint&) const override;
 
-    int baselinePosition(FontBaseline,
-        bool firstLine,
-        LineDirectionMode,
-        LinePositionMode) const override;
+    virtual int baselinePosition(FontBaseline, bool firstLine, LineDirectionMode, LinePositionMode) const override;
 
 private:
-    void updateAnonymousChildStyle(const LayoutObject& child,
-        ComputedStyle& childStyle) const override;
+    virtual void updateAnonymousChildStyle(const LayoutObject& child, ComputedStyle& childStyle) const override;
 
-    bool hasLineIfEmpty() const override { return isHTMLInputElement(node()); }
+    virtual bool hasLineIfEmpty() const override { return isHTMLInputElement(node()); }
 
     LayoutBlock* m_inner;
 };

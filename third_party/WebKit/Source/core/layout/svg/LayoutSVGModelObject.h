@@ -45,62 +45,43 @@ class LayoutSVGModelObject : public LayoutObject {
 public:
     explicit LayoutSVGModelObject(SVGElement*);
 
-    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
+    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
 
-    LayoutRect absoluteVisualRect() const override;
-    FloatRect visualRectInLocalSVGCoordinates() const override
-    {
-        return m_localVisualRect;
-    }
+    virtual LayoutRect clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* = nullptr) const override;
 
-    void absoluteRects(Vector<IntRect>&,
-        const LayoutPoint& accumulatedOffset) const final;
-    void absoluteQuads(Vector<FloatQuad>&,
-        MapCoordinatesFlags mode = 0) const override;
-    FloatRect localBoundingBoxRectForAccessibility() const final;
+    virtual FloatRect paintInvalidationRectInLocalCoordinates() const override final { return m_paintInvalidationBoundingBox; }
 
-    void mapLocalToAncestor(const LayoutBoxModelObject* ancestor,
-        TransformState&,
-        MapCoordinatesFlags = ApplyContainerFlip) const final;
-    void mapAncestorToLocal(const LayoutBoxModelObject* ancestor,
-        TransformState&,
-        MapCoordinatesFlags = ApplyContainerFlip) const final;
-    const LayoutObject* pushMappingToContainer(
-        const LayoutBoxModelObject* ancestorToStopAt,
-        LayoutGeometryMap&) const final;
-    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
+    virtual void absoluteRects(Vector<IntRect>&, const LayoutPoint& accumulatedOffset) const override final;
+    virtual void absoluteQuads(Vector<FloatQuad>&, bool* wasFixed) const override;
 
-    void computeLayerHitTestRects(LayerHitTestRects&) const final;
+    virtual void mapLocalToContainer(const LayoutBoxModelObject* paintInvalidationContainer, TransformState&, MapCoordinatesFlags = ApplyContainerFlip, bool* wasFixed = nullptr, const PaintInvalidationState* = nullptr) const override final;
+    virtual const LayoutObject* pushMappingToContainer(const LayoutBoxModelObject* ancestorToStopAt, LayoutGeometryMap&) const override final;
+    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
+
+    virtual void computeLayerHitTestRects(LayerHitTestRects&) const override final;
 
     SVGElement* element() const { return toSVGElement(LayoutObject::node()); }
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSVG || LayoutObject::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVG || LayoutObject::isOfType(type); }
 
 protected:
-    void addLayerHitTestRects(LayerHitTestRects&,
-        const PaintLayer* currentCompositedLayer,
-        const LayoutPoint& layerOffset,
-        const LayoutRect& containerRect) const final;
-    void willBeDestroyed() override;
+    virtual void addLayerHitTestRects(LayerHitTestRects&, const DeprecatedPaintLayer* currentCompositedLayer, const LayoutPoint& layerOffset, const LayoutRect& containerRect) const override final;
+    virtual void willBeDestroyed() override;
 
 private:
     // LayoutSVGModelObject subclasses should use element() instead.
     void node() const = delete;
 
     // This method should never be called, SVG uses a different nodeAtPoint method
-    bool nodeAtPoint(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        HitTestAction) final;
-    IntRect absoluteElementBoundingBoxRect() const final;
+    virtual bool nodeAtPoint(HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) override final;
+    virtual IntRect absoluteFocusRingBoundingBoxRect() const override final;
+
+    virtual void invalidateTreeIfNeeded(PaintInvalidationState&) override final;
 
 protected:
-    FloatRect m_localVisualRect;
+    FloatRect m_paintInvalidationBoundingBox;
 };
 
-} // namespace blink
+}
 
 #endif

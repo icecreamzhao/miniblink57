@@ -7,14 +7,13 @@
 
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
-#include <memory>
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 class DOMTimer;
 class ExecutionContext;
 class ScheduledAction;
-class WebTaskRunner;
 
 // Maintains a set of DOMTimers for a given page or
 // worker. DOMTimerCoordinator assigns IDs to timers; these IDs are
@@ -22,23 +21,22 @@ class WebTaskRunner;
 // also tracks recursive creation or iterative scheduling of timers,
 // which is used as a signal for throttling repetitive timers.
 class DOMTimerCoordinator {
-    DISALLOW_NEW();
+    DISALLOW_ALLOCATION();
     WTF_MAKE_NONCOPYABLE(DOMTimerCoordinator);
-
 public:
-    explicit DOMTimerCoordinator(RefPtr<WebTaskRunner>);
+    DOMTimerCoordinator();
 
     // Creates and installs a new timer. Returns the assigned ID.
-    int installNewTimeout(ExecutionContext*,
-        ScheduledAction*,
-        int timeout,
-        bool singleShot);
+    int installNewTimeout(ExecutionContext*, PassOwnPtrWillBeRawPtr<ScheduledAction>, int timeout, bool singleShot);
 
     // Removes and disposes the timer with the specified ID, if any. This may
     // destroy the timer.
-    DOMTimer* removeTimeoutByID(int id);
+    void removeTimeoutByID(int id);
 
-    bool hasInstalledTimeout() const;
+    // Notifies registered timers that
+    // ExecutionContext::timerAlignmentInterval has changed so that
+    // timers can adjust their schedule to the new alignment interval.
+    void didChangeTimerAlignmentInterval();
 
     // Timers created during the execution of other timers, and
     // repeating timers, are throttled. Timer nesting level tracks the
@@ -51,21 +49,16 @@ public:
     // deeper timer nesting level, see DOMTimer::DOMTimer.
     void setTimerNestingLevel(int level) { m_timerNestingLevel = level; }
 
-    void setTimerTaskRunner(RefPtr<WebTaskRunner>);
-
-    RefPtr<WebTaskRunner> timerTaskRunner() const { return m_timerTaskRunner; }
-
     DECLARE_TRACE(); // Oilpan.
 
 private:
     int nextID();
 
-    using TimeoutMap = HeapHashMap<int, Member<DOMTimer>>;
+    using TimeoutMap = WillBeHeapHashMap<int, RefPtrWillBeMember<DOMTimer>>;
     TimeoutMap m_timers;
 
     int m_circularSequentialID;
     int m_timerNestingLevel;
-    RefPtr<WebTaskRunner> m_timerTaskRunner;
 };
 
 } // namespace blink

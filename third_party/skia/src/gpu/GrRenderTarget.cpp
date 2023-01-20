@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,15 +9,23 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "GrRenderTarget.h"
 
 #include "GrContext.h"
 #include "GrDrawContext.h"
+<<<<<<< HEAD
 #include "GrDrawTarget.h"
+=======
+>>>>>>> miniblink49
 #include "GrGpu.h"
 #include "GrRenderTargetPriv.h"
 #include "GrStencilAttachment.h"
 
+<<<<<<< HEAD
 GrRenderTarget::~GrRenderTarget()
 {
     if (fLastDrawTarget) {
@@ -31,15 +43,28 @@ void GrRenderTarget::discard()
     }
 
     sk_sp<GrDrawContext> drawContext(context->drawContext(sk_ref_sp(this)));
+=======
+void GrRenderTarget::discard() {
+    // go through context so that all necessary flushing occurs
+    GrContext* context = this->getContext();
+    GrDrawContext* drawContext = context ? context->drawContext() : NULL;
+>>>>>>> miniblink49
     if (!drawContext) {
         return;
     }
 
+<<<<<<< HEAD
     drawContext->discard();
 }
 
 void GrRenderTarget::flagAsNeedingResolve(const SkIRect* rect)
 {
+=======
+    drawContext->discard(this);
+}
+
+void GrRenderTarget::flagAsNeedingResolve(const SkIRect* rect) {
+>>>>>>> miniblink49
     if (kCanResolve_ResolveType == getResolveType()) {
         if (rect) {
             fResolveRect.join(*rect);
@@ -52,8 +77,12 @@ void GrRenderTarget::flagAsNeedingResolve(const SkIRect* rect)
     }
 }
 
+<<<<<<< HEAD
 void GrRenderTarget::overrideResolveRect(const SkIRect rect)
 {
+=======
+void GrRenderTarget::overrideResolveRect(const SkIRect rect) {
+>>>>>>> miniblink49
     fResolveRect = rect;
     if (fResolveRect.isEmpty()) {
         fResolveRect.setLargestInverted();
@@ -64,13 +93,19 @@ void GrRenderTarget::overrideResolveRect(const SkIRect rect)
     }
 }
 
+<<<<<<< HEAD
 void GrRenderTarget::onRelease()
 {
     SkSafeSetNull(fStencilAttachment);
+=======
+void GrRenderTarget::onRelease() {
+    this->renderTargetPriv().didAttachStencilAttachment(NULL);
+>>>>>>> miniblink49
 
     INHERITED::onRelease();
 }
 
+<<<<<<< HEAD
 void GrRenderTarget::onAbandon()
 {
     SkSafeSetNull(fStencilAttachment);
@@ -78,10 +113,15 @@ void GrRenderTarget::onAbandon()
     // The contents of this renderTarget are gone/invalid. It isn't useful to point back
     // the creating drawTarget.
     this->setLastDrawTarget(nullptr);
+=======
+void GrRenderTarget::onAbandon() {
+    this->renderTargetPriv().didAttachStencilAttachment(NULL);
+>>>>>>> miniblink49
 
     INHERITED::onAbandon();
 }
 
+<<<<<<< HEAD
 void GrRenderTarget::setLastDrawTarget(GrDrawTarget* dt)
 {
     if (fLastDrawTarget) {
@@ -129,4 +169,20 @@ GrRenderTarget::SampleConfig GrRenderTarget::ComputeSampleConfig(const GrCaps& c
     return (caps.usesMixedSamples() && sampleCnt > 0)
         ? GrRenderTarget::kStencil_SampleConfig
         : GrRenderTarget::kUnified_SampleConfig;
+=======
+///////////////////////////////////////////////////////////////////////////////
+
+void GrRenderTargetPriv::didAttachStencilAttachment(GrStencilAttachment* stencilAttachment) {
+    SkRefCnt_SafeAssign(fRenderTarget->fStencilAttachment, stencilAttachment);
+}
+
+GrStencilAttachment* GrRenderTargetPriv::attachStencilAttachment() const {
+    if (fRenderTarget->fStencilAttachment) {
+        return fRenderTarget->fStencilAttachment;
+    }
+    if (!fRenderTarget->wasDestroyed() && fRenderTarget->canAttemptStencilAttachment()) {
+        fRenderTarget->getGpu()->attachStencilAttachmentToRenderTarget(fRenderTarget);
+    }
+    return fRenderTarget->fStencilAttachment;
+>>>>>>> miniblink49
 }

@@ -23,6 +23,7 @@
  * DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/text/LocaleMac.h"
 
 #include "platform/DateComponents.h"
@@ -33,11 +34,29 @@
 #include "wtf/MathExtras.h"
 #include "wtf/text/CString.h"
 #include <memory>
+=======
+#include "config.h"
+#include "platform/text/LocaleMac.h"
+
+#include "platform/DateComponents.h"
+#include "platform/TestingPlatformSupport.h"
+#include "public/platform/Platform.h"
+#include "wtf/DateMath.h"
+#include "wtf/MathExtras.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/text/CString.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
 class LocalePlatformSupport : public TestingPlatformSupport {
 public:
+<<<<<<< HEAD
+=======
+    LocalePlatformSupport() : TestingPlatformSupport(TestingPlatformSupport::Config()) { }
+
+>>>>>>> miniblink49
     WebString queryLocalizedString(WebLocalizedString::Name /*name*/) override
     {
         return WebString::fromUTF8("Week $2, $1");
@@ -47,6 +66,7 @@ public:
 class LocaleMacTest : public ::testing::Test {
 protected:
     enum {
+<<<<<<< HEAD
         January = 0,
         February,
         March,
@@ -72,16 +92,35 @@ protected:
     };
 
     DateComponents getDateComponents(int year, int month, int day)
+=======
+        January = 0, February, March,
+        April, May, June,
+        July, August, September,
+        October, November, December,
+    };
+
+    enum {
+        Sunday = 0, Monday, Tuesday,
+        Wednesday, Thursday, Friday,
+        Saturday,
+    };
+
+    DateComponents dateComponents(int year, int month, int day)
+>>>>>>> miniblink49
     {
         DateComponents date;
         date.setMillisecondsSinceEpochForDate(msForDate(year, month, day));
         return date;
     }
 
+<<<<<<< HEAD
     DateComponents getTimeComponents(int hour,
         int minute,
         int second,
         int millisecond)
+=======
+    DateComponents timeComponents(int hour, int minute, int second, int millisecond)
+>>>>>>> miniblink49
     {
         DateComponents date;
         date.setMillisecondsSinceMidnight(hour * msPerHour + minute * msPerMinute + second * msPerSecond + millisecond);
@@ -95,13 +134,18 @@ protected:
 
     String formatWeek(const String& localeString, const String& isoString)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         DateComponents date;
         unsigned end;
         date.parseWeek(isoString, 0, end);
         return locale->formatDateTime(date);
     }
 
+<<<<<<< HEAD
     String formatMonth(const String& localeString,
         const String& isoString,
         bool useShortFormat)
@@ -113,10 +157,20 @@ protected:
         return locale->formatDateTime(
             date,
             (useShortFormat ? Locale::FormatTypeShort : Locale::FormatTypeMedium));
+=======
+    String formatMonth(const String& localeString, const String& isoString, bool useShortFormat)
+    {
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+        DateComponents date;
+        unsigned end;
+        date.parseMonth(isoString, 0, end);
+        return locale->formatDateTime(date, (useShortFormat ? Locale::FormatTypeShort : Locale::FormatTypeMedium));
+>>>>>>> miniblink49
     }
 
     String formatDate(const String& localeString, int year, int month, int day)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
         return locale->formatDateTime(getDateComponents(year, month, day));
     }
@@ -132,28 +186,51 @@ protected:
         return locale->formatDateTime(
             getTimeComponents(hour, minute, second, millisecond),
             (useShortFormat ? Locale::FormatTypeShort : Locale::FormatTypeMedium));
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+        return locale->formatDateTime(dateComponents(year, month, day));
+    }
+
+    String formatTime(const String& localeString, int hour, int minute, int second, int millisecond, bool useShortFormat)
+    {
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+        return locale->formatDateTime(timeComponents(hour, minute, second, millisecond), (useShortFormat ? Locale::FormatTypeShort : Locale::FormatTypeMedium));
+>>>>>>> miniblink49
     }
 
     unsigned firstDayOfWeek(const String& localeString)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->firstDayOfWeek();
     }
 
     String monthLabel(const String& localeString, unsigned index)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->monthLabels()[index];
     }
 
     String weekDayShortLabel(const String& localeString, unsigned index)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->weekDayShortLabels()[index];
     }
 
     bool isRTL(const String& localeString)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
         return locale->isRTL();
     }
@@ -161,61 +238,107 @@ protected:
     String monthFormat(const String& localeString)
     {
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+        return locale->isRTL();
+    }
+
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+    String monthFormat(const String& localeString)
+    {
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->monthFormat();
     }
 
     String timeFormat(const String& localeString)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->timeFormat();
     }
 
     String shortTimeFormat(const String& localeString)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->shortTimeFormat();
     }
 
     String shortMonthLabel(const String& localeString, unsigned index)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->shortMonthLabels()[index];
     }
 
     String standAloneMonthLabel(const String& localeString, unsigned index)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->standAloneMonthLabels()[index];
     }
 
     String shortStandAloneMonthLabel(const String& localeString, unsigned index)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->shortStandAloneMonthLabels()[index];
     }
 
     String timeAMPMLabel(const String& localeString, unsigned index)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
         return locale->timeAMPMLabels()[index];
     }
 
     String decimalSeparator(const String& localeString)
     {
+<<<<<<< HEAD
         std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
         return locale->localizedDecimalSeparator();
     }
+=======
+        OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+        return locale->localizedDecimalSeparator();
+    }
+#endif
+>>>>>>> miniblink49
 };
 
 TEST_F(LocaleMacTest, formatWeek)
 {
+<<<<<<< HEAD
     ScopedTestingPlatformSupport<LocalePlatformSupport> support;
+=======
+    LocalePlatformSupport support;
+>>>>>>> miniblink49
     EXPECT_STREQ("Week 04, 2005", formatWeek("en_US", "2005-W04").utf8().data());
     EXPECT_STREQ("Week 52, 2005", formatWeek("en_US", "2005-W52").utf8().data());
 }
 
 TEST_F(LocaleMacTest, formatMonth)
 {
+<<<<<<< HEAD
     EXPECT_STREQ("April 2005",
         formatMonth("en_US", "2005-04", false).utf8().data());
     EXPECT_STREQ("avril 2005",
@@ -232,19 +355,34 @@ TEST_F(LocaleMacTest, formatMonth)
         "2005\xE5\xB9\xB4"
         "04\xE6\x9C\x88",
         formatMonth("ja_JP", "2005-04", true).utf8().data());
+=======
+    EXPECT_STREQ("April 2005", formatMonth("en_US", "2005-04", false).utf8().data());
+    EXPECT_STREQ("avril 2005", formatMonth("fr_FR", "2005-04", false).utf8().data());
+    EXPECT_STREQ("2005\xE5\xB9\xB4" "04\xE6\x9C\x88", formatMonth("ja_JP", "2005-04", false).utf8().data());
+
+    EXPECT_STREQ("Apr 2005", formatMonth("en_US", "2005-04", true).utf8().data());
+    EXPECT_STREQ("avr. 2005", formatMonth("fr_FR", "2005-04", true).utf8().data());
+    EXPECT_STREQ("2005\xE5\xB9\xB4" "04\xE6\x9C\x88", formatMonth("ja_JP", "2005-04", true).utf8().data());
+>>>>>>> miniblink49
 }
 
 TEST_F(LocaleMacTest, formatDate)
 {
+<<<<<<< HEAD
     EXPECT_STREQ("04/27/2005",
         formatDate("en_US", 2005, April, 27).utf8().data());
     EXPECT_STREQ("27/04/2005",
         formatDate("fr_FR", 2005, April, 27).utf8().data());
+=======
+    EXPECT_STREQ("04/27/2005", formatDate("en_US", 2005, April, 27).utf8().data());
+    EXPECT_STREQ("27/04/2005", formatDate("fr_FR", 2005, April, 27).utf8().data());
+>>>>>>> miniblink49
     // Do not test ja_JP locale. OS X 10.8 and 10.7 have different formats.
 }
 
 TEST_F(LocaleMacTest, formatTime)
 {
+<<<<<<< HEAD
     EXPECT_STREQ("1:23 PM",
         formatTime("en_US", 13, 23, 00, 000, true).utf8().data());
     EXPECT_STREQ("13:23",
@@ -281,6 +419,25 @@ TEST_F(LocaleMacTest, formatTime)
         "\xDB\xB7:\xDB\xB0\xDB\xB7:"
         "\xDB\xB0\xDB\xB7\xD9\xAB\xDB\xB0\xDB\xB0\xDB\xB7",
         formatTime("fa", 07, 07, 07, 007, false).utf8().data());
+=======
+    EXPECT_STREQ("1:23 PM", formatTime("en_US", 13, 23, 00, 000, true).utf8().data());
+    EXPECT_STREQ("13:23", formatTime("fr_FR", 13, 23, 00, 000, true).utf8().data());
+    EXPECT_STREQ("13:23", formatTime("ja_JP", 13, 23, 00, 000, true).utf8().data());
+    EXPECT_STREQ("\xD9\xA1:\xD9\xA2\xD9\xA3 \xD9\x85", formatTime("ar", 13, 23, 00, 000, true).utf8().data());
+    EXPECT_STREQ("\xDB\xB1\xDB\xB3:\xDB\xB2\xDB\xB3", formatTime("fa", 13, 23, 00, 000, true).utf8().data());
+
+    EXPECT_STREQ("12:00 AM", formatTime("en_US", 00, 00, 00, 000, true).utf8().data());
+    EXPECT_STREQ("00:00", formatTime("fr_FR", 00, 00, 00, 000, true).utf8().data());
+    EXPECT_STREQ("0:00", formatTime("ja_JP", 00, 00, 00, 000, true).utf8().data());
+    EXPECT_STREQ("\xD9\xA1\xD9\xA2:\xD9\xA0\xD9\xA0 \xD8\xB5", formatTime("ar", 00, 00, 00, 000, true).utf8().data());
+    EXPECT_STREQ("\xDB\xB0:\xDB\xB0\xDB\xB0", formatTime("fa", 00, 00, 00, 000, true).utf8().data());
+
+    EXPECT_STREQ("7:07:07.007 AM", formatTime("en_US", 07, 07, 07, 007, false).utf8().data());
+    EXPECT_STREQ("07:07:07,007", formatTime("fr_FR", 07, 07, 07, 007, false).utf8().data());
+    EXPECT_STREQ("7:07:07.007", formatTime("ja_JP", 07, 07, 07, 007, false).utf8().data());
+    EXPECT_STREQ("\xD9\xA7:\xD9\xA0\xD9\xA7:\xD9\xA0\xD9\xA7\xD9\xAB\xD9\xA0\xD9\xA0\xD9\xA7 \xD8\xB5", formatTime("ar", 07, 07, 07, 007, false).utf8().data());
+    EXPECT_STREQ("\xDB\xB7:\xDB\xB0\xDB\xB7:\xDB\xB0\xDB\xB7\xD9\xAB\xDB\xB0\xDB\xB0\xDB\xB7", formatTime("fa", 07, 07, 07, 007, false).utf8().data());
+>>>>>>> miniblink49
 }
 
 TEST_F(LocaleMacTest, firstDayOfWeek)
@@ -298,10 +455,14 @@ TEST_F(LocaleMacTest, monthLabels)
 
     EXPECT_STREQ("janvier", monthLabel("fr_FR", January).utf8().data());
     EXPECT_STREQ("juin", monthLabel("fr_FR", June).utf8().data());
+<<<<<<< HEAD
     EXPECT_STREQ(
         "d\xC3\xA9"
         "cembre",
         monthLabel("fr_FR", December).utf8().data());
+=======
+    EXPECT_STREQ("d\xC3\xA9" "cembre", monthLabel("fr_FR", December).utf8().data());
+>>>>>>> miniblink49
 
     EXPECT_STREQ("1\xE6\x9C\x88", monthLabel("ja_JP", January).utf8().data());
     EXPECT_STREQ("6\xE6\x9C\x88", monthLabel("ja_JP", June).utf8().data());
@@ -318,12 +479,18 @@ TEST_F(LocaleMacTest, weekDayShortLabels)
     EXPECT_STREQ("mer.", weekDayShortLabel("fr_FR", Wednesday).utf8().data());
     EXPECT_STREQ("sam.", weekDayShortLabel("fr_FR", Saturday).utf8().data());
 
+<<<<<<< HEAD
     EXPECT_STREQ("\xE6\x97\xA5",
         weekDayShortLabel("ja_JP", Sunday).utf8().data());
     EXPECT_STREQ("\xE6\xB0\xB4",
         weekDayShortLabel("ja_JP", Wednesday).utf8().data());
     EXPECT_STREQ("\xE5\x9C\x9F",
         weekDayShortLabel("ja_JP", Saturday).utf8().data());
+=======
+    EXPECT_STREQ("\xE6\x97\xA5", weekDayShortLabel("ja_JP", Sunday).utf8().data());
+    EXPECT_STREQ("\xE6\xB0\xB4", weekDayShortLabel("ja_JP", Wednesday).utf8().data());
+    EXPECT_STREQ("\xE5\x9C\x9F", weekDayShortLabel("ja_JP", Saturday).utf8().data());
+>>>>>>> miniblink49
 }
 
 TEST_F(LocaleMacTest, isRTL)
@@ -334,11 +501,19 @@ TEST_F(LocaleMacTest, isRTL)
     EXPECT_FALSE(isRTL("**invalid**"));
 }
 
+<<<<<<< HEAD
 TEST_F(LocaleMacTest, monthFormat)
 {
     EXPECT_STREQ("MMMM yyyy", monthFormat("en_US").utf8().data());
     EXPECT_STREQ("yyyy\xE5\xB9\xB4M\xE6\x9C\x88",
         monthFormat("ja_JP").utf8().data());
+=======
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+TEST_F(LocaleMacTest, monthFormat)
+{
+    EXPECT_STREQ("MMMM yyyy", monthFormat("en_US").utf8().data());
+    EXPECT_STREQ("yyyy\xE5\xB9\xB4M\xE6\x9C\x88", monthFormat("ja_JP").utf8().data());
+>>>>>>> miniblink49
 
     // fr_FR and ru return different results on OS versions.
     //  "MMM yyyy" "LLL yyyy" on 10.6 and 10.7
@@ -363,6 +538,7 @@ TEST_F(LocaleMacTest, standAloneMonthLabels)
 {
     EXPECT_STREQ("January", standAloneMonthLabel("en_US", January).utf8().data());
     EXPECT_STREQ("June", standAloneMonthLabel("en_US", June).utf8().data());
+<<<<<<< HEAD
     EXPECT_STREQ("December",
         standAloneMonthLabel("en_US", December).utf8().data());
 
@@ -379,6 +555,17 @@ TEST_F(LocaleMacTest, standAloneMonthLabels)
         standAloneMonthLabel("ja_JP", June).utf8().data());
     EXPECT_STREQ("12\xE6\x9C\x88",
         standAloneMonthLabel("ja_JP", December).utf8().data());
+=======
+    EXPECT_STREQ("December", standAloneMonthLabel("en_US", December).utf8().data());
+
+    EXPECT_STREQ("janvier", standAloneMonthLabel("fr_FR", January).utf8().data());
+    EXPECT_STREQ("juin", standAloneMonthLabel("fr_FR", June).utf8().data());
+    EXPECT_STREQ("d\xC3\xA9" "cembre", standAloneMonthLabel("fr_FR", December).utf8().data());
+
+    EXPECT_STREQ("1\xE6\x9C\x88", standAloneMonthLabel("ja_JP", January).utf8().data());
+    EXPECT_STREQ("6\xE6\x9C\x88", standAloneMonthLabel("ja_JP", June).utf8().data());
+    EXPECT_STREQ("12\xE6\x9C\x88", standAloneMonthLabel("ja_JP", December).utf8().data());
+>>>>>>> miniblink49
 }
 
 TEST_F(LocaleMacTest, shortMonthLabels)
@@ -390,6 +577,7 @@ TEST_F(LocaleMacTest, shortMonthLabels)
 
     EXPECT_STREQ("janv.", shortMonthLabel("fr_FR", 0).utf8().data());
     EXPECT_STREQ("janv.", shortStandAloneMonthLabel("fr_FR", 0).utf8().data());
+<<<<<<< HEAD
     EXPECT_STREQ(
         "d\xC3\xA9"
         "c.",
@@ -412,6 +600,20 @@ TEST_F(LocaleMacTest, shortMonthLabels)
         shortMonthLabel("ru_RU", 4).utf8().data());
     // The ru_RU locale returns different stand-alone month labels on OS versions.
     //  "\xD0\xBC\xD0\xB0\xD1\x80\xD1\x82" "\xD0\xBC\xD0\xB0\xD0\xB9" on 10.7
+=======
+    EXPECT_STREQ("d\xC3\xA9" "c.", shortMonthLabel("fr_FR", 11).utf8().data());
+    EXPECT_STREQ("d\xC3\xA9" "c.", shortStandAloneMonthLabel("fr_FR", 11).utf8().data());
+
+    EXPECT_STREQ("1\xE6\x9C\x88", shortMonthLabel("ja_JP", 0).utf8().data());
+    EXPECT_STREQ("1\xE6\x9C\x88", shortStandAloneMonthLabel("ja_JP", 0).utf8().data());
+    EXPECT_STREQ("12\xE6\x9C\x88", shortMonthLabel("ja_JP", 11).utf8().data());
+    EXPECT_STREQ("12\xE6\x9C\x88", shortStandAloneMonthLabel("ja_JP", 11).utf8().data());
+
+    EXPECT_STREQ("\xD0\xBC\xD0\xB0\xD1\x80\xD1\x82\xD0\xB0", shortMonthLabel("ru_RU", 2).utf8().data());
+    EXPECT_STREQ("\xD0\xBC\xD0\xB0\xD1\x8F", shortMonthLabel("ru_RU", 4).utf8().data());
+    // The ru_RU locale returns different stand-alone month labels on OS versions.
+    //  "\xD0\xBC\xD0\xB0\xD1\x80\xD1\x82" "\xD0\xBC\xD0\xB0\xD0\xB9" on 10.6 and 10.7
+>>>>>>> miniblink49
     //  "\xD0\x9C\xD0\xB0\xD1\x80\xD1\x82" "\xD0\x9C\xD0\xB0\xD0\xB9" on 10.8
 }
 
@@ -423,10 +625,15 @@ TEST_F(LocaleMacTest, timeAMPMLabels)
     EXPECT_STREQ("AM", timeAMPMLabel("fr_FR", 0).utf8().data());
     EXPECT_STREQ("PM", timeAMPMLabel("fr_FR", 1).utf8().data());
 
+<<<<<<< HEAD
     EXPECT_STREQ("\xE5\x8D\x88\xE5\x89\x8D",
         timeAMPMLabel("ja_JP", 0).utf8().data());
     EXPECT_STREQ("\xE5\x8D\x88\xE5\xBE\x8C",
         timeAMPMLabel("ja_JP", 1).utf8().data());
+=======
+    EXPECT_STREQ("\xE5\x8D\x88\xE5\x89\x8D", timeAMPMLabel("ja_JP", 0).utf8().data());
+    EXPECT_STREQ("\xE5\x8D\x88\xE5\xBE\x8C", timeAMPMLabel("ja_JP", 1).utf8().data());
+>>>>>>> miniblink49
 }
 
 TEST_F(LocaleMacTest, decimalSeparator)
@@ -434,6 +641,7 @@ TEST_F(LocaleMacTest, decimalSeparator)
     EXPECT_STREQ(".", decimalSeparator("en_US").utf8().data());
     EXPECT_STREQ(",", decimalSeparator("fr_FR").utf8().data());
 }
+<<<<<<< HEAD
 
 TEST_F(LocaleMacTest, invalidLocale)
 {
@@ -448,6 +656,19 @@ static void testNumberIsReversible(const AtomicString& localeString,
     const char* shouldHave = 0)
 {
     std::unique_ptr<LocaleMac> locale = LocaleMac::create(localeString);
+=======
+#endif
+
+TEST_F(LocaleMacTest, invalidLocale)
+{
+    EXPECT_STREQ(monthLabel("en_US", January).utf8().data(), monthLabel("foo", January).utf8().data());
+    EXPECT_STREQ(decimalSeparator("en_US").utf8().data(), decimalSeparator("foo").utf8().data());
+}
+
+static void testNumberIsReversible(const AtomicString& localeString, const char* original, const char* shouldHave = 0)
+{
+    OwnPtr<LocaleMac> locale = LocaleMac::create(localeString);
+>>>>>>> miniblink49
     String localized = locale->convertToLocalizedNumber(original);
     if (shouldHave)
         EXPECT_TRUE(localized.contains(shouldHave));
@@ -455,8 +676,12 @@ static void testNumberIsReversible(const AtomicString& localeString,
     EXPECT_STREQ(original, converted.utf8().data());
 }
 
+<<<<<<< HEAD
 void testNumbers(const AtomicString& localeString,
     const char* decimalSeparatorShouldBe = 0)
+=======
+void testNumbers(const AtomicString& localeString, const char* decimalSeparatorShouldBe = 0)
+>>>>>>> miniblink49
 {
     testNumberIsReversible(localeString, "123456789012345678901234567890");
     testNumberIsReversible(localeString, "-123.456", decimalSeparatorShouldBe);

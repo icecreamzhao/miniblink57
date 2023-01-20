@@ -28,7 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://www.w3.org/TR/media-source/#idl-def-SourceBuffer
+=======
+// https://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html#idl-def-SourceBuffer
+>>>>>>> miniblink49
 
 enum AppendMode {
     "segments",
@@ -36,12 +40,24 @@ enum AppendMode {
 };
 
 [
+<<<<<<< HEAD
     ActiveScriptWrappable,
     DependentLifetime,
 ] interface SourceBuffer : EventTarget {
 
     // Gets or sets the AppendMode.
     [RaisesException=Setter] attribute AppendMode mode;
+=======
+    ActiveDOMObject,
+    NoInterfaceObject,
+    RuntimeEnabled=MediaSource,
+    TypeChecking=Interface,
+] interface SourceBuffer : EventTarget {
+
+    // Gets or sets the AppendMode.
+    // FIXME: Remove MediaSourceExperimental once mode attribute is implemented and stabilized. See http://crbug.com/249422.
+    [RaisesException=Setter, RuntimeEnabled=MediaSourceExperimental] attribute AppendMode mode;
+>>>>>>> miniblink49
 
     readonly attribute boolean updating;
 
@@ -51,25 +67,36 @@ enum AppendMode {
     // Applies an offset to media segment timestamps.
     [RaisesException=Setter] attribute double timestampOffset;
 
+<<<<<<< HEAD
     [RuntimeEnabled=AudioVideoTracks] readonly attribute AudioTrackList audioTracks;
     [RuntimeEnabled=AudioVideoTracks] readonly attribute VideoTrackList videoTracks;
 
+=======
+>>>>>>> miniblink49
     // Presentation timestamp for the start of append window.
     [RaisesException=Setter] attribute double appendWindowStart;
 
     // Presentation timestamp for the end of append window.
     [RaisesException=Setter] attribute unrestricted double appendWindowEnd;
 
+<<<<<<< HEAD
     attribute EventHandler onupdatestart;
     attribute EventHandler onupdate;
     attribute EventHandler onupdateend;
     attribute EventHandler onerror;
     attribute EventHandler onabort;
 
+=======
+>>>>>>> miniblink49
     // Append segment data.
     [RaisesException] void appendBuffer(ArrayBuffer data);
     [RaisesException] void appendBuffer(ArrayBufferView data);
 
+<<<<<<< HEAD
+=======
+    [RaisesException, RuntimeEnabled=ExperimentalStream] void appendStream(Stream stream, optional unsigned long long maxSize);
+
+>>>>>>> miniblink49
     // Abort the current segment append sequence.
     [RaisesException] void abort();
     [RaisesException] void remove(double start, unrestricted double end);
@@ -78,3 +105,7 @@ enum AppendMode {
     // the initialization segment algorithm.
     [RaisesException=Setter, RuntimeEnabled=MediaSourceExperimental] attribute TrackDefaultList trackDefaults;
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

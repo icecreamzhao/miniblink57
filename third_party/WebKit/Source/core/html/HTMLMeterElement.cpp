@@ -18,18 +18,21 @@
  *
  */
 
+#include "config.h"
+
 #include "core/html/HTMLMeterElement.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/HTMLNames.h"
-#include "core/dom/NodeComputedStyle.h"
+#include "core/dom/ExceptionCode.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "core/frame/UseCounter.h"
-#include "core/html/HTMLContentElement.h"
-#include "core/html/HTMLDivElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/style/ComputedStyle.h"
+#include "core/html/shadow/MeterShadowElement.h"
+#include "core/layout/LayoutMeter.h"
+#include "core/layout/LayoutTheme.h"
 
 namespace blink {
 
@@ -41,39 +44,30 @@ HTMLMeterElement::HTMLMeterElement(Document& document)
     UseCounter::count(document, UseCounter::MeterElement);
 }
 
-HTMLMeterElement::~HTMLMeterElement() { }
-
-HTMLMeterElement* HTMLMeterElement::create(Document& document)
+HTMLMeterElement::~HTMLMeterElement()
 {
-    HTMLMeterElement* meter = new HTMLMeterElement(document);
+}
+
+PassRefPtrWillBeRawPtr<HTMLMeterElement> HTMLMeterElement::create(Document& document)
+{
+    RefPtrWillBeRawPtr<HTMLMeterElement> meter = adoptRefWillBeNoop(new HTMLMeterElement(document));
     meter->ensureUserAgentShadowRoot();
-    return meter;
+    return meter.release();
 }
 
 LayoutObject* HTMLMeterElement::createLayoutObject(const ComputedStyle& style)
 {
-    switch (style.appearance()) {
-    case MeterPart:
-        UseCounter::count(document(),
-            UseCounter::MeterElementWithMeterAppearance);
-        break;
-    case NoControlPart:
-        UseCounter::count(document(), UseCounter::MeterElementWithNoneAppearance);
-        break;
-    default:
-        break;
-    }
-    return LabelableElement::createLayoutObject(style);
+    if (hasOpenShadowRoot() || !LayoutTheme::theme().supportsMeter(style.appearance()))
+        return LayoutObject::createObject(this, style);
+    return new LayoutMeter(this);
 }
 
-void HTMLMeterElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLMeterElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    const QualifiedName& name = params.name;
     if (name == valueAttr || name == minAttr || name == maxAttr || name == lowAttr || name == highAttr || name == optimumAttr)
         didElementStateChange();
     else
-        LabelableElement::parseAttribute(params);
+        LabelableElement::parseAttribute(name, value);
 }
 
 double HTMLMeterElement::value() const
@@ -99,8 +93,7 @@ void HTMLMeterElement::setMin(double min)
 
 double HTMLMeterElement::max() const
 {
-    return std::max(getFloatingPointAttribute(maxAttr, std::max(1.0, min())),
-        min());
+    return std::max(getFloatingPointAttribute(maxAttr, std::max(1.0, min())), min());
 }
 
 void HTMLMeterElement::setMax(double max)
@@ -141,7 +134,7 @@ void HTMLMeterElement::setOptimum(double optimum)
     setFloatingPointAttribute(optimumAttr, optimum);
 }
 
-HTMLMeterElement::GaugeRegion HTMLMeterElement::getGaugeRegion() const
+HTMLMeterElement::GaugeRegion HTMLMeterElement::gaugeRegion() const
 {
     double lowValue = low();
     double highValue = high();
@@ -167,8 +160,8 @@ HTMLMeterElement::GaugeRegion HTMLMeterElement::getGaugeRegion() const
     }
 
     // The optimum range stays between high and low.
-    // According to the standard, <meter> never show GaugeRegionEvenLessGood in
-    // this case because the value is never less or greater than min or max.
+    // According to the standard, <meter> never show GaugeRegionEvenLessGood in this case
+    // because the value is never less or greater than min or max.
     if (lowValue <= theValue && theValue <= highValue)
         return GaugeRegionOptimum;
     return GaugeRegionSuboptimal;
@@ -187,60 +180,41 @@ double HTMLMeterElement::valueRatio() const
 
 void HTMLMeterElement::didElementStateChange()
 {
-    updateValueAppearance(valueRatio() * 100);
+    m_value->setWidthPercentage(valueRatio()*100);
+    m_value->updatePseudo();
+    if (LayoutMeter* layoutMeter = this->layoutMeter())
+        layoutMeter->updateFromElement();
+}
+
+LayoutMeter* HTMLMeterElement::layoutMeter() const
+{
+    if (layoutObject() && layoutObject()->isMeter())
+        return toLayoutMeter(layoutObject());
+
+    LayoutObject* layoutObject = userAgentShadowRoot()->firstChild()->layoutObject();
+    return toLayoutMeter(layoutObject);
 }
 
 void HTMLMeterElement::didAddUserAgentShadowRoot(ShadowRoot& root)
 {
-    DCHECK(!m_value);
+    ASSERT(!m_value);
 
-    HTMLDivElement* inner = HTMLDivElement::create(document());
-    inner->setShadowPseudoId(AtomicString("-webkit-meter-inner-element"));
+    RefPtrWillBeRawPtr<MeterInnerElement> inner = MeterInnerElement::create(document());
     root.appendChild(inner);
 
-    HTMLDivElement* bar = HTMLDivElement::create(document());
-    bar->setShadowPseudoId(AtomicString("-webkit-meter-bar"));
-
-    m_value = HTMLDivElement::create(document());
-    updateValueAppearance(0);
+    RefPtrWillBeRawPtr<MeterBarElement> bar = MeterBarElement::create(document());
+    m_value = MeterValueElement::create(document());
+    m_value->setWidthPercentage(0);
+    m_value->updatePseudo();
     bar->appendChild(m_value);
 
     inner->appendChild(bar);
-
-    HTMLDivElement* fallback = HTMLDivElement::create(document());
-    fallback->appendChild(HTMLContentElement::create(document()));
-    fallback->setShadowPseudoId(AtomicString("-internal-fallback"));
-    root.appendChild(fallback);
 }
 
-void HTMLMeterElement::updateValueAppearance(double percentage)
+void HTMLMeterElement::willAddFirstAuthorShadowRoot()
 {
-    DEFINE_STATIC_LOCAL(AtomicString, optimumPseudoId,
-        ("-webkit-meter-optimum-value"));
-    DEFINE_STATIC_LOCAL(AtomicString, suboptimumPseudoId,
-        ("-webkit-meter-suboptimum-value"));
-    DEFINE_STATIC_LOCAL(AtomicString, evenLessGoodPseudoId,
-        ("-webkit-meter-even-less-good-value"));
-
-    m_value->setInlineStyleProperty(CSSPropertyWidth, percentage,
-        CSSPrimitiveValue::UnitType::Percentage);
-    switch (getGaugeRegion()) {
-    case GaugeRegionOptimum:
-        m_value->setShadowPseudoId(optimumPseudoId);
-        break;
-    case GaugeRegionSuboptimal:
-        m_value->setShadowPseudoId(suboptimumPseudoId);
-        break;
-    case GaugeRegionEvenLessGood:
-        m_value->setShadowPseudoId(evenLessGoodPseudoId);
-        break;
-    }
-}
-
-bool HTMLMeterElement::canContainRangeEndPoint() const
-{
-    document().updateStyleAndLayoutTreeForNode(this);
-    return computedStyle() && !computedStyle()->hasAppearance();
+    ASSERT(RuntimeEnabledFeatures::authorShadowDOMForAnyElementEnabled());
+    lazyReattachIfAttached();
 }
 
 DEFINE_TRACE(HTMLMeterElement)
@@ -249,4 +223,4 @@ DEFINE_TRACE(HTMLMeterElement)
     LabelableElement::trace(visitor);
 }
 
-} // namespace blink
+} // namespace

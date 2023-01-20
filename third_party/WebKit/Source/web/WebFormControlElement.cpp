@@ -28,10 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/web/WebFormControlElement.h"
 
 #include "core/dom/NodeComputedStyle.h"
 #include "core/events/Event.h"
+=======
+#include "config.h"
+#include "public/web/WebFormControlElement.h"
+
+#include "core/dom/NodeComputedStyle.h"
+>>>>>>> miniblink49
 #include "core/html/HTMLFormControlElement.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
@@ -83,23 +90,33 @@ bool WebFormControlElement::autoComplete() const
         return constUnwrap<HTMLInputElement>()->shouldAutocomplete();
     if (isHTMLTextAreaElement(*m_private))
         return constUnwrap<HTMLTextAreaElement>()->shouldAutocomplete();
+<<<<<<< HEAD
     if (isHTMLSelectElement(*m_private))
         return constUnwrap<HTMLSelectElement>()->shouldAutocomplete();
+=======
+>>>>>>> miniblink49
     return false;
 }
 
 void WebFormControlElement::setValue(const WebString& value, bool sendEvents)
 {
     if (isHTMLInputElement(*m_private))
+<<<<<<< HEAD
         unwrap<HTMLInputElement>()->setValue(
             value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
     else if (isHTMLTextAreaElement(*m_private))
         unwrap<HTMLTextAreaElement>()->setValue(
             value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
+=======
+        unwrap<HTMLInputElement>()->setValue(value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
+    else if (isHTMLTextAreaElement(*m_private))
+        unwrap<HTMLTextAreaElement>()->setValue(value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
+>>>>>>> miniblink49
     else if (isHTMLSelectElement(*m_private))
         unwrap<HTMLSelectElement>()->setValue(value, sendEvents);
 }
 
+<<<<<<< HEAD
 void WebFormControlElement::setAutofillValue(const WebString& value)
 {
     // The input and change events will be sent in setValue.
@@ -126,6 +143,8 @@ void WebFormControlElement::setAutofillValue(const WebString& value)
     }
 }
 
+=======
+>>>>>>> miniblink49
 WebString WebFormControlElement::value() const
 {
     if (isHTMLInputElement(*m_private))
@@ -170,9 +189,15 @@ WebString WebFormControlElement::editingValue() const
 void WebFormControlElement::setSelectionRange(int start, int end)
 {
     if (isHTMLInputElement(*m_private))
+<<<<<<< HEAD
         unwrap<HTMLInputElement>()->setSelectionRange(start, end);
     else if (isHTMLTextAreaElement(*m_private))
         unwrap<HTMLTextAreaElement>()->setSelectionRange(start, end);
+=======
+        unwrap<HTMLInputElement>()->setSelectionRange(start, end, SelectionHasNoDirection, NotDispatchSelectEvent);
+    else if (isHTMLTextAreaElement(*m_private))
+        unwrap<HTMLTextAreaElement>()->setSelectionRange(start, end, SelectionHasNoDirection, NotDispatchSelectEvent);
+>>>>>>> miniblink49
 }
 
 int WebFormControlElement::selectionStart() const
@@ -193,6 +218,7 @@ int WebFormControlElement::selectionEnd() const
     return 0;
 }
 
+<<<<<<< HEAD
 WebString WebFormControlElement::alignmentForFormData() const
 {
     if (const ComputedStyle* style = constUnwrap<HTMLFormControlElement>()->computedStyle()) {
@@ -213,27 +239,53 @@ WebString WebFormControlElement::directionForFormData() const
     return WebString::fromUTF8("ltr");
 }
 
+=======
+WebString WebFormControlElement::directionForFormData() const
+{
+    if (const ComputedStyle* style = constUnwrap<HTMLFormControlElement>()->computedStyle())
+        return style->isLeftToRightDirection() ? WebString::fromUTF8("ltr") : WebString::fromUTF8("rtl");
+    return WebString::fromUTF8("ltr");
+}
+
+bool WebFormControlElement::isActivatedSubmit() const
+{
+    return constUnwrap<HTMLFormControlElement>()->isActivatedSubmit();
+}
+
+>>>>>>> miniblink49
 WebFormElement WebFormControlElement::form() const
 {
     return WebFormElement(constUnwrap<HTMLFormControlElement>()->form());
 }
 
+<<<<<<< HEAD
 WebFormControlElement::WebFormControlElement(HTMLFormControlElement* elem)
+=======
+WebFormControlElement::WebFormControlElement(const PassRefPtrWillBeRawPtr<HTMLFormControlElement>& elem)
+>>>>>>> miniblink49
     : WebElement(elem)
 {
 }
 
+<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebFormControlElement,
     isElementNode() && constUnwrap<Element>()->isFormControlElement());
 
 WebFormControlElement& WebFormControlElement::operator=(
     HTMLFormControlElement* elem)
+=======
+WebFormControlElement& WebFormControlElement::operator=(const PassRefPtrWillBeRawPtr<HTMLFormControlElement>& elem)
+>>>>>>> miniblink49
 {
     m_private = elem;
     return *this;
 }
 
+<<<<<<< HEAD
 WebFormControlElement::operator HTMLFormControlElement*() const
+=======
+WebFormControlElement::operator PassRefPtrWillBeRawPtr<HTMLFormControlElement>() const
+>>>>>>> miniblink49
 {
     return toHTMLFormControlElement(m_private.get());
 }

@@ -26,7 +26,7 @@
 #ifndef DateTimeFieldsState_h
 #define DateTimeFieldsState_h
 
-#include "wtf/Allocator.h"
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 
 namespace blink {
 
@@ -39,8 +39,6 @@ class FormControlState;
 // Each field can contain invalid value for date, e.g. day of month field can
 // be 30 even if month field is February.
 class DateTimeFieldsState {
-    STACK_ALLOCATED();
-
 public:
     enum AMPMValue {
         AMPMValueEmpty = -1,
@@ -100,4 +98,5 @@ private:
 
 } // namespace blink
 
+#endif
 #endif

@@ -27,11 +27,8 @@
 
 namespace blink {
 
-class HTMLSelectElement;
-
 class HTMLHRElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLHRElement);
 
@@ -39,14 +36,9 @@ public:
 
 private:
     explicit HTMLHRElement(Document&);
-    HTMLSelectElement* ownerSelectElement() const;
 
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&,
-        const AtomicString&,
-        MutableStylePropertySet*) override;
-    InsertionNotificationRequest insertedInto(ContainerNode*) override;
-    void removedFrom(ContainerNode*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
 };
 
 } // namespace blink

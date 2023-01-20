@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://fetch.spec.whatwg.org/#request-class
+=======
+// http://fetch.spec.whatwg.org/#request-class
+>>>>>>> miniblink49
 
 typedef (Request or USVString) RequestInfo;
 
@@ -13,6 +17,7 @@ enum RequestContext {
     "prefetch", "script", "serviceworker", "sharedworker",
     "subresource", "style", "track", "video", "worker", "xmlhttprequest", "xslt"
 };
+<<<<<<< HEAD
 enum RequestMode { "navigate", "same-origin", "no-cors", "cors" };
 enum RequestCredentials { "omit", "same-origin", "include" };
 enum RequestRedirect { "follow", "error", "manual" };
@@ -30,10 +35,17 @@ enum ReferrerPolicy {
 
 [
     ActiveScriptWrappable,
+=======
+enum RequestMode { "same-origin", "no-cors", "cors" };
+enum RequestCredentials { "omit", "same-origin", "include" };
+
+[
+>>>>>>> miniblink49
     Constructor(RequestInfo input, optional Dictionary requestInitDict),
     ConstructorCallWith=ScriptState,
     Exposed=(Window,Worker),
     RaisesException=Constructor,
+<<<<<<< HEAD
     DependentLifetime,
 ] interface Request {
     readonly attribute ByteString method;
@@ -47,6 +59,21 @@ enum ReferrerPolicy {
     readonly attribute DOMString integrity;
 
     [RaisesException, CallWith=ScriptState] Request clone();
+=======
+    ActiveDOMObject,
+    GarbageCollected,
+    TypeChecking=Interface,
+] interface Request {
+    readonly attribute ByteString method;
+    readonly attribute USVString url;
+    readonly attribute Headers headers;
+    [DeprecateAs=FetchAPIRequestContext] readonly attribute RequestContext context;
+    readonly attribute DOMString referrer;
+    readonly attribute RequestMode mode;
+    readonly attribute RequestCredentials credentials;
+
+    [RaisesException] Request clone();
+>>>>>>> miniblink49
 };
 
 Request implements Body;

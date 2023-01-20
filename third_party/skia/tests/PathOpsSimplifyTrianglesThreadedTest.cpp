@@ -7,8 +7,12 @@
 #include "PathOpsExtendedTest.h"
 #include "PathOpsThreadedCommon.h"
 
+<<<<<<< HEAD
 static void testSimplifyTrianglesMain(PathOpsThreadState* data)
 {
+=======
+static void testSimplifyTrianglesMain(PathOpsThreadState* data) {
+>>>>>>> miniblink49
     SkASSERT(data);
     PathOpsThreadState& state = *data;
     char pathStr[1024];
@@ -73,8 +77,12 @@ static void testSimplifyTrianglesMain(PathOpsThreadState* data)
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsSimplifyTrianglesThreaded, reporter)
 {
+=======
+DEF_TEST(PathOpsSimplifyTrianglesThreaded, reporter) {
+>>>>>>> miniblink49
     initializeTests(reporter, "testTriangles");
     PathOpsThreadedTestRunner testRunner(reporter);
     for (int a = 0; a < 15; ++a) {
@@ -92,11 +100,18 @@ DEF_TEST(PathOpsSimplifyTrianglesThreaded, reporter)
                 if ((bx - ax) * (cy - ay) == (by - ay) * (cx - ax)) {
                     continue;
                 }
+<<<<<<< HEAD
                 *testRunner.fRunnables.append() = new PathOpsThreadedRunnable(
                     &testSimplifyTrianglesMain, a, b, c, 0, &testRunner);
             }
             if (!reporter->allowExtendedTest())
                 goto finish;
+=======
+                *testRunner.fRunnables.append() = SkNEW_ARGS(PathOpsThreadedRunnable,
+                        (&testSimplifyTrianglesMain, a, b, c, 0, &testRunner));
+            }
+            if (!reporter->allowExtendedTest()) goto finish;
+>>>>>>> miniblink49
         }
     }
 finish:

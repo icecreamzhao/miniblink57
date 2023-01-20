@@ -23,14 +23,13 @@
 #include "core/svg/SVGAnimatedNumber.h"
 #include "core/svg/SVGAnimatedNumberOptionalNumber.h"
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
+#include "platform/graphics/filters/FEDropShadow.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class SVGFEDropShadowElement final
-    : public SVGFilterPrimitiveStandardAttributes {
+class SVGFEDropShadowElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGFEDropShadowElement);
 
@@ -48,16 +47,15 @@ private:
     explicit SVGFEDropShadowElement(Document&);
 
     void svgAttributeChanged(const QualifiedName&) override;
-    bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&) override;
-    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
+    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
 
     static const AtomicString& stdDeviationXIdentifier();
     static const AtomicString& stdDeviationYIdentifier();
 
-    Member<SVGAnimatedNumber> m_dx;
-    Member<SVGAnimatedNumber> m_dy;
-    Member<SVGAnimatedNumberOptionalNumber> m_stdDeviation;
-    Member<SVGAnimatedString> m_in1;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_dx;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_dy;
+    RefPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_stdDeviation;
+    RefPtrWillBeMember<SVGAnimatedString> m_in1;
 };
 
 } // namespace blink

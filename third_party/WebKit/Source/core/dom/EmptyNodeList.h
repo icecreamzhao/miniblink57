@@ -33,14 +33,15 @@
 #define EmptyNodeList_h
 
 #include "core/dom/NodeList.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class EmptyNodeList final : public NodeList {
 public:
-    static EmptyNodeList* create(Node& rootNode)
+    static PassRefPtrWillBeRawPtr<EmptyNodeList> create(Node& rootNode)
     {
-        return new EmptyNodeList(rootNode);
+        return adoptRefWillBeNoop(new EmptyNodeList(rootNode));
     }
     ~EmptyNodeList() override;
 
@@ -49,10 +50,7 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    explicit EmptyNodeList(Node& rootNode)
-        : m_owner(rootNode)
-    {
-    }
+    explicit EmptyNodeList(Node& rootNode) : m_owner(rootNode) { }
 
     unsigned length() const override { return 0; }
     Node* item(unsigned) const override { return 0; }
@@ -60,14 +58,10 @@ private:
     bool isEmptyNodeList() const override { return true; }
     Node* virtualOwnerNode() const override;
 
-    Member<Node> m_owner;
+    RefPtrWillBeMember<Node> m_owner;
 };
 
-DEFINE_TYPE_CASTS(EmptyNodeList,
-    NodeList,
-    nodeList,
-    nodeList->isEmptyNodeList(),
-    nodeList.isEmptyNodeList());
+DEFINE_TYPE_CASTS(EmptyNodeList, NodeList, nodeList, nodeList->isEmptyNodeList(), nodeList.isEmptyNodeList());
 
 } // namespace blink
 

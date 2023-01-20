@@ -18,11 +18,12 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLSummaryElement.h"
 
-#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/HTMLNames.h"
-#include "core/dom/shadow/FlatTreeTraversal.h"
+#include "core/dom/shadow/ComposedTreeTraversal.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/html/HTMLContentElement.h"
@@ -35,11 +36,11 @@ namespace blink {
 
 using namespace HTMLNames;
 
-HTMLSummaryElement* HTMLSummaryElement::create(Document& document)
+PassRefPtrWillBeRawPtr<HTMLSummaryElement> HTMLSummaryElement::create(Document& document)
 {
-    HTMLSummaryElement* summary = new HTMLSummaryElement(document);
+    RefPtrWillBeRawPtr<HTMLSummaryElement> summary = adoptRefWillBeNoop(new HTMLSummaryElement(document));
     summary->ensureUserAgentShadowRoot();
-    return summary;
+    return summary.release();
 }
 
 HTMLSummaryElement::HTMLSummaryElement(Document& document)
@@ -47,18 +48,14 @@ HTMLSummaryElement::HTMLSummaryElement(Document& document)
 {
 }
 
-LayoutObject* HTMLSummaryElement::createLayoutObject(
-    const ComputedStyle& style)
+LayoutObject* HTMLSummaryElement::createLayoutObject(const ComputedStyle&)
 {
-    EDisplay display = style.display();
-    if (display == EDisplay::Flex || display == EDisplay::InlineFlex || display == EDisplay::Grid || display == EDisplay::InlineGrid)
-        return LayoutObject::createObject(this, style);
     return new LayoutBlockFlow(this);
 }
 
 void HTMLSummaryElement::didAddUserAgentShadowRoot(ShadowRoot& root)
 {
-    DetailsMarkerControl* markerControl = DetailsMarkerControl::create(document());
+    RefPtrWillBeRawPtr<DetailsMarkerControl> markerControl = DetailsMarkerControl::create(document());
     markerControl->setIdAttribute(ShadowElementNames::detailsMarker());
     root.appendChild(markerControl);
     root.appendChild(HTMLContentElement::create(document()));
@@ -66,19 +63,15 @@ void HTMLSummaryElement::didAddUserAgentShadowRoot(ShadowRoot& root)
 
 HTMLDetailsElement* HTMLSummaryElement::detailsElement() const
 {
-    Node* parent = parentNode();
+    Node* parent = ComposedTreeTraversal::parent(*this);
     if (isHTMLDetailsElement(parent))
         return toHTMLDetailsElement(parent);
-    Element* host = ownerShadowHost();
-    if (isHTMLDetailsElement(host))
-        return toHTMLDetailsElement(host);
     return nullptr;
 }
 
 Element* HTMLSummaryElement::markerControl()
 {
-    return ensureUserAgentShadowRoot().getElementById(
-        ShadowElementNames::detailsMarker());
+    return ensureUserAgentShadowRoot().getElementById(ShadowElementNames::detailsMarker());
 }
 
 bool HTMLSummaryElement::isMainSummary() const
@@ -96,7 +89,7 @@ static bool isClickableControl(Node* node)
     Element* element = toElement(node);
     if (element->isFormControlElement())
         return true;
-    Element* host = element->ownerShadowHost();
+    Element* host = element->shadowHost();
     return host && host->isFormControlElement();
 }
 
@@ -107,7 +100,8 @@ bool HTMLSummaryElement::supportsFocus() const
 
 void HTMLSummaryElement::defaultEventHandler(Event* event)
 {
-    if (isMainSummary()) {
+    updateDistribution();
+    if (isMainSummary() && layoutObject()) {
         if (event->type() == EventTypeNames::DOMActivate && !isClickableControl(event->target()->toNode())) {
             if (HTMLDetailsElement* details = detailsElement())
                 details->toggleOpen();
@@ -116,7 +110,7 @@ void HTMLSummaryElement::defaultEventHandler(Event* event)
         }
 
         if (event->isKeyboardEvent()) {
-            if (event->type() == EventTypeNames::keydown && toKeyboardEvent(event)->key() == " ") {
+            if (event->type() == EventTypeNames::keydown && toKeyboardEvent(event)->keyIdentifier() == "U+0020") {
                 setActive(true);
                 // No setDefaultHandled() - IE dispatches a keypress in this case.
                 return;
@@ -133,8 +127,8 @@ void HTMLSummaryElement::defaultEventHandler(Event* event)
                     return;
                 }
             }
-            if (event->type() == EventTypeNames::keyup && toKeyboardEvent(event)->key() == " ") {
-                if (isActive())
+            if (event->type() == EventTypeNames::keyup && toKeyboardEvent(event)->keyIdentifier() == "U+0020") {
+                if (active())
                     dispatchSimulatedClick(event);
                 event->setDefaultHandled();
                 return;
@@ -147,7 +141,10 @@ void HTMLSummaryElement::defaultEventHandler(Event* event)
 
 bool HTMLSummaryElement::willRespondToMouseClickEvents()
 {
-    return isMainSummary() || HTMLElement::willRespondToMouseClickEvents();
+    if (isMainSummary() && layoutObject())
+        return true;
+
+    return HTMLElement::willRespondToMouseClickEvents();
 }
 
-} // namespace blink
+}

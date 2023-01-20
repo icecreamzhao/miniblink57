@@ -9,8 +9,13 @@
 #define SkOTTable_EBLC_DEFINED
 
 #include "SkEndian.h"
+<<<<<<< HEAD
 #include "SkOTTableTypes.h"
 #include "SkOTTable_EBDT.h"
+=======
+#include "SkOTTable_EBDT.h"
+#include "SkOTTableTypes.h"
+>>>>>>> miniblink49
 #include "SkTypedEnum.h"
 
 #pragma pack(push, 1)
@@ -55,9 +60,18 @@ struct SkOTTableEmbeddedBitmapLocation {
         SK_OT_BYTE ppemY; //vertical pixels per Em
         struct BitDepth {
             SK_TYPED_ENUM(Value, SK_OT_BYTE,
+<<<<<<< HEAD
                 ((BW, 1))((Gray4, 2))((Gray16, 4))((Gray256, 8))
                     SK_SEQ_END,
                 SK_SEQ_END)
+=======
+                ((BW, 1))
+                ((Gray4, 2))
+                ((Gray16, 4))
+                ((Gray256, 8))
+                SK_SEQ_END,
+            SK_SEQ_END)
+>>>>>>> miniblink49
             SK_OT_BYTE value;
         } bitDepth; //the Microsoft rasterizer v.1.7 or greater supports
         union Flags {
@@ -65,7 +79,11 @@ struct SkOTTableEmbeddedBitmapLocation {
                 //0-7
                 SK_OT_BYTE_BITFIELD(
                     Horizontal, // Horizontal small glyph metrics
+<<<<<<< HEAD
                     Vertical, // Vertical small glyph metrics
+=======
+                    Vertical,  // Vertical small glyph metrics
+>>>>>>> miniblink49
                     Reserved02,
                     Reserved03,
                     Reserved04,
@@ -141,6 +159,10 @@ struct SkOTTableEmbeddedBitmapLocation {
         IndexSubTable4 format4;
         IndexSubTable5 format5;
     };
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 };
 
 #pragma pack(pop)

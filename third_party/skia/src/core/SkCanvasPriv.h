@@ -16,8 +16,13 @@ public:
     ~SkAutoCanvasMatrixPaint();
 
 private:
+<<<<<<< HEAD
     SkCanvas* fCanvas;
     int fSaveCount;
+=======
+    SkCanvas*   fCanvas;
+    int         fSaveCount;
+>>>>>>> miniblink49
 };
 
 #endif

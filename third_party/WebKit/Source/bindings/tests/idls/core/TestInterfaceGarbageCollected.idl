@@ -4,6 +4,7 @@
 
 [
     Constructor(DOMString str),
+    GarbageCollected,
 ] interface TestInterfaceGarbageCollected : EventTarget { // Inherit from EventTarget to test order of internal fields
     attribute TestInterfaceGarbageCollected attr1;
     void func(TestInterfaceGarbageCollected arg);

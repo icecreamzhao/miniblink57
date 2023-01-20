@@ -10,13 +10,23 @@
 #include "SkColorPriv.h"
 #include "SkFilterProc.h"
 #include "SkPaint.h"
+<<<<<<< HEAD
 #include "SkShader.h" // for tilemodes
+=======
+#include "SkShader.h"   // for tilemodes
+>>>>>>> miniblink49
 #include "SkUtilsArm.h"
 
 // Required to ensure the table is part of the final binary.
 extern const SkBitmapProcState::SampleProc32 gSkBitmapProcStateSample32_neon[];
+<<<<<<< HEAD
 
 #define NAME_WRAP(x) x##_neon
+=======
+extern const SkBitmapProcState::SampleProc16 gSkBitmapProcStateSample16_neon[];
+
+#define   NAME_WRAP(x)  x ## _neon
+>>>>>>> miniblink49
 #include "SkBitmapProcState_filter_neon.h"
 #include "SkBitmapProcState_procs.h"
 
@@ -78,18 +88,55 @@ const SkBitmapProcState::SampleProc32 gSkBitmapProcStateSample32_neon[] = {
     SG8_alpha_D32_filter_DX_neon,
 };
 
+<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "SkConvolver.h"
 #include <arm_neon.h>
+=======
+const SkBitmapProcState::SampleProc16 gSkBitmapProcStateSample16_neon[] = {
+    S32_D16_nofilter_DXDY_neon,
+    S32_D16_nofilter_DX_neon,
+    S32_D16_filter_DXDY_neon,
+    S32_D16_filter_DX_neon,
+
+    S16_D16_nofilter_DXDY_neon,
+    S16_D16_nofilter_DX_neon,
+    S16_D16_filter_DXDY_neon,
+    S16_D16_filter_DX_neon,
+
+    SI8_D16_nofilter_DXDY_neon,
+    SI8_D16_nofilter_DX_neon,
+    SI8_D16_filter_DXDY_neon,
+    SI8_D16_filter_DX_neon,
+
+    // Don't support 4444 -> 565
+    NULL, NULL, NULL, NULL,
+    // Don't support A8 -> 565
+    NULL, NULL, NULL, NULL,
+    // Don't support G8 -> 565 (but we could)
+    NULL, NULL, NULL, NULL,
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+#include <arm_neon.h>
+#include "SkConvolver.h"
+>>>>>>> miniblink49
 
 // Convolves horizontally along a single row. The row data is given in
 // |srcData| and continues for the numValues() of the filter.
 void convolveHorizontally_neon(const unsigned char* srcData,
+<<<<<<< HEAD
     const SkConvolutionFilter1D& filter,
     unsigned char* outRow,
     bool hasAlpha)
 {
+=======
+                               const SkConvolutionFilter1D& filter,
+                               unsigned char* outRow,
+                               bool hasAlpha) {
+>>>>>>> miniblink49
     // Loop over each pixel on this row in the output image.
     int numValues = filter.numValues();
     for (int outX = 0; outX < numValues; outX++) {
@@ -99,7 +146,12 @@ void convolveHorizontally_neon(const unsigned char* srcData,
         uint8x8_t coeff_mask3 = vcreate_u8(0x0706070607060706);
         // Get the filter that determines the current output pixel.
         int filterOffset, filterLength;
+<<<<<<< HEAD
         const SkConvolutionFilter1D::ConvolutionFixed* filterValues = filter.FilterForValue(outX, &filterOffset, &filterLength);
+=======
+        const SkConvolutionFilter1D::ConvolutionFixed* filterValues =
+            filter.FilterForValue(outX, &filterOffset, &filterLength);
+>>>>>>> miniblink49
 
         // Compute the first pixel in this row that the filter affects. It will
         // touch |filterLength| pixels (4 bytes each) after this.
@@ -107,7 +159,11 @@ void convolveHorizontally_neon(const unsigned char* srcData,
 
         // Apply the filter to the row to get the destination pixel in |accum|.
         int32x4_t accum = vdupq_n_s32(0);
+<<<<<<< HEAD
         for (int filterX = 0; filterX<filterLength> > 2; filterX++) {
+=======
+        for (int filterX = 0; filterX < filterLength >> 2; filterX++) {
+>>>>>>> miniblink49
             // Load 4 coefficients
             int16x4_t coeffs, coeff0, coeff1, coeff2, coeff3;
             coeffs = vld1_s16(filterValues);
@@ -143,10 +199,17 @@ void convolveHorizontally_neon(const unsigned char* srcData,
         int r = filterLength & 3;
         if (r) {
             const uint16_t mask[4][4] = {
+<<<<<<< HEAD
                 { 0, 0, 0, 0 },
                 { 0xFFFF, 0, 0, 0 },
                 { 0xFFFF, 0xFFFF, 0, 0 },
                 { 0xFFFF, 0xFFFF, 0xFFFF, 0 }
+=======
+                {0, 0, 0, 0},
+                {0xFFFF, 0, 0, 0},
+                {0xFFFF, 0xFFFF, 0, 0},
+                {0xFFFF, 0xFFFF, 0xFFFF, 0}
+>>>>>>> miniblink49
             };
             uint16x4_t coeffs;
             int16x4_t coeff0, coeff1, coeff2;
@@ -187,6 +250,7 @@ void convolveHorizontally_neon(const unsigned char* srcData,
 // being |pixelWidth| wide.
 //
 // The output must have room for |pixelWidth * 4| bytes.
+<<<<<<< HEAD
 template <bool hasAlpha>
 void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filterValues,
     int filterLength,
@@ -194,6 +258,14 @@ void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filt
     int pixelWidth,
     unsigned char* outRow)
 {
+=======
+template<bool hasAlpha>
+void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filterValues,
+                             int filterLength,
+                             unsigned char* const* sourceDataRows,
+                             int pixelWidth,
+                             unsigned char* outRow) {
+>>>>>>> miniblink49
     int width = pixelWidth & ~3;
 
     int32x4_t accum0, accum1, accum2, accum3;
@@ -325,24 +397,38 @@ void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filt
             accum8 = vreinterpretq_u8_u32(vreinterpretq_u32_u8(accum8) | vdupq_n_u32(0xFF000000));
         }
 
+<<<<<<< HEAD
         switch (r) {
+=======
+        switch(r) {
+>>>>>>> miniblink49
         case 1:
             vst1q_lane_u32(reinterpret_cast<uint32_t*>(outRow), vreinterpretq_u32_u8(accum8), 0);
             break;
         case 2:
             vst1_u32(reinterpret_cast<uint32_t*>(outRow),
+<<<<<<< HEAD
                 vreinterpret_u32_u8(vget_low_u8(accum8)));
             break;
         case 3:
             vst1_u32(reinterpret_cast<uint32_t*>(outRow),
                 vreinterpret_u32_u8(vget_low_u8(accum8)));
             vst1q_lane_u32(reinterpret_cast<uint32_t*>(outRow + 8), vreinterpretq_u32_u8(accum8), 2);
+=======
+                     vreinterpret_u32_u8(vget_low_u8(accum8)));
+            break;
+        case 3:
+            vst1_u32(reinterpret_cast<uint32_t*>(outRow),
+                     vreinterpret_u32_u8(vget_low_u8(accum8)));
+            vst1q_lane_u32(reinterpret_cast<uint32_t*>(outRow+8), vreinterpretq_u32_u8(accum8), 2);
+>>>>>>> miniblink49
             break;
         }
     }
 }
 
 void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filterValues,
+<<<<<<< HEAD
     int filterLength,
     unsigned char* const* sourceDataRows,
     int pixelWidth,
@@ -357,6 +443,21 @@ void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filt
         convolveVertically_neon<false>(filterValues, filterLength,
             sourceDataRows, pixelWidth,
             outRow);
+=======
+                             int filterLength,
+                             unsigned char* const* sourceDataRows,
+                             int pixelWidth,
+                             unsigned char* outRow,
+                             bool sourceHasAlpha) {
+    if (sourceHasAlpha) {
+        convolveVertically_neon<true>(filterValues, filterLength,
+                                      sourceDataRows, pixelWidth,
+                                      outRow);
+    } else {
+        convolveVertically_neon<false>(filterValues, filterLength,
+                                       sourceDataRows, pixelWidth,
+                                       outRow);
+>>>>>>> miniblink49
     }
 }
 
@@ -365,10 +466,16 @@ void convolveVertically_neon(const SkConvolutionFilter1D::ConvolutionFixed* filt
 // The algorithm is almost same as |ConvolveHorizontally_SSE2|. Please
 // refer to that function for detailed comments.
 void convolve4RowsHorizontally_neon(const unsigned char* srcData[4],
+<<<<<<< HEAD
     const SkConvolutionFilter1D& filter,
     unsigned char* outRow[4],
     size_t outRowBytes)
 {
+=======
+                                    const SkConvolutionFilter1D& filter,
+                                    unsigned char* outRow[4],
+                                    size_t outRowBytes) {
+>>>>>>> miniblink49
 
     uint8x8_t coeff_mask0 = vcreate_u8(0x0100010001000100);
     uint8x8_t coeff_mask1 = vcreate_u8(0x0302030203020302);
@@ -381,16 +488,28 @@ void convolve4RowsHorizontally_neon(const unsigned char* srcData[4],
     // loaded by SIMD when |filter_length| is not divisible by 4.
     // mask[0] is not used in following algorithm.
     const uint16_t mask[4][4] = {
+<<<<<<< HEAD
         { 0, 0, 0, 0 },
         { 0xFFFF, 0, 0, 0 },
         { 0xFFFF, 0xFFFF, 0, 0 },
         { 0xFFFF, 0xFFFF, 0xFFFF, 0 }
+=======
+        {0, 0, 0, 0},
+        {0xFFFF, 0, 0, 0},
+        {0xFFFF, 0xFFFF, 0, 0},
+        {0xFFFF, 0xFFFF, 0xFFFF, 0}
+>>>>>>> miniblink49
     };
 
     // Output one pixel each iteration, calculating all channels (RGBA) together.
     for (int outX = 0; outX < num_values; outX++) {
 
+<<<<<<< HEAD
         const SkConvolutionFilter1D::ConvolutionFixed* filterValues = filter.FilterForValue(outX, &filterOffset, &filterLength);
+=======
+        const SkConvolutionFilter1D::ConvolutionFixed* filterValues =
+        filter.FilterForValue(outX, &filterOffset, &filterLength);
+>>>>>>> miniblink49
 
         // four pixels in a column per iteration.
         int32x4_t accum0 = vdupq_n_s32(0);
@@ -398,7 +517,11 @@ void convolve4RowsHorizontally_neon(const unsigned char* srcData[4],
         int32x4_t accum2 = vdupq_n_s32(0);
         int32x4_t accum3 = vdupq_n_s32(0);
 
+<<<<<<< HEAD
         int start = (filterOffset << 2);
+=======
+        int start = (filterOffset<<2);
+>>>>>>> miniblink49
 
         // We will load and accumulate with four coefficients per iteration.
         for (int filter_x = 0; filter_x < (filterLength >> 2); filter_x++) {
@@ -414,6 +537,10 @@ void convolve4RowsHorizontally_neon(const unsigned char* srcData[4],
             int16x8_t p01_16, p23_16;
             int32x4_t p0, p1, p2, p3;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #define ITERATION(src, accum)                                       \
     pixels = vld1q_u8(src);                                         \
     p01_16 = vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(pixels)));  \
@@ -459,10 +586,17 @@ void convolve4RowsHorizontally_neon(const unsigned char* srcData[4],
         int16x4_t accum16;
         uint8x8_t res0, res1, res2, res3;
 
+<<<<<<< HEAD
 #define PACK_RESULT(accum, res)                                    \
     accum = vshrq_n_s32(accum, SkConvolutionFilter1D::kShiftBits); \
     accum16 = vqmovn_s32(accum);                                   \
     res = vqmovun_s16(vcombine_s16(accum16, accum16));
+=======
+#define PACK_RESULT(accum, res)                                         \
+        accum = vshrq_n_s32(accum, SkConvolutionFilter1D::kShiftBits);  \
+        accum16 = vqmovn_s32(accum);                                    \
+        res = vqmovun_s16(vcombine_s16(accum16, accum16));
+>>>>>>> miniblink49
 
         PACK_RESULT(accum0, res0);
         PACK_RESULT(accum1, res1);
@@ -480,8 +614,12 @@ void convolve4RowsHorizontally_neon(const unsigned char* srcData[4],
     }
 }
 
+<<<<<<< HEAD
 void applySIMDPadding_neon(SkConvolutionFilter1D* filter)
 {
+=======
+void applySIMDPadding_neon(SkConvolutionFilter1D *filter) {
+>>>>>>> miniblink49
     // Padding |paddingCount| of more dummy coefficients after the coefficients
     // of last filter to prevent SIMD instructions which load 8 or 16 bytes
     // together to access invalid memory areas. We are not trying to align the
@@ -492,8 +630,12 @@ void applySIMDPadding_neon(SkConvolutionFilter1D* filter)
     }
 }
 
+<<<<<<< HEAD
 void platformConvolutionProcs_arm_neon(SkConvolutionProcs* procs)
 {
+=======
+void platformConvolutionProcs_arm_neon(SkConvolutionProcs* procs) {
+>>>>>>> miniblink49
     procs->fExtraHorizontalReads = 3;
     procs->fConvolveVertically = &convolveVertically_neon;
     procs->fConvolve4RowsHorizontally = &convolve4RowsHorizontally_neon;

@@ -45,8 +45,12 @@ namespace v8 {
 class Isolate;
 class Object;
 class Value;
+<<<<<<< HEAD
 template <class T>
 class Local;
+=======
+template <class T> class Local;
+>>>>>>> miniblink49
 }
 
 namespace blink {
@@ -65,11 +69,16 @@ public:
         return *this;
     }
 
+<<<<<<< HEAD
     BLINK_EXPORT static WebBlob createFromUUID(const WebString& uuid,
         const WebString& type,
         long long size);
     BLINK_EXPORT static WebBlob createFromFile(const WebString& path,
         long long size);
+=======
+    BLINK_EXPORT static WebBlob createFromUUID(const WebString& uuid, const WebString& type, long long size);
+    BLINK_EXPORT static WebBlob createFromFile(const WebString& path, long long size);
+>>>>>>> miniblink49
     BLINK_EXPORT static WebBlob fromV8Value(v8::Local<v8::Value>);
 
     BLINK_EXPORT void reset();
@@ -78,9 +87,13 @@ public:
 
     bool isNull() const { return m_private.isNull(); }
 
+<<<<<<< HEAD
     BLINK_EXPORT v8::Local<v8::Value> toV8Value(
         v8::Local<v8::Object> creationContext,
         v8::Isolate*);
+=======
+    BLINK_EXPORT v8::Local<v8::Value>  toV8Value(v8::Local<v8::Object> creationContext, v8::Isolate*);
+>>>>>>> miniblink49
 
 #if BLINK_IMPLEMENTATION
     WebBlob(Blob*);

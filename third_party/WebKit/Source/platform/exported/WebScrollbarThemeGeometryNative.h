@@ -29,15 +29,20 @@
 #include "platform/PlatformExport.h"
 #include "public/platform/WebRect.h"
 #include "public/platform/WebScrollbarThemeGeometry.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class ScrollbarTheme;
 class WebScrollbar;
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT WebScrollbarThemeGeometryNative
     : public WebScrollbarThemeGeometry {
     USING_FAST_MALLOC(WebScrollbarThemeGeometryNative);
@@ -47,22 +52,51 @@ public:
     static std::unique_ptr<WebScrollbarThemeGeometryNative> create(
         ScrollbarTheme&);
 
+=======
+class PLATFORM_EXPORT WebScrollbarThemeGeometryNative : public WebScrollbarThemeGeometry {
+public:
+    static PassOwnPtr<WebScrollbarThemeGeometryNative> create(ScrollbarTheme*);
+
+    // WebScrollbarThemeGeometry overrides
+    WebScrollbarThemeGeometryNative* clone() const override;
+    int thumbPosition(WebScrollbar*) override;
+    int thumbLength(WebScrollbar*) override;
+    int trackPosition(WebScrollbar*) override;
+    int trackLength(WebScrollbar*) override;
+>>>>>>> miniblink49
     bool hasButtons(WebScrollbar*) override;
     bool hasThumb(WebScrollbar*) override;
     WebRect trackRect(WebScrollbar*) override;
     WebRect thumbRect(WebScrollbar*) override;
+<<<<<<< HEAD
+=======
+    int minimumThumbLength(WebScrollbar*) override;
+    int scrollbarThickness(WebScrollbar*) override;
+>>>>>>> miniblink49
     WebRect backButtonStartRect(WebScrollbar*) override;
     WebRect backButtonEndRect(WebScrollbar*) override;
     WebRect forwardButtonStartRect(WebScrollbar*) override;
     WebRect forwardButtonEndRect(WebScrollbar*) override;
+<<<<<<< HEAD
 
 private:
     explicit WebScrollbarThemeGeometryNative(ScrollbarTheme&);
+=======
+    WebRect constrainTrackRectToTrackPieces(WebScrollbar*, const WebRect&) override;
+    void splitTrack(WebScrollbar*, const WebRect& track, WebRect& startTrack, WebRect& thumb, WebRect& endTrack) override;
+
+private:
+    explicit WebScrollbarThemeGeometryNative(ScrollbarTheme*);
+>>>>>>> miniblink49
 
     // The theme is not owned by this class. It is assumed that the theme is a
     // static pointer and its lifetime is essentially infinite. Only thread-safe
     // functions on the theme can be called by this theme.
+<<<<<<< HEAD
     ScrollbarTheme& m_theme;
+=======
+    ScrollbarTheme* m_theme;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

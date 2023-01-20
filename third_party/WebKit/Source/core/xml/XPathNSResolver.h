@@ -33,12 +33,9 @@
 
 namespace blink {
 
-class XPathNSResolver : public GarbageCollectedFinalized<XPathNSResolver>,
-                        public ScriptWrappable {
+class XPathNSResolver : public GarbageCollectedFinalized<XPathNSResolver>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    virtual ~XPathNSResolver() { }
     virtual AtomicString lookupNamespaceURI(const String& prefix) = 0;
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }

@@ -23,10 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#dfn-speechgrammar
 
 [
     Constructor,
+=======
+[
+    Constructor,
+    GarbageCollected,
+>>>>>>> miniblink49
     NoInterfaceObject,
 ] interface SpeechGrammar {
     [URL,CallWith=ExecutionContext] attribute DOMString src;

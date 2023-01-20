@@ -35,11 +35,10 @@ namespace blink {
 
 class EventTarget;
 class Event;
+class Node;
 class NodeEventContext;
 
-class WindowEventContext : public GarbageCollected<WindowEventContext> {
-    WTF_MAKE_NONCOPYABLE(WindowEventContext);
-
+class WindowEventContext : public NoBaseWillBeGarbageCollected<WindowEventContext> {
 public:
     WindowEventContext(Event&, const NodeEventContext& topNodeEventContext);
 
@@ -50,8 +49,8 @@ public:
     DECLARE_TRACE();
 
 private:
-    Member<LocalDOMWindow> m_window;
-    Member<EventTarget> m_target;
+    RefPtrWillBeMember<LocalDOMWindow> m_window;
+    RefPtrWillBeMember<EventTarget> m_target;
 };
 
 inline LocalDOMWindow* WindowEventContext::window() const
@@ -64,6 +63,6 @@ inline EventTarget* WindowEventContext::target() const
     return m_target.get();
 }
 
-} // namespace blink
+}
 
 #endif // WindowEventContext_h

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/html/LinkManifest.h"
 
 #include "core/dom/Document.h"
@@ -11,9 +12,9 @@
 
 namespace blink {
 
-LinkManifest* LinkManifest::create(HTMLLinkElement* owner)
+PassOwnPtrWillBeRawPtr<LinkManifest> LinkManifest::create(HTMLLinkElement* owner)
 {
-    return new LinkManifest(owner);
+    return adoptPtrWillBeNoop(new LinkManifest(owner));
 }
 
 LinkManifest::LinkManifest(HTMLLinkElement* owner)
@@ -21,7 +22,9 @@ LinkManifest::LinkManifest(HTMLLinkElement* owner)
 {
 }
 
-LinkManifest::~LinkManifest() { }
+LinkManifest::~LinkManifest()
+{
+}
 
 void LinkManifest::process()
 {

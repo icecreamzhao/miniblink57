@@ -29,13 +29,10 @@
 
 namespace blink {
 
-template <>
-const SVGEnumerationStringEntries& getStaticStringEntries<ColorMatrixType>();
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<ColorMatrixType>();
 
-class SVGFEColorMatrixElement final
-    : public SVGFilterPrimitiveStandardAttributes {
+class SVGFEColorMatrixElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGFEColorMatrixElement);
 
@@ -50,12 +47,11 @@ private:
 
     bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
-    bool taintsOrigin(bool inputsTaintOrigin) const override;
+    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
 
-    Member<SVGAnimatedNumberList> m_values;
-    Member<SVGAnimatedString> m_in1;
-    Member<SVGAnimatedEnumeration<ColorMatrixType>> m_type;
+    RefPtrWillBeMember<SVGAnimatedNumberList> m_values;
+    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<ColorMatrixType>> m_type;
 };
 
 } // namespace blink

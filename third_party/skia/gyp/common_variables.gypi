@@ -36,9 +36,14 @@
   # which deals with these same constraints in a similar manner.
   #
   'variables': {  # level 1
+<<<<<<< HEAD
     'angle_path%': '../',
 
     'variables': {  # level 2
+=======
+    'variables': {  # level 2
+
+>>>>>>> miniblink49
       # Variables needed by conditions list within the level-2 variables dict.
       'variables': {  # level 3
         'variables': { # level 4
@@ -49,11 +54,16 @@
           'skia_os%': '<(OS)',
         },
         'skia_os%': '<(skia_os)',
+<<<<<<< HEAD
         'vulkan_merged_into_skia': '1',
         'skia_android_framework%': 0,
         # RAW codec needs exceptions. Due to that, it is a separate target. Its usage can be
         # controlled by skia_codec_decodes_raw.
         'skia_codec_decodes_raw%' : 1,
+=======
+
+        'skia_android_framework%': 0,
+>>>>>>> miniblink49
         'conditions' : [
           [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "mac"]', {
             'skia_arch_type%': 'x86_64',
@@ -70,22 +80,35 @@
       # so that siblings of the level-2 'variables' dict can see them.
       # (skia_os will depend on skia_android_framework.)
       'skia_android_framework%': '<(skia_android_framework)',
+<<<<<<< HEAD
       'skia_codec_decodes_raw%': '<(skia_codec_decodes_raw)',
+=======
+>>>>>>> miniblink49
       'skia_arch_type%': '<(skia_arch_type)',
       'arm_version%': '<(arm_version)',
       'arm_neon%': '<(arm_neon)',
       'skia_egl%': '<(skia_egl)',
+<<<<<<< HEAD
       'vulkan_merged_into_skia%': '<(vulkan_merged_into_skia)',
+=======
+
+>>>>>>> miniblink49
       'conditions': [
         [ 'skia_android_framework == 1', {
           'skia_os%': 'android',
           'skia_chrome_utils%': 0,
+<<<<<<< HEAD
           'skia_use_android_framework_defines%': 1,
+=======
+>>>>>>> miniblink49
           'skia_use_system_json%': 1,
         }, {
           'skia_os%': '<(skia_os)',
           'skia_chrome_utils%': 1,
+<<<<<<< HEAD
           'skia_use_android_framework_defines%': 0,
+=======
+>>>>>>> miniblink49
           'skia_use_system_json%': 0,
         }],
         [ 'skia_os == "win"', {
@@ -93,10 +116,17 @@
         }, {
           'os_posix%': 1,
         }],
+<<<<<<< HEAD
         [ 'skia_os == "linux"', {
           # ANGLE on linux require these two variable be defined.
           'chromeos%': 0,
           'use_x11%': 1,
+=======
+        ['"64" in skia_arch_type', {
+          'skia_arch_width%': 64,
+        }, {
+          'skia_arch_width%': 32,
+>>>>>>> miniblink49
         }],
         [ 'skia_os == "android"', {
           'skia_static_initializers%': 0,
@@ -129,14 +159,21 @@
       'skia_embedded_fonts%': '0',
 
       'skia_sanitizer%': '',
+<<<<<<< HEAD
       'skia_mesa%': 0,
       'skia_gpu_extra_dependency_path%': '',
       'skia_gpu_extra_tests_path%': '',
+=======
+      'skia_scalar%': 'float',
+      'skia_mesa%': 0,
+      'skia_gpu_extra_dependency_path%': '',
+>>>>>>> miniblink49
       'skia_stroke_path_rendering%': 0,
       'skia_android_path_rendering%': 0,
       'skia_resource_cache_mb_limit%': 0,
       'skia_resource_cache_count_limit%': 0,
       'skia_angle%': 0,
+<<<<<<< HEAD
       'skia_command_buffer%': 0,
       'skia_gdi%': 0,
       'skia_gpu%': 1,
@@ -148,6 +185,16 @@
       'skia_shared_lib%': 0,
       'skia_force_distance_field_text%': 0,
       'skia_is_bot%': '<!(python -c "import os; print os.environ.get(\'CHROME_HEADLESS\', 0)")',
+=======
+      'skia_gdi%': 0,
+      'skia_gpu%': 1,
+      'skia_osx_deployment_target%': '',
+      'skia_profile_enabled%': 0,
+      'skia_win_debuggers_path%': '',
+      'skia_shared_lib%': 0,
+      'skia_opencl%': 0,
+      'skia_force_distance_field_text%': 0,
+>>>>>>> miniblink49
 
       # These variables determine the default optimization level for different
       # compilers.
@@ -172,11 +219,14 @@
       }, {
         'skia_release_optimization_level%': '<(skia_default_gcc_optimization_level)',
       }],
+<<<<<<< HEAD
       [ 'skia_os == "linux"', {
         # ANGLE on linux require these two variable be defined.
         'chromeos%': 0,
         'use_x11%': 1,
       }],
+=======
+>>>>>>> miniblink49
       [ 'skia_sanitizer', {
         'skia_clang_build': 1,
         'skia_keep_frame_pointer': 1,
@@ -184,7 +234,11 @@
         'skia_clang_build%': 0,
         'skia_keep_frame_pointer%': 0,
       }],
+<<<<<<< HEAD
       [ 'skia_shared_lib or skia_sanitizer or skia_os == "android" or (skia_os == "linux" and (skia_angle == 1 or skia_command_buffer == 1))', {
+=======
+      [ 'skia_shared_lib or skia_sanitizer or skia_os == "android"', {
+>>>>>>> miniblink49
           'skia_pic%' : 1,
         }, {
           'skia_pic%' : 0,
@@ -196,6 +250,10 @@
     # so that siblings of the level-1 'variables' dict can see them.
     'arm_version%': '<(arm_version)',
     'arm_neon%': '<(arm_neon)',
+<<<<<<< HEAD
+=======
+    'arm_neon_optional%': 0,
+>>>>>>> miniblink49
     'mips_arch_variant%': 'mips32',
     'mips_dsp%': 0,
     'skia_os%': '<(skia_os)',
@@ -205,6 +263,7 @@
     'skia_no_fontconfig%': '<(skia_no_fontconfig)',
     'skia_embedded_fonts%': '<(skia_embedded_fonts)',
     'skia_sanitizer%': '<(skia_sanitizer)',
+<<<<<<< HEAD
     'skia_sanitizer_blacklist%':
       '<!(python -c "import sys; import os; print os.path.abspath(sys.argv[1])" ../tools/xsan.blacklist)',
     'skia_mesa%': '<(skia_mesa)',
@@ -214,11 +273,19 @@
     'skia_android_framework%': '<(skia_android_framework)',
     'skia_codec_decodes_raw%': '<(skia_codec_decodes_raw)',
     'skia_use_android_framework_defines%': '<(skia_use_android_framework_defines)',
+=======
+    'skia_scalar%': '<(skia_scalar)',
+    'skia_mesa%': '<(skia_mesa)',
+    'skia_gpu_extra_dependency_path%': '<(skia_gpu_extra_dependency_path)',
+    'skia_stroke_path_rendering%': '<(skia_stroke_path_rendering)',
+    'skia_android_framework%': '<(skia_android_framework)',
+>>>>>>> miniblink49
     'skia_use_system_json%': '<(skia_use_system_json)',
     'skia_android_path_rendering%': '<(skia_android_path_rendering)',
     'skia_resource_cache_mb_limit%': '<(skia_resource_cache_mb_limit)',
     'skia_resource_cache_count_limit%': '<(skia_resource_cache_count_limit)',
     'skia_angle%': '<(skia_angle)',
+<<<<<<< HEAD
     'skia_arch_type%': '<(skia_arch_type)',
     'skia_chrome_utils%': '<(skia_chrome_utils)',
     'skia_command_buffer%': '<(skia_command_buffer)',
@@ -231,10 +298,24 @@
     'skia_pdf%': '<(skia_pdf)',
     'skia_profile_enabled%': '<(skia_profile_enabled)',
     'skia_shared_lib%': '<(skia_shared_lib)',
+=======
+    'skia_arch_width%': '<(skia_arch_width)',
+    'skia_arch_type%': '<(skia_arch_type)',
+    'skia_chrome_utils%': '<(skia_chrome_utils)',
+    'skia_gdi%': '<(skia_gdi)',
+    'skia_gpu%': '<(skia_gpu)',
+    'skia_win_exceptions%': 0,
+    'skia_win_ltcg%': 1,
+    'skia_osx_deployment_target%': '<(skia_osx_deployment_target)',
+    'skia_profile_enabled%': '<(skia_profile_enabled)',
+    'skia_shared_lib%': '<(skia_shared_lib)',
+    'skia_opencl%': '<(skia_opencl)',
+>>>>>>> miniblink49
     'skia_force_distance_field_text%': '<(skia_force_distance_field_text)',
     'skia_static_initializers%': '<(skia_static_initializers)',
     'ios_sdk_version%': '6.0',
     'skia_win_debuggers_path%': '<(skia_win_debuggers_path)',
+<<<<<<< HEAD
     'skia_disable_inlining%': 0,
     'skia_moz2d%': 0,
     'skia_is_bot%': '<(skia_is_bot)',
@@ -243,11 +324,23 @@
     'skia_fast%': 0,
     'skia_dump_stats%': 0,
     'vulkan_merged_into_skia%': '<(vulkan_merged_into_skia)',
+=======
+    'skia_run_pdfviewer_in_gm%': 0,
+    'skia_disable_inlining%': 0,
+    'skia_moz2d%': 0,
+    'skia_is_bot%': '<!(python -c "import os; print os.environ.get(\'CHROME_HEADLESS\', 0)")',
+    'skia_egl%': '<(skia_egl)',
+    'skia_fast%': 0,
+>>>>>>> miniblink49
     'skia_fast_flags': [
         '-O3',                   # Even for Debug builds.
         '-march=native',         # Use all features of and optimize for THIS machine.
         '-fomit-frame-pointer',  # Sometimes an extra register is nice, and cuts a push/pop.
+<<<<<<< HEAD
         #'-ffast-math',           # Optimize float math even when it breaks IEEE compliance.
+=======
+        '-ffast-math',           # Optimize float math even when it breaks IEEE compliance.
+>>>>>>> miniblink49
         #'-flto'                  # Enable link-time optimization.
     ],
 

@@ -33,6 +33,10 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -41,11 +45,16 @@ class StorageErrorCallback;
 class StorageQuotaCallback;
 class StorageUsageCallback;
 
+<<<<<<< HEAD
 class DeprecatedStorageQuota final
     : public GarbageCollected<DeprecatedStorageQuota>,
       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class DeprecatedStorageQuota final : public GarbageCollected<DeprecatedStorageQuota>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     enum Type {
         Temporary,
@@ -57,6 +66,7 @@ public:
         return new DeprecatedStorageQuota(type);
     }
 
+<<<<<<< HEAD
     void queryUsageAndQuota(ExecutionContext*,
         StorageUsageCallback*,
         StorageErrorCallback*);
@@ -65,6 +75,11 @@ public:
         unsigned long long newQuotaInBytes,
         StorageQuotaCallback*,
         StorageErrorCallback*);
+=======
+    void queryUsageAndQuota(ExecutionContext*, StorageUsageCallback*, StorageErrorCallback*);
+
+    void requestQuota(ExecutionContext*, unsigned long long newQuotaInBytes, StorageQuotaCallback*, StorageErrorCallback*);
+>>>>>>> miniblink49
 
     DEFINE_INLINE_TRACE() { }
 

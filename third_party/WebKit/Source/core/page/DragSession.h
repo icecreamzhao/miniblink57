@@ -27,12 +27,10 @@
 #define DragSession_h
 
 #include "core/page/DragActions.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 struct DragSession {
-    STACK_ALLOCATED();
     DragOperation operation;
     bool mouseIsOverFileInput;
     unsigned numberOfItemsToBeAccepted;
@@ -45,6 +43,6 @@ struct DragSession {
     }
 };
 
-} // namespace blink
+}
 
 #endif

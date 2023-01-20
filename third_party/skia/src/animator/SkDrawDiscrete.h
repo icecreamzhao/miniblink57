@@ -14,7 +14,10 @@ class SkDiscrete : public SkDrawPathEffect {
     DECLARE_MEMBER_INFO(Discrete);
     SkDiscrete();
     SkPathEffect* getPathEffect() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkScalar deviation;
     SkScalar segLength;

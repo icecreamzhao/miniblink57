@@ -37,10 +37,15 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class Metadata final : public GarbageCollectedFinalized<Metadata>,
                        public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class Metadata : public GarbageCollectedFinalized<Metadata>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static Metadata* create(const FileMetadata& platformMetadata)
     {
@@ -53,6 +58,7 @@ public:
     }
 
     // Return Epoch time in milliseconds for Date.
+<<<<<<< HEAD
     double modificationTime() const
     {
         return m_platformMetadata.modificationTime;
@@ -61,14 +67,22 @@ public:
     {
         return static_cast<unsigned long long>(m_platformMetadata.length);
     }
+=======
+    double modificationTime() const { return m_platformMetadata.modificationTime; }
+    unsigned long long size() const { return static_cast<unsigned long long>(m_platformMetadata.length); }
+>>>>>>> miniblink49
 
     DEFINE_INLINE_TRACE() { }
 
 private:
     explicit Metadata(const FileMetadata& platformMetadata)
+<<<<<<< HEAD
         : m_platformMetadata(platformMetadata)
     {
     }
+=======
+        : m_platformMetadata(platformMetadata) { }
+>>>>>>> miniblink49
 
     FileMetadata m_platformMetadata;
 };

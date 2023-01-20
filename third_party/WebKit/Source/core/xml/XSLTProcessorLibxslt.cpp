@@ -20,12 +20,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/xml/XSLTProcessor.h"
 
-#include "bindings/core/v8/SourceLocation.h"
 #include "core/dom/Document.h"
 #include "core/dom/TransformSource.h"
-#include "core/editing/serializers/Serialization.h"
+#include "core/editing/markup.h"
 #include "core/fetch/FetchInitiatorTypeNames.h"
 #include "core/fetch/RawResource.h"
 #include "core/fetch/Resource.h"
@@ -44,16 +44,13 @@
 #include "platform/network/ResourceResponse.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/Assertions.h"
-#include "wtf/allocator/Partitions.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuffer.h"
 #include "wtf/text/UTF8.h"
-#include <third_party/libxslt/libxslt/imports.h>
-#include <third_party/libxslt/libxslt/security.h>
-#include <third_party/libxslt/libxslt/variables.h>
-#include <third_party/libxslt/libxslt/xsltutils.h>
-#include "third_party/libxml/src/include/libxml/xmlIO.h"
-#include <third_party/libxml/src/include/libxml/tree.h>
+#include "third_party/libxslt/libxslt/imports.h"
+#include "third_party/libxslt/libxslt/security.h"
+#include "third_party/libxslt/libxslt/variables.h"
+#include "third_party/libxslt/libxslt/xsltutils.h"
 
 namespace blink {
 
@@ -83,21 +80,15 @@ void XSLTProcessor::parseErrorFunc(void* userData, xmlError* error)
         break;
     }
 
-    console->addMessage(ConsoleMessage::create(
-        XMLMessageSource, level, error->message,
-        SourceLocation::create(error->file, error->line, 0, nullptr)));
+    console->addMessage(ConsoleMessage::create(XMLMessageSource, level, error->message, error->file, error->line));
 }
 
-// FIXME: There seems to be no way to control the ctxt pointer for loading here,
-// thus we have globals.
+// FIXME: There seems to be no way to control the ctxt pointer for loading here, thus we have globals.
 static XSLTProcessor* globalProcessor = nullptr;
 static ResourceFetcher* globalResourceFetcher = nullptr;
 
-static xmlDocPtr docLoaderFunc(const xmlChar* uri,
-    xmlDictPtr,
-    int options,
-    void* ctxt,
-    xsltLoadType type)
+static xmlDocPtr docLoaderFunc(
+    const xmlChar* uri, xmlDictPtr, int options, void* ctxt, xsltLoadType type)
 {
     if (!globalProcessor)
         return nullptr;
@@ -106,16 +97,13 @@ static xmlDocPtr docLoaderFunc(const xmlChar* uri,
     case XSLT_LOAD_DOCUMENT: {
         xsltTransformContextPtr context = (xsltTransformContextPtr)ctxt;
         xmlChar* base = xmlNodeGetBase(context->document->doc, context->node);
-        KURL url(KURL(ParsedURLString, reinterpret_cast<const char*>(base)),
-            reinterpret_cast<const char*>(uri));
+        KURL url(KURL(ParsedURLString, reinterpret_cast<const char*>(base)), reinterpret_cast<const char*>(uri));
         xmlFree(base);
 
-        ResourceLoaderOptions fetchOptions(
-            ResourceFetcher::defaultResourceOptions());
-        FetchRequest request(ResourceRequest(url), FetchInitiatorTypeNames::xml,
-            fetchOptions);
+        ResourceLoaderOptions fetchOptions(ResourceFetcher::defaultResourceOptions());
+        FetchRequest request(ResourceRequest(url), FetchInitiatorTypeNames::xml, fetchOptions);
         request.setOriginRestriction(FetchRequest::RestrictToSameOrigin);
-        Resource* resource = RawResource::fetchSynchronously(request, globalResourceFetcher);
+        ResourcePtr<Resource> resource = RawResource::fetchSynchronously(request, globalResourceFetcher);
         if (!resource || !globalProcessor)
             return nullptr;
 
@@ -128,10 +116,8 @@ static xmlDocPtr docLoaderFunc(const xmlChar* uri,
 
         // We don't specify an encoding here. Neither Gecko nor WinIE respects
         // the encoding specified in the HTTP headers.
-        RefPtr<const SharedBuffer> data = resource->resourceBuffer();
-        xmlDocPtr doc = data ? xmlReadMemory(data->data(), data->size(),
-                            (const char*)uri, 0, options)
-                             : nullptr;
+        SharedBuffer* data = resource->resourceBuffer();
+        xmlDocPtr doc = data ? xmlReadMemory(data->data(), data->size(), (const char*)uri, 0, options) : nullptr;
 
         xmlSetStructuredErrorFunc(0, 0);
         xmlSetGenericErrorFunc(0, 0);
@@ -139,8 +125,7 @@ static xmlDocPtr docLoaderFunc(const xmlChar* uri,
         return doc;
     }
     case XSLT_LOAD_STYLESHEET:
-        return globalProcessor->xslStylesheet()->locateStylesheetSubResource(
-            ((xsltStylesheetPtr)ctxt)->doc, uri);
+        return globalProcessor->xslStylesheet()->locateStylesheetSubResource(((xsltStylesheetPtr)ctxt)->doc, uri);
     default:
         break;
     }
@@ -148,9 +133,7 @@ static xmlDocPtr docLoaderFunc(const xmlChar* uri,
     return nullptr;
 }
 
-static inline void setXSLTLoadCallBack(xsltDocLoaderFunc func,
-    XSLTProcessor* processor,
-    ResourceFetcher* fetcher)
+static inline void setXSLTLoadCallBack(xsltDocLoaderFunc func, XSLTProcessor* processor, ResourceFetcher* fetcher)
 {
     xsltSetLoaderFunc(func);
     globalProcessor = processor;
@@ -169,10 +152,9 @@ static int writeToStringBuilder(void* context, const char* buffer, int len)
     UChar* bufferUCharEnd = bufferUChar + len;
 
     const char* stringCurrent = buffer;
-    WTF::Unicode::ConversionResult result = WTF::Unicode::convertUTF8ToUTF16(
-        &stringCurrent, buffer + len, &bufferUChar, bufferUCharEnd);
+    WTF::Unicode::ConversionResult result = WTF::Unicode::convertUTF8ToUTF16(&stringCurrent, buffer + len, &bufferUChar, bufferUCharEnd);
     if (result != WTF::Unicode::conversionOK && result != WTF::Unicode::sourceExhausted) {
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return -1;
     }
 
@@ -181,11 +163,8 @@ static int writeToStringBuilder(void* context, const char* buffer, int len)
     return stringCurrent - buffer;
 }
 
-static bool saveResultToString(xmlDocPtr resultDoc,
-    xsltStylesheetPtr sheet,
-    String& resultString)
+static bool saveResultToString(xmlDocPtr resultDoc, xsltStylesheetPtr sheet, String& resultString)
 {
-#ifdef LIBXML_OUTPUT_ENABLED
     xmlOutputBufferPtr outputBuf = xmlAllocOutputBuffer(0);
     if (!outputBuf)
         return false;
@@ -207,34 +186,19 @@ static bool saveResultToString(xmlDocPtr resultDoc,
     resultString = resultBuilder.toString();
 
     return true;
-#else
-    return false;
-#endif
 }
 
-static char* allocateParameterArray(const char* data)
-{
-    size_t length = strlen(data) + 1;
-    char* parameterArray = static_cast<char*>(WTF::Partitions::fastMalloc(
-        length, WTF_HEAP_PROFILER_TYPE_NAME(XSLTProcessor)));
-    memcpy(parameterArray, data, length);
-    return parameterArray;
-}
-
-static const char** xsltParamArrayFromParameterMap(
-    XSLTProcessor::ParameterMap& parameters)
+static const char** xsltParamArrayFromParameterMap(XSLTProcessor::ParameterMap& parameters)
 {
     if (parameters.isEmpty())
         return nullptr;
 
-    const char** parameterArray = static_cast<const char**>(
-        WTF::Partitions::fastMalloc(((parameters.size() * 2) + 1) * sizeof(char*),
-            WTF_HEAP_PROFILER_TYPE_NAME(XSLTProcessor)));
+    const char** parameterArray = static_cast<const char**>(fastMalloc(((parameters.size() * 2) + 1) * sizeof(char*)));
 
     unsigned index = 0;
     for (auto& parameter : parameters) {
-        parameterArray[index++] = allocateParameterArray(parameter.key.utf8().data());
-        parameterArray[index++] = allocateParameterArray(parameter.value.utf8().data());
+        parameterArray[index++] = fastStrDup(parameter.key.utf8().data());
+        parameterArray[index++] = fastStrDup(parameter.value.utf8().data());
     }
     parameterArray[index] = 0;
 
@@ -248,27 +212,21 @@ static void freeXsltParamArray(const char** params)
         return;
 
     while (*temp) {
-        WTF::Partitions::fastFree(const_cast<char*>(*(temp++)));
-        WTF::Partitions::fastFree(const_cast<char*>(*(temp++)));
+        fastFree(const_cast<char*>(*(temp++)));
+        fastFree(const_cast<char*>(*(temp++)));
     }
-    WTF::Partitions::fastFree(params);
+    fastFree(params);
 }
 
-static xsltStylesheetPtr xsltStylesheetPointer(
-    Document* document,
-    Member<XSLStyleSheet>& cachedStylesheet,
-    Node* stylesheetRootNode)
+static xsltStylesheetPtr xsltStylesheetPointer(Document* document, RefPtrWillBeMember<XSLStyleSheet>& cachedStylesheet, Node* stylesheetRootNode)
 {
     if (!cachedStylesheet && stylesheetRootNode) {
-        // When using importStylesheet, we will use the given document as the
-        // imported stylesheet's owner.
+        // When using importStylesheet, we will use the given document as the imported stylesheet's owner.
         cachedStylesheet = XSLStyleSheet::createForXSLTProcessor(
-            stylesheetRootNode->parentNode()
-                ? &stylesheetRootNode->parentNode()->document()
-                : document,
-            stylesheetRootNode, stylesheetRootNode->document().url().getString(),
-            stylesheetRootNode->document()
-                .url()); // FIXME: Should we use baseURL here?
+            stylesheetRootNode->parentNode() ? &stylesheetRootNode->parentNode()->document() : document,
+            stylesheetRootNode,
+            stylesheetRootNode->document().url().string(),
+            stylesheetRootNode->document().url()); // FIXME: Should we use baseURL here?
 
         // According to Mozilla documentation, the node must be a Document node,
         // an xsl:stylesheet or xsl:transform element. But we just use text
@@ -282,26 +240,23 @@ static xsltStylesheetPtr xsltStylesheetPointer(
     return cachedStylesheet->compileStyleSheet();
 }
 
-static inline xmlDocPtr xmlDocPtrFromNode(Node* sourceNode,
-    bool& shouldDelete)
+static inline xmlDocPtr xmlDocPtrFromNode(Node* sourceNode, bool& shouldDelete)
 {
-    Document* ownerDocument = &sourceNode->document();
-    bool sourceIsDocument = (sourceNode == ownerDocument);
+    RefPtrWillBeRawPtr<Document> ownerDocument(sourceNode->document());
+    bool sourceIsDocument = (sourceNode == ownerDocument.get());
 
     xmlDocPtr sourceDoc = nullptr;
     if (sourceIsDocument && ownerDocument->transformSource())
         sourceDoc = (xmlDocPtr)ownerDocument->transformSource()->platformSource();
     if (!sourceDoc) {
-        sourceDoc = (xmlDocPtr)xmlDocPtrForString(
-            ownerDocument, createMarkup(sourceNode),
-            sourceIsDocument ? ownerDocument->url().getString() : String());
+        sourceDoc = (xmlDocPtr)xmlDocPtrForString(ownerDocument.get(), createMarkup(sourceNode),
+            sourceIsDocument ? ownerDocument->url().string() : String());
         shouldDelete = sourceDoc;
     }
     return sourceDoc;
 }
 
-static inline String resultMIMEType(xmlDocPtr resultDoc,
-    xsltStylesheetPtr sheet)
+static inline String resultMIMEType(xmlDocPtr resultDoc, xsltStylesheetPtr sheet)
 {
     // There are three types of output we need to be able to deal with:
     // HTML (create an HTML document), XML (create an XML document),
@@ -320,16 +275,12 @@ static inline String resultMIMEType(xmlDocPtr resultDoc,
     return "application/xml";
 }
 
-bool XSLTProcessor::transformToString(Node* sourceNode,
-    String& mimeType,
-    String& resultString,
-    String& resultEncoding)
+bool XSLTProcessor::transformToString(Node* sourceNode, String& mimeType, String& resultString, String& resultEncoding)
 {
-    Document* ownerDocument = &sourceNode->document();
+    RefPtrWillBeRawPtr<Document> ownerDocument(sourceNode->document());
 
     setXSLTLoadCallBack(docLoaderFunc, this, ownerDocument->fetcher());
-    xsltStylesheetPtr sheet = xsltStylesheetPointer(
-        m_document.get(), m_stylesheet, m_stylesheetRootNode.get());
+    xsltStylesheetPtr sheet = xsltStylesheetPointer(m_document.get(), m_stylesheet, m_stylesheetRootNode.get());
     if (!sheet) {
         setXSLTLoadCallBack(0, 0, 0);
         m_stylesheet = nullptr;

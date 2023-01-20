@@ -29,53 +29,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/BaseButtonInputType.h"
 
 #include "core/HTMLNames.h"
 #include "core/dom/Text.h"
 #include "core/dom/shadow/ShadowRoot.h"
-#include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
-#include "core/html/parser/HTMLParserIdioms.h"
 #include "core/layout/LayoutButton.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-BaseButtonInputType::BaseButtonInputType(HTMLInputElement& element)
-    : InputType(element)
-    , KeyboardClickableInputTypeView(element)
-{
-}
-
-DEFINE_TRACE(BaseButtonInputType)
-{
-    KeyboardClickableInputTypeView::trace(visitor);
-    InputType::trace(visitor);
-}
-
-InputTypeView* BaseButtonInputType::createView()
-{
-    return this;
-}
-
 void BaseButtonInputType::createShadowSubtree()
 {
-    DCHECK(element().userAgentShadowRoot());
-    element().userAgentShadowRoot()->appendChild(
-        Text::create(element().document(), displayValue()));
+    ASSERT(element().userAgentShadowRoot());
+    element().userAgentShadowRoot()->appendChild(Text::create(element().document(), element().valueWithDefault()));
 }
 
 void BaseButtonInputType::valueAttributeChanged()
 {
-    toTextOrDie(element().userAgentShadowRoot()->firstChild())
-        ->setData(displayValue());
-}
-
-String BaseButtonInputType::displayValue() const
-{
-    return element().valueOrDefaultLabel().removeCharacters(isHTMLLineBreak);
+    toText(element().userAgentShadowRoot()->firstChild())->setData(element().valueWithDefault());
 }
 
 bool BaseButtonInputType::shouldSaveAndRestoreFormControlState() const
@@ -83,31 +58,25 @@ bool BaseButtonInputType::shouldSaveAndRestoreFormControlState() const
     return false;
 }
 
-void BaseButtonInputType::appendToFormData(FormData&) const { }
+bool BaseButtonInputType::appendFormData(FormDataList&, bool) const
+{
+    // Buttons except overridden types are never successful.
+    return false;
+}
 
-LayoutObject* BaseButtonInputType::createLayoutObject(
-    const ComputedStyle&) const
+LayoutObject* BaseButtonInputType::createLayoutObject(const ComputedStyle&) const
 {
     return new LayoutButton(&element());
 }
 
-InputType::ValueMode BaseButtonInputType::valueMode() const
+bool BaseButtonInputType::storesValueSeparateFromAttribute()
 {
-    return ValueMode::kDefault;
+    return false;
 }
 
-void BaseButtonInputType::setValue(const String& sanitizedValue,
-    bool,
-    TextFieldEventBehavior)
+void BaseButtonInputType::setValue(const String& sanitizedValue, bool, TextFieldEventBehavior)
 {
     element().setAttribute(valueAttr, AtomicString(sanitizedValue));
-}
-
-bool BaseButtonInputType::matchesDefaultPseudoClass()
-{
-    // HTMLFormElement::findDefaultButton() traverses the tree. So we check
-    // canBeSuccessfulSubmitButton() first for early return.
-    return canBeSuccessfulSubmitButton() && element().form() && element().form()->findDefaultButton() == &element();
 }
 
 } // namespace blink

@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/testing/URLTestHelpers.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebURLLoaderMockFactory.h"
@@ -35,14 +36,28 @@
 #include "public/web/WebView.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "web/tests/FrameTestHelpers.h"
+=======
+#include "config.h"
+
+#include "platform/testing/URLTestHelpers.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebUnitTestSupport.h"
+#include "public/web/WebView.h"
+#include "web/tests/FrameTestHelpers.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 #include <v8/include/v8-profiler.h>
 #include <v8/include/v8.h>
 
 namespace blink {
 
+<<<<<<< HEAD
 const v8::HeapGraphNode* GetProperty(const v8::HeapGraphNode* node,
     v8::HeapGraphEdge::Type type,
     const char* name)
+=======
+const v8::HeapGraphNode* GetProperty(const v8::HeapGraphNode* node, v8::HeapGraphEdge::Type type, const char* name)
+>>>>>>> miniblink49
 {
     for (int i = 0, count = node->GetChildrenCount(); i < count; ++i) {
         const v8::HeapGraphEdge* prop = node->GetChild(i);
@@ -83,6 +98,10 @@ int GetNumObjects(const char* constructor)
     return count;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 class ListenerLeakTest : public testing::Test {
 public:
     void RunTest(const std::string& filename)
@@ -90,22 +109,34 @@ public:
         std::string baseURL("http://www.example.com/");
         std::string fileName(filename);
         bool executeScript = true;
+<<<<<<< HEAD
         URLTestHelpers::registerMockedURLFromBaseURL(
             WebString::fromUTF8(baseURL.c_str()),
             WebString::fromUTF8(fileName.c_str()));
+=======
+        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(baseURL.c_str()), WebString::fromUTF8(fileName.c_str()));
+>>>>>>> miniblink49
         webViewHelper.initializeAndLoad(baseURL + fileName, executeScript);
     }
 
     void TearDown() override
     {
+<<<<<<< HEAD
         Platform::current()->getURLLoaderMockFactory()->unregisterAllURLs();
         WebCache::clear();
+=======
+        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
+>>>>>>> miniblink49
     }
 
 protected:
     FrameTestHelpers::WebViewHelper webViewHelper;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // This test tries to create a reference cycle between node and its listener.
 // See http://crbug/17400.
 TEST_F(ListenerLeakTest, ReferenceCycle)

@@ -31,17 +31,26 @@
 
 #include "platform/fonts/Glyph.h"
 #include "platform/geometry/FloatRect.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/HashMap.h"
 #include "wtf/PtrUtil.h"
 #include "wtf/text/Unicode.h"
 #include <memory>
+=======
+#include "wtf/Assertions.h"
+#include "wtf/HashMap.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/text/Unicode.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 const float cGlyphSizeUnknown = -1;
 
+<<<<<<< HEAD
 template <class T>
 class GlyphMetricsMap {
     USING_FAST_MALLOC(GlyphMetricsMap);
@@ -52,6 +61,12 @@ public:
         : m_filledPrimaryPage(false)
     {
     }
+=======
+template<class T> class GlyphMetricsMap {
+    WTF_MAKE_NONCOPYABLE(GlyphMetricsMap);
+public:
+    GlyphMetricsMap() : m_filledPrimaryPage(false) { }
+>>>>>>> miniblink49
     T metricsForGlyph(Glyph glyph)
     {
         return locatePage(glyph / GlyphMetricsPage::size)->metricsForGlyph(glyph);
@@ -64,12 +79,17 @@ public:
 
 private:
     class GlyphMetricsPage {
+<<<<<<< HEAD
         USING_FAST_MALLOC(GlyphMetricsPage);
         WTF_MAKE_NONCOPYABLE(GlyphMetricsPage);
 
     public:
         static const size_t size = 256; // Usually covers Latin-1 in a single page.
         GlyphMetricsPage() { }
+=======
+    public:
+        static const size_t size = 256; // Usually covers Latin-1 in a single page.
+>>>>>>> miniblink49
 
         T metricsForGlyph(Glyph glyph) const { return m_metrics[glyph % size]; }
         void setMetricsForGlyph(Glyph glyph, const T& metrics)
@@ -99,23 +119,38 @@ private:
 
     bool m_filledPrimaryPage;
     GlyphMetricsPage m_primaryPage; // We optimize for the page that contains glyph indices 0-255.
+<<<<<<< HEAD
     std::unique_ptr<HashMap<int, std::unique_ptr<GlyphMetricsPage>>> m_pages;
 };
 
 template <>
 inline float GlyphMetricsMap<float>::unknownMetrics()
+=======
+    OwnPtr<HashMap<int, OwnPtr<GlyphMetricsPage>>> m_pages;
+};
+
+template<> inline float GlyphMetricsMap<float>::unknownMetrics()
+>>>>>>> miniblink49
 {
     return cGlyphSizeUnknown;
 }
 
+<<<<<<< HEAD
 template <>
 inline FloatRect GlyphMetricsMap<FloatRect>::unknownMetrics()
+=======
+template<> inline FloatRect GlyphMetricsMap<FloatRect>::unknownMetrics()
+>>>>>>> miniblink49
 {
     return FloatRect(0, 0, cGlyphSizeUnknown, cGlyphSizeUnknown);
 }
 
+<<<<<<< HEAD
 template <class T>
 typename GlyphMetricsMap<T>::GlyphMetricsPage* GlyphMetricsMap<T>::locatePageSlowCase(unsigned pageNumber)
+=======
+template<class T> typename GlyphMetricsMap<T>::GlyphMetricsPage* GlyphMetricsMap<T>::locatePageSlowCase(unsigned pageNumber)
+>>>>>>> miniblink49
 {
     GlyphMetricsPage* page;
     if (!pageNumber) {
@@ -128,10 +163,17 @@ typename GlyphMetricsMap<T>::GlyphMetricsPage* GlyphMetricsMap<T>::locatePageSlo
             if (page)
                 return page;
         } else {
+<<<<<<< HEAD
             m_pages = wrapUnique(new HashMap<int, std::unique_ptr<GlyphMetricsPage>>);
         }
         page = new GlyphMetricsPage;
         m_pages->set(pageNumber, WTF::wrapUnique(page));
+=======
+            m_pages = adoptPtr(new HashMap<int, OwnPtr<GlyphMetricsPage>>);
+        }
+        page = new GlyphMetricsPage;
+        m_pages->set(pageNumber, adoptPtr(page));
+>>>>>>> miniblink49
     }
 
     // Fill in the whole page with the unknown glyph information.

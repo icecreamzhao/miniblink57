@@ -23,17 +23,20 @@
 
 #include "core/SVGNames.h"
 #include "core/dom/StyleElement.h"
+#include "core/events/EventSender.h"
 #include "core/svg/SVGElement.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class SVGStyleElement final : public SVGElement, public StyleElement {
-    DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(SVGStyleElement);
+typedef EventSender<SVGStyleElement> SVGStyleEventSender;
 
+class SVGStyleElement final : public SVGElement
+                            , public StyleElement {
+    DEFINE_WRAPPERTYPEINFO();
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGStyleElement);
 public:
-    static SVGStyleElement* create(Document&, bool createdByParser);
+    static PassRefPtrWillBeRawPtr<SVGStyleElement> create(Document&, bool createdByParser);
     ~SVGStyleElement() override;
 
     using StyleElement::sheet;
@@ -50,14 +53,14 @@ public:
     String title() const override;
     void setTitle(const AtomicString&);
 
-    void dispatchPendingEvent();
+    void dispatchPendingEvent(SVGStyleEventSender*);
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     SVGStyleElement(Document&, bool createdByParser);
 
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void didNotifySubtreeInsertionsToDocument() override;
     void removedFrom(ContainerNode*) override;
@@ -67,12 +70,8 @@ private:
     bool layoutObjectIsNeeded(const ComputedStyle&) override { return false; }
 
     bool sheetLoaded() override { return StyleElement::sheetLoaded(document()); }
-    void notifyLoadedSheetAndAllCriticalSubresources(
-        LoadedSheetErrorStatus) override;
-    void startLoadingDynamicSheet() override
-    {
-        StyleElement::startLoadingDynamicSheet(document());
-    }
+    void notifyLoadedSheetAndAllCriticalSubresources(LoadedSheetErrorStatus) override;
+    void startLoadingDynamicSheet() override { StyleElement::startLoadingDynamicSheet(document()); }
 };
 
 } // namespace blink

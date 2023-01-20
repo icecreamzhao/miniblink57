@@ -31,10 +31,9 @@ namespace blink {
 
 class TextDocumentParser final : public HTMLDocumentParser {
 public:
-    static TextDocumentParser* create(HTMLDocument& document,
-        ParserSynchronizationPolicy syncPolicy)
+    static PassRefPtrWillBeRawPtr<TextDocumentParser> create(HTMLDocument& document, ParserSynchronizationPolicy syncPolicy)
     {
-        return new TextDocumentParser(document, syncPolicy);
+        return adoptRefWillBeNoop(new TextDocumentParser(document, syncPolicy));
     }
     ~TextDocumentParser() override;
 
@@ -47,6 +46,6 @@ private:
     bool m_haveInsertedFakePreElement;
 };
 
-} // namespace blink
+}
 
 #endif

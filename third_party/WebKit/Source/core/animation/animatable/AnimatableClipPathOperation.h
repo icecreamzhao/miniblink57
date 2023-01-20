@@ -33,39 +33,38 @@
 
 #include "core/CoreExport.h"
 #include "core/animation/animatable/AnimatableValue.h"
-#include "core/style/ClipPathOperation.h"
+#include "core/layout/ClipPathOperation.h"
 
 namespace blink {
 
 class CORE_EXPORT AnimatableClipPathOperation final : public AnimatableValue {
 public:
-    ~AnimatableClipPathOperation() override { }
-    static PassRefPtr<AnimatableClipPathOperation> create(
-        ClipPathOperation* operation)
+    virtual ~AnimatableClipPathOperation() { }
+    static PassRefPtrWillBeRawPtr<AnimatableClipPathOperation> create(ClipPathOperation* operation)
     {
-        return adoptRef(new AnimatableClipPathOperation(operation));
+        return adoptRefWillBeNoop(new AnimatableClipPathOperation(operation));
     }
-    ClipPathOperation* getClipPathOperation() const { return m_operation.get(); }
+    ClipPathOperation* clipPathOperation() const { return m_operation.get(); }
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { AnimatableValue::trace(visitor); }
 
 protected:
-    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
-        double fraction) const override;
-    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
+    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
     AnimatableClipPathOperation(ClipPathOperation* operation)
         : m_operation(operation)
     {
-        DCHECK(m_operation);
+        ASSERT(m_operation);
     }
-    AnimatableType type() const override { return TypeClipPathOperation; }
-    bool equalTo(const AnimatableValue*) const override;
+    virtual AnimatableType type() const override { return TypeClipPathOperation; }
+    virtual bool equalTo(const AnimatableValue*) const override;
 
     RefPtr<ClipPathOperation> m_operation;
 };
 
-DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableClipPathOperation,
-    isClipPathOperation());
+DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableClipPathOperation, isClipPathOperation());
 
 } // namespace blink
 

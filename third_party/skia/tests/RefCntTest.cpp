@@ -11,8 +11,12 @@
 #include "SkWeakRefCnt.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 static void bounce_ref(void* data)
 {
+=======
+static void bounce_ref(void* data) {
+>>>>>>> miniblink49
     SkRefCnt* ref = static_cast<SkRefCnt*>(data);
     for (int i = 0; i < 100000; ++i) {
         ref->ref();
@@ -20,13 +24,23 @@ static void bounce_ref(void* data)
     }
 }
 
+<<<<<<< HEAD
 static void test_refCnt(skiatest::Reporter* reporter)
 {
+=======
+static void test_refCnt(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkRefCnt* ref = new SkRefCnt();
 
     SkThread thing1(bounce_ref, ref);
     SkThread thing2(bounce_ref, ref);
 
+<<<<<<< HEAD
+=======
+    thing1.setProcessorAffinity(0);
+    thing2.setProcessorAffinity(23);
+
+>>>>>>> miniblink49
     SkASSERT(thing1.start());
     SkASSERT(thing2.start());
 
@@ -37,8 +51,12 @@ static void test_refCnt(skiatest::Reporter* reporter)
     ref->unref();
 }
 
+<<<<<<< HEAD
 static void bounce_weak_ref(void* data)
 {
+=======
+static void bounce_weak_ref(void* data) {
+>>>>>>> miniblink49
     SkWeakRefCnt* ref = static_cast<SkWeakRefCnt*>(data);
     for (int i = 0; i < 100000; ++i) {
         if (ref->try_ref()) {
@@ -47,8 +65,12 @@ static void bounce_weak_ref(void* data)
     }
 }
 
+<<<<<<< HEAD
 static void bounce_weak_weak_ref(void* data)
 {
+=======
+static void bounce_weak_weak_ref(void* data) {
+>>>>>>> miniblink49
     SkWeakRefCnt* ref = static_cast<SkWeakRefCnt*>(data);
     for (int i = 0; i < 100000; ++i) {
         ref->weak_ref();
@@ -56,8 +78,12 @@ static void bounce_weak_weak_ref(void* data)
     }
 }
 
+<<<<<<< HEAD
 static void test_weakRefCnt(skiatest::Reporter* reporter)
 {
+=======
+static void test_weakRefCnt(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkWeakRefCnt* ref = new SkWeakRefCnt();
 
     SkThread thing1(bounce_ref, ref);
@@ -65,6 +91,14 @@ static void test_weakRefCnt(skiatest::Reporter* reporter)
     SkThread thing3(bounce_weak_ref, ref);
     SkThread thing4(bounce_weak_weak_ref, ref);
 
+<<<<<<< HEAD
+=======
+    thing1.setProcessorAffinity(0);
+    thing2.setProcessorAffinity(23);
+    thing3.setProcessorAffinity(2);
+    thing4.setProcessorAffinity(17);
+
+>>>>>>> miniblink49
     SkASSERT(thing1.start());
     SkASSERT(thing2.start());
     SkASSERT(thing3.start());
@@ -76,6 +110,7 @@ static void test_weakRefCnt(skiatest::Reporter* reporter)
     thing4.join();
 
     REPORTER_ASSERT(reporter, ref->unique());
+<<<<<<< HEAD
     SkDEBUGCODE(REPORTER_ASSERT(reporter, ref->getWeakCnt() == 1));
     ref->unref();
 }
@@ -420,3 +455,13 @@ DEF_TEST(sk_sp_ref, r)
     REPORTER_ASSERT(r, rc->unique());
     rc->unref();
 }
+=======
+    REPORTER_ASSERT(reporter, ref->getWeakCnt() == 1);
+    ref->unref();
+}
+
+DEF_TEST(RefCnt, reporter) {
+    test_refCnt(reporter);
+    test_weakRefCnt(reporter);
+}
+>>>>>>> miniblink49

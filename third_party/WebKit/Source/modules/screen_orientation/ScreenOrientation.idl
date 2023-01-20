@@ -2,8 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://w3c.github.io/screen-orientation/#screenorientation-interface
 
+=======
+>>>>>>> miniblink49
 enum OrientationLockType {
     "any",
     "natural",
@@ -22,7 +25,14 @@ enum OrientationType {
     "landscape-secondary"
 };
 
+<<<<<<< HEAD
 interface ScreenOrientation : EventTarget {
+=======
+[
+    GarbageCollected,
+    RuntimeEnabled=ScreenOrientation
+] interface ScreenOrientation : EventTarget {
+>>>>>>> miniblink49
     [MeasureAs=ScreenOrientationAngle] readonly attribute unsigned short angle;
     [MeasureAs=ScreenOrientationType] readonly attribute DOMString type;
 

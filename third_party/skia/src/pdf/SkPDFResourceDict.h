@@ -8,11 +8,17 @@
 #ifndef SkPDFResourceDict_DEFINED
 #define SkPDFResourceDict_DEFINED
 
+<<<<<<< HEAD
 #include "SkRefCnt.h"
 #include "SkTDArray.h"
 
 class SkPDFDict;
 class SkPDFObject;
+=======
+#include "SkPDFTypes.h"
+#include "SkTDArray.h"
+#include "SkTypes.h"
+>>>>>>> miniblink49
 
 /** \class SkPDFResourceDict
 
@@ -36,9 +42,15 @@ public:
      *  The full set of ProcSet entries is automatically created for backwards
      *  compatibility, as recommended by the PDF spec.
      *
+<<<<<<< HEAD
      *  Any arguments can be nullptr.
      */
     static sk_sp<SkPDFDict> Make(
+=======
+     *  Any arguments can be NULL.
+     */
+    static SkPDFDict* Create(
+>>>>>>> miniblink49
         const SkTDArray<SkPDFObject*>* gStateResources,
         const SkTDArray<SkPDFObject*>* patternResources,
         const SkTDArray<SkPDFObject*>* xObjectResources,

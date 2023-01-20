@@ -23,6 +23,7 @@
 
 namespace WTF {
 
+<<<<<<< HEAD
 template <typename T>
 inline T* getPtr(T* p)
 {
@@ -34,6 +35,17 @@ inline T* getPtr(T& p)
 {
     return &p;
 }
+=======
+    template <typename T> inline T* getPtr(T* p)
+    {
+        return p;
+    }
+
+    template <typename T> inline T* getPtr(T& p)
+    {
+        return &p;
+    }
+>>>>>>> miniblink49
 
 } // namespace WTF
 

@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,22 +22,43 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef AsyncAudioDecoder_h
 #define AsyncAudioDecoder_h
 
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "wtf/build_config.h"
 #include <memory>
 
 namespace blink {
 
 class BaseAudioContext;
+=======
+#include "public/platform/WebThread.h"
+#include "wtf/OwnPtr.h"
+
+namespace blink {
+
+>>>>>>> miniblink49
 class AudioBuffer;
 class AudioBufferCallback;
 class AudioBus;
 class DOMArrayBuffer;
+<<<<<<< HEAD
 class ScriptPromiseResolver;
 
 // AsyncAudioDecoder asynchronously decodes audio file data from a
@@ -77,6 +99,27 @@ private:
         AudioBus*,
         ScriptPromiseResolver*,
         BaseAudioContext*);
+=======
+
+// AsyncAudioDecoder asynchronously decodes audio file data from a DOMArrayBuffer in a worker thread.
+// Upon successful decoding, a completion callback will be invoked with the decoded PCM data in an AudioBuffer.
+
+class AsyncAudioDecoder {
+    WTF_MAKE_NONCOPYABLE(AsyncAudioDecoder);
+public:
+    AsyncAudioDecoder();
+    ~AsyncAudioDecoder();
+
+    // Must be called on the main thread.
+    void decodeAsync(DOMArrayBuffer* audioData, float sampleRate, AudioBufferCallback* successCallback, AudioBufferCallback* errorCallback);
+
+private:
+    AudioBuffer* createAudioBufferFromAudioBus(AudioBus*);
+    static void decode(DOMArrayBuffer* audioData, float sampleRate, AudioBufferCallback* successCallback, AudioBufferCallback* errorCallback);
+    static void notifyComplete(DOMArrayBuffer* audioData, AudioBufferCallback* successCallback, AudioBufferCallback* errorCallback, AudioBus*);
+
+    OwnPtr<WebThread> m_thread;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -6,6 +6,7 @@
 #define FirstPaintInvalidationTracking_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/instrumentation/tracing/TraceEvent.h"
 
 namespace blink {
@@ -31,6 +32,13 @@ public:
 private:
     static bool s_enabledForShowPaintRects;
 };
+=======
+
+namespace blink {
+
+PLATFORM_EXPORT bool firstPaintInvalidationTrackingEnabled();
+PLATFORM_EXPORT void setFirstPaintInvalidationTrackingEnabledForShowPaintRects(bool);
+>>>>>>> miniblink49
 
 } // namespace blink
 

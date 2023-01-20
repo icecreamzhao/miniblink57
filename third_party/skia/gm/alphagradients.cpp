@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "gm.h"
@@ -21,27 +22,60 @@ protected:
 
     SkISize onISize() override
     {
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+
+class AlphaGradientsGM : public skiagm::GM {
+public:
+    AlphaGradientsGM() {}
+
+protected:
+    SkString onShortName() override {
+        return SkString("alphagradients");
+    }
+
+    SkISize onISize() override {
+>>>>>>> miniblink49
         return SkISize::Make(640, 480);
     }
 
     static void draw_grad(SkCanvas* canvas, const SkRect& r,
+<<<<<<< HEAD
         SkColor c0, SkColor c1, bool doPreMul)
     {
+=======
+                          SkColor c0, SkColor c1, bool doPreMul) {
+>>>>>>> miniblink49
         SkColor colors[] = { c0, c1 };
         SkPoint pts[] = { { r.fLeft, r.fTop }, { r.fRight, r.fBottom } };
         SkPaint paint;
         uint32_t flags = doPreMul ? SkGradientShader::kInterpolateColorsInPremul_Flag : 0;
+<<<<<<< HEAD
         paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, 2,
             SkShader::kClamp_TileMode, flags, nullptr));
         canvas->drawRect(r, paint);
 
         paint.setShader(nullptr);
+=======
+        SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL, 2,
+                                                     SkShader::kClamp_TileMode, flags, NULL);
+        paint.setShader(s)->unref();
+        canvas->drawRect(r, paint);
+
+        paint.setShader(NULL);
+>>>>>>> miniblink49
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawRect(r, paint);
     }
 
+<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         static const struct {
             SkColor fColor0;
             SkColor fColor1;
@@ -79,4 +113,8 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_GM(return new AlphaGradientsGM;)
+=======
+DEF_GM( return SkNEW(AlphaGradientsGM); )
+>>>>>>> miniblink49

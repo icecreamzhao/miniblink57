@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -11,6 +15,7 @@
 #include "SkString.h"
 
 class MatrixBench : public Benchmark {
+<<<<<<< HEAD
     SkString fName;
 
 public:
@@ -21,6 +26,15 @@ public:
 
     bool isSuitableFor(Backend backend) override
     {
+=======
+    SkString    fName;
+public:
+    MatrixBench(const char name[])  {
+        fName.printf("matrix_%s", name);
+    }
+
+    bool isSuitableFor(Backend backend) override {
+>>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
@@ -29,6 +43,7 @@ public:
 protected:
     virtual int mulLoopCount() const { return 1; }
 
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -36,6 +51,13 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
+=======
+    virtual const char* onGetName() {
+        return fName.c_str();
+    }
+
+    virtual void onDraw(const int loops, SkCanvas*) {
+>>>>>>> miniblink49
         for (int i = 0; i < loops; i++) {
             this->performTest();
         }
@@ -45,6 +67,7 @@ private:
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 class EqualsMatrixBench : public MatrixBench {
 public:
     EqualsMatrixBench()
@@ -55,6 +78,14 @@ public:
 protected:
     void performTest() override
     {
+=======
+
+class EqualsMatrixBench : public MatrixBench {
+public:
+    EqualsMatrixBench() : INHERITED("equals") {}
+protected:
+    virtual void performTest() {
+>>>>>>> miniblink49
         SkMatrix m0, m1, m2;
 
         m0.reset();
@@ -67,21 +98,29 @@ protected:
         junk ^= (m1 == m2);
         junk ^= (m2 == m0);
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef MatrixBench INHERITED;
 };
 
 class ScaleMatrixBench : public MatrixBench {
 public:
+<<<<<<< HEAD
     ScaleMatrixBench()
         : INHERITED("scale")
     {
+=======
+    ScaleMatrixBench() : INHERITED("scale") {
+>>>>>>> miniblink49
         fSX = fSY = 1.5f;
         fM0.reset();
         fM1.setScale(fSX, fSY);
         fM2.setTranslate(fSX, fSY);
     }
+<<<<<<< HEAD
 
 protected:
     void performTest() override
@@ -95,6 +134,15 @@ protected:
         m.preScale(fSX, fSY);
     }
 
+=======
+protected:
+    virtual void performTest() {
+        SkMatrix m;
+        m = fM0; m.preScale(fSX, fSY);
+        m = fM1; m.preScale(fSX, fSY);
+        m = fM2; m.preScale(fSX, fSY);
+    }
+>>>>>>> miniblink49
 private:
     SkMatrix fM0, fM1, fM2;
     SkScalar fSX, fSY;
@@ -104,9 +152,13 @@ private:
 // having unknown values in our arrays can throw off the timing a lot, perhaps
 // handling NaN values is a lot slower. Anyway, this guy is just meant to put
 // reasonable values in our arrays.
+<<<<<<< HEAD
 template <typename T>
 void init9(T array[9])
 {
+=======
+template <typename T> void init9(T array[9]) {
+>>>>>>> miniblink49
     SkRandom rand;
     for (int i = 0; i < 9; i++) {
         array[i] = rand.nextSScalar1();
@@ -116,6 +168,7 @@ void init9(T array[9])
 class GetTypeMatrixBench : public MatrixBench {
 public:
     GetTypeMatrixBench()
+<<<<<<< HEAD
         : INHERITED("gettype")
     {
         fArray[0] = (float)fRnd.nextS();
@@ -129,15 +182,35 @@ public:
         fArray[8] = (float)fRnd.nextS();
     }
 
+=======
+        : INHERITED("gettype") {
+        fArray[0] = (float) fRnd.nextS();
+        fArray[1] = (float) fRnd.nextS();
+        fArray[2] = (float) fRnd.nextS();
+        fArray[3] = (float) fRnd.nextS();
+        fArray[4] = (float) fRnd.nextS();
+        fArray[5] = (float) fRnd.nextS();
+        fArray[6] = (float) fRnd.nextS();
+        fArray[7] = (float) fRnd.nextS();
+        fArray[8] = (float) fRnd.nextS();
+    }
+>>>>>>> miniblink49
 protected:
     // Putting random generation of the matrix inside performTest()
     // would help us avoid anomalous runs, but takes up 25% or
     // more of the function time.
+<<<<<<< HEAD
     void performTest() override
     {
         fMatrix.setAll(fArray[0], fArray[1], fArray[2],
             fArray[3], fArray[4], fArray[5],
             fArray[6], fArray[7], fArray[8]);
+=======
+    virtual void performTest() {
+        fMatrix.setAll(fArray[0], fArray[1], fArray[2],
+                       fArray[3], fArray[4], fArray[5],
+                       fArray[6], fArray[7], fArray[8]);
+>>>>>>> miniblink49
         // xoring into a volatile prevents the compiler from optimizing these away
         volatile int junk = 0;
         junk ^= (fMatrix.getType());
@@ -156,7 +229,10 @@ protected:
         fMatrix.dirtyMatrixTypeCache();
         junk ^= (fMatrix.getType());
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkMatrix fMatrix;
     float fArray[9];
@@ -166,6 +242,7 @@ private:
 
 class DecomposeMatrixBench : public MatrixBench {
 public:
+<<<<<<< HEAD
     DecomposeMatrixBench()
         : INHERITED("decompose")
     {
@@ -174,6 +251,12 @@ public:
 protected:
     void onDelayedSetup() override
     {
+=======
+    DecomposeMatrixBench() : INHERITED("decompose") {}
+
+protected:
+    virtual void onPreDraw() {
+>>>>>>> miniblink49
         for (int i = 0; i < 10; ++i) {
             SkScalar rot0 = (fRandom.nextBool()) ? fRandom.nextRangeF(-180, 180) : 0.0f;
             SkScalar sx = fRandom.nextRangeF(-3000.f, 3000.f);
@@ -184,6 +267,7 @@ protected:
             fMatrix[i].postRotate(rot1);
         }
     }
+<<<<<<< HEAD
     void performTest() override
     {
         SkPoint rotation1, scale, rotation2;
@@ -192,6 +276,14 @@ protected:
         }
     }
 
+=======
+    virtual void performTest() {
+        SkPoint rotation1, scale, rotation2;
+        for (int i = 0; i < 10; ++i) {
+            (void) SkDecomposeUpper2x2(fMatrix[i], &rotation1, &scale, &rotation2);
+        }
+    }
+>>>>>>> miniblink49
 private:
     SkMatrix fMatrix[10];
     SkRandom fRandom;
@@ -202,8 +294,12 @@ class InvertMapRectMatrixBench : public MatrixBench {
 public:
     InvertMapRectMatrixBench(const char* name, int flags)
         : INHERITED(name)
+<<<<<<< HEAD
         , fFlags(flags)
     {
+=======
+        , fFlags(flags) {
+>>>>>>> miniblink49
         fMatrix.reset();
         fIteration = 0;
         if (flags & kScale_Flag) {
@@ -224,6 +320,7 @@ public:
         }
     }
     enum Flag {
+<<<<<<< HEAD
         kScale_Flag = 0x01,
         kTranslate_Flag = 0x02,
         kRotate_Flag = 0x04,
@@ -234,6 +331,16 @@ public:
 protected:
     void performTest() override
     {
+=======
+        kScale_Flag             = 0x01,
+        kTranslate_Flag         = 0x02,
+        kRotate_Flag            = 0x04,
+        kPerspective_Flag       = 0x08,
+        kUncachedTypeMask_Flag  = 0x10,
+    };
+protected:
+    virtual void performTest() {
+>>>>>>> miniblink49
         if (fFlags & kUncachedTypeMask_Flag) {
             // This will invalidate the typemask without
             // changing the matrix.
@@ -249,7 +356,10 @@ protected:
             inv.mapRect(&transformedRect, srcRect);
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkMatrix fMatrix;
     int fFlags;
@@ -259,6 +369,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_BENCH(return new EqualsMatrixBench();)
 DEF_BENCH(return new ScaleMatrixBench();)
 DEF_BENCH(return new GetTypeMatrixBench();)
@@ -289,10 +400,51 @@ DEF_BENCH(return new InvertMapRectMatrixBench(
 DEF_BENCH(return new InvertMapRectMatrixBench(
     "invert_maprect_typemask_nonpersp",
     InvertMapRectMatrixBench::kUncachedTypeMask_Flag | InvertMapRectMatrixBench::kScale_Flag | InvertMapRectMatrixBench::kRotate_Flag | InvertMapRectMatrixBench::kTranslate_Flag);)
+=======
+DEF_BENCH( return new EqualsMatrixBench(); )
+DEF_BENCH( return new ScaleMatrixBench(); )
+DEF_BENCH( return new GetTypeMatrixBench(); )
+DEF_BENCH( return new DecomposeMatrixBench(); )
+
+DEF_BENCH( return new InvertMapRectMatrixBench("invert_maprect_identity", 0); )
+
+DEF_BENCH(return new InvertMapRectMatrixBench(
+                                  "invert_maprect_rectstaysrect",
+                                  InvertMapRectMatrixBench::kScale_Flag |
+                                  InvertMapRectMatrixBench::kTranslate_Flag); )
+
+DEF_BENCH(return new InvertMapRectMatrixBench(
+                                  "invert_maprect_translate",
+                                  InvertMapRectMatrixBench::kTranslate_Flag); )
+
+DEF_BENCH(return new InvertMapRectMatrixBench(
+                                  "invert_maprect_nonpersp",
+                                  InvertMapRectMatrixBench::kScale_Flag |
+                                  InvertMapRectMatrixBench::kRotate_Flag |
+                                  InvertMapRectMatrixBench::kTranslate_Flag); )
+
+DEF_BENCH( return new InvertMapRectMatrixBench(
+                               "invert_maprect_persp",
+                               InvertMapRectMatrixBench::kPerspective_Flag); )
+
+DEF_BENCH( return new InvertMapRectMatrixBench(
+                           "invert_maprect_typemask_rectstaysrect",
+                           InvertMapRectMatrixBench::kUncachedTypeMask_Flag |
+                           InvertMapRectMatrixBench::kScale_Flag |
+                           InvertMapRectMatrixBench::kTranslate_Flag); )
+
+DEF_BENCH( return new InvertMapRectMatrixBench(
+                           "invert_maprect_typemask_nonpersp",
+                           InvertMapRectMatrixBench::kUncachedTypeMask_Flag |
+                           InvertMapRectMatrixBench::kScale_Flag |
+                           InvertMapRectMatrixBench::kRotate_Flag |
+                           InvertMapRectMatrixBench::kTranslate_Flag); )
+>>>>>>> miniblink49
 
 ///////////////////////////////////////////////////////////////////////////////
 
 static SkMatrix make_trans() { return SkMatrix::MakeTrans(2, 3); }
+<<<<<<< HEAD
 static SkMatrix make_scale()
 {
     SkMatrix m(make_trans());
@@ -305,6 +457,10 @@ static SkMatrix make_afine()
     m.postRotate(15);
     return m;
 }
+=======
+static SkMatrix make_scale() { SkMatrix m(make_trans()); m.postScale(1.5f, 0.5f); return m; }
+static SkMatrix make_afine() { SkMatrix m(make_trans()); m.postRotate(15); return m; }
+>>>>>>> miniblink49
 
 class MapPointsMatrixBench : public MatrixBench {
 protected:
@@ -313,11 +469,17 @@ protected:
         N = 32
     };
     SkPoint fSrc[N], fDst[N];
+<<<<<<< HEAD
 
 public:
     MapPointsMatrixBench(const char name[], const SkMatrix& m)
         : MatrixBench(name)
         , fM(m)
+=======
+public:
+    MapPointsMatrixBench(const char name[], const SkMatrix& m)
+        : MatrixBench(name), fM(m)
+>>>>>>> miniblink49
     {
         SkRandom rand;
         for (int i = 0; i < N; ++i) {
@@ -325,14 +487,26 @@ public:
         }
     }
 
+<<<<<<< HEAD
     void performTest() override
     {
+=======
+    void performTest() override {
+>>>>>>> miniblink49
         for (int i = 0; i < 1000000; ++i) {
             fM.mapPoints(fDst, fSrc, N);
         }
     }
 };
+<<<<<<< HEAD
 DEF_BENCH(return new MapPointsMatrixBench("mappoints_identity", SkMatrix::I());)
 DEF_BENCH(return new MapPointsMatrixBench("mappoints_trans", make_trans());)
 DEF_BENCH(return new MapPointsMatrixBench("mappoints_scale", make_scale());)
 DEF_BENCH(return new MapPointsMatrixBench("mappoints_affine", make_afine());)
+=======
+DEF_BENCH( return new MapPointsMatrixBench("mappoints_identity", SkMatrix::I()); )
+DEF_BENCH( return new MapPointsMatrixBench("mappoints_trans", make_trans()); )
+DEF_BENCH( return new MapPointsMatrixBench("mappoints_scale", make_scale()); )
+DEF_BENCH( return new MapPointsMatrixBench("mappoints_affine", make_afine()); )
+
+>>>>>>> miniblink49

@@ -12,6 +12,7 @@
 
 namespace {
 struct C {
+<<<<<<< HEAD
     C()
         : fID(-1)
     {
@@ -22,6 +23,10 @@ struct C {
     {
         ++gInstCnt;
     }
+=======
+    C() : fID(-1) { ++gInstCnt; }
+    C(int id) : fID(id) { ++gInstCnt; }
+>>>>>>> miniblink49
     ~C() { --gInstCnt; }
     int fID;
 
@@ -32,13 +37,21 @@ int C::gInstCnt = 0;
 }
 
 static void check_allocator_helper(GrTAllocator<C>* allocator, int cnt, int popCnt,
+<<<<<<< HEAD
     skiatest::Reporter* reporter);
+=======
+                                   skiatest::Reporter* reporter);
+>>>>>>> miniblink49
 
 // Adds cnt items to the allocator, tests the cnts and iterators, pops popCnt items and checks
 // again. Finally it resets the allocator and checks again.
 static void check_allocator(GrTAllocator<C>* allocator, int cnt, int popCnt,
+<<<<<<< HEAD
     skiatest::Reporter* reporter)
 {
+=======
+                            skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkASSERT(allocator);
     SkASSERT(allocator->empty());
     for (int i = 0; i < cnt; ++i) {
@@ -57,8 +70,12 @@ static void check_allocator(GrTAllocator<C>* allocator, int cnt, int popCnt,
 // Checks that the allocator has the correct count, etc and that the element IDs are correct.
 // Then pops popCnt items and checks again.
 static void check_allocator_helper(GrTAllocator<C>* allocator, int cnt, int popCnt,
+<<<<<<< HEAD
     skiatest::Reporter* reporter)
 {
+=======
+                                   skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, (0 == cnt) == allocator->empty());
     REPORTER_ASSERT(reporter, cnt == allocator->count());
     REPORTER_ASSERT(reporter, cnt == C::gInstCnt);
@@ -69,7 +86,11 @@ static void check_allocator_helper(GrTAllocator<C>* allocator, int cnt, int popC
     }
     REPORTER_ASSERT(reporter, !iter.next());
     if (cnt > 0) {
+<<<<<<< HEAD
         REPORTER_ASSERT(reporter, cnt - 1 == allocator->back().fID);
+=======
+        REPORTER_ASSERT(reporter, cnt-1 == allocator->back().fID);
+>>>>>>> miniblink49
     }
 
     if (popCnt > 0) {
@@ -80,8 +101,12 @@ static void check_allocator_helper(GrTAllocator<C>* allocator, int cnt, int popC
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(GrAllocator, reporter)
 {
+=======
+DEF_TEST(GrAllocator, reporter) {
+>>>>>>> miniblink49
 
     // Test combinations of allocators with and without stack storage and with different block
     // sizes.

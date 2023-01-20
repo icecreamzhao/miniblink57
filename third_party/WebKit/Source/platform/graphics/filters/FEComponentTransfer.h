@@ -29,6 +29,7 @@
 namespace blink {
 
 enum ComponentTransferType {
+<<<<<<< HEAD
     FECOMPONENTTRANSFER_TYPE_UNKNOWN = 0,
     FECOMPONENTTRANSFER_TYPE_IDENTITY = 1,
     FECOMPONENTTRANSFER_TYPE_TABLE = 2,
@@ -39,6 +40,17 @@ enum ComponentTransferType {
 
 struct ComponentTransferFunction {
     DISALLOW_NEW();
+=======
+    FECOMPONENTTRANSFER_TYPE_UNKNOWN  = 0,
+    FECOMPONENTTRANSFER_TYPE_IDENTITY = 1,
+    FECOMPONENTTRANSFER_TYPE_TABLE    = 2,
+    FECOMPONENTTRANSFER_TYPE_DISCRETE = 3,
+    FECOMPONENTTRANSFER_TYPE_LINEAR   = 4,
+    FECOMPONENTTRANSFER_TYPE_GAMMA    = 5
+};
+
+struct ComponentTransferFunction {
+>>>>>>> miniblink49
     ComponentTransferFunction()
         : type(FECOMPONENTTRANSFER_TYPE_UNKNOWN)
         , slope(0)
@@ -60,6 +72,7 @@ struct ComponentTransferFunction {
     Vector<float> tableValues;
 };
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT FEComponentTransfer final : public FilterEffect {
 public:
     static FEComponentTransfer* create(
@@ -68,10 +81,19 @@ public:
         const ComponentTransferFunction& greenFunc,
         const ComponentTransferFunction& blueFunc,
         const ComponentTransferFunction& alphaFunc);
+=======
+class PLATFORM_EXPORT FEComponentTransfer : public FilterEffect {
+public:
+    static PassRefPtrWillBeRawPtr<FEComponentTransfer> create(Filter*, const ComponentTransferFunction& redFunc, const ComponentTransferFunction& greenFunc,
+        const ComponentTransferFunction& blueFunc, const ComponentTransferFunction& alphaFunc);
+
+    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+>>>>>>> miniblink49
 
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
+<<<<<<< HEAD
     FEComponentTransfer(Filter*,
         const ComponentTransferFunction& redFunc,
         const ComponentTransferFunction& greenFunc,
@@ -86,6 +108,14 @@ private:
         unsigned char gValues[256],
         unsigned char bValues[256],
         unsigned char aValues[256]);
+=======
+    FEComponentTransfer(Filter*, const ComponentTransferFunction& redFunc, const ComponentTransferFunction& greenFunc,
+        const ComponentTransferFunction& blueFunc, const ComponentTransferFunction& alphaFunc);
+
+    bool affectsTransparentPixels() override;
+
+    void getValues(unsigned char rValues[256], unsigned char gValues[256], unsigned char bValues[256], unsigned char aValues[256]);
+>>>>>>> miniblink49
 
     ComponentTransferFunction m_redFunc;
     ComponentTransferFunction m_greenFunc;

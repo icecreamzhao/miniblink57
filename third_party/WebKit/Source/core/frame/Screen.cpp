@@ -26,6 +26,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
+#include "config.h"
 #include "core/frame/Screen.h"
 
 #include "core/frame/FrameHost.h"
@@ -39,114 +41,100 @@
 namespace blink {
 
 Screen::Screen(LocalFrame* frame)
-    : DOMWindowClient(frame)
+    : DOMWindowProperty(frame)
 {
 }
 
 int Screen::height() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    FrameHost* host = frame()->host();
+    FrameHost* host = m_frame->host();
     if (!host)
         return 0;
-    if (host->settings().getReportScreenSizeInPhysicalPixelsQuirk()) {
-        WebScreenInfo screenInfo = host->chromeClient().screenInfo();
-        return lroundf(screenInfo.rect.height * screenInfo.deviceScaleFactor);
-    }
+    if (host->settings().reportScreenSizeInPhysicalPixelsQuirk())
+        return lroundf(host->chromeClient().screenInfo().rect.height * host->deviceScaleFactor());
     return host->chromeClient().screenInfo().rect.height;
 }
 
 int Screen::width() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    FrameHost* host = frame()->host();
+    FrameHost* host = m_frame->host();
     if (!host)
         return 0;
-    if (host->settings().getReportScreenSizeInPhysicalPixelsQuirk()) {
-        WebScreenInfo screenInfo = host->chromeClient().screenInfo();
-        return lroundf(screenInfo.rect.width * screenInfo.deviceScaleFactor);
-    }
+    if (host->settings().reportScreenSizeInPhysicalPixelsQuirk())
+        return lroundf(host->chromeClient().screenInfo().rect.width * host->deviceScaleFactor());
     return host->chromeClient().screenInfo().rect.width;
 }
 
 unsigned Screen::colorDepth() const
 {
-    if (!frame() || !frame()->host())
+    if (!m_frame || !m_frame->host())
         return 0;
-    return static_cast<unsigned>(
-        frame()->host()->chromeClient().screenInfo().depth);
+    return static_cast<unsigned>(m_frame->host()->chromeClient().screenInfo().depth);
 }
 
 unsigned Screen::pixelDepth() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    return static_cast<unsigned>(
-        frame()->host()->chromeClient().screenInfo().depth);
+    return static_cast<unsigned>(m_frame->host()->chromeClient().screenInfo().depth);
 }
 
 int Screen::availLeft() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    FrameHost* host = frame()->host();
+    FrameHost* host = m_frame->host();
     if (!host)
         return 0;
-    if (host->settings().getReportScreenSizeInPhysicalPixelsQuirk()) {
-        WebScreenInfo screenInfo = host->chromeClient().screenInfo();
-        return lroundf(screenInfo.availableRect.x * screenInfo.deviceScaleFactor);
-    }
+    if (host->settings().reportScreenSizeInPhysicalPixelsQuirk())
+        return lroundf(host->chromeClient().screenInfo().availableRect.x * host->deviceScaleFactor());
     return static_cast<int>(host->chromeClient().screenInfo().availableRect.x);
 }
 
 int Screen::availTop() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    FrameHost* host = frame()->host();
+    FrameHost* host = m_frame->host();
     if (!host)
         return 0;
-    if (host->settings().getReportScreenSizeInPhysicalPixelsQuirk()) {
-        WebScreenInfo screenInfo = host->chromeClient().screenInfo();
-        return lroundf(screenInfo.availableRect.y * screenInfo.deviceScaleFactor);
-    }
+    if (host->settings().reportScreenSizeInPhysicalPixelsQuirk())
+        return lroundf(host->chromeClient().screenInfo().availableRect.y * host->deviceScaleFactor());
     return static_cast<int>(host->chromeClient().screenInfo().availableRect.y);
 }
 
 int Screen::availHeight() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    FrameHost* host = frame()->host();
+    FrameHost* host = m_frame->host();
     if (!host)
         return 0;
-    if (host->settings().getReportScreenSizeInPhysicalPixelsQuirk()) {
-        WebScreenInfo screenInfo = host->chromeClient().screenInfo();
-        return lroundf(screenInfo.availableRect.height * screenInfo.deviceScaleFactor);
-    }
+    if (host->settings().reportScreenSizeInPhysicalPixelsQuirk())
+        return lroundf(host->chromeClient().screenInfo().availableRect.height * host->deviceScaleFactor());
     return host->chromeClient().screenInfo().availableRect.height;
 }
 
 int Screen::availWidth() const
 {
-    if (!frame())
+    if (!m_frame)
         return 0;
-    FrameHost* host = frame()->host();
+    FrameHost* host = m_frame->host();
     if (!host)
         return 0;
-    if (host->settings().getReportScreenSizeInPhysicalPixelsQuirk()) {
-        WebScreenInfo screenInfo = host->chromeClient().screenInfo();
-        return lroundf(screenInfo.availableRect.width * screenInfo.deviceScaleFactor);
-    }
+    if (host->settings().reportScreenSizeInPhysicalPixelsQuirk())
+        return lroundf(host->chromeClient().screenInfo().availableRect.width * host->deviceScaleFactor());
     return host->chromeClient().screenInfo().availableRect.width;
 }
 
 DEFINE_TRACE(Screen)
 {
-    DOMWindowClient::trace(visitor);
-    Supplementable<Screen>::trace(visitor);
+    HeapSupplementable<Screen>::trace(visitor);
+    DOMWindowProperty::trace(visitor);
 }
 
 } // namespace blink

@@ -14,10 +14,14 @@ namespace blink {
 
 class WebPasswordCredential : public WebCredential {
 public:
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebPasswordCredential(const WebString& id,
         const WebString& password,
         const WebString& name,
         const WebURL& iconURL);
+=======
+    BLINK_PLATFORM_EXPORT WebPasswordCredential(const WebString& id, const WebString& password, const WebString& name, const WebURL& iconURL);
+>>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT void assign(const WebPasswordCredential&);
 
@@ -32,3 +36,9 @@ public:
 } // namespace blink
 
 #endif // WebPasswordCredential_h
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> miniblink49

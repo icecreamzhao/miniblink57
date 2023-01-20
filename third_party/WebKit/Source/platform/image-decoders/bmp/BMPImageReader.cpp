@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/image-decoders/bmp/BMPImageReader.h"
 
 namespace {
@@ -35,6 +39,7 @@ namespace {
 // See comments on m_lookupTableAddresses in the header.
 const uint8_t nBitTo8BitlookupTable[] = {
     // 1 bit
+<<<<<<< HEAD
     0,
     255,
     // 2 bits
@@ -308,6 +313,41 @@ BMPImageReader::BMPImageReader(ImageDecoder* parent,
     : m_parent(parent)
     , m_buffer(0)
     , m_fastReader(nullptr)
+=======
+    0, 255,
+    // 2 bits
+    0, 85, 170, 255,
+    // 3 bits
+    0, 36, 73, 109, 146, 182, 219, 255,
+    // 4 bits
+    0, 17, 34, 51, 68, 85, 102, 119, 136, 153, 170, 187, 204, 221, 238, 255,
+    // 5 bits
+    0, 8, 16, 25, 33, 41, 49, 58, 66, 74, 82, 90, 99, 107, 115, 123,
+    132, 140, 148, 156, 165, 173, 181, 189, 197, 206, 214, 222, 230, 239, 247, 255,
+    // 6 bits
+    0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 45, 49, 53, 57, 61,
+    65, 69, 73, 77, 81, 85, 89, 93, 97, 101, 105, 109, 113, 117, 121, 125,
+    130, 134, 138, 142, 146, 150, 154, 158, 162, 166, 170, 174, 178, 182, 186, 190,
+    194, 198, 202, 206, 210, 215, 219, 223, 227, 231, 235, 239, 243, 247, 251, 255,
+    // 7 bits
+    0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
+    32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62,
+    64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94,
+    96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126,
+    129, 131, 133, 135, 137, 139, 141, 143, 145, 147, 149, 151, 153, 155, 157, 159,
+    161, 163, 165, 167, 169, 171, 173, 175, 177, 179, 181, 183, 185, 187, 189, 191,
+    193, 195, 197, 199, 201, 203, 205, 207, 209, 211, 213, 215, 217, 219, 221, 223,
+    225, 227, 229, 231, 233, 235, 237, 239, 241, 243, 245, 247, 249, 251, 253, 255,
+};
+
+}
+
+namespace blink {
+
+BMPImageReader::BMPImageReader(ImageDecoder* parent, size_t decodedAndHeaderOffset, size_t imgDataOffset, bool isInICO)
+    : m_parent(parent)
+    , m_buffer(0)
+>>>>>>> miniblink49
     , m_decodedOffset(decodedAndHeaderOffset)
     , m_headerOffset(decodedAndHeaderOffset)
     , m_imgDataOffset(imgDataOffset)
@@ -320,6 +360,10 @@ BMPImageReader::BMPImageReader(ImageDecoder* parent,
     , m_seenZeroAlphaPixel(false)
     , m_isInICO(isInICO)
     , m_decodingAndMask(false)
+<<<<<<< HEAD
+=======
+    , m_forceBitMaskAlpha(false)
+>>>>>>> miniblink49
 {
     // Clue-in decodeBMP() that we need to detect the correct info header size.
     memset(&m_infoHeader, 0, sizeof(m_infoHeader));
@@ -327,10 +371,13 @@ BMPImageReader::BMPImageReader(ImageDecoder* parent,
 
 bool BMPImageReader::decodeBMP(bool onlySize)
 {
+<<<<<<< HEAD
     // Defensively clear the FastSharedBufferReader's cache, as another caller
     // may have called SharedBuffer::mergeSegmentsIntoBuffer().
     m_fastReader.clearCache();
 
+=======
+>>>>>>> miniblink49
     // Calculate size of info header.
     if (!m_infoHeader.biSize && !readInfoHeaderSize())
         return false;
@@ -353,6 +400,7 @@ bool BMPImageReader::decodeBMP(bool onlySize)
         return false;
 
     // Initialize the framebuffer if needed.
+<<<<<<< HEAD
     ASSERT(m_buffer); // Parent should set this before asking us to decode!
     if (m_buffer->getStatus() == ImageFrame::FrameEmpty) {
         if (!m_buffer->setSizeAndColorSpace(m_parent->size().width(),
@@ -360,6 +408,12 @@ bool BMPImageReader::decodeBMP(bool onlySize)
                 m_parent->colorSpaceForSkImages())) {
             return m_parent->setFailed(); // Unable to allocate.
         }
+=======
+    ASSERT(m_buffer);  // Parent should set this before asking us to decode!
+    if (m_buffer->status() == ImageFrame::FrameEmpty) {
+        if (!m_buffer->setSize(m_parent->size().width(), m_parent->size().height()))
+            return m_parent->setFailed(); // Unable to allocate.
+>>>>>>> miniblink49
         m_buffer->setStatus(ImageFrame::FramePartial);
         // setSize() calls eraseARGB(), which resets the alpha flag, so we force
         // it back to false here.  We'll set it true below in all cases where
@@ -459,10 +513,16 @@ bool BMPImageReader::processInfoHeader()
     // colors", so set it to the maximum number of colors for this bit depth.
     // Also do this for bitmaps that put too large a value here.
     if (m_infoHeader.biBitCount < 16) {
+<<<<<<< HEAD
         const uint32_t maxColors = static_cast<uint32_t>(1)
             << m_infoHeader.biBitCount;
         if (!m_infoHeader.biClrUsed || (m_infoHeader.biClrUsed > maxColors))
             m_infoHeader.biClrUsed = maxColors;
+=======
+      const uint32_t maxColors = static_cast<uint32_t>(1) << m_infoHeader.biBitCount;
+      if (!m_infoHeader.biClrUsed || (m_infoHeader.biClrUsed > maxColors))
+          m_infoHeader.biClrUsed = maxColors;
+>>>>>>> miniblink49
     }
 
     // For any bitmaps that set their BitCount to the wrong value, reset the
@@ -542,11 +602,14 @@ bool BMPImageReader::readInfoHeader()
 
     // Detect top-down BMPs.
     if (m_infoHeader.biHeight < 0) {
+<<<<<<< HEAD
         // We can't negate INT32_MIN below to get a positive int32_t.
         // isInfoHeaderValid() will reject heights of 1 << 16 or larger anyway,
         // so just reject this bitmap now.
         if (m_infoHeader.biHeight == INT32_MIN)
             return m_parent->setFailed();
+=======
+>>>>>>> miniblink49
         m_isTopDown = true;
         m_infoHeader.biHeight = -m_infoHeader.biHeight;
     }
@@ -721,9 +784,14 @@ bool BMPImageReader::processBitmasks()
     // other browsers and ignore alpha in Windows V3 BMPs except inside ICO
     // files.
     if (!isWindowsV4Plus())
+<<<<<<< HEAD
         m_bitMasks[3] = (m_isInICO && (m_infoHeader.biCompression != BITFIELDS) && (m_infoHeader.biBitCount == 32))
             ? static_cast<uint32_t>(0xff000000)
             : 0;
+=======
+        m_bitMasks[3] = (m_isInICO && (m_infoHeader.biCompression != BITFIELDS) && (m_infoHeader.biBitCount == 32)) || m_forceBitMaskAlpha ? 
+            static_cast<uint32_t>(0xff000000) : 0;
+>>>>>>> miniblink49
 
     // We've now decoded all the non-image data we care about.  Skip anything
     // else before the actual raster data.
@@ -795,6 +863,7 @@ bool BMPImageReader::processColorTable()
     if ((m_decodedOffset > m_data->size()) || ((m_data->size() - m_decodedOffset) < tableSizeInBytes))
         return false;
     m_colorTable.resize(m_infoHeader.biClrUsed);
+<<<<<<< HEAD
 
     // On non-OS/2 1.x, an extra padding byte is present, which we need to skip.
     const size_t bytesPerColor = m_isOS21x ? 3 : 4;
@@ -803,6 +872,15 @@ bool BMPImageReader::processColorTable()
         m_colorTable[i].rgbGreen = readUint8(1);
         m_colorTable[i].rgbRed = readUint8(2);
         m_decodedOffset += bytesPerColor;
+=======
+    for (size_t i = 0; i < m_infoHeader.biClrUsed; ++i) {
+        m_colorTable[i].rgbBlue = m_data->data()[m_decodedOffset++];
+        m_colorTable[i].rgbGreen = m_data->data()[m_decodedOffset++];
+        m_colorTable[i].rgbRed = m_data->data()[m_decodedOffset++];
+        // Skip padding byte (not present on OS/2 1.x).
+        if (!m_isOS21x)
+            ++m_decodedOffset;
+>>>>>>> miniblink49
     }
 
     // We've now decoded all the non-image data we care about.  Skip anything
@@ -849,15 +927,24 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
 
         // For every entry except EOF, we'd better not have reached the end of
         // the image.
+<<<<<<< HEAD
         const uint8_t count = readUint8(0);
         const uint8_t code = readUint8(1);
+=======
+        const uint8_t count = m_data->data()[m_decodedOffset];
+        const uint8_t code = m_data->data()[m_decodedOffset + 1];
+>>>>>>> miniblink49
         if ((count || (code != 1)) && pastEndOfImage(0))
             return Failure;
 
         // Decode.
         if (!count) {
             switch (code) {
+<<<<<<< HEAD
             case 0: // Magic token: EOL
+=======
+            case 0:  // Magic token: EOL
+>>>>>>> miniblink49
                 // Skip any remaining pixels in this row.
                 if (m_coord.x() < m_parent->size().width())
                     m_buffer->setHasAlpha(true);
@@ -866,7 +953,11 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
                 m_decodedOffset += 2;
                 break;
 
+<<<<<<< HEAD
             case 1: // Magic token: EOF
+=======
+            case 1:  // Magic token: EOF
+>>>>>>> miniblink49
                 // Skip any remaining pixels in the image.
                 if ((m_coord.x() < m_parent->size().width()) || (m_isTopDown ? (m_coord.y() < (m_parent->size().height() - 1)) : (m_coord.y() > 0)))
                     m_buffer->setHasAlpha(true);
@@ -876,7 +967,11 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
                 // underlying SkBitmap when we mark the frame complete.
                 return Success;
 
+<<<<<<< HEAD
             case 2: { // Magic token: Delta
+=======
+            case 2: {  // Magic token: Delta
+>>>>>>> miniblink49
                 // The next two bytes specify dx and dy.  Bail if there isn't
                 // enough data.
                 if ((m_data->size() - m_decodedOffset) < 4)
@@ -884,8 +979,13 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
 
                 // Fail if this takes us past the end of the desired row or
                 // past the end of the image.
+<<<<<<< HEAD
                 const uint8_t dx = readUint8(2);
                 const uint8_t dy = readUint8(3);
+=======
+                const uint8_t dx = m_data->data()[m_decodedOffset + 2];
+                const uint8_t dy = m_data->data()[m_decodedOffset + 3];
+>>>>>>> miniblink49
                 if (dx || dy)
                     m_buffer->setHasAlpha(true);
                 if (((m_coord.x() + dx) > m_parent->size().width()) || pastEndOfImage(dy))
@@ -913,7 +1013,11 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
                 break;
             }
             }
+<<<<<<< HEAD
         } else { // Encoded mode
+=======
+        } else {  // Encoded mode
+>>>>>>> miniblink49
             // The following color data is repeated for |count| total pixels.
             // Strangely, some BMPs seem to specify excessively large counts
             // here; ignore pixels past the end of the row.
@@ -925,18 +1029,30 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
                     return InsufficientData;
 
                 // One BGR triple that we copy |count| times.
+<<<<<<< HEAD
                 fillRGBA(endX, readUint8(3), readUint8(2), code, 0xff);
+=======
+                fillRGBA(endX, m_data->data()[m_decodedOffset + 3], m_data->data()[m_decodedOffset + 2], code, 0xff);
+>>>>>>> miniblink49
                 m_decodedOffset += 4;
             } else {
                 // RLE8 has one color index that gets repeated; RLE4 has two
                 // color indexes in the upper and lower 4 bits of the byte,
                 // which are alternated.
+<<<<<<< HEAD
                 size_t colorIndexes[2] = { code, code };
+=======
+                size_t colorIndexes[2] = {code, code};
+>>>>>>> miniblink49
                 if (m_infoHeader.biCompression == RLE4) {
                     colorIndexes[0] = (colorIndexes[0] >> 4) & 0xf;
                     colorIndexes[1] &= 0xf;
                 }
+<<<<<<< HEAD
                 for (int which = 0; m_coord.x() < endX;) {
+=======
+                for (int which = 0; m_coord.x() < endX; ) {
+>>>>>>> miniblink49
                     // Some images specify color values past the end of the
                     // color table; set these pixels to black.
                     if (colorIndexes[which] < m_infoHeader.biClrUsed)
@@ -952,9 +1068,13 @@ BMPImageReader::ProcessingResult BMPImageReader::processRLEData()
     }
 }
 
+<<<<<<< HEAD
 BMPImageReader::ProcessingResult BMPImageReader::processNonRLEData(
     bool inRLE,
     int numPixels)
+=======
+BMPImageReader::ProcessingResult BMPImageReader::processNonRLEData(bool inRLE, int numPixels)
+>>>>>>> miniblink49
 {
     if (m_decodedOffset > m_data->size())
         return InsufficientData;
@@ -971,9 +1091,13 @@ BMPImageReader::ProcessingResult BMPImageReader::processNonRLEData(
     // requires.
     const size_t pixelsPerByte = 8 / m_infoHeader.biBitCount;
     const size_t bytesPerPixel = m_infoHeader.biBitCount / 8;
+<<<<<<< HEAD
     const size_t unpaddedNumBytes = (m_infoHeader.biBitCount < 16)
         ? ((numPixels + pixelsPerByte - 1) / pixelsPerByte)
         : (numPixels * bytesPerPixel);
+=======
+    const size_t unpaddedNumBytes = (m_infoHeader.biBitCount < 16) ? ((numPixels + pixelsPerByte - 1) / pixelsPerByte) : (numPixels * bytesPerPixel);
+>>>>>>> miniblink49
     // RLE runs are zero-padded at the end to a multiple of 16 bits.  Non-RLE
     // data is in rows and is zero-padded to a multiple of 32 bits.
     const size_t alignBits = inRLE ? 1 : 3;
@@ -992,9 +1116,14 @@ BMPImageReader::ProcessingResult BMPImageReader::processNonRLEData(
             // the most significant bits in the byte).
             const uint8_t mask = (1 << m_infoHeader.biBitCount) - 1;
             for (size_t byte = 0; byte < unpaddedNumBytes; ++byte) {
+<<<<<<< HEAD
                 uint8_t pixelData = readUint8(byte);
                 for (size_t pixel = 0; (pixel < pixelsPerByte) && (m_coord.x() < endX);
                      ++pixel) {
+=======
+                uint8_t pixelData = m_data->data()[m_decodedOffset + byte];
+                for (size_t pixel = 0; (pixel < pixelsPerByte) && (m_coord.x() < endX); ++pixel) {
+>>>>>>> miniblink49
                     const size_t colorIndex = (pixelData >> (8 - m_infoHeader.biBitCount)) & mask;
                     if (m_decodingAndMask) {
                         // There's no way to accurately represent an AND + XOR
@@ -1045,7 +1174,11 @@ BMPImageReader::ProcessingResult BMPImageReader::processNonRLEData(
                 }
 
                 setRGBA(getComponent(pixel, 0), getComponent(pixel, 1),
+<<<<<<< HEAD
                     getComponent(pixel, 2), alpha);
+=======
+                        getComponent(pixel, 2), alpha);
+>>>>>>> miniblink49
             }
         }
 

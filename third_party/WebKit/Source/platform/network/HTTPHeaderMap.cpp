@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/network/HTTPHeaderMap.h"
 
 #include "wtf/PtrUtil.h"
@@ -42,10 +43,29 @@ HTTPHeaderMap::~HTTPHeaderMap() { }
 std::unique_ptr<CrossThreadHTTPHeaderMapData> HTTPHeaderMap::copyData() const
 {
     std::unique_ptr<CrossThreadHTTPHeaderMapData> data = WTF::makeUnique<CrossThreadHTTPHeaderMapData>();
+=======
+#include "config.h"
+#include "platform/network/HTTPHeaderMap.h"
+
+namespace blink {
+
+HTTPHeaderMap::HTTPHeaderMap()
+{
+}
+
+HTTPHeaderMap::~HTTPHeaderMap()
+{
+}
+
+PassOwnPtr<CrossThreadHTTPHeaderMapData> HTTPHeaderMap::copyData() const
+{
+    OwnPtr<CrossThreadHTTPHeaderMapData> data = adoptPtr(new CrossThreadHTTPHeaderMapData());
+>>>>>>> miniblink49
     data->reserveInitialCapacity(size());
 
     HTTPHeaderMap::const_iterator endIt = end();
     for (HTTPHeaderMap::const_iterator it = begin(); it != endIt; ++it)
+<<<<<<< HEAD
         data->uncheckedAppend(std::make_pair(it->key.getString().isolatedCopy(),
             it->value.getString().isolatedCopy()));
 
@@ -53,13 +73,64 @@ std::unique_ptr<CrossThreadHTTPHeaderMapData> HTTPHeaderMap::copyData() const
 }
 
 void HTTPHeaderMap::adopt(std::unique_ptr<CrossThreadHTTPHeaderMapData> data)
+=======
+        data->uncheckedAppend(std::make_pair(it->key.string().isolatedCopy(), it->value.string().isolatedCopy()));
+
+    return data.release();
+}
+
+void HTTPHeaderMap::adopt(PassOwnPtr<CrossThreadHTTPHeaderMapData> data)
+>>>>>>> miniblink49
 {
     clear();
     size_t dataSize = data->size();
     for (size_t index = 0; index < dataSize; ++index) {
+<<<<<<< HEAD
         std::pair<String, String>& header = (*data)[index];
+=======
+        pair<String, String>& header = (*data)[index];
+>>>>>>> miniblink49
         set(AtomicString(header.first), AtomicString(header.second));
     }
 }
 
+<<<<<<< HEAD
+=======
+// Adapter that allows the HashMap to take C strings as keys.
+struct CaseFoldingCStringTranslator {
+    static unsigned hash(const char* cString)
+    {
+        return CaseFoldingHash::hash(cString, strlen(cString));
+    }
+
+    static bool equal(const AtomicString& key, const char* cString)
+    {
+        return equalIgnoringCase(key, cString);
+    }
+
+    static void translate(AtomicString& location, const char* cString, unsigned /*hash*/)
+    {
+        location = AtomicString(cString);
+    }
+};
+
+const AtomicString& HTTPHeaderMap::get(const char* name) const
+{
+    const_iterator i = m_headers.find<CaseFoldingCStringTranslator>(name);
+    if (i == end())
+        return nullAtom;
+    return i->value;
+}
+
+bool HTTPHeaderMap::contains(const char* name) const
+{
+    return m_headers.find<CaseFoldingCStringTranslator>(name) != end();
+}
+
+HTTPHeaderMap::AddResult HTTPHeaderMap::add(const char* name, const AtomicString& value)
+{
+    return m_headers.add<CaseFoldingCStringTranslator>(name, value);
+}
+
+>>>>>>> miniblink49
 } // namespace blink

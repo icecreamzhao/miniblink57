@@ -26,7 +26,7 @@ namespace content {
 class DevToolsClient;
 class WebPage;
 
-// ±»µ÷ÊÔÍøÒ³Ê¹ÓÃ
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³Ê¹ï¿½ï¿½
 // Developer tools UI end of communication channel between the render process of
 // the page being inspected and tools UI renderer process. All messages will
 // go through browser process. On the side of the inspected page there's
@@ -54,10 +54,10 @@ public:
 private:
     // WebDevToolsFrontendClient implementation.
     // WebDevToolsAgentClient implementation.
-    void sendProtocolMessage(int sessionId, int callId,
+    void sendProtocolMessage(int callId,
         const blink::WebString& response,
         const blink::WebString& state) override;
-    blink::WebDevToolsAgentClient::WebKitClientMessageLoop* createClientMessageLoop() /*override*/;
+    blink::WebDevToolsAgentClient::WebKitClientMessageLoop* createClientMessageLoop() override;
     void willEnterDebugLoop() override;
     void didExitDebugLoop() override;
     void willEnterDebugLoopInRun();
@@ -74,7 +74,6 @@ private:
 
     friend class WebKitClientMessageLoopImpl;
     bool m_isAttached;
-    int m_sessionId;
     DevToolsClient* m_devToolsClient;
     int m_id;
     WebPage* m_page;

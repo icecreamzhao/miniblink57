@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 // The spec for MediaDevices is in two parts:
+<<<<<<< HEAD
 // https://w3c.github.io/mediacapture-main/#mediadevices
 // https://w3c.github.io/mediacapture-main/#mediadevices-interface-extensions
 
@@ -18,4 +19,16 @@
      RaisesException,
      MeasureAs=GetUserMediaPromise
     ] Promise<MediaStream> getUserMedia(optional MediaStreamConstraints constraints);
+=======
+// http://w3c.github.io/mediacapture-main/#mediadevices
+// http://w3c.github.io/mediacapture-main/#mediadevices-interface-extensions
+
+[
+    GarbageCollected,
+    RuntimeEnabled=EnumerateDevices
+]
+interface MediaDevices {
+    [RuntimeEnabled=EnumerateDevices, TypeChecking=Interface, CallWith=ScriptState] Promise<sequence<MediaDeviceInfo>> enumerateDevices();
+    [CallWith=ScriptState, RaisesException] Promise<MediaStream> getUserMedia(Dictionary options);
+>>>>>>> miniblink49
 };

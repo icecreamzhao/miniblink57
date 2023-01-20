@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColorPriv.h"
 #include "SkShader.h"
@@ -17,12 +18,26 @@
 
 static SkBitmap make_bm()
 {
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkColorPriv.h"
+#include "SkShader.h"
+
+#include "SkArithmeticMode.h"
+#include "SkGradientShader.h"
+#define WW  100
+#define HH  32
+
+static SkBitmap make_bm() {
+>>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(WW, HH);
     bm.eraseColor(SK_ColorTRANSPARENT);
     return bm;
 }
 
+<<<<<<< HEAD
 static SkBitmap make_src()
 {
     SkBitmap bm = make_bm();
@@ -39,10 +54,25 @@ static SkBitmap make_src()
     };
     paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
         SkShader::kClamp_TileMode));
+=======
+static SkBitmap make_src() {
+    SkBitmap bm = make_bm();
+    SkCanvas canvas(bm);
+    SkPaint paint;
+    SkPoint pts[] = { {0, 0}, {SkIntToScalar(WW), SkIntToScalar(HH)} };
+    SkColor colors[] = {
+        SK_ColorTRANSPARENT, SK_ColorGREEN, SK_ColorCYAN,
+        SK_ColorRED, SK_ColorMAGENTA, SK_ColorWHITE,
+    };
+    SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL, SK_ARRAY_COUNT(colors),
+                                                 SkShader::kClamp_TileMode);
+    paint.setShader(s)->unref();
+>>>>>>> miniblink49
     canvas.drawPaint(paint);
     return bm;
 }
 
+<<<<<<< HEAD
 static SkBitmap make_dst()
 {
     SkBitmap bm = make_bm();
@@ -55,12 +85,29 @@ static SkBitmap make_dst()
     };
     paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
         SkShader::kClamp_TileMode));
+=======
+static SkBitmap make_dst() {
+    SkBitmap bm = make_bm();
+    SkCanvas canvas(bm);
+    SkPaint paint;
+    SkPoint pts[] = { {0, SkIntToScalar(HH)}, {SkIntToScalar(WW), 0} };
+    SkColor colors[] = {
+        SK_ColorBLUE, SK_ColorYELLOW, SK_ColorBLACK, SK_ColorGREEN, SK_ColorGRAY
+    };
+    SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL, SK_ARRAY_COUNT(colors),
+                                                 SkShader::kClamp_TileMode);
+    paint.setShader(s)->unref();
+>>>>>>> miniblink49
     canvas.drawPaint(paint);
     return bm;
 }
 
+<<<<<<< HEAD
 static void show_k_text(SkCanvas* canvas, SkScalar x, SkScalar y, const SkScalar k[])
 {
+=======
+static void show_k_text(SkCanvas* canvas, SkScalar x, SkScalar y, const SkScalar k[]) {
+>>>>>>> miniblink49
     SkPaint paint;
     paint.setTextSize(SkIntToScalar(24));
     paint.setAntiAlias(true);
@@ -76,6 +123,7 @@ static void show_k_text(SkCanvas* canvas, SkScalar x, SkScalar y, const SkScalar
 
 class ArithmodeGM : public skiagm::GM {
 public:
+<<<<<<< HEAD
     ArithmodeGM() { }
 
 protected:
@@ -88,11 +136,25 @@ protected:
 
     virtual void onDraw(SkCanvas* canvas)
     {
+=======
+    ArithmodeGM () {}
+
+protected:
+
+    virtual SkString onShortName() {
+        return SkString("arithmode");
+    }
+
+    virtual SkISize onISize() { return SkISize::Make(640, 480); }
+
+    virtual void onDraw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkBitmap src = make_src();
         SkBitmap dst = make_dst();
 
         const SkScalar one = SK_Scalar1;
         static const SkScalar K[] = {
+<<<<<<< HEAD
             0,
             0,
             0,
@@ -137,6 +199,19 @@ protected:
             one / 2,
             one / 2,
             0,
+=======
+            0, 0, 0, 0,
+            0, 0, 0, one,
+            0, one, 0, 0,
+            0, 0, one, 0,
+            0, one, one, 0,
+            0, one, -one, 0,
+            0, one/2, one/2, 0,
+            0, one/2, one/2, one/4,
+            0, one/2, one/2, -one/4,
+            one/4, one/2, one/2, 0,
+            -one/4, one/2, one/2, 0,
+>>>>>>> miniblink49
         };
 
         const SkScalar* k = K;
@@ -145,6 +220,7 @@ protected:
         SkScalar gap = SkIntToScalar(src.width() + 20);
         while (k < stop) {
             SkScalar x = 0;
+<<<<<<< HEAD
             canvas->drawBitmap(src, x, y, nullptr);
             x += gap;
             canvas->drawBitmap(dst, x, y, nullptr);
@@ -154,6 +230,18 @@ protected:
             canvas->drawBitmap(dst, x, y, nullptr);
             SkPaint paint;
             paint.setXfermode(SkArithmeticMode::Make(k[0], k[1], k[2], k[3]));
+=======
+            canvas->drawBitmap(src, x, y, NULL);
+            x += gap;
+            canvas->drawBitmap(dst, x, y, NULL);
+            x += gap;
+            SkRect rect = SkRect::MakeXYWH(x, y, SkIntToScalar(WW), SkIntToScalar(HH));
+            canvas->saveLayer(&rect, NULL);
+            canvas->drawBitmap(dst, x, y, NULL);
+            SkXfermode* xfer = SkArithmeticMode::Create(k[0], k[1], k[2], k[3]);
+            SkPaint paint;
+            paint.setXfermode(xfer)->unref();
+>>>>>>> miniblink49
             canvas->drawBitmap(src, x, y, &paint);
             canvas->restore();
             x += gap;
@@ -161,6 +249,7 @@ protected:
             k += 4;
             y += SkIntToScalar(src.height() + 12);
         }
+<<<<<<< HEAD
 
         // Draw two special cases to test enforcePMColor. In these cases, we
         // draw the dst bitmap twice, the first time it is halved and inverted,
@@ -193,6 +282,8 @@ protected:
 
             y += SkIntToScalar(src.height() + 12);
         }
+=======
+>>>>>>> miniblink49
     }
 
 private:
@@ -201,4 +292,9 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new ArithmodeGM;)
+=======
+static skiagm::GM* MyFactory(void*) { return new ArithmodeGM; }
+static skiagm::GMRegistry reg(MyFactory);
+>>>>>>> miniblink49

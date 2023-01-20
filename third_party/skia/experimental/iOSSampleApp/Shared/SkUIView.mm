@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+=======
+>>>>>>> miniblink49
 #import "SkUIView.h"
 #include "SkCanvas.h"
 #include "SkCGUtils.h"
@@ -35,7 +38,12 @@
 - (void)setUpWindow {
     if (NULL != fWind) {
         fWind->setVisibleP(true);
+<<<<<<< HEAD
         fWind->resize(self.frame.size.width, self.frame.size.height);
+=======
+        fWind->resize(self.frame.size.width, self.frame.size.height,
+                      kN32_SkColorType);
+>>>>>>> miniblink49
     }
 }
 

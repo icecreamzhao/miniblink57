@@ -35,16 +35,18 @@ enum XMLHttpRequestResponseType {
     "document",
     "json",
     "text",
+    "legacystream",
 };
 
-// TODO(foolip): Most DOMString types in the XMLHttpRequest interface should be
+// TODO(philipj): Most DOMString types in the XMLHttpRequest interface should be
 // either ByteString or USVString.
 [
-    ActiveScriptWrappable,
+    ActiveDOMObject,
     Constructor,
     ConstructorCallWith=ScriptState,
-    DependentLifetime,
-    Exposed=(Window,DedicatedWorker,SharedWorker),
+    // TODO(philipj): The spec has Exposed=(Window,Worker)
+    // https://github.com/whatwg/xhr/issues/19
+    Exposed=(Window,DedicatedWorker,SharedWorker)
 ] interface XMLHttpRequest : XMLHttpRequestEventTarget {
     // event handler
     attribute EventHandler onreadystatechange;
@@ -64,7 +66,7 @@ enum XMLHttpRequestResponseType {
     [RaisesException=Setter] attribute unsigned long timeout;
     [RaisesException=Setter] attribute boolean withCredentials;
     readonly attribute XMLHttpRequestUpload upload;
-    // TODO(foolip): The data argument should be of type
+    // TODO(philipj): The data argument should be of type
     // (Document or BodyInit)?
     [RaisesException] void send(optional (ArrayBuffer or ArrayBufferView or Blob or Document or DOMString or FormData)? body = null);
     void abort();
@@ -79,6 +81,6 @@ enum XMLHttpRequestResponseType {
     [RaisesException=Setter] attribute XMLHttpRequestResponseType responseType;
     [Custom=Getter, RaisesException=Getter] readonly attribute any response;
     [Custom=Getter, RaisesException=Getter] readonly attribute DOMString responseText;
-    // TODO(foolip): responseXML should be [Exposed=Window].
+    // TODO(philipj): responseXML should be [Exposed=Window].
     [RaisesException=Getter] readonly attribute Document? responseXML;
 };

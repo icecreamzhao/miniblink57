@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/PaintInvalidationReason.h"
 
 #include "wtf/Assertions.h"
@@ -45,20 +49,30 @@ const char* paintInvalidationReasonToString(PaintInvalidationReason reason)
         return "scroll";
     case PaintInvalidationSelection:
         return "selection";
+<<<<<<< HEAD
     case PaintInvalidationOutline:
         return "outline";
     case PaintInvalidationSubtree:
         return "subtree";
+=======
+    case PaintInvalidationFocusRing:
+        return "focus ring";
+    case PaintInvalidationLayer:
+        return "layer";
+>>>>>>> miniblink49
     case PaintInvalidationLayoutObjectInsertion:
         return "layoutObject insertion";
     case PaintInvalidationLayoutObjectRemoval:
         return "layoutObject removal";
+<<<<<<< HEAD
     case PaintInvalidationSVGResourceChange:
         return "SVG resource change";
     case PaintInvalidationBackgroundOnScrollingContentsLayer:
         return "background on scrolling contents layer";
     case PaintInvalidationForTesting:
         return "for testing";
+=======
+>>>>>>> miniblink49
     case PaintInvalidationDelayedFull:
         return "delayed full";
     }
@@ -66,4 +80,8 @@ const char* paintInvalidationReasonToString(PaintInvalidationReason reason)
     return "";
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

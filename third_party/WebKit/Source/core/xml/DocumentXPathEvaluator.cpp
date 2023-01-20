@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/xml/DocumentXPathEvaluator.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -31,37 +32,29 @@
 
 namespace blink {
 
-DocumentXPathEvaluator::DocumentXPathEvaluator(Document& document)
-    : Supplement<Document>(document)
+DocumentXPathEvaluator::DocumentXPathEvaluator()
 {
 }
 
-DocumentXPathEvaluator& DocumentXPathEvaluator::from(Document& document)
+DocumentXPathEvaluator& DocumentXPathEvaluator::from(WillBeHeapSupplementable<Document>& document)
 {
-    DocumentXPathEvaluator* cache = static_cast<DocumentXPathEvaluator*>(
-        Supplement<Document>::from(document, supplementName()));
+    DocumentXPathEvaluator* cache = static_cast<DocumentXPathEvaluator*>(WillBeHeapSupplement<Document>::from(document, supplementName()));
     if (!cache) {
-        cache = new DocumentXPathEvaluator(document);
-        Supplement<Document>::provideTo(document, supplementName(), cache);
+        cache = new DocumentXPathEvaluator();
+        WillBeHeapSupplement<Document>::provideTo(document, supplementName(), adoptPtrWillBeNoop(cache));
     }
     return *cache;
 }
 
-XPathExpression* DocumentXPathEvaluator::createExpression(
-    Document& document,
-    const String& expression,
-    XPathNSResolver* resolver,
-    ExceptionState& exceptionState)
+XPathExpression* DocumentXPathEvaluator::createExpression(WillBeHeapSupplementable<Document>& document, const String& expression, XPathNSResolver* resolver, ExceptionState& exceptionState)
 {
     DocumentXPathEvaluator& suplement = from(document);
     if (!suplement.m_xpathEvaluator)
         suplement.m_xpathEvaluator = XPathEvaluator::create();
-    return suplement.m_xpathEvaluator->createExpression(expression, resolver,
-        exceptionState);
+    return suplement.m_xpathEvaluator->createExpression(expression, resolver, exceptionState);
 }
 
-XPathNSResolver* DocumentXPathEvaluator::createNSResolver(Document& document,
-    Node* nodeResolver)
+XPathNSResolver* DocumentXPathEvaluator::createNSResolver(WillBeHeapSupplementable<Document>& document, Node* nodeResolver)
 {
     DocumentXPathEvaluator& suplement = from(document);
     if (!suplement.m_xpathEvaluator)
@@ -69,25 +62,20 @@ XPathNSResolver* DocumentXPathEvaluator::createNSResolver(Document& document,
     return suplement.m_xpathEvaluator->createNSResolver(nodeResolver);
 }
 
-XPathResult* DocumentXPathEvaluator::evaluate(Document& document,
-    const String& expression,
-    Node* contextNode,
-    XPathNSResolver* resolver,
-    unsigned short type,
-    const ScriptValue&,
-    ExceptionState& exceptionState)
+XPathResult* DocumentXPathEvaluator::evaluate(WillBeHeapSupplementable<Document>& document, const String& expression,
+    Node* contextNode, XPathNSResolver* resolver, unsigned short type,
+    const ScriptValue&, ExceptionState& exceptionState)
 {
     DocumentXPathEvaluator& suplement = from(document);
     if (!suplement.m_xpathEvaluator)
         suplement.m_xpathEvaluator = XPathEvaluator::create();
-    return suplement.m_xpathEvaluator->evaluate(
-        expression, contextNode, resolver, type, ScriptValue(), exceptionState);
+    return suplement.m_xpathEvaluator->evaluate(expression, contextNode, resolver, type, ScriptValue(), exceptionState);
 }
 
 DEFINE_TRACE(DocumentXPathEvaluator)
 {
     visitor->trace(m_xpathEvaluator);
-    Supplement<Document>::trace(visitor);
+    WillBeHeapSupplement<Document>::trace(visitor);
 }
 
 } // namespace blink

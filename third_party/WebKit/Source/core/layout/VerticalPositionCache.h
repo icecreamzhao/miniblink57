@@ -26,36 +26,32 @@
 #ifndef VerticalPositionCache_h
 #define VerticalPositionCache_h
 
-#include "core/layout/api/LineLayoutItem.h"
 #include "platform/fonts/FontBaseline.h"
-#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 
 namespace blink {
+
+class LayoutObject;
 
 // Values for vertical alignment.
 const int PositionUndefined = 0x80000000;
 
 class VerticalPositionCache {
-    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(VerticalPositionCache);
-
 public:
-    VerticalPositionCache() { }
+    VerticalPositionCache()
+    { }
 
-    int get(LineLayoutItem layoutObject, FontBaseline baselineType) const
+    int get(LayoutObject* layoutObject, FontBaseline baselineType) const
     {
-        const HashMap<LineLayoutItem, int>& mapToCheck = baselineType == AlphabeticBaseline ? m_alphabeticPositions
-                                                                                            : m_ideographicPositions;
-        const HashMap<LineLayoutItem, int>::const_iterator it = mapToCheck.find(layoutObject);
+        const HashMap<LayoutObject*, int>& mapToCheck = baselineType == AlphabeticBaseline ? m_alphabeticPositions : m_ideographicPositions;
+        const HashMap<LayoutObject*, int>::const_iterator it = mapToCheck.find(layoutObject);
         if (it == mapToCheck.end())
             return PositionUndefined;
         return it->value;
     }
 
-    void set(LineLayoutItem layoutObject,
-        FontBaseline baselineType,
-        int position)
+    void set(LayoutObject* layoutObject, FontBaseline baselineType, int position)
     {
         if (baselineType == AlphabeticBaseline)
             m_alphabeticPositions.set(layoutObject, position);
@@ -64,8 +60,8 @@ public:
     }
 
 private:
-    HashMap<LineLayoutItem, int> m_alphabeticPositions;
-    HashMap<LineLayoutItem, int> m_ideographicPositions;
+    HashMap<LayoutObject*, int> m_alphabeticPositions;
+    HashMap<LayoutObject*, int> m_ideographicPositions;
 };
 
 } // namespace blink

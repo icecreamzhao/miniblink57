@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "web/WebEmbeddedWorkerImpl.h"
 
 #include "bindings/core/v8/SourceLocation.h"
@@ -40,6 +41,19 @@
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/loader/FrameLoadRequest.h"
 #include "core/workers/ParentFrameTaskRunners.h"
+=======
+#include "config.h"
+#include "web/WebEmbeddedWorkerImpl.h"
+
+#include "core/dom/CrossThreadTask.h"
+#include "core/dom/Document.h"
+#include "core/fetch/SubstituteData.h"
+#include "core/frame/csp/ContentSecurityPolicy.h"
+#include "core/inspector/InspectorInstrumentation.h"
+#include "core/inspector/WorkerDebuggerAgent.h"
+#include "core/inspector/WorkerInspectorController.h"
+#include "core/loader/FrameLoadRequest.h"
+>>>>>>> miniblink49
 #include "core/workers/WorkerClients.h"
 #include "core/workers/WorkerGlobalScope.h"
 #include "core/workers/WorkerInspectorProxy.h"
@@ -48,11 +62,15 @@
 #include "core/workers/WorkerThreadStartupData.h"
 #include "modules/serviceworkers/ServiceWorkerContainerClient.h"
 #include "modules/serviceworkers/ServiceWorkerThread.h"
+<<<<<<< HEAD
 #include "platform/Histogram.h"
+=======
+>>>>>>> miniblink49
 #include "platform/SharedBuffer.h"
 #include "platform/heap/Handle.h"
 #include "platform/network/ContentSecurityPolicyParsers.h"
 #include "platform/network/ContentSecurityPolicyResponseHeaders.h"
+<<<<<<< HEAD
 #include "platform/network/NetworkUtils.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/Platform.h"
@@ -66,12 +84,24 @@
 #include "public/web/modules/serviceworker/WebServiceWorkerContextClient.h"
 #include "public/web/modules/serviceworker/WebServiceWorkerNetworkProvider.h"
 #include "web/IndexedDBClientImpl.h"
+=======
+#include "public/platform/Platform.h"
+#include "public/platform/WebServiceWorkerProvider.h"
+#include "public/platform/WebURLRequest.h"
+#include "public/web/WebDevToolsAgent.h"
+#include "public/web/WebServiceWorkerContextClient.h"
+#include "public/web/WebServiceWorkerNetworkProvider.h"
+#include "public/web/WebSettings.h"
+#include "public/web/WebView.h"
+#include "public/web/WebWorkerContentSettingsClientProxy.h"
+>>>>>>> miniblink49
 #include "web/ServiceWorkerGlobalScopeClientImpl.h"
 #include "web/ServiceWorkerGlobalScopeProxy.h"
 #include "web/WebDataSourceImpl.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WorkerContentSettingsClient.h"
 #include "wtf/Functional.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
 
@@ -83,6 +113,14 @@ WebEmbeddedWorker* WebEmbeddedWorker::create(
 {
     return new WebEmbeddedWorkerImpl(WTF::wrapUnique(client),
         WTF::wrapUnique(contentSettingsClient));
+=======
+
+namespace blink {
+
+WebEmbeddedWorker* WebEmbeddedWorker::create(WebServiceWorkerContextClient* client, WebWorkerContentSettingsClientProxy* contentSettingsClient)
+{
+    return new WebEmbeddedWorkerImpl(adoptPtr(client), adoptPtr(contentSettingsClient));
+>>>>>>> miniblink49
 }
 
 static HashSet<WebEmbeddedWorkerImpl*>& runningWorkerInstances()
@@ -91,6 +129,7 @@ static HashSet<WebEmbeddedWorkerImpl*>& runningWorkerInstances()
     return set;
 }
 
+<<<<<<< HEAD
 WebEmbeddedWorkerImpl::WebEmbeddedWorkerImpl(
     std::unique_ptr<WebServiceWorkerContextClient> client,
     std::unique_ptr<WebWorkerContentSettingsClientProxy> contentSettingsClient)
@@ -99,6 +138,14 @@ WebEmbeddedWorkerImpl::WebEmbeddedWorkerImpl(
     , m_workerInspectorProxy(WorkerInspectorProxy::create())
     , m_webView(nullptr)
     , m_mainFrame(nullptr)
+=======
+WebEmbeddedWorkerImpl::WebEmbeddedWorkerImpl(PassOwnPtr<WebServiceWorkerContextClient> client, PassOwnPtr<WebWorkerContentSettingsClientProxy> ContentSettingsClient)
+    : m_workerContextClient(client)
+    , m_contentSettingsClient(ContentSettingsClient)
+    , m_workerInspectorProxy(WorkerInspectorProxy::create())
+    , m_webView(0)
+    , m_mainFrame(0)
+>>>>>>> miniblink49
     , m_loadingShadowPage(false)
     , m_askedToTerminate(false)
     , m_pauseAfterDownloadState(DontPauseAfterDownload)
@@ -115,24 +162,34 @@ WebEmbeddedWorkerImpl::~WebEmbeddedWorkerImpl()
     if (m_workerThread)
         m_workerThread->terminateAndWait();
 
+<<<<<<< HEAD
     DCHECK(runningWorkerInstances().contains(this));
     runningWorkerInstances().remove(this);
     DCHECK(m_webView);
+=======
+    ASSERT(runningWorkerInstances().contains(this));
+    runningWorkerInstances().remove(this);
+    ASSERT(m_webView);
+>>>>>>> miniblink49
 
     // Detach the client before closing the view to avoid getting called back.
     m_mainFrame->setClient(0);
 
+<<<<<<< HEAD
     if (m_workerGlobalScopeProxy) {
         m_workerGlobalScopeProxy->detach();
         m_workerGlobalScopeProxy.clear();
     }
 
+=======
+>>>>>>> miniblink49
     m_webView->close();
     m_mainFrame->close();
     if (m_loaderProxy)
         m_loaderProxy->detachProvider(this);
 }
 
+<<<<<<< HEAD
 void WebEmbeddedWorkerImpl::startWorkerContext(
     const WebEmbeddedWorkerStartData& data)
 {
@@ -156,6 +213,23 @@ void WebEmbeddedWorkerImpl::startWorkerContext(
     if (SecurityOrigin::create(scriptURL)->isLocalhost())
         m_workerStartData.addressSpace = WebAddressSpaceLocal;
 
+=======
+void WebEmbeddedWorkerImpl::terminateAll()
+{
+    HashSet<WebEmbeddedWorkerImpl*> instances = runningWorkerInstances();
+    for (HashSet<WebEmbeddedWorkerImpl*>::iterator it = instances.begin(), itEnd = instances.end(); it != itEnd; ++it) {
+        (*it)->terminateWorkerContext();
+    }
+}
+
+void WebEmbeddedWorkerImpl::startWorkerContext(
+    const WebEmbeddedWorkerStartData& data)
+{
+    ASSERT(!m_askedToTerminate);
+    ASSERT(!m_mainScriptLoader);
+    ASSERT(m_pauseAfterDownloadState == DontPauseAfterDownload);
+    m_workerStartData = data;
+>>>>>>> miniblink49
     if (data.pauseAfterDownloadMode == WebEmbeddedWorkerStartData::PauseAfterDownload)
         m_pauseAfterDownloadState = DoPauseAfterDownload;
     prepareShadowPageForLoader();
@@ -178,20 +252,30 @@ void WebEmbeddedWorkerImpl::terminateWorkerContext()
         m_workerContextClient->workerContextFailedToStart();
         return;
     }
+<<<<<<< HEAD
     if (!m_workerThread) {
         // The worker thread has not been created yet if the worker is asked to
         // terminate during waiting for debugger or paused after download.
         DCHECK(m_workerStartData.waitForDebuggerMode == WebEmbeddedWorkerStartData::WaitForDebugger || m_pauseAfterDownloadState == IsPausedAfterDownload);
+=======
+    if (m_pauseAfterDownloadState == IsPausedAfterDownload) {
+>>>>>>> miniblink49
         // This deletes 'this'.
         m_workerContextClient->workerContextFailedToStart();
         return;
     }
+<<<<<<< HEAD
     m_workerThread->terminate();
+=======
+    if (m_workerThread)
+        m_workerThread->terminate();
+>>>>>>> miniblink49
     m_workerInspectorProxy->workerThreadTerminated();
 }
 
 void WebEmbeddedWorkerImpl::resumeAfterDownload()
 {
+<<<<<<< HEAD
     DCHECK(!m_askedToTerminate);
     DCHECK_EQ(m_pauseAfterDownloadState, IsPausedAfterDownload);
 
@@ -214,6 +298,32 @@ void WebEmbeddedWorkerImpl::reattachDevTools(const WebString& hostId,
     WebDevToolsAgent* devtoolsAgent = m_mainFrame->devToolsAgent();
     if (devtoolsAgent)
         devtoolsAgent->reattach(hostId, sessionId, savedState);
+=======
+    ASSERT(!m_askedToTerminate);
+    bool wasPaused = (m_pauseAfterDownloadState == IsPausedAfterDownload);
+    m_pauseAfterDownloadState = DontPauseAfterDownload;
+
+    // If we were asked to wait for debugger while updating service worker version then it is good time now.
+    m_workerContextClient->workerReadyForInspection();
+    if (m_workerStartData.waitForDebuggerMode == WebEmbeddedWorkerStartData::WaitForDebugger)
+        m_waitingForDebuggerState = WaitingForDebuggerAfterScriptLoaded;
+    else if (wasPaused)
+        startWorkerThread();
+}
+
+void WebEmbeddedWorkerImpl::attachDevTools(const WebString& hostId)
+{
+    WebDevToolsAgent* devtoolsAgent = m_mainFrame->devToolsAgent();
+    if (devtoolsAgent)
+        devtoolsAgent->attach(hostId);
+}
+
+void WebEmbeddedWorkerImpl::reattachDevTools(const WebString& hostId, const WebString& savedState)
+{
+    WebDevToolsAgent* devtoolsAgent = m_mainFrame->devToolsAgent();
+    if (devtoolsAgent)
+        devtoolsAgent->reattach(hostId, savedState);
+>>>>>>> miniblink49
     resumeStartup();
 }
 
@@ -224,15 +334,20 @@ void WebEmbeddedWorkerImpl::detachDevTools()
         devtoolsAgent->detach();
 }
 
+<<<<<<< HEAD
 void WebEmbeddedWorkerImpl::dispatchDevToolsMessage(int sessionId,
     int callId,
     const WebString& method,
     const WebString& message)
+=======
+void WebEmbeddedWorkerImpl::dispatchDevToolsMessage(const WebString& message)
+>>>>>>> miniblink49
 {
     if (m_askedToTerminate)
         return;
     WebDevToolsAgent* devtoolsAgent = m_mainFrame->devToolsAgent();
     if (devtoolsAgent)
+<<<<<<< HEAD
         devtoolsAgent->dispatchOnInspectorBackend(sessionId, callId, method,
             message);
 }
@@ -263,10 +378,14 @@ void WebEmbeddedWorkerImpl::addMessageToConsole(
         OtherMessageSource, webCoreMessageLevel, message.text,
         SourceLocation::create(message.url, message.lineNumber,
             message.columnNumber, nullptr)));
+=======
+        devtoolsAgent->dispatchOnInspectorBackend(message);
+>>>>>>> miniblink49
 }
 
 void WebEmbeddedWorkerImpl::postMessageToPageInspector(const String& message)
 {
+<<<<<<< HEAD
     m_workerInspectorProxy->dispatchMessageFromWorker(message);
 }
 
@@ -290,6 +409,26 @@ void WebEmbeddedWorkerImpl::postTaskToWorkerGlobalScope(
     if (m_askedToTerminate || !m_workerThread)
         return;
     m_workerThread->postTask(location, std::move(task));
+=======
+    WorkerInspectorProxy::PageInspector* pageInspector = m_workerInspectorProxy->pageInspector();
+    if (!pageInspector)
+        return;
+    pageInspector->dispatchMessageFromWorker(message);
+}
+
+void WebEmbeddedWorkerImpl::postTaskToLoader(PassOwnPtr<ExecutionContextTask> task)
+{
+    m_mainFrame->frame()->document()->postTask(FROM_HERE, task);
+}
+
+bool WebEmbeddedWorkerImpl::postTaskToWorkerGlobalScope(PassOwnPtr<ExecutionContextTask> task)
+{
+    if (m_askedToTerminate || !m_workerThread)
+        return false;
+
+    m_workerThread->postTask(FROM_HERE, task);
+    return !m_workerThread->terminated();
+>>>>>>> miniblink49
 }
 
 void WebEmbeddedWorkerImpl::prepareShadowPageForLoader()
@@ -300,8 +439,13 @@ void WebEmbeddedWorkerImpl::prepareShadowPageForLoader()
     // FIXME: This does mostly same as WebSharedWorkerImpl::initializeLoader.
     // This code, and probably most of the code in this class should be shared
     // with SharedWorker.
+<<<<<<< HEAD
     DCHECK(!m_webView);
     m_webView = WebView::create(nullptr, WebPageVisibilityStateVisible);
+=======
+    ASSERT(!m_webView);
+    m_webView = WebView::create(0);
+>>>>>>> miniblink49
     WebSettings* settings = m_webView->settings();
     // FIXME: http://crbug.com/363843. This needs to find a better way to
     // not create graphics layers.
@@ -310,6 +454,7 @@ void WebEmbeddedWorkerImpl::prepareShadowPageForLoader()
     // FIXME: When we support FetchEvent.default(), we should relax this
     // restriction.
     settings->setStrictMixedContentChecking(true);
+<<<<<<< HEAD
     settings->setAllowRunningOfInsecureContent(false);
     settings->setDataSaverEnabled(m_workerStartData.dataSaverEnabled);
     m_mainFrame = toWebLocalFrameImpl(
@@ -322,6 +467,24 @@ void WebEmbeddedWorkerImpl::prepareShadowPageForLoader()
     if (m_workerStartData.waitForDebuggerMode == WebEmbeddedWorkerStartData::WaitForDebugger) {
         m_waitingForDebuggerState = WaitingForDebugger;
         return;
+=======
+    settings->setAllowDisplayOfInsecureContent(false);
+    settings->setAllowRunningOfInsecureContent(false);
+    m_mainFrame = toWebLocalFrameImpl(WebLocalFrame::create(WebTreeScopeType::Document, this));
+    m_webView->setMainFrame(m_mainFrame);
+    m_mainFrame->setDevToolsAgentClient(this);
+
+    // If we were asked to wait for debugger then it is the good time to do that.
+    // However if we are updating service worker version (m_pauseAfterDownloadState is set)
+    // Then we need to load the worker script to check the version, so in this case we wait for debugger
+    // later in ::resumeAfterDownload().
+    if (m_pauseAfterDownloadState != DoPauseAfterDownload) {
+        m_workerContextClient->workerReadyForInspection();
+        if (m_workerStartData.waitForDebuggerMode == WebEmbeddedWorkerStartData::WaitForDebugger) {
+            m_waitingForDebuggerState = WaitingForDebuggerBeforeLoadingScript;
+            return;
+        }
+>>>>>>> miniblink49
     }
 
     loadShadowPage();
@@ -332,6 +495,7 @@ void WebEmbeddedWorkerImpl::loadShadowPage()
     // Construct substitute data source for the 'shadow page'. We only need it
     // to have same origin as the worker so the loading checks work correctly.
     CString content("");
+<<<<<<< HEAD
     RefPtr<SharedBuffer> buffer(
         SharedBuffer::create(content.data(), content.length()));
     m_loadingShadowPage = true;
@@ -342,6 +506,17 @@ void WebEmbeddedWorkerImpl::loadShadowPage()
 
 void WebEmbeddedWorkerImpl::willSendRequest(WebLocalFrame* frame,
     WebURLRequest& request)
+=======
+    int length = static_cast<int>(content.length());
+    RefPtr<SharedBuffer> buffer(SharedBuffer::create(content.data(), length));
+    m_loadingShadowPage = true;
+    m_mainFrame->frame()->loader().load(FrameLoadRequest(0, ResourceRequest(m_workerStartData.scriptURL), SubstituteData(buffer, "text/html", "UTF-8", KURL())));
+}
+
+void WebEmbeddedWorkerImpl::willSendRequest(
+    WebLocalFrame* frame, unsigned, WebURLRequest& request,
+    const WebURLResponse& redirectResponse)
+>>>>>>> miniblink49
 {
     if (m_networkProvider)
         m_networkProvider->willSendRequest(frame->dataSource(), request);
@@ -349,6 +524,7 @@ void WebEmbeddedWorkerImpl::willSendRequest(WebLocalFrame* frame,
 
 void WebEmbeddedWorkerImpl::didFinishDocumentLoad(WebLocalFrame* frame)
 {
+<<<<<<< HEAD
     DCHECK(!m_mainScriptLoader);
     DCHECK(!m_networkProvider);
     DCHECK(m_mainFrame);
@@ -366,20 +542,45 @@ void WebEmbeddedWorkerImpl::didFinishDocumentLoad(WebLocalFrame* frame)
         DenyCrossOriginRequests, m_workerStartData.addressSpace, nullptr,
         bind(&WebEmbeddedWorkerImpl::onScriptLoaderFinished,
             WTF::unretained(this)));
+=======
+    ASSERT(!m_mainScriptLoader);
+    ASSERT(!m_networkProvider);
+    ASSERT(m_mainFrame);
+    ASSERT(m_workerContextClient);
+    ASSERT(m_loadingShadowPage);
+    ASSERT(!m_askedToTerminate);
+    m_loadingShadowPage = false;
+    m_networkProvider = adoptPtr(m_workerContextClient->createServiceWorkerNetworkProvider(frame->dataSource()));
+    m_mainScriptLoader = adoptPtr(new WorkerScriptLoader());
+    m_mainScriptLoader->setRequestContext(WebURLRequest::RequestContextServiceWorker);
+    m_mainScriptLoader->loadAsynchronously(
+        *m_mainFrame->frame()->document(),
+        m_workerStartData.scriptURL,
+        DenyCrossOriginRequests,
+        nullptr,
+        bind(&WebEmbeddedWorkerImpl::onScriptLoaderFinished, this));
+>>>>>>> miniblink49
     // Do nothing here since onScriptLoaderFinished() might have been already
     // invoked and |this| might have been deleted at this point.
 }
 
+<<<<<<< HEAD
 void WebEmbeddedWorkerImpl::sendProtocolMessage(int sessionId,
     int callId,
     const WebString& message,
     const WebString& state)
 {
     m_workerContextClient->sendDevToolsMessage(sessionId, callId, message, state);
+=======
+void WebEmbeddedWorkerImpl::sendProtocolMessage(int callId, const WebString& message, const WebString& state)
+{
+    m_workerContextClient->sendDevToolsMessage(callId, message, state);
+>>>>>>> miniblink49
 }
 
 void WebEmbeddedWorkerImpl::resumeStartup()
 {
+<<<<<<< HEAD
     bool wasWaiting = (m_waitingForDebuggerState == WaitingForDebugger);
     m_waitingForDebuggerState = NotWaitingForDebugger;
     if (wasWaiting)
@@ -390,10 +591,19 @@ WebDevToolsAgentClient::WebKitClientMessageLoop*
 WebEmbeddedWorkerImpl::createClientMessageLoop()
 {
     return m_workerContextClient->createDevToolsMessageLoop();
+=======
+    WaitingForDebuggerState waitingForDebuggerState = m_waitingForDebuggerState;
+    m_waitingForDebuggerState = NotWaitingForDebugger;
+    if (waitingForDebuggerState == WaitingForDebuggerBeforeLoadingScript)
+        loadShadowPage();
+    else if (waitingForDebuggerState == WaitingForDebuggerAfterScriptLoaded)
+        startWorkerThread();
+>>>>>>> miniblink49
 }
 
 void WebEmbeddedWorkerImpl::onScriptLoaderFinished()
 {
+<<<<<<< HEAD
     DCHECK(m_mainScriptLoader);
     if (m_askedToTerminate)
         return;
@@ -404,11 +614,20 @@ void WebEmbeddedWorkerImpl::onScriptLoaderFinished()
     // through the normal network stack rather than through service worker
     // loading code.
     if (!m_workerContextClient->hasAssociatedRegistration() || m_mainScriptLoader->failed()) {
+=======
+    ASSERT(m_mainScriptLoader);
+
+    if (m_askedToTerminate)
+        return;
+
+    if (m_mainScriptLoader->failed()) {
+>>>>>>> miniblink49
         m_mainScriptLoader.clear();
         // This deletes 'this'.
         m_workerContextClient->workerContextFailedToStart();
         return;
     }
+<<<<<<< HEAD
     m_workerContextClient->workerScriptLoaded();
 
     DEFINE_STATIC_LOCAL(CustomCountHistogram, scriptSizeHistogram,
@@ -424,6 +643,16 @@ void WebEmbeddedWorkerImpl::onScriptLoaderFinished()
 
     if (m_pauseAfterDownloadState == DoPauseAfterDownload) {
         m_pauseAfterDownloadState = IsPausedAfterDownload;
+=======
+
+    Platform::current()->histogramCustomCounts("ServiceWorker.ScriptSize", m_mainScriptLoader->script().length(), 1000, 5000000, 50);
+    if (m_mainScriptLoader->cachedMetadata())
+        Platform::current()->histogramCustomCounts("ServiceWorker.ScriptCachedMetadataSize", m_mainScriptLoader->cachedMetadata()->size(), 1000, 50000000, 50);
+
+    if (m_pauseAfterDownloadState == DoPauseAfterDownload) {
+        m_pauseAfterDownloadState = IsPausedAfterDownload;
+        m_workerContextClient->didPauseAfterDownload();
+>>>>>>> miniblink49
         return;
     }
     startWorkerThread();
@@ -431,6 +660,7 @@ void WebEmbeddedWorkerImpl::onScriptLoaderFinished()
 
 void WebEmbeddedWorkerImpl::startWorkerThread()
 {
+<<<<<<< HEAD
     DCHECK_EQ(m_pauseAfterDownloadState, DontPauseAfterDownload);
     DCHECK(!m_askedToTerminate);
 
@@ -492,6 +722,47 @@ void WebEmbeddedWorkerImpl::startWorkerThread()
     m_workerThread->start(std::move(startupData));
     m_workerInspectorProxy->workerThreadCreated(document, m_workerThread.get(),
         scriptURL);
+=======
+    ASSERT(m_pauseAfterDownloadState == DontPauseAfterDownload);
+    ASSERT(!m_askedToTerminate);
+
+    Document* document = m_mainFrame->frame()->document();
+
+    WorkerThreadStartMode startMode = DontPauseWorkerGlobalScopeOnStart;
+    if (InspectorInstrumentation::shouldPauseDedicatedWorkerOnStart(document))
+        startMode = PauseWorkerGlobalScopeOnStart;
+
+    // FIXME: this document's origin is pristine and without any extra privileges. (crbug.com/254993)
+    SecurityOrigin* starterOrigin = document->securityOrigin();
+
+    OwnPtrWillBeRawPtr<WorkerClients> workerClients = WorkerClients::create();
+    provideContentSettingsClientToWorker(workerClients.get(), m_contentSettingsClient.release());
+    provideServiceWorkerGlobalScopeClientToWorker(workerClients.get(), ServiceWorkerGlobalScopeClientImpl::create(*m_workerContextClient));
+    provideServiceWorkerContainerClientToWorker(workerClients.get(), adoptPtr(m_workerContextClient->createServiceWorkerProvider()));
+
+    // We need to set the CSP to both the shadow page's document and the ServiceWorkerGlobalScope.
+    document->initContentSecurityPolicy(m_mainScriptLoader->releaseContentSecurityPolicy());
+
+    KURL scriptURL = m_mainScriptLoader->url();
+    OwnPtr<WorkerThreadStartupData> startupData = WorkerThreadStartupData::create(
+        scriptURL,
+        m_workerStartData.userAgent,
+        m_mainScriptLoader->script(),
+        m_mainScriptLoader->releaseCachedMetadata(),
+        startMode,
+        document->contentSecurityPolicy()->headers(),
+        starterOrigin,
+        workerClients.release(),
+        static_cast<V8CacheOptions>(m_workerStartData.v8CacheOptions));
+
+    m_mainScriptLoader.clear();
+
+    m_workerGlobalScopeProxy = ServiceWorkerGlobalScopeProxy::create(*this, *document, *m_workerContextClient);
+    m_loaderProxy = WorkerLoaderProxy::create(this);
+    m_workerThread = ServiceWorkerThread::create(m_loaderProxy, *m_workerGlobalScopeProxy);
+    m_workerThread->start(startupData.release());
+    m_workerInspectorProxy->workerThreadCreated(document, m_workerThread.get(), scriptURL);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

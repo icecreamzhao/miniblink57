@@ -19,6 +19,7 @@ using protocol::Maybe;
 using protocol::Response;
 
 class V8HeapProfilerAgentImpl : public protocol::HeapProfiler::Backend {
+<<<<<<< HEAD
 public:
     V8HeapProfilerAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
         protocol::DictionaryValue* state);
@@ -67,3 +68,53 @@ private:
 } // namespace v8_inspector
 
 #endif // V8_INSPECTOR_V8_HEAP_PROFILER_AGENT_IMPL_H_
+=======
+ public:
+  V8HeapProfilerAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
+                          protocol::DictionaryValue* state);
+  ~V8HeapProfilerAgentImpl() override;
+  void restore();
+
+  Response collectGarbage() override;
+
+  Response enable() override;
+  Response startTrackingHeapObjects(Maybe<bool> trackAllocations) override;
+  Response stopTrackingHeapObjects(Maybe<bool> reportProgress) override;
+
+  Response disable() override;
+
+  Response takeHeapSnapshot(Maybe<bool> reportProgress) override;
+
+  Response getObjectByHeapObjectId(
+      const String16& heapSnapshotObjectId, Maybe<String16> objectGroup,
+      std::unique_ptr<protocol::Runtime::RemoteObject>* result) override;
+  Response addInspectedHeapObject(
+      const String16& inspectedHeapObjectId) override;
+  Response getHeapObjectId(const String16& objectId,
+                           String16* heapSnapshotObjectId) override;
+
+  Response startSampling(Maybe<double> samplingInterval) override;
+  Response stopSampling(
+      std::unique_ptr<protocol::HeapProfiler::SamplingHeapProfile>*) override;
+  Response getSamplingProfile(
+      std::unique_ptr<protocol::HeapProfiler::SamplingHeapProfile>*) override;
+
+ private:
+  void startTrackingHeapObjectsInternal(bool trackAllocations);
+  void stopTrackingHeapObjectsInternal();
+  void requestHeapStatsUpdate();
+  static void onTimer(void*);
+
+  V8InspectorSessionImpl* m_session;
+  v8::Isolate* m_isolate;
+  protocol::HeapProfiler::Frontend m_frontend;
+  protocol::DictionaryValue* m_state;
+  bool m_hasTimer;
+
+  DISALLOW_COPY_AND_ASSIGN(V8HeapProfilerAgentImpl);
+};
+
+}  // namespace v8_inspector
+
+#endif  // V8_INSPECTOR_V8_HEAP_PROFILER_AGENT_IMPL_H_
+>>>>>>> miniblink49

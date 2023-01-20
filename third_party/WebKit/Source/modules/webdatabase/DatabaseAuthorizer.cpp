@@ -26,6 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/webdatabase/DatabaseAuthorizer.h"
 
 #include "wtf/HashSet.h"
@@ -37,6 +38,14 @@ namespace blink {
 
 DatabaseAuthorizer* DatabaseAuthorizer::create(
     const String& databaseInfoTableName)
+=======
+#include "config.h"
+#include "modules/webdatabase/DatabaseAuthorizer.h"
+
+namespace blink {
+
+DatabaseAuthorizer* DatabaseAuthorizer::create(const String& databaseInfoTableName)
+>>>>>>> miniblink49
 {
     return new DatabaseAuthorizer(databaseInfoTableName);
 }
@@ -45,9 +54,14 @@ DatabaseAuthorizer::DatabaseAuthorizer(const String& databaseInfoTableName)
     : m_securityEnabled(false)
     , m_databaseInfoTableName(databaseInfoTableName)
 {
+<<<<<<< HEAD
     DCHECK(isMainThread());
 
     reset();
+=======
+    reset();
+    addWhitelistedFunctions();
+>>>>>>> miniblink49
 }
 
 void DatabaseAuthorizer::reset()
@@ -62,6 +76,7 @@ void DatabaseAuthorizer::resetDeletes()
     m_hadDeletes = false;
 }
 
+<<<<<<< HEAD
 namespace {
     using FunctionNameList = HashSet<String, CaseFoldingHash>;
 
@@ -128,6 +143,70 @@ namespace {
             }));
         return list;
     }
+=======
+void DatabaseAuthorizer::addWhitelistedFunctions()
+{
+    // SQLite functions used to help implement some operations
+    // ALTER TABLE helpers
+    m_whitelistedFunctions.add("sqlite_rename_table");
+    m_whitelistedFunctions.add("sqlite_rename_trigger");
+    // GLOB helpers
+    m_whitelistedFunctions.add("glob");
+
+    // SQLite core functions
+    m_whitelistedFunctions.add("abs");
+    m_whitelistedFunctions.add("changes");
+    m_whitelistedFunctions.add("coalesce");
+    m_whitelistedFunctions.add("glob");
+    m_whitelistedFunctions.add("ifnull");
+    m_whitelistedFunctions.add("hex");
+    m_whitelistedFunctions.add("last_insert_rowid");
+    m_whitelistedFunctions.add("length");
+    m_whitelistedFunctions.add("like");
+    m_whitelistedFunctions.add("lower");
+    m_whitelistedFunctions.add("ltrim");
+    m_whitelistedFunctions.add("max");
+    m_whitelistedFunctions.add("min");
+    m_whitelistedFunctions.add("nullif");
+    m_whitelistedFunctions.add("quote");
+    m_whitelistedFunctions.add("replace");
+    m_whitelistedFunctions.add("round");
+    m_whitelistedFunctions.add("rtrim");
+    m_whitelistedFunctions.add("soundex");
+    m_whitelistedFunctions.add("sqlite_source_id");
+    m_whitelistedFunctions.add("sqlite_version");
+    m_whitelistedFunctions.add("substr");
+    m_whitelistedFunctions.add("total_changes");
+    m_whitelistedFunctions.add("trim");
+    m_whitelistedFunctions.add("typeof");
+    m_whitelistedFunctions.add("upper");
+    m_whitelistedFunctions.add("zeroblob");
+
+    // SQLite date and time functions
+    m_whitelistedFunctions.add("date");
+    m_whitelistedFunctions.add("time");
+    m_whitelistedFunctions.add("datetime");
+    m_whitelistedFunctions.add("julianday");
+    m_whitelistedFunctions.add("strftime");
+
+    // SQLite aggregate functions
+    // max() and min() are already in the list
+    m_whitelistedFunctions.add("avg");
+    m_whitelistedFunctions.add("count");
+    m_whitelistedFunctions.add("group_concat");
+    m_whitelistedFunctions.add("sum");
+    m_whitelistedFunctions.add("total");
+
+    // SQLite FTS functions
+    m_whitelistedFunctions.add("match");
+    m_whitelistedFunctions.add("snippet");
+    m_whitelistedFunctions.add("offsets");
+    m_whitelistedFunctions.add("optimize");
+
+    // SQLite ICU functions
+    // like(), lower() and upper() are already in the list
+    m_whitelistedFunctions.add("regexp");
+>>>>>>> miniblink49
 }
 
 int DatabaseAuthorizer::createTable(const String& tableName)
@@ -169,8 +248,12 @@ int DatabaseAuthorizer::dropTempTable(const String& tableName)
     return updateDeletesBasedOnTableName(tableName);
 }
 
+<<<<<<< HEAD
 int DatabaseAuthorizer::allowAlterTable(const String&,
     const String& tableName)
+=======
+int DatabaseAuthorizer::allowAlterTable(const String&, const String& tableName)
+>>>>>>> miniblink49
 {
     if (!allowWrite())
         return SQLAuthDeny;
@@ -188,8 +271,12 @@ int DatabaseAuthorizer::createIndex(const String&, const String& tableName)
     return denyBasedOnTableName(tableName);
 }
 
+<<<<<<< HEAD
 int DatabaseAuthorizer::createTempIndex(const String&,
     const String& tableName)
+=======
+int DatabaseAuthorizer::createTempIndex(const String&, const String& tableName)
+>>>>>>> miniblink49
 {
     // SQLITE_CREATE_TEMP_INDEX should result in a UPDATE or INSERT operation,
     // which is not allowed in read-only transactions or private browsing,
@@ -228,8 +315,12 @@ int DatabaseAuthorizer::createTrigger(const String&, const String& tableName)
     return denyBasedOnTableName(tableName);
 }
 
+<<<<<<< HEAD
 int DatabaseAuthorizer::createTempTrigger(const String&,
     const String& tableName)
+=======
+int DatabaseAuthorizer::createTempTrigger(const String&, const String& tableName)
+>>>>>>> miniblink49
 {
     // SQLITE_CREATE_TEMP_TRIGGER results in a INSERT operation, which is not
     // allowed in read-only transactions or private browsing, so we might as
@@ -248,8 +339,12 @@ int DatabaseAuthorizer::dropTrigger(const String&, const String& tableName)
     return updateDeletesBasedOnTableName(tableName);
 }
 
+<<<<<<< HEAD
 int DatabaseAuthorizer::dropTempTrigger(const String&,
     const String& tableName)
+=======
+int DatabaseAuthorizer::dropTempTrigger(const String&, const String& tableName)
+>>>>>>> miniblink49
 {
     // SQLITE_DROP_TEMP_TRIGGER results in a DELETE operation, which is not
     // allowed in read-only transactions or private browsing, so we might as
@@ -294,8 +389,12 @@ int DatabaseAuthorizer::dropTempView(const String&)
     return SQLAuthAllow;
 }
 
+<<<<<<< HEAD
 int DatabaseAuthorizer::createVTable(const String& tableName,
     const String& moduleName)
+=======
+int DatabaseAuthorizer::createVTable(const String& tableName, const String& moduleName)
+>>>>>>> miniblink49
 {
     if (!allowWrite())
         return SQLAuthDeny;
@@ -308,8 +407,12 @@ int DatabaseAuthorizer::createVTable(const String& tableName,
     return denyBasedOnTableName(tableName);
 }
 
+<<<<<<< HEAD
 int DatabaseAuthorizer::dropVTable(const String& tableName,
     const String& moduleName)
+=======
+int DatabaseAuthorizer::dropVTable(const String& tableName, const String& moduleName)
+>>>>>>> miniblink49
 {
     if (!allowWrite())
         return SQLAuthDeny;
@@ -388,7 +491,11 @@ int DatabaseAuthorizer::allowDetach(const String&)
 
 int DatabaseAuthorizer::allowFunction(const String& functionName)
 {
+<<<<<<< HEAD
     if (m_securityEnabled && !whitelistedFunctions().contains(functionName))
+=======
+    if (m_securityEnabled && !m_whitelistedFunctions.contains(functionName))
+>>>>>>> miniblink49
         return SQLAuthDeny;
 
     return SQLAuthAllow;
@@ -419,6 +526,7 @@ int DatabaseAuthorizer::denyBasedOnTableName(const String& tableName) const
     if (!m_securityEnabled)
         return SQLAuthAllow;
 
+<<<<<<< HEAD
     // Sadly, normal creates and drops end up affecting sqlite_master in an
     // authorizer callback, so it will be tough to enforce all of the following
     // policies:
@@ -427,6 +535,13 @@ int DatabaseAuthorizer::denyBasedOnTableName(const String& tableName) const
     //     equalIgnoringCase(tableName, "sqlite_sequence") ||
     //     equalIgnoringCase(tableName, Database::databaseInfoTableName()))
     //   return SQLAuthDeny;
+=======
+    // Sadly, normal creates and drops end up affecting sqlite_master in an authorizer callback, so
+    // it will be tough to enforce all of the following policies
+    //if (equalIgnoringCase(tableName, "sqlite_master") || equalIgnoringCase(tableName, "sqlite_temp_master") ||
+    //    equalIgnoringCase(tableName, "sqlite_sequence") || equalIgnoringCase(tableName, Database::databaseInfoTableName()))
+    //        return SQLAuthDeny;
+>>>>>>> miniblink49
 
     if (equalIgnoringCase(tableName, m_databaseInfoTableName))
         return SQLAuthDeny;

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkMaskFilter.h"
 #include "SkBlitter.h"
 #include "SkCachedData.h"
@@ -12,15 +17,31 @@
 #include "SkPath.h"
 #include "SkRRect.h"
 #include "SkRasterClip.h"
+=======
+
+#include "SkMaskFilter.h"
+#include "SkBlitter.h"
+#include "SkDraw.h"
+#include "SkCachedData.h"
+#include "SkRasterClip.h"
+#include "SkRRect.h"
+>>>>>>> miniblink49
 #include "SkTypes.h"
 
 #if SK_SUPPORT_GPU
 #include "GrTexture.h"
 #include "SkGr.h"
+<<<<<<< HEAD
 #endif
 
 SkMaskFilter::NinePatch::~NinePatch()
 {
+=======
+#include "SkGrPixelRef.h"
+#endif
+
+SkMaskFilter::NinePatch::~NinePatch() {
+>>>>>>> miniblink49
     if (fCache) {
         SkASSERT((const void*)fMask.fImage == fCache->data());
         fCache->unref();
@@ -30,6 +51,7 @@ SkMaskFilter::NinePatch::~NinePatch()
 }
 
 bool SkMaskFilter::filterMask(SkMask*, const SkMask&, const SkMatrix&,
+<<<<<<< HEAD
     SkIPoint*) const
 {
     return false;
@@ -42,6 +64,17 @@ bool SkMaskFilter::asABlur(BlurRec*) const
 
 static void extractMaskSubset(const SkMask& src, SkMask* dst)
 {
+=======
+                              SkIPoint*) const {
+    return false;
+}
+
+bool SkMaskFilter::asABlur(BlurRec*) const {
+    return false;
+}
+
+static void extractMaskSubset(const SkMask& src, SkMask* dst) {
+>>>>>>> miniblink49
     SkASSERT(src.fBounds.contains(dst->fBounds));
 
     const int dx = dst->fBounds.left() - src.fBounds.left();
@@ -52,16 +85,24 @@ static void extractMaskSubset(const SkMask& src, SkMask* dst)
 }
 
 static void blitClippedMask(SkBlitter* blitter, const SkMask& mask,
+<<<<<<< HEAD
     const SkIRect& bounds, const SkIRect& clipR)
 {
+=======
+                            const SkIRect& bounds, const SkIRect& clipR) {
+>>>>>>> miniblink49
     SkIRect r;
     if (r.intersect(bounds, clipR)) {
         blitter->blitMask(mask, r);
     }
 }
 
+<<<<<<< HEAD
 static void blitClippedRect(SkBlitter* blitter, const SkIRect& rect, const SkIRect& clipR)
 {
+=======
+static void blitClippedRect(SkBlitter* blitter, const SkIRect& rect, const SkIRect& clipR) {
+>>>>>>> miniblink49
     SkIRect r;
     if (r.intersect(rect, clipR)) {
         blitter->blitRect(r.left(), r.top(), r.width(), r.height());
@@ -81,9 +122,14 @@ static void dump(const SkMask& mask) {
 #endif
 
 static void draw_nine_clipped(const SkMask& mask, const SkIRect& outerR,
+<<<<<<< HEAD
     const SkIPoint& center, bool fillCenter,
     const SkIRect& clipR, SkBlitter* blitter)
 {
+=======
+                              const SkIPoint& center, bool fillCenter,
+                              const SkIRect& clipR, SkBlitter* blitter) {
+>>>>>>> miniblink49
     int cx = center.x();
     int cy = center.y();
     SkMask m;
@@ -125,22 +171,36 @@ static void draw_nine_clipped(const SkMask& mask, const SkIRect& outerR,
     if (m.fBounds.width() > 0 && m.fBounds.height() > 0) {
         extractMaskSubset(mask, &m);
         m.fBounds.offsetTo(outerR.right() - m.fBounds.width(),
+<<<<<<< HEAD
             outerR.bottom() - m.fBounds.height());
+=======
+                           outerR.bottom() - m.fBounds.height());
+>>>>>>> miniblink49
         blitClippedMask(blitter, m, m.fBounds, clipR);
     }
 
     SkIRect innerR;
     innerR.set(outerR.left() + cx - mask.fBounds.left(),
+<<<<<<< HEAD
         outerR.top() + cy - mask.fBounds.top(),
         outerR.right() + (cx + 1 - mask.fBounds.right()),
         outerR.bottom() + (cy + 1 - mask.fBounds.bottom()));
+=======
+               outerR.top() + cy - mask.fBounds.top(),
+               outerR.right() + (cx + 1 - mask.fBounds.right()),
+               outerR.bottom() + (cy + 1 - mask.fBounds.bottom()));
+>>>>>>> miniblink49
     if (fillCenter) {
         blitClippedRect(blitter, innerR, clipR);
     }
 
     const int innerW = innerR.width();
     size_t storageSize = (innerW + 1) * (sizeof(int16_t) + sizeof(uint8_t));
+<<<<<<< HEAD
     SkAutoSMalloc<4 * 1024> storage(storageSize);
+=======
+    SkAutoSMalloc<4*1024> storage(storageSize);
+>>>>>>> miniblink49
     int16_t* runs = (int16_t*)storage.get();
     uint8_t* alpha = (uint8_t*)(runs + innerW + 1);
 
@@ -179,7 +239,11 @@ static void draw_nine_clipped(const SkMask& mask, const SkIRect& outerR,
         int height = r.height();
         for (int x = startX; x < stopX; ++x) {
             blitter->blitV(outerR.left() + x, r.top(), height,
+<<<<<<< HEAD
                 *mask.getAddr8(mask.fBounds.left() + x, mask.fBounds.top() + cy));
+=======
+                           *mask.getAddr8(mask.fBounds.left() + x, mask.fBounds.top() + cy));
+>>>>>>> miniblink49
         }
     }
     // right
@@ -190,14 +254,22 @@ static void draw_nine_clipped(const SkMask& mask, const SkIRect& outerR,
         int height = r.height();
         for (int x = startX; x < stopX; ++x) {
             blitter->blitV(outerR.right() - x - 1, r.top(), height,
+<<<<<<< HEAD
                 *mask.getAddr8(mask.fBounds.right() - x - 1, mask.fBounds.top() + cy));
+=======
+                           *mask.getAddr8(mask.fBounds.right() - x - 1, mask.fBounds.top() + cy));
+>>>>>>> miniblink49
         }
     }
 }
 
 static void draw_nine(const SkMask& mask, const SkIRect& outerR, const SkIPoint& center,
+<<<<<<< HEAD
     bool fillCenter, const SkRasterClip& clip, SkBlitter* blitter)
 {
+=======
+                      bool fillCenter, const SkRasterClip& clip, SkBlitter* blitter) {
+>>>>>>> miniblink49
     // if we get here, we need to (possibly) resolve the clip and blitter
     SkAAClipBlitterWrapper wrapper(clip, blitter);
     blitter = wrapper.getBlitter();
@@ -213,8 +285,12 @@ static void draw_nine(const SkMask& mask, const SkIRect& outerR, const SkIPoint&
     }
 }
 
+<<<<<<< HEAD
 static int countNestedRects(const SkPath& path, SkRect rects[2])
 {
+=======
+static int countNestedRects(const SkPath& path, SkRect rects[2]) {
+>>>>>>> miniblink49
     if (path.isNestedFillRects(rects)) {
         return 2;
     }
@@ -222,15 +298,28 @@ static int countNestedRects(const SkPath& path, SkRect rects[2])
 }
 
 bool SkMaskFilter::filterRRect(const SkRRect& devRRect, const SkMatrix& matrix,
+<<<<<<< HEAD
     const SkRasterClip& clip, SkBlitter* blitter) const
 {
+=======
+                               const SkRasterClip& clip, SkBlitter* blitter,
+                               SkPaint::Style style) const {
+>>>>>>> miniblink49
     // Attempt to speed up drawing by creating a nine patch. If a nine patch
     // cannot be used, return false to allow our caller to recover and perform
     // the drawing another way.
     NinePatch patch;
+<<<<<<< HEAD
     patch.fMask.fImage = nullptr;
     if (kTrue_FilterReturn != this->filterRRectToNine(devRRect, matrix, clip.getBounds(), &patch)) {
         SkASSERT(nullptr == patch.fMask.fImage);
+=======
+    patch.fMask.fImage = NULL;
+    if (kTrue_FilterReturn != this->filterRRectToNine(devRRect, matrix,
+                                                      clip.getBounds(),
+                                                      &patch)) {
+        SkASSERT(NULL == patch.fMask.fImage);
+>>>>>>> miniblink49
         return false;
     }
     draw_nine(patch.fMask, patch.fOuterRect, patch.fCenter, true, clip, blitter);
@@ -238,18 +327,27 @@ bool SkMaskFilter::filterRRect(const SkRRect& devRRect, const SkMatrix& matrix,
 }
 
 bool SkMaskFilter::filterPath(const SkPath& devPath, const SkMatrix& matrix,
+<<<<<<< HEAD
     const SkRasterClip& clip, SkBlitter* blitter,
     SkStrokeRec::InitStyle style) const
 {
     SkRect rects[2];
     int rectCount = 0;
     if (SkStrokeRec::kFill_InitStyle == style) {
+=======
+                              const SkRasterClip& clip, SkBlitter* blitter,
+                              SkPaint::Style style) const {
+    SkRect rects[2];
+    int rectCount = 0;
+    if (SkPaint::kFill_Style == style) {
+>>>>>>> miniblink49
         rectCount = countNestedRects(devPath, rects);
     }
     if (rectCount > 0) {
         NinePatch patch;
 
         switch (this->filterRectsToNine(rects, rectCount, matrix, clip.getBounds(), &patch)) {
+<<<<<<< HEAD
         case kFalse_FilterReturn:
             SkASSERT(nullptr == patch.fMask.fImage);
             return false;
@@ -271,11 +369,38 @@ bool SkMaskFilter::filterPath(const SkPath& devPath, const SkMatrix& matrix,
     if (!SkDraw::DrawToMask(devPath, &clip.getBounds(), this, &matrix, &srcM,
             SkMask::kComputeBoundsAndRenderImage_CreateMode,
             style)) {
+=======
+            case kFalse_FilterReturn:
+                SkASSERT(NULL == patch.fMask.fImage);
+                return false;
+
+            case kTrue_FilterReturn:
+                draw_nine(patch.fMask, patch.fOuterRect, patch.fCenter, 1 == rectCount, clip,
+                          blitter);
+                return true;
+
+            case kUnimplemented_FilterReturn:
+                SkASSERT(NULL == patch.fMask.fImage);
+                // fall through
+                break;
+        }
+    }
+
+    SkMask  srcM, dstM;
+
+    if (!SkDraw::DrawToMask(devPath, &clip.getBounds(), this, &matrix, &srcM,
+                            SkMask::kComputeBoundsAndRenderImage_CreateMode,
+                            style)) {
+>>>>>>> miniblink49
         return false;
     }
     SkAutoMaskFreeImage autoSrc(srcM.fImage);
 
+<<<<<<< HEAD
     if (!this->filterMask(&dstM, srcM, matrix, nullptr)) {
+=======
+    if (!this->filterMask(&dstM, srcM, matrix, NULL)) {
+>>>>>>> miniblink49
         return false;
     }
     SkAutoMaskFreeImage autoDst(dstM.fImage);
@@ -299,19 +424,28 @@ bool SkMaskFilter::filterPath(const SkPath& devPath, const SkMatrix& matrix,
 
 SkMaskFilter::FilterReturn
 SkMaskFilter::filterRRectToNine(const SkRRect&, const SkMatrix&,
+<<<<<<< HEAD
     const SkIRect& clipBounds, NinePatch*) const
 {
+=======
+                                const SkIRect& clipBounds, NinePatch*) const {
+>>>>>>> miniblink49
     return kUnimplemented_FilterReturn;
 }
 
 SkMaskFilter::FilterReturn
 SkMaskFilter::filterRectsToNine(const SkRect[], int count, const SkMatrix&,
+<<<<<<< HEAD
     const SkIRect& clipBounds, NinePatch*) const
 {
+=======
+                                const SkIRect& clipBounds, NinePatch*) const {
+>>>>>>> miniblink49
     return kUnimplemented_FilterReturn;
 }
 
 #if SK_SUPPORT_GPU
+<<<<<<< HEAD
 bool SkMaskFilter::asFragmentProcessor(GrFragmentProcessor**, GrTexture*, const SkMatrix&) const
 {
     return false;
@@ -344,27 +478,76 @@ bool SkMaskFilter::directFilterRRectMaskGPU(GrTextureProvider* texProvider,
     const SkStrokeRec& strokeRec,
     const SkRRect& rrect) const
 {
+=======
+bool SkMaskFilter::asFragmentProcessor(GrFragmentProcessor**, GrTexture*, const SkMatrix&) const {
+    return false;
+}
+
+bool SkMaskFilter::canFilterMaskGPU(const SkRect& devBounds,
+                                    const SkIRect& clipBounds,
+                                    const SkMatrix& ctm,
+                                    SkRect* maskRect) const {
+    return false;
+}
+
+ bool SkMaskFilter::directFilterMaskGPU(GrContext* context,
+                                        GrRenderTarget* rt,
+                                        GrPaint* grp,
+                                        const GrClip&,
+                                        const SkMatrix& viewMatrix,
+                                        const SkStrokeRec& strokeRec,
+                                        const SkPath& path) const {
+    return false;
+}
+
+
+bool SkMaskFilter::directFilterRRectMaskGPU(GrContext* context,
+                                            GrRenderTarget* rt,
+                                            GrPaint* grp,
+                                            const GrClip&,
+                                            const SkMatrix& viewMatrix,
+                                            const SkStrokeRec& strokeRec,
+                                            const SkRRect& rrect) const {
+>>>>>>> miniblink49
     return false;
 }
 
 bool SkMaskFilter::filterMaskGPU(GrTexture* src,
+<<<<<<< HEAD
     const SkMatrix& ctm,
     const SkIRect& maskRect,
     GrTexture** result) const
 {
+=======
+                                 const SkMatrix& ctm,
+                                 const SkRect& maskRect,
+                                 GrTexture** result,
+                                 bool canOverwriteSrc) const {
+>>>>>>> miniblink49
     return false;
 }
 #endif
 
+<<<<<<< HEAD
 void SkMaskFilter::computeFastBounds(const SkRect& src, SkRect* dst) const
 {
     SkMask srcM, dstM;
 
+=======
+void SkMaskFilter::computeFastBounds(const SkRect& src, SkRect* dst) const {
+    SkMask  srcM, dstM;
+
+    srcM.fImage = NULL;
+>>>>>>> miniblink49
     srcM.fBounds = src.roundOut();
     srcM.fRowBytes = 0;
     srcM.fFormat = SkMask::kA8_Format;
 
+<<<<<<< HEAD
     SkIPoint margin; // ignored
+=======
+    SkIPoint margin;    // ignored
+>>>>>>> miniblink49
     if (this->filterMask(&dstM, srcM, SkMatrix::I(), &margin)) {
         dst->set(dstM.fBounds);
     } else {

@@ -10,6 +10,7 @@
 
 #include "GrAllocator.h"
 #include "GrGpu.h"
+<<<<<<< HEAD
 #include "SkTypes.h"
 #include "gl/GrGLContext.h"
 
@@ -20,5 +21,17 @@ GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
     int* lengths,
     int count,
     GrGpu::Stats*);
+=======
+#include "gl/GrGLContext.h"
+#include "SkTypes.h"
+
+GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
+                                    GrGLuint programId,
+                                    GrGLenum type,
+                                    const char** strings,
+                                    int* lengths,
+                                    int count,
+                                    GrGpu::Stats*);
+>>>>>>> miniblink49
 
 #endif

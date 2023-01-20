@@ -26,10 +26,17 @@
 #ifndef TextEncodingRegistry_h
 #define TextEncodingRegistry_h
 
+<<<<<<< HEAD
 #include "wtf/WTFExport.h"
 #include "wtf/text/Unicode.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+#include "wtf/WTFExport.h"
+#include "wtf/text/Unicode.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -38,7 +45,11 @@ class TextEncoding;
 
 // Use TextResourceDecoder::decode to decode resources, since it handles BOMs.
 // Use TextEncoding::encode to encode, since it takes care of normalization.
+<<<<<<< HEAD
 WTF_EXPORT std::unique_ptr<TextCodec> newTextCodec(const TextEncoding&);
+=======
+WTF_EXPORT PassOwnPtr<TextCodec> newTextCodec(const TextEncoding&);
+>>>>>>> miniblink49
 
 // Only TextEncoding should use the following functions directly.
 const char* atomicCanonicalTextEncodingName(const char* alias);
@@ -55,8 +66,13 @@ void dumpTextEncodingNameMap();
 
 } // namespace WTF
 
+<<<<<<< HEAD
 using WTF::atomicCanonicalTextEncodingName;
 using WTF::newTextCodec;
+=======
+using WTF::newTextCodec;
+using WTF::atomicCanonicalTextEncodingName;
+>>>>>>> miniblink49
 using WTF::noExtendedTextEncodingNameUsed;
 #ifndef NDEBUG
 using WTF::dumpTextEncodingNameMap;

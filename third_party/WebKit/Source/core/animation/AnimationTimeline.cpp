@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/AnimationTimeline.h"
 
 #include "core/animation/AnimationClock.h"
@@ -37,87 +38,86 @@
 #include "core/loader/DocumentLoader.h"
 #include "core/page/Page.h"
 #include "platform/RuntimeEnabledFeatures.h"
-#include "platform/animation/CompositorAnimationTimeline.h"
-#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/TraceEvent.h"
 #include "public/platform/Platform.h"
+#include "public/platform/WebCompositorAnimationTimeline.h"
 #include "public/platform/WebCompositorSupport.h"
-#include "wtf/PtrUtil.h"
-#include <algorithm>
 
 namespace blink {
 
 namespace {
 
-    bool compareAnimations(const Member<Animation>& left,
-        const Member<Animation>& right)
-    {
-        return Animation::hasLowerPriority(left.get(), right.get());
-    }
+bool compareAnimations(const RefPtrWillBeMember<Animation>& left, const RefPtrWillBeMember<Animation>& right)
+{
+    return Animation::hasLowerPriority(left.get(), right.get());
+}
+
 }
 
 // This value represents 1 frame at 30Hz plus a little bit of wiggle room.
 // TODO: Plumb a nominal framerate through and derive this value from that.
 const double AnimationTimeline::s_minimumDelay = 0.04;
 
-AnimationTimeline* AnimationTimeline::create(Document* document,
-    PlatformTiming* timing)
+
+PassRefPtrWillBeRawPtr<AnimationTimeline> AnimationTimeline::create(Document* document, PassOwnPtrWillBeRawPtr<PlatformTiming> timing)
 {
-    return new AnimationTimeline(document, timing);
+    return adoptRefWillBeNoop(new AnimationTimeline(document, timing));
 }
 
-AnimationTimeline::AnimationTimeline(Document* document, PlatformTiming* timing)
+AnimationTimeline::AnimationTimeline(Document* document, PassOwnPtrWillBeRawPtr<PlatformTiming> timing)
     : m_document(document)
-    ,
-    // 0 is used by unit tests which cannot initialize from the loader
-    m_zeroTime(0)
+    , m_zeroTime(0) // 0 is used by unit tests which cannot initialize from the loader
     , m_zeroTimeInitialized(false)
     , m_outdatedAnimationCount(0)
     , m_playbackRate(1)
     , m_lastCurrentTimeInternal(0)
 {
     if (!timing)
-        m_timing = new AnimationTimelineTiming(this);
+        m_timing = adoptPtrWillBeNoop(new AnimationTimelineTiming(this));
     else
         m_timing = timing;
 
-    if (Platform::current()->isThreadedAnimationEnabled())
-        m_compositorTimeline = CompositorAnimationTimeline::create();
+    if (RuntimeEnabledFeatures::compositorAnimationTimelinesEnabled() && Platform::current()->compositorSupport())
+        m_compositorTimeline = adoptPtr(Platform::current()->compositorSupport()->createAnimationTimeline());
 
-    DCHECK(document);
+    ASSERT(document);
 }
 
-bool AnimationTimeline::isActive()
+AnimationTimeline::~AnimationTimeline()
 {
-    return m_document && m_document->page();
+#if !ENABLE(OILPAN)
+    for (const auto& animation : m_animations)
+        animation->detachFromTimeline();
+#endif
 }
 
 void AnimationTimeline::animationAttached(Animation& animation)
 {
-    DCHECK_EQ(animation.timeline(), this);
-    DCHECK(!m_animations.contains(&animation));
+    ASSERT(animation.timeline() == this);
+    ASSERT(!m_animations.contains(&animation));
     m_animations.add(&animation);
 }
 
-Animation* AnimationTimeline::play(AnimationEffectReadOnly* child)
+Animation* AnimationTimeline::play(AnimationEffect* child)
 {
     if (!m_document)
         return nullptr;
 
-    Animation* animation = Animation::create(child, this);
-    DCHECK(m_animations.contains(animation));
+    RefPtrWillBeRawPtr<Animation> animation = Animation::create(child, this);
+    ASSERT(m_animations.contains(animation.get()));
 
     animation->play();
-    DCHECK(m_animationsNeedingUpdate.contains(animation));
+    ASSERT(m_animationsNeedingUpdate.contains(animation));
 
-    return animation;
+    return animation.get();
 }
 
-HeapVector<Member<Animation>> AnimationTimeline::getAnimations()
+WillBeHeapVector<RefPtrWillBeMember<Animation>> AnimationTimeline::getAnimations()
 {
-    HeapVector<Member<Animation>> animations;
+    WillBeHeapVector<RefPtrWillBeMember<Animation>> animations;
     for (const auto& animation : m_animations) {
         if (animation->effect() && (animation->effect()->isCurrent() || animation->effect()->isInEffect()))
-            animations.push_back(animation);
+            animations.append(animation);
     }
     std::sort(animations.begin(), animations.end(), compareAnimations);
     return animations;
@@ -134,10 +134,12 @@ void AnimationTimeline::serviceAnimations(TimingUpdateReason reason)
 
     m_lastCurrentTimeInternal = currentTimeInternal();
 
-    HeapVector<Member<Animation>> animations;
+    m_timing->cancelWake();
+
+    WillBeHeapVector<RawPtrWillBeMember<Animation>> animations;
     animations.reserveInitialCapacity(m_animationsNeedingUpdate.size());
-    for (Animation* animation : m_animationsNeedingUpdate)
-        animations.push_back(animation);
+    for (RefPtrWillBeMember<Animation> animation : m_animationsNeedingUpdate)
+        animations.append(animation.get());
 
     std::sort(animations.begin(), animations.end(), Animation::hasLowerPriority);
 
@@ -146,18 +148,17 @@ void AnimationTimeline::serviceAnimations(TimingUpdateReason reason)
             m_animationsNeedingUpdate.remove(animation);
     }
 
-    DCHECK_EQ(m_outdatedAnimationCount, 0U);
-    DCHECK(m_lastCurrentTimeInternal == currentTimeInternal() || (std_isnan(currentTimeInternal()) && std_isnan(m_lastCurrentTimeInternal)));
+    ASSERT(m_outdatedAnimationCount == 0);
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     for (const auto& animation : m_animationsNeedingUpdate)
-        DCHECK(!animation->outdated());
+        ASSERT(!animation->outdated());
 #endif
 }
 
 void AnimationTimeline::scheduleNextService()
 {
-    DCHECK_EQ(m_outdatedAnimationCount, 0U);
+    ASSERT(m_outdatedAnimationCount == 0);
 
     double timeToNextEffect = std::numeric_limits<double>::infinity();
     for (const auto& animation : m_animationsNeedingUpdate) {
@@ -173,9 +174,12 @@ void AnimationTimeline::scheduleNextService()
 
 void AnimationTimeline::AnimationTimelineTiming::wakeAfter(double duration)
 {
-    if (m_timer.isActive() && m_timer.nextFireInterval() < duration)
-        return;
-    m_timer.startOneShot(duration, BLINK_FROM_HERE);
+    m_timer.startOneShot(duration, FROM_HERE);
+}
+
+void AnimationTimeline::AnimationTimelineTiming::cancelWake()
+{
+    m_timer.stop();
 }
 
 void AnimationTimeline::AnimationTimelineTiming::serviceOnNextFrame()
@@ -199,14 +203,6 @@ double AnimationTimeline::zeroTime()
     return m_zeroTime;
 }
 
-void AnimationTimeline::resetForTesting()
-{
-    m_zeroTime = 0;
-    m_zeroTimeInitialized = true;
-    m_playbackRate = 1;
-    m_lastCurrentTimeInternal = 0;
-}
-
 double AnimationTimeline::currentTime(bool& isNull)
 {
     return currentTimeInternal(isNull) * 1000;
@@ -214,14 +210,14 @@ double AnimationTimeline::currentTime(bool& isNull)
 
 double AnimationTimeline::currentTimeInternal(bool& isNull)
 {
-    if (!isActive()) {
+    if (!m_document) {
         isNull = true;
         return std::numeric_limits<double>::quiet_NaN();
     }
     double result = m_playbackRate == 0
         ? zeroTime()
         : (document()->animationClock().currentTime() - zeroTime()) * m_playbackRate;
-    isNull = std_isnan(result);
+    isNull = std::isnan(result);
     return result;
 }
 
@@ -243,7 +239,7 @@ void AnimationTimeline::setCurrentTime(double currentTime)
 
 void AnimationTimeline::setCurrentTimeInternal(double currentTime)
 {
-    if (!isActive())
+    if (!document())
         return;
     m_zeroTime = m_playbackRate == 0
         ? currentTime
@@ -253,17 +249,16 @@ void AnimationTimeline::setCurrentTimeInternal(double currentTime)
     for (const auto& animation : m_animations) {
         // The Player needs a timing update to pick up a new time.
         animation->setOutdated();
+        // Any corresponding compositor animation will need to be restarted. Marking the
+        // effect changed forces this.
+        animation->setCompositorPending(true);
     }
-
-    // Any corresponding compositor animation will need to be restarted. Marking
-    // the effect changed forces this.
-    setAllCompositorPending(true);
 }
 
 double AnimationTimeline::effectiveTime()
 {
     double time = currentTimeInternal();
-    return std_isnan(time) ? 0 : time;
+    return std::isnan(time) ? 0 : time;
 }
 
 void AnimationTimeline::pauseAnimationsForTesting(double pauseTime)
@@ -275,55 +270,39 @@ void AnimationTimeline::pauseAnimationsForTesting(double pauseTime)
 
 bool AnimationTimeline::needsAnimationTimingUpdate()
 {
-    if (currentTimeInternal() == m_lastCurrentTimeInternal)
-        return false;
-
-    if (std_isnan(currentTimeInternal()) && std_isnan(m_lastCurrentTimeInternal))
-        return false;
-
-    // We allow m_lastCurrentTimeInternal to advance here when there
-    // are no animations to allow animations spawned during style
-    // recalc to not invalidate this flag.
-    if (m_animationsNeedingUpdate.isEmpty())
-        m_lastCurrentTimeInternal = currentTimeInternal();
-
-    return !m_animationsNeedingUpdate.isEmpty();
+    return m_animationsNeedingUpdate.size() && currentTimeInternal() != m_lastCurrentTimeInternal;
 }
 
 void AnimationTimeline::clearOutdatedAnimation(Animation* animation)
 {
-    DCHECK(!animation->outdated());
+    ASSERT(!animation->outdated());
     m_outdatedAnimationCount--;
 }
 
 void AnimationTimeline::setOutdatedAnimation(Animation* animation)
 {
-    DCHECK(animation->outdated());
+    ASSERT(animation->outdated());
     m_outdatedAnimationCount++;
     m_animationsNeedingUpdate.add(animation);
-    if (isActive() && !m_document->page()->animator().isServicingAnimations())
+    if (m_document && m_document->page() && !m_document->page()->animator().isServicingAnimations())
         m_timing->serviceOnNextFrame();
 }
 
 void AnimationTimeline::setPlaybackRate(double playbackRate)
 {
-    if (!isActive())
+    if (!document())
         return;
     double currentTime = currentTimeInternal();
     m_playbackRate = playbackRate;
-    m_zeroTime = playbackRate == 0 ? currentTime
-                                   : document()->animationClock().currentTime() - currentTime / playbackRate;
+    m_zeroTime = playbackRate == 0
+        ? currentTime
+        : document()->animationClock().currentTime() - currentTime / playbackRate;
     m_zeroTimeInitialized = true;
 
-    // Corresponding compositor animation may need to be restarted to pick up
-    // the new playback rate. Marking the effect changed forces this.
-    setAllCompositorPending(true);
-}
-
-void AnimationTimeline::setAllCompositorPending(bool sourceChanged)
-{
     for (const auto& animation : m_animations) {
-        animation->setCompositorPending(sourceChanged);
+        // Corresponding compositor animation may need to be restarted to pick up
+        // the new playback rate. Marking the effect changed forces this.
+        animation->setCompositorPending(true);
     }
 }
 
@@ -332,18 +311,22 @@ double AnimationTimeline::playbackRate() const
     return m_playbackRate;
 }
 
-void AnimationTimeline::invalidateKeyframeEffects(const TreeScope& treeScope)
+#if !ENABLE(OILPAN)
+void AnimationTimeline::detachFromDocument()
 {
-    for (const auto& animation : m_animations)
-        animation->invalidateKeyframeEffect(treeScope);
+    // FIXME: AnimationTimeline should keep Document alive.
+    m_document = nullptr;
 }
+#endif
 
 DEFINE_TRACE(AnimationTimeline)
 {
+#if ENABLE(OILPAN)
     visitor->trace(m_document);
     visitor->trace(m_timing);
     visitor->trace(m_animationsNeedingUpdate);
     visitor->trace(m_animations);
+#endif
 }
 
-} // namespace blink
+} // namespace

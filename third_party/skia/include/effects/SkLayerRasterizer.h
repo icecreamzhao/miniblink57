@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,11 +9,20 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkLayerRasterizer_DEFINED
 #define SkLayerRasterizer_DEFINED
 
 #include "SkDeque.h"
 #include "SkRasterizer.h"
+=======
+
+#ifndef SkLayerRasterizer_DEFINED
+#define SkLayerRasterizer_DEFINED
+
+#include "SkRasterizer.h"
+#include "SkDeque.h"
+>>>>>>> miniblink49
 #include "SkScalar.h"
 
 class SkPaint;
@@ -23,8 +36,12 @@ public:
         Builder();
         ~Builder();
 
+<<<<<<< HEAD
         void addLayer(const SkPaint& paint)
         {
+=======
+        void addLayer(const SkPaint& paint) {
+>>>>>>> miniblink49
             this->addLayer(paint, 0, 0);
         }
 
@@ -43,7 +60,11 @@ public:
           *
           *  The caller is responsible for calling unref() on the returned object, if non NULL.
           */
+<<<<<<< HEAD
         sk_sp<SkLayerRasterizer> detach();
+=======
+        SkLayerRasterizer* detachRasterizer();
+>>>>>>> miniblink49
 
         /**
           *  Create and return a new immutable SkLayerRasterizer that contains a shapshot of the
@@ -57,6 +78,7 @@ public:
           *
           *  The caller is responsible for calling unref() on the returned object, if non NULL.
           */
+<<<<<<< HEAD
         sk_sp<SkLayerRasterizer> snapshot() const;
 
 #ifdef SK_SUPPORT_LEGACY_MINOR_EFFECT_PTR
@@ -69,6 +91,9 @@ public:
             return this->snapshot().release();
         }
 #endif
+=======
+        SkLayerRasterizer* snapshotRasterizer() const;
+>>>>>>> miniblink49
 
     private:
         SkDeque* fLayers;
@@ -83,8 +108,13 @@ protected:
 
     // override from SkRasterizer
     virtual bool onRasterize(const SkPath& path, const SkMatrix& matrix,
+<<<<<<< HEAD
         const SkIRect* clipBounds,
         SkMask* mask, SkMask::CreateMode mode) const override;
+=======
+                             const SkIRect* clipBounds,
+                             SkMask* mask, SkMask::CreateMode mode) const override;
+>>>>>>> miniblink49
 
 private:
     const SkDeque* const fLayers;

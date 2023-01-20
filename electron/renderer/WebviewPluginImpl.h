@@ -5,7 +5,7 @@
 #include "third_party/npapi/bindings/npapi.h"
 #include "third_party/npapi/bindings/npfunctions.h"
 #include "third_party/npapi/bindings/npruntime.h"
-#include "wke/wkedefine.h"
+#include "wke.h"
 #include <string>
 
 namespace base {
@@ -40,10 +40,11 @@ public:
     void onKey(uint32_t message, uint32_t wParam, uint32_t lParam);
 
     void loadURL(
-        const std::string& urlString,
-        const std::string& httpReferrerString,
-        const std::string& userAgentString,
-        const std::string& extraHeadersString);
+        const std::string& urlString, 
+        const std::string& httpReferrerString, 
+        const std::string& userAgentString, 
+        const std::string& extraHeadersString
+        );
 
     std::string getURL();
 

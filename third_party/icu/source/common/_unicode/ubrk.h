@@ -8,22 +8,38 @@
 #ifndef UBRK_H
 #define UBRK_H
 
+<<<<<<< HEAD
 #include "unicode/localpointer.h"
 #include "unicode/uloc.h"
 #include "unicode/utext.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uloc.h"
+#include "unicode/utext.h"
+#include "unicode/localpointer.h"
+>>>>>>> miniblink49
 
 /**
  * A text-break iterator.
  *  For usage in C programs.
  */
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
+<<<<<<< HEAD
 #define UBRK_TYPEDEF_UBREAK_ITERATOR
 /**
      *  Opaque type representing an ICU Break iterator object.
      *  @stable ICU 2.0
      */
 typedef struct UBreakIterator UBreakIterator;
+=======
+#   define UBRK_TYPEDEF_UBREAK_ITERATOR
+    /**
+     *  Opaque type representing an ICU Break iterator object.
+     *  @stable ICU 2.0
+     */
+    typedef struct UBreakIterator UBreakIterator;
+>>>>>>> miniblink49
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -85,6 +101,7 @@ typedef struct UBreakIterator UBreakIterator;
 
 /** The possible types of text boundaries.  @stable ICU 2.0 */
 typedef enum UBreakIteratorType {
+<<<<<<< HEAD
     /** Character breaks  @stable ICU 2.0 */
     UBRK_CHARACTER = 0,
     /** Word breaks @stable ICU 2.0 */
@@ -96,6 +113,19 @@ typedef enum UBreakIteratorType {
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
+=======
+  /** Character breaks  @stable ICU 2.0 */
+  UBRK_CHARACTER = 0,
+  /** Word breaks @stable ICU 2.0 */
+  UBRK_WORD = 1,
+  /** Line breaks @stable ICU 2.0 */
+  UBRK_LINE = 2,
+  /** Sentence breaks @stable ICU 2.0 */
+  UBRK_SENTENCE = 3,
+
+#ifndef U_HIDE_DEPRECATED_API
+  /**
+>>>>>>> miniblink49
    * Title Case breaks
    * The iterator created using this type locates title boundaries as described for
    * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
@@ -103,15 +133,26 @@ typedef enum UBreakIteratorType {
    *
    * @deprecated ICU 2.8 Use the word break iterator for titlecasing for Unicode 4 and later.
    */
+<<<<<<< HEAD
     UBRK_TITLE = 4,
 #endif /* U_HIDE_DEPRECATED_API */
     UBRK_COUNT = 5
+=======
+  UBRK_TITLE = 4,
+#endif /* U_HIDE_DEPRECATED_API */
+  UBRK_COUNT = 5
+>>>>>>> miniblink49
 } UBreakIteratorType;
 
 /** Value indicating all text boundaries have been returned.
  *  @stable ICU 2.0
  */
+<<<<<<< HEAD
 #define UBRK_DONE ((int32_t)-1)
+=======
+#define UBRK_DONE ((int32_t) -1)
+
+>>>>>>> miniblink49
 
 /**
  *  Enum constants for the word break tags returned by
@@ -124,6 +165,7 @@ typedef enum UBreakIteratorType {
 typedef enum UWordBreak {
     /** Tag value for "words" that do not fit into any of other categories.
      *  Includes spaces and most punctuation. */
+<<<<<<< HEAD
     UBRK_WORD_NONE = 0,
     /** Upper bound for tags for uncategorized words. */
     UBRK_WORD_NONE_LIMIT = 100,
@@ -144,6 +186,28 @@ typedef enum UWordBreak {
     UBRK_WORD_IDEO = 400,
     /** Tag value for words containing ideographic characters, upper limit */
     UBRK_WORD_IDEO_LIMIT = 500
+=======
+    UBRK_WORD_NONE           = 0,
+    /** Upper bound for tags for uncategorized words. */
+    UBRK_WORD_NONE_LIMIT     = 100,
+    /** Tag value for words that appear to be numbers, lower limit.    */
+    UBRK_WORD_NUMBER         = 100,
+    /** Tag value for words that appear to be numbers, upper limit.    */
+    UBRK_WORD_NUMBER_LIMIT   = 200,
+    /** Tag value for words that contain letters, excluding
+     *  hiragana, katakana or ideographic characters, lower limit.    */
+    UBRK_WORD_LETTER         = 200,
+    /** Tag value for words containing letters, upper limit  */
+    UBRK_WORD_LETTER_LIMIT   = 300,
+    /** Tag value for words containing kana characters, lower limit */
+    UBRK_WORD_KANA           = 300,
+    /** Tag value for words containing kana characters, upper limit */
+    UBRK_WORD_KANA_LIMIT     = 400,
+    /** Tag value for words containing ideographic characters, lower limit */
+    UBRK_WORD_IDEO           = 400,
+    /** Tag value for words containing ideographic characters, upper limit */
+    UBRK_WORD_IDEO_LIMIT     = 500
+>>>>>>> miniblink49
 } UWordBreak;
 
 /**
@@ -157,6 +221,7 @@ typedef enum UWordBreak {
 typedef enum ULineBreakTag {
     /** Tag value for soft line breaks, positions at which a line break
       *  is acceptable but not required                */
+<<<<<<< HEAD
     UBRK_LINE_SOFT = 0,
     /** Upper bound for soft line breaks.              */
     UBRK_LINE_SOFT_LIMIT = 100,
@@ -166,6 +231,19 @@ typedef enum ULineBreakTag {
     UBRK_LINE_HARD_LIMIT = 200
 } ULineBreakTag;
 
+=======
+    UBRK_LINE_SOFT            = 0,
+    /** Upper bound for soft line breaks.              */
+    UBRK_LINE_SOFT_LIMIT      = 100,
+    /** Tag value for a hard, or mandatory line break  */
+    UBRK_LINE_HARD            = 100,
+    /** Upper bound for hard line breaks.              */
+    UBRK_LINE_HARD_LIMIT      = 200
+} ULineBreakTag;
+
+
+
+>>>>>>> miniblink49
 /**
  *  Enum constants for the sentence break tags returned by getRuleStatus().
  *  A range of values is defined for each category of
@@ -179,19 +257,33 @@ typedef enum USentenceBreakTag {
       * ('.', '?', '!', etc.) character, possibly followed by a
       * hard separator (CR, LF, PS, etc.)
       */
+<<<<<<< HEAD
     UBRK_SENTENCE_TERM = 0,
+=======
+    UBRK_SENTENCE_TERM       = 0,
+>>>>>>> miniblink49
     /** Upper bound for tags for sentences ended by sentence terminators.    */
     UBRK_SENTENCE_TERM_LIMIT = 100,
     /** Tag value for for sentences that do not contain an ending
       * sentence terminator ('.', '?', '!', etc.) character, but
       * are ended only by a hard separator (CR, LF, PS, etc.) or end of input.
       */
+<<<<<<< HEAD
     UBRK_SENTENCE_SEP = 100,
     /** Upper bound for tags for sentences ended by a separator.              */
     UBRK_SENTENCE_SEP_LIMIT = 200
     /** Tag value for a hard, or mandatory line break  */
 } USentenceBreakTag;
 
+=======
+    UBRK_SENTENCE_SEP        = 100,
+    /** Upper bound for tags for sentences ended by a separator.              */
+    UBRK_SENTENCE_SEP_LIMIT  = 200
+    /** Tag value for a hard, or mandatory line break  */
+} USentenceBreakTag;
+
+
+>>>>>>> miniblink49
 /**
  * Open a new UBreakIterator for locating text boundaries for a specified locale.
  * A UBreakIterator may be used for detecting character, line, word,
@@ -208,10 +300,17 @@ typedef enum USentenceBreakTag {
  */
 U_STABLE UBreakIterator* U_EXPORT2
 ubrk_open(UBreakIteratorType type,
+<<<<<<< HEAD
     const char* locale,
     const UChar* text,
     int32_t textLength,
     UErrorCode* status);
+=======
+      const char *locale,
+      const UChar *text,
+      int32_t textLength,
+      UErrorCode *status);
+>>>>>>> miniblink49
 
 /**
  * Open a new UBreakIterator for locating text boundaries using specified breaking rules.
@@ -229,12 +328,21 @@ ubrk_open(UBreakIteratorType type,
  * @stable ICU 2.2
  */
 U_STABLE UBreakIterator* U_EXPORT2
+<<<<<<< HEAD
 ubrk_openRules(const UChar* rules,
     int32_t rulesLength,
     const UChar* text,
     int32_t textLength,
     UParseError* parseErr,
     UErrorCode* status);
+=======
+ubrk_openRules(const UChar     *rules,
+               int32_t         rulesLength,
+               const UChar     *text,
+               int32_t          textLength,
+               UParseError     *parseErr,
+               UErrorCode      *status);
+>>>>>>> miniblink49
 
 /**
  * Thread safe cloning operation
@@ -254,12 +362,21 @@ ubrk_openRules(const UChar* rules,
  * @return pointer to the new clone
  * @stable ICU 2.0
  */
+<<<<<<< HEAD
 U_STABLE UBreakIterator* U_EXPORT2
 ubrk_safeClone(
     const UBreakIterator* bi,
     void* stackBuffer,
     int32_t* pBufferSize,
     UErrorCode* status);
+=======
+U_STABLE UBreakIterator * U_EXPORT2
+ubrk_safeClone(
+          const UBreakIterator *bi,
+          void *stackBuffer,
+          int32_t *pBufferSize,
+          UErrorCode *status);
+>>>>>>> miniblink49
 
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -278,7 +395,11 @@ ubrk_safeClone(
  * @stable ICU 2.0
 */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 ubrk_close(UBreakIterator* bi);
+=======
+ubrk_close(UBreakIterator *bi);
+>>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -309,9 +430,16 @@ U_NAMESPACE_END
  */
 U_STABLE void U_EXPORT2
 ubrk_setText(UBreakIterator* bi,
+<<<<<<< HEAD
     const UChar* text,
     int32_t textLength,
     UErrorCode* status);
+=======
+             const UChar*    text,
+             int32_t         textLength,
+             UErrorCode*     status);
+
+>>>>>>> miniblink49
 
 /**
  * Sets an existing iterator to point to a new piece of text.
@@ -332,8 +460,15 @@ ubrk_setText(UBreakIterator* bi,
  */
 U_STABLE void U_EXPORT2
 ubrk_setUText(UBreakIterator* bi,
+<<<<<<< HEAD
     UText* text,
     UErrorCode* status);
+=======
+             UText*          text,
+             UErrorCode*     status);
+
+
+>>>>>>> miniblink49
 
 /**
  * Determine the most recently-returned text boundary.
@@ -344,7 +479,11 @@ ubrk_setUText(UBreakIterator* bi,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_current(const UBreakIterator* bi);
+=======
+ubrk_current(const UBreakIterator *bi);
+>>>>>>> miniblink49
 
 /**
  * Advance the iterator to the boundary following the current boundary.
@@ -356,7 +495,11 @@ ubrk_current(const UBreakIterator* bi);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_next(UBreakIterator* bi);
+=======
+ubrk_next(UBreakIterator *bi);
+>>>>>>> miniblink49
 
 /**
  * Set the iterator position to the boundary preceding the current boundary.
@@ -368,7 +511,11 @@ ubrk_next(UBreakIterator* bi);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_previous(UBreakIterator* bi);
+=======
+ubrk_previous(UBreakIterator *bi);
+>>>>>>> miniblink49
 
 /**
  * Set the iterator position to zero, the start of the text being scanned.
@@ -378,7 +525,11 @@ ubrk_previous(UBreakIterator* bi);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_first(UBreakIterator* bi);
+=======
+ubrk_first(UBreakIterator *bi);
+>>>>>>> miniblink49
 
 /**
  * Set the iterator position to the index immediately <EM>beyond</EM> the last character in the text being scanned.
@@ -390,7 +541,11 @@ ubrk_first(UBreakIterator* bi);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_last(UBreakIterator* bi);
+=======
+ubrk_last(UBreakIterator *bi);
+>>>>>>> miniblink49
 
 /**
  * Set the iterator position to the first boundary preceding the specified offset.
@@ -402,8 +557,13 @@ ubrk_last(UBreakIterator* bi);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_preceding(UBreakIterator* bi,
     int32_t offset);
+=======
+ubrk_preceding(UBreakIterator *bi,
+           int32_t offset);
+>>>>>>> miniblink49
 
 /**
  * Advance the iterator to the first boundary following the specified offset.
@@ -415,8 +575,13 @@ ubrk_preceding(UBreakIterator* bi,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 ubrk_following(UBreakIterator* bi,
     int32_t offset);
+=======
+ubrk_following(UBreakIterator *bi,
+           int32_t offset);
+>>>>>>> miniblink49
 
 /**
 * Get a locale for which text breaking information is available.
@@ -441,6 +606,10 @@ ubrk_getAvailable(int32_t index);
 U_STABLE int32_t U_EXPORT2
 ubrk_countAvailable(void);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /**
 * Returns true if the specfied position is a boundary position.  As a side
 * effect, leaves the iterator pointing to the first boundary position at
@@ -450,8 +619,13 @@ ubrk_countAvailable(void);
 * @return True if "offset" is a boundary position.
 * @stable ICU 2.0
 */
+<<<<<<< HEAD
 U_STABLE UBool U_EXPORT2
 ubrk_isBoundary(UBreakIterator* bi, int32_t offset);
+=======
+U_STABLE  UBool U_EXPORT2
+ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
+>>>>>>> miniblink49
 
 /**
  * Return the status from the break rule that determined the most recently
@@ -462,8 +636,13 @@ ubrk_isBoundary(UBreakIterator* bi, int32_t offset);
  * For word break iterators, the possible values are defined in enum UWordBreak.
  * @stable ICU 2.2
  */
+<<<<<<< HEAD
 U_STABLE int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator* bi);
+=======
+U_STABLE  int32_t U_EXPORT2
+ubrk_getRuleStatus(UBreakIterator *bi);
+>>>>>>> miniblink49
 
 /**
  * Get the statuses from the break rules that determined the most recently
@@ -482,8 +661,13 @@ ubrk_getRuleStatus(UBreakIterator* bi);
  *                  the most recent boundary returned by the break iterator.
  * @stable ICU 3.0
  */
+<<<<<<< HEAD
 U_STABLE int32_t U_EXPORT2
 ubrk_getRuleStatusVec(UBreakIterator* bi, int32_t* fillInVec, int32_t capacity, UErrorCode* status);
+=======
+U_STABLE  int32_t U_EXPORT2
+ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status);
+>>>>>>> miniblink49
 
 /**
  * Return the locale of the break iterator. You can choose between the valid and
@@ -495,7 +679,11 @@ ubrk_getRuleStatusVec(UBreakIterator* bi, int32_t* fillInVec, int32_t capacity, 
  * @stable ICU 2.8
  */
 U_STABLE const char* U_EXPORT2
+<<<<<<< HEAD
 ubrk_getLocaleByType(const UBreakIterator* bi, ULocDataLocaleType type, UErrorCode* status);
+=======
+ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);
+>>>>>>> miniblink49
 
 /**
   *  Set the subject text string upon which the break iterator is operating
@@ -523,9 +711,15 @@ ubrk_getLocaleByType(const UBreakIterator* bi, ULocDataLocaleType type, UErrorCo
   * @stable ICU 49
   */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 ubrk_refreshUText(UBreakIterator* bi,
     UText* text,
     UErrorCode* status);
+=======
+ubrk_refreshUText(UBreakIterator *bi,
+                       UText          *text,
+                       UErrorCode     *status);
+>>>>>>> miniblink49
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 

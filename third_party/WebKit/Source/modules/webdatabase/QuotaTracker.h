@@ -32,6 +32,10 @@
 #define QuotaTracker_h
 
 #include "modules/ModulesExport.h"
+<<<<<<< HEAD
+=======
+#include "platform/weborigin/SecurityOrigin.h"
+>>>>>>> miniblink49
 #include "wtf/HashMap.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/text/StringHash.h"
@@ -39,16 +43,21 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class SecurityOrigin;
 
 class MODULES_EXPORT QuotaTracker {
     USING_FAST_MALLOC(QuotaTracker);
     WTF_MAKE_NONCOPYABLE(QuotaTracker);
 
+=======
+class MODULES_EXPORT QuotaTracker {
+>>>>>>> miniblink49
 public:
     static QuotaTracker& instance();
 
     void getDatabaseSizeAndSpaceAvailableToOrigin(
+<<<<<<< HEAD
         SecurityOrigin*,
         const String& databaseName,
         unsigned long long* databaseSize,
@@ -59,6 +68,15 @@ public:
     void updateSpaceAvailableToOrigin(SecurityOrigin*,
         unsigned long long spaceAvailable);
     void resetSpaceAvailableToOrigin(SecurityOrigin*);
+=======
+        const String& originIdentifier, const String& databaseName,
+        unsigned long long* databaseSize, unsigned long long* spaceAvailable);
+    void updateDatabaseSize(
+        const String& originIdentifier, const String& databaseName,
+        unsigned long long databaseSize);
+    void updateSpaceAvailableToOrigin(const String& originIdentifier, unsigned long long spaceAvailable);
+    void resetSpaceAvailableToOrigin(const String& originIdentifier);
+>>>>>>> miniblink49
 
 private:
     QuotaTracker() { }
@@ -69,6 +87,10 @@ private:
     Mutex m_dataGuard;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif // QuotaTracker_h

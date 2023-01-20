@@ -21,40 +21,59 @@
 #ifndef CSSCursorImageValue_h
 #define CSSCursorImageValue_h
 
-#include "core/css/CSSValue.h"
+#include "core/css/CSSImageValue.h"
 #include "platform/geometry/IntPoint.h"
+#include "wtf/HashSet.h"
 
 namespace blink {
 
+class Element;
+class SVGElement;
+
 class CSSCursorImageValue : public CSSValue {
 public:
-    static const CSSCursorImageValue* create(const CSSValue& imageValue,
-        bool hotSpotSpecified,
-        const IntPoint& hotSpot)
+    static PassRefPtrWillBeRawPtr<CSSCursorImageValue> create(PassRefPtrWillBeRawPtr<CSSValue> imageValue, bool hotSpotSpecified, const IntPoint& hotSpot)
     {
-        return new CSSCursorImageValue(imageValue, hotSpotSpecified, hotSpot);
+        return adoptRefWillBeNoop(new CSSCursorImageValue(imageValue, hotSpotSpecified, hotSpot));
     }
 
     ~CSSCursorImageValue();
 
     bool hotSpotSpecified() const { return m_hotSpotSpecified; }
-    const IntPoint& hotSpot() const { return m_hotSpot; }
-    const CSSValue& imageValue() const { return *m_imageValue; }
+
+    IntPoint hotSpot() const { return m_hotSpot; }
 
     String customCSSText() const;
+
+    bool updateIfSVGCursorIsUsed(Element*);
+    StyleImage* cachedImage(Document*, float deviceScaleFactor);
+    StyleImage* cachedOrPendingImage(float deviceScaleFactor);
+
+#if !ENABLE(OILPAN)
+    void removeReferencedElement(SVGElement*);
+#endif
 
     bool equals(const CSSCursorImageValue&) const;
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    CSSCursorImageValue(const CSSValue& imageValue,
-        bool hotSpotSpecified,
-        const IntPoint& hotSpot);
+    CSSCursorImageValue(PassRefPtrWillBeRawPtr<CSSValue> imageValue, bool hotSpotSpecified, const IntPoint& hotSpot);
 
-    Member<const CSSValue> m_imageValue;
-    IntPoint m_hotSpot;
+    bool isSVGCursor() const;
+    String cachedImageURL();
+    void clearImageResource();
+
+    RefPtrWillBeMember<CSSValue> m_imageValue;
+
     bool m_hotSpotSpecified;
+    IntPoint m_hotSpot;
+    RefPtr<StyleImage> m_image;
+    bool m_accessedImage;
+
+#if !ENABLE(OILPAN)
+    HashSet<SVGElement*> m_referencedElements;
+#endif
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSCursorImageValue, isCursorImageValue());

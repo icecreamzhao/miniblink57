@@ -31,36 +31,29 @@
 #ifndef SVGBoolean_h
 #define SVGBoolean_h
 
-#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 
 namespace blink {
 
-class SVGBoolean final : public SVGPropertyHelper<SVGBoolean> {
+class SVGBoolean : public SVGPropertyHelper<SVGBoolean> {
 public:
     // SVGBoolean does not have a tear-off type.
     typedef void TearOffType;
     typedef bool PrimitiveType;
 
-    static SVGBoolean* create(bool value = false)
+    static PassRefPtrWillBeRawPtr<SVGBoolean> create(bool value = false)
     {
-        return new SVGBoolean(value);
+        return adoptRefWillBeNoop(new SVGBoolean(value));
     }
 
-    SVGBoolean* clone() const { return create(m_value); }
+    PassRefPtrWillBeRawPtr<SVGBoolean> clone() const { return create(m_value); }
 
     String valueAsString() const override;
-    SVGParsingError setValueAsString(const String&);
+    void setValueAsString(const String&, ExceptionState&);
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement*) override;
-    float calculateDistance(SVGPropertyBase* to, SVGElement*) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) override;
 
     bool value() const { return m_value; }
     void setValue(bool value) { m_value = value; }
@@ -76,7 +69,12 @@ private:
     bool m_value;
 };
 
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGBoolean);
+inline PassRefPtrWillBeRawPtr<SVGBoolean> toSVGBoolean(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGBoolean::classType());
+    return static_pointer_cast<SVGBoolean>(base.release());
+}
 
 } // namespace blink
 

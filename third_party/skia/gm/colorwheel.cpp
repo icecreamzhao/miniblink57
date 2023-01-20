@@ -7,6 +7,7 @@
 
 #include "Resources.h"
 #include "SkData.h"
+<<<<<<< HEAD
 #include "SkImage.h"
 #include "gm.h"
 #include "sk_tool_utils.h"
@@ -20,6 +21,18 @@ static void draw_image(SkCanvas* canvas, const char* resource, int x, int y)
         SkDebugf("\nCould not decode file '%s'. Did you forget"
                  " to set the resourcePath?\n",
             resource);
+=======
+#include "gm.h"
+#include "sk_tool_utils.h"
+
+static void draw_bitmap(SkCanvas* canvas, const char* resource, int x, int y) {
+    SkBitmap bitmap;
+    if (GetResourceAsBitmap(resource, &bitmap)) {
+        canvas->drawBitmap(bitmap, SkIntToScalar(x), SkIntToScalar(y));
+    } else {
+        SkDebugf("\nCould not decode file '%s'. Did you forget"
+                 " to set the resourcePath?\n", resource);
+>>>>>>> miniblink49
     }
 }
 
@@ -32,6 +45,7 @@ static void draw_image(SkCanvas* canvas, const char* resource, int x, int y)
   background (rendered as a checkerboard).  The JPEG image has a grey
   background and compression artifacts.
  */
+<<<<<<< HEAD
 DEF_SIMPLE_GM(colorwheel, canvas, 256, 256)
 {
     sk_tool_utils::draw_checkerboard(canvas);
@@ -49,6 +63,22 @@ DEF_SIMPLE_GM(colorwheelnative, canvas, 128, 28)
     paint.setTextSize(18.0f);
 
     canvas->clear(sk_tool_utils::color_to_565(SK_ColorLTGRAY));
+=======
+DEF_SIMPLE_GM(colorwheel, canvas, 256, 256) {
+    sk_tool_utils::draw_checkerboard(canvas);
+    draw_bitmap(canvas, "color_wheel.png", 0, 0);  // top left
+    draw_bitmap(canvas, "color_wheel.gif", 128, 0);  // top right
+    draw_bitmap(canvas, "color_wheel.webp", 0, 128);  // bottom left
+    draw_bitmap(canvas, "color_wheel.jpg", 128, 128);  // bottom right
+}
+
+DEF_SIMPLE_GM(colorwheelnative, canvas, 128, 28) {
+    SkPaint paint;
+    sk_tool_utils::set_portable_typeface(&paint, NULL, SkTypeface::kBold);
+    paint.setTextSize(18.0f);
+
+    canvas->clear(SK_ColorLTGRAY);
+>>>>>>> miniblink49
     paint.setColor(SK_ColorRED);
     canvas->drawText("R", 1, 8.0f, 20.0f, paint);
     paint.setColor(SK_ColorGREEN);

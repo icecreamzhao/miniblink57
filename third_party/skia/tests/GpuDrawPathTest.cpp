@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkTypes.h"
 
 #if SK_SUPPORT_GPU
@@ -18,11 +19,22 @@
 #include "SkDashPathEffect.h"
 #include "SkPaint.h"
 #include "SkPath.h"
+=======
+#if SK_SUPPORT_GPU
+
+#include "GrContext.h"
+#include "GrContextFactory.h"
+#include "SkBitmap.h"
+#include "SkCanvas.h"
+#include "SkColor.h"
+#include "SkPaint.h"
+>>>>>>> miniblink49
 #include "SkRRect.h"
 #include "SkRect.h"
 #include "SkSurface.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 #include <initializer_list>
 
 static void test_drawPathEmpty(skiatest::Reporter*, SkCanvas* canvas)
@@ -35,6 +47,16 @@ static void test_drawPathEmpty(skiatest::Reporter*, SkCanvas* canvas)
     canvas->drawOval(emptyRect, paint);
     canvas->drawRect(emptyRect, paint);
     canvas->drawRRect(SkRRect::MakeRect(emptyRect), paint);
+=======
+static void test_drawPathEmpty(skiatest::Reporter*, SkCanvas* canvas) {
+    // Filling an empty path should not crash.
+    SkPaint paint;
+    canvas->drawRect(SkRect(), paint);
+    canvas->drawPath(SkPath(), paint);
+    canvas->drawOval(SkRect(), paint);
+    canvas->drawRect(SkRect(), paint);
+    canvas->drawRRect(SkRRect(), paint);
+>>>>>>> miniblink49
 
     // Stroking an empty path should not crash.
     paint.setAntiAlias(true);
@@ -42,6 +64,7 @@ static void test_drawPathEmpty(skiatest::Reporter*, SkCanvas* canvas)
     paint.setColor(SK_ColorGRAY);
     paint.setStrokeWidth(SkIntToScalar(20));
     paint.setStrokeJoin(SkPaint::kRound_Join);
+<<<<<<< HEAD
     canvas->drawRect(emptyRect, paint);
     canvas->drawPath(SkPath(), paint);
     canvas->drawOval(emptyRect, paint);
@@ -91,10 +114,40 @@ DEF_GPUTEST_FOR_ALL_GL_CONTEXTS(GpuDrawPath, reporter, ctxInfo)
                 continue;
             }
             test_func(reporter, surface->getCanvas());
+=======
+    canvas->drawRect(SkRect(), paint);
+    canvas->drawPath(SkPath(), paint);
+    canvas->drawOval(SkRect(), paint);
+    canvas->drawRect(SkRect(), paint);
+    canvas->drawRRect(SkRRect(), paint);
+}
+
+
+DEF_GPUTEST(GpuDrawPath, reporter, factory) {
+    return;
+
+    for (int type = 0; type < GrContextFactory::kLastGLContextType; ++type) {
+        GrContextFactory::GLContextType glType = static_cast<GrContextFactory::GLContextType>(type);
+
+        GrContext* grContext = factory->get(glType);
+        if (NULL == grContext) {
+            continue;
+        }
+        static const int sampleCounts[] = { 0, 4, 16 };
+
+        for (size_t i = 0; i < SK_ARRAY_COUNT(sampleCounts); ++i) {
+            SkImageInfo info = SkImageInfo::MakeN32Premul(255, 255);
+            
+            SkAutoTUnref<SkSurface> surface(
+                SkSurface::NewRenderTarget(grContext, SkSurface::kNo_Budgeted, info,
+                                           sampleCounts[i], NULL));
+            test_drawPathEmpty(reporter, surface->getCanvas());
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 DEF_GPUTEST(GrPathKeys, reporter, /*factory*/)
 {
     // Keys should not ignore conic weights.
@@ -114,4 +167,6 @@ DEF_GPUTEST(GrPathKeys, reporter, /*factory*/)
     REPORTER_ASSERT(reporter, key1 != key2);
 }
 
+=======
+>>>>>>> miniblink49
 #endif

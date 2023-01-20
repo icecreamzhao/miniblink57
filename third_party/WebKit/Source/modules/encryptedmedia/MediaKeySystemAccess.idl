@@ -2,9 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://w3c.github.io/encrypted-media/#mediakeysystemaccess-interface
 
 interface MediaKeySystemAccess {
+=======
+// http://w3c.github.io/encrypted-media/#mediakeysystemaccess-interface
+
+[
+    RuntimeEnabled=EncryptedMedia,
+    GarbageCollected,
+    TypeChecking=Interface
+] interface MediaKeySystemAccess {
+>>>>>>> miniblink49
     readonly attribute DOMString keySystem;
     MediaKeySystemConfiguration getConfiguration();
     [CallWith=ScriptState] Promise<MediaKeys> createMediaKeys();

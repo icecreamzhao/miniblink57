@@ -11,6 +11,7 @@
 #include "SkShader.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 // Test that attempting to create a picture shader with a nullptr picture or
 // empty picture returns a shader that draws nothing.
 DEF_TEST(PictureShader_empty, reporter)
@@ -19,10 +20,20 @@ DEF_TEST(PictureShader_empty, reporter)
 
     SkBitmap bitmap;
     bitmap.allocN32Pixels(1, 1);
+=======
+// Test that attempting to create a picture shader with a NULL picture or
+// empty picture returns a shader that draws nothing.
+DEF_TEST(PictureShader_empty, reporter) {
+    SkPaint paint;
+
+    SkBitmap bitmap;
+    bitmap.allocN32Pixels(1,1);
+>>>>>>> miniblink49
 
     SkCanvas canvas(bitmap);
     canvas.clear(SK_ColorGREEN);
 
+<<<<<<< HEAD
     paint.setShader(SkShader::MakePictureShader(
         nullptr, SkShader::kClamp_TileMode, SkShader::kClamp_TileMode, nullptr, nullptr));
 
@@ -37,4 +48,23 @@ DEF_TEST(PictureShader_empty, reporter)
 
     canvas.drawRect(SkRect::MakeWH(1, 1), paint);
     REPORTER_ASSERT(reporter, *bitmap.getAddr32(0, 0) == SK_ColorGREEN);
+=======
+    SkShader* shader = SkShader::CreatePictureShader(
+            NULL, SkShader::kClamp_TileMode, SkShader::kClamp_TileMode, NULL, NULL);
+    paint.setShader(shader)->unref();
+
+    canvas.drawRect(SkRect::MakeWH(1,1), paint);
+    REPORTER_ASSERT(reporter, *bitmap.getAddr32(0,0) == SK_ColorGREEN);
+
+
+    SkPictureRecorder factory;
+    factory.beginRecording(0, 0, NULL, 0);
+    SkAutoTUnref<SkPicture> picture(factory.endRecording());
+    shader = SkShader::CreatePictureShader(
+            picture.get(), SkShader::kClamp_TileMode, SkShader::kClamp_TileMode, NULL, NULL);
+    paint.setShader(shader)->unref();
+
+    canvas.drawRect(SkRect::MakeWH(1,1), paint);
+    REPORTER_ASSERT(reporter, *bitmap.getAddr32(0,0) == SK_ColorGREEN);
+>>>>>>> miniblink49
 }

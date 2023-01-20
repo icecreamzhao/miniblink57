@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +19,7 @@
  *
  */
 
+#include "config.h"
 #include "core/style/ContentData.h"
 
 #include "core/layout/LayoutCounter.h"
@@ -29,91 +29,69 @@
 #include "core/layout/LayoutQuote.h"
 #include "core/layout/LayoutTextFragment.h"
 #include "core/style/ComputedStyle.h"
-#include <memory>
 
 namespace blink {
 
-ContentData* ContentData::create(StyleImage* image)
+PassOwnPtr<ContentData> ContentData::create(PassRefPtr<StyleImage> image)
 {
-    return new ImageContentData(image);
+    return adoptPtr(new ImageContentData(image));
 }
 
-ContentData* ContentData::create(const String& text)
+PassOwnPtr<ContentData> ContentData::create(const String& text)
 {
-    return new TextContentData(text);
+    return adoptPtr(new TextContentData(text));
 }
 
-ContentData* ContentData::create(std::unique_ptr<CounterContent> counter)
+PassOwnPtr<ContentData> ContentData::create(PassOwnPtr<CounterContent> counter)
 {
-    return new CounterContentData(std::move(counter));
+    return adoptPtr(new CounterContentData(counter));
 }
 
-ContentData* ContentData::create(QuoteType quote)
+PassOwnPtr<ContentData> ContentData::create(QuoteType quote)
 {
-    return new QuoteContentData(quote);
+    return adoptPtr(new QuoteContentData(quote));
 }
 
-ContentData* ContentData::clone() const
+PassOwnPtr<ContentData> ContentData::clone() const
 {
-    ContentData* result = cloneInternal();
+    OwnPtr<ContentData> result = cloneInternal();
 
-    ContentData* lastNewData = result;
-    for (const ContentData* contentData = next(); contentData;
-         contentData = contentData->next()) {
-        ContentData* newData = contentData->cloneInternal();
-        lastNewData->setNext(newData);
+    ContentData* lastNewData = result.get();
+    for (const ContentData* contentData = next(); contentData; contentData = contentData->next()) {
+        OwnPtr<ContentData> newData = contentData->cloneInternal();
+        lastNewData->setNext(newData.release());
         lastNewData = lastNewData->next();
     }
 
-    return result;
+    return result.release();
 }
 
-DEFINE_TRACE(ContentData)
-{
-    visitor->trace(m_next);
-}
-
-LayoutObject* ImageContentData::createLayoutObject(
-    Document& doc,
-    ComputedStyle& pseudoStyle) const
+LayoutObject* ImageContentData::createLayoutObject(Document& doc, ComputedStyle& pseudoStyle) const
 {
     LayoutImage* image = LayoutImage::createAnonymous(&doc);
     image->setPseudoStyle(&pseudoStyle);
     if (m_image)
-        image->setImageResource(
-            LayoutImageResourceStyleImage::create(m_image.get()));
+        image->setImageResource(LayoutImageResourceStyleImage::create(m_image.get()));
     else
         image->setImageResource(LayoutImageResource::create());
     return image;
 }
 
-DEFINE_TRACE(ImageContentData)
-{
-    visitor->trace(m_image);
-    ContentData::trace(visitor);
-}
-
-LayoutObject* TextContentData::createLayoutObject(
-    Document& doc,
-    ComputedStyle& pseudoStyle) const
+LayoutObject* TextContentData::createLayoutObject(Document& doc, ComputedStyle& pseudoStyle) const
 {
     LayoutObject* layoutObject = new LayoutTextFragment(&doc, m_text.impl());
     layoutObject->setPseudoStyle(&pseudoStyle);
     return layoutObject;
 }
 
-LayoutObject* CounterContentData::createLayoutObject(
-    Document& doc,
-    ComputedStyle& pseudoStyle) const
+LayoutObject* CounterContentData::createLayoutObject(Document& doc, ComputedStyle& pseudoStyle) const
 {
     LayoutObject* layoutObject = new LayoutCounter(&doc, *m_counter);
     layoutObject->setPseudoStyle(&pseudoStyle);
     return layoutObject;
 }
 
-LayoutObject* QuoteContentData::createLayoutObject(
-    Document& doc,
-    ComputedStyle& pseudoStyle) const
+LayoutObject* QuoteContentData::createLayoutObject(Document& doc, ComputedStyle& pseudoStyle) const
 {
     LayoutObject* layoutObject = new LayoutQuote(&doc, m_quote);
     layoutObject->setPseudoStyle(&pseudoStyle);

@@ -32,15 +32,15 @@ namespace blink {
 
 class BeforeTextInsertedEvent final : public Event {
 public:
-    ~BeforeTextInsertedEvent() override;
+    virtual ~BeforeTextInsertedEvent();
 
-    static BeforeTextInsertedEvent* create(const String& text)
+    static PassRefPtrWillBeRawPtr<BeforeTextInsertedEvent> create(const String& text)
     {
-        return new BeforeTextInsertedEvent(text);
+        return adoptRefWillBeNoop(new BeforeTextInsertedEvent(text));
     }
 
-    const AtomicString& interfaceName() const override;
-    bool isBeforeTextInsertedEvent() const override { return true; }
+    virtual const AtomicString& interfaceName() const override;
+    virtual bool isBeforeTextInsertedEvent() const override { return true; }
 
     const String& text() const { return m_text; }
     void setText(const String& s) { m_text = s; }
@@ -53,6 +53,6 @@ private:
     String m_text;
 };
 
-} // namespace blink
+} // namespace
 
 #endif

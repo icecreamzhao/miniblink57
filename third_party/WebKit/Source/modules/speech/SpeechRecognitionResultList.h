@@ -32,6 +32,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class SpeechRecognitionResultList
     : public GarbageCollected<SpeechRecognitionResultList>,
       public ScriptWrappable {
@@ -40,6 +41,12 @@ class SpeechRecognitionResultList
 public:
     static SpeechRecognitionResultList* create(
         const HeapVector<Member<SpeechRecognitionResult>>&);
+=======
+class SpeechRecognitionResultList : public GarbageCollected<SpeechRecognitionResultList>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static SpeechRecognitionResultList* create(const HeapVector<Member<SpeechRecognitionResult>>&);
+>>>>>>> miniblink49
 
     unsigned length() { return m_results.size(); }
     SpeechRecognitionResult* item(unsigned index);
@@ -47,8 +54,12 @@ public:
     DECLARE_TRACE();
 
 private:
+<<<<<<< HEAD
     explicit SpeechRecognitionResultList(
         const HeapVector<Member<SpeechRecognitionResult>>&);
+=======
+    explicit SpeechRecognitionResultList(const HeapVector<Member<SpeechRecognitionResult>>&);
+>>>>>>> miniblink49
 
     HeapVector<Member<SpeechRecognitionResult>> m_results;
 };

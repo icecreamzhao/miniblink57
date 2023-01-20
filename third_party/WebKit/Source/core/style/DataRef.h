@@ -24,15 +24,11 @@
 #ifndef DataRef_h
 #define DataRef_h
 
-#include "wtf/Allocator.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-template <typename T>
-class DataRef {
-    USING_FAST_MALLOC(DataRef);
-
+template <typename T> class DataRef {
 public:
     const T* get() const { return m_data.get(); }
 
@@ -67,7 +63,6 @@ public:
     }
 
     void operator=(std::nullptr_t) { m_data = nullptr; }
-
 private:
     RefPtr<T> m_data;
 };

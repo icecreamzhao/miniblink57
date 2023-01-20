@@ -24,88 +24,125 @@
  *
  */
 
+#include "config.h"
 #include "core/workers/WorkerEventQueue.h"
 
+#include "core/dom/ExecutionContext.h"
 #include "core/dom/ExecutionContextTask.h"
-#include "core/dom/TaskRunnerHelper.h"
 #include "core/events/Event.h"
 #include "core/inspector/InspectorInstrumentation.h"
-#include "core/workers/WorkerGlobalScope.h"
 
 namespace blink {
 
-WorkerEventQueue* WorkerEventQueue::create(
-    WorkerGlobalScope* workerGlobalScope)
+PassOwnPtrWillBeRawPtr<WorkerEventQueue> WorkerEventQueue::create(ExecutionContext* context)
 {
-    return new WorkerEventQueue(workerGlobalScope);
+    return adoptPtrWillBeNoop(new WorkerEventQueue(context));
 }
 
-WorkerEventQueue::WorkerEventQueue(WorkerGlobalScope* workerGlobalScope)
-    : m_workerGlobalScope(workerGlobalScope)
+WorkerEventQueue::WorkerEventQueue(ExecutionContext* context)
+    : m_executionContext(context)
     , m_isClosed(false)
 {
 }
 
 WorkerEventQueue::~WorkerEventQueue()
 {
-    DCHECK(m_pendingEvents.isEmpty());
+    ASSERT(m_eventTaskMap.isEmpty());
 }
 
 DEFINE_TRACE(WorkerEventQueue)
 {
-    visitor->trace(m_workerGlobalScope);
-    visitor->trace(m_pendingEvents);
+#if ENABLE(OILPAN)
+    visitor->trace(m_executionContext);
+    visitor->trace(m_eventTaskMap);
+#endif
     EventQueue::trace(visitor);
 }
 
-bool WorkerEventQueue::enqueueEvent(Event* event)
+class WorkerEventQueue::EventDispatcherTask : public ExecutionContextTask {
+public:
+    static PassOwnPtr<EventDispatcherTask> create(PassRefPtrWillBeRawPtr<Event> event, WorkerEventQueue* eventQueue)
+    {
+        return adoptPtr(new EventDispatcherTask(event, eventQueue));
+    }
+
+    virtual ~EventDispatcherTask()
+    {
+        if (m_event)
+            m_eventQueue->removeEvent(m_event.get());
+    }
+
+    void dispatchEvent(ExecutionContext*, PassRefPtrWillBeRawPtr<Event> event)
+    {
+        event->target()->dispatchEvent(event);
+    }
+
+    virtual void performTask(ExecutionContext* context)
+    {
+        if (m_isCancelled)
+            return;
+        m_eventQueue->removeEvent(m_event.get());
+        dispatchEvent(context, m_event);
+        m_event.clear();
+    }
+
+    void cancel()
+    {
+        m_isCancelled = true;
+        m_event.clear();
+    }
+
+private:
+    EventDispatcherTask(PassRefPtrWillBeRawPtr<Event> event, WorkerEventQueue* eventQueue)
+        : m_event(event)
+        , m_eventQueue(eventQueue)
+        , m_isCancelled(false)
+    {
+    }
+
+    RefPtrWillBePersistent<Event> m_event;
+    WorkerEventQueue* m_eventQueue;
+    bool m_isCancelled;
+};
+
+void WorkerEventQueue::removeEvent(Event* event)
+{
+    InspectorInstrumentation::didRemoveEvent(event->target(), event);
+    m_eventTaskMap.remove(event);
+}
+
+bool WorkerEventQueue::enqueueEvent(PassRefPtrWillBeRawPtr<Event> prpEvent)
 {
     if (m_isClosed)
         return false;
-    InspectorInstrumentation::asyncTaskScheduled(
-        event->target()->getExecutionContext(), event->type(), event);
-    m_pendingEvents.add(event);
-    m_workerGlobalScope->postTask(
-        TaskType::UnspecedTimer, BLINK_FROM_HERE,
-        createSameThreadTask(&WorkerEventQueue::dispatchEvent,
-            wrapPersistent(this), wrapWeakPersistent(event)));
+    RefPtrWillBeRawPtr<Event> event = prpEvent;
+    InspectorInstrumentation::didEnqueueEvent(event->target(), event.get());
+    OwnPtr<EventDispatcherTask> task = EventDispatcherTask::create(event, this);
+    m_eventTaskMap.add(event.release(), task.get());
+    m_executionContext->postTask(FROM_HERE, task.release());
     return true;
 }
 
 bool WorkerEventQueue::cancelEvent(Event* event)
 {
-    if (!removeEvent(event))
+    EventDispatcherTask* task = m_eventTaskMap.get(event);
+    if (!task)
         return false;
-    InspectorInstrumentation::asyncTaskCanceled(
-        event->target()->getExecutionContext(), event);
+    task->cancel();
+    removeEvent(event);
     return true;
 }
 
 void WorkerEventQueue::close()
 {
     m_isClosed = true;
-    for (const auto& event : m_pendingEvents)
-        InspectorInstrumentation::asyncTaskCanceled(
-            event->target()->getExecutionContext(), event);
-    m_pendingEvents.clear();
+    for (const auto& entry : m_eventTaskMap) {
+        Event* event = entry.key.get();
+        EventDispatcherTask* task = entry.value;
+        InspectorInstrumentation::didRemoveEvent(event->target(), event);
+        task->cancel();
+    }
+    m_eventTaskMap.clear();
 }
 
-bool WorkerEventQueue::removeEvent(Event* event)
-{
-    auto found = m_pendingEvents.find(event);
-    if (found == m_pendingEvents.end())
-        return false;
-    m_pendingEvents.remove(found);
-    return true;
 }
-
-void WorkerEventQueue::dispatchEvent(Event* event)
-{
-    if (!event || !removeEvent(event))
-        return;
-
-    InspectorInstrumentation::AsyncTask asyncTask(m_workerGlobalScope, event);
-    event->target()->dispatchEvent(event);
-}
-
-} // namespace blink

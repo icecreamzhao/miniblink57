@@ -28,22 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/editing/RenderedPosition.h"
 
-#include "core/editing/TextAffinity.h"
+#include "core/dom/Position.h"
 #include "core/editing/VisiblePosition.h"
-#include "core/editing/VisibleUnits.h"
-#include "core/layout/api/LineLayoutAPIShim.h"
 #include "core/layout/compositing/CompositedSelectionBound.h"
-#include "core/paint/PaintLayer.h"
+#include "core/paint/DeprecatedPaintLayer.h"
 
 namespace blink {
 
-template <typename Strategy>
-static inline LayoutObject* layoutObjectFromPosition(
-    const PositionTemplate<Strategy>& position)
+static inline LayoutObject* layoutObjectFromPosition(const Position& position)
 {
-    DCHECK(position.isNotNull());
+    ASSERT(position.isNotNull());
     Node* layoutObjectNode = nullptr;
     switch (position.anchorType()) {
     case PositionAnchorType::OffsetInAnchor:
@@ -57,10 +54,10 @@ static inline LayoutObject* layoutObjectFromPosition(
         break;
 
     case PositionAnchorType::BeforeChildren:
-        layoutObjectNode = Strategy::firstChild(*position.anchorNode());
+        layoutObjectNode = position.anchorNode()->firstChild();
         break;
     case PositionAnchorType::AfterChildren:
-        layoutObjectNode = Strategy::lastChild(*position.anchorNode());
+        layoutObjectNode = position.anchorNode()->lastChild();
         break;
     }
     if (!layoutObjectNode || !layoutObjectNode->layoutObject())
@@ -69,17 +66,6 @@ static inline LayoutObject* layoutObjectFromPosition(
 }
 
 RenderedPosition::RenderedPosition(const VisiblePosition& position)
-    : RenderedPosition(position.deepEquivalent(), position.affinity())
-{
-}
-
-RenderedPosition::RenderedPosition(const VisiblePositionInFlatTree& position)
-    : RenderedPosition(position.deepEquivalent(), position.affinity())
-{
-}
-
-RenderedPosition::RenderedPosition(const Position& position,
-    TextAffinity affinity)
     : m_layoutObject(nullptr)
     , m_inlineBox(nullptr)
     , m_offset(0)
@@ -88,17 +74,16 @@ RenderedPosition::RenderedPosition(const Position& position,
 {
     if (position.isNull())
         return;
-    InlineBoxPosition boxPosition = computeInlineBoxPosition(position, affinity);
+    InlineBoxPosition boxPosition = position.computeInlineBoxPosition();
     m_inlineBox = boxPosition.inlineBox;
     m_offset = boxPosition.offsetInBox;
     if (m_inlineBox)
-        m_layoutObject = LineLayoutAPIShim::layoutObjectFrom(m_inlineBox->getLineLayoutItem());
+        m_layoutObject = &m_inlineBox->layoutObject();
     else
-        m_layoutObject = layoutObjectFromPosition(position);
+        m_layoutObject = layoutObjectFromPosition(position.deepEquivalent());
 }
 
-RenderedPosition::RenderedPosition(const PositionInFlatTree& position,
-    TextAffinity affinity)
+RenderedPosition::RenderedPosition(const Position& position, EAffinity affinity)
     : m_layoutObject(nullptr)
     , m_inlineBox(nullptr)
     , m_offset(0)
@@ -107,13 +92,18 @@ RenderedPosition::RenderedPosition(const PositionInFlatTree& position,
 {
     if (position.isNull())
         return;
-    InlineBoxPosition boxPosition = computeInlineBoxPosition(position, affinity);
+    InlineBoxPosition boxPosition = position.computeInlineBoxPosition(affinity);
     m_inlineBox = boxPosition.inlineBox;
     m_offset = boxPosition.offsetInBox;
     if (m_inlineBox)
-        m_layoutObject = LineLayoutAPIShim::layoutObjectFrom(m_inlineBox->getLineLayoutItem());
+        m_layoutObject = &m_inlineBox->layoutObject();
     else
         m_layoutObject = layoutObjectFromPosition(position);
+}
+
+RenderedPosition::RenderedPosition(const PositionInComposedTree& position, EAffinity affinity)
+    : RenderedPosition(toPositionInDOMTree(position), affinity)
+{
 }
 
 InlineBox* RenderedPosition::prevLeafChild() const
@@ -132,7 +122,9 @@ InlineBox* RenderedPosition::nextLeafChild() const
 
 bool RenderedPosition::isEquivalent(const RenderedPosition& other) const
 {
-    return (m_layoutObject == other.m_layoutObject && m_inlineBox == other.m_inlineBox && m_offset == other.m_offset) || (atLeftmostOffsetInBox() && other.atRightmostOffsetInBox() && prevLeafChild() == other.m_inlineBox) || (atRightmostOffsetInBox() && other.atLeftmostOffsetInBox() && nextLeafChild() == other.m_inlineBox);
+    return (m_layoutObject == other.m_layoutObject && m_inlineBox == other.m_inlineBox && m_offset == other.m_offset)
+        || (atLeftmostOffsetInBox() && other.atRightmostOffsetInBox() && prevLeafChild() == other.m_inlineBox)
+        || (atRightmostOffsetInBox() && other.atLeftmostOffsetInBox() && nextLeafChild() == other.m_inlineBox);
 }
 
 unsigned char RenderedPosition::bidiLevelOnLeft() const
@@ -147,8 +139,7 @@ unsigned char RenderedPosition::bidiLevelOnRight() const
     return box ? box->bidiLevel() : 0;
 }
 
-RenderedPosition RenderedPosition::leftBoundaryOfBidiRun(
-    unsigned char bidiLevelOfRun)
+RenderedPosition RenderedPosition::leftBoundaryOfBidiRun(unsigned char bidiLevelOfRun)
 {
     if (!m_inlineBox || bidiLevelOfRun > m_inlineBox->bidiLevel())
         return RenderedPosition();
@@ -157,18 +148,15 @@ RenderedPosition RenderedPosition::leftBoundaryOfBidiRun(
     do {
         InlineBox* prev = box->prevLeafChildIgnoringLineBreak();
         if (!prev || prev->bidiLevel() < bidiLevelOfRun)
-            return RenderedPosition(
-                LineLayoutAPIShim::layoutObjectFrom(box->getLineLayoutItem()), box,
-                box->caretLeftmostOffset());
+            return RenderedPosition(&box->layoutObject(), box, box->caretLeftmostOffset());
         box = prev;
     } while (box);
 
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return RenderedPosition();
 }
 
-RenderedPosition RenderedPosition::rightBoundaryOfBidiRun(
-    unsigned char bidiLevelOfRun)
+RenderedPosition RenderedPosition::rightBoundaryOfBidiRun(unsigned char bidiLevelOfRun)
 {
     if (!m_inlineBox || bidiLevelOfRun > m_inlineBox->bidiLevel())
         return RenderedPosition();
@@ -177,19 +165,15 @@ RenderedPosition RenderedPosition::rightBoundaryOfBidiRun(
     do {
         InlineBox* next = box->nextLeafChildIgnoringLineBreak();
         if (!next || next->bidiLevel() < bidiLevelOfRun)
-            return RenderedPosition(
-                LineLayoutAPIShim::layoutObjectFrom(box->getLineLayoutItem()), box,
-                box->caretRightmostOffset());
+            return RenderedPosition(&box->layoutObject(), box, box->caretRightmostOffset());
         box = next;
     } while (box);
 
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return RenderedPosition();
 }
 
-bool RenderedPosition::atLeftBoundaryOfBidiRun(
-    ShouldMatchBidiLevel shouldMatchBidiLevel,
-    unsigned char bidiLevelOfRun) const
+bool RenderedPosition::atLeftBoundaryOfBidiRun(ShouldMatchBidiLevel shouldMatchBidiLevel, unsigned char bidiLevelOfRun) const
 {
     if (!m_inlineBox)
         return false;
@@ -209,9 +193,7 @@ bool RenderedPosition::atLeftBoundaryOfBidiRun(
     return false;
 }
 
-bool RenderedPosition::atRightBoundaryOfBidiRun(
-    ShouldMatchBidiLevel shouldMatchBidiLevel,
-    unsigned char bidiLevelOfRun) const
+bool RenderedPosition::atRightBoundaryOfBidiRun(ShouldMatchBidiLevel shouldMatchBidiLevel, unsigned char bidiLevelOfRun) const
 {
     if (!m_inlineBox)
         return false;
@@ -233,79 +215,34 @@ bool RenderedPosition::atRightBoundaryOfBidiRun(
 
 Position RenderedPosition::positionAtLeftBoundaryOfBiDiRun() const
 {
-    DCHECK(atLeftBoundaryOfBidiRun());
+    ASSERT(atLeftBoundaryOfBidiRun());
 
     if (atLeftmostOffsetInBox())
-        return Position::editingPositionOf(m_layoutObject->node(), m_offset);
+        return createLegacyEditingPosition(m_layoutObject->node(), m_offset);
 
-    return Position::editingPositionOf(
-        nextLeafChild()->getLineLayoutItem().node(),
-        nextLeafChild()->caretLeftmostOffset());
+    return createLegacyEditingPosition(nextLeafChild()->layoutObject().node(), nextLeafChild()->caretLeftmostOffset());
 }
 
 Position RenderedPosition::positionAtRightBoundaryOfBiDiRun() const
 {
-    DCHECK(atRightBoundaryOfBidiRun());
+    ASSERT(atRightBoundaryOfBidiRun());
 
     if (atRightmostOffsetInBox())
-        return Position::editingPositionOf(m_layoutObject->node(), m_offset);
+        return createLegacyEditingPosition(m_layoutObject->node(), m_offset);
 
-    return Position::editingPositionOf(
-        prevLeafChild()->getLineLayoutItem().node(),
-        prevLeafChild()->caretRightmostOffset());
+    return createLegacyEditingPosition(prevLeafChild()->layoutObject().node(), prevLeafChild()->caretRightmostOffset());
 }
 
-IntRect RenderedPosition::absoluteRect(
-    LayoutUnit* extraWidthToEndOfLine) const
+IntRect RenderedPosition::absoluteRect(LayoutUnit* extraWidthToEndOfLine) const
 {
     if (isNull())
         return IntRect();
 
-    IntRect localRect = pixelSnappedIntRect(m_layoutObject->localCaretRect(
-        m_inlineBox, m_offset, extraWidthToEndOfLine));
-    return localRect == IntRect()
-        ? IntRect()
-        : m_layoutObject->localToAbsoluteQuad(FloatRect(localRect))
-              .enclosingBoundingBox();
+    IntRect localRect = pixelSnappedIntRect(m_layoutObject->localCaretRect(m_inlineBox, m_offset, extraWidthToEndOfLine));
+    return localRect == IntRect() ? IntRect() : m_layoutObject->localToAbsoluteQuad(FloatRect(localRect)).enclosingBoundingBox();
 }
 
-// Convert a local point into the coordinate system of backing coordinates.
-// Also returns the backing layer if needed.
-FloatPoint RenderedPosition::localToInvalidationBackingPoint(
-    const LayoutPoint& localPoint,
-    GraphicsLayer** graphicsLayerBacking) const
-{
-    const LayoutBoxModelObject& paintInvalidationContainer = m_layoutObject->containerForPaintInvalidation();
-    DCHECK(paintInvalidationContainer.layer());
-
-    FloatPoint containerPoint = m_layoutObject->localToAncestorPoint(
-        FloatPoint(localPoint), &paintInvalidationContainer,
-        TraverseDocumentBoundaries);
-
-    // A layoutObject can have no invalidation backing if it is from a detached
-    // frame, or when forced compositing is disabled.
-    if (paintInvalidationContainer.layer()->compositingState() == NotComposited)
-        return containerPoint;
-
-    PaintLayer::mapPointInPaintInvalidationContainerToBacking(
-        paintInvalidationContainer, containerPoint);
-
-    // Must not use the scrolling contents layer, so pass
-    // |paintInvalidationContainer|.
-    if (GraphicsLayer* graphicsLayer = paintInvalidationContainer.layer()->graphicsLayerBacking(
-            &paintInvalidationContainer)) {
-        if (graphicsLayerBacking)
-            *graphicsLayerBacking = graphicsLayer;
-
-        containerPoint.move(-graphicsLayer->offsetFromLayoutObject());
-    }
-
-    return containerPoint;
-}
-
-void RenderedPosition::positionInGraphicsLayerBacking(
-    CompositedSelectionBound& bound,
-    bool selectionStart) const
+void RenderedPosition::positionInGraphicsLayerBacking(CompositedSelectionBound& bound) const
 {
     bound.layer = nullptr;
     bound.edgeTopInLayer = bound.edgeBottomInLayer = FloatPoint();
@@ -314,37 +251,19 @@ void RenderedPosition::positionInGraphicsLayerBacking(
         return;
 
     LayoutRect rect = m_layoutObject->localCaretRect(m_inlineBox, m_offset);
-    if (m_layoutObject->style()->isHorizontalWritingMode()) {
-        bound.edgeTopInLayer = localToInvalidationBackingPoint(rect.minXMinYCorner(), &bound.layer);
-        bound.edgeBottomInLayer = localToInvalidationBackingPoint(rect.minXMaxYCorner(), nullptr);
-    } else {
-        bound.edgeTopInLayer = localToInvalidationBackingPoint(rect.minXMinYCorner(), &bound.layer);
-        bound.edgeBottomInLayer = localToInvalidationBackingPoint(rect.maxXMinYCorner(), nullptr);
-
-        // When text is vertical, it looks better for the start handle baseline to
-        // be at the starting edge, to enclose the selection fully between the
-        // handles.
-        if (selectionStart) {
-            float xSwap = bound.edgeBottomInLayer.x();
-            bound.edgeBottomInLayer.setX(bound.edgeTopInLayer.x());
-            bound.edgeTopInLayer.setX(xSwap);
-        }
-
-        // Flipped blocks writing mode is not only vertical but also right to left.
-        bound.isTextDirectionRTL = m_layoutObject->hasFlippedBlocksWritingMode();
-    }
+    DeprecatedPaintLayer* layer = nullptr;
+    bound.edgeTopInLayer = m_layoutObject->localToInvalidationBackingPoint(rect.minXMinYCorner(), &layer);
+    bound.edgeBottomInLayer = m_layoutObject->localToInvalidationBackingPoint(rect.minXMaxYCorner(), nullptr);
+    bound.layer = layer ? layer->graphicsLayerBacking() : nullptr;
 }
 
-bool layoutObjectContainsPosition(LayoutObject* target,
-    const Position& position)
+bool layoutObjectContainsPosition(LayoutObject* target, const Position& position)
 {
-    for (LayoutObject* layoutObject = layoutObjectFromPosition(position);
-         layoutObject && layoutObject->node();
-         layoutObject = layoutObject->parent()) {
+    for (LayoutObject* layoutObject = layoutObjectFromPosition(position); layoutObject && layoutObject->node(); layoutObject = layoutObject->parent()) {
         if (layoutObject == target)
             return true;
     }
     return false;
 }
 
-} // namespace blink
+};

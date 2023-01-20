@@ -40,28 +40,25 @@ namespace blink {
 class SVGElement;
 
 // SVGStringList property implementations for SVGTests properties.
-// Inherits SVGAnimatedPropertyBase to enable XML attribute synchronization, but
-// this is never animated.
+// Inherits SVGAnimatedPropertyBase to enable XML attribute synchronization, but this is never animated.
 class SVGStaticStringList final : public SVGAnimatedPropertyBase {
 public:
-    static SVGStaticStringList* create(SVGElement* contextElement,
-        const QualifiedName& attributeName)
+    static PassRefPtrWillBeRawPtr<SVGStaticStringList> create(SVGElement* contextElement, const QualifiedName& attributeName)
     {
-        return new SVGStaticStringList(contextElement, attributeName);
+        return adoptRefWillBeNoop(new SVGStaticStringList(contextElement, attributeName));
     }
 
     ~SVGStaticStringList() override;
 
     // SVGAnimatedPropertyBase:
     SVGPropertyBase* currentValueBase() override;
-    const SVGPropertyBase& baseValueBase() const override;
     bool isAnimating() const override;
-    SVGPropertyBase* createAnimatedValue() override;
-    void setAnimatedValue(SVGPropertyBase*) override;
+    PassRefPtrWillBeRawPtr<SVGPropertyBase> createAnimatedValue() override;
+    void setAnimatedValue(PassRefPtrWillBeRawPtr<SVGPropertyBase>) override;
     void animationEnded() override;
     bool needsSynchronizeAttribute() override;
 
-    SVGParsingError setBaseValueAsString(const String&) override;
+    void setBaseValueAsString(const String& value, SVGParsingError& parseError);
 
     SVGStringList* value() { return m_value.get(); }
     SVGStringListTearOff* tearOff();
@@ -71,10 +68,10 @@ public:
 private:
     SVGStaticStringList(SVGElement*, const QualifiedName&);
 
-    Member<SVGStringList> m_value;
-    Member<SVGStringListTearOff> m_tearOff;
+    RefPtrWillBeMember<SVGStringList> m_value;
+    RefPtrWillBeMember<SVGStringListTearOff> m_tearOff;
 };
 
-} // namespace blink
+}
 
 #endif

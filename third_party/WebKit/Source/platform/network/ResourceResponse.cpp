@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/network/ResourceResponse.h"
 
 #include "wtf/CurrentTime.h"
@@ -74,6 +75,16 @@ ResourceResponse::SignedCertificateTimestamp::isolatedCopy() const
         m_signatureData.isolatedCopy());
 }
 
+=======
+#include "config.h"
+#include "platform/network/ResourceResponse.h"
+
+#include "wtf/CurrentTime.h"
+#include "wtf/StdLibExtras.h"
+
+namespace blink {
+
+>>>>>>> miniblink49
 ResourceResponse::ResourceResponse()
     : m_expectedContentLength(0)
     , m_httpStatusCode(0)
@@ -90,15 +101,22 @@ ResourceResponse::ResourceResponse()
     , m_date(0.0)
     , m_expires(0.0)
     , m_lastModified(0.0)
+<<<<<<< HEAD
     , m_hasMajorCertificateErrors(false)
     , m_securityStyle(SecurityStyleUnknown)
     , m_httpVersion(HTTPVersionUnknown)
     , m_appCacheID(0)
+=======
+    , m_httpVersion(Unknown)
+    , m_appCacheID(0)
+    , m_isMultipartPayload(false)
+>>>>>>> miniblink49
     , m_wasFetchedViaSPDY(false)
     , m_wasNpnNegotiated(false)
     , m_wasAlternateProtocolAvailable(false)
     , m_wasFetchedViaProxy(false)
     , m_wasFetchedViaServiceWorker(false)
+<<<<<<< HEAD
     , m_wasFetchedViaForeignFetch(false)
     , m_wasFallbackRequiredByServiceWorker(false)
     , m_serviceWorkerResponseType(WebServiceWorkerResponseTypeDefault)
@@ -116,6 +134,16 @@ ResourceResponse::ResourceResponse(const KURL& url,
     long long expectedLength,
     const AtomicString& textEncodingName,
     const String& filename)
+=======
+    , m_wasFallbackRequiredByServiceWorker(false)
+    , m_serviceWorkerResponseType(WebServiceWorkerResponseTypeDefault)
+    , m_responseTime(0)
+    , m_remotePort(0)
+{
+}
+
+ResourceResponse::ResourceResponse(const KURL& url, const AtomicString& mimeType, long long expectedLength, const AtomicString& textEncodingName, const String& filename)
+>>>>>>> miniblink49
     : m_url(url)
     , m_mimeType(mimeType)
     , m_expectedContentLength(expectedLength)
@@ -135,15 +163,22 @@ ResourceResponse::ResourceResponse(const KURL& url,
     , m_date(0.0)
     , m_expires(0.0)
     , m_lastModified(0.0)
+<<<<<<< HEAD
     , m_hasMajorCertificateErrors(false)
     , m_securityStyle(SecurityStyleUnknown)
     , m_httpVersion(HTTPVersionUnknown)
     , m_appCacheID(0)
+=======
+    , m_httpVersion(Unknown)
+    , m_appCacheID(0)
+    , m_isMultipartPayload(false)
+>>>>>>> miniblink49
     , m_wasFetchedViaSPDY(false)
     , m_wasNpnNegotiated(false)
     , m_wasAlternateProtocolAvailable(false)
     , m_wasFetchedViaProxy(false)
     , m_wasFetchedViaServiceWorker(false)
+<<<<<<< HEAD
     , m_wasFetchedViaForeignFetch(false)
     , m_wasFallbackRequiredByServiceWorker(false)
     , m_serviceWorkerResponseType(WebServiceWorkerResponseTypeDefault)
@@ -228,10 +263,70 @@ std::unique_ptr<CrossThreadResourceResponseData> ResourceResponse::copyData()
     data->m_suggestedFilename = suggestedFilename().isolatedCopy();
     data->m_httpStatusCode = httpStatusCode();
     data->m_httpStatusText = httpStatusText().getString().isolatedCopy();
+=======
+    , m_wasFallbackRequiredByServiceWorker(false)
+    , m_serviceWorkerResponseType(WebServiceWorkerResponseTypeDefault)
+    , m_responseTime(0)
+    , m_remotePort(0)
+{
+}
+
+PassOwnPtr<ResourceResponse> ResourceResponse::adopt(PassOwnPtr<CrossThreadResourceResponseData> data)
+{
+    OwnPtr<ResourceResponse> response = adoptPtr(new ResourceResponse);
+    response->setURL(data->m_url);
+    response->setMimeType(AtomicString(data->m_mimeType));
+    response->setExpectedContentLength(data->m_expectedContentLength);
+    response->setTextEncodingName(AtomicString(data->m_textEncodingName));
+    response->setSuggestedFilename(data->m_suggestedFilename);
+
+    response->setHTTPStatusCode(data->m_httpStatusCode);
+    response->setHTTPStatusText(AtomicString(data->m_httpStatusText));
+
+    response->m_httpHeaderFields.adopt(data->m_httpHeaders.release());
+    response->setLastModifiedDate(data->m_lastModifiedDate);
+    response->setResourceLoadTiming(data->m_resourceLoadTiming.release());
+    response->m_securityInfo = data->m_securityInfo;
+    response->m_httpVersion = data->m_httpVersion;
+    response->m_appCacheID = data->m_appCacheID;
+    response->m_appCacheManifestURL = data->m_appCacheManifestURL.copy();
+    response->m_isMultipartPayload = data->m_isMultipartPayload;
+    response->m_wasFetchedViaSPDY = data->m_wasFetchedViaSPDY;
+    response->m_wasNpnNegotiated = data->m_wasNpnNegotiated;
+    response->m_wasAlternateProtocolAvailable = data->m_wasAlternateProtocolAvailable;
+    response->m_wasFetchedViaProxy = data->m_wasFetchedViaProxy;
+    response->m_wasFetchedViaServiceWorker = data->m_wasFetchedViaServiceWorker;
+    response->m_wasFallbackRequiredByServiceWorker = data->m_wasFallbackRequiredByServiceWorker;
+    response->m_serviceWorkerResponseType = data->m_serviceWorkerResponseType;
+    response->m_originalURLViaServiceWorker = data->m_originalURLViaServiceWorker;
+    response->m_responseTime = data->m_responseTime;
+    response->m_remoteIPAddress = AtomicString(data->m_remoteIPAddress);
+    response->m_remotePort = data->m_remotePort;
+    response->m_downloadedFilePath = data->m_downloadedFilePath;
+    response->m_downloadedFileHandle = data->m_downloadedFileHandle;
+
+    // Bug https://bugs.webkit.org/show_bug.cgi?id=60397 this doesn't support
+    // whatever values may be present in the opaque m_extraData structure.
+
+    return response.release();
+}
+
+PassOwnPtr<CrossThreadResourceResponseData> ResourceResponse::copyData() const
+{
+    OwnPtr<CrossThreadResourceResponseData> data = adoptPtr(new CrossThreadResourceResponseData);
+    data->m_url = url().copy();
+    data->m_mimeType = mimeType().string().isolatedCopy();
+    data->m_expectedContentLength = expectedContentLength();
+    data->m_textEncodingName = textEncodingName().string().isolatedCopy();
+    data->m_suggestedFilename = suggestedFilename().isolatedCopy();
+    data->m_httpStatusCode = httpStatusCode();
+    data->m_httpStatusText = httpStatusText().string().isolatedCopy();
+>>>>>>> miniblink49
     data->m_httpHeaders = httpHeaderFields().copyData();
     data->m_lastModifiedDate = lastModifiedDate();
     if (m_resourceLoadTiming)
         data->m_resourceLoadTiming = m_resourceLoadTiming->deepCopy();
+<<<<<<< HEAD
     data->m_hasMajorCertificateErrors = m_hasMajorCertificateErrors;
     data->m_securityStyle = m_securityStyle;
     data->m_securityDetails.protocol = m_securityDetails.protocol.isolatedCopy();
@@ -251,11 +346,19 @@ std::unique_ptr<CrossThreadResourceResponseData> ResourceResponse::copyData()
     data->m_appCacheID = m_appCacheID;
     data->m_appCacheManifestURL = m_appCacheManifestURL.copy();
     data->m_multipartBoundary = m_multipartBoundary;
+=======
+    data->m_securityInfo = CString(m_securityInfo.data(), m_securityInfo.length());
+    data->m_httpVersion = m_httpVersion;
+    data->m_appCacheID = m_appCacheID;
+    data->m_appCacheManifestURL = m_appCacheManifestURL.copy();
+    data->m_isMultipartPayload = m_isMultipartPayload;
+>>>>>>> miniblink49
     data->m_wasFetchedViaSPDY = m_wasFetchedViaSPDY;
     data->m_wasNpnNegotiated = m_wasNpnNegotiated;
     data->m_wasAlternateProtocolAvailable = m_wasAlternateProtocolAvailable;
     data->m_wasFetchedViaProxy = m_wasFetchedViaProxy;
     data->m_wasFetchedViaServiceWorker = m_wasFetchedViaServiceWorker;
+<<<<<<< HEAD
     data->m_wasFetchedViaForeignFetch = m_wasFetchedViaForeignFetch;
     data->m_wasFallbackRequiredByServiceWorker = m_wasFallbackRequiredByServiceWorker;
     data->m_serviceWorkerResponseType = m_serviceWorkerResponseType;
@@ -272,13 +375,25 @@ std::unique_ptr<CrossThreadResourceResponseData> ResourceResponse::copyData()
     data->m_encodedDataLength = m_encodedDataLength;
     data->m_encodedBodyLength = m_encodedBodyLength;
     data->m_decodedBodyLength = m_decodedBodyLength;
+=======
+    data->m_wasFallbackRequiredByServiceWorker = m_wasFallbackRequiredByServiceWorker;
+    data->m_serviceWorkerResponseType = m_serviceWorkerResponseType;
+    data->m_originalURLViaServiceWorker = m_originalURLViaServiceWorker.copy();
+    data->m_responseTime = m_responseTime;
+    data->m_remoteIPAddress = m_remoteIPAddress.string().isolatedCopy();
+    data->m_remotePort = m_remotePort;
+>>>>>>> miniblink49
     data->m_downloadedFilePath = m_downloadedFilePath.isolatedCopy();
     data->m_downloadedFileHandle = m_downloadedFileHandle;
 
     // Bug https://bugs.webkit.org/show_bug.cgi?id=60397 this doesn't support
     // whatever values may be present in the opaque m_extraData structure.
 
+<<<<<<< HEAD
     return data;
+=======
+    return data.release();
+>>>>>>> miniblink49
 }
 
 bool ResourceResponse::isHTTP() const
@@ -307,8 +422,12 @@ void ResourceResponse::setMimeType(const AtomicString& mimeType)
 {
     m_isNull = false;
 
+<<<<<<< HEAD
     // FIXME: MIME type is determined by HTTP Content-Type header. We should
     // update the header, so that it doesn't disagree with m_mimeType.
+=======
+    // FIXME: MIME type is determined by HTTP Content-Type header. We should update the header, so that it doesn't disagree with m_mimeType.
+>>>>>>> miniblink49
     m_mimeType = mimeType;
 }
 
@@ -317,6 +436,7 @@ long long ResourceResponse::expectedContentLength() const
     return m_expectedContentLength;
 }
 
+<<<<<<< HEAD
 void ResourceResponse::setExpectedContentLength(
     long long expectedContentLength)
 {
@@ -325,6 +445,13 @@ void ResourceResponse::setExpectedContentLength(
     // FIXME: Content length is determined by HTTP Content-Length header. We
     // should update the header, so that it doesn't disagree with
     // m_expectedContentLength.
+=======
+void ResourceResponse::setExpectedContentLength(long long expectedContentLength)
+{
+    m_isNull = false;
+
+    // FIXME: Content length is determined by HTTP Content-Length header. We should update the header, so that it doesn't disagree with m_expectedContentLength.
+>>>>>>> miniblink49
     m_expectedContentLength = expectedContentLength;
 }
 
@@ -337,8 +464,12 @@ void ResourceResponse::setTextEncodingName(const AtomicString& encodingName)
 {
     m_isNull = false;
 
+<<<<<<< HEAD
     // FIXME: Text encoding is determined by HTTP Content-Type header. We should
     // update the header, so that it doesn't disagree with m_textEncodingName.
+=======
+    // FIXME: Text encoding is determined by HTTP Content-Type header. We should update the header, so that it doesn't disagree with m_textEncodingName.
+>>>>>>> miniblink49
     m_textEncodingName = encodingName;
 }
 
@@ -352,8 +483,12 @@ void ResourceResponse::setSuggestedFilename(const String& suggestedName)
 {
     m_isNull = false;
 
+<<<<<<< HEAD
     // FIXME: Suggested file name is calculated based on other headers. There
     // should not be a setter for it.
+=======
+    // FIXME: Suggested file name is calculated based on other headers. There should not be a setter for it.
+>>>>>>> miniblink49
     m_suggestedFilename = suggestedName;
 }
 
@@ -377,12 +512,17 @@ void ResourceResponse::setHTTPStatusText(const AtomicString& statusText)
     m_httpStatusText = statusText;
 }
 
+<<<<<<< HEAD
 const AtomicString& ResourceResponse::httpHeaderField(
     const AtomicString& name) const
+=======
+const AtomicString& ResourceResponse::httpHeaderField(const AtomicString& name) const
+>>>>>>> miniblink49
 {
     return m_httpHeaderFields.get(name);
 }
 
+<<<<<<< HEAD
 void ResourceResponse::updateHeaderParsedState(const AtomicString& name)
 {
     static const char ageHeader[] = "age";
@@ -393,6 +533,35 @@ void ResourceResponse::updateHeaderParsedState(const AtomicString& name)
     if (equalIgnoringCase(name, ageHeader))
         m_haveParsedAgeHeader = false;
     else if (equalIgnoringCase(name, cacheControlHeader) || equalIgnoringCase(name, pragmaHeader))
+=======
+const AtomicString& ResourceResponse::httpHeaderField(const char* name) const
+{
+    return m_httpHeaderFields.get(name);
+}
+
+static const AtomicString& cacheControlHeaderString()
+{
+    DEFINE_STATIC_LOCAL(const AtomicString, cacheControlHeader, ("cache-control", AtomicString::ConstructFromLiteral));
+    return cacheControlHeader;
+}
+
+static const AtomicString& pragmaHeaderString()
+{
+    DEFINE_STATIC_LOCAL(const AtomicString, pragmaHeader, ("pragma", AtomicString::ConstructFromLiteral));
+    return pragmaHeader;
+}
+
+void ResourceResponse::updateHeaderParsedState(const AtomicString& name)
+{
+    DEFINE_STATIC_LOCAL(const AtomicString, ageHeader, ("age", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, dateHeader, ("date", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, expiresHeader, ("expires", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, lastModifiedHeader, ("last-modified", AtomicString::ConstructFromLiteral));
+
+    if (equalIgnoringCase(name, ageHeader))
+        m_haveParsedAgeHeader = false;
+    else if (equalIgnoringCase(name, cacheControlHeaderString()) || equalIgnoringCase(name, pragmaHeaderString()))
+>>>>>>> miniblink49
         m_cacheControlHeader = CacheControlHeader();
     else if (equalIgnoringCase(name, dateHeader))
         m_haveParsedDateHeader = false;
@@ -402,6 +571,7 @@ void ResourceResponse::updateHeaderParsedState(const AtomicString& name)
         m_haveParsedLastModifiedHeader = false;
 }
 
+<<<<<<< HEAD
 void ResourceResponse::setSecurityDetails(
     const String& protocol,
     const String& keyExchange,
@@ -432,14 +602,21 @@ void ResourceResponse::setSecurityDetails(
 
 void ResourceResponse::setHTTPHeaderField(const AtomicString& name,
     const AtomicString& value)
+=======
+void ResourceResponse::setHTTPHeaderField(const AtomicString& name, const AtomicString& value)
+>>>>>>> miniblink49
 {
     updateHeaderParsedState(name);
 
     m_httpHeaderFields.set(name, value);
 }
 
+<<<<<<< HEAD
 void ResourceResponse::addHTTPHeaderField(const AtomicString& name,
     const AtomicString& value)
+=======
+void ResourceResponse::addHTTPHeaderField(const AtomicString& name, const AtomicString& value)
+>>>>>>> miniblink49
 {
     updateHeaderParsedState(name);
 
@@ -458,6 +635,7 @@ const HTTPHeaderMap& ResourceResponse::httpHeaderFields() const
     return m_httpHeaderFields;
 }
 
+<<<<<<< HEAD
 bool ResourceResponse::cacheControlContainsNoCache() const
 {
     if (!m_cacheControlHeader.parsed) {
@@ -482,11 +660,32 @@ bool ResourceResponse::cacheControlContainsMustRevalidate() const
         m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeader),
             m_httpHeaderFields.get(pragmaHeader));
     }
+=======
+bool ResourceResponse::cacheControlContainsNoCache()
+{
+    if (!m_cacheControlHeader.parsed)
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    return m_cacheControlHeader.containsNoCache;
+}
+
+bool ResourceResponse::cacheControlContainsNoStore()
+{
+    if (!m_cacheControlHeader.parsed)
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    return m_cacheControlHeader.containsNoStore;
+}
+
+bool ResourceResponse::cacheControlContainsMustRevalidate()
+{
+    if (!m_cacheControlHeader.parsed)
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+>>>>>>> miniblink49
     return m_cacheControlHeader.containsMustRevalidate;
 }
 
 bool ResourceResponse::hasCacheValidatorFields() const
 {
+<<<<<<< HEAD
     static const char lastModifiedHeader[] = "last-modified";
     static const char eTagHeader[] = "etag";
     return !m_httpHeaderFields.get(lastModifiedHeader).isEmpty() || !m_httpHeaderFields.get(eTagHeader).isEmpty();
@@ -512,6 +711,28 @@ double ResourceResponse::cacheControlStaleWhileRevalidate() const
 
 static double parseDateValueInHeader(const HTTPHeaderMap& headers,
     const AtomicString& headerName)
+=======
+    DEFINE_STATIC_LOCAL(const AtomicString, lastModifiedHeader, ("last-modified", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, eTagHeader, ("etag", AtomicString::ConstructFromLiteral));
+    return !m_httpHeaderFields.get(lastModifiedHeader).isEmpty() || !m_httpHeaderFields.get(eTagHeader).isEmpty();
+}
+
+double ResourceResponse::cacheControlMaxAge()
+{
+    if (!m_cacheControlHeader.parsed)
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    return m_cacheControlHeader.maxAge;
+}
+
+double ResourceResponse::cacheControlStaleWhileRevalidate()
+{
+    if (!m_cacheControlHeader.parsed)
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    return m_cacheControlHeader.staleWhileRevalidate;
+}
+
+static double parseDateValueInHeader(const HTTPHeaderMap& headers, const AtomicString& headerName)
+>>>>>>> miniblink49
 {
     const AtomicString& headerValue = headers.get(headerName);
     if (headerValue.isEmpty())
@@ -521,7 +742,11 @@ static double parseDateValueInHeader(const HTTPHeaderMap& headers,
     // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
     // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
     double dateInMilliseconds = parseDate(headerValue);
+<<<<<<< HEAD
     if (!std_isfinite(dateInMilliseconds))
+=======
+    if (!std::isfinite(dateInMilliseconds))
+>>>>>>> miniblink49
         return std::numeric_limits<double>::quiet_NaN();
     return dateInMilliseconds / 1000;
 }
@@ -529,7 +754,11 @@ static double parseDateValueInHeader(const HTTPHeaderMap& headers,
 double ResourceResponse::date() const
 {
     if (!m_haveParsedDateHeader) {
+<<<<<<< HEAD
         static const char headerName[] = "date";
+=======
+        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("date", AtomicString::ConstructFromLiteral));
+>>>>>>> miniblink49
         m_date = parseDateValueInHeader(m_httpHeaderFields, headerName);
         m_haveParsedDateHeader = true;
     }
@@ -539,7 +768,11 @@ double ResourceResponse::date() const
 double ResourceResponse::age() const
 {
     if (!m_haveParsedAgeHeader) {
+<<<<<<< HEAD
         static const char headerName[] = "age";
+=======
+        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("age", AtomicString::ConstructFromLiteral));
+>>>>>>> miniblink49
         const AtomicString& headerValue = m_httpHeaderFields.get(headerName);
         bool ok;
         m_age = headerValue.toDouble(&ok);
@@ -553,7 +786,11 @@ double ResourceResponse::age() const
 double ResourceResponse::expires() const
 {
     if (!m_haveParsedExpiresHeader) {
+<<<<<<< HEAD
         static const char headerName[] = "expires";
+=======
+        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("expires", AtomicString::ConstructFromLiteral));
+>>>>>>> miniblink49
         m_expires = parseDateValueInHeader(m_httpHeaderFields, headerName);
         m_haveParsedExpiresHeader = true;
     }
@@ -563,7 +800,11 @@ double ResourceResponse::expires() const
 double ResourceResponse::lastModified() const
 {
     if (!m_haveParsedLastModifiedHeader) {
+<<<<<<< HEAD
         static const char headerName[] = "last-modified";
+=======
+        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("last-modified", AtomicString::ConstructFromLiteral));
+>>>>>>> miniblink49
         m_lastModified = parseDateValueInHeader(m_httpHeaderFields, headerName);
         m_haveParsedLastModifiedHeader = true;
     }
@@ -572,13 +813,21 @@ double ResourceResponse::lastModified() const
 
 bool ResourceResponse::isAttachment() const
 {
+<<<<<<< HEAD
     static const char headerName[] = "content-disposition";
     static const char attachmentString[] = "attachment";
+=======
+    DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("content-disposition", AtomicString::ConstructFromLiteral));
+>>>>>>> miniblink49
     String value = m_httpHeaderFields.get(headerName);
     size_t loc = value.find(';');
     if (loc != kNotFound)
         value = value.left(loc);
     value = value.stripWhiteSpace();
+<<<<<<< HEAD
+=======
+    DEFINE_STATIC_LOCAL(const AtomicString, attachmentString, ("attachment", AtomicString::ConstructFromLiteral));
+>>>>>>> miniblink49
     return equalIgnoringCase(value, attachmentString);
 }
 
@@ -627,8 +876,12 @@ ResourceLoadTiming* ResourceResponse::resourceLoadTiming() const
     return m_resourceLoadTiming.get();
 }
 
+<<<<<<< HEAD
 void ResourceResponse::setResourceLoadTiming(
     PassRefPtr<ResourceLoadTiming> resourceLoadTiming)
+=======
+void ResourceResponse::setResourceLoadTiming(PassRefPtr<ResourceLoadTiming> resourceLoadTiming)
+>>>>>>> miniblink49
 {
     m_resourceLoadTiming = resourceLoadTiming;
 }
@@ -638,12 +891,17 @@ PassRefPtr<ResourceLoadInfo> ResourceResponse::resourceLoadInfo() const
     return m_resourceLoadInfo.get();
 }
 
+<<<<<<< HEAD
 void ResourceResponse::setResourceLoadInfo(
     PassRefPtr<ResourceLoadInfo> loadInfo)
+=======
+void ResourceResponse::setResourceLoadInfo(PassRefPtr<ResourceLoadInfo> loadInfo)
+>>>>>>> miniblink49
 {
     m_resourceLoadInfo = loadInfo;
 }
 
+<<<<<<< HEAD
 KURL ResourceResponse::originalURLViaServiceWorker() const
 {
     if (m_urlListViaServiceWorker.isEmpty())
@@ -666,6 +924,8 @@ void ResourceResponse::addToDecodedBodyLength(long long value)
     m_decodedBodyLength += value;
 }
 
+=======
+>>>>>>> miniblink49
 void ResourceResponse::setDownloadedFilePath(const String& downloadedFilePath)
 {
     m_downloadedFilePath = downloadedFilePath;
@@ -673,6 +933,7 @@ void ResourceResponse::setDownloadedFilePath(const String& downloadedFilePath)
         m_downloadedFileHandle.clear();
         return;
     }
+<<<<<<< HEAD
     // TODO(dmurph): Investigate whether we need the mimeType on this blob.
     std::unique_ptr<BlobData> blobData = BlobData::createForFileWithUnknownSize(m_downloadedFilePath);
     blobData->detachFromCurrentThread();
@@ -687,6 +948,15 @@ void ResourceResponse::appendRedirectResponse(
 
 bool ResourceResponse::compare(const ResourceResponse& a,
     const ResourceResponse& b)
+=======
+    OwnPtr<BlobData> blobData = BlobData::create();
+    blobData->appendFile(m_downloadedFilePath);
+    blobData->detachFromCurrentThread();
+    m_downloadedFileHandle = BlobDataHandle::create(blobData.release(), -1);
+}
+
+bool ResourceResponse::compare(const ResourceResponse& a, const ResourceResponse& b)
+>>>>>>> miniblink49
 {
     if (a.isNull() != b.isNull())
         return false;
@@ -710,6 +980,7 @@ bool ResourceResponse::compare(const ResourceResponse& a,
         return true;
     if (a.resourceLoadTiming() != b.resourceLoadTiming())
         return false;
+<<<<<<< HEAD
     if (a.encodedBodyLength() != b.encodedBodyLength())
         return false;
     if (a.decodedBodyLength() != b.decodedBodyLength())
@@ -718,3 +989,9 @@ bool ResourceResponse::compare(const ResourceResponse& a,
 }
 
 } // namespace blink
+=======
+    return true;
+}
+
+}
+>>>>>>> miniblink49

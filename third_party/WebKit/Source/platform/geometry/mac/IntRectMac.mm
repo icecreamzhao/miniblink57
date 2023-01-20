@@ -20,15 +20,23 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+<<<<<<< HEAD
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+=======
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ */
+
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/IntRect.h"
 
 namespace blink {
 
 #ifndef NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES
 
+<<<<<<< HEAD
 IntRect::operator NSRect() const {
   return NSMakeRect(x(), y(), width(), height());
 }
@@ -42,4 +50,22 @@ IntRect enclosingIntRect(const NSRect& rect) {
 }
 
 #endif
+=======
+IntRect::operator NSRect() const
+{
+    return NSMakeRect(x(), y(), width(), height());
+}
+
+IntRect enclosingIntRect(const NSRect& rect)
+{
+    int l = static_cast<int>(floorf(rect.origin.x));
+    int t = static_cast<int>(floorf(rect.origin.y));
+    int r = static_cast<int>(ceilf(NSMaxX(rect)));
+    int b = static_cast<int>(ceilf(NSMaxY(rect)));
+    return IntRect(l, t, r - l, b - t);
+}
+
+#endif
+
+>>>>>>> miniblink49
 }

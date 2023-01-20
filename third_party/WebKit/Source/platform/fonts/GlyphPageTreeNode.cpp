@@ -26,16 +26,26 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/fonts/GlyphPageTreeNode.h"
 
 #include "platform/fonts/SegmentedFontData.h"
 #include "platform/fonts/SimpleFontData.h"
 #include "platform/fonts/opentype/OpenTypeVerticalData.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "wtf/text/CString.h"
+#include "wtf/text/CharacterNames.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 #include <stdio.h>
 
 namespace blink {
@@ -247,6 +257,7 @@ void GlyphPageTreeNode::initializePurePage(const FontData* fontData, unsigned pa
         haveGlyphs = false;
 
         const SegmentedFontData* segmentedFontData = toSegmentedFontData(fontData);
+<<<<<<< HEAD
         for (int i = segmentedFontData->numFaces() - 1; i >= 0; i--) {
             RefPtr<FontDataForRangeSet> fontDataForRangeSet = segmentedFontData->faceAt(i);
             RefPtr<UnicodeRangeSet> ranges = fontDataForRangeSet->ranges();
@@ -282,6 +293,29 @@ void GlyphPageTreeNode::initializePurePage(const FontData* fontData, unsigned pa
 
                 haveGlyphs |= fill(m_page.get(), from, to - from, buffer + from * (start < 0x10000 ? 1 : 2), (to - from) * (start < 0x10000 ? 1 : 2), fontDataForRangeSet->fontData());
             }
+=======
+        for (int i = segmentedFontData->numRanges() - 1; i >= 0; i--) {
+            const FontDataRange& range = segmentedFontData->rangeAt(i);
+            // all this casting is to ensure all the parameters to min and max have the same type,
+            // to avoid ambiguous template parameter errors on Windows
+            int from = max(0, static_cast<int>(range.from()) - static_cast<int>(start));
+            int to = 1 + min(static_cast<int>(range.to()) - static_cast<int>(start), static_cast<int>(GlyphPage::size) - 1);
+            if (from >= static_cast<int>(GlyphPage::size) || to <= 0)
+                continue;
+
+            // If this is a custom font needs to be loaded, do not fill
+            // the page so that font fallback is used while loading.
+            RefPtr<CustomFontData> customData = range.fontData()->customFontData();
+            if (customData && customData->isLoadingFallback()) {
+                for (int j = from; j < to; j++) {
+                    m_page->setCustomFontToLoad(j, customData.get());
+                    haveGlyphs = true;
+                }
+                continue;
+            }
+
+            haveGlyphs |= fill(m_page.get(), from, to - from, buffer + from * (start < 0x10000 ? 1 : 2), (to - from) * (start < 0x10000 ? 1 : 2), range.fontData().get());
+>>>>>>> miniblink49
         }
     }
 
@@ -343,9 +377,14 @@ void GlyphPageTreeNode::initializeOverridePage(const FontData* fontData, unsigne
 GlyphPageTreeNode* GlyphPageTreeNode::getNormalChild(const FontData* fontData, unsigned pageNumber)
 {
     ASSERT(fontData);
+<<<<<<< HEAD
 #if ENABLE(ASSERT)
     ASSERT(pageNumber == m_pageNumber);
 #endif
+=======
+    ASSERT(pageNumber == m_pageNumber);
+
+>>>>>>> miniblink49
     if (GlyphPageTreeNode* foundChild = m_children.get(fontData))
         return foundChild;
 
@@ -358,7 +397,11 @@ GlyphPageTreeNode* GlyphPageTreeNode::getNormalChild(const FontData* fontData, u
 #if ENABLE(ASSERT)
     child->m_pageNumber = m_pageNumber;
 #endif
+<<<<<<< HEAD
     m_children.set(fontData, WTF::wrapUnique(child));
+=======
+    m_children.set(fontData, adoptPtr(child));
+>>>>>>> miniblink49
     fontData->setMaxGlyphPageTreeLevel(max(fontData->maxGlyphPageTreeLevel(), child->m_level));
     child->initializePage(fontData, pageNumber);
     return child;
@@ -366,14 +409,23 @@ GlyphPageTreeNode* GlyphPageTreeNode::getNormalChild(const FontData* fontData, u
 
 SystemFallbackGlyphPageTreeNode* GlyphPageTreeNode::getSystemFallbackChild(unsigned pageNumber)
 {
+<<<<<<< HEAD
 #if ENABLE(ASSERT)
     ASSERT(pageNumber == m_pageNumber);
 #endif
+=======
+    ASSERT(pageNumber == m_pageNumber);
+
+>>>>>>> miniblink49
     if (m_systemFallbackChild)
         return m_systemFallbackChild.get();
 
     SystemFallbackGlyphPageTreeNode* child = new SystemFallbackGlyphPageTreeNode(this);
+<<<<<<< HEAD
     m_systemFallbackChild = WTF::wrapUnique(child);
+=======
+    m_systemFallbackChild = adoptPtr(child);
+>>>>>>> miniblink49
 #if ENABLE(ASSERT)
     child->m_pageNumber = m_pageNumber;
 #endif
@@ -386,7 +438,11 @@ void GlyphPageTreeNode::pruneCustomFontData(const FontData* fontData)
         return;
 
     // Prune any branch that contains this FontData.
+<<<<<<< HEAD
     if (std::unique_ptr<GlyphPageTreeNode> node = m_children.take(fontData)) {
+=======
+    if (OwnPtr<GlyphPageTreeNode> node = m_children.take(fontData)) {
+>>>>>>> miniblink49
         if (unsigned customFontCount = node->m_customFontCount + 1) {
             for (GlyphPageTreeNode* curr = this; curr; curr = curr->m_parent)
                 curr->m_customFontCount -= customFontCount;
@@ -415,7 +471,11 @@ void GlyphPageTreeNode::pruneFontData(const SimpleFontData* fontData, unsigned l
         m_page->removePerGlyphFontData(fontData);
 
     // Prune any branch that contains this FontData.
+<<<<<<< HEAD
     if (std::unique_ptr<GlyphPageTreeNode> node = m_children.take(fontData)) {
+=======
+    if (OwnPtr<GlyphPageTreeNode> node = m_children.take(fontData)) {
+>>>>>>> miniblink49
         if (unsigned customFontCount = node->m_customFontCount) {
             for (GlyphPageTreeNode* curr = this; curr; curr = curr->m_parent)
                 curr->m_customFontCount -= customFontCount;
@@ -461,3 +521,7 @@ PassRefPtr<GlyphPage> SystemFallbackGlyphPageTreeNode::initializePage()
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/storage/StorageEvent.h"
 
 #include "modules/EventModules.h"
@@ -31,6 +35,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 StorageEvent* StorageEvent::create()
 {
     return new StorageEvent;
@@ -62,6 +67,32 @@ StorageEvent::StorageEvent(const AtomicString& type,
     const String& newValue,
     const String& url,
     Storage* storageArea)
+=======
+PassRefPtrWillBeRawPtr<StorageEvent> StorageEvent::create()
+{
+    return adoptRefWillBeNoop(new StorageEvent);
+}
+
+StorageEvent::StorageEvent()
+{
+}
+
+StorageEvent::~StorageEvent()
+{
+}
+
+PassRefPtrWillBeRawPtr<StorageEvent> StorageEvent::create(const AtomicString& type, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea)
+{
+    return adoptRefWillBeNoop(new StorageEvent(type, key, oldValue, newValue, url, storageArea));
+}
+
+PassRefPtrWillBeRawPtr<StorageEvent> StorageEvent::create(const AtomicString& type, const StorageEventInit& initializer)
+{
+    return adoptRefWillBeNoop(new StorageEvent(type, initializer));
+}
+
+StorageEvent::StorageEvent(const AtomicString& type, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea)
+>>>>>>> miniblink49
     : Event(type, false, false)
     , m_key(key)
     , m_oldValue(oldValue)
@@ -71,8 +102,12 @@ StorageEvent::StorageEvent(const AtomicString& type,
 {
 }
 
+<<<<<<< HEAD
 StorageEvent::StorageEvent(const AtomicString& type,
     const StorageEventInit& initializer)
+=======
+StorageEvent::StorageEvent(const AtomicString& type, const StorageEventInit& initializer)
+>>>>>>> miniblink49
     : Event(type, initializer)
 {
     if (initializer.hasKey())
@@ -87,6 +122,7 @@ StorageEvent::StorageEvent(const AtomicString& type,
         m_storageArea = initializer.storageArea();
 }
 
+<<<<<<< HEAD
 void StorageEvent::initStorageEvent(const AtomicString& type,
     bool canBubble,
     bool cancelable,
@@ -97,6 +133,11 @@ void StorageEvent::initStorageEvent(const AtomicString& type,
     Storage* storageArea)
 {
     if (isBeingDispatched())
+=======
+void StorageEvent::initStorageEvent(const AtomicString& type, bool canBubble, bool cancelable, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea)
+{
+    if (dispatched())
+>>>>>>> miniblink49
         return;
 
     initEvent(type, canBubble, cancelable);

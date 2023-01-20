@@ -29,7 +29,6 @@
 #define InputStreamPreprocessor_h
 
 #include "platform/text/SegmentedString.h"
-#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
@@ -39,9 +38,7 @@ const LChar kEndOfFileMarker = 0;
 // http://www.whatwg.org/specs/web-apps/current-work/#preprocessing-the-input-stream
 template <typename Tokenizer>
 class InputStreamPreprocessor {
-    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(InputStreamPreprocessor);
-
 public:
     InputStreamPreprocessor(Tokenizer* tokenizer)
         : m_tokenizer(tokenizer)
@@ -49,10 +46,7 @@ public:
         reset();
     }
 
-    ALWAYS_INLINE UChar nextInputCharacter() const
-    {
-        return m_nextInputCharacter;
-    }
+    ALWAYS_INLINE UChar nextInputCharacter() const { return m_nextInputCharacter; }
 
     // Returns whether we succeeded in peeking at the next character.
     // The only way we can fail to peek is if there are no more
@@ -108,11 +102,10 @@ private:
             m_skipNextNewLine = true;
         } else {
             m_skipNextNewLine = false;
-            // FIXME: The spec indicates that the surrogate pair range as well as a
-            // number of specific character values are parse errors and should be
-            // replaced by the replacement character. We suspect this is a problem
-            // with the spec as doing that filtering breaks surrogate pair handling
-            // and causes us not to match Minefield.
+            // FIXME: The spec indicates that the surrogate pair range as well as
+            // a number of specific character values are parse errors and should be replaced
+            // by the replacement character. We suspect this is a problem with the spec as doing
+            // that filtering breaks surrogate pair handling and causes us not to match Minefield.
             if (m_nextInputCharacter == '\0' && !shouldTreatNullAsEndOfFileMarker(source)) {
                 if (m_tokenizer->shouldSkipNullCharacters()) {
                     source.advancePastNonNewline();
@@ -139,6 +132,7 @@ private:
     bool m_skipNextNewLine;
 };
 
-} // namespace blink
+}
 
 #endif // InputStreamPreprocessor_h
+

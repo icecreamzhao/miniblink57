@@ -10,6 +10,7 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -20,6 +21,18 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef WebMediaStreamTrack_h
@@ -28,12 +41,18 @@
 #include "WebCommon.h"
 #include "WebNonCopyable.h"
 #include "WebPrivatePtr.h"
+<<<<<<< HEAD
 #include "WebString.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class MediaStreamComponent;
+<<<<<<< HEAD
 class MediaStreamTrack;
+=======
+>>>>>>> miniblink49
 class WebAudioSourceProvider;
 class WebMediaStream;
 class WebMediaStreamSource;
@@ -41,6 +60,7 @@ class WebString;
 
 class WebMediaStreamTrack {
 public:
+<<<<<<< HEAD
     enum class FacingMode { None,
         User,
         Environment,
@@ -74,6 +94,21 @@ public:
         AudioMusic,
         VideoMotion,
         VideoDetail
+=======
+    class ExtraData {
+    public:
+        ExtraData() : m_owner(0) { }
+        virtual ~ExtraData() { }
+
+        BLINK_PLATFORM_EXPORT WebMediaStreamTrack owner();
+
+#if INSIDE_BLINK
+        BLINK_PLATFORM_EXPORT void setOwner(MediaStreamComponent*);
+#endif
+
+    private:
+        MediaStreamComponent* m_owner;
+>>>>>>> miniblink49
     };
 
     WebMediaStreamTrack() { }
@@ -88,8 +123,12 @@ public:
     BLINK_PLATFORM_EXPORT void assign(const WebMediaStreamTrack&);
 
     BLINK_PLATFORM_EXPORT void initialize(const WebMediaStreamSource&);
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void initialize(const WebString& id,
         const WebMediaStreamSource&);
+=======
+    BLINK_PLATFORM_EXPORT void initialize(const WebString& id, const WebMediaStreamSource&);
+>>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT void reset();
     bool isNull() const { return m_private.isNull(); }
@@ -99,6 +138,7 @@ public:
     BLINK_PLATFORM_EXPORT WebMediaStreamSource source() const;
     BLINK_PLATFORM_EXPORT bool isEnabled() const;
     BLINK_PLATFORM_EXPORT bool isMuted() const;
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT ContentHintType contentHint() const;
 
     // Extra data associated with this WebMediaStream.
@@ -107,6 +147,15 @@ public:
     // track data pointer to be deleted.
     BLINK_PLATFORM_EXPORT TrackData* getTrackData() const;
     BLINK_PLATFORM_EXPORT void setTrackData(TrackData*);
+=======
+
+    // Extra data associated with this WebMediaStream.
+    // If non-null, the extra data pointer will be deleted when the object is destroyed.
+    // Setting the extra data pointer will cause any existing non-null
+    // extra data pointer to be deleted.
+    BLINK_PLATFORM_EXPORT ExtraData* extraData() const;
+    BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
+>>>>>>> miniblink49
 
     // The lifetime of the WebAudioSourceProvider should outlive the
     // WebMediaStreamTrack, and clients are responsible for calling
@@ -114,6 +163,10 @@ public:
     BLINK_PLATFORM_EXPORT void setSourceProvider(WebAudioSourceProvider*);
 
 #if INSIDE_BLINK
+<<<<<<< HEAD
+=======
+    BLINK_PLATFORM_EXPORT WebMediaStreamTrack(PassRefPtr<MediaStreamComponent>);
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT WebMediaStreamTrack(MediaStreamComponent*);
     BLINK_PLATFORM_EXPORT WebMediaStreamTrack& operator=(MediaStreamComponent*);
     BLINK_PLATFORM_EXPORT operator WTF::PassRefPtr<MediaStreamComponent>() const;

@@ -9,38 +9,32 @@
 #include <vector>
 
 #include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkColor.h"
 
 #ifdef __OBJC__
-@class UIColor;
 @class UIImage;
 @class NSData;
 #else
-class UIColor;
 class UIImage;
 class NSData;
 #endif
 
-namespace skia {
+namespace gfx {
 
 // Draws a CGImage into an SkBitmap of the given size.
 SK_API SkBitmap CGImageToSkBitmap(CGImageRef image,
-    CGSize size,
-    bool is_opaque);
+                                  CGSize size,
+                                  bool is_opaque);
 
 // Given an SkBitmap and a color space, return an autoreleased UIImage.
 SK_API UIImage* SkBitmapToUIImageWithColorSpace(const SkBitmap& skia_bitmap,
-    CGFloat scale,
-    CGColorSpaceRef color_space);
+                                                CGFloat scale,
+                                                CGColorSpaceRef color_space);
 
 // Decodes all image representations inside the data into a vector of SkBitmaps.
 // Returns a vector of all the successfully decoded representations or an empty
 // vector if none can be decoded.
 SK_API std::vector<SkBitmap> ImageDataToSkBitmaps(NSData* image_data);
 
-// Returns a UIColor for an SKColor. Used by iOS downstream.
-SK_API UIColor* UIColorFromSkColor(SkColor color);
+}  // namespace gfx
 
-} // namespace skia
-
-#endif // SKIA_EXT_SKIA_UTILS_IOS_H_
+#endif  // SKIA_EXT_SKIA_UTILS_IOS_H_

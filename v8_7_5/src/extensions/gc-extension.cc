@@ -9,6 +9,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     v8::Local<v8::FunctionTemplate> GCExtension::GetNativeFunctionTemplate(
         v8::Isolate* isolate, v8::Local<v8::String> str)
     {
@@ -25,3 +26,21 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
+=======
+
+v8::Local<v8::FunctionTemplate> GCExtension::GetNativeFunctionTemplate(
+    v8::Isolate* isolate, v8::Local<v8::String> str) {
+  return v8::FunctionTemplate::New(isolate, GCExtension::GC);
+}
+
+
+void GCExtension::GC(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  args.GetIsolate()->RequestGarbageCollectionForTesting(
+      args[0]->BooleanValue(args.GetIsolate())
+          ? v8::Isolate::kMinorGarbageCollection
+          : v8::Isolate::kFullGarbageCollection);
+}
+
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

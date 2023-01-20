@@ -4,20 +4,10 @@
 
 #include "third_party/WebKit/public/web/WebFrameClient.h"
 #include "third_party/WebKit/public/web/WebConsoleMessage.h"
-#if ENABLE_NODEJS
-#include "third_party/WebKit/Source/wtf/HashMap.h"
-#endif
-#include "base/memory/linked_ptr.h"
 
 namespace cef {
 class BrowserHostImpl;
 class BrowserImpl;
-}
-
-struct NodeBindingInMbCore;
-
-namespace media {
-class UrlIndex;
 }
 
 using namespace blink;
@@ -26,7 +16,6 @@ namespace content {
 
 class WebPage;
 class ContextMenu;
-class WebGeolocationClientImpl;
 
 class WebFrameClientImpl : public WebFrameClient {
 public:
@@ -36,36 +25,35 @@ public:
     virtual void didAddMessageToConsole(const WebConsoleMessage& message, const WebString& sourceName, unsigned sourceLine, const WebString& stackTrace) override;
     virtual bool shouldReportDetailedMessageForSource(const WebString& source) override { return true; };
 
-    virtual WebLocalFrame* createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, const WebString& uniqueName, WebSandboxFlags sandboxFlags, const WebFrameOwnerProperties&) override;
+    virtual WebFrame* createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, WebSandboxFlags sandboxFlags) override;
 
-    virtual void frameDetached(WebLocalFrame* child, DetachType) override;
+    virtual void frameDetached(WebFrame* child, DetachType) override;
 
-    virtual void loadURLExternally(const WebURLRequest&, WebNavigationPolicy, const WebString& downloadName, bool shouldReplaceCurrentEntry) override;
+    virtual void loadURLExternally(WebLocalFrame*, const WebURLRequest&, WebNavigationPolicy, const WebString& downloadName) override;
 
     // Factory methods -----------------------------------------------------
 
     // May return null.
-   // virtual WebPluginPlaceholder* createPluginPlaceholder(WebLocalFrame*, const WebPluginParams&) override;
+    virtual WebPluginPlaceholder* createPluginPlaceholder(WebLocalFrame*, const WebPluginParams&) override;
 
     // May return null.
     virtual WebPlugin* createPlugin(WebLocalFrame*, const WebPluginParams&) override;
 
+    // TODO(srirama): Remove this method once chromium updated.
+    virtual WebMediaPlayer* createMediaPlayer(WebLocalFrame*, const WebURL&, WebMediaPlayerClient*, WebContentDecryptionModule*) override;
+
     // May return null.
     // WebContentDecryptionModule* may be null if one has not yet been set.
-    virtual WebMediaPlayer* createMediaPlayer(const WebMediaPlayerSource&,
-        WebMediaPlayerClient*,
-        WebMediaPlayerEncryptedMediaClient*,
-        WebContentDecryptionModule*,
-        const WebString& sinkId) override;
+    virtual WebMediaPlayer* createMediaPlayer(WebLocalFrame*, const WebURL&, WebMediaPlayerClient*, WebMediaPlayerEncryptedMediaClient*, WebContentDecryptionModule*) override;
 
     // May return null.
-    virtual WebApplicationCacheHost* createApplicationCacheHost(WebApplicationCacheHostClient*) override;
+    virtual WebApplicationCacheHost* createApplicationCacheHost(WebLocalFrame*, WebApplicationCacheHostClient*) override;
 
     // May return null.
-    virtual WebServiceWorkerProvider* createServiceWorkerProvider() override;
+    virtual WebServiceWorkerProvider* createServiceWorkerProvider(WebLocalFrame* frame) override;
 
     // May return null.
-    virtual WebWorkerContentSettingsClientProxy* createWorkerContentSettingsClientProxy() override;
+    virtual WebWorkerContentSettingsClientProxy* createWorkerContentSettingsClientProxy(WebLocalFrame* frame) override;
 
     // Create a new WebPopupMenu. In the "createExternalPopupMenu" form, the
     // client is responsible for rendering the contents of the popup menu.
@@ -83,17 +71,17 @@ public:
 
     // A form submission has been requested, but the page's submit event handler
     // hasn't yet had a chance to run (and possibly alter/interrupt the submit.)
-    virtual void willSendSubmitEvent(const WebFormElement&) override;
+    virtual void willSendSubmitEvent(WebLocalFrame*, const WebFormElement&) override;
 
     // A form submission is about to occur.
-    virtual void willSubmitForm(const WebFormElement&) override;
+    virtual void willSubmitForm(WebLocalFrame*, const WebFormElement&) override;
 
     // A datasource has been created for a new navigation.  The given
     // datasource will become the provisional datasource for the frame.
     virtual void didCreateDataSource(WebLocalFrame*, WebDataSource*) override;
 
     // A new provisional load has been started.
-    virtual void didStartProvisionalLoad(WebLocalFrame* localFrame) override;
+    virtual void didStartProvisionalLoad(WebLocalFrame* localFrame, double triggeringEventTime) override;
 
     // The provisional load was redirected via a HTTP 3xx response.
     virtual void didReceiveServerRedirectForProvisionalLoad(WebLocalFrame*) override;
@@ -141,18 +129,18 @@ public:
     // The navigation resulted in no change to the documents within the page.
     // For example, the navigation may have just resulted in scrolling to a
     // named anchor or a PopState event may have been dispatched.
-    virtual void didNavigateWithinPage(WebLocalFrame*, const WebHistoryItem&, WebHistoryCommitType, bool contentInitiated) override;
+    virtual void didNavigateWithinPage(WebLocalFrame*, const WebHistoryItem&, WebHistoryCommitType) override;
 
     // Called upon update to scroll position, document state, and other
     // non-navigational events related to the data held by WebHistoryItem.
     // WARNING: This method may be called very frequently.
-    virtual void didUpdateCurrentHistoryItem() override;
+    virtual void didUpdateCurrentHistoryItem(WebLocalFrame*) override;
 
     // The frame's manifest has changed.
-    virtual void didChangeManifest() override;
+    virtual void didChangeManifest(WebLocalFrame*) override;
 
     // The frame's presentation URL has changed.
-    //virtual void didChangeDefaultPresentation(WebLocalFrame*) override;
+    virtual void didChangeDefaultPresentation(WebLocalFrame*) override;
 
     // The frame's theme color has changed.
     virtual void didChangeThemeColor() override;
@@ -164,34 +152,32 @@ public:
     // Low-level resource notifications ------------------------------------
 
     // An element will request a resource.
-    //virtual void willRequestResource(WebLocalFrame*, const WebCachedURLRequest&) override;
+    virtual void willRequestResource(WebLocalFrame*, const WebCachedURLRequest&) override;
 
     // A request is about to be sent out, and the client may modify it.  Request
     // is writable, and changes to the URL, for example, will change the request
     // made.  If this request is the result of a redirect, then redirectResponse
     // will be non-null and contain the response that triggered the redirect.
-    virtual void willSendRequest(WebLocalFrame*, WebURLRequest&) override;
+    virtual void willSendRequest(
+        WebLocalFrame*, unsigned identifier, WebURLRequest&,
+        const WebURLResponse& redirectResponse) override;
 
     // Response headers have been received for the resource request given
     // by identifier.
-    virtual void didReceiveResponse(const WebURLResponse&) override;
+    virtual void didReceiveResponse(WebLocalFrame* webFrame, unsigned identifier, const WebURLResponse&) override;
 
-    //virtual void didChangeResourcePriority(WebLocalFrame* webFrame, unsigned identifier, const WebURLRequest::Priority& priority, int) override;
+    virtual void didChangeResourcePriority(WebLocalFrame* webFrame, unsigned identifier, const WebURLRequest::Priority& priority, int) override;
 
-    virtual void didDispatchPingLoader(const WebURL& url) override;
+    virtual void didDispatchPingLoader(WebLocalFrame* webFrame, const WebURL& url) override;
 
     // Navigational queries ------------------------------------------------
     virtual WebNavigationPolicy decidePolicyForNavigation(const NavigationPolicyInfo& info) override;
-
-    // During a history navigation, we may choose to load new subframes from history as well.
-    // This returns such a history item if appropriate.
-    virtual WebHistoryItem historyItemForNewChildFrame() override;
 
     // Services ------------------------------------------------------------
 
     // A frame specific cookie jar.  May return null, in which case
     // WebKitPlatformSupport::cookieJar() will be called to access cookies.
-    virtual WebCookieJar* cookieJar() override;
+    virtual WebCookieJar* cookieJar(WebLocalFrame*) override;
 
     // Dialogs -------------------------------------------------------------
 
@@ -213,7 +199,7 @@ public:
     // description and OK/Cancel choices, where 'OK' means that it is okay
     // to proceed with closing the view. Returns true if the user selects
     // 'OK' or false otherwise.
-    virtual bool runModalBeforeUnloadDialog(bool isReload) override;
+    virtual bool runModalBeforeUnloadDialog(bool isReload, const WebString& message) override;
 
     // UI ------------------------------------------------------------------
 
@@ -223,31 +209,21 @@ public:
 
     // Called when the data attached to the currently displayed context menu is
     // invalidated. The context menu may be closed if possible.
-    //virtual void clearContextMenu() override;
+    virtual void clearContextMenu() override;
 
     // Script notifications ------------------------------------------------
 
     // Notifies that a new script context has been created for this frame.
     // This is similar to didClearWindowObject but only called once per
     // frame context.
-    virtual void didCreateScriptContext(WebLocalFrame*, v8::Local<v8::Context>, int worldId) override;
+    virtual void didCreateScriptContext(WebLocalFrame*, v8::Local<v8::Context>, int extensionGroup, int worldId) override;
 
     // WebKit is about to release its reference to a v8 context for a frame.
     virtual void willReleaseScriptContext(WebLocalFrame*, v8::Local<v8::Context>, int worldId) override;
 
-    // Geolocation ---------------------------------------------------------
-
-    // Access the embedder API for (client-based) geolocation client .
-    //virtual WebGeolocationClient* geolocationClient() override;
-
     //////////////////////////////////////////////////////////////////////////
     void setWebPage(WebPage* webPage);
     WebPage* webPage();
-
-    void setFrame(WebLocalFrame* frame)
-    {
-        m_frame = frame;
-    }
     //////////////////////////////////////////////////////////////////////////
 
     bool isLoading() const { return m_loading; }
@@ -273,14 +249,6 @@ private:
     WTF::Vector<WebFrame*> m_unusedFrames;
 
     ContextMenu* m_menu;
-    WebGeolocationClientImpl* m_webGeolocationClientImpl;
-
-    WebLocalFrame* m_frame;
-
-    linked_ptr<media::UrlIndex> m_urlIndex;
-#if ENABLE_NODEJS
-    WTF::HashMap<WebFrame*, NodeBindingInMbCore*> m_nodebindings;
-#endif
 };
 
 } // namespace blink

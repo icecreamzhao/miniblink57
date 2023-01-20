@@ -36,22 +36,21 @@ namespace blink {
 class HTMLMediaElement;
 class LoadableTextTrack;
 
-class HTMLTrackElement final : public HTMLElement,
-                               private TextTrackLoaderClient {
+class HTMLTrackElement final : public HTMLElement, private TextTrackLoaderClient {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(HTMLTrackElement);
-
 public:
     DECLARE_NODE_FACTORY(HTMLTrackElement);
 
     const AtomicString& kind();
     void setKind(const AtomicString&);
 
-    enum ReadyState { kNone = 0,
-        kLoading = 1,
-        kLoaded = 2,
-        kError = 3 };
-    ReadyState getReadyState();
+    enum ReadyState {
+        NONE = 0,
+        LOADING = 1,
+        LOADED = 2,
+        TRACK_ERROR = 3
+    };
+    ReadyState readyState();
     void scheduleLoad();
 
     TextTrack* track();
@@ -62,7 +61,7 @@ private:
     explicit HTMLTrackElement(Document&);
     ~HTMLTrackElement() override;
 
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
 
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
 
@@ -78,19 +77,21 @@ private:
 
     const AtomicString& mediaElementCrossOriginAttribute() const;
     bool canLoadUrl(const KURL&);
-    void loadTimerFired(TimerBase*);
+    void loadTimerFired(Timer<HTMLTrackElement>*);
 
-    enum LoadStatus { Failure,
-        Success };
+    enum LoadStatus {
+        Failure,
+        Success
+    };
     void didCompleteLoad(LoadStatus);
 
     HTMLMediaElement* mediaElement() const;
 
     LoadableTextTrack* ensureTrack();
 
-    Member<LoadableTextTrack> m_track;
-    Member<TextTrackLoader> m_loader;
-    TaskRunnerTimer<HTMLTrackElement> m_loadTimer;
+    RefPtrWillBeMember<LoadableTextTrack> m_track;
+    OwnPtrWillBeMember<TextTrackLoader> m_loader;
+    Timer<HTMLTrackElement> m_loadTimer;
     KURL m_url;
 };
 

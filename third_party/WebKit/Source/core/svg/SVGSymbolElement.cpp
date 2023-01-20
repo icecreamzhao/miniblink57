@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGSymbolElement.h"
 
 #include "core/SVGNames.h"
@@ -50,4 +52,4 @@ LayoutObject* SVGSymbolElement::createLayoutObject(const ComputedStyle&)
     return new LayoutSVGHiddenContainer(this);
 }
 
-} // namespace blink
+}

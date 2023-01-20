@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/animation/Timing.h"
 
 namespace blink {
@@ -9,35 +10,36 @@ namespace blink {
 String Timing::fillModeString(FillMode fillMode)
 {
     switch (fillMode) {
-    case FillMode::NONE:
+    case Timing::FillModeNone:
         return "none";
-    case FillMode::FORWARDS:
+    case Timing::FillModeForwards:
         return "forwards";
-    case FillMode::BACKWARDS:
+    case Timing::FillModeBackwards:
         return "backwards";
-    case FillMode::BOTH:
+    case Timing::FillModeBoth:
         return "both";
-    case FillMode::AUTO:
+    case Timing::FillModeAuto:
         return "auto";
     }
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return "none";
 }
 
 String Timing::playbackDirectionString(PlaybackDirection playbackDirection)
 {
     switch (playbackDirection) {
-    case PlaybackDirection::NORMAL:
+    case Timing::PlaybackDirectionNormal:
         return "normal";
-    case PlaybackDirection::REVERSE:
+    case Timing::PlaybackDirectionReverse:
         return "reverse";
-    case PlaybackDirection::ALTERNATE_NORMAL:
+    case Timing::PlaybackDirectionAlternate:
         return "alternate";
-    case PlaybackDirection::ALTERNATE_REVERSE:
+    case Timing::PlaybackDirectionAlternateReverse:
         return "alternate-reverse";
     }
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return "normal";
 }
 
-} // namespace blink
+
+} // namespace

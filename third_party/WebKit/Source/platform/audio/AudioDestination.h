@@ -34,6 +34,7 @@
 #include "platform/audio/AudioSourceProvider.h"
 #include "public/platform/WebAudioDevice.h"
 #include "public/platform/WebVector.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/text/WTFString.h"
@@ -110,6 +111,62 @@ private:
     bool calculateBufferSize();
 
     size_t hardwareBufferSize();
+=======
+#include "wtf/Noncopyable.h"
+#include "wtf/text/WTFString.h"
+
+namespace blink {
+
+class AudioFIFO;
+class AudioPullFIFO;
+
+// An AudioDestination using Chromium's audio system
+
+class PLATFORM_EXPORT AudioDestination : public WebAudioDevice::RenderCallback, public AudioSourceProvider {
+    WTF_MAKE_NONCOPYABLE(AudioDestination);
+public:
+    AudioDestination(AudioIOCallback&, const String& inputDeviceId, unsigned numberOfInputChannels, unsigned numberOfOutputChannels, float sampleRate);
+    ~AudioDestination() override;
+
+    // Pass in (numberOfInputChannels > 0) if live/local audio input is desired.
+    // Port-specific device identification information for live/local input streams can be passed in the inputDeviceId.
+    static PassOwnPtr<AudioDestination> create(AudioIOCallback&, const String& inputDeviceId, unsigned numberOfInputChannels, unsigned numberOfOutputChannels, float sampleRate);
+
+    virtual void start();
+    virtual void stop();
+    bool isPlaying() { return m_isPlaying; }
+
+    float sampleRate() const { return m_sampleRate; }
+
+    // WebAudioDevice::RenderCallback
+    void render(const WebVector<float*>& sourceData, const WebVector<float*>& audioData, size_t numberOfFrames) override;
+
+    // AudioSourceProvider
+    void provideInput(AudioBus*, size_t framesToProcess) override;
+
+    static float hardwareSampleRate();
+
+    // maxChannelCount() returns the total number of output channels of the audio hardware.
+    // A value of 0 indicates that the number of channels cannot be configured and
+    // that only stereo (2-channel) destinations can be created.
+    // The numberOfOutputChannels parameter of AudioDestination::create() is allowed to
+    // be a value: 1 <= numberOfOutputChannels <= maxChannelCount(),
+    // or if maxChannelCount() equals 0, then numberOfOutputChannels must be 2.
+    static unsigned long maxChannelCount();
+
+private:
+    AudioIOCallback& m_callback;
+    unsigned m_numberOfOutputChannels;
+    RefPtr<AudioBus> m_inputBus;
+    RefPtr<AudioBus> m_renderBus;
+    float m_sampleRate;
+    bool m_isPlaying;
+    OwnPtr<WebAudioDevice> m_audioDevice;
+    size_t m_callbackBufferSize;
+
+    OwnPtr<AudioFIFO> m_inputFifo;
+    OwnPtr<AudioPullFIFO> m_fifo;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

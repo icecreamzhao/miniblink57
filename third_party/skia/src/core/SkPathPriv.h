@@ -13,6 +13,7 @@
 class SkPathPriv {
 public:
     enum FirstDirection {
+<<<<<<< HEAD
         kCW_FirstDirection, // == SkPath::kCW_Direction
         kCCW_FirstDirection, // == SkPath::kCCW_Direction
         kUnknown_FirstDirection,
@@ -20,6 +21,14 @@ public:
 
     static FirstDirection AsFirstDirection(SkPath::Direction dir)
     {
+=======
+        kCW_FirstDirection,         // == SkPath::kCW_Direction
+        kCCW_FirstDirection,        // == SkPath::kCCW_Direction
+        kUnknown_FirstDirection,
+    };
+
+    static FirstDirection AsFirstDirection(SkPath::Direction dir) {
+>>>>>>> miniblink49
         // since we agree numerically for the values in Direction, we can just cast.
         return (FirstDirection)dir;
     }
@@ -28,12 +37,18 @@ public:
      *  Return the opposite of the specified direction. kUnknown is its own
      *  opposite.
      */
+<<<<<<< HEAD
     static FirstDirection OppositeFirstDirection(FirstDirection dir)
     {
         static const FirstDirection gOppositeDir[] = {
             kCCW_FirstDirection,
             kCW_FirstDirection,
             kUnknown_FirstDirection,
+=======
+    static FirstDirection OppositeFirstDirection(FirstDirection dir) {
+        static const FirstDirection gOppositeDir[] = {
+            kCCW_FirstDirection, kCW_FirstDirection, kUnknown_FirstDirection, 
+>>>>>>> miniblink49
         };
         return gOppositeDir[dir];
     }
@@ -53,13 +68,18 @@ public:
      *  specified direction. If dir is kUnknown, returns true if the direction
      *  cannot be computed.
      */
+<<<<<<< HEAD
     static bool CheapIsFirstDirection(const SkPath& path, FirstDirection dir)
     {
+=======
+    static bool CheapIsFirstDirection(const SkPath& path, FirstDirection dir) {
+>>>>>>> miniblink49
         FirstDirection computedDir = kUnknown_FirstDirection;
         (void)CheapComputeFirstDirection(path, &computedDir);
         return computedDir == dir;
     }
 
+<<<<<<< HEAD
     static bool IsClosedSingleContour(const SkPath& path)
     {
         int verbCount = path.countVerbs();
@@ -99,6 +119,12 @@ public:
      */
     static bool IsSimpleClosedRect(const SkPath& path, SkRect* rect, SkPath::Direction* direction,
         unsigned* start);
+=======
+    static bool LastVerbIsClose(const SkPath& path) {
+        int count = path.countVerbs();
+        return count >= 1 && path.fPathRef->verbs()[~(count - 1)] == SkPath::Verb::kClose_Verb;
+    }
+>>>>>>> miniblink49
 };
 
 #endif

@@ -5,12 +5,19 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "gm.h"
 
 static void make_bm(SkBitmap* bm)
 {
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+
+static void make_bm(SkBitmap* bm) {
+>>>>>>> miniblink49
     bm->allocN32Pixels(60, 60);
     bm->eraseColor(0);
 
@@ -35,19 +42,63 @@ static void make_bm(SkBitmap* bm)
 //  twice. The fix resulted in (a) not taking the fast-path, but (b) drawing
 //  the image correctly.
 //
+<<<<<<< HEAD
 DEF_SIMPLE_GM(bitmaprecttest, canvas, 320, 240)
 {
     SkBitmap bm;
     make_bm(&bm);
 
     canvas->drawBitmap(bm, 150, 45, nullptr);
+=======
+static void test_bitmaprect(SkCanvas* canvas) {
+    SkBitmap bm;
+    make_bm(&bm);
+
+    canvas->drawBitmap(bm, 150, 45, NULL);
+>>>>>>> miniblink49
 
     SkScalar scale = 0.472560018f;
     canvas->save();
     canvas->scale(scale, scale);
+<<<<<<< HEAD
     canvas->drawBitmapRect(bm, SkRect::MakeXYWH(100, 100, 128, 128), nullptr);
     canvas->restore();
 
     canvas->scale(-1, 1);
     canvas->drawBitmap(bm, -310, 45, nullptr);
 }
+=======
+    canvas->drawBitmapRectToRect(bm, NULL, SkRect::MakeXYWH(100, 100, 128, 128), NULL);
+    canvas->restore();
+
+    canvas->scale(-1, 1);
+    canvas->drawBitmap(bm, -310, 45, NULL);
+}
+
+class BitmapRectTestGM : public skiagm::GM {
+public:
+    BitmapRectTestGM() {
+
+    }
+
+protected:
+    SkString onShortName() override {
+        return SkString("bitmaprecttest");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(320, 240);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+        test_bitmaprect(canvas);
+    }
+
+private:
+    typedef skiagm::GM INHERITED;
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+DEF_GM( return new BitmapRectTestGM; )
+>>>>>>> miniblink49

@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/HTMLVideoElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -31,22 +32,19 @@
 #include "core/dom/Attribute.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
-#include "core/dom/Fullscreen.h"
 #include "core/dom/shadow/ShadowRoot.h"
-#include "core/frame/ImageBitmap.h"
-#include "core/frame/LocalDOMWindow.h"
 #include "core/frame/Settings.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/imagebitmap/ImageBitmapOptions.h"
 #include "core/layout/LayoutImage.h"
 #include "core/layout/LayoutVideo.h"
-#include "platform/RuntimeEnabledFeatures.h"
 #include "platform/UserGestureIndicator.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/ImageBuffer.h"
 #include "platform/graphics/gpu/Extensions3DUtil.h"
 #include "public/platform/WebCanvas.h"
-#include <memory>
+#include "public/platform/WebGraphicsContext3D.h"
+#include "public/platform/WebSize.h"
+#include "public/platform/WebRect.h"
 
 namespace blink {
 
@@ -55,17 +53,16 @@ using namespace HTMLNames;
 inline HTMLVideoElement::HTMLVideoElement(Document& document)
     : HTMLMediaElement(videoTag, document)
 {
-    if (document.settings()) {
-        m_defaultPosterURL = AtomicString(document.settings()->getDefaultVideoPosterURL());
-    }
+    if (document.settings())
+        m_defaultPosterURL = AtomicString(document.settings()->defaultVideoPosterURL());
 }
 
-HTMLVideoElement* HTMLVideoElement::create(Document& document)
+PassRefPtrWillBeRawPtr<HTMLVideoElement> HTMLVideoElement::create(Document& document)
 {
-    HTMLVideoElement* video = new HTMLVideoElement(document);
+    RefPtrWillBeRawPtr<HTMLVideoElement> video = adoptRefWillBeNoop(new HTMLVideoElement(document));
     video->ensureUserAgentShadowRoot();
     video->suspendIfNeeded();
-    return video;
+    return video.release();
 }
 
 DEFINE_TRACE(HTMLVideoElement)
@@ -84,9 +81,9 @@ LayoutObject* HTMLVideoElement::createLayoutObject(const ComputedStyle&)
     return new LayoutVideo(this);
 }
 
-void HTMLVideoElement::attachLayoutTree(const AttachContext& context)
+void HTMLVideoElement::attach(const AttachContext& context)
 {
-    HTMLMediaElement::attachLayoutTree(context);
+    HTMLMediaElement::attach(context);
 
     updateDisplayState();
     if (shouldDisplayPosterImage()) {
@@ -94,16 +91,11 @@ void HTMLVideoElement::attachLayoutTree(const AttachContext& context)
             m_imageLoader = HTMLImageLoader::create(this);
         m_imageLoader->updateFromElement();
         if (layoutObject())
-            toLayoutImage(layoutObject())
-                ->imageResource()
-                ->setImageResource(m_imageLoader->image());
+            toLayoutImage(layoutObject())->imageResource()->setImageResource(m_imageLoader->image());
     }
 }
 
-void HTMLVideoElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLVideoElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
     if (name == widthAttr)
         addHTMLLengthToStyle(style, CSSPropertyWidth, value);
@@ -113,23 +105,20 @@ void HTMLVideoElement::collectStyleForPresentationAttribute(
         HTMLMediaElement::collectStyleForPresentationAttribute(name, value, style);
 }
 
-bool HTMLVideoElement::isPresentationAttribute(
-    const QualifiedName& name) const
+bool HTMLVideoElement::isPresentationAttribute(const QualifiedName& name) const
 {
     if (name == widthAttr || name == heightAttr)
         return true;
     return HTMLMediaElement::isPresentationAttribute(name);
 }
 
-void HTMLVideoElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLVideoElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == posterAttr) {
+    if (name == posterAttr) {
         // In case the poster attribute is set after playback, don't update the
         // display state, post playback the correct state will be picked up.
-        if (getDisplayMode() < Video || !hasAvailableVideoFrame()) {
-            // Force a poster recalc by setting m_displayMode to Unknown directly
-            // before calling updateDisplayState.
+        if (displayMode() < Video || !hasAvailableVideoFrame()) {
+            // Force a poster recalc by setting m_displayMode to Unknown directly before calling updateDisplayState.
             HTMLMediaElement::setDisplayMode(Unknown);
             updateDisplayState();
         }
@@ -145,8 +134,19 @@ void HTMLVideoElement::parseAttribute(
         if (webMediaPlayer())
             webMediaPlayer()->setPoster(posterImageURL());
     } else {
-        HTMLMediaElement::parseAttribute(params);
+        HTMLMediaElement::parseAttribute(name, value);
     }
+}
+
+bool HTMLVideoElement::supportsFullscreen() const
+{
+    if (!document().page())
+        return false;
+
+    if (!webMediaPlayer())
+        return false;
+
+    return true;
 }
 
 unsigned HTMLVideoElement::videoWidth() const
@@ -178,21 +178,21 @@ const AtomicString HTMLVideoElement::imageSourceURL() const
 
 void HTMLVideoElement::setDisplayMode(DisplayMode mode)
 {
-    DisplayMode oldMode = getDisplayMode();
+    DisplayMode oldMode = displayMode();
     KURL poster = posterImageURL();
 
     if (!poster.isEmpty()) {
-        // We have a poster path, but only show it until the user triggers display
-        // by playing or seeking and the media engine has something to display.
-        // Don't show the poster if there is a seek operation or the video has
-        // restarted because of loop attribute
+        // We have a poster path, but only show it until the user triggers display by playing or seeking and the
+        // media engine has something to display.
+        // Don't show the poster if there is a seek operation or
+        // the video has restarted because of loop attribute
         if (mode == Video && oldMode == Poster && !hasAvailableVideoFrame())
             return;
     }
 
     HTMLMediaElement::setDisplayMode(mode);
 
-    if (layoutObject() && getDisplayMode() != oldMode)
+    if (layoutObject() && displayMode() != oldMode)
         layoutObject()->updateFromElement();
 }
 
@@ -200,60 +200,34 @@ void HTMLVideoElement::updateDisplayState()
 {
     if (posterImageURL().isEmpty())
         setDisplayMode(Video);
-    else if (getDisplayMode() < Poster)
+    else if (displayMode() < Poster)
         setDisplayMode(Poster);
 }
 
-void HTMLVideoElement::paintCurrentFrame(SkCanvas* canvas,
-    const IntRect& destRect,
-    const SkPaint* paint) const
+void HTMLVideoElement::paintCurrentFrame(SkCanvas* canvas, const IntRect& destRect, const SkPaint* paint) const
 {
     if (!webMediaPlayer())
         return;
 
-    SkPaint mediaPaint;
-    if (paint) {
-        mediaPaint = *paint;
-    } else {
-        mediaPaint.setAlpha(0xFF);
-        mediaPaint.setFilterQuality(kLow_SkFilterQuality);
-    }
+    SkXfermode::Mode mode;
+    if (!paint || !SkXfermode::AsMode(paint->getXfermode(), &mode))
+        mode = SkXfermode::kSrcOver_Mode;
 
-    webMediaPlayer()->paint(canvas, destRect, mediaPaint);
+    // TODO(junov, philipj): crbug.com/456529 Pass the whole SkPaint instead of only alpha and xfermode
+    webMediaPlayer()->paint(canvas, destRect, paint ? paint->getAlpha() : 0xFF, mode);
 }
 
-bool HTMLVideoElement::copyVideoTextureToPlatformTexture(
-    gpu::gles2::GLES2Interface* gl,
-    GLuint texture,
-    bool premultiplyAlpha,
-    bool flipY)
+bool HTMLVideoElement::copyVideoTextureToPlatformTexture(WebGraphicsContext3D* context, Platform3DObject texture, GLenum internalFormat, GLenum type, bool premultiplyAlpha, bool flipY)
 {
+#ifdef MINIBLINK_NOT_IMPLEMENTED
     if (!webMediaPlayer())
         return false;
 
-    return webMediaPlayer()->copyVideoTextureToPlatformTexture(
-        gl, texture, premultiplyAlpha, flipY);
-}
-
-bool HTMLVideoElement::texImageImpl(
-    WebMediaPlayer::TexImageFunctionID functionID,
-    GLenum target,
-    gpu::gles2::GLES2Interface* gl,
-    GLint level,
-    GLint internalformat,
-    GLenum format,
-    GLenum type,
-    GLint xoffset,
-    GLint yoffset,
-    GLint zoffset,
-    bool flipY,
-    bool premultiplyAlpha)
-{
-    if (!webMediaPlayer())
-        return false;
-    return webMediaPlayer()->texImageImpl(
-        functionID, target, gl, level, internalformat, format, type, xoffset,
-        yoffset, zoffset, flipY, premultiplyAlpha);
+    ASSERT(Extensions3DUtil::canUseCopyTextureCHROMIUM(GL_TEXTURE_2D, internalFormat, type, 0));
+    return webMediaPlayer()->copyVideoTextureToPlatformTexture(context, texture, internalFormat, type, premultiplyAlpha, flipY);
+#endif // MINIBLINK_NOT_IMPLEMENTED
+    notImplemented();
+    return false;
 }
 
 bool HTMLVideoElement::hasAvailableVideoFrame() const
@@ -261,37 +235,36 @@ bool HTMLVideoElement::hasAvailableVideoFrame() const
     if (!webMediaPlayer())
         return false;
 
-    return webMediaPlayer()->hasVideo() && webMediaPlayer()->getReadyState() >= WebMediaPlayer::ReadyStateHaveCurrentData;
+    return webMediaPlayer()->hasVideo() && webMediaPlayer()->readyState() >= WebMediaPlayer::ReadyStateHaveCurrentData;
 }
 
-void HTMLVideoElement::webkitEnterFullscreen()
+void HTMLVideoElement::webkitEnterFullscreen(ExceptionState& exceptionState)
 {
-    if (!isFullscreen())
-        Fullscreen::requestFullscreen(*this, Fullscreen::RequestType::Prefixed);
+    if (isFullscreen())
+        return;
+
+    if (!supportsFullscreen()) {
+        exceptionState.throwDOMException(InvalidStateError, "This element does not support fullscreen mode.");
+        return;
+    }
+
+    enterFullscreen();
 }
 
 void HTMLVideoElement::webkitExitFullscreen()
 {
     if (isFullscreen())
-        Fullscreen::exitFullscreen(document());
+        exitFullscreen();
 }
 
 bool HTMLVideoElement::webkitSupportsFullscreen()
 {
-    return Fullscreen::fullscreenEnabled(document());
+    return supportsFullscreen();
 }
 
 bool HTMLVideoElement::webkitDisplayingFullscreen()
 {
     return isFullscreen();
-}
-
-bool HTMLVideoElement::usesOverlayFullscreenVideo() const
-{
-    if (RuntimeEnabledFeatures::forceOverlayFullscreenVideoEnabled())
-        return true;
-
-    return webMediaPlayer() && webMediaPlayer()->supportsOverlayFullscreenVideo();
 }
 
 void HTMLVideoElement::didMoveToNewDocument(Document& oldDocument)
@@ -325,11 +298,12 @@ KURL HTMLVideoElement::posterImageURL() const
     return document().completeURL(url);
 }
 
-PassRefPtr<Image> HTMLVideoElement::getSourceImageForCanvas(
-    SourceImageStatus* status,
-    AccelerationHint,
-    SnapshotReason,
-    const FloatSize&) const
+KURL HTMLVideoElement::mediaPlayerPosterURL()
+{
+    return posterImageURL();
+}
+
+PassRefPtr<Image> HTMLVideoElement::getSourceImageForCanvas(SourceImageMode mode, SourceImageStatus* status) const
 {
     if (!hasAvailableVideoFrame()) {
         *status = InvalidSourceImageStatus;
@@ -337,69 +311,26 @@ PassRefPtr<Image> HTMLVideoElement::getSourceImageForCanvas(
     }
 
     IntSize intrinsicSize(videoWidth(), videoHeight());
-    // FIXME: Not sure if we dhould we be doing anything with the AccelerationHint
-    // argument here?
-    std::unique_ptr<ImageBuffer> imageBuffer = ImageBuffer::create(intrinsicSize);
+    OwnPtr<ImageBuffer> imageBuffer = ImageBuffer::create(intrinsicSize);
     if (!imageBuffer) {
         *status = InvalidSourceImageStatus;
         return nullptr;
     }
 
-    paintCurrentFrame(imageBuffer->canvas(),
-        IntRect(IntPoint(0, 0), intrinsicSize), nullptr);
-    RefPtr<Image> snapshot = imageBuffer->newImageSnapshot();
-    if (!snapshot) {
-        *status = InvalidSourceImageStatus;
-        return nullptr;
-    }
+    paintCurrentFrame(imageBuffer->canvas(), IntRect(IntPoint(0, 0), intrinsicSize), nullptr);
 
-    *status = NormalSourceImageStatus;
-    return snapshot.release();
+    *status = (mode == CopySourceImageIfVolatile) ? NormalSourceImageStatus : ExternalSourceImageStatus;
+    return imageBuffer->copyImage(mode == CopySourceImageIfVolatile ? CopyBackingStore : DontCopyBackingStore, Unscaled);
 }
 
-bool HTMLVideoElement::wouldTaintOrigin(
-    SecurityOrigin* destinationSecurityOrigin) const
+bool HTMLVideoElement::wouldTaintOrigin(SecurityOrigin* destinationSecurityOrigin) const
 {
     return !isMediaDataCORSSameOrigin(destinationSecurityOrigin);
 }
 
-FloatSize HTMLVideoElement::elementSize(const FloatSize&) const
+FloatSize HTMLVideoElement::elementSize() const
 {
     return FloatSize(videoWidth(), videoHeight());
-}
-
-IntSize HTMLVideoElement::bitmapSourceSize() const
-{
-    return IntSize(videoWidth(), videoHeight());
-}
-
-ScriptPromise HTMLVideoElement::createImageBitmap(
-    ScriptState* scriptState,
-    EventTarget& eventTarget,
-    Optional<IntRect> cropRect,
-    const ImageBitmapOptions& options,
-    ExceptionState& exceptionState)
-{
-    DCHECK(eventTarget.toLocalDOMWindow());
-    if (getNetworkState() == HTMLMediaElement::kNetworkEmpty) {
-        exceptionState.throwDOMException(
-            InvalidStateError, "The provided element has not retrieved data.");
-        return ScriptPromise();
-    }
-    if (getReadyState() <= HTMLMediaElement::kHaveMetadata) {
-        exceptionState.throwDOMException(
-            InvalidStateError,
-            "The provided element's player has no current data.");
-        return ScriptPromise();
-    }
-    if ((cropRect && !ImageBitmap::isSourceSizeValid(cropRect->width(), cropRect->height(), exceptionState)) || !ImageBitmap::isSourceSizeValid(bitmapSourceSize().width(), bitmapSourceSize().height(), exceptionState))
-        return ScriptPromise();
-    if (!ImageBitmap::isResizeOptionValid(options, exceptionState))
-        return ScriptPromise();
-    return ImageBitmapSource::fulfillImageBitmap(
-        scriptState,
-        ImageBitmap::create(this, cropRect,
-            eventTarget.toLocalDOMWindow()->document(), options));
 }
 
 } // namespace blink

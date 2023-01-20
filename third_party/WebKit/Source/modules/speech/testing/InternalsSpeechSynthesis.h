@@ -31,6 +31,7 @@
 #ifndef InternalsSpeechSynthesis_h
 #define InternalsSpeechSynthesis_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
 namespace blink {
@@ -44,6 +45,16 @@ class InternalsSpeechSynthesis {
 
 public:
     static void enableMockSpeechSynthesizer(ScriptState*, Internals&, DOMWindow*);
+=======
+namespace blink {
+
+class Document;
+class Internals;
+
+class InternalsSpeechSynthesis {
+public:
+    static void enableMockSpeechSynthesizer(Internals&, Document*);
+>>>>>>> miniblink49
 };
 
 } // namespace blink

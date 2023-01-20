@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/transforms/PerspectiveTransformOperation.h"
 
 #include "platform/animation/AnimationUtilities.h"
@@ -30,17 +34,25 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 PassRefPtr<TransformOperation> PerspectiveTransformOperation::blend(
     const TransformOperation* from,
     double progress,
     bool blendToIdentity)
+=======
+PassRefPtr<TransformOperation> PerspectiveTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
+>>>>>>> miniblink49
 {
     if (from && !from->isSameType(*this))
         return this;
 
     if (blendToIdentity) {
+<<<<<<< HEAD
         // FIXME: this seems wrong.  https://bugs.webkit.org/show_bug.cgi?id=52700
         double p = blink::blend(m_p, 1., progress);
+=======
+        double p = blink::blend(m_p, 1., progress); // FIXME: this seems wrong. https://bugs.webkit.org/show_bug.cgi?id=52700
+>>>>>>> miniblink49
         return PerspectiveTransformOperation::create(clampTo<int>(p, 0));
     }
 
@@ -66,10 +78,13 @@ PassRefPtr<TransformOperation> PerspectiveTransformOperation::blend(
     return PerspectiveTransformOperation::create(0);
 }
 
+<<<<<<< HEAD
 PassRefPtr<TransformOperation> PerspectiveTransformOperation::zoom(
     double factor)
 {
     return create(m_p * factor);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

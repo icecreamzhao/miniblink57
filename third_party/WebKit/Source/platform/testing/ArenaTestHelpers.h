@@ -35,6 +35,7 @@
 namespace blink {
 namespace ArenaTestHelpers {
 
+<<<<<<< HEAD
     // An allocator for the PODArena which tracks the regions which have
     // been allocated.
     class TrackedAllocator final : public PODArena::FastMallocAllocator {
@@ -67,6 +68,46 @@ namespace ArenaTestHelpers {
         TrackedAllocator() { }
         Vector<void*> m_allocatedRegions;
     };
+=======
+// An allocator for the PODArena which tracks the regions which have
+// been allocated.
+class TrackedAllocator final : public PODArena::FastMallocAllocator {
+public:
+    static PassRefPtr<TrackedAllocator> create()
+    {
+        return adoptRef(new TrackedAllocator);
+    }
+
+    void* allocate(size_t size) override
+    {
+        void* result = PODArena::FastMallocAllocator::allocate(size);
+        m_allocatedRegions.append(result);
+        return result;
+    }
+
+    void free(void* ptr) override
+    {
+        size_t slot = m_allocatedRegions.find(ptr);
+        ASSERT_NE(slot, kNotFound);
+        m_allocatedRegions.remove(slot);
+        PODArena::FastMallocAllocator::free(ptr);
+    }
+
+    bool isEmpty() const
+    {
+        return !numRegions();
+    }
+
+    int numRegions() const
+    {
+        return m_allocatedRegions.size();
+    }
+
+private:
+    TrackedAllocator() { }
+    Vector<void*> m_allocatedRegions;
+};
+>>>>>>> miniblink49
 
 } // namespace ArenaTestHelpers
 } // namespace blink

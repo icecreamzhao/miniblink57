@@ -23,15 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/HitTestingTransformState.h"
 
 #include "platform/geometry/LayoutRect.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-void HitTestingTransformState::translate(int x,
-    int y,
-    TransformAccumulation accumulate)
+void HitTestingTransformState::translate(int x, int y, TransformAccumulation accumulate)
 {
     m_accumulatedTransform.translate(x, y);
     if (accumulate == FlattenTransform)
@@ -40,9 +40,7 @@ void HitTestingTransformState::translate(int x,
     m_accumulatingTransform = accumulate == AccumulateTransform;
 }
 
-void HitTestingTransformState::applyTransform(
-    const TransformationMatrix& transformFromContainer,
-    TransformAccumulation accumulate)
+void HitTestingTransformState::applyTransform(const TransformationMatrix& transformFromContainer, TransformAccumulation accumulate)
 {
     m_accumulatedTransform.multiply(transformFromContainer);
     if (accumulate == FlattenTransform)
@@ -56,8 +54,7 @@ void HitTestingTransformState::flatten()
     flattenWithTransform(m_accumulatedTransform);
 }
 
-void HitTestingTransformState::flattenWithTransform(
-    const TransformationMatrix& t)
+void HitTestingTransformState::flattenWithTransform(const TransformationMatrix& t)
 {
     TransformationMatrix inverseTransform = t.inverse();
     m_lastPlanarPoint = inverseTransform.projectPoint(m_lastPlanarPoint);
@@ -85,8 +82,7 @@ FloatQuad HitTestingTransformState::mappedArea() const
 
 LayoutRect HitTestingTransformState::boundsOfMappedArea() const
 {
-    return m_accumulatedTransform.inverse().clampedBoundsOfProjectedQuad(
-        m_lastPlanarArea);
+    return m_accumulatedTransform.inverse().clampedBoundsOfProjectedQuad(m_lastPlanarArea);
 }
 
 } // namespace blink

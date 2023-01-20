@@ -27,54 +27,60 @@
 #define TrackBase_h
 
 #include "core/CoreExport.h"
-#include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebMediaPlayer.h"
+#include "wtf/RefCounted.h"
 #include "wtf/text/AtomicString.h"
 
 namespace blink {
 
 class HTMLMediaElement;
 
-class CORE_EXPORT TrackBase : public Supplementable<TrackBase> {
+class CORE_EXPORT TrackBase : public WillBeGarbageCollectedMixin, public RefCountedWillBeNoBase<TrackBase> {
 public:
     virtual ~TrackBase();
 
-    WebMediaPlayer::TrackId id() const { return m_id; }
+    WebMediaPlayer::TrackId trackId() const { return m_trackId; }
 
-    WebMediaPlayer::TrackType type() const { return m_type; }
+    enum Type { TextTrack, AudioTrack, VideoTrack };
+    Type type() const { return m_type; }
 
     const AtomicString& kind() const { return m_kind; }
-    AtomicString label() const { return m_label; }
-    AtomicString language() const { return m_language; }
+    virtual void setKind(const AtomicString&);
 
-    void setMediaElement(HTMLMediaElement* mediaElement)
-    {
-        m_mediaElement = mediaElement;
-    }
+    AtomicString label() const { return m_label; }
+    void setLabel(const AtomicString& label) { m_label = label; }
+
+    AtomicString language() const { return m_language; }
+    void setLanguage(const AtomicString& language) { m_language = language; }
+
+    String id() const { return m_id; }
+    void setId(const String& id) { m_id = id; }
+
+    void setMediaElement(HTMLMediaElement* mediaElement) { m_mediaElement = mediaElement; }
     HTMLMediaElement* mediaElement() const { return m_mediaElement; }
     Node* owner() const;
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    TrackBase(WebMediaPlayer::TrackType,
-        const AtomicString& kind,
-        const AtomicString& label,
-        const AtomicString& language,
-        const String& id);
+    TrackBase(Type, const AtomicString& label, const AtomicString& language, const String& id);
 
-    WebMediaPlayer::TrackType m_type;
+    virtual bool isValidKind(const AtomicString&) const = 0;
+    virtual AtomicString defaultKind() const = 0;
+
+private:
+    WebMediaPlayer::TrackId m_trackId;
+    Type m_type;
     AtomicString m_kind;
     AtomicString m_label;
     AtomicString m_language;
     String m_id;
-    Member<HTMLMediaElement> m_mediaElement;
+    RawPtrWillBeMember<HTMLMediaElement> m_mediaElement;
 };
 
-#define DEFINE_TRACK_TYPE_CASTS(thisType, predicate)                          \
-    DEFINE_TYPE_CASTS(thisType, TrackBase, track, track->type() == predicate, \
-        track.type() == predicate)
+#define DEFINE_TRACK_TYPE_CASTS(thisType, predicate) \
+    DEFINE_TYPE_CASTS(thisType, TrackBase, track, track->type() == predicate, track.type() == predicate)
 
 } // namespace blink
 

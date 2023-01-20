@@ -26,6 +26,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/xml/parser/XMLErrors.h"
 
 #include "core/HTMLNames.h"
@@ -54,19 +55,12 @@ DEFINE_TRACE(XMLErrors)
     visitor->trace(m_document);
 }
 
-void XMLErrors::handleError(ErrorType type,
-    const char* message,
-    int lineNumber,
-    int columnNumber)
+void XMLErrors::handleError(ErrorType type, const char* message, int lineNumber, int columnNumber)
 {
-    handleError(type, message,
-        TextPosition(OrdinalNumber::fromOneBasedInt(lineNumber),
-            OrdinalNumber::fromOneBasedInt(columnNumber)));
+    handleError(type, message, TextPosition(OrdinalNumber::fromOneBasedInt(lineNumber), OrdinalNumber::fromOneBasedInt(columnNumber)));
 }
 
-void XMLErrors::handleError(ErrorType type,
-    const char* message,
-    TextPosition position)
+void XMLErrors::handleError(ErrorType type, const char* message, TextPosition position)
 {
     if (type == ErrorTypeFatal || (m_errorCount < maxErrors && m_lastErrorPosition.m_line != position.m_line && m_lastErrorPosition.m_column != position.m_column)) {
         switch (type) {
@@ -83,82 +77,68 @@ void XMLErrors::handleError(ErrorType type,
     }
 }
 
-void XMLErrors::appendErrorMessage(const String& typeString,
-    TextPosition position,
-    const char* message)
+void XMLErrors::appendErrorMessage(const String& typeString, TextPosition position, const char* message)
 {
     // <typeString> on line <lineNumber> at column <columnNumber>: <message>
     m_errorMessages.append(typeString);
-    m_errorMessages.append(" on line ");
+    m_errorMessages.appendLiteral(" on line ");
     m_errorMessages.appendNumber(position.m_line.oneBasedInt());
-    m_errorMessages.append(" at column ");
+    m_errorMessages.appendLiteral(" at column ");
     m_errorMessages.appendNumber(position.m_column.oneBasedInt());
-    m_errorMessages.append(": ");
+    m_errorMessages.appendLiteral(": ");
     m_errorMessages.append(message);
 }
 
-static inline Element* createXHTMLParserErrorHeader(
-    Document* doc,
-    const String& errorMessages)
+static inline PassRefPtrWillBeRawPtr<Element> createXHTMLParserErrorHeader(Document* doc, const String& errorMessages)
 {
-    Element* reportElement = doc->createElement(
-        QualifiedName(nullAtom, "parsererror", xhtmlNamespaceURI),
-        CreatedByParser);
+    RefPtrWillBeRawPtr<Element> reportElement = doc->createElement(QualifiedName(nullAtom, "parsererror", xhtmlNamespaceURI), true);
 
     Vector<Attribute> reportAttributes;
-    reportAttributes.push_back(Attribute(
-        styleAttr,
-        "display: block; white-space: pre; border: 2px solid #c77; padding: 0 "
-        "1em 0 1em; margin: 1em; background-color: #fdd; color: black"));
+    reportAttributes.append(Attribute(styleAttr, "display: block; white-space: pre; border: 2px solid #c77; padding: 0 1em 0 1em; margin: 1em; background-color: #fdd; color: black"));
     reportElement->parserSetAttributes(reportAttributes);
 
-    Element* h3 = doc->createElement(h3Tag, CreatedByParser);
-    reportElement->parserAppendChild(h3);
-    h3->parserAppendChild(
-        doc->createTextNode("This page contains the following errors:"));
+    RefPtrWillBeRawPtr<Element> h3 = doc->createElement(h3Tag, true);
+    reportElement->parserAppendChild(h3.get());
+    h3->parserAppendChild(doc->createTextNode("This page contains the following errors:"));
 
-    Element* fixed = doc->createElement(divTag, CreatedByParser);
+    RefPtrWillBeRawPtr<Element> fixed = doc->createElement(divTag, true);
     Vector<Attribute> fixedAttributes;
-    fixedAttributes.push_back(
-        Attribute(styleAttr, "font-family:monospace;font-size:12px"));
+    fixedAttributes.append(Attribute(styleAttr, "font-family:monospace;font-size:12px"));
     fixed->parserSetAttributes(fixedAttributes);
-    reportElement->parserAppendChild(fixed);
+    reportElement->parserAppendChild(fixed.get());
 
     fixed->parserAppendChild(doc->createTextNode(errorMessages));
 
-    h3 = doc->createElement(h3Tag, CreatedByParser);
-    reportElement->parserAppendChild(h3);
-    h3->parserAppendChild(doc->createTextNode(
-        "Below is a rendering of the page up to the first error."));
+    h3 = doc->createElement(h3Tag, true);
+    reportElement->parserAppendChild(h3.get());
+    h3->parserAppendChild(doc->createTextNode("Below is a rendering of the page up to the first error."));
 
-    return reportElement;
+    return reportElement.release();
 }
 
 void XMLErrors::insertErrorMessageBlock()
 {
-    // One or more errors occurred during parsing of the code. Display an error
-    // block to the user above the normal content (the DOM tree is created
-    // manually and includes line/col info regarding where the errors are located)
+    // One or more errors occurred during parsing of the code. Display an error block to the user above
+    // the normal content (the DOM tree is created manually and includes line/col info regarding
+    // where the errors are located)
 
     // Create elements for display
-    Element* documentElement = m_document->documentElement();
+    RefPtrWillBeRawPtr<Element> documentElement = m_document->documentElement();
     if (!documentElement) {
-        Element* rootElement = m_document->createElement(htmlTag, CreatedByParser);
-        Element* body = m_document->createElement(bodyTag, CreatedByParser);
+        RefPtrWillBeRawPtr<Element> rootElement = m_document->createElement(htmlTag, true);
+        RefPtrWillBeRawPtr<Element> body = m_document->createElement(bodyTag, true);
         rootElement->parserAppendChild(body);
         m_document->parserAppendChild(rootElement);
-        documentElement = body;
+        documentElement = body.get();
     } else if (documentElement->namespaceURI() == SVGNames::svgNamespaceURI) {
-        Element* rootElement = m_document->createElement(htmlTag, CreatedByParser);
-        Element* head = m_document->createElement(headTag, CreatedByParser);
-        Element* style = m_document->createElement(styleTag, CreatedByParser);
+        RefPtrWillBeRawPtr<Element> rootElement = m_document->createElement(htmlTag, true);
+        RefPtrWillBeRawPtr<Element> head = m_document->createElement(headTag, true);
+        RefPtrWillBeRawPtr<Element> style = m_document->createElement(styleTag, true);
         head->parserAppendChild(style);
-        style->parserAppendChild(
-            m_document->createTextNode("html, body { height: 100% } parsererror + "
-                                       "svg { width: 100%; height: 100% }"));
+        style->parserAppendChild(m_document->createTextNode("html, body { height: 100% } parsererror + svg { width: 100%; height: 100% }"));
         style->finishParsingChildren();
         rootElement->parserAppendChild(head);
-        Element* body = m_document->createElement(bodyTag, CreatedByParser);
+        RefPtrWillBeRawPtr<Element> body = m_document->createElement(bodyTag, true);
         rootElement->parserAppendChild(body);
 
         m_document->parserRemoveChild(*documentElement);
@@ -166,22 +146,22 @@ void XMLErrors::insertErrorMessageBlock()
         body->parserAppendChild(documentElement);
         m_document->parserAppendChild(rootElement);
 
-        documentElement = body;
+        documentElement = body.get();
     }
 
     String errorMessages = m_errorMessages.toString();
-    Element* reportElement = createXHTMLParserErrorHeader(m_document, errorMessages);
+    RefPtrWillBeRawPtr<Element> reportElement = createXHTMLParserErrorHeader(m_document, errorMessages);
 
+#ifdef MINIBLINK_NOT_IMPLEMENTED
     if (DocumentXSLT::hasTransformSourceDocument(*m_document)) {
         Vector<Attribute> attributes;
-        attributes.push_back(Attribute(styleAttr, "white-space: normal"));
-        Element* paragraph = m_document->createElement(pTag, CreatedByParser);
+        attributes.append(Attribute(styleAttr, "white-space: normal"));
+        RefPtrWillBeRawPtr<Element> paragraph = m_document->createElement(pTag, true);
         paragraph->parserSetAttributes(attributes);
-        paragraph->parserAppendChild(m_document->createTextNode(
-            "This document was created as the result of an XSL transformation. The "
-            "line and column numbers given are from the transformed result."));
-        reportElement->parserAppendChild(paragraph);
+        paragraph->parserAppendChild(m_document->createTextNode("This document was created as the result of an XSL transformation. The line and column numbers given are from the transformed result."));
+        reportElement->parserAppendChild(paragraph.release());
     }
+#endif // MINIBLINK_NOT_IMPLEMENTED
 
     Node* firstChild = documentElement->firstChild();
     if (firstChild)
@@ -190,7 +170,7 @@ void XMLErrors::insertErrorMessageBlock()
         documentElement->parserAppendChild(reportElement);
 
     // FIXME: Why do we need to call this manually?
-    m_document->updateStyleAndLayoutTree();
+    m_document->updateLayoutTreeIfNeeded();
 }
 
 } // namespace blink

@@ -23,21 +23,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/KillRing.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 void KillRing::append(const String&) { }
 
 void KillRing::prepend(const String&) { }
+=======
+void KillRing::append(const String&)
+{
+}
+
+void KillRing::prepend(const String&)
+{
+}
+>>>>>>> miniblink49
 
 String KillRing::yank()
 {
     return String();
 }
 
+<<<<<<< HEAD
 void KillRing::startNewSequence() { }
 
 void KillRing::setToYankedState() { }
+=======
+void KillRing::startNewSequence()
+{
+}
+
+void KillRing::setToYankedState()
+{
+}
+>>>>>>> miniblink49
 
 } // namespace blink

@@ -35,7 +35,6 @@
 #include "third_party/WebKit/Source/wtf/RefCounted.h"
 #include "third_party/WebKit/Source/wtf/text/StringHash.h"
 #include "third_party/WebKit/Source/wtf/text/WTFString.h"
-#include "third_party/npapi/bindings/npfunctions.h"
 
 namespace content {
 
@@ -152,7 +151,7 @@ private:
     NPNetscapeFuncs m_browserFuncs;
 
     void freeLibrarySoon();
-    void freeLibraryTimerFired(blink::TimerBase*);
+    void freeLibraryTimerFired(blink::Timer<PluginPackage>*);
     blink::Timer<PluginPackage> m_freeLibraryTimer;
 
     PluginQuirkSet m_quirks;

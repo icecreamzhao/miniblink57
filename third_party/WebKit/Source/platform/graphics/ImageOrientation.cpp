@@ -24,14 +24,22 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/ImageOrientation.h"
 
 #include "platform/transforms/AffineTransform.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 AffineTransform ImageOrientation::transformFromDefault(
     const FloatSize& drawnSize) const
+=======
+AffineTransform ImageOrientation::transformFromDefault(const FloatSize& drawnSize) const
+>>>>>>> miniblink49
 {
     float w = drawnSize.width();
     float h = drawnSize.height();
@@ -40,6 +48,7 @@ AffineTransform ImageOrientation::transformFromDefault(
     case OriginTopLeft:
         return AffineTransform();
     case OriginTopRight:
+<<<<<<< HEAD
         return AffineTransform(-1, 0, 0, 1, w, 0);
     case OriginBottomRight:
         return AffineTransform(-1, 0, 0, -1, w, h);
@@ -55,6 +64,21 @@ AffineTransform ImageOrientation::transformFromDefault(
         return AffineTransform(0, -1, 1, 0, 0, h);
     default:
         ASSERT_NOT_REACHED();
+=======
+        return AffineTransform(-1,  0,  0,  1,  w, 0);
+    case OriginBottomRight:
+        return AffineTransform(-1,  0,  0, -1,  w, h);
+    case OriginBottomLeft:
+        return AffineTransform( 1,  0,  0, -1,  0, h);
+    case OriginLeftTop:
+        return AffineTransform( 0,  1,  1,  0,  0, 0);
+    case OriginRightTop:
+        return AffineTransform( 0,  1, -1,  0,  w, 0);
+    case OriginRightBottom:
+        return AffineTransform( 0, -1, -1,  0,  w, h);
+    case OriginLeftBottom:
+        return AffineTransform( 0, -1,  1,  0,  0, h);
+>>>>>>> miniblink49
     }
 
     ASSERT_NOT_REACHED();

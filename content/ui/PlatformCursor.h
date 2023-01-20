@@ -27,12 +27,8 @@ HICON createSharedCursorImpl(const blink::WebCursorInfo& cursorInfo)
     const blink::IntPoint& hotSpot = cursorInfo.hotSpot;
     HICON impl;
 
-    blink::IntPoint effectiveHotSpot = hotSpot; // determineHotSpot(img, hotSpot);
-    //static bool doAlpha = base::getWindowsVersion(nullptr, nullptr) > base::WindowsVista;
-    static int doAlpha = -1;
-    if (-1 == doAlpha)
-        doAlpha = GetProcAddress(::GetModuleHandleW(u16("Kernel32.dll")), "AcquireSRWLockExclusive ") != nullptr ? 1 : 0;
-
+    IntPoint effectiveHotSpot = hotSpot; // determineHotSpot(img, hotSpot);
+    static bool doAlpha = base::getWindowsVersion(nullptr, nullptr) > base::WindowsVista;
     HWndDC dc(0);
     HDC workingDC = /*adoptGDIObject*/(::CreateCompatibleDC(dc));
     HBITMAP hCursor = nullptr;

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -26,8 +30,12 @@ static const SkColorType gColorTypes[] = {
 
 #define NUM_CONFIGS SK_ARRAY_COUNT(gColorTypes)
 
+<<<<<<< HEAD
 static void draw_checks(SkCanvas* canvas, int width, int height)
 {
+=======
+static void draw_checks(SkCanvas* canvas, int width, int height) {
+>>>>>>> miniblink49
     SkPaint paint;
     paint.setColor(SK_ColorRED);
     canvas->drawRectCoords(SkIntToScalar(0), SkIntToScalar(0),
@@ -45,14 +53,21 @@ static void draw_checks(SkCanvas* canvas, int width, int height)
 
 class BitmapCopyGM : public GM {
 public:
+<<<<<<< HEAD
     SkBitmap fDst[NUM_CONFIGS];
 
     BitmapCopyGM()
     {
+=======
+    SkBitmap    fDst[NUM_CONFIGS];
+
+    BitmapCopyGM() {
+>>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
+<<<<<<< HEAD
     virtual SkString onShortName()
     {
         return SkString("bitmapcopy");
@@ -65,6 +80,17 @@ protected:
 
     virtual void onDraw(SkCanvas* canvas)
     {
+=======
+    virtual SkString onShortName() {
+        return SkString("bitmapcopy");
+    }
+
+    virtual SkISize onISize() {
+        return SkISize::Make(540, 330);
+    }
+
+    virtual void onDraw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
         SkScalar horizMargin = 10;
         SkScalar vertMargin = 10;
@@ -81,8 +107,13 @@ protected:
 
         canvas->clear(sk_tool_utils::color_to_565(0xFFDDDDDD));
         paint.setAntiAlias(true);
+<<<<<<< HEAD
         sk_tool_utils::set_portable_typeface(&paint);
 
+=======
+        sk_tool_utils::set_portable_typeface_always(&paint);
+        
+>>>>>>> miniblink49
         SkScalar width = SkIntToScalar(40);
         SkScalar height = SkIntToScalar(40);
         if (paint.getFontSpacing() > height) {

@@ -26,6 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/audio/AudioDestination.h"
 
 #include "platform/Histogram.h"
@@ -87,6 +88,83 @@ AudioDestination::AudioDestination(AudioIOCallback& callback,
                 AudioUtilities::kRenderQuantumFrames));
     } else {
         NOTREACHED();
+=======
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+#include "platform/audio/AudioDestination.h"
+
+#include "platform/audio/AudioFIFO.h"
+#include "platform/audio/AudioPullFIFO.h"
+#include "public/platform/Platform.h"
+
+namespace blink {
+
+// Buffer size at which the web audio engine will render.
+const unsigned renderBufferSize = 128;
+
+// Size of the FIFO
+const size_t fifoSize = 8192;
+
+// Factory method: Chromium-implementation
+PassOwnPtr<AudioDestination> AudioDestination::create(AudioIOCallback& callback, const String& inputDeviceId, unsigned numberOfInputChannels, unsigned numberOfOutputChannels, float sampleRate)
+{
+    return adoptPtr(new AudioDestination(callback, inputDeviceId, numberOfInputChannels, numberOfOutputChannels, sampleRate));
+}
+
+AudioDestination::AudioDestination(AudioIOCallback& callback, const String& inputDeviceId, unsigned numberOfInputChannels, unsigned numberOfOutputChannels, float sampleRate)
+    : m_callback(callback)
+    , m_numberOfOutputChannels(numberOfOutputChannels)
+    , m_inputBus(AudioBus::create(numberOfInputChannels, renderBufferSize))
+    , m_renderBus(AudioBus::create(numberOfOutputChannels, renderBufferSize, false))
+    , m_sampleRate(sampleRate)
+    , m_isPlaying(false)
+{
+    // Use the optimal buffer size recommended by the audio backend.
+    m_callbackBufferSize = Platform::current()->audioHardwareBufferSize();
+
+#if OS(ANDROID)
+    // The optimum low-latency hardware buffer size is usually too small on Android for WebAudio to
+    // render without glitching. So, if it is small, use a larger size. If it was already large, use
+    // the requested size.
+    //
+    // Since WebAudio renders in 128-frame blocks, the small buffer sizes (144 for a Galaxy Nexus),
+    // cause significant processing jitter. Sometimes multiple blocks will processed, but other
+    // times will not be since the FIFO can satisfy the request. By using a larger
+    // callbackBufferSize, we smooth out the jitter.
+    const size_t kSmallBufferSize = 1024;
+    const size_t kDefaultCallbackBufferSize = 2048;
+
+    if (m_callbackBufferSize <= kSmallBufferSize)
+        m_callbackBufferSize = kDefaultCallbackBufferSize;
+#endif
+
+    // Quick exit if the requested size is too large.
+    ASSERT(m_callbackBufferSize + renderBufferSize <= fifoSize);
+    if (m_callbackBufferSize + renderBufferSize > fifoSize)
+        return;
+
+    m_audioDevice = adoptPtr(Platform::current()->createAudioDevice(m_callbackBufferSize, numberOfInputChannels, numberOfOutputChannels, sampleRate, this, inputDeviceId));
+    ASSERT(m_audioDevice);
+
+    // Create a FIFO to handle the possibility of the callback size
+    // not being a multiple of the render size. If the FIFO already
+    // contains enough data, the data will be provided directly.
+    // Otherwise, the FIFO will call the provider enough times to
+    // satisfy the request for data.
+    m_fifo = adoptPtr(new AudioPullFIFO(*this, numberOfOutputChannels, fifoSize, renderBufferSize));
+
+    // Input buffering.
+    m_inputFifo = adoptPtr(new AudioFIFO(numberOfInputChannels, fifoSize));
+
+    // If the callback size does not match the render size, then we need to buffer some
+    // extra silence for the input. Otherwise, we can over-consume the input FIFO.
+    if (m_callbackBufferSize != renderBufferSize) {
+        // FIXME: handle multi-channel input and don't hard-code to stereo.
+        RefPtr<AudioBus> silence = AudioBus::create(2, renderBufferSize);
+        m_inputFifo->push(silence.get());
+>>>>>>> miniblink49
     }
 }
 
@@ -95,6 +173,7 @@ AudioDestination::~AudioDestination()
     stop();
 }
 
+<<<<<<< HEAD
 void AudioDestination::render(const WebVector<float*>& destinationData,
     size_t numberOfFrames,
     double delay,
@@ -152,23 +231,37 @@ void AudioDestination::start()
 {
     if (m_webAudioDevice && !m_isPlaying) {
         m_webAudioDevice->start();
+=======
+void AudioDestination::start()
+{
+    if (!m_isPlaying && m_audioDevice) {
+        m_audioDevice->start();
+>>>>>>> miniblink49
         m_isPlaying = true;
     }
 }
 
 void AudioDestination::stop()
 {
+<<<<<<< HEAD
     if (m_webAudioDevice && m_isPlaying) {
         m_webAudioDevice->stop();
+=======
+    if (m_isPlaying && m_audioDevice) {
+        m_audioDevice->stop();
+>>>>>>> miniblink49
         m_isPlaying = false;
     }
 }
 
+<<<<<<< HEAD
 size_t AudioDestination::hardwareBufferSize()
 {
     return Platform::current()->audioHardwareBufferSize();
 }
 
+=======
+>>>>>>> miniblink49
 float AudioDestination::hardwareSampleRate()
 {
     return static_cast<float>(Platform::current()->audioHardwareSampleRate());
@@ -176,6 +269,7 @@ float AudioDestination::hardwareSampleRate()
 
 unsigned long AudioDestination::maxChannelCount()
 {
+<<<<<<< HEAD
     return static_cast<unsigned long>(
         Platform::current()->audioHardwareOutputChannels());
 }
@@ -227,3 +321,51 @@ bool AudioDestination::calculateBufferSize()
 }
 
 } // namespace blink
+=======
+    return static_cast<float>(Platform::current()->audioHardwareOutputChannels());
+}
+
+void AudioDestination::render(const WebVector<float*>& sourceData, const WebVector<float*>& audioData, size_t numberOfFrames)
+{
+    bool isNumberOfChannelsGood = audioData.size() == m_numberOfOutputChannels;
+    if (!isNumberOfChannelsGood) {
+        ASSERT_NOT_REACHED();
+        return;
+    }
+
+    bool isBufferSizeGood = numberOfFrames == m_callbackBufferSize;
+    if (!isBufferSizeGood) {
+        ASSERT_NOT_REACHED();
+        return;
+    }
+
+    // Buffer optional live input.
+    if (sourceData.size() >= 2) {
+        // FIXME: handle multi-channel input and don't hard-code to stereo.
+        RefPtr<AudioBus> wrapperBus = AudioBus::create(2, numberOfFrames, false);
+        wrapperBus->setChannelMemory(0, sourceData[0], numberOfFrames);
+        wrapperBus->setChannelMemory(1, sourceData[1], numberOfFrames);
+        m_inputFifo->push(wrapperBus.get());
+    }
+
+    for (unsigned i = 0; i < m_numberOfOutputChannels; ++i)
+        m_renderBus->setChannelMemory(i, audioData[i], numberOfFrames);
+
+    m_fifo->consume(m_renderBus.get(), numberOfFrames);
+}
+
+void AudioDestination::provideInput(AudioBus* bus, size_t framesToProcess)
+{
+    AudioBus* sourceBus = nullptr;
+    if (m_inputFifo->framesInFifo() >= framesToProcess) {
+        m_inputFifo->consume(m_inputBus.get(), framesToProcess);
+        sourceBus = m_inputBus.get();
+    }
+
+    m_callback.render(sourceBus, bus, framesToProcess);
+}
+
+} // namespace blink
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

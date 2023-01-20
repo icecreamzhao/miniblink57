@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkDrawSaveLayer_DEFINED
 #define SkDrawSaveLayer_DEFINED
 
@@ -19,6 +23,7 @@ class SkSaveLayer : public SkGroup {
     DECLARE_MEMBER_INFO(SaveLayer);
     SkSaveLayer();
     virtual ~SkSaveLayer();
+<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
 #ifdef SK_DUMP_ENABLED
     void dump(SkAnimateMaker*) override;
@@ -31,6 +36,19 @@ protected:
 
 private:
     typedef SkGroup INHERITED;
+=======
+    bool draw(SkAnimateMaker& ) override;
+#ifdef SK_DUMP_ENABLED
+    void dump(SkAnimateMaker* ) override;
+#endif
+    void onEndElement(SkAnimateMaker& ) override;
+protected:
+    SkDrawPaint* paint;
+    SkDrawRect* bounds;
+private:
+    typedef SkGroup INHERITED;
+
+>>>>>>> miniblink49
 };
 
 #endif //SkDrawSaveLayer_DEFINED

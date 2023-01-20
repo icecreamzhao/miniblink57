@@ -67,5 +67,4 @@ struct X509_VERIFY_PARAM_ID_st {
     size_t emaillen;
     unsigned char *ip;          /* If not NULL IP address to match */
     size_t iplen;               /* Length of IP address */
-    unsigned char poison;       /* Fail all verifications */
 };

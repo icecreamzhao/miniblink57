@@ -2,18 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableValueKeyframe.h"
 
 #include "core/animation/LegacyStyleInterpolation.h"
 
 namespace blink {
 
-AnimatableValueKeyframe::AnimatableValueKeyframe(
-    const AnimatableValueKeyframe& copyFrom)
+AnimatableValueKeyframe::AnimatableValueKeyframe(const AnimatableValueKeyframe& copyFrom)
     : Keyframe(copyFrom.m_offset, copyFrom.m_composite, copyFrom.m_easing)
 {
-    for (PropertyValueMap::const_iterator iter = copyFrom.m_propertyValues.begin();
-         iter != copyFrom.m_propertyValues.end(); ++iter)
+    for (PropertyValueMap::const_iterator iter = copyFrom.m_propertyValues.begin(); iter != copyFrom.m_propertyValues.end(); ++iter)
         setPropertyValue(iter->key, iter->value.get());
 }
 
@@ -22,49 +21,62 @@ PropertyHandleSet AnimatableValueKeyframe::properties() const
     // This is not used in time-critical code, so we probably don't need to
     // worry about caching this result.
     PropertyHandleSet properties;
-    for (PropertyValueMap::const_iterator iter = m_propertyValues.begin();
-         iter != m_propertyValues.end(); ++iter)
+    for (PropertyValueMap::const_iterator iter = m_propertyValues.begin(); iter != m_propertyValues.end(); ++iter)
         properties.add(PropertyHandle(*iter.keys()));
     return properties;
 }
 
-PassRefPtr<Keyframe> AnimatableValueKeyframe::clone() const
+PassRefPtrWillBeRawPtr<Keyframe> AnimatableValueKeyframe::clone() const
 {
-    return adoptRef(new AnimatableValueKeyframe(*this));
+    return adoptRefWillBeNoop(new AnimatableValueKeyframe(*this));
 }
 
-PassRefPtr<Keyframe::PropertySpecificKeyframe>
-AnimatableValueKeyframe::createPropertySpecificKeyframe(
-    PropertyHandle property) const
+PassOwnPtrWillBeRawPtr<Keyframe::PropertySpecificKeyframe> AnimatableValueKeyframe::createPropertySpecificKeyframe(PropertyHandle property) const
 {
-    return PropertySpecificKeyframe::create(
-        offset(), &easing(), propertyValue(property.cssProperty()), composite());
+    return adoptPtrWillBeNoop(new PropertySpecificKeyframe(offset(), &easing(), propertyValue(property.cssProperty()), composite()));
 }
 
-PassRefPtr<Keyframe::PropertySpecificKeyframe>
-AnimatableValueKeyframe::PropertySpecificKeyframe::cloneWithOffset(
-    double offset) const
+DEFINE_TRACE(AnimatableValueKeyframe)
 {
-    return create(offset, m_easing, m_value, m_composite);
+#if ENABLE(OILPAN)
+    visitor->trace(m_propertyValues);
+#endif
+    Keyframe::trace(visitor);
 }
 
-PassRefPtr<Interpolation>
-AnimatableValueKeyframe::PropertySpecificKeyframe::createInterpolation(
-    PropertyHandle property,
-    const Keyframe::PropertySpecificKeyframe& end) const
+AnimatableValueKeyframe::PropertySpecificKeyframe::PropertySpecificKeyframe(double offset, PassRefPtr<TimingFunction> easing, const AnimatableValue* value, EffectModel::CompositeOperation op)
+    : Keyframe::PropertySpecificKeyframe(offset, easing, op)
+    , m_value(const_cast<AnimatableValue*>(value))
+{ }
+
+AnimatableValueKeyframe::PropertySpecificKeyframe::PropertySpecificKeyframe(double offset, PassRefPtr<TimingFunction> easing, PassRefPtrWillBeRawPtr<AnimatableValue> value)
+    : Keyframe::PropertySpecificKeyframe(offset, easing, EffectModel::CompositeReplace)
+    , m_value(value)
 {
-    return LegacyStyleInterpolation::create(
-        value(), toAnimatableValuePropertySpecificKeyframe(end).value(),
-        property.cssProperty());
+    ASSERT(!isNull(m_offset));
 }
 
-PassRefPtr<Keyframe::PropertySpecificKeyframe>
-AnimatableValueKeyframe::PropertySpecificKeyframe::neutralKeyframe(
-    double offset,
-    PassRefPtr<TimingFunction> easing) const
+PassOwnPtrWillBeRawPtr<Keyframe::PropertySpecificKeyframe> AnimatableValueKeyframe::PropertySpecificKeyframe::cloneWithOffset(double offset) const
 {
-    return create(offset, std::move(easing), AnimatableValue::neutralValue(),
-        EffectModel::CompositeAdd);
+    Keyframe::PropertySpecificKeyframe* theClone = new PropertySpecificKeyframe(offset, m_easing, m_value);
+    return adoptPtrWillBeNoop(theClone);
 }
 
-} // namespace blink
+PassRefPtrWillBeRawPtr<Interpolation> AnimatableValueKeyframe::PropertySpecificKeyframe::maybeCreateInterpolation(PropertyHandle property, Keyframe::PropertySpecificKeyframe& end, Element*, const ComputedStyle*) const
+{
+    AnimatableValuePropertySpecificKeyframe& to = toAnimatableValuePropertySpecificKeyframe(end);
+    return LegacyStyleInterpolation::create(value(), to.value(), property.cssProperty());
+}
+
+PassOwnPtrWillBeRawPtr<Keyframe::PropertySpecificKeyframe> AnimatableValueKeyframe::PropertySpecificKeyframe::neutralKeyframe(double offset, PassRefPtr<TimingFunction> easing) const
+{
+    return adoptPtrWillBeNoop(new AnimatableValueKeyframe::PropertySpecificKeyframe(offset, easing, AnimatableValue::neutralValue(), EffectModel::CompositeAdd));
+}
+
+DEFINE_TRACE(AnimatableValueKeyframe::PropertySpecificKeyframe)
+{
+    visitor->trace(m_value);
+    Keyframe::PropertySpecificKeyframe::trace(visitor);
+}
+
+}

@@ -2,9 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "public/platform/modules/presentation/WebPresentationController.h"
 
 // This WebPresentationController.cpp, which includes only
+=======
+#include "config.h"
+#include "public/platform/modules/presentation/WebPresentationController.h"
+
+// This WebPresentationController.cpp, which includes only config.h and
+>>>>>>> miniblink49
 // WebPresentationController.h, should be in Source/platform/exported,
 // because WebPresentationController is not compiled without this cpp.
 // So if we don't have this cpp, we will see unresolved symbol error

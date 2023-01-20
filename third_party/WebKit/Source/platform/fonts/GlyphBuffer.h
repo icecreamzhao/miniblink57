@@ -41,7 +41,10 @@ class SimpleFontData;
 
 class GlyphBuffer {
     STACK_ALLOCATED();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 public:
     bool isEmpty() const { return m_fontData.isEmpty(); }
     unsigned size() const
@@ -89,6 +92,10 @@ public:
     {
         ASSERT(index < size());
         return hasVerticalOffsets() ? m_offsets[index * 2] : m_offsets[index];
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     }
 
     float yOffsetAt(unsigned index) const
@@ -144,7 +151,11 @@ public:
         ASSERT_WITH_SECURITY_IMPLICATION(!m_offsets.isEmpty());
         for (unsigned i = 0; i + 1 < m_offsets.size(); ++i)
             m_offsets[i] = totalWidth - m_offsets[i + 1];
+<<<<<<< HEAD
         m_offsets.back() = totalWidth - afterOffset;
+=======
+        m_offsets.last() = totalWidth - afterOffset;
+>>>>>>> miniblink49
 
         m_offsets.reverse();
     }

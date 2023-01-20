@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/SubtreeLayoutScope.h"
 
 #include "core/frame/FrameView.h"
@@ -45,15 +46,13 @@ SubtreeLayoutScope::~SubtreeLayoutScope()
 {
     RELEASE_ASSERT(!m_root.needsLayout());
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     for (auto* layoutObject : m_layoutObjectsToLayout)
         layoutObject->assertLaidOut();
 #endif
 }
 
-void SubtreeLayoutScope::setNeedsLayout(
-    LayoutObject* descendant,
-    LayoutInvalidationReasonForTracing reason)
+void SubtreeLayoutScope::setNeedsLayout(LayoutObject* descendant, LayoutInvalidationReasonForTracing reason)
 {
     ASSERT(descendant->isDescendantOf(&m_root));
     descendant->setNeedsLayout(reason, MarkContainerChain, this);
@@ -65,12 +64,11 @@ void SubtreeLayoutScope::setChildNeedsLayout(LayoutObject* descendant)
     descendant->setChildNeedsLayout(MarkContainerChain, this);
 }
 
-void SubtreeLayoutScope::recordObjectMarkedForLayout(
-    LayoutObject* layoutObject)
+void SubtreeLayoutScope::recordObjectMarkedForLayout(LayoutObject* layoutObject)
 {
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     m_layoutObjectsToLayout.add(layoutObject);
 #endif
 }
 
-} // namespace blink
+}

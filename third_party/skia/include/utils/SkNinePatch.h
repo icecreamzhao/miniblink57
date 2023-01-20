@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkNinePatch_DEFINED
 #define SkNinePatch_DEFINED
 
@@ -19,6 +23,7 @@ class SkPaint;
 class SkNinePatch {
 public:
     static void DrawNine(SkCanvas* canvas, const SkRect& dst,
+<<<<<<< HEAD
         const SkBitmap& bitmap, const SkIRect& margins,
         const SkPaint* paint = NULL);
 
@@ -27,6 +32,16 @@ public:
         const int32_t xDivs[], int numXDivs,
         const int32_t yDivs[], int numYDivs,
         const SkPaint* paint = NULL);
+=======
+                     const SkBitmap& bitmap, const SkIRect& margins,
+                     const SkPaint* paint = NULL);
+
+    static void DrawMesh(SkCanvas* canvas, const SkRect& dst,
+                         const SkBitmap& bitmap,
+                         const int32_t xDivs[], int numXDivs,
+                         const int32_t yDivs[], int numYDivs,
+                         const SkPaint* paint = NULL);
+>>>>>>> miniblink49
 };
 
 #endif

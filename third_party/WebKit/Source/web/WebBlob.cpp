@@ -28,11 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebBlob.h"
 
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8Blob.h"
 #include "core/fileapi/Blob.h"
+<<<<<<< HEAD
 #include "platform/FileMetadata.h"
 #include "platform/blob/BlobData.h"
 #include <memory>
@@ -42,15 +47,29 @@ namespace blink {
 WebBlob WebBlob::createFromUUID(const WebString& uuid,
     const WebString& type,
     long long size)
+=======
+#include "platform/blob/BlobData.h"
+#include "wtf/PassOwnPtr.h"
+
+namespace blink {
+
+WebBlob WebBlob::createFromUUID(const WebString& uuid, const WebString& type, long long size)
+>>>>>>> miniblink49
 {
     return Blob::create(BlobDataHandle::create(uuid, type, size));
 }
 
 WebBlob WebBlob::createFromFile(const WebString& path, long long size)
 {
+<<<<<<< HEAD
     std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->appendFile(path, 0, size, invalidFileTime());
     return Blob::create(BlobDataHandle::create(std::move(blobData), size));
+=======
+    OwnPtr<BlobData> blobData = BlobData::create();
+    blobData->appendFile(path);
+    return Blob::create(BlobDataHandle::create(blobData.release(), size));
+>>>>>>> miniblink49
 }
 
 WebBlob WebBlob::fromV8Value(v8::Local<v8::Value> value)
@@ -58,7 +77,11 @@ WebBlob WebBlob::fromV8Value(v8::Local<v8::Value> value)
     if (V8Blob::hasInstance(value, v8::Isolate::GetCurrent())) {
         v8::Local<v8::Object> object = v8::Local<v8::Object>::Cast(value);
         Blob* blob = V8Blob::toImpl(object);
+<<<<<<< HEAD
         DCHECK(blob);
+=======
+        ASSERT(blob);
+>>>>>>> miniblink49
         return blob;
     }
     return WebBlob();
@@ -81,6 +104,7 @@ WebString WebBlob::uuid()
     return m_private->uuid();
 }
 
+<<<<<<< HEAD
 v8::Local<v8::Value> WebBlob::toV8Value(v8::Local<v8::Object> creationContext,
     v8::Isolate* isolate)
 {
@@ -90,6 +114,16 @@ v8::Local<v8::Value> WebBlob::toV8Value(v8::Local<v8::Object> creationContext,
     if (!m_private.get())
         return v8::Local<v8::Value>();
     return ToV8(m_private.get(), isolate->GetCurrentContext()->Global(), isolate);
+=======
+v8::Local<v8::Value> WebBlob::toV8Value(v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    // We no longer use |creationContext| because it's often misused and points
+    // to a context faked by user script.
+    ASSERT(creationContext->CreationContext() == isolate->GetCurrentContext());
+    if (!m_private.get())
+        return v8::Local<v8::Value>();
+    return toV8(m_private.get(), isolate->GetCurrentContext()->Global(), isolate);
+>>>>>>> miniblink49
 }
 
 WebBlob::WebBlob(Blob* blob)

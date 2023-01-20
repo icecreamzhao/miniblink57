@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkHitTest.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -21,6 +25,7 @@ const SkMemberInfo SkHitTest::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkHitTest);
 
+<<<<<<< HEAD
 SkHitTest::SkHitTest()
     : value(false)
 {
@@ -28,6 +33,12 @@ SkHitTest::SkHitTest()
 
 bool SkHitTest::draw(SkAnimateMaker&)
 {
+=======
+SkHitTest::SkHitTest() : value(false) {
+}
+
+bool SkHitTest::draw(SkAnimateMaker&) {
+>>>>>>> miniblink49
     hits.setCount(bullets.count());
     value = false;
     int bulletCount = bullets.count();
@@ -53,8 +64,12 @@ bool SkHitTest::draw(SkAnimateMaker&)
     return false;
 }
 
+<<<<<<< HEAD
 bool SkHitTest::enable(SkAnimateMaker&)
 {
+=======
+bool SkHitTest::enable(SkAnimateMaker&) {
+>>>>>>> miniblink49
     for (int bIndex = 0; bIndex < bullets.count(); bIndex++) {
         SkDisplayable* bullet = bullets[bIndex];
         bullet->enableBounder();
@@ -66,6 +81,7 @@ bool SkHitTest::enable(SkAnimateMaker&)
     return false;
 }
 
+<<<<<<< HEAD
 bool SkHitTest::hasEnable() const
 {
     return true;
@@ -73,6 +89,13 @@ bool SkHitTest::hasEnable() const
 
 const SkMemberInfo* SkHitTest::preferredChild(SkDisplayTypes)
 {
+=======
+bool SkHitTest::hasEnable() const {
+    return true;
+}
+
+const SkMemberInfo* SkHitTest::preferredChild(SkDisplayTypes) {
+>>>>>>> miniblink49
     if (bullets.count() == 0)
         return getMember("bullets");
     return getMember("targets"); // !!! cwap! need to refer to member through enum like kScope instead

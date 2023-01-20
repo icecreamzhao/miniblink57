@@ -27,6 +27,8 @@
 
 %{
 
+#include "config.h"
+
 #include "core/xml/XPathFunctions.h"
 #include "core/xml/XPathNSResolver.h"
 #include "core/xml/XPathParser.h"
@@ -34,15 +36,10 @@
 #include "core/xml/XPathPredicate.h"
 #include "core/xml/XPathStep.h"
 #include "core/xml/XPathVariableReference.h"
-#include "wtf/allocator/Partitions.h"
+#include "wtf/FastMalloc.h"
 
-void* yyFastMalloc(size_t size)
-{
-    return WTF::Partitions::fastMalloc(size, nullptr);
-}
-
-#define YYMALLOC yyFastMalloc
-#define YYFREE WTF::Partitions::fastFree
+#define YYMALLOC fastMalloc
+#define YYFREE fastFree
 
 #define YYENABLE_NLS 0
 #define YYLTYPE_IS_TRIVIAL 1
@@ -275,12 +272,12 @@ PredicateList:
     Predicate
     {
         $$ = new blink::HeapVector<blink::Member<Predicate>>;
-        $$->push_back(new Predicate($1));
+        $$->append(new Predicate($1));
     }
     |
     PredicateList Predicate
     {
-        $$->push_back(new Predicate($2));
+        $$->append(new Predicate($2));
     }
     ;
 
@@ -359,12 +356,12 @@ ArgumentList:
     Argument
     {
         $$ = new blink::HeapVector<blink::Member<Expression>>;
-        $$->push_back($1);
+        $$->append($1);
     }
     |
     ArgumentList ',' Argument
     {
-        $$->push_back($3);
+        $$->append($3);
     }
     ;
 
@@ -394,14 +391,14 @@ PathExpr:
     FilterExpr '/' RelativeLocationPath
     {
         $3->setAbsolute(true);
-        $$ = new blink::XPath::Path($1, $3);
+        $$ = new Path($1, $3);
     }
     |
     FilterExpr DescendantOrSelf RelativeLocationPath
     {
         $3->insertFirstStep($2);
         $3->setAbsolute(true);
-        $$ = new blink::XPath::Path($1, $3);
+        $$ = new Path($1, $3);
     }
     ;
 
@@ -410,7 +407,7 @@ FilterExpr:
     |
     PrimaryExpr PredicateList
     {
-        $$ = new blink::XPath::Filter($1, *$2);
+        $$ = new Filter($1, *$2);
     }
     ;
 

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "public/platform/WebContentSettingCallbacks.h"
 
 #include "platform/ContentSettingCallbacks.h"
@@ -18,11 +19,27 @@ public:
     {
         return adoptRef(
             new WebContentSettingCallbacksPrivate(std::move(callbacks)));
+=======
+#include "config.h"
+
+#include "public/platform/WebContentSettingCallbacks.h"
+
+#include "platform/ContentSettingCallbacks.h"
+
+namespace blink {
+
+class WebContentSettingCallbacksPrivate : public RefCounted<WebContentSettingCallbacksPrivate> {
+public:
+    static PassRefPtr<WebContentSettingCallbacksPrivate> create(const PassOwnPtr<ContentSettingCallbacks>& callbacks)
+    {
+        return adoptRef(new WebContentSettingCallbacksPrivate(callbacks));
+>>>>>>> miniblink49
     }
 
     ContentSettingCallbacks* callbacks() { return m_callbacks.get(); }
 
 private:
+<<<<<<< HEAD
     WebContentSettingCallbacksPrivate(
         std::unique_ptr<ContentSettingCallbacks> callbacks)
         : m_callbacks(std::move(callbacks))
@@ -35,6 +52,15 @@ WebContentSettingCallbacks::WebContentSettingCallbacks(
     std::unique_ptr<ContentSettingCallbacks>&& callbacks)
 {
     m_private = WebContentSettingCallbacksPrivate::create(std::move(callbacks));
+=======
+    WebContentSettingCallbacksPrivate(const PassOwnPtr<ContentSettingCallbacks>& callbacks) : m_callbacks(callbacks) { }
+    OwnPtr<ContentSettingCallbacks> m_callbacks;
+};
+
+WebContentSettingCallbacks::WebContentSettingCallbacks(const PassOwnPtr<ContentSettingCallbacks>& callbacks)
+{
+    m_private = WebContentSettingCallbacksPrivate::create(callbacks);
+>>>>>>> miniblink49
 }
 
 void WebContentSettingCallbacks::reset()
@@ -42,8 +68,12 @@ void WebContentSettingCallbacks::reset()
     m_private.reset();
 }
 
+<<<<<<< HEAD
 void WebContentSettingCallbacks::assign(
     const WebContentSettingCallbacks& other)
+=======
+void WebContentSettingCallbacks::assign(const WebContentSettingCallbacks& other)
+>>>>>>> miniblink49
 {
     m_private = other.m_private;
 }

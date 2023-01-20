@@ -4,7 +4,6 @@
 
 #include "node/uv/include/uv.h"
 #include "v8.h"
-#include "mbvip/core/mb.h"
 #include <functional>
 #include <list>
 
@@ -12,7 +11,7 @@ namespace atom {
 
 class ThreadCall {
 private:
-    typedef void (*CoreMainTask)(void* data);
+    typedef void (*CoreMainTask)(void *data);
     struct TaskAsyncData {
         CoreMainTask call;
         void* data;
@@ -23,12 +22,12 @@ private:
         DWORD toThreadId;
         DWORD destroyThreadId;
     };
-
+    
 public:
     static void init(uv_loop_t* loop);
     static void initTaskQueue();
 
-    static void createBlinkThread(v8::Platform* v8platform); // BlinkÏß³ÌÒªÏÈ´´½¨£¬²ÅÄÜµ÷ÓÃinit
+    static void createBlinkThread(v8::Platform* v8platform); // Blinkï¿½ß³ï¿½Òªï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½init
     static void callBlinkThreadAsync(std::function<void(void)>&& closure);
     static void callBlinkThreadSync(std::function<void(void)>&& closure);
     static void callUiThreadSync(std::function<void(void)>&& closure);
@@ -39,7 +38,7 @@ public:
     static void shutdown();
 
     static void exitMessageLoop(DWORD threadId);
-    static void exitReEnterMessageLoop(DWORD threadId); // ÍÏ×§ÏûÏ¢Ê±ºò»áÆô¶¯ÖØÈëµÄÏûÏ¢Ñ­»·
+    static void exitReEnterMessageLoop(DWORD threadId); // ï¿½ï¿½×§ï¿½ï¿½Ï¢Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Ñ­ï¿½ï¿½
     static void messageLoop(uv_loop_t* loop, v8::Platform* platform, v8::Isolate* isolate);
 
     static uv_loop_t* getUiLoop() { return m_uiLoop; }
@@ -53,21 +52,13 @@ public:
 
     static void setMainThread();
 
-    static v8::Platform* getBlinkThreadV8Platform() { return m_v8platformOfBlink; }
+    static v8::Platform* getBlinkThreadV8Platform() { return m_v8platform; }
 
-    static void runUiThread(uv_loop_t* loop, v8::Platform* platform, v8::Isolate* isolate);
-    static void runMainThread();
 private:
-    static void MB_CALL_TYPE onBlinkThreadInited(void* param1, void* param2);
-
-    static void MB_CALL_TYPE OnBlinkThreadIdle(ThreadCall* self, v8::Isolate* isolate);
-    static void MB_CALL_TYPE OnUiThreadIdle(ThreadCall* self, v8::Isolate* isolate);
-
-    /// <summary>
-//     static void callSyncAndWait(TaskAsyncData* asyncData);
-//     static void callThreadAsync(std::function<void(void)> closure);
-//     static void threadCallbackWrap(void* data);
-//     static void asynThreadCallbackWrap(void* data);
+    static void callSyncAndWait(TaskAsyncData* asyncData);
+    static void callThreadAsync(std::function<void(void)> closure);
+    static void threadCallbackWrap(void* data);
+    static void asynThreadCallbackWrap(void* data);
 
     static DWORD m_blinkThreadId;
     static DWORD m_uiThreadId;
@@ -84,12 +75,10 @@ private:
 
     static void blinkThread(void* created);
 
-    static v8::Platform* m_v8platformOfBlink;
-    static v8::Platform* m_v8platformOfUi;
+    static v8::Platform* m_v8platform;
 
     struct TaskItem {
-        TaskItem(DWORD idThread, UINT msg, WPARAM wParam, LPARAM lParam)
-        {
+        TaskItem(DWORD idThread, UINT msg, WPARAM wParam, LPARAM lParam) {
             this->idThread = idThread;
             this->msg = msg;
             this->wParam = wParam;
@@ -107,7 +96,7 @@ private:
 
         kMaxTaskQueue,
     };
-
+    
     static TaskQueueType getWhichTypeByThreadId(DWORD idThread);
     static bool doTaskQueue(DWORD threadId);
     static bool runTaskQueue(UINT msg, WPARAM wParam, LPARAM lParam);

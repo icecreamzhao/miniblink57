@@ -12,35 +12,24 @@ namespace blink {
 
 class HTMLDataListOptionsCollection : public HTMLCollection {
 public:
-    static HTMLDataListOptionsCollection* create(ContainerNode& ownerNode,
-        CollectionType type)
+    static PassRefPtrWillBeRawPtr<HTMLDataListOptionsCollection> create(ContainerNode& ownerNode, CollectionType type)
     {
-        DCHECK_EQ(type, DataListOptions);
-        return new HTMLDataListOptionsCollection(ownerNode);
+        ASSERT_UNUSED(type, type == DataListOptions);
+        return adoptRefWillBeNoop(new HTMLDataListOptionsCollection(ownerNode));
     }
 
-    HTMLOptionElement* item(unsigned offset) const
-    {
-        return toHTMLOptionElement(HTMLCollection::item(offset));
-    }
+    HTMLOptionElement* item(unsigned offset) const { return toHTMLOptionElement(HTMLCollection::item(offset)); }
 
     bool elementMatches(const HTMLElement&) const;
-
 private:
     explicit HTMLDataListOptionsCollection(ContainerNode& ownerNode)
         : HTMLCollection(ownerNode, DataListOptions, DoesNotOverrideItemAfter)
-    {
-    }
+    { }
 };
 
-DEFINE_TYPE_CASTS(HTMLDataListOptionsCollection,
-    LiveNodeListBase,
-    collection,
-    collection->type() == DataListOptions,
-    collection.type() == DataListOptions);
+DEFINE_TYPE_CASTS(HTMLDataListOptionsCollection, LiveNodeListBase, collection, collection->type() == DataListOptions, collection.type() == DataListOptions);
 
-inline bool HTMLDataListOptionsCollection::elementMatches(
-    const HTMLElement& element) const
+inline bool HTMLDataListOptionsCollection::elementMatches(const HTMLElement& element) const
 {
     if (isHTMLOptionElement(element)) {
         const HTMLOptionElement& option = toHTMLOptionElement(element);

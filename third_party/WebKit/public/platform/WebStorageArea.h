@@ -51,6 +51,7 @@ public:
     // The number of key/value pairs in the storage area.
     virtual unsigned length() = 0;
 
+<<<<<<< HEAD
     // Get a value for a specific key. Valid key indices are 0 through
     // length() - 1.  Indexes may change on any set/removeItem call. Will return
     // null if the index provided is out of range.
@@ -67,27 +68,53 @@ public:
         const WebString& newValue,
         const WebURL& pageUrl,
         Result& result)
+=======
+    // Get a value for a specific key. Valid key indices are 0 through length() - 1.
+    // Indexes may change on any set/removeItem call. Will return null if the index
+    // provided is out of range.
+    virtual WebString key(unsigned index) = 0;
+
+    // Get the value that corresponds to a specific key. This returns null if there is
+    // no entry for that key.
+    virtual WebString getItem(const WebString& key) = 0;
+
+    // Set the value that corresponds to a specific key. Result will either be ResultOK
+    // or some particular error. The value is NOT set when there's an error. |pageUrl| is the
+    // url that should be used if a storage event fires.
+    virtual void setItem(const WebString& key, const WebString& newValue, const WebURL& pageUrl, Result& result)
+>>>>>>> miniblink49
     {
         WebString unused;
         setItem(key, newValue, pageUrl, result, unused);
     }
 
+<<<<<<< HEAD
     // Remove the value associated with a particular key. |pageUrl| is the url
     // that should be used if a storage event fires.
+=======
+
+    // Remove the value associated with a particular key. |pageUrl| is the url that should be used
+    // if a storage event fires.
+>>>>>>> miniblink49
     virtual void removeItem(const WebString& key, const WebURL& pageUrl)
     {
         WebString unused;
         removeItem(key, pageUrl, unused);
     }
 
+<<<<<<< HEAD
     // Clear all key/value pairs. |pageUrl| is the url that should be used if a
     // storage event fires.
+=======
+    // Clear all key/value pairs. |pageUrl| is the url that should be used if a storage event fires.
+>>>>>>> miniblink49
     virtual void clear(const WebURL& pageUrl)
     {
         bool unused;
         clear(pageUrl, unused);
     }
 
+<<<<<<< HEAD
     // DEPRECATED - being replaced by the async variants above which do not return
     // oldValues or block until completion.
     virtual void setItem(const WebString& key,
@@ -99,6 +126,15 @@ public:
         const WebURL& pageUrl,
         WebString& oldValue) { }
     virtual void clear(const WebURL& pageUrl, bool& somethingCleared) { }
+=======
+    // Returns amount of bytes occupied by the storage cache in physical memory.
+    virtual size_t memoryBytesUsedByCache() const { return 0; }
+
+    // DEPRECATED - being replaced by the async variants above which do not return oldValues or block until completion.
+    virtual void setItem(const WebString& key, const WebString& newValue, const WebURL&, Result&, WebString& oldValue) { }
+    virtual void removeItem(const WebString& key, const WebURL& pageUrl, WebString& oldValue)  { }
+    virtual void clear(const WebURL& pageUrl, bool& somethingCleared)  { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

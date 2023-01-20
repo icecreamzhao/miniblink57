@@ -8,193 +8,166 @@
 #include <windows.h>
 
 #include "base/base_export.h"
-#include "base/gtest_prod_util.h"
-#include "base/location.h"
+#include "base/basictypes.h"
+// #include "base/location.h"
 #include "base/logging.h"
-#include "base/macros.h"
+#include "base/move.h"
 
 // TODO(rvargas): remove this with the rest of the verifier.
 #if defined(COMPILER_MSVC)
 #include <intrin.h>
 #define BASE_WIN_GET_CALLER _ReturnAddress()
-//#elif defined(COMPILER_GCC)
-#else
-#define BASE_WIN_GET_CALLER __builtin_extract_return_addr(__builtin_return_address(0))
+#elif defined(COMPILER_GCC)
+#define BASE_WIN_GET_CALLER __builtin_extract_return_addr(\\
+    __builtin_return_address(0))
 #endif
 
 namespace base {
 namespace win {
 
-    // Generic wrapper for raw handles that takes care of closing handles
-    // automatically. The class interface follows the style of
-    // the ScopedFILE class with two additions:
-    //   - IsValid() method can tolerate multiple invalid handle values such as NULL
-    //     and INVALID_HANDLE_VALUE (-1) for Win32 handles.
-    //   - Set() (and the constructors and assignment operators that call it)
-    //     preserve the Windows LastError code. This ensures that GetLastError() can
-    //     be called after stashing a handle in a GenericScopedHandle object. Doing
-    //     this explicitly is necessary because of bug 528394 and VC++ 2015.
-    template <class Traits, class Verifier>
-    class GenericScopedHandle {
-    public:
-        typedef typename Traits::Handle Handle;
+// Generic wrapper for raw handles that takes care of closing handles
+// automatically. The class interface follows the style of
+// the ScopedFILE class with one addition:
+//   - IsValid() method can tolerate multiple invalid handle values such as NULL
+//     and INVALID_HANDLE_VALUE (-1) for Win32 handles.
+template <class Traits, class Verifier>
+class GenericScopedHandle {
+  MOVE_ONLY_TYPE_FOR_CPP_03(GenericScopedHandle, RValue)
 
-        GenericScopedHandle()
-            : handle_(Traits::NullHandle())
-        {
-        }
+ public:
+  typedef typename Traits::Handle Handle;
 
-        explicit GenericScopedHandle(Handle handle)
-            : handle_(Traits::NullHandle())
-        {
-            Set(handle);
-        }
+  GenericScopedHandle() : handle_(Traits::NullHandle()) {}
 
-        GenericScopedHandle(GenericScopedHandle&& other)
-            : handle_(Traits::NullHandle())
-        {
-            Set(other.Take());
-        }
+  explicit GenericScopedHandle(Handle handle) : handle_(Traits::NullHandle()) {
+    Set(handle);
+  }
 
-        ~GenericScopedHandle()
-        {
-            Close();
-        }
+  // Move constructor for C++03 move emulation of this type.
+  GenericScopedHandle(RValue other) : handle_(Traits::NullHandle()) {
+    Set(other.object->Take());
+  }
 
-        bool IsValid() const
-        {
-            return Traits::IsHandleValid(handle_);
-        }
+  ~GenericScopedHandle() {
+    Close();
+  }
 
-        GenericScopedHandle& operator=(GenericScopedHandle&& other)
-        {
-            DCHECK_NE(this, &other);
-            Set(other.Take());
-            return *this;
-        }
+  bool IsValid() const {
+    return Traits::IsHandleValid(handle_);
+  }
 
-        void Set(Handle handle)
-        {
-            if (handle_ != handle) {
-                // Preserve old LastError to avoid bug 528394.
-                auto last_error = ::GetLastError();
-                Close();
+  // Move operator= for C++03 move emulation of this type.
+  GenericScopedHandle& operator=(RValue other) {
+    if (this != other.object) {
+      Set(other.object->Take());
+    }
+    return *this;
+  }
 
-                if (Traits::IsHandleValid(handle)) {
-                    handle_ = handle;
-                    Verifier::StartTracking(handle, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
-                }
-                ::SetLastError(last_error);
-            }
-        }
+  void Set(Handle handle) {
+    if (handle_ != handle) {
+      Close();
 
-        Handle Get() const
-        {
-            return handle_;
-        }
+      if (Traits::IsHandleValid(handle)) {
+        handle_ = handle;
+//         Verifier::StartTracking(handle, this, BASE_WIN_GET_CALLER,
+//                                 tracked_objects::GetProgramCounter());
+      }
+    }
+  }
 
-        // Transfers ownership away from this object.
-        Handle Take()
-        {
-            Handle temp = handle_;
-            handle_ = Traits::NullHandle();
-            if (Traits::IsHandleValid(temp)) {
-                Verifier::StopTracking(temp, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
-            }
-            return temp;
-        }
+  Handle Get() const {
+    return handle_;
+  }
 
-        // Explicitly closes the owned handle.
-        void Close()
-        {
-            if (Traits::IsHandleValid(handle_)) {
-                Verifier::StopTracking(handle_, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
+  operator Handle() const {
+    return handle_;
+  }
 
-                Traits::CloseHandle(handle_);
-                handle_ = Traits::NullHandle();
-            }
-        }
+  // Transfers ownership away from this object.
+  Handle Take() {
+    Handle temp = handle_;
+    handle_ = Traits::NullHandle();
+//     if (Traits::IsHandleValid(temp)) {
+//       Verifier::StopTracking(temp, this, BASE_WIN_GET_CALLER, tracked_objects::GetProgramCounter());
+//     }
+    return temp;
+  }
 
-    private:
-        FRIEND_TEST_ALL_PREFIXES(ScopedHandleTest, ActiveVerifierWrongOwner);
-        FRIEND_TEST_ALL_PREFIXES(ScopedHandleTest, ActiveVerifierUntrackedHandle);
-        Handle handle_;
+  // Explicitly closes the owned handle.
+  void Close() {
+    if (Traits::IsHandleValid(handle_)) {
+//       Verifier::StopTracking(handle_, this, BASE_WIN_GET_CALLER,
+//                              tracked_objects::GetProgramCounter());
 
-        DISALLOW_COPY_AND_ASSIGN(GenericScopedHandle);
-    };
+      if (!Traits::CloseHandle(handle_))
+        CHECK(false);
+
+      handle_ = Traits::NullHandle();
+    }
+  }
+
+ private:
+  Handle handle_;
+};
 
 #undef BASE_WIN_GET_CALLER
 
-    // The traits class for Win32 handles that can be closed via CloseHandle() API.
-    class HandleTraits {
-    public:
-        typedef HANDLE Handle;
+// The traits class for Win32 handles that can be closed via CloseHandle() API.
+class HandleTraits {
+ public:
+  typedef HANDLE Handle;
 
-        // Closes the handle.
-        static bool BASE_EXPORT CloseHandle(HANDLE handle);
+  // Closes the handle.
+  static bool CloseHandle(HANDLE handle) {
+    return ::CloseHandle(handle) != FALSE;
+  }
 
-        // Returns true if the handle value is valid.
-        static bool IsHandleValid(HANDLE handle)
-        {
-            return handle != NULL && handle != INVALID_HANDLE_VALUE;
-        }
+  // Returns true if the handle value is valid.
+  static bool IsHandleValid(HANDLE handle) {
+    return handle != NULL && handle != INVALID_HANDLE_VALUE;
+  }
 
-        // Returns NULL handle value.
-        static HANDLE NullHandle()
-        {
-            return NULL;
-        }
+  // Returns NULL handle value.
+  static HANDLE NullHandle() {
+    return NULL;
+  }
 
-    private:
-        DISALLOW_IMPLICIT_CONSTRUCTORS(HandleTraits);
-    };
+ private:
+  //DISALLOW_IMPLICIT_CONSTRUCTORS(HandleTraits);
+};
 
-    // Do-nothing verifier.
-    class DummyVerifierTraits {
-    public:
-        typedef HANDLE Handle;
+// Do-nothing verifier.
+class DummyVerifierTraits {
+ public:
+  typedef HANDLE Handle;
 
-        static void StartTracking(HANDLE handle, const void* owner,
-            const void* pc1, const void* pc2) { }
-        static void StopTracking(HANDLE handle, const void* owner,
-            const void* pc1, const void* pc2) { }
+  static void StartTracking(HANDLE handle, const void* owner,
+                            const void* pc1, const void* pc2) {}
+  static void StopTracking(HANDLE handle, const void* owner,
+                           const void* pc1, const void* pc2) {}
 
-    private:
-        DISALLOW_IMPLICIT_CONSTRUCTORS(DummyVerifierTraits);
-    };
+ private:
+  //DISALLOW_IMPLICIT_CONSTRUCTORS(DummyVerifierTraits);
+};
 
-    // Performs actual run-time tracking.
-    class BASE_EXPORT VerifierTraits {
-    public:
-        typedef HANDLE Handle;
+// Performs actual run-time tracking.
+class BASE_EXPORT VerifierTraits {
+ public:
+  typedef HANDLE Handle;
 
-        static void StartTracking(HANDLE handle, const void* owner,
-            const void* pc1, const void* pc2);
-        static void StopTracking(HANDLE handle, const void* owner,
-            const void* pc1, const void* pc2);
+  static void StartTracking(HANDLE handle, const void* owner,
+                            const void* pc1, const void* pc2);
+  static void StopTracking(HANDLE handle, const void* owner,
+                           const void* pc1, const void* pc2);
 
-    private:
-        DISALLOW_IMPLICIT_CONSTRUCTORS(VerifierTraits);
-    };
+ private:
+  //DISALLOW_IMPLICIT_CONSTRUCTORS(VerifierTraits);
+};
 
-    typedef GenericScopedHandle<HandleTraits, VerifierTraits> ScopedHandle;
+typedef GenericScopedHandle<HandleTraits, DummyVerifierTraits> ScopedHandle;
 
-    // This function may be called by the embedder to disable the use of
-    // VerifierTraits at runtime. It has no effect if DummyVerifierTraits is used
-    // for ScopedHandle.
-    BASE_EXPORT void DisableHandleVerifier();
+}  // namespace win
+}  // namespace base
 
-    // This should be called whenever the OS is closing a handle, if extended
-    // verification of improper handle closing is desired. If |handle| is being
-    // tracked by the handle verifier and ScopedHandle is not the one closing it,
-    // a CHECK is generated.
-    BASE_EXPORT void OnHandleBeingClosed(HANDLE handle);
-
-    // This testing function returns the module that the ActiveVerifier concrete
-    // implementation was instantiated in.
-    BASE_EXPORT HMODULE GetHandleVerifierModuleForTesting();
-
-} // namespace win
-} // namespace base
-
-#endif // BASE_WIN_SCOPED_HANDLE_H_
+#endif  // BASE_SCOPED_HANDLE_WIN_H_

@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- *               All right reserved.
+ * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All right reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -27,19 +26,15 @@
 #include "core/layout/api/LineLayoutBlockFlow.h"
 #include "core/layout/line/InlineIterator.h"
 #include "core/layout/line/LineInfo.h"
-#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-enum WhitespacePosition { LeadingWhitespace,
-    TrailingWhitespace };
+enum WhitespacePosition { LeadingWhitespace, TrailingWhitespace };
 
 struct LayoutTextInfo;
 
 class LineBreaker {
-    STACK_ALLOCATED();
-
 public:
     friend class BreakingContext;
     LineBreaker(LineLayoutBlockFlow block)
@@ -48,29 +43,23 @@ public:
         reset();
     }
 
-    InlineIterator nextLineBreak(InlineBidiResolver&,
-        LineInfo&,
-        LayoutTextInfo&,
-        WordMeasurements&);
+    InlineIterator nextLineBreak(InlineBidiResolver&, LineInfo&, LayoutTextInfo&,
+        FloatingObject* lastFloatFromPreviousLine, WordMeasurements&);
 
     bool lineWasHyphenated() { return m_hyphenated; }
-    const Vector<LineLayoutBox>& positionedObjects()
-    {
-        return m_positionedObjects;
-    }
+    const Vector<LayoutBox*>& positionedObjects() { return m_positionedObjects; }
     EClear clear() { return m_clear; }
-
 private:
     void reset();
 
-    void skipLeadingWhitespace(InlineBidiResolver&, LineInfo&, LineWidth&);
+    void skipLeadingWhitespace(InlineBidiResolver&, LineInfo&, FloatingObject* lastFloatFromPreviousLine, LineWidth&);
 
     LineLayoutBlockFlow m_block;
     bool m_hyphenated;
     EClear m_clear;
-    Vector<LineLayoutBox> m_positionedObjects;
+    Vector<LayoutBox*> m_positionedObjects;
 };
 
-} // namespace blink
+}
 
 #endif // LineBreaker_h

@@ -8,8 +8,12 @@
 #include "SkPathMeasure.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 static void test_small_segment3()
 {
+=======
+static void test_small_segment3() {
+>>>>>>> miniblink49
     SkPath path;
     const SkPoint pts[] = {
         { 0, 0 },
@@ -26,6 +30,7 @@ static void test_small_segment3()
     meas.getLength();
 }
 
+<<<<<<< HEAD
 static void test_small_segment2()
 {
     SkPath path;
@@ -35,6 +40,14 @@ static void test_small_segment2()
         { 0, 0 },
         { 10, 10 },
         { 0, 0 },
+=======
+static void test_small_segment2() {
+    SkPath path;
+    const SkPoint pts[] = {
+        { 0, 0 },
+        { 100000000000.0f, 100000000000.0f }, { 0, 0 },
+        { 10, 10 }, { 0, 0 },
+>>>>>>> miniblink49
     };
 
     path.moveTo(pts[0]);
@@ -45,11 +58,18 @@ static void test_small_segment2()
     meas.getLength();
 }
 
+<<<<<<< HEAD
 static void test_small_segment()
 {
     SkPath path;
     const SkPoint pts[] = {
         { 100000, 100000 },
+=======
+static void test_small_segment() {
+    SkPath path;
+    const SkPoint pts[] = {
+        { 100000, 100000},
+>>>>>>> miniblink49
         // big jump between these points, makes a big segment
         { 1.0005f, 0.9999f },
         // tiny (non-zero) jump between these points
@@ -78,15 +98,21 @@ static void test_small_segment()
     meas.getLength();
 }
 
+<<<<<<< HEAD
 DEF_TEST(PathMeasure, reporter)
 {
     SkPath path;
+=======
+DEF_TEST(PathMeasure, reporter) {
+    SkPath  path;
+>>>>>>> miniblink49
 
     path.moveTo(0, 0);
     path.lineTo(SK_Scalar1, 0);
     path.lineTo(SK_Scalar1, SK_Scalar1);
     path.lineTo(0, SK_Scalar1);
 
+<<<<<<< HEAD
     SkPathMeasure meas(path, true);
     SkScalar length = meas.getLength();
     SkASSERT(length == SK_Scalar1 * 4);
@@ -97,12 +123,28 @@ DEF_TEST(PathMeasure, reporter)
     meas.setPath(&path, false);
     length = meas.getLength();
     REPORTER_ASSERT(reporter, length == SK_Scalar1 * 5);
+=======
+    SkPathMeasure   meas(path, true);
+    SkScalar        length = meas.getLength();
+    SkASSERT(length == SK_Scalar1*4);
+
+    path.reset();
+    path.moveTo(0, 0);
+    path.lineTo(SK_Scalar1*3, SK_Scalar1*4);
+    meas.setPath(&path, false);
+    length = meas.getLength();
+    REPORTER_ASSERT(reporter, length == SK_Scalar1*5);
+>>>>>>> miniblink49
 
     path.reset();
     path.addCircle(0, 0, SK_Scalar1);
     meas.setPath(&path, true);
     length = meas.getLength();
+<<<<<<< HEAD
     //    SkDebugf("circle arc-length = %g\n", length);
+=======
+//    SkDebugf("circle arc-length = %g\n", length);
+>>>>>>> miniblink49
 
     // Test the behavior following a close not followed by a move.
     path.reset();
@@ -122,8 +164,13 @@ DEF_TEST(PathMeasure, reporter)
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
+<<<<<<< HEAD
             -SK_ScalarHalf,
             0.0001f));
+=======
+                            -SK_ScalarHalf,
+                            0.0001f));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, position.fY == 0);
     REPORTER_ASSERT(reporter, tangent.fX == -SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
@@ -136,19 +183,32 @@ DEF_TEST(PathMeasure, reporter)
     path.quadTo(SK_Scalar1, 0, SK_Scalar1, 0);
     path.quadTo(SK_Scalar1, SK_Scalar1, SK_Scalar1, SK_Scalar1 * 2);
     path.cubicTo(SK_Scalar1, SK_Scalar1 * 2,
+<<<<<<< HEAD
         SK_Scalar1, SK_Scalar1 * 2,
         SK_Scalar1, SK_Scalar1 * 2);
     path.cubicTo(SK_Scalar1 * 2, SK_Scalar1 * 2,
         SK_Scalar1 * 3, SK_Scalar1 * 2,
         SK_Scalar1 * 4, SK_Scalar1 * 2);
+=======
+                 SK_Scalar1, SK_Scalar1 * 2,
+                 SK_Scalar1, SK_Scalar1 * 2);
+    path.cubicTo(SK_Scalar1*2, SK_Scalar1 * 2,
+                 SK_Scalar1*3, SK_Scalar1 * 2,
+                 SK_Scalar1*4, SK_Scalar1 * 2);
+>>>>>>> miniblink49
     meas.setPath(&path, false);
     length = meas.getLength();
     REPORTER_ASSERT(reporter, length == SK_Scalar1 * 6);
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
+<<<<<<< HEAD
             SK_ScalarHalf,
             0.0001f));
+=======
+                            SK_ScalarHalf,
+                            0.0001f));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, position.fY == 0);
     REPORTER_ASSERT(reporter, tangent.fX == SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
@@ -162,12 +222,21 @@ DEF_TEST(PathMeasure, reporter)
     REPORTER_ASSERT(reporter, meas.getPosTan(4.5f, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
+<<<<<<< HEAD
             2.5f,
             0.0001f));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fY,
             2.0f,
             0.0001f));
+=======
+                            2.5f,
+                            0.0001f));
+    REPORTER_ASSERT(reporter,
+        SkScalarNearlyEqual(position.fY,
+                            2.0f,
+                            0.0001f));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, tangent.fX == SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
 
@@ -183,8 +252,13 @@ DEF_TEST(PathMeasure, reporter)
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
+<<<<<<< HEAD
             SK_ScalarHalf,
             0.0001f));
+=======
+                            SK_ScalarHalf,
+                            0.0001f));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, position.fY == 0);
     REPORTER_ASSERT(reporter, tangent.fX == SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
@@ -194,12 +268,21 @@ DEF_TEST(PathMeasure, reporter)
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
+<<<<<<< HEAD
             1.5f,
             0.0001f));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fY,
             2.0f,
             0.0001f));
+=======
+                            1.5f,
+                            0.0001f));
+    REPORTER_ASSERT(reporter,
+        SkScalarNearlyEqual(position.fY,
+                            2.0f,
+                            0.0001f));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, tangent.fX == -SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
 
@@ -207,6 +290,7 @@ DEF_TEST(PathMeasure, reporter)
     test_small_segment2();
     test_small_segment3();
 }
+<<<<<<< HEAD
 
 DEF_TEST(PathMeasureConic, reporter)
 {
@@ -224,3 +308,5 @@ DEF_TEST(PathMeasureConic, reporter)
     REPORTER_ASSERT(reporter, 19.5f < stdP.fX && stdP.fX < 20.5f);
     REPORTER_ASSERT(reporter, 19.5f < hiP.fX && hiP.fX < 20.5f);
 }
+=======
+>>>>>>> miniblink49

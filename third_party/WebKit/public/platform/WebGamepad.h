@@ -26,14 +26,25 @@
 
 #include "WebCommon.h"
 
+<<<<<<< HEAD
 namespace blink {
 
 #pragma pack(push, 4)
+=======
+#if BLINK_IMPLEMENTATION
+#include "wtf/Assertions.h"
+#endif
+
+namespace blink {
+
+#pragma pack(push, 1)
+>>>>>>> miniblink49
 
 class WebGamepadButton {
 public:
     WebGamepadButton()
         : pressed(false)
+<<<<<<< HEAD
         , touched(false)
         , value(0.)
     {
@@ -41,10 +52,18 @@ public:
     WebGamepadButton(bool pressed, bool touched, double value)
         : pressed(pressed)
         , touched(touched)
+=======
+        , value(0.)
+    {
+    }
+    WebGamepadButton(bool pressed, double value)
+        : pressed(pressed)
+>>>>>>> miniblink49
         , value(value)
     {
     }
     bool pressed;
+<<<<<<< HEAD
     bool touched;
     double value;
 };
@@ -97,6 +116,11 @@ enum WebGamepadHand {
     GamepadHandRight = 2
 };
 
+=======
+    double value;
+};
+
+>>>>>>> miniblink49
 // This structure is intentionally POD and fixed size so that it can be shared
 // memory between hardware polling threads and the rest of the browser. See
 // also WebGamepads.h.
@@ -112,7 +136,10 @@ public:
         , timestamp(0)
         , axesLength(0)
         , buttonsLength(0)
+<<<<<<< HEAD
         , displayId(0)
+=======
+>>>>>>> miniblink49
     {
         id[0] = 0;
         mapping[0] = 0;
@@ -142,6 +169,7 @@ public:
 
     // Mapping type (for example "standard")
     WebUChar mapping[mappingLengthCap];
+<<<<<<< HEAD
 
     WebGamepadPose pose;
 
@@ -151,6 +179,16 @@ public:
 };
 
 #pragma pack(pop)
+=======
+};
+
+#if BLINK_IMPLEMENTATION
+static_assert(sizeof(WebGamepad) == 721, "WebGamepad has wrong size");
+#endif
+
+#pragma pack(pop)
+
+>>>>>>> miniblink49
 }
 
 #endif // WebGamepad_h

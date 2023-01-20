@@ -6,6 +6,7 @@
  */
 
 #include "sk_tool_utils.h"
+<<<<<<< HEAD
 
 #include "../src/fonts/SkRandomScalerContext.h"
 #include "SkCanvas.h"
@@ -19,11 +20,26 @@
 
 #ifdef SK_BUILD_FOR_WIN
 #include "SkTypeface_win.h"
+=======
+#include "SkCanvas.h"
+#include "SkPaint.h"
+#include "SkPoint.h"
+#include "SkTextBlob.h"
+#include "SkFontMgr.h"
+#include "SkGraphics.h"
+#include "SkSurface.h"
+#include "SkTypeface.h"
+#include "../src/fonts/SkRandomScalerContext.h"
+
+#ifdef SK_BUILD_FOR_WIN
+    #include "SkTypeface_win.h"
+>>>>>>> miniblink49
 #endif
 
 #include "Test.h"
 
 #if SK_SUPPORT_GPU
+<<<<<<< HEAD
 #include "GrContext.h"
 #include "GrTest.h"
 
@@ -37,12 +53,24 @@ struct TextBlobWrapper {
         : fBlob(SkRef(blob.fBlob.get()))
     {
     }
+=======
+#include "GrContextFactory.h"
+
+struct TextBlobWrapper {
+    // This class assumes it 'owns' the textblob it wraps, and thus does not need to take a ref
+    explicit TextBlobWrapper(const SkTextBlob* blob) : fBlob(blob) {}
+    TextBlobWrapper(const TextBlobWrapper& blob) : fBlob(SkRef(blob.fBlob.get())) {}
+>>>>>>> miniblink49
 
     SkAutoTUnref<const SkTextBlob> fBlob;
 };
 
+<<<<<<< HEAD
 static void draw(SkCanvas* canvas, int redraw, const SkTArray<TextBlobWrapper>& blobs)
 {
+=======
+static void draw(SkCanvas* canvas, int redraw, const SkTArray<TextBlobWrapper>& blobs) {
+>>>>>>> miniblink49
     int yOffset = 0;
     for (int r = 0; r < redraw; r++) {
         for (int i = 0; i < blobs.count(); i++) {
@@ -59,14 +87,20 @@ static const int kWidth = 1024;
 static const int kHeight = 768;
 
 // This test hammers the GPU textblobcache and font atlas
+<<<<<<< HEAD
 static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContext* context,
     int maxTotalText, int maxGlyphID, int maxFamilies, bool normal,
     bool stressTest)
 {
+=======
+static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContextFactory* factory,
+                                  int maxTotalText, int maxGlyphID, int maxFamilies, bool normal) {
+>>>>>>> miniblink49
     // setup surface
     uint32_t flags = 0;
     SkSurfaceProps props(flags, SkSurfaceProps::kLegacyFontHost_InitType);
 
+<<<<<<< HEAD
     // configure our context for maximum stressing of cache and atlas
     if (stressTest) {
         GrTest::SetupAlwaysEvictAtlas(context);
@@ -75,6 +109,13 @@ static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContext* conte
 
     SkImageInfo info = SkImageInfo::Make(kWidth, kHeight, kN32_SkColorType, kPremul_SkAlphaType);
     auto surface(SkSurface::MakeRenderTarget(context, SkBudgeted::kNo, info, 0, &props));
+=======
+    // We don't typically actually draw with this unittest
+    GrContext* ctx = factory->get(GrContextFactory::kNull_GLContextType);
+    SkImageInfo info = SkImageInfo::Make(kWidth, kHeight, kN32_SkColorType, kPremul_SkAlphaType);
+    SkAutoTUnref<SkSurface> surface(SkSurface::NewRenderTarget(ctx, SkSurface::kNo_Budgeted, info,
+                                                               0, &props));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, surface);
     if (!surface) {
         return;
@@ -104,6 +145,7 @@ static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContext* conte
         SkAutoTUnref<SkFontStyleSet> set(fm->createStyleSet(i));
         for (int j = 0; j < set->count(); ++j) {
             SkFontStyle fs;
+<<<<<<< HEAD
             set->getStyle(j, &fs, nullptr);
 
             // We use a typeface which randomy returns unexpected mask formats to fuzz
@@ -112,6 +154,17 @@ static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContext* conte
                 paint.setTypeface(orig);
             } else {
                 paint.setTypeface(sk_make_sp<SkRandomTypeface>(orig, paint, true));
+=======
+            set->getStyle(j, &fs, NULL);
+
+            // We use a typeface which randomy returns unexpected mask formats to fuzz
+            SkAutoTUnref<SkTypeface> orig(set->createTypeface(j));
+            if (normal) {
+                paint.setTypeface(orig);
+            } else {
+                SkAutoTUnref<SkTypeface> typeface(SkNEW_ARGS(SkRandomTypeface, (orig, paint, true)));
+                paint.setTypeface(typeface);
+>>>>>>> miniblink49
             }
 
             SkTextBlobBuilder builder;
@@ -125,21 +178,35 @@ static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContext* conte
                             paint.setTextSize(160);
                         }
                         const SkTextBlobBuilder::RunBuffer& run = builder.allocRun(paint,
+<<<<<<< HEAD
                             maxTotalText,
                             0, 0,
                             nullptr);
+=======
+                                                                                   maxTotalText,
+                                                                                   0, 0,
+                                                                                   NULL);
+>>>>>>> miniblink49
                         memcpy(run.glyphs, text.get(), maxTotalText * sizeof(uint16_t));
                     }
                 }
             }
+<<<<<<< HEAD
             blobs.emplace_back(builder.build());
+=======
+            SkNEW_APPEND_TO_TARRAY(&blobs, TextBlobWrapper, (builder.build()));
+>>>>>>> miniblink49
         }
     }
 
     // create surface where LCD is impossible
     info = SkImageInfo::MakeN32Premul(kWidth, kHeight);
     SkSurfaceProps propsNoLCD(0, kUnknown_SkPixelGeometry);
+<<<<<<< HEAD
     auto surfaceNoLCD(canvas->makeSurface(info, &propsNoLCD));
+=======
+    SkAutoTUnref<SkSurface> surfaceNoLCD(canvas->newSurface(info, &propsNoLCD));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, surface);
     if (!surface) {
         return;
@@ -152,6 +219,7 @@ static void text_blob_cache_inner(skiatest::Reporter* reporter, GrContext* conte
     draw(canvasNoLCD, 2, blobs);
 
     // test draw after free
+<<<<<<< HEAD
     context->freeGpuResources();
     draw(canvas, 1, blobs);
 
@@ -181,5 +249,28 @@ DEF_GPUTEST_FOR_NULLGL_CONTEXT(TextBlobAbnormal, reporter, ctxInfo)
 DEF_GPUTEST_FOR_NULLGL_CONTEXT(TextBlobStressAbnormal, reporter, ctxInfo)
 {
     text_blob_cache_inner(reporter, ctxInfo.grContext(), 256, 256, 10, false, true);
+=======
+    ctx->freeGpuResources();
+    draw(canvas, 1, blobs);
+
+    ctx->freeGpuResources();
+    draw(canvasNoLCD, 1, blobs);
+
+    // test draw after abandon
+    ctx->abandonContext();
+    draw(canvas, 1, blobs);
+}
+
+DEF_GPUTEST(TextBlobCache, reporter, factory) {
+    text_blob_cache_inner(reporter, factory, 4096, 256, 30, true);
+}
+
+DEF_GPUTEST(TextBlobAbnormal, reporter, factory) {
+#ifdef SK_BUILD_FOR_ANDROID
+    text_blob_cache_inner(reporter, factory, 256, 256, 30, false);
+#else
+    text_blob_cache_inner(reporter, factory, 512, 256, 30, false);
+#endif
+>>>>>>> miniblink49
 }
 #endif

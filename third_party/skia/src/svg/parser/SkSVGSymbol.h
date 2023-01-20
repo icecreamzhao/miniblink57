@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkSVGSymbol_DEFINED
 #define SkSVGSymbol_DEFINED
 
@@ -12,7 +20,10 @@
 
 class SkSVGSymbol : public SkSVGElement {
     DECLARE_SVG_INFO(Symbol);
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkString f_viewBox;
     typedef SkSVGElement INHERITED;

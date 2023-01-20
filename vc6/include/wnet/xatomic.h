@@ -8,9 +8,14 @@
 #include <string.h>
 
 #include <intrin.h>
+<<<<<<< HEAD
 #if defined(__cplusplus)
 //#include <xutility> // weolar
 #endif
+=======
+#include <xutility>
+
+>>>>>>> miniblink49
 #include <intrinvc6.h>
 
 #pragma pack(push,_CRT_PACKING)

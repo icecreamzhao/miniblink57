@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/layout/svg/LayoutSVGBlock.h"
 
 #include "core/layout/LayoutView.h"
@@ -35,35 +36,28 @@ LayoutSVGBlock::LayoutSVGBlock(SVGElement* element)
 {
 }
 
-bool LayoutSVGBlock::allowsOverflowClip() const
+void LayoutSVGBlock::updateFromStyle()
 {
-    // LayoutSVGBlock, used by Layout(SVGText|ForeignObject), is not allowed to
-    // have overflow clip.
-    // LayoutBlock assumes a layer to be present when the overflow clip
-    // functionality is requested. Both Layout(SVGText|ForeignObject) return
-    // 'NoPaintLayer' on 'layerTypeRequired'.
-    // Fine for LayoutSVGText.
+    LayoutBlock::updateFromStyle();
+
+    // LayoutSVGlock, used by Layout(SVGText|ForeignObject), is not allowed to call setHasOverflowClip(true).
+    // LayoutBlock assumes a layer to be present when the overflow clip functionality is requested. Both
+    // Layout(SVGText|ForeignObject) return 'NoDeprecatedPaintLayer' on 'layerTypeRequired'. Fine for LayoutSVGText.
     //
-    // If we want to support overflow rules for <foreignObject> we can choose
-    // between two solutions:
+    // If we want to support overflow rules for <foreignObject> we can choose between two solutions:
     // a) make LayoutSVGForeignObject require layers and SVG layer aware
-    // b) refactor overflow logic out of Layer (as suggested by dhyatt), which is
-    //    a large task
+    // b) reactor overflow logic out of Layer (as suggested by dhyatt), which is a large task
     //
-    // Until this is resolved, disable overflow support. Opera/FF don't support it
-    // as well at the moment (Feb 2010).
+    // Until this is resolved, disable overflow support. Opera/FF don't support it as well at the moment (Feb 2010).
     //
-    // Note: This does NOT affect overflow handling on outer/inner <svg> elements
-    // - this is handled
-    // manually by LayoutSVGRoot - which owns the documents enclosing root layer
-    // and thus works fine.
-    return false;
+    // Note: This does NOT affect overflow handling on outer/inner <svg> elements - this is handled
+    // manually by LayoutSVGRoot - which owns the documents enclosing root layer and thus works fine.
+    setHasOverflowClip(false);
 }
 
 void LayoutSVGBlock::absoluteRects(Vector<IntRect>&, const LayoutPoint&) const
 {
-    // This code path should never be taken for SVG, as we're assuming
-    // useTransforms=true everywhere, absoluteQuads should be used.
+    // This code path should never be taken for SVG, as we're assuming useTransforms=true everywhere, absoluteQuads should be used.
     ASSERT_NOT_REACHED();
 }
 
@@ -73,78 +67,56 @@ void LayoutSVGBlock::willBeDestroyed()
     LayoutBlockFlow::willBeDestroyed();
 }
 
-void LayoutSVGBlock::updateFromStyle()
+void LayoutSVGBlock::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
 {
-    LayoutBlockFlow::updateFromStyle();
-    setFloating(false);
-}
-
-void LayoutSVGBlock::styleDidChange(StyleDifference diff,
-    const ComputedStyle* oldStyle)
-{
-    if (diff.needsFullLayout()) {
+    if (diff.needsFullLayout())
         setNeedsBoundariesUpdate();
-        if (diff.transformChanged())
-            setNeedsTransformUpdate();
-    }
 
     if (isBlendingAllowed()) {
         bool hasBlendModeChanged = (oldStyle && oldStyle->hasBlendMode()) == !style()->hasBlendMode();
         if (parent() && hasBlendModeChanged)
-            parent()->descendantIsolationRequirementsChanged(
-                style()->hasBlendMode() ? DescendantIsolationRequired
-                                        : DescendantIsolationNeedsUpdate);
+            parent()->descendantIsolationRequirementsChanged(style()->hasBlendMode() ? DescendantIsolationRequired : DescendantIsolationNeedsUpdate);
     }
 
     LayoutBlock::styleDidChange(diff, oldStyle);
     SVGResourcesCache::clientStyleChanged(this, diff, styleRef());
 }
 
-void LayoutSVGBlock::mapLocalToAncestor(const LayoutBoxModelObject* ancestor,
-    TransformState& transformState,
-    MapCoordinatesFlags flags) const
+void LayoutSVGBlock::mapLocalToContainer(const LayoutBoxModelObject* paintInvalidationContainer, TransformState& transformState, MapCoordinatesFlags, bool* wasFixed, const PaintInvalidationState* paintInvalidationState) const
 {
-    SVGLayoutSupport::mapLocalToAncestor(this, ancestor, transformState, flags);
+    SVGLayoutSupport::mapLocalToContainer(this, paintInvalidationContainer, transformState, wasFixed, paintInvalidationState);
 }
 
-void LayoutSVGBlock::mapAncestorToLocal(const LayoutBoxModelObject* ancestor,
-    TransformState& transformState,
-    MapCoordinatesFlags flags) const
+const LayoutObject* LayoutSVGBlock::pushMappingToContainer(const LayoutBoxModelObject* ancestorToStopAt, LayoutGeometryMap& geometryMap) const
 {
-    if (this == ancestor)
-        return;
-    SVGLayoutSupport::mapAncestorToLocal(*this, ancestor, transformState, flags);
+    return SVGLayoutSupport::pushMappingToContainer(this, ancestorToStopAt, geometryMap);
 }
 
-const LayoutObject* LayoutSVGBlock::pushMappingToContainer(
-    const LayoutBoxModelObject* ancestorToStopAt,
-    LayoutGeometryMap& geometryMap) const
+LayoutRect LayoutSVGBlock::clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* paintInvalidationState) const
 {
-    return SVGLayoutSupport::pushMappingToContainer(this, ancestorToStopAt,
-        geometryMap);
+    return SVGLayoutSupport::clippedOverflowRectForPaintInvalidation(*this, paintInvalidationContainer, paintInvalidationState);
 }
 
-LayoutRect LayoutSVGBlock::absoluteVisualRect() const
+void LayoutSVGBlock::mapRectToPaintInvalidationBacking(const LayoutBoxModelObject* paintInvalidationContainer, LayoutRect& rect, const PaintInvalidationState* paintInvalidationState) const
 {
-    return SVGLayoutSupport::visualRectInAncestorSpace(*this, *view());
+    FloatRect paintInvalidationRect = rect;
+    const LayoutSVGRoot& svgRoot = SVGLayoutSupport::mapRectToSVGRootForPaintInvalidation(*this, paintInvalidationRect, rect);
+    svgRoot.mapRectToPaintInvalidationBacking(paintInvalidationContainer, rect, paintInvalidationState);
 }
 
-bool LayoutSVGBlock::mapToVisualRectInAncestorSpace(
-    const LayoutBoxModelObject* ancestor,
-    LayoutRect& rect,
-    VisualRectFlags) const
-{
-    return SVGLayoutSupport::mapToVisualRectInAncestorSpace(
-        *this, ancestor, FloatRect(rect), rect);
-}
-
-bool LayoutSVGBlock::nodeAtPoint(HitTestResult&,
-    const HitTestLocation&,
-    const LayoutPoint&,
-    HitTestAction)
+bool LayoutSVGBlock::nodeAtPoint(HitTestResult&, const HitTestLocation&, const LayoutPoint&, HitTestAction)
 {
     ASSERT_NOT_REACHED();
     return false;
 }
 
-} // namespace blink
+void LayoutSVGBlock::invalidateTreeIfNeeded(PaintInvalidationState& paintInvalidationState)
+{
+    if (!shouldCheckForPaintInvalidation(paintInvalidationState))
+        return;
+
+    ForceHorriblySlowRectMapping slowRectMapping(&paintInvalidationState);
+    LayoutBlockFlow::invalidateTreeIfNeeded(paintInvalidationState);
+}
+
+}

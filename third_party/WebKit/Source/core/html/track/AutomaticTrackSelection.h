@@ -7,7 +7,6 @@
 
 #include "core/html/track/TextTrackKindUserPreference.h"
 #include "platform/heap/Handle.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -16,16 +15,12 @@ class TrackGroup;
 
 class AutomaticTrackSelection {
     STACK_ALLOCATED();
-
 public:
     struct Configuration {
-        DISALLOW_NEW();
         Configuration()
             : disableCurrentlyEnabledTracks(false)
             , forceEnableSubtitleOrCaptionTrack(false)
-            , textTrackKindUserPreference(TextTrackKindUserPreference::Default)
-        {
-        }
+            , textTrackKindUserPreference(TextTrackKindUserPreference::Default) { }
 
         bool disableCurrentlyEnabledTracks;
         bool forceEnableSubtitleOrCaptionTrack;

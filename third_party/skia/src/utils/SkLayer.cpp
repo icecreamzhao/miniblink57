@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -11,14 +15,23 @@
 //#define DEBUG_TRACK_NEW_DELETE
 
 #ifdef DEBUG_TRACK_NEW_DELETE
+<<<<<<< HEAD
 static int gLayerAllocCount;
+=======
+    static int gLayerAllocCount;
+>>>>>>> miniblink49
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 SkLayer::SkLayer()
 {
     fParent = nullptr;
+=======
+SkLayer::SkLayer() {
+    fParent = NULL;
+>>>>>>> miniblink49
     m_opacity = SK_Scalar1;
     m_size.set(0, 0);
     m_position.set(0, 0);
@@ -34,10 +47,15 @@ SkLayer::SkLayer()
 #endif
 }
 
+<<<<<<< HEAD
 SkLayer::SkLayer(const SkLayer& src)
     : INHERITED()
 {
     fParent = nullptr;
+=======
+SkLayer::SkLayer(const SkLayer& src) : INHERITED() {
+    fParent = NULL;
+>>>>>>> miniblink49
     m_opacity = src.m_opacity;
     m_size = src.m_size;
     m_position = src.m_position;
@@ -53,8 +71,12 @@ SkLayer::SkLayer(const SkLayer& src)
 #endif
 }
 
+<<<<<<< HEAD
 SkLayer::~SkLayer()
 {
+=======
+SkLayer::~SkLayer() {
+>>>>>>> miniblink49
     this->removeChildren();
 
 #ifdef DEBUG_TRACK_NEW_DELETE
@@ -65,6 +87,7 @@ SkLayer::~SkLayer()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 bool SkLayer::isInheritFromRootTransform() const
 {
     return (fFlags & kInheritFromRootTransform_Flag) != 0;
@@ -72,6 +95,13 @@ bool SkLayer::isInheritFromRootTransform() const
 
 void SkLayer::setInheritFromRootTransform(bool doInherit)
 {
+=======
+bool SkLayer::isInheritFromRootTransform() const {
+    return (fFlags & kInheritFromRootTransform_Flag) != 0;
+}
+
+void SkLayer::setInheritFromRootTransform(bool doInherit) {
+>>>>>>> miniblink49
     if (doInherit) {
         fFlags |= kInheritFromRootTransform_Flag;
     } else {
@@ -79,6 +109,7 @@ void SkLayer::setInheritFromRootTransform(bool doInherit)
     }
 }
 
+<<<<<<< HEAD
 void SkLayer::setMatrix(const SkMatrix& matrix)
 {
     fMatrix = matrix;
@@ -86,11 +117,19 @@ void SkLayer::setMatrix(const SkMatrix& matrix)
 
 void SkLayer::setChildrenMatrix(const SkMatrix& matrix)
 {
+=======
+void SkLayer::setMatrix(const SkMatrix& matrix) {
+    fMatrix = matrix;
+}
+
+void SkLayer::setChildrenMatrix(const SkMatrix& matrix) {
+>>>>>>> miniblink49
     fChildrenMatrix = matrix;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 int SkLayer::countChildren() const
 {
     return m_children.count();
@@ -98,10 +137,18 @@ int SkLayer::countChildren() const
 
 SkLayer* SkLayer::getChild(int index) const
 {
+=======
+int SkLayer::countChildren() const {
+    return m_children.count();
+}
+
+SkLayer* SkLayer::getChild(int index) const {
+>>>>>>> miniblink49
     if ((unsigned)index < (unsigned)m_children.count()) {
         SkASSERT(m_children[index]->fParent == this);
         return m_children[index];
     }
+<<<<<<< HEAD
     return nullptr;
 }
 
@@ -111,18 +158,33 @@ SkLayer* SkLayer::addChild(SkLayer* child)
     child->ref();
     child->detachFromParent();
     SkASSERT(child->fParent == nullptr);
+=======
+    return NULL;
+}
+
+SkLayer* SkLayer::addChild(SkLayer* child) {
+    SkASSERT(this != child);
+    child->ref();
+    child->detachFromParent();
+    SkASSERT(child->fParent == NULL);
+>>>>>>> miniblink49
     child->fParent = this;
 
     *m_children.append() = child;
     return child;
 }
 
+<<<<<<< HEAD
 void SkLayer::detachFromParent()
 {
+=======
+void SkLayer::detachFromParent() {
+>>>>>>> miniblink49
     if (fParent) {
         int index = fParent->m_children.find(this);
         SkASSERT(index >= 0);
         fParent->m_children.remove(index);
+<<<<<<< HEAD
         fParent = nullptr;
         this->unref(); // this call might delete us
     }
@@ -130,20 +192,38 @@ void SkLayer::detachFromParent()
 
 void SkLayer::removeChildren()
 {
+=======
+        fParent = NULL;
+        this->unref();  // this call might delete us
+    }
+}
+
+void SkLayer::removeChildren() {
+>>>>>>> miniblink49
     int count = m_children.count();
     for (int i = 0; i < count; i++) {
         SkLayer* child = m_children[i];
         SkASSERT(child->fParent == this);
+<<<<<<< HEAD
         child->fParent = nullptr; // in case it has more than one owner
+=======
+        child->fParent = NULL;  // in case it has more than one owner
+>>>>>>> miniblink49
         child->unref();
     }
     m_children.reset();
 }
 
+<<<<<<< HEAD
 SkLayer* SkLayer::getRootLayer() const
 {
     const SkLayer* root = this;
     while (root->fParent != nullptr) {
+=======
+SkLayer* SkLayer::getRootLayer() const {
+    const SkLayer* root = this;
+    while (root->fParent != NULL) {
+>>>>>>> miniblink49
         root = root->fParent;
     }
     return const_cast<SkLayer*>(root);
@@ -151,8 +231,12 @@ SkLayer* SkLayer::getRootLayer() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void SkLayer::getLocalTransform(SkMatrix* matrix) const
 {
+=======
+void SkLayer::getLocalTransform(SkMatrix* matrix) const {
+>>>>>>> miniblink49
     matrix->setTranslate(m_position.fX, m_position.fY);
 
     SkScalar tx = SkScalarMul(m_anchorPoint.fX, m_size.width());
@@ -162,8 +246,12 @@ void SkLayer::getLocalTransform(SkMatrix* matrix) const
     matrix->preTranslate(-tx, -ty);
 }
 
+<<<<<<< HEAD
 void SkLayer::localToGlobal(SkMatrix* matrix) const
 {
+=======
+void SkLayer::localToGlobal(SkMatrix* matrix) const {
+>>>>>>> miniblink49
     this->getLocalTransform(matrix);
 
     if (this->isInheritFromRootTransform()) {
@@ -172,7 +260,11 @@ void SkLayer::localToGlobal(SkMatrix* matrix) const
     }
 
     const SkLayer* layer = this;
+<<<<<<< HEAD
     while (layer->fParent != nullptr) {
+=======
+    while (layer->fParent != NULL) {
+>>>>>>> miniblink49
         layer = layer->fParent;
 
         SkMatrix tmp;
@@ -184,15 +276,24 @@ void SkLayer::localToGlobal(SkMatrix* matrix) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void SkLayer::onDraw(SkCanvas*, SkScalar opacity)
 {
     //    SkDebugf("----- no onDraw for %p\n", this);
+=======
+void SkLayer::onDraw(SkCanvas*, SkScalar opacity) {
+//    SkDebugf("----- no onDraw for %p\n", this);
+>>>>>>> miniblink49
 }
 
 #include "SkString.h"
 
+<<<<<<< HEAD
 void SkLayer::draw(SkCanvas* canvas, SkScalar opacity)
 {
+=======
+void SkLayer::draw(SkCanvas* canvas, SkScalar opacity) {
+>>>>>>> miniblink49
 #if 0
     SkString str1, str2;
  //   this->getMatrix().toDumpString(&str1);
@@ -204,7 +305,11 @@ void SkLayer::draw(SkCanvas* canvas, SkScalar opacity)
 
     opacity = SkScalarMul(opacity, this->getOpacity());
     if (opacity <= 0) {
+<<<<<<< HEAD
         //        SkDebugf("---- abort drawing %p opacity %g\n", this, opacity);
+=======
+//        SkDebugf("---- abort drawing %p opacity %g\n", this, opacity);
+>>>>>>> miniblink49
         return;
     }
 

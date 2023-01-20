@@ -53,10 +53,14 @@ public:
     };
 
     virtual ~WebMediaSource() { }
+<<<<<<< HEAD
     virtual AddStatus addSourceBuffer(const WebString& type,
         const WebString& codecs,
         WebSourceBuffer**)
         = 0;
+=======
+    virtual AddStatus addSourceBuffer(const WebString& type, const WebVector<WebString>& codecs, WebSourceBuffer**) = 0;
+>>>>>>> miniblink49
     virtual double duration() = 0;
     virtual void setDuration(double) = 0;
     virtual void markEndOfStream(EndOfStreamStatus) = 0;

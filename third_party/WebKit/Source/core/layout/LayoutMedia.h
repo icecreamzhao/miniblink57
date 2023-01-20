@@ -35,18 +35,10 @@ class HTMLMediaElement;
 class LayoutMedia : public LayoutImage {
 public:
     explicit LayoutMedia(HTMLMediaElement*);
-    ~LayoutMedia() override;
+    virtual ~LayoutMedia();
 
-    LayoutObject* firstChild() const
-    {
-        ASSERT(children() == virtualChildren());
-        return children()->firstChild();
-    }
-    LayoutObject* lastChild() const
-    {
-        ASSERT(children() == virtualChildren());
-        return children()->lastChild();
-    }
+    LayoutObject* firstChild() const { ASSERT(children() == virtualChildren()); return children()->firstChild(); }
+    LayoutObject* lastChild() const { ASSERT(children() == virtualChildren()); return children()->lastChild(); }
 
     // If you have a LayoutMedia, use firstChild or lastChild instead.
     void slowFirstChild() const = delete;
@@ -57,36 +49,27 @@ public:
 
     HTMLMediaElement* mediaElement() const;
 
-    const char* name() const override { return "LayoutMedia"; }
+    virtual const char* name() const override { return "LayoutMedia"; }
 
 protected:
-    void layout() override;
+    virtual void layout() override;
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectMedia || LayoutImage::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectMedia || LayoutImage::isOfType(type); }
 
 private:
-    LayoutObjectChildList* virtualChildren() final { return children(); }
-    const LayoutObjectChildList* virtualChildren() const final
-    {
-        return children();
-    }
+    virtual LayoutObjectChildList* virtualChildren() override final { return children(); }
+    virtual const LayoutObjectChildList* virtualChildren() const override final { return children(); }
 
-    PaintLayerType layerTypeRequired() const override { return NormalPaintLayer; }
+    virtual DeprecatedPaintLayerType layerTypeRequired() const override { return NormalDeprecatedPaintLayer; }
 
-    bool canHaveChildren() const final { return true; }
-    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const final;
+    virtual bool canHaveChildren() const override final { return true; }
+    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override final;
 
-    bool isImage() const final { return false; }
-    void paintReplaced(const PaintInfo&, const LayoutPoint&) const override;
+    virtual bool isImage() const override final { return false; }
+    virtual void paintReplaced(const PaintInfo&, const LayoutPoint&) override;
 
-    bool backgroundShouldAlwaysBeClipped() const final { return false; }
+    virtual bool backgroundShouldAlwaysBeClipped() const override final { return false; }
 
-    LayoutUnit computePanelWidth(const LayoutRect& mediaWidth) const;
-
-    Optional<LayoutUnit> m_lastReportedPanelWidth;
     LayoutObjectChildList m_children;
 };
 

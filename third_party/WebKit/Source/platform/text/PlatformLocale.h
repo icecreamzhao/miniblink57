@@ -29,25 +29,39 @@
 #include "platform/DateComponents.h"
 #include "platform/Language.h"
 #include "public/platform/WebLocalizedString.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT Locale {
     WTF_MAKE_NONCOPYABLE(Locale);
+<<<<<<< HEAD
     USING_FAST_MALLOC(Locale);
 
 public:
     static std::unique_ptr<Locale> create(const String& localeIdentifier);
+=======
+public:
+    static PassOwnPtr<Locale> create(const String& localeIdentifier);
+>>>>>>> miniblink49
     static Locale& defaultLocale();
 
     String queryString(WebLocalizedString::Name);
     String queryString(WebLocalizedString::Name, const String& parameter);
+<<<<<<< HEAD
     String queryString(WebLocalizedString::Name,
         const String& parameter1,
         const String& parameter2);
+=======
+    String queryString(WebLocalizedString::Name, const String& parameter1, const String& parameter2);
+>>>>>>> miniblink49
     String validationMessageTooLongText(unsigned valueLength, int maxLength);
     String validationMessageTooShortText(unsigned valueLength, int minLength);
 
@@ -66,11 +80,20 @@ public:
 
     // Remove characters from |input| if a character is not included in
     // locale-specific number characters and |standardChars|.
+<<<<<<< HEAD
     String stripInvalidNumberCharacters(const String& input,
         const String& standardChars) const;
 
     // Returns localized decimal separator, e.g. "." for English, "," for French.
     String localizedDecimalSeparator();
+=======
+    String stripInvalidNumberCharacters(const String& input, const String& standardChars) const;
+
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+    // Returns localized decimal separator, e.g. "." for English, "," for French.
+    String localizedDecimalSeparator();
+#endif
+>>>>>>> miniblink49
 
     // Returns date format in Unicode TR35 LDML[1] containing day of month,
     // month, and year, e.g. "dd/mm/yyyy"
@@ -139,16 +162,24 @@ public:
     // object.
     virtual bool isRTL() = 0;
 
+<<<<<<< HEAD
     enum FormatType { FormatTypeUnspecified,
         FormatTypeShort,
         FormatTypeMedium };
+=======
+    enum FormatType { FormatTypeUnspecified, FormatTypeShort, FormatTypeMedium };
+>>>>>>> miniblink49
 
     // Serializes the specified date into a formatted date string to
     // display to the user. If an implementation doesn't support
     // localized dates the function should return an empty string.
     // FormatType can be used to specify if you want the short format.
+<<<<<<< HEAD
     String formatDateTime(const DateComponents&,
         FormatType = FormatTypeUnspecified);
+=======
+    String formatDateTime(const DateComponents&, FormatType = FormatTypeUnspecified);
+>>>>>>> miniblink49
 
     virtual ~Locale();
 
@@ -160,6 +191,7 @@ protected:
         DecimalSymbolsSize
     };
 
+<<<<<<< HEAD
     Locale()
         : m_hasLocaleData(false)
     {
@@ -176,6 +208,14 @@ private:
         bool& isNegative,
         unsigned& startIndex,
         unsigned& endIndex);
+=======
+    Locale() : m_hasLocaleData(false) { }
+    virtual void initializeLocaleData() = 0;
+    void setLocaleData(const Vector<String, DecimalSymbolsSize>&, const String& positivePrefix, const String& positiveSuffix, const String& negativePrefix, const String& negativeSuffix);
+
+private:
+    bool detectSignAndGetDigitRange(const String& input, bool& isNegative, unsigned& startIndex, unsigned& endIndex);
+>>>>>>> miniblink49
     unsigned matchedDecimalSymbolIndex(const String& input, unsigned& position);
 
     String m_decimalSymbols[DecimalSymbolsSize];

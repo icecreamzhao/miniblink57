@@ -19,9 +19,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/filters/FETile.h"
 
 #include "SkTileImageFilter.h"
+=======
+#include "config.h"
+#include "platform/graphics/filters/FETile.h"
+
+#include "SkTileImageFilter.h"
+
+>>>>>>> miniblink49
 #include "platform/graphics/filters/Filter.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
@@ -33,6 +41,7 @@ FETile::FETile(Filter* filter)
 {
 }
 
+<<<<<<< HEAD
 FETile* FETile::create(Filter* filter)
 {
     return new FETile(filter);
@@ -54,6 +63,39 @@ sk_sp<SkImageFilter> FETile::createImageFilter()
         srcRect = inputEffect(0)->filterPrimitiveSubregion();
     FloatRect dstRect = filterPrimitiveSubregion();
     return SkTileImageFilter::Make(srcRect, dstRect, std::move(input));
+=======
+PassRefPtrWillBeRawPtr<FETile> FETile::create(Filter* filter)
+{
+    return adoptRefWillBeNoop(new FETile(filter));
+}
+
+FloatRect FETile::mapPaintRect(const FloatRect& rect, bool forward)
+{
+    return forward ? maxEffectRect() : inputEffect(0)->maxEffectRect();
+}
+
+static FloatRect getRect(FilterEffect* effect)
+{
+    FloatRect result = effect->filter()->filterRegion();
+    FloatRect boundaries = effect->effectBoundaries();
+    if (effect->hasX())
+        result.setX(boundaries.x());
+    if (effect->hasY())
+        result.setY(boundaries.y());
+    if (effect->hasWidth())
+        result.setWidth(boundaries.width());
+    if (effect->hasHeight())
+        result.setHeight(boundaries.height());
+    return result;
+}
+
+PassRefPtr<SkImageFilter> FETile::createImageFilter(SkiaImageFilterBuilder* builder)
+{
+    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
+    FloatRect srcRect = inputEffect(0) ? getRect(inputEffect(0)) : filter()->filterRegion();
+    FloatRect dstRect = getRect(this);
+    return adoptRef(SkTileImageFilter::Create(srcRect, dstRect, input.get()));
+>>>>>>> miniblink49
 }
 
 TextStream& FETile::externalRepresentation(TextStream& ts, int indent) const

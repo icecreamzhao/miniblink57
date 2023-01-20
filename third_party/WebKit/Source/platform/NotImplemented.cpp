@@ -23,21 +23,35 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/NotImplemented.h"
 #include "config.h"
 
 //#include "platform/Logging.h"
+=======
+#include "config.h"
+#include "platform/NotImplemented.h"
+
+#include "platform/Logging.h"
+>>>>>>> miniblink49
 #include <windows.h>
 
 namespace blink {
 
 #if !LOG_DISABLED
 
+<<<<<<< HEAD
 void* notImplementedLoggingChannel()
 {
     DebugBreak();
     //return &LogNotYetImplemented;
     return nullptr;
+=======
+WTFLogChannel* notImplementedLoggingChannel()
+{
+    DebugBreak();
+    return &LogNotYetImplemented;
+>>>>>>> miniblink49
 }
 
 #endif

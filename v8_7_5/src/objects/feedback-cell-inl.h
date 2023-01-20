@@ -17,6 +17,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(FeedbackCell, Struct)
 
     CAST_ACCESSOR(FeedbackCell)
@@ -39,3 +40,17 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_FEEDBACK_CELL_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(FeedbackCell, Struct)
+
+CAST_ACCESSOR(FeedbackCell)
+
+ACCESSORS(FeedbackCell, value, HeapObject, kValueOffset)
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_FEEDBACK_CELL_INL_H_
+>>>>>>> miniblink49

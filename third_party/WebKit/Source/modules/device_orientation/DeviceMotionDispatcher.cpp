@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/device_orientation/DeviceMotionDispatcher.h"
 
 #include "modules/device_orientation/DeviceMotionController.h"
@@ -38,6 +42,7 @@ namespace blink {
 
 DeviceMotionDispatcher& DeviceMotionDispatcher::instance()
 {
+<<<<<<< HEAD
     DEFINE_STATIC_LOCAL(DeviceMotionDispatcher, deviceMotionDispatcher,
         (new DeviceMotionDispatcher));
     return deviceMotionDispatcher;
@@ -46,6 +51,19 @@ DeviceMotionDispatcher& DeviceMotionDispatcher::instance()
 DeviceMotionDispatcher::DeviceMotionDispatcher() { }
 
 DeviceMotionDispatcher::~DeviceMotionDispatcher() { }
+=======
+    DEFINE_STATIC_LOCAL(Persistent<DeviceMotionDispatcher>, deviceMotionDispatcher, (new DeviceMotionDispatcher()));
+    return *deviceMotionDispatcher;
+}
+
+DeviceMotionDispatcher::DeviceMotionDispatcher()
+{
+}
+
+DeviceMotionDispatcher::~DeviceMotionDispatcher()
+{
+}
+>>>>>>> miniblink49
 
 DEFINE_TRACE(DeviceMotionDispatcher)
 {
@@ -55,17 +73,29 @@ DEFINE_TRACE(DeviceMotionDispatcher)
 
 void DeviceMotionDispatcher::startListening()
 {
+<<<<<<< HEAD
     Platform::current()->startListening(WebPlatformEventTypeDeviceMotion, this);
+=======
+    Platform::current()->startListening(WebPlatformEventDeviceMotion, this);
+>>>>>>> miniblink49
 }
 
 void DeviceMotionDispatcher::stopListening()
 {
+<<<<<<< HEAD
     Platform::current()->stopListening(WebPlatformEventTypeDeviceMotion);
     m_lastDeviceMotionData.clear();
 }
 
 void DeviceMotionDispatcher::didChangeDeviceMotion(
     const WebDeviceMotionData& motion)
+=======
+    Platform::current()->stopListening(WebPlatformEventDeviceMotion);
+    m_lastDeviceMotionData.clear();
+}
+
+void DeviceMotionDispatcher::didChangeDeviceMotion(const WebDeviceMotionData& motion)
+>>>>>>> miniblink49
 {
     m_lastDeviceMotionData = DeviceMotionData::create(motion);
     notifyControllers();

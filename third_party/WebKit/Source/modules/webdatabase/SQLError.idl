@@ -27,6 +27,10 @@
  */
 
 [
+<<<<<<< HEAD
+=======
+    GarbageCollected,
+>>>>>>> miniblink49
     NoInterfaceObject
 ] interface SQLError {
     readonly attribute unsigned long code;

@@ -8,6 +8,7 @@
 #ifndef SkData_DEFINED
 #define SkData_DEFINED
 
+<<<<<<< HEAD
 #include <stdio.h>
 
 #include "SkRefCnt.h"
@@ -16,6 +17,13 @@ class SkStream;
 
 #define SK_SUPPORT_LEGACY_DATA_FACTORIES
 
+=======
+#include "SkRefCnt.h"
+
+struct SkFILE;
+class SkStream;
+
+>>>>>>> miniblink49
 /**
  *  SkData holds an immutable data buffer. Not only is the data immutable,
  *  but the actual ptr that is returned (by data() or bytes()) is guaranteed
@@ -39,8 +47,12 @@ public:
      *  Like data(), returns a read-only ptr into the data, but in this case
      *  it is cast to uint8_t*, to make it easy to add an offset to it.
      */
+<<<<<<< HEAD
     const uint8_t* bytes() const
     {
+=======
+    const uint8_t* bytes() const {
+>>>>>>> miniblink49
         return reinterpret_cast<const uint8_t*>(fPtr);
     }
 
@@ -49,8 +61,12 @@ public:
      *  This call will assert that the refcnt is 1, as a precaution against modifying the
      *  contents when another client/thread has access to the data.
      */
+<<<<<<< HEAD
     void* writable_data()
     {
+=======
+    void* writable_data() {
+>>>>>>> miniblink49
         if (fSize) {
             // only assert we're unique if we're not empty
             SkASSERT(this->unique());
@@ -71,7 +87,10 @@ public:
      *  effectively returning 0 == memcmp(...)
      */
     bool equals(const SkData* other) const;
+<<<<<<< HEAD
     bool equals(sk_sp<const SkData>& other) const { return this->equals(other.get()); }
+=======
+>>>>>>> miniblink49
 
     /**
      *  Function that, if provided, will be called when the SkData goes out
@@ -82,13 +101,21 @@ public:
     /**
      *  Create a new dataref by copying the specified data
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeWithCopy(const void* data, size_t length);
+=======
+    static SkData* NewWithCopy(const void* data, size_t length);
+>>>>>>> miniblink49
 
     /**
      *  Create a new data with uninitialized contents. The caller should call writable_data()
      *  to write into the buffer, but this must be done before another ref() is made.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeUninitialized(size_t length);
+=======
+    static SkData* NewUninitialized(size_t length);
+>>>>>>> miniblink49
 
     /**
      *  Create a new dataref by copying the specified c-string
@@ -96,33 +123,51 @@ public:
      *  equal to strlen(cstr) + 1. If cstr is NULL, it will be treated the same
      *  as "".
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeWithCString(const char cstr[]);
+=======
+    static SkData* NewWithCString(const char cstr[]);
+>>>>>>> miniblink49
 
     /**
      *  Create a new dataref, taking the ptr as is, and using the
      *  releaseproc to free it. The proc may be NULL.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeWithProc(const void* ptr, size_t length, ReleaseProc proc, void* ctx);
+=======
+    static SkData* NewWithProc(const void* ptr, size_t length, ReleaseProc proc, void* context);
+>>>>>>> miniblink49
 
     /**
      *  Call this when the data parameter is already const and will outlive the lifetime of the
      *  SkData. Suitable for with const globals.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeWithoutCopy(const void* data, size_t length)
     {
         return MakeWithProc(data, length, DummyReleaseProc, nullptr);
+=======
+    static SkData* NewWithoutCopy(const void* data, size_t length) {
+        return NewWithProc(data, length, DummyReleaseProc, NULL);
+>>>>>>> miniblink49
     }
 
     /**
      *  Create a new dataref from a pointer allocated by malloc. The Data object
      *  takes ownership of that allocation, and will handling calling sk_free.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeFromMalloc(const void* data, size_t length);
+=======
+    static SkData* NewFromMalloc(const void* data, size_t length);
+>>>>>>> miniblink49
 
     /**
      *  Create a new dataref the file with the specified path.
      *  If the file cannot be opened, this returns NULL.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeFromFileName(const char path[]);
 
     /**
@@ -133,6 +178,18 @@ public:
      *  Returns NULL on failure.
      */
     static sk_sp<SkData> MakeFromFILE(FILE* f);
+=======
+    static SkData* NewFromFileName(const char path[]);
+
+    /**
+     *  Create a new dataref from a SkFILE.
+     *  This does not take ownership of the SkFILE, nor close it.
+     *  The caller is free to close the SkFILE at its convenience.
+     *  The SkFILE must be open for reading only.
+     *  Returns NULL on failure.
+     */
+    static SkData* NewFromFILE(SkFILE* f);
+>>>>>>> miniblink49
 
     /**
      *  Create a new dataref from a file descriptor.
@@ -141,25 +198,38 @@ public:
      *  The file descriptor must be open for reading only.
      *  Returns NULL on failure.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeFromFD(int fd);
+=======
+    static SkData* NewFromFD(int fd);
+>>>>>>> miniblink49
 
     /**
      *  Attempt to read size bytes into a SkData. If the read succeeds, return the data,
      *  else return NULL. Either way the stream's cursor may have been changed as a result
      *  of calling read().
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeFromStream(SkStream*, size_t size);
+=======
+    static SkData* NewFromStream(SkStream*, size_t size);
+>>>>>>> miniblink49
 
     /**
      *  Create a new dataref using a subset of the data in the specified
      *  src dataref.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeSubset(const SkData* src, size_t offset, size_t length);
+=======
+    static SkData* NewSubset(const SkData* src, size_t offset, size_t length);
+>>>>>>> miniblink49
 
     /**
      *  Returns a new empty dataref (or a reference to a shared empty dataref).
      *  New or shared, the caller must see that unref() is eventually called.
      */
+<<<<<<< HEAD
     static sk_sp<SkData> MakeEmpty();
 
 #ifdef SK_SUPPORT_LEGACY_DATA_FACTORIES
@@ -211,6 +281,21 @@ private:
     explicit SkData(size_t size); // inplace new/delete
     virtual ~SkData();
 
+=======
+    static SkData* NewEmpty();
+
+private:
+    ReleaseProc fReleaseProc;
+    void*       fReleaseProcContext;
+    void*       fPtr;
+    size_t      fSize;
+
+    SkData(const void* ptr, size_t size, ReleaseProc, void* context);
+    explicit SkData(size_t size);   // inplace new/delete
+    virtual ~SkData();
+
+
+>>>>>>> miniblink49
     // Objects of this type are sometimes created in a custom fashion using sk_malloc_throw and
     // therefore must be sk_freed. We overload new to also call sk_malloc_throw so that memory
     // can be unconditionally released using sk_free in an overloaded delete. Overloading regular
@@ -223,16 +308,27 @@ private:
     friend SkData* sk_new_empty_data();
 
     // shared internal factory
+<<<<<<< HEAD
     static sk_sp<SkData> PrivateNewWithCopy(const void* srcOrNull, size_t length);
 
     static void DummyReleaseProc(const void*, void*); // {}
+=======
+    static SkData* PrivateNewWithCopy(const void* srcOrNull, size_t length);
+
+    static void DummyReleaseProc(const void*, void*) {}
+>>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };
 
+<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_DATA_FACTORIES
 /** Typedef of SkAutoTUnref<SkData> for automatically unref-ing a SkData. */
 typedef SkAutoTUnref<SkData> SkAutoDataUnref;
 #endif
+=======
+/** Typedef of SkAutoTUnref<SkData> for automatically unref-ing a SkData. */
+typedef SkAutoTUnref<SkData> SkAutoDataUnref;
+>>>>>>> miniblink49
 
 #endif

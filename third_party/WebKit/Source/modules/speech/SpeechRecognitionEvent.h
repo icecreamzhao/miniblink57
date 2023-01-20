@@ -38,6 +38,7 @@ class Document;
 
 class SpeechRecognitionEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static SpeechRecognitionEvent* create(const AtomicString&,
@@ -48,12 +49,25 @@ public:
         unsigned long resultIndex,
         const HeapVector<Member<SpeechRecognitionResult>>& results);
     static SpeechRecognitionEvent* createNoMatch(SpeechRecognitionResult*);
+=======
+public:
+    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> create();
+    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> create(const AtomicString&, const SpeechRecognitionEventInit&);
+    ~SpeechRecognitionEvent() override;
+
+    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> createResult(unsigned long resultIndex, const HeapVector<Member<SpeechRecognitionResult>>& results);
+    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> createNoMatch(SpeechRecognitionResult*);
+>>>>>>> miniblink49
 
     unsigned long resultIndex() const { return m_resultIndex; }
     SpeechRecognitionResultList* results() const { return m_results; }
 
+<<<<<<< HEAD
     // These two methods are here to satisfy the specification which requires
     // these attributes to exist.
+=======
+    // These two methods are here to satisfy the specification which requires these attributes to exist.
+>>>>>>> miniblink49
     Document* interpretation() { return nullptr; }
     Document* emma() { return nullptr; }
 
@@ -63,6 +77,7 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     SpeechRecognitionEvent(const AtomicString&,
         const SpeechRecognitionEventInit&);
     SpeechRecognitionEvent(const AtomicString& eventName,
@@ -71,6 +86,14 @@ private:
 
     unsigned long m_resultIndex;
     Member<SpeechRecognitionResultList> m_results;
+=======
+    SpeechRecognitionEvent();
+    SpeechRecognitionEvent(const AtomicString&, const SpeechRecognitionEventInit&);
+    SpeechRecognitionEvent(const AtomicString& eventName, unsigned long resultIndex, SpeechRecognitionResultList* results);
+
+    unsigned long m_resultIndex;
+    PersistentWillBeMember<SpeechRecognitionResultList> m_results;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

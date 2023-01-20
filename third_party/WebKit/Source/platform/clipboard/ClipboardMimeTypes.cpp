@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/clipboard/ClipboardMimeTypes.h"
 
 namespace blink {
@@ -36,7 +40,10 @@ const char mimeTypeText[] = "text";
 const char mimeTypeTextPlain[] = "text/plain";
 const char mimeTypeTextPlainEtc[] = "text/plain;";
 const char mimeTypeTextHTML[] = "text/html";
+<<<<<<< HEAD
 const char mimeTypeTextRTF[] = "text/rtf";
+=======
+>>>>>>> miniblink49
 const char mimeTypeURL[] = "url";
 const char mimeTypeTextURIList[] = "text/uri-list";
 const char mimeTypeDownloadURL[] = "downloadurl";

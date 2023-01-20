@@ -24,6 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/network/NetworkHints.h"
 
 #include "public/platform/Platform.h"
@@ -41,6 +45,7 @@ void preconnect(const KURL& url, const CrossOriginAttributeValue crossOrigin)
 {
     if (WebPrescientNetworking* prescientNetworking = Platform::current()->prescientNetworking()) {
         bool allowCredentials = (crossOrigin != CrossOriginAttributeAnonymous);
+<<<<<<< HEAD
         prescientNetworking->preconnect(url, allowCredentials);
     }
 }
@@ -49,6 +54,13 @@ void sendNavigationHint(const KURL& url, WebNavigationHintType type)
 {
     if (WebPrescientNetworking* prescientNetworking = Platform::current()->prescientNetworking()) {
         prescientNetworking->sendNavigationHint(url, type);
+=======
+        // TODO(yoav): Call only the crossorigin interface once everything is hooked up.
+        if (crossOrigin == CrossOriginAttributeNotSet)
+            prescientNetworking->preconnect(url);
+        else
+            prescientNetworking->preconnect(url, allowCredentials);
+>>>>>>> miniblink49
     }
 }
 

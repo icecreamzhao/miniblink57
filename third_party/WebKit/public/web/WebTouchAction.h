@@ -33,6 +33,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 // Flags for permitted touch actions, specified in
 // http://w3c.github.io/pointerevents/#the-touch-action-css-property.
 enum WebTouchAction {
@@ -65,6 +66,25 @@ inline WebTouchAction& operator&=(WebTouchAction& a, WebTouchAction b)
 {
     return a = a & b;
 }
+=======
+// Flags for permitted touch actions, specified in http://w3c.github.io/pointerevents/#the-touch-action-css-property.
+enum WebTouchAction {
+    WebTouchActionAuto = 0x0,
+    WebTouchActionNone = 0x1,
+    WebTouchActionPanLeft = 0x2,
+    WebTouchActionPanRight = 0x4,
+    WebTouchActionPanX = WebTouchActionPanLeft | WebTouchActionPanRight,
+    WebTouchActionPanUp = 0x8,
+    WebTouchActionPanDown = 0x10,
+    WebTouchActionPanY = WebTouchActionPanUp | WebTouchActionPanDown,
+    WebTouchActionPinchZoom = 0x20,
+};
+inline WebTouchAction operator| (WebTouchAction a, WebTouchAction b) { return WebTouchAction(int(a) | int(b)); }
+inline WebTouchAction& operator|= (WebTouchAction& a, WebTouchAction b) { return a = a | b; }
+inline WebTouchAction operator& (WebTouchAction a, WebTouchAction b) { return WebTouchAction(int(a) & int(b)); }
+inline WebTouchAction& operator&= (WebTouchAction& a, WebTouchAction b) { return a = a & b; }
+
+>>>>>>> miniblink49
 
 } // namespace blink
 

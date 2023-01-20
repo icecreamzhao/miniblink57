@@ -32,7 +32,6 @@
 #define RetainedDOMInfo_h
 
 #include "bindings/core/v8/RetainedObjectInfo.h"
-#include "platform/heap/Handle.h"
 #include <v8-profiler.h>
 
 namespace blink {
@@ -52,21 +51,16 @@ public:
     intptr_t GetElementCount() override;
     intptr_t GetEquivalenceClass() override;
 
-    static v8::RetainedObjectInfo* createRetainedDOMInfo(
-        uint16_t classId,
-        v8::Local<v8::Value> wrapper);
-
 private:
-    // V8 guarantees to keep RetainedObjectInfos alive only during a GC or heap
-    // snapshotting round, when renderer doesn't get control. This allows us to
-    // use raw pointers.
-    UntracedMember<Node> m_root;
+    // V8 guarantees to keep RetainedObjectInfos alive only during a GC or heap snapshotting round, when renderer
+    // doesn't get control. This allows us to use raw pointers.
+    Node* m_root;
 };
 
-class SuspendableObjectsInfo final : public RetainedObjectInfo {
+class ActiveDOMObjectsInfo final : public RetainedObjectInfo {
 public:
-    explicit SuspendableObjectsInfo(int numberOfObjectsWithPendingActivity);
-    ~SuspendableObjectsInfo() override;
+    explicit ActiveDOMObjectsInfo(int numberOfObjectsWithPendingActivity);
+    ~ActiveDOMObjectsInfo() override;
     void Dispose() override;
     bool IsEquivalent(v8::RetainedObjectInfo* other) override;
     intptr_t GetHash() override;

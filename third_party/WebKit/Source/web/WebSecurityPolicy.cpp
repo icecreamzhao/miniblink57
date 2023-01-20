@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebSecurityPolicy.h"
 
 #include "core/loader/FrameLoader.h"
@@ -40,18 +44,57 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 void WebSecurityPolicy::registerURLSchemeAsDisplayIsolated(
     const WebString& scheme)
+=======
+void WebSecurityPolicy::registerURLSchemeAsLocal(const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsLocal(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsNoAccess(const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsNoAccess(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsDisplayIsolated(const WebString& scheme)
+>>>>>>> miniblink49
 {
     SchemeRegistry::registerURLSchemeAsDisplayIsolated(scheme);
 }
 
+<<<<<<< HEAD
 void WebSecurityPolicy::registerURLSchemeAsAllowingServiceWorkers(
     const WebString& scheme)
+=======
+void WebSecurityPolicy::registerURLSchemeAsRestrictingMixedContent(const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsRestrictingMixedContent(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsSecure(const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsSecure(scheme);
+}
+
+bool WebSecurityPolicy::shouldTreatURLSchemeAsSecure(const WebString& scheme)
+{
+    return SchemeRegistry::shouldTreatURLSchemeAsSecure(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsCORSEnabled(const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsCORSEnabled(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsAllowingServiceWorkers(const WebString& scheme)
+>>>>>>> miniblink49
 {
     SchemeRegistry::registerURLSchemeAsAllowingServiceWorkers(scheme);
 }
 
+<<<<<<< HEAD
 void WebSecurityPolicy::registerURLSchemeAsSupportingFetchAPI(
     const WebString& scheme)
 {
@@ -60,10 +103,14 @@ void WebSecurityPolicy::registerURLSchemeAsSupportingFetchAPI(
 
 void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(
     const WebString& scheme)
+=======
+void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(const WebString& scheme)
+>>>>>>> miniblink49
 {
     SchemeRegistry::registerURLSchemeAsBypassingContentSecurityPolicy(scheme);
 }
 
+<<<<<<< HEAD
 void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(
     const WebString& scheme,
     PolicyAreas policyAreas)
@@ -80,6 +127,14 @@ void WebSecurityPolicy::registerURLSchemeAsFirstPartyWhenTopLevel(
 
 void WebSecurityPolicy::registerURLSchemeAsEmptyDocument(
     const WebString& scheme)
+=======
+void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(const WebString& scheme, PolicyAreas policyAreas)
+{
+    SchemeRegistry::registerURLSchemeAsBypassingContentSecurityPolicy(scheme, static_cast<SchemeRegistry::PolicyAreas>(policyAreas));
+}
+
+void WebSecurityPolicy::registerURLSchemeAsEmptyDocument(const WebString& scheme)
+>>>>>>> miniblink49
 {
     SchemeRegistry::registerURLSchemeAsEmptyDocument(scheme);
 }
@@ -111,12 +166,17 @@ void WebSecurityPolicy::resetOriginAccessWhitelists()
     SecurityPolicy::resetOriginAccessWhitelists();
 }
 
+<<<<<<< HEAD
 void WebSecurityPolicy::addOriginTrustworthyWhiteList(
     const WebSecurityOrigin& origin)
+=======
+void WebSecurityPolicy::addOriginTrustworthyWhiteList(const WebSecurityOrigin& origin)
+>>>>>>> miniblink49
 {
     SecurityPolicy::addOriginTrustworthyWhiteList(origin);
 }
 
+<<<<<<< HEAD
 void WebSecurityPolicy::addSchemeToBypassSecureContextWhitelist(
     const WebString& scheme)
 {
@@ -135,14 +195,25 @@ WebString WebSecurityPolicy::generateReferrerHeader(
 
 void WebSecurityPolicy::registerURLSchemeAsNotAllowingJavascriptURLs(
     const WebString& scheme)
+=======
+WebString WebSecurityPolicy::generateReferrerHeader(WebReferrerPolicy referrerPolicy, const WebURL& url, const WebString& referrer)
+{
+    return SecurityPolicy::generateReferrer(static_cast<ReferrerPolicy>(referrerPolicy), url, referrer).referrer;
+}
+
+void WebSecurityPolicy::registerURLSchemeAsNotAllowingJavascriptURLs(const WebString& scheme)
+>>>>>>> miniblink49
 {
     SchemeRegistry::registerURLSchemeAsNotAllowingJavascriptURLs(scheme);
 }
 
+<<<<<<< HEAD
 void WebSecurityPolicy::registerURLSchemeAsAllowedForReferrer(
     const WebString& scheme)
 {
     SchemeRegistry::registerURLSchemeAsAllowedForReferrer(scheme);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

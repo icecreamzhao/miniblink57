@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebSelector.h"
 
 #include "core/css/CSSSelectorList.h"
@@ -36,6 +40,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 WebString canonicalizeSelector(WebString webSelector,
     WebSelectorType restriction)
 {
@@ -44,6 +49,15 @@ WebString canonicalizeSelector(WebString webSelector,
     if (restriction == WebSelectorTypeCompound) {
         for (const CSSSelector* selector = selectorList.first(); selector;
              selector = selectorList.next(*selector)) {
+=======
+WebString canonicalizeSelector(WebString webSelector, WebSelectorType restriction)
+{
+    CSSSelectorList selectorList;
+    CSSParser::parseSelector(strictCSSParserContext(), webSelector, selectorList);
+
+    if (restriction == WebSelectorTypeCompound) {
+        for (const CSSSelector* selector = selectorList.first(); selector; selector = selectorList.next(*selector)) {
+>>>>>>> miniblink49
             if (!selector->isCompound())
                 return WebString();
         }

@@ -45,6 +45,10 @@ struct WebPopupMenuInfo {
     bool rightAligned;
     bool allowMultipleSelection;
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 }
 
 #endif

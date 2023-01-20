@@ -10,6 +10,7 @@
 namespace v8 {
 namespace platform {
 
+<<<<<<< HEAD
     WorkerThread::WorkerThread(TaskQueue* queue)
         : Thread(Options("V8 WorkerThread"))
         , queue_(queue)
@@ -31,3 +32,22 @@ namespace platform {
 
 } // namespace platform
 } // namespace v8
+=======
+WorkerThread::WorkerThread(TaskQueue* queue)
+    : Thread(Options("V8 WorkerThread")), queue_(queue) {
+  Start();
+}
+
+WorkerThread::~WorkerThread() {
+  Join();
+}
+
+void WorkerThread::Run() {
+  while (std::unique_ptr<Task> task = queue_->GetNext()) {
+    task->Run();
+  }
+}
+
+}  // namespace platform
+}  // namespace v8
+>>>>>>> miniblink49

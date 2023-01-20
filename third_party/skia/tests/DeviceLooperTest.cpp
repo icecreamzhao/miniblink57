@@ -5,11 +5,15 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkAutoPixmapStorage.h"
+=======
+>>>>>>> miniblink49
 #include "SkDeviceLooper.h"
 #include "SkRasterClip.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 static void make_pm(SkAutoPixmapStorage* pixmap, int w, int h)
 {
     pixmap->alloc(SkImageInfo::Make(w, h, kAlpha_8_SkColorType, kPremul_SkAlphaType));
@@ -17,6 +21,13 @@ static void make_pm(SkAutoPixmapStorage* pixmap, int w, int h)
 
 static bool equal(const SkRasterClip& a, const SkRasterClip& b)
 {
+=======
+static void make_pm(SkAutoPixmapStorage* pixmap, int w, int h) {
+    pixmap->alloc(SkImageInfo::Make(w, h, kAlpha_8_SkColorType, kPremul_SkAlphaType));
+}
+
+static bool equal(const SkRasterClip& a, const SkRasterClip& b) {
+>>>>>>> miniblink49
     if (a.isBW()) {
         return b.isBW() && a.bwRgn() == b.bwRgn();
     } else {
@@ -39,8 +50,12 @@ static const struct {
     { { 10, 32000 }, { 0, 0, 10, 4000 }, { 0, 0, 32000, 32000 } },
 };
 
+<<<<<<< HEAD
 static void test_simple(skiatest::Reporter* reporter)
 {
+=======
+static void test_simple(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
         SkAutoPixmapStorage pmap;
@@ -75,8 +90,12 @@ static void test_simple(skiatest::Reporter* reporter)
 //  [ 0x01  0x02 ]
 //  [ 0x04  0x08 ]
 //
+<<<<<<< HEAD
 static void make_rgn(SkRegion* rgn, int w, int h, unsigned mask)
 {
+=======
+static void make_rgn(SkRegion* rgn, int w, int h, unsigned mask) {
+>>>>>>> miniblink49
     SkASSERT(SkAlign2(w));
     SkASSERT(SkAlign2(h));
     w >>= 1;
@@ -96,18 +115,29 @@ static void make_rgn(SkRegion* rgn, int w, int h, unsigned mask)
     }
 }
 
+<<<<<<< HEAD
 static void test_complex(skiatest::Reporter* reporter)
 {
+=======
+static void test_complex(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     // choose size values that will result in 4 quadrants, given fAA setting
     const int BW_SIZE = 17 * 1000;
     const int AA_SIZE = 7 * 1000;
 
     struct {
         SkISize fSize;
+<<<<<<< HEAD
         bool fAA;
     } const gRec[] = {
         { { BW_SIZE, BW_SIZE }, false },
         { { AA_SIZE, AA_SIZE }, true },
+=======
+        bool    fAA;
+    } const gRec[] = {
+        { { BW_SIZE, BW_SIZE }, false },
+        { {  AA_SIZE, AA_SIZE }, true },
+>>>>>>> miniblink49
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
@@ -138,8 +168,12 @@ static void test_complex(skiatest::Reporter* reporter)
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(DeviceLooper, reporter)
 {
+=======
+DEF_TEST(DeviceLooper, reporter) {
+>>>>>>> miniblink49
     test_simple(reporter);
     test_complex(reporter);
 }

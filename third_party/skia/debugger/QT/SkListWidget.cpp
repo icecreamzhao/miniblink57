@@ -6,16 +6,26 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkListWidget.h"
 
 void SkListWidget::paint(QPainter* painter,
     const QStyleOptionViewItem& option,
     const QModelIndex& index) const
 {
+=======
+
+#include "SkListWidget.h"
+
+void SkListWidget::paint (QPainter *painter,
+                          const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const {
+>>>>>>> miniblink49
     /* We adjust the initial position of the list item so that
      * we don't have overlapping top and bottom borders of concurrent
      * widget items. */
     QRect r = option.rect;
+<<<<<<< HEAD
     r.adjust(-1, -1, 1, 0);
 
     QPen linePen(QColor::fromRgb(211, 211, 211), 1, Qt::SolidLine);
@@ -28,19 +38,41 @@ void SkListWidget::paint(QPainter* painter,
         gradientSelected.setColorAt(0.0, QColor::fromRgb(119, 213, 247));
         gradientSelected.setColorAt(0.9, QColor::fromRgb(27, 134, 183));
         gradientSelected.setColorAt(1.0, QColor::fromRgb(0, 120, 174));
+=======
+    r.adjust(-1,-1,1,0);
+
+    QPen linePen(QColor::fromRgb(211,211,211), 1, Qt::SolidLine);
+    QPen fontPen(QColor::fromRgb(51,51,51), 1, Qt::SolidLine);
+    QPen fontMarkedPen(Qt::white, 1, Qt::SolidLine);
+
+    // If selected
+    if(option.state & QStyle::State_Selected){
+        QLinearGradient gradientSelected(r.left(),r.top(),r.left(),r.height()+r.top());
+        gradientSelected.setColorAt(0.0, QColor::fromRgb(119,213,247));
+        gradientSelected.setColorAt(0.9, QColor::fromRgb(27,134,183));
+        gradientSelected.setColorAt(1.0, QColor::fromRgb(0,120,174));
+>>>>>>> miniblink49
         painter->setBrush(gradientSelected);
         painter->drawRect(r);
 
         painter->setPen(linePen);
+<<<<<<< HEAD
         painter->drawLine(r.topLeft(), r.topRight());
         painter->drawLine(r.topRight(), r.bottomRight());
         painter->drawLine(r.bottomLeft(), r.bottomRight());
         painter->drawLine(r.topLeft(), r.bottomLeft());
+=======
+        painter->drawLine(r.topLeft(),r.topRight());
+        painter->drawLine(r.topRight(),r.bottomRight());
+        painter->drawLine(r.bottomLeft(),r.bottomRight());
+        painter->drawLine(r.topLeft(),r.bottomLeft());
+>>>>>>> miniblink49
 
         painter->setPen(fontMarkedPen);
 
     } else {
         // Alternating background
+<<<<<<< HEAD
         painter->setBrush((index.row() % 2) ? Qt::white : QColor(252, 252, 252));
         painter->drawRect(r);
 
@@ -49,12 +81,29 @@ void SkListWidget::paint(QPainter* painter,
         painter->drawLine(r.topRight(), r.bottomRight());
         painter->drawLine(r.bottomLeft(), r.bottomRight());
         painter->drawLine(r.topLeft(), r.bottomLeft());
+=======
+        painter->setBrush((index.row() % 2) ? Qt::white : QColor(252,252,252));
+        painter->drawRect(r);
+
+        painter->setPen(linePen);
+        painter->drawLine(r.topLeft(),r.topRight());
+        painter->drawLine(r.topRight(),r.bottomRight());
+        painter->drawLine(r.bottomLeft(),r.bottomRight());
+        painter->drawLine(r.topLeft(),r.bottomLeft());
+>>>>>>> miniblink49
 
         painter->setPen(fontPen);
     }
 
+<<<<<<< HEAD
     QIcon breakpointIcon = QIcon(qvariant_cast<QPixmap>(index.data(Qt::DecorationRole)));
     QIcon deleteIcon = QIcon(qvariant_cast<QPixmap>(index.data(Qt::UserRole + 2)));
+=======
+    QIcon breakpointIcon =
+            QIcon(qvariant_cast<QPixmap>(index.data(Qt::DecorationRole)));
+    QIcon deleteIcon =
+            QIcon(qvariant_cast<QPixmap>(index.data(Qt::UserRole + 2)));
+>>>>>>> miniblink49
     int indent = index.data(Qt::UserRole + 3).toInt();
 
     QString drawCommandText = index.data(Qt::DisplayRole).toString();
@@ -80,6 +129,7 @@ void SkListWidget::paint(QPainter* painter,
 
     // Breakpoint Icon
     r = option.rect.adjusted(5, 10, -10, -10);
+<<<<<<< HEAD
     breakpointIcon.paint(painter, r, Qt::AlignVCenter | Qt::AlignLeft);
 
     // Delete Icon
@@ -95,10 +145,28 @@ void SkListWidget::paint(QPainter* painter,
     }
     painter->drawText(r.left(), r.top(), r.width(), r.height(),
         Qt::AlignBottom | Qt::AlignLeft, drawCommandText, &r);
+=======
+    breakpointIcon.paint(painter, r, Qt::AlignVCenter|Qt::AlignLeft);
+
+    // Delete Icon
+    r = option.rect.adjusted(19, 10, -10, -10);
+    deleteIcon.paint(painter, r, Qt::AlignVCenter|Qt::AlignLeft);
+
+    // Draw Command
+    if (time >= 0.0) {
+        r = option.rect.adjusted(kImageSpace+kCommandNumberSpace+kTimeSpace+indent, 0, -10, -7);
+    } else {
+        // don't need time offset
+        r = option.rect.adjusted(kImageSpace+kCommandNumberSpace+indent, 0, -10, -7);
+    }
+    painter->drawText(r.left(), r.top(), r.width(), r.height(),
+            Qt::AlignBottom|Qt::AlignLeft, drawCommandText, &r);
+>>>>>>> miniblink49
 
     // Draw Command Number
     r = option.rect.adjusted(kImageSpace, 0, -10, -7);
     painter->drawText(r.left(), r.top(), r.width(), r.height(),
+<<<<<<< HEAD
         Qt::AlignBottom | Qt::AlignLeft, drawCommandNumber, &r);
 
     if (time >= 0.0) {
@@ -112,5 +180,19 @@ void SkListWidget::paint(QPainter* painter,
 QSize SkListWidget::sizeHint(const QStyleOptionViewItem& option,
     const QModelIndex& index) const
 {
+=======
+                      Qt::AlignBottom|Qt::AlignLeft, drawCommandNumber, &r);
+
+    if (time >= 0.0) {
+        // Draw time
+        r = option.rect.adjusted(kImageSpace+kCommandNumberSpace, 0, -10, -7);
+        painter->drawText(r.left(), r.top(), r.width(), r.height(),
+                          Qt::AlignBottom|Qt::AlignLeft, drawTime, &r);
+    }
+}
+
+QSize SkListWidget::sizeHint (const QStyleOptionViewItem& option,
+                              const QModelIndex& index) const{
+>>>>>>> miniblink49
     return QSize(200, 30);
 }

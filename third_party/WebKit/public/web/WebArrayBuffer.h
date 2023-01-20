@@ -34,6 +34,13 @@
 #include "../platform/WebCommon.h"
 #include "../platform/WebPrivatePtr.h"
 
+<<<<<<< HEAD
+=======
+#if INSIDE_BLINK
+namespace WTF { template <typename T> class PassRefPtr; }
+#endif
+
+>>>>>>> miniblink49
 namespace blink {
 
 class DOMArrayBuffer;
@@ -50,8 +57,12 @@ public:
         return *this;
     }
 
+<<<<<<< HEAD
     BLINK_EXPORT static WebArrayBuffer create(unsigned numElements,
         unsigned elementByteSize);
+=======
+    BLINK_EXPORT static WebArrayBuffer create(unsigned numElements, unsigned elementByteSize);
+>>>>>>> miniblink49
 
     BLINK_EXPORT void reset();
     BLINK_EXPORT void assign(const WebArrayBuffer&);
@@ -61,9 +72,15 @@ public:
     BLINK_EXPORT unsigned byteLength() const;
 
 #if INSIDE_BLINK
+<<<<<<< HEAD
     BLINK_EXPORT WebArrayBuffer(DOMArrayBuffer*);
     BLINK_EXPORT WebArrayBuffer& operator=(DOMArrayBuffer*);
     BLINK_EXPORT operator DOMArrayBuffer*() const;
+=======
+    BLINK_EXPORT WebArrayBuffer(const WTF::PassRefPtr<DOMArrayBuffer>&);
+    BLINK_EXPORT WebArrayBuffer& operator=(const WTF::PassRefPtr<DOMArrayBuffer>&);
+    BLINK_EXPORT operator WTF::PassRefPtr<DOMArrayBuffer>() const;
+>>>>>>> miniblink49
 #endif
 
 protected:

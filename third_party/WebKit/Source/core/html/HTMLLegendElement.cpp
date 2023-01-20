@@ -22,6 +22,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLLegendElement.h"
 
 #include "core/HTMLNames.h"
@@ -52,18 +53,14 @@ HTMLFormControlElement* HTMLLegendElement::associatedControl()
     return Traversal<HTMLFormControlElement>::next(*fieldset, fieldset);
 }
 
-void HTMLLegendElement::focus(const FocusParams& params)
+void HTMLLegendElement::focus(bool, WebFocusType type)
 {
-    document().updateStyleAndLayoutTreeForNode(this);
-    if (isFocusable()) {
-        Element::focus(params);
-        return;
-    }
+    if (isFocusable())
+        Element::focus(true, type);
 
     // To match other browsers' behavior, never restore previous selection.
     if (HTMLFormControlElement* control = associatedControl())
-        control->focus(FocusParams(SelectionBehaviorOnFocus::Reset, params.type,
-            params.sourceCapabilities));
+        control->focus(false, type);
 }
 
 void HTMLLegendElement::accessKeyAction(bool sendMouseEvents)
@@ -84,4 +81,4 @@ HTMLFormElement* HTMLLegendElement::form() const
     return toHTMLFieldSetElement(fieldset)->formOwner();
 }
 
-} // namespace blink
+} // namespace

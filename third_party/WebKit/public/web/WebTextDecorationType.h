@@ -34,8 +34,13 @@
 namespace blink {
 
 enum WebTextDecorationType {
+<<<<<<< HEAD
     WebTextDecorationTypeSpelling = 1 << 1,
     WebTextDecorationTypeGrammar = 1 << 2,
+=======
+    WebTextDecorationTypeSpelling            = 1 << 1,
+    WebTextDecorationTypeGrammar             = 1 << 2,
+>>>>>>> miniblink49
     WebTextDecorationTypeInvisibleSpellcheck = 1 << 3,
 };
 

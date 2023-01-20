@@ -7,6 +7,7 @@
 
 #include "bindings/core/v8/Dictionary.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "platform/network/EncodedFormData.h"
 #include "platform/weborigin/Referrer.h"
 #include "wtf/RefPtr.h"
@@ -16,19 +17,31 @@
 namespace blink {
 
 class BytesConsumer;
+=======
+#include "wtf/RefPtr.h"
+#include "wtf/text/WTFString.h"
+
+namespace blink {
+
+class BlobDataHandle;
+>>>>>>> miniblink49
 class ExceptionState;
 class Headers;
 
 // FIXME: Use IDL dictionary instead of this class.
 class RequestInit {
     STACK_ALLOCATED();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 public:
     explicit RequestInit(ExecutionContext*, const Dictionary&, ExceptionState&);
 
     String method;
     Member<Headers> headers;
     Dictionary headersDictionary;
+<<<<<<< HEAD
     String contentType;
     Member<BytesConsumer> body;
     Referrer referrer;
@@ -43,5 +56,13 @@ public:
 };
 
 } // namespace blink
+=======
+    RefPtr<BlobDataHandle> bodyBlobHandle;
+    String mode;
+    String credentials;
+};
+
+}
+>>>>>>> miniblink49
 
 #endif // RequestInit_h

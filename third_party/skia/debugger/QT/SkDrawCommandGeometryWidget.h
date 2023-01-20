@@ -5,6 +5,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SKDRAWCOMMANDGEOMETRYWIDGET_H_
 #define SKDRAWCOMMANDGEOMETRYWIDGET_H_
 
@@ -13,7 +17,11 @@
 #include "SkSurface.h"
 class SkDebugger;
 
+<<<<<<< HEAD
 class SkDrawCommandGeometryWidget : public QFrame {
+=======
+class  SkDrawCommandGeometryWidget : public QFrame {
+>>>>>>> miniblink49
     Q_OBJECT
 
 public:
@@ -28,7 +36,11 @@ private:
     void updateImage();
 
     SkDebugger* fDebugger;
+<<<<<<< HEAD
     sk_sp<SkSurface> fSurface;
+=======
+    SkAutoTUnref<SkSurface> fSurface;
+>>>>>>> miniblink49
     int fCommandIndex;
 };
 

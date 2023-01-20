@@ -25,6 +25,7 @@ public:
      *  always applied.
      */
     enum Bits {
+<<<<<<< HEAD
         kStyle_Bit = 1 << 0, //!< use this layer's Style/stroke settings
         kTextSkewX_Bit = 1 << 1, //!< use this layer's textskewx
         kPathEffect_Bit = 1 << 2, //!< use this layer's patheffect
@@ -32,6 +33,15 @@ public:
         kShader_Bit = 1 << 4, //!< use this layer's shader
         kColorFilter_Bit = 1 << 5, //!< use this layer's colorfilter
         kXfermode_Bit = 1 << 6, //!< use this layer's xfermode
+=======
+        kStyle_Bit      = 1 << 0,   //!< use this layer's Style/stroke settings
+        kTextSkewX_Bit  = 1 << 1,   //!< use this layer's textskewx
+        kPathEffect_Bit = 1 << 2,   //!< use this layer's patheffect
+        kMaskFilter_Bit = 1 << 3,   //!< use this layer's maskfilter
+        kShader_Bit     = 1 << 4,   //!< use this layer's shader
+        kColorFilter_Bit = 1 << 5,  //!< use this layer's colorfilter
+        kXfermode_Bit   = 1 << 6,   //!< use this layer's xfermode
+>>>>>>> miniblink49
 
         /**
          *  Use the layer's paint entirely, with these exceptions:
@@ -56,10 +66,17 @@ public:
      *      kDst_Mode: to just keep the draw's color, ignoring the layer's
      */
     struct SK_API LayerInfo {
+<<<<<<< HEAD
         BitFlags fPaintBits;
         SkXfermode::Mode fColorMode;
         SkVector fOffset;
         bool fPostTranslate; //!< applies to fOffset
+=======
+        BitFlags            fPaintBits;
+        SkXfermode::Mode    fColorMode;
+        SkVector            fOffset;
+        bool                fPostTranslate; //!< applies to fOffset
+>>>>>>> miniblink49
 
         /**
          *  Initial the LayerInfo. Defaults to settings that will draw the
@@ -80,7 +97,11 @@ public:
     SK_TO_STRING_OVERRIDE()
 
     Factory getFactory() const override { return CreateProc; }
+<<<<<<< HEAD
     static sk_sp<SkFlattenable> CreateProc(SkReadBuffer& buffer);
+=======
+    static SkFlattenable* CreateProc(SkReadBuffer& buffer);
+>>>>>>> miniblink49
 
 protected:
     SkLayerDrawLooper();
@@ -89,12 +110,22 @@ protected:
 
 private:
     struct Rec {
+<<<<<<< HEAD
         Rec* fNext;
         SkPaint fPaint;
         LayerInfo fInfo;
     };
     Rec* fRecs;
     int fCount;
+=======
+        Rec*    fNext;
+        SkPaint fPaint;
+        LayerInfo fInfo;
+    };
+    Rec*    fRecs;
+    Rec*    fTopRec;
+    int     fCount;
+>>>>>>> miniblink49
 
     // state-machine during the init/next cycle
     class LayerDrawLooperContext : public SkDrawLooper::Context {
@@ -110,6 +141,14 @@ private:
         static void ApplyInfo(SkPaint* dst, const SkPaint& src, const LayerInfo&);
     };
 
+<<<<<<< HEAD
+=======
+    class MyRegistrar : public SkFlattenable::Registrar {
+    public:
+        MyRegistrar();
+    };
+
+>>>>>>> miniblink49
     typedef SkDrawLooper INHERITED;
 
 public:
@@ -142,6 +181,7 @@ public:
           * Pass list of layers on to newly built looper and return it. This will
           * also reset the builder, so it can be used to build another looper.
           */
+<<<<<<< HEAD
         sk_sp<SkDrawLooper> detach();
 #ifdef SK_SUPPORT_LEGACY_MINOR_EFFECT_PTR
         SkLayerDrawLooper* detachLooper()
@@ -149,11 +189,18 @@ public:
             return (SkLayerDrawLooper*)this->detach().release();
         }
 #endif
+=======
+        SkLayerDrawLooper* detachLooper();
+>>>>>>> miniblink49
 
     private:
         Rec* fRecs;
         Rec* fTopRec;
+<<<<<<< HEAD
         int fCount;
+=======
+        int  fCount;
+>>>>>>> miniblink49
     };
 };
 

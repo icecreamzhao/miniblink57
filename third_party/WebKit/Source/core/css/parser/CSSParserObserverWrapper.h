@@ -6,21 +6,14 @@
 #define CSSParserObserverWrapper_h
 
 #include "core/css/parser/CSSParserObserver.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
-class CSSParserToken;
-class CSSParserTokenRange;
-
 class CSSParserObserverWrapper {
-    STACK_ALLOCATED();
-
 public:
-    explicit CSSParserObserverWrapper(CSSParserObserver& observer)
-        : m_observer(observer)
-    {
-    }
+    CSSParserObserverWrapper(CSSParserObserver& observer)
+    : m_observer(observer)
+    { }
 
     unsigned startOffset(const CSSParserTokenRange&);
     unsigned previousTokenStartOffset(const CSSParserTokenRange&);
@@ -30,14 +23,12 @@ public:
     void yieldCommentsBefore(const CSSParserTokenRange&);
 
     CSSParserObserver& observer() { return m_observer; }
-    void addComment(unsigned startOffset,
-        unsigned endOffset,
-        unsigned tokensBefore)
+    void addComment(unsigned startOffset, unsigned endOffset, unsigned tokensBefore)
     {
-        CommentPosition position = { startOffset, endOffset, tokensBefore };
-        m_commentOffsets.push_back(position);
+        CommentPosition position = {startOffset, endOffset, tokensBefore};
+        m_commentOffsets.append(position);
     }
-    void addToken(unsigned startOffset) { m_tokenOffsets.push_back(startOffset); }
+    void addToken(unsigned startOffset) { m_tokenOffsets.append(startOffset); }
     void finalizeConstruction(CSSParserToken* firstParserToken)
     {
         m_firstParserToken = firstParserToken;
@@ -50,7 +41,6 @@ private:
     CSSParserToken* m_firstParserToken;
 
     struct CommentPosition {
-        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         unsigned startOffset;
         unsigned endOffset;
         unsigned tokensBefore;

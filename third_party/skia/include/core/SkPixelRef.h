@@ -8,24 +8,53 @@
 #ifndef SkPixelRef_DEFINED
 #define SkPixelRef_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkAtomics.h"
 #include "../private/SkMutex.h"
 #include "../private/SkTDArray.h"
 #include "SkBitmap.h"
 #include "SkFilterQuality.h"
 #include "SkImageInfo.h"
+=======
+#include "SkAtomics.h"
+#include "SkBitmap.h"
+#include "SkFilterQuality.h"
+#include "SkImageInfo.h"
+#include "SkMutex.h"
+>>>>>>> miniblink49
 #include "SkPixmap.h"
 #include "SkRefCnt.h"
 #include "SkSize.h"
 #include "SkString.h"
+<<<<<<< HEAD
 #include "SkYUVSizeInfo.h"
+=======
+#include "SkTDArray.h"
+
+#ifdef SK_DEBUG
+    /**
+     *  Defining SK_IGNORE_PIXELREF_SETPRELOCKED will force all pixelref
+     *  subclasses to correctly handle lock/unlock pixels. For performance
+     *  reasons, simple malloc-based subclasses call setPreLocked() to skip
+     *  the overhead of implementing these calls.
+     *
+     *  This build-flag disables that optimization, to add in debugging our
+     *  call-sites, to ensure that they correctly balance their calls of
+     *  lock and unlock.
+     */
+//    #define SK_IGNORE_PIXELREF_SETPRELOCKED
+#endif
+>>>>>>> miniblink49
 
 class SkColorTable;
 class SkData;
 struct SkIRect;
 
 class GrTexture;
+<<<<<<< HEAD
 class SkDiscardableMemory;
+=======
+>>>>>>> miniblink49
 
 /** \class SkPixelRef
 
@@ -38,10 +67,17 @@ class SkDiscardableMemory;
 class SK_API SkPixelRef : public SkRefCnt {
 public:
     explicit SkPixelRef(const SkImageInfo&);
+<<<<<<< HEAD
     virtual ~SkPixelRef();
 
     const SkImageInfo& info() const
     {
+=======
+    SkPixelRef(const SkImageInfo&, SkBaseMutex* mutex);
+    virtual ~SkPixelRef();
+
+    const SkImageInfo& info() const {
+>>>>>>> miniblink49
         return fInfo;
     }
 
@@ -61,6 +97,7 @@ public:
      *  Calling lockPixels returns a LockRec struct (on success).
      */
     struct LockRec {
+<<<<<<< HEAD
         LockRec()
             : fPixels(NULL)
             , fColorTable(NULL)
@@ -75,11 +112,23 @@ public:
 
         bool isZero() const
         {
+=======
+        LockRec() : fPixels(NULL), fColorTable(NULL) {}
+
+        void*           fPixels;
+        SkColorTable*   fColorTable;
+        size_t          fRowBytes;
+
+        void zero() { sk_bzero(this, sizeof(*this)); }
+
+        bool isZero() const {
+>>>>>>> miniblink49
             return NULL == fPixels && NULL == fColorTable && 0 == fRowBytes;
         }
     };
 
     SkDEBUGCODE(bool isLocked() const { return fLockCount > 0; })
+<<<<<<< HEAD
         SkDEBUGCODE(int getLockCount() const { return fLockCount; })
 
         /**
@@ -87,6 +136,15 @@ public:
      *  with a call to unlockPixels().
      */
         bool lockPixels();
+=======
+    SkDEBUGCODE(int getLockCount() const { return fLockCount; })
+
+    /**
+     *  Call to access the pixel memory. Return true on success. Balance this
+     *  with a call to unlockPixels().
+     */
+    bool lockPixels();
+>>>>>>> miniblink49
 
     /**
      *  Call to access the pixel memory. On success, return true and fill out
@@ -145,7 +203,11 @@ public:
     /** Returns true if this pixelref is marked as immutable, meaning that the
         contents of its pixels will not change for the lifetime of the pixelref.
     */
+<<<<<<< HEAD
     bool isImmutable() const { return fMutability != kMutable; }
+=======
+    bool isImmutable() const { return fIsImmutable; }
+>>>>>>> miniblink49
 
     /** Marks this pixelref is immutable, meaning that the contents of its
         pixels will not change for the lifetime of the pixelref. This state can
@@ -160,15 +222,23 @@ public:
 
     /** Copy a URI string to this pixelref, or clear the URI if the uri is null
      */
+<<<<<<< HEAD
     void setURI(const char uri[])
     {
+=======
+    void setURI(const char uri[]) {
+>>>>>>> miniblink49
         fURI.set(uri);
     }
 
     /** Copy a URI string to this pixelref
      */
+<<<<<<< HEAD
     void setURI(const char uri[], size_t len)
     {
+=======
+    void setURI(const char uri[], size_t len) {
+>>>>>>> miniblink49
         fURI.set(uri, len);
     }
 
@@ -184,17 +254,26 @@ public:
      *  If non-null is returned, the caller is responsible for calling unref()
      *  on the data when it is finished.
      */
+<<<<<<< HEAD
     SkData* refEncodedData()
     {
+=======
+    SkData* refEncodedData() {
+>>>>>>> miniblink49
         return this->onRefEncodedData();
     }
 
     struct LockRequest {
+<<<<<<< HEAD
         SkISize fSize;
+=======
+        SkISize         fSize;
+>>>>>>> miniblink49
         SkFilterQuality fQuality;
     };
 
     struct LockResult {
+<<<<<<< HEAD
         LockResult()
             : fPixels(NULL)
             , fCTable(NULL)
@@ -211,6 +290,19 @@ public:
 
         void unlock()
         {
+=======
+        LockResult() : fPixels(NULL), fCTable(NULL) {}
+
+        void        (*fUnlockProc)(void* ctx);
+        void*       fUnlockContext;
+
+        const void* fPixels;
+        SkColorTable* fCTable;  // should be NULL unless colortype is kIndex8
+        size_t      fRowBytes;
+        SkISize     fSize;
+
+        void unlock() {
+>>>>>>> miniblink49
             if (fUnlockProc) {
                 fUnlockProc(fUnlockContext);
                 fUnlockProc = NULL; // can't unlock twice!
@@ -225,6 +317,7 @@ public:
     virtual GrTexture* getTexture() { return NULL; }
 
     /**
+<<<<<<< HEAD
      *  If this can efficiently return YUV data, this should return true.
      *  Otherwise this returns false and does not modify any of the parameters.
      *
@@ -253,6 +346,24 @@ public:
 
     /** Populates dst with the pixels of this pixelRef, converting them to colorType. */
     bool readPixels(SkBitmap* dst, SkColorType colorType, const SkIRect* subset = NULL);
+=======
+     *  If any planes or rowBytes is NULL, this should output the sizes and return true
+     *  if it can efficiently return YUV planar data. If it cannot, it should return false.
+     *
+     *  If all planes and rowBytes are not NULL, then it should copy the associated Y,U,V data
+     *  into those planes of memory supplied by the caller. It should validate that the sizes
+     *  match what it expected. If the sizes do not match, it should return false.
+     *
+     *  If colorSpace is not NULL, the YUV color space of the data should be stored in the address
+     *  it points at.
+     */
+    bool getYUV8Planes(SkISize sizes[3], void* planes[3], size_t rowBytes[3],
+                       SkYUVColorSpace* colorSpace) {
+        return this->onGetYUV8Planes(sizes, planes, rowBytes, colorSpace);
+    }
+
+    bool readPixels(SkBitmap* dst, const SkIRect* subset = NULL);
+>>>>>>> miniblink49
 
     /**
      *  Makes a deep copy of this PixelRef, respecting the requested config.
@@ -264,8 +375,12 @@ public:
      *          not be created with the given config), or this PixelRef does not support deep
      *          copies.
      */
+<<<<<<< HEAD
     virtual SkPixelRef* deepCopy(SkColorType, SkColorSpace*, const SkIRect* /*subset*/)
     {
+=======
+    virtual SkPixelRef* deepCopy(SkColorType, SkColorProfileType, const SkIRect* /*subset*/) {
+>>>>>>> miniblink49
         return NULL;
     }
 
@@ -278,7 +393,11 @@ public:
     //
     // This can be used to invalidate caches keyed by SkPixelRef generation ID.
     struct GenIDChangeListener {
+<<<<<<< HEAD
         virtual ~GenIDChangeListener() { }
+=======
+        virtual ~GenIDChangeListener() {}
+>>>>>>> miniblink49
         virtual void onChange() = 0;
     };
 
@@ -287,6 +406,7 @@ public:
 
     // Call when this pixelref is part of the key to a resourcecache entry. This allows the cache
     // to know automatically those entries can be purged when this pixelref is changed or deleted.
+<<<<<<< HEAD
     void notifyAddedToCache()
     {
         fAddedToCache.store(true);
@@ -299,6 +419,12 @@ public:
      */
     bool isLazyGenerated() const { return this->onIsLazyGenerated(); }
 
+=======
+    void notifyAddedToCache() {
+        fAddedToCache.store(true);
+    }
+
+>>>>>>> miniblink49
 protected:
     /**
      *  On success, returns true and fills out the LockRec for the pixels. On
@@ -328,7 +454,11 @@ protected:
      *
      *  The base class implementation returns false;
      */
+<<<<<<< HEAD
     virtual bool onReadPixels(SkBitmap* dst, SkColorType colorType, const SkIRect* subsetOrNull);
+=======
+    virtual bool onReadPixels(SkBitmap* dst, const SkIRect* subsetOrNull);
+>>>>>>> miniblink49
 
     // default impl returns NULL.
     virtual SkData* onRefEncodedData();
@@ -336,6 +466,7 @@ protected:
     // default impl does nothing.
     virtual void onNotifyPixelsChanged();
 
+<<<<<<< HEAD
     virtual bool onQueryYUV8(SkYUVSizeInfo*, SkYUVColorSpace*) const
     {
         return false;
@@ -344,6 +475,11 @@ protected:
     {
         return false;
     }
+=======
+    // default impl returns false.
+    virtual bool onGetYUV8Planes(SkISize sizes[3], void* planes[3], size_t rowBytes[3],
+                                 SkYUVColorSpace* colorSpace);
+>>>>>>> miniblink49
 
     /**
      *  Returns the size (in bytes) of the internally allocated memory.
@@ -357,12 +493,19 @@ protected:
 
     virtual bool onRequestLock(const LockRequest&, LockResult*);
 
+<<<<<<< HEAD
     virtual bool onIsLazyGenerated() const { return false; }
 
     /** Return the mutex associated with this pixelref. This value is assigned
         in the constructor, and cannot change during the lifetime of the object.
     */
     SkBaseMutex* mutex() const { return &fMutex; }
+=======
+    /** Return the mutex associated with this pixelref. This value is assigned
+        in the constructor, and cannot change during the lifetime of the object.
+    */
+    SkBaseMutex* mutex() const { return fMutex; }
+>>>>>>> miniblink49
 
     // only call from constructor. Flags this to always be locked, removing
     // the need to grab the mutex and call onLockPixels/onUnlockPixels.
@@ -370,14 +513,23 @@ protected:
     void setPreLocked(void*, size_t rowBytes, SkColorTable*);
 
 private:
+<<<<<<< HEAD
     mutable SkMutex fMutex;
+=======
+    SkBaseMutex*    fMutex; // must remain in scope for the life of this object
+>>>>>>> miniblink49
 
     // mostly const. fInfo.fAlpahType can be changed at runtime.
     const SkImageInfo fInfo;
 
     // LockRec is only valid if we're in a locked state (isLocked())
+<<<<<<< HEAD
     LockRec fRec;
     int fLockCount;
+=======
+    LockRec         fRec;
+    int             fLockCount;
+>>>>>>> miniblink49
 
     bool lockPixelsInsideMutex();
 
@@ -389,6 +541,7 @@ private:
     const uint32_t fStableID;
 #endif
 
+<<<<<<< HEAD
     SkTDArray<GenIDChangeListener*> fGenIDChangeListeners; // pointers are owned
 
     SkString fURI;
@@ -402,12 +555,23 @@ private:
         kImmutable, // Once set to this state, it never leaves.
     } fMutability : 8; // easily fits inside a byte
 
+=======
+    SkTDArray<GenIDChangeListener*> fGenIDChangeListeners;  // pointers are owned
+
+    SkString    fURI;
+
+    // Set true by caches when they cache content that's derived from the current pixels.
+    SkAtomic<bool> fAddedToCache;
+    // can go from false to true, but never from true to false
+    bool fIsImmutable;
+>>>>>>> miniblink49
     // only ever set in constructor, const after that
     bool fPreLocked;
 
     void needsNewGenID();
     void callGenIDChangeListeners();
 
+<<<<<<< HEAD
     void setTemporarilyImmutable();
     void restoreMutability();
     friend class SkSurface_Raster; // For the two methods above.
@@ -426,6 +590,15 @@ private:
     friend class SkImageCacherator;
     friend class SkSpecialImage_Gpu;
 
+=======
+    void setMutex(SkBaseMutex* mutex);
+
+    // When copying a bitmap to another with the same shape and config, we can safely
+    // clone the pixelref generation ID too, which makes them equivalent under caching.
+    friend class SkBitmap;  // only for cloneGenID
+    void cloneGenID(const SkPixelRef&);
+
+>>>>>>> miniblink49
     typedef SkRefCnt INHERITED;
 };
 

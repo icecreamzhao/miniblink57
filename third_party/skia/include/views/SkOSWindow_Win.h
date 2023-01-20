@@ -6,12 +6,22 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkOSWindow_Win_DEFINED
 #define SkOSWindow_Win_DEFINED
 
 #include "../private/SkTHash.h"
 #include "SkWindow.h"
 #include <functional>
+=======
+
+#ifndef SkOSWindow_Win_DEFINED
+#define SkOSWindow_Win_DEFINED
+
+#include "SkWindow.h"
+#include "../../src/core/SkFunction.h"
+#include "../../src/core/SkTHash.h"
+>>>>>>> miniblink49
 
 #if SK_ANGLE
 #include "EGL/egl.h"
@@ -20,8 +30,13 @@
 class SkOSWindow : public SkWindow {
 public:
     struct WindowInit {
+<<<<<<< HEAD
         const TCHAR* fClass;
         HINSTANCE fInstance;
+=======
+        const TCHAR*    fClass;
+        HINSTANCE       fInstance;
+>>>>>>> miniblink49
     };
 
     SkOSWindow(const void* winInit);
@@ -39,8 +54,13 @@ public:
 #endif // SK_SUPPORT_GPU
     };
 
+<<<<<<< HEAD
     bool attach(SkBackEndTypes attachType, int msaaSampleCount, bool deepColor, AttachmentInfo*);
     void release();
+=======
+    bool attach(SkBackEndTypes attachType, int msaaSampleCount, AttachmentInfo*);
+    void detach();
+>>>>>>> miniblink49
     void present();
 
     bool wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -48,15 +68,23 @@ public:
 
     enum {
         SK_WM_SkEvent = WM_APP + 1000,
+<<<<<<< HEAD
         SK_WM_SkTimerID = 0xFFFF // just need a non-zero value
+=======
+        SK_WM_SkTimerID = 0xFFFF    // just need a non-zero value
+>>>>>>> miniblink49
     };
 
     bool makeFullscreen();
     void setVsync(bool);
     void closeWindow();
 
+<<<<<<< HEAD
     static SkOSWindow* GetOSWindowForHWND(void* hwnd)
     {
+=======
+    static SkOSWindow* GetOSWindowForHWND(void* hwnd) {
+>>>>>>> miniblink49
         SkOSWindow** win = gHwndToOSWindowMap.find(hwnd);
         if (!win) {
             return NULL;
@@ -64,11 +92,18 @@ public:
         return *win;
     }
 
+<<<<<<< HEAD
     // Iterates f over all the SkOSWindows and their corresponding HWNDs.
     // The void* argument to f is a HWND.
     static void ForAllWindows(const std::function<void(void*, SkOSWindow**)>& f)
     {
         gHwndToOSWindowMap.foreach (f);
+=======
+    // Iterates SkFunction over all the SkOSWindows and their corresponding HWNDs.
+    // The void* argument to the SkFunction is a HWND.
+    static void ForAllWindows(const SkFunction<void(void*, SkOSWindow**)>& f) {
+        gHwndToOSWindowMap.foreach(f);
+>>>>>>> miniblink49
     }
 
 protected:
@@ -84,6 +119,7 @@ protected:
 private:
     static SkTHashMap<void*, SkOSWindow*> gHwndToOSWindowMap;
 
+<<<<<<< HEAD
     WindowInit fWinInit;
     void* fHWND;
 
@@ -101,6 +137,24 @@ private:
 #endif // SK_SUPPORT_GPU
 
     bool fFullscreen;
+=======
+    WindowInit          fWinInit;
+    void*               fHWND;
+
+    void                doPaint(void* ctx);
+
+#if SK_SUPPORT_GPU
+    void*               fHGLRC;
+#if SK_ANGLE
+    EGLDisplay          fDisplay;
+    EGLContext          fContext;
+    EGLSurface          fSurface;
+    EGLConfig           fConfig;
+#endif // SK_ANGLE
+#endif // SK_SUPPORT_GPU
+
+    bool                fFullscreen;
+>>>>>>> miniblink49
     struct SavedWindowState {
         bool fZoomed;
         LONG fStyle;
@@ -112,6 +166,7 @@ private:
         void* fHWND;
     } fSavedWindowState;
 
+<<<<<<< HEAD
     HMENU fMBar;
 
     SkBackEndTypes fAttached;
@@ -119,6 +174,15 @@ private:
     void updateSize();
 #if SK_SUPPORT_GPU
     bool attachGL(int msaaSampleCount, bool deepColor, AttachmentInfo* info);
+=======
+    HMENU               fMBar;
+
+    SkBackEndTypes      fAttached;
+
+    void updateSize();
+#if SK_SUPPORT_GPU
+    bool attachGL(int msaaSampleCount, AttachmentInfo* info);
+>>>>>>> miniblink49
     void detachGL();
     void presentGL();
 
@@ -127,7 +191,10 @@ private:
     void detachANGLE();
     void presentANGLE();
 #endif // SK_ANGLE
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 #endif // SK_SUPPORT_GPU
 
     typedef SkWindow INHERITED;

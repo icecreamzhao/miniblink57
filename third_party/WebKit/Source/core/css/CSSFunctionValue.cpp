@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/css/CSSFunctionValue.h"
 
 #include "wtf/text/StringBuilder.h"
@@ -18,4 +19,4 @@ String CSSFunctionValue::customCSSText() const
     return result.toString();
 }
 
-} // namespace blink
+}

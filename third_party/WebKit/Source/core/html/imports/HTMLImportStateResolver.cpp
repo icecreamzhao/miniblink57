@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/imports/HTMLImportStateResolver.h"
 
 #include "core/html/imports/HTMLImport.h"
@@ -49,17 +50,14 @@ inline bool HTMLImportStateResolver::isBlockingFollowers(HTMLImport* import)
 inline bool HTMLImportStateResolver::shouldBlockScriptExecution() const
 {
     // FIXME: Memoize to make this faster.
-    for (HTMLImport* ancestor = m_import; ancestor;
-         ancestor = ancestor->parent()) {
-        for (HTMLImport* predecessor = ancestor->previous(); predecessor;
-             predecessor = predecessor->previous()) {
+    for (HTMLImport* ancestor = m_import; ancestor; ancestor = ancestor->parent()) {
+        for (HTMLImport* predecessor = ancestor->previous(); predecessor; predecessor = predecessor->previous()) {
             if (isBlockingFollowers(predecessor))
                 return true;
         }
     }
 
-    for (HTMLImport* child = m_import->firstChild(); child;
-         child = child->next()) {
+    for (HTMLImport* child = m_import->firstChild(); child; child = child->next()) {
         if (isBlockingFollowers(child))
             return true;
     }
@@ -81,4 +79,5 @@ HTMLImportState HTMLImportStateResolver::resolve() const
     return HTMLImportState(HTMLImportState::Ready);
 }
 
-} // namespace blink
+}
+

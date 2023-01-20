@@ -27,12 +27,17 @@
  *
  */
 
+#include "config.h"
 #include "core/html/forms/ColorChooser.h"
 
 namespace blink {
 
-ColorChooser::ColorChooser() { }
+ColorChooser::ColorChooser()
+{
+}
 
-ColorChooser::~ColorChooser() { }
+ColorChooser::~ColorChooser()
+{
+}
 
 } // namespace blink

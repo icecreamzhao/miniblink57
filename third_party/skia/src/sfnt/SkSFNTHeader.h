@@ -63,7 +63,13 @@ struct SkSFNTHeader {
 
 #pragma pack(pop)
 
+<<<<<<< HEAD
 static_assert(sizeof(SkSFNTHeader) == 12, "sizeof_SkSFNTHeader_not_12");
 static_assert(sizeof(SkSFNTHeader::TableDirectoryEntry) == 16, "sizeof_SkSFNTHeader_TableDirectoryEntry_not_16");
+=======
+
+SK_COMPILE_ASSERT(sizeof(SkSFNTHeader) == 12, sizeof_SkSFNTHeader_not_12);
+SK_COMPILE_ASSERT(sizeof(SkSFNTHeader::TableDirectoryEntry) == 16, sizeof_SkSFNTHeader_TableDirectoryEntry_not_16);
+>>>>>>> miniblink49
 
 #endif

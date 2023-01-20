@@ -14,6 +14,10 @@ class SkData;
 
 SK_API SkData* SkValidatingSerializeFlattenable(SkFlattenable*);
 SK_API SkFlattenable* SkValidatingDeserializeFlattenable(const void* data, size_t size,
+<<<<<<< HEAD
     SkFlattenable::Type type);
+=======
+                                                         SkFlattenable::Type type);
+>>>>>>> miniblink49
 
 #endif

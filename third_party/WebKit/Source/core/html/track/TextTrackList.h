@@ -32,6 +32,7 @@
 #include "platform/Timer.h"
 #include "platform/heap/Handle.h"
 #include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 
 namespace blink {
@@ -39,13 +40,13 @@ namespace blink {
 class GenericEventQueue;
 class TextTrack;
 
-class CORE_EXPORT TextTrackList final : public EventTargetWithInlineData {
+class TextTrackList final : public EventTargetWithInlineData, public RefCountedWillBeNoBase<TextTrackList> {
     DEFINE_WRAPPERTYPEINFO();
-
+    REFCOUNTED_EVENT_TARGET(TextTrackList);
 public:
-    static TextTrackList* create(HTMLMediaElement* owner)
+    static PassRefPtrWillBeRawPtr<TextTrackList> create(HTMLMediaElement* owner)
     {
-        return new TextTrackList(owner);
+        return adoptRefWillBeNoop(new TextTrackList(owner));
     }
     ~TextTrackList() override;
 
@@ -54,19 +55,22 @@ public:
     int getTrackIndexRelativeToRenderedTracks(TextTrack*);
     bool contains(TextTrack*) const;
 
-    TextTrack* anonymousIndexedGetter(unsigned index);
+    TextTrack* item(unsigned index);
     TextTrack* getTrackById(const AtomicString& id);
-    void append(TextTrack*);
+    void append(PassRefPtrWillBeRawPtr<TextTrack>);
     void remove(TextTrack*);
 
     // EventTarget
     const AtomicString& interfaceName() const override;
-    ExecutionContext* getExecutionContext() const override;
+    ExecutionContext* executionContext() const override;
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(addtrack);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(change);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(removetrack);
 
+#if !ENABLE(OILPAN)
+    void clearOwner();
+#endif
     HTMLMediaElement* owner() const;
 
     void scheduleChangeEvent();
@@ -76,25 +80,23 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
     explicit TextTrackList(HTMLMediaElement*);
 
-    void scheduleTrackEvent(const AtomicString& eventName, TextTrack*);
+    void scheduleTrackEvent(const AtomicString& eventName, PassRefPtrWillBeRawPtr<TextTrack>);
 
-    void scheduleAddTrackEvent(TextTrack*);
-    void scheduleRemoveTrackEvent(TextTrack*);
+    void scheduleAddTrackEvent(PassRefPtrWillBeRawPtr<TextTrack>);
+    void scheduleRemoveTrackEvent(PassRefPtrWillBeRawPtr<TextTrack>);
 
     void invalidateTrackIndexesAfterTrack(TextTrack*);
 
-    Member<HTMLMediaElement> m_owner;
+    RawPtrWillBeMember<HTMLMediaElement> m_owner;
 
-    Member<GenericEventQueue> m_asyncEventQueue;
+    OwnPtrWillBeMember<GenericEventQueue> m_asyncEventQueue;
 
-    HeapVector<TraceWrapperMember<TextTrack>> m_addTrackTracks;
-    HeapVector<TraceWrapperMember<TextTrack>> m_elementTracks;
-    HeapVector<TraceWrapperMember<TextTrack>> m_inbandTracks;
+    WillBeHeapVector<RefPtrWillBeMember<TextTrack>> m_addTrackTracks;
+    WillBeHeapVector<RefPtrWillBeMember<TextTrack>> m_elementTracks;
+    WillBeHeapVector<RefPtrWillBeMember<TextTrack>> m_inbandTracks;
 };
 
 } // namespace blink

@@ -14,6 +14,7 @@ class SkBlitter;
 
 namespace SkTextureCompressor {
 
+<<<<<<< HEAD
 bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src,
     int width, int height, size_t rowBytes);
 
@@ -24,3 +25,15 @@ void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width
 }
 
 #endif // SkTextureCompressor_LATC_DEFINED
+=======
+    bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src,
+                          int width, int height, size_t rowBytes);
+
+    SkBlitter* CreateLATCBlitter(int width, int height, void* outputBuffer,
+                                 SkTBlitterAllocator *allocator);
+
+    void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height);
+}
+
+#endif  // SkTextureCompressor_LATC_DEFINED
+>>>>>>> miniblink49

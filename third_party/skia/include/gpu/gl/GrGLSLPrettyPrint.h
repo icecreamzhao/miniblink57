@@ -10,10 +10,17 @@
 #include "SkString.h"
 
 namespace GrGLSLPrettyPrint {
+<<<<<<< HEAD
 SkString PrettyPrintGLSL(const char** strings,
     int* lengths,
     int count,
     bool countlines);
+=======
+    SkString PrettyPrintGLSL(const char** strings,
+                             int* lengths,
+                             int count,
+                             bool countlines);
+>>>>>>> miniblink49
 };
 
 #endif /* GRGLPRETTYPRINTSL_H_ */

@@ -26,6 +26,7 @@ struct SkOTTableOS2_VA {
     SK_OT_SHORT xAvgCharWidth;
     struct WeightClass {
         SK_TYPED_ENUM(Value, SK_OT_USHORT,
+<<<<<<< HEAD
             ((UltraLight, SkTEndian_SwapBE16(1)))((ExtraLight, SkTEndian_SwapBE16(2)))((Light, SkTEndian_SwapBE16(3)))((SemiLight, SkTEndian_SwapBE16(4)))((Medium, SkTEndian_SwapBE16(5)))((SemiBold, SkTEndian_SwapBE16(6)))((Bold, SkTEndian_SwapBE16(7)))((ExtraBold, SkTEndian_SwapBE16(8)))((UltraBold, SkTEndian_SwapBE16(9)))
                 SK_SEQ_END,
             (value)SK_SEQ_END)
@@ -35,6 +36,33 @@ struct SkOTTableOS2_VA {
             ((UltraCondensed, SkTEndian_SwapBE16(1)))((ExtraCondensed, SkTEndian_SwapBE16(2)))((Condensed, SkTEndian_SwapBE16(3)))((SemiCondensed, SkTEndian_SwapBE16(4)))((Medium, SkTEndian_SwapBE16(5)))((SemiExpanded, SkTEndian_SwapBE16(6)))((Expanded, SkTEndian_SwapBE16(7)))((ExtraExpanded, SkTEndian_SwapBE16(8)))((UltraExpanded, SkTEndian_SwapBE16(9)))
                 SK_SEQ_END,
             (value)SK_SEQ_END)
+=======
+            ((UltraLight, SkTEndian_SwapBE16(1)))
+            ((ExtraLight, SkTEndian_SwapBE16(2)))
+            ((Light, SkTEndian_SwapBE16(3)))
+            ((SemiLight, SkTEndian_SwapBE16(4)))
+            ((Medium, SkTEndian_SwapBE16(5)))
+            ((SemiBold, SkTEndian_SwapBE16(6)))
+            ((Bold, SkTEndian_SwapBE16(7)))
+            ((ExtraBold, SkTEndian_SwapBE16(8)))
+            ((UltraBold, SkTEndian_SwapBE16(9)))
+            SK_SEQ_END,
+        (value)SK_SEQ_END)
+    } usWeightClass;
+    struct WidthClass {
+        SK_TYPED_ENUM(Value, SK_OT_USHORT,
+            ((UltraCondensed, SkTEndian_SwapBE16(1)))
+            ((ExtraCondensed, SkTEndian_SwapBE16(2)))
+            ((Condensed, SkTEndian_SwapBE16(3)))
+            ((SemiCondensed, SkTEndian_SwapBE16(4)))
+            ((Medium, SkTEndian_SwapBE16(5)))
+            ((SemiExpanded, SkTEndian_SwapBE16(6)))
+            ((Expanded, SkTEndian_SwapBE16(7)))
+            ((ExtraExpanded, SkTEndian_SwapBE16(8)))
+            ((UltraExpanded, SkTEndian_SwapBE16(9)))
+            SK_SEQ_END,
+        (value)SK_SEQ_END)
+>>>>>>> miniblink49
     } usWidthClass;
     union Type {
         struct Field {
@@ -120,6 +148,11 @@ struct SkOTTableOS2_VA {
 
 #pragma pack(pop)
 
+<<<<<<< HEAD
 static_assert(sizeof(SkOTTableOS2_VA) == 68, "sizeof_SkOTTableOS2_VA_not_68");
+=======
+
+SK_COMPILE_ASSERT(sizeof(SkOTTableOS2_VA) == 68, sizeof_SkOTTableOS2_VA_not_68);
+>>>>>>> miniblink49
 
 #endif

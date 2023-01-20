@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/xml/DocumentXSLT.h"
 
 #include "bindings/core/v8/DOMWrapperWorld.h"
@@ -20,28 +21,29 @@
 
 namespace blink {
 
-class DOMContentLoadedListener final
-    : public V8AbstractEventListener,
-      public ProcessingInstruction::DetachableEventListener {
-    USING_GARBAGE_COLLECTED_MIXIN(DOMContentLoadedListener);
-
+class DOMContentLoadedListener final : public ProcessingInstruction::DetachableEventListener, public V8AbstractEventListener {
 public:
-    static DOMContentLoadedListener* create(ScriptState* scriptState,
-        ProcessingInstruction* pi)
+    static PassRefPtr<DOMContentLoadedListener> create(ScriptState* scriptState, ProcessingInstruction* pi)
     {
-        return new DOMContentLoadedListener(scriptState, pi);
+        return adoptRef(new DOMContentLoadedListener(scriptState, pi));
     }
 
-    bool operator==(const EventListener&) const override { return true; }
+    using V8AbstractEventListener::ref;
+    using V8AbstractEventListener::deref;
+
+    virtual bool operator==(const EventListener&)
+    {
+        return true;
+    }
 
     virtual void handleEvent(ScriptState* scriptState, Event* event)
     {
-        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-        DCHECK_EQ(event->type(), "DOMContentLoaded");
+        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+        ASSERT(event->type() == "DOMContentLoaded");
         ScriptState::Scope scope(scriptState);
 
-        Document& document = *toDocument(scriptState->getExecutionContext());
-        DCHECK(!document.parsing());
+        Document& document = *toDocument(scriptState->executionContext());
+        ASSERT(!document.parsing());
 
         // Processing instruction (XML documents only).
         // We don't support linking to embedded CSS stylesheets,
@@ -56,50 +58,49 @@ public:
         DocumentXSLT::applyXSLTransform(document, pi);
     }
 
-    void detach() override { m_processingInstruction = nullptr; }
-
-    EventListener* toEventListener() override { return this; }
-
-    DEFINE_INLINE_VIRTUAL_TRACE()
+    void detach() override
     {
-        visitor->trace(m_processingInstruction);
-        V8AbstractEventListener::trace(visitor);
-        ProcessingInstruction::DetachableEventListener::trace(visitor);
+        m_processingInstruction = nullptr;
+    }
+
+    EventListener* toEventListener() override
+    {
+        return this;
     }
 
 private:
     DOMContentLoadedListener(ScriptState* scriptState, ProcessingInstruction* pi)
-        : V8AbstractEventListener(false,
-            scriptState->world(),
-            scriptState->isolate())
+        : V8AbstractEventListener(false, scriptState->world(), scriptState->isolate())
         , m_processingInstruction(pi)
     {
     }
 
-    virtual v8::Local<v8::Value> callListenerFunction(ScriptState*,
-        v8::Local<v8::Value>,
-        Event*)
+    void refDetachableEventListener() override { ref(); }
+    void derefDetachableEventListener() override { deref(); }
+
+    virtual v8::Local<v8::Value> callListenerFunction(ScriptState*, v8::Local<v8::Value>, Event*)
     {
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return v8::Local<v8::Value>();
     }
 
     // If this event listener is attached to a ProcessingInstruction, keep a
     // weak reference back to it. That ProcessingInstruction is responsible for
     // detaching itself and clear out the reference.
-    Member<ProcessingInstruction> m_processingInstruction;
+    //
+    // FIXME: Oilpan: when EventListener is on the heap, make this a WeakMember<>,
+    // which will remove the need for explicit detachment.
+    ProcessingInstruction* m_processingInstruction;
 };
 
-DocumentXSLT::DocumentXSLT(Document& document)
-    : Supplement<Document>(document)
-    , m_transformSourceDocument(nullptr)
+DocumentXSLT::DocumentXSLT()
+    : m_transformSourceDocument(nullptr)
 {
 }
 
-void DocumentXSLT::applyXSLTransform(Document& document,
-    ProcessingInstruction* pi)
+void DocumentXSLT::applyXSLTransform(Document& document, ProcessingInstruction* pi)
 {
-    DCHECK(!pi->isLoading());
+    ASSERT(!pi->isLoading());
     UseCounter::count(document, UseCounter::XSLProcessingInstruction);
     XSLTProcessor* processor = XSLTProcessor::create(document);
     processor->setXSLStyleSheet(toXSLStyleSheet(pi->sheet()));
@@ -107,16 +108,13 @@ void DocumentXSLT::applyXSLTransform(Document& document,
     String newSource;
     String resultEncoding;
     document.setParsingState(Document::Parsing);
-    if (!processor->transformToString(&document, resultMIMEType, newSource,
-            resultEncoding)) {
+    if (!processor->transformToString(&document, resultMIMEType, newSource, resultEncoding)) {
         document.setParsingState(Document::FinishedParsing);
         return;
     }
-    // FIXME: If the transform failed we should probably report an error (like
-    // Mozilla does).
+    // FIXME: If the transform failed we should probably report an error (like Mozilla does).
     LocalFrame* ownerFrame = document.frame();
-    processor->createDocumentFromSource(newSource, resultEncoding, resultMIMEType,
-        &document, ownerFrame);
+    processor->createDocumentFromSource(newSource, resultEncoding, resultMIMEType, &document, ownerFrame);
     InspectorInstrumentation::frameDocumentUpdated(ownerFrame);
     document.setParsingState(Document::FinishedParsing);
 }
@@ -124,7 +122,7 @@ void DocumentXSLT::applyXSLTransform(Document& document,
 ProcessingInstruction* DocumentXSLT::findXSLStyleSheet(Document& document)
 {
     for (Node* node = document.firstChild(); node; node = node->nextSibling()) {
-        if (node->getNodeType() != Node::kProcessingInstructionNode)
+        if (node->nodeType() != Node::PROCESSING_INSTRUCTION_NODE)
             continue;
 
         ProcessingInstruction* pi = toProcessingInstruction(node);
@@ -134,9 +132,7 @@ ProcessingInstruction* DocumentXSLT::findXSLStyleSheet(Document& document)
     return nullptr;
 }
 
-bool DocumentXSLT::processingInstructionInsertedIntoDocument(
-    Document& document,
-    ProcessingInstruction* pi)
+bool DocumentXSLT::processingInstructionInsertedIntoDocument(Document& document, ProcessingInstruction* pi)
 {
     if (!pi->isXSL())
         return false;
@@ -145,18 +141,14 @@ bool DocumentXSLT::processingInstructionInsertedIntoDocument(
         return true;
 
     ScriptState* scriptState = ScriptState::forMainWorld(document.frame());
-    if (!scriptState)
-        return false;
-    DOMContentLoadedListener* listener = DOMContentLoadedListener::create(scriptState, pi);
+    RefPtr<DOMContentLoadedListener> listener = DOMContentLoadedListener::create(scriptState, pi);
     document.addEventListener(EventTypeNames::DOMContentLoaded, listener, false);
-    DCHECK(!pi->eventListenerForXSLT());
-    pi->setEventListenerForXSLT(listener);
+    ASSERT(!pi->eventListenerForXSLT());
+    pi->setEventListenerForXSLT(listener.release());
     return true;
 }
 
-bool DocumentXSLT::processingInstructionRemovedFromDocument(
-    Document& document,
-    ProcessingInstruction* pi)
+bool DocumentXSLT::processingInstructionRemovedFromDocument(Document& document, ProcessingInstruction* pi)
 {
     if (!pi->isXSL())
         return false;
@@ -164,9 +156,8 @@ bool DocumentXSLT::processingInstructionRemovedFromDocument(
     if (!pi->eventListenerForXSLT())
         return true;
 
-    DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-    document.removeEventListener(EventTypeNames::DOMContentLoaded,
-        pi->eventListenerForXSLT(), false);
+    ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+    document.removeEventListener(EventTypeNames::DOMContentLoaded, pi->eventListenerForXSLT(), false);
     pi->clearEventListenerForXSLT();
     return true;
 }
@@ -176,7 +167,8 @@ bool DocumentXSLT::sheetLoaded(Document& document, ProcessingInstruction* pi)
     if (!pi->isXSL())
         return false;
 
-    if (RuntimeEnabledFeatures::xsltEnabled() && !document.parsing() && !pi->isLoading() && !DocumentXSLT::hasTransformSourceDocument(document)) {
+    if (RuntimeEnabledFeatures::xsltEnabled() && !document.parsing() && !pi->isLoading()
+        && !DocumentXSLT::hasTransformSourceDocument(document)) {
         if (findXSLStyleSheet(document) == pi)
             applyXSLTransform(document, pi);
     }
@@ -190,17 +182,16 @@ const char* DocumentXSLT::supplementName()
 
 bool DocumentXSLT::hasTransformSourceDocument(Document& document)
 {
-    return static_cast<DocumentXSLT*>(
-        Supplement<Document>::from(document, supplementName()));
+    return static_cast<DocumentXSLT*>(WillBeHeapSupplement<Document>::from(document, supplementName()));
 }
 
-DocumentXSLT& DocumentXSLT::from(Document& document)
+
+DocumentXSLT& DocumentXSLT::from(WillBeHeapSupplementable<Document>& document)
 {
-    DocumentXSLT* supplement = static_cast<DocumentXSLT*>(
-        Supplement<Document>::from(document, supplementName()));
+    DocumentXSLT* supplement = static_cast<DocumentXSLT*>(WillBeHeapSupplement<Document>::from(document, supplementName()));
     if (!supplement) {
-        supplement = new DocumentXSLT(document);
-        Supplement<Document>::provideTo(document, supplementName(), supplement);
+        supplement = new DocumentXSLT();
+        WillBeHeapSupplement<Document>::provideTo(document, supplementName(), adoptPtrWillBeNoop(supplement));
     }
     return *supplement;
 }
@@ -208,7 +199,7 @@ DocumentXSLT& DocumentXSLT::from(Document& document)
 DEFINE_TRACE(DocumentXSLT)
 {
     visitor->trace(m_transformSourceDocument);
-    Supplement<Document>::trace(visitor);
+    WillBeHeapSupplement<Document>::trace(visitor);
 }
 
 } // namespace blink

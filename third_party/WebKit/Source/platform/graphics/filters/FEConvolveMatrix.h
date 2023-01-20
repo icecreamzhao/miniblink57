@@ -24,8 +24,13 @@
 #ifndef FEConvolveMatrix_h
 #define FEConvolveMatrix_h
 
+<<<<<<< HEAD
 #include "platform/geometry/IntPoint.h"
 #include "platform/geometry/IntSize.h"
+=======
+#include "platform/geometry/FloatPoint.h"
+#include "platform/geometry/FloatSize.h"
+>>>>>>> miniblink49
 #include "platform/graphics/filters/Filter.h"
 #include "platform/graphics/filters/FilterEffect.h"
 #include "wtf/Vector.h"
@@ -33,6 +38,7 @@
 namespace blink {
 
 enum EdgeModeType {
+<<<<<<< HEAD
     EDGEMODE_UNKNOWN = 0,
     EDGEMODE_DUPLICATE = 1,
     EDGEMODE_WRAP = 2,
@@ -73,12 +79,64 @@ private:
     sk_sp<SkImageFilter> createImageFilter() override;
 
     bool parametersValid() const;
+=======
+    EDGEMODE_UNKNOWN   = 0,
+    EDGEMODE_DUPLICATE = 1,
+    EDGEMODE_WRAP      = 2,
+    EDGEMODE_NONE      = 3
+};
+
+class PLATFORM_EXPORT FEConvolveMatrix : public FilterEffect {
+public:
+    static PassRefPtrWillBeRawPtr<FEConvolveMatrix> create(Filter*, const IntSize&,
+            float, float, const IntPoint&, EdgeModeType, const FloatPoint&,
+            bool, const Vector<float>&);
+
+    IntSize kernelSize() const;
+    void setKernelSize(const IntSize&);
+
+    const Vector<float>& kernel() const;
+    void setKernel(const Vector<float>&);
+
+    float divisor() const;
+    bool setDivisor(float);
+
+    float bias() const;
+    bool setBias(float);
+
+    IntPoint targetOffset() const;
+    bool setTargetOffset(const IntPoint&);
+
+    EdgeModeType edgeMode() const;
+    bool setEdgeMode(EdgeModeType);
+
+    FloatPoint kernelUnitLength() const;
+    bool setKernelUnitLength(const FloatPoint&);
+
+    bool preserveAlpha() const;
+    bool setPreserveAlpha(bool);
+
+    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+
+    FloatRect mapPaintRect(const FloatRect&, bool forward = true) final;
+
+    TextStream& externalRepresentation(TextStream&, int indention) const override;
+
+private:
+
+    FEConvolveMatrix(Filter*, const IntSize&, float, float,
+            const IntPoint&, EdgeModeType, const FloatPoint&, bool, const Vector<float>&);
+>>>>>>> miniblink49
 
     IntSize m_kernelSize;
     float m_divisor;
     float m_bias;
     IntPoint m_targetOffset;
     EdgeModeType m_edgeMode;
+<<<<<<< HEAD
+=======
+    FloatPoint m_kernelUnitLength;
+>>>>>>> miniblink49
     bool m_preserveAlpha;
     Vector<float> m_kernelMatrix;
 };

@@ -24,11 +24,8 @@ class CSSPropertyMetadataWriter(css_properties.CSSProperties):
     def generate_css_property_metadata_cpp(self):
         return {
             'properties': self._properties,
-            'switches': [('descriptor_only', 'isDescriptorOnly'),
-                         ('interpolable', 'isInterpolableProperty'),
+            'switches': [('interpolable', 'isInterpolableProperty'),
                          ('inherited', 'isInheritedProperty'),
-                         ('supports_percentage', 'propertySupportsPercentage'),
-                         ('repeated', 'propertyIsRepeated')
                         ],
             'first_enum_value': self._first_enum_value,
         }

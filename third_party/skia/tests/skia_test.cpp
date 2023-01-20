@@ -12,6 +12,10 @@
 #include "SkCommonFlags.h"
 #include "SkGraphics.h"
 #include "SkOSFile.h"
+<<<<<<< HEAD
+=======
+#include "SkRunnable.h"
+>>>>>>> miniblink49
 #include "SkTArray.h"
 #include "SkTaskGroup.h"
 #include "SkTemplates.h"
@@ -24,18 +28,25 @@
 #endif
 
 using namespace skiatest;
+<<<<<<< HEAD
 using namespace sk_gpu_test;
+=======
+>>>>>>> miniblink49
 
 DEFINE_bool2(extendedTest, x, false, "run extended tests for pathOps.");
 
 // need to explicitly declare this, or we get some weird infinite loop llist
 template TestRegistry* TestRegistry::gHead;
+<<<<<<< HEAD
 void (*gVerboseFinalize)() = nullptr;
+=======
+>>>>>>> miniblink49
 
 // The threads report back to this object when they are done.
 class Status {
 public:
     explicit Status(int total)
+<<<<<<< HEAD
         : fDone(0)
         , fTestCount(0)
         , fFailCount(0)
@@ -48,6 +59,14 @@ public:
         SkMSec elapsed,
         int testCount)
     {
+=======
+        : fDone(0), fTestCount(0), fFailCount(0), fTotal(total) {}
+    // Threadsafe.
+    void endTest(const char* testName,
+                 bool success,
+                 SkMSec elapsed,
+                 int testCount) {
+>>>>>>> miniblink49
         const int done = 1 + sk_atomic_inc(&fDone);
         for (int i = 0; i < testCount; ++i) {
             sk_atomic_inc(&fTestCount);
@@ -63,7 +82,11 @@ public:
             time.printf("%5dms ", elapsed);
         }
         SkDebugf("%s[%3d/%3d] %s%s", prefix.c_str(), done, fTotal, time.c_str(),
+<<<<<<< HEAD
             testName);
+=======
+                 testName);
+>>>>>>> miniblink49
     }
 
     void reportFailure() { sk_atomic_inc(&fFailCount); }
@@ -72,6 +95,7 @@ public:
     int32_t failCount() { return fFailCount; }
 
 private:
+<<<<<<< HEAD
     int32_t fDone; // atomic
     int32_t fTestCount; // atomic
     int32_t fFailCount; // atomic
@@ -122,6 +146,49 @@ public:
         fStatus->endTest(fTest.name, !reporter.fError, elapsed,
             reporter.fTestCount);
     }
+=======
+    int32_t fDone;  // atomic
+    int32_t fTestCount;  // atomic
+    int32_t fFailCount;  // atomic
+    const int fTotal;
+};
+
+// Deletes self when run.
+class SkTestRunnable : public SkRunnable {
+public:
+    SkTestRunnable(const Test& test,
+                   Status* status,
+                   GrContextFactory* grContextFactory = NULL)
+        : fTest(test), fStatus(status), fGrContextFactory(grContextFactory) {}
+
+  virtual void run() {
+      struct TestReporter : public skiatest::Reporter {
+      public:
+          TestReporter() : fError(false), fTestCount(0) {}
+          void bumpTestCount() override { ++fTestCount; }
+          bool allowExtendedTest() const override {
+              return FLAGS_extendedTest;
+          }
+          bool verbose() const override { return FLAGS_veryVerbose; }
+          void reportFailed(const skiatest::Failure& failure) override {
+              SkDebugf("\nFAILED: %s", failure.toString().c_str());
+              fError = true;
+          }
+          bool fError;
+          int fTestCount;
+      } reporter;
+
+      const SkMSec start = SkTime::GetMSecs();
+      fTest.proc(&reporter, fGrContextFactory);
+      SkMSec elapsed = SkTime::GetMSecs() - start;
+      if (reporter.fError) {
+          fStatus->reportFailure();
+      }
+      fStatus->endTest(fTest.name, !reporter.fError, elapsed,
+                       reporter.fTestCount);
+      SkDELETE(this);
+  }
+>>>>>>> miniblink49
 
 private:
     Test fTest;
@@ -129,8 +196,12 @@ private:
     GrContextFactory* fGrContextFactory;
 };
 
+<<<<<<< HEAD
 static bool should_run(const char* testName, bool isGPUTest)
 {
+=======
+static bool should_run(const char* testName, bool isGPUTest) {
+>>>>>>> miniblink49
     if (SkCommandLineFlags::ShouldSkip(FLAGS_match, testName)) {
         return false;
     }
@@ -144,8 +215,12 @@ static bool should_run(const char* testName, bool isGPUTest)
 }
 
 int test_main();
+<<<<<<< HEAD
 int test_main()
 {
+=======
+int test_main() {
+>>>>>>> miniblink49
     SetupCrashHandler();
 
     SkAutoGraphics ag;
@@ -171,12 +246,20 @@ int test_main()
 #else
         header.append(" SK_RELEASE");
 #endif
+<<<<<<< HEAD
+=======
+        header.appendf(" skia_arch_width=%d", (int)sizeof(void*) * 8);
+>>>>>>> miniblink49
         if (FLAGS_veryVerbose) {
             header.appendf("\n");
         }
         SkDebugf("%s", header.c_str());
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     // Count tests first.
     int total = 0;
     int toRun = 0;
@@ -206,11 +289,19 @@ int test_main()
         } else if (test.needsGpu) {
             gpuTests.push_back(&test);
         } else {
+<<<<<<< HEAD
             cpuTests.add(SkTestRunnable(test, &status));
         }
     }
 
     GrContextFactory* grContextFactoryPtr = nullptr;
+=======
+            cpuTests.add(SkNEW_ARGS(SkTestRunnable, (test, &status)));
+        }
+    }
+
+    GrContextFactory* grContextFactoryPtr = NULL;
+>>>>>>> miniblink49
 #if SK_SUPPORT_GPU
     // Give GPU tests a context factory if that makes sense on this machine.
     GrContextFactory grContextFactory;
@@ -220,7 +311,12 @@ int test_main()
 
     // Run GPU tests on this thread.
     for (int i = 0; i < gpuTests.count(); i++) {
+<<<<<<< HEAD
         SkTestRunnable(*gpuTests[i], &status, grContextFactoryPtr)();
+=======
+        SkNEW_ARGS(SkTestRunnable, (*gpuTests[i], &status, grContextFactoryPtr))
+                ->run();
+>>>>>>> miniblink49
     }
 
     // Block until threaded tests finish.
@@ -228,12 +324,18 @@ int test_main()
 
     if (FLAGS_verbose) {
         SkDebugf(
+<<<<<<< HEAD
             "\nFinished %d tests, %d failures, %d skipped. "
             "(%d internal tests)",
             toRun, status.failCount(), skipCount, status.testCount());
         if (gVerboseFinalize) {
             (*gVerboseFinalize)();
         }
+=======
+                "\nFinished %d tests, %d failures, %d skipped. "
+                "(%d internal tests)",
+                toRun, status.failCount(), skipCount, status.testCount());
+>>>>>>> miniblink49
     }
 
     SkDebugf("\n");
@@ -241,8 +343,12 @@ int test_main()
 }
 
 #if !defined(SK_BUILD_FOR_IOS)
+<<<<<<< HEAD
 int main(int argc, char** argv)
 {
+=======
+int main(int argc, char** argv) {
+>>>>>>> miniblink49
     SkCommandLineFlags::Parse(argc, argv);
     return test_main();
 }

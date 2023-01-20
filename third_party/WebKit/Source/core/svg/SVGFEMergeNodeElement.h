@@ -30,7 +30,6 @@ namespace blink {
 
 class SVGFEMergeNodeElement final : public SVGElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGFEMergeNodeElement);
     SVGAnimatedString* in1() { return m_in1.get(); }
@@ -44,7 +43,7 @@ private:
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override { return false; }
 
-    Member<SVGAnimatedString> m_in1;
+    RefPtrWillBeMember<SVGAnimatedString> m_in1;
 };
 
 } // namespace blink

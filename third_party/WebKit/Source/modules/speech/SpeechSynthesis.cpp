@@ -23,8 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/speech/SpeechSynthesis.h"
 
+=======
+#include "config.h"
+#include "modules/speech/SpeechSynthesis.h"
+
+#include "bindings/core/v8/ExceptionState.h"
+>>>>>>> miniblink49
 #include "core/dom/ExecutionContext.h"
 #include "modules/speech/SpeechSynthesisEvent.h"
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"
@@ -38,22 +45,42 @@ SpeechSynthesis* SpeechSynthesis::create(ExecutionContext* context)
 }
 
 SpeechSynthesis::SpeechSynthesis(ExecutionContext* context)
+<<<<<<< HEAD
     : ContextClient(context)
+=======
+    : ContextLifecycleObserver(context)
+>>>>>>> miniblink49
     , m_platformSpeechSynthesizer(PlatformSpeechSynthesizer::create(this))
     , m_isPaused(false)
 {
 }
 
+<<<<<<< HEAD
 void SpeechSynthesis::setPlatformSynthesizer(
     PlatformSpeechSynthesizer* synthesizer)
+=======
+void SpeechSynthesis::setPlatformSynthesizer(PlatformSpeechSynthesizer* synthesizer)
+>>>>>>> miniblink49
 {
     m_platformSpeechSynthesizer = synthesizer;
+}
+
+<<<<<<< HEAD
+void SpeechSynthesis::voicesDidChange()
+{
+    m_voiceList.clear();
+    if (getExecutionContext())
+=======
+ExecutionContext* SpeechSynthesis::executionContext() const
+{
+    return ContextLifecycleObserver::executionContext();
 }
 
 void SpeechSynthesis::voicesDidChange()
 {
     m_voiceList.clear();
-    if (getExecutionContext())
+    if (executionContext() && !executionContext()->activeDOMObjectsAreStopped())
+>>>>>>> miniblink49
         dispatchEvent(Event::create(EventTypeNames::voiceschanged));
 }
 
@@ -62,21 +89,34 @@ const HeapVector<Member<SpeechSynthesisVoice>>& SpeechSynthesis::getVoices()
     if (m_voiceList.size())
         return m_voiceList;
 
+<<<<<<< HEAD
     // If the voiceList is empty, that's the cue to get the voices from the
     // platform again.
     const Vector<RefPtr<PlatformSpeechSynthesisVoice>>& platformVoices = m_platformSpeechSynthesizer->voiceList();
     size_t voiceCount = platformVoices.size();
     for (size_t k = 0; k < voiceCount; k++)
         m_voiceList.push_back(SpeechSynthesisVoice::create(platformVoices[k]));
+=======
+    // If the voiceList is empty, that's the cue to get the voices from the platform again.
+    const HeapVector<Member<PlatformSpeechSynthesisVoice>>& platformVoices = m_platformSpeechSynthesizer->voiceList();
+    size_t voiceCount = platformVoices.size();
+    for (size_t k = 0; k < voiceCount; k++)
+        m_voiceList.append(SpeechSynthesisVoice::create(platformVoices[k]));
+>>>>>>> miniblink49
 
     return m_voiceList;
 }
 
 bool SpeechSynthesis::speaking() const
 {
+<<<<<<< HEAD
     // If we have a current speech utterance, then that means we're assumed to be
     // in a speaking state. This state is independent of whether the utterance
     // happens to be paused.
+=======
+    // If we have a current speech utterance, then that means we're assumed to be in a speaking state.
+    // This state is independent of whether the utterance happens to be paused.
+>>>>>>> miniblink49
     return currentSpeechUtterance();
 }
 
@@ -102,9 +142,18 @@ void SpeechSynthesis::startSpeakingImmediately()
     m_platformSpeechSynthesizer->speak(utterance->platformUtterance());
 }
 
+<<<<<<< HEAD
 void SpeechSynthesis::speak(SpeechSynthesisUtterance* utterance)
 {
     ASSERT(utterance);
+=======
+void SpeechSynthesis::speak(SpeechSynthesisUtterance* utterance, ExceptionState& exceptionState)
+{
+    if (!utterance) {
+        exceptionState.throwTypeError("Invalid utterance argument");
+        return;
+    }
+>>>>>>> miniblink49
 
     m_utteranceQueue.append(utterance);
 
@@ -135,6 +184,7 @@ void SpeechSynthesis::resume()
     m_platformSpeechSynthesizer->resume();
 }
 
+<<<<<<< HEAD
 void SpeechSynthesis::fireEvent(const AtomicString& type,
     SpeechSynthesisUtterance* utterance,
     unsigned long charIndex,
@@ -151,6 +201,15 @@ void SpeechSynthesis::fireEvent(const AtomicString& type,
 void SpeechSynthesis::handleSpeakingCompleted(
     SpeechSynthesisUtterance* utterance,
     bool errorOccurred)
+=======
+void SpeechSynthesis::fireEvent(const AtomicString& type, SpeechSynthesisUtterance* utterance, unsigned long charIndex, const String& name)
+{
+    if (executionContext() && !executionContext()->activeDOMObjectsAreStopped())
+        utterance->dispatchEvent(SpeechSynthesisEvent::create(type, utterance, charIndex, (currentTime() - utterance->startTime()), name));
+}
+
+void SpeechSynthesis::handleSpeakingCompleted(SpeechSynthesisUtterance* utterance, bool errorOccurred)
+>>>>>>> miniblink49
 {
     ASSERT(utterance);
 
@@ -166,24 +225,33 @@ void SpeechSynthesis::handleSpeakingCompleted(
     // sent an event on an utterance before it got the message that we
     // canceled it, and we should always report to the user what actually
     // happened.
+<<<<<<< HEAD
     fireEvent(errorOccurred ? EventTypeNames::error : EventTypeNames::end,
         utterance, 0, String());
+=======
+    fireEvent(errorOccurred ? EventTypeNames::error : EventTypeNames::end, utterance, 0, String());
+>>>>>>> miniblink49
 
     // Start the next utterance if we just finished one and one was pending.
     if (shouldStartSpeaking && !m_utteranceQueue.isEmpty())
         startSpeakingImmediately();
 }
 
+<<<<<<< HEAD
 void SpeechSynthesis::boundaryEventOccurred(
     PlatformSpeechSynthesisUtterance* utterance,
     SpeechBoundary boundary,
     unsigned charIndex)
+=======
+void SpeechSynthesis::boundaryEventOccurred(PlatformSpeechSynthesisUtterance* utterance, SpeechBoundary boundary, unsigned charIndex)
+>>>>>>> miniblink49
 {
     DEFINE_STATIC_LOCAL(const String, wordBoundaryString, ("word"));
     DEFINE_STATIC_LOCAL(const String, sentenceBoundaryString, ("sentence"));
 
     switch (boundary) {
     case SpeechWordBoundary:
+<<<<<<< HEAD
         fireEvent(EventTypeNames::boundary,
             static_cast<SpeechSynthesisUtterance*>(utterance->client()),
             charIndex, wordBoundaryString);
@@ -192,12 +260,19 @@ void SpeechSynthesis::boundaryEventOccurred(
         fireEvent(EventTypeNames::boundary,
             static_cast<SpeechSynthesisUtterance*>(utterance->client()),
             charIndex, sentenceBoundaryString);
+=======
+        fireEvent(EventTypeNames::boundary, static_cast<SpeechSynthesisUtterance*>(utterance->client()), charIndex, wordBoundaryString);
+        break;
+    case SpeechSentenceBoundary:
+        fireEvent(EventTypeNames::boundary, static_cast<SpeechSynthesisUtterance*>(utterance->client()), charIndex, sentenceBoundaryString);
+>>>>>>> miniblink49
         break;
     default:
         ASSERT_NOT_REACHED();
     }
 }
 
+<<<<<<< HEAD
 void SpeechSynthesis::didStartSpeaking(
     PlatformSpeechSynthesisUtterance* utterance)
 {
@@ -241,6 +316,38 @@ void SpeechSynthesis::speakingErrorOccurred(
     if (utterance->client())
         handleSpeakingCompleted(
             static_cast<SpeechSynthesisUtterance*>(utterance->client()), true);
+=======
+void SpeechSynthesis::didStartSpeaking(PlatformSpeechSynthesisUtterance* utterance)
+{
+    if (utterance->client())
+        fireEvent(EventTypeNames::start, static_cast<SpeechSynthesisUtterance*>(utterance->client()), 0, String());
+}
+
+void SpeechSynthesis::didPauseSpeaking(PlatformSpeechSynthesisUtterance* utterance)
+{
+    m_isPaused = true;
+    if (utterance->client())
+        fireEvent(EventTypeNames::pause, static_cast<SpeechSynthesisUtterance*>(utterance->client()), 0, String());
+}
+
+void SpeechSynthesis::didResumeSpeaking(PlatformSpeechSynthesisUtterance* utterance)
+{
+    m_isPaused = false;
+    if (utterance->client())
+        fireEvent(EventTypeNames::resume, static_cast<SpeechSynthesisUtterance*>(utterance->client()), 0, String());
+}
+
+void SpeechSynthesis::didFinishSpeaking(PlatformSpeechSynthesisUtterance* utterance)
+{
+    if (utterance->client())
+        handleSpeakingCompleted(static_cast<SpeechSynthesisUtterance*>(utterance->client()), false);
+}
+
+void SpeechSynthesis::speakingErrorOccurred(PlatformSpeechSynthesisUtterance* utterance)
+{
+    if (utterance->client())
+        handleSpeakingCompleted(static_cast<SpeechSynthesisUtterance*>(utterance->client()), true);
+>>>>>>> miniblink49
 }
 
 SpeechSynthesisUtterance* SpeechSynthesis::currentSpeechUtterance() const
@@ -262,8 +369,13 @@ DEFINE_TRACE(SpeechSynthesis)
     visitor->trace(m_voiceList);
     visitor->trace(m_utteranceQueue);
     PlatformSpeechSynthesizerClient::trace(visitor);
+<<<<<<< HEAD
     ContextClient::trace(visitor);
     EventTargetWithInlineData::trace(visitor);
+=======
+    RefCountedGarbageCollectedEventTargetWithInlineData<SpeechSynthesis>::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

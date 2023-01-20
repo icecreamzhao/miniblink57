@@ -1,6 +1,10 @@
 /*
+<<<<<<< HEAD
  * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights
  * reserved.
+=======
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
+>>>>>>> miniblink49
  * Copyright (C) Research In Motion Limited 2011. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -23,6 +27,7 @@
 #ifndef StringOperators_h
 #define StringOperators_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/text/StringConcatenate.h"
 
@@ -32,10 +37,19 @@ template <typename StringType1, typename StringType2>
 class StringAppend final {
     STACK_ALLOCATED();
 
+=======
+#include "StringConcatenate.h"
+
+namespace WTF {
+
+template<typename StringType1, typename StringType2>
+class StringAppend {
+>>>>>>> miniblink49
 public:
     StringAppend(StringType1 string1, StringType2 string2);
 
     operator String() const;
+<<<<<<< HEAD
     operator AtomicString() const;
 
     unsigned length() const;
@@ -52,11 +66,32 @@ private:
 template <typename StringType1, typename StringType2>
 StringAppend<StringType1, StringType2>::StringAppend(StringType1 string1,
     StringType2 string2)
+=======
+
+    operator AtomicString() const;
+
+    bool is8Bit();
+
+    void writeTo(LChar* destination);
+
+    void writeTo(UChar* destination);
+
+    unsigned length();
+
+private:
+    StringType1 m_string1;
+    StringType2 m_string2;
+};
+
+template<typename StringType1, typename StringType2>
+StringAppend<StringType1, StringType2>::StringAppend(StringType1 string1, StringType2 string2)
+>>>>>>> miniblink49
     : m_string1(string1)
     , m_string2(string2)
 {
 }
 
+<<<<<<< HEAD
 template <typename StringType1, typename StringType2>
 StringAppend<StringType1, StringType2>::operator String() const
 {
@@ -80,24 +115,52 @@ StringAppend<StringType1, StringType2>::operator AtomicString() const
 
 template <typename StringType1, typename StringType2>
 bool StringAppend<StringType1, StringType2>::is8Bit() const
+=======
+template<typename StringType1, typename StringType2>
+StringAppend<StringType1, StringType2>::operator String() const
+{
+    return String(makeString(m_string1, m_string2));
+}
+
+template<typename StringType1, typename StringType2>
+StringAppend<StringType1, StringType2>::operator AtomicString() const
+{
+    return AtomicString(makeString(m_string1, m_string2));
+}
+
+template<typename StringType1, typename StringType2>
+bool StringAppend<StringType1, StringType2>::is8Bit()
+>>>>>>> miniblink49
 {
     StringTypeAdapter<StringType1> adapter1(m_string1);
     StringTypeAdapter<StringType2> adapter2(m_string2);
     return adapter1.is8Bit() && adapter2.is8Bit();
 }
 
+<<<<<<< HEAD
 template <typename StringType1, typename StringType2>
 void StringAppend<StringType1, StringType2>::writeTo(LChar* destination) const
 {
     DCHECK(is8Bit());
+=======
+template<typename StringType1, typename StringType2>
+void StringAppend<StringType1, StringType2>::writeTo(LChar* destination)
+{
+    ASSERT(is8Bit());
+>>>>>>> miniblink49
     StringTypeAdapter<StringType1> adapter1(m_string1);
     StringTypeAdapter<StringType2> adapter2(m_string2);
     adapter1.writeTo(destination);
     adapter2.writeTo(destination + adapter1.length());
 }
 
+<<<<<<< HEAD
 template <typename StringType1, typename StringType2>
 void StringAppend<StringType1, StringType2>::writeTo(UChar* destination) const
+=======
+template<typename StringType1, typename StringType2>
+void StringAppend<StringType1, StringType2>::writeTo(UChar* destination)
+>>>>>>> miniblink49
 {
     StringTypeAdapter<StringType1> adapter1(m_string1);
     StringTypeAdapter<StringType2> adapter2(m_string2);
@@ -105,6 +168,7 @@ void StringAppend<StringType1, StringType2>::writeTo(UChar* destination) const
     adapter2.writeTo(destination + adapter1.length());
 }
 
+<<<<<<< HEAD
 template <typename StringType1, typename StringType2>
 unsigned StringAppend<StringType1, StringType2>::length() const
 {
@@ -123,10 +187,25 @@ class StringTypeAdapter<StringAppend<StringType1, StringType2>> {
 public:
     StringTypeAdapter<StringAppend<StringType1, StringType2>>(
         const StringAppend<StringType1, StringType2>& buffer)
+=======
+template<typename StringType1, typename StringType2>
+unsigned StringAppend<StringType1, StringType2>::length()
+{
+    StringTypeAdapter<StringType1> adapter1(m_string1);
+    StringTypeAdapter<StringType2> adapter2(m_string2);
+    return adapter1.length() + adapter2.length();
+}
+
+template<typename StringType1, typename StringType2>
+class StringTypeAdapter<StringAppend<StringType1, StringType2>> {
+public:
+    StringTypeAdapter<StringAppend<StringType1, StringType2>>(StringAppend<StringType1, StringType2>& buffer)
+>>>>>>> miniblink49
         : m_buffer(buffer)
     {
     }
 
+<<<<<<< HEAD
     unsigned length() const { return m_buffer.length(); }
     bool is8Bit() const { return m_buffer.is8Bit(); }
 
@@ -139,17 +218,36 @@ private:
 
 inline StringAppend<const char*, String> operator+(const char* string1,
     const String& string2)
+=======
+    unsigned length() { return m_buffer.length(); }
+
+    bool is8Bit() { return m_buffer.is8Bit(); }
+
+    void writeTo(LChar* destination) { m_buffer.writeTo(destination); }
+    void writeTo(UChar* destination) { m_buffer.writeTo(destination); }
+
+private:
+    StringAppend<StringType1, StringType2>& m_buffer;
+};
+
+inline StringAppend<const char*, String> operator+(const char* string1, const String& string2)
+>>>>>>> miniblink49
 {
     return StringAppend<const char*, String>(string1, string2);
 }
 
+<<<<<<< HEAD
 inline StringAppend<const char*, AtomicString> operator+(
     const char* string1,
     const AtomicString& string2)
+=======
+inline StringAppend<const char*, AtomicString> operator+(const char* string1, const AtomicString& string2)
+>>>>>>> miniblink49
 {
     return StringAppend<const char*, AtomicString>(string1, string2);
 }
 
+<<<<<<< HEAD
 inline StringAppend<const char*, StringView> operator+(
     const char* string1,
     const StringView& string2)
@@ -161,23 +259,36 @@ template <typename U, typename V>
 inline StringAppend<const char*, StringAppend<U, V>> operator+(
     const char* string1,
     const StringAppend<U, V>& string2)
+=======
+template<typename U, typename V>
+inline StringAppend<const char*, StringAppend<U, V>> operator+(const char* string1, const StringAppend<U, V>& string2)
+>>>>>>> miniblink49
 {
     return StringAppend<const char*, StringAppend<U, V>>(string1, string2);
 }
 
+<<<<<<< HEAD
 inline StringAppend<const UChar*, String> operator+(const UChar* string1,
     const String& string2)
+=======
+inline StringAppend<const UChar*, String> operator+(const UChar* string1, const String& string2)
+>>>>>>> miniblink49
 {
     return StringAppend<const UChar*, String>(string1, string2);
 }
 
+<<<<<<< HEAD
 inline StringAppend<const UChar*, AtomicString> operator+(
     const UChar* string1,
     const AtomicString& string2)
+=======
+inline StringAppend<const UChar*, AtomicString> operator+(const UChar* string1, const AtomicString& string2)
+>>>>>>> miniblink49
 {
     return StringAppend<const UChar*, AtomicString>(string1, string2);
 }
 
+<<<<<<< HEAD
 inline StringAppend<const UChar*, StringView> operator+(
     const UChar* string1,
     const StringView& string2)
@@ -189,16 +300,25 @@ template <typename U, typename V>
 inline StringAppend<const UChar*, StringAppend<U, V>> operator+(
     const UChar* string1,
     const StringAppend<U, V>& string2)
+=======
+template<typename U, typename V>
+inline StringAppend<const UChar*, StringAppend<U, V>> operator+(const UChar* string1, const StringAppend<U, V>& string2)
+>>>>>>> miniblink49
 {
     return StringAppend<const UChar*, StringAppend<U, V>>(string1, string2);
 }
 
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 StringAppend<String, T> operator+(const String& string1, T string2)
 {
     return StringAppend<String, T>(string1, string2);
 }
 
+<<<<<<< HEAD
 template <typename T>
 StringAppend<AtomicString, T> operator+(const AtomicString& string1,
     T string2)
@@ -215,6 +335,10 @@ StringAppend<StringView, T> operator+(const StringView& string1, T string2)
 template <typename U, typename V, typename W>
 StringAppend<StringAppend<U, V>, W> operator+(const StringAppend<U, V>& string1,
     W string2)
+=======
+template<typename U, typename V, typename W>
+StringAppend<StringAppend<U, V>, W> operator+(const StringAppend<U, V>& string1, W string2)
+>>>>>>> miniblink49
 {
     return StringAppend<StringAppend<U, V>, W>(string1, string2);
 }

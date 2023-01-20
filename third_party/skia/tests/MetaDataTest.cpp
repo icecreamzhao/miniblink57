@@ -6,11 +6,18 @@
  */
 
 #include "SkMetaData.h"
+<<<<<<< HEAD
 #include "SkRefCnt.h"
 #include "Test.h"
 
 static void test_ptrs(skiatest::Reporter* reporter)
 {
+=======
+#include "Test.h"
+#include "SkRefCnt.h"
+
+static void test_ptrs(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkRefCnt ref;
     REPORTER_ASSERT(reporter, ref.unique());
 
@@ -36,9 +43,14 @@ static void test_ptrs(skiatest::Reporter* reporter)
     REPORTER_ASSERT(reporter, ref.unique());
 }
 
+<<<<<<< HEAD
 DEF_TEST(MetaData, reporter)
 {
     SkMetaData m1;
+=======
+DEF_TEST(MetaData, reporter) {
+    SkMetaData  m1;
+>>>>>>> miniblink49
 
     REPORTER_ASSERT(reporter, !m1.findS32("int"));
     REPORTER_ASSERT(reporter, !m1.findScalar("scalar"));
@@ -56,6 +68,7 @@ DEF_TEST(MetaData, reporter)
     m1.setBool("true", true);
     m1.setBool("false", false);
 
+<<<<<<< HEAD
     int32_t n;
     SkScalar s;
 
@@ -63,6 +76,15 @@ DEF_TEST(MetaData, reporter)
 
     REPORTER_ASSERT(reporter, m1.findS32("int", &n) && n == 12345);
     REPORTER_ASSERT(reporter, m1.findScalar("scalar", &s) && s == SK_Scalar1 / 2);
+=======
+    int32_t     n;
+    SkScalar    s;
+
+    m1.setScalar("scalar", SK_Scalar1/2);
+
+    REPORTER_ASSERT(reporter, m1.findS32("int", &n) && n == 12345);
+    REPORTER_ASSERT(reporter, m1.findScalar("scalar", &s) && s == SK_Scalar1/2);
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, !strcmp(m1.findString("hello"), "world"));
     REPORTER_ASSERT(reporter, m1.hasBool("true", true));
     REPORTER_ASSERT(reporter, m1.hasBool("false", false));
@@ -71,6 +93,7 @@ DEF_TEST(MetaData, reporter)
     const char* name;
 
     static const struct {
+<<<<<<< HEAD
         const char* fName;
         SkMetaData::Type fType;
         int fCount;
@@ -90,6 +113,30 @@ DEF_TEST(MetaData, reporter)
         int match = 0;
         for (unsigned i = 0; i < SK_ARRAY_COUNT(gElems); i++) {
             if (!strcmp(name, gElems[i].fName)) {
+=======
+        const char*         fName;
+        SkMetaData::Type    fType;
+        int                 fCount;
+    } gElems[] = {
+        { "int",    SkMetaData::kS32_Type,      1 },
+        { "scalar", SkMetaData::kScalar_Type,   1 },
+        { "ptr",    SkMetaData::kPtr_Type,      1 },
+        { "hello",  SkMetaData::kString_Type,   sizeof("world") },
+        { "true",   SkMetaData::kBool_Type,     1 },
+        { "false",  SkMetaData::kBool_Type,     1 }
+    };
+
+    int                 loop = 0;
+    int count;
+    SkMetaData::Type    t;
+    while ((name = iter.next(&t, &count)) != NULL)
+    {
+        int match = 0;
+        for (unsigned i = 0; i < SK_ARRAY_COUNT(gElems); i++)
+        {
+            if (!strcmp(name, gElems[i].fName))
+            {
+>>>>>>> miniblink49
                 match += 1;
                 REPORTER_ASSERT(reporter, gElems[i].fType == t);
                 REPORTER_ASSERT(reporter, gElems[i].fCount == count);

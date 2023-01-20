@@ -30,13 +30,12 @@ namespace blink {
 
 class SVGStopElement final : public SVGElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGStopElement);
 
     Color stopColorIncludingOpacity() const;
 
-    SVGAnimatedNumber* offset() const { return m_offset.get(); }
+    SVGAnimatedNumber* offset() { return m_offset.get(); }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -48,7 +47,7 @@ private:
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
 
-    Member<SVGAnimatedNumber> m_offset;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_offset;
 };
 
 } // namespace blink

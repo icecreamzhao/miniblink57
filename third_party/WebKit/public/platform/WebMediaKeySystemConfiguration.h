@@ -18,6 +18,7 @@ struct WebMediaKeySystemConfiguration {
         NotAllowed,
     };
 
+<<<<<<< HEAD
     WebString label;
     WebVector<WebEncryptedMediaInitDataType> initDataTypes;
     WebVector<WebMediaKeySystemMediaCapability> audioCapabilities;
@@ -25,6 +26,30 @@ struct WebMediaKeySystemConfiguration {
     Requirement distinctiveIdentifier = Requirement::Optional;
     Requirement persistentState = Requirement::Optional;
     WebVector<WebEncryptedMediaSessionType> sessionTypes;
+=======
+    // As MediaKeySystemConfiguration is a dictionary, some members may be
+    // not-present. Because requestMediaKeySystemAccess() distinguishes empty
+    // from not-present, we require a presence flag for each member.
+    bool hasInitDataTypes = false;
+    WebVector<WebEncryptedMediaInitDataType> initDataTypes;
+
+    bool hasAudioCapabilities = false;
+    WebVector<WebMediaKeySystemMediaCapability> audioCapabilities;
+
+    bool hasVideoCapabilities = false;
+    WebVector<WebMediaKeySystemMediaCapability> videoCapabilities;
+
+    // |distinctiveIdentifier| and |persistentState| are always present because
+    // they have default values.
+    Requirement distinctiveIdentifier = Requirement::Optional;
+    Requirement persistentState = Requirement::Optional;
+
+    bool hasSessionTypes = false;
+    WebVector<WebEncryptedMediaSessionType> sessionTypes;
+
+    // |label| may be not-present, but we use a null string to represent that.
+    WebString label;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

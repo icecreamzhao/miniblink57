@@ -18,22 +18,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/CSSValueList.h"
 
 #include "core/css/CSSPrimitiveValue.h"
-#include "core/css/parser/CSSParser.h"
-#include "wtf/SizeAssertions.h"
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
 
-struct SameSizeAsCSSValueList : CSSValue {
-    Vector<Member<CSSValue>, 4> list_values;
-};
-ASSERT_SIZE(CSSValueList, SameSizeAsCSSValueList);
-
-CSSValueList::CSSValueList(ClassType classType,
-    ValueListSeparator listSeparator)
+CSSValueList::CSSValueList(ClassType classType, ValueListSeparator listSeparator)
     : CSSValue(classType)
 {
     m_valueListSeparator = listSeparator;
@@ -45,12 +38,12 @@ CSSValueList::CSSValueList(ValueListSeparator listSeparator)
     m_valueListSeparator = listSeparator;
 }
 
-bool CSSValueList::removeAll(const CSSValue& val)
+bool CSSValueList::removeAll(CSSValue* val)
 {
     bool found = false;
     for (int index = m_values.size() - 1; index >= 0; --index) {
-        Member<const CSSValue>& value = m_values.at(index);
-        if (value && value->equals(val)) {
+        RefPtrWillBeMember<CSSValue>& value = m_values.at(index);
+        if (value && val && value->equals(*val)) {
             m_values.remove(index);
             found = true;
         }
@@ -59,19 +52,19 @@ bool CSSValueList::removeAll(const CSSValue& val)
     return found;
 }
 
-bool CSSValueList::hasValue(const CSSValue& val) const
+bool CSSValueList::hasValue(CSSValue* val) const
 {
     for (size_t index = 0; index < m_values.size(); index++) {
-        const Member<const CSSValue>& value = m_values.at(index);
-        if (value && value->equals(val))
+        const RefPtrWillBeMember<CSSValue>& value = m_values.at(index);
+        if (value && val && value->equals(*val))
             return true;
     }
     return false;
 }
 
-CSSValueList* CSSValueList::copy() const
+PassRefPtrWillBeRawPtr<CSSValueList> CSSValueList::copy()
 {
-    CSSValueList* newList = nullptr;
+    RefPtrWillBeRawPtr<CSSValueList> newList = nullptr;
     switch (m_valueListSeparator) {
     case SpaceSeparator:
         newList = createSpaceSeparated();
@@ -85,8 +78,9 @@ CSSValueList* CSSValueList::copy() const
     default:
         ASSERT_NOT_REACHED();
     }
-    newList->m_values = m_values;
-    return newList;
+    for (size_t index = 0; index < m_values.size(); index++)
+        newList->append(m_values[index]);
+    return newList.release();
 }
 
 String CSSValueList::customCSSText() const
@@ -129,21 +123,6 @@ bool CSSValueList::hasFailedOrCanceledSubresources() const
             return true;
     }
     return false;
-}
-
-bool CSSValueList::mayContainUrl() const
-{
-    for (const auto& value : m_values) {
-        if (value->mayContainUrl())
-            return true;
-    }
-    return false;
-}
-
-void CSSValueList::reResolveUrl(const Document& document) const
-{
-    for (const auto& value : m_values)
-        value->reResolveUrl(document);
 }
 
 DEFINE_TRACE_AFTER_DISPATCH(CSSValueList)

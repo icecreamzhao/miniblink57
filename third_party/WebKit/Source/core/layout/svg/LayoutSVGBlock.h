@@ -30,56 +30,33 @@ class LayoutSVGBlock : public LayoutBlockFlow {
 public:
     explicit LayoutSVGBlock(SVGElement*);
 
-    void mapLocalToAncestor(const LayoutBoxModelObject* ancestor,
-        TransformState&,
-        MapCoordinatesFlags = ApplyContainerFlip) const final;
-    void mapAncestorToLocal(const LayoutBoxModelObject* ancestor,
-        TransformState&,
-        MapCoordinatesFlags = ApplyContainerFlip) const final;
-    const LayoutObject* pushMappingToContainer(
-        const LayoutBoxModelObject* ancestorToStopAt,
-        LayoutGeometryMap&) const final;
+    virtual LayoutRect clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* = nullptr) const override final;
 
-    AffineTransform localSVGTransform() const final { return m_localTransform; }
+    virtual void mapLocalToContainer(const LayoutBoxModelObject* paintInvalidationContainer, TransformState&, MapCoordinatesFlags = ApplyContainerFlip, bool* wasFixed = nullptr, const PaintInvalidationState* = nullptr) const override final;
+    virtual const LayoutObject* pushMappingToContainer(const LayoutBoxModelObject* ancestorToStopAt, LayoutGeometryMap&) const override final;
 
-    PaintLayerType layerTypeRequired() const final { return NoPaintLayer; }
+    virtual AffineTransform localTransform() const override final { return m_localTransform; }
+
+    virtual DeprecatedPaintLayerType layerTypeRequired() const override final { return NoDeprecatedPaintLayer; }
+
+    virtual void invalidateTreeIfNeeded(PaintInvalidationState&) override;
 
 protected:
-    void willBeDestroyed() override;
-    bool mapToVisualRectInAncestorSpace(
-        const LayoutBoxModelObject* ancestor,
-        LayoutRect&,
-        VisualRectFlags = DefaultVisualRectFlags) const final;
+    virtual void willBeDestroyed() override;
+    virtual void mapRectToPaintInvalidationBacking(const LayoutBoxModelObject* paintInvalidationContainer, LayoutRect&, const PaintInvalidationState*) const override final;
 
     AffineTransform m_localTransform;
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSVG || LayoutBlockFlow::isOfType(type);
-    }
-
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVG || LayoutBlockFlow::isOfType(type); }
 private:
-    LayoutRect absoluteVisualRect() const final;
+    virtual void updateFromStyle() override final;
 
-    bool allowsOverflowClip() const final;
+    virtual void absoluteRects(Vector<IntRect>&, const LayoutPoint& accumulatedOffset) const override final;
 
-    void absoluteRects(Vector<IntRect>&,
-        const LayoutPoint& accumulatedOffset) const final;
+    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override final;
 
-    void updateFromStyle() final;
-    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) final;
-
-    bool nodeAtPoint(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        HitTestAction) override;
-
-    // The inherited version doesn't check for SVG effects.
-    bool paintedOutputOfObjectHasNoEffectRegardlessOfSize() const override
-    {
-        return false;
-    }
+    virtual bool nodeAtPoint(HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) override;
 };
 
-} // namespace blink
+}
 #endif // LayoutSVGBlock_h

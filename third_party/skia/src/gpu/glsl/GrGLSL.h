@@ -11,8 +11,11 @@
 #include "GrTypesPriv.h"
 #include "SkString.h"
 
+<<<<<<< HEAD
 class GrGLSLCaps;
 
+=======
+>>>>>>> miniblink49
 // Limited set of GLSL versions we build shaders for. Caller should round
 // down the GLSL version to one of these enums.
 enum GrGLSLGeneration {
@@ -37,6 +40,7 @@ enum GrGLSLGeneration {
      */
     k330_GrGLSLGeneration,
     /**
+<<<<<<< HEAD
      * Desktop GLSL 4.00
      */
     k400_GrGLSLGeneration,
@@ -48,6 +52,11 @@ enum GrGLSLGeneration {
      * ES GLSL 3.20
      */
     k320es_GrGLSLGeneration,
+=======
+     * ES GLSL 3.10 only TODO Make GLSLCap objects to make this more granular
+     */
+    k310es_GrGLSLGeneration,
+>>>>>>> miniblink49
 };
 
 bool GrGLSLSupportsNamedFragmentShaderOutputs(GrGLSLGeneration);
@@ -56,6 +65,7 @@ bool GrGLSLSupportsNamedFragmentShaderOutputs(GrGLSLGeneration);
  * Gets the name of the function that should be used to sample a 2D texture. Coord type is used
  * to indicate whether the texture is sampled using projective textured (kVec3f) or not (kVec2f).
  */
+<<<<<<< HEAD
 inline const char* GrGLSLTexture2DFunctionName(GrSLType coordType, GrSLType samplerType,
     GrGLSLGeneration glslGen)
 {
@@ -99,12 +109,21 @@ static inline const char* GrGLSLPrecisionString(GrSLPrecision p)
     default:
         SkFAIL("Unexpected precision type.");
         return "";
+=======
+inline const char* GrGLSLTexture2DFunctionName(GrSLType coordType, GrGLSLGeneration glslGen) {
+    if (kVec2f_GrSLType == coordType) {
+        return glslGen >= k130_GrGLSLGeneration ? "texture" : "texture2D";
+    } else {
+        SkASSERT(kVec3f_GrSLType == coordType);
+        return glslGen >= k130_GrGLSLGeneration ? "textureProj" : "texture2DProj";
+>>>>>>> miniblink49
     }
 }
 
 /**
  * Converts a GrSLType to a string containing the name of the equivalent GLSL type.
  */
+<<<<<<< HEAD
 static inline const char* GrGLSLTypeString(GrSLType t)
 {
     switch (t) {
@@ -141,6 +160,29 @@ static inline const char* GrGLSLTypeString(GrSLType t)
     default:
         SkFAIL("Unknown shader var type.");
         return ""; // suppress warning
+=======
+static inline const char* GrGLSLTypeString(GrSLType t) {
+    switch (t) {
+        case kVoid_GrSLType:
+            return "void";
+        case kFloat_GrSLType:
+            return "float";
+        case kVec2f_GrSLType:
+            return "vec2";
+        case kVec3f_GrSLType:
+            return "vec3";
+        case kVec4f_GrSLType:
+            return "vec4";
+        case kMat33f_GrSLType:
+            return "mat3";
+        case kMat44f_GrSLType:
+            return "mat4";
+        case kSampler2D_GrSLType:
+            return "sampler2D";
+        default:
+            SkFAIL("Unknown shader var type.");
+            return ""; // suppress warning
+>>>>>>> miniblink49
     }
 }
 
@@ -157,8 +199,12 @@ public:
     bool isOnes() const { return kOnes_ExprType == fType; }
     bool isZeros() const { return kZeros_ExprType == fType; }
 
+<<<<<<< HEAD
     const char* c_str() const
     {
+=======
+    const char* c_str() const {
+>>>>>>> miniblink49
         if (kZeros_ExprType == fType) {
             return Self::ZerosStr();
         } else if (kOnes_ExprType == fType) {
@@ -168,8 +214,12 @@ public:
         return fExpr.c_str();
     }
 
+<<<<<<< HEAD
     bool isValid() const
     {
+=======
+    bool isValid() const {
+>>>>>>> miniblink49
         return kFullExpr_ExprType != fType || !fExpr.isEmpty();
     }
 
@@ -178,15 +228,23 @@ protected:
      * Useful only as a return value from functions that never actually return
      * this and instances that will be assigned to later. */
     GrGLSLExpr()
+<<<<<<< HEAD
         : fType(kFullExpr_ExprType)
     {
+=======
+        : fType(kFullExpr_ExprType) {
+>>>>>>> miniblink49
         // The only constructor that is allowed to build an empty expression.
         SkASSERT(!this->isValid());
     }
 
     /** Constructs an expression with all components as value v */
+<<<<<<< HEAD
     explicit GrGLSLExpr(int v)
     {
+=======
+    explicit GrGLSLExpr(int v) {
+>>>>>>> miniblink49
         if (v == 0) {
             fType = kZeros_ExprType;
         } else if (v == 1) {
@@ -200,9 +258,14 @@ protected:
     /** Constructs an expression from a string.
      * Argument expr is a simple expression or a parenthesized expression. */
     // TODO: make explicit once effects input Exprs.
+<<<<<<< HEAD
     GrGLSLExpr(const char expr[])
     {
         if (nullptr == expr) { // TODO: remove this once effects input Exprs.
+=======
+    GrGLSLExpr(const char expr[]) {
+        if (NULL == expr) {  // TODO: remove this once effects input Exprs.
+>>>>>>> miniblink49
             fType = kOnes_ExprType;
         } else {
             fType = kFullExpr_ExprType;
@@ -214,9 +277,14 @@ protected:
     /** Constructs an expression from a string.
      * Argument expr is a simple expression or a parenthesized expression. */
     // TODO: make explicit once effects input Exprs.
+<<<<<<< HEAD
     GrGLSLExpr(const SkString& expr)
     {
         if (expr.isEmpty()) { // TODO: remove this once effects input Exprs.
+=======
+    GrGLSLExpr(const SkString& expr) {
+        if (expr.isEmpty()) {  // TODO: remove this once effects input Exprs.
+>>>>>>> miniblink49
             fType = kOnes_ExprType;
         } else {
             fType = kFullExpr_ExprType;
@@ -227,15 +295,23 @@ protected:
 
     /** Constructs an expression from a string with one substitution. */
     GrGLSLExpr(const char format[], const char in0[])
+<<<<<<< HEAD
         : fType(kFullExpr_ExprType)
     {
+=======
+        : fType(kFullExpr_ExprType) {
+>>>>>>> miniblink49
         fExpr.appendf(format, in0);
     }
 
     /** Constructs an expression from a string with two substitutions. */
     GrGLSLExpr(const char format[], const char in0[], const char in1[])
+<<<<<<< HEAD
         : fType(kFullExpr_ExprType)
     {
+=======
+        : fType(kFullExpr_ExprType) {
+>>>>>>> miniblink49
         fExpr.appendf(format, in0, in1);
     }
 
@@ -294,6 +370,7 @@ class GrGLSLExpr4;
 class GrGLSLExpr1 : public GrGLSLExpr<GrGLSLExpr1> {
 public:
     GrGLSLExpr1()
+<<<<<<< HEAD
         : INHERITED()
     {
     }
@@ -308,18 +385,37 @@ public:
     GrGLSLExpr1(const SkString& expr)
         : INHERITED(expr)
     {
+=======
+        : INHERITED() {
+    }
+    explicit GrGLSLExpr1(int v)
+        : INHERITED(v) {
+    }
+    GrGLSLExpr1(const char* expr)
+        : INHERITED(expr) {
+    }
+    GrGLSLExpr1(const SkString& expr)
+        : INHERITED(expr) {
+>>>>>>> miniblink49
     }
 
     static GrGLSLExpr1 VectorCast(const GrGLSLExpr1& expr);
 
 private:
     GrGLSLExpr1(const char format[], const char in0[])
+<<<<<<< HEAD
         : INHERITED(format, in0)
     {
     }
     GrGLSLExpr1(const char format[], const char in0[], const char in1[])
         : INHERITED(format, in0, in1)
     {
+=======
+        : INHERITED(format, in0) {
+    }
+    GrGLSLExpr1(const char format[], const char in0[], const char in1[])
+        : INHERITED(format, in0, in1) {
+>>>>>>> miniblink49
     }
 
     static const char* ZerosStr();
@@ -327,9 +423,15 @@ private:
     static const char* CastStr();
     static const char* CastIntStr();
 
+<<<<<<< HEAD
     friend GrGLSLExpr1 operator*(const GrGLSLExpr1& in0, const GrGLSLExpr1& in1);
     friend GrGLSLExpr1 operator+(const GrGLSLExpr1& in0, const GrGLSLExpr1& in1);
     friend GrGLSLExpr1 operator-(const GrGLSLExpr1& in0, const GrGLSLExpr1& in1);
+=======
+    friend GrGLSLExpr1 operator*(const GrGLSLExpr1& in0, const GrGLSLExpr1&in1);
+    friend GrGLSLExpr1 operator+(const GrGLSLExpr1& in0, const GrGLSLExpr1&in1);
+    friend GrGLSLExpr1 operator-(const GrGLSLExpr1& in0, const GrGLSLExpr1&in1);
+>>>>>>> miniblink49
 
     friend class GrGLSLExpr<GrGLSLExpr1>;
     friend class GrGLSLExpr<GrGLSLExpr4>;
@@ -341,6 +443,7 @@ private:
 class GrGLSLExpr4 : public GrGLSLExpr<GrGLSLExpr4> {
 public:
     GrGLSLExpr4()
+<<<<<<< HEAD
         : INHERITED()
     {
     }
@@ -355,6 +458,18 @@ public:
     GrGLSLExpr4(const SkString& expr)
         : INHERITED(expr)
     {
+=======
+        : INHERITED() {
+    }
+    explicit GrGLSLExpr4(int v)
+        : INHERITED(v) {
+    }
+    GrGLSLExpr4(const char* expr)
+        : INHERITED(expr) {
+    }
+    GrGLSLExpr4(const SkString& expr)
+        : INHERITED(expr) {
+>>>>>>> miniblink49
     }
 
     typedef GrGLSLExpr1 AExpr;
@@ -366,12 +481,19 @@ public:
 
 private:
     GrGLSLExpr4(const char format[], const char in0[])
+<<<<<<< HEAD
         : INHERITED(format, in0)
     {
     }
     GrGLSLExpr4(const char format[], const char in0[], const char in1[])
         : INHERITED(format, in0, in1)
     {
+=======
+        : INHERITED(format, in0) {
+    }
+    GrGLSLExpr4(const char format[], const char in0[], const char in1[])
+        : INHERITED(format, in0, in1) {
+>>>>>>> miniblink49
     }
 
     static const char* ZerosStr();
@@ -380,6 +502,7 @@ private:
     static const char* CastIntStr();
 
     // The vector-by-scalar and scalar-by-vector binary operations.
+<<<<<<< HEAD
     friend GrGLSLExpr4 operator*(const GrGLSLExpr1& in0, const GrGLSLExpr4& in1);
     friend GrGLSLExpr4 operator+(const GrGLSLExpr1& in0, const GrGLSLExpr4& in1);
     friend GrGLSLExpr4 operator-(const GrGLSLExpr1& in0, const GrGLSLExpr4& in1);
@@ -391,6 +514,19 @@ private:
     friend GrGLSLExpr4 operator*(const GrGLSLExpr4& in0, const GrGLSLExpr4& in1);
     friend GrGLSLExpr4 operator+(const GrGLSLExpr4& in0, const GrGLSLExpr4& in1);
     friend GrGLSLExpr4 operator-(const GrGLSLExpr4& in0, const GrGLSLExpr4& in1);
+=======
+    friend GrGLSLExpr4 operator*(const GrGLSLExpr1& in0, const GrGLSLExpr4&in1);
+    friend GrGLSLExpr4 operator+(const GrGLSLExpr1& in0, const GrGLSLExpr4&in1);
+    friend GrGLSLExpr4 operator-(const GrGLSLExpr1& in0, const GrGLSLExpr4&in1);
+    friend GrGLSLExpr4 operator*(const GrGLSLExpr4& in0, const GrGLSLExpr1&in1);
+    friend GrGLSLExpr4 operator+(const GrGLSLExpr4& in0, const GrGLSLExpr1&in1);
+    friend GrGLSLExpr4 operator-(const GrGLSLExpr4& in0, const GrGLSLExpr1&in1);
+
+    // The vector-by-vector, i.e. component-wise, binary operations.
+    friend GrGLSLExpr4 operator*(const GrGLSLExpr4& in0, const GrGLSLExpr4&in1);
+    friend GrGLSLExpr4 operator+(const GrGLSLExpr4& in0, const GrGLSLExpr4&in1);
+    friend GrGLSLExpr4 operator-(const GrGLSLExpr4& in0, const GrGLSLExpr4&in1);
+>>>>>>> miniblink49
 
     friend class GrGLSLExpr<GrGLSLExpr4>;
 

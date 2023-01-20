@@ -28,14 +28,23 @@
 #define SharedBuffer_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkData.h"
 #include "wtf/Forward.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
+=======
+#include "platform/PurgeableVector.h"
+#include "third_party/skia/include/core/SkData.h"
+#include "wtf/Forward.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/RefCounted.h"
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class WebProcessMemoryDump;
 
 class PLATFORM_EXPORT SharedBuffer : public RefCounted<SharedBuffer> {
@@ -69,6 +78,18 @@ public:
         STRICT_ARG_TYPE(size_t);
         return adoptRef(new SharedBuffer(data, size));
     }
+=======
+class PLATFORM_EXPORT SharedBuffer : public RefCounted<SharedBuffer> {
+public:
+    static const unsigned kSegmentSize = 0x1000;
+
+    static PassRefPtr<SharedBuffer> create() { return adoptRef(new SharedBuffer); }
+    static PassRefPtr<SharedBuffer> create(size_t size) { return adoptRef(new SharedBuffer(size)); }
+    static PassRefPtr<SharedBuffer> create(const char* c, int i) { return adoptRef(new SharedBuffer(c, i)); }
+    static PassRefPtr<SharedBuffer> create(const unsigned char* c, int i) { return adoptRef(new SharedBuffer(c, i)); }
+
+    static PassRefPtr<SharedBuffer> createPurgeable(const char* c, unsigned size) { return adoptRef(new SharedBuffer(c, size, PurgeableVector::Purgeable)); }
+>>>>>>> miniblink49
 
     static PassRefPtr<SharedBuffer> adoptVector(Vector<char>&);
 
@@ -79,11 +100,16 @@ public:
     // performance.
     const char* data() const;
 
+<<<<<<< HEAD
     size_t size() const;
+=======
+    unsigned size() const;
+>>>>>>> miniblink49
 
     bool isEmpty() const { return !size(); }
 
     void append(PassRefPtr<SharedBuffer>);
+<<<<<<< HEAD
 
     HAS_STRICTLY_TYPED_ARG
     void append(const char* data, STRICTLY_TYPED_ARG(size))
@@ -91,6 +117,9 @@ public:
         ALLOW_NUMERIC_ARG_TYPES_PROMOTABLE_TO(size_t);
         appendInternal(data, size);
     }
+=======
+    void append(const char*, unsigned);
+>>>>>>> miniblink49
     void append(const Vector<char>&);
 
     void clear();
@@ -104,6 +133,7 @@ public:
     // repeat calling it until it returns 0.
     // Usage:
     //      const char* segment;
+<<<<<<< HEAD
     //      size_t pos = 0;
     //      while (size_t length = sharedBuffer->getSomeData(segment, pos)) {
     //          // Use the data. for example: decoder->decode(segment, length);
@@ -147,22 +177,60 @@ public:
     sk_sp<SkData> getAsSkData() const;
 
     void onMemoryDump(const String& dumpPrefix, WebProcessMemoryDump*) const;
+=======
+    //      unsigned pos = 0;
+    //      while (unsigned length = sharedBuffer->getSomeData(segment, pos)) {
+    //          // Use the data. for example: decoder->decode(segment, length);
+    //          pos += length;
+    //      }
+    unsigned getSomeData(const char*& data, unsigned position = 0) const;
+
+    // Returns the content data into "dest" as a flat buffer. "byteLength" must
+    // exactly match with size(). Returns true on success, otherwise the content
+    // of "dest" is not guaranteed.
+    bool getAsBytes(void* dest, unsigned byteLength) const;
+
+    // Creates an SkData and copies this SharedBuffer's contents to that
+    // SkData without merging segmented buffers into a flat buffer.
+    PassRefPtr<SkData> getAsSkData() const;
+
+    // See PurgeableVector::lock().
+    bool lock();
+
+    // WARNING: Calling unlock() on a SharedBuffer that wasn't created with the
+    // purgeability option does an extra memcpy(). Please use
+    // SharedBuffer::createPurgeable() if you intend to call unlock().
+    void unlock();
+
+    bool isLocked() const;
+>>>>>>> miniblink49
 
 private:
     SharedBuffer();
     explicit SharedBuffer(size_t);
+<<<<<<< HEAD
     SharedBuffer(const char*, size_t);
     SharedBuffer(const unsigned char*, size_t);
+=======
+    SharedBuffer(const char*, int);
+    SharedBuffer(const unsigned char*, int);
+    SharedBuffer(const char*, unsigned, PurgeableVector::PurgeableOption);
+>>>>>>> miniblink49
 
     // See SharedBuffer::data().
     void mergeSegmentsIntoBuffer() const;
 
+<<<<<<< HEAD
     void appendInternal(const char* data, size_t);
     bool getAsBytesInternal(void* dest, size_t, size_t) const;
     size_t getSomeDataInternal(const char*& data, size_t position) const;
 
     size_t m_size;
     mutable Vector<char> m_buffer;
+=======
+    unsigned m_size;
+    mutable PurgeableVector m_buffer;
+>>>>>>> miniblink49
     mutable Vector<char*> m_segments;
 };
 

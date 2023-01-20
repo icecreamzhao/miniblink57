@@ -32,87 +32,112 @@
 #define InspectorBaseAgent_h
 
 #include "core/CoreExport.h"
-#include "core/InstrumentingAgents.h"
-#include "core/inspector/protocol/Protocol.h"
+#include "core/InspectorBackendDispatcher.h"
+#include "core/inspector/InstrumentingAgents.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+#include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+class InspectorFrontend;
+class InspectorCompositeState;
+class InspectorState;
+class InstrumentingAgents;
 class LocalFrame;
 
-using protocol::Maybe;
-using protocol::Response;
-
-class CORE_EXPORT InspectorAgent
-    : public GarbageCollectedFinalized<InspectorAgent> {
+class CORE_EXPORT InspectorAgent : public NoBaseWillBeGarbageCollectedFinalized<InspectorAgent> {
 public:
-    InspectorAgent() { }
-    virtual ~InspectorAgent() { }
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
+    explicit InspectorAgent(const String&);
+    virtual ~InspectorAgent();
+    DECLARE_VIRTUAL_TRACE();
 
+    virtual void init() { }
+    virtual void setFrontend(InspectorFrontend*) = 0;
+    virtual void clearFrontend() = 0;
+    virtual void disable(ErrorString*) { }
     virtual void restore() { }
+    virtual void registerInDispatcher(InspectorBackendDispatcher*) = 0;
+    virtual void discardAgent() { }
     virtual void didCommitLoadForLocalFrame(LocalFrame*) { }
     virtual void flushPendingProtocolNotifications() { }
 
-    virtual void init(InstrumentingAgents*, protocol::UberDispatcher*, protocol::DictionaryValue*) = 0;
-    virtual void dispose() = 0;
+    String name() const { return m_name; }
+    void appended(InstrumentingAgents*, InspectorState*);
+
+protected:
+    RawPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
+    RawPtrWillBeMember<InspectorState> m_state;
+
+private:
+    String m_name;
 };
 
-template <typename DomainMetainfo>
-class InspectorBaseAgent : public InspectorAgent
-    , public DomainMetainfo::BackendClass 
-{
+class CORE_EXPORT InspectorAgentRegistry final {
+    DISALLOW_ALLOCATION();
+    WTF_MAKE_NONCOPYABLE(InspectorAgentRegistry);
 public:
-    ~InspectorBaseAgent() override { }
+    InspectorAgentRegistry(InstrumentingAgents*, InspectorCompositeState*);
+    void append(PassOwnPtrWillBeRawPtr<InspectorAgent>);
 
-    void init(InstrumentingAgents* instrumentingAgents,
-        protocol::UberDispatcher* dispatcher,
-        protocol::DictionaryValue* state
-        ) override
+    void setFrontend(InspectorFrontend*);
+    void clearFrontend();
+    void restore();
+    void registerInDispatcher(InspectorBackendDispatcher*);
+    void discardAgents();
+    void flushPendingProtocolNotifications();
+    void didCommitLoadForLocalFrame(LocalFrame*);
+
+    DECLARE_TRACE();
+
+private:
+    RawPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
+    RawPtrWillBeMember<InspectorCompositeState> m_inspectorState;
+    WillBeHeapVector<OwnPtrWillBeMember<InspectorAgent> > m_agents;
+};
+
+template<typename AgentClass, typename FrontendClass>
+class InspectorBaseAgent : public InspectorAgent {
+public:
+    virtual ~InspectorBaseAgent() { }
+
+    void setFrontend(InspectorFrontend* frontend) override final
     {
-        m_instrumentingAgents = instrumentingAgents;
-        m_frontend.reset(new typename DomainMetainfo::FrontendClass(dispatcher->channel()));
-        DomainMetainfo::DispatcherClass::wire(dispatcher, this);
-
-        m_state = state->getObject(DomainMetainfo::domainName);
-        if (!m_state) {
-            std::unique_ptr<protocol::DictionaryValue> newState = protocol::DictionaryValue::create();
-            m_state = newState.get();
-            state->setObject(DomainMetainfo::domainName, std::move(newState));
-        }
+        ASSERT(!m_frontend);
+        m_frontend = FrontendClass::from(frontend);
     }
 
-    Response disable() override { return Response::OK(); }
-
-    void dispose() override
+    void clearFrontend() override final
     {
-        disable();
-        m_frontend.reset();
-        m_state = nullptr;
-        m_instrumentingAgents = nullptr;
+        ErrorString error;
+        disable(&error);
+        ASSERT(m_frontend);
+        m_frontend = nullptr;
     }
 
-    DEFINE_INLINE_VIRTUAL_TRACE()
+    virtual void registerInDispatcher(InspectorBackendDispatcher* dispatcher) override final
     {
-        visitor->trace(m_instrumentingAgents);
-        InspectorAgent::trace(visitor);
+        dispatcher->registerAgent(static_cast<AgentClass*>(this));
     }
 
 protected:
-    InspectorBaseAgent() { }
-
-    typename DomainMetainfo::FrontendClass* frontend() const
+    explicit InspectorBaseAgent(const String& name)
+        : InspectorAgent(name)
+        , m_frontend(nullptr)
     {
-        return m_frontend.get();
     }
-    Member<InstrumentingAgents> m_instrumentingAgents;
-    protocol::DictionaryValue* m_state;
+
+    FrontendClass* frontend() const { return m_frontend; }
 
 private:
-    std::unique_ptr<typename DomainMetainfo::FrontendClass> m_frontend;
+    FrontendClass* m_frontend;
 };
+
+inline bool asBool(const bool* const b)
+{
+    return b ? *b : false;
+}
 
 } // namespace blink
 

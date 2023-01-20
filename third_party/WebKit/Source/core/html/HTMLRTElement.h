@@ -21,6 +21,6 @@ private:
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 };
 
-} // namespace blink
+} // namespace
 
 #endif

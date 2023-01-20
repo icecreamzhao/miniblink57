@@ -27,10 +27,8 @@
 #define AutoscrollController_h
 
 #include "core/CoreExport.h"
-#include "platform/geometry/FloatSize.h"
 #include "platform/geometry/IntPoint.h"
-#include "platform/heap/Handle.h"
-#include "wtf/Time.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
@@ -46,52 +44,50 @@ enum AutoscrollType {
     NoAutoscroll,
     AutoscrollForDragAndDrop,
     AutoscrollForSelection,
-    AutoscrollForMiddleClickCanStop,
-    AutoscrollForMiddleClick,
+#if OS(WIN)
+    AutoscrollForPanCanStop,
+    AutoscrollForPan,
+#endif
 };
 
-// AutscrollController handels autoscroll and middle click autoscroll for
-// EventHandler.
-class CORE_EXPORT AutoscrollController final
-    : public GarbageCollected<AutoscrollController> {
+// AutscrollController handels autoscroll and pan scroll for EventHandler.
+class CORE_EXPORT AutoscrollController {
 public:
-    static AutoscrollController* create(Page&);
-    DECLARE_TRACE();
+    static PassOwnPtr<AutoscrollController> create(Page&);
 
-    static const int noMiddleClickAutoscrollRadius = 15;
+    static const int noPanScrollRadius = 15;
 
     void animate(double monotonicFrameBeginTime);
     bool autoscrollInProgress() const;
     bool autoscrollInProgress(const LayoutBox*) const;
-    bool middleClickAutoscrollInProgress() const;
+    bool panScrollInProgress() const;
     void startAutoscrollForSelection(LayoutObject*);
     void stopAutoscroll();
     void stopAutoscrollIfNeeded(LayoutObject*);
     void updateAutoscrollLayoutObject();
-    void updateDragAndDrop(Node* targetNode,
-        const IntPoint& eventPosition,
-        TimeTicks eventTime);
-    void handleMouseReleaseForMiddleClickAutoscroll(LocalFrame*,
-        const PlatformMouseEvent&);
-    void startMiddleClickAutoscroll(LayoutBox*, const IntPoint&);
+    void updateDragAndDrop(Node* targetNode, const IntPoint& eventPosition, double eventTime);
+#if OS(WIN)
+    void handleMouseReleaseForPanScrolling(LocalFrame*, const PlatformMouseEvent&);
+    void startPanScrolling(LayoutBox*, const IntPoint&);
+#endif
 
 private:
     explicit AutoscrollController(Page&);
 
     void startAutoscroll();
 
-    void updateMiddleClickAutoscrollState(FrameView*,
-        const IntPoint& lastKnownMousePosition);
-    FloatSize calculateAutoscrollDelta();
+#if OS(WIN)
+    void updatePanScrollState(FrameView*, const IntPoint& lastKnownMousePosition);
+#endif
 
-    Member<Page> m_page;
+    Page& m_page;
     LayoutBox* m_autoscrollLayoutObject;
-    LayoutBox* m_pressedLayoutObject;
     AutoscrollType m_autoscrollType;
     IntPoint m_dragAndDropAutoscrollReferencePosition;
-    TimeTicks m_dragAndDropAutoscrollStartTime;
-    IntPoint m_middleClickAutoscrollStartPos;
-    bool m_didLatchForMiddleClickAutoscroll;
+    double m_dragAndDropAutoscrollStartTime;
+#if OS(WIN)
+    IntPoint m_panScrollStartPos;
+#endif
 };
 
 } // namespace blink

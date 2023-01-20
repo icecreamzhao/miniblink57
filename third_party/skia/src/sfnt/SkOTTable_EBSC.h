@@ -9,8 +9,13 @@
 #define SkOTTable_EBSC_DEFINED
 
 #include "SkEndian.h"
+<<<<<<< HEAD
 #include "SkOTTableTypes.h"
 #include "SkOTTable_EBLC.h"
+=======
+#include "SkOTTable_EBLC.h"
+#include "SkOTTableTypes.h"
+>>>>>>> miniblink49
 
 #pragma pack(push, 1)
 

@@ -7,13 +7,19 @@
 
 #include "public/platform/WebCommon.h"
 #include "public/platform/WebCredential.h"
+<<<<<<< HEAD
 #include "public/platform/WebSecurityOrigin.h"
 #include "public/platform/WebString.h"
+=======
+#include "public/platform/WebString.h"
+#include "public/platform/WebURL.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WebFederatedCredential : public WebCredential {
 public:
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebFederatedCredential(
         const WebString& id,
         const WebSecurityOrigin& federation,
@@ -22,6 +28,15 @@ public:
 
     BLINK_PLATFORM_EXPORT void assign(const WebFederatedCredential&);
     BLINK_PLATFORM_EXPORT WebSecurityOrigin provider() const;
+=======
+    BLINK_PLATFORM_EXPORT WebFederatedCredential(const WebString& id, const WebURL& federation, const WebString& name, const WebURL& iconURL);
+
+    BLINK_PLATFORM_EXPORT void assign(const WebFederatedCredential&);
+    BLINK_PLATFORM_EXPORT WebURL provider() const;
+
+    // FIXME: Throw this away once it's unused on the Chromium side: https://crbug.com/494880
+    BLINK_PLATFORM_EXPORT WebURL federation() const { return provider(); }
+>>>>>>> miniblink49
 
 #if INSIDE_BLINK
     BLINK_PLATFORM_EXPORT WebFederatedCredential(PlatformCredential*);
@@ -32,3 +47,8 @@ public:
 } // namespace blink
 
 #endif // WebFederatedCredential_h
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> miniblink49

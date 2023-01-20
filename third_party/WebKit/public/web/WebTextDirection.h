@@ -39,7 +39,11 @@ namespace blink {
 
 // Represents text directions (or writing directions) of a DOM node.
 enum WebTextDirection {
+<<<<<<< HEAD
     WebTextDirectionDefault, // Natural writing direction ("inherit")
+=======
+    WebTextDirectionDefault,  // Natural writing direction ("inherit")
+>>>>>>> miniblink49
     WebTextDirectionLeftToRight,
     WebTextDirectionRightToLeft,
     WebTextDirectionLast = WebTextDirectionRightToLeft
@@ -49,9 +53,15 @@ enum WebTextDirection {
 inline WebTextDirection toWebTextDirection(TextDirection direction)
 {
     switch (direction) {
+<<<<<<< HEAD
     case TextDirection::kLtr:
         return WebTextDirectionLeftToRight;
     case TextDirection::kRtl:
+=======
+    case LTR:
+        return WebTextDirectionLeftToRight;
+    case RTL:
+>>>>>>> miniblink49
         return WebTextDirectionRightToLeft;
     }
     ASSERT_NOT_REACHED();

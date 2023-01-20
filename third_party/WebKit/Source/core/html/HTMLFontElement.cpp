@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLFontElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -28,10 +29,8 @@
 #include "core/css/CSSValueList.h"
 #include "core/css/CSSValuePool.h"
 #include "core/css/StylePropertySet.h"
-#include "core/css/parser/CSSParser.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "wtf/text/StringBuilder.h"
-#include "wtf/text/StringToNumber.h"
 
 using namespace WTF;
 
@@ -48,10 +47,9 @@ DEFINE_NODE_FACTORY(HTMLFontElement)
 
 // http://www.whatwg.org/specs/web-apps/current-work/multipage/rendering.html#fonts-and-colors
 template <typename CharacterType>
-static bool parseFontSize(const CharacterType* characters,
-    unsigned length,
-    int& size)
+static bool parseFontSize(const CharacterType* characters, unsigned length, int& size)
 {
+
     // Step 1
     // Step 2
     const CharacterType* position = characters;
@@ -67,12 +65,14 @@ static bool parseFontSize(const CharacterType* characters,
     // Step 4
     if (position == end)
         return false;
-    DCHECK_LT(position, end);
+    ASSERT(position < end);
 
     // Step 5
-    enum { RelativePlus,
+    enum {
+        RelativePlus,
         RelativeMinus,
-        Absolute } mode;
+        Absolute
+    } mode;
 
     switch (*position) {
     case '+':
@@ -138,20 +138,7 @@ static bool parseFontSize(const String& input, int& size)
     return parseFontSize(input.characters16(), input.length(), size);
 }
 
-static const CSSValueList* createFontFaceValueWithPool(
-    const AtomicString& string)
-{
-    CSSValuePool::FontFaceValueCache::AddResult entry = cssValuePool().getFontFaceCacheEntry(string);
-    if (!entry.storedValue->value) {
-        const CSSValue* parsedValue = CSSParser::parseSingleValue(CSSPropertyFontFamily, string);
-        if (parsedValue && parsedValue->isValueList())
-            entry.storedValue->value = toCSSValueList(parsedValue);
-    }
-    return entry.storedValue->value;
-}
-
-bool HTMLFontElement::cssValueFromFontSizeNumber(const String& s,
-    CSSValueID& size)
+bool HTMLFontElement::cssValueFromFontSizeNumber(const String& s, CSSValueID& size)
 {
     int num = 0;
     if (!parseFontSize(s, num))
@@ -181,7 +168,7 @@ bool HTMLFontElement::cssValueFromFontSizeNumber(const String& s,
         size = CSSValueWebkitXxxLarge;
         break;
     default:
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
     }
     return true;
 }
@@ -193,10 +180,7 @@ bool HTMLFontElement::isPresentationAttribute(const QualifiedName& name) const
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLFontElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLFontElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
     if (name == sizeAttr) {
         CSSValueID size = CSSValueInvalid;
@@ -205,11 +189,11 @@ void HTMLFontElement::collectStyleForPresentationAttribute(
     } else if (name == colorAttr) {
         addHTMLColorToStyle(style, CSSPropertyColor, value);
     } else if (name == faceAttr && !value.isEmpty()) {
-        if (const CSSValueList* fontFaceValue = createFontFaceValueWithPool(value))
-            style->setProperty(CSSProperty(CSSPropertyFontFamily, *fontFaceValue));
+        if (RefPtrWillBeRawPtr<CSSValueList> fontFaceValue = cssValuePool().createFontFaceValue(value))
+            style->setProperty(CSSProperty(CSSPropertyFontFamily, fontFaceValue.release()));
     } else {
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-} // namespace blink
+}

@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/CSSStyleRule.h"
 
 #include "core/css/CSSSelector.h"
@@ -31,8 +32,7 @@
 
 namespace blink {
 
-using SelectorTextCache = PersistentHeapHashMap<WeakMember<const CSSStyleRule>, String>;
-
+typedef HashMap<const CSSStyleRule*, String> SelectorTextCache;
 static SelectorTextCache& selectorTextCache()
 {
     DEFINE_STATIC_LOCAL(SelectorTextCache, cache, ());
@@ -45,13 +45,22 @@ CSSStyleRule::CSSStyleRule(StyleRule* styleRule, CSSStyleSheet* parent)
 {
 }
 
-CSSStyleRule::~CSSStyleRule() { }
+CSSStyleRule::~CSSStyleRule()
+{
+#if !ENABLE(OILPAN)
+    if (m_propertiesCSSOMWrapper)
+        m_propertiesCSSOMWrapper->clearParentRule();
+#endif
+    if (hasCachedSelectorText()) {
+        selectorTextCache().remove(this);
+        setHasCachedSelectorText(false);
+    }
+}
 
 CSSStyleDeclaration* CSSStyleRule::style() const
 {
     if (!m_propertiesCSSOMWrapper) {
-        m_propertiesCSSOMWrapper = StyleRuleCSSStyleDeclaration::create(
-            m_styleRule->mutableProperties(), const_cast<CSSStyleRule*>(this));
+        m_propertiesCSSOMWrapper = StyleRuleCSSStyleDeclaration::create(m_styleRule->mutableProperties(), const_cast<CSSStyleRule*>(this));
     }
     return m_propertiesCSSOMWrapper.get();
 }
@@ -59,10 +68,9 @@ CSSStyleDeclaration* CSSStyleRule::style() const
 String CSSStyleRule::generateSelectorText() const
 {
     StringBuilder builder;
-    for (const CSSSelector* selector = m_styleRule->selectorList().first();
-         selector; selector = CSSSelectorList::next(*selector)) {
+    for (const CSSSelector* selector = m_styleRule->selectorList().first(); selector; selector = CSSSelectorList::next(*selector)) {
         if (selector != m_styleRule->selectorList().first())
-            builder.append(", ");
+            builder.appendLiteral(", ");
         builder.append(selector->selectorText());
     }
     return builder.toString();
@@ -84,16 +92,15 @@ String CSSStyleRule::selectorText() const
 
 void CSSStyleRule::setSelectorText(const String& selectorText)
 {
-    const CSSParserContext* context = CSSParserContext::create(parserContext(), nullptr);
-    CSSSelectorList selectorList = CSSParser::parseSelector(
-        context, parentStyleSheet() ? parentStyleSheet()->contents() : nullptr,
-        selectorText);
+    CSSParserContext context(parserContext(), 0);
+    CSSSelectorList selectorList;
+    CSSParser::parseSelector(context, selectorText, selectorList);
     if (!selectorList.isValid())
         return;
 
     CSSStyleSheet::RuleMutationScope mutationScope(this);
 
-    m_styleRule->wrapperAdoptSelectorList(std::move(selectorList));
+    m_styleRule->wrapperAdoptSelectorList(selectorList);
 
     if (hasCachedSelectorText()) {
         selectorTextCache().remove(this);
@@ -105,7 +112,7 @@ String CSSStyleRule::cssText() const
 {
     StringBuilder result;
     result.append(selectorText());
-    result.append(" { ");
+    result.appendLiteral(" { ");
     String decls = m_styleRule->properties().asText();
     result.append(decls);
     if (!decls.isEmpty())
@@ -127,13 +134,6 @@ DEFINE_TRACE(CSSStyleRule)
     visitor->trace(m_styleRule);
     visitor->trace(m_propertiesCSSOMWrapper);
     CSSRule::trace(visitor);
-}
-
-DEFINE_TRACE_WRAPPERS(CSSStyleRule)
-{
-    visitor->traceWrappers(parentRule());
-    visitor->traceWrappers(parentStyleSheet());
-    CSSRule::traceWrappers(visitor);
 }
 
 } // namespace blink

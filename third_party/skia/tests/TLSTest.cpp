@@ -5,15 +5,22 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkAtomics.h"
+=======
+>>>>>>> miniblink49
 #include "SkGraphics.h"
 #include "SkPaint.h"
 #include "SkTLS.h"
 #include "SkThreadUtils.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 static void thread_main(void*)
 {
+=======
+static void thread_main(void*) {
+>>>>>>> miniblink49
     SkGraphics::SetTLSFontCacheLimit(1 * 1024 * 1024);
 
     const char text[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -32,8 +39,12 @@ static void thread_main(void*)
     }
 }
 
+<<<<<<< HEAD
 static void test_threads(SkThread::entryPointProc proc)
 {
+=======
+static void test_threads(SkThread::entryPointProc proc) {
+>>>>>>> miniblink49
     SkThread* threads[8];
     int N = SK_ARRAY_COUNT(threads);
     int i;
@@ -57,6 +68,7 @@ static void test_threads(SkThread::entryPointProc proc)
 
 static int32_t gCounter;
 
+<<<<<<< HEAD
 static void* FakeCreateTLS()
 {
     sk_atomic_inc(&gCounter);
@@ -80,6 +92,26 @@ DEF_TEST(TLS, reporter)
     // ('flaky segfault in TLS test on Shuttle_Ubuntu12 buildbots')
     if (false)
         test_threads(&thread_main);
+=======
+static void* FakeCreateTLS() {
+    sk_atomic_inc(&gCounter);
+    return NULL;
+}
+
+static void FakeDeleteTLS(void*) {
+    sk_atomic_dec(&gCounter);
+}
+
+static void testTLSDestructor(void*) {
+    SkTLS::Get(FakeCreateTLS, FakeDeleteTLS);
+}
+
+DEF_TEST(TLS, reporter) {
+    // TODO: Disabled for now to work around
+    // http://code.google.com/p/skia/issues/detail?id=619
+    // ('flaky segfault in TLS test on Shuttle_Ubuntu12 buildbots')
+    if( false ) test_threads(&thread_main);
+>>>>>>> miniblink49
 
     // Test to ensure that at thread destruction, TLS destructors
     // have been called.

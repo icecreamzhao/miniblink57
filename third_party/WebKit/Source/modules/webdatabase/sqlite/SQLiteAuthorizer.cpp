@@ -26,9 +26,16 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/webdatabase/DatabaseAuthorizer.h"
 
 #include "third_party/sqlite/sqlite3.h"
+=======
+#include "config.h"
+#include "modules/webdatabase/DatabaseAuthorizer.h"
+
+#include <sqlite3.h>
+>>>>>>> miniblink49
 
 namespace blink {
 

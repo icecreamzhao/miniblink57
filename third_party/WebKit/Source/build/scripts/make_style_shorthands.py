@@ -32,7 +32,6 @@ import sys
 
 import css_properties
 import in_generator
-from name_utilities import enum_for_css_property
 from name_utilities import lower_first
 import template_expander
 
@@ -51,14 +50,9 @@ class StylePropertyShorthandWriter(css_properties.CSSProperties):
         self._properties = {property_id: property for property_id, property in self._properties.items() if property['longhands']}
 
         for property in self._properties.values():
-            property['longhand_property_ids'] = map(enum_for_css_property, property['longhands'].split(';'))
+            property['longhand_property_ids'] = map(css_properties.css_name_to_enum, property['longhands'].split(';'))
             for longhand in property['longhand_property_ids']:
                 self._longhand_dictionary[longhand].append(property)
-        for longhands in self._longhand_dictionary.values():
-            # Sort first by number of longhands in decreasing order, then alphabetically
-            longhands.sort(
-                key=lambda property: (-len(property['longhand_property_ids']), property['name'])
-            )
 
     @template_expander.use_jinja('StylePropertyShorthand.cpp.tmpl')
     def generate_style_property_shorthand_cpp(self):

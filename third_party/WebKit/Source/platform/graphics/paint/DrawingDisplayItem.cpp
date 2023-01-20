@@ -2,10 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/paint/DrawingDisplayItem.h"
 
 #include "platform/graphics/GraphicsContext.h"
 #include "public/platform/WebDisplayItemList.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "third_party/skia/include/core/SkData.h"
@@ -14,21 +19,35 @@
 namespace blink {
 
 void DrawingDisplayItem::replay(GraphicsContext& context) const
+=======
+
+namespace blink {
+
+void DrawingDisplayItem::replay(GraphicsContext& context)
+>>>>>>> miniblink49
 {
     if (m_picture)
         context.drawPicture(m_picture.get());
 }
 
+<<<<<<< HEAD
 void DrawingDisplayItem::appendToWebDisplayItemList(
     const IntRect& visualRect,
     WebDisplayItemList* list) const
 {
     if (m_picture)
         list->appendDrawingItem(visualRect, m_picture);
+=======
+void DrawingDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+{
+    if (m_picture)
+        list->appendDrawingItem(m_picture.get());
+>>>>>>> miniblink49
 }
 
 bool DrawingDisplayItem::drawsContent() const
 {
+<<<<<<< HEAD
     return m_picture.get();
 }
 
@@ -48,10 +67,24 @@ void DrawingDisplayItem::dumpPropertiesAsDebugString(
             String::format(", rect: [%f,%f %fx%f]", m_picture->cullRect().x(),
                 m_picture->cullRect().y(), m_picture->cullRect().width(),
                 m_picture->cullRect().height()));
+=======
+    return m_picture;
+}
+
+#ifndef NDEBUG
+void DrawingDisplayItem::dumpPropertiesAsDebugString(WTF::StringBuilder& stringBuilder) const
+{
+    DisplayItem::dumpPropertiesAsDebugString(stringBuilder);
+    if (m_picture) {
+        stringBuilder.append(WTF::String::format(", rect: [%f,%f,%f,%f]",
+            m_picture->cullRect().x(), m_picture->cullRect().y(),
+            m_picture->cullRect().width(), m_picture->cullRect().height()));
+>>>>>>> miniblink49
     }
 }
 #endif
 
+<<<<<<< HEAD
 static bool picturesEqual(const SkPicture* picture1,
     const SkPicture* picture2)
 {
@@ -127,3 +160,6 @@ bool DrawingDisplayItem::equals(const DisplayItem& other) const
 }
 
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

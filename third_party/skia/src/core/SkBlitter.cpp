@@ -9,6 +9,7 @@
 #include "SkAntiRun.h"
 #include "SkColor.h"
 #include "SkColorFilter.h"
+<<<<<<< HEAD
 #include "SkMask.h"
 #include "SkMaskFilter.h"
 #include "SkReadBuffer.h"
@@ -42,19 +43,57 @@ const SkPixmap* SkBlitter::justAnOpaqueColor(uint32_t* value)
 }
 
 /*
+=======
+#include "SkCoreBlitters.h"
+#include "SkFilterShader.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkMask.h"
+#include "SkMaskFilter.h"
+#include "SkString.h"
+#include "SkTLazy.h"
+#include "SkUtils.h"
+#include "SkXfermode.h"
+#include "SkXfermodeInterpretation.h"
+
+SkBlitter::~SkBlitter() {}
+
+bool SkBlitter::isNullBlitter() const { return false; }
+
+bool SkBlitter::resetShaderContext(const SkShader::ContextRec&) {
+    return true;
+}
+
+SkShader::Context* SkBlitter::getShaderContext() const {
+    return NULL;
+}
+
+const SkPixmap* SkBlitter::justAnOpaqueColor(uint32_t* value) {
+    return NULL;
+}
+
+>>>>>>> miniblink49
 void SkBlitter::blitH(int x, int y, int width) {
     SkDEBUGFAIL("unimplemented");
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 void SkBlitter::blitAntiH(int x, int y, const SkAlpha antialias[],
                           const int16_t runs[]) {
     SkDEBUGFAIL("unimplemented");
 }
+<<<<<<< HEAD
  */
 
 void SkBlitter::blitV(int x, int y, int height, SkAlpha alpha)
 {
+=======
+
+void SkBlitter::blitV(int x, int y, int height, SkAlpha alpha) {
+>>>>>>> miniblink49
     if (alpha == 255) {
         this->blitRect(x, y, 1, height);
     } else {
@@ -68,8 +107,12 @@ void SkBlitter::blitV(int x, int y, int height, SkAlpha alpha)
     }
 }
 
+<<<<<<< HEAD
 void SkBlitter::blitRect(int x, int y, int width, int height)
 {
+=======
+void SkBlitter::blitRect(int x, int y, int width, int height) {
+>>>>>>> miniblink49
     SkASSERT(width > 0);
     while (--height >= 0) {
         this->blitH(x, y++, width);
@@ -80,8 +123,12 @@ void SkBlitter::blitRect(int x, int y, int width, int height)
 /// such as alpha == 0 or 255; also uses blitV(), which some subclasses
 /// may not support.
 void SkBlitter::blitAntiRect(int x, int y, int width, int height,
+<<<<<<< HEAD
     SkAlpha leftAlpha, SkAlpha rightAlpha)
 {
+=======
+                             SkAlpha leftAlpha, SkAlpha rightAlpha) {
+>>>>>>> miniblink49
     this->blitV(x++, y, height, leftAlpha);
     if (width > 0) {
         this->blitRect(x, y, width, height);
@@ -93,20 +140,34 @@ void SkBlitter::blitAntiRect(int x, int y, int width, int height,
 //////////////////////////////////////////////////////////////////////////////
 
 static inline void bits_to_runs(SkBlitter* blitter, int x, int y,
+<<<<<<< HEAD
     const uint8_t bits[],
     uint8_t left_mask, ptrdiff_t rowBytes,
     uint8_t right_mask)
 {
+=======
+                                const uint8_t bits[],
+                                U8CPU left_mask, int rowBytes,
+                                U8CPU right_mask) {
+>>>>>>> miniblink49
     int inFill = 0;
     int pos = 0;
 
     while (--rowBytes >= 0) {
+<<<<<<< HEAD
         uint8_t b = *bits++ & left_mask;
+=======
+        unsigned b = *bits++ & left_mask;
+>>>>>>> miniblink49
         if (rowBytes == 0) {
             b &= right_mask;
         }
 
+<<<<<<< HEAD
         for (uint8_t test = 0x80U; test != 0; test >>= 1) {
+=======
+        for (unsigned test = 0x80; test != 0; test >>= 1) {
+>>>>>>> miniblink49
             if (b & test) {
                 if (!inFill) {
                     pos = x;
@@ -120,7 +181,11 @@ static inline void bits_to_runs(SkBlitter* blitter, int x, int y,
             }
             x += 1;
         }
+<<<<<<< HEAD
         left_mask = 0xFFU;
+=======
+        left_mask = 0xFF;
+>>>>>>> miniblink49
     }
 
     // final cleanup
@@ -129,6 +194,7 @@ static inline void bits_to_runs(SkBlitter* blitter, int x, int y,
     }
 }
 
+<<<<<<< HEAD
 // maskBitCount is the number of 1's to place in the mask. It must be in the range between 1 and 8.
 static uint8_t generate_right_mask(int maskBitCount)
 {
@@ -143,15 +209,25 @@ void SkBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
         return; // needs to be handled by subclass
     }
 
+=======
+void SkBlitter::blitMask(const SkMask& mask, const SkIRect& clip) {
+    SkASSERT(mask.fBounds.contains(clip));
+
+>>>>>>> miniblink49
     if (mask.fFormat == SkMask::kBW_Format) {
         int cx = clip.fLeft;
         int cy = clip.fTop;
         int maskLeft = mask.fBounds.fLeft;
+<<<<<<< HEAD
         int maskRowBytes = mask.fRowBytes;
+=======
+        int mask_rowBytes = mask.fRowBytes;
+>>>>>>> miniblink49
         int height = clip.height();
 
         const uint8_t* bits = mask.getAddr1(cx, cy);
 
+<<<<<<< HEAD
         SkDEBUGCODE(const uint8_t* endOfImage = mask.fImage + (mask.fBounds.height() - 1) * maskRowBytes
                 + ((mask.fBounds.width() + 7) >> 3));
 
@@ -202,6 +278,58 @@ void SkBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
         SkAutoSTMalloc<64, int16_t> runStorage(width + 1);
         int16_t* runs = runStorage.get();
         const uint8_t* aa = mask.getAddr8(clip.fLeft, clip.fTop);
+=======
+        if (cx == maskLeft && clip.fRight == mask.fBounds.fRight) {
+            while (--height >= 0) {
+                bits_to_runs(this, cx, cy, bits, 0xFF, mask_rowBytes, 0xFF);
+                bits += mask_rowBytes;
+                cy += 1;
+            }
+        } else {
+            int left_edge = cx - maskLeft;
+            SkASSERT(left_edge >= 0);
+            int rite_edge = clip.fRight - maskLeft;
+            SkASSERT(rite_edge > left_edge);
+
+            int left_mask = 0xFF >> (left_edge & 7);
+            int rite_mask = 0xFF << (8 - (rite_edge & 7));
+            int full_runs = (rite_edge >> 3) - ((left_edge + 7) >> 3);
+
+            // check for empty right mask, so we don't read off the end (or go slower than we need to)
+            if (rite_mask == 0) {
+                SkASSERT(full_runs >= 0);
+                full_runs -= 1;
+                rite_mask = 0xFF;
+            }
+            if (left_mask == 0xFF) {
+                full_runs -= 1;
+            }
+
+            // back up manually so we can keep in sync with our byte-aligned src
+            // have cx reflect our actual starting x-coord
+            cx -= left_edge & 7;
+
+            if (full_runs < 0) {
+                SkASSERT((left_mask & rite_mask) != 0);
+                while (--height >= 0) {
+                    bits_to_runs(this, cx, cy, bits, left_mask, 1, rite_mask);
+                    bits += mask_rowBytes;
+                    cy += 1;
+                }
+            } else {
+                while (--height >= 0) {
+                    bits_to_runs(this, cx, cy, bits, left_mask, full_runs + 2, rite_mask);
+                    bits += mask_rowBytes;
+                    cy += 1;
+                }
+            }
+        }
+    } else {
+        int                         width = clip.width();
+        SkAutoSTMalloc<64, int16_t> runStorage(width + 1);
+        int16_t*                    runs = runStorage.get();
+        const uint8_t*              aa = mask.getAddr8(clip.fLeft, clip.fTop);
+>>>>>>> miniblink49
 
         sk_memset16((uint16_t*)runs, 1, width);
         runs[width] = 0;
@@ -218,8 +346,12 @@ void SkBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
 
 /////////////////////// these guys are not virtual, just a helpers
 
+<<<<<<< HEAD
 void SkBlitter::blitMaskRegion(const SkMask& mask, const SkRegion& clip)
 {
+=======
+void SkBlitter::blitMaskRegion(const SkMask& mask, const SkRegion& clip) {
+>>>>>>> miniblink49
     if (clip.quickReject(mask.fBounds)) {
         return;
     }
@@ -233,8 +365,12 @@ void SkBlitter::blitMaskRegion(const SkMask& mask, const SkRegion& clip)
     }
 }
 
+<<<<<<< HEAD
 void SkBlitter::blitRectRegion(const SkIRect& rect, const SkRegion& clip)
 {
+=======
+void SkBlitter::blitRectRegion(const SkIRect& rect, const SkRegion& clip) {
+>>>>>>> miniblink49
     SkRegion::Cliperator clipper(clip, rect);
 
     while (!clipper.done()) {
@@ -244,8 +380,12 @@ void SkBlitter::blitRectRegion(const SkIRect& rect, const SkRegion& clip)
     }
 }
 
+<<<<<<< HEAD
 void SkBlitter::blitRegion(const SkRegion& clip)
 {
+=======
+void SkBlitter::blitRegion(const SkRegion& clip) {
+>>>>>>> miniblink49
     SkRegion::Iterator iter(clip);
 
     while (!iter.done()) {
@@ -257,6 +397,7 @@ void SkBlitter::blitRegion(const SkRegion& clip)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void SkNullBlitter::blitH(int x, int y, int width) { }
 
 void SkNullBlitter::blitAntiH(int x, int y, const SkAlpha antialias[],
@@ -271,14 +412,33 @@ void SkNullBlitter::blitMask(const SkMask& mask, const SkIRect& clip) { }
 const SkPixmap* SkNullBlitter::justAnOpaqueColor(uint32_t* value)
 {
     return nullptr;
+=======
+void SkNullBlitter::blitH(int x, int y, int width) {}
+
+void SkNullBlitter::blitAntiH(int x, int y, const SkAlpha antialias[],
+                              const int16_t runs[]) {}
+
+void SkNullBlitter::blitV(int x, int y, int height, SkAlpha alpha) {}
+
+void SkNullBlitter::blitRect(int x, int y, int width, int height) {}
+
+void SkNullBlitter::blitMask(const SkMask& mask, const SkIRect& clip) {}
+
+const SkPixmap* SkNullBlitter::justAnOpaqueColor(uint32_t* value) {
+    return NULL;
+>>>>>>> miniblink49
 }
 
 bool SkNullBlitter::isNullBlitter() const { return true; }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static int compute_anti_width(const int16_t runs[])
 {
+=======
+static int compute_anti_width(const int16_t runs[]) {
+>>>>>>> miniblink49
     int width = 0;
 
     for (;;) {
@@ -294,6 +454,7 @@ static int compute_anti_width(const int16_t runs[])
     return width;
 }
 
+<<<<<<< HEAD
 static inline bool y_in_rect(int y, const SkIRect& rect)
 {
     return (unsigned)(y - rect.fTop) < (unsigned)rect.height();
@@ -306,6 +467,17 @@ static inline bool x_in_rect(int x, const SkIRect& rect)
 
 void SkRectClipBlitter::blitH(int left, int y, int width)
 {
+=======
+static inline bool y_in_rect(int y, const SkIRect& rect) {
+    return (unsigned)(y - rect.fTop) < (unsigned)rect.height();
+}
+
+static inline bool x_in_rect(int x, const SkIRect& rect) {
+    return (unsigned)(x - rect.fLeft) < (unsigned)rect.width();
+}
+
+void SkRectClipBlitter::blitH(int left, int y, int width) {
+>>>>>>> miniblink49
     SkASSERT(width > 0);
 
     if (!y_in_rect(y, fClipRect)) {
@@ -328,8 +500,12 @@ void SkRectClipBlitter::blitH(int left, int y, int width)
 }
 
 void SkRectClipBlitter::blitAntiH(int left, int y, const SkAlpha aa[],
+<<<<<<< HEAD
     const int16_t runs[])
 {
+=======
+                                  const int16_t runs[]) {
+>>>>>>> miniblink49
     if (!y_in_rect(y, fClipRect) || left >= fClipRect.fRight) {
         return;
     }
@@ -363,8 +539,12 @@ void SkRectClipBlitter::blitAntiH(int left, int y, const SkAlpha aa[],
     fBlitter->blitAntiH(x0, y, aa, runs);
 }
 
+<<<<<<< HEAD
 void SkRectClipBlitter::blitV(int x, int y, int height, SkAlpha alpha)
 {
+=======
+void SkRectClipBlitter::blitV(int x, int y, int height, SkAlpha alpha) {
+>>>>>>> miniblink49
     SkASSERT(height > 0);
 
     if (!x_in_rect(x, fClipRect)) {
@@ -386,9 +566,14 @@ void SkRectClipBlitter::blitV(int x, int y, int height, SkAlpha alpha)
     }
 }
 
+<<<<<<< HEAD
 void SkRectClipBlitter::blitRect(int left, int y, int width, int height)
 {
     SkIRect r;
+=======
+void SkRectClipBlitter::blitRect(int left, int y, int width, int height) {
+    SkIRect    r;
+>>>>>>> miniblink49
 
     r.set(left, y, left + width, y + height);
     if (r.intersect(fClipRect)) {
@@ -397,9 +582,14 @@ void SkRectClipBlitter::blitRect(int left, int y, int width, int height)
 }
 
 void SkRectClipBlitter::blitAntiRect(int left, int y, int width, int height,
+<<<<<<< HEAD
     SkAlpha leftAlpha, SkAlpha rightAlpha)
 {
     SkIRect r;
+=======
+                                     SkAlpha leftAlpha, SkAlpha rightAlpha) {
+    SkIRect    r;
+>>>>>>> miniblink49
 
     // The *true* width of the rectangle blitted is width+2:
     r.set(left, y, left + width + 2, y + height);
@@ -423,31 +613,50 @@ void SkRectClipBlitter::blitAntiRect(int left, int y, int width, int height,
             }
         } else {
             fBlitter->blitAntiRect(r.fLeft, r.fTop, r.width() - 2, r.height(),
+<<<<<<< HEAD
                 leftAlpha, rightAlpha);
+=======
+                                   leftAlpha, rightAlpha);
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 void SkRectClipBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
 {
     SkASSERT(mask.fBounds.contains(clip));
 
     SkIRect r = clip;
+=======
+void SkRectClipBlitter::blitMask(const SkMask& mask, const SkIRect& clip) {
+    SkASSERT(mask.fBounds.contains(clip));
+
+    SkIRect    r = clip;
+>>>>>>> miniblink49
 
     if (r.intersect(fClipRect)) {
         fBlitter->blitMask(mask, r);
     }
 }
 
+<<<<<<< HEAD
 const SkPixmap* SkRectClipBlitter::justAnOpaqueColor(uint32_t* value)
 {
+=======
+const SkPixmap* SkRectClipBlitter::justAnOpaqueColor(uint32_t* value) {
+>>>>>>> miniblink49
     return fBlitter->justAnOpaqueColor(value);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void SkRgnClipBlitter::blitH(int x, int y, int width)
 {
+=======
+void SkRgnClipBlitter::blitH(int x, int y, int width) {
+>>>>>>> miniblink49
     SkRegion::Spanerator span(*fRgn, y, x, x + width);
     int left, right;
 
@@ -458,15 +667,23 @@ void SkRgnClipBlitter::blitH(int x, int y, int width)
 }
 
 void SkRgnClipBlitter::blitAntiH(int x, int y, const SkAlpha aa[],
+<<<<<<< HEAD
     const int16_t runs[])
 {
+=======
+                                 const int16_t runs[]) {
+>>>>>>> miniblink49
     int width = compute_anti_width(runs);
     SkRegion::Spanerator span(*fRgn, y, x, x + width);
     int left, right;
     SkDEBUGCODE(const SkIRect& bounds = fRgn->getBounds();)
 
+<<<<<<< HEAD
         int prevRite
         = x;
+=======
+    int prevRite = x;
+>>>>>>> miniblink49
     while (span.next(&left, &right)) {
         SkASSERT(x <= left);
         SkASSERT(left < right);
@@ -477,7 +694,11 @@ void SkRgnClipBlitter::blitAntiH(int x, int y, const SkAlpha aa[],
         // now zero before left
         if (left > prevRite) {
             int index = prevRite - x;
+<<<<<<< HEAD
             ((uint8_t*)aa)[index] = 0; // skip runs after right
+=======
+            ((uint8_t*)aa)[index] = 0;   // skip runs after right
+>>>>>>> miniblink49
             ((int16_t*)runs)[index] = SkToS16(left - prevRite);
         }
 
@@ -498,12 +719,20 @@ void SkRgnClipBlitter::blitAntiH(int x, int y, const SkAlpha aa[],
     }
 }
 
+<<<<<<< HEAD
 void SkRgnClipBlitter::blitV(int x, int y, int height, SkAlpha alpha)
 {
     SkIRect bounds;
     bounds.set(x, y, x + 1, y + height);
 
     SkRegion::Cliperator iter(*fRgn, bounds);
+=======
+void SkRgnClipBlitter::blitV(int x, int y, int height, SkAlpha alpha) {
+    SkIRect    bounds;
+    bounds.set(x, y, x + 1, y + height);
+
+    SkRegion::Cliperator    iter(*fRgn, bounds);
+>>>>>>> miniblink49
 
     while (!iter.done()) {
         const SkIRect& r = iter.rect();
@@ -514,12 +743,20 @@ void SkRgnClipBlitter::blitV(int x, int y, int height, SkAlpha alpha)
     }
 }
 
+<<<<<<< HEAD
 void SkRgnClipBlitter::blitRect(int x, int y, int width, int height)
 {
     SkIRect bounds;
     bounds.set(x, y, x + width, y + height);
 
     SkRegion::Cliperator iter(*fRgn, bounds);
+=======
+void SkRgnClipBlitter::blitRect(int x, int y, int width, int height) {
+    SkIRect    bounds;
+    bounds.set(x, y, x + width, y + height);
+
+    SkRegion::Cliperator    iter(*fRgn, bounds);
+>>>>>>> miniblink49
 
     while (!iter.done()) {
         const SkIRect& r = iter.rect();
@@ -531,6 +768,7 @@ void SkRgnClipBlitter::blitRect(int x, int y, int width, int height)
 }
 
 void SkRgnClipBlitter::blitAntiRect(int x, int y, int width, int height,
+<<<<<<< HEAD
     SkAlpha leftAlpha, SkAlpha rightAlpha)
 {
     // The *true* width of the rectangle to blit is width + 2
@@ -538,6 +776,14 @@ void SkRgnClipBlitter::blitAntiRect(int x, int y, int width, int height,
     bounds.set(x, y, x + width + 2, y + height);
 
     SkRegion::Cliperator iter(*fRgn, bounds);
+=======
+                                    SkAlpha leftAlpha, SkAlpha rightAlpha) {
+    // The *true* width of the rectangle to blit is width + 2
+    SkIRect    bounds;
+    bounds.set(x, y, x + width + 2, y + height);
+
+    SkRegion::Cliperator    iter(*fRgn, bounds);
+>>>>>>> miniblink49
 
     while (!iter.done()) {
         const SkIRect& r = iter.rect();
@@ -546,13 +792,19 @@ void SkRgnClipBlitter::blitAntiRect(int x, int y, int width, int height,
         SkASSERT(r.fRight <= x + width + 2);
 
         SkAlpha effectiveLeftAlpha = (r.fLeft == x) ? leftAlpha : 255;
+<<<<<<< HEAD
         SkAlpha effectiveRightAlpha = (r.fRight == x + width + 2) ? rightAlpha : 255;
+=======
+        SkAlpha effectiveRightAlpha = (r.fRight == x + width + 2) ?
+                                      rightAlpha : 255;
+>>>>>>> miniblink49
 
         if (255 == effectiveLeftAlpha && 255 == effectiveRightAlpha) {
             fBlitter->blitRect(r.fLeft, r.fTop, r.width(), r.height());
         } else if (1 == r.width()) {
             if (r.fLeft == x) {
                 fBlitter->blitV(r.fLeft, r.fTop, r.height(),
+<<<<<<< HEAD
                     effectiveLeftAlpha);
             } else {
                 SkASSERT(r.fLeft == x + width + 1);
@@ -562,11 +814,23 @@ void SkRgnClipBlitter::blitAntiRect(int x, int y, int width, int height,
         } else {
             fBlitter->blitAntiRect(r.fLeft, r.fTop, r.width() - 2, r.height(),
                 effectiveLeftAlpha, effectiveRightAlpha);
+=======
+                                effectiveLeftAlpha);
+            } else {
+                SkASSERT(r.fLeft == x + width + 1);
+                fBlitter->blitV(r.fLeft, r.fTop, r.height(),
+                                effectiveRightAlpha);
+            }
+        } else {
+            fBlitter->blitAntiRect(r.fLeft, r.fTop, r.width() - 2, r.height(),
+                                   effectiveLeftAlpha, effectiveRightAlpha);
+>>>>>>> miniblink49
         }
         iter.next();
     }
 }
 
+<<<<<<< HEAD
 void SkRgnClipBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
 {
     SkASSERT(mask.fBounds.contains(clip));
@@ -574,6 +838,15 @@ void SkRgnClipBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
     SkRegion::Cliperator iter(*fRgn, clip);
     const SkIRect& r = iter.rect();
     SkBlitter* blitter = fBlitter;
+=======
+
+void SkRgnClipBlitter::blitMask(const SkMask& mask, const SkIRect& clip) {
+    SkASSERT(mask.fBounds.contains(clip));
+
+    SkRegion::Cliperator iter(*fRgn, clip);
+    const SkIRect&       r = iter.rect();
+    SkBlitter*           blitter = fBlitter;
+>>>>>>> miniblink49
 
     while (!iter.done()) {
         blitter->blitMask(mask, r);
@@ -581,23 +854,35 @@ void SkRgnClipBlitter::blitMask(const SkMask& mask, const SkIRect& clip)
     }
 }
 
+<<<<<<< HEAD
 const SkPixmap* SkRgnClipBlitter::justAnOpaqueColor(uint32_t* value)
 {
+=======
+const SkPixmap* SkRgnClipBlitter::justAnOpaqueColor(uint32_t* value) {
+>>>>>>> miniblink49
     return fBlitter->justAnOpaqueColor(value);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 SkBlitter* SkBlitterClipper::apply(SkBlitter* blitter, const SkRegion* clip,
+<<<<<<< HEAD
     const SkIRect* ir)
 {
+=======
+                                   const SkIRect* ir) {
+>>>>>>> miniblink49
     if (clip) {
         const SkIRect& clipR = clip->getBounds();
 
         if (clip->isEmpty() || (ir && !SkIRect::Intersects(clipR, *ir))) {
             blitter = &fNullBlitter;
         } else if (clip->isRect()) {
+<<<<<<< HEAD
             if (ir == nullptr || !clipR.contains(*ir)) {
+=======
+            if (ir == NULL || !clipR.contains(*ir)) {
+>>>>>>> miniblink49
                 fRectBlitter.init(blitter, clipR);
                 blitter = &fRectBlitter;
             }
@@ -611,6 +896,7 @@ SkBlitter* SkBlitterClipper::apply(SkBlitter* blitter, const SkRegion* clip,
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 #include "SkColorPriv.h"
 #include "SkColorShader.h"
 
@@ -626,10 +912,30 @@ public:
         size_t size = sizeof(Sk3DShaderContext);
         if (fProxy) {
             size += fProxy->contextSize(rec);
+=======
+#include "SkColorShader.h"
+#include "SkColorPriv.h"
+
+class Sk3DShader : public SkShader {
+public:
+    Sk3DShader(SkShader* proxy) : fProxy(proxy) {
+        SkSafeRef(proxy);
+    }
+
+    virtual ~Sk3DShader() {
+        SkSafeUnref(fProxy);
+    }
+
+    size_t contextSize() const override {
+        size_t size = sizeof(Sk3DShaderContext);
+        if (fProxy) {
+            size += fProxy->contextSize();
+>>>>>>> miniblink49
         }
         return size;
     }
 
+<<<<<<< HEAD
     Context* onCreateContext(const ContextRec& rec, void* storage) const override
     {
         SkShader::Context* proxyContext = nullptr;
@@ -641,15 +947,33 @@ public:
             }
         }
         return new (storage) Sk3DShaderContext(*this, rec, proxyContext);
+=======
+    Context* onCreateContext(const ContextRec& rec, void* storage) const override {
+        SkShader::Context* proxyContext = NULL;
+        if (fProxy) {
+            char* proxyContextStorage = (char*) storage + sizeof(Sk3DShaderContext);
+            proxyContext = fProxy->createContext(rec, proxyContextStorage);
+            if (!proxyContext) {
+                return NULL;
+            }
+        }
+        return SkNEW_PLACEMENT_ARGS(storage, Sk3DShaderContext, (*this, rec, proxyContext));
+>>>>>>> miniblink49
     }
 
     class Sk3DShaderContext : public SkShader::Context {
     public:
         // Calls proxyContext's destructor but will NOT free its memory.
         Sk3DShaderContext(const Sk3DShader& shader, const ContextRec& rec,
+<<<<<<< HEAD
             SkShader::Context* proxyContext)
             : INHERITED(shader, rec)
             , fMask(nullptr)
+=======
+                          SkShader::Context* proxyContext)
+            : INHERITED(shader, rec)
+            , fMask(NULL)
+>>>>>>> miniblink49
             , fProxyContext(proxyContext)
         {
             if (!fProxyContext) {
@@ -657,8 +981,12 @@ public:
             }
         }
 
+<<<<<<< HEAD
         virtual ~Sk3DShaderContext()
         {
+=======
+        virtual ~Sk3DShaderContext() {
+>>>>>>> miniblink49
             if (fProxyContext) {
                 fProxyContext->~Context();
             }
@@ -666,14 +994,23 @@ public:
 
         void set3DMask(const SkMask* mask) override { fMask = mask; }
 
+<<<<<<< HEAD
         void shadeSpan(int x, int y, SkPMColor span[], int count) override
         {
+=======
+        void shadeSpan(int x, int y, SkPMColor span[], int count) override {
+>>>>>>> miniblink49
             if (fProxyContext) {
                 fProxyContext->shadeSpan(x, y, span, count);
             }
 
+<<<<<<< HEAD
             if (fMask == nullptr) {
                 if (fProxyContext == nullptr) {
+=======
+            if (fMask == NULL) {
+                if (fProxyContext == NULL) {
+>>>>>>> miniblink49
                     sk_memset32(span, fPMColor, count);
                 }
                 return;
@@ -682,10 +1019,17 @@ public:
             SkASSERT(fMask->fBounds.contains(x, y));
             SkASSERT(fMask->fBounds.contains(x + count - 1, y));
 
+<<<<<<< HEAD
             size_t size = fMask->computeImageSize();
             const uint8_t* alpha = fMask->getAddr8(x, y);
             const uint8_t* mulp = alpha + size;
             const uint8_t* addp = mulp + size;
+=======
+            size_t          size = fMask->computeImageSize();
+            const uint8_t*  alpha = fMask->getAddr8(x, y);
+            const uint8_t*  mulp = alpha + size;
+            const uint8_t*  addp = mulp + size;
+>>>>>>> miniblink49
 
             if (fProxyContext) {
                 for (int i = 0; i < count; i++) {
@@ -710,7 +1054,11 @@ public:
                         span[i] = 0;
                     }
                 }
+<<<<<<< HEAD
             } else { // color
+=======
+            } else {    // color
+>>>>>>> miniblink49
                 unsigned a = SkGetPackedA32(fPMColor);
                 unsigned r = SkGetPackedR32(fPMColor);
                 unsigned g = SkGetPackedG32(fPMColor);
@@ -720,10 +1068,17 @@ public:
                         unsigned mul = SkAlpha255To256(mulp[i]);
                         unsigned add = addp[i];
 
+<<<<<<< HEAD
                         span[i] = SkPackARGB32(a,
                             SkFastMin32(SkAlphaMul(r, mul) + add, a),
                             SkFastMin32(SkAlphaMul(g, mul) + add, a),
                             SkFastMin32(SkAlphaMul(b, mul) + add, a));
+=======
+                        span[i] = SkPackARGB32( a,
+                                        SkFastMin32(SkAlphaMul(r, mul) + add, a),
+                                        SkFastMin32(SkAlphaMul(g, mul) + add, a),
+                                        SkFastMin32(SkAlphaMul(b, mul) + add, a));
+>>>>>>> miniblink49
                     } else {
                         span[i] = 0;
                     }
@@ -733,17 +1088,28 @@ public:
 
     private:
         // Unowned.
+<<<<<<< HEAD
         const SkMask* fMask;
         // Memory is unowned, but we need to call the destructor.
         SkShader::Context* fProxyContext;
         SkPMColor fPMColor;
+=======
+        const SkMask*       fMask;
+        // Memory is unowned, but we need to call the destructor.
+        SkShader::Context*  fProxyContext;
+        SkPMColor           fPMColor;
+>>>>>>> miniblink49
 
         typedef SkShader::Context INHERITED;
     };
 
 #ifndef SK_IGNORE_TO_STRING
+<<<<<<< HEAD
     void toString(SkString* str) const override
     {
+=======
+    void toString(SkString* str) const override {
+>>>>>>> miniblink49
         str->append("Sk3DShader: (");
 
         if (fProxy) {
@@ -760,6 +1126,7 @@ public:
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(Sk3DShader)
 
 protected:
+<<<<<<< HEAD
     void flatten(SkWriteBuffer& buffer) const override
     {
         buffer.writeFlattenable(fProxy.get());
@@ -767,13 +1134,27 @@ protected:
 
 private:
     sk_sp<SkShader> fProxy;
+=======
+    void flatten(SkWriteBuffer& buffer) const override {
+        buffer.writeFlattenable(fProxy);
+    }
+
+private:
+    SkShader*       fProxy;
+>>>>>>> miniblink49
 
     typedef SkShader INHERITED;
 };
 
+<<<<<<< HEAD
 sk_sp<SkFlattenable> Sk3DShader::CreateProc(SkReadBuffer& buffer)
 {
     return sk_make_sp<Sk3DShader>(buffer.readShader());
+=======
+SkFlattenable* Sk3DShader::CreateProc(SkReadBuffer& buffer) {
+    SkAutoTUnref<SkShader> shader(buffer.readShader());
+    return SkNEW_ARGS(Sk3DShader, (shader));
+>>>>>>> miniblink49
 }
 
 class Sk3DBlitter : public SkBlitter {
@@ -781,6 +1162,7 @@ public:
     Sk3DBlitter(SkBlitter* proxy, SkShader::Context* shaderContext)
         : fProxy(proxy)
         , fShaderContext(shaderContext)
+<<<<<<< HEAD
     {
     }
 
@@ -806,6 +1188,28 @@ public:
 
     void blitMask(const SkMask& mask, const SkIRect& clip) override
     {
+=======
+    {}
+
+    void blitH(int x, int y, int width) override {
+        fProxy->blitH(x, y, width);
+    }
+
+    virtual void blitAntiH(int x, int y, const SkAlpha antialias[],
+                           const int16_t runs[]) override {
+        fProxy->blitAntiH(x, y, antialias, runs);
+    }
+
+    void blitV(int x, int y, int height, SkAlpha alpha) override {
+        fProxy->blitV(x, y, height, alpha);
+    }
+
+    void blitRect(int x, int y, int width, int height) override {
+        fProxy->blitRect(x, y, width, height);
+    }
+
+    void blitMask(const SkMask& mask, const SkIRect& clip) override {
+>>>>>>> miniblink49
         if (mask.fFormat == SkMask::k3D_Format) {
             fShaderContext->set3DMask(&mask);
 
@@ -813,7 +1217,11 @@ public:
             fProxy->blitMask(mask, clip);
             ((SkMask*)&mask)->fFormat = SkMask::k3D_Format;
 
+<<<<<<< HEAD
             fShaderContext->set3DMask(nullptr);
+=======
+            fShaderContext->set3DMask(NULL);
+>>>>>>> miniblink49
         } else {
             fProxy->blitMask(mask, clip);
         }
@@ -821,14 +1229,20 @@ public:
 
 private:
     // Both pointers are unowned. They will be deleted by SkSmallAllocator.
+<<<<<<< HEAD
     SkBlitter* fProxy;
     SkShader::Context* fShaderContext;
+=======
+    SkBlitter*          fProxy;
+    SkShader::Context*  fShaderContext;
+>>>>>>> miniblink49
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "SkCoreBlitters.h"
 
+<<<<<<< HEAD
 SkShader::ContextRec::DstType SkBlitter::PreferredShaderDest(const SkImageInfo& dstInfo)
 {
 #ifdef SK_FORCE_PM4f_FOR_L32_BLITS
@@ -851,12 +1265,26 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
     // which check, in case we're being called by a client with a dummy device
     // (e.g. they have a bounder that always aborts the draw)
     if (kUnknown_SkColorType == device.colorType() || (drawCoverage && (kAlpha_8_SkColorType != device.colorType()))) {
+=======
+SkBlitter* SkBlitter::Choose(const SkPixmap& device,
+                             const SkMatrix& matrix,
+                             const SkPaint& origPaint,
+                             SkTBlitterAllocator* allocator,
+                             bool drawCoverage) {
+    SkASSERT(allocator != NULL);
+
+    // which check, in case we're being called by a client with a dummy device
+    // (e.g. they have a bounder that always aborts the draw)
+    if (kUnknown_SkColorType == device.colorType() ||
+            (drawCoverage && (kAlpha_8_SkColorType != device.colorType()))) {
+>>>>>>> miniblink49
         return allocator->createT<SkNullBlitter>();
     }
 
     SkShader* shader = origPaint.getShader();
     SkColorFilter* cf = origPaint.getColorFilter();
     SkXfermode* mode = origPaint.getXfermode();
+<<<<<<< HEAD
     sk_sp<Sk3DShader> shader3D;
 
     SkTCopyOnFirstWrite<SkPaint> paint(origPaint);
@@ -866,11 +1294,24 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
         // we know we haven't initialized lazyPaint yet, so just do it
         paint.writable()->setShader(shader3D);
         shader = shader3D.get();
+=======
+    Sk3DShader* shader3D = NULL;
+
+    SkTCopyOnFirstWrite<SkPaint> paint(origPaint);
+
+    if (origPaint.getMaskFilter() != NULL &&
+            origPaint.getMaskFilter()->getFormat() == SkMask::k3D_Format) {
+        shader3D = SkNEW_ARGS(Sk3DShader, (shader));
+        // we know we haven't initialized lazyPaint yet, so just do it
+        paint.writable()->setShader(shader3D)->unref();
+        shader = shader3D;
+>>>>>>> miniblink49
     }
 
     if (mode) {
         bool deviceIsOpaque = kRGB_565_SkColorType == device.colorType();
         switch (SkInterpretXfermode(*paint, deviceIsOpaque)) {
+<<<<<<< HEAD
         case kSrcOver_SkXfermodeInterpretation:
             mode = nullptr;
             paint.writable()->setXfermode(nullptr);
@@ -880,6 +1321,17 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
         }
         default:
             break;
+=======
+            case kSrcOver_SkXfermodeInterpretation:
+                mode = NULL;
+                paint.writable()->setXfermode(NULL);
+                break;
+            case kSkipDrawing_SkXfermodeInterpretation:{
+                return allocator->createT<SkNullBlitter>();
+            }
+            default:
+                break;
+>>>>>>> miniblink49
         }
     }
 
@@ -890,34 +1342,58 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
      */
     if (SkXfermode::IsMode(mode, SkXfermode::kClear_Mode)) {
         SkPaint* p = paint.writable();
+<<<<<<< HEAD
         p->setShader(nullptr);
         shader = nullptr;
         p->setColorFilter(nullptr);
         cf = nullptr;
+=======
+        shader = p->setShader(NULL);
+        cf = p->setColorFilter(NULL);
+>>>>>>> miniblink49
         mode = p->setXfermodeMode(SkXfermode::kSrc_Mode);
         p->setColor(0);
     }
 
+<<<<<<< HEAD
     if (nullptr == shader) {
         if (mode) {
             // xfermodes (and filters) require shaders for our current blitters
             paint.writable()->setShader(SkShader::MakeColorShader(paint->getColor()));
             paint.writable()->setAlpha(0xFF);
             shader = paint->getShader();
+=======
+    if (NULL == shader) {
+        if (mode) {
+            // xfermodes (and filters) require shaders for our current blitters
+            shader = SkNEW_ARGS(SkColorShader, (paint->getColor()));
+            paint.writable()->setShader(shader)->unref();
+            paint.writable()->setAlpha(0xFF);
+>>>>>>> miniblink49
         } else if (cf) {
             // if no shader && no xfermode, we just apply the colorfilter to
             // our color and move on.
             SkPaint* writablePaint = paint.writable();
             writablePaint->setColor(cf->filterColor(paint->getColor()));
+<<<<<<< HEAD
             writablePaint->setColorFilter(nullptr);
             cf = nullptr;
+=======
+            writablePaint->setColorFilter(NULL);
+            cf = NULL;
+>>>>>>> miniblink49
         }
     }
 
     if (cf) {
         SkASSERT(shader);
+<<<<<<< HEAD
         paint.writable()->setShader(shader->makeWithColorFilter(sk_ref_sp(cf)));
         shader = paint->getShader();
+=======
+        shader = SkNEW_ARGS(SkFilterShader, (shader, cf));
+        paint.writable()->setShader(shader)->unref();
+>>>>>>> miniblink49
         // blitters should ignore the presence/absence of a filter, since
         // if there is one, the shader will take care of it.
     }
@@ -925,11 +1401,18 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
     /*
      *  We create a SkShader::Context object, and store it on the blitter.
      */
+<<<<<<< HEAD
     SkShader::Context* shaderContext = nullptr;
     if (shader) {
         const SkShader::ContextRec rec(*paint, matrix, nullptr,
             PreferredShaderDest(device.info()));
         size_t contextSize = shader->contextSize(rec);
+=======
+    SkShader::Context* shaderContext = NULL;
+    if (shader) {
+        SkShader::ContextRec rec(*paint, matrix, NULL);
+        size_t contextSize = shader->contextSize();
+>>>>>>> miniblink49
         if (contextSize) {
             // Try to create the ShaderContext
             void* storage = allocator->reserveT<SkShader::Context>(contextSize);
@@ -939,12 +1422,17 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
                 return allocator->createT<SkNullBlitter>();
             }
             SkASSERT(shaderContext);
+<<<<<<< HEAD
             SkASSERT((void*)shaderContext == storage);
+=======
+            SkASSERT((void*) shaderContext == storage);
+>>>>>>> miniblink49
         } else {
             return allocator->createT<SkNullBlitter>();
         }
     }
 
+<<<<<<< HEAD
     SkBlitter* blitter = nullptr;
     switch (device.colorType()) {
     case kAlpha_8_SkColorType:
@@ -975,6 +1463,30 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
             if (shader) {
                 blitter = allocator->createT<SkARGB32_Shader_Blitter>(
                     device, *paint, shaderContext);
+=======
+    SkBlitter*  blitter = NULL;
+    switch (device.colorType()) {
+        case kAlpha_8_SkColorType:
+            if (drawCoverage) {
+                SkASSERT(NULL == shader);
+                SkASSERT(NULL == paint->getXfermode());
+                blitter = allocator->createT<SkA8_Coverage_Blitter>(device, *paint);
+            } else if (shader) {
+                blitter = allocator->createT<SkA8_Shader_Blitter>(device, *paint, shaderContext);
+            } else {
+                blitter = allocator->createT<SkA8_Blitter>(device, *paint);
+            }
+            break;
+
+        case kRGB_565_SkColorType:
+            blitter = SkBlitter_ChooseD565(device, *paint, shaderContext, allocator);
+            break;
+
+        case kN32_SkColorType:
+            if (shader) {
+                blitter = allocator->createT<SkARGB32_Shader_Blitter>(
+                        device, *paint, shaderContext);
+>>>>>>> miniblink49
             } else if (paint->getColor() == SK_ColorBLACK) {
                 blitter = allocator->createT<SkARGB32_Black_Blitter>(device, *paint);
             } else if (paint->getAlpha() == 0xFF) {
@@ -982,6 +1494,7 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
             } else {
                 blitter = allocator->createT<SkARGB32_Blitter>(device, *paint);
             }
+<<<<<<< HEAD
         }
         break;
 
@@ -995,6 +1508,14 @@ SkBlitter* SkBlitter::Choose(const SkPixmap& device,
 
     if (!blitter) {
         blitter = allocator->createT<SkNullBlitter>();
+=======
+            break;
+
+        default:
+            SkDEBUGFAIL("unsupported device config");
+            blitter = allocator->createT<SkNullBlitter>();
+            break;
+>>>>>>> miniblink49
     }
 
     if (shader3D) {
@@ -1013,12 +1534,18 @@ class SkZeroShaderContext : public SkShader::Context {
 public:
     SkZeroShaderContext(const SkShader& shader, const SkShader::ContextRec& rec)
         // Override rec with the identity matrix, so it is guaranteed to be invertible.
+<<<<<<< HEAD
         : INHERITED(shader, SkShader::ContextRec(*rec.fPaint, SkMatrix::I(), nullptr, rec.fPreferredDstType))
     {
     }
 
     void shadeSpan(int x, int y, SkPMColor colors[], int count) override
     {
+=======
+        : INHERITED(shader, SkShader::ContextRec(*rec.fPaint, SkMatrix::I(), NULL)) {}
+
+    void shadeSpan(int x, int y, SkPMColor colors[], int count) override {
+>>>>>>> miniblink49
         sk_bzero(colors, count * sizeof(SkPMColor));
     }
 
@@ -1027,16 +1554,24 @@ private:
 };
 
 SkShaderBlitter::SkShaderBlitter(const SkPixmap& device, const SkPaint& paint,
+<<<<<<< HEAD
     SkShader::Context* shaderContext)
     : INHERITED(device)
     , fShader(paint.getShader())
     , fShaderContext(shaderContext)
 {
+=======
+                                 SkShader::Context* shaderContext)
+        : INHERITED(device)
+        , fShader(paint.getShader())
+        , fShaderContext(shaderContext) {
+>>>>>>> miniblink49
     SkASSERT(fShader);
     SkASSERT(fShaderContext);
 
     fShader->ref();
     fShaderFlags = fShaderContext->getFlags();
+<<<<<<< HEAD
     fConstInY = SkToBool(fShaderFlags & SkShader::kConstInY32_Flag);
 }
 
@@ -1047,6 +1582,15 @@ SkShaderBlitter::~SkShaderBlitter()
 
 bool SkShaderBlitter::resetShaderContext(const SkShader::ContextRec& rec)
 {
+=======
+}
+
+SkShaderBlitter::~SkShaderBlitter() {
+    fShader->unref();
+}
+
+bool SkShaderBlitter::resetShaderContext(const SkShader::ContextRec& rec) {
+>>>>>>> miniblink49
     // Only destroy the old context if we have a new one. We need to ensure to have a
     // live context in fShaderContext because the storage is owned by an SkSmallAllocator
     // outside of this class.
@@ -1054,10 +1598,17 @@ bool SkShaderBlitter::resetShaderContext(const SkShader::ContextRec& rec)
     // shader to create it. It is therefore safe to re-use the storage.
     fShaderContext->~Context();
     SkShader::Context* ctx = fShader->createContext(rec, (void*)fShaderContext);
+<<<<<<< HEAD
     if (nullptr == ctx) {
         // Need a valid context in fShaderContext's storage, so we can later (or our caller) call
         // the in-place destructor.
         new (fShaderContext) SkZeroShaderContext(*fShader, rec);
+=======
+    if (NULL == ctx) {
+        // Need a valid context in fShaderContext's storage, so we can later (or our caller) call
+        // the in-place destructor.
+        SkNEW_PLACEMENT_ARGS(fShaderContext, SkZeroShaderContext, (*fShader, rec));
+>>>>>>> miniblink49
         return false;
     }
     return true;

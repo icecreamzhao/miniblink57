@@ -23,7 +23,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <windows.h>
+#include <Windows.h>
 #include <wtf/Noncopyable.h>
 
 namespace WTF {

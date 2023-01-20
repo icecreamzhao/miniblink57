@@ -7,6 +7,7 @@
 
 #include "SkImageEncoder.h"
 #include "SkBitmap.h"
+<<<<<<< HEAD
 #include "SkPixelSerializer.h"
 #include "SkPixmap.h"
 #include "SkStream.h"
@@ -17,11 +18,21 @@ SkImageEncoder::~SkImageEncoder() { }
 bool SkImageEncoder::encodeStream(SkWStream* stream, const SkBitmap& bm,
     int quality)
 {
+=======
+#include "SkStream.h"
+#include "SkTemplates.h"
+
+SkImageEncoder::~SkImageEncoder() {}
+
+bool SkImageEncoder::encodeStream(SkWStream* stream, const SkBitmap& bm,
+                                  int quality) {
+>>>>>>> miniblink49
     quality = SkMin32(100, SkMax32(0, quality));
     return this->onEncode(stream, bm, quality);
 }
 
 bool SkImageEncoder::encodeFile(const char file[], const SkBitmap& bm,
+<<<<<<< HEAD
     int quality)
 {
     quality = SkMin32(100, SkMax32(0, quality));
@@ -31,28 +42,50 @@ bool SkImageEncoder::encodeFile(const char file[], const SkBitmap& bm,
 
 SkData* SkImageEncoder::encodeData(const SkBitmap& bm, int quality)
 {
+=======
+                                int quality) {
+    quality = SkMin32(100, SkMax32(0, quality));
+    SkFILEWStream   stream(file);
+    return this->onEncode(&stream, bm, quality);
+}
+
+SkData* SkImageEncoder::encodeData(const SkBitmap& bm, int quality) {
+>>>>>>> miniblink49
     SkDynamicMemoryWStream stream;
     quality = SkMin32(100, SkMax32(0, quality));
     if (this->onEncode(&stream, bm, quality)) {
         return stream.copyToData();
     }
+<<<<<<< HEAD
     return nullptr;
 }
 
 bool SkImageEncoder::EncodeFile(const char file[], const SkBitmap& bm, Type t,
     int quality)
 {
+=======
+    return NULL;
+}
+
+bool SkImageEncoder::EncodeFile(const char file[], const SkBitmap& bm, Type t,
+                                int quality) {
+>>>>>>> miniblink49
     SkAutoTDelete<SkImageEncoder> enc(SkImageEncoder::Create(t));
     return enc.get() && enc.get()->encodeFile(file, bm, quality);
 }
 
 bool SkImageEncoder::EncodeStream(SkWStream* stream, const SkBitmap& bm, Type t,
+<<<<<<< HEAD
     int quality)
 {
+=======
+                                  int quality) {
+>>>>>>> miniblink49
     SkAutoTDelete<SkImageEncoder> enc(SkImageEncoder::Create(t));
     return enc.get() && enc.get()->encodeStream(stream, bm, quality);
 }
 
+<<<<<<< HEAD
 SkData* SkImageEncoder::EncodeData(const SkBitmap& bm, Type t, int quality)
 {
     SkAutoTDelete<SkImageEncoder> enc(SkImageEncoder::Create(t));
@@ -95,4 +128,19 @@ protected:
 SkPixelSerializer* SkImageEncoder::CreatePixelSerializer()
 {
     return new ImageEncoderPixelSerializer;
+=======
+SkData* SkImageEncoder::EncodeData(const SkBitmap& bm, Type t, int quality) {
+    SkAutoTDelete<SkImageEncoder> enc(SkImageEncoder::Create(t));
+    return enc.get() ? enc.get()->encodeData(bm, quality) : NULL;
+}
+
+SkData* SkImageEncoder::EncodeData(const SkImageInfo& info, const void* pixels, size_t rowBytes,
+                                   Type t, int quality) {
+    SkBitmap bm;
+    if (!bm.installPixels(info, const_cast<void*>(pixels), rowBytes)) {
+        return NULL;
+    }
+    SkAutoTDelete<SkImageEncoder> enc(SkImageEncoder::Create(t));
+    return enc.get() ? enc.get()->encodeData(bm, quality) : NULL;
+>>>>>>> miniblink49
 }

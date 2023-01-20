@@ -8,6 +8,7 @@
 #include "sk_tool_utils.h"
 #include "sk_tool_utils_flags.h"
 
+<<<<<<< HEAD
 #include "Resources.h"
 #include "SkBitmap.h"
 #include "SkCanvas.h"
@@ -15,11 +16,16 @@
 #include "SkFontMgr.h"
 #include "SkFontStyle.h"
 #include "SkPoint3.h"
+=======
+#include "SkBitmap.h"
+#include "SkCanvas.h"
+>>>>>>> miniblink49
 #include "SkShader.h"
 #include "SkTestScalerContext.h"
 #include "SkTextBlob.h"
 
 DEFINE_bool(portableFonts, false, "Use portable fonts");
+<<<<<<< HEAD
 
 namespace sk_tool_utils {
 
@@ -197,11 +203,34 @@ const char* colortype_name(SkColorType ct)
 
 SkColor color_to_565(SkColor color)
 {
+=======
+DEFINE_bool(resourceFonts, false, "Use resource fonts");
+
+namespace sk_tool_utils {
+
+const char* colortype_name(SkColorType ct) {
+    switch (ct) {
+        case kUnknown_SkColorType:      return "Unknown";
+        case kAlpha_8_SkColorType:      return "Alpha_8";
+        case kIndex_8_SkColorType:      return "Index_8";
+        case kARGB_4444_SkColorType:    return "ARGB_4444";
+        case kRGB_565_SkColorType:      return "RGB_565";
+        case kRGBA_8888_SkColorType:    return "RGBA_8888";
+        case kBGRA_8888_SkColorType:    return "BGRA_8888";
+        default:
+            SkASSERT(false);
+            return "unexpected colortype";
+    }
+}
+
+SkColor color_to_565(SkColor color) {
+>>>>>>> miniblink49
     SkPMColor pmColor = SkPreMultiplyColor(color);
     U16CPU color16 = SkPixel32ToPixel16(pmColor);
     return SkPixel16ToColor(color16);
 }
 
+<<<<<<< HEAD
 sk_sp<SkTypeface> create_portable_typeface(const char* name, SkFontStyle style)
 {
     return create_font(name, style);
@@ -215,6 +244,36 @@ void set_portable_typeface(SkPaint* paint, const char* name, SkFontStyle style)
 void write_pixels(SkCanvas* canvas, const SkBitmap& bitmap, int x, int y,
     SkColorType colorType, SkAlphaType alphaType)
 {
+=======
+SkTypeface* create_portable_typeface(const char* name, SkTypeface::Style style) {
+    SkTypeface* face;
+    if (FLAGS_portableFonts) {
+        face = create_font(name, style);
+    } else if (FLAGS_resourceFonts) {
+        face = resource_font(name, style);
+    } else {
+        face = SkTypeface::CreateFromName(name, style);
+    }
+    return face;
+}
+
+SkTypeface* create_portable_typeface_always(const char* name, SkTypeface::Style style) {
+    return create_font(name, style);
+}
+
+void set_portable_typeface(SkPaint* paint, const char* name, SkTypeface::Style style) {
+    SkTypeface* face = create_portable_typeface(name, style);
+    SkSafeUnref(paint->setTypeface(face));
+}
+
+void set_portable_typeface_always(SkPaint* paint, const char* name, SkTypeface::Style style) {
+    SkTypeface* face = create_font(name, style);
+    SkSafeUnref(paint->setTypeface(face));
+}
+    
+void write_pixels(SkCanvas* canvas, const SkBitmap& bitmap, int x, int y,
+                  SkColorType colorType, SkAlphaType alphaType) {
+>>>>>>> miniblink49
     SkBitmap tmp(bitmap);
     tmp.lockPixels();
 
@@ -223,13 +282,18 @@ void write_pixels(SkCanvas* canvas, const SkBitmap& bitmap, int x, int y,
     canvas->writePixels(info, tmp.getPixels(), tmp.rowBytes(), x, y);
 }
 
+<<<<<<< HEAD
 sk_sp<SkShader> create_checkerboard_shader(SkColor c1, SkColor c2, int size)
 {
+=======
+SkShader* create_checkerboard_shader(SkColor c1, SkColor c2, int size) {
+>>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(2 * size, 2 * size);
     bm.eraseColor(c1);
     bm.eraseArea(SkIRect::MakeLTRB(0, 0, size, size), c2);
     bm.eraseArea(SkIRect::MakeLTRB(size, size, 2 * size, 2 * size), c2);
+<<<<<<< HEAD
     return SkShader::MakeBitmapShader(
         bm, SkShader::kRepeat_TileMode, SkShader::kRepeat_TileMode);
 }
@@ -248,10 +312,20 @@ void draw_checkerboard(SkCanvas* canvas, SkColor c1, SkColor c2, int size)
 {
     SkPaint paint;
     paint.setShader(create_checkerboard_shader(c1, c2, size));
+=======
+    return SkShader::CreateBitmapShader(
+            bm, SkShader::kRepeat_TileMode, SkShader::kRepeat_TileMode);
+}
+
+void draw_checkerboard(SkCanvas* canvas, SkColor c1, SkColor c2, int size) {
+    SkPaint paint;
+    paint.setShader(create_checkerboard_shader(c1, c2, size))->unref();
+>>>>>>> miniblink49
     paint.setXfermodeMode(SkXfermode::kSrc_Mode);
     canvas->drawPaint(paint);
 }
 
+<<<<<<< HEAD
 SkBitmap create_string_bitmap(int w, int h, SkColor c, int x, int y,
     int textSize, const char* str)
 {
@@ -274,15 +348,24 @@ SkBitmap create_string_bitmap(int w, int h, SkColor c, int x, int y,
 void add_to_text_blob(SkTextBlobBuilder* builder, const char* text, const SkPaint& origPaint,
     SkScalar x, SkScalar y)
 {
+=======
+void add_to_text_blob(SkTextBlobBuilder* builder, const char* text, const SkPaint& origPaint,
+                      SkScalar x, SkScalar y) {
+>>>>>>> miniblink49
     SkPaint paint(origPaint);
     SkTDArray<uint16_t> glyphs;
 
     size_t len = strlen(text);
+<<<<<<< HEAD
     glyphs.append(paint.textToGlyphs(text, len, nullptr));
+=======
+    glyphs.append(paint.textToGlyphs(text, len, NULL));
+>>>>>>> miniblink49
     paint.textToGlyphs(text, len, glyphs.begin());
 
     paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
     const SkTextBlobBuilder::RunBuffer& run = builder->allocRun(paint, glyphs.count(), x, y,
+<<<<<<< HEAD
         nullptr);
     memcpy(run.glyphs, glyphs.begin(), glyphs.count() * sizeof(uint16_t));
 }
@@ -503,3 +586,11 @@ SkBitmap slow_blur(const SkBitmap& src, float sigma)
 }
 
 } // namespace sk_tool_utils
+=======
+                                                                NULL);
+    memcpy(run.glyphs, glyphs.begin(), glyphs.count() * sizeof(uint16_t));
+}
+
+
+}  // namespace sk_tool_utils
+>>>>>>> miniblink49

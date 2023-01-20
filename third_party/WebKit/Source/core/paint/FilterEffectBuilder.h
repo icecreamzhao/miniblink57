@@ -27,51 +27,42 @@
 #define FilterEffectBuilder_h
 
 #include "core/CoreExport.h"
-#include "platform/geometry/FloatRect.h"
+#include "platform/graphics/filters/FilterEffect.h"
 #include "platform/heap/Handle.h"
-#include "wtf/Allocator.h"
-
-class SkPaint;
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
+#include "wtf/Vector.h"
 
 namespace blink {
 
-class CompositorFilterOperations;
-class Filter;
-class FilterEffect;
 class FilterOperations;
-class FloatRect;
-class Node;
-class ReferenceFilterOperation;
-class SVGFilterElement;
-class SVGFilterGraphNodeMap;
+class ReferenceFilter;
+class Element;
 
-class CORE_EXPORT FilterEffectBuilder final {
-    STACK_ALLOCATED();
-
+class CORE_EXPORT FilterEffectBuilder final : public RefCountedWillBeGarbageCollectedFinalized<FilterEffectBuilder> {
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(FilterEffectBuilder);
 public:
-    FilterEffectBuilder(Node*,
-        const FloatRect& zoomedReferenceBox,
-        float zoom,
-        const SkPaint* fillPaint = nullptr,
-        const SkPaint* strokePaint = nullptr);
+    static PassRefPtrWillBeRawPtr<FilterEffectBuilder> create()
+    {
+        return adoptRefWillBeNoop(new FilterEffectBuilder());
+    }
 
-    Filter* buildReferenceFilter(SVGFilterElement&,
-        FilterEffect* previousEffect,
-        SVGFilterGraphNodeMap* = nullptr) const;
+    virtual ~FilterEffectBuilder();
+    DECLARE_TRACE();
 
-    FilterEffect* buildFilterEffect(const FilterOperations&) const;
-    CompositorFilterOperations buildFilterOperations(
-        const FilterOperations&) const;
+    bool build(Element*, const FilterOperations&, float zoom);
+
+    PassRefPtrWillBeRawPtr<FilterEffect> lastEffect() const
+    {
+        return m_lastEffect;
+    }
 
 private:
-    Filter* buildReferenceFilter(const ReferenceFilterOperation&,
-        FilterEffect* previousEffect) const;
+    FilterEffectBuilder();
 
-    Member<Node> m_targetContext;
-    FloatRect m_referenceBox;
-    float m_zoom;
-    const SkPaint* m_fillPaint;
-    const SkPaint* m_strokePaint;
+    RefPtrWillBeMember<FilterEffect> m_lastEffect;
+    WillBeHeapVector<RefPtrWillBeMember<ReferenceFilter>> m_referenceFilters;
 };
 
 } // namespace blink

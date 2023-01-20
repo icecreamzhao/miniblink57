@@ -28,22 +28,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGEnumeration.h"
 
+#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "core/dom/ExceptionCode.h"
 #include "core/svg/SVGAnimationElement.h"
 
 namespace blink {
 
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGEnumerationBase);
-
-SVGEnumerationBase::~SVGEnumerationBase() { }
-
-SVGPropertyBase* SVGEnumerationBase::cloneForAnimation(
-    const String& value) const
+inline PassRefPtrWillBeRawPtr<SVGEnumerationBase> toSVGEnumerationBase(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
 {
-    SVGEnumerationBase* svgEnumeration = clone();
-    svgEnumeration->setValueAsString(value);
-    return svgEnumeration;
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGEnumerationBase::classType());
+    return static_pointer_cast<SVGEnumerationBase>(base.release());
+}
+
+SVGEnumerationBase::~SVGEnumerationBase()
+{
+}
+
+PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGEnumerationBase::cloneForAnimation(const String& value) const
+{
+    RefPtrWillBeRawPtr<SVGEnumerationBase> svgEnumeration = clone();
+    svgEnumeration->setValueAsString(value, IGNORE_EXCEPTION);
+    return svgEnumeration.release();
 }
 
 String SVGEnumerationBase::valueAsString() const
@@ -57,57 +68,56 @@ String SVGEnumerationBase::valueAsString() const
     return emptyString();
 }
 
-void SVGEnumerationBase::setValue(unsigned short value)
+void SVGEnumerationBase::setValue(unsigned short value, ExceptionState& exceptionState)
 {
+    if (!value) {
+        exceptionState.throwTypeError("The enumeration value provided is 0, which is not settable.");
+        return;
+    }
+
+    if (value > maxExposedEnumValue()) {
+        exceptionState.throwTypeError("The enumeration value provided (" + String::number(value) + ") is larger than the largest allowed value (" + String::number(maxExposedEnumValue()) + ").");
+        return;
+    }
+
     m_value = value;
     notifyChange();
 }
 
-SVGParsingError SVGEnumerationBase::setValueAsString(const String& string)
+void SVGEnumerationBase::setValueAsString(const String& string, ExceptionState& exceptionState)
 {
     for (const auto& entry : m_entries) {
         if (string == entry.second) {
-            // 0 corresponds to _UNKNOWN enumeration values, and should not be
-            // settable.
+            // 0 corresponds to _UNKNOWN enumeration values, and should not be settable.
             ASSERT(entry.first);
             m_value = entry.first;
             notifyChange();
-            return SVGParseStatus::NoError;
+            return;
         }
     }
 
+    exceptionState.throwDOMException(SyntaxError, "The value provided ('" + string + "') is invalid.");
     notifyChange();
-    return SVGParseStatus::ExpectedEnumeration;
 }
 
-void SVGEnumerationBase::add(SVGPropertyBase*, SVGElement*)
+void SVGEnumerationBase::add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
 {
     ASSERT_NOT_REACHED();
 }
 
-void SVGEnumerationBase::calculateAnimatedValue(
-    SVGAnimationElement* animationElement,
-    float percentage,
-    unsigned repeatCount,
-    SVGPropertyBase* from,
-    SVGPropertyBase* to,
-    SVGPropertyBase*,
-    SVGElement*)
+void SVGEnumerationBase::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
 {
     ASSERT(animationElement);
-    unsigned short fromEnumeration = animationElement->getAnimationMode() == ToAnimation
-        ? m_value
-        : toSVGEnumerationBase(from)->value();
+    unsigned short fromEnumeration = animationElement->animationMode() == ToAnimation ? m_value : toSVGEnumerationBase(from)->value();
     unsigned short toEnumeration = toSVGEnumerationBase(to)->value();
 
-    animationElement->animateDiscreteType<unsigned short>(
-        percentage, fromEnumeration, toEnumeration, m_value);
+    animationElement->animateDiscreteType<unsigned short>(percentage, fromEnumeration, toEnumeration, m_value);
 }
 
-float SVGEnumerationBase::calculateDistance(SVGPropertyBase*, SVGElement*)
+float SVGEnumerationBase::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
 {
     // No paced animations for boolean.
     return -1;
 }
 
-} // namespace blink
+}

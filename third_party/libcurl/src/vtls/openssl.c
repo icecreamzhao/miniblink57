@@ -2792,6 +2792,7 @@ static CURLcode ossl_connect_step2(struct connectdata *conn, int sockindex)
 
 static int asn1_object_dump(ASN1_OBJECT *a, char *buf, size_t len)
 {
+<<<<<<< HEAD
 //   int i, ilen;
 // 
 //   ilen = (int)len;
@@ -2803,6 +2804,18 @@ static int asn1_object_dump(ASN1_OBJECT *a, char *buf, size_t len)
 //   if(i >= ilen)
 //     return 1; /* buffer too small */
   *(int*)1 = 1;
+=======
+  int i, ilen;
+
+  ilen = (int)len;
+  if(ilen < 0)
+    return 1; /* buffer too big */
+
+  i = openssl_i2t_ASN1_OBJECT(buf, ilen, a);
+
+  if(i >= ilen)
+    return 1; /* buffer too small */
+>>>>>>> miniblink49
 
   return 0;
 }

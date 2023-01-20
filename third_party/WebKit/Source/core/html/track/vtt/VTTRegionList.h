@@ -28,24 +28,26 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/html/track/vtt/VTTRegion.h"
-#include "platform/heap/Handle.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class VTTRegionList final : public GarbageCollected<VTTRegionList>,
-                            public ScriptWrappable {
+class VTTRegionList final : public RefCountedWillBeGarbageCollected<VTTRegionList>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static VTTRegionList* create() { return new VTTRegionList; }
+    static PassRefPtrWillBeRawPtr<VTTRegionList> create()
+    {
+        return adoptRefWillBeNoop(new VTTRegionList());
+    }
 
     unsigned long length() const;
 
     VTTRegion* item(unsigned index) const;
     VTTRegion* getRegionById(const String&) const;
 
-    void add(VTTRegion*);
+    void add(PassRefPtrWillBeRawPtr<VTTRegion>);
     bool remove(VTTRegion*);
 
     DECLARE_TRACE();
@@ -53,7 +55,7 @@ public:
 private:
     VTTRegionList();
 
-    HeapVector<Member<VTTRegion>> m_list;
+    WillBeHeapVector<RefPtrWillBeMember<VTTRegion>> m_list;
 };
 
 } // namespace blink

@@ -23,6 +23,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/DatasetDOMStringMap.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -70,11 +71,8 @@ static String convertAttributeNameToPropertyName(const String& name)
     return stringBuilder.toString();
 }
 
-template <typename CharType1, typename CharType2>
-static bool propertyNameMatchesAttributeName(const CharType1* propertyName,
-    const CharType2* attributeName,
-    unsigned propertyLength,
-    unsigned attributeLength)
+template<typename CharType1, typename CharType2>
+static bool propertyNameMatchesAttributeName(const CharType1* propertyName, const CharType2* attributeName, unsigned propertyLength, unsigned attributeLength)
 {
     unsigned a = 5;
     unsigned p = 0;
@@ -94,8 +92,7 @@ static bool propertyNameMatchesAttributeName(const CharType1* propertyName,
     return (a == attributeLength && p == propertyLength);
 }
 
-static bool propertyNameMatchesAttributeName(const String& propertyName,
-    const String& attributeName)
+static bool propertyNameMatchesAttributeName(const String& propertyName, const String& attributeName)
 {
     if (!attributeName.startsWith("data-"))
         return false;
@@ -105,21 +102,13 @@ static bool propertyNameMatchesAttributeName(const String& propertyName,
 
     if (propertyName.is8Bit()) {
         if (attributeName.is8Bit())
-            return propertyNameMatchesAttributeName(propertyName.characters8(),
-                attributeName.characters8(),
-                propertyLength, attributeLength);
-        return propertyNameMatchesAttributeName(propertyName.characters8(),
-            attributeName.characters16(),
-            propertyLength, attributeLength);
+            return propertyNameMatchesAttributeName(propertyName.characters8(), attributeName.characters8(), propertyLength, attributeLength);
+        return propertyNameMatchesAttributeName(propertyName.characters8(), attributeName.characters16(), propertyLength, attributeLength);
     }
 
     if (attributeName.is8Bit())
-        return propertyNameMatchesAttributeName(propertyName.characters16(),
-            attributeName.characters8(),
-            propertyLength, attributeLength);
-    return propertyNameMatchesAttributeName(propertyName.characters16(),
-        attributeName.characters16(),
-        propertyLength, attributeLength);
+        return propertyNameMatchesAttributeName(propertyName.characters16(), attributeName.characters8(), propertyLength, attributeLength);
+    return propertyNameMatchesAttributeName(propertyName.characters16(), attributeName.characters16(), propertyLength, attributeLength);
 }
 
 static bool isValidPropertyName(const String& name)
@@ -137,7 +126,7 @@ static bool isValidPropertyName(const String& name)
 static AtomicString convertPropertyNameToAttributeName(const String& name)
 {
     StringBuilder builder;
-    builder.append("data-");
+    builder.appendLiteral("data-");
 
     unsigned length = name.length();
     for (unsigned i = 0; i < length; ++i) {
@@ -153,12 +142,24 @@ static AtomicString convertPropertyNameToAttributeName(const String& name)
     return builder.toAtomicString();
 }
 
+#if !ENABLE(OILPAN)
+void DatasetDOMStringMap::ref()
+{
+    m_element->ref();
+}
+
+void DatasetDOMStringMap::deref()
+{
+    m_element->deref();
+}
+#endif
+
 void DatasetDOMStringMap::getNames(Vector<String>& names)
 {
     AttributeCollection attributes = m_element->attributes();
     for (const Attribute& attr : attributes) {
         if (isValidAttributeName(attr.localName()))
-            names.push_back(convertAttributeNameToPropertyName(attr.localName()));
+            names.append(convertAttributeNameToPropertyName(attr.localName()));
     }
 }
 
@@ -183,18 +184,14 @@ bool DatasetDOMStringMap::contains(const String& name)
     return false;
 }
 
-void DatasetDOMStringMap::setItem(const String& name,
-    const String& value,
-    ExceptionState& exceptionState)
+void DatasetDOMStringMap::setItem(const String& name, const String& value, ExceptionState& exceptionState)
 {
     if (!isValidPropertyName(name)) {
-        exceptionState.throwDOMException(
-            SyntaxError, "'" + name + "' is not a valid property name.");
+        exceptionState.throwDOMException(SyntaxError, "'" + name + "' is not a valid property name.");
         return;
     }
 
-    m_element->setAttribute(convertPropertyNameToAttributeName(name),
-        AtomicString(value), exceptionState);
+    m_element->setAttribute(convertPropertyNameToAttributeName(name), AtomicString(value), exceptionState);
 }
 
 bool DatasetDOMStringMap::deleteItem(const String& name)

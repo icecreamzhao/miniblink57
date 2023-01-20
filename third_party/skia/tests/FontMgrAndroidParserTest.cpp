@@ -7,7 +7,10 @@
 
 #include "Resources.h"
 #include "SkCommandLineFlags.h"
+<<<<<<< HEAD
 #include "SkFixed.h"
+=======
+>>>>>>> miniblink49
 #include "SkFontMgr_android_parser.h"
 #include "Test.h"
 
@@ -16,8 +19,12 @@
 
 DECLARE_bool(verboseFontMgr);
 
+<<<<<<< HEAD
 int CountFallbacks(SkTDArray<FontFamily*> fontFamilies)
 {
+=======
+int CountFallbacks(SkTDArray<FontFamily*> fontFamilies) {
+>>>>>>> miniblink49
     int countOfFallbackFonts = 0;
     for (int i = 0; i < fontFamilies.count(); i++) {
         if (fontFamilies[i]->fIsFallbackFont) {
@@ -28,24 +35,40 @@ int CountFallbacks(SkTDArray<FontFamily*> fontFamilies)
 }
 
 //https://tools.ietf.org/html/rfc5234#appendix-B.1
+<<<<<<< HEAD
 static bool isALPHA(int c)
 {
+=======
+static bool isALPHA(int c) {
+>>>>>>> miniblink49
     return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
 }
 
 //https://tools.ietf.org/html/rfc5234#appendix-B.1
+<<<<<<< HEAD
 static bool isDIGIT(int c)
 {
+=======
+static bool isDIGIT(int c) {
+>>>>>>> miniblink49
     return ('0' <= c && c <= '9');
 }
 
 void ValidateLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* firstExpectedFile,
+<<<<<<< HEAD
     skiatest::Reporter* reporter)
 {
     REPORTER_ASSERT(reporter, fontFamilies[0]->fNames.count() == 5);
     REPORTER_ASSERT(reporter, !strcmp(fontFamilies[0]->fNames[0].c_str(), "sans-serif"));
     REPORTER_ASSERT(reporter,
         !strcmp(fontFamilies[0]->fFonts[0].fFileName.c_str(), firstExpectedFile));
+=======
+                         skiatest::Reporter* reporter) {
+    REPORTER_ASSERT(reporter, fontFamilies[0]->fNames.count() == 5);
+    REPORTER_ASSERT(reporter, !strcmp(fontFamilies[0]->fNames[0].c_str(), "sans-serif"));
+    REPORTER_ASSERT(reporter,
+                    !strcmp(fontFamilies[0]->fFonts[0].fFileName.c_str(), firstExpectedFile));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, !fontFamilies[0]->fIsFallbackFont);
 
     // Check that the languages are all sane.
@@ -64,13 +87,23 @@ void ValidateLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* firstE
         FontFamily& family = *fontFamilies[i];
         for (int j = 0; j < family.fFonts.count(); ++j) {
             FontFileInfo& file = family.fFonts[j];
+<<<<<<< HEAD
             REPORTER_ASSERT(reporter, !file.fFileName.isEmpty() && file.fFileName[0] >= 'A' && file.fFileName[0] <= 'Z');
+=======
+            REPORTER_ASSERT(reporter, !file.fFileName.isEmpty() &&
+                                      file.fFileName[0] >= 'A' &&
+                                      file.fFileName[0] <= 'Z');
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 void DumpLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* label)
 {
+=======
+void DumpLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* label) {
+>>>>>>> miniblink49
     if (!FLAGS_verboseFontMgr) {
         return;
     }
@@ -78,6 +111,7 @@ void DumpLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* label)
     SkDebugf("\n--- Dumping %s\n", label);
     for (int i = 0; i < fontFamilies.count(); ++i) {
         SkDebugf("Family %d:\n", i);
+<<<<<<< HEAD
         switch (fontFamilies[i]->fVariant) {
         case kElegant_FontVariant:
             SkDebugf("  elegant\n");
@@ -87,6 +121,12 @@ void DumpLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* label)
             break;
         default:
             break;
+=======
+        switch(fontFamilies[i]->fVariant) {
+            case kElegant_FontVariant: SkDebugf("  elegant\n"); break;
+            case kCompact_FontVariant: SkDebugf("  compact\n"); break;
+            default: break;
+>>>>>>> miniblink49
         }
         SkDebugf("  basePath %s\n", fontFamilies[i]->fBasePath.c_str());
         if (!fontFamilies[i]->fLanguage.getTag().isEmpty()) {
@@ -97,6 +137,7 @@ void DumpLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* label)
         }
         for (int j = 0; j < fontFamilies[i]->fFonts.count(); ++j) {
             const FontFileInfo& ffi = fontFamilies[i]->fFonts[j];
+<<<<<<< HEAD
             SkDebugf("  file (%d) %s#%d", ffi.fWeight, ffi.fFileName.c_str(), ffi.fIndex);
             for (const auto& axis : ffi.fAxes) {
                 SkDebugf(" @'%c%c%c%c'=%f",
@@ -107,14 +148,22 @@ void DumpLoadedFonts(SkTDArray<FontFamily*> fontFamilies, const char* label)
                     axis.fStyleValue);
             }
             SkDebugf("\n");
+=======
+            SkDebugf("  file (%d) %s#%d\n", ffi.fWeight, ffi.fFileName.c_str(), ffi.fIndex);
+>>>>>>> miniblink49
         }
     }
     SkDebugf("\n\n");
 }
 
+<<<<<<< HEAD
 template <int N, typename T>
 static double test_parse_fixed_r(skiatest::Reporter* reporter,
     double low, double high, double inc)
+=======
+template <int N, typename T> static double test_parse_fixed_r(skiatest::Reporter* reporter,
+                                                              double low, double high, double inc)
+>>>>>>> miniblink49
 {
     double SK_FixedMax_double = nextafter(1 << (sizeof(T) * CHAR_BIT - N - 1), 0.0);
     double SK_FixedEpsilon_double = (1.0 / (1 << N));
@@ -130,7 +179,11 @@ static double test_parse_fixed_r(skiatest::Reporter* reporter,
         if (b) {
             double f2 = fix * SK_FixedEpsilon_double;
             double error = fabs(f - f2);
+<<<<<<< HEAD
             REPORTER_ASSERT(reporter, error <= SK_FixedEpsilon_double);
+=======
+            REPORTER_ASSERT(reporter,  error <= SK_FixedEpsilon_double);
+>>>>>>> miniblink49
             maxError = SkTMax(maxError, error);
         } else {
             REPORTER_ASSERT(reporter, f < -SK_FixedMax_double || SK_FixedMax_double < f);
@@ -141,8 +194,12 @@ static double test_parse_fixed_r(skiatest::Reporter* reporter,
     return maxError;
 }
 
+<<<<<<< HEAD
 static void test_parse_fixed(skiatest::Reporter* reporter)
 {
+=======
+static void test_parse_fixed(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     test_parse_fixed_r<27, int32_t>(reporter, -8.1, -7.9, 0.000001);
     test_parse_fixed_r<27, int32_t>(reporter, -0.1, 0.1, 0.000001);
     test_parse_fixed_r<27, int32_t>(reporter, 7.9, 8.1, 0.000001);
@@ -161,8 +218,12 @@ static void test_parse_fixed(skiatest::Reporter* reporter)
     REPORTER_ASSERT(reporter, !parse_fixed<16>(".123a", &fix));
 }
 
+<<<<<<< HEAD
 DEF_TEST(FontMgrAndroidParser, reporter)
 {
+=======
+DEF_TEST(FontMgrAndroidParser, reporter) {
+>>>>>>> miniblink49
     test_parse_fixed(reporter);
 
     bool resourcesMissing = false;
@@ -182,7 +243,11 @@ DEF_TEST(FontMgrAndroidParser, reporter)
     } else {
         resourcesMissing = true;
     }
+<<<<<<< HEAD
     preV17FontFamilies.deleteAll();
+=======
+
+>>>>>>> miniblink49
 
     SkTDArray<FontFamily*> v17FontFamilies;
     SkFontMgr_Android_Parser::GetCustomFontFamilies(v17FontFamilies,
@@ -200,13 +265,21 @@ DEF_TEST(FontMgrAndroidParser, reporter)
     } else {
         resourcesMissing = true;
     }
+<<<<<<< HEAD
     v17FontFamilies.deleteAll();
+=======
+
+>>>>>>> miniblink49
 
     SkTDArray<FontFamily*> v22FontFamilies;
     SkFontMgr_Android_Parser::GetCustomFontFamilies(v22FontFamilies,
         SkString("/custom/font/path/"),
         GetResourcePath("android_fonts/v22/fonts.xml").c_str(),
+<<<<<<< HEAD
         nullptr);
+=======
+        NULL);
+>>>>>>> miniblink49
 
     if (v22FontFamilies.count() > 0) {
         REPORTER_ASSERT(reporter, v22FontFamilies.count() == 54);
@@ -217,9 +290,16 @@ DEF_TEST(FontMgrAndroidParser, reporter)
     } else {
         resourcesMissing = true;
     }
+<<<<<<< HEAD
     v22FontFamilies.deleteAll();
+=======
+>>>>>>> miniblink49
 
     if (resourcesMissing) {
         SkDebugf("---- Resource files missing for FontConfigParser test\n");
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

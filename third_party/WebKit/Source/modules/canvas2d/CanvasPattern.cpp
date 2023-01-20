@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/canvas2d/CanvasPattern.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -31,8 +35,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 Pattern::RepeatMode CanvasPattern::parseRepetitionType(
     const String& type,
+=======
+Pattern::RepeatMode CanvasPattern::parseRepetitionType(const String& type,
+>>>>>>> miniblink49
     ExceptionState& exceptionState)
 {
     if (type.isEmpty() || type == "repeat")
@@ -47,6 +55,7 @@ Pattern::RepeatMode CanvasPattern::parseRepetitionType(
     if (type == "repeat-y")
         return Pattern::RepeatModeY;
 
+<<<<<<< HEAD
     exceptionState.throwDOMException(
         SyntaxError,
         "The provided type ('" + type + "') is not one of 'repeat', 'no-repeat', 'repeat-x', or 'repeat-y'.");
@@ -57,13 +66,28 @@ CanvasPattern::CanvasPattern(PassRefPtr<Image> image,
     Pattern::RepeatMode repeat,
     bool originClean)
     : m_pattern(Pattern::createImagePattern(std::move(image), repeat))
+=======
+    exceptionState.throwDOMException(SyntaxError, "The provided type ('" + type + "') is not one of 'repeat', 'no-repeat', 'repeat-x', or 'repeat-y'.");
+    return Pattern::RepeatModeNone;
+}
+
+CanvasPattern::CanvasPattern(PassRefPtr<Image> image, Pattern::RepeatMode repeat, bool originClean)
+    : m_pattern(Pattern::createBitmapPattern(image, repeat))
+>>>>>>> miniblink49
     , m_originClean(originClean)
 {
 }
 
 void CanvasPattern::setTransform(SVGMatrixTearOff* transform)
 {
+<<<<<<< HEAD
     m_patternTransform = transform ? transform->value() : AffineTransform(1, 0, 0, 1, 0, 0);
 }
 
 } // namespace blink
+=======
+    pattern()->setPatternSpaceTransform(transform ? transform->value() : AffineTransform(1, 0, 0, 1, 0, 0));
+}
+
+}
+>>>>>>> miniblink49

@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/webdatabase/DatabaseClient.h"
 
 #include "core/dom/Document.h"
@@ -38,6 +42,7 @@
 namespace blink {
 
 DatabaseClient::DatabaseClient()
+<<<<<<< HEAD
     : m_inspectorAgent(nullptr)
 {
 }
@@ -52,6 +57,14 @@ DatabaseClient* DatabaseClient::fromPage(Page* page)
 {
     return static_cast<DatabaseClient*>(
         Supplement<Page>::from(page, supplementName()));
+=======
+    : m_inspectorAgent(0)
+{ }
+
+DatabaseClient* DatabaseClient::fromPage(Page* page)
+{
+    return static_cast<DatabaseClient*>(WillBeHeapSupplement<Page>::from(page, supplementName()));
+>>>>>>> miniblink49
 }
 
 DatabaseClient* DatabaseClient::from(ExecutionContext* context)
@@ -64,10 +77,14 @@ const char* DatabaseClient::supplementName()
     return "DatabaseClient";
 }
 
+<<<<<<< HEAD
 void DatabaseClient::didOpenDatabase(blink::Database* database,
     const String& domain,
     const String& name,
     const String& version)
+=======
+void DatabaseClient::didOpenDatabase(Database* database, const String& domain, const String& name, const String& version)
+>>>>>>> miniblink49
 {
     if (m_inspectorAgent)
         m_inspectorAgent->didOpenDatabase(database, domain, name, version);
@@ -75,12 +92,20 @@ void DatabaseClient::didOpenDatabase(blink::Database* database,
 
 void DatabaseClient::setInspectorAgent(InspectorDatabaseAgent* agent)
 {
+<<<<<<< HEAD
     // TODO(dgozman): we should not set agent twice, but it's happening in OOPIF
     // case.
     m_inspectorAgent = agent;
 }
 
 void provideDatabaseClientTo(Page& page, DatabaseClient* client)
+=======
+    ASSERT(!m_inspectorAgent);
+    m_inspectorAgent = agent;
+}
+
+void provideDatabaseClientTo(Page& page, PassOwnPtrWillBeRawPtr<DatabaseClient> client)
+>>>>>>> miniblink49
 {
     page.provideSupplement(DatabaseClient::supplementName(), client);
 }

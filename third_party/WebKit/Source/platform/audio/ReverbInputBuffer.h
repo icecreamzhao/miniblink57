@@ -31,6 +31,7 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
@@ -42,23 +43,40 @@ class PLATFORM_EXPORT ReverbInputBuffer {
     DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(ReverbInputBuffer);
 
+=======
+
+namespace blink {
+
+// ReverbInputBuffer is used to buffer input samples for deferred processing by the background threads.
+class PLATFORM_EXPORT ReverbInputBuffer {
+>>>>>>> miniblink49
 public:
     ReverbInputBuffer(size_t length);
 
     // The realtime audio thread keeps writing samples here.
+<<<<<<< HEAD
     // The assumption is that the buffer's length is evenly divisible by
     // numberOfFrames (for nearly all cases this will be fine).
+=======
+    // The assumption is that the buffer's length is evenly divisible by numberOfFrames (for nearly all cases this will be fine).
+>>>>>>> miniblink49
     // FIXME: remove numberOfFrames restriction...
     void write(const float* sourceP, size_t numberOfFrames);
 
     // Background threads can call this to check if there's anything to read...
     size_t writeIndex() const { return m_writeIndex; }
 
+<<<<<<< HEAD
     // The individual background threads read here (and hope that they can keep up
     // with the buffer writing).
     // readIndex is updated with the next readIndex to read from...
     // The assumption is that the buffer's length is evenly divisible by
     // numberOfFrames.
+=======
+    // The individual background threads read here (and hope that they can keep up with the buffer writing).
+    // readIndex is updated with the next readIndex to read from...
+    // The assumption is that the buffer's length is evenly divisible by numberOfFrames.
+>>>>>>> miniblink49
     // FIXME: remove numberOfFrames restriction...
     float* directReadFrom(int* readIndex, size_t numberOfFrames);
 

@@ -28,7 +28,11 @@
 
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/Image.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
+=======
+#include "wtf/RefPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -36,12 +40,21 @@ class PLATFORM_EXPORT GeneratedImage : public Image {
 public:
     bool currentFrameHasSingleSecurityOrigin() const override { return true; }
 
+<<<<<<< HEAD
     bool usesContainerSize() const override { return true; }
     bool hasRelativeSize() const override { return true; }
+=======
+    void setContainerSize(const IntSize& size) override { m_size = size; }
+    bool usesContainerSize() const override { return true; }
+    bool hasRelativeWidth() const override { return true; }
+    bool hasRelativeHeight() const override { return true; }
+    void computeIntrinsicDimensions(Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio) override;
+>>>>>>> miniblink49
 
     IntSize size() const override { return m_size; }
 
     // Assume that generated content has no decoded data we need to worry about
+<<<<<<< HEAD
     void destroyDecodedData() override { }
 
     sk_sp<SkImage> imageForCurrentFrame(const ColorBehavior&) override;
@@ -67,6 +80,21 @@ protected:
     }
 
     virtual void drawTile(GraphicsContext&, const FloatRect&) = 0;
+=======
+    void destroyDecodedData(bool) override { }
+
+protected:
+    void drawPattern(GraphicsContext*, const FloatRect&,
+        const FloatSize&, const FloatPoint&, SkXfermode::Mode,
+        const FloatRect&, const IntSize& repeatSpacing) final;
+
+    // FIXME: Implement this to be less conservative.
+    bool currentFrameKnownToBeOpaque() override { return false; }
+
+    GeneratedImage(const IntSize& size) : m_size(size) { }
+
+    virtual void drawTile(GraphicsContext*, const FloatRect&) = 0;
+>>>>>>> miniblink49
 
     IntSize m_size;
 };

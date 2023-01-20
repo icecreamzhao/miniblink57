@@ -21,10 +21,17 @@
  *                 to integer values.
  */
 
+<<<<<<< HEAD
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
 #include "unicode/ustringtrie.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+#include "unicode/uobject.h"
+#include "unicode/ustringtrie.h"
+>>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -61,6 +68,7 @@ public:
      * @param trieUChars The UChar array that contains the serialized trie.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     UCharsTrie(const UChar* trieUChars)
         : ownedArray_(NULL)
         , uchars_(trieUChars)
@@ -68,6 +76,11 @@ public:
         , remainingMatchLength_(-1)
     {
     }
+=======
+    UCharsTrie(const UChar *trieUChars)
+            : ownedArray_(NULL), uchars_(trieUChars),
+              pos_(uchars_), remainingMatchLength_(-1) {}
+>>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -81,6 +94,7 @@ public:
      * @param other Another UCharsTrie object.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     UCharsTrie(const UCharsTrie& other)
         : ownedArray_(NULL)
         , uchars_(other.uchars_)
@@ -88,16 +102,27 @@ public:
         , remainingMatchLength_(other.remainingMatchLength_)
     {
     }
+=======
+    UCharsTrie(const UCharsTrie &other)
+            : ownedArray_(NULL), uchars_(other.uchars_),
+              pos_(other.pos_), remainingMatchLength_(other.remainingMatchLength_) {}
+>>>>>>> miniblink49
 
     /**
      * Resets this trie to its initial state.
      * @return *this
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     UCharsTrie& reset()
     {
         pos_ = uchars_;
         remainingMatchLength_ = -1;
+=======
+    UCharsTrie &reset() {
+        pos_=uchars_;
+        remainingMatchLength_=-1;
+>>>>>>> miniblink49
         return *this;
     }
 
@@ -112,6 +137,7 @@ public:
          * Constructs an empty State.
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         State() { uchars = NULL; }
 
     private:
@@ -119,6 +145,14 @@ public:
 
         const UChar* uchars;
         const UChar* pos;
+=======
+        State() { uchars=NULL; }
+    private:
+        friend class UCharsTrie;
+
+        const UChar *uchars;
+        const UChar *pos;
+>>>>>>> miniblink49
         int32_t remainingMatchLength;
     };
 
@@ -129,11 +163,18 @@ public:
      * @see resetToState
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     const UCharsTrie& saveState(State& state) const
     {
         state.uchars = uchars_;
         state.pos = pos_;
         state.remainingMatchLength = remainingMatchLength_;
+=======
+    const UCharsTrie &saveState(State &state) const {
+        state.uchars=uchars_;
+        state.pos=pos_;
+        state.remainingMatchLength=remainingMatchLength_;
+>>>>>>> miniblink49
         return *this;
     }
 
@@ -147,11 +188,18 @@ public:
      * @see reset
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     UCharsTrie& resetToState(const State& state)
     {
         if (uchars_ == state.uchars && uchars_ != NULL) {
             pos_ = state.pos;
             remainingMatchLength_ = state.remainingMatchLength;
+=======
+    UCharsTrie &resetToState(const State &state) {
+        if(uchars_==state.uchars && uchars_!=NULL) {
+            pos_=state.pos;
+            remainingMatchLength_=state.remainingMatchLength;
+>>>>>>> miniblink49
         }
         return *this;
     }
@@ -171,9 +219,14 @@ public:
      * @return The match/value Result.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     inline UStringTrieResult first(int32_t uchar)
     {
         remainingMatchLength_ = -1;
+=======
+    inline UStringTrieResult first(int32_t uchar) {
+        remainingMatchLength_=-1;
+>>>>>>> miniblink49
         return nextImpl(uchars_, uchar);
     }
 
@@ -219,7 +272,11 @@ public:
      * @return The match/value Result.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     UStringTrieResult next(const UChar* s, int32_t length);
+=======
+    UStringTrieResult next(const UChar *s, int32_t length);
+>>>>>>> miniblink49
 
     /**
      * Returns a matching string's value if called immediately after
@@ -230,12 +287,21 @@ public:
      * @return The value for the string so far.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     inline int32_t getValue() const
     {
         const UChar* pos = pos_;
         int32_t leadUnit = *pos++;
         // U_ASSERT(leadUnit>=kMinValueLead);
         return leadUnit & kValueIsFinal ? readValue(pos, leadUnit & 0x7fff) : readNodeValue(pos, leadUnit);
+=======
+    inline int32_t getValue() const {
+        const UChar *pos=pos_;
+        int32_t leadUnit=*pos++;
+        // U_ASSERT(leadUnit>=kMinValueLead);
+        return leadUnit&kValueIsFinal ?
+            readValue(pos, leadUnit&0x7fff) : readNodeValue(pos, leadUnit);
+>>>>>>> miniblink49
     }
 
     /**
@@ -247,11 +313,18 @@ public:
      *         map to the same value.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     inline UBool hasUniqueValue(int32_t& uniqueValue) const
     {
         const UChar* pos = pos_;
         // Skip the rest of a pending linear-match node.
         return pos != NULL && findUniqueValue(pos + remainingMatchLength_ + 1, FALSE, uniqueValue);
+=======
+    inline UBool hasUniqueValue(int32_t &uniqueValue) const {
+        const UChar *pos=pos_;
+        // Skip the rest of a pending linear-match node.
+        return pos!=NULL && findUniqueValue(pos+remainingMatchLength_+1, FALSE, uniqueValue);
+>>>>>>> miniblink49
     }
 
     /**
@@ -261,7 +334,11 @@ public:
      * @return the number of UChars which continue the string from here
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     int32_t getNextUChars(Appendable& out) const;
+=======
+    int32_t getNextUChars(Appendable &out) const;
+>>>>>>> miniblink49
 
     /**
      * Iterator for all of the (string, value) pairs in a UCharsTrie.
@@ -280,7 +357,11 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         Iterator(const UChar* trieUChars, int32_t maxStringLength, UErrorCode& errorCode);
+=======
+        Iterator(const UChar *trieUChars, int32_t maxStringLength, UErrorCode &errorCode);
+>>>>>>> miniblink49
 
         /**
          * Iterates from the current state of the specified UCharsTrie.
@@ -293,7 +374,11 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         Iterator(const UCharsTrie& trie, int32_t maxStringLength, UErrorCode& errorCode);
+=======
+        Iterator(const UCharsTrie &trie, int32_t maxStringLength, UErrorCode &errorCode);
+>>>>>>> miniblink49
 
         /**
          * Destructor.
@@ -306,7 +391,11 @@ public:
          * @return *this
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         Iterator& reset();
+=======
+        Iterator &reset();
+>>>>>>> miniblink49
 
         /**
          * @return TRUE if there are more elements.
@@ -328,13 +417,21 @@ public:
          * @return TRUE if there is another element.
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         UBool next(UErrorCode& errorCode);
+=======
+        UBool next(UErrorCode &errorCode);
+>>>>>>> miniblink49
 
         /**
          * @return The string for the last successful next().
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         const UnicodeString& getString() const { return str_; }
+=======
+        const UnicodeString &getString() const { return str_; }
+>>>>>>> miniblink49
         /**
          * @return The value for the last successful next().
          * @stable ICU 4.8
@@ -342,6 +439,7 @@ public:
         int32_t getValue() const { return value_; }
 
     private:
+<<<<<<< HEAD
         UBool truncateAndStop()
         {
             pos_ = NULL;
@@ -357,6 +455,22 @@ public:
         int32_t remainingMatchLength_;
         int32_t initialRemainingMatchLength_;
         UBool skipValue_; // Skip intermediate value which was already delivered.
+=======
+        UBool truncateAndStop() {
+            pos_=NULL;
+            value_=-1;  // no real value for str
+            return TRUE;
+        }
+
+        const UChar *branchNext(const UChar *pos, int32_t length, UErrorCode &errorCode);
+
+        const UChar *uchars_;
+        const UChar *pos_;
+        const UChar *initialPos_;
+        int32_t remainingMatchLength_;
+        int32_t initialRemainingMatchLength_;
+        UBool skipValue_;  // Skip intermediate value which was already delivered.
+>>>>>>> miniblink49
 
         UnicodeString str_;
         int32_t maxLength_;
@@ -369,7 +483,11 @@ public:
         // and the remaining branch length in bits 31..16.
         // (We could store the remaining branch length minus 1 in bits 30..16 and not use the sign bit,
         // but the code looks more confusing that way.)
+<<<<<<< HEAD
         UVector32* stack_;
+=======
+        UVector32 *stack_;
+>>>>>>> miniblink49
     };
 
 private:
@@ -381,6 +499,7 @@ private:
      * this constructor adopts the builder's array.
      * This constructor is only called by the builder.
      */
+<<<<<<< HEAD
     UCharsTrie(UChar* adoptUChars, const UChar* trieUChars)
         : ownedArray_(adoptUChars)
         , uchars_(trieUChars)
@@ -395,10 +514,22 @@ private:
     inline void stop()
     {
         pos_ = NULL;
+=======
+    UCharsTrie(UChar *adoptUChars, const UChar *trieUChars)
+            : ownedArray_(adoptUChars), uchars_(trieUChars),
+              pos_(uchars_), remainingMatchLength_(-1) {}
+
+    // No assignment operator.
+    UCharsTrie &operator=(const UCharsTrie &other);
+
+    inline void stop() {
+        pos_=NULL;
+>>>>>>> miniblink49
     }
 
     // Reads a compact 32-bit integer.
     // pos is already after the leadUnit, and the lead unit has bit 15 reset.
+<<<<<<< HEAD
     static inline int32_t readValue(const UChar* pos, int32_t leadUnit)
     {
         int32_t value;
@@ -418,10 +549,30 @@ private:
                 ++pos;
             } else {
                 pos += 2;
+=======
+    static inline int32_t readValue(const UChar *pos, int32_t leadUnit) {
+        int32_t value;
+        if(leadUnit<kMinTwoUnitValueLead) {
+            value=leadUnit;
+        } else if(leadUnit<kThreeUnitValueLead) {
+            value=((leadUnit-kMinTwoUnitValueLead)<<16)|*pos;
+        } else {
+            value=(pos[0]<<16)|pos[1];
+        }
+        return value;
+    }
+    static inline const UChar *skipValue(const UChar *pos, int32_t leadUnit) {
+        if(leadUnit>=kMinTwoUnitValueLead) {
+            if(leadUnit<kThreeUnitValueLead) {
+                ++pos;
+            } else {
+                pos+=2;
+>>>>>>> miniblink49
             }
         }
         return pos;
     }
+<<<<<<< HEAD
     static inline const UChar* skipValue(const UChar* pos)
     {
         int32_t leadUnit = *pos++;
@@ -449,11 +600,38 @@ private:
                 ++pos;
             } else {
                 pos += 2;
+=======
+    static inline const UChar *skipValue(const UChar *pos) {
+        int32_t leadUnit=*pos++;
+        return skipValue(pos, leadUnit&0x7fff);
+    }
+
+    static inline int32_t readNodeValue(const UChar *pos, int32_t leadUnit) {
+        // U_ASSERT(kMinValueLead<=leadUnit && leadUnit<kValueIsFinal);
+        int32_t value;
+        if(leadUnit<kMinTwoUnitNodeValueLead) {
+            value=(leadUnit>>6)-1;
+        } else if(leadUnit<kThreeUnitNodeValueLead) {
+            value=(((leadUnit&0x7fc0)-kMinTwoUnitNodeValueLead)<<10)|*pos;
+        } else {
+            value=(pos[0]<<16)|pos[1];
+        }
+        return value;
+    }
+    static inline const UChar *skipNodeValue(const UChar *pos, int32_t leadUnit) {
+        // U_ASSERT(kMinValueLead<=leadUnit && leadUnit<kValueIsFinal);
+        if(leadUnit>=kMinTwoUnitNodeValueLead) {
+            if(leadUnit<kThreeUnitNodeValueLead) {
+                ++pos;
+            } else {
+                pos+=2;
+>>>>>>> miniblink49
             }
         }
         return pos;
     }
 
+<<<<<<< HEAD
     static inline const UChar* jumpByDelta(const UChar* pos)
     {
         int32_t delta = *pos++;
@@ -474,6 +652,26 @@ private:
         if (delta >= kMinTwoUnitDeltaLead) {
             if (delta == kThreeUnitDeltaLead) {
                 pos += 2;
+=======
+    static inline const UChar *jumpByDelta(const UChar *pos) {
+        int32_t delta=*pos++;
+        if(delta>=kMinTwoUnitDeltaLead) {
+            if(delta==kThreeUnitDeltaLead) {
+                delta=(pos[0]<<16)|pos[1];
+                pos+=2;
+            } else {
+                delta=((delta-kMinTwoUnitDeltaLead)<<16)|*pos++;
+            }
+        }
+        return pos+delta;
+    }
+
+    static const UChar *skipDelta(const UChar *pos) {
+        int32_t delta=*pos++;
+        if(delta>=kMinTwoUnitDeltaLead) {
+            if(delta==kThreeUnitDeltaLead) {
+                pos+=2;
+>>>>>>> miniblink49
             } else {
                 ++pos;
             }
@@ -481,6 +679,7 @@ private:
         return pos;
     }
 
+<<<<<<< HEAD
     static inline UStringTrieResult valueResult(int32_t node)
     {
         return (UStringTrieResult)(USTRINGTRIE_INTERMEDIATE_VALUE - (node >> 15));
@@ -491,10 +690,22 @@ private:
 
     // Requires remainingLength_<0.
     UStringTrieResult nextImpl(const UChar* pos, int32_t uchar);
+=======
+    static inline UStringTrieResult valueResult(int32_t node) {
+        return (UStringTrieResult)(USTRINGTRIE_INTERMEDIATE_VALUE-(node>>15));
+    }
+
+    // Handles a branch node for both next(uchar) and next(string).
+    UStringTrieResult branchNext(const UChar *pos, int32_t length, int32_t uchar);
+
+    // Requires remainingLength_<0.
+    UStringTrieResult nextImpl(const UChar *pos, int32_t uchar);
+>>>>>>> miniblink49
 
     // Helper functions for hasUniqueValue().
     // Recursively finds a unique value (or whether there is not a unique one)
     // from a branch.
+<<<<<<< HEAD
     static const UChar* findUniqueValueFromBranch(const UChar* pos, int32_t length,
         UBool haveUniqueValue, int32_t& uniqueValue);
     // Recursively finds a unique value (or whether there is not a unique one)
@@ -504,6 +715,17 @@ private:
     // Helper functions for getNextUChars().
     // getNextUChars() when pos is on a branch node.
     static void getNextBranchUChars(const UChar* pos, int32_t length, Appendable& out);
+=======
+    static const UChar *findUniqueValueFromBranch(const UChar *pos, int32_t length,
+                                                  UBool haveUniqueValue, int32_t &uniqueValue);
+    // Recursively finds a unique value (or whether there is not a unique one)
+    // starting from a position on a node lead unit.
+    static UBool findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &uniqueValue);
+
+    // Helper functions for getNextUChars().
+    // getNextUChars() when pos is on a branch node.
+    static void getNextBranchUChars(const UChar *pos, int32_t length, Appendable &out);
+>>>>>>> miniblink49
 
     // UCharsTrie data structure
     //
@@ -548,15 +770,24 @@ private:
 
     // For a branch sub-node with at most this many entries, we drop down
     // to a linear search.
+<<<<<<< HEAD
     static const int32_t kMaxBranchLinearSubNodeLength = 5;
 
     // 0030..003f: Linear-match node, match 1..16 units and continue reading the next node.
     static const int32_t kMinLinearMatch = 0x30;
     static const int32_t kMaxLinearMatchLength = 0x10;
+=======
+    static const int32_t kMaxBranchLinearSubNodeLength=5;
+
+    // 0030..003f: Linear-match node, match 1..16 units and continue reading the next node.
+    static const int32_t kMinLinearMatch=0x30;
+    static const int32_t kMaxLinearMatchLength=0x10;
+>>>>>>> miniblink49
 
     // Match-node lead unit bits 14..6 for the optional intermediate value.
     // If these bits are 0, then there is no intermediate value.
     // Otherwise, see the *NodeValue* constants below.
+<<<<<<< HEAD
     static const int32_t kMinValueLead = kMinLinearMatch + kMaxLinearMatchLength; // 0x0040
     static const int32_t kNodeTypeMask = kMinValueLead - 1; // 0x003f
 
@@ -589,15 +820,58 @@ private:
 
     // Fixed value referencing the UCharsTrie words.
     const UChar* uchars_;
+=======
+    static const int32_t kMinValueLead=kMinLinearMatch+kMaxLinearMatchLength;  // 0x0040
+    static const int32_t kNodeTypeMask=kMinValueLead-1;  // 0x003f
+
+    // A final-value node has bit 15 set.
+    static const int32_t kValueIsFinal=0x8000;
+
+    // Compact value: After testing and masking off bit 15, use the following thresholds.
+    static const int32_t kMaxOneUnitValue=0x3fff;
+
+    static const int32_t kMinTwoUnitValueLead=kMaxOneUnitValue+1;  // 0x4000
+    static const int32_t kThreeUnitValueLead=0x7fff;
+
+    static const int32_t kMaxTwoUnitValue=((kThreeUnitValueLead-kMinTwoUnitValueLead)<<16)-1;  // 0x3ffeffff
+
+    // Compact intermediate-value integer, lead unit shared with a branch or linear-match node.
+    static const int32_t kMaxOneUnitNodeValue=0xff;
+    static const int32_t kMinTwoUnitNodeValueLead=kMinValueLead+((kMaxOneUnitNodeValue+1)<<6);  // 0x4040
+    static const int32_t kThreeUnitNodeValueLead=0x7fc0;
+
+    static const int32_t kMaxTwoUnitNodeValue=
+        ((kThreeUnitNodeValueLead-kMinTwoUnitNodeValueLead)<<10)-1;  // 0xfdffff
+
+    // Compact delta integers.
+    static const int32_t kMaxOneUnitDelta=0xfbff;
+    static const int32_t kMinTwoUnitDeltaLead=kMaxOneUnitDelta+1;  // 0xfc00
+    static const int32_t kThreeUnitDeltaLead=0xffff;
+
+    static const int32_t kMaxTwoUnitDelta=((kThreeUnitDeltaLead-kMinTwoUnitDeltaLead)<<16)-1;  // 0x03feffff
+
+    UChar *ownedArray_;
+
+    // Fixed value referencing the UCharsTrie words.
+    const UChar *uchars_;
+>>>>>>> miniblink49
 
     // Iterator variables.
 
     // Pointer to next trie unit to read. NULL if no more matches.
+<<<<<<< HEAD
     const UChar* pos_;
+=======
+    const UChar *pos_;
+>>>>>>> miniblink49
     // Remaining length of a linear-match node, minus 1. Negative if not in such a node.
     int32_t remainingMatchLength_;
 };
 
 U_NAMESPACE_END
 
+<<<<<<< HEAD
 #endif // __UCHARSTRIE_H__
+=======
+#endif  // __UCHARSTRIE_H__
+>>>>>>> miniblink49

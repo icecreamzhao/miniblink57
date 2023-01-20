@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLParamElement.h"
 
 #include "core/HTMLNames.h"
@@ -61,4 +62,4 @@ bool HTMLParamElement::isURLAttribute(const Attribute& attribute) const
     return HTMLElement::isURLAttribute(attribute);
 }
 
-} // namespace blink
+}

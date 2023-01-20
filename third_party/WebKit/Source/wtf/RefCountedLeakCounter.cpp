@@ -43,6 +43,7 @@ void RefCountedLeakCounter::decrement() { }
 #else
 
 #define LOG_CHANNEL_PREFIX Log
+<<<<<<< HEAD
 //static WTFLogChannel LogRefCountedLeaks = { WTFLogChannelOn };
 
 // typedef HashCountedSet<const char*, PtrHash<const char*>> ReasonSet;
@@ -53,13 +54,31 @@ void RefCountedLeakCounter::suppressMessages(const char* reason)
 //     if (!leakMessageSuppressionReasons)
 //         leakMessageSuppressionReasons = new ReasonSet;
 //     leakMessageSuppressionReasons->add(reason);
+=======
+static WTFLogChannel LogRefCountedLeaks = { WTFLogChannelOn };
+
+typedef HashCountedSet<const char*, PtrHash<const char*>> ReasonSet;
+static ReasonSet* leakMessageSuppressionReasons;
+
+void RefCountedLeakCounter::suppressMessages(const char* reason)
+{
+    if (!leakMessageSuppressionReasons)
+        leakMessageSuppressionReasons = new ReasonSet;
+    leakMessageSuppressionReasons->add(reason);
+>>>>>>> miniblink49
 }
 
 void RefCountedLeakCounter::cancelMessageSuppression(const char* reason)
 {
+<<<<<<< HEAD
 //     ASSERT(leakMessageSuppressionReasons);
 //     ASSERT(leakMessageSuppressionReasons->contains(reason));
 //     leakMessageSuppressionReasons->remove(reason);
+=======
+    ASSERT(leakMessageSuppressionReasons);
+    ASSERT(leakMessageSuppressionReasons->contains(reason));
+    leakMessageSuppressionReasons->remove(reason);
+>>>>>>> miniblink49
 }
 
 RefCountedLeakCounter::RefCountedLeakCounter(const char* description)
@@ -71,6 +90,7 @@ RefCountedLeakCounter::~RefCountedLeakCounter()
 {
     static bool loggedSuppressionReason;
     if (m_count) {
+<<<<<<< HEAD
 //         if (!leakMessageSuppressionReasons || leakMessageSuppressionReasons->isEmpty()) {
 //             //WTF_LOG(RefCountedLeaks, "LEAK: %u %s", m_count, m_description);
 //         } else if (!loggedSuppressionReason) {
@@ -82,6 +102,15 @@ RefCountedLeakCounter::~RefCountedLeakCounter()
         sprintf_s(output, 0x99, "RefCountedLeakCounter, LEAK: %u %s", m_count, m_description);
         OutputDebugStringA(output);
         free(output);
+=======
+        if (!leakMessageSuppressionReasons || leakMessageSuppressionReasons->isEmpty())
+            WTF_LOG(RefCountedLeaks, "LEAK: %u %s", m_count, m_description);
+        else if (!loggedSuppressionReason) {
+            // This logs only one reason. Later we could change it so we log all the reasons.
+            WTF_LOG(RefCountedLeaks, "No leak checking done: %s", leakMessageSuppressionReasons->begin()->key);
+            loggedSuppressionReason = true;
+        }
+>>>>>>> miniblink49
     }
 }
 

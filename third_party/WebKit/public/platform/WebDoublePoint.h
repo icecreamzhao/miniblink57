@@ -62,8 +62,17 @@ struct WebDoublePoint {
     {
     }
 
+<<<<<<< HEAD
     operator DoublePoint() const { return DoublePoint(x, y); }
 #endif
+=======
+    operator DoublePoint() const
+    {
+        return DoublePoint(x, y);
+    }
+#endif
+
+>>>>>>> miniblink49
 };
 
 inline bool operator==(const WebDoublePoint& a, const WebDoublePoint& b)

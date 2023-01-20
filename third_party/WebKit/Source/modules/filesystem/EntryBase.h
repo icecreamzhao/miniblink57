@@ -70,6 +70,10 @@ protected:
     mutable String m_cachedURL;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif // EntryBase_h

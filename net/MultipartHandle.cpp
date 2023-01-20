@@ -323,7 +323,7 @@ void MultipartHandle::didReceiveData(size_t length)
 
     if (d->client()) {
         const char* data = m_buffer.data();
-        d->client()->didReceiveData(data, length);
+        d->client()->didReceiveData(m_resourceHandle->loader(), data, length, length);
     }
 }
 
@@ -331,7 +331,8 @@ void MultipartHandle::didReceiveResponse()
 {
     WebURLLoaderInternal* d = m_resourceHandle;
     if (d->client()) {
-        WebURLResponse response(d->m_response);
+        WebURLResponse response;
+        response.assign(d->m_response);
 
         HTTPHeaderMap::const_iterator end = m_headers.end();
         for (HTTPHeaderMap::const_iterator it = m_headers.begin(); it != end; ++it)
@@ -343,7 +344,7 @@ void MultipartHandle::didReceiveResponse()
         response.setMIMEType(mimeType.lower());
         response.setTextEncodingName(extractCharsetFromMediaType(contentType));
 
-        d->client()->didReceiveResponse(response);
+        d->client()->didReceiveResponse(m_resourceHandle->loader(), response);
         d->setResponseFired(true);
     }
 }

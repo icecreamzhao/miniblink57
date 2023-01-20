@@ -32,7 +32,10 @@
 #define CryptoKey_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+<<<<<<< HEAD
 #include "modules/ModulesExport.h"
+=======
+>>>>>>> miniblink49
 #include "modules/crypto/NormalizeAlgorithm.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebCryptoKey.h"
@@ -43,11 +46,16 @@ namespace blink {
 
 class CryptoResult;
 
+<<<<<<< HEAD
 class MODULES_EXPORT CryptoKey final
     : public GarbageCollectedFinalized<CryptoKey>,
       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class CryptoKey : public GarbageCollectedFinalized<CryptoKey>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static CryptoKey* create(const WebCryptoKey& key)
     {
@@ -65,6 +73,7 @@ public:
 
     // If the key cannot be used with the indicated algorithm, returns false
     // and completes the CryptoResult with an error.
+<<<<<<< HEAD
     bool canBeUsedForAlgorithm(const WebCryptoAlgorithm&,
         WebCryptoKeyUsage,
         CryptoResult*) const;
@@ -74,6 +83,13 @@ public:
     static bool parseUsageMask(const Vector<String>&,
         WebCryptoKeyUsageMask&,
         CryptoResult*);
+=======
+    bool canBeUsedForAlgorithm(const WebCryptoAlgorithm&, WebCryptoKeyUsage, CryptoResult*) const;
+
+    // On failure, these return false and complete the CryptoResult with an error.
+    static bool parseFormat(const String&, WebCryptoKeyFormat&, CryptoResult*);
+    static bool parseUsageMask(const Vector<String>&, WebCryptoKeyUsageMask&, CryptoResult*);
+>>>>>>> miniblink49
 
     DEFINE_INLINE_TRACE() { }
 

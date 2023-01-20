@@ -31,27 +31,24 @@
 #ifndef SVGAnimatedPath_h
 #define SVGAnimatedPath_h
 
-#include "core/svg/SVGPath.h"
+#include "core/svg/SVGPathSegListTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-class SVGAnimatedPath : public SVGAnimatedProperty<SVGPath> {
+class SVGPathElement;
+
+class SVGAnimatedPath : public SVGAnimatedProperty<SVGPathSegList> {
 public:
     ~SVGAnimatedPath() override;
 
-    static SVGAnimatedPath* create(
-        SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        CSSPropertyID cssPropertyId = CSSPropertyInvalid)
+    static PassRefPtrWillBeRawPtr<SVGAnimatedPath> create(SVGPathElement* contextElement, const QualifiedName& attributeName)
     {
-        return new SVGAnimatedPath(contextElement, attributeName, cssPropertyId);
+        return adoptRefWillBeNoop(new SVGAnimatedPath(contextElement, attributeName));
     }
 
 protected:
-    SVGAnimatedPath(SVGElement*,
-        const QualifiedName&,
-        CSSPropertyID = CSSPropertyInvalid);
+    SVGAnimatedPath(SVGPathElement*, const QualifiedName&);
 };
 
 } // namespace blink

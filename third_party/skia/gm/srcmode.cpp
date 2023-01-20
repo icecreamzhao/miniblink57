@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkPath.h"
@@ -27,17 +28,49 @@ static void gradient_paintproc(SkPaint* paint)
     const SkPoint pts[] = { { 0, 0 }, { W, H } };
     paint->setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
         SkShader::kClamp_TileMode));
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+#include "SkSurface.h"
+
+#if SK_SUPPORT_GPU
+    #include "SkGpuDevice.h"
+#endif
+
+#define W   SkIntToScalar(80)
+#define H   SkIntToScalar(60)
+
+typedef void (*PaintProc)(SkPaint*);
+
+static void identity_paintproc(SkPaint* paint) {
+    paint->setShader(NULL);
+}
+
+static void gradient_paintproc(SkPaint* paint) {
+    const SkColor colors[] = { SK_ColorGREEN, SK_ColorBLUE };
+    const SkPoint pts[] = { { 0, 0 }, { W, H } };
+    SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL,
+                                                 SK_ARRAY_COUNT(colors),
+                                                 SkShader::kClamp_TileMode);
+    paint->setShader(s)->unref();
+>>>>>>> miniblink49
 }
 
 typedef void (*Proc)(SkCanvas*, const SkPaint&);
 
+<<<<<<< HEAD
 static void draw_hair(SkCanvas* canvas, const SkPaint& paint)
 {
+=======
+static void draw_hair(SkCanvas* canvas, const SkPaint& paint) {
+>>>>>>> miniblink49
     SkPaint p(paint);
     p.setStrokeWidth(0);
     canvas->drawLine(0, 0, W, H, p);
 }
 
+<<<<<<< HEAD
 static void draw_thick(SkCanvas* canvas, const SkPaint& paint)
 {
     SkPaint p(paint);
@@ -60,18 +93,44 @@ static void draw_text(SkCanvas* canvas, const SkPaint& paint)
     SkPaint p(paint);
     p.setTextSize(H / 4);
     canvas->drawText("Hamburge", 8, 0, H * 2 / 3, p);
+=======
+static void draw_thick(SkCanvas* canvas, const SkPaint& paint) {
+    SkPaint p(paint);
+    p.setStrokeWidth(H/5);
+    canvas->drawLine(0, 0, W, H, p);
+}
+
+static void draw_rect(SkCanvas* canvas, const SkPaint& paint) {
+    canvas->drawRect(SkRect::MakeWH(W, H), paint);
+}
+
+static void draw_oval(SkCanvas* canvas, const SkPaint& paint) {
+    canvas->drawOval(SkRect::MakeWH(W, H), paint);
+}
+
+static void draw_text(SkCanvas* canvas, const SkPaint& paint) {
+    SkPaint p(paint);
+    p.setTextSize(H/4);
+    canvas->drawText("Hamburge", 8, 0, H*2/3, p);
+>>>>>>> miniblink49
 }
 
 class SrcModeGM : public skiagm::GM {
     SkPath fPath;
+<<<<<<< HEAD
 
 public:
     SrcModeGM()
     {
+=======
+public:
+    SrcModeGM() {
+>>>>>>> miniblink49
         this->setBGColor(SK_ColorBLACK);
     }
 
 protected:
+<<<<<<< HEAD
     virtual SkString onShortName()
     {
         return SkString("srcmode");
@@ -84,11 +143,26 @@ protected:
 
     void drawContent(SkCanvas* canvas)
     {
+=======
+    virtual SkString onShortName() {
+        return SkString("srcmode");
+    }
+
+    virtual SkISize onISize() {
+        return SkISize::Make(640, 760);
+    }
+
+    void drawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         canvas->translate(SkIntToScalar(20), SkIntToScalar(20));
 
         SkPaint paint;
         sk_tool_utils::set_portable_typeface(&paint);
+<<<<<<< HEAD
         paint.setColor(0x80F60000);
+=======
+        paint.setColor(0x80FF0000);
+>>>>>>> miniblink49
 
         const Proc procs[] = {
             draw_hair, draw_thick, draw_rect, draw_oval, draw_text
@@ -123,8 +197,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     static sk_sp<SkSurface> compat_surface(SkCanvas* canvas, const SkISize& size, bool skipGPU)
     {
+=======
+    static SkSurface* compat_surface(SkCanvas* canvas, const SkISize& size, bool skipGPU) {
+>>>>>>> miniblink49
         SkImageInfo info = SkImageInfo::MakeN32Premul(size);
 
         bool callNewSurface = true;
@@ -133,20 +211,36 @@ protected:
             callNewSurface = false;
         }
 #endif
+<<<<<<< HEAD
         sk_sp<SkSurface> surface = callNewSurface ? canvas->makeSurface(info) : nullptr;
         if (nullptr == surface) {
             // picture canvas will return null, so fall-back to raster
             surface = SkSurface::MakeRaster(info);
+=======
+        SkSurface* surface = callNewSurface ? canvas->newSurface(info) : NULL;
+        if (NULL == surface) {
+            // picture canvas will return null, so fall-back to raster
+            surface = SkSurface::NewRaster(info);
+>>>>>>> miniblink49
         }
         return surface;
     }
 
+<<<<<<< HEAD
     virtual void onDraw(SkCanvas* canvas)
     {
         auto surf(compat_surface(canvas, this->getISize(), this->isCanvasDeferred()));
         surf->getCanvas()->drawColor(SK_ColorWHITE);
         this->drawContent(surf->getCanvas());
         surf->draw(canvas, 0, 0, nullptr);
+=======
+    virtual void onDraw(SkCanvas* canvas) {
+        SkAutoTUnref<SkSurface> surf(compat_surface(canvas, this->getISize(),
+                                                    this->isCanvasDeferred()));
+        surf->getCanvas()->drawColor(SK_ColorWHITE);
+        this->drawContent(surf->getCanvas());
+        surf->draw(canvas, 0, 0, NULL);
+>>>>>>> miniblink49
     }
 
 private:

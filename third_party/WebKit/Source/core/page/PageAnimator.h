@@ -6,7 +6,6 @@
 #define PageAnimator_h
 
 #include "core/CoreExport.h"
-#include "core/animation/AnimationClock.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
@@ -14,28 +13,24 @@ namespace blink {
 class LocalFrame;
 class Page;
 
-class CORE_EXPORT PageAnimator final : public GarbageCollected<PageAnimator> {
+class CORE_EXPORT PageAnimator final : public RefCountedWillBeGarbageCollected<PageAnimator> {
 public:
-    static PageAnimator* create(Page&);
+    static PassRefPtrWillBeRawPtr<PageAnimator> create(Page&);
     DECLARE_TRACE();
-    void scheduleVisualUpdate(LocalFrame*);
+    void scheduleVisualUpdate(LocalFrame* = 0);
     void serviceScriptedAnimations(double monotonicAnimationStartTime);
 
     bool isServicingAnimations() const { return m_servicingAnimations; }
-
-    // See documents of methods with the same names in FrameView class.
-    void updateAllLifecyclePhases(LocalFrame& rootFrame);
-    AnimationClock& clock() { return m_animationClock; }
+    void updateLayoutAndStyleForPainting(LocalFrame* rootFrame);
 
 private:
     explicit PageAnimator(Page&);
 
-    Member<Page> m_page;
+    RawPtrWillBeMember<Page> m_page;
     bool m_servicingAnimations;
     bool m_updatingLayoutAndStyleForPainting;
-    AnimationClock m_animationClock;
 };
 
-} // namespace blink
+}
 
 #endif // PageAnimator_h

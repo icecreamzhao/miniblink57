@@ -19,11 +19,16 @@ class Global;
 
 class Path2DBuilder : SkNoncopyable {
 public:
+<<<<<<< HEAD
     Path2DBuilder()
         : fSkPath()
     {
     }
     virtual ~Path2DBuilder() { }
+=======
+    Path2DBuilder() : fSkPath() {}
+    virtual ~Path2DBuilder() {}
+>>>>>>> miniblink49
 
     const SkPath& getSkPath() { return fSkPath; }
 
@@ -38,14 +43,21 @@ public:
     static void MoveTo(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void LineTo(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void QuadraticCurveTo(
+<<<<<<< HEAD
         const v8::FunctionCallbackInfo<v8::Value>& args);
+=======
+            const v8::FunctionCallbackInfo<v8::Value>& args);
+>>>>>>> miniblink49
     static void BezierCurveTo(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void Arc(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void Rect(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void Oval(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void ConicTo(const v8::FunctionCallbackInfo<v8::Value>& args);
     static void Finalize(const v8::FunctionCallbackInfo<v8::Value>& args);
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkPath fSkPath;
 

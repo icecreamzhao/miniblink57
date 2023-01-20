@@ -11,6 +11,7 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -21,11 +22,24 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef MediaStreamTrack_h
 #define MediaStreamTrack_h
 
+<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "core/dom/ContextLifecycleObserver.h"
 #include "modules/EventTargetModules.h"
@@ -35,11 +49,21 @@
 #include "public/platform/WebMediaConstraints.h"
 #include "wtf/Forward.h"
 #include <memory>
+=======
+#include "core/dom/ActiveDOMObject.h"
+#include "modules/EventTargetModules.h"
+#include "modules/ModulesExport.h"
+#include "modules/mediastream/SourceInfo.h"
+#include "platform/mediastream/MediaStreamDescriptor.h"
+#include "platform/mediastream/MediaStreamSource.h"
+#include "wtf/Forward.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class AudioSourceProvider;
 class ExceptionState;
+<<<<<<< HEAD
 class MediaTrackConstraints;
 class MediaStream;
 class MediaTrackSettings;
@@ -52,6 +76,18 @@ class MODULES_EXPORT MediaStreamTrack
     USING_GARBAGE_COLLECTED_MIXIN(MediaStreamTrack);
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class MediaStreamComponent;
+class MediaStreamTrackSourcesCallback;
+
+class MODULES_EXPORT MediaStreamTrack final
+    : public RefCountedGarbageCollectedEventTargetWithInlineData<MediaStreamTrack>
+    , public ActiveDOMObject
+    , public MediaStreamSource::Observer {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(MediaStreamTrack);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaStreamTrack);
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static MediaStreamTrack* create(ExecutionContext*, MediaStreamComponent*);
     ~MediaStreamTrack() override;
@@ -60,12 +96,17 @@ public:
     String id() const;
     String label() const;
     bool remote() const;
+<<<<<<< HEAD
+=======
+    bool readonly() const;
+>>>>>>> miniblink49
 
     bool enabled() const;
     void setEnabled(bool);
 
     bool muted() const;
 
+<<<<<<< HEAD
     String contentHint() const;
     void setContentHint(const String&);
 
@@ -81,12 +122,23 @@ public:
     void setConstraints(const WebMediaConstraints&);
 
     void getSettings(MediaTrackSettings&);
+=======
+    String readyState() const;
+
+    static void getSources(ExecutionContext*, MediaStreamTrackSourcesCallback*, ExceptionState&);
+    void stopTrack(ExceptionState&);
+    MediaStreamTrack* clone(ExecutionContext*);
+>>>>>>> miniblink49
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(mute);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(unmute);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(ended);
 
+<<<<<<< HEAD
     MediaStreamComponent* component() { return m_component; }
+=======
+    MediaStreamComponent* component();
+>>>>>>> miniblink49
     bool ended() const;
 
     void registerMediaStream(MediaStream*);
@@ -94,6 +146,7 @@ public:
 
     // EventTarget
     const AtomicString& interfaceName() const override;
+<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const override;
 
     // ScriptWrappable
@@ -109,6 +162,20 @@ public:
 private:
     friend class CanvasCaptureMediaStreamTrack;
 
+=======
+    ExecutionContext* executionContext() const override;
+
+    // ActiveDOMObject
+    void stop() override;
+
+    PassOwnPtr<AudioSourceProvider> createWebAudioSource();
+
+    // Oilpan: need to eagerly unregister as observer.
+    EAGERLY_FINALIZE();
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+>>>>>>> miniblink49
     MediaStreamTrack(ExecutionContext*, MediaStreamComponent*);
 
     // MediaStreamSourceObserver
@@ -120,8 +187,12 @@ private:
     HeapHashSet<Member<MediaStream>> m_registeredMediaStreams;
     bool m_isIteratingRegisteredMediaStreams;
     bool m_stopped;
+<<<<<<< HEAD
     Member<MediaStreamComponent> m_component;
     WebMediaConstraints m_constraints;
+=======
+    RefPtr<MediaStreamComponent> m_component;
+>>>>>>> miniblink49
 };
 
 typedef HeapVector<Member<MediaStreamTrack>> MediaStreamTrackVector;

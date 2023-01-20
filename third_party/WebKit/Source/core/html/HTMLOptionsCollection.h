@@ -36,18 +36,12 @@ class NodeListOrElement;
 
 class HTMLOptionsCollection final : public HTMLCollection {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static HTMLOptionsCollection* create(ContainerNode&, CollectionType);
+    static PassRefPtrWillBeRawPtr<HTMLOptionsCollection> create(ContainerNode&, CollectionType);
 
-    HTMLOptionElement* item(unsigned offset) const
-    {
-        return toHTMLOptionElement(HTMLCollection::item(offset));
-    }
+    HTMLOptionElement* item(unsigned offset) const { return toHTMLOptionElement(HTMLCollection::item(offset)); }
 
-    void add(const HTMLOptionElementOrHTMLOptGroupElement&,
-        const HTMLElementOrLong&,
-        ExceptionState&);
+    void add(const HTMLOptionElementOrHTMLOptGroupElement&, const HTMLElementOrLong&, ExceptionState&);
     void remove(int index);
 
     int selectedIndex() const;
@@ -55,7 +49,7 @@ public:
 
     void setLength(unsigned, ExceptionState&);
     void namedGetter(const AtomicString& name, NodeListOrElement&);
-    bool anonymousIndexedSetter(unsigned, HTMLOptionElement*, ExceptionState&);
+    bool anonymousIndexedSetter(unsigned, PassRefPtrWillBeRawPtr<HTMLOptionElement>, ExceptionState&);
 
     bool elementMatches(const HTMLElement&) const;
 
@@ -65,23 +59,11 @@ private:
     void supportedPropertyNames(Vector<String>& names) override;
 };
 
-DEFINE_TYPE_CASTS(HTMLOptionsCollection,
-    LiveNodeListBase,
-    collection,
-    collection->type() == SelectOptions,
-    collection.type() == SelectOptions);
+DEFINE_TYPE_CASTS(HTMLOptionsCollection, LiveNodeListBase, collection, collection->type() == SelectOptions, collection.type() == SelectOptions);
 
-inline bool HTMLOptionsCollection::elementMatches(
-    const HTMLElement& element) const
+inline bool HTMLOptionsCollection::elementMatches(const HTMLElement& element) const
 {
-    if (!isHTMLOptionElement(element))
-        return false;
-    Node* parent = element.parentNode();
-    if (!parent)
-        return false;
-    if (parent == &rootNode())
-        return true;
-    return isHTMLOptGroupElement(*parent) && parent->parentNode() == &rootNode();
+    return isHTMLOptionElement(element);
 }
 
 } // namespace blink

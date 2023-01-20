@@ -124,7 +124,11 @@ class SamplingHeapProfiler {
 
   void SampleObject(Address soon_object, size_t size);
 
+<<<<<<< HEAD
   static void V8CALL OnWeakCallback(const WeakCallbackInfo<Sample>& data);
+=======
+  static void OnWeakCallback(const WeakCallbackInfo<Sample>& data);
+>>>>>>> miniblink49
 
   // Methods that construct v8::AllocationProfile.
 

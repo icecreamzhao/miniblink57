@@ -28,57 +28,27 @@
 
 #include "core/CoreExport.h"
 #include "core/css/CSSSelector.h"
-#include <memory>
 
 namespace blink {
 
 class CSSParserSelector;
 
 class CORE_EXPORT CSSSelectorList {
-    USING_FAST_MALLOC(CSSSelectorList);
-
+    WTF_MAKE_FAST_ALLOCATED(CSSSelectorList);
 public:
-    CSSSelectorList()
-        : m_selectorArray(nullptr)
-    {
-    }
+    CSSSelectorList() : m_selectorArray(0) { }
+    CSSSelectorList(const CSSSelectorList&);
 
-    CSSSelectorList(CSSSelectorList&& o)
-        : m_selectorArray(o.m_selectorArray)
-    {
-        o.m_selectorArray = nullptr;
-    }
+    ~CSSSelectorList();
 
-    CSSSelectorList& operator=(CSSSelectorList&& o)
-    {
-        deleteSelectorsIfNeeded();
-        m_selectorArray = o.m_selectorArray;
-        o.m_selectorArray = nullptr;
-        return *this;
-    }
-
-    ~CSSSelectorList() { deleteSelectorsIfNeeded(); }
-
-    static CSSSelectorList adoptSelectorVector(
-        Vector<std::unique_ptr<CSSParserSelector>>& selectorVector);
-    CSSSelectorList copy() const;
+    void adopt(CSSSelectorList& list);
+    void adoptSelectorVector(Vector<OwnPtr<CSSParserSelector>>& selectorVector);
 
     bool isValid() const { return !!m_selectorArray; }
     const CSSSelector* first() const { return m_selectorArray; }
     static const CSSSelector* next(const CSSSelector&);
-    bool hasOneSelector() const
-    {
-        return m_selectorArray && !next(*m_selectorArray);
-    }
-    const CSSSelector& selectorAt(size_t index) const
-    {
-        return m_selectorArray[index];
-    }
-
-    size_t selectorIndex(const CSSSelector& selector) const
-    {
-        return &selector - m_selectorArray;
-    }
+    bool hasOneSelector() const { return m_selectorArray && !next(*m_selectorArray); }
+    const CSSSelector& selectorAt(size_t index) const { return m_selectorArray[index]; }
 
     size_t indexOfNextSelectorAfter(size_t index) const
     {
@@ -86,27 +56,28 @@ public:
         const CSSSelector* next = this->next(current);
         if (!next)
             return kNotFound;
-        return selectorIndex(*next);
+        return next - m_selectorArray;
     }
+
+    bool selectorsNeedNamespaceResolution();
+
+    bool selectorNeedsUpdatedDistribution(size_t index) const;
+
+    // TODO(esprehn): These methods are confusing and incorrectly named.
+    bool hasShadowDistributedAt(size_t index) const;
+    bool selectorCrossesTreeScopes(size_t index) const;
 
     String selectorsText() const;
 
 private:
     unsigned length() const;
-
-    void deleteSelectorsIfNeeded()
-    {
-        if (m_selectorArray)
-            deleteSelectors();
-    }
     void deleteSelectors();
 
-    CSSSelectorList(const CSSSelectorList&) = delete;
-    CSSSelectorList& operator=(const CSSSelectorList&) = delete;
+    // Hide.
+    CSSSelectorList& operator=(const CSSSelectorList&);
 
-    // End of a multipart selector is indicated by m_isLastInTagHistory bit in the
-    // last item. End of the array is indicated by m_isLastInSelectorList bit in
-    // the last item.
+    // End of a multipart selector is indicated by m_isLastInTagHistory bit in the last item.
+    // End of the array is indicated by m_isLastInSelectorList bit in the last item.
     CSSSelector* m_selectorArray;
 };
 

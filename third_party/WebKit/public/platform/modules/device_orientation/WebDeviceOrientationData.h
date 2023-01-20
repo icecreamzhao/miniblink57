@@ -33,6 +33,13 @@
 
 #include "public/platform/WebCommon.h"
 
+<<<<<<< HEAD
+=======
+#if INSIDE_BLINK
+#include "wtf/Assertions.h"
+#endif
+
+>>>>>>> miniblink49
 namespace blink {
 
 #pragma pack(push, 1)
@@ -51,12 +58,22 @@ public:
     bool hasGamma : 1;
 
     bool absolute : 1;
+<<<<<<< HEAD
+=======
+    bool hasAbsolute : 1;
+>>>>>>> miniblink49
 
     bool allAvailableSensorsAreActive : 1;
 };
 
+<<<<<<< HEAD
 static_assert(sizeof(WebDeviceOrientationData) == (3 * sizeof(double) + 1 * sizeof(char)),
     "WebDeviceOrientationData has wrong size");
+=======
+#if INSIDE_BLINK
+static_assert(sizeof(WebDeviceOrientationData) == (3 * sizeof(double) + 1 * sizeof(char)), "WebDeviceOrientationData has wrong size");
+#endif
+>>>>>>> miniblink49
 
 #pragma pack(pop)
 

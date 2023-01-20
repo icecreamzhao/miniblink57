@@ -18,34 +18,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "core/svg/SVGViewElement.h"
+#include "config.h"
 
-#include "core/SVGNames.h"
-#include "core/frame/UseCounter.h"
+#include "core/svg/SVGViewElement.h"
 
 namespace blink {
 
 inline SVGViewElement::SVGViewElement(Document& document)
     : SVGElement(SVGNames::viewTag, document)
     , SVGFitToViewBox(this)
+    , m_viewTarget(SVGStaticStringList::create(this, SVGNames::viewTargetAttr))
 {
-    UseCounter::count(document, UseCounter::SVGViewElement);
+    addToPropertyMap(m_viewTarget);
 }
 
 DEFINE_NODE_FACTORY(SVGViewElement)
 
 DEFINE_TRACE(SVGViewElement)
 {
+    visitor->trace(m_viewTarget);
     SVGElement::trace(visitor);
     SVGFitToViewBox::trace(visitor);
 }
 
-void SVGViewElement::parseAttribute(const AttributeModificationParams& params)
+void SVGViewElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (SVGZoomAndPan::parseAttribute(params.name, params.newValue))
+    if (SVGZoomAndPan::parseAttribute(name, value))
         return;
 
-    SVGElement::parseAttribute(params);
+    SVGElement::parseAttribute(name, value);
 }
 
 } // namespace blink

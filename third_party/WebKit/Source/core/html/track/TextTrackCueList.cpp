@@ -23,10 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/track/TextTrackCueList.h"
 
 #include "wtf/StdLibExtras.h"
-#include <algorithm>
 
 namespace blink {
 
@@ -35,12 +35,14 @@ TextTrackCueList::TextTrackCueList()
 {
 }
 
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(TextTrackCueList);
+
 unsigned long TextTrackCueList::length() const
 {
     return m_list.size();
 }
 
-TextTrackCue* TextTrackCueList::anonymousIndexedGetter(unsigned index) const
+TextTrackCue* TextTrackCueList::item(unsigned index) const
 {
     if (index < m_list.size())
         return m_list[index].get();
@@ -49,9 +51,9 @@ TextTrackCue* TextTrackCueList::anonymousIndexedGetter(unsigned index) const
 
 TextTrackCue* TextTrackCueList::getCueById(const AtomicString& id) const
 {
-    for (const auto& cue : m_list) {
-        if (cue->id() == id)
-            return cue.get();
+    for (size_t i = 0; i < m_list.size(); ++i) {
+        if (m_list[i]->id() == id)
+            return m_list[i].get();
     }
     return nullptr;
 }
@@ -65,25 +67,25 @@ void TextTrackCueList::collectActiveCues(TextTrackCueList& activeCues) const
     }
 }
 
-bool TextTrackCueList::add(TextTrackCue* cue)
+bool TextTrackCueList::add(PassRefPtrWillBeRawPtr<TextTrackCue> cue)
 {
-    DCHECK_GE(cue->startTime(), 0);
-    DCHECK_GE(cue->endTime(), 0);
+    ASSERT(cue->startTime() >= 0);
+    ASSERT(cue->endTime() >= 0);
 
     // Maintain text track cue order:
     // https://html.spec.whatwg.org/#text-track-cue-order
-    size_t index = findInsertionIndex(cue);
+    size_t index = findInsertionIndex(cue.get());
 
     // FIXME: The cue should not exist in the list in the first place.
-    if (!m_list.isEmpty() && (index > 0) && (m_list[index - 1].get() == cue))
+    if (!m_list.isEmpty() && (index > 0) && (m_list[index - 1].get() == cue.get()))
         return false;
 
-    m_list.insert(index, TraceWrapperMember<TextTrackCue>(this, cue));
+    m_list.insert(index, cue);
     invalidateCueIndex(index);
     return true;
 }
 
-static bool cueIsBefore(const TextTrackCue* cue, TextTrackCue* otherCue)
+static bool cueIsBefore(const TextTrackCue* cue, PassRefPtrWillBeRawPtr<TextTrackCue> otherCue)
 {
     if (cue->startTime() < otherCue->startTime())
         return true;
@@ -91,12 +93,11 @@ static bool cueIsBefore(const TextTrackCue* cue, TextTrackCue* otherCue)
     return cue->startTime() == otherCue->startTime() && cue->endTime() > otherCue->endTime();
 }
 
-size_t TextTrackCueList::findInsertionIndex(
-    const TextTrackCue* cueToInsert) const
+size_t TextTrackCueList::findInsertionIndex(const TextTrackCue* cueToInsert) const
 {
     auto it = std::upper_bound(m_list.begin(), m_list.end(), cueToInsert, cueIsBefore);
     size_t index = safeCast<size_t>(it - m_list.begin());
-    SECURITY_DCHECK(index <= m_list.size());
+    ASSERT_WITH_SECURITY_IMPLICATION(index <= m_list.size());
     return index;
 }
 
@@ -150,10 +151,4 @@ DEFINE_TRACE(TextTrackCueList)
     visitor->trace(m_list);
 }
 
-DEFINE_TRACE_WRAPPERS(TextTrackCueList)
-{
-    for (auto cue : m_list) {
-        visitor->traceWrappers(cue);
-    }
-}
 } // namespace blink

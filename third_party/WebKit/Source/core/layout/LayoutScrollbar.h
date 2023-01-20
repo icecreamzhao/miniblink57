@@ -33,41 +33,30 @@
 
 namespace blink {
 
-class ComputedStyle;
-class LayoutBox;
-class LayoutScrollbarPart;
 class LocalFrame;
 class Node;
+class LayoutBox;
+class LayoutScrollbarPart;
+class ComputedStyle;
 
 class LayoutScrollbar final : public Scrollbar {
 public:
-    static Scrollbar* createCustomScrollbar(ScrollableArea*,
-        ScrollbarOrientation,
-        Node*,
-        LocalFrame* owningFrame = nullptr);
-    ~LayoutScrollbar() override;
+    static PassRefPtrWillBeRawPtr<Scrollbar> createCustomScrollbar(ScrollableArea*, ScrollbarOrientation, Node*, LocalFrame* owningFrame = nullptr);
+    virtual ~LayoutScrollbar();
 
     LayoutBox* owningLayoutObject() const;
-    LayoutBox* owningLayoutObjectWithinFrame() const;
 
-    IntRect buttonRect(ScrollbarPart) const;
-    IntRect trackRect(int startLength, int endLength) const;
-    IntRect trackPieceRectWithMargins(ScrollbarPart, const IntRect&) const;
+    IntRect buttonRect(ScrollbarPart);
+    IntRect trackRect(int startLength, int endLength);
+    IntRect trackPieceRectWithMargins(ScrollbarPart, const IntRect&);
 
-    int minimumThumbLength() const;
+    int minimumThumbLength();
 
-    bool isOverlayScrollbar() const override { return false; }
+    virtual bool isOverlayScrollbar() const override { return false; }
 
-    LayoutScrollbarPart* getPart(ScrollbarPart partType)
-    {
-        return m_parts.get(partType);
-    }
-    const LayoutScrollbarPart* getPart(ScrollbarPart partType) const
-    {
-        return m_parts.get(partType);
-    }
+    LayoutScrollbarPart* getPart(ScrollbarPart partType) { return m_parts.get(partType); }
 
-    void invalidateDisplayItemClientsOfScrollbarParts();
+    virtual void invalidateRect(const IntRect&) override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -77,39 +66,33 @@ protected:
 private:
     friend class Scrollbar;
 
-    void setParent(Widget*) override;
-    void setEnabled(bool) override;
+    virtual void setParent(Widget*) override;
+    virtual void setEnabled(bool) override;
 
-    void setHoveredPart(ScrollbarPart) override;
-    void setPressedPart(ScrollbarPart) override;
+    virtual void setHoveredPart(ScrollbarPart) override;
+    virtual void setPressedPart(ScrollbarPart) override;
 
-    void styleChanged() override;
+    virtual void styleChanged() override;
 
-    bool isCustomScrollbar() const override { return true; }
+    virtual bool isCustomScrollbar() const override { return true; }
 
     void updateScrollbarParts(bool destroy = false);
 
     PassRefPtr<ComputedStyle> getScrollbarPseudoStyle(ScrollbarPart, PseudoId);
     void updateScrollbarPart(ScrollbarPart, bool destroy = false);
 
-    // This Scrollbar(Widget) may outlive the DOM which created it (during tear
-    // down), so we keep a reference to the Node which caused this custom
-    // scrollbar creation.
-    // This will not create a reference cycle as the Widget tree is owned by our
-    // containing FrameView which this Node pointer can in no way keep alive.
-    // See webkit bug 80610.
-    Member<Node> m_owner;
+    // This Scrollbar(Widget) may outlive the DOM which created it (during tear down),
+    // so we keep a reference to the Node which caused this custom scrollbar creation.
+    // This will not create a reference cycle as the Widget tree is owned by our containing
+    // FrameView which this Node pointer can in no way keep alive. See webkit bug 80610.
+    RefPtrWillBeMember<Node> m_owner;
 
-    Member<LocalFrame> m_owningFrame;
+    RawPtrWillBeMember<LocalFrame> m_owningFrame;
 
     HashMap<unsigned, LayoutScrollbarPart*> m_parts;
 };
 
-DEFINE_TYPE_CASTS(LayoutScrollbar,
-    ScrollbarThemeClient,
-    scrollbar,
-    scrollbar->isCustomScrollbar(),
-    scrollbar.isCustomScrollbar());
+DEFINE_TYPE_CASTS(LayoutScrollbar, ScrollbarThemeClient, scrollbar, scrollbar->isCustomScrollbar(), scrollbar.isCustomScrollbar());
 
 } // namespace blink
 

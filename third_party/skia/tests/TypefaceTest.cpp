@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkRefCnt.h"
 #include "SkTypeface.h"
 #include "SkTypefaceCache.h"
@@ -15,6 +16,15 @@ DEF_TEST(Typeface, reporter)
 
     sk_sp<SkTypeface> t1(SkTypeface::MakeFromName(nullptr, SkFontStyle()));
     sk_sp<SkTypeface> t2(SkTypeface::MakeDefault(SkTypeface::kNormal));
+=======
+#include "SkTypeface.h"
+#include "Test.h"
+
+DEF_TEST(Typeface, reporter) {
+
+    SkAutoTUnref<SkTypeface> t1(SkTypeface::CreateFromName(NULL, SkTypeface::kNormal));
+    SkAutoTUnref<SkTypeface> t2(SkTypeface::RefDefault(SkTypeface::kNormal));
+>>>>>>> miniblink49
 
     REPORTER_ASSERT(reporter, SkTypeface::Equal(t1.get(), t2.get()));
     REPORTER_ASSERT(reporter, SkTypeface::Equal(0, t1.get()));
@@ -23,6 +33,7 @@ DEF_TEST(Typeface, reporter)
     REPORTER_ASSERT(reporter, SkTypeface::Equal(t2.get(), 0));
 
 #ifdef SK_BUILD_FOR_ANDROID
+<<<<<<< HEAD
     sk_sp<SkTypeface> t3(SkTypeface::MakeFromName("non-existent-font", SkFontStyle()));
     REPORTER_ASSERT(reporter, nullptr == t3);
 #endif
@@ -106,3 +117,9 @@ DEF_TEST(TypefaceCache, reporter)
     }
     REPORTER_ASSERT(reporter, t1->unique());
 }
+=======
+    SkAutoTUnref<SkTypeface> t3(SkTypeface::CreateFromName("non-existent-font", SkTypeface::kNormal));
+    REPORTER_ASSERT(reporter, NULL == t3.get());
+#endif
+}
+>>>>>>> miniblink49

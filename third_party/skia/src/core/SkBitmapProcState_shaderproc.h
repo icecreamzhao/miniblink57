@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,6 +11,7 @@
 
 #include "SkMathPriv.h"
 
+<<<<<<< HEAD
 #define SCALE_FILTER_NAME MAKENAME(_filter_DX_shaderproc)
 
 // Can't be static in the general case because some of these implementations
@@ -24,6 +29,25 @@ void SCALE_FILTER_NAME(const void* sIn, int x, int y, SkPMColor* SK_RESTRICT col
 
         const unsigned maxX
         = s.fPixmap.width() - 1;
+=======
+#define SCALE_FILTER_NAME       MAKENAME(_filter_DX_shaderproc)
+
+// Can't be static in the general case because some of these implementations
+// will be defined and referenced in different object files.
+void SCALE_FILTER_NAME(const SkBitmapProcState& s, int x, int y,
+                       DSTTYPE* SK_RESTRICT colors, int count);
+
+void SCALE_FILTER_NAME(const SkBitmapProcState& s, int x, int y,
+                       DSTTYPE* SK_RESTRICT colors, int count) {
+    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask |
+                             SkMatrix::kScale_Mask)) == 0);
+    SkASSERT(s.fInvKy == 0);
+    SkASSERT(count > 0 && colors != NULL);
+    SkASSERT(s.fFilterLevel != kNone_SkFilterQuality);
+    SkDEBUGCODE(CHECKSTATE(s);)
+
+    const unsigned maxX = s.fPixmap.width() - 1;
+>>>>>>> miniblink49
     const SkFixed oneX = s.fFilterOneX;
     const SkFixed dx = s.fInvSx;
     SkFixed fx;
@@ -32,8 +56,15 @@ void SCALE_FILTER_NAME(const void* sIn, int x, int y, SkPMColor* SK_RESTRICT col
     unsigned subY;
 
     {
+<<<<<<< HEAD
         const SkBitmapProcStateAutoMapper mapper(s, x, y);
         SkFixed fy = mapper.fixedY();
+=======
+        SkPoint pt;
+        s.fInvProc(s.fInvMatrix, SkIntToScalar(x) + SK_ScalarHalf,
+                   SkIntToScalar(y) + SK_ScalarHalf, &pt);
+        SkFixed fy = SkScalarToFixed(pt.fY) - (s.fFilterOneY >> 1);
+>>>>>>> miniblink49
         const unsigned maxY = s.fPixmap.height() - 1;
         // compute our two Y values up front
         subY = TILEY_LOW_BITS(fy, maxY);
@@ -45,7 +76,11 @@ void SCALE_FILTER_NAME(const void* sIn, int x, int y, SkPMColor* SK_RESTRICT col
         row0 = (const SRCTYPE*)(srcAddr + y0 * rb);
         row1 = (const SRCTYPE*)(srcAddr + y1 * rb);
         // now initialize fx
+<<<<<<< HEAD
         fx = mapper.fixedX();
+=======
+        fx = SkScalarToFixed(pt.fX) - (oneX >> 1);
+>>>>>>> miniblink49
     }
 
 #ifdef PREAMBLE
@@ -58,11 +93,19 @@ void SCALE_FILTER_NAME(const void* sIn, int x, int y, SkPMColor* SK_RESTRICT col
         unsigned x1 = TILEX_PROCF((fx + oneX), maxX);
 
         FILTER_PROC(subX, subY,
+<<<<<<< HEAD
             SRC_TO_FILTER(row0[x0]),
             SRC_TO_FILTER(row0[x1]),
             SRC_TO_FILTER(row1[x0]),
             SRC_TO_FILTER(row1[x1]),
             colors);
+=======
+                    SRC_TO_FILTER(row0[x0]),
+                    SRC_TO_FILTER(row0[x1]),
+                    SRC_TO_FILTER(row1[x0]),
+                    SRC_TO_FILTER(row1[x1]),
+                    colors);
+>>>>>>> miniblink49
         colors += 1;
 
         fx += dx;
@@ -81,6 +124,10 @@ void SCALE_FILTER_NAME(const void* sIn, int x, int y, SkPMColor* SK_RESTRICT col
 #undef TILEY_LOW_BITS
 #undef MAKENAME
 #undef SRCTYPE
+<<<<<<< HEAD
+=======
+#undef DSTTYPE
+>>>>>>> miniblink49
 #undef CHECKSTATE
 #undef SRC_TO_FILTER
 #undef FILTER_TO_DST

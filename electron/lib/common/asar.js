@@ -18,7 +18,8 @@
         
         archive = new ArchiveClass(); // asar.createArchive(p);
         if (!archive.init(p)) {
-            //console.log("getOrCreateArchive fail:" + p);
+            console.log("getOrCreateArchive fail:" + p);
+            
             return null;
         }
         cachedArchives[p] = archive;
@@ -356,41 +357,35 @@
             return path.join(realpathSync(asarPath), real);
         }
 
-        const realpathNative = fs.realpath.native;
-        const realpath = fs.realpath;
-        const wrapRealpath = function(func) {
-            var result = function (p, cache, callback) {
-                const paths = splitPath(p);
-                const isAsar = paths[0];
-                const asarPath = paths[1];
-                const filePath = paths[2];
-                if (!isAsar) {
-                    return func.apply(this, arguments);
+        const realpath = fs.realpath
+        fs.realpath = function (p, cache, callback) {
+            const paths = splitPath(p);
+            const isAsar = paths[0];
+            const asarPath = paths[1];
+            const filePath = paths[2];
+            if (!isAsar) {
+                return realpath.apply(this, arguments);
+            }
+            if (typeof cache === 'function') {
+                callback = cache;
+                cache = void 0;
+            }
+            const archive = getOrCreateArchive(asarPath);
+            if (!archive) {
+                return invalidArchiveError(asarPath, callback);
+            }
+            const real = archive.realpath(filePath);
+            if (real === false) {
+                return notFoundError(asarPath, filePath, callback);
+            }
+            return realpath(asarPath, function (err, p) {
+                if (err) {
+                    return callback(err);
                 }
-                if (typeof cache === 'function') {
-                    callback = cache;
-                    cache = void 0;
-                }
-                const archive = getOrCreateArchive(asarPath);
-                if (!archive) {
-                    return invalidArchiveError(asarPath, callback);
-                }
-                const real = archive.realpath(filePath);
-                if (real === false) {
-                    return notFoundError(asarPath, filePath, callback);
-                }
-                return func(asarPath, function (err, p) {
-                    if (err) {
-                        return callback(err);
-                    }
-                    return callback(null, path.join(p, real));
-                })
-            };
-            return result;
-        };
-        fs.realpath = wrapRealpath(realpath);
-        fs.realpath.native = wrapRealpath(realpathNative);
-        
+                return callback(null, path.join(p, real));
+            })
+        }
+
         const exists = fs.exists;
         fs.exists = function (p, callback) {
             const paths = splitPath(p);

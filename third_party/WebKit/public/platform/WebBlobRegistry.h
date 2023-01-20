@@ -34,8 +34,11 @@
 #include "WebCommon.h"
 #include "WebThreadSafeData.h"
 
+<<<<<<< HEAD
 #include <memory>
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class WebBlobData;
@@ -61,6 +64,7 @@ public:
     public:
         virtual ~Builder() { }
         virtual void appendData(const WebThreadSafeData&) = 0;
+<<<<<<< HEAD
         virtual void appendFile(const WebString& path,
             uint64_t offset,
             uint64_t length,
@@ -77,6 +81,13 @@ public:
             uint64_t length,
             double expectedModificationTime)
             = 0;
+=======
+        virtual void appendFile(const WebString& path, uint64_t offset, uint64_t length, double expectedModificationTime) = 0;
+        // Calling this method ensures the given blob lives for the creation of
+        // the new blob.
+        virtual void appendBlob(const WebString& uuid, uint64_t offset, uint64_t length) = 0;
+        virtual void appendFileSystemURL(const WebURL&, uint64_t offset, uint64_t length, double expectedModificationTime) = 0;
+>>>>>>> miniblink49
 
         // Builds the blob. All calls to append* are invalid after calling this
         // method.
@@ -88,12 +99,18 @@ public:
     // TODO(dmurph): Deprecate and migrate to createBuilder
     virtual void registerBlobData(const WebString& uuid, const WebBlobData&) { }
 
+<<<<<<< HEAD
     // The blob is finalized (and sent to the browser) on calling build() on the
     // Builder object.
     virtual std::unique_ptr<Builder> createBuilder(
         const WebString& uuid,
         const WebString& contentType)
         = 0;
+=======
+    // Caller takes ownership of the Builder. The blob is finalized (and sent to
+    // the browser) on calling build() on the Builder object.
+    virtual Builder* createBuilder(const WebString& uuid, const WebString& contentType) { BLINK_ASSERT_NOT_REACHED(); return nullptr; }
+>>>>>>> miniblink49
 
     virtual void addBlobDataRef(const WebString& uuid) { }
     virtual void removeBlobDataRef(const WebString& uuid) { }
@@ -102,6 +119,7 @@ public:
 
     // Registers a stream URL referring to a stream with the specified media
     // type.
+<<<<<<< HEAD
     virtual void registerStreamURL(const WebURL&, const WebString&) = 0;
 
     // Registers a stream URL referring to the stream identified by the
@@ -127,6 +145,30 @@ public:
 
     // Unregisters a stream referred by the URL.
     virtual void unregisterStreamURL(const WebURL&) = 0;
+=======
+    virtual void registerStreamURL(const WebURL&, const WebString&) { BLINK_ASSERT_NOT_REACHED(); }
+
+    // Registers a stream URL referring to the stream identified by the
+    // specified srcURL.
+    virtual void registerStreamURL(const WebURL&, const WebURL& srcURL) { BLINK_ASSERT_NOT_REACHED(); }
+
+    // Add data to the stream referred by the URL.
+    virtual void addDataToStream(const WebURL&, const char* data, size_t length) { BLINK_ASSERT_NOT_REACHED(); }
+
+    // Flush contents buffered in the stream to the corresponding reader.
+    virtual void flushStream(const WebURL&) { BLINK_ASSERT_NOT_REACHED(); }
+
+    // Tell the registry that construction of this stream has completed
+    // successfully and so it won't receive any more data.
+    virtual void finalizeStream(const WebURL&) { BLINK_ASSERT_NOT_REACHED(); }
+
+    // Tell the registry that construction of this stream has been aborted and
+    // so it won't receive any more data.
+    virtual void abortStream(const WebURL&) { BLINK_ASSERT_NOT_REACHED(); }
+
+    // Unregisters a stream referred by the URL.
+    virtual void unregisterStreamURL(const WebURL&) { BLINK_ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

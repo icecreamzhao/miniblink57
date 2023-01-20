@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef WebFloatPoint3D_h
 #define WebFloatPoint3D_h
 
@@ -50,7 +54,14 @@ struct WebFloatPoint3D {
         return *this;
     }
 
+<<<<<<< HEAD
     operator FloatPoint3D() const { return FloatPoint3D(x, y, z); }
+=======
+    operator FloatPoint3D() const
+    {
+        return FloatPoint3D(x, y, z);
+    }
+>>>>>>> miniblink49
 #else
     WebFloatPoint3D(const gfx::Point3F& p)
         : x(p.x())
@@ -66,7 +77,14 @@ struct WebFloatPoint3D {
         return *this;
     }
 
+<<<<<<< HEAD
     operator gfx::Point3F() const { return gfx::Point3F(x, y, z); }
+=======
+    operator gfx::Point3F() const
+    {
+        return gfx::Point3F(x, y, z);
+    }
+>>>>>>> miniblink49
 
 #endif
 };

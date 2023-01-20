@@ -8,10 +8,15 @@
 #ifndef SkCGUtils_DEFINED
 #define SkCGUtils_DEFINED
 
+<<<<<<< HEAD
 #include "SkImageInfo.h"
 #include "SkSize.h"
 
 #if defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
+=======
+#include "SkSize.h"
+#include "SkImageInfo.h"
+>>>>>>> miniblink49
 
 #ifdef SK_BUILD_FOR_MAC
 #include <ApplicationServices/ApplicationServices.h>
@@ -39,21 +44,33 @@ SK_API bool SkCreateBitmapFromCGImage(SkBitmap* dst, CGImageRef src, SkISize* sc
  *  return false (e.g. ImageInfo incompatible with src).
  */
 SK_API bool SkCopyPixelsFromCGImage(const SkImageInfo& info, size_t rowBytes, void* dstPixels,
+<<<<<<< HEAD
     CGImageRef src);
+=======
+                                    CGImageRef src);
+>>>>>>> miniblink49
 
 /**
  *  Create an imageref from the specified bitmap using the specified colorspace.
  *  If space is NULL, then CGColorSpaceCreateDeviceRGB() is used.
  */
 SK_API CGImageRef SkCreateCGImageRefWithColorspace(const SkBitmap& bm,
+<<<<<<< HEAD
     CGColorSpaceRef space);
+=======
+                                                   CGColorSpaceRef space);
+>>>>>>> miniblink49
 
 /**
  *  Create an imageref from the specified bitmap using the colorspace returned
  *  by CGColorSpaceCreateDeviceRGB()
  */
+<<<<<<< HEAD
 static inline CGImageRef SkCreateCGImageRef(const SkBitmap& bm)
 {
+=======
+static inline CGImageRef SkCreateCGImageRef(const SkBitmap& bm) {
+>>>>>>> miniblink49
     return SkCreateCGImageRefWithColorspace(bm, NULL);
 }
 
@@ -81,5 +98,9 @@ CGDataProviderRef SkCreateDataProviderFromStream(SkStream*);
 
 CGDataProviderRef SkCreateDataProviderFromData(SkData*);
 
+<<<<<<< HEAD
 #endif // defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
 #endif // SkCGUtils_DEFINED
+=======
+#endif
+>>>>>>> miniblink49

@@ -28,31 +28,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/fonts/VDMXParser.h"
 
 #include "wtf/Allocator.h"
 #include "wtf/ByteOrder.h"
 #include "wtf/Noncopyable.h"
+=======
+#include "config.h"
+#include "VDMXParser.h"
+>>>>>>> miniblink49
 
 #include <stdlib.h>
 #include <string.h>
 
+<<<<<<< HEAD
+=======
+#include "wtf/ByteOrder.h"
+
+>>>>>>> miniblink49
 // Buffer helper class
 //
 // This class perform some trival buffer operations while checking for
 // out-of-bounds errors. As a family they return false if anything is amiss,
 // updating the current offset otherwise.
 class Buffer {
+<<<<<<< HEAD
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(Buffer);
 
+=======
+>>>>>>> miniblink49
 public:
     Buffer(const uint8_t* buffer, size_t length)
         : m_buffer(buffer)
         , m_length(length)
+<<<<<<< HEAD
         , m_offset(0)
     {
     }
+=======
+        , m_offset(0) { }
+>>>>>>> miniblink49
 
     bool skip(size_t numBytes)
     {
@@ -97,7 +114,11 @@ public:
     }
 
 private:
+<<<<<<< HEAD
     const uint8_t* const m_buffer;
+=======
+    const uint8_t *const m_buffer;
+>>>>>>> miniblink49
     const size_t m_length;
     size_t m_offset;
 };
@@ -124,8 +145,13 @@ namespace blink {
 //
 // See http://www.microsoft.com/opentype/otspec/vdmx.htm
 bool parseVDMX(int* yMax, int* yMin,
+<<<<<<< HEAD
     const uint8_t* vdmx, size_t vdmxLength,
     unsigned targetPixelSize)
+=======
+               const uint8_t* vdmx, size_t vdmxLength,
+               unsigned targetPixelSize)
+>>>>>>> miniblink49
 {
     Buffer buf(vdmx, vdmxLength);
 
@@ -140,7 +166,12 @@ bool parseVDMX(int* yMax, int* yMin,
     // of this second table.
     //
     // Range 6 <= x <= 262146
+<<<<<<< HEAD
     unsigned long offsetTableOffset = buf.offset() + 4 /* sizeof struct ratio */ * numRatios;
+=======
+    unsigned long offsetTableOffset =
+        buf.offset() + 4 /* sizeof struct ratio */ * numRatios;
+>>>>>>> miniblink49
 
     unsigned desiredRatio = 0xffffffff;
     // We read 4 bytes per record, so the offset range is

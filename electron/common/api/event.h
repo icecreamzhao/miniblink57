@@ -7,7 +7,6 @@
 
 #include "gin/wrappable.h"
 
-#include "base/threading/thread_local.h"
 #include <functional>
 #include <windows.h>
 
@@ -26,8 +25,6 @@ public:
 
     // event.sendReply(json), used for replying synchronous message.
     bool sendReply(const std::string& json);
-    std::string returnValueGet();
-    void returnValueSet(std::string json);
 
 protected:
     explicit Event(v8::Isolate* isolate, v8::Local<v8::Object> wrapper);
@@ -35,13 +32,11 @@ protected:
 
 private:
     //static v8::Persistent<v8::Function> constructor;
-    static base::ThreadLocalPointer<v8::Persistent<v8::Function> >* constructorTlsKey;
+    static DWORD constructorTlsKey;
     DISALLOW_COPY_AND_ASSIGN(Event);
     std::function<void(std::string)>* m_callback;
-
-    std::string m_returnValue;
 };
 
-} // namespace mate
+}  // namespace mate
 
-#endif // ATOM_BROWSER_API_EVENT_H_
+#endif  // ATOM_BROWSER_API_EVENT_H_

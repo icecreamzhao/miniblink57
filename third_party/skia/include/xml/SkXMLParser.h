@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkXMLParser_DEFINED
 #define SkXMLParser_DEFINED
 
@@ -39,12 +43,19 @@ public:
     void reset();
     void setCode(ErrorCode code) { fCode = code; }
     void setNoun(const SkString& str) { fNoun.set(str); }
+<<<<<<< HEAD
     void setNoun(const char* ch) { fNoun.set(ch); }
     void setNoun(const char* ch, size_t len) { fNoun.set(ch, len); }
 
 protected:
     ErrorCode fCode;
 
+=======
+    void setNoun(const char* ch)  { fNoun.set(ch); }
+    void setNoun(const char* ch, size_t len) { fNoun.set(ch, len); }
+protected:
+    ErrorCode fCode;
+>>>>>>> miniblink49
 private:
     int fLineNumber;
     int fNativeCode;
@@ -54,7 +65,11 @@ private:
 
 class SkXMLParser {
 public:
+<<<<<<< HEAD
     SkXMLParser(SkXMLParserError* parserError = NULL);
+=======
+            SkXMLParser(SkXMLParserError* parserError = NULL);
+>>>>>>> miniblink49
     virtual ~SkXMLParser();
 
     /** Returns true for success
@@ -79,10 +94,15 @@ public:
     virtual bool endElement(const char elem[]);
     virtual bool text(const char text[], int len);
     void* fParser;
+<<<<<<< HEAD
 
 protected:
     SkXMLParserError* fError;
 
+=======
+protected:
+    SkXMLParserError* fError;
+>>>>>>> miniblink49
 private:
     void reportError(void* parser);
 };

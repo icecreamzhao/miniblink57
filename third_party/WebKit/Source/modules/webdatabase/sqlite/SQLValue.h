@@ -29,12 +29,16 @@
 #ifndef SQLValue_h
 #define SQLValue_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class SQLValue {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -61,6 +65,17 @@ public:
     SQLValue(const SQLValue&);
 
     Type getType() const { return m_type; }
+=======
+public:
+    enum Type { NullValue, NumberValue, StringValue };
+
+    SQLValue() : m_type(NullValue), m_number(0.0) { }
+    SQLValue(double number) : m_type(NumberValue), m_number(number) { }
+    SQLValue(const String& s) : m_type(StringValue), m_number(0.0), m_string(s) { }
+    SQLValue(const SQLValue&);
+
+    Type type() const { return m_type; }
+>>>>>>> miniblink49
 
     String string() const;
     double number() const;

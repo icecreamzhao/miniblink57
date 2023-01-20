@@ -8,22 +8,19 @@
 #include "core/animation/Timing.h"
 #include "core/animation/css/CSSTimingData.h"
 #include "core/style/ComputedStyleConstants.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
 
 namespace blink {
 
 class CSSAnimationData final : public CSSTimingData {
 public:
-    static std::unique_ptr<CSSAnimationData> create()
+    static PassOwnPtr<CSSAnimationData> create()
     {
-        return WTF::wrapUnique(new CSSAnimationData);
+        return adoptPtr(new CSSAnimationData);
     }
 
-    static std::unique_ptr<CSSAnimationData> create(
-        const CSSAnimationData& animationData)
+    static PassOwnPtr<CSSAnimationData> create(const CSSAnimationData& animationData)
     {
-        return WTF::wrapUnique(new CSSAnimationData(animationData));
+        return adoptPtr(new CSSAnimationData(animationData));
     }
 
     bool animationsMatchForStyleRecalc(const CSSAnimationData& other) const;
@@ -31,22 +28,10 @@ public:
     Timing convertToTiming(size_t index) const;
 
     const Vector<AtomicString>& nameList() const { return m_nameList; }
-    const Vector<double>& iterationCountList() const
-    {
-        return m_iterationCountList;
-    }
-    const Vector<Timing::PlaybackDirection>& directionList() const
-    {
-        return m_directionList;
-    }
-    const Vector<Timing::FillMode>& fillModeList() const
-    {
-        return m_fillModeList;
-    }
-    const Vector<EAnimPlayState>& playStateList() const
-    {
-        return m_playStateList;
-    }
+    const Vector<double>& iterationCountList() const { return m_iterationCountList; }
+    const Vector<Timing::PlaybackDirection>& directionList() const { return m_directionList; }
+    const Vector<Timing::FillMode>& fillModeList() const { return m_fillModeList; }
+    const Vector<EAnimPlayState>& playStateList() const { return m_playStateList; }
 
     Vector<AtomicString>& nameList() { return m_nameList; }
     Vector<double>& iterationCountList() { return m_iterationCountList; }
@@ -55,11 +40,8 @@ public:
     Vector<EAnimPlayState>& playStateList() { return m_playStateList; }
 
     static const AtomicString& initialName();
-    static Timing::PlaybackDirection initialDirection()
-    {
-        return Timing::PlaybackDirection::NORMAL;
-    }
-    static Timing::FillMode initialFillMode() { return Timing::FillMode::NONE; }
+    static Timing::PlaybackDirection initialDirection() { return Timing::PlaybackDirectionNormal; }
+    static Timing::FillMode initialFillMode() { return Timing::FillModeNone; }
     static double initialIterationCount() { return 1.0; }
     static EAnimPlayState initialPlayState() { return AnimPlayStatePlaying; }
 

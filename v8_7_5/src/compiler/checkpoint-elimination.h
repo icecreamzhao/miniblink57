@@ -11,6 +11,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace compiler {
 
         // Performs elimination of redundant checkpoints within the graph.
@@ -33,3 +34,27 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_COMPILER_CHECKPOINT_ELIMINATION_H_
+=======
+namespace compiler {
+
+// Performs elimination of redundant checkpoints within the graph.
+class V8_EXPORT_PRIVATE CheckpointElimination final
+    : public NON_EXPORTED_BASE(AdvancedReducer) {
+ public:
+  explicit CheckpointElimination(Editor* editor);
+  ~CheckpointElimination() final = default;
+
+  const char* reducer_name() const override { return "CheckpointElimination"; }
+
+  Reduction Reduce(Node* node) final;
+
+ private:
+  Reduction ReduceCheckpoint(Node* node);
+};
+
+}  // namespace compiler
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_COMPILER_CHECKPOINT_ELIMINATION_H_
+>>>>>>> miniblink49

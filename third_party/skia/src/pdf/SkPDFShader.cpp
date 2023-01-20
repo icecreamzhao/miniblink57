@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,12 +9,19 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkPDFShader.h"
 
 #include "SkData.h"
 #include "SkPDFCanon.h"
 #include "SkPDFDevice.h"
+<<<<<<< HEAD
 #include "SkPDFDocument.h"
+=======
+>>>>>>> miniblink49
 #include "SkPDFFormXObject.h"
 #include "SkPDFGraphicState.h"
 #include "SkPDFResourceDict.h"
@@ -18,9 +29,15 @@
 #include "SkScalar.h"
 #include "SkStream.h"
 #include "SkTemplates.h"
+<<<<<<< HEAD
 
 static bool inverse_transform_bbox(const SkMatrix& matrix, SkRect* bbox)
 {
+=======
+#include "SkTypes.h"
+
+static bool inverse_transform_bbox(const SkMatrix& matrix, SkRect* bbox) {
+>>>>>>> miniblink49
     SkMatrix inverse;
     if (!matrix.invert(&inverse)) {
         return false;
@@ -29,11 +46,18 @@ static bool inverse_transform_bbox(const SkMatrix& matrix, SkRect* bbox)
     return true;
 }
 
+<<<<<<< HEAD
 static void unitToPointsMatrix(const SkPoint pts[2], SkMatrix* matrix)
 {
     SkVector vec = pts[1] - pts[0];
     SkScalar mag = vec.length();
     SkScalar inv = mag ? SkScalarInvert(mag) : 0;
+=======
+static void unitToPointsMatrix(const SkPoint pts[2], SkMatrix* matrix) {
+    SkVector    vec = pts[1] - pts[0];
+    SkScalar    mag = vec.length();
+    SkScalar    inv = mag ? SkScalarInvert(mag) : 0;
+>>>>>>> miniblink49
 
     vec.scale(inv);
     matrix->setSinCos(vec.fY, vec.fX);
@@ -51,9 +75,13 @@ static void unitToPointsMatrix(const SkPoint pts[2], SkMatrix* matrix)
    @param result                 The result ps function.
  */
 static void interpolateColorCode(SkScalar range, SkScalar* curColor,
+<<<<<<< HEAD
     SkScalar* prevColor,
     SkDynamicMemoryWStream* result)
 {
+=======
+                                 SkScalar* prevColor, SkString* result) {
+>>>>>>> miniblink49
     SkASSERT(range != SkIntToScalar(0));
     static const int kColorComponents = 3;
 
@@ -73,13 +101,18 @@ static void interpolateColorCode(SkScalar range, SkScalar* curColor,
     }
 
     if (!dupInput[0] && multiplier[0] == 0) {
+<<<<<<< HEAD
         result->writeText("pop ");
+=======
+        result->append("pop ");
+>>>>>>> miniblink49
     }
 
     for (int i = 0; i < kColorComponents; i++) {
         // If the next components needs t and this component will consume a
         // copy, make another copy.
         if (dupInput[i] && multiplier[i] != 0) {
+<<<<<<< HEAD
             result->writeText("dup ");
         }
 
@@ -94,11 +127,31 @@ static void interpolateColorCode(SkScalar range, SkScalar* curColor,
             if (prevColor[i] != 0) {
                 SkPDFUtils::AppendScalar(prevColor[i], result);
                 result->writeText(" add ");
+=======
+            result->append("dup ");
+        }
+
+        if (multiplier[i] == 0) {
+            result->appendScalar(prevColor[i]);
+            result->append(" ");
+        } else {
+            if (multiplier[i] != 1) {
+                result->appendScalar(multiplier[i]);
+                result->append(" mul ");
+            }
+            if (prevColor[i] != 0) {
+                result->appendScalar(prevColor[i]);
+                result->append(" add ");
+>>>>>>> miniblink49
             }
         }
 
         if (dupInput[i]) {
+<<<<<<< HEAD
             result->writeText("exch\n");
+=======
+            result->append("exch\n");
+>>>>>>> miniblink49
         }
     }
 }
@@ -124,19 +177,31 @@ static void interpolateColorCode(SkScalar range, SkScalar* curColor,
            }
        }
  */
+<<<<<<< HEAD
 static const int kColorComponents = 3;
 typedef SkScalar ColorTuple[kColorComponents];
 static void gradientFunctionCode(const SkShader::GradientInfo& info,
     SkDynamicMemoryWStream* result)
 {
+=======
+static void gradientFunctionCode(const SkShader::GradientInfo& info,
+                                 SkString* result) {
+>>>>>>> miniblink49
     /* We want to linearly interpolate from the previous color to the next.
        Scale the colors from 0..255 to 0..1 and determine the multipliers
        for interpolation.
        C{r,g,b}(t, section) = t - offset_(section-1) + t * Multiplier{r,g,b}.
      */
+<<<<<<< HEAD
 
     SkAutoSTMalloc<4, ColorTuple> colorDataAlloc(info.fColorCount);
     ColorTuple* colorData = colorDataAlloc.get();
+=======
+    static const int kColorComponents = 3;
+    typedef SkScalar ColorTuple[kColorComponents];
+    SkAutoSTMalloc<4, ColorTuple> colorDataAlloc(info.fColorCount);
+    ColorTuple *colorData = colorDataAlloc.get();
+>>>>>>> miniblink49
     const SkScalar scale = SkScalarInvert(SkIntToScalar(255));
     for (int i = 0; i < info.fColorCount; i++) {
         colorData[i][0] = SkScalarMul(SkColorGetR(info.fColors[i]), scale);
@@ -145,6 +210,7 @@ static void gradientFunctionCode(const SkShader::GradientInfo& info,
     }
 
     // Clamp the initial color.
+<<<<<<< HEAD
     result->writeText("dup 0 le {pop ");
     SkPDFUtils::AppendScalar(colorData[0][0], result);
     result->writeText(" ");
@@ -156,11 +222,25 @@ static void gradientFunctionCode(const SkShader::GradientInfo& info,
     // The gradient colors.
     int gradients = 0;
     for (int i = 1; i < info.fColorCount; i++) {
+=======
+    result->append("dup 0 le {pop ");
+    result->appendScalar(colorData[0][0]);
+    result->append(" ");
+    result->appendScalar(colorData[0][1]);
+    result->append(" ");
+    result->appendScalar(colorData[0][2]);
+    result->append(" }\n");
+
+    // The gradient colors.
+    int gradients = 0;
+    for (int i = 1 ; i < info.fColorCount; i++) {
+>>>>>>> miniblink49
         if (info.fColorOffsets[i] == info.fColorOffsets[i - 1]) {
             continue;
         }
         gradients++;
 
+<<<<<<< HEAD
         result->writeText("{dup ");
         SkPDFUtils::AppendScalar(info.fColorOffsets[i], result);
         result->writeText(" le {");
@@ -299,12 +379,46 @@ static void tileModeCode(SkShader::TileMode mode,
     if (mode == SkShader::kRepeat_TileMode) {
         result->writeText("dup truncate sub\n"); // Get the fractional part.
         result->writeText("dup 0 le {1 add} if\n"); // Map (-1,0) => (0,1)
+=======
+        result->append("{dup ");
+        result->appendScalar(info.fColorOffsets[i]);
+        result->append(" le {");
+        if (info.fColorOffsets[i - 1] != 0) {
+            result->appendScalar(info.fColorOffsets[i - 1]);
+            result->append(" sub\n");
+        }
+
+        interpolateColorCode(info.fColorOffsets[i] - info.fColorOffsets[i - 1],
+                             colorData[i], colorData[i - 1], result);
+        result->append("}\n");
+    }
+
+    // Clamp the final color.
+    result->append("{pop ");
+    result->appendScalar(colorData[info.fColorCount - 1][0]);
+    result->append(" ");
+    result->appendScalar(colorData[info.fColorCount - 1][1]);
+    result->append(" ");
+    result->appendScalar(colorData[info.fColorCount - 1][2]);
+
+    for (int i = 0 ; i < gradients + 1; i++) {
+        result->append("} ifelse\n");
+    }
+}
+
+/* Map a value of t on the stack into [0, 1) for Repeat or Mirror tile mode. */
+static void tileModeCode(SkShader::TileMode mode, SkString* result) {
+    if (mode == SkShader::kRepeat_TileMode) {
+        result->append("dup truncate sub\n");  // Get the fractional part.
+        result->append("dup 0 le {1 add} if\n");  // Map (-1,0) => (0,1)
+>>>>>>> miniblink49
         return;
     }
 
     if (mode == SkShader::kMirror_TileMode) {
         // Map t mod 2 into [0, 1, 1, 0].
         //               Code                     Stack
+<<<<<<< HEAD
         result->writeText("abs " // Map negative to positive.
                           "dup " // t.s t.s
                           "truncate " // t.s t
@@ -316,6 +430,19 @@ static void tileModeCode(SkShader::TileMode mode,
                           "sub " // true|false 0.s
                           "exch " // 0.s true|false
                           "{1 exch sub} if\n"); // 1 - 0.s|0.s
+=======
+        result->append("abs "                 // Map negative to positive.
+                       "dup "                 // t.s t.s
+                       "truncate "            // t.s t
+                       "dup "                 // t.s t t
+                       "cvi "                 // t.s t T
+                       "2 mod "               // t.s t (i mod 2)
+                       "1 eq "                // t.s t true|false
+                       "3 1 roll "            // true|false t.s t
+                       "sub "                 // true|false 0.s
+                       "exch "                // 0.s true|false
+                       "{1 exch sub} if\n");  // 1 - 0.s|0.s
+>>>>>>> miniblink49
     }
 }
 
@@ -328,12 +455,20 @@ static void tileModeCode(SkShader::TileMode mode,
  *  while the rest of the stack is preserved intact.
  *  inversePerspectiveMatrix is the inverse perspective matrix.
  */
+<<<<<<< HEAD
 static void apply_perspective_to_coordinates(
     const SkMatrix& inversePerspectiveMatrix,
     SkDynamicMemoryWStream* code)
 {
     if (!inversePerspectiveMatrix.hasPerspective()) {
         return;
+=======
+static SkString apply_perspective_to_coordinates(
+        const SkMatrix& inversePerspectiveMatrix) {
+    SkString code;
+    if (!inversePerspectiveMatrix.hasPerspective()) {
+        return code;
+>>>>>>> miniblink49
     }
 
     // Perspective matrix should be:
@@ -349,6 +484,7 @@ static void apply_perspective_to_coordinates(
     // x = x / (p2 + p0 x + p1 y)
 
     // Input on stack: x y
+<<<<<<< HEAD
     code->writeText(" dup "); // x y y
     SkPDFUtils::AppendScalar(p1, code); // x y y p1
     code->writeText(" mul " // x y y*p1
@@ -401,26 +537,90 @@ static void radialCode(const SkShader::GradientInfo& info,
     tileModeCode(info.fTileMode, function);
     gradientFunctionCode(info, function);
     function->writeText("}");
+=======
+    code.append(" dup ");               // x y y
+    code.appendScalar(p1);              // x y y p1
+    code.append(" mul "                 // x y y*p1
+                " 2 index ");           // x y y*p1 x
+    code.appendScalar(p0);              // x y y p1 x p0
+    code.append(" mul ");               // x y y*p1 x*p0
+    code.appendScalar(p2);              // x y y p1 x*p0 p2
+    code.append(" add "                 // x y y*p1 x*p0+p2
+                "add "                  // x y y*p1+x*p0+p2
+                "3 1 roll "             // y*p1+x*p0+p2 x y
+                "2 index "              // z x y y*p1+x*p0+p2
+                "div "                  // y*p1+x*p0+p2 x y/(y*p1+x*p0+p2)
+                "3 1 roll "             // y/(y*p1+x*p0+p2) y*p1+x*p0+p2 x
+                "exch "                 // y/(y*p1+x*p0+p2) x y*p1+x*p0+p2
+                "div "                  // y/(y*p1+x*p0+p2) x/(y*p1+x*p0+p2)
+                "exch\n");              // x/(y*p1+x*p0+p2) y/(y*p1+x*p0+p2)
+    return code;
+}
+
+static SkString linearCode(const SkShader::GradientInfo& info,
+                           const SkMatrix& perspectiveRemover) {
+    SkString function("{");
+
+    function.append(apply_perspective_to_coordinates(perspectiveRemover));
+
+    function.append("pop\n");  // Just ditch the y value.
+    tileModeCode(info.fTileMode, &function);
+    gradientFunctionCode(info, &function);
+    function.append("}");
+    return function;
+}
+
+static SkString radialCode(const SkShader::GradientInfo& info,
+                           const SkMatrix& perspectiveRemover) {
+    SkString function("{");
+
+    function.append(apply_perspective_to_coordinates(perspectiveRemover));
+
+    // Find the distance from the origin.
+    function.append("dup "      // x y y
+                    "mul "      // x y^2
+                    "exch "     // y^2 x
+                    "dup "      // y^2 x x
+                    "mul "      // y^2 x^2
+                    "add "      // y^2+x^2
+                    "sqrt\n");  // sqrt(y^2+x^2)
+
+    tileModeCode(info.fTileMode, &function);
+    gradientFunctionCode(info, &function);
+    function.append("}");
+    return function;
+>>>>>>> miniblink49
 }
 
 /* Conical gradient shader, based on the Canvas spec for radial gradients
    See: http://www.w3.org/TR/2dcontext/#dom-context-2d-createradialgradient
  */
+<<<<<<< HEAD
 static void twoPointConicalCode(const SkShader::GradientInfo& info,
     const SkMatrix& perspectiveRemover,
     SkDynamicMemoryWStream* function)
 {
+=======
+static SkString twoPointConicalCode(const SkShader::GradientInfo& info,
+                                    const SkMatrix& perspectiveRemover) {
+>>>>>>> miniblink49
     SkScalar dx = info.fPoint[1].fX - info.fPoint[0].fX;
     SkScalar dy = info.fPoint[1].fY - info.fPoint[0].fY;
     SkScalar r0 = info.fRadius[0];
     SkScalar dr = info.fRadius[1] - info.fRadius[0];
+<<<<<<< HEAD
     SkScalar a = SkScalarMul(dx, dx) + SkScalarMul(dy, dy) - SkScalarMul(dr, dr);
+=======
+    SkScalar a = SkScalarMul(dx, dx) + SkScalarMul(dy, dy) -
+                 SkScalarMul(dr, dr);
+>>>>>>> miniblink49
 
     // First compute t, if the pixel falls outside the cone, then we'll end
     // with 'false' on the stack, otherwise we'll push 'true' with t below it
 
     // We start with a stack of (x y), copy it and then consume one copy in
     // order to calculate b and the other to calculate c.
+<<<<<<< HEAD
     function->writeText("{");
 
     apply_perspective_to_coordinates(perspectiveRemover, function);
@@ -439,6 +639,26 @@ static void twoPointConicalCode(const SkShader::GradientInfo& info,
     function->writeText("4 2 roll dup mul exch dup mul add ");
     SkPDFUtils::AppendScalar(SkScalarMul(r0, r0), function);
     function->writeText(" sub dup 4 1 roll\n");
+=======
+    SkString function("{");
+
+    function.append(apply_perspective_to_coordinates(perspectiveRemover));
+
+    function.append("2 copy ");
+
+    // Calculate b and b^2; b = -2 * (y * dy + x * dx + r0 * dr).
+    function.appendScalar(dy);
+    function.append(" mul exch ");
+    function.appendScalar(dx);
+    function.append(" mul add ");
+    function.appendScalar(SkScalarMul(r0, dr));
+    function.append(" add -2 mul dup dup mul\n");
+
+    // c = x^2 + y^2 + radius0^2
+    function.append("4 2 roll dup mul exch dup mul add ");
+    function.appendScalar(SkScalarMul(r0, r0));
+    function.append(" sub dup 4 1 roll\n");
+>>>>>>> miniblink49
 
     // Contents of the stack at this point: c, b, b^2, c
 
@@ -446,6 +666,7 @@ static void twoPointConicalCode(const SkShader::GradientInfo& info,
     if (a == 0) {
 
         // t = -c/b
+<<<<<<< HEAD
         function->writeText("pop pop div neg dup ");
 
         // compute radius(t)
@@ -456,6 +677,18 @@ static void twoPointConicalCode(const SkShader::GradientInfo& info,
 
         // if r(t) < 0, then it's outside the cone
         function->writeText("0 lt {pop false} {true} ifelse\n");
+=======
+        function.append("pop pop div neg dup ");
+
+        // compute radius(t)
+        function.appendScalar(dr);
+        function.append(" mul ");
+        function.appendScalar(r0);
+        function.append(" add\n");
+
+        // if r(t) < 0, then it's outside the cone
+        function.append("0 lt {pop false} {true} ifelse\n");
+>>>>>>> miniblink49
 
     } else {
 
@@ -463,6 +696,7 @@ static void twoPointConicalCode(const SkShader::GradientInfo& info,
         // root t for which radius(t) > 0
 
         // compute the discriminant (b^2 - 4ac)
+<<<<<<< HEAD
         SkPDFUtils::AppendScalar(SkScalarMul(SkIntToScalar(4), a), function);
         function->writeText(" mul sub dup\n");
 
@@ -530,6 +764,75 @@ static void sweepCode(const SkShader::GradientInfo& info,
 
 static void drawBitmapMatrix(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& matrix)
 {
+=======
+        function.appendScalar(SkScalarMul(SkIntToScalar(4), a));
+        function.append(" mul sub dup\n");
+
+        // if d >= 0, proceed
+        function.append("0 ge {\n");
+
+        // an intermediate value we'll use to compute the roots:
+        // q = -0.5 * (b +/- sqrt(d))
+        function.append("sqrt exch dup 0 lt {exch -1 mul} if");
+        function.append(" add -0.5 mul dup\n");
+
+        // first root = q / a
+        function.appendScalar(a);
+        function.append(" div\n");
+
+        // second root = c / q
+        function.append("3 1 roll div\n");
+
+        // put the larger root on top of the stack
+        function.append("2 copy gt {exch} if\n");
+
+        // compute radius(t) for larger root
+        function.append("dup ");
+        function.appendScalar(dr);
+        function.append(" mul ");
+        function.appendScalar(r0);
+        function.append(" add\n");
+
+        // if r(t) > 0, we have our t, pop off the smaller root and we're done
+        function.append(" 0 gt {exch pop true}\n");
+
+        // otherwise, throw out the larger one and try the smaller root
+        function.append("{pop dup\n");
+        function.appendScalar(dr);
+        function.append(" mul ");
+        function.appendScalar(r0);
+        function.append(" add\n");
+
+        // if r(t) < 0, push false, otherwise the smaller root is our t
+        function.append("0 le {pop false} {true} ifelse\n");
+        function.append("} ifelse\n");
+
+        // d < 0, clear the stack and push false
+        function.append("} {pop pop pop false} ifelse\n");
+    }
+
+    // if the pixel is in the cone, proceed to compute a color
+    function.append("{");
+    tileModeCode(info.fTileMode, &function);
+    gradientFunctionCode(info, &function);
+
+    // otherwise, just write black
+    function.append("} {0 0 0} ifelse }");
+
+    return function;
+}
+
+static SkString sweepCode(const SkShader::GradientInfo& info,
+                          const SkMatrix& perspectiveRemover) {
+    SkString function("{exch atan 360 div\n");
+    tileModeCode(info.fTileMode, &function);
+    gradientFunctionCode(info, &function);
+    function.append("}");
+    return function;
+}
+
+static void drawBitmapMatrix(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& matrix) {
+>>>>>>> miniblink49
     SkAutoCanvasRestore acr(canvas, true);
     canvas->concat(matrix);
     canvas->drawBitmap(bm, 0, 0);
@@ -539,17 +842,29 @@ class SkPDFShader::State {
 public:
     SkShader::GradientType fType;
     SkShader::GradientInfo fInfo;
+<<<<<<< HEAD
     SkAutoFree fColorData; // This provides storage for arrays in fInfo.
+=======
+    SkAutoFree fColorData;    // This provides storage for arrays in fInfo.
+>>>>>>> miniblink49
     SkMatrix fCanvasTransform;
     SkMatrix fShaderTransform;
     SkIRect fBBox;
 
     SkBitmap fImage;
+<<<<<<< HEAD
     SkBitmapKey fBitmapKey;
     SkShader::TileMode fImageTileModes[2];
 
     State(SkShader* shader, const SkMatrix& canvasTransform,
         const SkIRect& bbox, SkScalar rasterScale);
+=======
+    uint32_t fPixelGeneration;
+    SkShader::TileMode fImageTileModes[2];
+
+    State(const SkShader& shader, const SkMatrix& canvasTransform,
+          const SkIRect& bbox, SkScalar rasterScale);
+>>>>>>> miniblink49
 
     bool operator==(const State& b) const;
 
@@ -567,6 +882,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 SkPDFFunctionShader::SkPDFFunctionShader(SkPDFShader::State* state)
+<<<<<<< HEAD
     : SkPDFDict("Pattern")
     , fShaderState(state)
 {
@@ -577,12 +893,20 @@ SkPDFFunctionShader::~SkPDFFunctionShader() { }
 
 bool SkPDFFunctionShader::equals(const SkPDFShader::State& state) const
 {
+=======
+    : SkPDFDict("Pattern"), fShaderState(state) {}
+
+SkPDFFunctionShader::~SkPDFFunctionShader() {}
+
+bool SkPDFFunctionShader::equals(const SkPDFShader::State& state) const {
+>>>>>>> miniblink49
     return state == *fShaderState;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 SkPDFAlphaFunctionShader::SkPDFAlphaFunctionShader(SkPDFShader::State* state)
+<<<<<<< HEAD
     : fShaderState(state)
 {
     state->fImage.reset();
@@ -594,10 +918,20 @@ bool SkPDFAlphaFunctionShader::equals(const SkPDFShader::State& state) const
 }
 
 SkPDFAlphaFunctionShader::~SkPDFAlphaFunctionShader() { }
+=======
+    : fShaderState(state) {}
+
+bool SkPDFAlphaFunctionShader::equals(const SkPDFShader::State& state) const {
+    return state == *fShaderState;
+}
+
+SkPDFAlphaFunctionShader::~SkPDFAlphaFunctionShader() {}
+>>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////////////
 
 SkPDFImageShader::SkPDFImageShader(SkPDFShader::State* state)
+<<<<<<< HEAD
     : fShaderState(state)
 {
     state->fImage.reset();
@@ -609,21 +943,38 @@ bool SkPDFImageShader::equals(const SkPDFShader::State& state) const
 }
 
 SkPDFImageShader::~SkPDFImageShader() { }
+=======
+    : fShaderState(state) {}
+
+bool SkPDFImageShader::equals(const SkPDFShader::State& state) const {
+    return state == *fShaderState;
+}
+
+SkPDFImageShader::~SkPDFImageShader() {}
+>>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static SkPDFObject* get_pdf_shader_by_state(
+<<<<<<< HEAD
     SkPDFDocument* doc,
     SkScalar dpi,
     std::unique_ptr<SkPDFShader::State>* autoState)
 {
     const SkPDFShader::State& state = **autoState;
     SkPDFCanon* canon = doc->canon();
+=======
+        SkPDFCanon* canon,
+        SkScalar dpi,
+        SkAutoTDelete<SkPDFShader::State>* autoState) {
+    const SkPDFShader::State& state = **autoState;
+>>>>>>> miniblink49
     if (state.fType == SkShader::kNone_GradientType && state.fImage.isNull()) {
         // TODO(vandebo) This drops SKComposeShader on the floor.  We could
         // handle compose shader by pulling things up to a layer, drawing with
         // the first shader, applying the xfer mode and drawing again with the
         // second shader, then applying the layer to the original drawing.
+<<<<<<< HEAD
         return nullptr;
     } else if (state.fType == SkShader::kNone_GradientType) {
         SkPDFObject* shader = canon->findImageShader(state);
@@ -633,6 +984,17 @@ static SkPDFObject* get_pdf_shader_by_state(
         SkPDFObject* shader = canon->findAlphaShader(state);
         return shader ? SkRef(shader)
                       : SkPDFAlphaFunctionShader::Create(doc, dpi, autoState);
+=======
+        return NULL;
+    } else if (state.fType == SkShader::kNone_GradientType) {
+        SkPDFObject* shader = canon->findImageShader(state);
+        return shader ? SkRef(shader)
+                      : SkPDFImageShader::Create(canon, dpi, autoState);
+    } else if (state.GradientHasAlpha()) {
+        SkPDFObject* shader = canon->findAlphaShader(state);
+        return shader ? SkRef(shader)
+                      : SkPDFAlphaFunctionShader::Create(canon, dpi, autoState);
+>>>>>>> miniblink49
     } else {
         SkPDFObject* shader = canon->findFunctionShader(state);
         return shader ? SkRef(shader)
@@ -641,6 +1003,7 @@ static SkPDFObject* get_pdf_shader_by_state(
 }
 
 // static
+<<<<<<< HEAD
 SkPDFObject* SkPDFShader::GetPDFShader(SkPDFDocument* doc,
     SkScalar dpi,
     SkShader* shader,
@@ -656,6 +1019,22 @@ static sk_sp<SkPDFDict> get_gradient_resource_dict(
     SkPDFObject* functionShader,
     SkPDFObject* gState)
 {
+=======
+SkPDFObject* SkPDFShader::GetPDFShader(SkPDFCanon* canon,
+                                       SkScalar dpi,
+                                       const SkShader& shader,
+                                       const SkMatrix& matrix,
+                                       const SkIRect& surfaceBBox,
+                                       SkScalar rasterScale) {
+    SkAutoTDelete<SkPDFShader::State> state(
+            SkNEW_ARGS(State, (shader, matrix, surfaceBBox, rasterScale)));
+    return get_pdf_shader_by_state(canon, dpi, &state);
+}
+
+static SkPDFDict* get_gradient_resource_dict(
+        SkPDFObject* functionShader,
+        SkPDFObject* gState) {
+>>>>>>> miniblink49
     SkTDArray<SkPDFObject*> patterns;
     if (functionShader) {
         patterns.push(functionShader);
@@ -664,6 +1043,7 @@ static sk_sp<SkPDFDict> get_gradient_resource_dict(
     if (gState) {
         graphicStates.push(gState);
     }
+<<<<<<< HEAD
     return SkPDFResourceDict::Make(&graphicStates, &patterns, nullptr, nullptr);
 }
 
@@ -672,6 +1052,15 @@ static void populate_tiling_pattern_dict(SkPDFDict* pattern,
     SkPDFDict* resources,
     const SkMatrix& matrix)
 {
+=======
+    return SkPDFResourceDict::Create(&graphicStates, &patterns, NULL, NULL);
+}
+
+static void populate_tiling_pattern_dict(SkPDFDict* pattern,
+                                         SkRect& bbox,
+                                         SkPDFDict* resources,
+                                         const SkMatrix& matrix) {
+>>>>>>> miniblink49
     const int kTiling_PatternType = 1;
     const int kColoredTilingPattern_PaintType = 1;
     const int kConstantSpacing_TilingType = 1;
@@ -683,7 +1072,11 @@ static void populate_tiling_pattern_dict(SkPDFDict* pattern,
     pattern->insertObject("BBox", SkPDFUtils::RectToArray(bbox));
     pattern->insertScalar("XStep", bbox.width());
     pattern->insertScalar("YStep", bbox.height());
+<<<<<<< HEAD
     pattern->insertObject("Resources", sk_ref_sp(resources));
+=======
+    pattern->insertObject("Resources", SkRef(resources));
+>>>>>>> miniblink49
     if (!matrix.isIdentity()) {
         pattern->insertObject("Matrix", SkPDFUtils::MatrixToArray(matrix));
     }
@@ -694,8 +1087,12 @@ static void populate_tiling_pattern_dict(SkPDFDict* pattern,
  * @param gsIndex A graphics state resource index to apply, or <0 if no
  * graphics state to apply.
  */
+<<<<<<< HEAD
 static SkStreamAsset* create_pattern_fill_content(int gsIndex, SkRect& bounds)
 {
+=======
+static SkStream* create_pattern_fill_content(int gsIndex, SkRect& bounds) {
+>>>>>>> miniblink49
     SkDynamicMemoryWStream content;
     if (gsIndex >= 0) {
         SkPDFUtils::ApplyGraphicState(gsIndex, &content);
@@ -703,7 +1100,11 @@ static SkStreamAsset* create_pattern_fill_content(int gsIndex, SkRect& bounds)
     SkPDFUtils::ApplyPattern(0, &content);
     SkPDFUtils::AppendRectangle(bounds, &content);
     SkPDFUtils::PaintPath(SkPaint::kFill_Style, SkPath::kEvenOdd_FillType,
+<<<<<<< HEAD
         &content);
+=======
+                          &content);
+>>>>>>> miniblink49
 
     return content.detachAsStream();
 }
@@ -712,6 +1113,7 @@ static SkStreamAsset* create_pattern_fill_content(int gsIndex, SkRect& bounds)
  * Creates a ExtGState with the SMask set to the luminosityShader in
  * luminosity mode. The shader pattern extends to the bbox.
  */
+<<<<<<< HEAD
 static sk_sp<SkPDFObject> create_smask_graphic_state(
     SkPDFDocument* doc, SkScalar dpi, const SkPDFShader::State& state)
 {
@@ -740,20 +1142,59 @@ SkPDFAlphaFunctionShader* SkPDFAlphaFunctionShader::Create(
     SkScalar dpi,
     std::unique_ptr<SkPDFShader::State>* autoState)
 {
+=======
+static SkPDFObject* create_smask_graphic_state(
+        SkPDFCanon* canon, SkScalar dpi, const SkPDFShader::State& state) {
+    SkRect bbox;
+    bbox.set(state.fBBox);
+
+    SkAutoTDelete<SkPDFShader::State> alphaToLuminosityState(
+            state.CreateAlphaToLuminosityState());
+    SkAutoTUnref<SkPDFObject> luminosityShader(
+            get_pdf_shader_by_state(canon, dpi, &alphaToLuminosityState));
+
+    SkAutoTDelete<SkStream> alphaStream(create_pattern_fill_content(-1, bbox));
+
+    SkAutoTUnref<SkPDFDict>
+        resources(get_gradient_resource_dict(luminosityShader, NULL));
+
+    SkAutoTUnref<SkPDFFormXObject> alphaMask(
+            new SkPDFFormXObject(alphaStream.get(), bbox, resources.get()));
+
+    return SkPDFGraphicState::GetSMaskGraphicState(
+            alphaMask.get(), false,
+            SkPDFGraphicState::kLuminosity_SMaskMode);
+}
+
+SkPDFAlphaFunctionShader* SkPDFAlphaFunctionShader::Create(
+        SkPDFCanon* canon,
+        SkScalar dpi,
+        SkAutoTDelete<SkPDFShader::State>* autoState) {
+>>>>>>> miniblink49
     const SkPDFShader::State& state = **autoState;
     SkRect bbox;
     bbox.set(state.fBBox);
 
+<<<<<<< HEAD
     std::unique_ptr<SkPDFShader::State> opaqueState(state.CreateOpaqueState());
 
     sk_sp<SkPDFObject> colorShader(
         get_pdf_shader_by_state(doc, dpi, &opaqueState));
     if (!colorShader) {
         return nullptr;
+=======
+    SkAutoTDelete<SkPDFShader::State> opaqueState(state.CreateOpaqueState());
+
+    SkAutoTUnref<SkPDFObject> colorShader(
+            get_pdf_shader_by_state(canon, dpi, &opaqueState));
+    if (!colorShader) {
+        return NULL;
+>>>>>>> miniblink49
     }
 
     // Create resource dict with alpha graphics state as G0 and
     // pattern shader as P0, then write content stream.
+<<<<<<< HEAD
     auto alphaGs = create_smask_graphic_state(doc, dpi, state);
 
     SkPDFAlphaFunctionShader* alphaFunctionShader = new SkPDFAlphaFunctionShader(autoState->release());
@@ -767,14 +1208,36 @@ SkPDFAlphaFunctionShader* SkPDFAlphaFunctionShader::Create(
     populate_tiling_pattern_dict(alphaFunctionShader, bbox, resourceDict.get(),
         SkMatrix::I());
     doc->canon()->addAlphaShader(alphaFunctionShader);
+=======
+    SkAutoTUnref<SkPDFObject> alphaGs(
+            create_smask_graphic_state(canon, dpi, state));
+
+    SkPDFAlphaFunctionShader* alphaFunctionShader =
+            SkNEW_ARGS(SkPDFAlphaFunctionShader, (autoState->detach()));
+
+    SkAutoTUnref<SkPDFDict> resourceDict(
+            get_gradient_resource_dict(colorShader.get(), alphaGs.get()));
+
+    SkAutoTDelete<SkStream> colorStream(
+            create_pattern_fill_content(0, bbox));
+    alphaFunctionShader->setData(colorStream.get());
+
+    populate_tiling_pattern_dict(alphaFunctionShader, bbox, resourceDict.get(),
+                                 SkMatrix::I());
+    canon->addAlphaShader(alphaFunctionShader);
+>>>>>>> miniblink49
     return alphaFunctionShader;
 }
 
 // Finds affine and persp such that in = affine * persp.
 // but it returns the inverse of perspective matrix.
 static bool split_perspective(const SkMatrix in, SkMatrix* affine,
+<<<<<<< HEAD
     SkMatrix* perspectiveInverse)
 {
+=======
+                              SkMatrix* perspectiveInverse) {
+>>>>>>> miniblink49
     const SkScalar p2 = in[SkMatrix::kMPersp2];
 
     if (SkScalarNearlyZero(p2)) {
@@ -798,6 +1261,7 @@ static bool split_perspective(const SkMatrix in, SkMatrix* affine,
     // 0  1  0
     // p0 p1 p2
     // But we need the inverse of persp.
+<<<<<<< HEAD
     perspectiveInverse->setAll(one, zero, zero,
         zero, one, zero,
         -p0 / p2, -p1 / p2, 1 / p2);
@@ -805,13 +1269,28 @@ static bool split_perspective(const SkMatrix in, SkMatrix* affine,
     affine->setAll(sx - p0 * tx / p2, kx - p1 * tx / p2, tx / p2,
         ky - p0 * ty / p2, sy - p1 * ty / p2, ty / p2,
         zero, zero, one);
+=======
+    perspectiveInverse->setAll(one,          zero,       zero,
+                               zero,         one,        zero,
+                               -p0/p2,     -p1/p2,     1/p2);
+
+    affine->setAll(sx - p0 * tx / p2,       kx - p1 * tx / p2,      tx / p2,
+                   ky - p0 * ty / p2,       sy - p1 * ty / p2,      ty / p2,
+                   zero,                    zero,                   one);
+>>>>>>> miniblink49
 
     return true;
 }
 
+<<<<<<< HEAD
 sk_sp<SkPDFArray> SkPDFShader::MakeRangeObject()
 {
     auto range = sk_make_sp<SkPDFArray>();
+=======
+namespace {
+SkPDFObject* create_range_object() {
+    SkPDFArray* range = SkNEW(SkPDFArray);
+>>>>>>> miniblink49
     range->reserve(6);
     range->appendInt(0);
     range->appendInt(1);
@@ -822,6 +1301,7 @@ sk_sp<SkPDFArray> SkPDFShader::MakeRangeObject()
     return range;
 }
 
+<<<<<<< HEAD
 static sk_sp<SkPDFStream> make_ps_function(
     std::unique_ptr<SkStreamAsset> psCode,
     SkPDFArray* domain,
@@ -930,6 +1410,39 @@ SkPDFFunctionShader* SkPDFFunctionShader::Create(
         transformPoints[0] = info->fPoint[0];
         transformPoints[1] = info->fPoint[1];
         switch (state.fType) {
+=======
+template <typename T> void unref(T* ptr) { ptr->unref();}
+}  // namespace
+
+SK_DECLARE_STATIC_LAZY_PTR(SkPDFObject, rangeObject,
+                           create_range_object, unref<SkPDFObject>);
+
+static SkPDFStream* make_ps_function(const SkString& psCode,
+                                     SkPDFArray* domain) {
+    SkAutoDataUnref funcData(
+            SkData::NewWithCopy(psCode.c_str(), psCode.size()));
+    SkPDFStream* result = SkNEW_ARGS(SkPDFStream, (funcData.get()));
+    result->insertInt("FunctionType", 4);
+    result->insertObject("Domain", SkRef(domain));
+    result->insertObject("Range", SkRef(rangeObject.get()));
+    return result;
+}
+
+SkPDFFunctionShader* SkPDFFunctionShader::Create(
+        SkPDFCanon* canon, SkAutoTDelete<SkPDFShader::State>* autoState) {
+    const SkPDFShader::State& state = **autoState;
+
+    SkString (*codeFunction)(const SkShader::GradientInfo& info,
+                             const SkMatrix& perspectiveRemover) = NULL;
+    SkPoint transformPoints[2];
+
+    // Depending on the type of the gradient, we want to transform the
+    // coordinate space in different ways.
+    const SkShader::GradientInfo* info = &state.fInfo;
+    transformPoints[0] = info->fPoint[0];
+    transformPoints[1] = info->fPoint[1];
+    switch (state.fType) {
+>>>>>>> miniblink49
         case SkShader::kLinear_GradientType:
             codeFunction = &linearCode;
             break;
@@ -952,6 +1465,7 @@ SkPDFFunctionShader* SkPDFFunctionShader::Create(
         case SkShader::kColor_GradientType:
         case SkShader::kNone_GradientType:
         default:
+<<<<<<< HEAD
             return nullptr;
         }
 
@@ -1035,6 +1549,94 @@ SkPDFImageShader* SkPDFImageShader::Create(
     SkScalar dpi,
     std::unique_ptr<SkPDFShader::State>* autoState)
 {
+=======
+            return NULL;
+    }
+
+    // Move any scaling (assuming a unit gradient) or translation
+    // (and rotation for linear gradient), of the final gradient from
+    // info->fPoints to the matrix (updating bbox appropriately).  Now
+    // the gradient can be drawn on on the unit segment.
+    SkMatrix mapperMatrix;
+    unitToPointsMatrix(transformPoints, &mapperMatrix);
+
+    SkMatrix finalMatrix = state.fCanvasTransform;
+    finalMatrix.preConcat(state.fShaderTransform);
+    finalMatrix.preConcat(mapperMatrix);
+
+    // Preserves as much as posible in the final matrix, and only removes
+    // the perspective. The inverse of the perspective is stored in
+    // perspectiveInverseOnly matrix and has 3 useful numbers
+    // (p0, p1, p2), while everything else is either 0 or 1.
+    // In this way the shader will handle it eficiently, with minimal code.
+    SkMatrix perspectiveInverseOnly = SkMatrix::I();
+    if (finalMatrix.hasPerspective()) {
+        if (!split_perspective(finalMatrix,
+                               &finalMatrix, &perspectiveInverseOnly)) {
+            return NULL;
+        }
+    }
+
+    SkRect bbox;
+    bbox.set(state.fBBox);
+    if (!inverse_transform_bbox(finalMatrix, &bbox)) {
+        return NULL;
+    }
+
+    SkAutoTUnref<SkPDFArray> domain(new SkPDFArray);
+    domain->reserve(4);
+    domain->appendScalar(bbox.fLeft);
+    domain->appendScalar(bbox.fRight);
+    domain->appendScalar(bbox.fTop);
+    domain->appendScalar(bbox.fBottom);
+
+    SkString functionCode;
+    // The two point radial gradient further references
+    // state.fInfo
+    // in translating from x, y coordinates to the t parameter. So, we have
+    // to transform the points and radii according to the calculated matrix.
+    if (state.fType == SkShader::kConical_GradientType) {
+        SkShader::GradientInfo twoPointRadialInfo = *info;
+        SkMatrix inverseMapperMatrix;
+        if (!mapperMatrix.invert(&inverseMapperMatrix)) {
+            return NULL;
+        }
+        inverseMapperMatrix.mapPoints(twoPointRadialInfo.fPoint, 2);
+        twoPointRadialInfo.fRadius[0] =
+            inverseMapperMatrix.mapRadius(info->fRadius[0]);
+        twoPointRadialInfo.fRadius[1] =
+            inverseMapperMatrix.mapRadius(info->fRadius[1]);
+        functionCode = codeFunction(twoPointRadialInfo, perspectiveInverseOnly);
+    } else {
+        functionCode = codeFunction(*info, perspectiveInverseOnly);
+    }
+
+    SkAutoTUnref<SkPDFDict> pdfShader(new SkPDFDict);
+    pdfShader->insertInt("ShadingType", 1);
+    pdfShader->insertName("ColorSpace", "DeviceRGB");
+    pdfShader->insertObject("Domain", SkRef(domain.get()));
+
+    SkAutoTUnref<SkPDFStream> function(
+            make_ps_function(functionCode, domain.get()));
+    pdfShader->insertObjRef("Function", function.detach());
+
+    SkPDFFunctionShader* pdfFunctionShader =
+            SkNEW_ARGS(SkPDFFunctionShader, (autoState->detach()));
+
+    pdfFunctionShader->insertInt("PatternType", 2);
+    pdfFunctionShader->insertObject("Matrix",
+                                    SkPDFUtils::MatrixToArray(finalMatrix));
+    pdfFunctionShader->insertObject("Shading", pdfShader.detach());
+
+    canon->addFunctionShader(pdfFunctionShader);
+    return pdfFunctionShader;
+}
+
+SkPDFImageShader* SkPDFImageShader::Create(
+        SkPDFCanon* canon,
+        SkScalar dpi,
+        SkAutoTDelete<SkPDFShader::State>* autoState) {
+>>>>>>> miniblink49
     const SkPDFShader::State& state = **autoState;
 
     state.fImage.lockPixels();
@@ -1050,7 +1652,11 @@ SkPDFImageShader* SkPDFImageShader::Create(
     SkRect deviceBounds;
     deviceBounds.set(state.fBBox);
     if (!inverse_transform_bbox(finalMatrix, &deviceBounds)) {
+<<<<<<< HEAD
         return nullptr;
+=======
+        return NULL;
+>>>>>>> miniblink49
     }
 
     const SkBitmap* image = &state.fImage;
@@ -1064,14 +1670,25 @@ SkPDFImageShader* SkPDFImageShader::Create(
     SkShader::TileMode tileModes[2];
     tileModes[0] = state.fImageTileModes[0];
     tileModes[1] = state.fImageTileModes[1];
+<<<<<<< HEAD
     if (tileModes[0] != SkShader::kClamp_TileMode || tileModes[1] != SkShader::kClamp_TileMode) {
+=======
+    if (tileModes[0] != SkShader::kClamp_TileMode ||
+            tileModes[1] != SkShader::kClamp_TileMode) {
+>>>>>>> miniblink49
         deviceBounds.join(bitmapBounds);
     }
 
     SkISize size = SkISize::Make(SkScalarRoundToInt(deviceBounds.width()),
+<<<<<<< HEAD
         SkScalarRoundToInt(deviceBounds.height()));
     sk_sp<SkPDFDevice> patternDevice(
         SkPDFDevice::CreateUnflipped(size, dpi, doc));
+=======
+                                 SkScalarRoundToInt(deviceBounds.height()));
+    SkAutoTUnref<SkPDFDevice> patternDevice(
+            SkPDFDevice::CreateUnflipped(size, dpi, canon));
+>>>>>>> miniblink49
     SkCanvas canvas(patternDevice.get());
 
     SkRect patternBBox;
@@ -1106,7 +1723,12 @@ SkPDFImageShader* SkPDFImageShader::Create(
         drawBitmapMatrix(&canvas, *image, yMirror);
         patternBBox.fBottom += height;
     }
+<<<<<<< HEAD
     if (tileModes[0] == SkShader::kMirror_TileMode && tileModes[1] == SkShader::kMirror_TileMode) {
+=======
+    if (tileModes[0] == SkShader::kMirror_TileMode &&
+            tileModes[1] == SkShader::kMirror_TileMode) {
+>>>>>>> miniblink49
         SkMatrix mirror;
         mirror.setScale(-1, -1);
         mirror.postTranslate(2 * width, 2 * height);
@@ -1118,7 +1740,12 @@ SkPDFImageShader* SkPDFImageShader::Create(
 
     // If both x and y are in clamp mode, we start by filling in the corners.
     // (Which are just a rectangles of the corner colors.)
+<<<<<<< HEAD
     if (tileModes[0] == SkShader::kClamp_TileMode && tileModes[1] == SkShader::kClamp_TileMode) {
+=======
+    if (tileModes[0] == SkShader::kClamp_TileMode &&
+            tileModes[1] == SkShader::kClamp_TileMode) {
+>>>>>>> miniblink49
         SkPaint paint;
         SkRect rect;
         rect = SkRect::MakeLTRB(deviceBounds.left(), deviceBounds.top(), 0, 0);
@@ -1128,22 +1755,37 @@ SkPDFImageShader* SkPDFImageShader::Create(
         }
 
         rect = SkRect::MakeLTRB(width, deviceBounds.top(),
+<<<<<<< HEAD
             deviceBounds.right(), 0);
+=======
+                                deviceBounds.right(), 0);
+>>>>>>> miniblink49
         if (!rect.isEmpty()) {
             paint.setColor(image->getColor(image->width() - 1, 0));
             canvas.drawRect(rect, paint);
         }
 
         rect = SkRect::MakeLTRB(width, height,
+<<<<<<< HEAD
             deviceBounds.right(), deviceBounds.bottom());
         if (!rect.isEmpty()) {
             paint.setColor(image->getColor(image->width() - 1,
                 image->height() - 1));
+=======
+                                deviceBounds.right(), deviceBounds.bottom());
+        if (!rect.isEmpty()) {
+            paint.setColor(image->getColor(image->width() - 1,
+                                           image->height() - 1));
+>>>>>>> miniblink49
             canvas.drawRect(rect, paint);
         }
 
         rect = SkRect::MakeLTRB(deviceBounds.left(), height,
+<<<<<<< HEAD
             0, deviceBounds.bottom());
+=======
+                                0, deviceBounds.bottom());
+>>>>>>> miniblink49
         if (!rect.isEmpty()) {
             paint.setColor(image->getColor(0, image->height() - 1));
             canvas.drawRect(rect, paint);
@@ -1228,6 +1870,7 @@ SkPDFImageShader* SkPDFImageShader::Create(
     }
 
     // Put the canvas into the pattern stream (fContent).
+<<<<<<< HEAD
     auto content = patternDevice->content();
 
     SkPDFImageShader* imageShader = new SkPDFImageShader(autoState->release());
@@ -1246,19 +1889,61 @@ SkPDFImageShader* SkPDFImageShader::Create(
 bool SkPDFShader::State::operator==(const SkPDFShader::State& b) const
 {
     if (fType != b.fType || fCanvasTransform != b.fCanvasTransform || fShaderTransform != b.fShaderTransform || fBBox != b.fBBox) {
+=======
+    SkAutoTDelete<SkStreamAsset> content(patternDevice->content());
+
+    SkPDFImageShader* imageShader =
+            SkNEW_ARGS(SkPDFImageShader, (autoState->detach()));
+    imageShader->setData(content.get());
+
+    SkAutoTUnref<SkPDFDict> resourceDict(
+            patternDevice->createResourceDict());
+    populate_tiling_pattern_dict(imageShader, patternBBox,
+                                 resourceDict.get(), finalMatrix);
+
+    imageShader->fShaderState->fImage.unlockPixels();
+
+    canon->addImageShader(imageShader);
+    return imageShader;
+}
+
+bool SkPDFShader::State::operator==(const SkPDFShader::State& b) const {
+    if (fType != b.fType ||
+            fCanvasTransform != b.fCanvasTransform ||
+            fShaderTransform != b.fShaderTransform ||
+            fBBox != b.fBBox) {
+>>>>>>> miniblink49
         return false;
     }
 
     if (fType == SkShader::kNone_GradientType) {
+<<<<<<< HEAD
         if (fBitmapKey != b.fBitmapKey || fBitmapKey.id() == 0 || fImageTileModes[0] != b.fImageTileModes[0] || fImageTileModes[1] != b.fImageTileModes[1]) {
             return false;
         }
     } else {
         if (fInfo.fColorCount != b.fInfo.fColorCount || memcmp(fInfo.fColors, b.fInfo.fColors, sizeof(SkColor) * fInfo.fColorCount) != 0 || memcmp(fInfo.fColorOffsets, b.fInfo.fColorOffsets, sizeof(SkScalar) * fInfo.fColorCount) != 0 || fInfo.fPoint[0] != b.fInfo.fPoint[0] || fInfo.fTileMode != b.fInfo.fTileMode) {
+=======
+        if (fPixelGeneration != b.fPixelGeneration ||
+                fPixelGeneration == 0 ||
+                fImageTileModes[0] != b.fImageTileModes[0] ||
+                fImageTileModes[1] != b.fImageTileModes[1]) {
+            return false;
+        }
+    } else {
+        if (fInfo.fColorCount != b.fInfo.fColorCount ||
+                memcmp(fInfo.fColors, b.fInfo.fColors,
+                       sizeof(SkColor) * fInfo.fColorCount) != 0 ||
+                memcmp(fInfo.fColorOffsets, b.fInfo.fColorOffsets,
+                       sizeof(SkScalar) * fInfo.fColorCount) != 0 ||
+                fInfo.fPoint[0] != b.fInfo.fPoint[0] ||
+                fInfo.fTileMode != b.fInfo.fTileMode) {
+>>>>>>> miniblink49
             return false;
         }
 
         switch (fType) {
+<<<<<<< HEAD
         case SkShader::kLinear_GradientType:
             if (fInfo.fPoint[1] != b.fInfo.fPoint[1]) {
                 return false;
@@ -1278,11 +1963,35 @@ bool SkPDFShader::State::operator==(const SkPDFShader::State& b) const
         case SkShader::kNone_GradientType:
         case SkShader::kColor_GradientType:
             break;
+=======
+            case SkShader::kLinear_GradientType:
+                if (fInfo.fPoint[1] != b.fInfo.fPoint[1]) {
+                    return false;
+                }
+                break;
+            case SkShader::kRadial_GradientType:
+                if (fInfo.fRadius[0] != b.fInfo.fRadius[0]) {
+                    return false;
+                }
+                break;
+            case SkShader::kConical_GradientType:
+                if (fInfo.fPoint[1] != b.fInfo.fPoint[1] ||
+                        fInfo.fRadius[0] != b.fInfo.fRadius[0] ||
+                        fInfo.fRadius[1] != b.fInfo.fRadius[1]) {
+                    return false;
+                }
+                break;
+            case SkShader::kSweep_GradientType:
+            case SkShader::kNone_GradientType:
+            case SkShader::kColor_GradientType:
+                break;
+>>>>>>> miniblink49
         }
     }
     return true;
 }
 
+<<<<<<< HEAD
 SkPDFShader::State::State(SkShader* shader, const SkMatrix& canvasTransform,
     const SkIRect& bbox, SkScalar rasterScale)
     : fCanvasTransform(canvasTransform)
@@ -1301,6 +2010,26 @@ SkPDFShader::State::State(SkShader* shader, const SkMatrix& canvasTransform,
         if (shader->isABitmap(&fImage, &matrix, fImageTileModes)) {
             SkASSERT(matrix.isIdentity());
         } else {
+=======
+SkPDFShader::State::State(const SkShader& shader, const SkMatrix& canvasTransform,
+                          const SkIRect& bbox, SkScalar rasterScale)
+        : fCanvasTransform(canvasTransform),
+          fBBox(bbox),
+          fPixelGeneration(0) {
+    fInfo.fColorCount = 0;
+    fInfo.fColors = NULL;
+    fInfo.fColorOffsets = NULL;
+    fShaderTransform = shader.getLocalMatrix();
+    fImageTileModes[0] = fImageTileModes[1] = SkShader::kClamp_TileMode;
+
+    fType = shader.asAGradient(&fInfo);
+
+    if (fType == SkShader::kNone_GradientType) {
+        SkShader::BitmapType bitmapType;
+        SkMatrix matrix;
+        bitmapType = shader.asABitmap(&fImage, &matrix, fImageTileModes);
+        if (bitmapType != SkShader::kDefault_BitmapType) {
+>>>>>>> miniblink49
             // Generic fallback for unsupported shaders:
             //  * allocate a bbox-sized bitmap
             //  * shade the whole area
@@ -1323,15 +2052,25 @@ SkPDFShader::State::State(SkShader* shader, const SkMatrix& canvasTransform,
             }
 
             SkISize size = SkISize::Make(SkScalarRoundToInt(rasterScale * bbox.width()),
+<<<<<<< HEAD
                 SkScalarRoundToInt(rasterScale * bbox.height()));
             SkSize scale = SkSize::Make(SkIntToScalar(size.width()) / shaderRect.width(),
                 SkIntToScalar(size.height()) / shaderRect.height());
+=======
+                                         SkScalarRoundToInt(rasterScale * bbox.height()));
+            SkSize scale = SkSize::Make(SkIntToScalar(size.width()) / shaderRect.width(),
+                                        SkIntToScalar(size.height()) / shaderRect.height());
+>>>>>>> miniblink49
 
             fImage.allocN32Pixels(size.width(), size.height());
             fImage.eraseColor(SK_ColorTRANSPARENT);
 
             SkPaint p;
+<<<<<<< HEAD
             p.setShader(sk_ref_sp(shader));
+=======
+            p.setShader(const_cast<SkShader*>(&shader));
+>>>>>>> miniblink49
 
             SkCanvas canvas(fImage);
             canvas.scale(scale.width(), scale.height());
@@ -1340,19 +2079,36 @@ SkPDFShader::State::State(SkShader* shader, const SkMatrix& canvasTransform,
 
             fShaderTransform.setTranslate(shaderRect.x(), shaderRect.y());
             fShaderTransform.preScale(1 / scale.width(), 1 / scale.height());
+<<<<<<< HEAD
         }
         fBitmapKey = SkBitmapKey(fImage);
     } else {
         AllocateGradientInfoStorage();
         shader->asAGradient(&fInfo);
+=======
+        } else {
+            SkASSERT(matrix.isIdentity());
+        }
+        fPixelGeneration = fImage.getGenerationID();
+    } else {
+        AllocateGradientInfoStorage();
+        shader.asAGradient(&fInfo);
+>>>>>>> miniblink49
     }
 }
 
 SkPDFShader::State::State(const SkPDFShader::State& other)
+<<<<<<< HEAD
     : fType(other.fType)
     , fCanvasTransform(other.fCanvasTransform)
     , fShaderTransform(other.fShaderTransform)
     , fBBox(other.fBBox)
+=======
+  : fType(other.fType),
+    fCanvasTransform(other.fCanvasTransform),
+    fShaderTransform(other.fShaderTransform),
+    fBBox(other.fBBox)
+>>>>>>> miniblink49
 {
     // Only gradients supported for now, since that is all that is used.
     // If needed, image state copy constructor can be added here later.
@@ -1373,8 +2129,12 @@ SkPDFShader::State::State(const SkPDFShader::State& other)
  * Create a copy of this gradient state with alpha assigned to RGB luminousity.
  * Only valid for gradient states.
  */
+<<<<<<< HEAD
 SkPDFShader::State* SkPDFShader::State::CreateAlphaToLuminosityState() const
 {
+=======
+SkPDFShader::State* SkPDFShader::State::CreateAlphaToLuminosityState() const {
+>>>>>>> miniblink49
     SkASSERT(fType != SkShader::kNone_GradientType);
 
     SkPDFShader::State* newState = new SkPDFShader::State(*this);
@@ -1391,14 +2151,22 @@ SkPDFShader::State* SkPDFShader::State::CreateAlphaToLuminosityState() const
  * Create a copy of this gradient state with alpha set to fully opaque
  * Only valid for gradient states.
  */
+<<<<<<< HEAD
 SkPDFShader::State* SkPDFShader::State::CreateOpaqueState() const
 {
+=======
+SkPDFShader::State* SkPDFShader::State::CreateOpaqueState() const {
+>>>>>>> miniblink49
     SkASSERT(fType != SkShader::kNone_GradientType);
 
     SkPDFShader::State* newState = new SkPDFShader::State(*this);
     for (int i = 0; i < fInfo.fColorCount; i++) {
         newState->fInfo.fColors[i] = SkColorSetA(fInfo.fColors[i],
+<<<<<<< HEAD
             SK_AlphaOPAQUE);
+=======
+                                                 SK_AlphaOPAQUE);
+>>>>>>> miniblink49
     }
 
     return newState;
@@ -1407,8 +2175,12 @@ SkPDFShader::State* SkPDFShader::State::CreateOpaqueState() const
 /**
  * Returns true if state is a gradient and the gradient has alpha.
  */
+<<<<<<< HEAD
 bool SkPDFShader::State::GradientHasAlpha() const
 {
+=======
+bool SkPDFShader::State::GradientHasAlpha() const {
+>>>>>>> miniblink49
     if (fType == SkShader::kNone_GradientType) {
         return false;
     }
@@ -1422,10 +2194,19 @@ bool SkPDFShader::State::GradientHasAlpha() const
     return false;
 }
 
+<<<<<<< HEAD
 void SkPDFShader::State::AllocateGradientInfoStorage()
 {
     fColorData.set(sk_malloc_throw(
         fInfo.fColorCount * (sizeof(SkColor) + sizeof(SkScalar))));
     fInfo.fColors = reinterpret_cast<SkColor*>(fColorData.get());
     fInfo.fColorOffsets = reinterpret_cast<SkScalar*>(fInfo.fColors + fInfo.fColorCount);
+=======
+void SkPDFShader::State::AllocateGradientInfoStorage() {
+    fColorData.set(sk_malloc_throw(
+               fInfo.fColorCount * (sizeof(SkColor) + sizeof(SkScalar))));
+    fInfo.fColors = reinterpret_cast<SkColor*>(fColorData.get());
+    fInfo.fColorOffsets =
+            reinterpret_cast<SkScalar*>(fInfo.fColors + fInfo.fColorCount);
+>>>>>>> miniblink49
 }

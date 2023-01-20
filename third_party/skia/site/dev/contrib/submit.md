@@ -2,6 +2,7 @@ How to submit a patch
 =====================
 
 
+<<<<<<< HEAD
 Configure git
 -------------
 
@@ -10,11 +11,14 @@ Configure git
     git config --global user.name "Your Name"
     git config --global user.email you@example.com
 
+=======
+>>>>>>> miniblink49
 Making changes
 --------------
 
 First create a branch for your changes:
 
+<<<<<<< HEAD
 <!--?prettify lang=sh?-->
 
     git config branch.autosetuprebase always
@@ -33,6 +37,26 @@ If your branch gets out of date, you will need to update it:
 
     git pull
     python bin/sync-and-gyp
+=======
+~~~~
+$ git checkout -b my_feature origin/master
+~~~~
+
+After making your changes, create a commit
+
+~~~~
+$ git add [file1] [file2] ...
+$ git commit
+~~~~
+
+If your branch gets out of date, you will need to update it:
+
+~~~~
+$ git pull --rebase
+$ gclient sync
+~~~~
+
+>>>>>>> miniblink49
 
 Adding a unit test
 ------------------
@@ -42,7 +66,11 @@ time. Skia has a simple unittest framework so you can add a case to it.
 
 Test code is located under the 'tests' directory.
 
+<<<<<<< HEAD
 See [Writing Unit and Rendering Tests](../testing/tests) for details.
+=======
+See [Writing Unit and Rendering Tests](tests) for details.
+>>>>>>> miniblink49
 
 Unit tests are best, but if your change touches rendering and you can't think of
 an automated way to verify the results, consider writing a GM test or a new page
@@ -57,16 +85,25 @@ For your code to be accepted into the codebase, you must complete the
 [Individual Contributor License
 Agreement](http://code.google.com/legal/individual-cla-v1.0.html). You can do
 this online, and it only takes a minute. If you are contributing on behalf of a
+<<<<<<< HEAD
 corporation, you must fill out the [Corporate Contributor License
 Agreement](http://code.google.com/legal/corporate-cla-v1.0.html)
 and send it to us as described on that page. Add your (or your organization's)
+=======
+corporation, you must fill out the [Corporate Contributor License Agreement](http://code.google.com/legal/corporate-cla-v1.0.html) 
+and send it to us as described on that page. Add your (or your organization's) 
+>>>>>>> miniblink49
 name and contact info to the AUTHORS file as a part of your CL.
 
 Now that you've made a change and written a test for it, it's ready for the code
 review! Submit a patch and getting it reviewed is fairly easy with depot tools.
 
+<<<<<<< HEAD
 Use git-cl, which comes with [depot
 tools](http://sites.google.com/a/chromium.org/dev/developers/how-tos/install-depot-tools).
+=======
+Use git-cl, which comes with [depot tools](http://sites.google.com/a/chromium.org/dev/developers/how-tos/install-depot-tools).
+>>>>>>> miniblink49
 For help, run git-cl help.
 
 ### Configuring git-cl
@@ -74,9 +111,15 @@ For help, run git-cl help.
 Before using any git-cl commands you will need to configure it to point at the
 correct code review server. This is accomplished with the following command:
 
+<<<<<<< HEAD
 <!--?prettify lang=sh?-->
 
     git cl config https://skia.googlesource.com/skia/+/master/codereview.settings
+=======
+~~~~
+git cl config https://skia.googlesource.com/skia/+/master/codereview.settings
+~~~~
+>>>>>>> miniblink49
 
 ### Find a reviewer
 
@@ -86,6 +129,7 @@ has been editing it.
 
 ### Uploading changes for review
 
+<<<<<<< HEAD
 Skia uses Chromium's code review [site](http://codereview.chromium.org) and the
 Rietveld open source code review tool.  
 Use git cl to upload your change:
@@ -93,11 +137,23 @@ Use git cl to upload your change:
 <!--?prettify lang=sh?-->
 
     git cl upload
+=======
+Skia uses Chromium's code review [site](http://codereview.chromium.org) and the 
+Rietveld open source code review tool.  
+Use git cl to upload your change:
+~~~~
+$ git cl upload 
+~~~~
+>>>>>>> miniblink49
 
 You may have to enter a Google Account username and password to authenticate
 yourself to codereview.chromium.org. A free gmail account will do fine, or any
 other type of Google account.  It does not have to match the email address you
+<<<<<<< HEAD
 configured using `git config --global user.email` above, but it can.
+=======
+configured using git config --global user.email above, but it can.
+>>>>>>> miniblink49
 
 The command output should include a URL, similar to
 (https://codereview.chromium.org/111893004/), indicating where your changelist
@@ -141,10 +197,19 @@ update.
 If you need to update code the code on an already uploaded CL, simply edit the
 code, commit it again locally, and then run git cl upload again e.g.
 
+<<<<<<< HEAD
     echo "GOATS" > whitespace.txt
     git add whitespace.txt
     git commit -m 'add GOATS fix to whitespace.txt'
     git cl upload
+=======
+~~~~
+echo "" > GOATS
+git add GOATS
+git commit -m 'add newline fix to GOATS'
+git cl upload
+~~~~
+>>>>>>> miniblink49
 
 Once you're ready for another review, use **Publish+Mail Comments** again to
 send another notification (it is helpful to tell the review what you did with
@@ -155,6 +220,7 @@ _Note_: As you work through the review process, both you and your reviewers
 should converse using the code review interface, and send notes using
 **Publish+Mail Comments**.
 
+<<<<<<< HEAD
 Once your change has received an LGTM, you can check the "Commit" box
 on the codereview page and it will be committed on your behalf.
 
@@ -162,6 +228,14 @@ Once your commit has gone in, you should delete the branch containing your chang
 
     git checkout -q origin/master
     git branch -D my_feature
+=======
+Once your commit has gone in, you should delete the branch containing your change:
+
+~~~~
+$ git checkout master
+$ git branch -D my_feature
+~~~~
+>>>>>>> miniblink49
 
 
 Final Testing
@@ -199,6 +273,7 @@ commit your change directly to Skia's repository.
 
 If you don't have committer rights in https://skia.googlesource.com/skia.git ...
 first of all, thanks for submitting your patch!  We really appreciate these
+<<<<<<< HEAD
 submissions.  After receiving an LGTM from a committer, you will be able to
 check the commit box and submit your patch via the commit queue.  
 
@@ -223,3 +298,29 @@ adjustments at his/her discretion).  If so, you can mark your codereview as
     ~~~~
     git cl land -c 'Contributor Name <email@example.com>'
     ~~~~
+=======
+submissions.  Unfortunately, we don't yet have a way for Skia committers to mark
+a patch as "approved" and thus allow non-committers to commit them.  So instead,
+please ask a Skia committer to land your patch for you or land using the commit
+queue.
+
+As part of this process, the Skia committer may create a new codereview
+containing your patch (perhaps with some small adjustments at her discretion).
+If so, you can mark your codereview as "Closed", and update it with a link to
+the new codereview.
+
+### Skia committers: 
+  *  tips on how to apply the externally provided patch are [here](./patch)
+  *  when landing externally contributed patches, please note the original 
+     contributor's identity (and provide a link to the original codereview) in the commit message
+
+git-cl will squash all your commits into a single one with the description you used when you uploaded your change.
+
+~~~~
+git cl land
+~~~~
+or
+~~~~
+git cl land -c 'Contributor Name <email@example.com>'
+~~~~
+>>>>>>> miniblink49

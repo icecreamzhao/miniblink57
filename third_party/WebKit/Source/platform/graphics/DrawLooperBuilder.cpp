@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/DrawLooperBuilder.h"
 
 #include "platform/geometry/FloatSize.h"
@@ -37,10 +41,16 @@
 #include "third_party/skia/include/core/SkColorFilter.h"
 #include "third_party/skia/include/core/SkDrawLooper.h"
 #include "third_party/skia/include/core/SkPaint.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/effects/SkBlurMaskFilter.h"
 #include "wtf/PtrUtil.h"
 #include "wtf/RefPtr.h"
 #include <memory>
+=======
+#include "third_party/skia/include/core/SkXfermode.h"
+#include "third_party/skia/include/effects/SkBlurMaskFilter.h"
+#include "wtf/RefPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -48,9 +58,20 @@ DrawLooperBuilder::DrawLooperBuilder() { }
 
 DrawLooperBuilder::~DrawLooperBuilder() { }
 
+<<<<<<< HEAD
 sk_sp<SkDrawLooper> DrawLooperBuilder::detachDrawLooper()
 {
     return m_skDrawLooperBuilder.detach();
+=======
+PassOwnPtr<DrawLooperBuilder> DrawLooperBuilder::create()
+{
+    return adoptPtr(new DrawLooperBuilder);
+}
+
+PassRefPtr<SkDrawLooper> DrawLooperBuilder::detachDrawLooper()
+{
+    return adoptRef(m_skDrawLooperBuilder.detachLooper());
+>>>>>>> miniblink49
 }
 
 void DrawLooperBuilder::addUnmodifiedContent()
@@ -59,6 +80,7 @@ void DrawLooperBuilder::addUnmodifiedContent()
     m_skDrawLooperBuilder.addLayerOnTop(info);
 }
 
+<<<<<<< HEAD
 void DrawLooperBuilder::addShadow(const FloatSize& offset,
     float blur,
     const Color& color,
@@ -67,6 +89,11 @@ void DrawLooperBuilder::addShadow(const FloatSize& offset,
 {
     ASSERT(blur >= 0);
 
+=======
+void DrawLooperBuilder::addShadow(const FloatSize& offset, float blur, const Color& color,
+    ShadowTransformMode shadowTransformMode, ShadowAlphaMode shadowAlphaMode)
+{
+>>>>>>> miniblink49
     // Detect when there's no effective shadow.
     if (!color.alpha())
         return;
@@ -77,10 +104,17 @@ void DrawLooperBuilder::addShadow(const FloatSize& offset,
 
     switch (shadowAlphaMode) {
     case ShadowRespectsAlpha:
+<<<<<<< HEAD
         info.fColorMode = SkXfermode::SkBlendModeToSkXfermodeMode(SkBlendMode::kDst);
         break;
     case ShadowIgnoresAlpha:
         info.fColorMode = SkXfermode::SkBlendModeToSkXfermodeMode(SkBlendMode::kSrc);
+=======
+        info.fColorMode = SkXfermode::kDst_Mode;
+        break;
+    case ShadowIgnoresAlpha:
+        info.fColorMode = SkXfermode::kSrc_Mode;
+>>>>>>> miniblink49
         break;
     default:
         ASSERT_NOT_REACHED();
@@ -99,12 +133,21 @@ void DrawLooperBuilder::addShadow(const FloatSize& offset,
         uint32_t mfFlags = SkBlurMaskFilter::kHighQuality_BlurFlag;
         if (shadowTransformMode == ShadowIgnoresTransforms)
             mfFlags |= SkBlurMaskFilter::kIgnoreTransform_BlurFlag;
+<<<<<<< HEAD
         paint->setMaskFilter(
             SkBlurMaskFilter::Make(kNormal_SkBlurStyle, sigma, mfFlags));
     }
 
     paint->setColorFilter(
         SkColorFilter::MakeModeFilter(skColor, SkBlendMode::kSrcIn));
+=======
+        RefPtr<SkMaskFilter> mf = adoptRef(SkBlurMaskFilter::Create(kNormal_SkBlurStyle, sigma, mfFlags));
+        paint->setMaskFilter(mf.get());
+    }
+
+    RefPtr<SkColorFilter> cf = adoptRef(SkColorFilter::CreateModeFilter(skColor, SkXfermode::kSrcIn_Mode));
+    paint->setColorFilter(cf.get());
+>>>>>>> miniblink49
 }
 
 } // namespace blink

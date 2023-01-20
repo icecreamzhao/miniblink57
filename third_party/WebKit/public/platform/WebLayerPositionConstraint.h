@@ -29,8 +29,13 @@
 namespace blink {
 
 struct WebLayerPositionConstraint {
+<<<<<<< HEAD
     bool isFixedPosition : 1;
     bool isFixedToRightEdge : 1;
+=======
+    bool isFixedPosition     : 1;
+    bool isFixedToRightEdge  : 1;
+>>>>>>> miniblink49
     bool isFixedToBottomEdge : 1;
 
     WebLayerPositionConstraint()
@@ -40,8 +45,12 @@ struct WebLayerPositionConstraint {
     {
     }
 
+<<<<<<< HEAD
     static WebLayerPositionConstraint fixedPosition(bool fixedToRightEdge,
         bool fixedToBottomEdge)
+=======
+    static WebLayerPositionConstraint fixedPosition(bool fixedToRightEdge, bool fixedToBottomEdge)
+>>>>>>> miniblink49
     {
         WebLayerPositionConstraint constraint;
         constraint.isFixedPosition = true;

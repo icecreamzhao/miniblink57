@@ -29,8 +29,6 @@
 
 #include "core/xml/XPathPredicate.h"
 #include "core/xml/XPathStep.h"
-#include "wtf/Allocator.h"
-#include <memory>
 
 namespace blink {
 
@@ -39,100 +37,77 @@ class XPathNSResolver;
 
 namespace XPath {
 
-    class Expression;
-    class LocationPath;
-    class Parser;
+class Expression;
+class LocationPath;
+class ParseNode;
+class Parser;
+class Predicate;
 
-    struct Token {
-        STACK_ALLOCATED();
-        int type;
-        String str;
-        Step::Axis axis;
-        NumericOp::Opcode numop;
-        EqTestOp::Opcode eqop;
+struct Token {
+    int type;
+    String str;
+    Step::Axis axis;
+    NumericOp::Opcode numop;
+    EqTestOp::Opcode eqop;
 
-        Token(int t)
-            : type(t)
-        {
-        }
-        Token(int t, const String& v)
-            : type(t)
-            , str(v)
-        {
-        }
-        Token(int t, Step::Axis v)
-            : type(t)
-            , axis(v)
-        {
-        }
-        Token(int t, NumericOp::Opcode v)
-            : type(t)
-            , numop(v)
-        {
-        }
-        Token(int t, EqTestOp::Opcode v)
-            : type(t)
-            , eqop(v)
-        {
-        }
-    };
+    Token(int t) : type(t) { }
+    Token(int t, const String& v): type(t), str(v) { }
+    Token(int t, Step::Axis v): type(t), axis(v) { }
+    Token(int t, NumericOp::Opcode v): type(t), numop(v) { }
+    Token(int t, EqTestOp::Opcode v): type(t), eqop(v) { }
+};
 
-    class Parser {
-        WTF_MAKE_NONCOPYABLE(Parser);
-        STACK_ALLOCATED();
+class Parser {
+    WTF_MAKE_NONCOPYABLE(Parser);
+    STACK_ALLOCATED();
+public:
+    Parser();
+    ~Parser();
 
-    public:
-        Parser();
-        ~Parser();
+    XPathNSResolver* resolver() const { return m_resolver.get(); }
+    bool expandQName(const String& qName, AtomicString& localName, AtomicString& namespaceURI);
 
-        XPathNSResolver* resolver() const { return m_resolver.get(); }
-        bool expandQName(const String& qName,
-            AtomicString& localName,
-            AtomicString& namespaceURI);
+    Expression* parseStatement(const String& statement, XPathNSResolver*, ExceptionState&);
 
-        Expression* parseStatement(const String& statement,
-            XPathNSResolver*,
-            ExceptionState&);
+    static Parser* current() { return currentParser; }
 
-        static Parser* current() { return currentParser; }
+    int lex(void* yylval);
 
-        int lex(void* yylval);
+    Member<Expression> m_topExpr;
+    bool m_gotNamespaceError;
 
-        Member<Expression> m_topExpr;
-        bool m_gotNamespaceError;
+    void registerString(String*);
+    void deleteString(String*);
 
-        void registerString(String*);
-        void deleteString(String*);
+private:
+    bool isBinaryOperatorContext() const;
 
-    private:
-        bool isBinaryOperatorContext() const;
+    void skipWS();
+    Token makeTokenAndAdvance(int type, int advance = 1);
+    Token makeTokenAndAdvance(int type, NumericOp::Opcode, int advance = 1);
+    Token makeTokenAndAdvance(int type, EqTestOp::Opcode, int advance = 1);
+    char peekAheadHelper();
+    char peekCurHelper();
 
-        void skipWS();
-        Token makeTokenAndAdvance(int type, int advance = 1);
-        Token makeTokenAndAdvance(int type, NumericOp::Opcode, int advance = 1);
-        Token makeTokenAndAdvance(int type, EqTestOp::Opcode, int advance = 1);
-        char peekAheadHelper();
-        char peekCurHelper();
+    Token lexString();
+    Token lexNumber();
+    bool lexNCName(String&);
+    bool lexQName(String&);
 
-        Token lexString();
-        Token lexNumber();
-        bool lexNCName(String&);
-        bool lexQName(String&);
+    Token nextToken();
+    Token nextTokenInternal();
 
-        Token nextToken();
-        Token nextTokenInternal();
+    void reset(const String& data);
 
-        void reset(const String& data);
+    static Parser* currentParser;
 
-        static Parser* currentParser;
+    unsigned m_nextPos;
+    String m_data;
+    int m_lastTokenType;
+    Member<XPathNSResolver> m_resolver;
 
-        unsigned m_nextPos;
-        String m_data;
-        int m_lastTokenType;
-        Member<XPathNSResolver> m_resolver;
-
-        HashSet<std::unique_ptr<String>> m_strings;
-    };
+    HashSet<OwnPtr<String>> m_strings;
+};
 
 } // namespace XPath
 

@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkPostParts.h"
 #include "SkDisplayPost.h"
 
@@ -19,6 +23,7 @@ const SkMemberInfo SkDataInput::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDataInput);
 
+<<<<<<< HEAD
 SkDataInput::SkDataInput()
     : fParent(nullptr)
 {
@@ -29,11 +34,20 @@ bool SkDataInput::add()
     SkASSERT(name.size() > 0);
     const char* dataName = name.c_str();
     if (fInt != (int)SK_NaN32)
+=======
+SkDataInput::SkDataInput() : fParent(NULL) {}
+
+bool SkDataInput::add() {
+    SkASSERT(name.size() > 0);
+    const char* dataName = name.c_str();
+    if (fInt != (int) SK_NaN32)
+>>>>>>> miniblink49
         fParent->fEvent.setS32(dataName, fInt);
     else if (SkScalarIsNaN(fFloat) == false)
         fParent->fEvent.setScalar(dataName, fFloat);
     else if (string.size() > 0)
         fParent->fEvent.setString(dataName, string);
+<<<<<<< HEAD
     //  else
     //      SkASSERT(0);
     return false;
@@ -59,5 +73,28 @@ bool SkDataInput::setParent(SkDisplayable* displayable)
 
 void SkDataInput::onEndElement(SkAnimateMaker&)
 {
+=======
+//  else
+//      SkASSERT(0);
+    return false;
+}
+
+void SkDataInput::dirty() {
+    fParent->dirty();
+}
+
+SkDisplayable* SkDataInput::getParent() const {
+    return fParent;
+}
+
+bool SkDataInput::setParent(SkDisplayable* displayable) {
+    if (displayable->isPost() == false)
+        return true;
+    fParent = (SkPost*) displayable;
+    return false;
+}
+
+void SkDataInput::onEndElement(SkAnimateMaker&) {
+>>>>>>> miniblink49
     add();
 }

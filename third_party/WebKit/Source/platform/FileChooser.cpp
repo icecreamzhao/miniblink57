@@ -26,6 +26,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/FileChooser.h"
 
 namespace blink {
@@ -35,8 +39,12 @@ FileChooserClient::~FileChooserClient()
     discardChooser();
 }
 
+<<<<<<< HEAD
 FileChooser* FileChooserClient::newFileChooser(
     const FileChooserSettings& settings)
+=======
+FileChooser* FileChooserClient::newFileChooser(const FileChooserSettings& settings)
+>>>>>>> miniblink49
 {
     discardChooser();
 
@@ -50,28 +58,46 @@ void FileChooserClient::discardChooser()
         m_chooser->disconnectClient();
 }
 
+<<<<<<< HEAD
 inline FileChooser::FileChooser(FileChooserClient* client,
     const FileChooserSettings& settings)
+=======
+inline FileChooser::FileChooser(FileChooserClient* client, const FileChooserSettings& settings)
+>>>>>>> miniblink49
     : m_client(client)
     , m_settings(settings)
 {
 }
 
+<<<<<<< HEAD
 PassRefPtr<FileChooser> FileChooser::create(
     FileChooserClient* client,
     const FileChooserSettings& settings)
+=======
+PassRefPtr<FileChooser> FileChooser::create(FileChooserClient* client, const FileChooserSettings& settings)
+>>>>>>> miniblink49
 {
     return adoptRef(new FileChooser(client, settings));
 }
 
+<<<<<<< HEAD
 FileChooser::~FileChooser() { }
+=======
+FileChooser::~FileChooser()
+{
+}
+>>>>>>> miniblink49
 
 void FileChooser::chooseFiles(const Vector<FileChooserFileInfo>& files)
 {
     // FIXME: This is inelegant. We should not be looking at settings here.
     Vector<String> paths;
     for (unsigned i = 0; i < files.size(); ++i)
+<<<<<<< HEAD
         paths.push_back(files[i].path);
+=======
+        paths.append(files[i].path);
+>>>>>>> miniblink49
     if (m_settings.selectedFiles == paths)
         return;
 
@@ -88,4 +114,8 @@ Vector<String> FileChooserSettings::acceptTypes() const
     return acceptTypes;
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

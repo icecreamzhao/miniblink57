@@ -1,6 +1,7 @@
 Quick Start Guides
 ==================
 
+<<<<<<< HEAD
 System-specific guidelines:
 
 *   [Android](/user/quick/android)
@@ -11,3 +12,5 @@ System-specific guidelines:
     -   [Linux](/user/quick/linux)
     -   [Mac OS X](/user/quick/macos)
     -   [Windows](/user/quick/windows)
+=======
+>>>>>>> miniblink49

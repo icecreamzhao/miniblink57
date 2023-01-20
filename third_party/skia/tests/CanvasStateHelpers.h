@@ -20,7 +20,11 @@ class SkRegion;
  *  test_complex_layers and complex_layers_draw_from_canvas_state.
  */
 void complex_layers_draw(SkCanvas* canvas, float left, float top,
+<<<<<<< HEAD
     float right, float bottom, int32_t spacer);
+=======
+                         float right, float bottom, int32_t spacer);
+>>>>>>> miniblink49
 
 /*
  *  Create an SkCanvas from state and draw to it. Return true on success.
@@ -29,14 +33,22 @@ void complex_layers_draw(SkCanvas* canvas, float left, float top,
  *  so it can be called from a separate library.
  */
 extern "C" bool complex_layers_draw_from_canvas_state(SkCanvasState* state,
+<<<<<<< HEAD
     float left, float top, float right, float bottom, int32_t spacer);
+=======
+        float left, float top, float right, float bottom, int32_t spacer);
+>>>>>>> miniblink49
 
 /*
  *  Helper function to perform drawing to an SkCanvas. Used both by test_complex_clips
  *  and complex_clips_draw_from_canvas_state.
  */
 void complex_clips_draw(SkCanvas* canvas, int32_t left, int32_t top,
+<<<<<<< HEAD
     int32_t right, int32_t bottom, int32_t clipOp, const SkRegion& localRegion);
+=======
+        int32_t right, int32_t bottom, int32_t clipOp, const SkRegion& localRegion);
+>>>>>>> miniblink49
 
 /*
  *  Create an SkCanvas from state and draw to it. Return true on success.
@@ -45,8 +57,13 @@ void complex_clips_draw(SkCanvas* canvas, int32_t left, int32_t top,
  *  so it can be called from a separate library.
  */
 extern "C" bool complex_clips_draw_from_canvas_state(SkCanvasState* state,
+<<<<<<< HEAD
     int32_t left, int32_t top, int32_t right, int32_t bottom, int32_t clipOp,
     int32_t regionRects, int32_t* rectCoords);
+=======
+        int32_t left, int32_t top, int32_t right, int32_t bottom, int32_t clipOp,
+        int32_t regionRects, int32_t* rectCoords);
+>>>>>>> miniblink49
 
 #endif // SK_SUPPORT_LEGACY_CLIPTOLAYERFLAG
 #endif // CanvasStateHelpers_DEFINED

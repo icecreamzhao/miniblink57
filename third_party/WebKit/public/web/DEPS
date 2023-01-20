@@ -1,10 +1,14 @@
 include_rules = [
     "+../platform",
     "+core",
+<<<<<<< HEAD
     "+mojo/public",
     "+platform",
     "+public/platform",
     "+public/web",
+=======
+    "+platform",
+>>>>>>> miniblink49
 
     # For subdirectories.
     "+../../platform",

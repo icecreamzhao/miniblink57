@@ -7,7 +7,10 @@
 
 #include "gm.h"
 
+<<<<<<< HEAD
 #include "../src/fonts/SkRandomScalerContext.h"
+=======
+>>>>>>> miniblink49
 #include "Resources.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
@@ -15,6 +18,10 @@
 #include "SkSurface.h"
 #include "SkTextBlob.h"
 #include "SkTypeface.h"
+<<<<<<< HEAD
+=======
+#include "../src/fonts/SkRandomScalerContext.h"
+>>>>>>> miniblink49
 
 #if SK_SUPPORT_GPU
 
@@ -28,8 +35,12 @@ public:
     TextBlobRandomFont() { }
 
 protected:
+<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
+=======
+    void onOnceBeforeDraw() override {
+>>>>>>> miniblink49
         SkTextBlobBuilder builder;
 
         const char* text = "The quick brown fox jumps over the lazy dog.";
@@ -40,12 +51,22 @@ protected:
         paint.setLCDRenderText(true);
 
         // Setup our random scaler context
+<<<<<<< HEAD
         sk_sp<SkTypeface> orig(sk_tool_utils::create_portable_typeface(
             "sans-serif", SkFontStyle::FromOldStyle(SkTypeface::kBold)));
         if (nullptr == orig) {
             orig = SkTypeface::MakeDefault();
         }
         paint.setTypeface(sk_make_sp<SkRandomTypeface>(orig, paint, false));
+=======
+        SkAutoTUnref<SkTypeface> orig(sk_tool_utils::create_portable_typeface("sans-serif",
+                                                                              SkTypeface::kBold));
+        if (NULL == orig) {
+            orig.reset(SkTypeface::RefDefault());
+        }
+        SkAutoTUnref<SkTypeface> random(SkNEW_ARGS(SkRandomTypeface, (orig, paint, false)));
+        paint.setTypeface(random);
+>>>>>>> miniblink49
 
         SkRect bounds;
         paint.measureText(text, strlen(text), &bounds);
@@ -65,6 +86,7 @@ protected:
         offset += bounds.height();
         sk_tool_utils::add_to_text_blob(&builder, bigtext2, paint, 0, offset);
 
+<<<<<<< HEAD
         // color emoji
         sk_sp<SkTypeface> origEmoji = sk_tool_utils::emoji_typeface();
         const char* osName = sk_tool_utils::platform_os_name();
@@ -77,10 +99,13 @@ protected:
             sk_tool_utils::add_to_text_blob(&builder, emojiText, paint, 0, offset);
         }
 
+=======
+>>>>>>> miniblink49
         // build
         fBlob.reset(builder.build());
     }
 
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("textblobrandomfont");
@@ -96,11 +121,26 @@ protected:
         // This GM exists to test a specific feature of the GPU backend.
         if (nullptr == canvas->getGrContext()) {
             skiagm::GM::DrawGpuOnlyMessage(canvas);
+=======
+    SkString onShortName() override {
+        return SkString("textblobrandomfont");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(kWidth, kHeight);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+        // This GM exists to test a specific feature of the GPU backend.
+        if (NULL == canvas->getGrContext()) {
+            this->drawGpuOnlyMessage(canvas);
+>>>>>>> miniblink49
             return;
         }
 
         canvas->drawColor(sk_tool_utils::color_to_565(SK_ColorWHITE));
 
+<<<<<<< HEAD
         SkImageInfo info = SkImageInfo::MakeN32(kWidth, kHeight, kPremul_SkAlphaType,
             sk_ref_sp(canvas->imageInfo().colorSpace()));
         SkSurfaceProps canvasProps(SkSurfaceProps::kLegacyFontHost_InitType);
@@ -109,6 +149,11 @@ protected:
             : 0;
         SkSurfaceProps props(gammaCorrect, kUnknown_SkPixelGeometry);
         auto surface(canvas->makeSurface(info, &props));
+=======
+        SkImageInfo info = SkImageInfo::MakeN32Premul(kWidth, kHeight);
+        SkSurfaceProps props(0, kUnknown_SkPixelGeometry);
+        SkAutoTUnref<SkSurface> surface(canvas->newSurface(info, &props));
+>>>>>>> miniblink49
         if (surface) {
             SkPaint paint;
             paint.setAntiAlias(true);
@@ -154,6 +199,10 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new TextBlobRandomFont;)
+=======
+DEF_GM( return SkNEW(TextBlobRandomFont); )
+>>>>>>> miniblink49
 }
 #endif

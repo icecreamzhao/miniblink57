@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Copyright 2013 Google Inc.
  *
@@ -10,6 +11,13 @@
 #define BUFFER_SIZE 512
 BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
 {
+=======
+#include "windows.h"
+#include "stdio.h"
+
+#define BUFFER_SIZE 512
+BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam) {
+>>>>>>> miniblink49
     WCHAR wcBuffer[BUFFER_SIZE];
     int bufferSize;
 
@@ -19,7 +27,11 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
         return (TRUE);
     }
 
+<<<<<<< HEAD
     LCID lcid = LocaleNameToLCID(pStr, nullptr);
+=======
+    LCID lcid = LocaleNameToLCID(pStr, NULL);
+>>>>>>> miniblink49
     if (lcid == 0) {
         wprintf(L"Error %d getting LCID\n", GetLastError());
         return (TRUE);
@@ -33,7 +45,12 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
     return (TRUE);
 }
 
+<<<<<<< HEAD
 int main(int argc, wchar_t* argv[])
 {
     EnumSystemLocalesEx(MyFuncLocaleEx, LOCALE_ALL, nullptr, nullptr);
+=======
+int main(int argc, wchar_t* argv[]) {
+    EnumSystemLocalesEx(MyFuncLocaleEx, LOCALE_ALL, NULL, NULL);
+>>>>>>> miniblink49
 }

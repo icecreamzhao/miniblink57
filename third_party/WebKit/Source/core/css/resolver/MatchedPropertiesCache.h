@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -26,6 +25,7 @@
 
 #include "core/css/StylePropertySet.h"
 #include "core/css/resolver/MatchResult.h"
+#include "platform/Timer.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
@@ -36,31 +36,31 @@ namespace blink {
 class ComputedStyle;
 class StyleResolverState;
 
-class CachedMatchedProperties final
-    : public GarbageCollectedFinalized<CachedMatchedProperties> {
+class CachedMatchedProperties final : public NoBaseWillBeGarbageCollectedFinalized<CachedMatchedProperties> {
+
 public:
-    HeapVector<MatchedProperties> matchedProperties;
+    WillBeHeapVector<MatchedProperties> matchedProperties;
     RefPtr<ComputedStyle> computedStyle;
     RefPtr<ComputedStyle> parentComputedStyle;
 
-    void set(const ComputedStyle&,
-        const ComputedStyle& parentStyle,
-        const MatchedPropertiesVector&);
+    void set(const ComputedStyle&, const ComputedStyle& parentStyle, const MatchResult&);
     void clear();
-    DEFINE_INLINE_TRACE() { visitor->trace(matchedProperties); }
+    DEFINE_INLINE_TRACE()
+    {
+#if ENABLE(OILPAN)
+        visitor->trace(matchedProperties);
+#endif
+    }
 };
 
 // Specialize the HashTraits for CachedMatchedProperties to check for dead
 // entries in the MatchedPropertiesCache.
-struct CachedMatchedPropertiesHashTraits
-    : HashTraits<Member<CachedMatchedProperties>> {
+#if ENABLE(OILPAN)
+struct CachedMatchedPropertiesHashTraits : HashTraits<Member<CachedMatchedProperties>> {
     static const WTF::WeakHandlingFlag weakHandlingFlag = WTF::WeakHandlingInCollections;
 
-    template <typename VisitorDispatcher>
-    static bool traceInCollection(
-        VisitorDispatcher visitor,
-        Member<CachedMatchedProperties>& cachedProperties,
-        WTF::ShouldWeakPointersBeMarkedStrongly strongify)
+    template<typename VisitorDispatcher>
+    static bool traceInCollection(VisitorDispatcher visitor, Member<CachedMatchedProperties>& cachedProperties, WTF::ShouldWeakPointersBeMarkedStrongly strongify)
     {
         // Only honor the cache's weakness semantics if the collection is traced
         // with WeakPointersActWeak. Otherwise just trace the cachedProperties
@@ -69,9 +69,8 @@ struct CachedMatchedPropertiesHashTraits
             // A given cache entry is only kept alive if none of the MatchedProperties
             // in the CachedMatchedProperties value contain a dead "properties" field.
             // If there is a dead field the entire cache entry is removed.
-            for (const auto& matchedProperties :
-                cachedProperties->matchedProperties) {
-                if (!ThreadHeap::isHeapObjectAlive(matchedProperties.properties)) {
+            for (const auto& matchedProperties : cachedProperties->matchedProperties) {
+                if (!Heap::isHeapObjectAlive(matchedProperties.properties)) {
                     // For now report the cache entry as dead. This might not
                     // be the final result if in a subsequent call for this entry,
                     // the "properties" field has been marked via another path.
@@ -81,47 +80,47 @@ struct CachedMatchedPropertiesHashTraits
         }
         // At this point none of the entries in the matchedProperties vector
         // had a dead "properties" field so trace CachedMatchedProperties strongly.
-        // FIXME: traceInCollection is also called from WeakProcessing to check if
-        // the entry is dead.  Avoid calling trace in that case by only calling
-        // trace when cachedProperties is not yet marked.
-        if (!ThreadHeap::isHeapObjectAlive(cachedProperties))
+        // FIXME: traceInCollection is also called from WeakProcessing to check if the entry is dead.
+        // Avoid calling trace in that case by only calling trace when cachedProperties is not yet marked.
+        if (!Heap::isHeapObjectAlive(cachedProperties))
             visitor->trace(cachedProperties);
         return false;
     }
 };
+#endif
 
 class MatchedPropertiesCache {
-    DISALLOW_NEW();
+    DISALLOW_ALLOCATION();
     WTF_MAKE_NONCOPYABLE(MatchedPropertiesCache);
-
 public:
     MatchedPropertiesCache();
-    ~MatchedPropertiesCache() { ASSERT(m_cache.isEmpty()); }
 
-    const CachedMatchedProperties* find(unsigned hash,
-        const StyleResolverState&,
-        const MatchedPropertiesVector&);
-    void add(const ComputedStyle&,
-        const ComputedStyle& parentStyle,
-        unsigned hash,
-        const MatchedPropertiesVector&);
+    const CachedMatchedProperties* find(unsigned hash, const StyleResolverState&, const MatchResult&);
+    void add(const ComputedStyle&, const ComputedStyle& parentStyle, unsigned hash, const MatchResult&);
 
     void clear();
     void clearViewportDependent();
 
-    static bool isCacheable(const StyleResolverState&);
+    static bool isCacheable(const Element*, const ComputedStyle&, const ComputedStyle& parentStyle);
 
     DECLARE_TRACE();
 
 private:
-    using Cache = HeapHashMap<unsigned,
-        Member<CachedMatchedProperties>,
-        DefaultHash<unsigned>::Hash,
-        HashTraits<unsigned>,
-        CachedMatchedPropertiesHashTraits>;
+#if ENABLE(OILPAN)
+    typedef HeapHashMap<unsigned, Member<CachedMatchedProperties>, DefaultHash<unsigned>::Hash, HashTraits<unsigned>, CachedMatchedPropertiesHashTraits > Cache;
+#else
+    // Every N additions to the matched declaration cache trigger a sweep where entries holding
+    // the last reference to a style declaration are garbage collected.
+    void sweep(Timer<MatchedPropertiesCache>*);
+
+    unsigned m_additionsSinceLastSweep;
+
+    typedef HashMap<unsigned, OwnPtr<CachedMatchedProperties>> Cache;
+    Timer<MatchedPropertiesCache> m_sweepTimer;
+#endif
     Cache m_cache;
 };
 
-} // namespace blink
+}
 
 #endif

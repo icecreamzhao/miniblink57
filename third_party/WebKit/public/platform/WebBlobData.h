@@ -32,12 +32,20 @@
 #define WebBlobData_h
 
 #include "WebNonCopyable.h"
+<<<<<<< HEAD
+=======
+#include "WebPrivateOwnPtr.h"
+>>>>>>> miniblink49
 #include "WebString.h"
 #include "WebThreadSafeData.h"
 #include "WebURL.h"
 
 #if INSIDE_BLINK
+<<<<<<< HEAD
 #include <memory>
+=======
+namespace WTF { template <typename T> class PassOwnPtr; }
+>>>>>>> miniblink49
 #endif
 
 namespace blink {
@@ -47,10 +55,14 @@ class BlobData;
 class WebBlobData : public WebNonCopyable {
 public:
     struct Item {
+<<<<<<< HEAD
         enum { TypeData,
             TypeFile,
             TypeBlob,
             TypeFileSystemURL } type;
+=======
+        enum { TypeData, TypeFile, TypeBlob, TypeFileSystemURL } type;
+>>>>>>> miniblink49
         WebThreadSafeData data;
         WebString blobUUID;
         WebString filePath;
@@ -79,6 +91,7 @@ public:
     BLINK_PLATFORM_EXPORT WebString contentType() const;
 
 #if INSIDE_BLINK
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebBlobData(std::unique_ptr<BlobData>);
     BLINK_PLATFORM_EXPORT WebBlobData& operator=(std::unique_ptr<BlobData>);
     BLINK_PLATFORM_EXPORT operator std::unique_ptr<BlobData>();
@@ -86,6 +99,15 @@ public:
 
 private:
     std::unique_ptr<BlobData> m_private;
+=======
+    BLINK_PLATFORM_EXPORT WebBlobData(const WTF::PassOwnPtr<BlobData>&);
+    BLINK_PLATFORM_EXPORT WebBlobData& operator=(const WTF::PassOwnPtr<BlobData>&);
+    BLINK_PLATFORM_EXPORT operator WTF::PassOwnPtr<BlobData>();
+#endif
+
+private:
+    WebPrivateOwnPtr<BlobData> m_private;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -1,8 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc.
- *               All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,22 +20,23 @@
  *
  */
 
+#include "config.h"
 #include "core/layout/LayoutInline.h"
 
 #include "core/dom/Fullscreen.h"
 #include "core/dom/StyleEngine.h"
 #include "core/layout/HitTestResult.h"
 #include "core/layout/LayoutBlock.h"
+#include "core/layout/LayoutFlowThread.h"
 #include "core/layout/LayoutFullScreen.h"
 #include "core/layout/LayoutGeometryMap.h"
 #include "core/layout/LayoutTheme.h"
 #include "core/layout/LayoutView.h"
-#include "core/layout/api/LineLayoutBoxModel.h"
 #include "core/layout/line/InlineTextBox.h"
 #include "core/paint/BoxPainter.h"
+#include "core/paint/DeprecatedPaintLayer.h"
 #include "core/paint/InlinePainter.h"
 #include "core/paint/ObjectPainter.h"
-#include "core/paint/PaintLayer.h"
 #include "core/style/StyleInheritedData.h"
 #include "platform/geometry/FloatQuad.h"
 #include "platform/geometry/Region.h"
@@ -50,8 +50,7 @@ struct SameSizeAsLayoutInline : public LayoutBoxModelObject {
     LineBoxList m_lineBoxes;
 };
 
-static_assert(sizeof(LayoutInline) == sizeof(SameSizeAsLayoutInline),
-    "LayoutInline should stay small");
+static_assert(sizeof(LayoutInline) == sizeof(SameSizeAsLayoutInline), "LayoutInline should stay small");
 
 LayoutInline::LayoutInline(Element* element)
     : LayoutBoxModelObject(element)
@@ -59,18 +58,35 @@ LayoutInline::LayoutInline(Element* element)
     setChildrenInline(true);
 }
 
+LayoutInline* LayoutInline::createAnonymous(Document* document)
+{
+    LayoutInline* layoutObject = new LayoutInline(nullptr);
+    layoutObject->setDocumentForAnonymous(document);
+    return layoutObject;
+}
+
 void LayoutInline::willBeDestroyed()
 {
-    // Make sure to destroy anonymous children first while they are still
-    // connected to the rest of the tree, so that they will properly dirty line
-    // boxes that they are removed from. Effects that do :before/:after only on
-    // hover could crash otherwise.
+#if ENABLE(ASSERT)
+    // Make sure we do not retain "this" in the continuation outline table map of our containing blocks.
+    if (parent() && style()->visibility() == VISIBLE && style()->hasOutline()) {
+        bool containingBlockPaintsContinuationOutline = continuation() || isInlineElementContinuation();
+        if (containingBlockPaintsContinuationOutline) {
+            if (LayoutBlock* cb = containingBlock()) {
+                if (LayoutBlock* cbCb = cb->containingBlock())
+                    ASSERT(!cbCb->paintsContinuationOutline(this));
+            }
+        }
+    }
+#endif
+
+    // Make sure to destroy anonymous children first while they are still connected to the rest of the tree, so that they will
+    // properly dirty line boxes that they are removed from.  Effects that do :before/:after only on hover could crash otherwise.
     children()->destroyLeftoverChildren();
 
     // Destroy our continuation before anything other than anonymous children.
     // The reason we don't destroy it before anonymous children is that they may
-    // have continuations of their own that are anonymous children of our
-    // continuation.
+    // have continuations of their own that are anonymous children of our continuation.
     LayoutBoxModelObject* continuation = this->continuation();
     if (continuation) {
         continuation->destroy();
@@ -110,15 +126,14 @@ LayoutInline* LayoutInline::inlineElementContinuation() const
     LayoutBoxModelObject* continuation = this->continuation();
     if (!continuation || continuation->isInline())
         return toLayoutInline(continuation);
-    return toLayoutBlockFlow(continuation)->inlineElementContinuation();
+    return toLayoutBlock(continuation)->inlineElementContinuation();
 }
 
 void LayoutInline::updateFromStyle()
 {
     LayoutBoxModelObject::updateFromStyle();
 
-    // FIXME: Is this still needed. Was needed for run-ins, since run-in is
-    // considered a block display type.
+    // FIXME: Is this still needed. Was needed for run-ins, since run-in is considered a block display type.
     setInline(true);
 
     // FIXME: Support transforms and reflections on inline flows someday.
@@ -129,52 +144,56 @@ void LayoutInline::updateFromStyle()
 static LayoutObject* inFlowPositionedInlineAncestor(LayoutObject* p)
 {
     while (p && p->isLayoutInline()) {
-        if (p->isInFlowPositioned())
+        if (p->isRelPositioned())
             return p;
         p = p->parent();
     }
     return nullptr;
 }
 
-static void updateInFlowPositionOfAnonymousBlockContinuations(
-    LayoutObject* block,
-    const ComputedStyle& newStyle,
-    const ComputedStyle& oldStyle,
-    LayoutObject* containingBlockOfEndOfContinuation)
+static void updateStyleOfAnonymousBlockContinuations(LayoutObject* block, const ComputedStyle& newStyle, const ComputedStyle& oldStyle, LayoutObject* containingBlockOfEndOfContinuation)
 {
-    for (; block && block != containingBlockOfEndOfContinuation && block->isAnonymousBlock();
-         block = block->nextSibling()) {
-        LayoutBlockFlow* blockFlow = toLayoutBlockFlow(block);
-        if (!blockFlow->isAnonymousBlockContinuation())
-            continue;
+    // If an inline's outline or in-flow positioning has changed then any descendant blocks will need to change their styles accordingly.
+    bool updateOutline = !newStyle.isOutlineEquivalent(&oldStyle);
+    bool updatePosition = newStyle.position() != oldStyle.position() && (newStyle.hasInFlowPosition() || oldStyle.hasInFlowPosition());
+    if (!updateOutline && !updatePosition)
+        return;
 
-        // If we are no longer in-flow positioned but our descendant block(s) still
-        // have an in-flow positioned ancestor then their containing anonymous block
-        // should keep its in-flow positioning.
-        if (oldStyle.hasInFlowPosition() && inFlowPositionedInlineAncestor(blockFlow->inlineElementContinuation()))
+    for (; block && block != containingBlockOfEndOfContinuation && block->isAnonymousBlock(); block = block->nextSibling()) {
+        if (!toLayoutBlock(block)->isAnonymousBlockContinuation())
             continue;
 
         RefPtr<ComputedStyle> newBlockStyle = ComputedStyle::clone(block->styleRef());
-        newBlockStyle->setPosition(newStyle.position());
+
+        if (updateOutline)
+            newBlockStyle->setOutlineFromStyle(newStyle);
+
+        if (updatePosition) {
+            // If we are no longer in-flow positioned but our descendant block(s) still have an in-flow positioned ancestor then
+            // their containing anonymous block should keep its in-flow positioning.
+            if (oldStyle.hasInFlowPosition() && inFlowPositionedInlineAncestor(toLayoutBlock(block)->inlineElementContinuation()))
+                continue;
+            newBlockStyle->setPosition(newStyle.position());
+        }
+
         block->setStyle(newBlockStyle);
     }
 }
 
-void LayoutInline::styleDidChange(StyleDifference diff,
-    const ComputedStyle* oldStyle)
+void LayoutInline::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
 {
     LayoutBoxModelObject::styleDidChange(diff, oldStyle);
 
-    // Ensure that all of the split inlines pick up the new style. We only do this
-    // if we're an inline, since we don't want to propagate a block's style to the
-    // other inlines. e.g., <font>foo <h4>goo</h4> moo</font>.  The <font> inlines
-    // before and after the block share the same style, but the block doesn't need
-    // to pass its style on to anyone else.
+    // Ensure that all of the split inlines pick up the new style. We
+    // only do this if we're an inline, since we don't want to propagate
+    // a block's style to the other inlines.
+    // e.g., <font>foo <h4>goo</h4> moo</font>.  The <font> inlines before
+    // and after the block share the same style, but the block doesn't
+    // need to pass its style on to anyone else.
     const ComputedStyle& newStyle = styleRef();
     LayoutInline* continuation = inlineElementContinuation();
     LayoutInline* endOfContinuation = nullptr;
-    for (LayoutInline* currCont = continuation; currCont;
-         currCont = currCont->inlineElementContinuation()) {
+    for (LayoutInline* currCont = continuation; currCont; currCont = currCont->inlineElementContinuation()) {
         LayoutBoxModelObject* nextCont = currCont->continuation();
         currCont->setContinuation(nullptr);
         currCont->setStyle(mutableStyle());
@@ -185,59 +204,44 @@ void LayoutInline::styleDidChange(StyleDifference diff,
     if (continuation && oldStyle) {
         ASSERT(endOfContinuation);
         LayoutObject* block = containingBlock()->nextSibling();
-        // If an inline's in-flow positioning has changed then any descendant blocks
-        // will need to change their styles accordingly.
-        if (block && block->isAnonymousBlock() && newStyle.position() != oldStyle->position() && (newStyle.hasInFlowPosition() || oldStyle->hasInFlowPosition()))
-            updateInFlowPositionOfAnonymousBlockContinuations(
-                block, newStyle, *oldStyle, endOfContinuation->containingBlock());
+        if (block && block->isAnonymousBlock())
+            updateStyleOfAnonymousBlockContinuations(block, newStyle, *oldStyle, endOfContinuation->containingBlock());
     }
 
     if (!alwaysCreateLineBoxes()) {
         bool alwaysCreateLineBoxesNew = hasSelfPaintingLayer() || hasBoxDecorationBackground() || newStyle.hasPadding() || newStyle.hasMargin() || newStyle.hasOutline();
         if (oldStyle && alwaysCreateLineBoxesNew) {
             dirtyLineBoxes(false);
-            setNeedsLayoutAndFullPaintInvalidation(
-                LayoutInvalidationReason::StyleChange);
+            setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::StyleChange);
         }
         setAlwaysCreateLineBoxes(alwaysCreateLineBoxesNew);
     }
-
-    // If we are changing to/from static, we need to reposition
-    // out-of-flow positioned descendants.
-    if (oldStyle && oldStyle->position() != newStyle.position() && (newStyle.position() == StaticPosition || oldStyle->position() == StaticPosition)) {
-        LayoutBlock* absContainingBlock = nullptr;
-        if (oldStyle->position() == StaticPosition) {
-            absContainingBlock = containingBlockForAbsolutePosition();
-        } else {
-            // When position was not static, containingBlockForAbsolutePosition
-            // for our children is our existing containingBlock.
-            absContainingBlock = containingBlock();
-        }
-        if (absContainingBlock)
-            absContainingBlock->removePositionedObjects(this, NewContainingBlock);
-    }
-
-    propagateStyleToAnonymousChildren();
 }
 
 void LayoutInline::updateAlwaysCreateLineBoxes(bool fullLayout)
 {
-    // Once we have been tainted once, just assume it will happen again. This way
-    // effects like hover highlighting that change the background color will only
-    // cause a layout on the first rollover.
+    // Once we have been tainted once, just assume it will happen again. This way effects like hover highlighting that change the
+    // background color will only cause a layout on the first rollover.
     if (alwaysCreateLineBoxes())
         return;
 
     const ComputedStyle& parentStyle = parent()->styleRef();
     LayoutInline* parentLayoutInline = parent()->isLayoutInline() ? toLayoutInline(parent()) : 0;
     bool checkFonts = document().inNoQuirksMode();
-    bool alwaysCreateLineBoxesNew = (parentLayoutInline && parentLayoutInline->alwaysCreateLineBoxes()) || (parentLayoutInline && parentStyle.verticalAlign() != EVerticalAlign::Baseline) || style()->verticalAlign() != EVerticalAlign::Baseline || style()->getTextEmphasisMark() != TextEmphasisMarkNone || (checkFonts && (!styleRef().hasIdenticalAscentDescentAndLineGap(parentStyle) || parentStyle.lineHeight() != styleRef().lineHeight()));
+    bool alwaysCreateLineBoxesNew = (parentLayoutInline && parentLayoutInline->alwaysCreateLineBoxes())
+        || (parentLayoutInline && parentStyle.verticalAlign() != BASELINE)
+        || style()->verticalAlign() != BASELINE
+        || style()->textEmphasisMark() != TextEmphasisMarkNone
+        || (checkFonts && (!parentStyle.font().fontMetrics().hasIdenticalAscentDescentAndLineGap(style()->font().fontMetrics())
+        || parentStyle.lineHeight() != style()->lineHeight()));
 
     if (!alwaysCreateLineBoxesNew && checkFonts && document().styleEngine().usesFirstLineRules()) {
         // Have to check the first line style as well.
         const ComputedStyle& firstLineParentStyle = parent()->styleRef(true);
         const ComputedStyle& childStyle = styleRef(true);
-        alwaysCreateLineBoxesNew = !firstLineParentStyle.hasIdenticalAscentDescentAndLineGap(childStyle) || childStyle.verticalAlign() != EVerticalAlign::Baseline || firstLineParentStyle.lineHeight() != childStyle.lineHeight();
+        alwaysCreateLineBoxesNew = !firstLineParentStyle.font().fontMetrics().hasIdenticalAscentDescentAndLineGap(childStyle.font().fontMetrics())
+        || childStyle.verticalAlign() != BASELINE
+        || firstLineParentStyle.lineHeight() != childStyle.lineHeight();
     }
 
     if (alwaysCreateLineBoxesNew) {
@@ -247,42 +251,35 @@ void LayoutInline::updateAlwaysCreateLineBoxes(bool fullLayout)
     }
 }
 
-LayoutRect LayoutInline::localCaretRect(InlineBox* inlineBox,
-    int,
-    LayoutUnit* extraWidthToEndOfLine)
+LayoutRect LayoutInline::localCaretRect(InlineBox* inlineBox, int, LayoutUnit* extraWidthToEndOfLine)
 {
     if (firstChild()) {
         // This condition is possible if the LayoutInline is at an editing boundary,
         // i.e. the VisiblePosition is:
-        //   <LayoutInline editingBoundary=true>|<LayoutText>
-        //   </LayoutText></LayoutInline>
+        //   <LayoutInline editingBoundary=true>|<LayoutText> </LayoutText></LayoutInline>
         // FIXME: need to figure out how to make this return a valid rect, note that
         // there are no line boxes created in the above case.
         return LayoutRect();
     }
 
-    DCHECK(!inlineBox);
+    ASSERT_UNUSED(inlineBox, !inlineBox);
 
     if (extraWidthToEndOfLine)
-        *extraWidthToEndOfLine = LayoutUnit();
+        *extraWidthToEndOfLine = 0;
 
-    LayoutRect caretRect = localCaretRectForEmptyElement(borderAndPaddingWidth(), LayoutUnit());
+    LayoutRect caretRect = localCaretRectForEmptyElement(borderAndPaddingWidth(), 0);
 
-    if (InlineBox* firstBox = firstLineBox())
-        caretRect.moveBy(firstBox->location());
+    if (InlineBox* firstBox = firstLineBox()) {
+        // FIXME: the call to roundedLayoutPoint() below is temporary and should be removed once
+        // the transition to LayoutUnit-based types is complete (crbug.com/321237)
+        caretRect.moveBy(firstBox->topLeft());
+    }
 
     return caretRect;
 }
 
 void LayoutInline::addChild(LayoutObject* newChild, LayoutObject* beforeChild)
 {
-    // Any table-part dom child of an inline element has anonymous wrappers in the
-    // layout tree so we need to climb up to the enclosing anonymous table wrapper
-    // and add the new child before that.
-    // TODO(rhogan): If newChild is a table part we want to insert it into the
-    // same table as beforeChild.
-    while (beforeChild && beforeChild->isTablePart())
-        beforeChild = beforeChild->parent();
     if (continuation())
         return addChildToContinuation(newChild, beforeChild);
     return addChildIgnoringContinuation(newChild, beforeChild);
@@ -290,13 +287,12 @@ void LayoutInline::addChild(LayoutObject* newChild, LayoutObject* beforeChild)
 
 static LayoutBoxModelObject* nextContinuation(LayoutObject* layoutObject)
 {
-    if (layoutObject->isInline() && !layoutObject->isAtomicInlineLevel())
+    if (layoutObject->isInline() && !layoutObject->isReplaced())
         return toLayoutInline(layoutObject)->continuation();
-    return toLayoutBlockFlow(layoutObject)->inlineElementContinuation();
+    return toLayoutBlock(layoutObject)->inlineElementContinuation();
 }
 
-LayoutBoxModelObject* LayoutInline::continuationBefore(
-    LayoutObject* beforeChild)
+LayoutBoxModelObject* LayoutInline::continuationBefore(LayoutObject* beforeChild)
 {
     if (beforeChild && beforeChild->parent() == this)
         return this;
@@ -321,31 +317,30 @@ LayoutBoxModelObject* LayoutInline::continuationBefore(
     return last;
 }
 
-void LayoutInline::addChildIgnoringContinuation(LayoutObject* newChild,
-    LayoutObject* beforeChild)
+void LayoutInline::addChildIgnoringContinuation(LayoutObject* newChild, LayoutObject* beforeChild)
 {
-    // Make sure we don't append things after :after-generated content if we have
-    // it.
+    // Make sure we don't append things after :after-generated content if we have it.
     if (!beforeChild && isAfterContent(lastChild()))
         beforeChild = lastChild();
 
-    if (!newChild->isInline() && !newChild->isFloatingOrOutOfFlowPositioned() && !newChild->isTablePart()) {
-        // We are placing a block inside an inline. We have to perform a split of
-        // this inline into continuations. This involves creating an anonymous
-        // block box to hold |newChild|. We then make that block box a continuation
-        // of this inline. We take all of the children after |beforeChild| and put
-        // them in a clone of this object.
-        RefPtr<ComputedStyle> newStyle = ComputedStyle::createAnonymousStyleWithDisplay(
-            containingBlock()->styleRef(), EDisplay::Block);
+    if (!newChild->isInline() && !newChild->isFloatingOrOutOfFlowPositioned()) {
+        // We are placing a block inside an inline. We have to perform a split of this
+        // inline into continuations.  This involves creating an anonymous block box to hold
+        // |newChild|.  We then make that block box a continuation of this inline.  We take all of
+        // the children after |beforeChild| and put them in a clone of this object.
+        RefPtr<ComputedStyle> newStyle = ComputedStyle::createAnonymousStyleWithDisplay(styleRef(), BLOCK);
 
-        // If inside an inline affected by in-flow positioning the block needs to be
-        // affected by it too. Giving the block a layer like this allows it to
-        // collect the x/y offsets from inline parents later.
+        // If inside an inline affected by in-flow positioning the block needs to be affected by it too.
+        // Giving the block a layer like this allows it to collect the x/y offsets from inline parents later.
         if (LayoutObject* positionedAncestor = inFlowPositionedInlineAncestor(this))
             newStyle->setPosition(positionedAncestor->style()->position());
 
+        // Push outline style to the block continuation.
+        if (!newStyle->isOutlineEquivalent(style()))
+            newStyle->setOutlineFromStyle(*style());
+
         LayoutBlockFlow* newBox = LayoutBlockFlow::createAnonymous(&document());
-        newBox->setStyle(std::move(newStyle));
+        newBox->setStyle(newStyle.release());
         LayoutBoxModelObject* oldContinuation = continuation();
         setContinuation(newBox);
 
@@ -355,8 +350,7 @@ void LayoutInline::addChildIgnoringContinuation(LayoutObject* newChild,
 
     LayoutBoxModelObject::addChild(newChild, beforeChild);
 
-    newChild->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-        LayoutInvalidationReason::ChildChanged);
+    newChild->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::ChildChanged);
 }
 
 LayoutInline* LayoutInline::clone() const
@@ -367,76 +361,64 @@ LayoutInline* LayoutInline::clone() const
     return cloneInline;
 }
 
-void LayoutInline::moveChildrenToIgnoringContinuation(
-    LayoutInline* to,
-    LayoutObject* startChild)
+void LayoutInline::moveChildrenToIgnoringContinuation(LayoutInline* to, LayoutObject* startChild)
 {
     LayoutObject* child = startChild;
     while (child) {
         LayoutObject* currentChild = child;
         child = currentChild->nextSibling();
-        to->addChildIgnoringContinuation(
-            children()->removeChildNode(this, currentChild), nullptr);
+        to->addChildIgnoringContinuation(children()->removeChildNode(this, currentChild), nullptr);
     }
 }
 
-void LayoutInline::splitInlines(LayoutBlockFlow* fromBlock,
-    LayoutBlockFlow* toBlock,
-    LayoutBlockFlow* middleBlock,
-    LayoutObject* beforeChild,
-    LayoutBoxModelObject* oldCont)
+void LayoutInline::splitInlines(LayoutBlock* fromBlock, LayoutBlock* toBlock,
+    LayoutBlock* middleBlock, LayoutObject* beforeChild, LayoutBoxModelObject* oldCont)
 {
     ASSERT(isDescendantOf(fromBlock));
 
     // If we're splitting the inline containing the fullscreened element,
-    // |beforeChild| may be the layoutObject for the fullscreened element.
-    // However, that layoutObject is wrapped in a LayoutFullScreen, so |this| is
-    // not its parent. Since the splitting logic expects |this| to be the parent,
-    // set |beforeChild| to be the LayoutFullScreen.
+    // |beforeChild| may be the layoutObject for the fullscreened element. However,
+    // that layoutObject is wrapped in a LayoutFullScreen, so |this| is not its
+    // parent. Since the splitting logic expects |this| to be the parent, set
+    // |beforeChild| to be the LayoutFullScreen.
     if (Fullscreen* fullscreen = Fullscreen::fromIfExists(document())) {
-        const Element* fullScreenElement = fullscreen->currentFullScreenElement();
+        const Element* fullScreenElement = fullscreen->webkitCurrentFullScreenElement();
         if (fullScreenElement && beforeChild && beforeChild->node() == fullScreenElement)
             beforeChild = fullscreen->fullScreenLayoutObject();
     }
 
-    // FIXME: Because splitting is O(n^2) as tags nest pathologically, we cap the
-    // depth at which we're willing to clone.
-    // There will eventually be a better approach to this problem that will let us
-    // nest to a much greater depth (see bugzilla bug 13430) but for now we have a
-    // limit. This *will* result in incorrect rendering, but the alternative is to
-    // hang forever.
+    // FIXME: Because splitting is O(n^2) as tags nest pathologically, we cap the depth at which we're willing to clone.
+    // There will eventually be a better approach to this problem that will let us nest to a much
+    // greater depth (see bugzilla bug 13430) but for now we have a limit.  This *will* result in
+    // incorrect rendering, but the alternative is to hang forever.
     const unsigned cMaxSplitDepth = 200;
     Vector<LayoutInline*> inlinesToClone;
     LayoutInline* topMostInline = this;
     for (LayoutObject* o = this; o != fromBlock; o = o->parent()) {
         topMostInline = toLayoutInline(o);
         if (inlinesToClone.size() < cMaxSplitDepth)
-            inlinesToClone.push_back(topMostInline);
-        // Keep walking up the chain to ensure |topMostInline| is a child of
-        // |fromBlock|, to avoid assertion failure when |fromBlock|'s children are
-        // moved to |toBlock| below.
+            inlinesToClone.append(topMostInline);
+        // Keep walking up the chain to ensure |topMostInline| is a child of |fromBlock|,
+        // to avoid assertion failure when |fromBlock|'s children are moved to |toBlock| below.
     }
 
     // Create a new clone of the top-most inline in |inlinesToClone|.
-    LayoutInline* topMostInlineToClone = inlinesToClone.back();
+    LayoutInline* topMostInlineToClone = inlinesToClone.last();
     LayoutInline* cloneInline = topMostInlineToClone->clone();
 
     // Now we are at the block level. We need to put the clone into the |toBlock|.
     toBlock->children()->appendChildNode(toBlock, cloneInline);
 
-    // Now take all the children after |topMostInline| and remove them from the
-    // |fromBlock| and put them into the toBlock.
-    fromBlock->moveChildrenTo(toBlock, topMostInline->nextSibling(), nullptr,
-        true);
+    // Now take all the children after |topMostInline| and remove them from the |fromBlock|
+    // and put them into the toBlock.
+    fromBlock->moveChildrenTo(toBlock, topMostInline->nextSibling(), nullptr, true);
 
     LayoutInline* currentParent = topMostInlineToClone;
     LayoutInline* cloneInlineParent = cloneInline;
 
-    // Clone the inlines from top to down to ensure any new object will be added
-    // into a rooted tree.
-    // Note that we have already cloned the top-most one, so the loop begins from
-    // size - 2 (except if we have reached |cMaxDepth| in which case we sacrifice
-    // correct rendering for performance).
+    // Clone the inlines from top to down to ensure any new object will be added into a rooted tree.
+    // Note that we have already cloned the top-most one, so the loop begins from size - 2 (except if
+    // we have reached |cMaxDepth| in which case we sacrifice correct rendering for performance).
     for (int i = static_cast<int>(inlinesToClone.size()) - 2; i >= 0; --i) {
         // Hook the clone up as a continuation of |currentInline|.
         LayoutBoxModelObject* oldCont = currentParent->continuation();
@@ -452,16 +434,14 @@ void LayoutInline::splitInlines(LayoutBlockFlow* fromBlock,
 
         // Now we need to take all of the children starting from the first child
         // *after* |current| and append them all to the |cloneInlineParent|.
-        currentParent->moveChildrenToIgnoringContinuation(cloneInlineParent,
-            current->nextSibling());
+        currentParent->moveChildrenToIgnoringContinuation(cloneInlineParent, current->nextSibling());
 
         currentParent = current;
         cloneInlineParent = cloneInline;
     }
 
-    // The last inline to clone is |this|, and the current |cloneInline| is cloned
-    // from |this|.
-    ASSERT(this == inlinesToClone.front());
+    // The last inline to clone is |this|, and the current |cloneInline| is cloned from |this|.
+    ASSERT(this == inlinesToClone.first());
 
     // Hook |cloneInline| up as the continuation of the middle block.
     cloneInline->setContinuation(oldCont);
@@ -472,84 +452,68 @@ void LayoutInline::splitInlines(LayoutBlockFlow* fromBlock,
     moveChildrenToIgnoringContinuation(cloneInline, beforeChild);
 }
 
-void LayoutInline::splitFlow(LayoutObject* beforeChild,
-    LayoutBlockFlow* newBlockBox,
-    LayoutObject* newChild,
-    LayoutBoxModelObject* oldCont)
+void LayoutInline::splitFlow(LayoutObject* beforeChild, LayoutBlock* newBlockBox,
+    LayoutObject* newChild, LayoutBoxModelObject* oldCont)
 {
-    LayoutBlockFlow* block = toLayoutBlockFlow(containingBlock());
-    LayoutBlockFlow* pre = nullptr;
+    LayoutBlock* pre = nullptr;
+    LayoutBlock* block = containingBlock();
 
     // Delete our line boxes before we do the inline split into continuations.
     block->deleteLineBoxTree();
 
-    bool reusedAnonymousBlock = false;
-    if (block->isAnonymousBlock()) {
-        LayoutBlock* outerContainingBlock = block->containingBlock();
-        if (outerContainingBlock && outerContainingBlock->isLayoutBlockFlow() && !outerContainingBlock->createsAnonymousWrapper()) {
-            // We can reuse this block and make it the preBlock of the next
-            // continuation.
-            block->removePositionedObjects(nullptr);
-            block->removeFloatingObjects();
-            pre = block;
-            block = toLayoutBlockFlow(outerContainingBlock);
-            reusedAnonymousBlock = true;
-        }
+    bool madeNewBeforeBlock = false;
+    if (block->isAnonymousBlock() && (!block->parent() || !block->parent()->createsAnonymousWrapper())) {
+        // We can reuse this block and make it the preBlock of the next continuation.
+        pre = block;
+        pre->removePositionedObjects(nullptr);
+        if (pre->isLayoutBlockFlow())
+            toLayoutBlockFlow(pre)->removeFloatingObjects();
+        block = block->containingBlock();
+    } else {
+        // No anonymous block available for use.  Make one.
+        pre = block->createAnonymousBlock();
+        madeNewBeforeBlock = true;
     }
 
-    // No anonymous block available for use. Make one.
-    if (!reusedAnonymousBlock)
-        pre = toLayoutBlockFlow(block->createAnonymousBlock());
+    LayoutBlock* post = toLayoutBlock(pre->createAnonymousBoxWithSameTypeAs(block));
 
-    LayoutBlockFlow* post = toLayoutBlockFlow(pre->createAnonymousBlock());
-
-    LayoutObject* boxFirst = !reusedAnonymousBlock ? block->firstChild() : pre->nextSibling();
-    if (!reusedAnonymousBlock)
+    LayoutObject* boxFirst = madeNewBeforeBlock ? block->firstChild() : pre->nextSibling();
+    if (madeNewBeforeBlock)
         block->children()->insertChildNode(block, pre, boxFirst);
     block->children()->insertChildNode(block, newBlockBox, boxFirst);
     block->children()->insertChildNode(block, post, boxFirst);
     block->setChildrenInline(false);
 
-    if (!reusedAnonymousBlock) {
+    if (madeNewBeforeBlock) {
         LayoutObject* o = boxFirst;
         while (o) {
             LayoutObject* no = o;
             o = no->nextSibling();
-            pre->children()->appendChildNode(
-                pre, block->children()->removeChildNode(block, no));
-            no->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-                LayoutInvalidationReason::AnonymousBlockChange);
+            pre->children()->appendChildNode(pre, block->children()->removeChildNode(block, no));
+            no->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AnonymousBlockChange);
         }
     }
 
     splitInlines(pre, post, newBlockBox, beforeChild, oldCont);
 
-    // We already know the newBlockBox isn't going to contain inline kids, so
-    // avoid wasting time in makeChildrenNonInline by just setting this explicitly
-    // up front.
+    // We already know the newBlockBox isn't going to contain inline kids, so avoid wasting
+    // time in makeChildrenNonInline by just setting this explicitly up front.
     newBlockBox->setChildrenInline(false);
 
     newBlockBox->addChild(newChild);
 
-    // Always just do a full layout in order to ensure that line boxes (especially
-    // wrappers for images) get deleted properly. Because objects moves from the
-    // pre block into the post block, we want to make new line boxes instead of
-    // leaving the old line boxes around.
-    pre->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-        LayoutInvalidationReason::AnonymousBlockChange);
-    block->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-        LayoutInvalidationReason::AnonymousBlockChange);
-    post->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-        LayoutInvalidationReason::AnonymousBlockChange);
+    // Always just do a full layout in order to ensure that line boxes (especially wrappers for images)
+    // get deleted properly.  Because objects moves from the pre block into the post block, we want to
+    // make new line boxes instead of leaving the old line boxes around.
+    pre->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AnonymousBlockChange);
+    block->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AnonymousBlockChange);
+    post->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AnonymousBlockChange);
 }
 
-void LayoutInline::addChildToContinuation(LayoutObject* newChild,
-    LayoutObject* beforeChild)
+void LayoutInline::addChildToContinuation(LayoutObject* newChild, LayoutObject* beforeChild)
 {
-    // A continuation always consists of two potential candidates: an inline or an
-    // anonymous block box holding block children.
     LayoutBoxModelObject* flow = continuationBefore(beforeChild);
-    ASSERT(!beforeChild || beforeChild->parent()->isAnonymousBlock() || beforeChild->parent()->isLayoutInline());
+    ASSERT(!beforeChild || beforeChild->parent()->isLayoutBlock() || beforeChild->parent()->isLayoutInline());
     LayoutBoxModelObject* beforeChildParent = nullptr;
     if (beforeChild) {
         beforeChildParent = toLayoutBoxModelObject(beforeChild->parent());
@@ -561,103 +525,71 @@ void LayoutInline::addChildToContinuation(LayoutObject* newChild,
             beforeChildParent = flow;
     }
 
-    // TODO(rhogan): Should we treat out-of-flows and floats as through they're
-    // inline below?
     if (newChild->isFloatingOrOutOfFlowPositioned())
-        return beforeChildParent->addChildIgnoringContinuation(newChild,
-            beforeChild);
+        return beforeChildParent->addChildIgnoringContinuation(newChild, beforeChild);
 
-    // A table part will be wrapped by an inline anonymous table when it is added
-    // to the layout tree, so treat it as inline when deciding where to add it.
-    bool childInline = newChild->isInline() || newChild->isTablePart();
+    // A continuation always consists of two potential candidates: an inline or an anonymous
+    // block box holding block children.
+    bool childInline = newChild->isInline();
     bool bcpInline = beforeChildParent->isInline();
     bool flowInline = flow->isInline();
 
     if (flow == beforeChildParent)
         return flow->addChildIgnoringContinuation(newChild, beforeChild);
 
-    // The goal here is to match up if we can, so that we can coalesce and create
-    // the minimal # of continuations needed for the inline.
+    // The goal here is to match up if we can, so that we can coalesce and create the
+    // minimal # of continuations needed for the inline.
     if (childInline == bcpInline || (beforeChild && beforeChild->isInline()))
-        return beforeChildParent->addChildIgnoringContinuation(newChild,
-            beforeChild);
-    if (flowInline == childInline) {
-        // Just treat like an append.
-        return flow->addChildIgnoringContinuation(newChild, 0);
-    }
+        return beforeChildParent->addChildIgnoringContinuation(newChild, beforeChild);
+    if (flowInline == childInline)
+        return flow->addChildIgnoringContinuation(newChild, 0); // Just treat like an append.
     return beforeChildParent->addChildIgnoringContinuation(newChild, beforeChild);
 }
 
-void LayoutInline::paint(const PaintInfo& paintInfo,
-    const LayoutPoint& paintOffset) const
+void LayoutInline::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
     InlinePainter(*this).paint(paintInfo, paintOffset);
 }
 
-template <typename GeneratorContext>
+template<typename GeneratorContext>
 void LayoutInline::generateLineBoxRects(GeneratorContext& yield) const
 {
     if (!alwaysCreateLineBoxes()) {
         generateCulledLineBoxRects(yield, this);
     } else if (InlineFlowBox* curr = firstLineBox()) {
         for (; curr; curr = curr->nextLineBox())
-            yield(LayoutRect(curr->location(), curr->size()));
+            yield(LayoutRect(curr->topLeft(), curr->size()));
+    } else {
+        yield(LayoutRect());
     }
 }
 
-static inline void computeItemTopHeight(const LayoutInline* container,
-    const RootInlineBox& rootBox,
-    LayoutUnit* top,
-    LayoutUnit* height)
+template<typename GeneratorContext>
+void LayoutInline::generateCulledLineBoxRects(GeneratorContext& yield, const LayoutInline* container) const
 {
-    bool firstLine = rootBox.isFirstLineStyle();
-    const SimpleFontData* fontData = rootBox.getLineLayoutItem().style(firstLine)->font().primaryFont();
-    const SimpleFontData* containerFontData = container->style(firstLine)->font().primaryFont();
-    DCHECK(fontData && containerFontData);
-    if (!fontData || !containerFontData) {
-        *top = LayoutUnit();
-        *height = LayoutUnit();
+    if (!culledInlineFirstLineBox()) {
+        yield(LayoutRect());
         return;
     }
-    auto metrics = fontData->getFontMetrics();
-    auto containerMetrics = containerFontData->getFontMetrics();
-    *top = rootBox.logicalTop() + (metrics.ascent() - containerMetrics.ascent());
-    *height = LayoutUnit(containerMetrics.height());
-}
-
-template <typename GeneratorContext>
-void LayoutInline::generateCulledLineBoxRects(
-    GeneratorContext& yield,
-    const LayoutInline* container) const
-{
-    if (!culledInlineFirstLineBox())
-        return;
 
     bool isHorizontal = style()->isHorizontalWritingMode();
 
-    LayoutUnit logicalTop, logicalHeight;
     for (LayoutObject* curr = firstChild(); curr; curr = curr->nextSibling()) {
         if (curr->isFloatingOrOutOfFlowPositioned())
             continue;
 
-        // We want to get the margin box in the inline direction, and then use our
-        // font ascent/descent in the block direction (aligned to the root box's
-        // baseline).
+        // We want to get the margin box in the inline direction, and then use our font ascent/descent in the block
+        // direction (aligned to the root box's baseline).
         if (curr->isBox()) {
             LayoutBox* currBox = toLayoutBox(curr);
             if (currBox->inlineBoxWrapper()) {
                 RootInlineBox& rootBox = currBox->inlineBoxWrapper()->root();
-                computeItemTopHeight(container, rootBox, &logicalTop, &logicalHeight);
-                if (isHorizontal) {
-                    yield(LayoutRect(
-                        currBox->inlineBoxWrapper()->x() - currBox->marginLeft(),
-                        logicalTop, currBox->size().width() + currBox->marginWidth(),
-                        logicalHeight));
-                } else {
-                    yield(LayoutRect(logicalTop, currBox->inlineBoxWrapper()->y() - currBox->marginTop(),
-                        logicalHeight,
-                        currBox->size().height() + currBox->marginHeight()));
-                }
+                int logicalTop = rootBox.logicalTop() + (rootBox.layoutObject().style(rootBox.isFirstLineStyle())->font().fontMetrics().ascent() - container->style(rootBox.isFirstLineStyle())->font().fontMetrics().ascent());
+                int logicalHeight = container->style(rootBox.isFirstLineStyle())->font().fontMetrics().height();
+                if (isHorizontal)
+                    yield(LayoutRect(currBox->inlineBoxWrapper()->x() - currBox->marginLeft(), logicalTop, currBox->size().width() + currBox->marginWidth(), logicalHeight));
+                else
+                    yield(LayoutRect(logicalTop, currBox->inlineBoxWrapper()->y() - currBox->marginTop(), logicalHeight, currBox->size().height() + currBox->marginHeight()));
             }
         } else if (curr->isLayoutInline()) {
             // If the child doesn't need line boxes either, then we can recur.
@@ -665,35 +597,33 @@ void LayoutInline::generateCulledLineBoxRects(
             if (!currInline->alwaysCreateLineBoxes()) {
                 currInline->generateCulledLineBoxRects(yield, container);
             } else {
-                for (InlineFlowBox* childLine = currInline->firstLineBox(); childLine;
-                     childLine = childLine->nextLineBox()) {
+                for (InlineFlowBox* childLine = currInline->firstLineBox(); childLine; childLine = childLine->nextLineBox()) {
                     RootInlineBox& rootBox = childLine->root();
-                    computeItemTopHeight(container, rootBox, &logicalTop, &logicalHeight);
-                    LayoutUnit logicalWidth = childLine->logicalWidth() + childLine->marginLogicalWidth();
+                    int logicalTop = rootBox.logicalTop() + (rootBox.layoutObject().style(rootBox.isFirstLineStyle())->font().fontMetrics().ascent() - container->style(rootBox.isFirstLineStyle())->font().fontMetrics().ascent());
+                    int logicalHeight = container->style(rootBox.isFirstLineStyle())->font().fontMetrics().height();
                     if (isHorizontal) {
-                        yield(LayoutRect(
-                            LayoutUnit(childLine->x() - childLine->marginLogicalLeft()),
-                            logicalTop, logicalWidth, logicalHeight));
-                    } else {
-                        yield(LayoutRect(
+                        yield(LayoutRect(childLine->x() - childLine->marginLogicalLeft(),
                             logicalTop,
-                            LayoutUnit(childLine->y() - childLine->marginLogicalLeft()),
-                            logicalHeight, logicalWidth));
+                            childLine->logicalWidth() + childLine->marginLogicalLeft() + childLine->marginLogicalRight(),
+                            logicalHeight));
+                    } else {
+                        yield(LayoutRect(logicalTop,
+                            childLine->y() - childLine->marginLogicalLeft(),
+                            logicalHeight,
+                            childLine->logicalWidth() + childLine->marginLogicalLeft() + childLine->marginLogicalRight()));
                     }
                 }
             }
         } else if (curr->isText()) {
             LayoutText* currText = toLayoutText(curr);
-            for (InlineTextBox* childText = currText->firstTextBox(); childText;
-                 childText = childText->nextTextBox()) {
+            for (InlineTextBox* childText = currText->firstTextBox(); childText; childText = childText->nextTextBox()) {
                 RootInlineBox& rootBox = childText->root();
-                computeItemTopHeight(container, rootBox, &logicalTop, &logicalHeight);
+                int logicalTop = rootBox.logicalTop() + (rootBox.layoutObject().style(rootBox.isFirstLineStyle())->font().fontMetrics().ascent() - container->style(rootBox.isFirstLineStyle())->font().fontMetrics().ascent());
+                int logicalHeight = container->style(rootBox.isFirstLineStyle())->font().fontMetrics().height();
                 if (isHorizontal)
-                    yield(LayoutRect(childText->x(), logicalTop,
-                        childText->logicalWidth(), logicalHeight));
+                    yield(LayoutRect(childText->x(), logicalTop, childText->logicalWidth(), logicalHeight));
                 else
-                    yield(LayoutRect(logicalTop, childText->y(), logicalHeight,
-                        childText->logicalWidth()));
+                    yield(LayoutRect(logicalTop, childText->y(), logicalHeight, childText->logicalWidth()));
             }
         }
     }
@@ -701,121 +631,102 @@ void LayoutInline::generateCulledLineBoxRects(
 
 namespace {
 
-    class AbsoluteRectsGeneratorContext {
-    public:
-        AbsoluteRectsGeneratorContext(Vector<IntRect>& rects,
-            const LayoutPoint& accumulatedOffset)
-            : m_rects(rects)
-            , m_accumulatedOffset(accumulatedOffset)
-        {
-        }
+class AbsoluteRectsGeneratorContext {
+public:
+    AbsoluteRectsGeneratorContext(Vector<IntRect>& rects, const LayoutPoint& accumulatedOffset)
+        : m_rects(rects)
+        , m_accumulatedOffset(accumulatedOffset) { }
 
-        void operator()(const LayoutRect& rect)
-        {
-            IntRect intRect = enclosingIntRect(rect);
-            intRect.move(m_accumulatedOffset.x().toInt(),
-                m_accumulatedOffset.y().toInt());
-            m_rects.push_back(intRect);
-        }
-
-    private:
-        Vector<IntRect>& m_rects;
-        const LayoutPoint& m_accumulatedOffset;
-    };
+    void operator()(const LayoutRect& rect)
+    {
+        IntRect intRect = enclosingIntRect(rect);
+        intRect.move(m_accumulatedOffset.x(), m_accumulatedOffset.y());
+        m_rects.append(intRect);
+    }
+private:
+    Vector<IntRect>& m_rects;
+    const LayoutPoint& m_accumulatedOffset;
+};
 
 } // unnamed namespace
 
-void LayoutInline::absoluteRects(Vector<IntRect>& rects,
-    const LayoutPoint& accumulatedOffset) const
+void LayoutInline::absoluteRects(Vector<IntRect>& rects, const LayoutPoint& accumulatedOffset) const
 {
     AbsoluteRectsGeneratorContext context(rects, accumulatedOffset);
     generateLineBoxRects(context);
-    if (rects.isEmpty())
-        context(LayoutRect());
 
     if (const LayoutBoxModelObject* continuation = this->continuation()) {
         if (continuation->isBox()) {
             const LayoutBox* box = toLayoutBox(continuation);
-            continuation->absoluteRects(
-                rects,
-                toLayoutPoint(accumulatedOffset - containingBlock()->location() + box->locationOffset()));
+            continuation->absoluteRects(rects, toLayoutPoint(accumulatedOffset - containingBlock()->location() + box->locationOffset()));
         } else {
-            continuation->absoluteRects(
-                rects,
-                toLayoutPoint(accumulatedOffset - containingBlock()->location()));
+            continuation->absoluteRects(rects, toLayoutPoint(accumulatedOffset - containingBlock()->location()));
         }
     }
 }
 
+
 namespace {
 
-    class AbsoluteQuadsGeneratorContext {
-    public:
-        AbsoluteQuadsGeneratorContext(const LayoutInline* layoutObject,
-            Vector<FloatQuad>& quads,
-            MapCoordinatesFlags mode)
-            : m_quads(quads)
-            , m_geometryMap(mode)
-        {
-            m_geometryMap.pushMappingsToAncestor(layoutObject, 0);
-        }
+class AbsoluteQuadsGeneratorContext {
+public:
+    AbsoluteQuadsGeneratorContext(const LayoutInline* layoutObject, Vector<FloatQuad>& quads)
+        : m_quads(quads)
+        , m_geometryMap()
+    {
+        m_geometryMap.pushMappingsToAncestor(layoutObject, 0);
+    }
 
-        void operator()(const FloatRect& rect)
-        {
-            m_quads.push_back(m_geometryMap.absoluteRect(rect));
-        }
-        void operator()(const LayoutRect& rect) { operator()(FloatRect(rect)); }
-
-    private:
-        Vector<FloatQuad>& m_quads;
-        LayoutGeometryMap m_geometryMap;
-    };
+    void operator()(const FloatRect& rect)
+    {
+        m_quads.append(m_geometryMap.absoluteRect(rect));
+    }
+private:
+    Vector<FloatQuad>& m_quads;
+    LayoutGeometryMap m_geometryMap;
+};
 
 } // unnamed namespace
 
-void LayoutInline::absoluteQuadsForSelf(Vector<FloatQuad>& quads,
-    MapCoordinatesFlags mode) const
+void LayoutInline::absoluteQuads(Vector<FloatQuad>& quads, bool* wasFixed) const
 {
-    AbsoluteQuadsGeneratorContext context(this, quads, mode);
+    AbsoluteQuadsGeneratorContext context(this, quads);
     generateLineBoxRects(context);
-    if (quads.isEmpty())
-        context(FloatRect());
+
+    if (const LayoutBoxModelObject* continuation = this->continuation())
+        continuation->absoluteQuads(quads, wasFixed);
 }
 
-LayoutPoint LayoutInline::firstLineBoxTopLeft() const
+LayoutUnit LayoutInline::offsetLeft() const
 {
-    if (InlineBox* firstBox = firstLineBoxIncludingCulling())
-        return firstBox->location();
-    return LayoutPoint();
+    LayoutPoint topLeft;
+    if (InlineBox* firstBox = firstLineBoxIncludingCulling()) {
+        topLeft = firstBox->topLeft();
+    }
+    return adjustedPositionRelativeToOffsetParent(topLeft).x();
 }
 
-LayoutUnit LayoutInline::offsetLeft(const Element* parent) const
+LayoutUnit LayoutInline::offsetTop() const
 {
-    return adjustedPositionRelativeTo(firstLineBoxTopLeft(), parent).x();
+    LayoutPoint topLeft;
+    if (InlineBox* firstBox = firstLineBoxIncludingCulling()) {
+        topLeft = firstBox->topLeft();
+    }
+    return adjustedPositionRelativeToOffsetParent(topLeft).y();
 }
 
-LayoutUnit LayoutInline::offsetTop(const Element* parent) const
-{
-    return adjustedPositionRelativeTo(firstLineBoxTopLeft(), parent).y();
-}
-
-static LayoutUnit computeMargin(const LayoutInline* layoutObject,
-    const Length& margin)
+static LayoutUnit computeMargin(const LayoutInline* layoutObject, const Length& margin)
 {
     if (margin.isFixed())
-        return LayoutUnit(margin.value());
-    if (margin.isPercentOrCalc())
-        return minimumValueForLength(
-            margin,
-            std::max(LayoutUnit(),
-                layoutObject->containingBlock()->availableLogicalWidth()));
+        return margin.value();
+    if (margin.hasPercent())
+        return minimumValueForLength(margin, std::max(LayoutUnit(), layoutObject->containingBlock()->availableLogicalWidth()));
     return LayoutUnit();
 }
 
 LayoutRectOutsets LayoutInline::marginBoxOutsets() const
 {
-    return LayoutRectOutsets(marginTop(), marginRight(), marginBottom(),
-        marginLeft());
+    return LayoutRectOutsets(marginTop(), marginRight(), marginBottom(), marginLeft());
 }
 
 LayoutUnit LayoutInline::marginLeft() const
@@ -840,105 +751,67 @@ LayoutUnit LayoutInline::marginBottom() const
 
 LayoutUnit LayoutInline::marginStart(const ComputedStyle* otherStyle) const
 {
-    return computeMargin(
-        this, style()->marginStartUsing(otherStyle ? otherStyle : style()));
+    return computeMargin(this, style()->marginStartUsing(otherStyle ? otherStyle : style()));
 }
 
 LayoutUnit LayoutInline::marginEnd(const ComputedStyle* otherStyle) const
 {
-    return computeMargin(
-        this, style()->marginEndUsing(otherStyle ? otherStyle : style()));
+    return computeMargin(this, style()->marginEndUsing(otherStyle ? otherStyle : style()));
 }
 
 LayoutUnit LayoutInline::marginBefore(const ComputedStyle* otherStyle) const
 {
-    return computeMargin(
-        this, style()->marginBeforeUsing(otherStyle ? otherStyle : style()));
+    return computeMargin(this, style()->marginBeforeUsing(otherStyle ? otherStyle : style()));
 }
 
 LayoutUnit LayoutInline::marginAfter(const ComputedStyle* otherStyle) const
 {
-    return computeMargin(
-        this, style()->marginAfterUsing(otherStyle ? otherStyle : style()));
-}
-
-LayoutUnit LayoutInline::marginOver() const
-{
-    return computeMargin(this, style()->marginOver());
-}
-
-LayoutUnit LayoutInline::marginUnder() const
-{
-    return computeMargin(this, style()->marginUnder());
+    return computeMargin(this, style()->marginAfterUsing(otherStyle ? otherStyle : style()));
 }
 
 bool LayoutInline::nodeAtPoint(HitTestResult& result,
-    const HitTestLocation& locationInContainer,
-    const LayoutPoint& accumulatedOffset,
-    HitTestAction hitTestAction)
+    const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction hitTestAction)
 {
-    return m_lineBoxes.hitTest(LineLayoutBoxModel(this), result,
-        locationInContainer, accumulatedOffset,
-        hitTestAction);
+    return m_lineBoxes.hitTest(this, result, locationInContainer, accumulatedOffset, hitTestAction);
 }
 
 namespace {
 
-    class HitTestCulledInlinesGeneratorContext {
-    public:
-        HitTestCulledInlinesGeneratorContext(Region& region,
-            const HitTestLocation& location)
-            : m_intersected(false)
-            , m_region(region)
-            , m_location(location)
-        {
-        }
-        void operator()(const FloatRect& rect)
-        {
-            if (m_location.intersects(rect)) {
-                m_intersected = true;
-                m_region.unite(enclosingIntRect(rect));
-            }
-        }
-        void operator()(const LayoutRect& rect)
-        {
-            if (m_location.intersects(rect)) {
-                m_intersected = true;
-                m_region.unite(enclosingIntRect(rect));
-            }
-        }
-        bool intersected() const { return m_intersected; }
-
-    private:
-        bool m_intersected;
-        Region& m_region;
-        const HitTestLocation& m_location;
-    };
+class HitTestCulledInlinesGeneratorContext {
+public:
+    HitTestCulledInlinesGeneratorContext(Region& region, const HitTestLocation& location) : m_intersected(false), m_region(region), m_location(location) { }
+    void operator()(const FloatRect& rect)
+    {
+        m_intersected = m_intersected || m_location.intersects(rect);
+        m_region.unite(enclosingIntRect(rect));
+    }
+    bool intersected() const { return m_intersected; }
+private:
+    bool m_intersected;
+    Region& m_region;
+    const HitTestLocation& m_location;
+};
 
 } // unnamed namespace
 
-bool LayoutInline::hitTestCulledInline(
-    HitTestResult& result,
-    const HitTestLocation& locationInContainer,
-    const LayoutPoint& accumulatedOffset)
+bool LayoutInline::hitTestCulledInline(HitTestResult& result, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset)
 {
     ASSERT(!alwaysCreateLineBoxes());
     if (!visibleToHitTestRequest(result.hitTestRequest()))
         return false;
 
-    HitTestLocation adjustedLocation(locationInContainer,
-        -toLayoutSize(accumulatedOffset));
+    HitTestLocation tmpLocation(locationInContainer, -toLayoutSize(accumulatedOffset));
 
     Region regionResult;
-    HitTestCulledInlinesGeneratorContext context(regionResult, adjustedLocation);
+    HitTestCulledInlinesGeneratorContext context(regionResult, tmpLocation);
     generateCulledLineBoxRects(context, this);
 
     if (context.intersected()) {
-        updateHitTestResult(result, adjustedLocation.point());
-        if (result.addNodeToListBasedTestResult(node(), adjustedLocation,
-                regionResult)
-            == StopHitTesting)
-            return true;
+        updateHitTestResult(result, tmpLocation.point());
+        // We can not use addNodeToListBasedTestResult to determine if we fully enclose the hit-test area
+        // because it can only handle rectangular targets.
+        result.addNodeToListBasedTestResult(node(), locationInContainer);
+        return regionResult.contains(tmpLocation.boundingBox());
     }
     return false;
 }
@@ -946,21 +819,21 @@ bool LayoutInline::hitTestCulledInline(
 PositionWithAffinity LayoutInline::positionForPoint(const LayoutPoint& point)
 {
     // FIXME: Does not deal with relative positioned inlines (should it?)
-
-    // If there are continuations, test them first because our containing block
-    // will not check them.
-    LayoutBoxModelObject* continuation = this->continuation();
-    while (continuation) {
-        if (continuation->isInline() || continuation->slowFirstChild())
-            return continuation->positionForPoint(point);
-        continuation = toLayoutBlockFlow(continuation)->inlineElementContinuation();
+    LayoutBlock* cb = containingBlock();
+    if (firstLineBoxIncludingCulling()) {
+        // This inline actually has a line box.  We must have clicked in the border/padding of one of these boxes.  We
+        // should try to find a result by asking our containing block.
+        return cb->positionForPoint(point);
     }
 
-    if (firstLineBoxIncludingCulling()) {
-        // This inline actually has a line box.  We must have clicked in the
-        // border/padding of one of these boxes.  We
-        // should try to find a result by asking our containing block.
-        return containingBlock()->positionForPoint(point);
+    // Translate the coords from the pre-anonymous block to the post-anonymous block.
+    LayoutPoint parentBlockPoint = cb->location() + point;
+    LayoutBoxModelObject* c = continuation();
+    while (c) {
+        LayoutBox* contBlock = c->isInline() ? c->containingBlock() : toLayoutBlock(c);
+        if (c->isInline() || c->slowFirstChild())
+            return c->positionForPoint(parentBlockPoint - contBlock->locationOffset());
+        c = toLayoutBlock(c)->inlineElementContinuation();
     }
 
     return LayoutBoxModelObject::positionForPoint(point);
@@ -968,46 +841,40 @@ PositionWithAffinity LayoutInline::positionForPoint(const LayoutPoint& point)
 
 namespace {
 
-    class LinesBoundingBoxGeneratorContext {
-    public:
-        LinesBoundingBoxGeneratorContext(FloatRect& rect)
-            : m_rect(rect)
-        {
-        }
-        void operator()(const FloatRect& rect) { m_rect.uniteIfNonZero(rect); }
-        void operator()(const LayoutRect& rect) { operator()(FloatRect(rect)); }
-
-    private:
-        FloatRect& m_rect;
-    };
+class LinesBoundingBoxGeneratorContext {
+public:
+    LinesBoundingBoxGeneratorContext(FloatRect& rect) : m_rect(rect) { }
+    void operator()(const FloatRect& rect)
+    {
+        m_rect.uniteIfNonZero(rect);
+    }
+private:
+    FloatRect& m_rect;
+};
 
 } // unnamed namespace
 
-LayoutRect LayoutInline::linesBoundingBox() const
+IntRect LayoutInline::linesBoundingBox() const
 {
     if (!alwaysCreateLineBoxes()) {
         ASSERT(!firstLineBox());
         FloatRect floatResult;
         LinesBoundingBoxGeneratorContext context(floatResult);
         generateCulledLineBoxRects(context, this);
-        return enclosingLayoutRect(floatResult);
+        return enclosingIntRect(floatResult);
     }
 
-    LayoutRect result;
+    IntRect result;
 
-    // See <rdar://problem/5289721>, for an unknown reason the linked list here is
-    // sometimes inconsistent, first is non-zero and last is zero.  We have been
-    // unable to reproduce this at all (and consequently unable to figure ot why
-    // this is happening).  The assert will hopefully catch the problem in debug
-    // builds and help us someday figure out why.  We also put in a redundant
-    // check of lastLineBox() to avoid the crash for now.
+    // See <rdar://problem/5289721>, for an unknown reason the linked list here is sometimes inconsistent, first is non-zero and last is zero.  We have been
+    // unable to reproduce this at all (and consequently unable to figure ot why this is happening).  The assert will hopefully catch the problem in debug
+    // builds and help us someday figure out why.  We also put in a redundant check of lastLineBox() to avoid the crash for now.
     ASSERT(!firstLineBox() == !lastLineBox()); // Either both are null or both exist.
     if (firstLineBox() && lastLineBox()) {
         // Return the width of the minimal left side and the maximal right side.
-        LayoutUnit logicalLeftSide;
-        LayoutUnit logicalRightSide;
-        for (InlineFlowBox* curr = firstLineBox(); curr;
-             curr = curr->nextLineBox()) {
+        LayoutUnit logicalLeftSide = 0;
+        LayoutUnit logicalRightSide = 0;
+        for (InlineFlowBox* curr = firstLineBox(); curr; curr = curr->nextLineBox()) {
             if (curr == firstLineBox() || curr->logicalLeft() < logicalLeftSide)
                 logicalLeftSide = curr->logicalLeft();
             if (curr == firstLineBox() || curr->logicalRight() > logicalRightSide)
@@ -1018,11 +885,9 @@ LayoutRect LayoutInline::linesBoundingBox() const
 
         LayoutUnit x = isHorizontal ? logicalLeftSide : firstLineBox()->x();
         LayoutUnit y = isHorizontal ? firstLineBox()->y() : logicalLeftSide;
-        LayoutUnit width = isHorizontal ? logicalRightSide - logicalLeftSide
-                                        : lastLineBox()->logicalBottom() - x;
-        LayoutUnit height = isHorizontal ? lastLineBox()->logicalBottom() - y
-                                         : logicalRightSide - logicalLeftSide;
-        result = LayoutRect(x, y, width, height);
+        LayoutUnit width = isHorizontal ? logicalRightSide - logicalLeftSide : lastLineBox()->logicalBottom() - x;
+        LayoutUnit height = isHorizontal ? lastLineBox()->logicalBottom() - y : logicalRightSide - logicalLeftSide;
+        result = enclosingIntRect(LayoutRect(x, y, width, height));
     }
 
     return result;
@@ -1034,9 +899,8 @@ InlineBox* LayoutInline::culledInlineFirstLineBox() const
         if (curr->isFloatingOrOutOfFlowPositioned())
             continue;
 
-        // We want to get the margin box in the inline direction, and then use our
-        // font ascent/descent in the block direction (aligned to the root box's
-        // baseline).
+        // We want to get the margin box in the inline direction, and then use our font ascent/descent in the block
+        // direction (aligned to the root box's baseline).
         if (curr->isBox())
             return toLayoutBox(curr)->inlineBoxWrapper();
         if (curr->isLayoutInline()) {
@@ -1059,9 +923,8 @@ InlineBox* LayoutInline::culledInlineLastLineBox() const
         if (curr->isFloatingOrOutOfFlowPositioned())
             continue;
 
-        // We want to get the margin box in the inline direction, and then use our
-        // font ascent/descent in the block direction (aligned to the root box's
-        // baseline).
+        // We want to get the margin box in the inline direction, and then use our font ascent/descent in the block
+        // direction (aligned to the root box's baseline).
         if (curr->isBox())
             return toLayoutBox(curr)->inlineBoxWrapper();
         if (curr->isLayoutInline()) {
@@ -1106,13 +969,14 @@ LayoutRect LayoutInline::culledInlineVisualOverflowBoundingBox() const
             // If the child doesn't need line boxes either, then we can recur.
             LayoutInline* currInline = toLayoutInline(curr);
             if (!currInline->alwaysCreateLineBoxes())
-                result.uniteIfNonZero(
-                    currInline->culledInlineVisualOverflowBoundingBox());
+                result.uniteIfNonZero(currInline->culledInlineVisualOverflowBoundingBox());
             else if (!currInline->hasSelfPaintingLayer())
-                result.uniteIfNonZero(currInline->visualOverflowRect());
+                result.uniteIfNonZero(currInline->linesVisualOverflowBoundingBox());
         } else if (curr->isText()) {
+            // FIXME; Overflow from text boxes is lost. We will need to cache this information in
+            // InlineTextBoxes.
             LayoutText* currText = toLayoutText(curr);
-            result.uniteIfNonZero(currText->visualOverflowRect());
+            result.uniteIfNonZero(currText->linesVisualOverflowBoundingBox());
         }
     }
     return result;
@@ -1147,13 +1011,10 @@ LayoutRect LayoutInline::linesVisualOverflowBoundingBox() const
     return rect;
 }
 
-LayoutRect LayoutInline::absoluteVisualRect() const
+LayoutRect LayoutInline::absoluteClippedOverflowRect() const
 {
-    if (!continuation()) {
-        LayoutRect rect = visualOverflowRect();
-        mapToVisualRectInAncestorSpace(view(), rect);
-        return rect;
-    }
+    if (!continuation())
+        return clippedOverflowRect(view());
 
     FloatRect floatResult;
     LinesBoundingBoxGeneratorContext context(floatResult);
@@ -1162,129 +1023,185 @@ LayoutRect LayoutInline::absoluteVisualRect() const
     while (LayoutInline* nextContinuation = endContinuation->inlineElementContinuation())
         endContinuation = nextContinuation;
 
-    for (LayoutBlock* currBlock = containingBlock();
-         currBlock && currBlock->isAnonymousBlock();
-         currBlock = toLayoutBlock(currBlock->nextSibling())) {
-        bool walkChildrenOnly = !currBlock->childrenInline();
-        for (LayoutObject* curr = currBlock->firstChild(); curr;
-             curr = curr->nextSibling()) {
-            LayoutRect rect(curr->localVisualRect());
-            context(FloatRect(rect));
-            if (walkChildrenOnly)
-                continue;
-            for (LayoutObject* walker = curr; walker;
-                 walker = walker->nextInPreOrder(curr)) {
-                if (walker != endContinuation)
-                    continue;
-                LayoutRect rect(enclosingIntRect(floatResult));
-                mapToVisualRectInAncestorSpace(view(), rect);
-                return rect;
-            }
+    for (LayoutBlock* currBlock = containingBlock(); currBlock && currBlock->isAnonymousBlock(); currBlock = toLayoutBlock(currBlock->nextSibling())) {
+        for (LayoutObject* curr = currBlock->firstChild(); curr; curr = curr->nextSibling()) {
+            LayoutRect rect = curr->clippedOverflowRectForPaintInvalidation(view());
+            context(rect);
+            if (curr == endContinuation)
+                return LayoutRect(enclosingIntRect(floatResult));
         }
     }
     return LayoutRect();
 }
 
-LayoutRect LayoutInline::localVisualRect() const
+LayoutRect LayoutInline::clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* paintInvalidationState) const
 {
     // If we don't create line boxes, we don't have any invalidations to do.
     if (!alwaysCreateLineBoxes())
         return LayoutRect();
-
-    if (style()->visibility() != EVisibility::kVisible)
-        return LayoutRect();
-
-    return visualOverflowRect();
+    return clippedOverflowRect(paintInvalidationContainer);
 }
 
-LayoutRect LayoutInline::visualOverflowRect() const
+LayoutRect LayoutInline::clippedOverflowRect(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* paintInvalidationState) const
 {
-    LayoutRect overflowRect = linesVisualOverflowBoundingBox();
-    LayoutUnit outlineOutset(style()->outlineOutsetExtent());
-    if (outlineOutset) {
-        Vector<LayoutRect> rects;
-        if (document().inNoQuirksMode()) {
-            // We have already included outline extents of line boxes in
-            // linesVisualOverflowBoundingBox(), so the following just add outline
-            // rects for children and continuations.
-            addOutlineRectsForChildrenAndContinuations(
-                rects, LayoutPoint(), outlineRectsShouldIncludeBlockVisualOverflow());
-        } else {
-            // In non-standard mode, because the difference in
-            // LayoutBlock::minLineHeightForReplacedObject(),
-            // linesVisualOverflowBoundingBox() may not cover outline rects of lines
-            // containing replaced objects.
-            addOutlineRects(rects, LayoutPoint(),
-                outlineRectsShouldIncludeBlockVisualOverflow());
+    const LayoutBoxModelObject* continuation = this->continuation();
+    if ((!firstLineBoxIncludingCulling() && !continuation) || style()->visibility() != VISIBLE)
+        return LayoutRect();
+
+    LayoutRect overflowRect(linesVisualOverflowBoundingBox());
+    mapRectToPaintInvalidationBacking(paintInvalidationContainer, overflowRect, paintInvalidationState);
+
+    LayoutUnit outlineSize = style()->outlineSize();
+    if (outlineSize) {
+        for (LayoutObject* curr = firstChild(); curr; curr = curr->nextSibling()) {
+            if (!curr->isText())
+                overflowRect.unite(curr->rectWithOutlineForPaintInvalidation(paintInvalidationContainer, outlineSize));
         }
-        if (!rects.isEmpty()) {
-            LayoutRect outlineRect = unionRectEvenIfEmpty(rects);
-            outlineRect.inflate(outlineOutset);
-            overflowRect.unite(outlineRect);
-        }
+
+        if (continuation && !continuation->isInline() && continuation->parent())
+            overflowRect.unite(continuation->rectWithOutlineForPaintInvalidation(paintInvalidationContainer, outlineSize));
     }
+
     return overflowRect;
 }
 
-bool LayoutInline::mapToVisualRectInAncestorSpace(
-    const LayoutBoxModelObject* ancestor,
-    LayoutRect& rect,
-    VisualRectFlags visualRectFlags) const
+LayoutRect LayoutInline::rectWithOutlineForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, LayoutUnit outlineWidth, const PaintInvalidationState* paintInvalidationState) const
 {
-    if (ancestor == this)
-        return true;
-
-    LayoutObject* container = this->container();
-    ASSERT(container == parent());
-    if (!container)
-        return true;
-
-    if (style()->hasInFlowPosition() && layer()) {
-        // Apply the in-flow position offset when invalidating a rectangle. The
-        // layer is translated, but the layout box isn't, so we need to do this to
-        // get the right dirty rect. Since this is called from LayoutObject::
-        // setStyle, the relative position flag on the LayoutObject has been
-        // cleared, so use the one on the style().
-        rect.move(layer()->offsetForInFlowPosition());
+    LayoutRect r(LayoutBoxModelObject::rectWithOutlineForPaintInvalidation(paintInvalidationContainer, outlineWidth, paintInvalidationState));
+    for (LayoutObject* curr = firstChild(); curr; curr = curr->nextSibling()) {
+        if (!curr->isText())
+            r.unite(curr->rectWithOutlineForPaintInvalidation(paintInvalidationContainer, outlineWidth, paintInvalidationState));
     }
-
-    LayoutBox* containerBox = container->isBox() ? toLayoutBox(container) : nullptr;
-    if (containerBox && container != ancestor && !containerBox->mapScrollingContentsRectToBoxSpace(rect, visualRectFlags))
-        return false;
-
-    // TODO(wkorman): Generalize Ruby specialization and/or document more clearly.
-    if (containerBox && !isRuby())
-        containerBox->flipForWritingMode(rect);
-    return container->mapToVisualRectInAncestorSpace(ancestor, rect,
-        visualRectFlags);
+    return r;
 }
 
-LayoutSize LayoutInline::offsetFromContainer(
-    const LayoutObject* container) const
+void LayoutInline::mapRectToPaintInvalidationBacking(const LayoutBoxModelObject* paintInvalidationContainer, LayoutRect& rect, const PaintInvalidationState* paintInvalidationState) const
+{
+    if (paintInvalidationState && paintInvalidationState->canMapToContainer(paintInvalidationContainer)) {
+        if (style()->hasInFlowPosition() && layer())
+            rect.move(layer()->offsetForInFlowPosition());
+        rect.move(paintInvalidationState->paintOffset());
+        if (paintInvalidationState->isClipped())
+            rect.intersect(paintInvalidationState->clipRect());
+        return;
+    }
+
+    if (paintInvalidationContainer == this)
+        return;
+
+    bool containerSkipped;
+    LayoutObject* o = container(paintInvalidationContainer, &containerSkipped);
+    if (!o)
+        return;
+
+    LayoutPoint topLeft = rect.location();
+
+    if (style()->hasInFlowPosition() && layer()) {
+        // Apply the in-flow position offset when invalidating a rectangle. The layer
+        // is translated, but the layout box isn't, so we need to do this to get the
+        // right dirty rect. Since this is called from LayoutObject::setStyle, the relative position
+        // flag on the LayoutObject has been cleared, so use the one on the style().
+        topLeft += layer()->offsetForInFlowPosition();
+    }
+
+    // FIXME: We ignore the lightweight clipping rect that controls use, since if |o| is in mid-layout,
+    // its controlClipRect will be wrong. For overflow clip we use the values cached by the layer.
+    rect.setLocation(topLeft);
+    if (o->hasOverflowClip()) {
+        LayoutBox* containerBox = toLayoutBox(o);
+        containerBox->applyCachedClipAndScrollOffsetForPaintInvalidation(rect);
+        if (rect.isEmpty())
+            return;
+    }
+
+    if (containerSkipped) {
+        // If the paintInvalidationContainer is below o, then we need to map the rect into paintInvalidationContainer's coordinates.
+        LayoutSize containerOffset = paintInvalidationContainer->offsetFromAncestorContainer(o);
+        rect.move(-containerOffset);
+        return;
+    }
+
+    o->mapRectToPaintInvalidationBacking(paintInvalidationContainer, rect, paintInvalidationState);
+}
+
+LayoutSize LayoutInline::offsetFromContainer(const LayoutObject* container, const LayoutPoint& point, bool* offsetDependsOnPoint) const
 {
     ASSERT(container == this->container());
 
     LayoutSize offset;
-    if (isInFlowPositioned())
+    if (isRelPositioned())
         offset += offsetForInFlowPosition();
+
+    offset += container->columnOffset(point);
 
     if (container->hasOverflowClip())
         offset -= toLayoutBox(container)->scrolledContentOffset();
 
+    if (offsetDependsOnPoint)
+        *offsetDependsOnPoint = (container->isBox() && container->style()->isFlippedBlocksWritingMode()) || container->isLayoutFlowThread();
+
     return offset;
 }
 
-PaintLayerType LayoutInline::layerTypeRequired() const
+void LayoutInline::mapLocalToContainer(const LayoutBoxModelObject* paintInvalidationContainer, TransformState& transformState, MapCoordinatesFlags mode, bool* wasFixed, const PaintInvalidationState* paintInvalidationState) const
 {
-    return isInFlowPositioned() || createsGroup() || hasClipPath() || style()->shouldCompositeForCurrentAnimations() || style()->hasCompositorProxy() || style()->containsPaint()
-        ? NormalPaintLayer
-        : NoPaintLayer;
+    if (paintInvalidationContainer == this)
+        return;
+
+    if (paintInvalidationState && paintInvalidationState->canMapToContainer(paintInvalidationContainer)) {
+        LayoutSize offset = paintInvalidationState->paintOffset();
+        if (style()->hasInFlowPosition() && layer())
+            offset += layer()->offsetForInFlowPosition();
+        transformState.move(offset);
+        return;
+    }
+
+    bool containerSkipped;
+    LayoutObject* o = container(paintInvalidationContainer, &containerSkipped);
+    if (!o)
+        return;
+
+    if (mode & ApplyContainerFlip && o->isBox()) {
+        if (o->style()->isFlippedBlocksWritingMode()) {
+            IntPoint centerPoint = roundedIntPoint(transformState.mappedPoint());
+            transformState.move(toLayoutBox(o)->flipForWritingMode(LayoutPoint(centerPoint)) - centerPoint);
+        }
+        mode &= ~ApplyContainerFlip;
+    }
+
+    LayoutSize containerOffset = offsetFromContainer(o, roundedLayoutPoint(transformState.mappedPoint()));
+
+    bool preserve3D = mode & UseTransforms && (o->style()->preserves3D() || style()->preserves3D());
+    if (mode & UseTransforms && shouldUseTransformFromContainer(o)) {
+        TransformationMatrix t;
+        getTransformFromContainer(o, containerOffset, t);
+        transformState.applyTransform(t, preserve3D ? TransformState::AccumulateTransform : TransformState::FlattenTransform);
+    } else {
+        transformState.move(containerOffset.width(), containerOffset.height(), preserve3D ? TransformState::AccumulateTransform : TransformState::FlattenTransform);
+    }
+
+    if (containerSkipped) {
+        // There can't be a transform between paintInvalidationContainer and o, because transforms create containers, so it should be safe
+        // to just subtract the delta between the paintInvalidationContainer and o.
+        LayoutSize containerOffset = paintInvalidationContainer->offsetFromAncestorContainer(o);
+        transformState.move(-containerOffset.width(), -containerOffset.height(), preserve3D ? TransformState::AccumulateTransform : TransformState::FlattenTransform);
+        return;
+    }
+
+    o->mapLocalToContainer(paintInvalidationContainer, transformState, mode, wasFixed, paintInvalidationState);
+}
+
+void LayoutInline::updateDragState(bool dragOn)
+{
+    LayoutBoxModelObject::updateDragState(dragOn);
+    if (LayoutBoxModelObject* continuation = this->continuation())
+        continuation->updateDragState(dragOn);
 }
 
 void LayoutInline::childBecameNonInline(LayoutObject* child)
 {
     // We have to split the parent flow.
-    LayoutBlockFlow* newBox = toLayoutBlockFlow(containingBlock()->createAnonymousBlock());
+    LayoutBlock* newBox = containingBlock()->createAnonymousBlock();
     LayoutBoxModelObject* oldContinuation = continuation();
     setContinuation(newBox);
     LayoutObject* beforeChild = child->nextSibling();
@@ -1292,8 +1209,7 @@ void LayoutInline::childBecameNonInline(LayoutObject* child)
     splitFlow(beforeChild, newBox, child, oldContinuation);
 }
 
-void LayoutInline::updateHitTestResult(HitTestResult& result,
-    const LayoutPoint& point)
+void LayoutInline::updateHitTestResult(HitTestResult& result, const LayoutPoint& point)
 {
     if (result.innerNode())
         return;
@@ -1302,9 +1218,8 @@ void LayoutInline::updateHitTestResult(HitTestResult& result,
     LayoutPoint localPoint(point);
     if (n) {
         if (isInlineElementContinuation()) {
-            // We're in the continuation of a split inline. Adjust our local point to
-            // be in the coordinate space of the principal layoutObject's containing
-            // block. This will end up being the innerNode.
+            // We're in the continuation of a split inline.  Adjust our local point to be in the coordinate space
+            // of the principal layoutObject's containing block.  This will end up being the innerNode.
             LayoutBlock* firstBlock = n->layoutObject()->containingBlock();
 
             // Get our containing block.
@@ -1324,8 +1239,7 @@ void LayoutInline::dirtyLineBoxes(bool fullLayout)
     }
 
     if (!alwaysCreateLineBoxes()) {
-        // We have to grovel into our children in order to dirty the appropriate
-        // lines.
+        // We have to grovel into our children in order to dirty the appropriate lines.
         for (LayoutObject* curr = firstChild(); curr; curr = curr->nextSibling()) {
             if (curr->isFloatingOrOutOfFlowPositioned())
                 continue;
@@ -1336,13 +1250,11 @@ void LayoutInline::dirtyLineBoxes(bool fullLayout)
             } else if (!curr->selfNeedsLayout()) {
                 if (curr->isLayoutInline()) {
                     LayoutInline* currInline = toLayoutInline(curr);
-                    for (InlineFlowBox* childLine = currInline->firstLineBox(); childLine;
-                         childLine = childLine->nextLineBox())
+                    for (InlineFlowBox* childLine = currInline->firstLineBox(); childLine; childLine = childLine->nextLineBox())
                         childLine->root().markDirty();
                 } else if (curr->isText()) {
                     LayoutText* currText = toLayoutText(curr);
-                    for (InlineTextBox* childText = currText->firstTextBox(); childText;
-                         childText = childText->nextTextBox())
+                    for (InlineTextBox* childText = currText->firstTextBox(); childText; childText = childText->nextTextBox())
                         childText->root().markDirty();
                 }
             }
@@ -1354,7 +1266,7 @@ void LayoutInline::dirtyLineBoxes(bool fullLayout)
 
 InlineFlowBox* LayoutInline::createInlineFlowBox()
 {
-    return new InlineFlowBox(LineLayoutItem(this));
+    return new InlineFlowBox(*this);
 }
 
 InlineFlowBox* LayoutInline::createAndAppendInlineFlowBox()
@@ -1365,47 +1277,35 @@ InlineFlowBox* LayoutInline::createAndAppendInlineFlowBox()
     return flowBox;
 }
 
-LayoutUnit LayoutInline::lineHeight(
-    bool firstLine,
-    LineDirectionMode /*direction*/,
-    LinePositionMode /*linePositionMode*/) const
+LayoutUnit LayoutInline::lineHeight(bool firstLine, LineDirectionMode /*direction*/, LinePositionMode /*linePositionMode*/) const
 {
     if (firstLine && document().styleEngine().usesFirstLineRules()) {
         const ComputedStyle* s = style(firstLine);
         if (s != style())
-            return LayoutUnit(s->computedLineHeight());
+            return s->computedLineHeight();
     }
 
-    return LayoutUnit(style()->computedLineHeight());
+    return style()->computedLineHeight();
 }
 
-int LayoutInline::baselinePosition(FontBaseline baselineType,
-    bool firstLine,
-    LineDirectionMode direction,
-    LinePositionMode linePositionMode) const
+int LayoutInline::baselinePosition(FontBaseline baselineType, bool firstLine, LineDirectionMode direction, LinePositionMode linePositionMode) const
 {
     ASSERT(linePositionMode == PositionOnContainingLine);
-    const SimpleFontData* fontData = style(firstLine)->font().primaryFont();
-    DCHECK(fontData);
-    if (!fontData)
-        return -1;
-    const FontMetrics& fontMetrics = fontData->getFontMetrics();
-    return (fontMetrics.ascent(baselineType) + (lineHeight(firstLine, direction, linePositionMode) - fontMetrics.height()) / 2)
-        .toInt();
+    const FontMetrics& fontMetrics = style(firstLine)->fontMetrics();
+    return fontMetrics.ascent(baselineType) + (lineHeight(firstLine, direction, linePositionMode) - fontMetrics.height()) / 2;
 }
 
-LayoutSize LayoutInline::offsetForInFlowPositionedInline(
-    const LayoutBox& child) const
+LayoutSize LayoutInline::offsetForInFlowPositionedInline(const LayoutBox& child) const
 {
     // FIXME: This function isn't right with mixed writing modes.
 
-    ASSERT(isInFlowPositioned());
-    if (!isInFlowPositioned())
+    ASSERT(isRelPositioned());
+    if (!isRelPositioned())
         return LayoutSize();
 
-    // When we have an enclosing relpositioned inline, we need to add in the
-    // offset of the first line box from the rest of the content, but only in the
-    // cases where we know we're positioned relative to the inline itself.
+    // When we have an enclosing relpositioned inline, we need to add in the offset of the first line
+    // box from the rest of the content, but only in the cases where we know we're positioned
+    // relative to the inline itself.
 
     LayoutSize logicalOffset;
     LayoutUnit inlinePosition;
@@ -1418,25 +1318,19 @@ LayoutSize LayoutInline::offsetForInFlowPositionedInline(
         blockPosition = layer()->staticBlockPosition();
     }
 
-    // Per http://www.w3.org/TR/CSS2/visudet.html#abs-non-replaced-width an
-    // absolute positioned box with a static position should locate itself as
-    // though it is a normal flow box in relation to its containing block. If this
-    // relative-positioned inline has a negative offset we need to compensate for
-    // it so that we align the positioned object with the edge of its containing
-    // block.
-    if (child.style()->hasStaticInlinePosition(
-            style()->isHorizontalWritingMode()))
-        logicalOffset.setWidth(
-            std::max(LayoutUnit(), -offsetForInFlowPosition().width()));
+    // Per http://www.w3.org/TR/CSS2/visudet.html#abs-non-replaced-width an absolute positioned box
+    // with a static position should locate itself as though it is a normal flow box in relation to
+    // its containing block. If this relative-positioned inline has a negative offset we need to
+    // compensate for it so that we align the positioned object with the edge of its containing block.
+    if (child.style()->hasStaticInlinePosition(style()->isHorizontalWritingMode()))
+        logicalOffset.setWidth(std::max(LayoutUnit(), -offsetForInFlowPosition().width()));
     else
         logicalOffset.setWidth(inlinePosition);
 
-    if (!child.style()->hasStaticBlockPosition(
-            style()->isHorizontalWritingMode()))
+    if (!child.style()->hasStaticBlockPosition(style()->isHorizontalWritingMode()))
         logicalOffset.setHeight(blockPosition);
 
-    return style()->isHorizontalWritingMode() ? logicalOffset
-                                              : logicalOffset.transposedSize();
+    return style()->isHorizontalWritingMode() ? logicalOffset : logicalOffset.transposedSize();
 }
 
 void LayoutInline::imageChanged(WrappedImagePtr, const IntRect*)
@@ -1450,80 +1344,58 @@ void LayoutInline::imageChanged(WrappedImagePtr, const IntRect*)
 
 namespace {
 
-    class AbsoluteLayoutRectsGeneratorContext {
-    public:
-        AbsoluteLayoutRectsGeneratorContext(Vector<LayoutRect>& rects,
-            const LayoutPoint& accumulatedOffset)
-            : m_rects(rects)
-            , m_accumulatedOffset(accumulatedOffset)
-        {
-        }
+class AbsoluteLayoutRectsGeneratorContext {
+public:
+    AbsoluteLayoutRectsGeneratorContext(Vector<LayoutRect>& rects, const LayoutPoint& accumulatedOffset)
+        : m_rects(rects)
+        , m_accumulatedOffset(accumulatedOffset) { }
 
-        void operator()(const FloatRect& rect) { operator()(LayoutRect(rect)); }
-        void operator()(const LayoutRect& rect)
-        {
-            LayoutRect layoutRect(rect);
-            layoutRect.moveBy(m_accumulatedOffset);
-            m_rects.push_back(layoutRect);
-        }
+    void operator()(const FloatRect& rect)
+    {
+        LayoutRect layoutRect(rect);
+        layoutRect.move(m_accumulatedOffset.x(), m_accumulatedOffset.y());
+        m_rects.append(layoutRect);
+    }
+private:
+    Vector<LayoutRect>& m_rects;
+    const LayoutPoint& m_accumulatedOffset;
+};
 
-    private:
-        Vector<LayoutRect>& m_rects;
-        const LayoutPoint& m_accumulatedOffset;
-    };
+class AbsoluteLayoutRectsIgnoringEmptyRectsGeneratorContext : public AbsoluteLayoutRectsGeneratorContext {
+public:
+    AbsoluteLayoutRectsIgnoringEmptyRectsGeneratorContext(Vector<LayoutRect>& rects, const LayoutPoint& accumulatedOffset)
+        : AbsoluteLayoutRectsGeneratorContext(rects, accumulatedOffset) { }
+
+    void operator()(const FloatRect& rect)
+    {
+        if (!rect.isEmpty())
+            AbsoluteLayoutRectsGeneratorContext::operator()(rect);
+    }
+};
 
 } // unnamed namespace
 
-void LayoutInline::addOutlineRects(
-    Vector<LayoutRect>& rects,
-    const LayoutPoint& additionalOffset,
-    IncludeBlockVisualOverflowOrNot includeBlockOverflows) const
+void LayoutInline::addFocusRingRects(Vector<LayoutRect>& rects, const LayoutPoint& additionalOffset) const
 {
-    AbsoluteLayoutRectsGeneratorContext context(rects, additionalOffset);
-    generateLineBoxRects(context);
-    addOutlineRectsForChildrenAndContinuations(rects, additionalOffset,
-        includeBlockOverflows);
-}
+    // Add line boxes only if this object is the first object of addFocusRingRects().
+    // Otherwise the parent (LayoutBlockFlow or LayoutInline) should have added line box rects
+    // covering those of this object.
+    if (rects.isEmpty()) {
+        AbsoluteLayoutRectsIgnoringEmptyRectsGeneratorContext context(rects, additionalOffset);
+        generateLineBoxRects(context);
+    }
 
-void LayoutInline::addOutlineRectsForChildrenAndContinuations(
-    Vector<LayoutRect>& rects,
-    const LayoutPoint& additionalOffset,
-    IncludeBlockVisualOverflowOrNot includeBlockOverflows) const
-{
-    addOutlineRectsForNormalChildren(rects, additionalOffset,
-        includeBlockOverflows);
-    addOutlineRectsForContinuations(rects, additionalOffset,
-        includeBlockOverflows);
-}
+    addFocusRingRectsForNormalChildren(rects, additionalOffset);
 
-void LayoutInline::addOutlineRectsForContinuations(
-    Vector<LayoutRect>& rects,
-    const LayoutPoint& additionalOffset,
-    IncludeBlockVisualOverflowOrNot includeBlockOverflows) const
-{
     if (LayoutBoxModelObject* continuation = this->continuation()) {
         if (continuation->isInline())
-            continuation->addOutlineRects(
-                rects,
-                additionalOffset + (continuation->containingBlock()->location() - containingBlock()->location()),
-                includeBlockOverflows);
+            continuation->addFocusRingRects(rects, additionalOffset + (continuation->containingBlock()->location() - containingBlock()->location()));
         else
-            continuation->addOutlineRects(
-                rects, additionalOffset + (toLayoutBox(continuation)->location() - containingBlock()->location()),
-                includeBlockOverflows);
+            continuation->addFocusRingRects(rects, additionalOffset + (toLayoutBox(continuation)->location() - containingBlock()->location()));
     }
 }
 
-FloatRect LayoutInline::localBoundingBoxRectForAccessibility() const
-{
-    Vector<LayoutRect> rects;
-    addOutlineRects(rects, LayoutPoint(), IncludeBlockVisualOverflow);
-    return FloatRect(unionRect(rects));
-}
-
-void LayoutInline::computeSelfHitTestRects(
-    Vector<LayoutRect>& rects,
-    const LayoutPoint& layerOffset) const
+void LayoutInline::computeSelfHitTestRects(Vector<LayoutRect>& rects, const LayoutPoint& layerOffset) const
 {
     AbsoluteLayoutRectsGeneratorContext context(rects, layerOffset);
     generateLineBoxRects(context);
@@ -1532,7 +1404,7 @@ void LayoutInline::computeSelfHitTestRects(
 void LayoutInline::addAnnotatedRegions(Vector<AnnotatedRegionValue>& regions)
 {
     // Convert the style regions to absolute coordinates.
-    if (style()->visibility() != EVisibility::kVisible)
+    if (style()->visibility() != VISIBLE)
         return;
 
     if (style()->getDraggableRegionMode() == DraggableRegionNone)
@@ -1547,27 +1419,17 @@ void LayoutInline::addAnnotatedRegions(Vector<AnnotatedRegionValue>& regions)
         container = this;
 
     FloatPoint absPos = container->localToAbsolute();
-    region.bounds.setX(LayoutUnit(absPos.x() + region.bounds.x()));
-    region.bounds.setY(LayoutUnit(absPos.y() + region.bounds.y()));
+    region.bounds.setX(absPos.x() + region.bounds.x());
+    region.bounds.setY(absPos.y() + region.bounds.y());
 
-    regions.push_back(region);
+    regions.append(region);
 }
 
-void LayoutInline::invalidateDisplayItemClients(
-    PaintInvalidationReason invalidationReason) const
+void LayoutInline::invalidateDisplayItemClients(const LayoutBoxModelObject& paintInvalidationContainer) const
 {
-    ObjectPaintInvalidator paintInvalidator(*this);
-    paintInvalidator.invalidateDisplayItemClient(*this, invalidationReason);
-
+    LayoutBoxModelObject::invalidateDisplayItemClients(paintInvalidationContainer);
     for (InlineFlowBox* box = firstLineBox(); box; box = box->nextLineBox())
-        paintInvalidator.invalidateDisplayItemClient(*box, invalidationReason);
-}
-
-// TODO(lunalu): Not to just dump 0, 0 as the x and y here
-LayoutRect LayoutInline::debugRect() const
-{
-    IntRect linesBox = enclosingIntRect(linesBoundingBox());
-    return LayoutRect(IntRect(0, 0, linesBox.width(), linesBox.height()));
+        paintInvalidationContainer.invalidateDisplayItemClientOnBacking(*box);
 }
 
 } // namespace blink

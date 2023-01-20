@@ -28,6 +28,8 @@
 
 #include "core/CoreExport.h"
 #include "core/clipboard/DataTransferAccessPolicy.h"
+#include "core/dom/DocumentMarker.h"
+#include "core/editing/EditAction.h"
 #include "core/editing/EditingBehavior.h"
 #include "core/editing/EphemeralRange.h"
 #include "core/editing/FindOptions.h"
@@ -35,16 +37,14 @@
 #include "core/editing/VisibleSelection.h"
 #include "core/editing/WritingDirection.h"
 #include "core/editing/iterators/TextIterator.h"
-#include "core/editing/markers/DocumentMarker.h"
-#include "core/events/InputEvent.h"
 #include "platform/PasteMode.h"
 #include "platform/heap/Handle.h"
-#include <memory>
 
 namespace blink {
 
 class CompositeEditCommand;
-class DragData;
+class DummyPageHolder;
+class EditCommandComposition;
 class EditorClient;
 class EditorInternalCommand;
 class LocalFrame;
@@ -55,28 +55,14 @@ class SpellChecker;
 class StylePropertySet;
 class TextEvent;
 class UndoStack;
-class UndoStep;
 
-enum class DeleteDirection;
-enum class DeleteMode { Simple,
-    Smart };
-enum class InsertMode { Simple,
-    Smart };
-enum class DragSourceType { HTMLSource,
-    PlainTextSource };
+enum EditorCommandSource { CommandFromMenuOrKeyBinding, CommandFromDOM };
+enum EditorParagraphSeparator { EditorParagraphSeparatorIsDiv, EditorParagraphSeparatorIsP };
 
-enum EditorCommandSource { CommandFromMenuOrKeyBinding,
-    CommandFromDOM };
-enum EditorParagraphSeparator {
-    EditorParagraphSeparatorIsDiv,
-    EditorParagraphSeparatorIsP
-};
-
-class CORE_EXPORT Editor final : public GarbageCollectedFinalized<Editor> {
+class CORE_EXPORT Editor final : public NoBaseWillBeGarbageCollectedFinalized<Editor> {
     WTF_MAKE_NONCOPYABLE(Editor);
-
 public:
-    static Editor* create(LocalFrame&);
+    static PassOwnPtrWillBeRawPtr<Editor> create(LocalFrame&);
     ~Editor();
 
     EditorClient& client() const;
@@ -98,10 +84,10 @@ public:
     bool canDelete() const;
     bool canSmartCopyOrDelete() const;
 
-    void cut(EditorCommandSource);
+    void cut();
     void copy();
-    void paste(EditorCommandSource);
-    void pasteAsPlainText(EditorCommandSource);
+    void paste();
+    void pasteAsPlainText();
     void performDelete();
 
     static void countEvent(ExecutionContext*, const Event*);
@@ -117,39 +103,30 @@ public:
 
     void removeFormattingAndStyle();
 
-    void registerCommandGroup(CompositeEditCommand* commandGroupWrapper);
     void clearLastEditCommand();
 
-    bool deleteWithDirection(DeleteDirection,
-        TextGranularity,
-        bool killRing,
-        bool isTypingAction);
-    void deleteSelectionWithSmartDelete(
-        DeleteMode,
-        InputEvent::InputType,
-        const Position& referenceMovePosition = Position());
+    bool deleteWithDirection(SelectionDirection, TextGranularity, bool killRing, bool isTypingAction);
+    void deleteSelectionWithSmartDelete(bool smartDelete);
 
-    void applyStyle(StylePropertySet*, InputEvent::InputType);
-    void applyParagraphStyle(StylePropertySet*, InputEvent::InputType);
-    void applyStyleToSelection(StylePropertySet*, InputEvent::InputType);
-    void applyParagraphStyleToSelection(StylePropertySet*, InputEvent::InputType);
+    void applyStyle(StylePropertySet*, EditAction = EditActionUnspecified);
+    void applyParagraphStyle(StylePropertySet*, EditAction = EditActionUnspecified);
+    void applyStyleToSelection(StylePropertySet*, EditAction);
+    void applyParagraphStyleToSelection(StylePropertySet*, EditAction);
 
-    void appliedEditing(CompositeEditCommand*);
-    void unappliedEditing(UndoStep*);
-    void reappliedEditing(UndoStep*);
+    void appliedEditing(PassRefPtrWillBeRawPtr<CompositeEditCommand>);
+    void unappliedEditing(PassRefPtrWillBeRawPtr<EditCommandComposition>);
+    void reappliedEditing(PassRefPtrWillBeRawPtr<EditCommandComposition>);
 
     void setShouldStyleWithCSS(bool flag) { m_shouldStyleWithCSS = flag; }
     bool shouldStyleWithCSS() const { return m_shouldStyleWithCSS; }
 
     class CORE_EXPORT Command {
         STACK_ALLOCATED();
-
     public:
         Command();
-        Command(const EditorInternalCommand*, EditorCommandSource, LocalFrame*);
+        Command(const EditorInternalCommand*, EditorCommandSource, PassRefPtrWillBeRawPtr<LocalFrame>);
 
-        bool execute(const String& parameter = String(),
-            Event* triggeringEvent = nullptr) const;
+        bool execute(const String& parameter = String(), Event* triggeringEvent = nullptr) const;
         bool execute(Event* triggeringEvent) const;
 
         bool isSupported() const;
@@ -162,26 +139,19 @@ public:
 
         // Returns 0 if this Command is not supported.
         int idForHistogram() const;
-
     private:
         LocalFrame& frame() const
         {
-            DCHECK(m_frame);
+            ASSERT(m_frame);
             return *m_frame;
         }
 
-        // Returns target ranges for the command, currently only supports delete
-        // related commands. Used by InputEvent.
-        RangeVector* getTargetRanges() const;
-
         const EditorInternalCommand* m_command;
         EditorCommandSource m_source;
-        Member<LocalFrame> m_frame;
+        RefPtrWillBeMember<LocalFrame> m_frame;
     };
-    Command createCommand(
-        const String&
-            commandName); // Command source is CommandFromMenuOrKeyBinding.
-    Command createCommand(const String& commandName, EditorCommandSource);
+    Command command(const String& commandName); // Command source is CommandFromMenuOrKeyBinding.
+    Command command(const String& commandName, EditorCommandSource);
 
     // |Editor::executeCommand| is implementation of |WebFrame::executeCommand|
     // rather than |Document::execCommand|.
@@ -189,9 +159,7 @@ public:
     bool executeCommand(const String& commandName, const String& value);
 
     bool insertText(const String&, KeyboardEvent* triggeringEvent);
-    bool insertTextWithoutSendingTextEvent(const String&,
-        bool selectInsertedText,
-        TextEvent* triggeringEvent);
+    bool insertTextWithoutSendingTextEvent(const String&, bool selectInsertedText, TextEvent* triggeringEvent);
     bool insertLineBreak();
     bool insertParagraphSeparator();
 
@@ -224,104 +192,58 @@ public:
 
     EphemeralRange selectedRange();
 
-    void addToKillRing(const EphemeralRange&);
+    // TODO(yosin) We should get rid of |addToKillRing()| with |Range| for
+    // Oilpan.
+    void addToKillRing(Range*, bool prepend);
+    void addToKillRing(const EphemeralRange&, bool prepend);
 
-    void pasteAsFragment(DocumentFragment*, bool smartReplace, bool matchStyle);
+    void pasteAsFragment(PassRefPtrWillBeRawPtr<DocumentFragment>, bool smartReplace, bool matchStyle);
     void pasteAsPlainText(const String&, bool smartReplace);
 
     Element* findEventTargetFrom(const VisibleSelection&) const;
-    Element* findEventTargetFromSelection() const;
 
     bool findString(const String&, FindOptions);
 
-    Range* findStringAndScrollToVisible(const String&, Range*, FindOptions);
-    Range* findRangeOfString(const String& target,
-        const EphemeralRange& referenceRange,
-        FindOptions);
-    Range* findRangeOfString(const String& target,
-        const EphemeralRangeInFlatTree& referenceRange,
-        FindOptions);
+    PassRefPtrWillBeRawPtr<Range> findStringAndScrollToVisible(const String&, Range*, FindOptions);
 
     const VisibleSelection& mark() const; // Mark, to be used as emacs uses it.
     void setMark(const VisibleSelection&);
 
-    void computeAndSetTypingStyle(StylePropertySet*, InputEvent::InputType);
+    void computeAndSetTypingStyle(StylePropertySet* , EditAction = EditActionUnspecified);
 
-    // |firstRectForRange| requires up-to-date layout.
-    IntRect firstRectForRange(const EphemeralRange&) const;
+    IntRect firstRectForRange(Range*) const;
 
-    void respondToChangedSelection(const Position& oldSelectionStart,
-        FrameSelection::SetSelectionOptions);
+    void respondToChangedSelection(const VisibleSelection& oldSelection, FrameSelection::SetSelectionOptions);
 
     bool markedTextMatchesAreHighlighted() const;
     void setMarkedTextMatchesAreHighlighted(bool);
 
-    void replaceSelectionWithFragment(DocumentFragment*,
-        bool selectReplacement,
-        bool smartReplace,
-        bool matchStyle,
-        InputEvent::InputType);
-    void replaceSelectionWithText(const String&,
-        bool selectReplacement,
-        bool smartReplace,
-        InputEvent::InputType);
+    void replaceSelectionWithFragment(PassRefPtrWillBeRawPtr<DocumentFragment>, bool selectReplacement, bool smartReplace, bool matchStyle);
+    void replaceSelectionWithText(const String&, bool selectReplacement, bool smartReplace);
 
-    // Implementation of WebLocalFrameImpl::replaceSelection.
-    void replaceSelection(const String&);
-
-    void replaceSelectionAfterDragging(DocumentFragment*,
-        InsertMode,
-        DragSourceType);
-
-    // Return false if frame was destroyed by event handler, should stop executing
-    // remaining actions.
-    bool deleteSelectionAfterDraggingWithEvents(
-        Element* dragSource,
-        DeleteMode,
-        const Position& referenceMovePosition);
-    bool replaceSelectionAfterDraggingWithEvents(Element* dropTarget,
-        DragData*,
-        DocumentFragment*,
-        Range* dropCaretRange,
-        InsertMode,
-        DragSourceType);
-
-    EditorParagraphSeparator defaultParagraphSeparator() const
-    {
-        return m_defaultParagraphSeparator;
-    }
-    void setDefaultParagraphSeparator(EditorParagraphSeparator separator)
-    {
-        m_defaultParagraphSeparator = separator;
-    }
-
-    static void tidyUpHTMLStructure(Document&);
+    EditorParagraphSeparator defaultParagraphSeparator() const { return m_defaultParagraphSeparator; }
+    void setDefaultParagraphSeparator(EditorParagraphSeparator separator) { m_defaultParagraphSeparator = separator; }
 
     class RevealSelectionScope {
         WTF_MAKE_NONCOPYABLE(RevealSelectionScope);
-        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
+        STACK_ALLOCATED();
     public:
         explicit RevealSelectionScope(Editor*);
         ~RevealSelectionScope();
-
-        DECLARE_TRACE();
-
     private:
-        Member<Editor> m_editor;
+        RawPtrWillBeMember<Editor> m_editor;
     };
     friend class RevealSelectionScope;
 
     DECLARE_TRACE();
 
 private:
-    Member<LocalFrame> m_frame;
-    Member<CompositeEditCommand> m_lastEditCommand;
-    const Member<UndoStack> m_undoStack;
+    RawPtrWillBeMember<LocalFrame> m_frame;
+    RefPtrWillBeMember<CompositeEditCommand> m_lastEditCommand;
     int m_preventRevealSelection;
     bool m_shouldStartNewKillRingSequence;
     bool m_shouldStyleWithCSS;
-    const std::unique_ptr<KillRing> m_killRing;
+    const OwnPtr<KillRing> m_killRing;
     VisibleSelection m_mark;
     bool m_areMarkedTextMatchesHighlighted;
     EditorParagraphSeparator m_defaultParagraphSeparator;
@@ -331,11 +253,14 @@ private:
 
     LocalFrame& frame() const
     {
-        DCHECK(m_frame);
+        ASSERT(m_frame);
         return *m_frame;
     }
 
     bool canDeleteRange(const EphemeralRange&) const;
+    bool shouldDeleteRange(const EphemeralRange&) const;
+
+    UndoStack* undoStack() const;
 
     bool tryDHTMLCopy();
     bool tryDHTMLCut();
@@ -345,15 +270,15 @@ private:
     void pasteAsPlainTextWithPasteboard(Pasteboard*);
     void pasteWithPasteboard(Pasteboard*);
     void writeSelectionToPasteboard();
-    bool dispatchCPPEvent(const AtomicString&,
-        DataTransferAccessPolicy,
-        PasteMode = AllMimeTypes);
+    bool dispatchCPPEvent(const AtomicString&, DataTransferAccessPolicy, PasteMode = AllMimeTypes);
 
-    void revealSelectionAfterEditingOperation(
-        const ScrollAlignment& = ScrollAlignment::alignCenterIfNeeded,
-        RevealExtentOption = DoNotRevealExtent);
-    void changeSelectionAfterCommand(const VisibleSelection& newSelection,
-        FrameSelection::SetSelectionOptions);
+    void revealSelectionAfterEditingOperation(const ScrollAlignment& = ScrollAlignment::alignCenterIfNeeded, RevealExtentOption = DoNotRevealExtent);
+    void changeSelectionAfterCommand(const VisibleSelection& newSelection, FrameSelection::SetSelectionOptions);
+    void notifyComponentsOnChangedSelection(const VisibleSelection& oldSelection, FrameSelection::SetSelectionOptions);
+
+    Element* findEventTargetFromSelection() const;
+
+    PassRefPtrWillBeRawPtr<Range> findRangeOfString(const String&, Range*, FindOptions);
 
     SpellChecker& spellChecker() const;
 

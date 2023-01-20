@@ -26,6 +26,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/webdatabase/SQLResultSetRowList.h"
 
 #include "bindings/core/v8/ScriptValue.h"
@@ -45,6 +49,7 @@ unsigned SQLResultSetRowList::length() const
     return m_result.size() / m_columns.size();
 }
 
+<<<<<<< HEAD
 ScriptValue SQLResultSetRowList::item(ScriptState* scriptState,
     unsigned index,
     ExceptionState& exceptionState)
@@ -52,6 +57,12 @@ ScriptValue SQLResultSetRowList::item(ScriptState* scriptState,
     if (index >= length()) {
         exceptionState.throwDOMException(
             IndexSizeError, ExceptionMessages::indexExceedsMaximumBound<unsigned>("index", index, length()));
+=======
+ScriptValue SQLResultSetRowList::item(ScriptState* scriptState, unsigned index, ExceptionState& exceptionState)
+{
+    if (index >= length()) {
+        exceptionState.throwDOMException(IndexSizeError, ExceptionMessages::indexExceedsMaximumBound<unsigned>("index", index, length()));
+>>>>>>> miniblink49
         return ScriptValue();
     }
 
@@ -60,8 +71,12 @@ ScriptValue SQLResultSetRowList::item(ScriptState* scriptState,
 
     Vector<std::pair<String, SQLValue>> dataArray;
     for (unsigned i = 0; i < numColumns; ++i)
+<<<<<<< HEAD
         dataArray.push_back(
             std::make_pair(m_columns[i], m_result[valuesIndex + i]));
+=======
+        dataArray.append(std::make_pair(m_columns[i], m_result[valuesIndex + i]));
+>>>>>>> miniblink49
 
     return ScriptValue::from(scriptState, dataArray);
 }

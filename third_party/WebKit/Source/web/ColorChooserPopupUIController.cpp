@@ -23,10 +23,17 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "web/ColorChooserPopupUIController.h"
 
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
+=======
+#include "config.h"
+#include "web/ColorChooserPopupUIController.h"
+
+#include "core/frame/FrameView.h"
+>>>>>>> miniblink49
 #include "core/html/forms/ColorChooserClient.h"
 #include "core/page/PagePopup.h"
 #include "platform/geometry/IntRect.h"
@@ -44,6 +51,7 @@ enum ColorPickerPopupAction {
     ColorPickerPopupActionSetValue = 0
 };
 
+<<<<<<< HEAD
 ColorChooserPopupUIController::ColorChooserPopupUIController(
     LocalFrame* frame,
     ChromeClientImpl* chromeClient,
@@ -51,10 +59,17 @@ ColorChooserPopupUIController::ColorChooserPopupUIController(
     : ColorChooserUIController(frame, client)
     , m_chromeClient(chromeClient)
     , m_popup(nullptr)
+=======
+ColorChooserPopupUIController::ColorChooserPopupUIController(LocalFrame* frame, ChromeClientImpl* chromeClient, ColorChooserClient* client)
+    : ColorChooserUIController(frame, client)
+    , m_chromeClient(chromeClient)
+    , m_popup(0)
+>>>>>>> miniblink49
     , m_locale(Locale::defaultLocale())
 {
 }
 
+<<<<<<< HEAD
 ColorChooserPopupUIController::~ColorChooserPopupUIController() { }
 
 void ColorChooserPopupUIController::dispose()
@@ -68,6 +83,12 @@ DEFINE_TRACE(ColorChooserPopupUIController)
 {
     visitor->trace(m_chromeClient);
     ColorChooserUIController::trace(visitor);
+=======
+ColorChooserPopupUIController::~ColorChooserPopupUIController()
+{
+    closePopup();
+    // ~ColorChooserUIController ends the ColorChooser.
+>>>>>>> miniblink49
 }
 
 void ColorChooserPopupUIController::openUI()
@@ -88,9 +109,18 @@ void ColorChooserPopupUIController::endChooser()
 
 AXObject* ColorChooserPopupUIController::rootAXObject()
 {
+<<<<<<< HEAD
     //return m_popup ? m_popup->rootAXObject() : nullptr;
     DebugBreak();
     return nullptr;
+=======
+    return m_popup ? m_popup->rootAXObject() : 0;
+}
+
+IntSize ColorChooserPopupUIController::contentSize()
+{
+    return IntSize(0, 0);
+>>>>>>> miniblink49
 }
 
 void ColorChooserPopupUIController::writeDocument(SharedBuffer* data)
@@ -98,6 +128,7 @@ void ColorChooserPopupUIController::writeDocument(SharedBuffer* data)
     Vector<ColorSuggestion> suggestions = m_client->suggestions();
     Vector<String> suggestionValues;
     for (unsigned i = 0; i < suggestions.size(); i++)
+<<<<<<< HEAD
         suggestionValues.push_back(suggestions[i].color.serialized());
     IntRect anchorRectInScreen = m_chromeClient->viewportToScreen(
         m_client->elementRectRelativeToViewport(), m_frame->view());
@@ -116,6 +147,19 @@ void ColorChooserPopupUIController::writeDocument(SharedBuffer* data)
         locale().queryString(WebLocalizedString::OtherColorLabel), data);
     addProperty("anchorRectInScreen", anchorRectInScreen, data);
     addProperty("zoomFactor", zoomFactor(), data);
+=======
+        suggestionValues.append(suggestions[i].color.serialized());
+    IntRect anchorRectInScreen = m_chromeClient->viewportToScreen(m_client->elementRectRelativeToViewport());
+
+    PagePopupClient::addString("<!DOCTYPE html><head><meta charset='UTF-8'><style>\n", data);
+    data->append(Platform::current()->loadResource("pickerCommon.css"));
+    data->append(Platform::current()->loadResource("colorSuggestionPicker.css"));
+    PagePopupClient::addString("</style></head><body><div id=main>Loading...</div><script>\n"
+        "window.dialogArguments = {\n", data);
+    PagePopupClient::addProperty("values", suggestionValues, data);
+    PagePopupClient::addProperty("otherColorLabel", locale().queryString(WebLocalizedString::OtherColorLabel), data);
+    addProperty("anchorRectInScreen", anchorRectInScreen, data);
+>>>>>>> miniblink49
     PagePopupClient::addString("};\n", data);
     data->append(Platform::current()->loadResource("pickerCommon.js"));
     data->append(Platform::current()->loadResource("colorSuggestionPicker.js"));
@@ -127,12 +171,19 @@ Locale& ColorChooserPopupUIController::locale()
     return m_locale;
 }
 
+<<<<<<< HEAD
 void ColorChooserPopupUIController::setValueAndClosePopup(
     int numValue,
     const String& stringValue)
 {
     DCHECK(m_popup);
     DCHECK(m_client);
+=======
+void ColorChooserPopupUIController::setValueAndClosePopup(int numValue, const String& stringValue)
+{
+    ASSERT(m_popup);
+    ASSERT(m_client);
+>>>>>>> miniblink49
     if (numValue == ColorPickerPopupActionSetValue)
         setValue(stringValue);
     if (numValue == ColorPickerPopupActionChooseOtherColor)
@@ -142,16 +193,27 @@ void ColorChooserPopupUIController::setValueAndClosePopup(
 
 void ColorChooserPopupUIController::setValue(const String& value)
 {
+<<<<<<< HEAD
     DCHECK(m_client);
     Color color;
     bool success = color.setFromString(value);
     DCHECK(success);
+=======
+    ASSERT(m_client);
+    Color color;
+    bool success = color.setFromString(value);
+    ASSERT_UNUSED(success, success);
+>>>>>>> miniblink49
     m_client->didChooseColor(color);
 }
 
 void ColorChooserPopupUIController::didClosePopup()
 {
+<<<<<<< HEAD
     m_popup = nullptr;
+=======
+    m_popup = 0;
+>>>>>>> miniblink49
 
     if (!m_chooser)
         didEndChooser();
@@ -164,7 +226,11 @@ Element& ColorChooserPopupUIController::ownerElement()
 
 void ColorChooserPopupUIController::openPopup()
 {
+<<<<<<< HEAD
     DCHECK(!m_popup);
+=======
+    ASSERT(!m_popup);
+>>>>>>> miniblink49
     m_popup = m_chromeClient->openPagePopup(this);
 }
 

@@ -10,6 +10,7 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -22,6 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "public/platform/WebMediaStream.h"
 
 #include "platform/UUID.h"
@@ -31,14 +48,21 @@
 #include "public/platform/WebMediaStreamSource.h"
 #include "public/platform/WebMediaStreamTrack.h"
 #include "public/platform/WebString.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include "wtf/Vector.h"
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 namespace {
 
+<<<<<<< HEAD
     class ExtraDataContainer : public MediaStreamDescriptor::ExtraData {
     public:
         ExtraDataContainer(std::unique_ptr<WebMediaStream::ExtraData> extraData)
@@ -54,6 +78,25 @@ namespace {
 
 } // namespace
 
+=======
+class ExtraDataContainer : public MediaStreamDescriptor::ExtraData {
+public:
+    ExtraDataContainer(PassOwnPtr<WebMediaStream::ExtraData> extraData) : m_extraData(extraData) { }
+
+    WebMediaStream::ExtraData* extraData() { return m_extraData.get(); }
+
+private:
+    OwnPtr<WebMediaStream::ExtraData> m_extraData;
+};
+
+} // namespace
+
+WebMediaStream::WebMediaStream(const PassRefPtr<MediaStreamDescriptor>& mediaStreamDescriptor)
+    : m_private(mediaStreamDescriptor)
+{
+}
+
+>>>>>>> miniblink49
 WebMediaStream::WebMediaStream(MediaStreamDescriptor* mediaStreamDescriptor)
     : m_private(mediaStreamDescriptor)
 {
@@ -69,22 +112,38 @@ WebString WebMediaStream::id() const
     return m_private->id();
 }
 
+<<<<<<< HEAD
 WebMediaStream::ExtraData* WebMediaStream::getExtraData() const
 {
     MediaStreamDescriptor::ExtraData* data = m_private->getExtraData();
     if (!data)
         return 0;
     return static_cast<ExtraDataContainer*>(data)->getExtraData();
+=======
+WebMediaStream::ExtraData* WebMediaStream::extraData() const
+{
+    MediaStreamDescriptor::ExtraData* data = m_private->extraData();
+    if (!data)
+        return 0;
+    return static_cast<ExtraDataContainer*>(data)->extraData();
+>>>>>>> miniblink49
 }
 
 void WebMediaStream::setExtraData(ExtraData* extraData)
 {
+<<<<<<< HEAD
     m_private->setExtraData(
         WTF::wrapUnique(new ExtraDataContainer(WTF::wrapUnique(extraData))));
 }
 
 void WebMediaStream::audioTracks(
     WebVector<WebMediaStreamTrack>& webTracks) const
+=======
+    m_private->setExtraData(adoptPtr(new ExtraDataContainer(adoptPtr(extraData))));
+}
+
+void WebMediaStream::audioTracks(WebVector<WebMediaStreamTrack>& webTracks) const
+>>>>>>> miniblink49
 {
     size_t numberOfTracks = m_private->numberOfAudioComponents();
     WebVector<WebMediaStreamTrack> result(numberOfTracks);
@@ -93,8 +152,12 @@ void WebMediaStream::audioTracks(
     webTracks.swap(result);
 }
 
+<<<<<<< HEAD
 void WebMediaStream::videoTracks(
     WebVector<WebMediaStreamTrack>& webTracks) const
+=======
+void WebMediaStream::videoTracks(WebVector<WebMediaStreamTrack>& webTracks) const
+>>>>>>> miniblink49
 {
     size_t numberOfTracks = m_private->numberOfVideoComponents();
     WebVector<WebMediaStreamTrack> result(numberOfTracks);
@@ -115,38 +178,66 @@ void WebMediaStream::removeTrack(const WebMediaStreamTrack& track)
     m_private->removeRemoteTrack(track);
 }
 
+<<<<<<< HEAD
 WebMediaStream& WebMediaStream::operator=(
     MediaStreamDescriptor* mediaStreamDescriptor)
+=======
+WebMediaStream& WebMediaStream::operator=(const PassRefPtr<MediaStreamDescriptor>& mediaStreamDescriptor)
+>>>>>>> miniblink49
 {
     m_private = mediaStreamDescriptor;
     return *this;
 }
 
+<<<<<<< HEAD
+=======
+WebMediaStream::operator PassRefPtr<MediaStreamDescriptor>() const
+{
+    return m_private.get();
+}
+
+>>>>>>> miniblink49
 WebMediaStream::operator MediaStreamDescriptor*() const
 {
     return m_private.get();
 }
 
+<<<<<<< HEAD
 void WebMediaStream::initialize(
     const WebVector<WebMediaStreamTrack>& audioTracks,
     const WebVector<WebMediaStreamTrack>& videoTracks)
+=======
+void WebMediaStream::initialize(const WebVector<WebMediaStreamTrack>& audioTracks, const WebVector<WebMediaStreamTrack>& videoTracks)
+>>>>>>> miniblink49
 {
     initialize(createCanonicalUUIDString(), audioTracks, videoTracks);
 }
 
+<<<<<<< HEAD
 void WebMediaStream::initialize(
     const WebString& label,
     const WebVector<WebMediaStreamTrack>& audioTracks,
     const WebVector<WebMediaStreamTrack>& videoTracks)
+=======
+void WebMediaStream::initialize(const WebString& label, const WebVector<WebMediaStreamTrack>& audioTracks, const WebVector<WebMediaStreamTrack>& videoTracks)
+>>>>>>> miniblink49
 {
     MediaStreamComponentVector audio, video;
     for (size_t i = 0; i < audioTracks.size(); ++i) {
         MediaStreamComponent* component = audioTracks[i];
+<<<<<<< HEAD
         audio.push_back(component);
     }
     for (size_t i = 0; i < videoTracks.size(); ++i) {
         MediaStreamComponent* component = videoTracks[i];
         video.push_back(component);
+=======
+        audio.append(component);
+    }
+    for (size_t i = 0; i < videoTracks.size(); ++i) {
+        MediaStreamComponent* component = videoTracks[i];
+        video.append(component);
+>>>>>>> miniblink49
     }
     m_private = MediaStreamDescriptor::create(label, audio, video);
 }

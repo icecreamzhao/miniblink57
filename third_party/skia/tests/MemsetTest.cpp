@@ -6,25 +6,37 @@
  */
 
 #include "SkChunkAlloc.h"
+<<<<<<< HEAD
 #include "SkRandom.h"
+=======
+>>>>>>> miniblink49
 #include "SkUtils.h"
 #include "Test.h"
 
 static void check_alloc(skiatest::Reporter* reporter, const SkChunkAlloc& alloc,
+<<<<<<< HEAD
     size_t capacity, size_t used, int numBlocks)
 {
+=======
+                        size_t capacity, size_t used, int numBlocks) {
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, alloc.totalCapacity() >= capacity);
     REPORTER_ASSERT(reporter, alloc.totalUsed() == used);
     SkDEBUGCODE(REPORTER_ASSERT(reporter, alloc.blockCount() == numBlocks);)
 }
 
+<<<<<<< HEAD
 static void* simple_alloc(skiatest::Reporter* reporter, SkChunkAlloc* alloc, size_t size)
 {
+=======
+static void* simple_alloc(skiatest::Reporter* reporter, SkChunkAlloc* alloc, size_t size) {
+>>>>>>> miniblink49
     void* ptr = alloc->allocThrow(size);
     check_alloc(reporter, *alloc, size, size, 1);
     REPORTER_ASSERT(reporter, alloc->contains(ptr));
     return ptr;
 }
+<<<<<<< HEAD
 
 static void check_alloc_alignment(skiatest::Reporter* reporter,
     SkChunkAlloc* alloc, size_t size)
@@ -37,13 +49,21 @@ static void check_alloc_alignment(skiatest::Reporter* reporter,
 
 static void test_chunkalloc(skiatest::Reporter* reporter)
 {
+=======
+                        
+static void test_chunkalloc(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     static const size_t kMin = 1024;
     SkChunkAlloc alloc(kMin);
 
     //------------------------------------------------------------------------
     // check empty
     check_alloc(reporter, alloc, 0, 0, 0);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, !alloc.contains(nullptr));
+=======
+    REPORTER_ASSERT(reporter, !alloc.contains(NULL));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, !alloc.contains(reporter));
 
     // reset on empty allocator
@@ -80,13 +100,18 @@ static void test_chunkalloc(skiatest::Reporter* reporter)
     ptr = simple_alloc(reporter, &alloc, size);
 
     ptr = alloc.allocThrow(kMin);
+<<<<<<< HEAD
     check_alloc(reporter, alloc, 2 * kMin, size + kMin, 2);
+=======
+    check_alloc(reporter, alloc, 2*kMin, size+kMin, 2);
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, alloc.contains(ptr));
 
     //------------------------------------------------------------------------
     // test out unalloc
     size_t freed = alloc.unalloc(ptr);
     REPORTER_ASSERT(reporter, freed == kMin);
+<<<<<<< HEAD
     check_alloc(reporter, alloc, 2 * kMin, size, 2);
     REPORTER_ASSERT(reporter, !alloc.contains(ptr));
 
@@ -97,18 +122,27 @@ static void test_chunkalloc(skiatest::Reporter* reporter)
     for (int i = 0; i < 1000; i++) {
         check_alloc_alignment(reporter, &alloc, rand.nextU16());
     }
+=======
+    check_alloc(reporter, alloc, 2*kMin, size, 2);
+    REPORTER_ASSERT(reporter, !alloc.contains(ptr));
+>>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static void set_zero(void* dst, size_t bytes)
 {
+=======
+static void set_zero(void* dst, size_t bytes) {
+>>>>>>> miniblink49
     char* ptr = (char*)dst;
     for (size_t i = 0; i < bytes; ++i) {
         ptr[i] = 0;
     }
 }
 
+<<<<<<< HEAD
 #define MAX_ALIGNMENT 64
 #define MAX_COUNT ((MAX_ALIGNMENT)*32)
 #define PAD 32
@@ -141,6 +175,37 @@ static void compare32(skiatest::Reporter* r, const uint32_t base[],
 
 static void test_16(skiatest::Reporter* reporter)
 {
+=======
+#define MAX_ALIGNMENT   64
+#define MAX_COUNT       ((MAX_ALIGNMENT) * 32)
+#define PAD             32
+#define TOTAL           (PAD + MAX_ALIGNMENT + MAX_COUNT + PAD)
+
+#define VALUE16         0x1234
+#define VALUE32         0x12345678
+
+static bool compare16(const uint16_t base[], uint16_t value, int count) {
+    for (int i = 0; i < count; ++i) {
+        if (base[i] != value) {
+            SkDebugf("[%d] expected %x found %x\n", i, value, base[i]);
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool compare32(const uint32_t base[], uint32_t value, int count) {
+    for (int i = 0; i < count; ++i) {
+        if (base[i] != value) {
+            SkDebugf("[%d] expected %x found %x\n", i, value, base[i]);
+            return false;
+        }
+    }
+    return true;
+}
+
+static void test_16(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     uint16_t buffer[TOTAL];
 
     for (int count = 0; count < MAX_COUNT; ++count) {
@@ -150,15 +215,26 @@ static void test_16(skiatest::Reporter* reporter)
             uint16_t* base = &buffer[PAD + alignment];
             sk_memset16(base, VALUE16, count);
 
+<<<<<<< HEAD
             compare16(reporter, buffer, 0, PAD + alignment);
             compare16(reporter, base, VALUE16, count);
             compare16(reporter, base + count, 0, TOTAL - count - PAD - alignment);
+=======
+            REPORTER_ASSERT(reporter,
+                compare16(buffer,       0,       PAD + alignment) &&
+                compare16(base,         VALUE16, count) &&
+                compare16(base + count, 0,       TOTAL - count - PAD - alignment));
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 static void test_32(skiatest::Reporter* reporter)
 {
+=======
+static void test_32(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     uint32_t buffer[TOTAL];
 
     for (int count = 0; count < MAX_COUNT; ++count) {
@@ -168,9 +244,16 @@ static void test_32(skiatest::Reporter* reporter)
             uint32_t* base = &buffer[PAD + alignment];
             sk_memset32(base, VALUE32, count);
 
+<<<<<<< HEAD
             compare32(reporter, buffer, 0, PAD + alignment);
             compare32(reporter, base, VALUE32, count);
             compare32(reporter, base + count, 0, TOTAL - count - PAD - alignment);
+=======
+            REPORTER_ASSERT(reporter,
+                compare32(buffer,       0,       PAD + alignment) &&
+                compare32(base,         VALUE32, count) &&
+                compare32(base + count, 0,       TOTAL - count - PAD - alignment));
+>>>>>>> miniblink49
         }
     }
 }
@@ -180,8 +263,12 @@ static void test_32(skiatest::Reporter* reporter)
  *  For performance considerations, implementations may take different paths
  *  depending on the alignment of the dst, and/or the size of the count.
  */
+<<<<<<< HEAD
 DEF_TEST(Memset, reporter)
 {
+=======
+DEF_TEST(Memset, reporter) {
+>>>>>>> miniblink49
     test_16(reporter);
     test_32(reporter);
 

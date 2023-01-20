@@ -17,6 +17,7 @@ namespace internal {
 
 #define __ ACCESS_MASM(masm)
 
+<<<<<<< HEAD
     void DebugCodegen::GenerateHandleDebuggerStatement(MacroAssembler* masm)
     {
         {
@@ -61,3 +62,48 @@ namespace internal {
 #undef __
 
 #endif // V8_TARGET_ARCH_ARM64
+=======
+void DebugCodegen::GenerateHandleDebuggerStatement(MacroAssembler* masm) {
+  {
+    FrameScope scope(masm, StackFrame::INTERNAL);
+    __ CallRuntime(Runtime::kHandleDebuggerStatement, 0);
+  }
+  __ MaybeDropFrames();
+
+  // Return to caller.
+  __ Ret();
+}
+
+void DebugCodegen::GenerateFrameDropperTrampoline(MacroAssembler* masm) {
+  // Frame is being dropped:
+  // - Drop to the target frame specified by x1.
+  // - Look up current function on the frame.
+  // - Leave the frame.
+  // - Restart the frame by calling the function.
+  __ Mov(fp, x1);
+  __ Ldr(x1, MemOperand(fp, JavaScriptFrameConstants::kFunctionOffset));
+
+  __ Mov(sp, fp);
+  __ Pop(fp, lr);  // Frame, Return address.
+
+  __ LoadTaggedPointerField(
+      x0, FieldMemOperand(x1, JSFunction::kSharedFunctionInfoOffset));
+  __ Ldrh(x0,
+          FieldMemOperand(x0, SharedFunctionInfo::kFormalParameterCountOffset));
+  __ mov(x2, x0);
+
+  ParameterCount dummy1(x2);
+  ParameterCount dummy2(x0);
+  __ InvokeFunction(x1, dummy1, dummy2, JUMP_FUNCTION);
+}
+
+
+const bool LiveEdit::kFrameDropperSupported = true;
+
+}  // namespace internal
+}  // namespace v8
+
+#undef __
+
+#endif  // V8_TARGET_ARCH_ARM64
+>>>>>>> miniblink49

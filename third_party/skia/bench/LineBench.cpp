@@ -15,18 +15,30 @@
 #include "SkString.h"
 #include "SkTArray.h"
 
+<<<<<<< HEAD
 class LineBench : public Benchmark {
     SkScalar fStrokeWidth;
     bool fDoAA;
     SkString fName;
+=======
+
+class LineBench : public Benchmark {
+    SkScalar    fStrokeWidth;
+    bool        fDoAA;
+    SkString    fName;
+>>>>>>> miniblink49
     enum {
         PTS = 500,
     };
     SkPoint fPts[PTS];
 
 public:
+<<<<<<< HEAD
     LineBench(SkScalar width, bool doAA)
     {
+=======
+    LineBench(SkScalar width, bool doAA)  {
+>>>>>>> miniblink49
         fStrokeWidth = width;
         fDoAA = doAA;
         fName.printf("lines_%g_%s", width, doAA ? "AA" : "BW");
@@ -38,6 +50,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -45,6 +58,13 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         this->setupPaint(&paint);
 
@@ -61,8 +81,16 @@ private:
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_BENCH(return new LineBench(0, false);)
 DEF_BENCH(return new LineBench(SK_Scalar1, false);)
 DEF_BENCH(return new LineBench(0, true);)
 DEF_BENCH(return new LineBench(SK_Scalar1 / 2, true);)
 DEF_BENCH(return new LineBench(SK_Scalar1, true);)
+=======
+DEF_BENCH(return new LineBench(0,            false);)
+DEF_BENCH(return new LineBench(SK_Scalar1,   false);)
+DEF_BENCH(return new LineBench(0,            true);)
+DEF_BENCH(return new LineBench(SK_Scalar1/2, true);)
+DEF_BENCH(return new LineBench(SK_Scalar1,   true);)
+>>>>>>> miniblink49

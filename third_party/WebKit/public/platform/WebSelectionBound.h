@@ -14,9 +14,17 @@ namespace blink {
 struct WebSelectionBound {
     // TODO(jdduke): Remove the type identifier after downstream code adopts
     // |WebSelection| for determining bound orientation.
+<<<<<<< HEAD
     enum Type { Caret,
         SelectionLeft,
         SelectionRight };
+=======
+    enum Type {
+        Caret,
+        SelectionLeft,
+        SelectionRight
+    };
+>>>>>>> miniblink49
 
     explicit WebSelectionBound(Type type)
         : type(type)

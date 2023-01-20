@@ -12,11 +12,19 @@
 #include "SkMutex.h"
 
 #ifndef SK_LAZY_CACHE_STATS
+<<<<<<< HEAD
 #ifdef SK_DEBUG
 #define SK_LAZY_CACHE_STATS 1
 #else
 #define SK_LAZY_CACHE_STATS 0
 #endif
+=======
+    #ifdef SK_DEBUG
+        #define SK_LAZY_CACHE_STATS 1
+    #else
+        #define SK_LAZY_CACHE_STATS 0
+    #endif
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -36,7 +44,11 @@ public:
     /** purges all unlocked DMs */
     virtual void dumpPool() = 0;
 
+<<<<<<< HEAD
 #if SK_LAZY_CACHE_STATS
+=======
+    #if SK_LAZY_CACHE_STATS
+>>>>>>> miniblink49
     /**
      * These two values are a count of the number of successful and
      * failed calls to SkDiscardableMemory::lock() for all DMs managed
@@ -45,7 +57,11 @@ public:
     virtual int getCacheHits() = 0;
     virtual int getCacheMisses() = 0;
     virtual void resetCacheHitsAndMisses() = 0;
+<<<<<<< HEAD
 #endif
+=======
+    #endif
+>>>>>>> miniblink49
 
     /**
      *  This non-global pool can be used for unit tests to verify that
@@ -53,7 +69,11 @@ public:
      *  Without mutex, will be not be thread safe.
      */
     static SkDiscardableMemoryPool* Create(
+<<<<<<< HEAD
         size_t size, SkBaseMutex* mutex = nullptr);
+=======
+            size_t size, SkBaseMutex* mutex = NULL);
+>>>>>>> miniblink49
 };
 
 /**
@@ -66,4 +86,8 @@ SkDiscardableMemoryPool* SkGetGlobalDiscardableMemoryPool();
 #define SK_DEFAULT_GLOBAL_DISCARDABLE_MEMORY_POOL_SIZE (128 * 1024 * 1024)
 #endif
 
+<<<<<<< HEAD
 #endif // SkDiscardableMemoryPool_DEFINED
+=======
+#endif  // SkDiscardableMemoryPool_DEFINED
+>>>>>>> miniblink49

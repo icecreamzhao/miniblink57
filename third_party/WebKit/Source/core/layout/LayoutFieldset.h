@@ -34,23 +34,18 @@ public:
 
     LayoutBox* findInFlowLegend() const;
 
-    const char* name() const override { return "LayoutFieldset"; }
+    virtual const char* name() const override { return "LayoutFieldset"; }
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectFieldset || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectFieldset || LayoutBlockFlow::isOfType(type); }
 
-    LayoutObject* layoutSpecialExcludedChild(bool relayoutChildren,
-        SubtreeLayoutScope&) override;
+    virtual LayoutObject* layoutSpecialExcludedChild(bool relayoutChildren, SubtreeLayoutScope&) override;
 
-    void computePreferredLogicalWidths() override;
-    bool avoidsFloats() const override { return true; }
+    virtual void computePreferredLogicalWidths() override;
+    virtual bool avoidsFloats() const override { return true; }
 
-    void paintBoxDecorationBackground(const PaintInfo&,
-        const LayoutPoint&) const override;
-    void paintMask(const PaintInfo&, const LayoutPoint&) const override;
+    virtual void paintBoxDecorationBackground(const PaintInfo&, const LayoutPoint&) override;
+    virtual void paintMask(const PaintInfo&, const LayoutPoint&) override;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutFieldset, isFieldset());

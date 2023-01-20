@@ -19,8 +19,13 @@
 
 #include "unicode/utypes.h"
 
+<<<<<<< HEAD
 #include "unicode/locid.h"
 #include "unicode/unistr.h"
+=======
+#include "unicode/unistr.h"
+#include "unicode/locid.h"
+>>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -38,6 +43,7 @@ struct ListFormatData : public UMemory {
     UnicodeString middlePattern;
     UnicodeString endPattern;
 
+<<<<<<< HEAD
     ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end)
         : twoPattern(two)
         , startPattern(start)
@@ -47,11 +53,22 @@ struct ListFormatData : public UMemory {
     }
 };
 
+=======
+  ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end) :
+      twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end) {}
+};
+
+
+>>>>>>> miniblink49
 /**
  * \file
  * \brief C++ API: API for formatting a list.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /**
  * An immutable class for formatting a list, using data from CLDR (or supplied
  * separately).
@@ -62,9 +79,16 @@ struct ListFormatData : public UMemory {
  * The ListFormatter class is not intended for public subclassing.
  * @stable ICU 50
  */
+<<<<<<< HEAD
 class U_COMMON_API ListFormatter : public UObject {
 
 public:
+=======
+class U_COMMON_API ListFormatter : public UObject{
+
+  public:
+
+>>>>>>> miniblink49
     /**
      * Copy constructor.
      * @stable ICU 52
@@ -110,7 +134,11 @@ public:
      * @internal
      */
     static ListFormatter* createInstance(const Locale& locale, const char* style, UErrorCode& errorCode);
+<<<<<<< HEAD
 #endif /* U_HIDE_INTERNAL_API */
+=======
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -119,6 +147,10 @@ public:
      */
     virtual ~ListFormatter();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * Formats a list of strings.
      *
@@ -137,6 +169,7 @@ public:
       @internal for MeasureFormat
     */
     UnicodeString& format(
+<<<<<<< HEAD
         const UnicodeString items[],
         int32_t n_items,
         UnicodeString& appendTo,
@@ -147,15 +180,35 @@ public:
      * @internal constructor made public for testing.
      */
     ListFormatter(const ListFormatData& data);
+=======
+            const UnicodeString items[],
+            int32_t n_items,
+            UnicodeString& appendTo,
+            int32_t index,
+            int32_t &offset,
+            UErrorCode& errorCode) const;
+    /**
+     * @internal constructor made public for testing.
+     */
+    ListFormatter(const ListFormatData &data);
+>>>>>>> miniblink49
     /**
      * @internal constructor made public for testing.
      */
     ListFormatter(const ListFormatInternal* listFormatterInternal);
+<<<<<<< HEAD
 #endif /* U_HIDE_INTERNAL_API */
 
 private:
     static void initializeHash(UErrorCode& errorCode);
     static const ListFormatInternal* getListFormatInternal(const Locale& locale, const char* style, UErrorCode& errorCode);
+=======
+#endif  /* U_HIDE_INTERNAL_API */
+
+  private:
+    static void initializeHash(UErrorCode& errorCode);
+    static const ListFormatInternal* getListFormatInternal(const Locale& locale, const char *style, UErrorCode& errorCode);
+>>>>>>> miniblink49
 
     ListFormatter();
 

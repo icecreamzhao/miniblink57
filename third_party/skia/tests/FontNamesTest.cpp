@@ -13,15 +13,23 @@
 
 #include <stddef.h>
 
+<<<<<<< HEAD
 template <size_t R, size_t D>
 struct Format0NameTable {
+=======
+template <size_t R, size_t D> struct Format0NameTable {
+>>>>>>> miniblink49
     SkOTTableName header;
     SkOTTableName::Record nameRecord[R];
     char data[D];
 };
 
+<<<<<<< HEAD
 template <size_t R, size_t L, size_t D>
 struct Format1NameTable {
+=======
+template <size_t R, size_t L, size_t D> struct Format1NameTable {
+>>>>>>> miniblink49
     SkOTTableName header;
     SkOTTableName::Record nameRecord[R];
     struct {
@@ -38,6 +46,7 @@ SimpleFormat0NameTable simpleFormat0NameTable = {
         /*count*/ SkTEndianSwap16<1>::value,
         /*stringOffset*/ SkTEndianSwap16<offsetof(SimpleFormat0NameTable, data)>::value,
     },
+<<<<<<< HEAD
     /*nameRecord[]*/ { /*Record*/ {
         /*platformID*/ { SkOTTableName::Record::PlatformID::Windows },
         /*encodingID*/ { SkOTTableName::Record::EncodingID::Windows::UnicodeBMPUCS2 },
@@ -54,6 +63,19 @@ SimpleFormat0NameTable simpleFormat0NameTable = {
              "s"
              "\x0"
              "t",
+=======
+    /*nameRecord[]*/ {
+        /*Record*/ {
+            /*platformID*/ { SkOTTableName::Record::PlatformID::Windows },
+            /*encodingID*/ { SkOTTableName::Record::EncodingID::Windows::UnicodeBMPUCS2 },
+            /*languageID*/ { SkOTTableName::Record::LanguageID::Windows::English_UnitedStates },
+            /*nameID*/ { SkOTTableName::Record::NameID::Predefined::FontFamilyName },
+            /*length*/ SkTEndianSwap16<8>::value,
+            /*offset*/ SkTEndianSwap16<0>::value,
+        }
+    },
+    /*data*/ "\x0" "T" "\x0" "e" "\x0" "s" "\x0" "t",
+>>>>>>> miniblink49
 };
 
 typedef Format1NameTable<1, 1, 19> SimpleFormat1NameTable;
@@ -63,6 +85,7 @@ SimpleFormat1NameTable simpleFormat1NameTable = {
         /*count*/ SkTEndianSwap16<1>::value,
         /*stringOffset*/ SkTEndianSwap16<offsetof(SimpleFormat1NameTable, data)>::value,
     },
+<<<<<<< HEAD
     /*nameRecord[]*/ { /*Record*/ {
         /*platformID*/ { SkOTTableName::Record::PlatformID::Windows },
         /*encodingID*/ { SkOTTableName::Record::EncodingID::Windows::UnicodeBMPUCS2 },
@@ -71,6 +94,18 @@ SimpleFormat1NameTable simpleFormat1NameTable = {
         /*length*/ SkTEndianSwap16<8>::value,
         /*offset*/ SkTEndianSwap16<0>::value,
     } },
+=======
+    /*nameRecord[]*/ {
+        /*Record*/ {
+            /*platformID*/ { SkOTTableName::Record::PlatformID::Windows },
+            /*encodingID*/ { SkOTTableName::Record::EncodingID::Windows::UnicodeBMPUCS2 },
+            /*languageID*/ { SkTEndianSwap16<0x8000 + 0>::value },
+            /*nameID*/ { SkOTTableName::Record::NameID::Predefined::FontFamilyName },
+            /*length*/ SkTEndianSwap16<8>::value,
+            /*offset*/ SkTEndianSwap16<0>::value,
+        }
+    },
+>>>>>>> miniblink49
     /*format1ext*/ {
         /*header*/ {
             /*langTagCount*/ SkTEndianSwap16<1>::value,
@@ -82,6 +117,7 @@ SimpleFormat1NameTable simpleFormat1NameTable = {
             },
         },
     },
+<<<<<<< HEAD
     /*data*/ "\x0"
              "T"
              "\x0"
@@ -100,6 +136,10 @@ SimpleFormat1NameTable simpleFormat1NameTable = {
              "U"
              "\x0"
              "S",
+=======
+    /*data*/ "\x0" "T" "\x0" "e" "\x0" "s" "\x0" "t"
+             "\x0" "e" "\x0" "n" "\x0" "-" "\x0" "U" "\x0" "S",
+>>>>>>> miniblink49
 };
 
 struct FontNamesTest {
@@ -130,8 +170,12 @@ struct FontNamesTest {
     },
 };
 
+<<<<<<< HEAD
 static void test_synthetic(skiatest::Reporter* reporter, bool verbose)
 {
+=======
+static void test_synthetic(skiatest::Reporter* reporter, bool verbose) {
+>>>>>>> miniblink49
     for (size_t i = 0; i < SK_ARRAY_COUNT(test); ++i) {
         SkOTTableName::Iterator iter(*test[i].data, test[i].nameID.predefined.value);
         SkOTTableName::Iterator::Record record;
@@ -139,11 +183,21 @@ static void test_synthetic(skiatest::Reporter* reporter, bool verbose)
         while (nameIndex < test[i].nameCount && iter.next(record)) {
             REPORTER_ASSERT_MESSAGE(reporter,
                 strcmp(test[i].names[nameIndex].name, record.name.c_str()) == 0,
+<<<<<<< HEAD
                 "Name did not match.");
 
             REPORTER_ASSERT_MESSAGE(reporter,
                 strcmp(test[i].names[nameIndex].language, record.language.c_str()) == 0,
                 "Language did not match.");
+=======
+                "Name did not match."
+            );
+
+            REPORTER_ASSERT_MESSAGE(reporter,
+                strcmp(test[i].names[nameIndex].language, record.language.c_str()) == 0,
+                "Language did not match."
+            );
+>>>>>>> miniblink49
 
             //printf("%s <%s>\n", record.name.c_str(), record.language.c_str());
 
@@ -151,17 +205,29 @@ static void test_synthetic(skiatest::Reporter* reporter, bool verbose)
         }
 
         REPORTER_ASSERT_MESSAGE(reporter, nameIndex == test[i].nameCount,
+<<<<<<< HEAD
             "Fewer names than expected.");
 
         REPORTER_ASSERT_MESSAGE(reporter, !iter.next(record),
             "More names than expected.");
+=======
+                                "Fewer names than expected.");
+
+        REPORTER_ASSERT_MESSAGE(reporter, !iter.next(record),
+                                "More names than expected.");
+>>>>>>> miniblink49
     }
 }
 
 #define MAX_FAMILIES 1000
+<<<<<<< HEAD
 static void test_systemfonts(skiatest::Reporter* reporter, bool verbose)
 {
     static const SkFontTableTag nameTag = SkSetFourByteTag('n', 'a', 'm', 'e');
+=======
+static void test_systemfonts(skiatest::Reporter* reporter, bool verbose) {
+    static const SkFontTableTag nameTag = SkSetFourByteTag('n','a','m','e');
+>>>>>>> miniblink49
 
     SkAutoTUnref<SkFontMgr> fm(SkFontMgr::RefDefault());
     int count = SkMin32(fm->countFamilies(), MAX_FAMILIES);
@@ -186,7 +252,11 @@ static void test_systemfonts(skiatest::Reporter* reporter, bool verbose)
             while (familyNamesIter->next(&familyNameLocalized)) {
                 if (verbose) {
                     SkDebugf("(%s) <%s>\n", familyNameLocalized.fString.c_str(),
+<<<<<<< HEAD
                         familyNameLocalized.fLanguage.c_str());
+=======
+                                            familyNameLocalized.fLanguage.c_str());
+>>>>>>> miniblink49
                 }
             }
 
@@ -206,7 +276,12 @@ static void test_systemfonts(skiatest::Reporter* reporter, bool verbose)
             while (familyNameIter.next(record)) {
                 REPORTER_ASSERT_MESSAGE(reporter,
                     SkOTTableName::Record::NameID::Predefined::FontFamilyName == record.type,
+<<<<<<< HEAD
                     "Requested family name, got something else.");
+=======
+                    "Requested family name, got something else."
+                );
+>>>>>>> miniblink49
                 if (verbose) {
                     SkDebugf("{%s} <%s>\n", record.name.c_str(), record.language.c_str());
                 }
@@ -217,7 +292,12 @@ static void test_systemfonts(skiatest::Reporter* reporter, bool verbose)
             while (styleNameIter.next(record)) {
                 REPORTER_ASSERT_MESSAGE(reporter,
                     SkOTTableName::Record::NameID::Predefined::FontSubfamilyName == record.type,
+<<<<<<< HEAD
                     "Requested subfamily name, got something else.");
+=======
+                    "Requested subfamily name, got something else."
+                );
+>>>>>>> miniblink49
                 if (verbose) {
                     SkDebugf("{{%s}} <%s>\n", record.name.c_str(), record.language.c_str());
                 }
@@ -232,8 +312,12 @@ static void test_systemfonts(skiatest::Reporter* reporter, bool verbose)
 
 DEFINE_bool(verboseFontNames, false, "verbose FontNames test.");
 
+<<<<<<< HEAD
 DEF_TEST(FontNames, reporter)
 {
+=======
+DEF_TEST(FontNames, reporter) {
+>>>>>>> miniblink49
     test_synthetic(reporter, FLAGS_verboseFontNames);
     test_systemfonts(reporter, FLAGS_verboseFontNames);
 }

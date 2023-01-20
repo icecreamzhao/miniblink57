@@ -41,59 +41,34 @@ namespace blink {
 class Event;
 class Node;
 
-// V8LazyEventListener is a wrapper for a JavaScript code string that is
-// compiled and evaluated when an event is fired.  A V8LazyEventListener is
-// either a HTML or SVG event handler.
+// V8LazyEventListener is a wrapper for a JavaScript code string that is compiled and evaluated when an event is fired.
+// A V8LazyEventListener is either a HTML or SVG event handler.
 class V8LazyEventListener final : public V8AbstractEventListener {
 public:
-    static V8LazyEventListener* create(const AtomicString& functionName,
-        const AtomicString& eventParameterName,
-        const String& code,
-        const String& sourceURL,
-        const TextPosition& position,
-        Node* node,
-        v8::Isolate* isolate)
+    static PassRefPtr<V8LazyEventListener> create(const AtomicString& functionName, const AtomicString& eventParameterName, const String& code, const String& sourceURL, const TextPosition& position, Node* node, v8::Isolate* isolate)
     {
-        return new V8LazyEventListener(isolate, functionName, eventParameterName,
-            code, sourceURL, position, node);
+        return adoptRef(new V8LazyEventListener(isolate, functionName, eventParameterName, code, sourceURL, position, node));
     }
-
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        visitor->trace(m_node);
-        V8AbstractEventListener::trace(visitor);
-    }
-
-    const String& code() const { return m_code; }
 
 protected:
-    v8::Local<v8::Object> getListenerObjectInternal(ExecutionContext*) override;
+    void prepareListenerObject(ExecutionContext*) override;
 
 private:
-    V8LazyEventListener(v8::Isolate*,
-        const AtomicString& functionName,
-        const AtomicString& eventParameterName,
-        const String& code,
-        const String sourceURL,
-        const TextPosition&,
-        Node*);
+    V8LazyEventListener(v8::Isolate*, const AtomicString& functionName, const AtomicString& eventParameterName, const String& code, const String sourceURL, const TextPosition&, Node*);
 
-    v8::Local<v8::Value> callListenerFunction(ScriptState*,
-        v8::Local<v8::Value>,
-        Event*) override;
+    v8::Local<v8::Value> callListenerFunction(ScriptState*, v8::Local<v8::Value>, Event*) override;
 
-    void compileScript(ScriptState*, ExecutionContext*);
+    // Needs to return true for all event handlers implemented in JavaScript so that
+    // the SVG code does not add the event handler in both
+    // SVGUseElement::buildShadowTree and again in
+    // SVGUseElement::transferEventListenersToShadowTree
+    bool wasCreatedFromMarkup() const override { return true; }
 
-    void fireErrorEvent(v8::Local<v8::Context>,
-        ExecutionContext*,
-        v8::Local<v8::Message>);
-
-    bool m_wasCompilationFailed;
     AtomicString m_functionName;
     AtomicString m_eventParameterName;
     String m_code;
     String m_sourceURL;
-    Member<Node> m_node;
+    Node* m_node;
     TextPosition m_position;
 };
 

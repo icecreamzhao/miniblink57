@@ -7,7 +7,11 @@
 
 #include "src/objects/js-proxy.h"
 
+<<<<<<< HEAD
 #include "src/objects-inl.h" // Needed for write barriers
+=======
+#include "src/objects-inl.h"  // Needed for write barriers
+>>>>>>> miniblink49
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -15,6 +19,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(JSProxy, JSReceiver)
 
     CAST_ACCESSOR(JSProxy)
@@ -30,3 +35,20 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_JS_PROXY_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(JSProxy, JSReceiver)
+
+CAST_ACCESSOR(JSProxy)
+
+ACCESSORS(JSProxy, target, Object, kTargetOffset)
+ACCESSORS(JSProxy, handler, Object, kHandlerOffset)
+
+bool JSProxy::IsRevoked() const { return !handler()->IsJSReceiver(); }
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_JS_PROXY_INL_H_
+>>>>>>> miniblink49

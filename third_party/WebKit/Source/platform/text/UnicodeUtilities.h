@@ -36,6 +36,7 @@ namespace blink {
 PLATFORM_EXPORT bool isSeparator(UChar32);
 PLATFORM_EXPORT bool isKanaLetter(UChar character);
 PLATFORM_EXPORT bool containsKanaLetters(const String&);
+<<<<<<< HEAD
 PLATFORM_EXPORT void normalizeCharactersIntoNFCForm(const UChar* characters,
     unsigned length,
     Vector<UChar>& buffer);
@@ -49,6 +50,13 @@ PLATFORM_EXPORT bool checkKanaStringsEqual(const UChar* firstData,
     unsigned firstLength,
     const UChar* secondData,
     unsigned secondLength);
+=======
+PLATFORM_EXPORT void normalizeCharactersIntoNFCForm(const UChar* characters, unsigned length, Vector<UChar>& buffer);
+PLATFORM_EXPORT void foldQuoteMarksAndSoftHyphens(UChar* data, size_t length);
+PLATFORM_EXPORT void foldQuoteMarksAndSoftHyphens(String&);
+PLATFORM_EXPORT bool checkOnlyKanaLettersInStrings(const UChar* firstData, unsigned firstLength, const UChar* secondData, unsigned secondLength);
+PLATFORM_EXPORT bool checkKanaStringsEqual(const UChar* firstData, unsigned firstLength, const UChar* secondData, unsigned secondLength);
+>>>>>>> miniblink49
 
 } // namespace blink
 

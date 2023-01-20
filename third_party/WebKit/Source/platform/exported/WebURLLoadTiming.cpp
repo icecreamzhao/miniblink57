@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebURLLoadTiming.h"
 
 #include "platform/network/ResourceLoadTiming.h"
@@ -190,6 +194,7 @@ void WebURLLoadTiming::setSSLEnd(double end)
     m_private->setSslEnd(end);
 }
 
+<<<<<<< HEAD
 double WebURLLoadTiming::pushStart() const
 {
     return m_private->pushStart();
@@ -211,12 +216,19 @@ void WebURLLoadTiming::setPushEnd(double end)
 }
 
 WebURLLoadTiming::WebURLLoadTiming(PassRefPtr<ResourceLoadTiming> value)
+=======
+WebURLLoadTiming::WebURLLoadTiming(const PassRefPtr<ResourceLoadTiming>& value)
+>>>>>>> miniblink49
     : m_private(value)
 {
 }
 
+<<<<<<< HEAD
 WebURLLoadTiming& WebURLLoadTiming::operator=(
     PassRefPtr<ResourceLoadTiming> value)
+=======
+WebURLLoadTiming& WebURLLoadTiming::operator=(const PassRefPtr<ResourceLoadTiming>& value)
+>>>>>>> miniblink49
 {
     m_private = value;
     return *this;

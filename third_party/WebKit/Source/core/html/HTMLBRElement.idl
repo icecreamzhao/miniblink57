@@ -22,5 +22,5 @@
 interface HTMLBRElement : HTMLElement {
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLBRElement-partial
-    [CEReactions, Reflect] attribute DOMString clear;
+    [Reflect] attribute DOMString clear;
 };

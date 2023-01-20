@@ -5,44 +5,39 @@
 #ifndef InProcessWorkerBase_h
 #define InProcessWorkerBase_h
 
-#include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "core/CoreExport.h"
+#include "core/dom/ActiveDOMObject.h"
 #include "core/dom/MessagePort.h"
-#include "core/dom/SuspendableObject.h"
 #include "core/events/EventListener.h"
 #include "core/events/EventTarget.h"
 #include "core/workers/AbstractWorker.h"
+#include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
+#include "wtf/text/AtomicStringHash.h"
 
 namespace blink {
 
 class ExceptionState;
 class ExecutionContext;
-class InProcessWorkerMessagingProxy;
+class WorkerGlobalScopeProxy;
 class WorkerScriptLoader;
 
 // Base class for workers that operate in the same process as the document that
 // creates them.
-class CORE_EXPORT InProcessWorkerBase
-    : public AbstractWorker,
-      public ActiveScriptWrappable<InProcessWorkerBase> {
+class CORE_EXPORT InProcessWorkerBase : public AbstractWorker {
 public:
     ~InProcessWorkerBase() override;
 
-    void postMessage(ExecutionContext*,
-        PassRefPtr<SerializedScriptValue> message,
-        const MessagePortArray&,
-        ExceptionState&);
-    static bool canTransferArrayBuffersAndImageBitmaps() { return true; }
+    void postMessage(ExecutionContext*, PassRefPtr<SerializedScriptValue> message, const MessagePortArray*, ExceptionState&);
     void terminate();
 
-    // SuspendableObject
-    void contextDestroyed(ExecutionContext*) override;
+    // ActiveDOMObject
+    void stop() override;
+    bool hasPendingActivity() const override;
 
-    // ScriptWrappable
-    bool hasPendingActivity() const final;
+    PassRefPtr<ContentSecurityPolicy> contentSecurityPolicy();
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(message);
 
@@ -52,23 +47,18 @@ protected:
     explicit InProcessWorkerBase(ExecutionContext*);
     bool initialize(ExecutionContext*, const String&, ExceptionState&);
 
-    // Creates a proxy to allow communicating with the worker's global scope.
-    // InProcessWorkerBase does not take ownership of the created proxy. The proxy
-    // is expected to manage its own lifetime, and delete itself in response to
-    // terminateWorkerGlobalScope().
-    virtual InProcessWorkerMessagingProxy* createInProcessWorkerMessagingProxy(
-        ExecutionContext*)
-        = 0;
+    // Creates a proxy to allow communicating with the worker's global scope. InProcessWorkerBase does not take ownership of the
+    // created proxy. The proxy is expected to manage its own lifetime, and delete itself in response to terminateWorkerGlobalScope().
+    virtual WorkerGlobalScopeProxy* createWorkerGlobalScopeProxy(ExecutionContext*) = 0;
 
 private:
     // Callbacks for m_scriptLoader.
     void onResponse();
     void onFinished();
 
-    RefPtr<WorkerScriptLoader> m_scriptLoader;
-
-    // The proxy outlives the worker to perform thread shutdown.
-    InProcessWorkerMessagingProxy* m_contextProxy;
+    OwnPtr<WorkerScriptLoader> m_scriptLoader;
+    RefPtr<ContentSecurityPolicy> m_contentSecurityPolicy;
+    WorkerGlobalScopeProxy* m_contextProxy; // The proxy outlives the worker to perform thread shutdown.
 };
 
 } // namespace blink

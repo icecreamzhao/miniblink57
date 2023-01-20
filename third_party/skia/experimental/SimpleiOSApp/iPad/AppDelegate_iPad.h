@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @interface AppDelegate_iPad : NSObject <UIApplicationDelegate> {
+<<<<<<< HEAD
     UIWindow* window;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow* window;
+=======
+    UIWindow *window;
+}
+
+@property (nonatomic, retain) IBOutlet UIWindow *window;
+>>>>>>> miniblink49
 
 @end

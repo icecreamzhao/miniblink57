@@ -23,39 +23,36 @@
  * SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/shadow/ClearButtonElement.h"
 
 #include "core/events/MouseEvent.h"
 #include "core/frame/LocalFrame.h"
 #include "core/html/shadow/ShadowElementNames.h"
 #include "core/input/EventHandler.h"
-#include "core/layout/LayoutObject.h"
+#include "core/layout/LayoutView.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-inline ClearButtonElement::ClearButtonElement(
-    Document& document,
-    ClearButtonOwner& clearButtonOwner)
+inline ClearButtonElement::ClearButtonElement(Document& document, ClearButtonOwner& clearButtonOwner)
     : HTMLDivElement(document)
     , m_clearButtonOwner(&clearButtonOwner)
 {
 }
 
-ClearButtonElement* ClearButtonElement::create(
-    Document& document,
-    ClearButtonOwner& clearButtonOwner)
+PassRefPtrWillBeRawPtr<ClearButtonElement> ClearButtonElement::create(Document& document, ClearButtonOwner& clearButtonOwner)
 {
-    ClearButtonElement* element = new ClearButtonElement(document, clearButtonOwner);
-    element->setShadowPseudoId(AtomicString("-webkit-clear-button"));
+    RefPtrWillBeRawPtr<ClearButtonElement> element = adoptRefWillBeNoop(new ClearButtonElement(document, clearButtonOwner));
+    element->setShadowPseudoId(AtomicString("-webkit-clear-button", AtomicString::ConstructFromLiteral));
     element->setAttribute(idAttr, ShadowElementNames::clearButton());
-    return element;
+    return element.release();
 }
 
-void ClearButtonElement::detachLayoutTree(const AttachContext& context)
+void ClearButtonElement::detach(const AttachContext& context)
 {
-    HTMLDivElement::detachLayoutTree(context);
+    HTMLDivElement::detach(context);
 }
 
 void ClearButtonElement::defaultEventHandler(Event* event)
@@ -95,4 +92,4 @@ DEFINE_TRACE(ClearButtonElement)
     HTMLDivElement::trace(visitor);
 }
 
-} // namespace blink
+}

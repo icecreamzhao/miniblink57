@@ -10,14 +10,23 @@
 #ifndef UNIFUNCT_H
 #define UNIFUNCT_H
 
+<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+>>>>>>> miniblink49
 
 /**
  * \file 
  * \brief C++ API: Unicode Functor
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
@@ -33,6 +42,10 @@ class TransliterationRuleData;
 class U_COMMON_API UnicodeFunctor : public UObject {
 
 public:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * Destructor
      * @stable ICU 2.4
@@ -107,12 +120,20 @@ public:
     virtual void setData(const TransliterationRuleData*) = 0;
 
 protected:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * Since this class has pure virtual functions,
      * a constructor can't be used.
      * @stable ICU 2.0
      */
     /*UnicodeFunctor();*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 };
 
 /*inline UnicodeFunctor::UnicodeFunctor() {}*/

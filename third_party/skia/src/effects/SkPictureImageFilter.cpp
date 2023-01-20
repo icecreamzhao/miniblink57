@@ -6,6 +6,7 @@
  */
 
 #include "SkPictureImageFilter.h"
+<<<<<<< HEAD
 
 #include "SkCanvas.h"
 #include "SkReadBuffer.h"
@@ -61,13 +62,50 @@ SkPictureImageFilter::SkPictureImageFilter(sk_sp<SkPicture> picture, const SkRec
 sk_sp<SkFlattenable> SkPictureImageFilter::CreateProc(SkReadBuffer& buffer)
 {
     sk_sp<SkPicture> picture;
+=======
+#include "SkDevice.h"
+#include "SkCanvas.h"
+#include "SkReadBuffer.h"
+#include "SkSurfaceProps.h"
+#include "SkWriteBuffer.h"
+#include "SkValidationUtils.h"
+
+SkPictureImageFilter::SkPictureImageFilter(const SkPicture* picture)
+    : INHERITED(0, 0, NULL)
+    , fPicture(SkSafeRef(picture))
+    , fCropRect(picture ? picture->cullRect() : SkRect::MakeEmpty())
+    , fPictureResolution(kDeviceSpace_PictureResolution) 
+    , fFilterQuality(kLow_SkFilterQuality) {
+}
+
+SkPictureImageFilter::SkPictureImageFilter(const SkPicture* picture, const SkRect& cropRect,
+                                           PictureResolution pictureResolution,
+                                           SkFilterQuality filterQuality)
+    : INHERITED(0, 0, NULL)
+    , fPicture(SkSafeRef(picture))
+    , fCropRect(cropRect)
+    , fPictureResolution(pictureResolution)
+    , fFilterQuality(filterQuality) {
+}
+
+SkPictureImageFilter::~SkPictureImageFilter() {
+    SkSafeUnref(fPicture);
+}
+
+SkFlattenable* SkPictureImageFilter::CreateProc(SkReadBuffer& buffer) {
+    SkAutoTUnref<SkPicture> picture;
+>>>>>>> miniblink49
     SkRect cropRect;
 
     if (buffer.isCrossProcess() && SkPicture::PictureIOSecurityPrecautionsEnabled()) {
         buffer.validate(!buffer.readBool());
     } else {
         if (buffer.readBool()) {
+<<<<<<< HEAD
             picture = SkPicture::MakeFromBuffer(buffer);
+=======
+            picture.reset(SkPicture::CreateFromBuffer(buffer));
+>>>>>>> miniblink49
         }
     }
     buffer.readRect(&cropRect);
@@ -76,7 +114,11 @@ sk_sp<SkFlattenable> SkPictureImageFilter::CreateProc(SkReadBuffer& buffer)
         pictureResolution = kDeviceSpace_PictureResolution;
     } else {
         pictureResolution = (PictureResolution)buffer.readInt();
+<<<<<<< HEAD
     }
+=======
+    }  
+>>>>>>> miniblink49
 
     if (kLocalSpace_PictureResolution == pictureResolution) {
         //filterLevel is only serialized if pictureResolution is LocalSpace
@@ -86,6 +128,7 @@ sk_sp<SkFlattenable> SkPictureImageFilter::CreateProc(SkReadBuffer& buffer)
         } else {
             filterQuality = (SkFilterQuality)buffer.readInt();
         }
+<<<<<<< HEAD
         return MakeForLocalSpace(picture, cropRect, filterQuality);
     }
     return Make(picture, cropRect);
@@ -97,6 +140,18 @@ void SkPictureImageFilter::flatten(SkWriteBuffer& buffer) const
         buffer.writeBool(false);
     } else {
         bool hasPicture = (fPicture != nullptr);
+=======
+        return CreateForLocalSpace(picture, cropRect, filterQuality);
+    }
+    return Create(picture, cropRect);
+}
+
+void SkPictureImageFilter::flatten(SkWriteBuffer& buffer) const {
+    if (buffer.isCrossProcess() && SkPicture::PictureIOSecurityPrecautionsEnabled()) {
+        buffer.writeBool(false);
+    } else {
+        bool hasPicture = (fPicture != NULL);
+>>>>>>> miniblink49
         buffer.writeBool(hasPicture);
         if (hasPicture) {
             fPicture->flatten(buffer);
@@ -109,18 +164,27 @@ void SkPictureImageFilter::flatten(SkWriteBuffer& buffer) const
     }
 }
 
+<<<<<<< HEAD
 sk_sp<SkSpecialImage> SkPictureImageFilter::onFilterImage(SkSpecialImage* source,
     const Context& ctx,
     SkIPoint* offset) const
 {
     if (!fPicture) {
         return nullptr;
+=======
+bool SkPictureImageFilter::onFilterImage(Proxy* proxy, const SkBitmap&, const Context& ctx,
+                                         SkBitmap* result, SkIPoint* offset) const {
+    if (!fPicture) {
+        offset->fX = offset->fY = 0;
+        return true;
+>>>>>>> miniblink49
     }
 
     SkRect floatBounds;
     ctx.ctm().mapRect(&floatBounds, fCropRect);
     SkIRect bounds = floatBounds.roundOut();
     if (!bounds.intersect(ctx.clipBounds())) {
+<<<<<<< HEAD
         return nullptr;
     }
 
@@ -162,6 +226,47 @@ void SkPictureImageFilter::drawPictureAtLocalResolution(SkSpecialImage* source,
     const SkIRect& deviceBounds,
     const Context& ctx) const
 {
+=======
+        return false;
+    }
+
+    if (bounds.isEmpty()) {
+        offset->fX = offset->fY = 0;
+        return true;
+    }
+
+    SkAutoTUnref<SkBaseDevice> device(proxy->createDevice(bounds.width(), bounds.height()));
+    if (NULL == device.get()) {
+        return false;
+    }
+
+    if (kDeviceSpace_PictureResolution == fPictureResolution || 
+        0 == (ctx.ctm().getType() & ~SkMatrix::kTranslate_Mask)) {
+        this->drawPictureAtDeviceResolution(device.get(), bounds, ctx);        
+    } else {
+        this->drawPictureAtLocalResolution(proxy, device.get(), bounds, ctx);
+    }
+
+    *result = device.get()->accessBitmap(false);
+    offset->fX = bounds.fLeft;
+    offset->fY = bounds.fTop;
+    return true;
+}
+
+void SkPictureImageFilter::drawPictureAtDeviceResolution(SkBaseDevice* device,
+                                                         const SkIRect& deviceBounds,
+                                                         const Context& ctx) const {
+    SkCanvas canvas(device);
+
+    canvas.translate(-SkIntToScalar(deviceBounds.fLeft), -SkIntToScalar(deviceBounds.fTop));
+    canvas.concat(ctx.ctm());
+    canvas.drawPicture(fPicture);
+}
+
+void SkPictureImageFilter::drawPictureAtLocalResolution(Proxy* proxy, SkBaseDevice* device,
+                                                        const SkIRect& deviceBounds,
+                                                        const Context& ctx) const {
+>>>>>>> miniblink49
     SkMatrix inverseCtm;
     if (!ctx.ctm().invert(&inverseCtm)) {
         return;
@@ -173,6 +278,7 @@ void SkPictureImageFilter::drawPictureAtLocalResolution(SkSpecialImage* source,
         return;
     }
     SkIRect localIBounds = localBounds.roundOut();
+<<<<<<< HEAD
 
     sk_sp<SkSpecialImage> localImg;
     {
@@ -220,6 +326,33 @@ void SkPictureImageFilter::toString(SkString* str) const
         str->appendf("picture: (%f,%f,%f,%f)",
             fPicture->cullRect().fLeft, fPicture->cullRect().fTop,
             fPicture->cullRect().fRight, fPicture->cullRect().fBottom);
+=======
+    SkAutoTUnref<SkBaseDevice> localDevice(proxy->createDevice(localIBounds.width(), localIBounds.height()));
+
+    SkCanvas localCanvas(localDevice);
+    localCanvas.translate(-SkIntToScalar(localIBounds.fLeft), -SkIntToScalar(localIBounds.fTop));
+    localCanvas.drawPicture(fPicture);
+
+    SkCanvas canvas(device);
+
+    canvas.translate(-SkIntToScalar(deviceBounds.fLeft), -SkIntToScalar(deviceBounds.fTop));
+    canvas.concat(ctx.ctm());
+    SkPaint paint;
+    paint.setFilterQuality(fFilterQuality);
+    canvas.drawBitmap(localDevice.get()->accessBitmap(false), SkIntToScalar(localIBounds.fLeft),
+                      SkIntToScalar(localIBounds.fTop), &paint);
+}
+
+#ifndef SK_IGNORE_TO_STRING
+void SkPictureImageFilter::toString(SkString* str) const {
+    str->appendf("SkPictureImageFilter: (");
+    str->appendf("crop: (%f,%f,%f,%f) ", 
+                 fCropRect.fLeft, fCropRect.fTop, fCropRect.fRight, fCropRect.fBottom);
+    if (fPicture) {
+        str->appendf("picture: (%f,%f,%f,%f)",
+                     fPicture->cullRect().fLeft, fPicture->cullRect().fTop,
+                     fPicture->cullRect().fRight, fPicture->cullRect().fBottom);
+>>>>>>> miniblink49
     }
     str->append(")");
 }

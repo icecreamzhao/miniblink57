@@ -27,10 +27,11 @@
 #define LayoutVTTCue_h
 
 #include "core/layout/LayoutBlockFlow.h"
+#include "platform/heap/Handle.h"
 
 namespace blink {
 
-class IntRect;
+class VTTCueBox;
 
 class LayoutVTTCue final : public LayoutBlockFlow {
 public:
@@ -41,9 +42,9 @@ public:
     float snapToLinesPosition() { return m_snapToLinesPosition; }
 
 private:
-    void layout() override;
+    virtual void layout() override;
 
-    IntRect computeControlsRect() const;
+    void adjustForTopAndBottomMarginBorderAndPadding();
     void repositionCueSnapToLinesNotSet();
 
     float m_snapToLinesPosition;

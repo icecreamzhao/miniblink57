@@ -38,6 +38,7 @@ public:
      * have to modify the effect/shaderbuilder interface to make it possible (e.g. give access
      * to the view matrix or untransformed positions in the fragment shader).
      */
+<<<<<<< HEAD
     static sk_sp<GrFragmentProcessor> Make(GrPrimitiveEdgeType edgeType, int n,
         const SkScalar edges[])
     {
@@ -45,20 +46,40 @@ public:
             return nullptr;
         }
         return sk_sp<GrFragmentProcessor>(new GrConvexPolyEffect(edgeType, n, edges));
+=======
+    static GrFragmentProcessor* Create(GrPrimitiveEdgeType edgeType, int n,
+                                       const SkScalar edges[]) {
+        if (n <= 0 || n > kMaxEdges || kHairlineAA_GrProcessorEdgeType == edgeType) {
+            return NULL;
+        }
+        return SkNEW_ARGS(GrConvexPolyEffect, (edgeType, n, edges));
+>>>>>>> miniblink49
     }
 
     /**
      * Creates an effect that clips against the path. If the path is not a convex polygon, is
+<<<<<<< HEAD
      * inverse filled, or has too many edges, this will return nullptr. If offset is non-nullptr, then
      * the path is translated by the vector.
      */
     static sk_sp<GrFragmentProcessor> Make(GrPrimitiveEdgeType, const SkPath&,
         const SkVector* offset = nullptr);
+=======
+     * inverse filled, or has too many edges, this will return NULL. If offset is non-NULL, then
+     * the path is translated by the vector.
+     */
+    static GrFragmentProcessor* Create(GrPrimitiveEdgeType, const SkPath&,
+                                       const SkVector* offset = NULL);
+>>>>>>> miniblink49
 
     /**
      * Creates an effect that fills inside the rect with AA edges..
      */
+<<<<<<< HEAD
     static sk_sp<GrFragmentProcessor> Make(GrPrimitiveEdgeType, const SkRect&);
+=======
+    static GrFragmentProcessor* Create(GrPrimitiveEdgeType, const SkRect&);
+>>>>>>> miniblink49
 
     virtual ~GrConvexPolyEffect();
 
@@ -70,6 +91,7 @@ public:
 
     const SkScalar* getEdges() const { return fEdges; }
 
+<<<<<<< HEAD
 private:
     GrConvexPolyEffect(GrPrimitiveEdgeType edgeType, int n, const SkScalar edges[]);
 
@@ -77,17 +99,36 @@ private:
 
     void onGetGLSLProcessorKey(const GrGLSLCaps&, GrProcessorKeyBuilder*) const override;
 
+=======
+    void getGLProcessorKey(const GrGLSLCaps&, GrProcessorKeyBuilder*) const override;
+
+    GrGLFragmentProcessor* createGLInstance() const override;
+
+private:
+    GrConvexPolyEffect(GrPrimitiveEdgeType edgeType, int n, const SkScalar edges[]);
+
+>>>>>>> miniblink49
     bool onIsEqual(const GrFragmentProcessor& other) const override;
 
     void onComputeInvariantOutput(GrInvariantOutput* inout) const override;
 
+<<<<<<< HEAD
     GrPrimitiveEdgeType fEdgeType;
     int fEdgeCount;
     SkScalar fEdges[3 * kMaxEdges];
+=======
+    GrPrimitiveEdgeType    fEdgeType;
+    int                    fEdgeCount;
+    SkScalar               fEdges[3 * kMaxEdges];
+>>>>>>> miniblink49
 
     GR_DECLARE_FRAGMENT_PROCESSOR_TEST;
 
     typedef GrFragmentProcessor INHERITED;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #endif

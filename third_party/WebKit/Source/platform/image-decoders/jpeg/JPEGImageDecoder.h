@@ -1,5 +1,9 @@
 /*
  * Copyright (C) 2006 Apple Computer, Inc.  All rights reserved.
+<<<<<<< HEAD
+=======
+ * Copyright (C) 2008-2009 Torch Mobile, Inc.
+>>>>>>> miniblink49
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,21 +31,36 @@
 #define JPEGImageDecoder_h
 
 #include "platform/image-decoders/ImageDecoder.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+
+#include "wtf/Noncopyable.h"
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class JPEGImageReader;
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT JPEGImageDecoder final : public ImageDecoder {
     WTF_MAKE_NONCOPYABLE(JPEGImageDecoder);
 
 public:
     JPEGImageDecoder(AlphaOption, const ColorBehavior&, size_t maxDecodedBytes);
+=======
+// This class decodes the JPEG image format.
+class PLATFORM_EXPORT JPEGImageDecoder : public ImageDecoder {
+    WTF_MAKE_NONCOPYABLE(JPEGImageDecoder);
+public:
+    JPEGImageDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedBytes);
+>>>>>>> miniblink49
     ~JPEGImageDecoder() override;
 
     // ImageDecoder:
     String filenameExtension() const override { return "jpg"; }
+<<<<<<< HEAD
     void onSetData(SegmentReader* data) override;
     IntSize decodedSize() const override { return m_decodedSize; }
     bool setSize(unsigned width, unsigned height) override;
@@ -51,15 +70,30 @@ public:
     bool decodeToYUV() override;
     void setImagePlanes(std::unique_ptr<ImagePlanes>) override;
     bool hasImagePlanes() const { return m_imagePlanes.get(); }
+=======
+    bool hasColorProfile() const override { return m_hasColorProfile; }
+    IntSize decodedSize() const override { return m_decodedSize; }
+    IntSize decodedYUVSize(int component, SizeType) const override;
+    bool setSize(unsigned width, unsigned height) override;
+    bool canDecodeToYUV() override;
+    bool decodeToYUV() override;
+    void setImagePlanes(PassOwnPtr<ImagePlanes>) override;
+    bool hasImagePlanes() const { return m_imagePlanes; }
+>>>>>>> miniblink49
 
     bool outputScanlines();
     unsigned desiredScaleNumerator() const;
     void complete();
 
+<<<<<<< HEAD
     void setOrientation(ImageOrientation orientation)
     {
         m_orientation = orientation;
     }
+=======
+    void setOrientation(ImageOrientation orientation) { m_orientation = orientation; }
+    void setHasColorProfile(bool hasColorProfile) { m_hasColorProfile = hasColorProfile; }
+>>>>>>> miniblink49
     void setDecodedSize(unsigned width, unsigned height);
 
 private:
@@ -72,9 +106,16 @@ private:
     // data coming, sets the "decode failure" flag.
     void decode(bool onlySize);
 
+<<<<<<< HEAD
     std::unique_ptr<JPEGImageReader> m_reader;
     std::unique_ptr<ImagePlanes> m_imagePlanes;
     IntSize m_decodedSize;
+=======
+    OwnPtr<JPEGImageReader> m_reader;
+    OwnPtr<ImagePlanes> m_imagePlanes;
+    IntSize m_decodedSize;
+    bool m_hasColorProfile;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

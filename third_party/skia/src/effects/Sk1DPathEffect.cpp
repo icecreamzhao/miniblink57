@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "Sk1DPathEffect.h"
 #include "SkPathMeasure.h"
 #include "SkReadBuffer.h"
@@ -18,6 +23,20 @@ bool Sk1DPathEffect::filterPath(SkPath* dst, const SkPath& src,
     do {
         SkScalar length = meas.getLength();
         SkScalar distance = this->begin(length);
+=======
+
+#include "Sk1DPathEffect.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkPathMeasure.h"
+
+bool Sk1DPathEffect::filterPath(SkPath* dst, const SkPath& src,
+                                SkStrokeRec*, const SkRect*) const {
+    SkPathMeasure   meas(src, false);
+    do {
+        SkScalar    length = meas.getLength();
+        SkScalar    distance = this->begin(length);
+>>>>>>> miniblink49
         while (distance < length) {
             SkScalar delta = this->next(dst, distance, meas);
             if (delta <= 0) {
@@ -32,6 +51,7 @@ bool Sk1DPathEffect::filterPath(SkPath* dst, const SkPath& src,
 ///////////////////////////////////////////////////////////////////////////////
 
 SkPath1DPathEffect::SkPath1DPathEffect(const SkPath& path, SkScalar advance,
+<<<<<<< HEAD
     SkScalar phase, Style style)
     : fPath(path)
 {
@@ -67,6 +87,47 @@ SkPath1DPathEffect::SkPath1DPathEffect(const SkPath& path, SkScalar advance,
 bool SkPath1DPathEffect::filterPath(SkPath* dst, const SkPath& src,
     SkStrokeRec* rec, const SkRect* cullRect) const
 {
+=======
+    SkScalar phase, Style style) : fPath(path)
+{
+    if (advance <= 0 || path.isEmpty()) {
+        SkDEBUGF(("SkPath1DPathEffect can't use advance <= 0\n"));
+        fAdvance = 0;   // signals we can't draw anything
+        fInitialOffset = 0;
+        fStyle = kStyleCount;
+    } else {
+        // cleanup their phase parameter, inverting it so that it becomes an
+        // offset along the path (to match the interpretation in PostScript)
+        if (phase < 0) {
+            phase = -phase;
+            if (phase > advance) {
+                phase = SkScalarMod(phase, advance);
+            }
+        } else {
+            if (phase > advance) {
+                phase = SkScalarMod(phase, advance);
+            }
+            phase = advance - phase;
+        }
+        // now catch the edge case where phase == advance (within epsilon)
+        if (phase >= advance) {
+            phase = 0;
+        }
+        SkASSERT(phase >= 0);
+
+        fAdvance = advance;
+        fInitialOffset = phase;
+
+        if ((unsigned)style >= kStyleCount) {
+            SkDEBUGF(("SkPath1DPathEffect style enum out of range %d\n", style));
+        }
+        fStyle = style;
+    }
+}
+
+bool SkPath1DPathEffect::filterPath(SkPath* dst, const SkPath& src,
+                            SkStrokeRec* rec, const SkRect* cullRect) const {
+>>>>>>> miniblink49
     if (fAdvance > 0) {
         rec->setFillStyle();
         return this->INHERITED::filterPath(dst, src, rec, cullRect);
@@ -75,8 +136,12 @@ bool SkPath1DPathEffect::filterPath(SkPath* dst, const SkPath& src,
 }
 
 static bool morphpoints(SkPoint dst[], const SkPoint src[], int count,
+<<<<<<< HEAD
     SkPathMeasure& meas, SkScalar dist)
 {
+=======
+                        SkPathMeasure& meas, SkScalar dist) {
+>>>>>>> miniblink49
     for (int i = 0; i < count; i++) {
         SkPoint pos;
         SkVector tangent;
@@ -88,8 +153,13 @@ static bool morphpoints(SkPoint dst[], const SkPoint src[], int count,
             return false;
         }
 
+<<<<<<< HEAD
         SkMatrix matrix;
         SkPoint pt;
+=======
+        SkMatrix    matrix;
+        SkPoint     pt;
+>>>>>>> miniblink49
 
         pt.set(sx, sy);
         matrix.setSinCos(tangent.fY, tangent.fX, 0, 0);
@@ -107,6 +177,7 @@ determine that, but we need it. I guess a cheap answer is let the caller tell us
 but that seems like a cop-out. Another answer is to get Rob Johnson to figure it out.
 */
 static void morphpath(SkPath* dst, const SkPath& src, SkPathMeasure& meas,
+<<<<<<< HEAD
     SkScalar dist)
 {
     SkPath::Iter iter(src, false);
@@ -141,10 +212,46 @@ static void morphpath(SkPath* dst, const SkPath& src, SkPathMeasure& meas,
         default:
             SkDEBUGFAIL("unknown verb");
             break;
+=======
+                      SkScalar dist) {
+    SkPath::Iter    iter(src, false);
+    SkPoint         srcP[4], dstP[3];
+    SkPath::Verb    verb;
+
+    while ((verb = iter.next(srcP)) != SkPath::kDone_Verb) {
+        switch (verb) {
+            case SkPath::kMove_Verb:
+                if (morphpoints(dstP, srcP, 1, meas, dist)) {
+                    dst->moveTo(dstP[0]);
+                }
+                break;
+            case SkPath::kLine_Verb:
+                srcP[2] = srcP[1];
+                srcP[1].set(SkScalarAve(srcP[0].fX, srcP[2].fX),
+                            SkScalarAve(srcP[0].fY, srcP[2].fY));
+                // fall through to quad
+            case SkPath::kQuad_Verb:
+                if (morphpoints(dstP, &srcP[1], 2, meas, dist)) {
+                    dst->quadTo(dstP[0], dstP[1]);
+                }
+                break;
+            case SkPath::kCubic_Verb:
+                if (morphpoints(dstP, &srcP[1], 3, meas, dist)) {
+                    dst->cubicTo(dstP[0], dstP[1], dstP[2]);
+                }
+                break;
+            case SkPath::kClose_Verb:
+                dst->close();
+                break;
+            default:
+                SkDEBUGFAIL("unknown verb");
+                break;
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 SkScalar SkPath1DPathEffect::begin(SkScalar contourLength) const
 {
     return fInitialOffset;
@@ -152,12 +259,20 @@ SkScalar SkPath1DPathEffect::begin(SkScalar contourLength) const
 
 sk_sp<SkFlattenable> SkPath1DPathEffect::CreateProc(SkReadBuffer& buffer)
 {
+=======
+SkScalar SkPath1DPathEffect::begin(SkScalar contourLength) const {
+    return fInitialOffset;
+}
+
+SkFlattenable* SkPath1DPathEffect::CreateProc(SkReadBuffer& buffer) {
+>>>>>>> miniblink49
     SkScalar advance = buffer.readScalar();
     if (advance > 0) {
         SkPath path;
         buffer.readPath(&path);
         SkScalar phase = buffer.readScalar();
         Style style = (Style)buffer.readUInt();
+<<<<<<< HEAD
         return SkPath1DPathEffect::Make(path, advance, phase, style);
     }
     return nullptr;
@@ -165,6 +280,14 @@ sk_sp<SkFlattenable> SkPath1DPathEffect::CreateProc(SkReadBuffer& buffer)
 
 void SkPath1DPathEffect::flatten(SkWriteBuffer& buffer) const
 {
+=======
+        return SkPath1DPathEffect::Create(path, advance, phase, style);
+    }
+    return NULL;
+}
+
+void SkPath1DPathEffect::flatten(SkWriteBuffer& buffer) const {
+>>>>>>> miniblink49
     buffer.writeScalar(fAdvance);
     if (fAdvance > 0) {
         buffer.writePath(fPath);
@@ -174,6 +297,7 @@ void SkPath1DPathEffect::flatten(SkWriteBuffer& buffer) const
 }
 
 SkScalar SkPath1DPathEffect::next(SkPath* dst, SkScalar distance,
+<<<<<<< HEAD
     SkPathMeasure& meas) const
 {
     switch (fStyle) {
@@ -195,19 +319,48 @@ SkScalar SkPath1DPathEffect::next(SkPath* dst, SkScalar distance,
     default:
         SkDEBUGFAIL("unknown Style enum");
         break;
+=======
+                                  SkPathMeasure& meas) const {
+    switch (fStyle) {
+        case kTranslate_Style: {
+            SkPoint pos;
+            if (meas.getPosTan(distance, &pos, NULL)) {
+                dst->addPath(fPath, pos.fX, pos.fY);
+            }
+        } break;
+        case kRotate_Style: {
+            SkMatrix matrix;
+            if (meas.getMatrix(distance, &matrix)) {
+                dst->addPath(fPath, matrix);
+            }
+        } break;
+        case kMorph_Style:
+            morphpath(dst, fPath, meas, distance);
+            break;
+        default:
+            SkDEBUGFAIL("unknown Style enum");
+            break;
+>>>>>>> miniblink49
     }
     return fAdvance;
 }
 
+<<<<<<< HEAD
 #ifndef SK_IGNORE_TO_STRING
 void SkPath1DPathEffect::toString(SkString* str) const
 {
+=======
+
+#ifndef SK_IGNORE_TO_STRING
+void SkPath1DPathEffect::toString(SkString* str) const {
+>>>>>>> miniblink49
     str->appendf("SkPath1DPathEffect: (");
     // TODO: add path and style
     str->appendf("advance: %.2f phase %.2f", fAdvance, fInitialOffset);
     str->appendf(")");
 }
 #endif
+<<<<<<< HEAD
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,3 +372,5 @@ sk_sp<SkPathEffect> SkPath1DPathEffect::Make(const SkPath& path, SkScalar advanc
     }
     return sk_sp<SkPathEffect>(new SkPath1DPathEffect(path, advance, phase, style));
 }
+=======
+>>>>>>> miniblink49

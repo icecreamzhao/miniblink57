@@ -5,6 +5,7 @@
 #ifndef StaticBitmapImage_h
 #define StaticBitmapImage_h
 
+<<<<<<< HEAD
 #include "gpu/command_buffer/common/mailbox.h"
 #include "gpu/command_buffer/common/sync_token.h"
 #include "platform/graphics/Image.h"
@@ -85,6 +86,31 @@ protected:
     // site would have to call the API setOriginClean() and setPremultiplied().
     bool m_isOriginClean = true;
     bool m_isPremultiplied = true;
+=======
+#include "platform/graphics/Image.h"
+
+namespace blink {
+
+class PLATFORM_EXPORT StaticBitmapImage : public Image {
+public:
+    ~StaticBitmapImage() override;
+
+    bool isImmutableBitmap() override { return true; }
+
+    static PassRefPtr<Image> create(PassRefPtr<SkImage>);
+    virtual void destroyDecodedData(bool destroyAll) { }
+    virtual bool currentFrameKnownToBeOpaque();
+    virtual IntSize size() const;
+    void draw(SkCanvas*, const SkPaint&, const FloatRect& dstRect, const FloatRect& srcRect, RespectImageOrientationEnum, ImageClampingMode) override;
+
+
+    PassRefPtr<SkImage> skImage() override { return m_image; }
+
+protected:
+    StaticBitmapImage(PassRefPtr<SkImage>);
+
+    RefPtr<SkImage> m_image;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

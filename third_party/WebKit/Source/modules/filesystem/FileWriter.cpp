@@ -28,9 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/filesystem/FileWriter.h"
 
 #include "bindings/core/v8/ExceptionState.h"
+=======
+#include "config.h"
+#include "modules/filesystem/FileWriter.h"
+
+#include "bindings/core/v8/ExceptionState.h"
+#include "core/dom/ExceptionCode.h"
+>>>>>>> miniblink49
 #include "core/events/ProgressEvent.h"
 #include "core/fileapi/Blob.h"
 #include "core/inspector/InspectorInstrumentation.h"
@@ -45,12 +53,23 @@ static const double progressNotificationIntervalMS = 50;
 
 FileWriter* FileWriter::create(ExecutionContext* context)
 {
+<<<<<<< HEAD
     return new FileWriter(context);
 }
 
 FileWriter::FileWriter(ExecutionContext* context)
     : ContextLifecycleObserver(context)
     , m_readyState(kInit)
+=======
+    FileWriter* fileWriter = new FileWriter(context);
+    fileWriter->suspendIfNeeded();
+    return fileWriter;
+}
+
+FileWriter::FileWriter(ExecutionContext* context)
+    : ActiveDOMObject(context)
+    , m_readyState(INIT)
+>>>>>>> miniblink49
     , m_operationInProgress(OperationNone)
     , m_queuedOperation(OperationNone)
     , m_bytesWritten(0)
@@ -59,13 +78,22 @@ FileWriter::FileWriter(ExecutionContext* context)
     , m_numAborts(0)
     , m_recursionDepth(0)
     , m_lastProgressNotificationTimeMS(0)
+<<<<<<< HEAD
+=======
+    , m_asyncOperationId(0)
+>>>>>>> miniblink49
 {
 }
 
 FileWriter::~FileWriter()
 {
     ASSERT(!m_recursionDepth);
+<<<<<<< HEAD
     DCHECK(!writer());
+=======
+    if (m_readyState == WRITING)
+        stop();
+>>>>>>> miniblink49
 }
 
 const AtomicString& FileWriter::interfaceName() const
@@ -73,18 +101,33 @@ const AtomicString& FileWriter::interfaceName() const
     return EventTargetNames::FileWriter;
 }
 
+<<<<<<< HEAD
 void FileWriter::contextDestroyed(ExecutionContext*)
 {
     dispose();
+=======
+void FileWriter::stop()
+{
+    // Make sure we've actually got something to stop, and haven't already called abort().
+    if (!writer() || m_readyState != WRITING)
+        return;
+    doOperation(OperationAbort);
+    m_readyState = DONE;
+>>>>>>> miniblink49
 }
 
 bool FileWriter::hasPendingActivity() const
 {
+<<<<<<< HEAD
     return m_operationInProgress != OperationNone || m_queuedOperation != OperationNone || m_readyState == kWriting;
+=======
+    return m_operationInProgress != OperationNone || m_queuedOperation != OperationNone || m_readyState == WRITING;
+>>>>>>> miniblink49
 }
 
 void FileWriter::write(Blob* data, ExceptionState& exceptionState)
 {
+<<<<<<< HEAD
     if (!getExecutionContext())
         return;
     ASSERT(data);
@@ -96,17 +139,39 @@ void FileWriter::write(Blob* data, ExceptionState& exceptionState)
     }
     if (m_recursionDepth > kMaxRecursionDepth) {
         setError(FileError::kSecurityErr, exceptionState);
+=======
+    ASSERT(writer());
+    ASSERT(m_truncateLength == -1);
+    if (m_readyState == WRITING) {
+        setError(FileError::INVALID_STATE_ERR, exceptionState);
+        return;
+    }
+    if (!data) {
+        setError(FileError::TYPE_MISMATCH_ERR, exceptionState);
+        return;
+    }
+    if (m_recursionDepth > kMaxRecursionDepth) {
+        setError(FileError::SECURITY_ERR, exceptionState);
+>>>>>>> miniblink49
         return;
     }
 
     m_blobBeingWritten = data;
+<<<<<<< HEAD
     m_readyState = kWriting;
+=======
+    m_readyState = WRITING;
+>>>>>>> miniblink49
     m_bytesWritten = 0;
     m_bytesToWrite = data->size();
     ASSERT(m_queuedOperation == OperationNone);
     if (m_operationInProgress != OperationNone) {
+<<<<<<< HEAD
         // We must be waiting for an abort to complete, since m_readyState wasn't
         // kWriting.
+=======
+        // We must be waiting for an abort to complete, since m_readyState wasn't WRITING.
+>>>>>>> miniblink49
         ASSERT(m_operationInProgress == OperationAbort);
         m_queuedOperation = OperationWrite;
     } else
@@ -117,11 +182,17 @@ void FileWriter::write(Blob* data, ExceptionState& exceptionState)
 
 void FileWriter::seek(long long position, ExceptionState& exceptionState)
 {
+<<<<<<< HEAD
     if (!getExecutionContext())
         return;
     ASSERT(writer());
     if (m_readyState == kWriting) {
         setError(FileError::kInvalidStateErr, exceptionState);
+=======
+    ASSERT(writer());
+    if (m_readyState == WRITING) {
+        setError(FileError::INVALID_STATE_ERR, exceptionState);
+>>>>>>> miniblink49
         return;
     }
 
@@ -132,6 +203,7 @@ void FileWriter::seek(long long position, ExceptionState& exceptionState)
 
 void FileWriter::truncate(long long position, ExceptionState& exceptionState)
 {
+<<<<<<< HEAD
     if (!getExecutionContext())
         return;
     ASSERT(writer());
@@ -146,13 +218,31 @@ void FileWriter::truncate(long long position, ExceptionState& exceptionState)
     }
 
     m_readyState = kWriting;
+=======
+    ASSERT(writer());
+    ASSERT(m_truncateLength == -1);
+    if (m_readyState == WRITING || position < 0) {
+        setError(FileError::INVALID_STATE_ERR, exceptionState);
+        return;
+    }
+    if (m_recursionDepth > kMaxRecursionDepth) {
+        setError(FileError::SECURITY_ERR, exceptionState);
+        return;
+    }
+
+    m_readyState = WRITING;
+>>>>>>> miniblink49
     m_bytesWritten = 0;
     m_bytesToWrite = 0;
     m_truncateLength = position;
     ASSERT(m_queuedOperation == OperationNone);
     if (m_operationInProgress != OperationNone) {
+<<<<<<< HEAD
         // We must be waiting for an abort to complete, since m_readyState wasn't
         // kWriting.
+=======
+        // We must be waiting for an abort to complete, since m_readyState wasn't WRITING.
+>>>>>>> miniblink49
         ASSERT(m_operationInProgress == OperationAbort);
         m_queuedOperation = OperationTruncate;
     } else
@@ -162,15 +252,24 @@ void FileWriter::truncate(long long position, ExceptionState& exceptionState)
 
 void FileWriter::abort(ExceptionState& exceptionState)
 {
+<<<<<<< HEAD
     if (!getExecutionContext())
         return;
     ASSERT(writer());
     if (m_readyState != kWriting)
+=======
+    ASSERT(writer());
+    if (m_readyState != WRITING)
+>>>>>>> miniblink49
         return;
     ++m_numAborts;
 
     doOperation(OperationAbort);
+<<<<<<< HEAD
     signalCompletion(FileError::kAbortErr);
+=======
+    signalCompletion(FileError::ABORT_ERR);
+>>>>>>> miniblink49
 }
 
 void FileWriter::didWrite(long long bytes, bool complete)
@@ -179,6 +278,7 @@ void FileWriter::didWrite(long long bytes, bool complete)
         completeAbort();
         return;
     }
+<<<<<<< HEAD
     DCHECK_EQ(kWriting, m_readyState);
     DCHECK_EQ(-1, m_truncateLength);
     DCHECK_EQ(OperationWrite, m_operationInProgress);
@@ -186,6 +286,15 @@ void FileWriter::didWrite(long long bytes, bool complete)
     DCHECK(bytes + m_bytesWritten <= m_bytesToWrite);
     m_bytesWritten += bytes;
     DCHECK((m_bytesWritten == m_bytesToWrite) || !complete);
+=======
+    ASSERT(m_readyState == WRITING);
+    ASSERT(m_truncateLength == -1);
+    ASSERT(m_operationInProgress == OperationWrite);
+    ASSERT(!m_bytesToWrite || bytes + m_bytesWritten > 0);
+    ASSERT(bytes + m_bytesWritten <= m_bytesToWrite);
+    m_bytesWritten += bytes;
+    ASSERT((m_bytesWritten == m_bytesToWrite) || !complete);
+>>>>>>> miniblink49
     setPosition(position() + bytes);
     if (position() > length())
         setLength(position());
@@ -204,8 +313,13 @@ void FileWriter::didWrite(long long bytes, bool complete)
     }
 
     if (complete) {
+<<<<<<< HEAD
         if (numAborts == m_numAborts)
             signalCompletion(FileError::kOK);
+=======
+      if (numAborts == m_numAborts)
+          signalCompletion(FileError::OK);
+>>>>>>> miniblink49
     }
 }
 
@@ -221,19 +335,33 @@ void FileWriter::didTruncate()
     if (position() > length())
         setPosition(length());
     m_operationInProgress = OperationNone;
+<<<<<<< HEAD
     signalCompletion(FileError::kOK);
+=======
+    signalCompletion(FileError::OK);
+>>>>>>> miniblink49
 }
 
 void FileWriter::didFail(WebFileError code)
 {
+<<<<<<< HEAD
     DCHECK_NE(OperationNone, m_operationInProgress);
     DCHECK_NE(FileError::kOK, static_cast<FileError::ErrorCode>(code));
+=======
+    ASSERT(m_operationInProgress != OperationNone);
+    ASSERT(static_cast<FileError::ErrorCode>(code) != FileError::OK);
+>>>>>>> miniblink49
     if (m_operationInProgress == OperationAbort) {
         completeAbort();
         return;
     }
+<<<<<<< HEAD
     DCHECK_EQ(OperationNone, m_queuedOperation);
     DCHECK_EQ(kWriting, m_readyState);
+=======
+    ASSERT(m_queuedOperation == OperationNone);
+    ASSERT(m_readyState == WRITING);
+>>>>>>> miniblink49
     m_blobBeingWritten.clear();
     m_operationInProgress = OperationNone;
     signalCompletion(static_cast<FileError::ErrorCode>(code));
@@ -250,6 +378,7 @@ void FileWriter::completeAbort()
 
 void FileWriter::doOperation(Operation operation)
 {
+<<<<<<< HEAD
     InspectorInstrumentation::asyncTaskScheduled(getExecutionContext(),
         "FileWriter", this);
     switch (operation) {
@@ -271,6 +400,28 @@ void FileWriter::doOperation(Operation operation)
         DCHECK_EQ(-1, m_truncateLength);
         DCHECK(!m_blobBeingWritten.get());
         DCHECK_EQ(kDone, m_readyState);
+=======
+    m_asyncOperationId = InspectorInstrumentation::traceAsyncOperationStarting(executionContext(), "FileWriter", m_asyncOperationId);
+    switch (operation) {
+    case OperationWrite:
+        ASSERT(m_operationInProgress == OperationNone);
+        ASSERT(m_truncateLength == -1);
+        ASSERT(m_blobBeingWritten.get());
+        ASSERT(m_readyState == WRITING);
+        writer()->write(position(), m_blobBeingWritten->uuid());
+        break;
+    case OperationTruncate:
+        ASSERT(m_operationInProgress == OperationNone);
+        ASSERT(m_truncateLength >= 0);
+        ASSERT(m_readyState == WRITING);
+        writer()->truncate(m_truncateLength);
+        break;
+    case OperationNone:
+        ASSERT(m_operationInProgress == OperationNone);
+        ASSERT(m_truncateLength == -1);
+        ASSERT(!m_blobBeingWritten.get());
+        ASSERT(m_readyState == DONE);
+>>>>>>> miniblink49
         break;
     case OperationAbort:
         if (m_operationInProgress == OperationWrite || m_operationInProgress == OperationTruncate)
@@ -288,11 +439,19 @@ void FileWriter::doOperation(Operation operation)
 
 void FileWriter::signalCompletion(FileError::ErrorCode code)
 {
+<<<<<<< HEAD
     m_readyState = kDone;
     m_truncateLength = -1;
     if (FileError::kOK != code) {
         m_error = FileError::createDOMException(code);
         if (FileError::kAbortErr == code)
+=======
+    m_readyState = DONE;
+    m_truncateLength = -1;
+    if (FileError::OK != code) {
+        m_error = FileError::create(code);
+        if (FileError::ABORT_ERR == code)
+>>>>>>> miniblink49
             fireEvent(EventTypeNames::abort);
         else
             fireEvent(EventTypeNames::error);
@@ -300,11 +459,17 @@ void FileWriter::signalCompletion(FileError::ErrorCode code)
         fireEvent(EventTypeNames::write);
     fireEvent(EventTypeNames::writeend);
 
+<<<<<<< HEAD
     InspectorInstrumentation::asyncTaskCanceled(getExecutionContext(), this);
+=======
+    InspectorInstrumentation::traceAsyncOperationCompleted(executionContext(), m_asyncOperationId);
+    m_asyncOperationId = 0;
+>>>>>>> miniblink49
 }
 
 void FileWriter::fireEvent(const AtomicString& type)
 {
+<<<<<<< HEAD
     InspectorInstrumentation::AsyncTask asyncTask(getExecutionContext(), this);
     ++m_recursionDepth;
     dispatchEvent(
@@ -330,6 +495,21 @@ void FileWriter::dispose()
         m_readyState = kDone;
     }
     resetWriter();
+=======
+    InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncCallbackStarting(executionContext(), m_asyncOperationId);
+    ++m_recursionDepth;
+    dispatchEvent(ProgressEvent::create(type, true, m_bytesWritten, m_bytesToWrite));
+    --m_recursionDepth;
+    ASSERT(m_recursionDepth >= 0);
+    InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+}
+
+void FileWriter::setError(FileError::ErrorCode errorCode, ExceptionState& exceptionState)
+{
+    ASSERT(errorCode);
+    FileError::throwDOMException(exceptionState, errorCode);
+    m_error = FileError::create(errorCode);
+>>>>>>> miniblink49
 }
 
 DEFINE_TRACE(FileWriter)
@@ -338,7 +518,11 @@ DEFINE_TRACE(FileWriter)
     visitor->trace(m_blobBeingWritten);
     EventTargetWithInlineData::trace(visitor);
     FileWriterBase::trace(visitor);
+<<<<<<< HEAD
     ContextLifecycleObserver::trace(visitor);
+=======
+    ActiveDOMObject::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

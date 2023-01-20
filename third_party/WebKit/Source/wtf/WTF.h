@@ -32,10 +32,15 @@
 #define WTF_h
 
 #include "wtf/Compiler.h"
+<<<<<<< HEAD
+=======
+#include "wtf/CurrentTime.h"
+>>>>>>> miniblink49
 #include "wtf/WTFExport.h"
 
 namespace WTF {
 
+<<<<<<< HEAD
 typedef void MainThreadFunction(void*);
 
 // This function must be called exactly once from the main thread before using
@@ -53,4 +58,16 @@ namespace internal {
 
 using WTF::isMainThread;
 
+=======
+typedef void(*HistogramEnumerationFunction)(const char* name, int sample, int boundaryValue);
+typedef void(*AdjustAmountOfExternalAllocatedMemoryFunction)(int size);
+
+// This function must be called exactly once from the main thread before using anything else in WTF.
+WTF_EXPORT void initialize(TimeFunction currentTimeFunction, TimeFunction monotonicallyIncreasingTimeFunction, TimeFunction systemTraceTimeFunction, HistogramEnumerationFunction, AdjustAmountOfExternalAllocatedMemoryFunction);
+WTF_EXPORT void shutdown();
+WTF_EXPORT bool isShutdown();
+
+} // namespace WTF
+
+>>>>>>> miniblink49
 #endif // WTF_h

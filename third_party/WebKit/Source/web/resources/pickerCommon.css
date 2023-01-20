@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Copyright (C) 2012 Google Inc. All rights reserved.
  *
@@ -34,3 +35,6 @@ body {
 .rtl {
     direction: rtl;
 }
+=======
+body{-webkit-user-select:none;background-color:white;font:-webkit-small-control;margin:0;overflow:hidden}.rtl{direction:rtl}
+>>>>>>> miniblink49

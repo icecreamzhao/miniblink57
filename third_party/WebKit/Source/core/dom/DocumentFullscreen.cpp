@@ -23,6 +23,7 @@
  * DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/DocumentFullscreen.h"
 
 #include "core/dom/Fullscreen.h"
@@ -36,17 +37,21 @@ bool DocumentFullscreen::fullscreenEnabled(Document& document)
 
 Element* DocumentFullscreen::fullscreenElement(Document& document)
 {
-    return Fullscreen::fullscreenElementForBindingFrom(document);
+    if (Fullscreen* fullscreen = Fullscreen::fromIfExists(document))
+        return fullscreen->fullscreenElement();
+    return 0;
 }
 
 void DocumentFullscreen::exitFullscreen(Document& document)
 {
-    Fullscreen::exitFullscreen(document);
+    Fullscreen::from(document).exitFullscreen();
 }
 
-Element* DocumentFullscreen::currentFullScreenElement(Document& document)
+Element* DocumentFullscreen::webkitCurrentFullScreenElement(Document& document)
 {
-    return Fullscreen::currentFullScreenElementForBindingFrom(document);
+    if (Fullscreen* fullscreen = Fullscreen::fromIfExists(document))
+        return fullscreen->webkitCurrentFullScreenElement();
+    return 0;
 }
 
 } // namespace blink

@@ -24,8 +24,9 @@
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGAnimatedString.h"
 #include "core/svg/SVGElement.h"
-#include "core/svg/SVGUnitTypes.h"
 #include "platform/heap/Handle.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
@@ -38,15 +39,11 @@ class SVGFilterPrimitiveStandardAttributes : public SVGElement {
     // instantiated, and b) we don't generate corresponding V8T.h or V8T.cpp.
     // The subclasses must write DEFINE_WRAPPERTYPEINFO().
 public:
-    void setStandardAttributes(FilterEffect*,
-        SVGUnitTypes::SVGUnitType,
-        const FloatRect& referenceBox) const;
+    void setStandardAttributes(FilterEffect*) const;
 
-    virtual FilterEffect* build(SVGFilterBuilder*, Filter*) = 0;
+    virtual PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) = 0;
     // Returns true, if the new value is different from the old one.
     virtual bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&);
-
-    virtual bool taintsOrigin(bool inputsTaintOrigin) const { return true; }
 
     // JS API
     SVGAnimatedLength* x() const { return m_x.get(); }
@@ -72,11 +69,11 @@ private:
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
     bool layoutObjectIsNeeded(const ComputedStyle&) final;
 
-    Member<SVGAnimatedLength> m_x;
-    Member<SVGAnimatedLength> m_y;
-    Member<SVGAnimatedLength> m_width;
-    Member<SVGAnimatedLength> m_height;
-    Member<SVGAnimatedString> m_result;
+    RefPtrWillBeMember<SVGAnimatedLength> m_x;
+    RefPtrWillBeMember<SVGAnimatedLength> m_y;
+    RefPtrWillBeMember<SVGAnimatedLength> m_width;
+    RefPtrWillBeMember<SVGAnimatedLength> m_height;
+    RefPtrWillBeMember<SVGAnimatedString> m_result;
 };
 
 void invalidateFilterPrimitiveParent(SVGElement*);

@@ -5,11 +5,17 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+#include "sk_tool_utils.h"
+#include "SkBitmapSource.h"
+>>>>>>> miniblink49
 #include "SkBlurImageFilter.h"
 #include "SkColor.h"
 #include "SkDisplacementMapEffect.h"
 #include "SkDropShadowImageFilter.h"
 #include "SkGradientShader.h"
+<<<<<<< HEAD
 #include "SkImage.h"
 #include "SkImageSource.h"
 #include "SkMorphologyImageFilter.h"
@@ -17,6 +23,11 @@
 #include "SkSurface.h"
 #include "gm.h"
 #include "sk_tool_utils.h"
+=======
+#include "SkMorphologyImageFilter.h"
+#include "SkScalar.h"
+#include "gm.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
@@ -24,6 +35,7 @@ namespace skiagm {
 // It checks that the scale portion of the CTM is correctly extracted
 // and applied to the image inputs separately from the non-scale portion.
 
+<<<<<<< HEAD
 static sk_sp<SkImage> make_gradient_circle(int width, int height)
 {
     SkScalar x = SkIntToScalar(width / 2);
@@ -49,14 +61,24 @@ class ImageFiltersTransformedGM : public GM {
 public:
     ImageFiltersTransformedGM()
     {
+=======
+class ImageFiltersTransformedGM : public GM {
+public:
+    ImageFiltersTransformedGM() {
+>>>>>>> miniblink49
         this->setBGColor(SK_ColorBLACK);
     }
 
 protected:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     SkString onShortName() override { return SkString("imagefilterstransformed"); }
 
     SkISize onISize() override { return SkISize::Make(420, 240); }
 
+<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
         fCheckerboard = SkImage::MakeFromBitmap(
@@ -79,6 +101,49 @@ protected:
                 checkerboard),
             SkDilateImageFilter::Make(2, 2, checkerboard),
             SkErodeImageFilter::Make(2, 2, checkerboard),
+=======
+    void makeGradientCircle(int width, int height) {
+        SkScalar x = SkIntToScalar(width / 2);
+        SkScalar y = SkIntToScalar(height / 2);
+        SkScalar radius = SkMinScalar(x, y) * 0.8f;
+        fGradientCircle.allocN32Pixels(width, height);
+        SkCanvas canvas(fGradientCircle);
+        canvas.clear(0x00000000);
+        SkColor colors[2];
+        colors[0] = SK_ColorWHITE;
+        colors[1] = SK_ColorBLACK;
+        SkAutoTUnref<SkShader> shader(
+            SkGradientShader::CreateRadial(SkPoint::Make(x, y), radius, colors, NULL, 2,
+                                           SkShader::kClamp_TileMode)
+        );
+        SkPaint paint;
+        paint.setShader(shader);
+        canvas.drawCircle(x, y, radius, paint);
+    }
+
+    void onOnceBeforeDraw() override {
+        fCheckerboard.allocN32Pixels(64, 64);
+        SkCanvas checkerboardCanvas(fCheckerboard);
+        sk_tool_utils::draw_checkerboard(&checkerboardCanvas, 0xFFA0A0A0, 0xFF404040, 8);
+
+        this->makeGradientCircle(64, 64);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+        SkAutoTUnref<SkImageFilter> gradient(SkBitmapSource::Create(fGradientCircle));
+        SkAutoTUnref<SkImageFilter> checkerboard(SkBitmapSource::Create(fCheckerboard));
+        SkImageFilter* filters[] = {
+            SkBlurImageFilter::Create(12, 0),
+            SkDropShadowImageFilter::Create(0, 15, 8, 0, SK_ColorGREEN,
+                SkDropShadowImageFilter::kDrawShadowAndForeground_ShadowMode),
+            SkDisplacementMapEffect::Create(SkDisplacementMapEffect::kR_ChannelSelectorType,
+                                            SkDisplacementMapEffect::kR_ChannelSelectorType,
+                                            12,
+                                            gradient.get(),
+                                            checkerboard.get()),
+            SkDilateImageFilter::Create(2, 2, checkerboard.get()),
+            SkErodeImageFilter::Create(2, 2, checkerboard.get()),
+>>>>>>> miniblink49
         };
 
         const SkScalar margin = SkIntToScalar(20);
@@ -102,14 +167,19 @@ protected:
                 }
                 canvas->translate(-size * SK_ScalarHalf, -size * SK_ScalarHalf);
                 canvas->drawOval(SkRect::MakeXYWH(0, size * SkDoubleToScalar(0.1),
+<<<<<<< HEAD
                                      size, size * SkDoubleToScalar(0.6)),
                     paint);
+=======
+                                                  size, size * SkDoubleToScalar(0.6)), paint);
+>>>>>>> miniblink49
                 canvas->restore();
                 canvas->translate(size + margin, 0);
             }
             canvas->restore();
             canvas->translate(0, size + margin);
         }
+<<<<<<< HEAD
     }
 
 private:
@@ -163,4 +233,22 @@ DEF_SIMPLE_GM(rotate_imagefilter, canvas, 500, 500)
         canvas->restore();
         canvas->translate(0, 150);
     }
+=======
+
+        for (size_t i = 0; i < SK_ARRAY_COUNT(filters); ++i) {
+            SkSafeUnref(filters[i]);
+        }
+    }
+
+private:
+    SkBitmap fCheckerboard;
+    SkBitmap fGradientCircle;
+    typedef GM INHERITED;
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+DEF_GM( return new ImageFiltersTransformedGM; )
+
+>>>>>>> miniblink49
 }

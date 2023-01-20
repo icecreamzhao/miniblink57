@@ -35,7 +35,7 @@ class Node;
 
 class NativeXPathNSResolver final : public XPathNSResolver {
 public:
-    static NativeXPathNSResolver* create(Node* node)
+    static NativeXPathNSResolver* create(PassRefPtrWillBeRawPtr<Node> node)
     {
         return new NativeXPathNSResolver(node);
     }
@@ -45,9 +45,9 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    explicit NativeXPathNSResolver(Node*);
+    explicit NativeXPathNSResolver(PassRefPtrWillBeRawPtr<Node>);
 
-    Member<Node> m_node;
+    RefPtrWillBeMember<Node> m_node;
 };
 
 } // namespace blink

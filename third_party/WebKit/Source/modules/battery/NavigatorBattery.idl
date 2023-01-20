@@ -5,3 +5,7 @@
 partial interface Navigator {
     [CallWith=ScriptState] Promise getBattery();
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

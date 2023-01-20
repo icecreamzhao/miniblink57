@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "platform/heap/SafePoint.h"
 
 #include "platform/heap/Heap.h"
@@ -16,6 +17,17 @@ using PushAllRegistersCallback = void (*)(SafePointBarrier*,
 extern "C" void pushAllRegisters(SafePointBarrier*,
     ThreadState*,
     PushAllRegistersCallback);
+=======
+#include "config.h"
+#include "platform/heap/SafePoint.h"
+
+#include "wtf/Atomics.h"
+
+namespace blink {
+
+using PushAllRegistersCallback = void (*)(SafePointBarrier*, ThreadState*, intptr_t*);
+extern "C" void pushAllRegisters(SafePointBarrier*, ThreadState*, PushAllRegistersCallback);
+>>>>>>> miniblink49
 
 static double lockingTimeout()
 {
@@ -24,12 +36,23 @@ static double lockingTimeout()
 }
 
 SafePointBarrier::SafePointBarrier()
+<<<<<<< HEAD
     : m_unparkedThreadCount(0)
     , m_parkingRequested(0)
 {
 }
 
 SafePointBarrier::~SafePointBarrier() { }
+=======
+    : m_canResume(1)
+    , m_unparkedThreadCount(0)
+{
+}
+
+SafePointBarrier::~SafePointBarrier()
+{
+}
+>>>>>>> miniblink49
 
 bool SafePointBarrier::parkOthers()
 {
@@ -37,27 +60,46 @@ bool SafePointBarrier::parkOthers()
 
     ThreadState* current = ThreadState::current();
     // Lock threadAttachMutex() to prevent threads from attaching.
+<<<<<<< HEAD
     current->lockThreadAttachMutex();
     const ThreadStateSet& threads = current->heap().threads();
 
     MutexLocker locker(m_mutex);
     atomicAdd(&m_unparkedThreadCount, threads.size());
     releaseStore(&m_parkingRequested, 1);
+=======
+    ThreadState::lockThreadAttachMutex();
+    ThreadState::AttachedThreadStateSet& threads = ThreadState::attachedThreads();
+
+    MutexLocker locker(m_mutex);
+    atomicAdd(&m_unparkedThreadCount, threads.size());
+    releaseStore(&m_canResume, 0);
+>>>>>>> miniblink49
 
     for (ThreadState* state : threads) {
         if (state == current)
             continue;
 
+<<<<<<< HEAD
         for (auto& interruptor : state->interruptors())
+=======
+        for (ThreadState::Interruptor* interruptor : state->interruptors())
+>>>>>>> miniblink49
             interruptor->requestInterrupt();
     }
 
     while (acquireLoad(&m_unparkedThreadCount) > 0) {
         double expirationTime = currentTime() + lockingTimeout();
         if (!m_parked.timedWait(m_mutex, expirationTime)) {
+<<<<<<< HEAD
             // One of the other threads did not return to a safepoint within the
             // maximum time we allow for threads to be parked. Abandon the GC and
             // resume the currently parked threads.
+=======
+            // One of the other threads did not return to a safepoint within the maximum
+            // time we allow for threads to be parked. Abandon the GC and resume the
+            // currently parked threads.
+>>>>>>> miniblink49
             resumeOthers(true);
             return false;
         }
@@ -67,10 +109,16 @@ bool SafePointBarrier::parkOthers()
 
 void SafePointBarrier::resumeOthers(bool barrierLocked)
 {
+<<<<<<< HEAD
     ThreadState* current = ThreadState::current();
     const ThreadStateSet& threads = current->heap().threads();
     atomicSubtract(&m_unparkedThreadCount, threads.size());
     releaseStore(&m_parkingRequested, 0);
+=======
+    ThreadState::AttachedThreadStateSet& threads = ThreadState::attachedThreads();
+    atomicSubtract(&m_unparkedThreadCount, threads.size());
+    releaseStore(&m_canResume, 1);
+>>>>>>> miniblink49
 
     if (UNLIKELY(barrierLocked)) {
         m_resume.broadcast();
@@ -81,6 +129,7 @@ void SafePointBarrier::resumeOthers(bool barrierLocked)
         m_resume.broadcast();
     }
 
+<<<<<<< HEAD
     current->unlockThreadAttachMutex();
     ASSERT(ThreadState::current()->isAtSafePoint());
 }
@@ -127,6 +176,16 @@ void SafePointBarrier::checkAndPark(ThreadState* state,
 {
     ASSERT(!state->sweepForbidden());
     if (acquireLoad(&m_parkingRequested)) {
+=======
+    ThreadState::unlockThreadAttachMutex();
+    ASSERT(ThreadState::current()->isAtSafePoint());
+}
+
+void SafePointBarrier::checkAndPark(ThreadState* state, SafePointAwareMutexLocker* locker)
+{
+    ASSERT(!state->sweepForbidden());
+    if (!acquireLoad(&m_canResume)) {
+>>>>>>> miniblink49
         // If we are leaving the safepoint from a SafePointAwareMutexLocker
         // call out to release the lock before going to sleep. This enables the
         // lock to be acquired in the sweep phase, e.g. during weak processing
@@ -135,8 +194,11 @@ void SafePointBarrier::checkAndPark(ThreadState* state,
         if (locker)
             locker->reset();
         pushAllRegisters(this, state, parkAfterPushRegisters);
+<<<<<<< HEAD
 //         initPushAllRegisters();
 //         s_cb(this, state, (intptr_t*)parkAfterPushRegisters);
+=======
+>>>>>>> miniblink49
     }
 }
 
@@ -144,12 +206,18 @@ void SafePointBarrier::enterSafePoint(ThreadState* state)
 {
     ASSERT(!state->sweepForbidden());
     pushAllRegisters(this, state, enterSafePointAfterPushRegisters);
+<<<<<<< HEAD
 //     initPushAllRegisters();
 //     s_cb(this, state, (intptr_t*)enterSafePointAfterPushRegisters);
 }
 
 void SafePointBarrier::leaveSafePoint(ThreadState* state,
     SafePointAwareMutexLocker* locker)
+=======
+}
+
+void SafePointBarrier::leaveSafePoint(ThreadState* state, SafePointAwareMutexLocker* locker)
+>>>>>>> miniblink49
 {
     if (atomicIncrement(&m_unparkedThreadCount) > 0)
         checkAndPark(state, locker);
@@ -161,16 +229,35 @@ void SafePointBarrier::doPark(ThreadState* state, intptr_t* stackEnd)
     MutexLocker locker(m_mutex);
     if (!atomicDecrement(&m_unparkedThreadCount))
         m_parked.signal();
+<<<<<<< HEAD
     while (acquireLoad(&m_parkingRequested))
+=======
+    while (!acquireLoad(&m_canResume))
+>>>>>>> miniblink49
         m_resume.wait(m_mutex);
     atomicIncrement(&m_unparkedThreadCount);
 }
 
+<<<<<<< HEAD
 void SafePointBarrier::doEnterSafePoint(ThreadState* state,
     intptr_t* stackEnd)
 {
     state->recordStackEnd(stackEnd);
     state->copyStackUntilSafePointScope();
+=======
+void SafePointBarrier::doEnterSafePoint(ThreadState* state, intptr_t* stackEnd)
+{
+    state->recordStackEnd(stackEnd);
+    state->copyStackUntilSafePointScope();
+    // m_unparkedThreadCount tracks amount of unparked threads. It is
+    // positive if and only if we have requested other threads to park
+    // at safe-points in preparation for GC. The last thread to park
+    // itself will make the counter hit zero and should notify GC thread
+    // that it is safe to proceed.
+    // If no other thread is waiting for other threads to park then
+    // this counter can be negative: if N threads are at safe-points
+    // the counter will be -N.
+>>>>>>> miniblink49
     if (!atomicDecrement(&m_unparkedThreadCount)) {
         MutexLocker locker(m_mutex);
         m_parked.signal(); // Safe point reached.

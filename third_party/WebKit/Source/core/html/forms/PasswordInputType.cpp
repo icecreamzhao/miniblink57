@@ -29,23 +29,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/PasswordInputType.h"
 
 #include "core/InputTypeNames.h"
 #include "core/dom/Document.h"
-#include "core/editing/FrameSelection.h"
-#include "core/frame/LocalFrame.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/forms/FormController.h"
-#include "core/layout/LayoutTextControlSingleLine.h"
 #include "wtf/Assertions.h"
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
 
-InputType* PasswordInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> PasswordInputType::create(HTMLInputElement& element)
 {
-    return new PasswordInputType(element);
+    return adoptRefWillBeNoop(new PasswordInputType(element));
 }
 
 void PasswordInputType::countUsage()
@@ -68,14 +66,14 @@ bool PasswordInputType::shouldSaveAndRestoreFormControlState() const
 FormControlState PasswordInputType::saveFormControlState() const
 {
     // Should never save/restore password fields.
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return FormControlState();
 }
 
 void PasswordInputType::restoreFormControlState(const FormControlState&)
 {
     // Should never save/restore password fields.
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
 }
 
 bool PasswordInputType::shouldRespectListAttribute()
@@ -85,28 +83,14 @@ bool PasswordInputType::shouldRespectListAttribute()
 
 void PasswordInputType::enableSecureTextInput()
 {
-    LocalFrame* frame = element().document().frame();
-    if (!frame)
-        return;
-    frame->selection().setUseSecureKeyboardEntryWhenActive(true);
+    if (element().document().frame())
+        element().document().setUseSecureKeyboardEntryWhenActive(true);
 }
 
 void PasswordInputType::disableSecureTextInput()
 {
-    LocalFrame* frame = element().document().frame();
-    if (!frame)
-        return;
-    frame->selection().setUseSecureKeyboardEntryWhenActive(false);
-}
-
-void PasswordInputType::onAttachWithLayoutObject()
-{
-    element().document().incrementPasswordCount();
-}
-
-void PasswordInputType::onDetachWithLayoutObject()
-{
-    element().document().decrementPasswordCount();
+    if (element().document().frame())
+        element().document().setUseSecureKeyboardEntryWhenActive(false);
 }
 
 } // namespace blink

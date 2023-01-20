@@ -39,6 +39,10 @@ namespace blink {
 
 class RTCStatsRequest;
 class WebMediaStreamTrack;
+<<<<<<< HEAD
+=======
+class WebMediaStream;
+>>>>>>> miniblink49
 class WebRTCStatsResponse;
 
 // The WebRTCStatsRequest class represents a JavaScript call on
@@ -95,7 +99,11 @@ public:
 #endif
 
 private:
+<<<<<<< HEAD
     WebPrivatePtr<RTCStatsRequest, WebPrivatePtrDestructionCrossThread> m_private;
+=======
+    WebPrivatePtr<RTCStatsRequest> m_private;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

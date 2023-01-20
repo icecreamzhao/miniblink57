@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "public/platform/WebVector.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -26,15 +27,47 @@ TEST(WebVectorTest, Iterators)
     for (WebVector<int>::iterator it = webVector.begin(); it != webVector.end();
          ++it)
         output.push_back(*it);
+=======
+#include "config.h"
+#include "public/platform/WebVector.h"
+
+#include "wtf/Vector.h"
+#include <gtest/gtest.h>
+
+namespace blink {
+
+TEST(WebVectorTest, beginend)
+{
+    Vector<int> input;
+    for (int i = 0; i < 5; ++i)
+        input.append(i);
+
+    WebVector<int> webVector(input);
+    ASSERT_EQ(input.size(), webVector.size());
+
+    EXPECT_EQ(webVector.data(), webVector.begin());
+    EXPECT_EQ(webVector.data() + webVector.size(), webVector.end());
+
+    // Use begin()/end() iterators directly.
+    Vector<int> output;
+    for (WebVector<int>::iterator it = webVector.begin(); it != webVector.end(); ++it)
+        output.append(*it);
+>>>>>>> miniblink49
     ASSERT_EQ(input.size(), output.size());
     for (size_t i = 0; i < input.size(); ++i)
         EXPECT_EQ(input[i], output[i]);
 
     // Use begin()/end() const_iterators directly.
     output.clear();
+<<<<<<< HEAD
     for (WebVector<int>::const_iterator it = constWebVector.begin();
          it != constWebVector.end(); ++it)
         output.push_back(*it);
+=======
+    const WebVector<int>& constWebVector = webVector;
+    for (WebVector<int>::const_iterator it = constWebVector.begin(); it != constWebVector.end(); ++it)
+        output.append(*it);
+>>>>>>> miniblink49
     ASSERT_EQ(input.size(), output.size());
     for (size_t i = 0; i < input.size(); ++i)
         EXPECT_EQ(input[i], output[i]);
@@ -42,12 +75,17 @@ TEST(WebVectorTest, Iterators)
     // Use range-based for loop.
     output.clear();
     for (int x : webVector)
+<<<<<<< HEAD
         output.push_back(x);
+=======
+        output.append(x);
+>>>>>>> miniblink49
     ASSERT_EQ(input.size(), output.size());
     for (size_t i = 0; i < input.size(); ++i)
         EXPECT_EQ(input[i], output[i]);
 }
 
+<<<<<<< HEAD
 TEST(WebVectorTest, IsEmpty)
 {
     WebVector<int> vector;
@@ -130,4 +168,6 @@ TEST(WebVectorTest, CreateFromStdVector)
         EXPECT_EQ(input[i], assigned[i]);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

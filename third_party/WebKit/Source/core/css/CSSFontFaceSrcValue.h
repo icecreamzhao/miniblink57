@@ -27,35 +27,30 @@
 #define CSSFontFaceSrcValue_h
 
 #include "core/css/CSSValue.h"
-#include "core/fetch/ResourceOwner.h"
-#include "core/loader/resource/FontResource.h"
+#include "core/fetch/ResourcePtr.h"
 #include "platform/weborigin/Referrer.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+class FontResource;
 class Document;
 
 class CSSFontFaceSrcValue : public CSSValue {
 public:
-    static CSSFontFaceSrcValue* create(
-        const String& specifiedResource,
-        const String& absoluteResource,
-        ContentSecurityPolicyDisposition shouldCheckContentSecurityPolicy)
+    static PassRefPtrWillBeRawPtr<CSSFontFaceSrcValue> create(const String& resource, ContentSecurityPolicyDisposition shouldCheckContentSecurityPolicy)
     {
-        return new CSSFontFaceSrcValue(specifiedResource, absoluteResource, false,
-            shouldCheckContentSecurityPolicy);
+        return adoptRefWillBeNoop(new CSSFontFaceSrcValue(resource, false, shouldCheckContentSecurityPolicy));
     }
-    static CSSFontFaceSrcValue* createLocal(
-        const String& absoluteResource,
-        ContentSecurityPolicyDisposition shouldCheckContentSecurityPolicy)
+    static PassRefPtrWillBeRawPtr<CSSFontFaceSrcValue> createLocal(const String& resource, ContentSecurityPolicyDisposition shouldCheckContentSecurityPolicy)
     {
-        return new CSSFontFaceSrcValue(emptyString(), absoluteResource, true,
-            shouldCheckContentSecurityPolicy);
+        return adoptRefWillBeNoop(new CSSFontFaceSrcValue(resource, true, shouldCheckContentSecurityPolicy));
     }
 
-    const String& resource() const { return m_absoluteResource; }
+    ~CSSFontFaceSrcValue();
+
+    const String& resource() const { return m_resource; }
     const String& format() const { return m_format; }
     bool isLocal() const { return m_isLocal; }
 
@@ -68,68 +63,29 @@ public:
 
     bool hasFailedOrCanceledSubresources() const;
 
-    FontResource* fetch(Document*) const;
+    FontResource* fetch(Document*);
 
     bool equals(const CSSFontFaceSrcValue&) const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
-    {
-        visitor->trace(m_fetched);
-        CSSValue::traceAfterDispatch(visitor);
-    }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
 
 private:
-    CSSFontFaceSrcValue(
-        const String& specifiedResource,
-        const String& absoluteResource,
-        bool local,
-        ContentSecurityPolicyDisposition shouldCheckContentSecurityPolicy)
-        : CSSValue(FontFaceSrcClass)
-        , m_absoluteResource(absoluteResource)
-        , m_specifiedResource(specifiedResource)
-        , m_isLocal(local)
-        , m_shouldCheckContentSecurityPolicy(shouldCheckContentSecurityPolicy)
-    {
-    }
+    CSSFontFaceSrcValue(const String& resource, bool local, ContentSecurityPolicyDisposition shouldCheckContentSecurityPolicy);
 
-    void restoreCachedResourceIfNeeded(Document*) const;
+    void restoreCachedResourceIfNeeded(Document*);
+    bool shouldSetCrossOriginAccessControl(const KURL& resource, SecurityOrigin*);
 
-    String m_absoluteResource;
-    String m_specifiedResource;
+    String m_resource;
     String m_format;
     Referrer m_referrer;
     bool m_isLocal;
     ContentSecurityPolicyDisposition m_shouldCheckContentSecurityPolicy;
 
-    class FontResourceHelper
-        : public GarbageCollectedFinalized<FontResourceHelper>,
-          public ResourceOwner<FontResource> {
-        USING_GARBAGE_COLLECTED_MIXIN(FontResourceHelper);
-
-    public:
-        static FontResourceHelper* create(FontResource* resource)
-        {
-            return new FontResourceHelper(resource);
-        }
-
-        DEFINE_INLINE_VIRTUAL_TRACE()
-        {
-            ResourceOwner<FontResource>::trace(visitor);
-        }
-
-    private:
-        FontResourceHelper(FontResource* resource) { setResource(resource); }
-
-        String debugName() const override
-        {
-            return "CSSFontFaceSrcValue::FontResourceHelper";
-        }
-    };
-    mutable Member<FontResourceHelper> m_fetched;
+    ResourcePtr<FontResource> m_fetched;
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSFontFaceSrcValue, isFontFaceSrcValue());
 
-} // namespace blink
+}
 
 #endif

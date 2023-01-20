@@ -28,12 +28,17 @@
 
 #include "core/page/Page.h"
 #include "modules/speech/SpeechRecognitionClient.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class MediaStreamTrack;
 
+<<<<<<< HEAD
 class SpeechRecognitionController final
     : public GarbageCollectedFinalized<SpeechRecognitionController>,
       public Supplement<Page> {
@@ -52,11 +57,22 @@ public:
     {
         m_client->start(recognition, grammars, lang, continuous, interimResults,
             maxAlternatives, audioTrack);
+=======
+class SpeechRecognitionController final : public NoBaseWillBeGarbageCollectedFinalized<SpeechRecognitionController>, public WillBeHeapSupplement<Page> {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SpeechRecognitionController);
+public:
+    virtual ~SpeechRecognitionController();
+
+    void start(SpeechRecognition* recognition, const SpeechGrammarList* grammars, const String& lang, const String& serviceURI, bool continuous, bool interimResults, unsigned long maxAlternatives, MediaStreamTrack* audioTrack)
+    {
+        m_client->start(recognition, grammars, lang, serviceURI, continuous, interimResults, maxAlternatives, audioTrack);
+>>>>>>> miniblink49
     }
 
     void stop(SpeechRecognition* recognition) { m_client->stop(recognition); }
     void abort(SpeechRecognition* recognition) { m_client->abort(recognition); }
 
+<<<<<<< HEAD
     static SpeechRecognitionController* create(
         std::unique_ptr<SpeechRecognitionClient>);
     static const char* supplementName();
@@ -73,6 +89,18 @@ private:
         std::unique_ptr<SpeechRecognitionClient>);
 
     std::unique_ptr<SpeechRecognitionClient> m_client;
+=======
+    static PassOwnPtrWillBeRawPtr<SpeechRecognitionController> create(PassOwnPtr<SpeechRecognitionClient>);
+    static const char* supplementName();
+    static SpeechRecognitionController* from(Page* page) { return static_cast<SpeechRecognitionController*>(WillBeHeapSupplement<Page>::from(page, supplementName())); }
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { WillBeHeapSupplement<Page>::trace(visitor); }
+
+private:
+    explicit SpeechRecognitionController(PassOwnPtr<SpeechRecognitionClient>);
+
+    OwnPtr<SpeechRecognitionClient> m_client;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

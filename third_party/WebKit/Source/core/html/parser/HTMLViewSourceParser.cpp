@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLViewSourceParser.h"
 
 #include "core/dom/DOMImplementation.h"
@@ -30,12 +31,10 @@
 #include "core/html/parser/HTMLParserOptions.h"
 #include "core/html/parser/HTMLToken.h"
 #include "core/html/parser/XSSAuditorDelegate.h"
-#include <memory>
 
 namespace blink {
 
-HTMLViewSourceParser::HTMLViewSourceParser(HTMLViewSourceDocument& document,
-    const String& mimeType)
+HTMLViewSourceParser::HTMLViewSourceParser(HTMLViewSourceDocument& document, const String& mimeType)
     : DecodedDataDocumentParser(document)
     , m_tokenizer(HTMLTokenizer::create(HTMLParserOptions(&document)))
 {
@@ -53,17 +52,13 @@ void HTMLViewSourceParser::pumpTokenizer()
             return;
         m_sourceTracker.end(m_input.current(), m_tokenizer.get(), m_token);
 
-        std::unique_ptr<XSSInfo> xssInfo = m_xssAuditor.filterToken(FilterTokenRequest(
-            m_token, m_sourceTracker, m_tokenizer->shouldAllowCDATA()));
-        HTMLViewSourceDocument::SourceAnnotation annotation = xssInfo ? HTMLViewSourceDocument::AnnotateSourceAsXSS
-                                                                      : HTMLViewSourceDocument::AnnotateSourceAsSafe;
-        document()->addSource(m_sourceTracker.sourceForToken(m_token), m_token,
-            annotation);
+        OwnPtr<XSSInfo> xssInfo = m_xssAuditor.filterToken(FilterTokenRequest(m_token, m_sourceTracker, m_tokenizer->shouldAllowCDATA()));
+        HTMLViewSourceDocument::SourceAnnotation annotation = xssInfo ? HTMLViewSourceDocument::AnnotateSourceAsXSS : HTMLViewSourceDocument::AnnotateSourceAsSafe;
+        document()->addSource(m_sourceTracker.sourceForToken(m_token), m_token, annotation);
 
         // FIXME: The tokenizer should do this work for us.
         if (m_token.type() == HTMLToken::StartTag)
-            m_tokenizer->updateStateFor(
-                attemptStaticStringCreation(m_token.name(), Likely8Bit));
+            m_tokenizer->updateStateFor(attemptStaticStringCreation(m_token.name(), Likely8Bit));
         m_token.clear();
     }
 }
@@ -76,14 +71,10 @@ void HTMLViewSourceParser::append(const String& input)
 
 void HTMLViewSourceParser::finish()
 {
-    flush();
     if (!m_input.haveSeenEndOfFile())
         m_input.markEndOfFile();
-
-    if (!isDetached()) {
-        pumpTokenizer();
-        document()->finishedParsing();
-    }
+    pumpTokenizer();
+    document()->finishedParsing();
 }
 
-} // namespace blink
+}

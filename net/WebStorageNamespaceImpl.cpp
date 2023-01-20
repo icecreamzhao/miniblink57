@@ -25,9 +25,9 @@ WebStorageNamespaceImpl::WebStorageNamespaceImpl(const String& localPath, int64 
 WebStorageNamespaceImpl::~WebStorageNamespaceImpl() {
 }
 
-WebStorageArea* WebStorageNamespaceImpl::createStorageArea(const blink::WebSecurityOrigin& origin) 
+WebStorageArea* WebStorageNamespaceImpl::createStorageArea(const blink::WebString& origin) 
 {
-    WebStorageAreaImpl* result = new WebStorageAreaImpl(m_cachedArea, origin, m_isLocal, this);
+    WebStorageAreaImpl* result = new WebStorageAreaImpl(m_cachedArea, origin, m_isLocal);
     result->loadFromFile(m_localPath);
     return result;
 }

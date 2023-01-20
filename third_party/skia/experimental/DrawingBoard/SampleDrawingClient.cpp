@@ -1,4 +1,5 @@
 #include "SampleCode.h"
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColorPalette.h"
 #include "SkCornerPathEffect.h"
@@ -7,6 +8,17 @@
 #include "SkOSMenu.h"
 #include "SkSockets.h"
 #include "SkView.h"
+=======
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkGPipe.h"
+#include "SkSockets.h"
+#include "SkNetPipeController.h"
+#include "SkCornerPathEffect.h"
+#include "SkColorPalette.h"
+#include "SkOSMenu.h"
+
+>>>>>>> miniblink49
 
 /**
  * Drawing Client
@@ -35,8 +47,12 @@
 
 class DrawingClientView : public SampleView {
 public:
+<<<<<<< HEAD
     DrawingClientView()
     {
+=======
+    DrawingClientView() {
+>>>>>>> miniblink49
         fSocket = NULL;
         fTotalBytesRead = 0;
         fPalette = new SkColorPalette;
@@ -50,8 +66,12 @@ public:
         fSync = true;
         fVector = true;
     }
+<<<<<<< HEAD
     ~DrawingClientView()
     {
+=======
+    ~DrawingClientView() {
+>>>>>>> miniblink49
         if (fSocket) {
             delete fSocket;
         }
@@ -59,6 +79,7 @@ public:
         fBuffer.reset();
     }
 
+<<<<<<< HEAD
     virtual void requestMenu(SkOSMenu* menu)
     {
         menu->setTitle("Drawing Client");
@@ -70,20 +91,42 @@ public:
         menu->appendSwitch("Anti-Aliasing", "AA", this->getSinkID(), fAA);
         menu->appendSwitch("Show Color Palette", "Palette", this->getSinkID(),
             fPaletteVisible);
+=======
+    virtual void requestMenu(SkOSMenu* menu) {
+        menu->setTitle("Drawing Client");
+        menu->appendTextField("Server IP", "Server IP", this->getSinkID(),
+                              "IP address or hostname");
+        menu->appendSwitch("Vector", "Vector", this->getSinkID(), fVector);
+        menu->appendSlider("Brush Size", "Brush Size", this->getSinkID(), 1.0,
+                           100.0, fBrushSize);
+        menu->appendSwitch("Anti-Aliasing", "AA", this->getSinkID(), fAA);
+        menu->appendSwitch("Show Color Palette", "Palette", this->getSinkID(),
+                           fPaletteVisible);
+>>>>>>> miniblink49
         menu->appendSwitch("Sync", "Sync", this->getSinkID(), fSync);
         menu->appendAction("Clear", this->getSinkID());
     }
 
 protected:
+<<<<<<< HEAD
     static void readData(int cid, const void* data, size_t size,
         SkSocket::DataType type, void* context)
     {
+=======
+
+    static void readData(int cid, const void* data, size_t size,
+                         SkSocket::DataType type, void* context) {
+>>>>>>> miniblink49
         DrawingClientView* view = (DrawingClientView*)context;
         view->onRead(cid, data, size, type);
     }
 
+<<<<<<< HEAD
     void onRead(int cid, const void* data, size_t size, SkSocket::DataType type)
     {
+=======
+    void onRead(int cid, const void* data, size_t size, SkSocket::DataType type) {
+>>>>>>> miniblink49
         if (size > 0) {
             fBuffer.reset();
             if (type == SkSocket::kPipeReplace_type)
@@ -96,8 +139,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     bool onQuery(SkEvent* evt)
     {
+=======
+    bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Drawing Client");
             return true;
@@ -106,9 +153,13 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     bool onEvent(const SkEvent& evt)
     {
         ;
+=======
+    bool onEvent(const SkEvent& evt) {;
+>>>>>>> miniblink49
         if (SkOSMenu::FindSliderValue(evt, "Brush Size", &fBrushSize))
             return true;
 
@@ -126,7 +177,12 @@ protected:
             this->inval(NULL);
             return true;
         }
+<<<<<<< HEAD
         if (SkOSMenu::FindSwitchState(evt, "AA", &fAA) || SkOSMenu::FindSwitchState(evt, "Sync", &fSync))
+=======
+        if (SkOSMenu::FindSwitchState(evt, "AA", &fAA) ||
+            SkOSMenu::FindSwitchState(evt, "Sync", &fSync))
+>>>>>>> miniblink49
             return true;
         if (SkOSMenu::FindSwitchState(evt, "Vector", &fVector)) {
             this->clearBitmap();
@@ -143,6 +199,7 @@ protected:
         return this->INHERITED::onEvent(evt);
     }
 
+<<<<<<< HEAD
     virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y)
     {
         return new Click(this);
@@ -165,21 +222,58 @@ protected:
             break;
         default:
             break;
+=======
+    virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y) {
+        return new Click(this);
+    }
+
+    virtual bool onClick(SkView::Click* click) {
+        switch (click->fState) {
+            case SkView::Click::kDown_State:
+                fCurrLine.moveTo(click->fCurr);
+                fType = SkSocket::kPipeReplace_type;
+                if (fSocket)
+                    fSocket->resumeWrite();
+                break;
+            case SkView::Click::kMoved_State:
+                fCurrLine.lineTo(click->fCurr);
+                break;
+            case SkView::Click::kUp_State:
+                fType = SkSocket::kPipeAppend_type;
+                break;
+            default:
+                break;
+>>>>>>> miniblink49
         }
         return true;
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
+=======
+    virtual void onDrawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         if (fSocket) {
             if (fSocket->isConnected()) {
                 if (fSync) {
                     int count = 0;
+<<<<<<< HEAD
                     while (fSocket->readPacket(readData, this) > 0 && count < MAX_READ_PER_FRAME)
                         ++count;
                 } else
                     fSocket->readPacket(readData, this);
             } else
+=======
+                    while (fSocket->readPacket(readData, this) > 0 &&
+                           count < MAX_READ_PER_FRAME)
+                        ++count;
+                }
+                else
+                    fSocket->readPacket(readData, this);
+            }
+            else
+>>>>>>> miniblink49
                 fSocket->connectToServer();
         }
         size_t bytesRead = 0;
@@ -193,8 +287,13 @@ protected:
                 tempCanvas = &bufferCanvas;
             SkGPipeReader reader(tempCanvas);
             status = reader.playback(fData.begin() + fTotalBytesRead,
+<<<<<<< HEAD
                 fData.count() - fTotalBytesRead,
                 &bytesRead);
+=======
+                                     fData.count() - fTotalBytesRead,
+                                     &bytesRead);
+>>>>>>> miniblink49
             SkASSERT(SkGPipeReader::kError_Status != status);
             fTotalBytesRead += bytesRead;
         }
@@ -207,8 +306,13 @@ protected:
         while (totalBytesRead < fBuffer.count()) {
             SkGPipeReader reader(canvas);
             status = reader.playback(fBuffer.begin() + totalBytesRead,
+<<<<<<< HEAD
                 fBuffer.count() - totalBytesRead,
                 &bytesRead);
+=======
+                                     fBuffer.count() - totalBytesRead,
+                                     &bytesRead);
+>>>>>>> miniblink49
             SkASSERT(SkGPipeReader::kError_Status != status);
             totalBytesRead += bytesRead;
         }
@@ -216,7 +320,11 @@ protected:
         SkNetPipeController controller(canvas);
         SkGPipeWriter writer;
         SkCanvas* writerCanvas = writer.startRecording(&controller,
+<<<<<<< HEAD
             SkGPipeWriter::kCrossProcess_Flag);
+=======
+                                                       SkGPipeWriter::kCrossProcess_Flag);
+>>>>>>> miniblink49
 
         //controller.disablePlayback();
         SkPaint p;
@@ -239,24 +347,35 @@ protected:
         this->inval(NULL);
     }
 
+<<<<<<< HEAD
     virtual void onSizeChange()
     {
         this->INHERITED::onSizeChange();
         fPalette->setLoc(this->width() - 100, 0);
+=======
+    virtual void onSizeChange() {
+        this->INHERITED::onSizeChange();
+        fPalette->setLoc(this->width()-100, 0);
+>>>>>>> miniblink49
         fBase.setConfig(SkBitmap::kARGB_8888_Config, this->width(), this->height());
         fBase.allocPixels(NULL);
         this->clearBitmap();
     }
 
 private:
+<<<<<<< HEAD
     void clear()
     {
+=======
+    void clear() {
+>>>>>>> miniblink49
         fData.reset();
         fBuffer.reset();
         fCurrLine.reset();
         fTotalBytesRead = 0;
         this->clearBitmap();
     }
+<<<<<<< HEAD
     void clearBitmap()
     {
         fTotalBytesRead = 0;
@@ -275,10 +394,33 @@ private:
     bool fAA;
     bool fSync;
     bool fVector;
+=======
+    void clearBitmap() {
+        fTotalBytesRead = 0;
+        fBase.eraseColor(fBGColor);
+    }
+    SkTDArray<char>     fData;
+    SkTDArray<char>     fBuffer;
+    SkBitmap            fBase;
+    SkPath              fCurrLine;
+    SkTCPClient*        fSocket;
+    SkSocket::DataType  fType;
+    SkColorPalette*     fPalette;
+    bool                fPaletteVisible;
+    size_t              fTotalBytesRead;
+    SkScalar            fBrushSize;
+    bool                fAA;
+    bool                fSync;
+    bool                fVector;
+>>>>>>> miniblink49
 
     typedef SampleView INHERITED;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////
 
 static SkView* MyFactory() { return new DrawingClientView; }

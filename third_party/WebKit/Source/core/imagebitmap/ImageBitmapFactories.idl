@@ -30,23 +30,31 @@
 
 // https://html.spec.whatwg.org/#imagebitmapfactories
 
-typedef (HTMLImageElement or
-         HTMLVideoElement or
-         HTMLCanvasElement or
+// FIXME: should use typedef instead, but
+// requires better union type support: http://crbug.com/240176
+/*
+typedef (// HTMLImageElement or
+         // HTMLVideoElement or
+         // HTMLCanvasElement or
          Blob or
          ImageData or
-         ImageBitmap or
-         OffscreenCanvas) ImageBitmapSource;
+         // CanvasRenderingContext2D or
+         ImageBitmap) ImageBitmapSource;
+*/
 
 [
     LegacyTreatAsPartialInterface,
     NoInterfaceObject, // Always used on target of 'implements'
     Exposed=(Window,Worker),
+    RuntimeEnabled=ExperimentalCanvasFeatures,
+    TypeChecking=Interface,
 ] interface ImageBitmapFactories {
-    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(
-        ImageBitmapSource imageBitmap, optional ImageBitmapOptions options);
-    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(
-        ImageBitmapSource imageBitmap, long sx, long sy, long sw, long sh, optional ImageBitmapOptions options);
+    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(Blob blob);
+    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(Blob blob, long sx, long sy, long sw, long sh);
+    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(ImageData data);
+    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(ImageData data, long sx, long sy, long sw, long sh);
+    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(ImageBitmap bitmap);
+    [CallWith=ScriptState, RaisesException] Promise createImageBitmap(ImageBitmap bitmap, long sx, long sy, long sw, long sh);
 };
 
 Window implements ImageBitmapFactories;

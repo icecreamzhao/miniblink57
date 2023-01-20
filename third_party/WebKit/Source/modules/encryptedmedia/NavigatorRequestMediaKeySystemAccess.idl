@@ -4,6 +4,12 @@
 
 // https://w3c.github.io/encrypted-media/#navigator-extension-requestmediakeysystemaccess
 
+<<<<<<< HEAD
 partial interface Navigator {
+=======
+[
+    RuntimeEnabled=EncryptedMedia
+] partial interface Navigator {
+>>>>>>> miniblink49
     [CallWith=ScriptState] Promise<MediaKeySystemAccess> requestMediaKeySystemAccess(DOMString keySystem, sequence<MediaKeySystemConfiguration> supportedConfigurations);
 };

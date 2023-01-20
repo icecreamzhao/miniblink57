@@ -38,27 +38,20 @@ namespace blink {
 class LayoutRubyText final : public LayoutBlockFlow {
 public:
     LayoutRubyText(Element*);
-    ~LayoutRubyText() override;
+    virtual ~LayoutRubyText();
 
-    const char* name() const override { return "LayoutRubyText"; }
+    virtual const char* name() const override { return "LayoutRubyText"; }
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectRubyText || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectRubyText || LayoutBlockFlow::isOfType(type); }
 
-    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
+    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
 
 private:
-    bool avoidsFloats() const override;
+    virtual bool avoidsFloats() const override;
 
-    ETextAlign textAlignmentForLine(bool endsWithSoftBreak) const override;
-    void adjustInlineDirectionLineBounds(unsigned expansionOpportunityCount,
-        LayoutUnit& logicalLeft,
-        LayoutUnit& logicalWidth) const override;
+    virtual ETextAlign textAlignmentForLine(bool endsWithSoftBreak) const override;
+    virtual void adjustInlineDirectionLineBounds(unsigned expansionOpportunityCount, LayoutUnit& logicalLeft, LayoutUnit& logicalWidth) const override;
 };
-
-DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutRubyText, isRubyText());
 
 } // namespace blink
 

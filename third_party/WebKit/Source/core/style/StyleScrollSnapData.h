@@ -27,14 +27,12 @@
 #define StyleScrollSnapData_h
 
 #include "platform/LengthPoint.h"
-#include "wtf/Allocator.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 struct ScrollSnapPoints {
-    DISALLOW_NEW();
     Length repeatOffset;
     bool hasRepeat;
     bool usesElements;
@@ -42,21 +40,12 @@ struct ScrollSnapPoints {
 };
 
 bool operator==(const ScrollSnapPoints&, const ScrollSnapPoints&);
-inline bool operator!=(const ScrollSnapPoints& a, const ScrollSnapPoints& b)
-{
-    return !(a == b);
-}
+inline bool operator!=(const ScrollSnapPoints& a, const ScrollSnapPoints& b) { return !(a == b); }
 
 class StyleScrollSnapData : public RefCounted<StyleScrollSnapData> {
 public:
-    static PassRefPtr<StyleScrollSnapData> create()
-    {
-        return adoptRef(new StyleScrollSnapData);
-    }
-    PassRefPtr<StyleScrollSnapData> copy()
-    {
-        return adoptRef(new StyleScrollSnapData(*this));
-    }
+    static PassRefPtr<StyleScrollSnapData> create() { return adoptRef(new StyleScrollSnapData); }
+    PassRefPtr<StyleScrollSnapData> copy() { return adoptRef(new StyleScrollSnapData(*this)); }
 
     ScrollSnapPoints m_xPoints;
     ScrollSnapPoints m_yPoints;
@@ -69,11 +58,7 @@ private:
 };
 
 bool operator==(const StyleScrollSnapData&, const StyleScrollSnapData&);
-inline bool operator!=(const StyleScrollSnapData& a,
-    const StyleScrollSnapData& b)
-{
-    return !(a == b);
-}
+inline bool operator!=(const StyleScrollSnapData& a, const StyleScrollSnapData& b) { return !(a == b); }
 
 } // namespace blink
 

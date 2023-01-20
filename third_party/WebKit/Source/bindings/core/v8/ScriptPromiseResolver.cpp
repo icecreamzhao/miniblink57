@@ -2,28 +2,29 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 
-#include "core/dom/TaskRunnerHelper.h"
-#include "core/inspector/InspectorInstrumentation.h"
+#include "bindings/core/v8/V8RecursionScope.h"
+#include "platform/LifecycleObserver.h"
 
 namespace blink {
 
 ScriptPromiseResolver::ScriptPromiseResolver(ScriptState* scriptState)
-    : SuspendableObject(scriptState->getExecutionContext())
+    : ActiveDOMObject(scriptState->executionContext())
     , m_state(Pending)
     , m_scriptState(scriptState)
-    , m_timer(TaskRunnerHelper::get(TaskType::Microtask, getExecutionContext()),
-          this,
-          &ScriptPromiseResolver::onTimerFired)
+    , m_mode(Default)
+    , m_timer(this, &ScriptPromiseResolver::onTimerFired)
     , m_resolver(scriptState)
+#if ENABLE(ASSERT)
+    , m_isPromiseCalled(false)
+#endif
 {
-    if (getExecutionContext()->isContextDestroyed()) {
-        m_state = Detached;
+    if (executionContext()->activeDOMObjectsAreStopped()) {
+        m_state = ResolvedOrRejected;
         m_resolver.clear();
     }
-    InspectorInstrumentation::asyncTaskScheduled(getExecutionContext(), "Promise",
-        this);
 }
 
 void ScriptPromiseResolver::suspend()
@@ -34,52 +35,38 @@ void ScriptPromiseResolver::suspend()
 void ScriptPromiseResolver::resume()
 {
     if (m_state == Resolving || m_state == Rejecting)
-        m_timer.startOneShot(0, BLINK_FROM_HERE);
+        m_timer.startOneShot(0, FROM_HERE);
 }
 
-void ScriptPromiseResolver::detach()
+void ScriptPromiseResolver::stop()
 {
-    if (m_state == Detached)
-        return;
     m_timer.stop();
-    m_state = Detached;
-    m_resolver.clear();
-    m_value.clear();
-    m_keepAlive.clear();
-    InspectorInstrumentation::asyncTaskCanceled(getExecutionContext(), this);
+    clear();
 }
 
 void ScriptPromiseResolver::keepAliveWhilePending()
 {
-    // keepAliveWhilePending() will be called twice if the resolver
-    // is created in a suspended execution context and the resolver
-    // is then resolved/rejected while in that suspended state.
-    if (m_state == Detached || m_keepAlive)
+    if (m_state == ResolvedOrRejected || m_mode == KeepAliveWhilePending)
         return;
 
-    // Keep |this| around while the promise is Pending;
-    // see detach() for the dual operation.
-    m_keepAlive = this;
+    // Keep |this| while the promise is Pending.
+    // deref() will be called in clear().
+    m_mode = KeepAliveWhilePending;
+    ref();
 }
 
-void ScriptPromiseResolver::onTimerFired(TimerBase*)
+void ScriptPromiseResolver::onTimerFired(Timer<ScriptPromiseResolver>*)
 {
     ASSERT(m_state == Resolving || m_state == Rejecting);
-    if (!getScriptState()->contextIsValid()) {
-        detach();
-        return;
-    }
-
     ScriptState::Scope scope(m_scriptState.get());
     resolveOrRejectImmediately();
 }
 
 void ScriptPromiseResolver::resolveOrRejectImmediately()
 {
-    DCHECK(!getExecutionContext()->isContextDestroyed());
-    DCHECK(!getExecutionContext()->isContextSuspended());
+    ASSERT(!executionContext()->activeDOMObjectsAreStopped());
+    ASSERT(!executionContext()->activeDOMObjectsAreSuspended());
     {
-        InspectorInstrumentation::AsyncTask asyncTask(getExecutionContext(), this);
         if (m_state == Resolving) {
             m_resolver.resolve(m_value.newLocal(m_scriptState->isolate()));
         } else {
@@ -87,12 +74,33 @@ void ScriptPromiseResolver::resolveOrRejectImmediately()
             m_resolver.reject(m_value.newLocal(m_scriptState->isolate()));
         }
     }
-    detach();
+    clear();
+}
+
+void ScriptPromiseResolver::clear()
+{
+    if (m_state == ResolvedOrRejected)
+        return;
+    ResolutionState state = m_state;
+    m_state = ResolvedOrRejected;
+    m_resolver.clear();
+    m_value.clear();
+    if (m_mode == KeepAliveWhilePending) {
+        // |ref| was called in |keepAliveWhilePending|.
+        deref();
+    }
+    // |this| may be deleted here, but it is safe to check |state| because
+    // it doesn't depend on |this|. When |this| is deleted, |state| can't be
+    // |Resolving| nor |Rejecting| and hence |this->deref()| can't be executed.
+    if (state == Resolving || state == Rejecting) {
+        // |ref| was called in |resolveOrReject|.
+        deref();
+    }
 }
 
 DEFINE_TRACE(ScriptPromiseResolver)
 {
-    SuspendableObject::trace(visitor);
+    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

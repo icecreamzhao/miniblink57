@@ -36,15 +36,23 @@
 namespace blink {
 
 struct WebTextCheckingResult;
+<<<<<<< HEAD
 template <typename T>
 class WebVector;
+=======
+template <typename T> class WebVector;
+>>>>>>> miniblink49
 
 // Gets called back when WebViewClient finished an asynchronous spell checking.
 class WebTextCheckingCompletion {
 public:
+<<<<<<< HEAD
     virtual void didFinishCheckingText(
         const WebVector<WebTextCheckingResult>&)
         = 0;
+=======
+    virtual void didFinishCheckingText(const WebVector<WebTextCheckingResult>&) = 0;
+>>>>>>> miniblink49
     virtual void didCancelCheckingText() { }
 
 protected:

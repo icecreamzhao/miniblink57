@@ -29,10 +29,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/track/TextTrackCue.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
-#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/events/Event.h"
 #include "core/html/track/TextTrack.h"
 #include "core/html/track/TextTrackCueList.h"
@@ -129,20 +130,20 @@ unsigned TextTrackCue::cueIndex()
 {
     // This method can only be called on cues while they are associated with
     // a(n enabled) track (and hence that track's list of cues should exist.)
-    DCHECK(track() && track()->cues());
+    ASSERT(track() && track()->cues());
     TextTrackCueList* cueList = track()->cues();
     if (!cueList->isCueIndexValid(m_cueIndex))
         cueList->validateCueIndexes();
     return m_cueIndex;
 }
 
-DispatchEventResult TextTrackCue::dispatchEventInternal(Event* event)
+bool TextTrackCue::dispatchEvent(PassRefPtrWillBeRawPtr<Event> event)
 {
     // When a TextTrack's mode is disabled: no cues are active, no events fired.
     if (!track() || track()->mode() == TextTrack::disabledKeyword())
-        return DispatchEventResult::CanceledBeforeDispatch;
+        return false;
 
-    return EventTarget::dispatchEventInternal(event);
+    return EventTarget::dispatchEvent(event);
 }
 
 const AtomicString& TextTrackCue::interfaceName() const

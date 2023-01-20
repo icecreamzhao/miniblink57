@@ -15,8 +15,13 @@
 #ifndef __STRINGTRIEBUILDER_H__
 #define __STRINGTRIEBUILDER_H__
 
+<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+>>>>>>> miniblink49
 
 /**
  * \file
@@ -62,10 +67,17 @@ class U_COMMON_API StringTrieBuilder : public UObject {
 public:
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
+<<<<<<< HEAD
     static UBool hashNode(const void* node);
     /** @internal */
     static UBool equalNodes(const void* left, const void* right);
 #endif /* U_HIDE_INTERNAL_API */
+=======
+    static UBool hashNode(const void *node);
+    /** @internal */
+    static UBool equalNodes(const void *left, const void *right);
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
 protected:
     // Do not enclose the protected default constructor with #ifndef U_HIDE_INTERNAL_API
@@ -77,28 +89,48 @@ protected:
 
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
+<<<<<<< HEAD
     void createCompactBuilder(int32_t sizeGuess, UErrorCode& errorCode);
+=======
+    void createCompactBuilder(int32_t sizeGuess, UErrorCode &errorCode);
+>>>>>>> miniblink49
     /** @internal */
     void deleteCompactBuilder();
 
     /** @internal */
+<<<<<<< HEAD
     void build(UStringTrieBuildOption buildOption, int32_t elementsLength, UErrorCode& errorCode);
+=======
+    void build(UStringTrieBuildOption buildOption, int32_t elementsLength, UErrorCode &errorCode);
+>>>>>>> miniblink49
 
     /** @internal */
     int32_t writeNode(int32_t start, int32_t limit, int32_t unitIndex);
     /** @internal */
     int32_t writeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex, int32_t length);
+<<<<<<< HEAD
 #endif /* U_HIDE_INTERNAL_API */
+=======
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
     class Node;
 
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
+<<<<<<< HEAD
     Node* makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErrorCode& errorCode);
     /** @internal */
     Node* makeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex,
         int32_t length, UErrorCode& errorCode);
 #endif /* U_HIDE_INTERNAL_API */
+=======
+    Node *makeNode(int32_t start, int32_t limit, int32_t unitIndex, UErrorCode &errorCode);
+    /** @internal */
+    Node *makeBranchSubNode(int32_t start, int32_t limit, int32_t unitIndex,
+                            int32_t length, UErrorCode &errorCode);
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
     /** @internal */
     virtual int32_t getElementStringLength(int32_t i) const = 0;
@@ -133,12 +165,20 @@ protected:
 #ifndef U_HIDE_INTERNAL_API
     // max(BytesTrie::kMaxBranchLinearSubNodeLength, UCharsTrie::kMaxBranchLinearSubNodeLength).
     /** @internal */
+<<<<<<< HEAD
     static const int32_t kMaxBranchLinearSubNodeLength = 5;
+=======
+    static const int32_t kMaxBranchLinearSubNodeLength=5;
+>>>>>>> miniblink49
 
     // Maximum number of nested split-branch levels for a branch on all 2^16 possible UChar units.
     // log2(2^16/kMaxBranchLinearSubNodeLength) rounded up.
     /** @internal */
+<<<<<<< HEAD
     static const int32_t kMaxSplitBranchLevels = 14;
+=======
+    static const int32_t kMaxSplitBranchLevels=14;
+>>>>>>> miniblink49
 
     /**
      * Makes sure that there is only one unique node registered that is
@@ -150,7 +190,11 @@ protected:
      *         an equivalent node if newNode is a duplicate.
      * @internal
      */
+<<<<<<< HEAD
     Node* registerNode(Node* newNode, UErrorCode& errorCode);
+=======
+    Node *registerNode(Node *newNode, UErrorCode &errorCode);
+>>>>>>> miniblink49
     /**
      * Makes sure that there is only one unique FinalValueNode registered
      * with this value.
@@ -161,8 +205,13 @@ protected:
      * @return A FinalValueNode with the given value.
      * @internal
      */
+<<<<<<< HEAD
     Node* registerFinalValue(int32_t value, UErrorCode& errorCode);
 #endif /* U_HIDE_INTERNAL_API */
+=======
+    Node *registerFinalValue(int32_t value, UErrorCode &errorCode);
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
     /*
      * C++ note:
@@ -182,12 +231,17 @@ protected:
 
     // Hash set of nodes, maps from nodes to integer 1.
     /** @internal */
+<<<<<<< HEAD
     UHashtable* nodes;
+=======
+    UHashtable *nodes;
+>>>>>>> miniblink49
 
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
     class Node : public UObject {
     public:
+<<<<<<< HEAD
         Node(int32_t initialHash)
             : hash(initialHash)
             , offset(0)
@@ -199,6 +253,15 @@ protected:
         // Base class operator==() compares the actual class types.
         virtual UBool operator==(const Node& other) const;
         inline UBool operator!=(const Node& other) const { return !operator==(other); }
+=======
+        Node(int32_t initialHash) : hash(initialHash), offset(0) {}
+        inline int32_t hashCode() const { return hash; }
+        // Handles node==NULL.
+        static inline int32_t hashCode(const Node *node) { return node==NULL ? 0 : node->hashCode(); }
+        // Base class operator==() compares the actual class types.
+        virtual UBool operator==(const Node &other) const;
+        inline UBool operator!=(const Node &other) const { return !operator==(other); }
+>>>>>>> miniblink49
         /**
          * Traverses the Node graph and numbers branch edges, with rightmost edges first.
          * This is to avoid writing a duplicate node twice.
@@ -228,22 +291,36 @@ protected:
          */
         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
         // write() must set the offset to a positive value.
+<<<<<<< HEAD
         virtual void write(StringTrieBuilder& builder) = 0;
         // See markRightEdgesFirst.
         inline void writeUnlessInsideRightEdge(int32_t firstRight, int32_t lastRight,
             StringTrieBuilder& builder)
         {
+=======
+        virtual void write(StringTrieBuilder &builder) = 0;
+        // See markRightEdgesFirst.
+        inline void writeUnlessInsideRightEdge(int32_t firstRight, int32_t lastRight,
+                                               StringTrieBuilder &builder) {
+>>>>>>> miniblink49
             // Note: Edge numbers are negative, lastRight<=firstRight.
             // If offset>0 then this node and its sub-nodes have been written already
             // and we need not write them again.
             // If this node is part of the unwritten right branch edge,
             // then we wait until that is written.
+<<<<<<< HEAD
             if (offset < 0 && (offset < lastRight || firstRight < offset)) {
+=======
+            if(offset<0 && (offset<lastRight || firstRight<offset)) {
+>>>>>>> miniblink49
                 write(builder);
             }
         }
         inline int32_t getOffset() const { return offset; }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
     protected:
         int32_t hash;
         int32_t offset;
@@ -258,6 +335,7 @@ protected:
     /** @internal */
     class FinalValueNode : public Node {
     public:
+<<<<<<< HEAD
         FinalValueNode(int32_t v)
             : Node(0x111111 * 37 + v)
             , value(v)
@@ -266,6 +344,11 @@ protected:
         virtual UBool operator==(const Node& other) const;
         virtual void write(StringTrieBuilder& builder);
 
+=======
+        FinalValueNode(int32_t v) : Node(0x111111*37+v), value(v) {}
+        virtual UBool operator==(const Node &other) const;
+        virtual void write(StringTrieBuilder &builder);
+>>>>>>> miniblink49
     protected:
         int32_t value;
     };
@@ -275,6 +358,7 @@ protected:
      */
     class ValueNode : public Node {
     public:
+<<<<<<< HEAD
         ValueNode(int32_t initialHash)
             : Node(initialHash)
             , hasValue(FALSE)
@@ -289,6 +373,15 @@ protected:
             hash = hash * 37 + v;
         }
 
+=======
+        ValueNode(int32_t initialHash) : Node(initialHash), hasValue(FALSE), value(0) {}
+        virtual UBool operator==(const Node &other) const;
+        void setValue(int32_t v) {
+            hasValue=TRUE;
+            value=v;
+            hash=hash*37+v;
+        }
+>>>>>>> miniblink49
     protected:
         UBool hasValue;
         int32_t value;
@@ -299,6 +392,7 @@ protected:
      */
     class IntermediateValueNode : public ValueNode {
     public:
+<<<<<<< HEAD
         IntermediateValueNode(int32_t v, Node* nextNode)
             : ValueNode(0x222222 * 37 + hashCode(nextNode))
             , next(nextNode)
@@ -311,6 +405,15 @@ protected:
 
     protected:
         Node* next;
+=======
+        IntermediateValueNode(int32_t v, Node *nextNode)
+                : ValueNode(0x222222*37+hashCode(nextNode)), next(nextNode) { setValue(v); }
+        virtual UBool operator==(const Node &other) const;
+        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(StringTrieBuilder &builder);
+    protected:
+        Node *next;
+>>>>>>> miniblink49
     };
 
     /**
@@ -318,6 +421,7 @@ protected:
      */
     class LinearMatchNode : public ValueNode {
     public:
+<<<<<<< HEAD
         LinearMatchNode(int32_t len, Node* nextNode)
             : ValueNode((0x333333 * 37 + len) * 37 + hashCode(nextNode))
             , length(len)
@@ -330,6 +434,16 @@ protected:
     protected:
         int32_t length;
         Node* next;
+=======
+        LinearMatchNode(int32_t len, Node *nextNode)
+                : ValueNode((0x333333*37+len)*37+hashCode(nextNode)),
+                  length(len), next(nextNode) {}
+        virtual UBool operator==(const Node &other) const;
+        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+    protected:
+        int32_t length;
+        Node *next;
+>>>>>>> miniblink49
     };
 
     /**
@@ -337,11 +451,15 @@ protected:
      */
     class BranchNode : public Node {
     public:
+<<<<<<< HEAD
         BranchNode(int32_t initialHash)
             : Node(initialHash)
         {
         }
 
+=======
+        BranchNode(int32_t initialHash) : Node(initialHash) {}
+>>>>>>> miniblink49
     protected:
         int32_t firstEdgeNumber;
     };
@@ -351,6 +469,7 @@ protected:
      */
     class ListBranchNode : public BranchNode {
     public:
+<<<<<<< HEAD
         ListBranchNode()
             : BranchNode(0x444444)
             , length(0)
@@ -380,6 +499,30 @@ protected:
 
     protected:
         Node* equal[kMaxBranchLinearSubNodeLength]; // NULL means "has final value".
+=======
+        ListBranchNode() : BranchNode(0x444444), length(0) {}
+        virtual UBool operator==(const Node &other) const;
+        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(StringTrieBuilder &builder);
+        // Adds a unit with a final value.
+        void add(int32_t c, int32_t value) {
+            units[length]=(UChar)c;
+            equal[length]=NULL;
+            values[length]=value;
+            ++length;
+            hash=(hash*37+c)*37+value;
+        }
+        // Adds a unit which leads to another match node.
+        void add(int32_t c, Node *node) {
+            units[length]=(UChar)c;
+            equal[length]=node;
+            values[length]=0;
+            ++length;
+            hash=(hash*37+c)*37+hashCode(node);
+        }
+    protected:
+        Node *equal[kMaxBranchLinearSubNodeLength];  // NULL means "has final value".
+>>>>>>> miniblink49
         int32_t length;
         int32_t values[kMaxBranchLinearSubNodeLength];
         UChar units[kMaxBranchLinearSubNodeLength];
@@ -390,6 +533,7 @@ protected:
      */
     class SplitBranchNode : public BranchNode {
     public:
+<<<<<<< HEAD
         SplitBranchNode(UChar middleUnit, Node* lessThanNode, Node* greaterOrEqualNode)
             : BranchNode(((0x555555 * 37 + middleUnit) * 37 + hashCode(lessThanNode)) * 37 + hashCode(greaterOrEqualNode))
             , unit(middleUnit)
@@ -405,12 +549,26 @@ protected:
         UChar unit;
         Node* lessThan;
         Node* greaterOrEqual;
+=======
+        SplitBranchNode(UChar middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
+                : BranchNode(((0x555555*37+middleUnit)*37+
+                              hashCode(lessThanNode))*37+hashCode(greaterOrEqualNode)),
+                  unit(middleUnit), lessThan(lessThanNode), greaterOrEqual(greaterOrEqualNode) {}
+        virtual UBool operator==(const Node &other) const;
+        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(StringTrieBuilder &builder);
+    protected:
+        UChar unit;
+        Node *lessThan;
+        Node *greaterOrEqual;
+>>>>>>> miniblink49
     };
 
     // Branch head node, for writing the actual node lead unit.
     /** @internal */
     class BranchHeadNode : public ValueNode {
     public:
+<<<<<<< HEAD
         BranchHeadNode(int32_t len, Node* subNode)
             : ValueNode((0x666666 * 37 + len) * 37 + hashCode(subNode))
             , length(len)
@@ -430,6 +588,23 @@ protected:
     /** @internal */
     virtual Node* createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
         Node* nextNode) const = 0;
+=======
+        BranchHeadNode(int32_t len, Node *subNode)
+                : ValueNode((0x666666*37+len)*37+hashCode(subNode)),
+                  length(len), next(subNode) {}
+        virtual UBool operator==(const Node &other) const;
+        virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+        virtual void write(StringTrieBuilder &builder);
+    protected:
+        int32_t length;
+        Node *next;  // A branch sub-node.
+    };
+#endif  /* U_HIDE_INTERNAL_API */
+
+    /** @internal */
+    virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
+                                        Node *nextNode) const = 0;
+>>>>>>> miniblink49
 
     /** @internal */
     virtual int32_t write(int32_t unit) = 0;
@@ -445,4 +620,8 @@ protected:
 
 U_NAMESPACE_END
 
+<<<<<<< HEAD
 #endif // __STRINGTRIEBUILDER_H__
+=======
+#endif  // __STRINGTRIEBUILDER_H__
+>>>>>>> miniblink49

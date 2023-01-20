@@ -9,12 +9,21 @@
 
 @interface SkUIRootViewController : UITableViewController <UITableViewDataSource> {
 @private
+<<<<<<< HEAD
     UIPopoverController* popoverController;
     UIBarButtonItem* popoverButtonItem;
     NSMutableArray* fSamples;
 }
 @property (nonatomic, retain) UIPopoverController* popoverController;
 @property (nonatomic, retain) UIBarButtonItem* popoverButtonItem;
+=======
+    UIPopoverController *popoverController;
+    UIBarButtonItem *popoverButtonItem;
+    NSMutableArray* fSamples;
+}
+@property (nonatomic, retain) UIPopoverController *popoverController;
+@property (nonatomic, retain) UIBarButtonItem *popoverButtonItem;
+>>>>>>> miniblink49
 
 - (void)addItem:(NSString*)anItem;
 

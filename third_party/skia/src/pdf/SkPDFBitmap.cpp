@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkPDFBitmap.h"
 #include "SkColorPriv.h"
 #include "SkData.h"
@@ -52,12 +53,32 @@ bool image_compute_is_opaque(const SkImage* image)
 
 static void pdf_stream_begin(SkWStream* stream)
 {
+=======
+#include "SkColorPriv.h"
+#include "SkData.h"
+#include "SkFlate.h"
+#include "SkImageGenerator.h"
+#include "SkJpegInfo.h"
+#include "SkPDFBitmap.h"
+#include "SkPDFCanon.h"
+#include "SkPixelRef.h"
+#include "SkStream.h"
+#include "SkUnPreMultiply.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+static void pdf_stream_begin(SkWStream* stream) {
+>>>>>>> miniblink49
     static const char streamBegin[] = " stream\n";
     stream->write(streamBegin, strlen(streamBegin));
 }
 
+<<<<<<< HEAD
 static void pdf_stream_end(SkWStream* stream)
 {
+=======
+static void pdf_stream_end(SkWStream* stream) {
+>>>>>>> miniblink49
     static const char streamEnd[] = "\nendstream";
     stream->write(streamEnd, strlen(streamEnd));
 }
@@ -65,8 +86,12 @@ static void pdf_stream_end(SkWStream* stream)
 ////////////////////////////////////////////////////////////////////////////////
 
 // write a single byte to a stream n times.
+<<<<<<< HEAD
 static void fill_stream(SkWStream* out, char value, size_t n)
 {
+=======
+static void fill_stream(SkWStream* out, char value, size_t n) {
+>>>>>>> miniblink49
     char buffer[4096];
     memset(buffer, value, sizeof(buffer));
     for (size_t i = 0; i < n / sizeof(buffer); ++i) {
@@ -75,6 +100,7 @@ static void fill_stream(SkWStream* out, char value, size_t n)
     out->write(buffer, n % sizeof(buffer));
 }
 
+<<<<<<< HEAD
 // TODO(reed@): Decide if these five functions belong in SkColorPriv.h
 static bool SkIsBGRA(SkColorType ct)
 {
@@ -110,6 +136,14 @@ static void pmcolor_to_rgb24(uint32_t color, uint8_t* rgb, SkColorType ct)
     rgb[0] = SkUnPreMultiply::ApplyScale(s, SkGetR32Component(color, ct));
     rgb[1] = SkUnPreMultiply::ApplyScale(s, SkGetG32Component(color, ct));
     rgb[2] = SkUnPreMultiply::ApplyScale(s, SkGetB32Component(color, ct));
+=======
+// unpremultiply and extract R, G, B components.
+static void pmcolor_to_rgb24(SkPMColor pmColor, uint8_t* rgb) {
+    uint32_t s = SkUnPreMultiply::GetScale(SkGetPackedA32(pmColor));
+    rgb[0] = SkUnPreMultiply::ApplyScale(s, SkGetPackedR32(pmColor));
+    rgb[1] = SkUnPreMultiply::ApplyScale(s, SkGetPackedG32(pmColor));
+    rgb[2] = SkUnPreMultiply::ApplyScale(s, SkGetPackedB32(pmColor));
+>>>>>>> miniblink49
 }
 
 /* It is necessary to average the color component of transparent
@@ -122,11 +156,18 @@ static void pmcolor_to_rgb24(uint32_t color, uint8_t* rgb, SkColorType ct)
    rendered as grey because of the separate soft mask and color
    resizing. e.g.: gm/bitmappremul.cpp */
 static void get_neighbor_avg_color(const SkBitmap& bm,
+<<<<<<< HEAD
     int xOrig,
     int yOrig,
     uint8_t rgb[3],
     SkColorType ct)
 {
+=======
+                                   int xOrig,
+                                   int yOrig,
+                                   uint8_t rgb[3]) {
+    SkASSERT(kN32_SkColorType == bm.colorType());
+>>>>>>> miniblink49
     unsigned a = 0, r = 0, g = 0, b = 0;
     // Clamp the range to the edge of the bitmap.
     int ymin = SkTMax(0, yOrig - 1);
@@ -134,6 +175,7 @@ static void get_neighbor_avg_color(const SkBitmap& bm,
     int xmin = SkTMax(0, xOrig - 1);
     int xmax = SkTMin(xOrig + 1, bm.width() - 1);
     for (int y = ymin; y <= ymax; ++y) {
+<<<<<<< HEAD
         uint32_t* scanline = bm.getAddr32(0, y);
         for (int x = xmin; x <= xmax; ++x) {
             uint32_t color = scanline[x];
@@ -141,6 +183,15 @@ static void get_neighbor_avg_color(const SkBitmap& bm,
             r += SkGetR32Component(color, ct);
             g += SkGetG32Component(color, ct);
             b += SkGetB32Component(color, ct);
+=======
+        SkPMColor* scanline = bm.getAddr32(0, y);
+        for (int x = xmin; x <= xmax; ++x) {
+            SkPMColor pmColor = scanline[x];
+            a += SkGetPackedA32(pmColor);
+            r += SkGetPackedR32(pmColor);
+            g += SkGetPackedG32(pmColor);
+            b += SkGetPackedB32(pmColor);
+>>>>>>> miniblink49
         }
     }
     if (a > 0) {
@@ -152,6 +203,7 @@ static void get_neighbor_avg_color(const SkBitmap& bm,
     }
 }
 
+<<<<<<< HEAD
 static size_t pixel_count(const SkBitmap& bm)
 {
     return SkToSizeT(bm.width()) * SkToSizeT(bm.height());
@@ -159,6 +211,13 @@ static size_t pixel_count(const SkBitmap& bm)
 
 static const SkBitmap& not4444(const SkBitmap& input, SkBitmap* copy)
 {
+=======
+static size_t pixel_count(const SkBitmap& bm) {
+    return SkToSizeT(bm.width()) * SkToSizeT(bm.height());
+}
+
+static const SkBitmap& not4444(const SkBitmap& input, SkBitmap* copy) {
+>>>>>>> miniblink49
     if (input.colorType() != kARGB_4444_SkColorType) {
         return input;
     }
@@ -168,6 +227,7 @@ static const SkBitmap& not4444(const SkBitmap& input, SkBitmap* copy)
     return *copy;
 }
 
+<<<<<<< HEAD
 static size_t pdf_color_component_count(SkColorType ct)
 {
     switch (ct) {
@@ -191,12 +251,36 @@ static void bitmap_to_pdf_pixels(const SkBitmap& bitmap, SkWStream* out)
 {
     if (!bitmap.getPixels()) {
         size_t size = pixel_count(bitmap) * pdf_color_component_count(bitmap.colorType());
+=======
+static size_t pdf_color_component_count(SkColorType ct) {
+    switch (ct) {
+        case kN32_SkColorType:
+        case kRGB_565_SkColorType:
+        case kARGB_4444_SkColorType:
+            return 3;
+        case kAlpha_8_SkColorType:
+        case kIndex_8_SkColorType:
+        case kGray_8_SkColorType:
+            return 1;
+        case kUnknown_SkColorType:
+        default:
+            SkDEBUGFAIL("unexpected color type");
+            return 0;
+    }
+}
+
+static void bitmap_to_pdf_pixels(const SkBitmap& bitmap, SkWStream* out) {
+    if (!bitmap.getPixels()) {
+        size_t size = pixel_count(bitmap) *
+                      pdf_color_component_count(bitmap.colorType());
+>>>>>>> miniblink49
         fill_stream(out, '\x00', size);
         return;
     }
     SkBitmap copy;
     const SkBitmap& bm = not4444(bitmap, &copy);
     SkAutoLockPixels autoLockPixels(bm);
+<<<<<<< HEAD
     SkColorType colorType = bm.colorType();
     SkAlphaType alphaType = bm.alphaType();
     switch (colorType) {
@@ -260,13 +344,72 @@ static void bitmap_to_pdf_pixels(const SkBitmap& bitmap, SkWStream* out)
     case kARGB_4444_SkColorType:
     default:
         SkDEBUGFAIL("unexpected color type");
+=======
+    switch (bm.colorType()) {
+        case kN32_SkColorType: {
+            SkASSERT(3 == pdf_color_component_count(bitmap.colorType()));
+            SkAutoTMalloc<uint8_t> scanline(3 * bm.width());
+            for (int y = 0; y < bm.height(); ++y) {
+                const SkPMColor* src = bm.getAddr32(0, y);
+                uint8_t* dst = scanline.get();
+                for (int x = 0; x < bm.width(); ++x) {
+                    SkPMColor color = *src++;
+                    U8CPU alpha = SkGetPackedA32(color);
+                    if (alpha != SK_AlphaTRANSPARENT) {
+                        pmcolor_to_rgb24(color, dst);
+                    } else {
+                        get_neighbor_avg_color(bm, x, y, dst);
+                    }
+                    dst += 3;
+                }
+                out->write(scanline.get(), 3 * bm.width());
+            }
+            return;
+        }
+        case kRGB_565_SkColorType: {
+            SkASSERT(3 == pdf_color_component_count(bitmap.colorType()));
+            SkAutoTMalloc<uint8_t> scanline(3 * bm.width());
+            for (int y = 0; y < bm.height(); ++y) {
+                const uint16_t* src = bm.getAddr16(0, y);
+                uint8_t* dst = scanline.get();
+                for (int x = 0; x < bm.width(); ++x) {
+                    U16CPU color565 = *src++;
+                    *dst++ = SkPacked16ToR32(color565);
+                    *dst++ = SkPacked16ToG32(color565);
+                    *dst++ = SkPacked16ToB32(color565);
+                }
+                out->write(scanline.get(), 3 * bm.width());
+            }
+            return;
+        }
+        case kAlpha_8_SkColorType:
+            SkASSERT(1 == pdf_color_component_count(bitmap.colorType()));
+            fill_stream(out, '\x00', pixel_count(bm));
+            return;
+        case kGray_8_SkColorType:
+        case kIndex_8_SkColorType:
+            SkASSERT(1 == pdf_color_component_count(bitmap.colorType()));
+            // these two formats need no transformation to serialize.
+            for (int y = 0; y < bm.height(); ++y) {
+                out->write(bm.getAddr8(0, y), bm.width());
+            }
+            return;
+        case kUnknown_SkColorType:
+        case kARGB_4444_SkColorType:
+        default:
+            SkDEBUGFAIL("unexpected color type");
+>>>>>>> miniblink49
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static void bitmap_alpha_to_a8(const SkBitmap& bitmap, SkWStream* out)
 {
+=======
+static void bitmap_alpha_to_a8(const SkBitmap& bitmap, SkWStream* out) {
+>>>>>>> miniblink49
     if (!bitmap.getPixels()) {
         fill_stream(out, '\xFF', pixel_count(bitmap));
         return;
@@ -274,6 +417,7 @@ static void bitmap_alpha_to_a8(const SkBitmap& bitmap, SkWStream* out)
     SkBitmap copy;
     const SkBitmap& bm = not4444(bitmap, &copy);
     SkAutoLockPixels autoLockPixels(bm);
+<<<<<<< HEAD
     SkColorType colorType = bm.colorType();
     switch (colorType) {
     case kRGBA_8888_SkColorType:
@@ -326,18 +470,149 @@ static sk_sp<SkPDFArray> make_indexed_color_space(
     SkAlphaType alphaType)
 {
     auto result = sk_make_sp<SkPDFArray>();
+=======
+    switch (bm.colorType()) {
+        case kN32_SkColorType: {
+            SkAutoTMalloc<uint8_t> scanline(bm.width());
+            for (int y = 0; y < bm.height(); ++y) {
+                uint8_t* dst = scanline.get();
+                const SkPMColor* src = bm.getAddr32(0, y);
+                for (int x = 0; x < bm.width(); ++x) {
+                    *dst++ = SkGetPackedA32(*src++);
+                }
+                out->write(scanline.get(), bm.width());
+            }
+            return;
+        }
+        case kAlpha_8_SkColorType:
+            for (int y = 0; y < bm.height(); ++y) {
+                out->write(bm.getAddr8(0, y), bm.width());
+            }
+            return;
+        case kIndex_8_SkColorType: {
+            SkColorTable* ct = bm.getColorTable();
+            SkASSERT(ct);
+            SkAutoTMalloc<uint8_t> scanline(bm.width());
+            for (int y = 0; y < bm.height(); ++y) {
+                uint8_t* dst = scanline.get();
+                const uint8_t* src = bm.getAddr8(0, y);
+                for (int x = 0; x < bm.width(); ++x) {
+                    *dst++ = SkGetPackedA32((*ct)[*src++]);
+                }
+                out->write(scanline.get(), bm.width());
+            }
+            return;
+        }
+        case kRGB_565_SkColorType:
+        case kGray_8_SkColorType:
+            SkDEBUGFAIL("color type has no alpha");
+            return;
+        case kARGB_4444_SkColorType:
+            SkDEBUGFAIL("4444 color type should have been converted to N32");
+            return;
+        case kUnknown_SkColorType:
+        default:
+            SkDEBUGFAIL("unexpected color type");
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+// This SkPDFObject only outputs the alpha layer of the given bitmap.
+class PDFAlphaBitmap : public SkPDFObject {
+public:
+    PDFAlphaBitmap(const SkBitmap& bm) : fBitmap(bm) {}
+    ~PDFAlphaBitmap() {}
+    void emitObject(SkWStream*,
+                    const SkPDFObjNumMap&,
+                    const SkPDFSubstituteMap&) override;
+
+private:
+    const SkBitmap fBitmap;
+};
+
+void PDFAlphaBitmap::emitObject(SkWStream* stream,
+                                const SkPDFObjNumMap& objNumMap,
+                                const SkPDFSubstituteMap& substitutes) {
+    SkAutoLockPixels autoLockPixels(fBitmap);
+    SkASSERT(fBitmap.colorType() != kIndex_8_SkColorType ||
+             fBitmap.getColorTable());
+
+    // Write to a temporary buffer to get the compressed length.
+    SkDynamicMemoryWStream buffer;
+    SkDeflateWStream deflateWStream(&buffer);
+    bitmap_alpha_to_a8(fBitmap, &deflateWStream);
+    deflateWStream.finalize();  // call before detachAsStream().
+    SkAutoTDelete<SkStreamAsset> asset(buffer.detachAsStream());
+
+    SkPDFDict pdfDict("XObject");
+    pdfDict.insertName("Subtype", "Image");
+    pdfDict.insertInt("Width", fBitmap.width());
+    pdfDict.insertInt("Height", fBitmap.height());
+    pdfDict.insertName("ColorSpace", "DeviceGray");
+    pdfDict.insertInt("BitsPerComponent", 8);
+    pdfDict.insertName("Filter", "FlateDecode");
+    pdfDict.insertInt("Length", asset->getLength());
+    pdfDict.emitObject(stream, objNumMap, substitutes);
+
+    pdf_stream_begin(stream);
+    stream->writeStream(asset.get(), asset->getLength());
+    pdf_stream_end(stream);
+}
+}  // namespace
+
+////////////////////////////////////////////////////////////////////////////////
+
+namespace {
+class PDFDefaultBitmap : public SkPDFBitmap {
+public:
+    const SkAutoTUnref<SkPDFObject> fSMask;
+    void emitObject(SkWStream*,
+                    const SkPDFObjNumMap&,
+                    const SkPDFSubstituteMap&) override;
+    void addResources(SkPDFObjNumMap*,
+                      const SkPDFSubstituteMap&) const override;
+    PDFDefaultBitmap(const SkBitmap& bm, SkPDFObject* smask)
+        : SkPDFBitmap(bm), fSMask(smask) {}
+};
+}  // namespace
+
+void PDFDefaultBitmap::addResources(
+        SkPDFObjNumMap* catalog,
+        const SkPDFSubstituteMap& substitutes) const {
+    if (fSMask.get()) {
+        SkPDFObject* obj = substitutes.getSubstitute(fSMask.get());
+        SkASSERT(obj);
+        if (catalog->addObject(obj)) {
+            obj->addResources(catalog, substitutes);
+        }
+    }
+}
+
+static SkPDFArray* make_indexed_color_space(const SkColorTable* table) {
+    SkPDFArray* result = SkNEW(SkPDFArray);
+>>>>>>> miniblink49
     result->reserve(4);
     result->appendName("Indexed");
     result->appendName("DeviceRGB");
     SkASSERT(table);
     if (table->count() < 1) {
         result->appendInt(0);
+<<<<<<< HEAD
         char shortTableArray[3] = { 0, 0, 0 };
+=======
+        char shortTableArray[3] = {0, 0, 0};
+>>>>>>> miniblink49
         SkString tableString(shortTableArray, SK_ARRAY_COUNT(shortTableArray));
         result->appendString(tableString);
         return result;
     }
+<<<<<<< HEAD
     result->appendInt(table->count() - 1); // maximum color index.
+=======
+    result->appendInt(table->count() - 1);  // maximum color index.
+>>>>>>> miniblink49
 
     // Potentially, this could be represented in fewer bytes with a stream.
     // Max size as a string is 1.5k.
@@ -346,6 +621,7 @@ static sk_sp<SkPDFArray> make_indexed_color_space(
     uint8_t* tablePtr = reinterpret_cast<uint8_t*>(tableArray);
     const SkPMColor* colors = table->readColors();
     for (int i = 0; i < table->count(); i++) {
+<<<<<<< HEAD
         if (alphaType == kPremul_SkAlphaType) {
             pmcolor_to_rgb24(colors[i], tablePtr, kN32_SkColorType);
             tablePtr += 3;
@@ -354,12 +630,17 @@ static sk_sp<SkPDFArray> make_indexed_color_space(
             *tablePtr++ = SkGetG32Component(colors[i], kN32_SkColorType);
             *tablePtr++ = SkGetB32Component(colors[i], kN32_SkColorType);
         }
+=======
+        pmcolor_to_rgb24(colors[i], tablePtr);
+        tablePtr += 3;
+>>>>>>> miniblink49
     }
     SkString tableString(tableArray, 3 * table->count());
     result->appendString(tableString);
     return result;
 }
 
+<<<<<<< HEAD
 static void emit_image_xobject(SkWStream* stream,
     const SkImage* image,
     bool alpha,
@@ -370,10 +651,19 @@ static void emit_image_xobject(SkWStream* stream,
     SkBitmap bitmap;
     image_get_ro_pixels(image, &bitmap); // TODO(halcanary): test
     SkAutoLockPixels autoLockPixels(bitmap); // with malformed images.
+=======
+void PDFDefaultBitmap::emitObject(SkWStream* stream,
+                                  const SkPDFObjNumMap& objNumMap,
+                                  const SkPDFSubstituteMap& substitutes) {
+    SkAutoLockPixels autoLockPixels(fBitmap);
+    SkASSERT(fBitmap.colorType() != kIndex_8_SkColorType ||
+             fBitmap.getColorTable());
+>>>>>>> miniblink49
 
     // Write to a temporary buffer to get the compressed length.
     SkDynamicMemoryWStream buffer;
     SkDeflateWStream deflateWStream(&buffer);
+<<<<<<< HEAD
     if (alpha) {
         bitmap_alpha_to_a8(bitmap, &deflateWStream);
     } else {
@@ -394,14 +684,36 @@ static void emit_image_xobject(SkWStream* stream,
             make_indexed_color_space(bitmap.getColorTable(),
                 bitmap.alphaType()));
     } else if (1 == pdf_color_component_count(bitmap.colorType())) {
+=======
+    bitmap_to_pdf_pixels(fBitmap, &deflateWStream);
+    deflateWStream.finalize();  // call before detachAsStream().
+    SkAutoTDelete<SkStreamAsset> asset(buffer.detachAsStream());
+
+    SkPDFDict pdfDict("XObject");
+    pdfDict.insertName("Subtype", "Image");
+    pdfDict.insertInt("Width", fBitmap.width());
+    pdfDict.insertInt("Height", fBitmap.height());
+    if (fBitmap.colorType() == kIndex_8_SkColorType) {
+        SkASSERT(1 == pdf_color_component_count(fBitmap.colorType()));
+        pdfDict.insertObject("ColorSpace",
+                             make_indexed_color_space(fBitmap.getColorTable()));
+    } else if (1 == pdf_color_component_count(fBitmap.colorType())) {
+>>>>>>> miniblink49
         pdfDict.insertName("ColorSpace", "DeviceGray");
     } else {
         pdfDict.insertName("ColorSpace", "DeviceRGB");
     }
+<<<<<<< HEAD
     if (smask) {
         pdfDict.insertObjRef("SMask", smask);
     }
     pdfDict.insertInt("BitsPerComponent", 8);
+=======
+    pdfDict.insertInt("BitsPerComponent", 8);
+    if (fSMask) {
+        pdfDict.insertObjRef("SMask", SkRef(fSMask.get()));
+    }
+>>>>>>> miniblink49
     pdfDict.insertName("Filter", "FlateDecode");
     pdfDict.insertInt("Length", asset->getLength());
     pdfDict.emitObject(stream, objNumMap, substitutes);
@@ -413,6 +725,7 @@ static void emit_image_xobject(SkWStream* stream,
 
 ////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 namespace {
 // This SkPDFObject only outputs the alpha layer of the given bitmap.
 class PDFAlphaBitmap final : public SkPDFObject {
@@ -512,6 +825,40 @@ void PDFJpegBitmap::emitObject(SkWStream* stream,
     pdfDict.insertName("Subtype", "Image");
     pdfDict.insertInt("Width", fSize.width());
     pdfDict.insertInt("Height", fSize.height());
+=======
+static const SkBitmap& immutable_bitmap(const SkBitmap& bm, SkBitmap* copy) {
+    if (bm.isImmutable()) {
+        return bm;
+    }
+    bm.copyTo(copy);
+    copy->setImmutable();
+    return *copy;
+}
+
+namespace {
+/**
+ *  This PDFObject assumes that its constructor was handed YUV JFIF
+ *  Jpeg-encoded data that can be directly embedded into a PDF.
+ */
+class PDFJpegBitmap : public SkPDFBitmap {
+public:
+    SkAutoTUnref<SkData> fData;
+    bool fIsYUV;
+    PDFJpegBitmap(const SkBitmap& bm, SkData* data, bool isYUV)
+        : SkPDFBitmap(bm), fData(SkRef(data)), fIsYUV(isYUV) {}
+    void emitObject(SkWStream*,
+                    const SkPDFObjNumMap&,
+                    const SkPDFSubstituteMap&) override;
+};
+
+void PDFJpegBitmap::emitObject(SkWStream* stream,
+                               const SkPDFObjNumMap& objNumMap,
+                               const SkPDFSubstituteMap& substituteMap) {
+    SkPDFDict pdfDict("XObject");
+    pdfDict.insertName("Subtype", "Image");
+    pdfDict.insertInt("Width", fBitmap.width());
+    pdfDict.insertInt("Height", fBitmap.height());
+>>>>>>> miniblink49
     if (fIsYUV) {
         pdfDict.insertName("ColorSpace", "DeviceRGB");
     } else {
@@ -526,6 +873,7 @@ void PDFJpegBitmap::emitObject(SkWStream* stream,
     stream->write(fData->data(), fData->size());
     pdf_stream_end(stream);
 }
+<<<<<<< HEAD
 } // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -572,4 +920,45 @@ sk_sp<SkPDFObject> SkPDFCreateBitmapObject(sk_sp<SkImage> image,
     gRegularImageObjects.fetch_add(1);
 #endif
     return sk_make_sp<PDFDefaultBitmap>(std::move(image), std::move(smask));
+=======
+}  // namespace
+
+////////////////////////////////////////////////////////////////////////////////
+
+SkPDFBitmap* SkPDFBitmap::Create(SkPDFCanon* canon, const SkBitmap& bitmap) {
+    SkASSERT(canon);
+    if (!SkColorTypeIsValid(bitmap.colorType()) ||
+        kUnknown_SkColorType == bitmap.colorType()) {
+        return NULL;
+    }
+    SkBitmap copy;
+    const SkBitmap& bm = immutable_bitmap(bitmap, &copy);
+    if (bm.drawsNothing()) {
+        return NULL;
+    }
+    if (SkPDFBitmap* canonBitmap = canon->findBitmap(bm)) {
+        return SkRef(canonBitmap);
+    }
+
+    if (bm.pixelRef() && bm.pixelRefOrigin().isZero() &&
+        bm.dimensions() == bm.pixelRef()->info().dimensions()) {
+        // Requires the bitmap to be backed by lazy pixels.
+        SkAutoTUnref<SkData> data(bm.pixelRef()->refEncodedData());
+        SkJFIFInfo info;
+        if (data && SkIsJFIF(data, &info)) {
+            bool yuv = info.fType == SkJFIFInfo::kYCbCr;
+            SkPDFBitmap* pdfBitmap = SkNEW_ARGS(PDFJpegBitmap, (bm, data, yuv));
+            canon->addBitmap(pdfBitmap);
+            return pdfBitmap;
+        }
+    }
+
+    SkPDFObject* smask = NULL;
+    if (!bm.isOpaque() && !SkBitmap::ComputeIsOpaque(bm)) {
+        smask = SkNEW_ARGS(PDFAlphaBitmap, (bm));
+    }
+    SkPDFBitmap* pdfBitmap = SkNEW_ARGS(PDFDefaultBitmap, (bm, smask));
+    canon->addBitmap(pdfBitmap);
+    return pdfBitmap;
+>>>>>>> miniblink49
 }

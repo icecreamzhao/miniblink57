@@ -25,7 +25,10 @@
         'effects.gyp:*'
       ],
       'include_dirs': [
+<<<<<<< HEAD
         '../include/private',
+=======
+>>>>>>> miniblink49
         '../src/core',
         '../src/opts',
         '../src/utils',
@@ -34,7 +37,11 @@
       'conditions': [
         [ '"x86" in skia_arch_type and skia_os != "ios"', {
           'cflags': [ '-msse2' ],
+<<<<<<< HEAD
           'dependencies': [ 'opts_ssse3', 'opts_sse41', 'opts_sse42', 'opts_avx', 'opts_avx2' ],
+=======
+          'dependencies': [ 'opts_ssse3', 'opts_sse41' ],
+>>>>>>> miniblink49
           'sources': [ '<@(sse2_sources)' ],
         }],
 
@@ -61,9 +68,16 @@
           # ARM), the compiler doesn't like that.
           'cflags!': [ '-fno-omit-frame-pointer', '-mapcs-frame', '-mapcs' ],
           'cflags':  [ '-fomit-frame-pointer' ],
+<<<<<<< HEAD
           'sources': [ '<@(armv7_sources)' ],
           'conditions': [
             [ 'arm_neon == 1', {
+=======
+          'variables': { 'arm_neon_optional%': '<(arm_neon_optional>' },
+          'sources': [ '<@(armv7_sources)' ],
+          'conditions': [
+            [ 'arm_neon == 1 or arm_neon_optional == 1', {
+>>>>>>> miniblink49
               'dependencies': [ 'opts_neon' ]
             }],
           ],
@@ -88,6 +102,7 @@
       'type': 'static_library',
       'standalone_static_library': 1,
       'dependencies': [ 'core.gyp:*' ],
+<<<<<<< HEAD
       'include_dirs': [
           '../include/private',
           '../src/core',
@@ -97,6 +112,17 @@
       'conditions': [
         [ 'skia_os == "win"', { 'defines' : [ 'SK_CPU_SSE_LEVEL=31' ] }],
         [ 'not skia_android_framework', { 'cflags': [ '-mssse3' ] }],
+=======
+      'include_dirs': [ '../src/core' ],
+      'sources': [ '<@(ssse3_sources)' ],
+      'conditions': [
+        [ 'skia_os == "win"', {
+            'defines' : [ 'SK_CPU_SSE_LEVEL=31' ],
+        }],
+        [ 'not skia_android_framework', {
+          'cflags': [ '-mssse3' ],
+        }],
+>>>>>>> miniblink49
       ],
     },
     {
@@ -105,6 +131,7 @@
       'type': 'static_library',
       'standalone_static_library': 1,
       'dependencies': [ 'core.gyp:*' ],
+<<<<<<< HEAD
       'include_dirs': [
           '../include/private',
           '../src/core',
@@ -169,6 +196,19 @@
       'xcode_settings': { 'OTHER_CPLUSPLUSFLAGS': [ '-mavx2' ] },
       'conditions': [
         [ 'not skia_android_framework', { 'cflags': [ '-mavx2' ] }],
+=======
+      'sources': [ '<@(sse41_sources)' ],
+      'conditions': [
+        [ 'skia_os == "win"', {
+            'defines' : [ 'SK_CPU_SSE_LEVEL=41' ],
+        }],
+        [ 'not skia_android_framework', {
+          'cflags': [ '-msse4.1' ],
+        }],
+        [ 'skia_os == "mac"', {
+          'xcode_settings': { 'GCC_ENABLE_SSE41_EXTENSIONS': 'YES' },
+        }],
+>>>>>>> miniblink49
       ],
     },
     {
@@ -181,7 +221,10 @@
         'effects.gyp:*'
       ],
       'include_dirs': [
+<<<<<<< HEAD
         '../include/private',
+=======
+>>>>>>> miniblink49
         '../src/core',
         '../src/opts',
         '../src/utils',

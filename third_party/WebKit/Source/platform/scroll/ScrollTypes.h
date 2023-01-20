@@ -26,12 +26,16 @@
 #ifndef ScrollTypes_h
 #define ScrollTypes_h
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatPoint.h"
 #include "public/platform/WebGestureEvent.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Assertions.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 // A ScrollOffset represents an offset from the scroll origin of a
 // ScrollableArea.  Note that "scroll origin" is not the same as the layout
 // concept of "location", nor is it necessarily coincident with the top/left of
@@ -49,6 +53,8 @@ enum OverlayScrollbarClipBehavior {
     ExcludeOverlayScrollbarSizeForHitTesting
 };
 
+=======
+>>>>>>> miniblink49
 enum ScrollDirection {
     ScrollUpIgnoringWritingMode,
     ScrollDownIgnoringWritingMode,
@@ -61,14 +67,24 @@ enum ScrollDirection {
     ScrollInlineDirectionForward
 };
 
+<<<<<<< HEAD
 enum ScrollDirectionPhysical { ScrollUp,
     ScrollDown,
     ScrollLeft,
     ScrollRight };
+=======
+enum ScrollDirectionPhysical {
+    ScrollUp,
+    ScrollDown,
+    ScrollLeft,
+    ScrollRight
+};
+>>>>>>> miniblink49
 
 enum ScrollType {
     UserScroll,
     ProgrammaticScroll,
+<<<<<<< HEAD
     ClampingScroll,
     CompositorScroll,
     AnchoringScroll
@@ -84,6 +100,13 @@ inline bool scrollTypeClearsFragmentAnchor(ScrollType scrollType)
 inline ScrollDirectionPhysical toPhysicalDirection(ScrollDirection direction,
     bool isVertical,
     bool isFlipped)
+=======
+    CompositorScroll
+};
+
+// Convert logical scroll direction to physical. Physical scroll directions are unaffected.
+inline ScrollDirectionPhysical toPhysicalDirection(ScrollDirection direction, bool isVertical, bool isFlipped)
+>>>>>>> miniblink49
 {
     switch (direction) {
     case ScrollBlockDirectionBackward: {
@@ -168,6 +191,7 @@ enum ScrollGranularity {
     ScrollByPrecisePixel
 };
 
+<<<<<<< HEAD
 enum ScrollInertialPhase {
     ScrollInertialPhaseUnknown,
     ScrollInertialPhaseNonMomentum,
@@ -183,6 +207,13 @@ enum ScrollbarMode { ScrollbarAuto,
 
 enum ScrollbarControlSize { RegularScrollbar,
     SmallScrollbar };
+=======
+enum ScrollbarOrientation { HorizontalScrollbar, VerticalScrollbar };
+
+enum ScrollbarMode { ScrollbarAuto, ScrollbarAlwaysOff, ScrollbarAlwaysOn };
+
+enum ScrollbarControlSize { RegularScrollbar, SmallScrollbar };
+>>>>>>> miniblink49
 
 typedef unsigned ScrollbarControlState;
 
@@ -206,6 +237,7 @@ enum ScrollbarPart {
     AllParts = 0xffffffff
 };
 
+<<<<<<< HEAD
 enum ScrollbarOverlayColorTheme {
     ScrollbarOverlayColorThemeDark,
     ScrollbarOverlayColorThemeLight
@@ -222,10 +254,43 @@ enum ScrollBehavior {
 // by scrolling.
 struct ScrollResult {
     STACK_ALLOCATED();
+=======
+enum ScrollbarButtonsPlacement {
+    ScrollbarButtonsNone,
+    ScrollbarButtonsSingle,
+    ScrollbarButtonsDoubleStart,
+    ScrollbarButtonsDoubleEnd,
+    ScrollbarButtonsDoubleBoth
+};
+
+enum ScrollbarOverlayStyle {
+    ScrollbarOverlayStyleDefault,
+    ScrollbarOverlayStyleDark,
+    ScrollbarOverlayStyleLight
+};
+
+// The result of an attempt to scroll. If didScroll is true, then unusedScrollDelta gives
+// the amount of the scroll delta that was not consumed by scrolling. If didScroll is false
+// then unusedScrollDelta is zero.
+struct ScrollResultOneDimensional {
+    explicit ScrollResultOneDimensional(bool didScroll)
+        : didScroll(didScroll)
+        , unusedScrollDelta(0) { }
+    ScrollResultOneDimensional(bool didScroll, float unusedScrollDelta)
+        : didScroll(didScroll)
+        , unusedScrollDelta(unusedScrollDelta) { }
+
+    bool didScroll;
+    float unusedScrollDelta;
+};
+
+struct ScrollResult {
+>>>>>>> miniblink49
     explicit ScrollResult()
         : didScrollX(false)
         , didScrollY(false)
         , unusedScrollDeltaX(0)
+<<<<<<< HEAD
         , unusedScrollDeltaY(0)
     {
     }
@@ -239,17 +304,29 @@ struct ScrollResult {
         , unusedScrollDeltaY(unusedScrollDeltaY)
     {
     }
+=======
+        , unusedScrollDeltaY(0) { }
+    ScrollResult(bool didScrollX, bool didScrollY, float unusedScrollDeltaX, float unusedScrollDeltaY)
+        : didScrollX(didScrollX)
+        , didScrollY(didScrollY)
+        , unusedScrollDeltaX(unusedScrollDeltaX)
+        , unusedScrollDeltaY(unusedScrollDeltaY) { }
+>>>>>>> miniblink49
 
     bool didScroll() { return didScrollX || didScrollY; }
 
     bool didScrollX;
     bool didScrollY;
+<<<<<<< HEAD
 
     // In pixels.
+=======
+>>>>>>> miniblink49
     float unusedScrollDeltaX;
     float unusedScrollDeltaY;
 };
 
+<<<<<<< HEAD
 inline ScrollOffset toScrollDelta(ScrollbarOrientation orientation,
     float delta)
 {
@@ -285,5 +362,10 @@ inline ScrollGranularity toPlatformScrollGranularity(
 typedef unsigned ScrollbarControlPartMask;
 
 } // namespace blink
+=======
+typedef unsigned ScrollbarControlPartMask;
+
+}
+>>>>>>> miniblink49
 
 #endif

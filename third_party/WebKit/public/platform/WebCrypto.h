@@ -38,17 +38,25 @@
 #include "WebString.h"
 #include "WebVector.h"
 
+<<<<<<< HEAD
 #include <memory>
 
 #if INSIDE_BLINK
 #include "platform/heap/Handle.h"
 #include "wtf/PassRefPtr.h"
+=======
+#if INSIDE_BLINK
+#include "platform/heap/Handle.h"
+>>>>>>> miniblink49
 #endif
 
 namespace blink {
 
 class CryptoResult;
+<<<<<<< HEAD
 class CryptoResultCancel;
+=======
+>>>>>>> miniblink49
 class WebString;
 
 enum WebCryptoErrorType {
@@ -62,9 +70,21 @@ enum WebCryptoErrorType {
 
 class WebCryptoResult {
 public:
+<<<<<<< HEAD
     WebCryptoResult(const WebCryptoResult& o) { assign(o); }
 
     ~WebCryptoResult() { reset(); }
+=======
+    WebCryptoResult(const WebCryptoResult& o)
+    {
+        assign(o);
+    }
+
+    ~WebCryptoResult()
+    {
+        reset();
+    }
+>>>>>>> miniblink49
 
     WebCryptoResult& operator=(const WebCryptoResult& o)
     {
@@ -78,6 +98,7 @@ public:
     // secret information such as bytes of the key or plain text. An
     // appropriate error would be something like:
     //   "iv must be 16 bytes long".
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void completeWithError(WebCryptoErrorType,
         const WebString&);
 
@@ -90,23 +111,41 @@ public:
     BLINK_PLATFORM_EXPORT void completeWithKeyPair(
         const WebCryptoKey& publicKey,
         const WebCryptoKey& privateKey);
+=======
+    BLINK_PLATFORM_EXPORT void completeWithError(WebCryptoErrorType, const WebString&);
+
+    // Makes a copy of the input data given as a pointer and byte length.
+    BLINK_PLATFORM_EXPORT void completeWithBuffer(const void*, unsigned);
+    BLINK_PLATFORM_EXPORT void completeWithJson(const char* utf8Data, unsigned length);
+    BLINK_PLATFORM_EXPORT void completeWithBoolean(bool);
+    BLINK_PLATFORM_EXPORT void completeWithKey(const WebCryptoKey&);
+    BLINK_PLATFORM_EXPORT void completeWithKeyPair(const WebCryptoKey& publicKey, const WebCryptoKey& privateKey);
+>>>>>>> miniblink49
 
     // Returns true if the underlying operation was cancelled.
     // This method can be called from any thread.
     BLINK_PLATFORM_EXPORT bool cancelled() const;
 
 #if INSIDE_BLINK
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebCryptoResult(CryptoResult*,
         PassRefPtr<CryptoResultCancel>);
+=======
+    BLINK_PLATFORM_EXPORT explicit WebCryptoResult(const PassRefPtrWillBeRawPtr<CryptoResult>&);
+>>>>>>> miniblink49
 #endif
 
 private:
     BLINK_PLATFORM_EXPORT void reset();
     BLINK_PLATFORM_EXPORT void assign(const WebCryptoResult&);
 
+<<<<<<< HEAD
     WebPrivatePtr<CryptoResult, WebPrivatePtrDestructionCrossThread> m_impl;
     WebPrivatePtr<CryptoResultCancel, WebPrivatePtrDestructionCrossThread>
         m_cancel;
+=======
+    WebPrivatePtr<CryptoResult> m_impl;
+>>>>>>> miniblink49
 };
 
 class WebCryptoDigestor {
@@ -117,20 +156,28 @@ public:
     // partially generated digest. It will return |false| when that fails. After
     // a return of |false|, consume() should not be called again (nor should
     // finish() be called).
+<<<<<<< HEAD
     virtual bool consume(const unsigned char* data, unsigned dataSize)
     {
         return false;
     }
+=======
+    virtual bool consume(const unsigned char* data, unsigned dataSize) { return false; }
+>>>>>>> miniblink49
 
     // finish() will return |true| if the digest has been successfully computed
     // and put into the result buffer, otherwise it will return |false|. In
     // either case, neither finish() nor consume() should be called again after
     // a call to finish(). resultData is valid until the WebCrytpoDigestor
     // object is destroyed.
+<<<<<<< HEAD
     virtual bool finish(unsigned char*& resultData, unsigned& resultDataSize)
     {
         return false;
     }
+=======
+    virtual bool finish(unsigned char*& resultData, unsigned& resultDataSize) { return false; }
+>>>>>>> miniblink49
 
 protected:
     WebCryptoDigestor() { }
@@ -179,8 +226,15 @@ public:
     // Inputs
     // -----------------------
     //
+<<<<<<< HEAD
     //   * Data buffers are transfered as WebVectors. Implementations are free
     //     to re-use or transfer their storage.
+=======
+    //   * Data buffers are passed as (basePointer, byteLength) pairs.
+    //     These buffers are only valid during the call itself. Asynchronous
+    //     implementations wishing to access it after the function returns
+    //     should make a copy.
+>>>>>>> miniblink49
     //
     //   * All WebCryptoKeys are guaranteeed to be !isNull().
     //
@@ -205,6 +259,7 @@ public:
     //  * The key usages permit the operation being requested.
     //  * The key's algorithm matches that of the requested operation.
     //
+<<<<<<< HEAD
     virtual void encrypt(const WebCryptoAlgorithm&,
         const WebCryptoKey&,
         WebVector<unsigned char> data,
@@ -298,16 +353,38 @@ public:
     {
         result.completeWithError(WebCryptoErrorTypeNotSupported, "");
     }
+=======
+    virtual void encrypt(const WebCryptoAlgorithm&, const WebCryptoKey&, const unsigned char* data, unsigned dataSize, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void decrypt(const WebCryptoAlgorithm&, const WebCryptoKey&, const unsigned char* data, unsigned dataSize, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void sign(const WebCryptoAlgorithm&, const WebCryptoKey&, const unsigned char* data, unsigned dataSize, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void verifySignature(const WebCryptoAlgorithm&, const WebCryptoKey&, const unsigned char* signature, unsigned signatureSize, const unsigned char* data, unsigned dataSize, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void digest(const WebCryptoAlgorithm&, const unsigned char* data, unsigned dataSize, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void generateKey(const WebCryptoAlgorithm&, bool extractable, WebCryptoKeyUsageMask, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void importKey(WebCryptoKeyFormat, const unsigned char* keyData, unsigned keyDataSize, const WebCryptoAlgorithm&, bool extractable, WebCryptoKeyUsageMask, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void exportKey(WebCryptoKeyFormat, const WebCryptoKey&, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void wrapKey(WebCryptoKeyFormat, const WebCryptoKey& key, const WebCryptoKey& wrappingKey, const WebCryptoAlgorithm&, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void unwrapKey(WebCryptoKeyFormat, const unsigned char* wrappedKey, unsigned wrappedKeySize, const WebCryptoKey&, const WebCryptoAlgorithm& unwrapAlgorithm, const WebCryptoAlgorithm& unwrappedKeyAlgorithm, bool extractable, WebCryptoKeyUsageMask, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void deriveBits(const WebCryptoAlgorithm&, const WebCryptoKey&, unsigned length, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+    virtual void deriveKey(const WebCryptoAlgorithm& algorithm, const WebCryptoKey& baseKey, const WebCryptoAlgorithm& importAlgorithm, const WebCryptoAlgorithm& keyLengthAlgorithm, bool extractable, WebCryptoKeyUsageMask, WebCryptoResult result) { result.completeWithError(WebCryptoErrorTypeNotSupported, ""); }
+>>>>>>> miniblink49
 
     // This is the exception to the "Completing the request" guarantees
     // outlined above. This is useful for Blink internal crypto and is not part
     // of the WebCrypto standard. createDigestor must provide the result via
+<<<<<<< HEAD
     // the WebCryptoDigestor object synchronously. This will never return null.
     virtual std::unique_ptr<WebCryptoDigestor> createDigestor(
         WebCryptoAlgorithmId algorithmId)
     {
         return nullptr;
     }
+=======
+    // the WebCryptoDigestor object synchronously. createDigestor may return 0
+    // if it fails to create a WebCryptoDigestor. If it succeeds, the
+    // WebCryptoDigestor returned by createDigestor must be freed by the
+    // caller.
+    virtual WebCryptoDigestor* createDigestor(WebCryptoAlgorithmId algorithmId) { return nullptr; }
+>>>>>>> miniblink49
 
     // -----------------------
     // Structured clone
@@ -351,6 +428,7 @@ public:
 
     // Creates a new key given key data which was written using
     // serializeKeyForClone(). Returns true on success.
+<<<<<<< HEAD
     virtual bool deserializeKeyForClone(const WebCryptoKeyAlgorithm&,
         WebCryptoKeyType,
         bool extractable,
@@ -369,6 +447,13 @@ public:
     {
         return false;
     }
+=======
+    virtual bool deserializeKeyForClone(const WebCryptoKeyAlgorithm&, WebCryptoKeyType, bool extractable, WebCryptoKeyUsageMask, const unsigned char* keyData, unsigned keyDataSize, WebCryptoKey&) { return false; }
+
+    // Writes the key data into the given WebVector.
+    // Returns true on success.
+    virtual bool serializeKeyForClone(const WebCryptoKey&, WebVector<unsigned char>&) { return false; }
+>>>>>>> miniblink49
 
 protected:
     virtual ~WebCrypto() { }

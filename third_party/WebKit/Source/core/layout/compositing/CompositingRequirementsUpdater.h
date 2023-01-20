@@ -29,46 +29,35 @@
 
 #include "platform/geometry/IntRect.h"
 #include "platform/graphics/CompositingReasons.h"
-#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class CompositingReasonFinder;
-class PaintLayer;
+class DeprecatedPaintLayer;
 class LayoutView;
 
 class CompositingRequirementsUpdater {
-    STACK_ALLOCATED();
-
 public:
     CompositingRequirementsUpdater(LayoutView&, CompositingReasonFinder&);
     ~CompositingRequirementsUpdater();
 
-    //  Recurse through the layers in z-index and overflow order (which is
-    //  equivalent to painting order)
+    //  Recurse through the layers in z-index and overflow order (which is equivalent to painting order)
     //  For the z-order children of a compositing layer:
-    //      If a child layers has a compositing layer, then all subsequent layers
-    //      must be compositing in order to render above that layer.
+    //      If a child layers has a compositing layer, then all subsequent layers must
+    //      be compositing in order to render above that layer.
     //
-    //      If a child in the negative z-order list is compositing, then the layer
-    //      itself must be compositing so that its contents render over that
-    //      child.  This implies that its positive z-index children must also be
-    //      compositing.
+    //      If a child in the negative z-order list is compositing, then the layer itself
+    //      must be compositing so that its contents render over that child.
+    //      This implies that its positive z-index children must also be compositing.
     //
-    void update(PaintLayer* root);
+    void update(DeprecatedPaintLayer* root);
 
 private:
     class OverlapMap;
     class RecursionData;
 
-    void updateRecursive(PaintLayer* ancestorLayer,
-        PaintLayer* currentLayer,
-        OverlapMap&,
-        RecursionData&,
-        bool& descendantHas3DTransform,
-        Vector<PaintLayer*>& unclippedDescendants,
-        IntRect& absoluteDescendantBoundingBox);
+    void updateRecursive(DeprecatedPaintLayer* ancestorLayer, DeprecatedPaintLayer* currentLayer, OverlapMap&, RecursionData&, bool& descendantHas3DTransform, Vector<DeprecatedPaintLayer*>& unclippedDescendants, IntRect& absoluteDecendantBoundingBox);
 
     LayoutView& m_layoutView;
     CompositingReasonFinder& m_compositingReasonFinder;

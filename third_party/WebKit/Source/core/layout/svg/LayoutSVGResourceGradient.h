@@ -28,13 +28,11 @@
 #include "platform/graphics/Gradient.h"
 #include "platform/transforms/AffineTransform.h"
 #include "wtf/HashMap.h"
-#include <memory>
 
 namespace blink {
 
 struct GradientData {
-    USING_FAST_MALLOC(GradientData);
-
+    WTF_MAKE_FAST_ALLOCATED(GradientData);
 public:
     RefPtr<Gradient> gradient;
     AffineTransform userspaceTransform;
@@ -44,30 +42,28 @@ class LayoutSVGResourceGradient : public LayoutSVGResourcePaintServer {
 public:
     explicit LayoutSVGResourceGradient(SVGGradientElement*);
 
-    void removeAllClientsFromCache(bool markForInvalidation = true) final;
-    void removeClientFromCache(LayoutObject*,
-        bool markForInvalidation = true) final;
+    virtual void removeAllClientsFromCache(bool markForInvalidation = true) override final;
+    virtual void removeClientFromCache(LayoutObject*, bool markForInvalidation = true) override final;
 
-    SVGPaintServer preparePaintServer(const LayoutObject&) final;
+    virtual SVGPaintServer preparePaintServer(const LayoutObject&) override final;
 
-    bool isChildAllowed(LayoutObject* child, const ComputedStyle&) const final;
+    virtual bool isChildAllowed(LayoutObject* child, const ComputedStyle&) const override final;
 
 protected:
-    void addStops(Gradient&, const Vector<Gradient::ColorStop>&) const;
+    void addStops(GradientData*, const Vector<Gradient::ColorStop>&) const;
 
     virtual SVGUnitTypes::SVGUnitType gradientUnits() const = 0;
-    virtual AffineTransform calculateGradientTransform() const = 0;
+    virtual void calculateGradientTransform(AffineTransform&) = 0;
     virtual bool collectGradientAttributes(SVGGradientElement*) = 0;
-    virtual PassRefPtr<Gradient> buildGradient() const = 0;
+    virtual void buildGradient(GradientData*) const = 0;
 
-    static GradientSpreadMethod platformSpreadMethodFromSVGType(
-        SVGSpreadMethodType);
+    GradientSpreadMethod platformSpreadMethodFromSVGType(SVGSpreadMethodType) const;
 
 private:
     bool m_shouldCollectGradientAttributes : 1;
-    HashMap<const LayoutObject*, std::unique_ptr<GradientData>> m_gradientMap;
+    HashMap<const LayoutObject*, OwnPtr<GradientData>> m_gradientMap;
 };
 
-} // namespace blink
+}
 
 #endif

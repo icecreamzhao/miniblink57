@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/WebTextCheckingCompletionImpl.h"
 
 #include "platform/text/TextCheckerClient.h"
@@ -38,6 +42,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 static Vector<TextCheckingResult> toCoreResults(
     const WebVector<WebTextCheckingResult>& results)
 {
@@ -49,6 +54,17 @@ static Vector<TextCheckingResult> toCoreResults(
 
 void WebTextCheckingCompletionImpl::didFinishCheckingText(
     const WebVector<WebTextCheckingResult>& results)
+=======
+static Vector<TextCheckingResult> toCoreResults(const WebVector<WebTextCheckingResult>& results)
+{
+    Vector<TextCheckingResult> coreResults;
+    for (size_t i = 0; i < results.size(); ++i)
+        coreResults.append(results[i]);
+    return coreResults;
+}
+
+void WebTextCheckingCompletionImpl::didFinishCheckingText(const WebVector<WebTextCheckingResult>& results)
+>>>>>>> miniblink49
 {
     m_request->didSucceed(toCoreResults(results));
     delete this;

@@ -5,13 +5,20 @@
 #ifndef ResizeViewportAnchor_h
 #define ResizeViewportAnchor_h
 
+<<<<<<< HEAD
 #include "core/page/Page.h"
 #include "platform/heap/Handle.h"
 #include "platform/scroll/ScrollTypes.h"
+=======
+#include "platform/geometry/DoublePoint.h"
+#include "platform/heap/Handle.h"
+#include "web/ViewportAnchor.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class FrameView;
+<<<<<<< HEAD
 
 // This class scrolls the viewports to compensate for bounds clamping caused by
 // viewport size changes.
@@ -60,6 +67,23 @@ private:
     ScrollOffset m_drift;
     Member<Page> m_page;
     int m_scopeCount;
+=======
+class PinchViewport;
+
+// The resize anchor saves the current scroll offset of the visual viewport and
+// restores to that scroll offset so that document location appears exactly
+// unchanged to the user.
+class ResizeViewportAnchor : public ViewportAnchor {
+    STACK_ALLOCATED();
+public:
+    ResizeViewportAnchor(FrameView& rootFrameView, PinchViewport&);
+    ~ResizeViewportAnchor();
+
+private:
+    // Inner viewport origin in the reference frame of the root document, in CSS
+    // pixels.
+    DoublePoint m_pinchViewportInDocument;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -31,19 +31,14 @@
 #ifndef ScopedPersistent_h
 #define ScopedPersistent_h
 
-#include "bindings/core/v8/ScriptWrappableVisitor.h"
-#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include <memory>
 #include <v8.h>
 
 namespace blink {
 
-template <typename T>
+template<typename T>
 class ScopedPersistent {
-    USING_FAST_MALLOC(ScopedPersistent);
     WTF_MAKE_NONCOPYABLE(ScopedPersistent);
-
 public:
     ScopedPersistent() { }
 
@@ -59,42 +54,37 @@ public:
             m_handle.Reset(isolate, local);
     }
 
-    virtual ~ScopedPersistent() { clear(); }
+    ~ScopedPersistent()
+    {
+        clear();
+    }
 
     ALWAYS_INLINE v8::Local<T> newLocal(v8::Isolate* isolate) const
     {
         return v8::Local<T>::New(isolate, m_handle);
     }
 
-    // If you don't need to get weak callback, use setPhantom instead.
-    // setPhantom is faster than setWeak.
-    template <typename P>
-    void setWeak(P* parameters,
-        void (*callback)(const v8::WeakCallbackInfo<P>&),
-        v8::WeakCallbackType type = v8::WeakCallbackType::kParameter)
+    template<typename P>
+    void setWeak(P* parameters, void (*callback)(const v8::WeakCallbackInfo<P>&), v8::WeakCallbackType type = v8::WeakCallbackType::kParameter)
     {
         m_handle.SetWeak(parameters, callback, type);
     }
 
-    // Turns this handle into a weak phantom handle without
-    // finalization callback.
-    void setPhantom() { m_handle.SetWeak(); }
-
-    void clearWeak() { m_handle.template ClearWeak<void>(); }
-
     bool isEmpty() const { return m_handle.IsEmpty(); }
     bool isWeak() const { return m_handle.IsWeak(); }
 
-    virtual void set(v8::Isolate* isolate, v8::Local<T> handle)
+    void set(v8::Isolate* isolate, v8::Local<T> handle)
     {
         m_handle.Reset(isolate, handle);
     }
 
-    // Note: This is clear in the std::unique_ptr sense, not the v8::Handle sense.
-    void clear() { m_handle.Reset(); }
+    // Note: This is clear in the OwnPtr sense, not the v8::Handle sense.
+    void clear()
+    {
+        m_handle.Reset();
+    }
 
-    void setReference(const v8::Persistent<v8::Object>& parent,
-        v8::Isolate* isolate)
+    void setReference(const v8::Persistent<v8::Object>& parent, v8::Isolate* isolate)
     {
         isolate->SetReference(parent, m_handle);
     }
@@ -110,9 +100,15 @@ public:
         return m_handle == other;
     }
 
-    ALWAYS_INLINE v8::Persistent<T>& get() { return m_handle; }
-
 private:
+    // FIXME: This function does an unsafe handle access. Remove it.
+    friend class V8AbstractEventListener;
+    friend class V8PerIsolateData;
+    ALWAYS_INLINE v8::Persistent<T>& getUnsafe()
+    {
+        return m_handle;
+    }
+
     v8::Persistent<T> m_handle;
 };
 

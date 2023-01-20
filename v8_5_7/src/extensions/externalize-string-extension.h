@@ -15,8 +15,13 @@ class ExternalizeStringExtension : public v8::Extension {
   ExternalizeStringExtension() : v8::Extension("v8/externalize", kSource) {}
   virtual v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
       v8::Isolate* isolate, v8::Local<v8::String> name);
+<<<<<<< HEAD
   static void V8CALL Externalize(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void V8CALL IsOneByte(const v8::FunctionCallbackInfo<v8::Value>& args);
+=======
+  static void Externalize(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void IsOneByte(const v8::FunctionCallbackInfo<v8::Value>& args);
+>>>>>>> miniblink49
 
  private:
   static const char* const kSource;

@@ -413,7 +413,11 @@ bool CodeGenerationFromStringsAllowed(Isolate* isolate,
   } else {
     // Callback set. Let it decide if code generation is allowed.
     VMState<EXTERNAL> state(isolate);
+<<<<<<< HEAD
     return callback(v8::Utils::ToLocal(context), v8::Local<v8::String>());
+=======
+    return callback(v8::Utils::ToLocal(context));
+>>>>>>> miniblink49
   }
 }
 
@@ -437,8 +441,11 @@ static Object* CompileGlobalEval(Isolate* isolate, Handle<String> source,
     return isolate->heap()->exception();
   }
 
+<<<<<<< HEAD
   //std::unique_ptr<char[]> flat = source->ToCString();
 
+=======
+>>>>>>> miniblink49
   // Deal with a normal eval call with a string argument. Compile it
   // and return the compiled function bound in the local context.
   static const ParseRestriction restriction = NO_PARSE_RESTRICTION;

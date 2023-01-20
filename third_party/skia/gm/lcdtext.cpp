@@ -5,14 +5,23 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 /* Tests text rendering with LCD and subpixel rendering turned on and off.
  */
 
+=======
+
+/* Tests text rendering with LCD and subpixel rendering turned on and off.
+ */
+
+#include "gm.h"
+>>>>>>> miniblink49
 #include "SkCanvas.h"
 #include "SkPicture.h"
 #include "SkPictureImageFilter.h"
 #include "SkPictureRecorder.h"
 #include "SkSurface.h"
+<<<<<<< HEAD
 #include "gm.h"
 
 class LcdTextGM : public skiagm::GM {
@@ -50,10 +59,45 @@ protected:
     void drawText(SkCanvas* canvas, const SkString& string,
         bool subpixelTextEnabled, bool lcdRenderTextEnabled)
     {
+=======
+
+
+class LcdTextGM : public skiagm::GM {
+public:
+    LcdTextGM() {
+        const int pointSize = 36;
+        textHeight = SkIntToScalar(pointSize);
+    }
+    
+protected:
+    
+    SkString onShortName() {
+        return SkString("lcdtext");
+    }
+    
+    SkISize onISize() { return SkISize::Make(640, 480); }
+    
+    virtual void onDraw(SkCanvas* canvas) {
+        
+        y = textHeight;
+        drawText(canvas, SkString("TEXT: SubpixelTrue LCDRenderTrue"),
+                 true,  true);
+        drawText(canvas, SkString("TEXT: SubpixelTrue LCDRenderFalse"),
+                 true,  false);
+        drawText(canvas, SkString("TEXT: SubpixelFalse LCDRenderTrue"),
+                 false, true);
+        drawText(canvas, SkString("TEXT: SubpixelFalse LCDRenderFalse"),
+                 false, false);
+    }
+    
+    void drawText(SkCanvas* canvas, const SkString& string,
+                  bool subpixelTextEnabled, bool lcdRenderTextEnabled) {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setColor(SK_ColorBLACK);
         paint.setDither(true);
         paint.setAntiAlias(true);
+<<<<<<< HEAD
         paint.setSubpixelText(subpixelTextEnabled);
         paint.setLCDRenderText(lcdRenderTextEnabled);
         paint.setTextSize(textHeight);
@@ -62,6 +106,17 @@ protected:
         y += textHeight;
     }
 
+=======
+        sk_tool_utils::set_portable_typeface(&paint);
+        paint.setSubpixelText(subpixelTextEnabled);
+        paint.setLCDRenderText(lcdRenderTextEnabled);
+        paint.setTextSize(textHeight);
+        
+        canvas->drawText(string.c_str(), string.size(), 0, y, paint);
+        y += textHeight;
+    }
+    
+>>>>>>> miniblink49
 private:
     typedef skiagm::GM INHERITED;
     SkScalar y, textHeight;
@@ -78,14 +133,19 @@ class LcdTextSizeGM : public skiagm::GM {
         kLCDTextSizeLimit = 48
     };
 
+<<<<<<< HEAD
     static void ScaleAbout(SkCanvas* canvas, SkScalar sx, SkScalar sy, SkScalar px, SkScalar py)
     {
+=======
+    static void ScaleAbout(SkCanvas* canvas, SkScalar sx, SkScalar sy, SkScalar px, SkScalar py) {
+>>>>>>> miniblink49
         SkMatrix m;
         m.setScale(sx, sy, px, py);
         canvas->concat(m);
     }
 
 public:
+<<<<<<< HEAD
     LcdTextSizeGM() { }
 
 protected:
@@ -98,6 +158,18 @@ protected:
 
     virtual void onDraw(SkCanvas* canvas)
     {
+=======
+    LcdTextSizeGM() {}
+    
+protected:
+    SkString onShortName() {
+        return SkString("lcdtextsize");
+    }
+    
+    SkISize onISize() { return SkISize::Make(320, 120); }
+    
+    virtual void onDraw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         const char* lcd_text = "LCD";
         const char* gray_text = "GRAY";
 
@@ -106,6 +178,7 @@ protected:
         paint.setLCDRenderText(true);
 
         const struct {
+<<<<<<< HEAD
             SkPoint fLoc;
             SkScalar fTextSize;
             SkScalar fScale;
@@ -115,6 +188,17 @@ protected:
             { { 160, 50 }, kLCDTextSizeLimit + 1, 1, gray_text },
             { { 10, 100 }, kLCDTextSizeLimit / 2, 1.99f, lcd_text },
             { { 160, 100 }, kLCDTextSizeLimit / 2, 2.01f, gray_text },
+=======
+            SkPoint     fLoc;
+            SkScalar    fTextSize;
+            SkScalar    fScale;
+            const char* fText;
+        } rec[] = {
+            { {  10,  50 }, kLCDTextSizeLimit - 1,     1,  lcd_text },
+            { { 160,  50 }, kLCDTextSizeLimit + 1,     1,  gray_text },
+            { {  10, 100 }, kLCDTextSizeLimit / 2, 1.99f,  lcd_text },
+            { { 160, 100 }, kLCDTextSizeLimit / 2, 2.01f,  gray_text },
+>>>>>>> miniblink49
         };
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(rec); ++i) {
@@ -130,6 +214,7 @@ protected:
 private:
     typedef skiagm::GM INHERITED;
 };
+<<<<<<< HEAD
 DEF_GM(return new LcdTextGM;)
 DEF_GM(return new LcdTextSizeGM;)
 
@@ -167,3 +252,8 @@ DEF_SIMPLE_GM(savelayer_lcdtext, canvas, 620, 260)
         canvas->translate(0, 80);
     }
 }
+=======
+
+DEF_GM( return new LcdTextGM; )
+DEF_GM( return new LcdTextSizeGM; )
+>>>>>>> miniblink49

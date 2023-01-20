@@ -8,8 +8,11 @@
 #ifndef SkHalf_DEFINED
 #define SkHalf_DEFINED
 
+<<<<<<< HEAD
 #include "SkCpu.h"
 #include "SkNx.h"
+=======
+>>>>>>> miniblink49
 #include "SkTypes.h"
 
 // 16-bit floating point value
@@ -17,14 +20,21 @@
 // only used for storage
 typedef uint16_t SkHalf;
 
+<<<<<<< HEAD
 #define SK_HalfMin 0x0400 // 2^-24  (minimum positive normal value)
 #define SK_HalfMax 0x7bff // 65504
 #define SK_HalfEpsilon 0x1400 // 2^-10
+=======
+#define SK_HalfMin      0x0400   // 2^-24  (minimum positive normal value)
+#define SK_HalfMax      0x7bff   // 65504
+#define SK_HalfEpsilon  0x1400   // 2^-10
+>>>>>>> miniblink49
 
 // convert between half and single precision floating point
 float SkHalfToFloat(SkHalf h);
 SkHalf SkFloatToHalf(float f);
 
+<<<<<<< HEAD
 // Convert between half and single precision floating point, but pull any dirty
 // trick we can to make it faster as long as it's correct enough for values in [0,1].
 static inline Sk4f SkHalfToFloat_01(uint64_t);
@@ -161,3 +171,6 @@ static inline void SkFloatToHalf_01(const Sk4f& fs, uint64_t* hs)
 #endif
     *hs = SkFloatToHalf_01(fs);
 }
+=======
+#endif
+>>>>>>> miniblink49

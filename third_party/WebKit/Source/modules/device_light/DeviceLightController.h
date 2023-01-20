@@ -13,11 +13,16 @@ namespace blink {
 
 class Event;
 
+<<<<<<< HEAD
 class MODULES_EXPORT DeviceLightController final
     : public DeviceSingleWindowEventController,
       public Supplement<Document> {
     USING_GARBAGE_COLLECTED_MIXIN(DeviceLightController);
 
+=======
+class MODULES_EXPORT DeviceLightController final : public DeviceSingleWindowEventController, public WillBeHeapSupplement<Document> {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DeviceLightController);
+>>>>>>> miniblink49
 public:
     ~DeviceLightController() override;
 
@@ -35,7 +40,11 @@ private:
     bool hasLastData() override;
 
     // Inherited from DeviceSingleWindowEventController.
+<<<<<<< HEAD
     Event* lastEvent() const override;
+=======
+    PassRefPtrWillBeRawPtr<Event> lastEvent() const override;
+>>>>>>> miniblink49
     const AtomicString& eventTypeName() const override;
     bool isNullEvent(Event*) const override;
 };

@@ -13,38 +13,31 @@ namespace blink {
 
 class MediaQueryListEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static MediaQueryListEvent* create(MediaQueryList* list)
+    static PassRefPtrWillBeRawPtr<MediaQueryListEvent> create()
     {
-        return new MediaQueryListEvent(list);
+        return adoptRefWillBeNoop(new MediaQueryListEvent);
     }
 
-    static MediaQueryListEvent* create(const String& media, bool matches)
+    static PassRefPtrWillBeRawPtr<MediaQueryListEvent> create(PassRefPtrWillBeRawPtr<MediaQueryList> list)
     {
-        return new MediaQueryListEvent(media, matches);
+        return adoptRefWillBeNoop(new MediaQueryListEvent(list));
     }
 
-    static MediaQueryListEvent* create(
-        const AtomicString& eventType,
-        const MediaQueryListEventInit& initializer)
+    static PassRefPtrWillBeRawPtr<MediaQueryListEvent> create(const String& media, bool matches)
     {
-        return new MediaQueryListEvent(eventType, initializer);
+        return adoptRefWillBeNoop(new MediaQueryListEvent(media, matches));
     }
 
-    String media() const
+    static PassRefPtrWillBeRawPtr<MediaQueryListEvent> create(const AtomicString& eventType, const MediaQueryListEventInit& initializer)
     {
-        return m_mediaQueryList ? m_mediaQueryList->media() : m_media;
-    }
-    bool matches() const
-    {
-        return m_mediaQueryList ? m_mediaQueryList->matches() : m_matches;
+        return adoptRefWillBeNoop(new MediaQueryListEvent(eventType, initializer));
     }
 
-    const AtomicString& interfaceName() const override
-    {
-        return EventNames::MediaQueryListEvent;
-    }
+    String media() const { return m_mediaQueryList ? m_mediaQueryList->media() : m_media; }
+    bool matches() const { return m_mediaQueryList ? m_mediaQueryList->matches() : m_matches; }
+
+    virtual const AtomicString& interfaceName() const override { return EventNames::MediaQueryListEvent; }
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
@@ -53,22 +46,20 @@ public:
     }
 
 private:
+    MediaQueryListEvent()
+        : m_matches(false) { }
+
     MediaQueryListEvent(const String& media, bool matches)
         : Event(EventTypeNames::change, false, false)
         , m_media(media)
-        , m_matches(matches)
-    {
-    }
+        , m_matches(matches) { }
 
-    explicit MediaQueryListEvent(MediaQueryList* list)
+    explicit MediaQueryListEvent(PassRefPtrWillBeRawPtr<MediaQueryList> list)
         : Event(EventTypeNames::change, false, false)
         , m_mediaQueryList(list)
-        , m_matches(false)
-    {
-    }
+        , m_matches(false) { }
 
-    MediaQueryListEvent(const AtomicString& eventType,
-        const MediaQueryListEventInit& initializer)
+    MediaQueryListEvent(const AtomicString& eventType, const MediaQueryListEventInit& initializer)
         : Event(eventType, initializer)
         , m_matches(false)
     {
@@ -80,7 +71,7 @@ private:
 
     // We have m_media/m_matches for JS-created events; we use m_mediaQueryList
     // for events that blink generates.
-    Member<MediaQueryList> m_mediaQueryList;
+    RefPtrWillBeMember<MediaQueryList> m_mediaQueryList;
     String m_media;
     bool m_matches;
 };

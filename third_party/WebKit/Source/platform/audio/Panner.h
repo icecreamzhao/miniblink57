@@ -30,6 +30,7 @@
 #define Panner_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/audio/AudioBus.h"
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
@@ -38,11 +39,19 @@
 
 namespace blink {
 
+=======
+#include "wtf/PassOwnPtr.h"
+
+namespace blink {
+
+class AudioBus;
+>>>>>>> miniblink49
 class HRTFDatabaseLoader;
 
 // Abstract base class for panning a mono or stereo source.
 
 class PLATFORM_EXPORT Panner {
+<<<<<<< HEAD
     USING_FAST_MALLOC(Panner);
     WTF_MAKE_NONCOPYABLE(Panner);
 
@@ -73,6 +82,23 @@ public:
         size_t framesToProcess,
         AudioBus::ChannelInterpretation)
         = 0;
+=======
+public:
+    enum {
+        PanningModelEqualPower = 0,
+        PanningModelHRTF = 1
+    };
+
+    typedef unsigned PanningModel;
+
+    static PassOwnPtr<Panner> create(PanningModel, float sampleRate, HRTFDatabaseLoader*);
+
+    virtual ~Panner() { };
+
+    PanningModel panningModel() const { return m_panningModel; }
+
+    virtual void pan(double azimuth, double elevation, const AudioBus* inputBus, AudioBus* outputBus, size_t framesToProcess) = 0;
+>>>>>>> miniblink49
 
     virtual void reset() = 0;
 
@@ -80,10 +106,14 @@ public:
     virtual double latencyTime() const = 0;
 
 protected:
+<<<<<<< HEAD
     Panner(PanningModel model)
         : m_panningModel(model)
     {
     }
+=======
+    Panner(PanningModel model) : m_panningModel(model) { }
+>>>>>>> miniblink49
 
     PanningModel m_panningModel;
 };

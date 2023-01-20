@@ -7,6 +7,10 @@
 
 #include "modules/EventModules.h"
 #include "modules/ModulesExport.h"
+<<<<<<< HEAD
+=======
+#include "modules/push_messaging/PushEventInit.h"
+>>>>>>> miniblink49
 #include "modules/push_messaging/PushMessageData.h"
 #include "modules/serviceworkers/ExtendableEvent.h"
 #include "platform/heap/Handle.h"
@@ -15,6 +19,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PushEventInit;
 
 class MODULES_EXPORT PushEvent final : public ExtendableEvent {
@@ -31,11 +36,30 @@ public:
         const PushEventInit& initializer)
     {
         return new PushEvent(type, initializer);
+=======
+class MODULES_EXPORT PushEvent final : public ExtendableEvent {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static PassRefPtrWillBeRawPtr<PushEvent> create()
+    {
+        return adoptRefWillBeNoop(new PushEvent);
+    }
+    static PassRefPtrWillBeRawPtr<PushEvent> create(const AtomicString& type, PushMessageData* data, WaitUntilObserver* observer)
+    {
+        return adoptRefWillBeNoop(new PushEvent(type, data, observer));
+    }
+    static PassRefPtrWillBeRawPtr<PushEvent> create(const AtomicString& type, const PushEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new PushEvent(type, initializer));
+>>>>>>> miniblink49
     }
 
     ~PushEvent() override;
 
+<<<<<<< HEAD
     // ExtendableEvent interface.
+=======
+>>>>>>> miniblink49
     const AtomicString& interfaceName() const override;
 
     PushMessageData* data();
@@ -43,10 +67,18 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     PushEvent(const AtomicString& type, PushMessageData*, WaitUntilObserver*);
     PushEvent(const AtomicString& type, const PushEventInit&);
 
     Member<PushMessageData> m_data;
+=======
+    PushEvent();
+    PushEvent(const AtomicString& type, PushMessageData*, WaitUntilObserver*);
+    PushEvent(const AtomicString& type, const PushEventInit&);
+
+    PersistentWillBeMember<PushMessageData> m_data;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

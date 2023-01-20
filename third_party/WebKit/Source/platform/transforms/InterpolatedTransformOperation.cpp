@@ -28,14 +28,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/transforms/InterpolatedTransformOperation.h"
 
 #include "platform/transforms/IdentityTransformOperation.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 bool InterpolatedTransformOperation::operator==(
     const TransformOperation& o) const
+=======
+bool InterpolatedTransformOperation::operator==(const TransformOperation& o) const
+>>>>>>> miniblink49
 {
     if (!isSameType(o))
         return false;
@@ -43,9 +51,13 @@ bool InterpolatedTransformOperation::operator==(
     return progress == t->progress && from == t->from && to == t->to;
 }
 
+<<<<<<< HEAD
 void InterpolatedTransformOperation::apply(
     TransformationMatrix& transform,
     const FloatSize& borderBoxSize) const
+=======
+void InterpolatedTransformOperation::apply(TransformationMatrix& transform, const FloatSize& borderBoxSize) const
+>>>>>>> miniblink49
 {
     TransformationMatrix fromTransform;
     TransformationMatrix toTransform;
@@ -56,15 +68,20 @@ void InterpolatedTransformOperation::apply(
     transform.multiply(toTransform);
 }
 
+<<<<<<< HEAD
 PassRefPtr<TransformOperation> InterpolatedTransformOperation::blend(
     const TransformOperation* from,
     double progress,
     bool blendToIdentity)
+=======
+PassRefPtr<TransformOperation> InterpolatedTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
+>>>>>>> miniblink49
 {
     if (from && !from->isSameType(*this))
         return this;
 
     TransformOperations thisOperations;
+<<<<<<< HEAD
     thisOperations.operations().push_back(this);
     TransformOperations fromOperations;
     if (blendToIdentity)
@@ -77,3 +94,16 @@ PassRefPtr<TransformOperation> InterpolatedTransformOperation::blend(
 }
 
 } // namespace blink
+=======
+    thisOperations.operations().append(this);
+    TransformOperations fromOperations;
+    if (blendToIdentity)
+        fromOperations.operations().append(IdentityTransformOperation::create());
+    else
+        fromOperations.operations().append(const_cast<TransformOperation*>(from));
+    return InterpolatedTransformOperation::create(thisOperations, fromOperations, progress);
+}
+
+} // namespace blink
+
+>>>>>>> miniblink49

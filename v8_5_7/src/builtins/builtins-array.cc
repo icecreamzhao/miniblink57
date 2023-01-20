@@ -23,7 +23,11 @@ inline bool ClampedToInteger(Isolate* isolate, Object* object, int* out) {
     return true;
   } else if (object->IsHeapNumber()) {
     double value = HeapNumber::cast(object)->value();
+<<<<<<< HEAD
     if (std_isnan(value)) {
+=======
+    if (std::isnan(value)) {
+>>>>>>> miniblink49
       *out = 0;
     } else if (value > kMaxInt) {
       *out = kMaxInt;

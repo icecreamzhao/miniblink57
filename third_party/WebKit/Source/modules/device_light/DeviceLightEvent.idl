@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://www.w3.org/TR/2015/WD-ambient-light-20150903/#devicelightevent-interface
+=======
+// http://w3c.github.io/ambient-light/#idl-def-DeviceLightEvent
+>>>>>>> miniblink49
 
 [
     RuntimeEnabled=DeviceLight,

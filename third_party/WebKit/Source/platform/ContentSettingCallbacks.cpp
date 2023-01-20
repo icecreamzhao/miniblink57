@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/ContentSettingCallbacks.h"
 
 #include "wtf/PtrUtil.h"
@@ -48,6 +49,22 @@ ContentSettingCallbacks::ContentSettingCallbacks(
     std::unique_ptr<WTF::Closure> denied)
     : m_allowed(std::move(allowed))
     , m_denied(std::move(denied))
+=======
+#include "config.h"
+
+#include "platform/ContentSettingCallbacks.h"
+
+namespace blink {
+
+PassOwnPtr<ContentSettingCallbacks> ContentSettingCallbacks::create(PassOwnPtr<Closure> allowed, PassOwnPtr<Closure> denied)
+{
+    return adoptPtr(new ContentSettingCallbacks(allowed, denied));
+}
+
+ContentSettingCallbacks::ContentSettingCallbacks(PassOwnPtr<Closure> allowed, PassOwnPtr<Closure> denied)
+    : m_allowed(allowed)
+    , m_denied(denied)
+>>>>>>> miniblink49
 {
 }
 

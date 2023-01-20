@@ -4,7 +4,11 @@
 
 #ifndef V8_INTL_SUPPORT
 #error Internationalization is expected to be enabled.
+<<<<<<< HEAD
 #endif // V8_INTL_SUPPORT
+=======
+#endif  // V8_INTL_SUPPORT
+>>>>>>> miniblink49
 
 #ifndef V8_OBJECTS_JS_PLURAL_RULES_INL_H_
 #define V8_OBJECTS_JS_PLURAL_RULES_INL_H_
@@ -19,6 +23,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(JSPluralRules, JSObject)
 
     ACCESSORS(JSPluralRules, locale, String, kLocaleOffset)
@@ -49,3 +54,33 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_JS_PLURAL_RULES_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(JSPluralRules, JSObject)
+
+ACCESSORS(JSPluralRules, locale, String, kLocaleOffset)
+SMI_ACCESSORS(JSPluralRules, flags, kFlagsOffset)
+ACCESSORS(JSPluralRules, icu_plural_rules, Managed<icu::PluralRules>,
+          kICUPluralRulesOffset)
+ACCESSORS(JSPluralRules, icu_decimal_format, Managed<icu::DecimalFormat>,
+          kICUDecimalFormatOffset)
+
+inline void JSPluralRules::set_type(Type type) {
+  DCHECK_LT(type, Type::COUNT);
+  int hints = flags();
+  hints = TypeBits::update(hints, type);
+  set_flags(hints);
+}
+
+inline JSPluralRules::Type JSPluralRules::type() const {
+  return TypeBits::decode(flags());
+}
+
+CAST_ACCESSOR(JSPluralRules)
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_JS_PLURAL_RULES_INL_H_
+>>>>>>> miniblink49

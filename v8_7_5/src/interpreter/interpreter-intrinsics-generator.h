@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     namespace compiler {
         class Node;
     } // namespace compiler
@@ -25,3 +26,20 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_INTERPRETER_INTERPRETER_INTRINSICS_GENERATOR_H_
+=======
+namespace compiler {
+class Node;
+}  // namespace compiler
+
+namespace interpreter {
+
+extern compiler::Node* GenerateInvokeIntrinsic(
+    InterpreterAssembler* assembler, compiler::Node* function_id,
+    compiler::Node* context, const InterpreterAssembler::RegListNodePair& args);
+
+}  // namespace interpreter
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_INTERPRETER_INTERPRETER_INTRINSICS_GENERATOR_H_
+>>>>>>> miniblink49

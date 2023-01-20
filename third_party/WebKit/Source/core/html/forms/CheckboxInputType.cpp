@@ -29,18 +29,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/CheckboxInputType.h"
 
 #include "core/InputTypeNames.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/html/HTMLInputElement.h"
 #include "platform/text/PlatformLocale.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-InputType* CheckboxInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> CheckboxInputType::create(HTMLInputElement& element)
 {
-    return new CheckboxInputType(element);
+    return adoptRefWillBeNoop(new CheckboxInputType(element));
 }
 
 const AtomicString& CheckboxInputType::formControlType() const
@@ -55,25 +57,23 @@ bool CheckboxInputType::valueMissing(const String&) const
 
 String CheckboxInputType::valueMissingText() const
 {
-    return locale().queryString(
-        WebLocalizedString::ValidationValueMissingForCheckbox);
+    return locale().queryString(WebLocalizedString::ValidationValueMissingForCheckbox);
 }
 
 void CheckboxInputType::handleKeyupEvent(KeyboardEvent* event)
 {
-    const String& key = event->key();
-    if (key != " ")
+    const String& key = event->keyIdentifier();
+    if (key != "U+0020")
         return;
     dispatchSimulatedClickIfActive(event);
 }
 
-ClickHandlingState* CheckboxInputType::willDispatchClick()
+PassOwnPtrWillBeRawPtr<ClickHandlingState> CheckboxInputType::willDispatchClick()
 {
-    // An event handler can use preventDefault or "return false" to reverse the
-    // checking we do here.  The ClickHandlingState object contains what we need
-    // to undo what we did here in didDispatchClick.
+    // An event handler can use preventDefault or "return false" to reverse the checking we do here.
+    // The ClickHandlingState object contains what we need to undo what we did here in didDispatchClick.
 
-    ClickHandlingState* state = new ClickHandlingState;
+    OwnPtrWillBeRawPtr<ClickHandlingState> state = adoptPtrWillBeNoop(new ClickHandlingState);
 
     state->checked = element().checked();
     state->indeterminate = element().indeterminate();
@@ -82,12 +82,11 @@ ClickHandlingState* CheckboxInputType::willDispatchClick()
         element().setIndeterminate(false);
 
     element().setChecked(!state->checked, DispatchChangeEvent);
-    m_isInClickHandler = true;
-    return state;
+
+    return state.release();
 }
 
-void CheckboxInputType::didDispatchClick(Event* event,
-    const ClickHandlingState& state)
+void CheckboxInputType::didDispatchClick(Event* event, const ClickHandlingState& state)
 {
     if (event->defaultPrevented() || event->defaultHandled()) {
         element().setIndeterminate(state.indeterminate);
@@ -95,7 +94,6 @@ void CheckboxInputType::didDispatchClick(Event* event,
     } else {
         element().dispatchChangeEventIfNeeded();
     }
-    m_isInClickHandler = false;
     // The work we did in willDispatchClick was default handling.
     event->setDefaultHandled();
 }

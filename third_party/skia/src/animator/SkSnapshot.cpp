@@ -6,12 +6,22 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkTypes.h"
 
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
 #include "SkImageEncoder.h"
 #include "SkSnapshot.h"
+=======
+
+#include "SkTypes.h"
+
+#include "SkSnapshot.h"
+#include "SkAnimateMaker.h"
+#include "SkCanvas.h"
+#include "SkImageEncoder.h"
+>>>>>>> miniblink49
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -28,6 +38,7 @@ DEFINE_GET_MEMBER(SkSnapshot);
 
 SkSnapshot::SkSnapshot()
 {
+<<<<<<< HEAD
     quality = 100 * SK_Scalar1;
     type = (SkImageEncoder::Type)-1;
     sequence = false;
@@ -39,6 +50,20 @@ bool SkSnapshot::draw(SkAnimateMaker& maker)
     SkASSERT(type >= 0);
     SkASSERT(filename.size() > 0);
     SkImageEncoder* encoder = SkImageEncoder::Create((SkImageEncoder::Type)type);
+=======
+    quality     = 100 * SK_Scalar1;
+    type        = (SkImageEncoder::Type) -1;
+    sequence    = false;
+    fSeqVal     = 0;
+}
+
+#include "SkDevice.h"
+
+bool SkSnapshot::draw(SkAnimateMaker& maker) {
+    SkASSERT(type >= 0);
+    SkASSERT(filename.size() > 0);
+    SkImageEncoder* encoder = SkImageEncoder::Create((SkImageEncoder::Type) type);
+>>>>>>> miniblink49
     if (!encoder) {
         return false;
     }
@@ -47,9 +72,15 @@ bool SkSnapshot::draw(SkAnimateMaker& maker)
     SkString name(filename);
     if (sequence) {
         char num[4] = "000";
+<<<<<<< HEAD
         num[0] = (char)(num[0] + fSeqVal / 100);
         num[1] = (char)(num[1] + fSeqVal / 10 % 10);
         num[2] = (char)(num[2] + fSeqVal % 10);
+=======
+        num[0] = (char) (num[0] + fSeqVal / 100);
+        num[1] = (char) (num[1] + fSeqVal / 10 % 10);
+        num[2] = (char) (num[2] + fSeqVal % 10);
+>>>>>>> miniblink49
         name.append(num);
         if (++fSeqVal > 999)
             sequence = false;

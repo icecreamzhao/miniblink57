@@ -11,9 +11,18 @@
 namespace ots {
 
 struct OpenTypeHMTX {
+<<<<<<< HEAD
     OpenTypeMetricsTable metrics;
 };
 
 } // namespace ots
 
 #endif // OTS_HMTX_H_
+=======
+  OpenTypeMetricsTable metrics;
+};
+
+}  // namespace ots
+
+#endif  // OTS_HMTX_H_
+>>>>>>> miniblink49

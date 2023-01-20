@@ -7,6 +7,7 @@
 
 #include "core/html/imports/HTMLImport.h"
 #include "platform/Timer.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
@@ -15,7 +16,7 @@ class KURL;
 
 class HTMLImportTreeRoot : public HTMLImport {
 public:
-    static HTMLImportTreeRoot* create(Document*);
+    static PassOwnPtrWillBeRawPtr<HTMLImportTreeRoot> create(Document*);
 
     ~HTMLImportTreeRoot() override;
     void dispose();
@@ -28,7 +29,7 @@ public:
 
     void scheduleRecalcState();
 
-    HTMLImportChild* add(HTMLImportChild*);
+    HTMLImportChild* add(PassOwnPtrWillBeRawPtr<HTMLImportChild>);
     HTMLImportChild* find(const KURL&) const;
 
     DECLARE_VIRTUAL_TRACE();
@@ -36,22 +37,18 @@ public:
 private:
     explicit HTMLImportTreeRoot(Document*);
 
-    void recalcTimerFired(TimerBase*);
+    void recalcTimerFired(Timer<HTMLImportTreeRoot>*);
 
-    Member<Document> m_document;
+    RawPtrWillBeMember<Document> m_document;
     Timer<HTMLImportTreeRoot> m_recalcTimer;
 
     // List of import which has been loaded or being loaded.
-    typedef HeapVector<Member<HTMLImportChild>> ImportList;
+    typedef WillBeHeapVector<OwnPtrWillBeMember<HTMLImportChild>> ImportList;
     ImportList m_imports;
 };
 
-DEFINE_TYPE_CASTS(HTMLImportTreeRoot,
-    HTMLImport,
-    import,
-    import->isRoot(),
-    import.isRoot());
+DEFINE_TYPE_CASTS(HTMLImportTreeRoot, HTMLImport, import, import->isRoot(), import.isRoot());
 
-} // namespace blink
+}
 
 #endif

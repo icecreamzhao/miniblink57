@@ -33,7 +33,10 @@
 
 #include "core/frame/PlatformEventDispatcher.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "public/platform/WebPlatformEventType.h"
+=======
+>>>>>>> miniblink49
 #include "public/platform/modules/device_orientation/WebDeviceOrientationListener.h"
 #include "wtf/RefPtr.h"
 
@@ -42,6 +45,7 @@ namespace blink {
 class DeviceOrientationData;
 class WebDeviceOrientationData;
 
+<<<<<<< HEAD
 // This class listens to device orientation data and notifies all registered
 // controllers.
 class DeviceOrientationDispatcher final
@@ -52,6 +56,13 @@ class DeviceOrientationDispatcher final
 
 public:
     static DeviceOrientationDispatcher& instance(bool absolute);
+=======
+// This class listens to device orientation data and notifies all registered controllers.
+class DeviceOrientationDispatcher final : public GarbageCollectedFinalized<DeviceOrientationDispatcher>, public PlatformEventDispatcher, public WebDeviceOrientationListener {
+    USING_GARBAGE_COLLECTED_MIXIN(DeviceOrientationDispatcher);
+public:
+    static DeviceOrientationDispatcher& instance();
+>>>>>>> miniblink49
     ~DeviceOrientationDispatcher() override;
 
     // Note that the returned object is owned by this class.
@@ -64,15 +75,22 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     explicit DeviceOrientationDispatcher(bool absolute);
+=======
+    DeviceOrientationDispatcher();
+>>>>>>> miniblink49
 
     // Inherited from PlatformEventDispatcher.
     void startListening() override;
     void stopListening() override;
 
+<<<<<<< HEAD
     WebPlatformEventType getWebPlatformEventType() const;
 
     const bool m_absolute;
+=======
+>>>>>>> miniblink49
     Member<DeviceOrientationData> m_lastDeviceOrientationData;
 };
 

@@ -28,8 +28,13 @@ public:
     };
 
     GameBench(Type type, Clear clear,
+<<<<<<< HEAD
         bool aligned = false, bool useAtlas = false,
         bool useDrawVertices = false)
+=======
+              bool aligned = false, bool useAtlas = false,
+              bool useDrawVertices = false)
+>>>>>>> miniblink49
         : fType(type)
         , fClear(clear)
         , fAligned(aligned)
@@ -37,8 +42,12 @@ public:
         , fUseDrawVertices(useDrawVertices)
         , fName("game")
         , fNumSaved(0)
+<<<<<<< HEAD
         , fInitialized(false)
     {
+=======
+        , fInitialized(false) {
+>>>>>>> miniblink49
 
         switch (fType) {
         case kScale_Type:
@@ -75,6 +84,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -82,6 +92,13 @@ protected:
 
     void onDelayedSetup() override
     {
+=======
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onPreDraw() override {
+>>>>>>> miniblink49
         if (!fInitialized) {
             this->makeCheckerboard();
             this->makeAtlas();
@@ -89,8 +106,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkRandom scaleRand;
         SkRandom transRand;
         SkRandom rotRand;
@@ -113,21 +134,36 @@ protected:
         SkScalar maxTransX, maxTransY;
 
         if (kScale_Type == fType) {
+<<<<<<< HEAD
             maxTransX = size.fWidth - (1.5f * width);
             maxTransY = size.fHeight - (1.5f * height);
         } else if (kTranslate_Type == fType) {
             maxTransX = SkIntToScalar(size.fWidth - width);
+=======
+            maxTransX = size.fWidth  - (1.5f * width);
+            maxTransY = size.fHeight - (1.5f * height);
+        } else if (kTranslate_Type == fType) {
+            maxTransX = SkIntToScalar(size.fWidth  - width);
+>>>>>>> miniblink49
             maxTransY = SkIntToScalar(size.fHeight - height);
         } else {
             SkASSERT(kRotate_Type == fType);
             // Yes, some rotations will be off the top and left sides
+<<<<<<< HEAD
             maxTransX = size.fWidth - SK_ScalarSqrt2 * height;
+=======
+            maxTransX = size.fWidth  - SK_ScalarSqrt2 * height;
+>>>>>>> miniblink49
             maxTransY = size.fHeight - SK_ScalarSqrt2 * height;
         }
 
         SkMatrix mat;
         SkRect dst = { 0, 0, SkIntToScalar(width), SkIntToScalar(height) };
+<<<<<<< HEAD
         SkRect clearRect = { -1.0f, -1.0f, width + 1.0f, height + 1.0f };
+=======
+        SkRect clearRect = { -1.0f, -1.0f, width+1.0f, height+1.0f };
+>>>>>>> miniblink49
         SkPoint verts[4] = { // for drawVertices path
             { 0, 0 },
             { 0, SkIntToScalar(height) },
@@ -140,12 +176,21 @@ protected:
         p.setColor(0xFF000000);
         p.setFilterQuality(kLow_SkFilterQuality);
 
+<<<<<<< HEAD
         SkPaint p2; // for drawVertices path
         p2.setColor(0xFF000000);
         p2.setFilterQuality(kLow_SkFilterQuality);
         p2.setShader(SkShader::MakeBitmapShader(fAtlas,
             SkShader::kClamp_TileMode,
             SkShader::kClamp_TileMode));
+=======
+        SkPaint p2;         // for drawVertices path
+        p2.setColor(0xFF000000);
+        p2.setFilterQuality(kLow_SkFilterQuality);
+        p2.setShader(SkShader::CreateBitmapShader(fAtlas,
+                                                  SkShader::kClamp_TileMode,
+                                                  SkShader::kClamp_TileMode))->unref();
+>>>>>>> miniblink49
 
         for (int i = 0; i < loops; ++i, ++fNumSaved) {
             if (0 == i % kNumBeforeClear) {
@@ -199,12 +244,18 @@ protected:
 
                 if (fUseDrawVertices) {
                     SkPoint uvs[4] = {
+<<<<<<< HEAD
                         { SkIntToScalar(src.fLeft), SkIntToScalar(src.fBottom) },
                         { SkIntToScalar(src.fLeft), SkIntToScalar(src.fTop) },
+=======
+                        { SkIntToScalar(src.fLeft),  SkIntToScalar(src.fBottom) },
+                        { SkIntToScalar(src.fLeft),  SkIntToScalar(src.fTop) },
+>>>>>>> miniblink49
                         { SkIntToScalar(src.fRight), SkIntToScalar(src.fTop) },
                         { SkIntToScalar(src.fRight), SkIntToScalar(src.fBottom) },
                     };
                     canvas->drawVertices(SkCanvas::kTriangles_VertexMode,
+<<<<<<< HEAD
                         4, verts, uvs, nullptr, nullptr,
                         indices, 6, p2);
                 } else {
@@ -213,6 +264,16 @@ protected:
                 }
             } else {
                 canvas->drawBitmapRect(fCheckerboard, dst, &p);
+=======
+                                         4, verts, uvs, NULL, NULL,
+                                         indices, 6, p2);
+                } else {
+                    canvas->drawBitmapRect(fAtlas, &src, dst, &p,
+                                           SkCanvas::kBleed_DrawBitmapRectFlag);
+                }
+            } else {
+                canvas->drawBitmapRect(fCheckerboard, NULL, dst, &p);
+>>>>>>> miniblink49
             }
         }
     }
@@ -226,6 +287,7 @@ private:
     static const int kNumAtlasedX = 5;
     static const int kNumAtlasedY = 5;
     static const int kAtlasSpacer = 2;
+<<<<<<< HEAD
     static const int kTotAtlasWidth = kNumAtlasedX * kAtlasCellWidth + (kNumAtlasedX + 1) * kAtlasSpacer;
     static const int kTotAtlasHeight = kNumAtlasedY * kAtlasCellHeight + (kNumAtlasedY + 1) * kAtlasSpacer;
     static const int kNumBeforeClear = 100;
@@ -238,17 +300,40 @@ private:
     SkString fName;
     int fNumSaved; // num draws stored in 'fSaved'
     bool fInitialized;
+=======
+    static const int kTotAtlasWidth  = kNumAtlasedX * kAtlasCellWidth +
+                                       (kNumAtlasedX+1) * kAtlasSpacer;
+    static const int kTotAtlasHeight = kNumAtlasedY * kAtlasCellHeight +
+                                       (kNumAtlasedY+1) * kAtlasSpacer;
+    static const int kNumBeforeClear = 100;
+
+    Type     fType;
+    Clear    fClear;
+    bool     fAligned;
+    bool     fUseAtlas;
+    bool     fUseDrawVertices;
+    SkString fName;
+    int      fNumSaved; // num draws stored in 'fSaved'
+    bool     fInitialized;
+>>>>>>> miniblink49
 
     // 0 & 1 are always x & y translate. 2 is either scale or rotate.
     SkScalar fSaved[kNumBeforeClear][3];
 
     SkBitmap fCheckerboard;
     SkBitmap fAtlas;
+<<<<<<< HEAD
     SkIRect fAtlasRects[kNumAtlasedX][kNumAtlasedY];
 
     // Note: the resulting checker board has transparency
     void makeCheckerboard()
     {
+=======
+    SkIRect  fAtlasRects[kNumAtlasedX][kNumAtlasedY];
+
+    // Note: the resulting checker board has transparency
+    void makeCheckerboard() {
+>>>>>>> miniblink49
         static int kCheckSize = 16;
 
         fCheckerboard.allocN32Pixels(kCheckerboardWidth, kCheckerboardHeight);
@@ -269,8 +354,12 @@ private:
     }
 
     // Note: the resulting atlas has transparency
+<<<<<<< HEAD
     void makeAtlas()
     {
+=======
+    void makeAtlas() {
+>>>>>>> miniblink49
         SkRandom rand;
 
         SkColor colors[kNumAtlasedX][kNumAtlasedY];
@@ -279,9 +368,15 @@ private:
             for (int x = 0; x < kNumAtlasedX; ++x) {
                 colors[x][y] = rand.nextU() | 0xff000000;
                 fAtlasRects[x][y] = SkIRect::MakeXYWH(kAtlasSpacer + x * (kAtlasCellWidth + kAtlasSpacer),
+<<<<<<< HEAD
                     kAtlasSpacer + y * (kAtlasCellHeight + kAtlasSpacer),
                     kAtlasCellWidth,
                     kAtlasCellHeight);
+=======
+                                                      kAtlasSpacer + y * (kAtlasCellHeight + kAtlasSpacer),
+                                                      kAtlasCellWidth,
+                                                      kAtlasCellHeight);
+>>>>>>> miniblink49
             }
         }
 
@@ -312,6 +407,7 @@ private:
 };
 
 // Partial clear
+<<<<<<< HEAD
 DEF_BENCH(return new GameBench(GameBench::kScale_Type, GameBench::kPartial_Clear);)
 DEF_BENCH(return new GameBench(GameBench::kTranslate_Type, GameBench::kPartial_Clear);)
 DEF_BENCH(return new GameBench(GameBench::kTranslate_Type, GameBench::kPartial_Clear, true);)
@@ -327,3 +423,29 @@ DEF_BENCH(return new GameBench(GameBench::kRotate_Type, GameBench::kFull_Clear);
 DEF_BENCH(return new GameBench(GameBench::kTranslate_Type, GameBench::kFull_Clear, false, true);)
 DEF_BENCH(return new GameBench(
     GameBench::kTranslate_Type, GameBench::kFull_Clear, false, true, true);)
+=======
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kScale_Type,
+                                            GameBench::kPartial_Clear)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kTranslate_Type,
+                                            GameBench::kPartial_Clear)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kTranslate_Type,
+                                            GameBench::kPartial_Clear, true)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kRotate_Type,
+                                            GameBench::kPartial_Clear)); )
+
+// Full clear
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kScale_Type,
+                                            GameBench::kFull_Clear)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kTranslate_Type,
+                                            GameBench::kFull_Clear)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kTranslate_Type,
+                                            GameBench::kFull_Clear, true)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kRotate_Type,
+                                            GameBench::kFull_Clear)); )
+
+// Atlased
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kTranslate_Type,
+                                            GameBench::kFull_Clear, false, true)); )
+DEF_BENCH( return SkNEW_ARGS(GameBench, (GameBench::kTranslate_Type,
+                                            GameBench::kFull_Clear, false, true, true)); )
+>>>>>>> miniblink49

@@ -26,14 +26,26 @@
 #ifndef GraphicsTypes3D_h
 #define GraphicsTypes3D_h
 
+<<<<<<< HEAD
 // #ifndef __glext_h_
 // #include "third_party/khronos/GLES3/gl3.h"
 // #include "third_party/khronos/GLES2/gl2ext.h"
 // #endif
+=======
+#ifndef __glext_h_
+// #include "third_party/khronos/GLES3/gl3.h"
+// #include "third_party/khronos/GLES2/gl2ext.h"
+#endif
+>>>>>>> miniblink49
 
 #include "wtf/Forward.h"
 #include <stdint.h>
 
+<<<<<<< HEAD
+=======
+typedef unsigned Platform3DObject;
+
+>>>>>>> miniblink49
 // WebGL-specific enums
 const unsigned GC3D_UNPACK_FLIP_Y_WEBGL = 0x9240;
 const unsigned GC3D_UNPACK_PREMULTIPLY_ALPHA_WEBGL = 0x9241;
@@ -42,9 +54,12 @@ const unsigned GC3D_UNPACK_COLORSPACE_CONVERSION_WEBGL = 0x9243;
 const unsigned GC3D_BROWSER_DEFAULT_WEBGL = 0x9244;
 const unsigned GC3D_MAX_CLIENT_WAIT_TIMEOUT_WEBGL = 0x9247;
 
+<<<<<<< HEAD
 // GL_ARB_texture_rectangle
 const unsigned GC3D_TEXTURE_RECTANGLE_ARB = 0x84F5;
 
+=======
+>>>>>>> miniblink49
 // GL_AMD_compressed_ATC_texture
 const unsigned GC3D_COMPRESSED_ATC_RGB_AMD = 0x8C92;
 const unsigned GC3D_COMPRESSED_ATC_RGBA_EXPLICIT_ALPHA_AMD = 0x8C93;
@@ -56,8 +71,12 @@ const unsigned GC3D_SCANOUT_CHROMIUM = 0x78F2;
 
 namespace blink {
 
+<<<<<<< HEAD
 enum SourceDrawingBuffer { FrontBuffer,
     BackBuffer };
+=======
+enum SourceDrawingBuffer { FrontBuffer, BackBuffer };
+>>>>>>> miniblink49
 
 } // namespace blink
 

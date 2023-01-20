@@ -4,6 +4,7 @@ Mac OS X
 Quickstart
 ----------
 
+<<<<<<< HEAD
 First, install [XCode](https://developer.apple.com/xcode/). 
 
 <!--?prettify lang=sh?-->
@@ -23,6 +24,36 @@ First, install [XCode](https://developer.apple.com/xcode/).
     # Run DM (the Skia test app) and SampleApp.
     out/Debug/dm
     out/Debug/SampleApp
+=======
+1.  Install [XCode](http://developer.apple.com/xcode/).
+
+2.  Install depot tools.
+
+    <!--?prettify lang=sh?-->
+
+        git clone 'https://chromium.googlesource.com/chromium/tools/depot_tools.git'
+        export PATH="${PWD}/depot_tools:${PATH}"
+
+3.  Get Skia.
+
+    <!--?prettify lang=sh?-->
+
+        git clone 'https://skia.googlesource.com/skia'
+        cd skia
+
+4.  Build.
+
+    <!--?prettify lang=sh?-->
+
+        bin/sync-and-gyp && ninja -C out/Debug
+
+5.  Run DM (the Skia test app) and SampleApp.
+
+    <!--?prettify lang=sh?-->
+
+        out/Debug/dm
+        open out/Debug/SampleApp.app
+>>>>>>> miniblink49
 
 Prerequisites
 -------------
@@ -38,7 +69,11 @@ Make sure the following have been installed:
 Check out the source code
 -------------------------
 
+<<<<<<< HEAD
 Follow the instructions [here](../download) for downloading the Skia source.
+=======
+See the instructions [here](../download).
+>>>>>>> miniblink49
 
 Generate XCode projects
 -----------------------
@@ -46,6 +81,7 @@ Generate XCode projects
 We use the open-source gyp tool to generate XCode projects (and analogous
 build scripts on other platforms) from our multiplatform "gyp" files.
 
+<<<<<<< HEAD
 Two Gyp generators are used on Mac OS:
 
 *   `ninja` - Run ninja yourself, without XCode project files,
@@ -59,6 +95,8 @@ sync-and-gyp. The default value for `GYP_GENERATORS` is
 
 
 
+=======
+>>>>>>> miniblink49
 Before building, make sure that gyp knows to create an XCode project or ninja
 build files. If you leave GYP_GENERATORS undefined it will assume the
 following default:
@@ -69,7 +107,11 @@ Or you can set it to `ninja` or `xcode` alone, if you like.
 
 You can then generate the Xcode projects and ninja build files by running:
 
+<<<<<<< HEAD
     python bin/sync-and-gyp
+=======
+    ./gyp_skia
+>>>>>>> miniblink49
 
 Build and run tests from the command line
 -----------------------------------------
@@ -77,12 +119,34 @@ Build and run tests from the command line
     ninja -C out/Debug dm
     out/Debug/dm
 
+<<<<<<< HEAD
+=======
+The usual mode you want for testing is Debug mode (SK_DEBUG is defined, and
+debug symbols are included in the binary). If you would like to build the
+Release version instead:
+
+    ninja -C out/Release dm
+    out/Release/dm
+
+Build and run nanobench (performance tests)
+-------------------------------------------
+
+In this case, we will build with the "Release" configuration, since we are running performance tests.
+
+    ninja -C out/Release nanobench
+    out/Release/nanobench [ --skps path/to/*.skp ]
+>>>>>>> miniblink49
 
 Build and run SampleApp in the XCode IDE
 ----------------------------------------
 
+<<<<<<< HEAD
   * Run `sync-and-gyp` as described above.
   * In the Finder, navigate to `$SKIA_INSTALLDIR/trunk/out/gyp`
+=======
+  * Run gyp_skia as described above.
+  * In the Finder, navigate to $SKIA_INSTALLDIR/trunk/out/gyp
+>>>>>>> miniblink49
   * Double-click SampleApp.xcodeproj ; this will launch XCode and open the SampleApp project
   * Click the “Build and Run” button in the top toolbar
   * Once the build is complete, you should see a window with lots of shaded text examples. To move through the sample app, use the following keypresses:

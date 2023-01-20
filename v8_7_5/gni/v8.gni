@@ -101,6 +101,7 @@ v8_add_configs = [
   v8_path_prefix + ":toolchain",
 ]
 
+<<<<<<< HEAD
 if (is_debug && !v8_optimized_debug) {
   v8_remove_configs += [ "//build/config/compiler:default_optimization" ]
   v8_add_configs += [ "//build/config/compiler:no_optimize" ]
@@ -115,6 +116,10 @@ if (is_debug && !v8_optimized_debug) {
     v8_add_configs += [ "//build/config/compiler:optimize_max" ]
   }
 }
+=======
+v8_remove_configs += [ "//build/config/compiler:default_optimization" ]
+v8_add_configs += [ v8_path_prefix + ":default_optimization" ]
+>>>>>>> miniblink49
 
 if (v8_code_coverage && !is_clang) {
   v8_add_configs += [

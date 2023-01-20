@@ -26,7 +26,11 @@
 #ifndef FontOrientation_h
 #define FontOrientation_h
 
+<<<<<<< HEAD
 #include "platform/text/Character.h"
+=======
+#include "platform/fonts/Character.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -55,6 +59,7 @@ inline bool isVerticalUpright(FontOrientation orientation, UChar32 character)
 }
 inline bool isVerticalBaseline(FontOrientation orientation) { return orientation != FontOrientation::Horizontal; }
 
+<<<<<<< HEAD
 inline FontOrientation adjustOrientationForCharacterInMixedVertical(FontOrientation orientation, UChar32 character)
 {
     if (orientation != FontOrientation::VerticalMixed)
@@ -64,6 +69,8 @@ inline FontOrientation adjustOrientationForCharacterInMixedVertical(FontOrientat
         : FontOrientation::VerticalRotated;
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif // FontOrientation_h

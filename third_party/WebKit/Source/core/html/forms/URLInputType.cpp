@@ -28,18 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/URLInputType.h"
 
 #include "core/InputTypeNames.h"
 #include "core/html/HTMLInputElement.h"
-#include "core/html/parser/HTMLParserIdioms.h"
 #include "platform/text/PlatformLocale.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-InputType* URLInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> URLInputType::create(HTMLInputElement& element)
 {
-    return new URLInputType(element);
+    return adoptRefWillBeNoop(new URLInputType(element));
 }
 
 void URLInputType::countUsage()
@@ -65,18 +66,6 @@ bool URLInputType::typeMismatch() const
 String URLInputType::typeMismatchText() const
 {
     return locale().queryString(WebLocalizedString::ValidationTypeMismatchForURL);
-}
-
-String URLInputType::sanitizeValue(const String& proposedValue) const
-{
-    return BaseTextInputType::sanitizeValue(
-        stripLeadingAndTrailingHTMLSpaces(proposedValue));
-}
-
-String URLInputType::sanitizeUserInputValue(const String& proposedValue) const
-{
-    // Do not call URLInputType::sanitizeValue.
-    return BaseTextInputType::sanitizeValue(proposedValue);
 }
 
 } // namespace blink

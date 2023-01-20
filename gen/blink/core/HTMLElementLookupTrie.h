@@ -5,12 +5,11 @@
 #ifndef HTMLElementLookupTrie_h
 #define HTMLElementLookupTrie_h
 
-#include "core/CoreExport.h"
 #include "wtf/text/StringImpl.h"
 
 namespace blink {
 
-CORE_EXPORT StringImpl* lookupHTMLTag(const UChar* data, unsigned length);
+StringImpl* lookupHTMLTag(const UChar* data, unsigned length);
 
 } // namespace blink
 

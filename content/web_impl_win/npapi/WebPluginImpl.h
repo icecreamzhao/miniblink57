@@ -44,13 +44,11 @@
 #include "third_party/WebKit/Source/wtf/PassRefPtr.h"
 #include "third_party/WebKit/Source/wtf/RefPtr.h"
 #include "third_party/WebKit/Source/wtf/Noncopyable.h"
-//#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
 #include "third_party/WebKit/Source/wtf/Vector.h"
 #include "third_party/WebKit/Source/wtf/text/CString.h"
 #include "third_party/WebKit/Source/wtf/HashFunctions.h"
-#include "third_party/WebKit/Source/wtf/HashSet.h"
 #include "third_party/npapi/bindings/npruntime.h"
-#include "third_party/skia/include/core/SkImageInfo.h"
 #include <v8.h>
 #include <windows.h>
 
@@ -78,10 +76,9 @@ enum PluginStatus {
 };
 
 class PluginMessageThrottlerWin;
-class WebPluginIMEWin;
 
 class PluginRequest {
-    WTF_MAKE_NONCOPYABLE(PluginRequest); //WTF_MAKE_FAST_ALLOCATED(PluginRequest);
+    WTF_MAKE_NONCOPYABLE(PluginRequest); WTF_MAKE_FAST_ALLOCATED(PluginRequest);
 public:
     PluginRequest(const blink::FrameLoadRequest& frameLoadRequest, bool sendNotification, void* notifyData, bool shouldAllowPopups)
         : m_frameLoadRequest(frameLoadRequest)
@@ -105,18 +102,16 @@ public:
     WebPluginImpl(blink::WebLocalFrame* parentFrame, const blink::WebPluginParams&);
     virtual ~WebPluginImpl();
 
-    bool getImeStatus(int* inputType, blink::IntRect* caretRect);
-
     virtual bool initialize(blink::WebPluginContainer*);
     virtual void destroy() override;
 
     static void shutdown();
 
     virtual blink::WebPluginContainer* container() const override;
-    /*virtual*/ void containerDidDetachFromParent() /*override*/;
+    virtual void containerDidDetachFromParent() override;
 
     virtual NPObject* scriptableObject() override;
-    virtual _NPP* pluginNPP() override;
+    virtual struct _NPP* pluginNPP() override;
 
     // The same as scriptableObject() but allows to expose scriptable interface
     // through plain v8 object instead of NPObject.
@@ -126,17 +121,17 @@ public:
     // Returns true if the form submission value is successfully obtained
     // from the plugin. The value would be associated with the name attribute
     // of the corresponding object element.
-    /*virtual*/ bool getFormValue(blink::WebString&) /*override*/;
+    virtual bool getFormValue(blink::WebString&) override;
     virtual bool supportsKeyboardFocus() const override;
     virtual bool supportsEditCommands() const override;
     // Returns true if this plugin supports input method, which implements
     // setComposition() and confirmComposition() below.
-    virtual bool supportsInputMethod() const override { return true; }
+    virtual bool supportsInputMethod() const override { return false; }
 
     virtual bool canProcessDrag() const override { return false; }
 
     // TODO(schenney): Make these pure virtual when chromium changes land
-    /*virtual*/ void layoutIfNeeded() /*override*/ { }
+    virtual void layoutIfNeeded() override { }
     virtual void paint(blink::WebCanvas*, const blink::WebRect&) override;
 
     // Coordinates are relative to the containing window.
@@ -149,10 +144,8 @@ public:
 
     virtual void updateVisibility(bool) override;
 
-    virtual void updateAllLifecyclePhases(void) override;
-
-    /*virtual*/ bool acceptsInputEvents() /*override*/;
-    virtual blink::WebInputEventResult handleInputEvent(const blink::WebInputEvent&, blink::WebCursorInfo&) override;
+    virtual bool acceptsInputEvents() override;
+    virtual bool handleInputEvent(const blink::WebInputEvent&, blink::WebCursorInfo&) override;
 
     virtual bool handleDragStatusUpdate(blink::WebDragStatus, const blink::WebDragData&, blink::WebDragOperationsMask,
         const blink::WebPoint& position, const blink::WebPoint& screenPosition) { return false; }
@@ -162,8 +155,8 @@ public:
     virtual void didFinishLoading() override;
     virtual void didFailLoading(const blink::WebURLError&) override;
 
-    /*virtual*/ void didFinishLoadingFrameRequest(const blink::WebURL&, void* notifyData) /*override*/;
-    /*virtual*/ void didFailLoadingFrameRequest(const blink::WebURL&, void* notifyData, const blink::WebURLError&) /*override*/;
+    virtual void didFinishLoadingFrameRequest(const blink::WebURL&, void* notifyData) override;
+    virtual void didFailLoadingFrameRequest(const blink::WebURL&, void* notifyData, const blink::WebURLError&) override;
 
     virtual bool supportsPaginatedPrint() { return false; }
     virtual bool isPrintScalingDisabled() { return false; }
@@ -180,8 +173,8 @@ public:
     virtual bool executeEditCommand(const blink::WebString& name) { return false; }
     virtual bool executeEditCommand(const blink::WebString& name, const blink::WebString& value) { return false; }
 
-    virtual bool setComposition(const blink::WebString& text, const blink::WebVector<blink::WebCompositionUnderline>& underlines, int selectionStart, int selectionEnd) override;
-    //virtual bool confirmComposition(const blink::WebString& text, blink::WebWidget::ConfirmCompositionBehavior selectionBehavior) override;
+    virtual bool setComposition(const blink::WebString& text, const blink::WebVector<blink::WebCompositionUnderline>& underlines, int selectionStart, int selectionEnd) { return false; }
+    virtual bool confirmComposition(const blink::WebString& text, blink::WebWidget::ConfirmCompositionBehavior selectionBehavior) { return false; }
     virtual void extendSelectionAndDelete(int before, int after) { }
     virtual blink::WebURL linkAtPosition(const blink::WebPoint& position) const { return blink::WebURL(); }
 
@@ -238,7 +231,6 @@ public:
 
     bool handleMouseEvent(const blink::WebMouseEvent& evt);
     bool handleKeyboardEvent(const blink::WebKeyboardEvent& evt);
-    bool handleKeyboardCharEventForEmulateIme(int windowsKeyCode);
 
     void invalidateRect(const blink::IntRect&);
 
@@ -343,8 +335,8 @@ private:
 
     void performRequest(PluginRequest*);
     void scheduleRequest(PassOwnPtr<PluginRequest>);
-    void requestTimerFired(blink::TimerBase*);
-    void invalidateTimerFired(blink::TimerBase*);
+    void requestTimerFired(blink::Timer<WebPluginImpl>*);
+    void invalidateTimerFired(blink::Timer<WebPluginImpl>*);
     void platformStartImpl(bool isSync);
     blink::Timer<WebPluginImpl> m_requestTimer;
     blink::Timer<WebPluginImpl> m_invalidateTimer;
@@ -367,20 +359,19 @@ private:
 
     friend class PlatformStartAsynTask;
 
-    void asynSetPlatformPluginWidgetVisibilityTimerFired(blink::TimerBase*);
+    void asynSetPlatformPluginWidgetVisibilityTimerFired(blink::Timer<WebPluginImpl>*);
     blink::Timer<WebPluginImpl> m_setPlatformPluginWidgetVisibilityTimer;
     
-    void popPopupsStateTimerFired(blink::TimerBase*);
+    void popPopupsStateTimerFired(blink::Timer<WebPluginImpl>*);
     blink::Timer<WebPluginImpl> m_popPopupsStateTimer;
 
-    void lifeSupportTimerFired(blink::TimerBase*);
+    void lifeSupportTimerFired(blink::Timer<WebPluginImpl>*);
     blink::Timer<WebPluginImpl> m_lifeSupportTimer;
 
     bool dispatchNPEvent(NPEvent&);
 
-    void updatePluginWidget(const blink::IntRect& windowRect, const blink::IntRect& clipRect, bool isVisible);
+    void updatePluginWidget(const blink::IntRect& windowRect, const blink::IntRect& clipRect);
     void paintMissingPluginIcon(blink::WebCanvas*, const blink::IntRect&);
-    void setRgnIfNeeded(const blink::IntRect& windowRect, const blink::IntRect& oldWindowRect, const blink::IntRect& oldClipRect);
 
     void paintIntoTransformedContext(HDC);
     PassRefPtr<blink::Image> snapshot();
@@ -400,7 +391,7 @@ private:
 
     Vector<bool, 4> m_popupStateStack;
 
-    typedef std::set<PluginStream*> HashSetStreams;
+    typedef WTF::HashSet<PluginStream*> HashSetStreams;
     HashSetStreams m_streams;
     Vector<OwnPtr<PluginRequest>> m_requests;
 
@@ -434,15 +425,7 @@ private:
     static WebPluginImpl* s_currentPluginView;
 
     SkCanvas* m_memoryCanvas;
-    void* m_memoryPixels;
-    SIZE m_memoryCanvasSize;
-
     wke::CWebView* m_wkeWebview;
-
-    Vector<blink::IntRect> m_cutOutsRects;
-    bool m_cutOutsRectsDirty;
-
-    WebPluginIMEWin* m_pluginIme;
 };
 
 } // namespace content

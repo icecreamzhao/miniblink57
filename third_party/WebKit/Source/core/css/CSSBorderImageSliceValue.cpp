@@ -23,19 +23,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/css/CSSBorderImageSliceValue.h"
 
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-CSSBorderImageSliceValue::CSSBorderImageSliceValue(CSSQuadValue* slices,
-    bool fill)
+CSSBorderImageSliceValue::CSSBorderImageSliceValue(PassRefPtrWillBeRawPtr<CSSPrimitiveValue> slices, bool fill)
     : CSSValue(BorderImageSliceClass)
     , m_slices(slices)
     , m_fill(fill)
 {
-    ASSERT(m_slices);
 }
 
 String CSSBorderImageSliceValue::customCSSText() const
@@ -49,8 +48,7 @@ String CSSBorderImageSliceValue::customCSSText() const
     return text;
 }
 
-bool CSSBorderImageSliceValue::equals(
-    const CSSBorderImageSliceValue& other) const
+bool CSSBorderImageSliceValue::equals(const CSSBorderImageSliceValue& other) const
 {
     return m_fill == other.m_fill && compareCSSValuePtr(m_slices, other.m_slices);
 }

@@ -23,28 +23,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/text/TextCodecUserDefined.h"
 
 #include "wtf/PtrUtil.h"
+=======
+#include "config.h"
+#include "wtf/text/TextCodecUserDefined.h"
+
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuffer.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
 
 namespace WTF {
 
 void TextCodecUserDefined::registerEncodingNames(
     EncodingNameRegistrar registrar)
+=======
+
+namespace WTF {
+
+void TextCodecUserDefined::registerEncodingNames(EncodingNameRegistrar registrar)
+>>>>>>> miniblink49
 {
     registrar("x-user-defined", "x-user-defined");
 }
 
+<<<<<<< HEAD
 static std::unique_ptr<TextCodec> newStreamingTextDecoderUserDefined(
     const TextEncoding&,
     const void*)
 {
     return WTF::wrapUnique(new TextCodecUserDefined);
+=======
+static PassOwnPtr<TextCodec> newStreamingTextDecoderUserDefined(const TextEncoding&, const void*)
+{
+    return adoptPtr(new TextCodecUserDefined);
+>>>>>>> miniblink49
 }
 
 void TextCodecUserDefined::registerCodecs(TextCodecRegistrar registrar)
@@ -52,11 +72,15 @@ void TextCodecUserDefined::registerCodecs(TextCodecRegistrar registrar)
     registrar("x-user-defined", newStreamingTextDecoderUserDefined, 0);
 }
 
+<<<<<<< HEAD
 String TextCodecUserDefined::decode(const char* bytes,
     size_t length,
     FlushBehavior,
     bool,
     bool&)
+=======
+String TextCodecUserDefined::decode(const char* bytes, size_t length, FlushBehavior, bool, bool&)
+>>>>>>> miniblink49
 {
     StringBuilder result;
     result.reserveCapacity(length);
@@ -69,6 +93,7 @@ String TextCodecUserDefined::decode(const char* bytes,
     return result.toString();
 }
 
+<<<<<<< HEAD
 template <typename CharType>
 static CString encodeComplexUserDefined(const CharType* characters,
     size_t length,
@@ -104,6 +129,27 @@ static CString encodeComplexUserDefined(const CharType* characters,
                 result.grow(targetLength);
                 bytes = result.data();
             }
+=======
+template<typename CharType>
+static CString encodeComplexUserDefined(const CharType* characters, size_t length, UnencodableHandling handling)
+{
+    Vector<char> result(length);
+    char* bytes = result.data();
+
+    size_t resultLength = 0;
+    for (size_t i = 0; i < length; ) {
+        UChar32 c;
+        U16_NEXT(characters, i, length, c);
+        signed char signedByte = static_cast<signed char>(c);
+        if ((signedByte & 0xF7FF) == c)
+            bytes[resultLength++] = signedByte;
+        else {
+            // No way to encode this character with x-user-defined.
+            UnencodableReplacementArray replacement;
+            int replacementLength = TextCodec::getUnencodableReplacement(c, handling, replacement);
+            result.grow(resultLength + replacementLength + length - i);
+            bytes = result.data();
+>>>>>>> miniblink49
             memcpy(bytes + resultLength, replacement, replacementLength);
             resultLength += replacementLength;
         }
@@ -112,6 +158,7 @@ static CString encodeComplexUserDefined(const CharType* characters,
     return CString(bytes, resultLength);
 }
 
+<<<<<<< HEAD
 template <typename CharType>
 CString TextCodecUserDefined::encodeCommon(const CharType* characters,
     size_t length,
@@ -122,6 +169,15 @@ CString TextCodecUserDefined::encodeCommon(const CharType* characters,
 
     // Convert the string a fast way and simultaneously do an efficient check to
     // see if it's all ASCII.
+=======
+template<typename CharType>
+CString TextCodecUserDefined::encodeCommon(const CharType* characters, size_t length, UnencodableHandling handling)
+{
+    char* bytes;
+    CString result = CString::newUninitialized(length, bytes);
+
+    // Convert the string a fast way and simultaneously do an efficient check to see if it's all ASCII.
+>>>>>>> miniblink49
     UChar ored = 0;
     for (size_t i = 0; i < length; ++i) {
         UChar c = characters[i];
@@ -136,16 +192,24 @@ CString TextCodecUserDefined::encodeCommon(const CharType* characters,
     return encodeComplexUserDefined(characters, length, handling);
 }
 
+<<<<<<< HEAD
 CString TextCodecUserDefined::encode(const UChar* characters,
     size_t length,
     UnencodableHandling handling)
+=======
+CString TextCodecUserDefined::encode(const UChar* characters, size_t length, UnencodableHandling handling)
+>>>>>>> miniblink49
 {
     return encodeCommon(characters, length, handling);
 }
 
+<<<<<<< HEAD
 CString TextCodecUserDefined::encode(const LChar* characters,
     size_t length,
     UnencodableHandling handling)
+=======
+CString TextCodecUserDefined::encode(const LChar* characters, size_t length, UnencodableHandling handling)
+>>>>>>> miniblink49
 {
     return encodeCommon(characters, length, handling);
 }

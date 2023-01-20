@@ -37,6 +37,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PlatformSpeechSynthesizerClient;
 
 class MODULES_EXPORT SpeechSynthesis final
@@ -46,6 +47,15 @@ class MODULES_EXPORT SpeechSynthesis final
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(SpeechSynthesis);
 
+=======
+class ExceptionState;
+class PlatformSpeechSynthesizerClient;
+
+class MODULES_EXPORT SpeechSynthesis final : public RefCountedGarbageCollectedEventTargetWithInlineData<SpeechSynthesis>, public PlatformSpeechSynthesizerClient, public ContextLifecycleObserver {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(SpeechSynthesis);
+    DEFINE_WRAPPERTYPEINFO();
+    USING_GARBAGE_COLLECTED_MIXIN(SpeechSynthesis);
+>>>>>>> miniblink49
 public:
     static SpeechSynthesis* create(ExecutionContext*);
 
@@ -53,7 +63,11 @@ public:
     bool speaking() const;
     bool paused() const;
 
+<<<<<<< HEAD
     void speak(SpeechSynthesisUtterance*);
+=======
+    void speak(SpeechSynthesisUtterance*, ExceptionState&);
+>>>>>>> miniblink49
     void cancel();
     void pause();
     void resume();
@@ -65,10 +79,14 @@ public:
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(voiceschanged);
 
+<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const override
     {
         return ContextClient::getExecutionContext();
     }
+=======
+    ExecutionContext* executionContext() const override;
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -82,6 +100,7 @@ private:
     void didResumeSpeaking(PlatformSpeechSynthesisUtterance*) override;
     void didFinishSpeaking(PlatformSpeechSynthesisUtterance*) override;
     void speakingErrorOccurred(PlatformSpeechSynthesisUtterance*) override;
+<<<<<<< HEAD
     void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*,
         SpeechBoundary,
         unsigned charIndex) override;
@@ -92,6 +111,13 @@ private:
         SpeechSynthesisUtterance*,
         unsigned long charIndex,
         const String& name);
+=======
+    void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*, SpeechBoundary, unsigned charIndex) override;
+
+    void startSpeakingImmediately();
+    void handleSpeakingCompleted(SpeechSynthesisUtterance*, bool errorOccurred);
+    void fireEvent(const AtomicString& type, SpeechSynthesisUtterance*, unsigned long charIndex, const String& name);
+>>>>>>> miniblink49
 
     // Returns the utterance at the front of the queue.
     SpeechSynthesisUtterance* currentSpeechUtterance() const;
@@ -107,4 +133,8 @@ private:
 
 } // namespace blink
 
+<<<<<<< HEAD
 #endif // SpeechSynthesis_h
+=======
+#endif // SpeechSynthesisEvent_h
+>>>>>>> miniblink49

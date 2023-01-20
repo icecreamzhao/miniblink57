@@ -8,8 +8,8 @@
 
 namespace atom {
 
-extern "C" NPError __stdcall Webview_NP_Initialize(NPNetscapeFuncs* browserFuncs);
-extern "C" NPError __stdcall Webview_NP_GetEntryPoints(NPPluginFuncs* pluginFuncs);
+extern "C" NPError __stdcall Webview_NP_Initialize(NPNetscapeFuncs *browserFuncs);
+extern "C" NPError __stdcall Webview_NP_GetEntryPoints(NPPluginFuncs *pluginFuncs);
 extern "C" void __stdcall Webview_NP_Shutdown(void);
 
 }

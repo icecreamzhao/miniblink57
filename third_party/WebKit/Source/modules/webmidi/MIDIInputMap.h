@@ -11,9 +11,16 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class MIDIInputMap : public MIDIPortMap<MIDIInput>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class ScriptState;
+
+class MIDIInputMap : public MIDIPortMap<MIDIInput>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     explicit MIDIInputMap(const HeapVector<Member<MIDIInput>>&);
 };

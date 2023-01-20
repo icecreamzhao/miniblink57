@@ -31,20 +31,34 @@
 #ifndef NormalizeAlgorithm_h
 #define NormalizeAlgorithm_h
 
+<<<<<<< HEAD
 #include "bindings/modules/v8/DictionaryOrString.h"
+=======
+#include "bindings/modules/v8/UnionTypesModules.h"
+>>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "public/platform/WebCrypto.h"
 #include "public/platform/WebCryptoAlgorithm.h"
 #include "public/platform/WebString.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Compiler.h"
+=======
+#include "wtf/Assertions.h"
+>>>>>>> miniblink49
 #include "wtf/Forward.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 struct AlgorithmError {
     STACK_ALLOCATED();
+=======
+class Dictionary;
+
+struct AlgorithmError {
+>>>>>>> miniblink49
     WebCryptoErrorType errorType;
     WebString errorDetails;
 };
@@ -62,11 +76,15 @@ typedef DictionaryOrString AlgorithmIdentifier;
 // a error type and a (non-localized) debug string.
 //
 // [1] http://www.w3.org/TR/WebCryptoAPI/#algorithm-normalizing-rules
+<<<<<<< HEAD
 MODULES_EXPORT WARN_UNUSED_RESULT bool normalizeAlgorithm(
     const AlgorithmIdentifier&,
     WebCryptoOperation,
     WebCryptoAlgorithm&,
     AlgorithmError*);
+=======
+MODULES_EXPORT bool normalizeAlgorithm(const AlgorithmIdentifier&, WebCryptoOperation, WebCryptoAlgorithm&, AlgorithmError*) WARN_UNUSED_RETURN;
+>>>>>>> miniblink49
 
 } // namespace blink
 

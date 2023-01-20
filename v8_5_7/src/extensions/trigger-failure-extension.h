@@ -15,11 +15,19 @@ class TriggerFailureExtension : public v8::Extension {
   TriggerFailureExtension() : v8::Extension("v8/trigger-failure", kSource) {}
   virtual v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
       v8::Isolate* isolate, v8::Local<v8::String> name);
+<<<<<<< HEAD
   static void V8CALL TriggerCheckFalse(
       const v8::FunctionCallbackInfo<v8::Value>& args);
   static void V8CALL TriggerAssertFalse(
       const v8::FunctionCallbackInfo<v8::Value>& args);
   static void V8CALL TriggerSlowAssertFalse(
+=======
+  static void TriggerCheckFalse(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void TriggerAssertFalse(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void TriggerSlowAssertFalse(
+>>>>>>> miniblink49
       const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:

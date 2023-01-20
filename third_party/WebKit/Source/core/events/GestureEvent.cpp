@@ -23,78 +23,56 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "core/events/GestureEvent.h"
-
+#include "config.h"
 #include "core/dom/Element.h"
+#include "core/events/GestureEvent.h"
 #include "wtf/text/AtomicString.h"
 
 namespace blink {
 
-GestureEvent* GestureEvent::create(AbstractView* view,
-    const WebGestureEvent& event)
+PassRefPtrWillBeRawPtr<GestureEvent> GestureEvent::create(PassRefPtrWillBeRawPtr<AbstractView> view, const PlatformGestureEvent& event)
 {
     AtomicString eventType;
-
+    float deltaX = 0;
+    float deltaY = 0;
     switch (event.type()) {
-    case WebInputEvent::GestureScrollBegin:
-        eventType = EventTypeNames::gesturescrollstart;
-        break;
-    case WebInputEvent::GestureScrollEnd:
-        eventType = EventTypeNames::gesturescrollend;
-        break;
-    case WebInputEvent::GestureScrollUpdate:
+    case PlatformEvent::GestureScrollBegin:
+        eventType = EventTypeNames::gesturescrollstart; break;
+    case PlatformEvent::GestureScrollEnd:
+        eventType = EventTypeNames::gesturescrollend; break;
+    case PlatformEvent::GestureScrollUpdate:
+        // Only deltaX/Y are used when converting this
+        // back to a PlatformGestureEvent.
         eventType = EventTypeNames::gesturescrollupdate;
+        deltaX = event.deltaX();
+        deltaY = event.deltaY();
         break;
-    case WebInputEvent::GestureTap:
-        eventType = EventTypeNames::gesturetap;
-        break;
-    case WebInputEvent::GestureTapUnconfirmed:
-        eventType = EventTypeNames::gesturetapunconfirmed;
-        break;
-    case WebInputEvent::GestureTapDown:
-        eventType = EventTypeNames::gesturetapdown;
-        break;
-    case WebInputEvent::GestureShowPress:
-        eventType = EventTypeNames::gestureshowpress;
-        break;
-    case WebInputEvent::GestureLongPress:
-        eventType = EventTypeNames::gesturelongpress;
-        break;
-    case WebInputEvent::GestureFlingStart:
-        eventType = EventTypeNames::gestureflingstart;
-        break;
-    case WebInputEvent::GestureTwoFingerTap:
-    case WebInputEvent::GesturePinchBegin:
-    case WebInputEvent::GesturePinchEnd:
-    case WebInputEvent::GesturePinchUpdate:
-    case WebInputEvent::GestureTapCancel:
+    case PlatformEvent::GestureTap:
+        eventType = EventTypeNames::gesturetap; break;
+    case PlatformEvent::GestureTapUnconfirmed:
+        eventType = EventTypeNames::gesturetapunconfirmed; break;
+    case PlatformEvent::GestureTapDown:
+        eventType = EventTypeNames::gesturetapdown; break;
+    case PlatformEvent::GestureShowPress:
+        eventType = EventTypeNames::gestureshowpress; break;
+    case PlatformEvent::GestureLongPress:
+        eventType = EventTypeNames::gesturelongpress; break;
+    case PlatformEvent::GestureTwoFingerTap:
+    case PlatformEvent::GesturePinchBegin:
+    case PlatformEvent::GesturePinchEnd:
+    case PlatformEvent::GesturePinchUpdate:
+    case PlatformEvent::GestureTapDownCancel:
     default:
         return nullptr;
     }
-    return new GestureEvent(eventType, view, event);
-}
-
-GestureEvent::GestureEvent(const AtomicString& eventType,
-    AbstractView* view,
-    const WebGestureEvent& event)
-    : UIEventWithKeyState(
-        eventType,
-        true,
-        true,
-        view,
-        0,
-        static_cast<PlatformEvent::Modifiers>(event.modifiers()),
-        TimeTicks::FromSeconds(event.timeStampSeconds()),
-        nullptr)
-    , m_nativeEvent(event)
-{
+    return adoptRefWillBeNoop(new GestureEvent(eventType, view, event.globalPosition().x(), event.globalPosition().y(), event.position().x(), event.position().y(), event.ctrlKey(), event.altKey(), event.shiftKey(), event.metaKey(), deltaX, deltaY, event.timestamp()));
 }
 
 const AtomicString& GestureEvent::interfaceName() const
 {
-    // FIXME: when a GestureEvent.idl interface is defined, return the string
-    // "GestureEvent".  Until that happens, do not advertise an interface that
-    // does not exist, since it will trip up the bindings integrity checks.
+    // FIXME: when a GestureEvent.idl interface is defined, return the string "GestureEvent".
+    // Until that happens, do not advertise an interface that does not exist, since it will
+    // trip up the bindings integrity checks.
     return UIEvent::interfaceName();
 }
 
@@ -103,9 +81,40 @@ bool GestureEvent::isGestureEvent() const
     return true;
 }
 
+GestureEvent::GestureEvent()
+    : m_deltaX(0)
+    , m_deltaY(0)
+{
+}
+
+GestureEvent::GestureEvent(const AtomicString& type, PassRefPtrWillBeRawPtr<AbstractView> view, int screenX, int screenY, int clientX, int clientY, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, float deltaX, float deltaY, double uiTimestamp)
+    : MouseRelatedEvent(type, true, true, view, 0, IntPoint(screenX, screenY), IntPoint(clientX, clientY), IntPoint(0, 0), ctrlKey, altKey, shiftKey, metaKey)
+    , m_deltaX(deltaX)
+    , m_deltaY(deltaY)
+{
+    setUICreateTime(uiTimestamp);
+}
+
 DEFINE_TRACE(GestureEvent)
 {
-    UIEvent::trace(visitor);
+    MouseRelatedEvent::trace(visitor);
+}
+
+GestureEventDispatchMediator::GestureEventDispatchMediator(PassRefPtrWillBeRawPtr<GestureEvent> gestureEvent)
+    : EventDispatchMediator(gestureEvent)
+{
+}
+
+GestureEvent& GestureEventDispatchMediator::event() const
+{
+    return toGestureEvent(EventDispatchMediator::event());
+}
+
+bool GestureEventDispatchMediator::dispatchEvent(EventDispatcher& dispatcher) const
+{
+    dispatcher.dispatch();
+    ASSERT(!event().defaultPrevented());
+    return event().defaultHandled() || event().defaultPrevented();
 }
 
 } // namespace blink

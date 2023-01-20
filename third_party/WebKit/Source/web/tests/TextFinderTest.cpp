@@ -2,13 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "web/TextFinder.h"
 
 #include "bindings/core/v8/ExceptionState.h"
+=======
+#include "config.h"
+#include "web/TextFinder.h"
+
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+>>>>>>> miniblink49
 #include "core/dom/Document.h"
 #include "core/dom/NodeList.h"
 #include "core/dom/Range.h"
 #include "core/dom/shadow/ShadowRoot.h"
+<<<<<<< HEAD
 #include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/VisualViewport.h"
@@ -23,6 +31,17 @@
 #include "web/FindInPageCoordinates.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/tests/FrameTestHelpers.h"
+=======
+#include "core/html/HTMLElement.h"
+#include "platform/testing/UnitTestHelpers.h"
+#include "public/platform/Platform.h"
+#include "public/web/WebDocument.h"
+#include "web/FindInPageCoordinates.h"
+#include "web/WebLocalFrameImpl.h"
+#include "web/tests/FrameTestHelpers.h"
+#include "wtf/OwnPtr.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 using blink::testing::runPendingTasks;
 
@@ -30,6 +49,7 @@ namespace blink {
 
 class TextFinderTest : public ::testing::Test {
 protected:
+<<<<<<< HEAD
     TextFinderTest()
     {
         m_webViewHelper.initialize();
@@ -39,10 +59,14 @@ protected:
         m_document = static_cast<Document*>(frameImpl.document());
         m_textFinder = &frameImpl.ensureTextFinder();
     }
+=======
+    void SetUp() override;
+>>>>>>> miniblink49
 
     Document& document() const;
     TextFinder& textFinder() const;
 
+<<<<<<< HEAD
     static WebFloatRect findInPageRect(Node* startContainer,
         int startOffset,
         Node* endContainer,
@@ -54,6 +78,26 @@ private:
     Persistent<TextFinder> m_textFinder;
 };
 
+=======
+    static WebFloatRect findInPageRect(Node* startContainer, int startOffset, Node* endContainer, int endOffset);
+
+private:
+    FrameTestHelpers::WebViewHelper m_webViewHelper;
+    RefPtrWillBePersistent<Document> m_document;
+    TextFinder* m_textFinder;
+};
+
+void TextFinderTest::SetUp()
+{
+    m_webViewHelper.initialize();
+    WebLocalFrameImpl& frameImpl = *m_webViewHelper.webViewImpl()->mainFrameImpl();
+    frameImpl.viewImpl()->resize(WebSize(640, 480));
+    frameImpl.viewImpl()->layout();
+    m_document = PassRefPtrWillBeRawPtr<Document>(frameImpl.document());
+    m_textFinder = &frameImpl.ensureTextFinder();
+}
+
+>>>>>>> miniblink49
 Document& TextFinderTest::document() const
 {
     return *m_document;
@@ -64,6 +108,7 @@ TextFinder& TextFinderTest::textFinder() const
     return *m_textFinder;
 }
 
+<<<<<<< HEAD
 WebFloatRect TextFinderTest::findInPageRect(Node* startContainer,
     int startOffset,
     Node* endContainer,
@@ -72,21 +117,37 @@ WebFloatRect TextFinderTest::findInPageRect(Node* startContainer,
     Range* range = Range::create(startContainer->document(), startContainer,
         startOffset, endContainer, endOffset);
     return WebFloatRect(findInPageRectFromRange(range));
+=======
+WebFloatRect TextFinderTest::findInPageRect(Node* startContainer, int startOffset, Node* endContainer, int endOffset)
+{
+    RefPtrWillBeRawPtr<Range> range = Range::create(startContainer->document(), startContainer, startOffset, endContainer, endOffset);
+    return WebFloatRect(findInPageRectFromRange(range.get()));
+>>>>>>> miniblink49
 }
 
 TEST_F(TextFinderTest, FindTextSimple)
 {
+<<<<<<< HEAD
     document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ");
     document().updateStyleAndLayout();
+=======
+    document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
     Node* textNode = document().body()->firstChild();
 
     int identifier = 0;
     WebString searchText(String("FindMe"));
     WebFindOptions findOptions; // Default.
     bool wrapWithinFrame = true;
+<<<<<<< HEAD
 
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    WebRect* selectionRect = nullptr;
+
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     Range* activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textNode, activeMatch->startContainer());
@@ -95,8 +156,12 @@ TEST_F(TextFinderTest, FindTextSimple)
     EXPECT_EQ(10, activeMatch->endOffset());
 
     findOptions.findNext = true;
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textNode, activeMatch->startContainer());
@@ -105,8 +170,12 @@ TEST_F(TextFinderTest, FindTextSimple)
     EXPECT_EQ(20, activeMatch->endOffset());
 
     // Should wrap to the first match.
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textNode, activeMatch->startContainer());
@@ -119,8 +188,12 @@ TEST_F(TextFinderTest, FindTextSimple)
     findOptions = WebFindOptions();
     findOptions.forward = false;
 
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textNode, activeMatch->startContainer());
@@ -129,8 +202,12 @@ TEST_F(TextFinderTest, FindTextSimple)
     EXPECT_EQ(20, activeMatch->endOffset());
 
     findOptions.findNext = true;
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textNode, activeMatch->startContainer());
@@ -139,8 +216,12 @@ TEST_F(TextFinderTest, FindTextSimple)
     EXPECT_EQ(10, activeMatch->endOffset());
 
     // Wrap to the first match (last occurence in the document).
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textNode, activeMatch->startContainer());
@@ -149,6 +230,7 @@ TEST_F(TextFinderTest, FindTextSimple)
     EXPECT_EQ(20, activeMatch->endOffset());
 }
 
+<<<<<<< HEAD
 TEST_F(TextFinderTest, FindTextAutosizing)
 {
     document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ");
@@ -191,19 +273,31 @@ TEST_F(TextFinderTest, FindTextNotFound)
 {
     document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ");
     document().updateStyleAndLayout();
+=======
+TEST_F(TextFinderTest, FindTextNotFound)
+{
+    document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
 
     int identifier = 0;
     WebString searchText(String("Boo"));
     WebFindOptions findOptions; // Default.
     bool wrapWithinFrame = true;
+<<<<<<< HEAD
 
     EXPECT_FALSE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    WebRect* selectionRect = nullptr;
+
+    EXPECT_FALSE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     EXPECT_FALSE(textFinder().activeMatch());
 }
 
 TEST_F(TextFinderTest, FindTextInShadowDOM)
 {
+<<<<<<< HEAD
     document().body()->setInnerHTML("<b>FOO</b><i>foo</i>");
     ShadowRoot* shadowRoot = document().body()->createShadowRootInternal(
         ShadowRootType::V0, ASSERT_NO_EXCEPTION);
@@ -213,11 +307,20 @@ TEST_F(TextFinderTest, FindTextInShadowDOM)
     Node* textInIElement = document().body()->lastChild()->firstChild();
     Node* textInUElement = shadowRoot->childNodes()->item(1)->firstChild();
     document().updateStyleAndLayout();
+=======
+    document().body()->setInnerHTML("<b>FOO</b><i>foo</i>", ASSERT_NO_EXCEPTION);
+    RefPtrWillBeRawPtr<ShadowRoot> shadowRoot = document().body()->createShadowRoot(ASSERT_NO_EXCEPTION);
+    shadowRoot->setInnerHTML("<content select=\"i\"></content><u>Foo</u><content></content>", ASSERT_NO_EXCEPTION);
+    Node* textInBElement = document().body()->firstChild()->firstChild();
+    Node* textInIElement = document().body()->lastChild()->firstChild();
+    Node* textInUElement = shadowRoot->childNodes()->item(1)->firstChild();
+>>>>>>> miniblink49
 
     int identifier = 0;
     WebString searchText(String("foo"));
     WebFindOptions findOptions; // Default.
     bool wrapWithinFrame = true;
+<<<<<<< HEAD
 
     // TextIterator currently returns the matches in the flat treeorder, so
     // in this case the matches will be returned in the order of
@@ -236,13 +339,27 @@ TEST_F(TextFinderTest, FindTextInShadowDOM)
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
+=======
+    WebRect* selectionRect = nullptr;
+
+    // TextIterator currently returns the matches in the document order, instead of the visual order. It visits
+    // the shadow roots first, so in this case the matches will be returned in the order of <u> -> <b> -> <i>.
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+    Range* activeMatch = textFinder().activeMatch();
+    ASSERT_TRUE(activeMatch);
+>>>>>>> miniblink49
     EXPECT_EQ(textInUElement, activeMatch->startContainer());
     EXPECT_EQ(0, activeMatch->startOffset());
     EXPECT_EQ(textInUElement, activeMatch->endContainer());
     EXPECT_EQ(3, activeMatch->endOffset());
 
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    findOptions.findNext = true;
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textInBElement, activeMatch->startContainer());
@@ -250,9 +367,13 @@ TEST_F(TextFinderTest, FindTextInShadowDOM)
     EXPECT_EQ(textInBElement, activeMatch->endContainer());
     EXPECT_EQ(3, activeMatch->endOffset());
 
+<<<<<<< HEAD
     // Should wrap to the first match.
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textInIElement, activeMatch->startContainer());
@@ -260,11 +381,24 @@ TEST_F(TextFinderTest, FindTextInShadowDOM)
     EXPECT_EQ(textInIElement, activeMatch->endContainer());
     EXPECT_EQ(3, activeMatch->endOffset());
 
+<<<<<<< HEAD
+=======
+    // Should wrap to the first match.
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+    activeMatch = textFinder().activeMatch();
+    ASSERT_TRUE(activeMatch);
+    EXPECT_EQ(textInUElement, activeMatch->startContainer());
+    EXPECT_EQ(0, activeMatch->startOffset());
+    EXPECT_EQ(textInUElement, activeMatch->endContainer());
+    EXPECT_EQ(3, activeMatch->endOffset());
+
+>>>>>>> miniblink49
     // Fresh search in the reverse order.
     identifier = 1;
     findOptions = WebFindOptions();
     findOptions.forward = false;
 
+<<<<<<< HEAD
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
     activeMatch = textFinder().activeMatch();
@@ -286,6 +420,9 @@ TEST_F(TextFinderTest, FindTextInShadowDOM)
 
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textInIElement, activeMatch->startContainer());
@@ -293,22 +430,51 @@ TEST_F(TextFinderTest, FindTextInShadowDOM)
     EXPECT_EQ(textInIElement, activeMatch->endContainer());
     EXPECT_EQ(3, activeMatch->endOffset());
 
+<<<<<<< HEAD
     // And wrap.
     ASSERT_TRUE(
         textFinder().find(identifier, searchText, findOptions, wrapWithinFrame));
+=======
+    findOptions.findNext = true;
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+>>>>>>> miniblink49
     activeMatch = textFinder().activeMatch();
     ASSERT_TRUE(activeMatch);
     EXPECT_EQ(textInBElement, activeMatch->startContainer());
     EXPECT_EQ(0, activeMatch->startOffset());
     EXPECT_EQ(textInBElement, activeMatch->endContainer());
     EXPECT_EQ(3, activeMatch->endOffset());
+<<<<<<< HEAD
+=======
+
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+    activeMatch = textFinder().activeMatch();
+    ASSERT_TRUE(activeMatch);
+    EXPECT_EQ(textInUElement, activeMatch->startContainer());
+    EXPECT_EQ(0, activeMatch->startOffset());
+    EXPECT_EQ(textInUElement, activeMatch->endContainer());
+    EXPECT_EQ(3, activeMatch->endOffset());
+
+    // And wrap.
+    ASSERT_TRUE(textFinder().find(identifier, searchText, findOptions, wrapWithinFrame, selectionRect));
+    activeMatch = textFinder().activeMatch();
+    ASSERT_TRUE(activeMatch);
+    EXPECT_EQ(textInIElement, activeMatch->startContainer());
+    EXPECT_EQ(0, activeMatch->startOffset());
+    EXPECT_EQ(textInIElement, activeMatch->endContainer());
+    EXPECT_EQ(3, activeMatch->endOffset());
+>>>>>>> miniblink49
 }
 
 TEST_F(TextFinderTest, ScopeTextMatchesSimple)
 {
+<<<<<<< HEAD
     document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ");
     document().updateStyleAndLayout();
 
+=======
+    document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
     Node* textNode = document().body()->firstChild();
 
     int identifier = 0;
@@ -316,7 +482,11 @@ TEST_F(TextFinderTest, ScopeTextMatchesSimple)
     WebFindOptions findOptions; // Default.
 
     textFinder().resetMatchCount();
+<<<<<<< HEAD
     textFinder().startScopingStringMatches(identifier, searchText, findOptions);
+=======
+    textFinder().scopeStringMatches(identifier, searchText, findOptions, true);
+>>>>>>> miniblink49
     while (textFinder().scopingInProgress())
         runPendingTasks();
 
@@ -328,6 +498,7 @@ TEST_F(TextFinderTest, ScopeTextMatchesSimple)
     EXPECT_EQ(findInPageRect(textNode, 14, textNode, 20), matchRects[1]);
 }
 
+<<<<<<< HEAD
 TEST_F(TextFinderTest, ScopeTextMatchesRepeated)
 {
     document().body()->setInnerHTML("XXXXFindMeYYYYfindmeZZZZ");
@@ -366,12 +537,23 @@ TEST_F(TextFinderTest, ScopeTextMatchesWithShadowDOM)
     Node* textInIElement = document().body()->lastChild()->firstChild();
     Node* textInUElement = shadowRoot->childNodes()->item(1)->firstChild();
     document().updateStyleAndLayout();
+=======
+TEST_F(TextFinderTest, ScopeTextMatchesWithShadowDOM)
+{
+    document().body()->setInnerHTML("<b>FOO</b><i>foo</i>", ASSERT_NO_EXCEPTION);
+    RefPtrWillBeRawPtr<ShadowRoot> shadowRoot = document().body()->createShadowRoot(ASSERT_NO_EXCEPTION);
+    shadowRoot->setInnerHTML("<content select=\"i\"></content><u>Foo</u><content></content>", ASSERT_NO_EXCEPTION);
+    Node* textInBElement = document().body()->firstChild()->firstChild();
+    Node* textInIElement = document().body()->lastChild()->firstChild();
+    Node* textInUElement = shadowRoot->childNodes()->item(1)->firstChild();
+>>>>>>> miniblink49
 
     int identifier = 0;
     WebString searchText(String("fOO"));
     WebFindOptions findOptions; // Default.
 
     textFinder().resetMatchCount();
+<<<<<<< HEAD
     textFinder().startScopingStringMatches(identifier, searchText, findOptions);
     while (textFinder().scopingInProgress())
         runPendingTasks();
@@ -379,23 +561,41 @@ TEST_F(TextFinderTest, ScopeTextMatchesWithShadowDOM)
     // TextIterator currently returns the matches in the flat tree order,
     // so in this case the matches will be returned in the order of
     // <i> -> <u> -> <b>.
+=======
+    textFinder().scopeStringMatches(identifier, searchText, findOptions, true);
+    while (textFinder().scopingInProgress())
+        runPendingTasks();
+
+    // TextIterator currently returns the matches in the document order, instead of the visual order. It visits
+    // the shadow roots first, so in this case the matches will be returned in the order of <u> -> <b> -> <i>.
+>>>>>>> miniblink49
     EXPECT_EQ(3, textFinder().totalMatchCount());
     WebVector<WebFloatRect> matchRects;
     textFinder().findMatchRects(matchRects);
     ASSERT_EQ(3u, matchRects.size());
+<<<<<<< HEAD
     EXPECT_EQ(findInPageRect(textInIElement, 0, textInIElement, 3),
         matchRects[0]);
     EXPECT_EQ(findInPageRect(textInUElement, 0, textInUElement, 3),
         matchRects[1]);
     EXPECT_EQ(findInPageRect(textInBElement, 0, textInBElement, 3),
         matchRects[2]);
+=======
+    EXPECT_EQ(findInPageRect(textInUElement, 0, textInUElement, 3), matchRects[0]);
+    EXPECT_EQ(findInPageRect(textInBElement, 0, textInBElement, 3), matchRects[1]);
+    EXPECT_EQ(findInPageRect(textInIElement, 0, textInIElement, 3), matchRects[2]);
+>>>>>>> miniblink49
 }
 
 TEST_F(TextFinderTest, ScopeRepeatPatternTextMatches)
 {
+<<<<<<< HEAD
     document().body()->setInnerHTML("ab ab ab ab ab");
     document().updateStyleAndLayout();
 
+=======
+    document().body()->setInnerHTML("ab ab ab ab ab", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
     Node* textNode = document().body()->firstChild();
 
     int identifier = 0;
@@ -403,7 +603,11 @@ TEST_F(TextFinderTest, ScopeRepeatPatternTextMatches)
     WebFindOptions findOptions; // Default.
 
     textFinder().resetMatchCount();
+<<<<<<< HEAD
     textFinder().startScopingStringMatches(identifier, searchText, findOptions);
+=======
+    textFinder().scopeStringMatches(identifier, searchText, findOptions, true);
+>>>>>>> miniblink49
     while (textFinder().scopingInProgress())
         runPendingTasks();
 
@@ -417,9 +621,13 @@ TEST_F(TextFinderTest, ScopeRepeatPatternTextMatches)
 
 TEST_F(TextFinderTest, OverlappingMatches)
 {
+<<<<<<< HEAD
     document().body()->setInnerHTML("aababaa");
     document().updateStyleAndLayout();
 
+=======
+    document().body()->setInnerHTML("aababaa", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
     Node* textNode = document().body()->firstChild();
 
     int identifier = 0;
@@ -427,7 +635,11 @@ TEST_F(TextFinderTest, OverlappingMatches)
     WebFindOptions findOptions; // Default.
 
     textFinder().resetMatchCount();
+<<<<<<< HEAD
     textFinder().startScopingStringMatches(identifier, searchText, findOptions);
+=======
+    textFinder().scopeStringMatches(identifier, searchText, findOptions, true);
+>>>>>>> miniblink49
     while (textFinder().scopingInProgress())
         runPendingTasks();
 
@@ -441,9 +653,13 @@ TEST_F(TextFinderTest, OverlappingMatches)
 
 TEST_F(TextFinderTest, SequentialMatches)
 {
+<<<<<<< HEAD
     document().body()->setInnerHTML("ababab");
     document().updateStyleAndLayout();
 
+=======
+    document().body()->setInnerHTML("ababab", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
     Node* textNode = document().body()->firstChild();
 
     int identifier = 0;
@@ -451,7 +667,11 @@ TEST_F(TextFinderTest, SequentialMatches)
     WebFindOptions findOptions; // Default.
 
     textFinder().resetMatchCount();
+<<<<<<< HEAD
     textFinder().startScopingStringMatches(identifier, searchText, findOptions);
+=======
+    textFinder().scopeStringMatches(identifier, searchText, findOptions, true);
+>>>>>>> miniblink49
     while (textFinder().scopingInProgress())
         runPendingTasks();
 
@@ -464,6 +684,7 @@ TEST_F(TextFinderTest, SequentialMatches)
     EXPECT_EQ(findInPageRect(textNode, 4, textNode, 6), matchRects[2]);
 }
 
+<<<<<<< HEAD
 TEST_F(TextFinderTest, FindTextJavaScriptUpdatesDOM)
 {
     document().body()->setInnerHTML("<b>XXXXFindMeYYYY</b><i></i>");
@@ -599,6 +820,93 @@ private:
 };
 
 double TextFinderFakeTimerTest::s_timeElapsed;
+=======
+class TextFinderFakeTimerTest : public TextFinderTest {
+protected:
+    void SetUp() override;
+    void TearDown() override;
+
+    // A simple platform that mocks out the clock.
+    class TimeProxyPlatform : public Platform {
+    public:
+        TimeProxyPlatform()
+            : m_timeCounter(0.)
+            , m_fallbackPlatform(0)
+        { }
+
+        void install()
+        {
+            // Check that the proxy wasn't installed yet.
+            ASSERT_NE(Platform::current(), this);
+            m_fallbackPlatform = Platform::current();
+            m_timeCounter = m_fallbackPlatform->currentTime();
+            Platform::initialize(this);
+            ASSERT_EQ(Platform::current(), this);
+        }
+
+        void remove()
+        {
+            // Check that the proxy was installed.
+            ASSERT_EQ(Platform::current(), this);
+            Platform::initialize(m_fallbackPlatform);
+            ASSERT_EQ(Platform::current(), m_fallbackPlatform);
+            m_fallbackPlatform = 0;
+        }
+
+    private:
+        Platform& ensureFallback()
+        {
+            ASSERT(m_fallbackPlatform);
+            return *m_fallbackPlatform;
+        }
+
+        // From blink::Platform:
+        double currentTime() override
+        {
+            return ++m_timeCounter;
+        }
+
+        // These blink::Platform methods must be overriden to make a usable object.
+        void cryptographicallyRandomValues(unsigned char* buffer, size_t length) override
+        {
+            ensureFallback().cryptographicallyRandomValues(buffer, length);
+        }
+
+        const unsigned char* getTraceCategoryEnabledFlag(const char* categoryName) override
+        {
+            return ensureFallback().getTraceCategoryEnabledFlag(categoryName);
+        }
+
+        // These two methods allow timers to work correctly.
+        double monotonicallyIncreasingTime() override
+        {
+            return ensureFallback().monotonicallyIncreasingTime();
+        }
+
+        WebThread* currentThread() override { return ensureFallback().currentThread(); }
+        WebUnitTestSupport* unitTestSupport() override { return ensureFallback().unitTestSupport(); }
+        WebString defaultLocale() override { return ensureFallback().defaultLocale(); }
+        WebCompositorSupport* compositorSupport() override { return ensureFallback().compositorSupport(); }
+
+        double m_timeCounter;
+        Platform* m_fallbackPlatform;
+    };
+
+    TimeProxyPlatform m_proxyTimePlatform;
+};
+
+void TextFinderFakeTimerTest::SetUp()
+{
+    TextFinderTest::SetUp();
+    m_proxyTimePlatform.install();
+}
+
+void TextFinderFakeTimerTest::TearDown()
+{
+    m_proxyTimePlatform.remove();
+    TextFinderTest::TearDown();
+}
+>>>>>>> miniblink49
 
 TEST_F(TextFinderFakeTimerTest, ScopeWithTimeouts)
 {
@@ -612,8 +920,12 @@ TEST_F(TextFinderFakeTimerTest, ScopeWithTimeouts)
     text.insert(searchPattern, 50);
     text.insert(searchPattern, 90);
 
+<<<<<<< HEAD
     document().body()->setInnerHTML(text);
     document().updateStyleAndLayout();
+=======
+    document().body()->setInnerHTML(text, ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
 
     int identifier = 0;
     WebFindOptions findOptions; // Default.
@@ -622,8 +934,12 @@ TEST_F(TextFinderFakeTimerTest, ScopeWithTimeouts)
 
     // There will be only one iteration before timeout, because increment
     // of the TimeProxyPlatform timer is greater than timeout threshold.
+<<<<<<< HEAD
     textFinder().startScopingStringMatches(identifier, searchPattern,
         findOptions);
+=======
+    textFinder().scopeStringMatches(identifier, searchPattern, findOptions, true);
+>>>>>>> miniblink49
     while (textFinder().scopingInProgress())
         runPendingTasks();
 

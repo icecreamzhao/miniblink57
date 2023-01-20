@@ -5,6 +5,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkBorder_DEFINED
 #define SkBorder_DEFINED
 
@@ -51,6 +55,7 @@ public:
     };
 
     enum BlurStyle {
+<<<<<<< HEAD
         kNormal_BlurStyle, //!< fuzzy inside and outside
         kInner_BlurStyle, //!< fuzzy inside, nothing outside
     };
@@ -60,6 +65,17 @@ public:
         SkScalar fYOffset;
         SkScalar fBlurSigma;
         SkColor fColor;
+=======
+        kNormal_BlurStyle,  //!< fuzzy inside and outside
+        kInner_BlurStyle,   //!< fuzzy inside, nothing outside
+    };
+
+    struct ShadowInfo {
+        SkScalar  fXOffset;
+        SkScalar  fYOffset;
+        SkScalar  fBlurSigma;
+        SkColor   fColor;
+>>>>>>> miniblink49
         BlurStyle fStyle;
     };
 
@@ -67,8 +83,12 @@ public:
 
     SkBorder(const SkPaint paints[4], const SkScalar widths[4], const BorderStyle styles[4]);
 
+<<<<<<< HEAD
     void setBackground(SkPaint* p)
     {
+=======
+    void setBackground(SkPaint* p) {
+>>>>>>> miniblink49
         if (NULL == p) {
             fBackground.reset();
             fFlags &= ~kDrawBackground_Flag;
@@ -78,8 +98,12 @@ public:
         }
     }
 
+<<<<<<< HEAD
     void addShadow(ShadowInfo& info)
     {
+=======
+    void addShadow(ShadowInfo& info) {
+>>>>>>> miniblink49
         fShadows.push_back(info);
     }
 
@@ -93,6 +117,7 @@ private:
 
     // If kOnePaint_Flag is specified then fBorder[0] is applied to all sides.
     // Otherwise the order is: left, top, right, bottom
+<<<<<<< HEAD
     SkPaint fPaints[4];
     // Only valid if kDrawBackground_Flag is set.
     SkPaint fBackground;
@@ -100,6 +125,15 @@ private:
     BorderStyle fStyles[4];
     SkTArray<ShadowInfo> fShadows;
     uint32_t fFlags;
+=======
+    SkPaint              fPaints[4];
+    // Only valid if kDrawBackground_Flag is set.
+    SkPaint              fBackground;
+    SkScalar             fWidths[4];
+    BorderStyle          fStyles[4];
+    SkTArray<ShadowInfo> fShadows;
+    uint32_t             fFlags;
+>>>>>>> miniblink49
 };
 
 #endif

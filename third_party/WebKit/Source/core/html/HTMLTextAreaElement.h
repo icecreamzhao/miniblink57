@@ -24,19 +24,18 @@
 #ifndef HTMLTextAreaElement_h
 #define HTMLTextAreaElement_h
 
-#include "base/gtest_prod_util.h"
 #include "core/CoreExport.h"
-#include "core/html/TextControlElement.h"
+#include "core/html/HTMLTextFormControlElement.h"
 
 namespace blink {
 
 class BeforeTextInsertedEvent;
+class ExceptionState;
 
-class CORE_EXPORT HTMLTextAreaElement final : public TextControlElement {
+class CORE_EXPORT HTMLTextAreaElement final : public HTMLTextFormControlElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static HTMLTextAreaElement* create(Document&);
+    static PassRefPtrWillBeRawPtr<HTMLTextAreaElement> create(Document&, HTMLFormElement*);
 
     unsigned cols() const { return m_cols; }
     unsigned rows() const { return m_rows; }
@@ -44,11 +43,14 @@ public:
     bool shouldWrapText() const { return m_wrap != NoWrap; }
 
     String value() const override;
-    void setValue(const String&,
-        TextFieldEventBehavior = DispatchNoEvent) override;
+    void setValue(const String&, TextFieldEventBehavior = DispatchNoEvent);
     String defaultValue() const;
     void setDefaultValue(const String&);
     int textLength() const { return value().length(); }
+    int maxLength() const;
+    int minLength() const;
+    void setMaxLength(int, ExceptionState&);
+    void setMinLength(int, ExceptionState&);
 
     String suggestedValue() const;
     void setSuggestedValue(const String&);
@@ -64,14 +66,13 @@ public:
     void setRows(unsigned);
 
 private:
-    FRIEND_TEST_ALL_PREFIXES(HTMLTextAreaElementTest, SanitizeUserInputValue);
-    explicit HTMLTextAreaElement(Document&);
+    HTMLTextAreaElement(Document&, HTMLFormElement*);
 
-    enum WrapMethod { NoWrap,
-        SoftWrap,
-        HardWrap };
-    enum SetValueCommonOption { NotSetSelection,
-        SetSeletion };
+    enum WrapMethod { NoWrap, SoftWrap, HardWrap };
+    enum SetValueCommonOption {
+        NotSetSelection,
+        SetSeletion
+    };
 
     void didAddUserAgentShadowRoot(ShadowRoot&) override;
     // FIXME: Author shadows should be allowed
@@ -83,26 +84,16 @@ private:
     void updateValue() const;
     void setInnerEditorValue(const String&) override;
     void setNonDirtyValue(const String&);
-    void setValueCommon(const String&,
-        TextFieldEventBehavior,
-        SetValueCommonOption = NotSetSelection);
+    void setValueCommon(const String&, TextFieldEventBehavior, SetValueCommonOption = NotSetSelection);
 
-    bool isPlaceholderVisible() const override { return m_isPlaceholderVisible; }
-    void setPlaceholderVisibility(bool) override;
     bool supportsPlaceholder() const override { return true; }
     void updatePlaceholderText() override;
     bool isEmptyValue() const override { return value().isEmpty(); }
-    bool isEmptySuggestedValue() const final
-    {
-        return suggestedValue().isEmpty();
-    }
+    bool isEmptySuggestedValue() const final { return suggestedValue().isEmpty(); }
     bool supportsAutocapitalize() const override { return true; }
     const AtomicString& defaultAutocapitalize() const override;
 
-    bool isOptionalFormControl() const override
-    {
-        return !isRequiredFormControl();
-    }
+    bool isOptionalFormControl() const override { return !isRequiredFormControl(); }
     bool isRequiredFormControl() const override { return isRequired(); }
 
     void defaultEventHandler(Event*) override;
@@ -120,21 +111,19 @@ private:
     FormControlState saveFormControlState() const override;
     void restoreFormControlState(const FormControlState&) override;
 
-    bool isTextControl() const override { return true; }
+    bool isTextFormControl() const override { return true; }
 
     void childrenChanged(const ChildrenChange&) override;
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&,
-        const AtomicString&,
-        MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
-    void appendToFormData(FormData&) override;
+    bool appendFormData(FormDataList&, bool) override;
     void resetImpl() override;
     bool hasCustomFocusLogic() const override;
     bool shouldShowFocusRingOnMouseFocus() const override;
     bool isKeyboardFocusable() const override;
-    void updateFocusAppearance(SelectionBehaviorOnFocus) override;
+    void updateFocusAppearance(bool restorePreviousSelection) override;
 
     void accessKeyAction(bool sendMouseEvents) override;
 
@@ -153,7 +142,6 @@ private:
     mutable String m_value;
     mutable bool m_isDirty;
     bool m_valueIsUpToDate;
-    unsigned m_isPlaceholderVisible : 1;
     String m_suggestedValue;
 };
 

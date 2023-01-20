@@ -39,29 +39,19 @@ class ExceptionState;
 
 class NumberInputType final : public TextFieldInputType {
 public:
-    static InputType* create(HTMLInputElement&);
+    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
 
 private:
-    NumberInputType(HTMLInputElement& element)
-        : TextFieldInputType(element)
-    {
-    }
+    NumberInputType(HTMLInputElement& element) : TextFieldInputType(element) { }
     void countUsage() override;
     const AtomicString& formControlType() const override;
-    void setValue(const String&,
-        bool valueChanged,
-        TextFieldEventBehavior) override;
+    void setValue(const String&, bool valueChanged, TextFieldEventBehavior) override;
     double valueAsDouble() const override;
-    void setValueAsDouble(double,
-        TextFieldEventBehavior,
-        ExceptionState&) const override;
-    void setValueAsDecimal(const Decimal&,
-        TextFieldEventBehavior,
-        ExceptionState&) const override;
+    void setValueAsDouble(double, TextFieldEventBehavior, ExceptionState&) const override;
+    void setValueAsDecimal(const Decimal&, TextFieldEventBehavior, ExceptionState&) const override;
     bool typeMismatchFor(const String&) const override;
     bool typeMismatch() const override;
-    bool sizeShouldIncludeDecoration(int defaultSize,
-        int& preferredSize) const override;
+    bool sizeShouldIncludeDecoration(int defaultSize, int& preferredSize) const override;
     bool isSteppable() const override;
     StepRange createStepRange(AnyStepHandling) const override;
     void handleKeydownEvent(KeyboardEvent*) override;
@@ -72,7 +62,6 @@ private:
     String visibleValue() const override;
     String convertFromVisibleValue(const String&) const override;
     String sanitizeValue(const String&) const override;
-    void warnIfValueIsInvalid(const String&) const override;
     bool hasBadInput() const override;
     String badInputText() const override;
     String rangeOverflowText(const Decimal& maxmum) const override;

@@ -26,6 +26,12 @@ int getMaxResidentSetSizeMB();
  */
 int getCurrResidentSetSizeMB();
 
+<<<<<<< HEAD
 } // namespace sk_tools
 
 #endif // ProcStats_DEFINED
+=======
+}  // namespace sk_tools
+
+#endif  // ProcStats_DEFINED
+>>>>>>> miniblink49

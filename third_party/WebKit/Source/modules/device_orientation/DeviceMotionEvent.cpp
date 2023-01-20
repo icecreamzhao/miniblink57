@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/device_orientation/DeviceMotionEvent.h"
 
 #include "modules/device_orientation/DeviceAcceleration.h"
@@ -31,13 +35,20 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 DeviceMotionEvent::~DeviceMotionEvent() { }
+=======
+DeviceMotionEvent::~DeviceMotionEvent()
+{
+}
+>>>>>>> miniblink49
 
 DeviceMotionEvent::DeviceMotionEvent()
     : m_deviceMotionData(DeviceMotionData::create())
 {
 }
 
+<<<<<<< HEAD
 DeviceMotionEvent::DeviceMotionEvent(const AtomicString& eventType,
     DeviceMotionData* deviceMotionData)
     : Event(eventType, false, false)
@@ -53,6 +64,17 @@ void DeviceMotionEvent::initDeviceMotionEvent(
     DeviceMotionData* deviceMotionData)
 {
     if (isBeingDispatched())
+=======
+DeviceMotionEvent::DeviceMotionEvent(const AtomicString& eventType, DeviceMotionData* deviceMotionData)
+    : Event(eventType, false, false) // Can't bubble, not cancelable
+    , m_deviceMotionData(deviceMotionData)
+{
+}
+
+void DeviceMotionEvent::initDeviceMotionEvent(const AtomicString& type, bool bubbles, bool cancelable, DeviceMotionData* deviceMotionData)
+{
+    if (dispatched())
+>>>>>>> miniblink49
         return;
 
     initEvent(type, bubbles, cancelable);
@@ -65,34 +87,58 @@ void DeviceMotionEvent::initDeviceMotionEvent(
 
 DeviceAcceleration* DeviceMotionEvent::acceleration()
 {
+<<<<<<< HEAD
     if (!m_deviceMotionData->getAcceleration())
         return nullptr;
 
     if (!m_acceleration)
         m_acceleration = DeviceAcceleration::create(m_deviceMotionData->getAcceleration());
+=======
+    if (!m_deviceMotionData->acceleration())
+        return nullptr;
+
+    if (!m_acceleration)
+        m_acceleration = DeviceAcceleration::create(m_deviceMotionData->acceleration());
+>>>>>>> miniblink49
 
     return m_acceleration.get();
 }
 
 DeviceAcceleration* DeviceMotionEvent::accelerationIncludingGravity()
 {
+<<<<<<< HEAD
     if (!m_deviceMotionData->getAccelerationIncludingGravity())
         return nullptr;
 
     if (!m_accelerationIncludingGravity)
         m_accelerationIncludingGravity = DeviceAcceleration::create(
             m_deviceMotionData->getAccelerationIncludingGravity());
+=======
+    if (!m_deviceMotionData->accelerationIncludingGravity())
+        return nullptr;
+
+    if (!m_accelerationIncludingGravity)
+        m_accelerationIncludingGravity = DeviceAcceleration::create(m_deviceMotionData->accelerationIncludingGravity());
+>>>>>>> miniblink49
 
     return m_accelerationIncludingGravity.get();
 }
 
 DeviceRotationRate* DeviceMotionEvent::rotationRate()
 {
+<<<<<<< HEAD
     if (!m_deviceMotionData->getRotationRate())
         return nullptr;
 
     if (!m_rotationRate)
         m_rotationRate = DeviceRotationRate::create(m_deviceMotionData->getRotationRate());
+=======
+    if (!m_deviceMotionData->rotationRate())
+        return nullptr;
+
+    if (!m_rotationRate)
+        m_rotationRate = DeviceRotationRate::create(m_deviceMotionData->rotationRate());
+>>>>>>> miniblink49
 
     return m_rotationRate.get();
 }

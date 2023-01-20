@@ -28,12 +28,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/text/UnicodeUtilities.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/Vector.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
+=======
+#include "config.h"
+#include "platform/text/UnicodeUtilities.h"
+
+#include "wtf/Vector.h"
+#include "wtf/text/CharacterNames.h"
+#include "wtf/text/WTFString.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 #include <unicode/uchar.h>
 
 namespace blink {
@@ -41,12 +51,20 @@ namespace blink {
 static const UChar32 kMaxLatinCharCount = 256;
 
 static bool isTestFirstAndLastCharsInCategoryFailed = false;
+<<<<<<< HEAD
 UBool U_CALLCONV testFirstAndLastCharsInCategory(const void* context,
     UChar32 start,
     UChar32 limit,
     UCharCategory type)
 {
     if (start >= kMaxLatinCharCount && U_MASK(type) & (U_GC_S_MASK | U_GC_P_MASK | U_GC_Z_MASK | U_GC_CF_MASK) && (!isSeparator(start) || !isSeparator(limit - 1))) {
+=======
+UBool U_CALLCONV testFirstAndLastCharsInCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type)
+{
+    if (start >= kMaxLatinCharCount
+        && U_MASK(type) & (U_GC_S_MASK | U_GC_P_MASK | U_GC_Z_MASK | U_GC_CF_MASK)
+        && (!isSeparator(start) || !isSeparator(limit - 1))) {
+>>>>>>> miniblink49
         isTestFirstAndLastCharsInCategoryFailed = true;
 
         // Break enumeration process
@@ -58,6 +76,7 @@ UBool U_CALLCONV testFirstAndLastCharsInCategory(const void* context,
 
 TEST(UnicodeUtilitiesTest, Separators)
 {
+<<<<<<< HEAD
     // clang-format off
   static const bool latinSeparatorTable[256] = {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -84,6 +103,26 @@ TEST(UnicodeUtilitiesTest, Separators)
       0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
   };
     // clang-format on
+=======
+    static const bool latinSeparatorTable[kMaxLatinCharCount] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // space ! " # $ % & ' ( ) * + , - . /
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, //                         : ; < = > ?
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //   @
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, //                         [ \ ] ^ _
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //   `
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, //                           { | } ~
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+>>>>>>> miniblink49
 
     for (UChar32 character = 0; character < kMaxLatinCharCount; ++character) {
         EXPECT_EQ(isSeparator(character), latinSeparatorTable[character]);
@@ -134,6 +173,7 @@ TEST(UnicodeUtilitiesTest, ContainsKanaLetters)
 
 TEST(UnicodeUtilitiesTest, FoldQuoteMarkOrSoftHyphenTest)
 {
+<<<<<<< HEAD
     const UChar charactersToFold[] = { hebrewPunctuationGershayimCharacter,
         leftDoubleQuotationMarkCharacter,
         rightDoubleQuotationMarkCharacter,
@@ -141,6 +181,13 @@ TEST(UnicodeUtilitiesTest, FoldQuoteMarkOrSoftHyphenTest)
         leftSingleQuotationMarkCharacter,
         rightSingleQuotationMarkCharacter,
         softHyphenCharacter };
+=======
+    const UChar charactersToFold[] = {
+        hebrewPunctuationGershayimCharacter, leftDoubleQuotationMarkCharacter, rightDoubleQuotationMarkCharacter,
+        hebrewPunctuationGereshCharacter, leftSingleQuotationMarkCharacter, rightSingleQuotationMarkCharacter,
+        softHyphenCharacter
+    };
+>>>>>>> miniblink49
 
     String stringToFold(charactersToFold, WTF_ARRAY_LENGTH(charactersToFold));
     Vector<UChar> buffer;
@@ -148,8 +195,12 @@ TEST(UnicodeUtilitiesTest, FoldQuoteMarkOrSoftHyphenTest)
 
     foldQuoteMarksAndSoftHyphens(stringToFold);
 
+<<<<<<< HEAD
     const String foldedString("\"\"\"\'\'\'\0",
         WTF_ARRAY_LENGTH(charactersToFold));
+=======
+    const String foldedString("\"\"\"\'\'\'\0", WTF_ARRAY_LENGTH(charactersToFold));
+>>>>>>> miniblink49
     EXPECT_EQ(stringToFold, foldedString);
 
     foldQuoteMarksAndSoftHyphens(buffer.data(), buffer.size());
@@ -163,6 +214,7 @@ TEST(UnicodeUtilitiesTest, OnlyKanaLettersEqualityTest)
 
     // Check that non-Kana letters will be skipped.
     EXPECT_TRUE(checkOnlyKanaLettersInStrings(
+<<<<<<< HEAD
         nonKanaString1, WTF_ARRAY_LENGTH(nonKanaString1), nonKanaString2,
         WTF_ARRAY_LENGTH(nonKanaString2)));
 
@@ -175,18 +227,38 @@ TEST(UnicodeUtilitiesTest, OnlyKanaLettersEqualityTest)
     EXPECT_TRUE(
         checkOnlyKanaLettersInStrings(kanaString, WTF_ARRAY_LENGTH(kanaString),
             kanaString, WTF_ARRAY_LENGTH(kanaString)));
+=======
+        nonKanaString1, WTF_ARRAY_LENGTH(nonKanaString1),
+        nonKanaString2, WTF_ARRAY_LENGTH(nonKanaString2)));
+
+    const UChar kanaString[] = { 'e', 'f', 'g', 0x3041 };
+    EXPECT_FALSE(checkOnlyKanaLettersInStrings(
+        kanaString, WTF_ARRAY_LENGTH(kanaString),
+        nonKanaString2, WTF_ARRAY_LENGTH(nonKanaString2)));
+
+    // Compare with self.
+    EXPECT_TRUE(checkOnlyKanaLettersInStrings(
+        kanaString, WTF_ARRAY_LENGTH(kanaString),
+        kanaString, WTF_ARRAY_LENGTH(kanaString)));
+>>>>>>> miniblink49
 
     UChar voicedKanaString1[] = { 0x3042, 0x3099 };
     UChar voicedKanaString2[] = { 0x3042, 0x309A };
 
     // Comparing strings with different sound marks should fail.
     EXPECT_FALSE(checkOnlyKanaLettersInStrings(
+<<<<<<< HEAD
         voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1), voicedKanaString2,
         WTF_ARRAY_LENGTH(voicedKanaString2)));
+=======
+        voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1),
+        voicedKanaString2, WTF_ARRAY_LENGTH(voicedKanaString2)));
+>>>>>>> miniblink49
 
     // Now strings will be the same.
     voicedKanaString2[1] = 0x3099;
     EXPECT_TRUE(checkOnlyKanaLettersInStrings(
+<<<<<<< HEAD
         voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1), voicedKanaString2,
         WTF_ARRAY_LENGTH(voicedKanaString2)));
 
@@ -194,6 +266,15 @@ TEST(UnicodeUtilitiesTest, OnlyKanaLettersEqualityTest)
     EXPECT_FALSE(checkOnlyKanaLettersInStrings(
         voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1), voicedKanaString2,
         WTF_ARRAY_LENGTH(voicedKanaString2)));
+=======
+        voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1),
+        voicedKanaString2, WTF_ARRAY_LENGTH(voicedKanaString2)));
+
+    voicedKanaString2[0] = 0x3043;
+    EXPECT_FALSE(checkOnlyKanaLettersInStrings(
+        voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1),
+        voicedKanaString2, WTF_ARRAY_LENGTH(voicedKanaString2)));
+>>>>>>> miniblink49
 }
 
 TEST(UnicodeUtilitiesTest, StringsWithKanaLettersTest)
@@ -202,6 +283,7 @@ TEST(UnicodeUtilitiesTest, StringsWithKanaLettersTest)
     const UChar nonKanaString2[] = { 'a', 'b', 'c' };
 
     // Check that non-Kana letters will be compared.
+<<<<<<< HEAD
     EXPECT_TRUE(
         checkKanaStringsEqual(nonKanaString1, WTF_ARRAY_LENGTH(nonKanaString1),
             nonKanaString2, WTF_ARRAY_LENGTH(nonKanaString2)));
@@ -213,10 +295,25 @@ TEST(UnicodeUtilitiesTest, StringsWithKanaLettersTest)
 
     // Compare with self.
     EXPECT_TRUE(checkKanaStringsEqual(kanaString, WTF_ARRAY_LENGTH(kanaString),
+=======
+    EXPECT_TRUE(checkKanaStringsEqual(
+        nonKanaString1, WTF_ARRAY_LENGTH(nonKanaString1),
+        nonKanaString2, WTF_ARRAY_LENGTH(nonKanaString2)));
+
+    const UChar kanaString[] = { 'a', 'b', 'c', 0x3041 };
+    EXPECT_FALSE(checkKanaStringsEqual(
+        kanaString, WTF_ARRAY_LENGTH(kanaString),
+        nonKanaString2, WTF_ARRAY_LENGTH(nonKanaString2)));
+
+    // Compare with self.
+    EXPECT_TRUE(checkKanaStringsEqual(
+        kanaString, WTF_ARRAY_LENGTH(kanaString),
+>>>>>>> miniblink49
         kanaString, WTF_ARRAY_LENGTH(kanaString)));
 
     const UChar kanaString2[] = { 'x', 'y', 'z', 0x3041 };
     // Comparing strings with different non-Kana letters should fail.
+<<<<<<< HEAD
     EXPECT_FALSE(checkKanaStringsEqual(kanaString, WTF_ARRAY_LENGTH(kanaString),
         kanaString2,
         WTF_ARRAY_LENGTH(kanaString2)));
@@ -233,18 +330,41 @@ TEST(UnicodeUtilitiesTest, StringsWithKanaLettersTest)
     EXPECT_FALSE(checkKanaStringsEqual(kanaString3, WTF_ARRAY_LENGTH(kanaString3),
         kanaString4,
         WTF_ARRAY_LENGTH(kanaString4)));
+=======
+    EXPECT_FALSE(checkKanaStringsEqual(
+        kanaString, WTF_ARRAY_LENGTH(kanaString),
+        kanaString2, WTF_ARRAY_LENGTH(kanaString2)));
+
+    const UChar kanaString3[] = { 'a', 'b', 'c', 0x3042, 0x3099, 'm', 'n', 'o' };
+    // Check that non-Kana letters after Kana letters will be compared.
+    EXPECT_TRUE(checkKanaStringsEqual(
+        kanaString3, WTF_ARRAY_LENGTH(kanaString3),
+        kanaString3, WTF_ARRAY_LENGTH(kanaString3)));
+
+    const UChar kanaString4[] = { 'a', 'b', 'c', 0x3042, 0x3099, 'm', 'n', 'o', 'p' };
+    // And now comparing should fail.
+    EXPECT_FALSE(checkKanaStringsEqual(
+        kanaString3, WTF_ARRAY_LENGTH(kanaString3),
+        kanaString4, WTF_ARRAY_LENGTH(kanaString4)));
+>>>>>>> miniblink49
 
     UChar voicedKanaString1[] = { 0x3042, 0x3099 };
     UChar voicedKanaString2[] = { 0x3042, 0x309A };
 
     // Comparing strings with different sound marks should fail.
     EXPECT_FALSE(checkKanaStringsEqual(
+<<<<<<< HEAD
         voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1), voicedKanaString2,
         WTF_ARRAY_LENGTH(voicedKanaString2)));
+=======
+        voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1),
+        voicedKanaString2, WTF_ARRAY_LENGTH(voicedKanaString2)));
+>>>>>>> miniblink49
 
     // Now strings will be the same.
     voicedKanaString2[1] = 0x3099;
     EXPECT_TRUE(checkKanaStringsEqual(
+<<<<<<< HEAD
         voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1), voicedKanaString2,
         WTF_ARRAY_LENGTH(voicedKanaString2)));
 
@@ -252,6 +372,15 @@ TEST(UnicodeUtilitiesTest, StringsWithKanaLettersTest)
     EXPECT_FALSE(checkKanaStringsEqual(
         voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1), voicedKanaString2,
         WTF_ARRAY_LENGTH(voicedKanaString2)));
+=======
+        voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1),
+        voicedKanaString2, WTF_ARRAY_LENGTH(voicedKanaString2)));
+
+    voicedKanaString2[0] = 0x3043;
+    EXPECT_FALSE(checkKanaStringsEqual(
+        voicedKanaString1, WTF_ARRAY_LENGTH(voicedKanaString1),
+        voicedKanaString2, WTF_ARRAY_LENGTH(voicedKanaString2)));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

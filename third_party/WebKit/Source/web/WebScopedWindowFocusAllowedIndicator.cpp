@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebScopedWindowFocusAllowedIndicator.h"
 
 #include "core/dom/Document.h"
@@ -36,6 +40,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 WebScopedWindowFocusAllowedIndicator::WebScopedWindowFocusAllowedIndicator(
     WebDocument* webDocument)
 {
@@ -45,5 +50,18 @@ WebScopedWindowFocusAllowedIndicator::WebScopedWindowFocusAllowedIndicator(
 }
 
 WebScopedWindowFocusAllowedIndicator::~WebScopedWindowFocusAllowedIndicator() { }
+=======
+void WebScopedWindowFocusAllowedIndicator::initialize(WebDocument* webDocument)
+{
+    Document* document = webDocument->unwrap<Document>();
+    ASSERT(document);
+    m_private.reset(new ScopedWindowFocusAllowedIndicator(document));
+}
+
+void WebScopedWindowFocusAllowedIndicator::reset()
+{
+    m_private.reset(0);
+}
+>>>>>>> miniblink49
 
 } // namespace blink

@@ -26,6 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/audio/HRTFKernel.h"
 
 #include "platform/audio/AudioChannel.h"
@@ -43,6 +44,25 @@ namespace blink {
 // of the passed in AudioChannel must be a power of 2.
 static float extractAverageGroupDelay(AudioChannel* channel,
     size_t analysisFFTSize)
+=======
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+#include "platform/audio/HRTFKernel.h"
+
+#include "platform/audio/AudioChannel.h"
+#include "platform/FloatConversion.h"
+#include "wtf/MathExtras.h"
+
+namespace blink {
+
+// Takes the input AudioChannel as an input impulse response and calculates the average group delay.
+// This represents the initial delay before the most energetic part of the impulse response.
+// The sample-frame delay is removed from the impulseP impulse response, and this value  is returned.
+// the length of the passed in AudioChannel must be a power of 2.
+static float extractAverageGroupDelay(AudioChannel* channel, size_t analysisFFTSize)
+>>>>>>> miniblink49
 {
     ASSERT(channel);
 
@@ -59,7 +79,11 @@ static float extractAverageGroupDelay(AudioChannel* channel,
     FFTFrame estimationFrame(analysisFFTSize);
     estimationFrame.doFFT(impulseP);
 
+<<<<<<< HEAD
     float frameDelay = clampTo<float>(estimationFrame.extractAverageGroupDelay());
+=======
+    float frameDelay = narrowPrecisionToFloat(estimationFrame.extractAverageGroupDelay());
+>>>>>>> miniblink49
     estimationFrame.doInverseFFT(impulseP);
 
     return frameDelay;
@@ -77,6 +101,7 @@ HRTFKernel::HRTFKernel(AudioChannel* channel, size_t fftSize, float sampleRate)
     float* impulseResponse = channel->mutableData();
     size_t responseLength = channel->length();
 
+<<<<<<< HEAD
     // We need to truncate to fit into 1/2 the FFT size (with zero padding) in
     // order to do proper convolution.
     // Truncate if necessary to max impulse response length allowed by FFT.
@@ -89,11 +114,22 @@ HRTFKernel::HRTFKernel(AudioChannel* channel, size_t fftSize, float sampleRate)
     if (numberOfFadeOutFrames < truncatedResponseLength) {
         for (unsigned i = truncatedResponseLength - numberOfFadeOutFrames;
              i < truncatedResponseLength; ++i) {
+=======
+    // We need to truncate to fit into 1/2 the FFT size (with zero padding) in order to do proper convolution.
+    size_t truncatedResponseLength = std::min(responseLength, fftSize / 2); // truncate if necessary to max impulse response length allowed by FFT
+
+    // Quick fade-out (apply window) at truncation point
+    unsigned numberOfFadeOutFrames = static_cast<unsigned>(sampleRate / 4410); // 10 sample-frames @44.1KHz sample-rate
+    ASSERT(numberOfFadeOutFrames < truncatedResponseLength);
+    if (numberOfFadeOutFrames < truncatedResponseLength) {
+        for (unsigned i = truncatedResponseLength - numberOfFadeOutFrames; i < truncatedResponseLength; ++i) {
+>>>>>>> miniblink49
             float x = 1.0f - static_cast<float>(i - (truncatedResponseLength - numberOfFadeOutFrames)) / numberOfFadeOutFrames;
             impulseResponse[i] *= x;
         }
     }
 
+<<<<<<< HEAD
     m_fftFrame = WTF::makeUnique<FFTFrame>(fftSize);
     m_fftFrame->doPaddedFFT(impulseResponse, truncatedResponseLength);
 }
@@ -101,12 +137,22 @@ HRTFKernel::HRTFKernel(AudioChannel* channel, size_t fftSize, float sampleRate)
 std::unique_ptr<AudioChannel> HRTFKernel::createImpulseResponse()
 {
     std::unique_ptr<AudioChannel> channel = WTF::wrapUnique(new AudioChannel(fftSize()));
+=======
+    m_fftFrame = adoptPtr(new FFTFrame(fftSize));
+    m_fftFrame->doPaddedFFT(impulseResponse, truncatedResponseLength);
+}
+
+PassOwnPtr<AudioChannel> HRTFKernel::createImpulseResponse()
+{
+    OwnPtr<AudioChannel> channel = adoptPtr(new AudioChannel(fftSize()));
+>>>>>>> miniblink49
     FFTFrame fftFrame(*m_fftFrame);
 
     // Add leading delay back in.
     fftFrame.addConstantGroupDelay(m_frameDelay);
     fftFrame.doInverseFFT(channel->mutableData());
 
+<<<<<<< HEAD
     return channel;
 }
 
@@ -115,13 +161,24 @@ std::unique_ptr<HRTFKernel> HRTFKernel::createInterpolatedKernel(
     HRTFKernel* kernel1,
     HRTFKernel* kernel2,
     float x)
+=======
+    return channel.release();
+}
+
+// Interpolates two kernels with x: 0 -> 1 and returns the result.
+PassOwnPtr<HRTFKernel> HRTFKernel::createInterpolatedKernel(HRTFKernel* kernel1, HRTFKernel* kernel2, float x)
+>>>>>>> miniblink49
 {
     ASSERT(kernel1 && kernel2);
     if (!kernel1 || !kernel2)
         return nullptr;
 
     ASSERT(x >= 0.0 && x < 1.0);
+<<<<<<< HEAD
     x = clampTo(x, 0.0f, 1.0f);
+=======
+    x = std::min(1.0f, std::max(0.0f, x));
+>>>>>>> miniblink49
 
     float sampleRate1 = kernel1->sampleRate();
     float sampleRate2 = kernel2->sampleRate();
@@ -131,6 +188,7 @@ std::unique_ptr<HRTFKernel> HRTFKernel::createInterpolatedKernel(
 
     float frameDelay = (1 - x) * kernel1->frameDelay() + x * kernel2->frameDelay();
 
+<<<<<<< HEAD
     std::unique_ptr<FFTFrame> interpolatedFrame = FFTFrame::createInterpolatedFrame(*kernel1->fftFrame(),
         *kernel2->fftFrame(), x);
     return HRTFKernel::create(std::move(interpolatedFrame), frameDelay,
@@ -138,3 +196,12 @@ std::unique_ptr<HRTFKernel> HRTFKernel::createInterpolatedKernel(
 }
 
 } // namespace blink
+=======
+    OwnPtr<FFTFrame> interpolatedFrame = FFTFrame::createInterpolatedFrame(*kernel1->fftFrame(), *kernel2->fftFrame(), x);
+    return HRTFKernel::create(interpolatedFrame.release(), frameDelay, sampleRate1);
+}
+
+} // namespace blink
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

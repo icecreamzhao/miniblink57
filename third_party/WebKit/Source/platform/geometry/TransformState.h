@@ -32,12 +32,17 @@
 #include "platform/geometry/LayoutSize.h"
 #include "platform/transforms/AffineTransform.h"
 #include "platform/transforms/TransformationMatrix.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT TransformState {
+<<<<<<< HEAD
     STACK_ALLOCATED();
 
 public:
@@ -55,6 +60,16 @@ public:
         , m_lastPlanarQuad(quad)
         , m_accumulatingTransform(false)
         , m_forceAccumulatingTransform(false)
+=======
+public:
+    enum TransformDirection { ApplyTransformDirection, UnapplyInverseTransformDirection };
+    enum TransformAccumulation { FlattenTransform, AccumulateTransform };
+
+    TransformState(TransformDirection mappingDirection, const FloatPoint& p, const FloatQuad& quad)
+        : m_lastPlanarPoint(p)
+        , m_lastPlanarQuad(quad)
+        , m_accumulatingTransform(false)
+>>>>>>> miniblink49
         , m_mapPoint(true)
         , m_mapQuad(true)
         , m_direction(mappingDirection)
@@ -64,7 +79,10 @@ public:
     TransformState(TransformDirection mappingDirection, const FloatPoint& p)
         : m_lastPlanarPoint(p)
         , m_accumulatingTransform(false)
+<<<<<<< HEAD
         , m_forceAccumulatingTransform(false)
+=======
+>>>>>>> miniblink49
         , m_mapPoint(true)
         , m_mapQuad(false)
         , m_direction(mappingDirection)
@@ -74,13 +92,17 @@ public:
     TransformState(TransformDirection mappingDirection, const FloatQuad& quad)
         : m_lastPlanarQuad(quad)
         , m_accumulatingTransform(false)
+<<<<<<< HEAD
         , m_forceAccumulatingTransform(false)
+=======
+>>>>>>> miniblink49
         , m_mapPoint(false)
         , m_mapQuad(true)
         , m_direction(mappingDirection)
     {
     }
 
+<<<<<<< HEAD
     // Accumulate a transform but don't map any points directly.
     TransformState(TransformDirection mappingDirection)
         : m_accumulatedTransform(TransformationMatrix::create())
@@ -92,28 +114,40 @@ public:
     {
     }
 
+=======
+>>>>>>> miniblink49
     TransformState(const TransformState& other) { *this = other; }
 
     TransformState& operator=(const TransformState&);
 
     void setQuad(const FloatQuad& quad)
     {
+<<<<<<< HEAD
         // FIXME: this assumes that the quad being added is in the coordinate system
         // of the current state.  This breaks if we're simultaneously mapping a
         // point.  https://bugs.webkit.org/show_bug.cgi?id=106680
+=======
+        // FIXME: this assumes that the quad being added is in the coordinate system of the current state.
+        // This breaks if we're simultaneously mapping a point. https://bugs.webkit.org/show_bug.cgi?id=106680
+>>>>>>> miniblink49
         ASSERT(!m_mapPoint);
         m_accumulatedOffset = LayoutSize();
         m_lastPlanarQuad = quad;
     }
 
+<<<<<<< HEAD
     void move(LayoutUnit x,
         LayoutUnit y,
         TransformAccumulation accumulate = FlattenTransform)
+=======
+    void move(LayoutUnit x, LayoutUnit y, TransformAccumulation accumulate = FlattenTransform)
+>>>>>>> miniblink49
     {
         move(LayoutSize(x, y), accumulate);
     }
 
     void move(const LayoutSize&, TransformAccumulation = FlattenTransform);
+<<<<<<< HEAD
     void move(const IntSize& size,
         TransformAccumulation accumulate = FlattenTransform)
     {
@@ -125,6 +159,14 @@ public:
     void applyTransform(const TransformationMatrix& transformFromContainer,
         TransformAccumulation = FlattenTransform,
         bool* wasClamped = 0);
+=======
+    void move(const IntSize& size, TransformAccumulation accumulate = FlattenTransform)
+    {
+        move(LayoutSize(size), accumulate);
+    }
+    void applyTransform(const AffineTransform& transformFromContainer, TransformAccumulation = FlattenTransform, bool* wasClamped = 0);
+    void applyTransform(const TransformationMatrix& transformFromContainer, TransformAccumulation = FlattenTransform, bool* wasClamped = 0);
+>>>>>>> miniblink49
     void flatten(bool* wasClamped = 0);
 
     // Return the coords of the point or quad in the last flattened layer
@@ -135,9 +177,12 @@ public:
     FloatPoint mappedPoint(bool* wasClamped = 0) const;
     FloatQuad mappedQuad(bool* wasClamped = 0) const;
 
+<<<<<<< HEAD
     // Return the accumulated transform.
     const TransformationMatrix& accumulatedTransform() const;
 
+=======
+>>>>>>> miniblink49
 private:
     void translateTransform(const LayoutSize&);
     void translateMappedCoordinates(const LayoutSize&);
@@ -148,10 +193,16 @@ private:
     FloatQuad m_lastPlanarQuad;
 
     // We only allocate the transform if we need to
+<<<<<<< HEAD
     std::unique_ptr<TransformationMatrix> m_accumulatedTransform;
     LayoutSize m_accumulatedOffset;
     bool m_accumulatingTransform;
     bool m_forceAccumulatingTransform;
+=======
+    OwnPtr<TransformationMatrix> m_accumulatedTransform;
+    LayoutSize m_accumulatedOffset;
+    bool m_accumulatingTransform;
+>>>>>>> miniblink49
     bool m_mapPoint, m_mapQuad;
     TransformDirection m_direction;
 };

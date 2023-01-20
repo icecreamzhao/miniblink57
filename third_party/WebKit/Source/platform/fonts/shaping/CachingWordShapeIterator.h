@@ -26,6 +26,7 @@
 #ifndef CachingWordShapeIterator_h
 #define CachingWordShapeIterator_h
 
+<<<<<<< HEAD
 #include "platform/fonts/Font.h"
 #include "platform/fonts/SimpleFontData.h"
 #include "platform/fonts/shaping/CachingWordShapeIterator.h"
@@ -33,10 +34,19 @@
 #include "platform/fonts/shaping/ShapeCache.h"
 #include "platform/fonts/shaping/ShapeResultSpacing.h"
 #include "wtf/Allocator.h"
+=======
+#include "platform/fonts/SimpleFontData.h"
+#include "platform/fonts/shaping/CachingWordShapeIterator.h"
+#ifndef MINIBLINK_NO_HARFBUZZ
+#include "platform/fonts/shaping/HarfBuzzShaper.h"
+#endif
+#include "platform/fonts/shaping/ShapeCache.h"
+>>>>>>> miniblink49
 #include "wtf/text/CharacterNames.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class CachingWordShapeIterator final {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(CachingWordShapeIterator);
@@ -52,10 +62,30 @@ public:
         , m_startIndex(0)
     {
         ASSERT(font);
+=======
+class CachingWordShapeIterator {
+public:
+    CachingWordShapeIterator(ShapeCache* cache, const TextRun& run,
+        const Font* font, HashSet<const SimpleFontData*>* fallbackFonts)
+        : m_shapeCache(cache), m_textRun(run), m_font(font)
+        , m_fallbackFonts(fallbackFonts), m_startIndex(0)
+    {
+        ASSERT(font);
+        const FontDescription& fontDescription = font->fontDescription();
+
+        // Word and letter spacing can change the width of a word, as can tabs
+        // as we segment solely based on on space characters.
+        // If expansion is used (for justified text) the spacing between words
+        // change and thus we need to shape the entire run.
+        m_wordResultCachable = !fontDescription.wordSpacing()
+            && !fontDescription.letterSpacing() && !run.allowTabs()
+            && m_textRun.expansion() == 0.0f;
+>>>>>>> miniblink49
 
         // Shaping word by word is faster as each word is cached. If we cannot
         // use the cache or if the font doesn't support word by word shaping
         // fall back on shaping the entire run.
+<<<<<<< HEAD
         m_shapeByWord = m_font->canShapeWordByWord();
     }
 
@@ -218,14 +248,77 @@ private:
         ASSERT(*wordResult);
         m_widthSoFar += (*wordResult)->width();
         return true;
+=======
+        m_shapeByWord = m_wordResultCachable && m_font->canShapeWordByWord();
+    }
+
+    bool next(RefPtr<ShapeResult>* wordResult)
+    {
+        if (!m_shapeByWord) {
+            if (m_startIndex)
+                return false;
+            *wordResult = shapeWord(m_textRun, m_font, m_fallbackFonts);
+            m_startIndex = 1;
+            return *wordResult;
+        }
+
+        unsigned length = m_textRun.length();
+        if (m_startIndex < length) {
+            if (m_textRun[m_startIndex] == spaceCharacter) {
+                TextRun wordRun = m_textRun.subRun(m_startIndex, 1);
+                *wordResult = shapeWord(wordRun, m_font, m_fallbackFonts);
+                m_startIndex++;
+                return true;
+            }
+
+            for (unsigned i = m_startIndex; ; i++) {
+                if (i == length || m_textRun[i] == spaceCharacter) {
+                    TextRun wordRun = m_textRun.subRun(m_startIndex,
+                        i - m_startIndex);
+                    *wordResult = shapeWord(wordRun, m_font, m_fallbackFonts);
+                    m_startIndex = i;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+private:
+    PassRefPtr<ShapeResult> shapeWord(const TextRun& wordRun,
+        const Font* font, HashSet<const SimpleFontData*>* fallbackFonts)
+    {
+        ShapeCacheEntry* cacheEntry = m_wordResultCachable
+            ? m_shapeCache->add(wordRun, ShapeCacheEntry())
+            : nullptr;
+        if (cacheEntry && cacheEntry->m_shapeResult)
+            return cacheEntry->m_shapeResult;
+
+        HarfBuzzShaper shaper(font, wordRun, fallbackFonts);
+        RefPtr<ShapeResult> shapeResult = shaper.shapeResult();
+        if (!shapeResult)
+            return nullptr;
+
+        // FIXME: Add support for fallback fonts. https://crbug.com/503688
+        if (cacheEntry && (!fallbackFonts || fallbackFonts->isEmpty()))
+            cacheEntry->m_shapeResult = shapeResult;
+
+        return shapeResult.release();
+>>>>>>> miniblink49
     }
 
     ShapeCache* m_shapeCache;
     const TextRun& m_textRun;
     const Font* m_font;
+<<<<<<< HEAD
     ShapeResultSpacing m_spacing;
     float m_widthSoFar; // Used only when allowTabs()
     unsigned m_startIndex : 31;
+=======
+    HashSet<const SimpleFontData*>* m_fallbackFonts;
+    unsigned m_startIndex : 30;
+    unsigned m_wordResultCachable : 1;
+>>>>>>> miniblink49
     unsigned m_shapeByWord : 1;
 };
 

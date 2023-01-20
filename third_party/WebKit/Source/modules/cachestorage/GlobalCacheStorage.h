@@ -5,8 +5,11 @@
 #ifndef GlobalCacheStorage_h
 #define GlobalCacheStorage_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class CacheStorage;
@@ -15,8 +18,11 @@ class ExceptionState;
 class WorkerGlobalScope;
 
 class GlobalCacheStorage {
+<<<<<<< HEAD
     STATIC_ONLY(GlobalCacheStorage);
 
+=======
+>>>>>>> miniblink49
 public:
     static CacheStorage* caches(DOMWindow&, ExceptionState&);
     static CacheStorage* caches(WorkerGlobalScope&, ExceptionState&);

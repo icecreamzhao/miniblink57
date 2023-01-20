@@ -29,10 +29,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/mediastream/MediaStreamComponent.h"
 
 #include "platform/UUID.h"
 #include "platform/audio/AudioBus.h"
+<<<<<<< HEAD
 #include "platform/mediastream/MediaStreamCenter.h"
 #include "platform/mediastream/MediaStreamSource.h"
 #include "public/platform/WebAudioSourceProvider.h"
@@ -94,11 +99,40 @@ void MediaStreamComponent::dispose()
 
 void MediaStreamComponent::AudioSourceProviderImpl::wrap(
     WebAudioSourceProvider* provider)
+=======
+#include "platform/mediastream/MediaStreamSource.h"
+#include "public/platform/WebAudioSourceProvider.h"
+
+namespace blink {
+
+PassRefPtr<MediaStreamComponent> MediaStreamComponent::create(PassRefPtr<MediaStreamSource> source)
+{
+    return adoptRef(new MediaStreamComponent(createCanonicalUUIDString(), source));
+}
+
+PassRefPtr<MediaStreamComponent> MediaStreamComponent::create(const String& id, PassRefPtr<MediaStreamSource> source)
+{
+    return adoptRef(new MediaStreamComponent(id, source));
+}
+
+MediaStreamComponent::MediaStreamComponent(const String& id, PassRefPtr<MediaStreamSource> source)
+    : m_source(source)
+    , m_id(id)
+    , m_enabled(true)
+    , m_muted(false)
+{
+    ASSERT(m_id.length());
+}
+
+#if ENABLE(WEB_AUDIO)
+void MediaStreamComponent::AudioSourceProviderImpl::wrap(WebAudioSourceProvider* provider)
+>>>>>>> miniblink49
 {
     MutexLocker locker(m_provideInputLock);
     m_webAudioSourceProvider = provider;
 }
 
+<<<<<<< HEAD
 void MediaStreamComponent::getSettings(
     WebMediaStreamTrack::Settings& settings)
 {
@@ -133,6 +167,11 @@ void MediaStreamComponent::AudioSourceProviderImpl::provideInput(
     size_t framesToProcess)
 {
     DCHECK(bus);
+=======
+void MediaStreamComponent::AudioSourceProviderImpl::provideInput(AudioBus* bus, size_t framesToProcess)
+{
+    ASSERT(bus);
+>>>>>>> miniblink49
     if (!bus)
         return;
 
@@ -150,6 +189,7 @@ void MediaStreamComponent::AudioSourceProviderImpl::provideInput(
 
     m_webAudioSourceProvider->provideInput(webAudioData, framesToProcess);
 }
+<<<<<<< HEAD
 
 DEFINE_TRACE(MediaStreamComponent)
 {
@@ -157,3 +197,9 @@ DEFINE_TRACE(MediaStreamComponent)
 }
 
 } // namespace blink
+=======
+#endif // #if ENABLE(WEB_AUDIO)
+
+} // namespace blink
+
+>>>>>>> miniblink49

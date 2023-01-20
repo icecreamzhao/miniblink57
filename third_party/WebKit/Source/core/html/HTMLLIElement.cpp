@@ -20,15 +20,14 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLLIElement.h"
 
 #include "core/CSSPropertyNames.h"
 #include "core/CSSValueKeywords.h"
 #include "core/HTMLNames.h"
 #include "core/dom/LayoutTreeBuilderTraversal.h"
-#include "core/html/parser/HTMLParserIdioms.h"
 #include "core/layout/LayoutListItem.h"
-#include "core/layout/api/LayoutLIItem.h"
 
 namespace blink {
 
@@ -48,62 +47,44 @@ bool HTMLLIElement::isPresentationAttribute(const QualifiedName& name) const
     return HTMLElement::isPresentationAttribute(name);
 }
 
-CSSValueID listTypeToCSSValueID(const AtomicString& value)
-{
-    if (value == "a")
-        return CSSValueLowerAlpha;
-    if (value == "A")
-        return CSSValueUpperAlpha;
-    if (value == "i")
-        return CSSValueLowerRoman;
-    if (value == "I")
-        return CSSValueUpperRoman;
-    if (value == "1")
-        return CSSValueDecimal;
-    if (equalIgnoringCase(value, "disc"))
-        return CSSValueDisc;
-    if (equalIgnoringCase(value, "circle"))
-        return CSSValueCircle;
-    if (equalIgnoringCase(value, "square"))
-        return CSSValueSquare;
-    if (equalIgnoringCase(value, "none"))
-        return CSSValueNone;
-    return CSSValueInvalid;
-}
-
-void HTMLLIElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLLIElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
     if (name == typeAttr) {
-        CSSValueID typeValue = listTypeToCSSValueID(value);
-        if (typeValue != CSSValueInvalid)
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
-                typeValue);
+        if (value == "a")
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueLowerAlpha);
+        else if (value == "A")
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueUpperAlpha);
+        else if (value == "i")
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueLowerRoman);
+        else if (value == "I")
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueUpperRoman);
+        else if (value == "1")
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueDecimal);
+        else
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, value);
     } else {
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-void HTMLLIElement::parseAttribute(const AttributeModificationParams& params)
+void HTMLLIElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == valueAttr) {
+    if (name == valueAttr) {
         if (layoutObject() && layoutObject()->isListItem())
-            parseValue(params.newValue);
+            parseValue(value);
     } else {
-        HTMLElement::parseAttribute(params);
+        HTMLElement::parseAttribute(name, value);
     }
 }
 
-void HTMLLIElement::attachLayoutTree(const AttachContext& context)
+void HTMLLIElement::attach(const AttachContext& context)
 {
-    HTMLElement::attachLayoutTree(context);
+    HTMLElement::attach(context);
 
     if (layoutObject() && layoutObject()->isListItem()) {
-        LayoutLIItem liLayoutItem = LayoutLIItem(toLayoutListItem(layoutObject()));
+        LayoutListItem* listItemLayoutObject = toLayoutListItem(layoutObject());
 
-        DCHECK(!document().childNeedsDistributionRecalc());
+        ASSERT(!document().childNeedsDistributionRecalc());
 
         // Find the enclosing list node.
         Element* listNode = 0;
@@ -116,11 +97,10 @@ void HTMLLIElement::attachLayoutTree(const AttachContext& context)
                 listNode = current;
         }
 
-        // If we are not in a list, tell the layoutObject so it can position us
-        // inside.  We don't want to change our style to say "inside" since that
-        // would affect nested nodes.
+        // If we are not in a list, tell the layoutObject so it can position us inside.
+        // We don't want to change our style to say "inside" since that would affect nested nodes.
         if (!listNode)
-            liLayoutItem.setNotInList(true);
+            listItemLayoutObject->setNotInList(true);
 
         parseValue(fastGetAttribute(valueAttr));
     }
@@ -128,14 +108,14 @@ void HTMLLIElement::attachLayoutTree(const AttachContext& context)
 
 inline void HTMLLIElement::parseValue(const AtomicString& value)
 {
-    DCHECK(layoutObject());
-    DCHECK(layoutObject()->isListItem());
+    ASSERT(layoutObject() && layoutObject()->isListItem());
 
-    int requestedValue = 0;
-    if (parseHTMLInteger(value, requestedValue))
+    bool valueOK;
+    int requestedValue = value.toInt(&valueOK);
+    if (valueOK)
         toLayoutListItem(layoutObject())->setExplicitValue(requestedValue);
     else
         toLayoutListItem(layoutObject())->clearExplicitValue();
 }
 
-} // namespace blink
+}

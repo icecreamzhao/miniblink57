@@ -13,8 +13,11 @@
 class SkReadBuffer;
 class SkWriteBuffer;
 
+<<<<<<< HEAD
 class SkPrivateEffectInitializer;
 
+=======
+>>>>>>> miniblink49
 /*
  *  Flattening is straight-forward:
  *      1. call getFactory() so we have a function-ptr to recreate the subclass
@@ -37,12 +40,17 @@ class SkPrivateEffectInitializer;
 #define SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP() static void InitializeFlattenables();
 
 #define SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_START(flattenable) \
+<<<<<<< HEAD
     void flattenable::InitializeFlattenables()                   \
     {
+=======
+    void flattenable::InitializeFlattenables() {
+>>>>>>> miniblink49
 
 #define SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_END \
     }
 
+<<<<<<< HEAD
 #define SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(flattenable)         \
     SkFlattenable::Register(#flattenable, flattenable::CreateProc, \
         flattenable::GetFlattenableType());
@@ -53,15 +61,31 @@ private:                                                                 \
     friend class SkFlattenable::PrivateInitializer;                      \
                                                                          \
 public:                                                                  \
+=======
+#define SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(flattenable) \
+    SkFlattenable::Registrar(#flattenable, flattenable::CreateProc, \
+                             flattenable::GetFlattenableType());
+
+#define SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(flattenable)    \
+    private:                                                                \
+    static SkFlattenable* CreateProc(SkReadBuffer&);                        \
+    friend class SkPrivateEffectInitializer;                                \
+    public:                                                                 \
+>>>>>>> miniblink49
     Factory getFactory() const override { return CreateProc; }
 
 /** For SkFlattenable derived objects with a valid type
     This macro should only be used in base class objects in core
   */
 #define SK_DEFINE_FLATTENABLE_TYPE(flattenable) \
+<<<<<<< HEAD
     static Type GetFlattenableType()            \
     {                                           \
         return k##flattenable##_Type;           \
+=======
+    static Type GetFlattenableType() { \
+        return k##flattenable##_Type; \
+>>>>>>> miniblink49
     }
 
 /** \class SkFlattenable
@@ -74,7 +98,10 @@ class SK_API SkFlattenable : public SkRefCnt {
 public:
     enum Type {
         kSkColorFilter_Type,
+<<<<<<< HEAD
         kSkDrawable_Type,
+=======
+>>>>>>> miniblink49
         kSkDrawLooper_Type,
         kSkImageFilter_Type,
         kSkMaskFilter_Type,
@@ -82,6 +109,7 @@ public:
         kSkPixelRef_Type,
         kSkRasterizer_Type,
         kSkShader_Type,
+<<<<<<< HEAD
         kSkUnused_Type, // used to be SkUnitMapper
         kSkXfermode_Type,
         kSkNormalSource_Type,
@@ -90,6 +118,15 @@ public:
     typedef sk_sp<SkFlattenable> (*Factory)(SkReadBuffer&);
 
     SkFlattenable() { }
+=======
+        kSkUnused_Type,     // used to be SkUnitMapper
+        kSkXfermode_Type,
+    };
+
+    typedef SkFlattenable* (*Factory)(SkReadBuffer&);
+
+    SkFlattenable() {}
+>>>>>>> miniblink49
 
     /** Implement this to return a factory function pointer that can be called
      to recreate your class given a buffer (previously written to by your
@@ -97,6 +134,7 @@ public:
      */
     virtual Factory getFactory() const = 0;
 
+<<<<<<< HEAD
     /**
      *  Returns the name of the object's class.
      *
@@ -106,6 +144,11 @@ public:
      *  If the flattenable is registered, there is no need to override.
      */
     virtual const char* getTypeName() const { return FactoryToName(getFactory()); }
+=======
+    /** Returns the name of the object's class
+      */
+    const char* getTypeName() const { return FactoryToName(getFactory()); }
+>>>>>>> miniblink49
 
     static Factory NameToFactory(const char name[]);
     static const char* FactoryToName(Factory);
@@ -113,10 +156,21 @@ public:
 
     static void Register(const char name[], Factory, Type);
 
+<<<<<<< HEAD
+=======
+    class Registrar {
+    public:
+        Registrar(const char name[], Factory factory, Type type) {
+            SkFlattenable::Register(name, factory, type);
+        }
+    };
+
+>>>>>>> miniblink49
     /**
      *  Override this if your subclass needs to record data that it will need to recreate itself
      *  from its CreateProc (returned by getFactory()).
      */
+<<<<<<< HEAD
     virtual void flatten(SkWriteBuffer&) const { }
 
 protected:
@@ -125,6 +179,9 @@ protected:
         static void InitCore();
         static void InitEffects();
     };
+=======
+    virtual void flatten(SkWriteBuffer&) const {}
+>>>>>>> miniblink49
 
 private:
     static void InitializeFlattenablesIfNeeded();

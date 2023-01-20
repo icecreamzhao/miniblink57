@@ -16,5 +16,10 @@
  */
 int SkForceLinking(bool doNotPassTrue);
 
+<<<<<<< HEAD
 #define __SK_FORCE_IMAGE_DECODER_LINKING \
     SK_UNUSED static int linking_forced = SkForceLinking(false)
+=======
+#define __SK_FORCE_IMAGE_DECODER_LINKING       \
+SK_UNUSED static int linking_forced = SkForceLinking(false)
+>>>>>>> miniblink49

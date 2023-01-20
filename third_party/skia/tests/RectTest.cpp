@@ -10,8 +10,12 @@
 #include "SkRect.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 static bool has_green_pixels(const SkBitmap& bm)
 {
+=======
+static bool has_green_pixels(const SkBitmap& bm) {
+>>>>>>> miniblink49
     for (int j = 0; j < bm.height(); ++j) {
         for (int i = 0; i < bm.width(); ++i) {
             if (SkColorGetG(bm.getColor(i, j))) {
@@ -23,8 +27,12 @@ static bool has_green_pixels(const SkBitmap& bm)
     return false;
 }
 
+<<<<<<< HEAD
 static void test_stroke_width_clipping(skiatest::Reporter* reporter)
 {
+=======
+static void test_stroke_width_clipping(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(100, 10);
     bm.eraseColor(SK_ColorTRANSPARENT);
@@ -48,6 +56,7 @@ static void test_stroke_width_clipping(skiatest::Reporter* reporter)
     REPORTER_ASSERT(reporter, has_green_pixels(bm));
 }
 
+<<<<<<< HEAD
 static void test_skbug4406(skiatest::Reporter* reporter)
 {
     SkBitmap bm;
@@ -91,4 +100,8 @@ DEF_TEST(Rect, reporter)
 {
     test_stroke_width_clipping(reporter);
     test_skbug4406(reporter);
+=======
+DEF_TEST(Rect, reporter) {
+    test_stroke_width_clipping(reporter);
+>>>>>>> miniblink49
 }

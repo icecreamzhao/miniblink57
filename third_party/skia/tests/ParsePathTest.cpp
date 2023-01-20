@@ -8,8 +8,12 @@
 #include "SkParsePath.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 static void test_to_from(skiatest::Reporter* reporter, const SkPath& path)
 {
+=======
+static void test_to_from(skiatest::Reporter* reporter, const SkPath& path) {
+>>>>>>> miniblink49
     SkString str, str2;
     SkParsePath::ToSVGString(path, &str);
 
@@ -19,8 +23,13 @@ static void test_to_from(skiatest::Reporter* reporter, const SkPath& path)
 
     SkParsePath::ToSVGString(path2, &str2);
     REPORTER_ASSERT(reporter, str == str2);
+<<<<<<< HEAD
 #if 0 // closed paths are not equal, the iter explicitly gives the closing \
     // edge, even if it is not in the path.
+=======
+#if 0 // closed paths are not equal, the iter explicitly gives the closing
+      // edge, even if it is not in the path.
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, path == path2);
     if (path != path2) {
         SkDebugf("str1=%s\nstr2=%s\n", str.c_str(), str2.c_str());
@@ -33,12 +42,17 @@ static struct {
     const SkRect fBounds;
 } gRec[] = {
     { "M1,1 l-2.58-2.828-3.82-0.113, 1.9-3.3223-1.08-3.6702, 3.75,0.7744,3.16-2.1551,"
+<<<<<<< HEAD
       "0.42,3.8008,3.02,2.3384-3.48,1.574-1.29,3.601z",
+=======
+       "0.42,3.8008,3.02,2.3384-3.48,1.574-1.29,3.601z",
+>>>>>>> miniblink49
         { -5.39999962f, -10.3142f, 5.77000046f, 1.f } },
     { "", { 0, 0, 0, 0 } },
     { "M0,0L10,10", { 0, 0, SkIntToScalar(10), SkIntToScalar(10) } },
     { "M-5.5,-0.5 Q 0 0 6,6.50",
         { -5.5f, -0.5f,
+<<<<<<< HEAD
             6, 6.5f } }
 };
 
@@ -46,6 +60,14 @@ DEF_TEST(ParsePath, reporter)
 {
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); i++) {
         SkPath path;
+=======
+          6, 6.5f } }
+};
+
+DEF_TEST(ParsePath, reporter) {
+    for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); i++) {
+        SkPath  path;
+>>>>>>> miniblink49
         bool success = SkParsePath::FromSVGString(gRec[i].fStr, &path);
         REPORTER_ASSERT(reporter, success);
         const SkRect& expectedBounds = gRec[i].fBounds;
@@ -65,6 +87,7 @@ DEF_TEST(ParsePath, reporter)
     p.addRoundRect(r, 4, 4.5f);
     test_to_from(reporter, p);
 }
+<<<<<<< HEAD
 
 DEF_TEST(ParsePath_invalid, r)
 {
@@ -92,3 +115,5 @@ DEF_TEST(ParsePathRandom, r)
         REPORTER_ASSERT(r, success);
     }
 }
+=======
+>>>>>>> miniblink49

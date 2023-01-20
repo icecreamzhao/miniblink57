@@ -26,6 +26,7 @@
 #ifndef PODArena_h
 #define PODArena_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Noncopyable.h"
@@ -35,6 +36,16 @@
 #include "wtf/allocator/Partitions.h"
 #include <memory>
 #include <stdint.h>
+=======
+#include <stdint.h>
+#include "wtf/Assertions.h"
+#include "wtf/FastMalloc.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -51,7 +62,10 @@ public:
     public:
         virtual void* allocate(size_t size) = 0;
         virtual void free(void* ptr) = 0;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
     protected:
         virtual ~Allocator() { }
         friend class WTF::RefCounted<Allocator>;
@@ -66,43 +80,73 @@ public:
             return adoptRef(new FastMallocAllocator);
         }
 
+<<<<<<< HEAD
         void* allocate(size_t size) override
         {
             return WTF::Partitions::fastMalloc(size,
                 WTF_HEAP_PROFILER_TYPE_NAME(PODArena));
         }
         void free(void* ptr) override { WTF::Partitions::fastFree(ptr); }
+=======
+        void* allocate(size_t size) override { return fastMalloc(size); }
+        void free(void* ptr) override { fastFree(ptr); }
+>>>>>>> miniblink49
 
     protected:
         FastMallocAllocator() { }
     };
 
     // Creates a new PODArena configured with a FastMallocAllocator.
+<<<<<<< HEAD
     static PassRefPtr<PODArena> create() { return adoptRef(new PODArena); }
+=======
+    static PassRefPtr<PODArena> create()
+    {
+        return adoptRef(new PODArena);
+    }
+>>>>>>> miniblink49
 
     // Creates a new PODArena configured with the given Allocator.
     static PassRefPtr<PODArena> create(PassRefPtr<Allocator> allocator)
     {
+<<<<<<< HEAD
         return adoptRef(new PODArena(std::move(allocator)));
     }
 
     // Allocates an object from the arena.
     template <class T>
     T* allocateObject()
+=======
+        return adoptRef(new PODArena(allocator));
+    }
+
+    // Allocates an object from the arena.
+    template<class T> T* allocateObject()
+>>>>>>> miniblink49
     {
         return new (allocateBase<T>()) T();
     }
 
     // Allocates an object from the arena, calling a single-argument constructor.
+<<<<<<< HEAD
     template <class T, class Argument1Type>
     T* allocateObject(const Argument1Type& argument1)
+=======
+    template<class T, class Argument1Type> T* allocateObject(const Argument1Type& argument1)
+>>>>>>> miniblink49
     {
         return new (allocateBase<T>()) T(argument1);
     }
 
     // The initial size of allocated chunks; increases as necessary to
     // satisfy large allocations. Mainly public for unit tests.
+<<<<<<< HEAD
     enum { DefaultChunkSize = 16384 };
+=======
+    enum {
+        DefaultChunkSize = 16384
+    };
+>>>>>>> miniblink49
 
 protected:
     friend class WTF::RefCounted<PODArena>;
@@ -110,13 +154,18 @@ protected:
     PODArena()
         : m_allocator(FastMallocAllocator::create())
         , m_current(0)
+<<<<<<< HEAD
         , m_currentChunkSize(DefaultChunkSize)
     {
     }
+=======
+        , m_currentChunkSize(DefaultChunkSize) { }
+>>>>>>> miniblink49
 
     explicit PODArena(PassRefPtr<Allocator> allocator)
         : m_allocator(allocator)
         , m_current(0)
+<<<<<<< HEAD
         , m_currentChunkSize(DefaultChunkSize)
     {
     }
@@ -125,12 +174,23 @@ protected:
     // current platform.
     template <class T>
     static size_t minAlignment()
+=======
+        , m_currentChunkSize(DefaultChunkSize) { }
+
+    // Returns the alignment requirement for classes and structs on the
+    // current platform.
+    template <class T> static size_t minAlignment()
+>>>>>>> miniblink49
     {
         return WTF_ALIGN_OF(T);
     }
 
+<<<<<<< HEAD
     template <class T>
     void* allocateBase()
+=======
+    template<class T> void* allocateBase()
+>>>>>>> miniblink49
     {
         void* ptr = 0;
         size_t roundedSize = roundUp(sizeof(T), minAlignment<T>());
@@ -140,9 +200,14 @@ protected:
         if (!ptr) {
             if (roundedSize > m_currentChunkSize)
                 m_currentChunkSize = roundedSize;
+<<<<<<< HEAD
             m_chunks.push_back(
                 WTF::wrapUnique(new Chunk(m_allocator.get(), m_currentChunkSize)));
             m_current = m_chunks.back().get();
+=======
+            m_chunks.append(adoptPtr(new Chunk(m_allocator.get(), m_currentChunkSize)));
+            m_current = m_chunks.last().get();
+>>>>>>> miniblink49
             ptr = m_current->allocate(roundedSize);
         }
         return ptr;
@@ -157,9 +222,13 @@ protected:
 
     // Manages a chunk of memory and individual allocations out of it.
     class Chunk final {
+<<<<<<< HEAD
         USING_FAST_MALLOC(Chunk);
         WTF_MAKE_NONCOPYABLE(Chunk);
 
+=======
+        WTF_MAKE_NONCOPYABLE(Chunk);
+>>>>>>> miniblink49
     public:
         // Allocates a block of memory of the given size from the passed
         // Allocator.
@@ -173,7 +242,14 @@ protected:
 
         // Frees the memory allocated from the Allocator in the
         // constructor.
+<<<<<<< HEAD
         ~Chunk() { m_allocator->free(m_base); }
+=======
+        ~Chunk()
+        {
+            m_allocator->free(m_base);
+        }
+>>>>>>> miniblink49
 
         // Returns a pointer to "size" bytes of storage, or 0 if this
         // Chunk could not satisfy the allocation.
@@ -201,7 +277,11 @@ protected:
     RefPtr<Allocator> m_allocator;
     Chunk* m_current;
     size_t m_currentChunkSize;
+<<<<<<< HEAD
     Vector<std::unique_ptr<Chunk>> m_chunks;
+=======
+    Vector<OwnPtr<Chunk>> m_chunks;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

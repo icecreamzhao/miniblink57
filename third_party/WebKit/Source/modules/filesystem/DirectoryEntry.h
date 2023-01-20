@@ -47,16 +47,22 @@ class VoidCallback;
 
 class MODULES_EXPORT DirectoryEntry final : public Entry {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static DirectoryEntry* create(DOMFileSystemBase* fileSystem,
         const String& fullPath)
+=======
+public:
+    static DirectoryEntry* create(DOMFileSystemBase* fileSystem, const String& fullPath)
+>>>>>>> miniblink49
     {
         return new DirectoryEntry(fileSystem, fullPath);
     }
     bool isDirectory() const override { return true; }
 
     DirectoryReader* createReader();
+<<<<<<< HEAD
     void getFile(const String& path,
         const FileSystemFlags&,
         EntryCallback* = nullptr,
@@ -67,6 +73,11 @@ public:
         ErrorCallback* = nullptr);
     void removeRecursively(VoidCallback* successCallback = nullptr,
         ErrorCallback* = nullptr) const;
+=======
+    void getFile(const String& path, const FileSystemFlags&, EntryCallback* = nullptr, ErrorCallback* = nullptr);
+    void getDirectory(const String& path, const FileSystemFlags&, EntryCallback* = nullptr, ErrorCallback* = nullptr);
+    void removeRecursively(VoidCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -74,11 +85,15 @@ private:
     DirectoryEntry(DOMFileSystemBase*, const String& fullPath);
 };
 
+<<<<<<< HEAD
 DEFINE_TYPE_CASTS(DirectoryEntry,
     Entry,
     entry,
     entry->isDirectory(),
     entry.isDirectory());
+=======
+DEFINE_TYPE_CASTS(DirectoryEntry, Entry, entry, entry->isDirectory(), entry.isDirectory());
+>>>>>>> miniblink49
 
 } // namespace blink
 

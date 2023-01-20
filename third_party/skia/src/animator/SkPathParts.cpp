@@ -6,6 +6,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkPathParts.h"
 #include "SkAnimateMaker.h"
 #include "SkDrawMatrix.h"
@@ -33,6 +34,31 @@ bool SkPathPart::setParent(SkDisplayable* parent)
     if (parent->isPath() == false)
         return true;
     fPath = (SkDrawPath*)parent;
+=======
+
+#include "SkPathParts.h"
+#include "SkAnimateMaker.h"
+#include "SkDrawMatrix.h"
+#include "SkDrawRectangle.h"
+#include "SkDrawPath.h"
+
+SkPathPart::SkPathPart() : fPath(NULL) {
+}
+
+void SkPathPart::dirty() {
+    fPath->dirty();
+}
+
+SkDisplayable* SkPathPart::getParent() const {
+    return fPath;
+}
+
+bool SkPathPart::setParent(SkDisplayable* parent) {
+    SkASSERT(parent != NULL);
+    if (parent->isPath() == false)
+        return true;
+    fPath = (SkDrawPath*) parent;
+>>>>>>> miniblink49
     return false;
 }
 
@@ -48,6 +74,7 @@ const SkMemberInfo SkMoveTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkMoveTo);
 
+<<<<<<< HEAD
 SkMoveTo::SkMoveTo()
     : x(0)
     , y(0)
@@ -56,10 +83,20 @@ SkMoveTo::SkMoveTo()
 
 bool SkMoveTo::add()
 {
+=======
+SkMoveTo::SkMoveTo() : x(0), y(0) {
+}
+
+bool SkMoveTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.moveTo(x, y);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // RMoveTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -71,12 +108,20 @@ const SkMemberInfo SkRMoveTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRMoveTo);
 
+<<<<<<< HEAD
 bool SkRMoveTo::add()
 {
+=======
+bool SkRMoveTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.rMoveTo(x, y);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // LineTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -89,6 +134,7 @@ const SkMemberInfo SkLineTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkLineTo);
 
+<<<<<<< HEAD
 SkLineTo::SkLineTo()
     : x(0)
     , y(0)
@@ -97,10 +143,20 @@ SkLineTo::SkLineTo()
 
 bool SkLineTo::add()
 {
+=======
+SkLineTo::SkLineTo() : x(0), y(0) {
+}
+
+bool SkLineTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.lineTo(x, y);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // RLineTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -112,12 +168,20 @@ const SkMemberInfo SkRLineTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRLineTo);
 
+<<<<<<< HEAD
 bool SkRLineTo::add()
 {
+=======
+bool SkRLineTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.rLineTo(x, y);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // QuadTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -132,6 +196,7 @@ const SkMemberInfo SkQuadTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkQuadTo);
 
+<<<<<<< HEAD
 SkQuadTo::SkQuadTo()
     : x1(0)
     , y1(0)
@@ -142,10 +207,20 @@ SkQuadTo::SkQuadTo()
 
 bool SkQuadTo::add()
 {
+=======
+SkQuadTo::SkQuadTo() : x1(0), y1(0), x2(0), y2(0) {
+}
+
+bool SkQuadTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.quadTo(x1, y1, x2, y2);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // RQuadTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -157,12 +232,20 @@ const SkMemberInfo SkRQuadTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRQuadTo);
 
+<<<<<<< HEAD
 bool SkRQuadTo::add()
 {
+=======
+bool SkRQuadTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.rQuadTo(x1, y1, x2, y2);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // CubicTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -179,6 +262,7 @@ const SkMemberInfo SkCubicTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkCubicTo);
 
+<<<<<<< HEAD
 SkCubicTo::SkCubicTo()
     : x1(0)
     , y1(0)
@@ -191,10 +275,20 @@ SkCubicTo::SkCubicTo()
 
 bool SkCubicTo::add()
 {
+=======
+SkCubicTo::SkCubicTo() : x1(0), y1(0), x2(0), y2(0), x3(0), y3(0) {
+}
+
+bool SkCubicTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.cubicTo(x1, y1, x2, y2, x3, y3);
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // RCubicTo
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -206,19 +300,33 @@ const SkMemberInfo SkRCubicTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRCubicTo);
 
+<<<<<<< HEAD
 bool SkRCubicTo::add()
 {
+=======
+bool SkRCubicTo::add() {
+>>>>>>> miniblink49
     fPath->fPath.rCubicTo(x1, y1, x2, y2, x3, y3);
     return false;
 }
 
+<<<<<<< HEAD
 // SkClose
 bool SkClose::add()
 {
+=======
+
+// SkClose
+bool SkClose::add() {
+>>>>>>> miniblink49
     fPath->fPath.close();
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // SkAddGeom
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -230,9 +338,13 @@ const SkMemberInfo SkAddGeom::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAddGeom);
 
+<<<<<<< HEAD
 SkAddGeom::SkAddGeom()
     : direction(SkPath::kCCW_Direction)
 {
+=======
+SkAddGeom::SkAddGeom() : direction(SkPath::kCCW_Direction) {
+>>>>>>> miniblink49
 }
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -249,6 +361,7 @@ const SkMemberInfo SkAddRect::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAddRect);
 
+<<<<<<< HEAD
 SkAddRect::SkAddRect()
 {
     fRect.setEmpty();
@@ -260,6 +373,18 @@ bool SkAddRect::add()
     return false;
 }
 
+=======
+SkAddRect::SkAddRect() {
+    fRect.setEmpty();
+}
+
+bool SkAddRect::add() {
+    fPath->fPath.addRect(fRect, (SkPath::Direction) direction);
+    return false;
+}
+
+
+>>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkAddOval::fInfo[] = {
@@ -270,12 +395,21 @@ const SkMemberInfo SkAddOval::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAddOval);
 
+<<<<<<< HEAD
 bool SkAddOval::add()
 {
     fPath->fPath.addOval(fRect, (SkPath::Direction)direction);
     return false;
 }
 
+=======
+bool SkAddOval::add() {
+    fPath->fPath.addOval(fRect,  (SkPath::Direction) direction);
+    return false;
+}
+
+
+>>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkAddCircle::fInfo[] = {
@@ -289,6 +423,7 @@ const SkMemberInfo SkAddCircle::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAddCircle);
 
+<<<<<<< HEAD
 SkAddCircle::SkAddCircle()
     : radius(0)
     , x(0)
@@ -302,6 +437,17 @@ bool SkAddCircle::add()
     return false;
 }
 
+=======
+SkAddCircle::SkAddCircle() : radius(0), x(0), y(0) {
+}
+
+bool SkAddCircle::add() {
+    fPath->fPath.addCircle(x, y, radius,  (SkPath::Direction) direction);
+    return false;
+}
+
+
+>>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkAddRoundRect::fInfo[] = {
@@ -314,6 +460,7 @@ const SkMemberInfo SkAddRoundRect::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAddRoundRect);
 
+<<<<<<< HEAD
 SkAddRoundRect::SkAddRoundRect()
     : rx(0)
     , ry(0)
@@ -326,6 +473,17 @@ bool SkAddRoundRect::add()
     return false;
 }
 
+=======
+SkAddRoundRect::SkAddRoundRect() : rx(0), ry(0) {
+}
+
+bool SkAddRoundRect::add() {
+    fPath->fPath.addRoundRect(fRect, rx, ry,  (SkPath::Direction) direction);
+    return false;
+}
+
+
+>>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkAddPath::fInfo[] = {
@@ -337,6 +495,7 @@ const SkMemberInfo SkAddPath::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAddPath);
 
+<<<<<<< HEAD
 SkAddPath::SkAddPath()
     : matrix(nullptr)
     , path(nullptr)
@@ -346,6 +505,13 @@ SkAddPath::SkAddPath()
 bool SkAddPath::add()
 {
     SkASSERT(path != nullptr);
+=======
+SkAddPath::SkAddPath() : matrix(NULL), path(NULL) {
+}
+
+bool SkAddPath::add() {
+    SkASSERT (path != NULL);
+>>>>>>> miniblink49
     if (matrix)
         fPath->fPath.addPath(path->fPath, matrix->getMatrix());
     else

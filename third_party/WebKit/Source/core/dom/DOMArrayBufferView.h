@@ -9,15 +9,13 @@
 #include "core/CoreExport.h"
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/dom/DOMSharedArrayBuffer.h"
-#include "wtf/typed_arrays/ArrayBufferView.h"
+#include "wtf/ArrayBufferView.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
-class CORE_EXPORT DOMArrayBufferView
-    : public GarbageCollectedFinalized<DOMArrayBufferView>,
-      public ScriptWrappable {
+class CORE_EXPORT DOMArrayBufferView : public RefCounted<DOMArrayBufferView>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     typedef WTF::ArrayBufferView::ViewType ViewType;
     static const ViewType TypeInt8 = WTF::ArrayBufferView::TypeInt8;
@@ -33,29 +31,29 @@ public:
 
     virtual ~DOMArrayBufferView() { }
 
-    DOMArrayBuffer* buffer() const
+    PassRefPtr<DOMArrayBuffer> buffer() const
     {
-        DCHECK(!isShared());
-        if (!m_domArrayBuffer)
+        ASSERT(!isShared());
+        if (!m_domArrayBuffer) {
             m_domArrayBuffer = DOMArrayBuffer::create(view()->buffer());
-
-        return static_cast<DOMArrayBuffer*>(m_domArrayBuffer.get());
+        }
+        return static_pointer_cast<DOMArrayBuffer>(m_domArrayBuffer);
     }
 
-    DOMSharedArrayBuffer* bufferShared() const
+    PassRefPtr<DOMSharedArrayBuffer> bufferShared() const
     {
-        DCHECK(isShared());
-        if (!m_domArrayBuffer)
+        ASSERT(isShared());
+        if (!m_domArrayBuffer) {
             m_domArrayBuffer = DOMSharedArrayBuffer::create(view()->buffer());
-
-        return static_cast<DOMSharedArrayBuffer*>(m_domArrayBuffer.get());
+        }
+        return static_pointer_cast<DOMSharedArrayBuffer>(m_domArrayBuffer);
     }
 
-    DOMArrayBufferBase* bufferBase() const
+    PassRefPtr<DOMArrayBufferBase> bufferBase() const
     {
-        if (isShared())
+        if (isShared()) {
             return bufferShared();
-
+        }
         return buffer();
     }
 
@@ -67,38 +65,32 @@ public:
     void* baseAddress() const { return view()->baseAddress(); }
     unsigned byteOffset() const { return view()->byteOffset(); }
     unsigned byteLength() const { return view()->byteLength(); }
-    unsigned typeSize() const { return view()->typeSize(); }
     void setNeuterable(bool flag) { return view()->setNeuterable(flag); }
     bool isShared() const { return view()->isShared(); }
 
-    v8::Local<v8::Object> wrap(v8::Isolate*,
-        v8::Local<v8::Object> creationContext) override
+    v8::Local<v8::Object> wrap(v8::Isolate*, v8::Local<v8::Object> creationContext) override
     {
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return v8::Local<v8::Object>();
     }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_domArrayBuffer); }
 
 protected:
     explicit DOMArrayBufferView(PassRefPtr<WTF::ArrayBufferView> bufferView)
         : m_bufferView(bufferView)
     {
-        DCHECK(m_bufferView);
+        ASSERT(m_bufferView);
     }
-    DOMArrayBufferView(PassRefPtr<WTF::ArrayBufferView> bufferView,
-        DOMArrayBufferBase* domArrayBuffer)
-        : m_bufferView(bufferView)
-        , m_domArrayBuffer(domArrayBuffer)
+    DOMArrayBufferView(PassRefPtr<WTF::ArrayBufferView> bufferView, PassRefPtr<DOMArrayBufferBase> domArrayBuffer)
+        : m_bufferView(bufferView), m_domArrayBuffer(domArrayBuffer)
     {
-        DCHECK(m_bufferView);
-        DCHECK(m_domArrayBuffer);
-        DCHECK_EQ(m_domArrayBuffer->buffer(), m_bufferView->buffer());
+        ASSERT(m_bufferView);
+        ASSERT(m_domArrayBuffer);
+        ASSERT(m_domArrayBuffer->buffer() == m_bufferView->buffer());
     }
 
 private:
     RefPtr<WTF::ArrayBufferView> m_bufferView;
-    mutable Member<DOMArrayBufferBase> m_domArrayBuffer;
+    mutable RefPtr<DOMArrayBufferBase> m_domArrayBuffer;
 };
 
 } // namespace blink

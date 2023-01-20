@@ -8,97 +8,111 @@
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "core/page/scrolling/ScrollStateInit.h"
-#include "platform/scroll/ScrollStateData.h"
-#include "wtf/Forward.h"
-#include <deque>
-#include <memory>
+#include "core/dom/Element.h"
+#include "wtf/Vector.h"
 
 namespace blink {
 
-class Element;
-
-class CORE_EXPORT ScrollState final
-    : public GarbageCollectedFinalized<ScrollState>,
-      public ScriptWrappable {
+class CORE_EXPORT ScrollState final : public RefCountedWillBeGarbageCollected<ScrollState>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
 public:
-    static ScrollState* create(ScrollStateInit);
-    static ScrollState* create(std::unique_ptr<ScrollStateData>);
-
-    ~ScrollState() { }
+    static PassRefPtrWillBeRawPtr<ScrollState> create(
+        double deltaX, double deltaY, double deltaGranularity, double velocityX,
+        double velocityY, bool inInertialPhase,
+        bool isBeginning = false, bool isEnding = false,
+        bool fromUserInput = false, bool shouldPropagate = true,
+        bool deltaConsumedForScrollSequence = false);
 
     // Web exposed methods.
 
     // Reduce deltas by x, y.
     void consumeDelta(double x, double y, ExceptionState&);
-    // Pops the first element off of |m_scrollChain| and calls |distributeScroll|
-    // on it.
+    // Pops the first element off of |m_scrollChain| and calls
+    // |distributeScroll| on it.
     void distributeToScrollChainDescendant();
-    int positionX() { return m_data->position_x; };
-    int positionY() { return m_data->position_y; };
-    // Positive when scrolling right.
-    double deltaX() const { return m_data->delta_x; };
-    // Positive when scrolling down.
-    double deltaY() const { return m_data->delta_y; };
-    // Indicates the smallest delta the input device can produce. 0 for
-    // unquantized inputs.
-    double deltaGranularity() const { return m_data->delta_granularity; };
+    // Positive when scrolling left.
+    double deltaX() const { return m_deltaX; }
+    // Positive when scrolling up.
+    double deltaY() const { return m_deltaY; }
+    // Indicates the smallest delta the input device can produce. 0 for unquantized inputs.
+    double deltaGranularity() const { return m_deltaGranularity; }
     // Positive if moving right.
-    double velocityX() const { return m_data->velocity_x; };
+    double velocityX() const { return m_velocityX; }
     // Positive if moving down.
-    double velocityY() const { return m_data->velocity_y; };
+    double velocityY() const { return m_velocityY; }
     // True for events dispatched after the users's gesture has finished.
-    bool inInertialPhase() const { return m_data->is_in_inertial_phase; };
+    bool inInertialPhase() const { return m_inInertialPhase; }
     // True if this is the first event for this scroll.
-    bool isBeginning() const { return m_data->is_beginning; };
+    bool isBeginning() const { return m_isBeginning; }
     // True if this is the last event for this scroll.
-    bool isEnding() const { return m_data->is_ending; };
+    bool isEnding() const { return m_isEnding; }
     // True if this scroll is the direct result of user input.
-    bool fromUserInput() const { return m_data->from_user_input; };
-    // True if this scroll is the result of the user interacting directly with
-    // the screen, e.g., via touch.
-    bool isDirectManipulation() const { return m_data->is_direct_manipulation; }
+    bool fromUserInput() const { return m_fromUserInput; }
     // True if this scroll is allowed to bubble upwards.
-    bool shouldPropagate() const { return m_data->should_propagate; };
+    bool shouldPropagate() const { return m_shouldPropagate; }
 
     // Non web exposed methods.
     void consumeDeltaNative(double x, double y);
 
-    // TODO(tdresser): this needs to be web exposed. See crbug.com/483091.
-    void setScrollChain(std::deque<int> scrollChain)
+    void setScrollChain(WillBeHeapDeque<RefPtrWillBeMember<Element>> scrollChain)
     {
         m_scrollChain = scrollChain;
     }
 
-    Element* currentNativeScrollingElement() const;
-    void setCurrentNativeScrollingElement(Element*);
+    void setCurrentNativeScrollingElement(Element* element)
+    {
+        m_currentNativeScrollingElement = element;
+    }
 
-    void setCurrentNativeScrollingElementById(int elementId);
+    Element* currentNativeScrollingElement() const
+    {
+        return m_currentNativeScrollingElement.get();
+    }
 
     bool deltaConsumedForScrollSequence() const
     {
-        return m_data->delta_consumed_for_scroll_sequence;
+        return m_deltaConsumedForScrollSequence;
     }
 
     // Scroll begin and end must propagate to all nodes to ensure
     // their state is updated.
     bool fullyConsumed() const
     {
-        return !m_data->delta_x && !m_data->delta_y && !m_data->is_ending && !m_data->is_beginning;
+        return !m_deltaX && !m_deltaY && !m_isEnding && !m_isBeginning;
     }
 
-    ScrollStateData* data() const { return m_data.get(); }
-
-    DEFINE_INLINE_TRACE() { }
+    DEFINE_INLINE_TRACE()
+    {
+        visitor->trace(m_currentNativeScrollingElement);
+        visitor->trace(m_scrollChain);
+    };
 
 private:
     ScrollState();
-    explicit ScrollState(std::unique_ptr<ScrollStateData>);
+    ScrollState(double deltaX, double deltaY, double deltaGranularity,
+        double velocityX, double velocityY, bool inInertialPhase, bool isBeginning,
+        bool isEnding, bool fromUserInput, bool shouldPropagate,
+        bool deltaConsumedForScrollSequence);
 
-    std::unique_ptr<ScrollStateData> m_data;
-    std::deque<int> m_scrollChain;
+    double m_deltaX;
+    double m_deltaY;
+    double m_deltaGranularity;
+    double m_velocityX;
+    double m_velocityY;
+    bool m_inInertialPhase;
+    bool m_isBeginning;
+    bool m_isEnding;
+
+    bool m_fromUserInput;
+    bool m_shouldPropagate;
+    // The last native element to respond to a scroll, or null if none exists.
+    RefPtrWillBeMember<Element> m_currentNativeScrollingElement;
+    // Whether the scroll sequence has had any delta consumed, in the
+    // current frame, or any child frames.
+    bool m_deltaConsumedForScrollSequence;
+
+    WillBeHeapDeque<RefPtrWillBeMember<Element>> m_scrollChain;
 };
 
 } // namespace blink

@@ -44,6 +44,10 @@ public:
     virtual void handleEvent(Metadata*) = 0;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+} // namespace
+>>>>>>> miniblink49
 
 #endif // MetadataCallback_h

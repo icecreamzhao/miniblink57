@@ -7,7 +7,11 @@
 
 #include <signal.h>
 
+<<<<<<< HEAD
 #include "v8config.h" // NOLINT(build/include)
+=======
+#include "v8config.h"  // NOLINT(build/include)
+>>>>>>> miniblink49
 
 namespace v8 {
 /**
@@ -25,7 +29,14 @@ namespace v8 {
  * handler.
  */
 V8_EXPORT bool TryHandleWebAssemblyTrapPosix(int sig_code, siginfo_t* info,
+<<<<<<< HEAD
     void* context);
 
 } // namespace v8
 #endif // V8_WASM_TRAP_HANDLER_POSIX_H_
+=======
+                                             void* context);
+
+}  // namespace v8
+#endif  // V8_WASM_TRAP_HANDLER_POSIX_H_
+>>>>>>> miniblink49

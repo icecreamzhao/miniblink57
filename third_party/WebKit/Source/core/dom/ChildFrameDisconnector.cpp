@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/dom/ChildFrameDisconnector.h"
 
 #include "core/dom/shadow/ElementShadow.h"
@@ -11,13 +12,13 @@
 
 namespace blink {
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
 static unsigned checkConnectedSubframeCountIsConsistent(Node&);
 #endif
 
 void ChildFrameDisconnector::disconnect(DisconnectPolicy policy)
 {
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     checkConnectedSubframeCountIsConsistent(root());
 #endif
 
@@ -40,7 +41,7 @@ void ChildFrameDisconnector::collectFrameOwners(Node& root)
         return;
 
     if (root.isHTMLElement() && root.isFrameOwnerElement())
-        m_frameOwners.push_back(&toHTMLFrameOwnerElement(root));
+        m_frameOwners.append(&toHTMLFrameOwnerElement(root));
 
     for (Node* child = root.firstChild(); child; child = child->nextSibling())
         collectFrameOwners(*child);
@@ -60,19 +61,18 @@ void ChildFrameDisconnector::disconnectCollectedFrameOwners()
         HTMLFrameOwnerElement* owner = m_frameOwners[i].get();
         // Don't need to traverse up the tree for the first owner since no
         // script could have moved it.
-        if (!i || root().isShadowIncludingInclusiveAncestorOf(owner))
+        if (!i || root().containsIncludingShadowDOM(owner))
             owner->disconnectContentFrame();
     }
 }
 
 void ChildFrameDisconnector::collectFrameOwners(ElementShadow& shadow)
 {
-    for (ShadowRoot* root = &shadow.youngestShadowRoot(); root;
-         root = root->olderShadowRoot())
+    for (ShadowRoot* root = shadow.youngestShadowRoot(); root; root = root->olderShadowRoot())
         collectFrameOwners(*root);
 }
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
 static unsigned checkConnectedSubframeCountIsConsistent(Node& node)
 {
     unsigned count = 0;
@@ -82,8 +82,7 @@ static unsigned checkConnectedSubframeCountIsConsistent(Node& node)
             count++;
 
         if (ElementShadow* shadow = toElement(node).shadow()) {
-            for (ShadowRoot* root = &shadow->youngestShadowRoot(); root;
-                 root = root->olderShadowRoot())
+            for (ShadowRoot* root = shadow->youngestShadowRoot(); root; root = root->olderShadowRoot())
                 count += checkConnectedSubframeCountIsConsistent(*root);
         }
     }
@@ -93,15 +92,15 @@ static unsigned checkConnectedSubframeCountIsConsistent(Node& node)
 
     // If we undercount there's possibly a security bug since we'd leave frames
     // in subtrees outside the document.
-    DCHECK_GE(node.connectedSubframeCount(), count);
+    ASSERT(node.connectedSubframeCount() >= count);
 
     // If we overcount it's safe, but not optimal because it means we'll traverse
     // through the document in ChildFrameDisconnector looking for frames that have
     // already been disconnected.
-    DCHECK_EQ(node.connectedSubframeCount(), count);
+    ASSERT(node.connectedSubframeCount() == count);
 
     return count;
 }
 #endif
 
-} // namespace blink
+}

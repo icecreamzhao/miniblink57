@@ -30,13 +30,10 @@
 
 namespace blink {
 
-template <>
-const SVGEnumerationStringEntries&
-getStaticStringEntries<ComponentTransferType>();
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<ComponentTransferType>();
 
 class SVGComponentTransferFunctionElement : public SVGElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     ComponentTransferFunction transferFunction() const;
 
@@ -58,13 +55,13 @@ protected:
     bool layoutObjectIsNeeded(const ComputedStyle&) final { return false; }
 
 private:
-    Member<SVGAnimatedNumberList> m_tableValues;
-    Member<SVGAnimatedNumber> m_slope;
-    Member<SVGAnimatedNumber> m_intercept;
-    Member<SVGAnimatedNumber> m_amplitude;
-    Member<SVGAnimatedNumber> m_exponent;
-    Member<SVGAnimatedNumber> m_offset;
-    Member<SVGAnimatedEnumeration<ComponentTransferType>> m_type;
+    RefPtrWillBeMember<SVGAnimatedNumberList> m_tableValues;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_slope;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_intercept;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_amplitude;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_exponent;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_offset;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<ComponentTransferType>> m_type;
 };
 
 } // namespace blink

@@ -29,7 +29,10 @@
 namespace blink {
 
 enum WebGestureDevice {
+<<<<<<< HEAD
     WebGestureDeviceUninitialized,
+=======
+>>>>>>> miniblink49
     WebGestureDeviceTouchpad,
     WebGestureDeviceTouchscreen,
 };

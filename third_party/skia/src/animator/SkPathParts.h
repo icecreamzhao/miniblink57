@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkPathParts_DEFINED
 #define SkPathParts_DEFINED
 
@@ -24,10 +28,14 @@ public:
     virtual SkDisplayable* getParent() const;
     virtual bool setParent(SkDisplayable* parent);
 #ifdef SK_DEBUG
+<<<<<<< HEAD
     virtual bool isPathPart() const
     {
         return true;
     }
+=======
+    virtual bool isPathPart() const { return true; }
+>>>>>>> miniblink49
 #endif
 protected:
     SkDrawPath* fPath;
@@ -37,7 +45,10 @@ class SkMoveTo : public SkPathPart {
     DECLARE_MEMBER_INFO(MoveTo);
     SkMoveTo();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     SkScalar x;
     SkScalar y;
@@ -46,7 +57,10 @@ protected:
 class SkRMoveTo : public SkMoveTo {
     DECLARE_MEMBER_INFO(RMoveTo);
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkMoveTo INHERITED;
 };
@@ -55,7 +69,10 @@ class SkLineTo : public SkPathPart {
     DECLARE_MEMBER_INFO(LineTo);
     SkLineTo();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     SkScalar x;
     SkScalar y;
@@ -64,7 +81,10 @@ protected:
 class SkRLineTo : public SkLineTo {
     DECLARE_MEMBER_INFO(RLineTo);
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkLineTo INHERITED;
 };
@@ -73,7 +93,10 @@ class SkQuadTo : public SkPathPart {
     DECLARE_MEMBER_INFO(QuadTo);
     SkQuadTo();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     SkScalar x1;
     SkScalar y1;
@@ -84,7 +107,10 @@ protected:
 class SkRQuadTo : public SkQuadTo {
     DECLARE_MEMBER_INFO(RQuadTo);
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkQuadTo INHERITED;
 };
@@ -93,7 +119,10 @@ class SkCubicTo : public SkPathPart {
     DECLARE_MEMBER_INFO(CubicTo);
     SkCubicTo();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     SkScalar x1;
     SkScalar y1;
@@ -106,7 +135,10 @@ protected:
 class SkRCubicTo : public SkCubicTo {
     DECLARE_MEMBER_INFO(RCubicTo);
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkCubicTo INHERITED;
 };
@@ -119,7 +151,10 @@ class SkClose : public SkPathPart {
 class SkAddGeom : public SkPathPart {
     DECLARE_PRIVATE_MEMBER_INFO(AddGeom);
     SkAddGeom();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     int /*SkPath::Direction*/ direction;
 };
@@ -128,10 +163,15 @@ class SkAddRect : public SkAddGeom {
     DECLARE_MEMBER_INFO(AddRect);
     SkAddRect();
     bool add() override;
+<<<<<<< HEAD
 
 protected:
     SkRect fRect;
 
+=======
+protected:
+    SkRect fRect;
+>>>>>>> miniblink49
 private:
     typedef SkAddGeom INHERITED;
 };
@@ -139,7 +179,10 @@ private:
 class SkAddOval : public SkAddRect {
     DECLARE_MEMBER_INFO(AddOval);
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkAddRect INHERITED;
 };
@@ -148,7 +191,10 @@ class SkAddCircle : public SkAddGeom {
     DECLARE_MEMBER_INFO(AddCircle);
     SkAddCircle();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkScalar radius;
     SkScalar x;
@@ -160,7 +206,10 @@ class SkAddRoundRect : public SkAddRect {
     DECLARE_MEMBER_INFO(AddRoundRect);
     SkAddRoundRect();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkScalar rx;
     SkScalar ry;
@@ -171,7 +220,10 @@ class SkAddPath : public SkPathPart {
     DECLARE_MEMBER_INFO(AddPath);
     SkAddPath();
     bool add() override;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkPathPart INHERITED;
     SkDrawMatrix* matrix;

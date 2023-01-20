@@ -39,6 +39,7 @@ namespace WTF {
 // TreeNode is generic, ContainerNode-like linked tree data structure.
 // There are a few notable difference between TreeNode and Node:
 //
+<<<<<<< HEAD
 //  * Each TreeNode node is NOT ref counted. The user have to retain its
 //    lifetime somehow.
 //    FIXME: lifetime management could be parameterized so that ref counted
@@ -50,6 +51,14 @@ namespace WTF {
 //
 // FIXME: oilpan: Trace tree node edges to ensure we don't have dangling
 // pointers.
+=======
+//  * Each TreeNode node is NOT ref counted. The user have to retain its lifetime somehow.
+//    FIXME: lifetime management could be parameterized so that ref counted implementations can be used.
+//  * It ASSERT()s invalid input. The callers have to ensure that given parameter is sound.
+//  * There is no branch-leaf difference. Every node can be a parent of other node.
+//
+// FIXME: oilpan: Trace tree node edges to ensure we don't have dangling pointers.
+>>>>>>> miniblink49
 // As it is used in HTMLImport it is safe since they all die together.
 template <class T>
 class TreeNode {
@@ -70,6 +79,7 @@ public:
     NodeType* parent() const { return m_parent; }
     NodeType* firstChild() const { return m_firstChild; }
     NodeType* lastChild() const { return m_lastChild; }
+<<<<<<< HEAD
     NodeType* here() const
     {
         return static_cast<NodeType*>(const_cast<TreeNode*>(this));
@@ -79,15 +89,28 @@ public:
     {
         return !m_parent && !m_next && !m_previous && !m_firstChild && !m_lastChild;
     }
+=======
+    NodeType* here() const { return static_cast<NodeType*>(const_cast<TreeNode*>(this)); }
+
+    bool orphan() const { return !m_parent && !m_next && !m_previous && !m_firstChild && !m_lastChild; }
+>>>>>>> miniblink49
     bool hasChildren() const { return m_firstChild; }
 
     void insertBefore(NodeType* newChild, NodeType* refChild)
     {
+<<<<<<< HEAD
         DCHECK(!newChild->parent());
         DCHECK(!newChild->next());
         DCHECK(!newChild->previous());
 
         DCHECK(!refChild || this == refChild->parent());
+=======
+        ASSERT(!newChild->parent());
+        ASSERT(!newChild->next());
+        ASSERT(!newChild->previous());
+
+        ASSERT(!refChild || this == refChild->parent());
+>>>>>>> miniblink49
 
         if (!refChild) {
             appendChild(newChild);
@@ -107,19 +130,33 @@ public:
 
     void appendChild(NodeType* child)
     {
+<<<<<<< HEAD
         DCHECK(!child->parent());
         DCHECK(!child->next());
         DCHECK(!child->previous());
+=======
+        ASSERT(!child->parent());
+        ASSERT(!child->next());
+        ASSERT(!child->previous());
+>>>>>>> miniblink49
 
         child->m_parent = here();
 
         if (!m_lastChild) {
+<<<<<<< HEAD
             DCHECK(!m_firstChild);
+=======
+            ASSERT(!m_firstChild);
+>>>>>>> miniblink49
             m_lastChild = m_firstChild = child;
             return;
         }
 
+<<<<<<< HEAD
         DCHECK(!m_lastChild->m_next);
+=======
+        ASSERT(!m_lastChild->m_next);
+>>>>>>> miniblink49
         NodeType* oldLast = m_lastChild;
         m_lastChild = child;
 
@@ -129,7 +166,11 @@ public:
 
     NodeType* removeChild(NodeType* child)
     {
+<<<<<<< HEAD
         DCHECK_EQ(child->parent(), this);
+=======
+        ASSERT(child->parent() == this);
+>>>>>>> miniblink49
 
         if (m_firstChild == child)
             m_firstChild = child->next();
@@ -150,7 +191,11 @@ public:
 
     void takeChildrenFrom(NodeType* oldParent)
     {
+<<<<<<< HEAD
         DCHECK_NE(oldParent, this);
+=======
+        ASSERT(oldParent != this);
+>>>>>>> miniblink49
         while (oldParent->hasChildren()) {
             NodeType* child = oldParent->firstChild();
             oldParent->removeChild(child);
@@ -166,10 +211,15 @@ private:
     NodeType* m_lastChild;
 };
 
+<<<<<<< HEAD
 template <class T>
 inline typename TreeNode<T>::NodeType* traverseNext(
     const TreeNode<T>* current,
     const TreeNode<T>* stayWithin = 0)
+=======
+template<class T>
+inline typename TreeNode<T>::NodeType* traverseNext(const TreeNode<T>* current, const TreeNode<T>* stayWithin = 0)
+>>>>>>> miniblink49
 {
     if (typename TreeNode<T>::NodeType* next = current->firstChild())
         return next;
@@ -177,8 +227,12 @@ inline typename TreeNode<T>::NodeType* traverseNext(
         return 0;
     if (typename TreeNode<T>::NodeType* next = current->next())
         return next;
+<<<<<<< HEAD
     for (typename TreeNode<T>::NodeType* parent = current->parent(); parent;
          parent = parent->parent()) {
+=======
+    for (typename TreeNode<T>::NodeType* parent = current->parent(); parent; parent = parent->parent()) {
+>>>>>>> miniblink49
         if (parent == stayWithin)
             return 0;
         if (typename TreeNode<T>::NodeType* next = parent->next())
@@ -188,9 +242,14 @@ inline typename TreeNode<T>::NodeType* traverseNext(
     return 0;
 }
 
+<<<<<<< HEAD
 template <class T>
 inline typename TreeNode<T>::NodeType* traverseFirstPostOrder(
     const TreeNode<T>* current)
+=======
+template<class T>
+inline typename TreeNode<T>::NodeType* traverseFirstPostOrder(const TreeNode<T>* current)
+>>>>>>> miniblink49
 {
     typename TreeNode<T>::NodeType* first = current->here();
     while (first->firstChild())
@@ -198,10 +257,15 @@ inline typename TreeNode<T>::NodeType* traverseFirstPostOrder(
     return first;
 }
 
+<<<<<<< HEAD
 template <class T>
 inline typename TreeNode<T>::NodeType* traverseNextPostOrder(
     const TreeNode<T>* current,
     const TreeNode<T>* stayWithin = 0)
+=======
+template<class T>
+inline typename TreeNode<T>::NodeType* traverseNextPostOrder(const TreeNode<T>* current, const TreeNode<T>* stayWithin = 0)
+>>>>>>> miniblink49
 {
     if (current == stayWithin)
         return 0;
@@ -214,10 +278,18 @@ inline typename TreeNode<T>::NodeType* traverseNextPostOrder(
     return next;
 }
 
+<<<<<<< HEAD
 } // namespace WTF
 
 using WTF::traverseNext;
 using WTF::traverseNextPostOrder;
 using WTF::TreeNode;
+=======
+}
+
+using WTF::TreeNode;
+using WTF::traverseNext;
+using WTF::traverseNextPostOrder;
+>>>>>>> miniblink49
 
 #endif

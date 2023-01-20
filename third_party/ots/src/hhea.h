@@ -11,9 +11,18 @@
 namespace ots {
 
 struct OpenTypeHHEA {
+<<<<<<< HEAD
     OpenTypeMetricsHeader header;
 };
 
 } // namespace ots
 
 #endif // OTS_HHEA_H_
+=======
+  OpenTypeMetricsHeader header;
+};
+
+}  // namespace ots
+
+#endif  // OTS_HHEA_H_
+>>>>>>> miniblink49

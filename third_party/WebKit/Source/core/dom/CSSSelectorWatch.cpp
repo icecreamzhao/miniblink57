@@ -28,14 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/CSSSelectorWatch.h"
 
 #include "core/css/StylePropertySet.h"
 #include "core/css/parser/CSSParser.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExecutionContext.h"
-#include "core/dom/StyleEngine.h"
-#include "core/dom/TaskRunnerHelper.h"
 #include "core/frame/LocalFrame.h"
 #include "core/loader/FrameLoaderClient.h"
 #include "core/style/StyleRareNonInheritedData.h"
@@ -46,11 +45,8 @@ namespace blink {
 static const char kSupplementName[] = "CSSSelectorWatch";
 
 CSSSelectorWatch::CSSSelectorWatch(Document& document)
-    : Supplement<Document>(document)
-    , m_callbackSelectorChangeTimer(
-          TaskRunnerHelper::get(TaskType::UnspecedTimer, &document),
-          this,
-          &CSSSelectorWatch::callbackSelectorChangeTimerFired)
+    : m_document(document)
+    , m_callbackSelectorChangeTimer(this, &CSSSelectorWatch::callbackSelectorChangeTimerFired)
     , m_timerExpirations(0)
 {
 }
@@ -60,68 +56,64 @@ CSSSelectorWatch& CSSSelectorWatch::from(Document& document)
     CSSSelectorWatch* watch = fromIfExists(document);
     if (!watch) {
         watch = new CSSSelectorWatch(document);
-        Supplement<Document>::provideTo(document, kSupplementName, watch);
+        WillBeHeapSupplement<Document>::provideTo(document, kSupplementName, adoptPtrWillBeNoop(watch));
     }
     return *watch;
 }
 
 CSSSelectorWatch* CSSSelectorWatch::fromIfExists(Document& document)
 {
-    return static_cast<CSSSelectorWatch*>(
-        Supplement<Document>::from(document, kSupplementName));
+    return static_cast<CSSSelectorWatch*>(WillBeHeapSupplement<Document>::from(document, kSupplementName));
 }
 
-void CSSSelectorWatch::callbackSelectorChangeTimerFired(TimerBase*)
+void CSSSelectorWatch::callbackSelectorChangeTimerFired(Timer<CSSSelectorWatch>*)
 {
     // Should be ensured by updateSelectorMatches():
-    DCHECK(!m_addedSelectors.isEmpty() || !m_removedSelectors.isEmpty());
+    ASSERT(!m_addedSelectors.isEmpty() || !m_removedSelectors.isEmpty());
 
     if (m_timerExpirations < 1) {
         m_timerExpirations++;
-        m_callbackSelectorChangeTimer.startOneShot(0, BLINK_FROM_HERE);
+        m_callbackSelectorChangeTimer.startOneShot(0, FROM_HERE);
         return;
     }
-    if (supplementable()->frame()) {
+    if (document().frame()) {
         Vector<String> addedSelectors;
         Vector<String> removedSelectors;
         copyToVector(m_addedSelectors, addedSelectors);
         copyToVector(m_removedSelectors, removedSelectors);
-        supplementable()->frame()->loader().client()->selectorMatchChanged(
-            addedSelectors, removedSelectors);
+        document().frame()->loader().client()->selectorMatchChanged(addedSelectors, removedSelectors);
     }
     m_addedSelectors.clear();
     m_removedSelectors.clear();
     m_timerExpirations = 0;
 }
 
-void CSSSelectorWatch::updateSelectorMatches(
-    const Vector<String>& removedSelectors,
-    const Vector<String>& addedSelectors)
+void CSSSelectorWatch::updateSelectorMatches(const Vector<String>& removedSelectors, const Vector<String>& addedSelectors)
 {
     bool shouldUpdateTimer = false;
 
-    for (const auto& selector : removedSelectors) {
+    for (unsigned i = 0; i < removedSelectors.size(); ++i) {
+        const String& selector = removedSelectors[i];
         if (!m_matchingCallbackSelectors.remove(selector))
             continue;
 
         // Count reached 0.
         shouldUpdateTimer = true;
-        auto it = m_addedSelectors.find(selector);
-        if (it != m_addedSelectors.end())
-            m_addedSelectors.remove(it);
+        if (m_addedSelectors.contains(selector))
+            m_addedSelectors.remove(selector);
         else
             m_removedSelectors.add(selector);
     }
 
-    for (const auto& selector : addedSelectors) {
+    for (unsigned i = 0; i < addedSelectors.size(); ++i) {
+        const String& selector = addedSelectors[i];
         HashCountedSet<String>::AddResult result = m_matchingCallbackSelectors.add(selector);
         if (!result.isNewEntry)
             continue;
 
         shouldUpdateTimer = true;
-        auto it = m_removedSelectors.find(selector);
-        if (it != m_removedSelectors.end())
-            m_removedSelectors.remove(it);
+        if (m_removedSelectors.contains(selector))
+            m_removedSelectors.remove(selector);
         else
             m_addedSelectors.add(selector);
     }
@@ -137,14 +129,13 @@ void CSSSelectorWatch::updateSelectorMatches(
     } else {
         m_timerExpirations = 0;
         if (!m_callbackSelectorChangeTimer.isActive())
-            m_callbackSelectorChangeTimer.startOneShot(0, BLINK_FROM_HERE);
+            m_callbackSelectorChangeTimer.startOneShot(0, FROM_HERE);
     }
 }
 
 static bool allCompound(const CSSSelectorList& selectorList)
 {
-    for (const CSSSelector* selector = selectorList.first(); selector;
-         selector = selectorList.next(*selector)) {
+    for (const CSSSelector* selector = selectorList.first(); selector; selector = selectorList.next(*selector)) {
         if (!selector->isCompound())
             return false;
     }
@@ -155,11 +146,11 @@ void CSSSelectorWatch::watchCSSSelectors(const Vector<String>& selectors)
 {
     m_watchedCallbackSelectors.clear();
 
-    StylePropertySet* callbackPropertySet = ImmutableStylePropertySet::create(nullptr, 0, UASheetMode);
+    const RefPtrWillBeRawPtr<StylePropertySet> callbackPropertySet = ImmutableStylePropertySet::create(nullptr, 0, UASheetMode);
 
-    CSSParserContext* context = CSSParserContext::create(UASheetMode);
-    for (const auto& selector : selectors) {
-        CSSSelectorList selectorList = CSSParser::parseSelector(context, nullptr, selector);
+    CSSSelectorList selectorList;
+    for (unsigned i = 0; i < selectors.size(); ++i) {
+        CSSParser::parseSelector(CSSParserContext(UASheetMode, 0), selectors[i], selectorList);
         if (!selectorList.isValid())
             continue;
 
@@ -167,16 +158,16 @@ void CSSSelectorWatch::watchCSSSelectors(const Vector<String>& selectors)
         if (!allCompound(selectorList))
             continue;
 
-        m_watchedCallbackSelectors.push_back(
-            StyleRule::create(std::move(selectorList), callbackPropertySet));
+        m_watchedCallbackSelectors.append(StyleRule::create(selectorList, callbackPropertySet));
     }
-    supplementable()->styleEngine().watchedSelectorsChanged();
+    document().changedSelectorWatch();
 }
 
 DEFINE_TRACE(CSSSelectorWatch)
 {
     visitor->trace(m_watchedCallbackSelectors);
-    Supplement<Document>::trace(visitor);
+    visitor->trace(m_document);
+    WillBeHeapSupplement<Document>::trace(visitor);
 }
 
 } // namespace blink

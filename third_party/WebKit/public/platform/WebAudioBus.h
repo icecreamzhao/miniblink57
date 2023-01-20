@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -20,6 +21,18 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef WebAudioBus_h
@@ -28,10 +41,14 @@
 #include "WebCommon.h"
 
 #if INSIDE_BLINK
+<<<<<<< HEAD
 namespace WTF {
 template <typename T>
 class PassRefPtr;
 }
+=======
+namespace WTF { template <typename T> class PassRefPtr; }
+>>>>>>> miniblink49
 #endif
 
 namespace blink {
@@ -44,6 +61,7 @@ class AudioBus;
 //
 class BLINK_PLATFORM_EXPORT WebAudioBus {
 public:
+<<<<<<< HEAD
     WebAudioBus()
         : m_private(0)
     {
@@ -57,6 +75,16 @@ public:
     // resizeSmaller() can only be called after initialize() with a new length <=
     // the initialization length.  The data stored in the bus will remain
     // undisturbed.
+=======
+    WebAudioBus() : m_private(0) { }
+    ~WebAudioBus() { reset(); }
+
+    // initialize() allocates memory of the given length for the given number of channels.
+    void initialize(unsigned numberOfChannels, size_t length, double sampleRate);
+
+    // resizeSmaller() can only be called after initialize() with a new length <= the initialization length.
+    // The data stored in the bus will remain undisturbed.
+>>>>>>> miniblink49
     void resizeSmaller(size_t newLength);
 
     // reset() releases the memory allocated from initialize().

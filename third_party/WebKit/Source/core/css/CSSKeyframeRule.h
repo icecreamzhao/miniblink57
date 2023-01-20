@@ -38,12 +38,11 @@ class KeyframeStyleRuleCSSStyleDeclaration;
 
 class CSSKeyframeRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    ~CSSKeyframeRule() override;
+    virtual ~CSSKeyframeRule();
 
-    String cssText() const override { return m_keyframe->cssText(); }
-    void reattach(StyleRuleBase*) override;
+    virtual String cssText() const override { return m_keyframe->cssText(); }
+    virtual void reattach(StyleRuleBase*) override;
 
     String keyText() const { return m_keyframe->keyText(); }
     void setKeyText(const String&, ExceptionState&);
@@ -55,15 +54,15 @@ public:
 private:
     CSSKeyframeRule(StyleRuleKeyframe*, CSSKeyframesRule* parent);
 
-    CSSRule::Type type() const override { return kKeyframeRule; }
+    virtual CSSRule::Type type() const override { return KEYFRAME_RULE; }
 
-    Member<StyleRuleKeyframe> m_keyframe;
-    mutable Member<KeyframeStyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
+    RefPtrWillBeMember<StyleRuleKeyframe> m_keyframe;
+    mutable RefPtrWillBeMember<KeyframeStyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
 
     friend class CSSKeyframesRule;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSKeyframeRule, kKeyframeRule);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSKeyframeRule, KEYFRAME_RULE);
 
 } // namespace blink
 

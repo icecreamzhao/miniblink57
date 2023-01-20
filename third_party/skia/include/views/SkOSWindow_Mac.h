@@ -15,15 +15,23 @@ class SkOSWindow : public SkWindow {
 public:
     SkOSWindow(void* hwnd);
     ~SkOSWindow();
+<<<<<<< HEAD
     void* getHWND() const { return fHWND; }
 
     virtual bool onDispatchClick(int x, int y, Click::State state,
         void* owner, unsigned modi);
+=======
+    void*   getHWND() const { return fHWND; }
+
+    virtual bool onDispatchClick(int x, int y, Click::State state,
+                                 void* owner, unsigned modi);
+>>>>>>> miniblink49
     enum SkBackEndTypes {
         kNone_BackEndType,
 #if SK_SUPPORT_GPU
         kNativeGL_BackEndType,
 #endif
+<<<<<<< HEAD
 #if SK_ANGLE
         kANGLE_BackEndType,
 #endif // SK_ANGLE
@@ -38,6 +46,17 @@ public:
     void closeWindow();
     void setVsync(bool);
 
+=======
+    };
+
+    void    detach();
+    bool    attach(SkBackEndTypes attachType, int msaaSampleCount, AttachmentInfo*);
+    void    present();
+
+    bool    makeFullscreen();
+    void    closeWindow();
+    void    setVsync(bool);
+>>>>>>> miniblink49
 protected:
     // overrides from SkEventSink
     virtual bool onEvent(const SkEvent& evt);
@@ -49,11 +68,19 @@ protected:
     virtual void onSetTitle(const char[]);
 
 private:
+<<<<<<< HEAD
     void* fHWND;
     bool fInvalEventIsPending;
     void* fNotifier;
 #if SK_SUPPORT_GPU
     void* fGLContext;
+=======
+    void*   fHWND;
+    bool    fInvalEventIsPending;
+    void*   fNotifier;
+#if SK_SUPPORT_GPU
+    void*   fGLContext;
+>>>>>>> miniblink49
 #endif
     typedef SkWindow INHERITED;
 };

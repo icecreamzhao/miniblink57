@@ -23,14 +23,22 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/GradientGeneratedImage.h"
 
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntSize.h"
+=======
+#include "config.h"
+#include "platform/graphics/GradientGeneratedImage.h"
+
+#include "platform/geometry/FloatRect.h"
+>>>>>>> miniblink49
 #include "platform/graphics/GraphicsContext.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 void GradientGeneratedImage::draw(SkCanvas* canvas,
     const SkPaint& paint,
     const FloatRect& destRect,
@@ -76,6 +84,25 @@ bool GradientGeneratedImage::applyShader(SkPaint& paint,
     m_gradient->applyToPaint(paint, localMatrix);
 
     return true;
+=======
+void GradientGeneratedImage::draw(SkCanvas* canvas, const SkPaint& paint, const FloatRect& destRect, const FloatRect& srcRect, RespectImageOrientationEnum, ImageClampingMode)
+{
+    SkAutoCanvasRestore ar(canvas, true);
+    canvas->clipRect(destRect);
+    canvas->translate(destRect.x(), destRect.y());
+    if (destRect.size() != srcRect.size())
+        canvas->scale(destRect.width() / srcRect.width(), destRect.height() / srcRect.height());
+    canvas->translate(-srcRect.x(), -srcRect.y());
+    SkPaint gradientPaint(paint);
+    gradientPaint.setShader(m_gradient->shader());
+    canvas->drawRect(SkRect::MakeWH(m_size.width(), m_size.height()), gradientPaint);
+}
+
+void GradientGeneratedImage::drawTile(GraphicsContext* context, const FloatRect& srcRect)
+{
+    context->setFillGradient(m_gradient);
+    context->fillRect(srcRect);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

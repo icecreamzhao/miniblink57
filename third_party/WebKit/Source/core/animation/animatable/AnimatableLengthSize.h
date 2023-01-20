@@ -37,35 +37,30 @@ namespace blink {
 
 class AnimatableLengthSize final : public AnimatableValue {
 public:
-    ~AnimatableLengthSize() override { }
-    static PassRefPtr<AnimatableLengthSize> create(
-        PassRefPtr<AnimatableValue> width,
-        PassRefPtr<AnimatableValue> height)
+    virtual ~AnimatableLengthSize() { }
+    static PassRefPtrWillBeRawPtr<AnimatableLengthSize> create(PassRefPtrWillBeRawPtr<AnimatableValue> width, PassRefPtrWillBeRawPtr<AnimatableValue> height)
     {
-        return adoptRef(
-            new AnimatableLengthSize(std::move(width), std::move(height)));
+        return adoptRefWillBeNoop(new AnimatableLengthSize(width, height));
     }
     const AnimatableValue* width() const { return m_width.get(); }
     const AnimatableValue* height() const { return m_height.get(); }
 
-    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    DECLARE_VIRTUAL_TRACE();
 
 protected:
-    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
-        double fraction) const override;
+    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
 
 private:
-    AnimatableLengthSize(PassRefPtr<AnimatableValue> width,
-        PassRefPtr<AnimatableValue> height)
+    AnimatableLengthSize(PassRefPtrWillBeRawPtr<AnimatableValue> width, PassRefPtrWillBeRawPtr<AnimatableValue> height)
         : m_width(width)
         , m_height(height)
     {
     }
-    AnimatableType type() const override { return TypeLengthSize; }
-    bool equalTo(const AnimatableValue*) const override;
+    virtual AnimatableType type() const override { return TypeLengthSize; }
+    virtual bool equalTo(const AnimatableValue*) const override;
 
-    RefPtr<AnimatableValue> m_width;
-    RefPtr<AnimatableValue> m_height;
+    RefPtrWillBeMember<AnimatableValue> m_width;
+    RefPtrWillBeMember<AnimatableValue> m_height;
 };
 
 DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableLengthSize, isLengthSize());

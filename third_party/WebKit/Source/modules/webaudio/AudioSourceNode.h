@@ -33,6 +33,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class BaseAudioContext;
 
 class AudioSourceNode : public AudioNode {
@@ -43,6 +44,13 @@ public:
         : AudioNode(context)
     {
     }
+=======
+class AudioSourceNode : public AudioNode {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    AudioSourceNode(AudioContext& context)
+        : AudioNode(context) { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -1,16 +1,13 @@
+#ifndef content_browser_PlatformEventHandler_h
+#define content_browser_PlatformEventHandler_h
 
 #include "content/browser/PlatformEventHandler.h"
 
+#include "third_party/WebKit/public/web/WebInputEvent.h"
 #include "third_party/WebKit/Source/web/WebViewImpl.h"
-#include "third_party/WebKit/public/platform/WebMouseWheelEvent.h"
-#include "third_party/WebKit/public/platform/WebInputEvent.h"
-#include "third_party/WebKit/public/platform/WebMouseEvent.h"
-#include "third_party/WebKit/public/web/WebLocalFrame.h"
-#include "third_party/WebKit/public/web/WebFrameWidget.h"
 
 #include "wtf/text/WTFString.h"
 #include "wke/wkeGlobalVar.h"
-#include "content/browser/TouchStruct.h"
 
 using namespace blink;
 
@@ -109,15 +106,15 @@ bool isScrollLockOn()
 static void buildModifiers(WebInputEvent* evt)
 {
     if (GetKeyState(VK_SHIFT) & HIGH_BIT_MASK_SHORT)
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::ShiftKey));
+        evt->modifiers |= WebInputEvent::ShiftKey;
     if (GetKeyState(VK_CONTROL) & HIGH_BIT_MASK_SHORT)
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::ControlKey));
+        evt->modifiers |= WebInputEvent::ControlKey;
     if (GetKeyState(VK_MENU) & HIGH_BIT_MASK_SHORT)
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::AltKey));
+        evt->modifiers |= WebInputEvent::AltKey;
     if (isCapsLockOn())
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::CapsLockOn));
+        evt->modifiers |= WebInputEvent::CapsLockOn;
     if (isNumLockOn())
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::NumLockOn));
+        evt->modifiers |= WebInputEvent::NumLockOn;
 }
 
 WebKeyboardEvent PlatformEventHandler::buildKeyboardEvent(WebInputEvent::Type type, UINT message, WPARAM wParam, LPARAM lParam)
@@ -132,44 +129,46 @@ WebKeyboardEvent PlatformEventHandler::buildKeyboardEvent(WebInputEvent::Type ty
     WebKeyboardEvent keyEvent;
     keyEvent.windowsKeyCode = (type == WebInputEvent::RawKeyDown || type == WebInputEvent::KeyUp) ? wParam : 0;
     keyEvent.nativeKeyCode = wParam;
-    keyEvent.domCode = keyEvent.windowsKeyCode;
-    keyEvent.domKey = keyEvent.windowsKeyCode;
-    keyEvent.setTimeStampSeconds(WTF::currentTime());
-    keyEvent.setSize(sizeof(WebKeyboardEvent));
-    keyEvent.setType(type);
+    keyEvent.domCode = 0;
+    keyEvent.domKey = 0;
+    keyEvent.timeStampSeconds = WTF::currentTime();
+    keyEvent.size = sizeof(WebMouseEvent);
+    keyEvent.type = type;
 
     buildModifiers(&keyEvent);
     if (isKeypadEvent(wParam, keyData, type))
-        keyEvent.setModifiers(keyEvent.modifiers() | WebInputEvent::IsKeyPad);
-#if defined(OS_WIN)
+        keyEvent.modifiers |= WebInputEvent::IsKeyPad;
+
     if (VK_LEFT == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Left");
+        strcpy(keyEvent.keyIdentifier, "Left");
     else if (VK_UP == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Up");
+        strcpy(keyEvent.keyIdentifier, "Up");
+    else if (VK_UP == keyEvent.windowsKeyCode)
+        strcpy(keyEvent.keyIdentifier, "Up");
     else if (VK_RIGHT == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Right");
+        strcpy(keyEvent.keyIdentifier, "Right");
     else if (VK_DOWN == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Down");
+        strcpy(keyEvent.keyIdentifier, "Down");
 
     else if (VK_NEXT == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"PageDown");
+        strcpy(keyEvent.keyIdentifier, "PageDown");
     else if (VK_PRIOR == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"PageUp");
+        strcpy(keyEvent.keyIdentifier, "PageUp");
 
     else if (VK_HOME == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Home");
+        strcpy(keyEvent.keyIdentifier, "Home");
     else if (VK_END == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"End");
+        strcpy(keyEvent.keyIdentifier, "End");
 
     else if (VK_TAB == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"U+0009");
+        strcpy(keyEvent.keyIdentifier, "U+0009");
     else if (VK_BACK == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"U+0008");
+        strcpy(keyEvent.keyIdentifier, "U+0008");
     else if (VK_ESCAPE == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"U+001B");
+        strcpy(keyEvent.keyIdentifier, "U+001B");
     else if (VK_RETURN == keyEvent.windowsKeyCode)
-        wcscpy(keyEvent.text, L"Enter");
-#endif
+        strcpy(keyEvent.keyIdentifier, "Enter");
+
     memset(keyEvent.text, 0, sizeof(WebUChar) * WebKeyboardEvent::textLengthCap);
     keyEvent.text[0] = (WebUChar)wParam;
     return keyEvent;
@@ -181,9 +180,10 @@ static void makeDraggableRegionNcHitTest(HWND hWnd, LPARAM lParam, bool* isDragg
     int yPos = ((int)(short)HIWORD(lParam));
     if (true == *isDraggableRegionNcHitTest) {
         //::PostMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(xPos, yPos));
-        ::PostMessageW(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+        ::PostMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
         lastPosForDrag = IntPoint(xPos, yPos);
-    } else {
+    }
+    else {
         if (hWnd)
             ::SetCapture(hWnd);
     }
@@ -192,7 +192,6 @@ static void makeDraggableRegionNcHitTest(HWND hWnd, LPARAM lParam, bool* isDragg
 
 PlatformEventHandler::PlatformEventHandler(WebWidget* webWidget, WebViewImpl* webViewImpl)
     : m_checkMouseLeaveTimer(this, &PlatformEventHandler::checkMouseLeave)
-    , m_touchEmulator(webWidget)
 {
     m_isDraggableRegionNcHitTest = false;
     m_postMouseLeave = false;
@@ -202,11 +201,8 @@ PlatformEventHandler::PlatformEventHandler(WebWidget* webWidget, WebViewImpl* we
     m_isDraggableNodeMousedown = false;
     m_isLeftMousedown = false;
     m_lastTimeMouseDown = 0;
-    m_isValidLastTouchDownPoint = false;
     m_webWidget = webWidget;
     m_webViewImpl = webViewImpl;
-    m_enableTouchSimulate = false;
-    m_enableSystemTouch = false;
 }
 
 void PlatformEventHandler::fireCaptureChangedEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -221,416 +217,51 @@ void PlatformEventHandler::fireCaptureChangedEvent(HWND hWnd, UINT message, WPAR
     }
 }
 
-static uint32_t s_uniqueTouchEventId = 0;
-
-void PlatformEventHandler::fireRealTouchEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    if (!m_enableSystemTouch)
-        return;
-    s_uniqueTouchEventId++;
-
-    unsigned int numInputs = (unsigned int)wParam;
-    if (numInputs > blink::WebTouchEvent::kTouchesLengthCap)
-        numInputs = blink::WebTouchEvent::kTouchesLengthCap;
-
-    TOUCHINPUT ti[blink::WebTouchEvent::kTouchesLengthCap];
-    if (!::GetTouchInputInfoXp((HTOUCHINPUT)lParam, numInputs, ti, sizeof(TOUCHINPUT)))
-        return;
-
-    double time = WTF::currentTime();
-    WebTouchEvent touchEvent;
-    touchEvent.setTimeStampSeconds(time);
-    touchEvent.setSize(sizeof(WebTouchEvent));
-    touchEvent.setModifiers(0);
-    touchEvent.touchesLength = 1;
-    //touchEvent.cancelable = true;
-    //touchEvent.causesScrollingIfUncanceled = false;
-    touchEvent.uniqueTouchEventId = s_uniqueTouchEventId;
-
-    POINT screenPt = { 0 };
-    POINT point = { 0 };
-
-    touchEvent.touchesLength = numInputs > blink::WebTouchEvent::kTouchesLengthCap ? blink::WebTouchEvent::kTouchesLengthCap : numInputs;
-    for (unsigned int i = 0; i < touchEvent.touchesLength; ++i) {
-        blink::WebTouchPoint& touchPoint = touchEvent.touches[i];
-        touchPoint.id = ti[i].dwID;
-
-        point = { ti[i].x,  ti[i].y };
-        screenPt = point;
-        ::ClientToScreen(hWnd, &screenPt);
-
-        touchPoint.screenPosition.x = screenPt.x / 100.0;
-        touchPoint.screenPosition.y = screenPt.y / 100.0;
-
-        touchPoint.position.x = point.x / 100.0;
-        touchPoint.position.y = point.y / 100.0;
-
-        touchPoint.radiusX = 10;
-        touchPoint.radiusY = 10;
-        touchPoint.rotationAngle = 0;
-
-        blink::WebGestureEvent gestureEvent;
-        gestureEvent.setTimeStampSeconds(time);
-        gestureEvent.setSize(sizeof(blink::WebGestureEvent));
-        gestureEvent.setModifiers(0);
-
-        gestureEvent.x = point.x / 100.0;
-        gestureEvent.y = point.y / 100.0;
-        gestureEvent.globalX = screenPt.x / 100.0;
-        gestureEvent.globalY = screenPt.x / 100.0;
-        gestureEvent.sourceDevice = blink::WebGestureDeviceTouchpad;
-
-        if (ti[i].dwFlags & TOUCHEVENTF_DOWN) {
-            touchEvent.setType(blink::WebInputEvent::TouchStart);
-            touchPoint.state = blink::WebTouchPoint::StatePressed;
-
-            m_lastTouchDownPoint = blink::FloatPoint(touchPoint.position);
-            m_isValidLastTouchDownPoint = true;
-            
-            gestureEvent.setType(blink::WebInputEvent::GestureScrollBegin);
-            gestureEvent.data.scrollBegin.deltaXHint = 0;
-            gestureEvent.data.scrollBegin.deltaYHint = 0;
-            gestureEvent.data.scrollBegin.targetViewport = true;
-        } else if (ti[i].dwFlags & TOUCHEVENTF_MOVE) {
-            touchEvent.setType(WebInputEvent::TouchMove);
-            touchPoint.state = WebTouchPoint::StateMoved;
-
-            gestureEvent.setType(blink::WebInputEvent::GestureScrollUpdate);
-            if (m_isValidLastTouchDownPoint) {
-                gestureEvent.data.scrollUpdate.deltaX = touchPoint.position.x - m_lastTouchDownPoint.x();
-                gestureEvent.data.scrollUpdate.deltaY = touchPoint.position.y - m_lastTouchDownPoint.y();
-                m_lastTouchDownPoint = blink::FloatPoint(touchPoint.position);
-                m_isValidLastTouchDownPoint = true;
-            }
-            gestureEvent.data.scrollUpdate.velocityX = 0;
-            gestureEvent.data.scrollUpdate.velocityY = 0;
-            gestureEvent.data.scrollUpdate.previousUpdateInSequencePrevented = false;
-            gestureEvent.data.scrollUpdate.preventPropagation = false;
-            //gestureEvent.data.scrollUpdate.inertial = false;
-
-        } else if (ti[i].dwFlags & TOUCHEVENTF_UP) {
-            touchEvent.setType(WebInputEvent::TouchEnd);
-            touchPoint.state = WebTouchPoint::StateReleased;
-
-            gestureEvent.setType(blink::WebInputEvent::GestureScrollEnd);
-            m_isValidLastTouchDownPoint = false;
-        }
-
-        if (0 == i && (m_isValidLastTouchDownPoint || blink::WebInputEvent::GestureScrollUpdate != gestureEvent.type())) {
-            m_webWidget->handleInputEvent(gestureEvent);
-        }
-    }
-
-    ::CloseTouchInputHandleXp((HTOUCHINPUT)lParam);
-    m_webWidget->handleInputEvent(touchEvent);
-}
-
-void PlatformEventHandler::fireRealTouchEventTest(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    s_uniqueTouchEventId++;
-
-    unsigned int numInputs = 1;
-    if (numInputs > blink::WebTouchEvent::kTouchesLengthCap)
-        numInputs = blink::WebTouchEvent::kTouchesLengthCap;
-
-    double time = WTF::currentTime();
-    WebTouchEvent touchEvent;
-    touchEvent.setTimeStampSeconds(time);
-    touchEvent.setSize(sizeof(WebTouchEvent));
-    touchEvent.setModifiers(0);
-    touchEvent.touchesLength = 1;
-//     touchEvent.cancelable = true;
-//     touchEvent.causesScrollingIfUncanceled = false;
-    touchEvent.uniqueTouchEventId = s_uniqueTouchEventId;
-
-    POINT screenPt;
-    ::GetCursorPos(&screenPt);
-
-    POINT point = { screenPt.x,  screenPt.y };
-    ::ScreenToClient(hWnd, &point);
-
-    touchEvent.touchesLength = numInputs > blink::WebTouchEvent::kTouchesLengthCap ? blink::WebTouchEvent::kTouchesLengthCap : numInputs;
-    for (unsigned int i = 0; i < touchEvent.touchesLength; ++i) {
-        blink::WebTouchPoint& touchPoint = touchEvent.touches[i];
-        touchPoint.id = 0;
-
-        touchPoint.screenPosition.x = screenPt.x;
-        touchPoint.screenPosition.y = screenPt.y;
-
-        touchPoint.position.x = point.x;
-        touchPoint.position.y = point.y;
-
-        touchPoint.radiusX = 10;
-        touchPoint.radiusY = 10;
-        touchPoint.rotationAngle = 0;
-
-        blink::WebGestureEvent gestureEvent;
-        gestureEvent.setTimeStampSeconds(time);
-        gestureEvent.setSize(sizeof(blink::WebGestureEvent));
-        gestureEvent.setModifiers(0);
-
-        gestureEvent.x = point.x;
-        gestureEvent.y = point.y;
-        gestureEvent.globalX = screenPt.x;
-        gestureEvent.globalY = screenPt.x;
-        gestureEvent.sourceDevice = blink::WebGestureDeviceTouchpad;
-
-        if (message == WM_LBUTTONDOWN) {
-            touchEvent.setType(blink::WebInputEvent::TouchStart);
-            touchPoint.state = blink::WebTouchPoint::StatePressed;
-
-            m_lastTouchDownPoint = blink::FloatPoint(touchPoint.position);
-            m_isValidLastTouchDownPoint = true;
-
-            gestureEvent.setType(blink::WebInputEvent::GestureScrollBegin);
-            gestureEvent.data.scrollBegin.deltaXHint = 0;
-            gestureEvent.data.scrollBegin.deltaYHint = 0;
-            gestureEvent.data.scrollBegin.targetViewport = true;
-        } else if (message == WM_MOUSEMOVE) {
-            touchEvent.setType(WebInputEvent::TouchMove);
-            touchPoint.state = WebTouchPoint::StateMoved;
-
-            gestureEvent.setType(blink::WebInputEvent::GestureScrollUpdate);
-
-            if (m_isValidLastTouchDownPoint) {
-                gestureEvent.data.scrollUpdate.deltaX = touchPoint.position.x - m_lastTouchDownPoint.x();
-                gestureEvent.data.scrollUpdate.deltaY = touchPoint.position.y - m_lastTouchDownPoint.y();
-                m_lastTouchDownPoint = blink::FloatPoint(touchPoint.position);
-                m_isValidLastTouchDownPoint = true;
-            }
-            gestureEvent.data.scrollUpdate.velocityX = 0;
-            gestureEvent.data.scrollUpdate.velocityY = 0;
-            gestureEvent.data.scrollUpdate.previousUpdateInSequencePrevented = true;
-            gestureEvent.data.scrollUpdate.preventPropagation = false;
-            //gestureEvent.data.scrollUpdate.inertial = false;
-
-        } else if (message == WM_LBUTTONUP) {
-            touchEvent.setType(WebInputEvent::TouchEnd);
-            touchPoint.state = WebTouchPoint::StateReleased;
-
-            gestureEvent.setType(blink::WebInputEvent::GestureScrollEnd);
-            m_isValidLastTouchDownPoint = false;
-        }
-
-        if (0 == i && (m_isValidLastTouchDownPoint || blink::WebInputEvent::GestureScrollUpdate != gestureEvent.type()))
-            m_webWidget->handleInputEvent(gestureEvent);
-    }
-
-    m_webWidget->handleInputEvent(touchEvent);
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-TouchEmulator::TouchEmulator(blink::WebWidget* webWidget)
-    : m_gestureShowPressTimer(this, &TouchEmulator::gestureShowPressTimer)
-    , m_gestureLongPressTimer(this, &TouchEmulator::gestureLongPressTimer)
-{
-    m_webWidget = webWidget;
-    m_isLongPress = false;
-    m_isPressState = false;
-    m_isScrollState = false;
-    m_isValidLastTouchDownPoint = false;
-}
-
-void TouchEmulator::handleMouseDown(HWND hWnd, blink::WebTouchEvent* touchEvent, blink::WebTouchPoint* touchPoint)
-{
-    m_lastTouchDownPoint = blink::FloatPoint(touchPoint->position);
-    m_isValidLastTouchDownPoint = true;
-
-    touchEvent->setType(WebInputEvent::TouchStart);
-    touchPoint->state = WebTouchPoint::StatePressed;
-    m_webWidget->handleInputEvent(*touchEvent);
-
-    s_uniqueTouchEventId++;
-
-    touchEvent->setType(WebInputEvent::GestureTapDown);
-    touchPoint->state = WebTouchPoint::StatePressed;
-    m_webWidget->handleInputEvent(*touchEvent);
-
-    m_gestureShowPressTimer.stop();
-    m_gestureLongPressTimer.stop();
-    m_isLongPress = false;
-    m_isPressState = true;
-    m_isScrollState = false;
-    m_gestureShowPressTimer.startOneShot(0.01, FROM_HERE);
-}
-
-void TouchEmulator::handleMouseMove(HWND hWnd, blink::WebTouchEvent* touchEvent, blink::WebTouchPoint* touchPoint)
-{
-    m_gestureShowPressTimer.stop();
-    m_gestureLongPressTimer.stop();
-    m_isLongPress = false;
-
-    if (!m_isPressState)
-        return;
-
-    POINT screenPt;
-    ::GetCursorPos(&screenPt);
-
-    POINT point = { screenPt.x,  screenPt.y };
-    ::ScreenToClient(hWnd, &point);
-
-    touchEvent->setType(WebInputEvent::TouchMove);
-    touchPoint->state = WebTouchPoint::StateMoved;
-
-    m_webWidget->handleInputEvent(*touchEvent);
-
-    blink::WebGestureEvent gestureEvent;
-    gestureEvent.setTimeStampSeconds(WTF::currentTime());
-    gestureEvent.setSize(sizeof(blink::WebGestureEvent));
-    gestureEvent.setModifiers(0);
-
-    gestureEvent.x = point.x;
-    gestureEvent.y = point.y;
-    gestureEvent.globalX = screenPt.x;
-    gestureEvent.globalY = screenPt.x;
-    gestureEvent.sourceDevice = blink::WebGestureDeviceTouchpad;
-
-    if (m_isValidLastTouchDownPoint) {
-        gestureEvent.data.scrollUpdate.deltaX = touchPoint->position.x - m_lastTouchDownPoint.x();
-        gestureEvent.data.scrollUpdate.deltaY = touchPoint->position.y - m_lastTouchDownPoint.y();
-        m_lastTouchDownPoint = blink::FloatPoint(touchPoint->position);
-        m_isValidLastTouchDownPoint = true;
-    }
-
-    gestureEvent.data.scrollUpdate.velocityX = 0;
-    gestureEvent.data.scrollUpdate.velocityY = 0;
-    gestureEvent.data.scrollUpdate.previousUpdateInSequencePrevented = true;
-    gestureEvent.data.scrollUpdate.preventPropagation = false;
-    //gestureEvent.data.scrollUpdate.inertial = false;
-
-    if (!m_isScrollState) {
-        s_uniqueTouchEventId++;
-        gestureEvent.setType(WebInputEvent::GestureTapCancel);
-        m_webWidget->handleInputEvent(gestureEvent);
-
-        s_uniqueTouchEventId++;
-        gestureEvent.setType(WebInputEvent::GestureScrollBegin);
-        m_webWidget->handleInputEvent(gestureEvent);
-    }
-    m_isScrollState = true;
-
-    s_uniqueTouchEventId++;
-
-    gestureEvent.setType(WebInputEvent::GestureScrollUpdate);
-    m_webWidget->handleInputEvent(gestureEvent);
-}
-
-void TouchEmulator::handleMouseUp(HWND hWnd, blink::WebTouchEvent* touchEvent, blink::WebTouchPoint* touchPoint)
-{
-    m_isValidLastTouchDownPoint = false;
-    touchEvent->setType(WebInputEvent::TouchEnd);
-    touchPoint->state = WebTouchPoint::StateReleased;
-    m_webWidget->handleInputEvent(*touchEvent);
-
-    m_gestureShowPressTimer.stop();
-    m_gestureLongPressTimer.stop();
-
-    if (m_isLongPress) {
-        s_uniqueTouchEventId++;
-        touchEvent->setType(WebInputEvent::GestureLongTap);
-        m_webWidget->handleInputEvent(*touchEvent);
-    }
-
-    if (m_isScrollState) {
-        s_uniqueTouchEventId++;
-        touchEvent->setType(WebInputEvent::GestureScrollEnd);
-        m_webWidget->handleInputEvent(*touchEvent);
-    }
-
-    m_isLongPress = false;
-    m_isPressState = false;
-    m_isScrollState = false;
-}
-
-void TouchEmulator::gestureShowPressTimer(blink::TimerBase*)
-{
-    s_uniqueTouchEventId++;
-
-    double time = WTF::currentTime();
-    WebTouchEvent touchEvent;
-    touchEvent.setTimeStampSeconds(WTF::currentTime());
-    touchEvent.setSize(sizeof(WebTouchEvent));
-    touchEvent.setModifiers(0);
-    touchEvent.touchesLength = 1;
-//     touchEvent.cancelable = true;
-//     touchEvent.causesScrollingIfUncanceled = false;
-    touchEvent.uniqueTouchEventId = s_uniqueTouchEventId;
-
-    touchEvent.setType(WebInputEvent::GestureShowPress);
-    m_webWidget->handleInputEvent(touchEvent);
-
-    m_gestureShowPressTimer.stop();
-    m_gestureLongPressTimer.stop();
-    m_isLongPress = true;
-    m_gestureLongPressTimer.startOneShot(1, FROM_HERE);
-}
-
-void TouchEmulator::gestureLongPressTimer(blink::TimerBase*)
-{
-    s_uniqueTouchEventId++;
-
-    double time = WTF::currentTime();
-    WebTouchEvent touchEvent;
-    touchEvent.setTimeStampSeconds(WTF::currentTime());
-    touchEvent.setSize(sizeof(WebTouchEvent));
-    touchEvent.setModifiers(0);
-    touchEvent.touchesLength = 1;
-//     touchEvent.cancelable = true;
-//     touchEvent.causesScrollingIfUncanceled = false;
-    touchEvent.uniqueTouchEventId = s_uniqueTouchEventId;
-
-    touchEvent.setType(WebInputEvent::GestureLongPress);
-    m_webWidget->handleInputEvent(touchEvent);
-
-    m_gestureShowPressTimer.stop();
-    m_gestureLongPressTimer.stop();
-    m_isLongPress = false;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
 void PlatformEventHandler::fireTouchEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    //return fireRealTouchEventTest(hWnd, message, wParam, lParam);
+    static uint32_t uniqueTouchEventId = 0;
+    uniqueTouchEventId++;
 
     double time = WTF::currentTime();
-    WebTouchEvent touchEvent;
-    touchEvent.setTimeStampSeconds(time);
-    touchEvent.setSize(sizeof(WebTouchEvent));
-    touchEvent.setModifiers(0);
-    touchEvent.touchesLength = 1;
-//     touchEvent.cancelable = true;
-//     touchEvent.causesScrollingIfUncanceled = false;
-    touchEvent.uniqueTouchEventId = s_uniqueTouchEventId;
+    WebTouchEvent webTouchEvent;
+    webTouchEvent.timeStampSeconds = WTF::currentTime();
+    webTouchEvent.size = sizeof(WebMouseEvent);
+    webTouchEvent.modifiers = 0;
+    webTouchEvent.touchesLength = 1;
+    webTouchEvent.cancelable = true;
+    webTouchEvent.causesScrollingIfUncanceled = false;
+    webTouchEvent.uniqueTouchEventId = uniqueTouchEventId;
 
-    WebTouchPoint& touchPoint = touchEvent.touches[0];
-    touchPoint.id = 0;
+    WebTouchPoint& webTouchPoint = webTouchEvent.touches[0];
+    webTouchPoint.id = 0;
+
+    if (WM_LBUTTONDOWN == message) {
+        webTouchEvent.type = WebInputEvent::TouchStart;
+        webTouchPoint.state = WebTouchPoint::StatePressed;
+    }
+    else if (WM_LBUTTONUP == message) {
+        webTouchEvent.type = WebInputEvent::TouchEnd;
+        webTouchPoint.state = WebTouchPoint::StateReleased;
+    }
+    else if (WM_MOUSEMOVE == message) {
+        webTouchEvent.type = WebInputEvent::TouchMove;
+        webTouchPoint.state = WebTouchPoint::StateMoved;
+    }
 
     POINT ptCursor;
     ::GetCursorPos(&ptCursor);
 
-    touchPoint.screenPosition.x = ptCursor.x;
-    touchPoint.screenPosition.y = ptCursor.y;
+    webTouchPoint.screenPosition.x = ptCursor.x;
+    webTouchPoint.screenPosition.y = ptCursor.y;
 
-    touchPoint.position.x = ((int)(short)LOWORD(lParam));
-    touchPoint.position.y = ((int)(short)HIWORD(lParam));
+    webTouchPoint.position.x = ((int)(short)LOWORD(lParam));
+    webTouchPoint.position.y = ((int)(short)HIWORD(lParam));
 
-    touchPoint.radiusX = 10;
-    touchPoint.radiusY = 10;
-    touchPoint.rotationAngle = 0;
+    webTouchPoint.radiusX = 10;
+    webTouchPoint.radiusY = 10;
+    webTouchPoint.rotationAngle = 0;
 
-    if (WM_LBUTTONDOWN == message) {
-        m_touchEmulator.handleMouseDown(m_hWnd, &touchEvent, &touchPoint);
-    } else if (WM_LBUTTONUP == message) {
-        m_touchEmulator.handleMouseUp(m_hWnd, &touchEvent, &touchPoint);
-    } else if (WM_MOUSEMOVE == message) {
-        m_touchEmulator.handleMouseMove(m_hWnd, &touchEvent, &touchPoint);
-    } else if (WM_MOUSELEAVE == message) {
-
-    } else if (WM_TOUCH == message) {
-        fireRealTouchEvent(hWnd, message, wParam, lParam);
-    }
+    m_webWidget->handleInputEvent(webTouchEvent);
 }
 
 static bool isNearPos(const blink::IntPoint& a, const blink::IntPoint& b)
@@ -641,7 +272,7 @@ static bool isNearPos(const blink::IntPoint& a, const blink::IntPoint& b)
 static void WKE_CALL_TYPE postDragMessageImpl(HWND hWnd, void* param)
 {
     ::ReleaseCapture();
-    ::PostMessageW(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
+    ::PostMessage(hWnd, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, 0);
 }
 
 static void postDragMessage(HWND hWnd)
@@ -657,7 +288,7 @@ static void postDragMessage(HWND hWnd)
     if (!hRootWnd)
         return;
     
-    if (!/*blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()*/true) {
+    if (!blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()) {
         postDragMessageImpl(hRootWnd, nullptr);
         return;
     }
@@ -676,7 +307,6 @@ void PlatformEventHandler::buildMousePosInfo(HWND hWnd, UINT message, WPARAM wPa
         ::GetCursorPos(&ptCursor);
         *globalPos = IntPoint(ptCursor.x, ptCursor.y);
         ::ScreenToClient(hWnd, &ptCursor);
-
         if (ptCursor.x < 2)
             ptCursor.x = -1;
         else if (ptCursor.x > 10)
@@ -696,16 +326,13 @@ void PlatformEventHandler::buildMousePosInfo(HWND hWnd, UINT message, WPARAM wPa
         pos->setY(/*m_offset.y() +*/ ((int)(short)HIWORD(lParam)));
 
         POINT widgetPoint = { pos->x(), pos->y() };
-#if defined(WIN32)
         ::ClientToScreen(hWnd, &widgetPoint);
-#else
 
-#endif
         *globalPos = IntPoint(widgetPoint.x, widgetPoint.y);
     }
 }
 
-// Êó±êµã»÷±êÌâÀ¸Ê±£¬ÊÕ²»µ½upÏûÏ¢£¬ËùÒÔÒªÄ£ÄâÒ»´Î
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Õ²ï¿½ï¿½ï¿½upï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÄ£ï¿½ï¿½Ò»ï¿½ï¿½
 bool PlatformEventHandler::fireMouseUpEventIfNeeded(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, const MouseEvtInfo& info, BOOL* bHandle)
 {
     if ((WM_MOUSEMOVE != message && WM_MOUSELEAVE != message) || !m_isLeftMousedown)
@@ -720,7 +347,7 @@ bool PlatformEventHandler::fireMouseUpEventIfNeeded(HWND hWnd, UINT message, WPA
     return true;
 }
 
-void PlatformEventHandler::checkMouseLeave(blink::TimerBase*)
+void PlatformEventHandler::checkMouseLeave(blink::Timer<PlatformEventHandler>*)
 {
     if (!m_hWnd || !::IsWindow(m_hWnd)) {
         m_checkMouseLeaveTimer.stop();
@@ -738,10 +365,6 @@ void PlatformEventHandler::checkMouseLeave(blink::TimerBase*)
         if (!m_isLeftMousedown) {
             MouseEvtInfo info = { true, false, nullptr };
             LPARAM lParam = MAKELONG(pt.x, pt.y);
-
-            if (m_enableTouchSimulate)
-                fireTouchEvent(m_hWnd, WM_MOUSELEAVE, lParam, 0);
-
             fireMouseEvent(m_hWnd, WM_MOUSELEAVE, 0, lParam, info, nullptr);
         }
         m_checkMouseLeaveTimer.stop();
@@ -770,18 +393,16 @@ LRESULT PlatformEventHandler::fireMouseEvent(HWND hWnd, UINT message, WPARAM wPa
 
     buildMousePosInfo(hWnd, message, wParam, lParam, &handle, &pos, &globalPos);
 
-#if defined(WIN32)
     if (!m_checkMouseLeaveTimer.isActive())
         m_checkMouseLeaveTimer.startRepeating(0.2, FROM_HERE);
     if (WM_MOUSELEAVE == message)
         m_checkMouseLeaveTimer.stop();
-#endif
 
     double time = WTF::currentTime();
     WebMouseEvent webMouseEvent;
-    webMouseEvent.setTimeStampSeconds(time);
-    webMouseEvent.setSize(sizeof(WebMouseEvent));
-    webMouseEvent.setModifiers(0);
+    webMouseEvent.timeStampSeconds = WTF::currentTime();
+    webMouseEvent.size = sizeof(WebMouseEvent);
+    webMouseEvent.modifiers = 0;
     webMouseEvent.x = pos.x();
     webMouseEvent.y = pos.y();
 
@@ -799,6 +420,7 @@ LRESULT PlatformEventHandler::fireMouseEvent(HWND hWnd, UINT message, WPARAM wPa
     if (WM_LBUTTONDOWN == message || WM_MBUTTONDOWN == message || WM_RBUTTONDOWN == message || WM_LBUTTONDBLCLK == message) {
         handle = true;
 
+        double time = WTF::currentTime();
         const static double minInterval = GetDoubleClickTime() / 1000.0;
 
         if (time - m_lastTimeMouseDown < minInterval && isNearPos(m_lastPosMouseDown, pos))
@@ -813,28 +435,28 @@ LRESULT PlatformEventHandler::fireMouseEvent(HWND hWnd, UINT message, WPARAM wPa
                 m_webViewImpl->setFocus(true);
                 m_webViewImpl->setIsActive(true);
             }
-            if (wke::g_enableNativeSetCapture && isValideWindow)
+            if (isValideWindow)
                 ::SetCapture(hWnd);
         }
         switch (message) {
         case WM_LBUTTONDOWN:
         case WM_LBUTTONDBLCLK:
             m_isLeftMousedown = true;
-            webMouseEvent.button = WebPointerProperties::Button::Left;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::LeftButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonLeft;
+            webMouseEvent.modifiers |= WebMouseEvent::LeftButtonDown;
             break;
         case WM_MBUTTONDOWN:
-            webMouseEvent.button = WebPointerProperties::Button::Middle;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::MiddleButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonMiddle;
+            webMouseEvent.modifiers |= WebMouseEvent::MiddleButtonDown;
             break;
         case WM_RBUTTONDOWN:
-            webMouseEvent.button = WebPointerProperties::Button::Right;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::RightButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonRight;
+            webMouseEvent.modifiers |= WebMouseEvent::RightButtonDown;
             break;
         }
         m_isDraggableRegionNcHitTest = false;
-        webMouseEvent.setType(WebInputEvent::MouseDown);
-        bool b = m_webWidget->handleInputEvent(webMouseEvent) != WebInputEventResult::NotHandled;
+        webMouseEvent.type = WebInputEvent::MouseDown;
+        bool b = m_webWidget->handleInputEvent(webMouseEvent);
 
         bool isDraggable = false;
         if (WM_LBUTTONDOWN == message)
@@ -849,63 +471,56 @@ LRESULT PlatformEventHandler::fireMouseEvent(HWND hWnd, UINT message, WPARAM wPa
         switch (message) {
         case WM_LBUTTONUP:
             m_isLeftMousedown = false;
-            webMouseEvent.button = WebPointerProperties::Button::Left;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::LeftButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonLeft;
+            webMouseEvent.modifiers |= WebMouseEvent::LeftButtonDown;
             break;
         case WM_MBUTTONUP:
-            webMouseEvent.button = WebPointerProperties::Button::Middle;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::MiddleButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonMiddle;
+            webMouseEvent.modifiers |= WebMouseEvent::MiddleButtonDown;
             break;
         case WM_RBUTTONUP:
-            webMouseEvent.button = WebPointerProperties::Button::Right;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::RightButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonRight;
+            webMouseEvent.modifiers |= WebMouseEvent::RightButtonDown;
             break;
         }
         if (isValideWindow)
             ::ReleaseCapture();
-        if (m_webViewImpl) {
-            WebLocalFrame* frame = (WebLocalFrame*)m_webViewImpl->mainFrame();
-            if (frame && frame->frameWidget())
-                frame->frameWidget()->dragSourceSystemDragEnded();
-        }
-        webMouseEvent.setType(WebInputEvent::MouseUp);
+        if (m_webViewImpl)
+            m_webViewImpl->dragSourceSystemDragEnded();
+        webMouseEvent.type = WebInputEvent::MouseUp;
         m_webWidget->handleInputEvent(webMouseEvent);        
     } else if (WM_MOUSEMOVE == message || WM_MOUSELEAVE == message) {
         handle = true;
         if (wParam & MK_LBUTTON) {
-            webMouseEvent.button = WebPointerProperties::Button::Left;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::LeftButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonLeft;
+            webMouseEvent.modifiers |= WebMouseEvent::LeftButtonDown;            
         } else if (wParam & MK_MBUTTON) {
-            webMouseEvent.button = WebPointerProperties::Button::Middle;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::MiddleButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonMiddle;
+            webMouseEvent.modifiers |= WebMouseEvent::MiddleButtonDown;
         } else if (wParam & MK_RBUTTON) {
-            webMouseEvent.button = WebPointerProperties::Button::Right;
-            webMouseEvent.setModifiers(webMouseEvent.modifiers() | WebMouseEvent::RightButtonDown);
+            webMouseEvent.button = WebMouseEvent::ButtonRight;
+            webMouseEvent.modifiers |= WebMouseEvent::RightButtonDown;
         } else {
             ASSERT(!m_isLeftMousedown);
-            webMouseEvent.button = WebPointerProperties::Button::Eraser;
+            webMouseEvent.button = WebMouseEvent::ButtonNone;
         }
 
         bool b = false;
         switch (message) {
         case WM_MOUSEMOVE:
             if (!m_mouseInWindow) {
-                webMouseEvent.setType(WebInputEvent::MouseEnter);
+                webMouseEvent.type = WebInputEvent::MouseEnter;
                 m_mouseInWindow = true;
             } else
-                webMouseEvent.setType(WebInputEvent::MouseMove);
+                webMouseEvent.type = WebInputEvent::MouseMove;
 
-            b = m_webWidget->handleInputEvent(webMouseEvent) != WebInputEventResult::NotHandled;
+            b = m_webWidget->handleInputEvent(webMouseEvent);
             break;
         case WM_MOUSELEAVE:
-            webMouseEvent.setType(WebInputEvent::MouseLeave);
-
-            if (m_webViewImpl) {
-                WebLocalFrame* frame = (WebLocalFrame*)m_webViewImpl->mainFrame();
-                if (frame && frame->frameWidget())
-                    frame->frameWidget()->dragSourceSystemDragEnded();
-            }
-            b = m_webWidget->handleInputEvent(webMouseEvent) != WebInputEventResult::NotHandled;
+            webMouseEvent.type = WebInputEvent::MouseLeave;
+            if (m_webViewImpl)
+                m_webViewImpl->dragSourceSystemDragEnded();
+            b = m_webWidget->handleInputEvent(webMouseEvent);
             m_mouseInWindow = false;
             break;
         }
@@ -923,8 +538,8 @@ void PlatformEventHandler::setIsDraggableNodeMousedown()
 
 bool PlatformEventHandler::isDraggableRegionNcHitTest(HWND hWnd, const blink::IntPoint& pos, HRGN draggableRegion)
 {
-    // µ¥Ïß³ÌÇé¿öÏÂ£¬Ö±½ÓÔÚmbÄÚ²¿´¦ÀíÍÏ×§¡£¶àÏß³ÌäÖÈ¾Ê±£¬±ØÐëÔÚuiÏß³Ì´¦Àí£¬·ñÔòblinkÏß³Ì¿¨ÁË£¬»áµ¼ÖÂÍÏ×§Ò²ºÜ¿¨
-    if (!/*blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()*/true)
+    // ï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½Ö±ï¿½ï¿½ï¿½ï¿½mbï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×§ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½È¾Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uiï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½blinkï¿½ß³Ì¿ï¿½ï¿½Ë£ï¿½ï¿½áµ¼ï¿½ï¿½ï¿½ï¿½×§Ò²ï¿½Ü¿ï¿½
+    if (!blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled())
         return m_isDraggableNodeMousedown;
     return false;
 
@@ -934,18 +549,18 @@ bool PlatformEventHandler::isDraggableRegionNcHitTest(HWND hWnd, const blink::In
 //     return ::PtInRegion(draggableRegion, pos.x(), pos.y());
 }
 
-int verticalScrollLines()
+static int verticalScrollLines()
 {
-    static ULONG scrollLines = 0;
-    if (!scrollLines && !SystemParametersInfoW(SPI_GETWHEELSCROLLLINES, 0, &scrollLines, 0))
+    static ULONG scrollLines;
+    if (!scrollLines && !SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &scrollLines, 0))
         scrollLines = 3;
     return scrollLines;
 }
 
-int horizontalScrollChars()
+static int horizontalScrollChars()
 {
-    static ULONG scrollChars = 0;
-    if (!scrollChars && !SystemParametersInfoW(SPI_GETWHEELSCROLLCHARS, 0, &scrollChars, 0))
+    static ULONG scrollChars;
+    if (!scrollChars && !SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0, &scrollChars, 0))
         scrollChars = 1;
     return scrollChars;
 }
@@ -970,78 +585,42 @@ LRESULT PlatformEventHandler::fireWheelEvent(HWND hWnd, UINT message, WPARAM wPa
     bool shiftKey = wParam & MK_SHIFT;
     bool ctrlKey = wParam & MK_CONTROL;
 
-    //blink::PlatformWheelEventGranularity granularity = blink::ScrollByPageWheelEvent;
+    blink::PlatformWheelEventGranularity granularity = blink::ScrollByPageWheelEvent;
 
     if (shiftKey) {
         deltaX = delta * static_cast<float>(horizontalScrollChars()) * cScrollbarPixelsPerLine;
         deltaY = 0;
-        //granularity = blink::ScrollByPixelWheelEvent;
+        granularity = blink::ScrollByPixelWheelEvent;
         modifiers |= WebInputEvent::ShiftKey;
     } else {
         deltaX = 0;
         deltaY = delta;
         int verticalMultiplier = verticalScrollLines();
-//         granularity = (verticalMultiplier == WHEEL_PAGESCROLL) ? blink::ScrollByPageWheelEvent : blink::ScrollByPixelWheelEvent;
-//         if (granularity == blink::ScrollByPixelWheelEvent)
-        if (verticalMultiplier != WHEEL_PAGESCROLL)
+        granularity = (verticalMultiplier == WHEEL_PAGESCROLL) ? blink::ScrollByPageWheelEvent : blink::ScrollByPixelWheelEvent;
+        if (granularity == blink::ScrollByPixelWheelEvent)
             deltaY *= static_cast<float>(verticalMultiplier)* cScrollbarPixelsPerLine;
     }
    
     if (ctrlKey)
         modifiers |= WebInputEvent::ControlKey;
-
-    WebGestureEvent webGestureEvent;
     
-    webGestureEvent.setType(WebInputEvent::GestureScrollBegin);
-    webGestureEvent.x = x;
-    webGestureEvent.y = y;
-    webGestureEvent.globalX = x;
-    webGestureEvent.globalY = y;
-
-    webGestureEvent.sourceDevice = blink::WebGestureDeviceTouchpad;
-    webGestureEvent.uniqueTouchEventId = 0;
-    webGestureEvent.resendingPluginId = -1;
-    
-    webGestureEvent.data.scrollBegin.deltaXHint = deltaX;
-    webGestureEvent.data.scrollBegin.deltaYHint = deltaY;
-    webGestureEvent.data.scrollBegin.deltaHintUnits = WebGestureEvent::Pixels;
-    webGestureEvent.data.scrollBegin.targetViewport = false;
-    webGestureEvent.data.scrollBegin.inertialPhase = WebGestureEvent::NonMomentumPhase;
-    webGestureEvent.data.scrollBegin.synthetic = true;
-    webGestureEvent.data.scrollBegin.pointerCount = 1;
-    m_webWidget->handleInputEvent(webGestureEvent);
-
-    webGestureEvent.setType(WebInputEvent::GestureScrollUpdate);
-    webGestureEvent.data.scrollUpdate.deltaX = deltaX;
-    webGestureEvent.data.scrollUpdate.deltaY = deltaY;
-    webGestureEvent.data.scrollUpdate.velocityX = x;
-    webGestureEvent.data.scrollUpdate.velocityY = y;
-    webGestureEvent.data.scrollUpdate.previousUpdateInSequencePrevented = false;
-    webGestureEvent.data.scrollUpdate.preventPropagation = false;
-    webGestureEvent.data.scrollUpdate.inertialPhase = WebGestureEvent::NonMomentumPhase;
-    m_webWidget->handleInputEvent(webGestureEvent);
-
-    webGestureEvent.setType(WebInputEvent::GestureScrollEnd);
-    webGestureEvent.data.scrollEnd.synthetic = true;
-    webGestureEvent.data.scrollEnd.inertialPhase = WebGestureEvent::NonMomentumPhase;
-    webGestureEvent.data.scrollEnd.deltaUnits = WebGestureEvent::Pixels;
-    m_webWidget->handleInputEvent(webGestureEvent);
-    
-//     WebMouseWheelEvent webWheelEvent;
-//     webWheelEvent.setType(WebInputEvent::MouseWheel);
-//     webWheelEvent.x = x;
-//     webWheelEvent.y = y;
-//     webWheelEvent.globalX = x;
-//     webWheelEvent.globalY = y;
-//     webWheelEvent.deltaX = deltaX;
-//     webWheelEvent.deltaY = deltaY;
-//     webWheelEvent.wheelTicksX = 0.f;
-//     webWheelEvent.wheelTicksY = delta;
-//     webWheelEvent.hasPreciseScrollingDeltas = true;
-//     webWheelEvent.setModifiers(modifiers);
-//     m_webWidget->handleInputEvent(webWheelEvent);
+    WebMouseWheelEvent webWheelEvent;
+    webWheelEvent.type = WebInputEvent::MouseWheel;
+    webWheelEvent.x = x;
+    webWheelEvent.y = y;
+    webWheelEvent.globalX = x;
+    webWheelEvent.globalY = y;
+    webWheelEvent.deltaX = deltaX;
+    webWheelEvent.deltaY = deltaY;
+    webWheelEvent.wheelTicksX = 0.f;
+    webWheelEvent.wheelTicksY = delta;
+    webWheelEvent.hasPreciseScrollingDeltas = true;
+    webWheelEvent.modifiers = modifiers;
+    m_webWidget->handleInputEvent(webWheelEvent);
 
     return 0;
 }
 
 }
+
+#endif // PlatformEventUtil_h

@@ -33,9 +33,16 @@
 
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/AudioProcessor.h"
+<<<<<<< HEAD
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/Vector.h"
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/ThreadingPrimitives.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,6 +51,7 @@ class AudioDSPKernel;
 class AudioProcessor;
 
 // AudioDSPKernelProcessor processes one input -> one output (N channels each)
+<<<<<<< HEAD
 // It uses one AudioDSPKernel object per channel to do the processing, thus
 // there is no cross-channel processing.  Despite this limitation it turns out
 // to be a very common and useful type of processor.
@@ -52,19 +60,35 @@ class PLATFORM_EXPORT AudioDSPKernelProcessor : public AudioProcessor {
 public:
     // numberOfChannels may be later changed if object is not yet in an
     // "initialized" state
+=======
+// It uses one AudioDSPKernel object per channel to do the processing, thus there is no cross-channel processing.
+// Despite this limitation it turns out to be a very common and useful type of processor.
+
+class PLATFORM_EXPORT AudioDSPKernelProcessor : public AudioProcessor {
+public:
+    // numberOfChannels may be later changed if object is not yet in an "initialized" state
+>>>>>>> miniblink49
     AudioDSPKernelProcessor(float sampleRate, unsigned numberOfChannels);
 
     // Subclasses create the appropriate type of processing kernel here.
     // We'll call this to create a kernel for each channel.
+<<<<<<< HEAD
     virtual std::unique_ptr<AudioDSPKernel> createKernel() = 0;
+=======
+    virtual PassOwnPtr<AudioDSPKernel> createKernel() = 0;
+>>>>>>> miniblink49
 
     // AudioProcessor methods
     void initialize() override;
     void uninitialize() override;
+<<<<<<< HEAD
     void process(const AudioBus* source,
         AudioBus* destination,
         size_t framesToProcess) override;
     void processOnlyAudioParams(size_t framesToProcess) override;
+=======
+    void process(const AudioBus* source, AudioBus* destination, size_t framesToProcess) override;
+>>>>>>> miniblink49
     void reset() override;
     void setNumberOfChannels(unsigned) override;
     unsigned numberOfChannels() const override { return m_numberOfChannels; }
@@ -73,7 +97,11 @@ public:
     double latencyTime() const override;
 
 protected:
+<<<<<<< HEAD
     Vector<std::unique_ptr<AudioDSPKernel>> m_kernels;
+=======
+    Vector<OwnPtr<AudioDSPKernel>> m_kernels;
+>>>>>>> miniblink49
     mutable Mutex m_processLock;
     bool m_hasJustReset;
 };

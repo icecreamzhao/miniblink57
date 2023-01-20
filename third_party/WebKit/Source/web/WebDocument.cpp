@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebDocument.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -37,9 +41,15 @@
 #include "core/css/StyleSheetContents.h"
 #include "core/dom/CSSSelectorWatch.h"
 #include "core/dom/Document.h"
+<<<<<<< HEAD
 #include "core/dom/DocumentStatisticsCollector.h"
 #include "core/dom/DocumentType.h"
 #include "core/dom/Element.h"
+=======
+#include "core/dom/DocumentType.h"
+#include "core/dom/Element.h"
+#include "core/dom/Fullscreen.h"
+>>>>>>> miniblink49
 #include "core/dom/StyleEngine.h"
 #include "core/events/Event.h"
 #include "core/html/HTMLAllCollection.h"
@@ -50,6 +60,7 @@
 #include "core/html/HTMLHeadElement.h"
 #include "core/html/HTMLLinkElement.h"
 #include "core/layout/LayoutObject.h"
+<<<<<<< HEAD
 #include "core/layout/api/LayoutAPIShim.h"
 #include "core/layout/api/LayoutViewItem.h"
 #include "core/loader/DocumentLoader.h"
@@ -63,6 +74,21 @@
 #include "public/web/WebElement.h"
 #include "public/web/WebElementCollection.h"
 #include "public/web/WebFormElement.h"
+=======
+#include "core/layout/LayoutView.h"
+#include "core/loader/DocumentLoader.h"
+#include "modules/accessibility/AXObject.h"
+#include "modules/accessibility/AXObjectCacheImpl.h"
+#include "platform/weborigin/SecurityOrigin.h"
+#include "public/platform/WebURL.h"
+//#include "public/web/WebAXObject.h"
+#include "public/web/WebDOMEvent.h"
+#include "public/web/WebDocumentType.h"
+#include "public/web/WebElement.h"
+#include "public/web/WebElementCollection.h"
+#include "public/web/WebFormElement.h"
+#include "public/web/WebNodeList.h"
+>>>>>>> miniblink49
 #include "web/WebLocalFrameImpl.h"
 #include "wtf/PassRefPtr.h"
 #include <v8.h>
@@ -74,6 +100,7 @@ WebURL WebDocument::url() const
     return constUnwrap<Document>()->url();
 }
 
+<<<<<<< HEAD
 WebSecurityOrigin WebDocument::getSecurityOrigin() const
 {
     if (!constUnwrap<Document>())
@@ -85,6 +112,24 @@ bool WebDocument::isSecureContext() const
 {
     const Document* document = constUnwrap<Document>();
     return document && document->isSecureContext();
+=======
+WebSecurityOrigin WebDocument::securityOrigin() const
+{
+    if (!constUnwrap<Document>())
+        return WebSecurityOrigin();
+    return WebSecurityOrigin(constUnwrap<Document>()->securityOrigin());
+}
+
+bool WebDocument::isPrivilegedContext(WebString& errorMessage) const
+{
+    const Document* document = constUnwrap<Document>();
+    if (!document)
+        return false;
+    String message;
+    bool result = document->isPrivilegedContext(message);
+    errorMessage = message;
+    return result;
+>>>>>>> miniblink49
 }
 
 WebString WebDocument::encoding() const
@@ -109,8 +154,12 @@ WebColor WebDocument::themeColor() const
 
 WebURL WebDocument::openSearchDescriptionURL() const
 {
+<<<<<<< HEAD
     return const_cast<Document*>(constUnwrap<Document>())
         ->openSearchDescriptionURL();
+=======
+    return const_cast<Document*>(constUnwrap<Document>())->openSearchDescriptionURL();
+>>>>>>> miniblink49
 }
 
 WebLocalFrame* WebDocument::frame() const
@@ -177,7 +226,11 @@ WebElementCollection WebDocument::all()
 
 void WebDocument::forms(WebVector<WebFormElement>& results) const
 {
+<<<<<<< HEAD
     HTMLCollection* forms = const_cast<Document*>(constUnwrap<Document>())->forms();
+=======
+    RefPtrWillBeRawPtr<HTMLCollection> forms = const_cast<Document*>(constUnwrap<Document>())->forms();
+>>>>>>> miniblink49
     size_t sourceLength = forms->length();
     Vector<WebFormElement> temp;
     temp.reserveCapacity(sourceLength);
@@ -185,7 +238,11 @@ void WebDocument::forms(WebVector<WebFormElement>& results) const
         Element* element = forms->item(i);
         // Strange but true, sometimes node can be 0.
         if (element && element->isHTMLElement())
+<<<<<<< HEAD
             temp.push_back(WebFormElement(toHTMLFormElement(element)));
+=======
+            temp.append(WebFormElement(toHTMLFormElement(element)));
+>>>>>>> miniblink49
     }
     results.assign(temp);
 }
@@ -205,6 +262,7 @@ WebElement WebDocument::focusedElement() const
     return WebElement(constUnwrap<Document>()->focusedElement());
 }
 
+<<<<<<< HEAD
 void WebDocument::insertStyleSheet(const WebString& sourceCode)
 {
     Document* document = unwrap<Document>();
@@ -212,11 +270,29 @@ void WebDocument::insertStyleSheet(const WebString& sourceCode)
     StyleSheetContents* parsedSheet = StyleSheetContents::create(CSSParserContext::create(*document));
     parsedSheet->parseString(sourceCode);
     document->styleEngine().injectAuthorSheet(parsedSheet);
+=======
+WebDocumentType WebDocument::doctype() const
+{
+    return WebDocumentType(constUnwrap<Document>()->doctype());
+}
+
+void WebDocument::insertStyleSheet(const WebString& sourceCode)
+{
+    RefPtrWillBeRawPtr<Document> document = unwrap<Document>();
+    ASSERT(document);
+    RefPtrWillBeRawPtr<StyleSheetContents> parsedSheet = StyleSheetContents::create(CSSParserContext(*document, 0));
+    parsedSheet->parseString(sourceCode);
+    document->styleEngine().addAuthorSheet(parsedSheet);
+>>>>>>> miniblink49
 }
 
 void WebDocument::watchCSSSelectors(const WebVector<WebString>& webSelectors)
 {
+<<<<<<< HEAD
     Document* document = unwrap<Document>();
+=======
+    RefPtrWillBeRawPtr<Document> document = unwrap<Document>();
+>>>>>>> miniblink49
     CSSSelectorWatch* watch = CSSSelectorWatch::fromIfExists(*document);
     if (!watch && webSelectors.isEmpty())
         return;
@@ -225,6 +301,7 @@ void WebDocument::watchCSSSelectors(const WebVector<WebString>& webSelectors)
     CSSSelectorWatch::from(*document).watchCSSSelectors(selectors);
 }
 
+<<<<<<< HEAD
 WebReferrerPolicy WebDocument::getReferrerPolicy() const
 {
     return static_cast<WebReferrerPolicy>(
@@ -256,6 +333,60 @@ WebString WebDocument::outgoingReferrer()
 //   AXObjectCacheImpl* cache = toAXObjectCacheImpl(document->axObjectCache());
 //   return cache ? WebAXObject(cache->focusedObject()) : WebAXObject();
 // }
+=======
+void WebDocument::cancelFullScreen()
+{
+    Fullscreen::fullyExitFullscreen(*unwrap<Document>());
+}
+
+WebElement WebDocument::fullScreenElement() const
+{
+    Element* fullScreenElement = 0;
+    if (Fullscreen* fullscreen = Fullscreen::fromIfExists(*const_cast<WebDocument*>(this)->unwrap<Document>()))
+        fullScreenElement = fullscreen->webkitCurrentFullScreenElement();
+    return WebElement(fullScreenElement);
+}
+
+WebDOMEvent WebDocument::createEvent(const WebString& eventType)
+{
+    TrackExceptionState exceptionState;
+    WebDOMEvent event(unwrap<Document>()->createEvent(eventType, exceptionState));
+    if (exceptionState.hadException())
+        return WebDOMEvent();
+    return event;
+}
+
+WebReferrerPolicy WebDocument::referrerPolicy() const
+{
+    return static_cast<WebReferrerPolicy>(constUnwrap<Document>()->referrerPolicy());
+}
+
+WebElement WebDocument::createElement(const WebString& tagName)
+{
+    TrackExceptionState exceptionState;
+    WebElement element(unwrap<Document>()->createElement(tagName, exceptionState));
+    if (exceptionState.hadException())
+        return WebElement();
+    return element;
+}
+
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+WebAXObject WebDocument::accessibilityObject() const
+{
+
+    const Document* document = constUnwrap<Document>();
+    AXObjectCacheImpl* cache = toAXObjectCacheImpl(document->axObjectCache());
+    return cache ? WebAXObject(cache->getOrCreate(document->layoutView())) : WebAXObject();
+}
+
+WebAXObject WebDocument::accessibilityObjectFromID(int axID) const
+{
+    const Document* document = constUnwrap<Document>();
+    AXObjectCacheImpl* cache = toAXObjectCacheImpl(document->axObjectCache());
+    return cache ? WebAXObject(cache->objectFromAXID(axID)) : WebAXObject();
+}
+#endif // MINIBLINK_NOT_IMPLEMENTED
+>>>>>>> miniblink49
 
 WebVector<WebDraggableRegion> WebDocument::draggableRegions() const
 {
@@ -273,6 +404,7 @@ WebVector<WebDraggableRegion> WebDocument::draggableRegions() const
     return draggableRegions;
 }
 
+<<<<<<< HEAD
 v8::Local<v8::Value> WebDocument::registerEmbedderCustomElement(
     const WebString& name,
     v8::Local<v8::Value> options,
@@ -289,6 +421,18 @@ v8::Local<v8::Value> WebDocument::registerEmbedderCustomElement(
     ScriptValue constructor = document->registerElement(
         ScriptState::current(isolate), name, registrationOptions, exceptionState,
         V0CustomElement::EmbedderNames);
+=======
+v8::Local<v8::Value> WebDocument::registerEmbedderCustomElement(const WebString& name, v8::Local<v8::Value> options, WebExceptionCode& ec)
+{
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    Document* document = unwrap<Document>();
+    TrackExceptionState exceptionState;
+    ElementRegistrationOptions registrationOptions;
+    V8ElementRegistrationOptions::toImpl(isolate, options, registrationOptions, exceptionState);
+    if (exceptionState.hadException())
+        return v8::Local<v8::Value>();
+    ScriptValue constructor = document->registerElement(ScriptState::current(isolate), name, registrationOptions, exceptionState, CustomElement::EmbedderNames);
+>>>>>>> miniblink49
     ec = exceptionState.code();
     if (exceptionState.hadException())
         return v8::Local<v8::Value>();
@@ -310,6 +454,7 @@ bool WebDocument::manifestUseCredentials() const
     HTMLLinkElement* linkElement = document->linkManifest();
     if (!linkElement)
         return false;
+<<<<<<< HEAD
     return equalIgnoringASCIICase(
         linkElement->fastGetAttribute(HTMLNames::crossoriginAttr),
         "use-credentials");
@@ -321,19 +466,42 @@ WebDistillabilityFeatures WebDocument::distillabilityFeatures()
 }
 
 WebDocument::WebDocument(Document* elem)
+=======
+    return equalIgnoringCase(linkElement->fastGetAttribute(HTMLNames::crossoriginAttr), "use-credentials");
+}
+
+WebURL WebDocument::defaultPresentationURL() const
+{
+    const Document* document = constUnwrap<Document>();
+    HTMLLinkElement* linkElement = document->linkDefaultPresentation();
+    if (!linkElement)
+        return WebURL();
+    return linkElement->href();
+}
+
+WebDocument::WebDocument(const PassRefPtrWillBeRawPtr<Document>& elem)
+>>>>>>> miniblink49
     : WebNode(elem)
 {
 }
 
+<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebDocument, constUnwrap<Node>()->isDocumentNode());
 
 WebDocument& WebDocument::operator=(Document* elem)
+=======
+WebDocument& WebDocument::operator=(const PassRefPtrWillBeRawPtr<Document>& elem)
+>>>>>>> miniblink49
 {
     m_private = elem;
     return *this;
 }
 
+<<<<<<< HEAD
 WebDocument::operator Document*() const
+=======
+WebDocument::operator PassRefPtrWillBeRawPtr<Document>() const
+>>>>>>> miniblink49
 {
     return toDocument(m_private.get());
 }

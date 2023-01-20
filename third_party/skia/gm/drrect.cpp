@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkRRect.h"
@@ -27,6 +28,28 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkRRect.h"
+#include "SkPath.h"
+
+class DRRectGM : public skiagm::GM {
+public:
+    DRRectGM() {}
+
+protected:
+
+    SkString onShortName() override {
+        return SkString("drrect");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(640, 480);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -69,4 +92,8 @@ private:
     typedef GM INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_GM(return new DRRectGM;)
+=======
+DEF_GM( return new DRRectGM; )
+>>>>>>> miniblink49

@@ -37,6 +37,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class DirectoryReaderBase
     : public GarbageCollectedFinalized<DirectoryReaderBase> {
 public:
@@ -49,6 +50,19 @@ public:
     virtual ~DirectoryReaderBase() { }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_fileSystem); }
+=======
+class DirectoryReaderBase : public GarbageCollectedFinalized<DirectoryReaderBase> {
+public:
+    DOMFileSystemBase* filesystem() const { return m_fileSystem.get(); }
+    void setHasMoreEntries(bool hasMoreEntries) { m_hasMoreEntries = hasMoreEntries; }
+
+    virtual ~DirectoryReaderBase() { }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_fileSystem);
+    }
+>>>>>>> miniblink49
 
 protected:
     DirectoryReaderBase(DOMFileSystemBase* fileSystem, const String& fullPath)

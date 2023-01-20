@@ -15,6 +15,10 @@
  * \brief C++ API: Unicode Matcher
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 class Replaceable;
@@ -35,7 +39,11 @@ enum UMatchDegree {
      * @stable ICU 2.4
      */
     U_MISMATCH,
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     /**
      * Constant returned by <code>matches()</code> indicating a
      * partial match between the text and this matcher.  This value is
@@ -47,7 +55,11 @@ enum UMatchDegree {
      * @stable ICU 2.4
      */
     U_PARTIAL_MATCH,
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     /**
      * Constant returned by <code>matches()</code> indicating a
      * complete match between the text and this matcher.  For an
@@ -120,10 +132,16 @@ public:
      * @stable ICU 2.4
      */
     virtual UMatchDegree matches(const Replaceable& text,
+<<<<<<< HEAD
         int32_t& offset,
         int32_t limit,
         UBool incremental)
         = 0;
+=======
+                                 int32_t& offset,
+                                 int32_t limit,
+                                 UBool incremental) = 0;
+>>>>>>> miniblink49
 
     /**
      * Returns a string representation of this matcher.  If the result of
@@ -138,7 +156,11 @@ public:
      * @stable ICU 2.4
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
+<<<<<<< HEAD
         UBool escapeUnprintable = FALSE) const = 0;
+=======
+                                     UBool escapeUnprintable = FALSE) const = 0;
+>>>>>>> miniblink49
 
     /**
      * Returns TRUE if this matcher will match a character c, where c

@@ -2766,8 +2766,13 @@ xmlXPathFormatNumber(double number, char buffer[], int buffersize)
 	    /* Finally copy result back to caller */
 	    size = strlen(work) + 1;
 	    if (size > buffersize) {
+<<<<<<< HEAD
 		    work[buffersize - 1] = 0;
 		    size = buffersize;
+=======
+		work[buffersize - 1] = 0;
+		size = buffersize;
+>>>>>>> miniblink49
 	    }
 	    memmove(buffer, work, size);
 	}

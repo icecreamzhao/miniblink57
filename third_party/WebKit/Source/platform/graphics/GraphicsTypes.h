@@ -28,11 +28,17 @@
 
 #include "platform/PlatformExport.h"
 #include "public/platform/WebBlendMode.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkFilterQuality.h"
 #include "third_party/skia/include/core/SkPaint.h"
 #include "third_party/skia/include/core/SkPath.h"
 #include "wtf/Forward.h"
 #include "wtf/build_config.h"
+=======
+#include "third_party/skia/include/core/SkPaint.h"
+#include "third_party/skia/include/core/SkPath.h"
+#include "wtf/Forward.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -77,6 +83,7 @@ enum OpacityMode {
     Opaque,
 };
 
+<<<<<<< HEAD
 enum AccelerationHint {
     PreferAcceleration,
     // The PreferAccelerationAfterVisibilityChange hint suggests we should switch
@@ -137,6 +144,20 @@ enum ShadowMode { DrawShadowAndForeground,
 
 enum AntiAliasingMode { NotAntiAliased,
     AntiAliased };
+=======
+// TODO(junov): crbug.com/453113 relocate ShadowMode to CanvasRenderingContext2DState.h once
+// GraphicsContext no longer uses it.
+enum ShadowMode {
+    DrawShadowAndForeground,
+    DrawShadowOnly,
+    DrawForegroundOnly
+};
+
+enum AntiAliasingMode {
+    NotAntiAliased,
+    AntiAliased
+};
+>>>>>>> miniblink49
 
 enum GradientSpreadMethod {
     SpreadMethodPad,
@@ -156,6 +177,7 @@ enum LineJoin {
     BevelJoin = SkPaint::kBevel_Join
 };
 
+<<<<<<< HEAD
 enum HorizontalAlignment { AlignLeft,
     AlignRight,
     AlignHCenter };
@@ -180,6 +202,17 @@ enum TextAlign {
 enum TextDrawingMode {
     TextModeFill = 1 << 0,
     TextModeStroke = 1 << 1,
+=======
+enum HorizontalAlignment { AlignLeft, AlignRight, AlignHCenter };
+
+enum TextBaseline { AlphabeticTextBaseline, TopTextBaseline, MiddleTextBaseline, BottomTextBaseline, IdeographicTextBaseline, HangingTextBaseline };
+
+enum TextAlign { StartTextAlign, EndTextAlign, LeftTextAlign, CenterTextAlign, RightTextAlign };
+
+enum TextDrawingMode {
+    TextModeFill      = 1 << 0,
+    TextModeStroke    = 1 << 1,
+>>>>>>> miniblink49
 };
 typedef unsigned TextDrawingModeFlags;
 
@@ -196,9 +229,13 @@ enum WindRule {
 };
 
 PLATFORM_EXPORT String compositeOperatorName(CompositeOperator, WebBlendMode);
+<<<<<<< HEAD
 PLATFORM_EXPORT bool parseCompositeAndBlendOperator(const String&,
     CompositeOperator&,
     WebBlendMode&);
+=======
+PLATFORM_EXPORT bool parseCompositeAndBlendOperator(const String&, CompositeOperator&, WebBlendMode&);
+>>>>>>> miniblink49
 
 PLATFORM_EXPORT String lineCapName(LineCap);
 PLATFORM_EXPORT bool parseLineCap(const String&, LineCap&);

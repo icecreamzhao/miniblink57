@@ -32,9 +32,15 @@
 #define ServiceWorkerGlobalScopeClientImpl_h
 
 #include "modules/serviceworkers/ServiceWorkerGlobalScopeClient.h"
+<<<<<<< HEAD
 #include "public/platform/modules/serviceworker/WebServiceWorkerClientsInfo.h"
 #include "public/platform/modules/serviceworker/WebServiceWorkerSkipWaitingCallbacks.h"
 #include <memory>
+=======
+#include "public/platform/WebServiceWorkerClientsInfo.h"
+#include "public/platform/WebServiceWorkerSkipWaitingCallbacks.h"
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -42,6 +48,7 @@ class WebServiceWorkerContextClient;
 class WebServiceWorkerResponse;
 class WebURL;
 
+<<<<<<< HEAD
 class ServiceWorkerGlobalScopeClientImpl final
     : public GarbageCollectedFinalized<ServiceWorkerGlobalScopeClientImpl>,
       public ServiceWorkerGlobalScopeClient {
@@ -57,11 +64,22 @@ public:
         std::unique_ptr<WebServiceWorkerClientsCallbacks>) override;
     void openWindow(const WebURL&,
         std::unique_ptr<WebServiceWorkerClientCallbacks>) override;
+=======
+class ServiceWorkerGlobalScopeClientImpl final : public NoBaseWillBeGarbageCollectedFinalized<ServiceWorkerGlobalScopeClientImpl>, public ServiceWorkerGlobalScopeClient {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerGlobalScopeClientImpl);
+public:
+    static PassOwnPtrWillBeRawPtr<ServiceWorkerGlobalScopeClient> create(WebServiceWorkerContextClient&);
+    ~ServiceWorkerGlobalScopeClientImpl() override;
+
+    void getClients(const WebServiceWorkerClientQueryOptions&, WebServiceWorkerClientsCallbacks*) override;
+    void openWindow(const WebURL&, WebServiceWorkerClientCallbacks*) override;
+>>>>>>> miniblink49
     void setCachedMetadata(const WebURL&, const char*, size_t) override;
     void clearCachedMetadata(const WebURL&) override;
 
     WebURL scope() const override;
 
+<<<<<<< HEAD
     void didHandleActivateEvent(int eventID,
         WebServiceWorkerEventResult,
         double eventDispatchTime) override;
@@ -112,6 +130,24 @@ public:
     {
         ServiceWorkerGlobalScopeClient::trace(visitor);
     }
+=======
+    void didHandleActivateEvent(int eventID, WebServiceWorkerEventResult) override;
+    void didHandleFetchEvent(int fetchEventID) override;
+    void didHandleFetchEvent(int fetchEventID, const WebServiceWorkerResponse&) override;
+    void didHandleInstallEvent(int installEventID, WebServiceWorkerEventResult) override;
+    void didHandleNotificationClickEvent(int eventID, WebServiceWorkerEventResult) override;
+    void didHandlePushEvent(int pushEventID, WebServiceWorkerEventResult) override;
+    void didHandleSyncEvent(int syncEventID, WebServiceWorkerEventResult) override;
+    void didHandleCrossOriginConnectEvent(int connectEventID, bool acceptConnect) override;
+    void postMessageToClient(const WebString& clientUUID, const WebString& message, PassOwnPtr<WebMessagePortChannelArray>) override;
+    void postMessageToCrossOriginClient(const WebCrossOriginServiceWorkerClient&, const WebString& message, PassOwnPtr<WebMessagePortChannelArray>) override;
+    void skipWaiting(WebServiceWorkerSkipWaitingCallbacks*) override;
+    void claim(WebServiceWorkerClientsClaimCallbacks*) override;
+    void focus(const WebString& clientUUID, WebServiceWorkerClientCallbacks*) override;
+    void stashMessagePort(WebMessagePortChannel*, const WebString& name) override;
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { ServiceWorkerGlobalScopeClient::trace(visitor); }
+>>>>>>> miniblink49
 
 private:
     explicit ServiceWorkerGlobalScopeClientImpl(WebServiceWorkerContextClient&);

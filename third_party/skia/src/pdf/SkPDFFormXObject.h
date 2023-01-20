@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2010 The Android Open Source Project
  *
@@ -5,15 +9,30 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkPDFFormXObject_DEFINED
 #define SkPDFFormXObject_DEFINED
 
 #include "SkPDFStream.h"
+<<<<<<< HEAD
 
 class SkPDFArray;
 class SkPDFDevice;
 class SkPDFDict;
 struct SkRect;
+=======
+#include "SkPDFTypes.h"
+#include "SkRect.h"
+#include "SkRefCnt.h"
+#include "SkString.h"
+
+class SkMatrix;
+class SkPDFDevice;
+class SkPDFObjNumMap;
+>>>>>>> miniblink49
 
 /** \class SkPDFFormXObject
 
@@ -25,7 +44,11 @@ struct SkRect;
 // The caller could keep track of the form XObjects it creates and
 // canonicalize them, but the Skia API doesn't provide enough context to
 // automatically do it (trivially).
+<<<<<<< HEAD
 class SkPDFFormXObject final : public SkPDFStream {
+=======
+class SkPDFFormXObject : public SkPDFStream {
+>>>>>>> miniblink49
 public:
     /** Create a PDF form XObject. Entries for the dictionary entries are
      *  automatically added.
@@ -36,14 +59,24 @@ public:
      * Create a PDF form XObject from a raw content stream and associated
      * resources.
      */
+<<<<<<< HEAD
     explicit SkPDFFormXObject(SkStreamAsset* content,
         SkRect bbox,
         SkPDFDict* resourceDict);
+=======
+    explicit SkPDFFormXObject(SkStream* content,
+                              SkRect bbox,
+                              SkPDFDict* resourceDict);
+>>>>>>> miniblink49
     virtual ~SkPDFFormXObject();
 
 private:
     void init(const char* colorSpace,
+<<<<<<< HEAD
         SkPDFDict* resourceDict, SkPDFArray* bbox);
+=======
+              SkPDFDict* resourceDict, SkPDFArray* bbox);
+>>>>>>> miniblink49
 };
 
 #endif

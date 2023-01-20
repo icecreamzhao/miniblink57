@@ -14,6 +14,7 @@ class SkBlitter;
 
 namespace SkTextureCompressor {
 
+<<<<<<< HEAD
 bool CompressA8ToR11EAC(uint8_t* dst, const uint8_t* src,
     int width, int height, size_t rowBytes);
 
@@ -24,3 +25,15 @@ void DecompressR11EAC(uint8_t* dst, int dstRB, const uint8_t* src, int width, in
 }
 
 #endif // SkTextureCompressor_R11EAC_DEFINED
+=======
+    bool CompressA8ToR11EAC(uint8_t* dst, const uint8_t* src,
+                            int width, int height, size_t rowBytes);
+
+    SkBlitter* CreateR11EACBlitter(int width, int height, void* outputBuffer,
+                                   SkTBlitterAllocator* allocator);
+
+    void DecompressR11EAC(uint8_t* dst, int dstRB, const uint8_t* src, int width, int height);
+}
+
+#endif  // SkTextureCompressor_R11EAC_DEFINED
+>>>>>>> miniblink49

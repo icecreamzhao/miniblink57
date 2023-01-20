@@ -8,6 +8,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     template <bool is_lower>
     int FastAsciiConvert(char* dst, const char* src, int length, bool* changed_out);
 
@@ -15,3 +16,12 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_STRING_CASE_H_
+=======
+template <bool is_lower>
+int FastAsciiConvert(char* dst, const char* src, int length, bool* changed_out);
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_STRING_CASE_H_
+>>>>>>> miniblink49

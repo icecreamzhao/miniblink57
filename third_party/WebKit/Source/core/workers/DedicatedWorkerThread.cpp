@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2009 Google Inc. All rights reserved.
  *
@@ -29,50 +28,49 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/workers/DedicatedWorkerThread.h"
 
 #include "core/workers/DedicatedWorkerGlobalScope.h"
-#include "core/workers/InProcessWorkerObjectProxy.h"
-#include "core/workers/WorkerBackingThread.h"
+#include "core/workers/WorkerObjectProxy.h"
 #include "core/workers/WorkerThreadStartupData.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
 
 namespace blink {
 
-std::unique_ptr<DedicatedWorkerThread> DedicatedWorkerThread::create(
-    PassRefPtr<WorkerLoaderProxy> workerLoaderProxy,
-    InProcessWorkerObjectProxy& workerObjectProxy,
-    double timeOrigin)
+PassRefPtr<DedicatedWorkerThread> DedicatedWorkerThread::create(PassRefPtr<WorkerLoaderProxy> workerLoaderProxy, WorkerObjectProxy& workerObjectProxy, double timeOrigin)
 {
-    return WTF::wrapUnique(new DedicatedWorkerThread(
-        std::move(workerLoaderProxy), workerObjectProxy, timeOrigin));
+    return adoptRef(new DedicatedWorkerThread(workerLoaderProxy, workerObjectProxy, timeOrigin));
 }
 
-DedicatedWorkerThread::DedicatedWorkerThread(
-    PassRefPtr<WorkerLoaderProxy> workerLoaderProxy,
-    InProcessWorkerObjectProxy& workerObjectProxy,
-    double timeOrigin)
-    : WorkerThread(std::move(workerLoaderProxy), workerObjectProxy)
-    , m_workerBackingThread(
-          WorkerBackingThread::create("DedicatedWorker Thread"))
+DedicatedWorkerThread::DedicatedWorkerThread(PassRefPtr<WorkerLoaderProxy> workerLoaderProxy, WorkerObjectProxy& workerObjectProxy, double timeOrigin)
+    : WorkerThread(workerLoaderProxy, workerObjectProxy)
     , m_workerObjectProxy(workerObjectProxy)
     , m_timeOrigin(timeOrigin)
 {
 }
 
-DedicatedWorkerThread::~DedicatedWorkerThread() { }
-
-WorkerOrWorkletGlobalScope* DedicatedWorkerThread::createWorkerGlobalScope(
-    std::unique_ptr<WorkerThreadStartupData> startupData)
+DedicatedWorkerThread::~DedicatedWorkerThread()
 {
-    return DedicatedWorkerGlobalScope::create(this, std::move(startupData),
-        m_timeOrigin);
 }
 
-void DedicatedWorkerThread::clearWorkerBackingThread()
+PassRefPtrWillBeRawPtr<WorkerGlobalScope> DedicatedWorkerThread::createWorkerGlobalScope(PassOwnPtr<WorkerThreadStartupData> startupData)
 {
-    m_workerBackingThread = nullptr;
+    return DedicatedWorkerGlobalScope::create(this, startupData, m_timeOrigin);
+}
+
+WebThreadSupportingGC& DedicatedWorkerThread::backingThread()
+{
+    if (!m_thread)
+        m_thread = WebThreadSupportingGC::create("DedicatedWorker Thread");
+    return *m_thread.get();
+}
+
+void DedicatedWorkerThread::postInitialize()
+{
+    // Notify the parent object of our current active state before the event
+    // loop starts processing tasks.
+    m_workerObjectProxy.reportPendingActivity(workerGlobalScope()->hasPendingActivity());
 }
 
 } // namespace blink

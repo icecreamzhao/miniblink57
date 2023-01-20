@@ -42,6 +42,7 @@ class MakeElementFactoryWriter(MakeQualifiedNamesWriter):
         'JSInterfaceName': None,
         'Conditional': None,
         'constructorNeedsCreatedByParser': None,
+        'constructorNeedsFormElement': None,
         'interfaceName': None,
         'noConstructor': None,
         'noTypeHelpers': None,

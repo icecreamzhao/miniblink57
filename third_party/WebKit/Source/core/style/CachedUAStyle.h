@@ -1,8 +1,7 @@
-/*
+ /*
  * Copyright (C) 2013 Google, Inc.
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,10 +23,6 @@
 #define CachedUAStyle_h
 
 #include "core/style/ComputedStyle.h"
-#include "wtf/Allocator.h"
-#include "wtf/Noncopyable.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
 
 namespace blink {
 
@@ -36,13 +31,10 @@ namespace blink {
 // We use this class to cache those values during
 // applyMatchedProperties for later use during adjustComputedStyle.
 class CachedUAStyle {
-    USING_FAST_MALLOC(CachedUAStyle);
-    WTF_MAKE_NONCOPYABLE(CachedUAStyle);
-
 public:
-    static std::unique_ptr<CachedUAStyle> create(const ComputedStyle* style)
+    static PassOwnPtr<CachedUAStyle> create(const ComputedStyle* style)
     {
-        return WTF::wrapUnique(new CachedUAStyle(style));
+        return adoptPtr(new CachedUAStyle(style));
     }
 
     BorderData border;
@@ -57,6 +49,8 @@ private:
     {
     }
 };
+
+
 
 } // namespace blink
 

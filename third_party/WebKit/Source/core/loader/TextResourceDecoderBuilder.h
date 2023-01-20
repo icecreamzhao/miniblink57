@@ -32,25 +32,20 @@
 #define TextResourceDecoderBuilder_h
 
 #include "core/html/parser/TextResourceDecoder.h"
-#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
-#include <memory>
 
 namespace blink {
 
 class Document;
 class TextResourceDecoder;
 
-class CORE_EXPORT TextResourceDecoderBuilder {
-    DISALLOW_NEW();
-
+class TextResourceDecoderBuilder {
 public:
-    TextResourceDecoderBuilder(const AtomicString& mimeType,
-        const AtomicString& encoding);
+    TextResourceDecoderBuilder(const AtomicString& mimeType, const AtomicString& encoding);
     ~TextResourceDecoderBuilder();
 
-    std::unique_ptr<TextResourceDecoder> buildFor(Document*);
+    PassOwnPtr<TextResourceDecoder> buildFor(Document*);
 
     const AtomicString& mimeType() const { return m_mimeType; }
     const AtomicString& encoding() const { return m_encoding; }
@@ -58,7 +53,7 @@ public:
     void clear();
 
 private:
-    std::unique_ptr<TextResourceDecoder> createDecoderInstance(Document*);
+    PassOwnPtr<TextResourceDecoder> createDecoderInstance(Document*);
     void setupEncoding(TextResourceDecoder*, Document*);
 
     AtomicString m_mimeType;

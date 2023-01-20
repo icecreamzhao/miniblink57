@@ -5,13 +5,7 @@
 #ifndef RejectedPromises_h
 #define RejectedPromises_h
 
-#include "bindings/core/v8/SourceLocation.h"
-#include "core/fetch/AccessControlStatus.h"
-#include "wtf/Deque.h"
-#include "wtf/Forward.h"
-#include "wtf/RefCounted.h"
-#include "wtf/Vector.h"
-#include <memory>
+#include "platform/heap/Handle.h"
 
 namespace v8 {
 class PromiseRejectMessage;
@@ -19,25 +13,22 @@ class PromiseRejectMessage;
 
 namespace blink {
 
+class ScriptCallStack;
 class ScriptState;
 
-class RejectedPromises final : public RefCounted<RejectedPromises> {
-    USING_FAST_MALLOC(RejectedPromises);
-
+class RejectedPromises final : public NoBaseWillBeGarbageCollected<RejectedPromises> {
+    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(RejectedPromises);
 public:
-    static PassRefPtr<RejectedPromises> create()
+    static PassOwnPtrWillBeRawPtr<RejectedPromises> create()
     {
-        return adoptRef(new RejectedPromises());
+        return adoptPtrWillBeNoop(new RejectedPromises);
     }
 
-    ~RejectedPromises();
+    RejectedPromises();
     void dispose();
+    DECLARE_TRACE();
 
-    void rejectedWithNoHandler(ScriptState*,
-        v8::PromiseRejectMessage,
-        const String& errorMessage,
-        std::unique_ptr<SourceLocation>,
-        AccessControlStatus);
+    void rejectedWithNoHandler(ScriptState*, v8::PromiseRejectMessage, const String& errorMessage, const String& resourceName, int scriptId, int lineNumber, int columnNumber, PassRefPtrWillBeRawPtr<ScriptCallStack>);
     void handlerAdded(v8::PromiseRejectMessage);
 
     void processQueue();
@@ -45,16 +36,8 @@ public:
 private:
     class Message;
 
-    RejectedPromises();
-
-    using MessageQueue = Deque<std::unique_ptr<Message>>;
-    std::unique_ptr<MessageQueue> createMessageQueue();
-
-    void processQueueNow(std::unique_ptr<MessageQueue>);
-    void revokeNow(std::unique_ptr<Message>);
-
-    MessageQueue m_queue;
-    Vector<std::unique_ptr<Message>> m_reportedAsErrors;
+    WillBeHeapDeque<OwnPtrWillBeMember<Message>> m_queue;
+    WillBeHeapVector<OwnPtrWillBeMember<Message>> m_reportedAsErrors;
 };
 
 } // namespace blink

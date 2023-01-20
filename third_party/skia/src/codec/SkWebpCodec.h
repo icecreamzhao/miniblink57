@@ -9,19 +9,26 @@
 #define SkWebpCodec_DEFINED
 
 #include "SkCodec.h"
+<<<<<<< HEAD
 #include "SkColorSpace.h"
+=======
+>>>>>>> miniblink49
 #include "SkEncodedFormat.h"
 #include "SkImageInfo.h"
 #include "SkTypes.h"
 
 class SkStream;
 
+<<<<<<< HEAD
 static const size_t WEBP_VP8_HEADER_SIZE = 30;
 
+=======
+>>>>>>> miniblink49
 class SkWebpCodec final : public SkCodec {
 public:
     // Assumes IsWebp was called and returned true.
     static SkCodec* NewFromStream(SkStream*);
+<<<<<<< HEAD
     static bool IsWebp(const void*, size_t);
 
 protected:
@@ -37,6 +44,21 @@ protected:
 
 private:
     SkWebpCodec(int width, int height, const SkEncodedInfo&, SkStream*);
+=======
+    static bool IsWebp(SkStream*);
+protected:
+    Result onGetPixels(const SkImageInfo&, void*, size_t, const Options&, SkPMColor*, int*)
+            override;
+    SkEncodedFormat onGetEncodedFormat() const override { return kWEBP_SkEncodedFormat; }
+
+    bool onReallyHasAlpha() const override {
+        return this->getInfo().alphaType() != kOpaque_SkAlphaType;
+    }
+
+    SkISize onGetScaledDimensions(float desiredScale) const override;
+private:
+    SkWebpCodec(const SkImageInfo&, SkStream*);
+>>>>>>> miniblink49
 
     typedef SkCodec INHERITED;
 };

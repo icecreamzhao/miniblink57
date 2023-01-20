@@ -15,7 +15,11 @@
  * \file 
  * \brief C++ API: Unicode Normalization
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/chariter.h"
@@ -129,11 +133,16 @@ U_NAMESPACE_BEGIN
  */
 class U_COMMON_API Normalizer : public UObject {
 public:
+<<<<<<< HEAD
     /**
+=======
+  /**
+>>>>>>> miniblink49
    * If DONE is returned from an iteration function that returns a code point,
    * then there are no more normalization results available.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     enum {
         DONE = 0xffff
     };
@@ -141,6 +150,15 @@ public:
     // Constructors
 
     /**
+=======
+  enum {
+      DONE=0xffff
+  };
+
+  // Constructors
+
+  /**
+>>>>>>> miniblink49
    * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given string.
    * <p>
@@ -150,9 +168,15 @@ public:
    * @param mode  The normalization mode.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     Normalizer(const UnicodeString& str, UNormalizationMode mode);
 
     /**
+=======
+  Normalizer(const UnicodeString& str, UNormalizationMode mode);
+
+  /**
+>>>>>>> miniblink49
    * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given string.
    * <p>
@@ -163,9 +187,15 @@ public:
    * @param mode  The normalization mode.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
 
     /**
+=======
+  Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
+
+  /**
+>>>>>>> miniblink49
    * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of the given text.
    * <p>
@@ -175,13 +205,20 @@ public:
    * @param mode  The normalization mode.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
 
     /**
+=======
+  Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
+
+  /**
+>>>>>>> miniblink49
    * Copy constructor.
    * @param copy The object to be copied.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     Normalizer(const Normalizer& copy);
 
     /**
@@ -195,6 +232,22 @@ public:
     //-------------------------------------------------------------------------
 
     /**
+=======
+  Normalizer(const Normalizer& copy);
+
+  /**
+   * Destructor
+   * @stable ICU 2.0
+   */
+  virtual ~Normalizer();
+
+
+  //-------------------------------------------------------------------------
+  // Static utility methods
+  //-------------------------------------------------------------------------
+
+  /**
+>>>>>>> miniblink49
    * Normalizes a <code>UnicodeString</code> according to the specified normalization mode.
    * This is a wrapper for unorm_normalize(), using UnicodeString's.
    *
@@ -208,12 +261,21 @@ public:
    * @param status    The error code.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     static void U_EXPORT2 normalize(const UnicodeString& source,
         UNormalizationMode mode, int32_t options,
         UnicodeString& result,
         UErrorCode& status);
 
     /**
+=======
+  static void U_EXPORT2 normalize(const UnicodeString& source,
+                        UNormalizationMode mode, int32_t options,
+                        UnicodeString& result,
+                        UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Compose a <code>UnicodeString</code>.
    * This is equivalent to normalize() with mode UNORM_NFC or UNORM_NFKC.
    * This is a wrapper for unorm_normalize(), using UnicodeString's.
@@ -230,12 +292,21 @@ public:
    * @param status    The error code.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     static void U_EXPORT2 compose(const UnicodeString& source,
         UBool compat, int32_t options,
         UnicodeString& result,
         UErrorCode& status);
 
     /**
+=======
+  static void U_EXPORT2 compose(const UnicodeString& source,
+                      UBool compat, int32_t options,
+                      UnicodeString& result,
+                      UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Static method to decompose a <code>UnicodeString</code>.
    * This is equivalent to normalize() with mode UNORM_NFD or UNORM_NFKD.
    * This is a wrapper for unorm_normalize(), using UnicodeString's.
@@ -252,12 +323,21 @@ public:
    * @param status    The error code.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     static void U_EXPORT2 decompose(const UnicodeString& source,
         UBool compat, int32_t options,
         UnicodeString& result,
         UErrorCode& status);
 
     /**
+=======
+  static void U_EXPORT2 decompose(const UnicodeString& source,
+                        UBool compat, int32_t options,
+                        UnicodeString& result,
+                        UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Performing quick check on a string, to quickly determine if the string is
    * in a particular normalization format.
    * This is a wrapper for unorm_quickCheck(), using a UnicodeString.
@@ -277,10 +357,17 @@ public:
    * @see isNormalized
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     static inline UNormalizationCheckResult
     quickCheck(const UnicodeString& source, UNormalizationMode mode, UErrorCode& status);
 
     /**
+=======
+  static inline UNormalizationCheckResult
+  quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Performing quick check on a string; same as the other version of quickCheck
    * but takes an extra options parameter like most normalization functions.
    *
@@ -293,10 +380,17 @@ public:
    * @see isNormalized
    * @stable ICU 2.6
    */
+<<<<<<< HEAD
     static UNormalizationCheckResult
     quickCheck(const UnicodeString& source, UNormalizationMode mode, int32_t options, UErrorCode& status);
 
     /**
+=======
+  static UNormalizationCheckResult
+  quickCheck(const UnicodeString &source, UNormalizationMode mode, int32_t options, UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Test if a string is in a given normalization form.
    * This is semantically equivalent to source.equals(normalize(source, mode)) .
    *
@@ -316,10 +410,17 @@ public:
    * @see quickCheck
    * @stable ICU 2.2
    */
+<<<<<<< HEAD
     static inline UBool
     isNormalized(const UnicodeString& src, UNormalizationMode mode, UErrorCode& errorCode);
 
     /**
+=======
+  static inline UBool
+  isNormalized(const UnicodeString &src, UNormalizationMode mode, UErrorCode &errorCode);
+
+  /**
+>>>>>>> miniblink49
    * Test if a string is in a given normalization form; same as the other version of isNormalized
    * but takes an extra options parameter like most normalization functions.
    *
@@ -334,10 +435,17 @@ public:
    * @see quickCheck
    * @stable ICU 2.6
    */
+<<<<<<< HEAD
     static UBool
     isNormalized(const UnicodeString& src, UNormalizationMode mode, int32_t options, UErrorCode& errorCode);
 
     /**
+=======
+  static UBool
+  isNormalized(const UnicodeString &src, UNormalizationMode mode, int32_t options, UErrorCode &errorCode);
+
+  /**
+>>>>>>> miniblink49
    * Concatenate normalized strings, making sure that the result is normalized as well.
    *
    * If both the left and the right strings are in
@@ -366,6 +474,7 @@ public:
    *
    * @stable ICU 2.1
    */
+<<<<<<< HEAD
     static UnicodeString&
         U_EXPORT2
         concatenate(const UnicodeString& left, const UnicodeString& right,
@@ -374,6 +483,15 @@ public:
             UErrorCode& errorCode);
 
     /**
+=======
+  static UnicodeString &
+  U_EXPORT2 concatenate(const UnicodeString &left, const UnicodeString &right,
+              UnicodeString &result,
+              UNormalizationMode mode, int32_t options,
+              UErrorCode &errorCode);
+
+  /**
+>>>>>>> miniblink49
    * Compare two strings for canonical equivalence.
    * Further options include case-insensitive comparison and
    * code point order (as opposed to code unit order).
@@ -437,6 +555,7 @@ public:
    *
    * @stable ICU 2.2
    */
+<<<<<<< HEAD
     static inline int32_t
     compare(const UnicodeString& s1, const UnicodeString& s2,
         uint32_t options,
@@ -447,6 +566,18 @@ public:
     //-------------------------------------------------------------------------
 
     /**
+=======
+  static inline int32_t
+  compare(const UnicodeString &s1, const UnicodeString &s2,
+          uint32_t options,
+          UErrorCode &errorCode);
+
+  //-------------------------------------------------------------------------
+  // Iteration API
+  //-------------------------------------------------------------------------
+
+  /**
+>>>>>>> miniblink49
    * Return the current character in the normalized text.
    * current() may need to normalize some text at getIndex().
    * The getIndex() is not changed.
@@ -454,9 +585,15 @@ public:
    * @return the current normalized code point
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UChar32 current(void);
 
     /**
+=======
+  UChar32              current(void);
+
+  /**
+>>>>>>> miniblink49
    * Return the first character in the normalized text.
    * This is equivalent to setIndexOnly(startIndex()) followed by next().
    * (Post-increment semantics.)
@@ -464,9 +601,15 @@ public:
    * @return the first normalized code point
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UChar32 first(void);
 
     /**
+=======
+  UChar32              first(void);
+
+  /**
+>>>>>>> miniblink49
    * Return the last character in the normalized text.
    * This is equivalent to setIndexOnly(endIndex()) followed by previous().
    * (Pre-decrement semantics.)
@@ -474,9 +617,15 @@ public:
    * @return the last normalized code point
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UChar32 last(void);
 
     /**
+=======
+  UChar32              last(void);
+
+  /**
+>>>>>>> miniblink49
    * Return the next character in the normalized text.
    * (Post-increment semantics.)
    * If the end of the text has already been reached, DONE is returned.
@@ -490,9 +639,15 @@ public:
    * @return the next normalized code point
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UChar32 next(void);
 
     /**
+=======
+  UChar32              next(void);
+
+  /**
+>>>>>>> miniblink49
    * Return the previous character in the normalized text and decrement.
    * (Pre-decrement semantics.)
    * If the beginning of the text has already been reached, DONE is returned.
@@ -506,9 +661,15 @@ public:
    * @return the previous normalized code point
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UChar32 previous(void);
 
     /**
+=======
+  UChar32              previous(void);
+
+  /**
+>>>>>>> miniblink49
    * Set the iteration position in the input text that is being normalized,
    * without any immediate normalization.
    * After setIndexOnly(), getIndex() will return the same index that is
@@ -517,16 +678,28 @@ public:
    * @param index the desired index in the input text.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void setIndexOnly(int32_t index);
 
     /**
+=======
+  void                 setIndexOnly(int32_t index);
+
+  /**
+>>>>>>> miniblink49
    * Reset the index to the beginning of the text.
    * This is equivalent to setIndexOnly(startIndex)).
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void reset(void);
 
     /**
+=======
+  void                reset(void);
+
+  /**
+>>>>>>> miniblink49
    * Retrieve the current iteration position in the input text that is
    * being normalized.
    *
@@ -540,9 +713,15 @@ public:
    * @return the current index in the input text
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     int32_t getIndex(void) const;
 
     /**
+=======
+  int32_t            getIndex(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Retrieve the index of the start of the input text. This is the begin index
    * of the <code>CharacterIterator</code> or the start (i.e. index 0) of the string
    * over which this <code>Normalizer</code> is iterating.
@@ -550,9 +729,15 @@ public:
    * @return the smallest index in the input text where the Normalizer operates
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     int32_t startIndex(void) const;
 
     /**
+=======
+  int32_t            startIndex(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Retrieve the index of the end of the input text. This is the end index
    * of the <code>CharacterIterator</code> or the length of the string
    * over which this <code>Normalizer</code> is iterating.
@@ -562,9 +747,15 @@ public:
    * @return the first index in the input text where the Normalizer does not operate
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     int32_t endIndex(void) const;
 
     /**
+=======
+  int32_t            endIndex(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Returns TRUE when both iterators refer to the same character in the same
    * input text.
    *
@@ -572,9 +763,15 @@ public:
    * @return comparison result
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UBool operator==(const Normalizer& that) const;
 
     /**
+=======
+  UBool        operator==(const Normalizer& that) const;
+
+  /**
+>>>>>>> miniblink49
    * Returns FALSE when both iterators refer to the same character in the same
    * input text.
    *
@@ -582,22 +779,35 @@ public:
    * @return comparison result
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     inline UBool operator!=(const Normalizer& that) const;
 
     /**
+=======
+  inline UBool        operator!=(const Normalizer& that) const;
+
+  /**
+>>>>>>> miniblink49
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
    * @return a pointer to a new Normalizer
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     Normalizer* clone(void) const;
 
     /**
+=======
+  Normalizer*        clone(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Generates a hash code for this iterator.
    *
    * @return the hash code
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     int32_t hashCode(void) const;
 
     //-------------------------------------------------------------------------
@@ -605,6 +815,15 @@ public:
     //-------------------------------------------------------------------------
 
     /**
+=======
+  int32_t                hashCode(void) const;
+
+  //-------------------------------------------------------------------------
+  // Property access methods
+  //-------------------------------------------------------------------------
+
+  /**
+>>>>>>> miniblink49
    * Set the normalization mode for this object.
    * <p>
    * <b>Note:</b>If the normalization mode is changed while iterating
@@ -619,9 +838,15 @@ public:
    * @see #getUMode
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void setMode(UNormalizationMode newMode);
 
     /**
+=======
+  void setMode(UNormalizationMode newMode);
+
+  /**
+>>>>>>> miniblink49
    * Return the normalization mode for this object.
    *
    * This is an unusual name because there used to be a getMode() that
@@ -631,9 +856,15 @@ public:
    * @see #setMode
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UNormalizationMode getUMode(void) const;
 
     /**
+=======
+  UNormalizationMode getUMode(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Set options that affect this <code>Normalizer</code>'s operation.
    * Options do not change the basic composition or decomposition operation
    * that is being performed, but they control whether
@@ -649,10 +880,17 @@ public:
    * @see #getOption
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void setOption(int32_t option,
         UBool value);
 
     /**
+=======
+  void setOption(int32_t option,
+         UBool value);
+
+  /**
+>>>>>>> miniblink49
    * Determine whether an option is turned on or off.
    * If multiple options are specified, then the result is TRUE if any
    * of them are set.
@@ -662,9 +900,15 @@ public:
    * @see #setOption
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UBool getOption(int32_t option) const;
 
     /**
+=======
+  UBool getOption(int32_t option) const;
+
+  /**
+>>>>>>> miniblink49
    * Set the input text over which this <code>Normalizer</code> will iterate.
    * The iteration position is set to the beginning.
    *
@@ -672,10 +916,17 @@ public:
    * @param status a UErrorCode
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void setText(const UnicodeString& newText,
         UErrorCode& status);
 
     /**
+=======
+  void setText(const UnicodeString& newText,
+           UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Set the input text over which this <code>Normalizer</code> will iterate.
    * The iteration position is set to the beginning.
    *
@@ -683,10 +934,17 @@ public:
    * @param status a UErrorCode
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void setText(const CharacterIterator& newText,
         UErrorCode& status);
 
     /**
+=======
+  void setText(const CharacterIterator& newText,
+           UErrorCode &status);
+
+  /**
+>>>>>>> miniblink49
    * Set the input text over which this <code>Normalizer</code> will iterate.
    * The iteration position is set to the beginning.
    *
@@ -695,29 +953,49 @@ public:
    * @param status a UErrorCode
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void setText(const UChar* newText,
         int32_t length,
         UErrorCode& status);
     /**
+=======
+  void setText(const UChar* newText,
+                    int32_t length,
+            UErrorCode &status);
+  /**
+>>>>>>> miniblink49
    * Copies the input text into the UnicodeString argument.
    *
    * @param result Receives a copy of the text under iteration.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     void getText(UnicodeString& result);
 
     /**
+=======
+  void            getText(UnicodeString&  result);
+
+  /**
+>>>>>>> miniblink49
    * ICU "poor man's RTTI", returns a UClassID for this class.
    * @returns a UClassID for this class.
    * @stable ICU 2.2
    */
+<<<<<<< HEAD
     static UClassID U_EXPORT2 getStaticClassID();
 
     /**
+=======
+  static UClassID U_EXPORT2 getStaticClassID();
+
+  /**
+>>>>>>> miniblink49
    * ICU "poor man's RTTI", returns a UClassID for the actual class.
    * @return a UClassID for the actual class.
    * @stable ICU 2.2
    */
+<<<<<<< HEAD
     virtual UClassID getDynamicClassID() const;
 
 private:
@@ -755,6 +1033,45 @@ private:
     // A buffer for holding intermediate results
     UnicodeString buffer;
     int32_t bufferPos;
+=======
+  virtual UClassID getDynamicClassID() const;
+
+private:
+  //-------------------------------------------------------------------------
+  // Private functions
+  //-------------------------------------------------------------------------
+
+  Normalizer(); // default constructor not implemented
+  Normalizer &operator=(const Normalizer &that); // assignment operator not implemented
+
+  // Private utility methods for iteration
+  // For documentation, see the source code
+  UBool nextNormalize();
+  UBool previousNormalize();
+
+  void    init();
+  void    clearBuffer(void);
+
+  //-------------------------------------------------------------------------
+  // Private data
+  //-------------------------------------------------------------------------
+
+  FilteredNormalizer2*fFilteredNorm2;  // owned if not NULL
+  const Normalizer2  *fNorm2;  // not owned; may be equal to fFilteredNorm2
+  UNormalizationMode  fUMode;
+  int32_t             fOptions;
+
+  // The input text and our position in it
+  CharacterIterator  *text;
+
+  // The normalization buffer is the result of normalization
+  // of the source in [currentIndex..nextIndex[ .
+  int32_t         currentIndex, nextIndex;
+
+  // A buffer for holding intermediate results
+  UnicodeString       buffer;
+  int32_t         bufferPos;
+>>>>>>> miniblink49
 };
 
 //-------------------------------------------------------------------------
@@ -762,6 +1079,7 @@ private:
 //-------------------------------------------------------------------------
 
 inline UBool
+<<<<<<< HEAD
 Normalizer::operator!=(const Normalizer& other) const
 {
     return !operator==(other);
@@ -772,18 +1090,33 @@ Normalizer::quickCheck(const UnicodeString& source,
     UNormalizationMode mode,
     UErrorCode& status)
 {
+=======
+Normalizer::operator!= (const Normalizer& other) const
+{ return ! operator==(other); }
+
+inline UNormalizationCheckResult
+Normalizer::quickCheck(const UnicodeString& source,
+                       UNormalizationMode mode,
+                       UErrorCode &status) {
+>>>>>>> miniblink49
     return quickCheck(source, mode, 0, status);
 }
 
 inline UBool
 Normalizer::isNormalized(const UnicodeString& source,
+<<<<<<< HEAD
     UNormalizationMode mode,
     UErrorCode& status)
 {
+=======
+                         UNormalizationMode mode,
+                         UErrorCode &status) {
+>>>>>>> miniblink49
     return isNormalized(source, mode, 0, status);
 }
 
 inline int32_t
+<<<<<<< HEAD
 Normalizer::compare(const UnicodeString& s1, const UnicodeString& s2,
     uint32_t options,
     UErrorCode& errorCode)
@@ -793,6 +1126,16 @@ Normalizer::compare(const UnicodeString& s1, const UnicodeString& s2,
         s2.getBuffer(), s2.length(),
         options,
         &errorCode);
+=======
+Normalizer::compare(const UnicodeString &s1, const UnicodeString &s2,
+                    uint32_t options,
+                    UErrorCode &errorCode) {
+  // all argument checking is done in unorm_compare
+  return unorm_compare(s1.getBuffer(), s1.length(),
+                       s2.getBuffer(), s2.length(),
+                       options,
+                       &errorCode);
+>>>>>>> miniblink49
 }
 
 U_NAMESPACE_END

@@ -76,7 +76,14 @@ struct WebSize {
         return *this;
     }
 
+<<<<<<< HEAD
     operator IntSize() const { return IntSize(width, height); }
+=======
+    operator IntSize() const
+    {
+        return IntSize(width, height);
+    }
+>>>>>>> miniblink49
 #else
     WebSize(const gfx::Size& s)
         : width(s.width())
@@ -109,7 +116,14 @@ struct WebSize {
         return gfx::Size(std::max(0, width), std::max(0, height));
     }
 
+<<<<<<< HEAD
     operator gfx::Vector2d() const { return gfx::Vector2d(width, height); }
+=======
+    operator gfx::Vector2d() const
+    {
+        return gfx::Vector2d(width, height);
+    }
+>>>>>>> miniblink49
 #endif
 };
 

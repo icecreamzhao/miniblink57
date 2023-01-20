@@ -34,6 +34,7 @@
 enum BinaryType { "blob", "arraybuffer" };
 
 [
+<<<<<<< HEAD
     ActiveScriptWrappable,
     Constructor(DOMString url, optional (DOMString or sequence<DOMString>) protocols),
     ConstructorCallWith=ExecutionContext,
@@ -41,6 +42,17 @@ enum BinaryType { "blob", "arraybuffer" };
     Exposed=(Window,Worker),
     ImplementedAs=DOMWebSocket,
     RaisesException=Constructor,
+=======
+    ActiveDOMObject,
+    // FIXME: Spec has DOMString[]. https://www.w3.org/Bugs/Public/show_bug.cgi?id=28102
+    Constructor(DOMString url, optional (DOMString or sequence<DOMString>) protocols),
+    ConstructorCallWith=ExecutionContext,
+    Exposed=(Window,Worker),
+    TypeChecking=Interface,
+    RaisesException=Constructor,
+    GarbageCollected,
+    ImplementedAs=DOMWebSocket,
+>>>>>>> miniblink49
 ] interface WebSocket : EventTarget {
     readonly attribute DOMString url;
 

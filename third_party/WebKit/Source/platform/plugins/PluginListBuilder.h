@@ -33,12 +33,16 @@
 
 #include "platform/plugins/PluginData.h"
 #include "public/platform/WebPluginListBuilder.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class PluginListBuilder final : public WebPluginListBuilder {
+<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
@@ -53,6 +57,14 @@ public:
         const WebString& fileName) override;
     void addMediaTypeToLastPlugin(const WebString& name,
         const WebString& description) override;
+=======
+public:
+    PluginListBuilder(Vector<PluginInfo>* results) : m_results(results) { }
+
+    // WebPluginListBuilder methods:
+    void addPlugin(const WebString& name, const WebString& description, const WebString& fileName) override;
+    void addMediaTypeToLastPlugin(const WebString& name, const WebString& description) override;
+>>>>>>> miniblink49
     void addFileExtensionToLastMediaType(const WebString& extension) override;
 
 private:

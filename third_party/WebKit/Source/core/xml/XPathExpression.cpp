@@ -24,6 +24,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/xml/XPathExpression.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -39,12 +40,11 @@ namespace blink {
 
 using namespace XPath;
 
-XPathExpression::XPathExpression() { }
+XPathExpression::XPathExpression()
+{
+}
 
-XPathExpression* XPathExpression::createExpression(
-    const String& expression,
-    XPathNSResolver* resolver,
-    ExceptionState& exceptionState)
+XPathExpression* XPathExpression::createExpression(const String& expression, XPathNSResolver* resolver, ExceptionState& exceptionState)
 {
     XPathExpression* expr = XPathExpression::create();
     Parser parser;
@@ -61,30 +61,23 @@ DEFINE_TRACE(XPathExpression)
     visitor->trace(m_topExpression);
 }
 
-XPathResult* XPathExpression::evaluate(Node* contextNode,
-    unsigned short type,
-    const ScriptValue&,
-    ExceptionState& exceptionState)
+XPathResult* XPathExpression::evaluate(Node* contextNode, unsigned short type, const ScriptValue&, ExceptionState& exceptionState)
 {
     if (!isValidContextNode(contextNode)) {
-        exceptionState.throwDOMException(
-            NotSupportedError, "The node provided is '" + contextNode->nodeName() + "', which is not a valid context node type.");
+        exceptionState.throwDOMException(NotSupportedError, "The node provided is '" + contextNode->nodeName() + "', which is not a valid context node type.");
         return nullptr;
     }
 
     EvaluationContext evaluationContext(*contextNode);
-    XPathResult* result = XPathResult::create(
-        evaluationContext, m_topExpression->evaluate(evaluationContext));
+    XPathResult* result = XPathResult::create(evaluationContext, m_topExpression->evaluate(evaluationContext));
 
     if (evaluationContext.hadTypeConversionError) {
-        // It is not specified what to do if type conversion fails while evaluating
-        // an expression.
-        exceptionState.throwDOMException(
-            SyntaxError, "Type conversion failed while evaluating the expression.");
+        // It is not specified what to do if type conversion fails while evaluating an expression.
+        exceptionState.throwDOMException(SyntaxError, "Type conversion failed while evaluating the expression.");
         return nullptr;
     }
 
-    if (type != XPathResult::kAnyType) {
+    if (type != XPathResult::ANY_TYPE) {
         result->convertTo(type, exceptionState);
         if (exceptionState.hadException())
             return nullptr;

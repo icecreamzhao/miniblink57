@@ -29,12 +29,16 @@
 #include "platform/PlatformExport.h"
 #include "platform/scroll/ScrollbarThemeClient.h"
 #include "public/platform/WebScrollbar.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
 // Adapts a WebScrollbar to the ScrollbarThemeClient interface
+<<<<<<< HEAD
 class PLATFORM_EXPORT WebScrollbarThemeClientImpl
     : public ScrollbarThemeClient {
     DISALLOW_NEW();
@@ -44,6 +48,14 @@ public:
     // Caller must retain ownership of this pointer and ensure that its lifetime
     // exceeds this instance.
     WebScrollbarThemeClientImpl(WebScrollbar&);
+=======
+class PLATFORM_EXPORT WebScrollbarThemeClientImpl : public ScrollbarThemeClient {
+    WTF_MAKE_NONCOPYABLE(WebScrollbarThemeClientImpl);
+public:
+    // Caller must retain ownership of this pointer and ensure that its lifetime
+    // exceeds this instance.
+    WebScrollbarThemeClientImpl(WebScrollbar*);
+>>>>>>> miniblink49
     ~WebScrollbarThemeClientImpl() override;
 
     // Implement ScrollbarThemeClient interface
@@ -59,10 +71,17 @@ public:
     IntRect frameRect() const override;
     void invalidate() override;
     void invalidateRect(const IntRect&) override;
+<<<<<<< HEAD
     ScrollbarOverlayColorTheme getScrollbarOverlayColorTheme() const override;
     void getTickmarks(Vector<IntRect>&) const override;
     bool isScrollableAreaActive() const override;
     IntPoint convertFromRootFrame(const IntPoint&) const override;
+=======
+    ScrollbarOverlayStyle scrollbarOverlayStyle() const override;
+    void getTickmarks(Vector<IntRect>&) const override;
+    bool isScrollableAreaActive() const override;
+    IntPoint convertFromContainingWindow(const IntPoint&) override;
+>>>>>>> miniblink49
     bool isCustomScrollbar() const override;
     ScrollbarOrientation orientation() const override;
     bool isLeftSideVerticalScrollbar() const override;
@@ -75,6 +94,7 @@ public:
     ScrollbarPart pressedPart() const override;
     ScrollbarPart hoveredPart() const override;
     void styleChanged() override;
+<<<<<<< HEAD
     void setScrollbarsHidden(bool) override;
     bool enabled() const override;
     void setEnabled(bool) override;
@@ -84,6 +104,20 @@ public:
 
 private:
     WebScrollbar& m_scrollbar;
+=======
+    bool enabled() const override;
+    void setEnabled(bool) override;
+    bool isOverlayScrollbar() const override;
+    bool isAlphaLocked() const override;
+    void setIsAlphaLocked(bool) override;
+    float elasticOverscroll() const override;
+    void setElasticOverscroll(float) override;
+    DisplayItemClient displayItemClient() const override;
+    String debugName() const override;
+
+private:
+    WebScrollbar* m_scrollbar;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

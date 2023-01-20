@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,8 +9,15 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkString.h"
 #include "SkAtomics.h"
+=======
+
+#include "SkAtomics.h"
+#include "SkFixed.h"
+#include "SkString.h"
+>>>>>>> miniblink49
 #include "SkUtils.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -15,12 +26,42 @@
 static const size_t kBufferSize = 1024;
 
 #ifdef SK_BUILD_FOR_WIN
+<<<<<<< HEAD
 #define VSNPRINTF(buffer, size, format, args) \
     _vsnprintf_s(buffer, size, _TRUNCATE, format, args)
 #define SNPRINTF _snprintf
 #else
 #define VSNPRINTF vsnprintf
 #define SNPRINTF snprintf
+=======
+    
+#if USING_VC6RT == 1
+	inline double wtf_vsnprintf(char* buffer, size_t count, const char* format, va_list args)
+	{
+		int result = _vsnprintf(buffer, count, format, args);
+
+		// In the case where the string entirely filled the buffer, _vsnprintf will not
+		// null-terminate it, but vsnprintf must.
+		if (count > 0)
+			buffer[count - 1] = '\0';
+
+		return result;
+	}
+    #define VSNPRINTF(buffer, size, format, args) \
+            wtf_vsnprintf(buffer, size, format, args)
+
+    int snprintf(char* buffer, size_t count, const char* format, ...);
+    #define SNPRINTF    snprintf
+#else
+    #define VSNPRINTF(buffer, size, format, args) \
+            _vsnprintf_s(buffer, size, _TRUNCATE, format, args)
+    #define SNPRINTF    _snprintf_s
+#endif
+
+#else
+    #define VSNPRINTF   vsnprintf
+    #define SNPRINTF    snprintf
+>>>>>>> miniblink49
 #endif
 
 #define ARGS_TO_BUFFER(format, buffer, size, written)      \
@@ -32,6 +73,7 @@ static const size_t kBufferSize = 1024;
         va_end(args);                                      \
     } while (0)
 
+<<<<<<< HEAD
 #ifdef SK_BUILD_FOR_WIN
 #define V_SKSTRING_PRINTF(output, format)                        \
     do {                                                         \
@@ -108,6 +150,30 @@ bool SkStrEndsWith(const char string[], const char suffixChar)
 
 int SkStrStartsWithOneOf(const char string[], const char prefixes[])
 {
+=======
+///////////////////////////////////////////////////////////////////////////////
+
+bool SkStrEndsWith(const char string[], const char suffixStr[]) {
+    SkASSERT(string);
+    SkASSERT(suffixStr);
+    size_t  strLen = strlen(string);
+    size_t  suffixLen = strlen(suffixStr);
+    return  strLen >= suffixLen &&
+            !strncmp(string + strLen - suffixLen, suffixStr, suffixLen);
+}
+
+bool SkStrEndsWith(const char string[], const char suffixChar) {
+    SkASSERT(string);
+    size_t  strLen = strlen(string);
+    if (0 == strLen) {
+        return false;
+    } else {
+        return (suffixChar == string[strLen-1]);
+    }
+}
+
+int SkStrStartsWithOneOf(const char string[], const char prefixes[]) {
+>>>>>>> miniblink49
     int index = 0;
     do {
         const char* limit = strchr(prefixes, '\0');
@@ -120,12 +186,20 @@ int SkStrStartsWithOneOf(const char string[], const char prefixes[])
     return -1;
 }
 
+<<<<<<< HEAD
 char* SkStrAppendU32(char string[], uint32_t dec)
 {
     SkDEBUGCODE(char* start = string;)
 
         char buffer[SkStrAppendU32_MaxSize];
     char* p = buffer + sizeof(buffer);
+=======
+char* SkStrAppendU32(char string[], uint32_t dec) {
+    SkDEBUGCODE(char* start = string;)
+
+    char    buffer[SkStrAppendU32_MaxSize];
+    char*   p = buffer + sizeof(buffer);
+>>>>>>> miniblink49
 
     do {
         *--p = SkToU8('0' + dec % 10);
@@ -141,16 +215,25 @@ char* SkStrAppendU32(char string[], uint32_t dec)
     return string;
 }
 
+<<<<<<< HEAD
 char* SkStrAppendS32(char string[], int32_t dec)
 {
     uint32_t udec = dec;
     if (dec < 0) {
         *string++ = '-';
         udec = ~udec + 1; // udec = -udec, but silences some warnings that are trying to be helpful
+=======
+char* SkStrAppendS32(char string[], int32_t dec) {
+    uint32_t udec = dec;
+    if (dec < 0) {
+        *string++ = '-';
+        udec = ~udec + 1;  // udec = -udec, but silences some warnings that are trying to be helpful
+>>>>>>> miniblink49
     }
     return SkStrAppendU32(string, udec);
 }
 
+<<<<<<< HEAD
 char* SkStrAppendU64(char string[], uint64_t dec, int minDigits)
 {
     SkDEBUGCODE(char* start = string;)
@@ -160,6 +243,16 @@ char* SkStrAppendU64(char string[], uint64_t dec, int minDigits)
 
     do {
         *--p = SkToU8('0' + (int32_t)(dec % 10));
+=======
+char* SkStrAppendU64(char string[], uint64_t dec, int minDigits) {
+    SkDEBUGCODE(char* start = string;)
+
+    char    buffer[SkStrAppendU64_MaxSize];
+    char*   p = buffer + sizeof(buffer);
+
+    do {
+        *--p = SkToU8('0' + (int32_t) (dec % 10));
+>>>>>>> miniblink49
         dec /= 10;
         minDigits--;
     } while (dec != 0);
@@ -178,18 +271,30 @@ char* SkStrAppendU64(char string[], uint64_t dec, int minDigits)
     return string;
 }
 
+<<<<<<< HEAD
 char* SkStrAppendS64(char string[], int64_t dec, int minDigits)
 {
     uint64_t udec = dec;
     if (dec < 0) {
         *string++ = '-';
         udec = ~udec + 1; // udec = -udec, but silences some warnings that are trying to be helpful
+=======
+char* SkStrAppendS64(char string[], int64_t dec, int minDigits) {
+    uint64_t udec = dec;
+    if (dec < 0) {
+        *string++ = '-';
+        udec = ~udec + 1;  // udec = -udec, but silences some warnings that are trying to be helpful
+>>>>>>> miniblink49
     }
     return SkStrAppendU64(string, udec, minDigits);
 }
 
+<<<<<<< HEAD
 char* SkStrAppendFloat(char string[], float value)
 {
+=======
+char* SkStrAppendFloat(char string[], float value) {
+>>>>>>> miniblink49
     // since floats have at most 8 significant digits, we limit our %g to that.
     static const char gFormat[] = "%.8g";
     // make it 1 larger for the terminating 0
@@ -200,15 +305,62 @@ char* SkStrAppendFloat(char string[], float value)
     return string + len;
 }
 
+<<<<<<< HEAD
+=======
+char* SkStrAppendFixed(char string[], SkFixed x) {
+    SkDEBUGCODE(char* start = string;)
+    if (x < 0) {
+        *string++ = '-';
+        x = -x;
+    }
+
+    unsigned frac = x & 0xFFFF;
+    x >>= 16;
+    if (frac == 0xFFFF) {
+        // need to do this to "round up", since 65535/65536 is closer to 1 than to .9999
+        x += 1;
+        frac = 0;
+    }
+    string = SkStrAppendS32(string, x);
+
+    // now handle the fractional part (if any)
+    if (frac) {
+        static const uint16_t   gTens[] = { 1000, 100, 10, 1 };
+        const uint16_t*         tens = gTens;
+
+        x = SkFixedRoundToInt(frac * 10000);
+        SkASSERT(x <= 10000);
+        if (x == 10000) {
+            x -= 1;
+        }
+        *string++ = '.';
+        do {
+            unsigned powerOfTen = *tens++;
+            *string++ = SkToU8('0' + x / powerOfTen);
+            x %= powerOfTen;
+        } while (x != 0);
+    }
+
+    SkASSERT(string - start <= SkStrAppendScalar_MaxSize);
+    return string;
+}
+
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////
 
 // the 3 values are [length] [refcnt] [terminating zero data]
 const SkString::Rec SkString::gEmptyRec = { 0, 0, 0 };
 
+<<<<<<< HEAD
 #define SizeOfRec() (gEmptyRec.data() - (const char*)&gEmptyRec)
 
 static uint32_t trim_size_t_to_u32(size_t value)
 {
+=======
+#define SizeOfRec()     (gEmptyRec.data() - (const char*)&gEmptyRec)
+
+static uint32_t trim_size_t_to_u32(size_t value) {
+>>>>>>> miniblink49
     if (sizeof(size_t) > sizeof(uint32_t)) {
         if (value > SK_MaxU32) {
             value = SK_MaxU32;
@@ -217,8 +369,12 @@ static uint32_t trim_size_t_to_u32(size_t value)
     return (uint32_t)value;
 }
 
+<<<<<<< HEAD
 static size_t check_add32(size_t base, size_t extra)
 {
+=======
+static size_t check_add32(size_t base, size_t extra) {
+>>>>>>> miniblink49
     SkASSERT(base <= SK_MaxU32);
     if (sizeof(size_t) > sizeof(uint32_t)) {
         if (base + extra > SK_MaxU32) {
@@ -228,8 +384,12 @@ static size_t check_add32(size_t base, size_t extra)
     return extra;
 }
 
+<<<<<<< HEAD
 SkString::Rec* SkString::AllocRec(const char text[], size_t len)
 {
+=======
+SkString::Rec* SkString::AllocRec(const char text[], size_t len) {
+>>>>>>> miniblink49
     Rec* rec;
 
     if (0 == len) {
@@ -249,8 +409,12 @@ SkString::Rec* SkString::AllocRec(const char text[], size_t len)
     return rec;
 }
 
+<<<<<<< HEAD
 SkString::Rec* SkString::RefRec(Rec* src)
 {
+=======
+SkString::Rec* SkString::RefRec(Rec* src) {
+>>>>>>> miniblink49
     if (src != &gEmptyRec) {
         sk_atomic_inc(&src->fRefCnt);
     }
@@ -258,8 +422,12 @@ SkString::Rec* SkString::RefRec(Rec* src)
 }
 
 #ifdef SK_DEBUG
+<<<<<<< HEAD
 void SkString::validate() const
 {
+=======
+void SkString::validate() const {
+>>>>>>> miniblink49
     // make sure know one has written over our global
     SkASSERT(0 == gEmptyRec.fLength);
     SkASSERT(0 == gEmptyRec.fRefCnt);
@@ -275,6 +443,7 @@ void SkString::validate() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 SkString::SkString()
     : fRec(const_cast<Rec*>(&gEmptyRec))
 {
@@ -288,10 +457,22 @@ SkString::SkString(size_t len)
 SkString::SkString(const char text[])
 {
     size_t len = text ? strlen(text) : 0;
+=======
+SkString::SkString() : fRec(const_cast<Rec*>(&gEmptyRec)) {
+}
+
+SkString::SkString(size_t len) {
+    fRec = AllocRec(NULL, len);
+}
+
+SkString::SkString(const char text[]) {
+    size_t  len = text ? strlen(text) : 0;
+>>>>>>> miniblink49
 
     fRec = AllocRec(text, len);
 }
 
+<<<<<<< HEAD
 SkString::SkString(const char text[], size_t len)
 {
     fRec = AllocRec(text, len);
@@ -299,11 +480,19 @@ SkString::SkString(const char text[], size_t len)
 
 SkString::SkString(const SkString& src)
 {
+=======
+SkString::SkString(const char text[], size_t len) {
+    fRec = AllocRec(text, len);
+}
+
+SkString::SkString(const SkString& src) {
+>>>>>>> miniblink49
     src.validate();
 
     fRec = RefRec(src.fRec);
 }
 
+<<<<<<< HEAD
 SkString::SkString(SkString&& src)
 {
     src.validate();
@@ -314,6 +503,9 @@ SkString::SkString(SkString&& src)
 
 SkString::~SkString()
 {
+=======
+SkString::~SkString() {
+>>>>>>> miniblink49
     this->validate();
 
     if (fRec->fLength) {
@@ -324,6 +516,7 @@ SkString::~SkString()
     }
 }
 
+<<<<<<< HEAD
 bool SkString::equals(const SkString& src) const
 {
     return fRec == src.fRec || this->equals(src.c_str(), src.size());
@@ -337,21 +530,42 @@ bool SkString::equals(const char text[]) const
 bool SkString::equals(const char text[], size_t len) const
 {
     SkASSERT(len == 0 || text != nullptr);
+=======
+bool SkString::equals(const SkString& src) const {
+    return fRec == src.fRec || this->equals(src.c_str(), src.size());
+}
+
+bool SkString::equals(const char text[]) const {
+    return this->equals(text, text ? strlen(text) : 0);
+}
+
+bool SkString::equals(const char text[], size_t len) const {
+    SkASSERT(len == 0 || text != NULL);
+>>>>>>> miniblink49
 
     return fRec->fLength == len && !memcmp(fRec->data(), text, len);
 }
 
+<<<<<<< HEAD
 SkString& SkString::operator=(const SkString& src)
 {
     this->validate();
 
     if (fRec != src.fRec) {
         SkString tmp(src);
+=======
+SkString& SkString::operator=(const SkString& src) {
+    this->validate();
+
+    if (fRec != src.fRec) {
+        SkString    tmp(src);
+>>>>>>> miniblink49
         this->swap(tmp);
     }
     return *this;
 }
 
+<<<<<<< HEAD
 SkString& SkString::operator=(SkString&& src)
 {
     this->validate();
@@ -364,6 +578,9 @@ SkString& SkString::operator=(SkString&& src)
 
 SkString& SkString::operator=(const char text[])
 {
+=======
+SkString& SkString::operator=(const char text[]) {
+>>>>>>> miniblink49
     this->validate();
 
     SkString tmp(text);
@@ -372,8 +589,12 @@ SkString& SkString::operator=(const char text[])
     return *this;
 }
 
+<<<<<<< HEAD
 void SkString::reset()
 {
+=======
+void SkString::reset() {
+>>>>>>> miniblink49
     this->validate();
 
     if (fRec->fLength) {
@@ -386,8 +607,12 @@ void SkString::reset()
     fRec = const_cast<Rec*>(&gEmptyRec);
 }
 
+<<<<<<< HEAD
 char* SkString::writable_str()
 {
+=======
+char* SkString::writable_str() {
+>>>>>>> miniblink49
     this->validate();
 
     if (fRec->fLength) {
@@ -405,6 +630,7 @@ char* SkString::writable_str()
     return fRec->data();
 }
 
+<<<<<<< HEAD
 void SkString::set(const char text[])
 {
     this->set(text, text ? strlen(text) : 0);
@@ -412,6 +638,13 @@ void SkString::set(const char text[])
 
 void SkString::set(const char text[], size_t len)
 {
+=======
+void SkString::set(const char text[]) {
+    this->set(text, text ? strlen(text) : 0);
+}
+
+void SkString::set(const char text[], size_t len) {
+>>>>>>> miniblink49
     len = trim_size_t_to_u32(len);
 
     if (0 == len) {
@@ -439,8 +672,12 @@ void SkString::set(const char text[], size_t len)
     }
 }
 
+<<<<<<< HEAD
 void SkString::setUTF16(const uint16_t src[])
 {
+=======
+void SkString::setUTF16(const uint16_t src[]) {
+>>>>>>> miniblink49
     int count = 0;
 
     while (src[count]) {
@@ -449,8 +686,12 @@ void SkString::setUTF16(const uint16_t src[])
     this->setUTF16(src, count);
 }
 
+<<<<<<< HEAD
 void SkString::setUTF16(const uint16_t src[], size_t count)
 {
+=======
+void SkString::setUTF16(const uint16_t src[], size_t count) {
+>>>>>>> miniblink49
     count = trim_size_t_to_u32(count);
 
     if (0 == count) {
@@ -467,7 +708,11 @@ void SkString::setUTF16(const uint16_t src[], size_t count)
         p[count] = 0;
     } else {
         SkString tmp(count); // puts a null terminator at the end of the string
+<<<<<<< HEAD
         char* p = tmp.writable_str();
+=======
+        char*    p = tmp.writable_str();
+>>>>>>> miniblink49
 
         for (size_t i = 0; i < count; i++) {
             p[i] = SkToU8(src[i]);
@@ -476,6 +721,7 @@ void SkString::setUTF16(const uint16_t src[], size_t count)
     }
 }
 
+<<<<<<< HEAD
 void SkString::insert(size_t offset, const char text[])
 {
     this->insert(offset, text, text ? strlen(text) : 0);
@@ -483,6 +729,13 @@ void SkString::insert(size_t offset, const char text[])
 
 void SkString::insert(size_t offset, const char text[], size_t len)
 {
+=======
+void SkString::insert(size_t offset, const char text[]) {
+    this->insert(offset, text, text ? strlen(text) : 0);
+}
+
+void SkString::insert(size_t offset, const char text[], size_t len) {
+>>>>>>> miniblink49
     if (len) {
         size_t length = fRec->fLength;
         if (offset > length) {
@@ -519,8 +772,13 @@ void SkString::insert(size_t offset, const char text[], size_t len)
             /*  Seems we should use realloc here, since that is safe if it fails
                 (we have the original data), and might be faster than alloc/copy/free.
             */
+<<<<<<< HEAD
             SkString tmp(fRec->fLength + len);
             char* dst = tmp.writable_str();
+=======
+            SkString    tmp(fRec->fLength + len);
+            char*       dst = tmp.writable_str();
+>>>>>>> miniblink49
 
             if (offset > 0) {
                 memcpy(dst, fRec->data(), offset);
@@ -528,7 +786,11 @@ void SkString::insert(size_t offset, const char text[], size_t len)
             memcpy(dst + offset, text, len);
             if (offset < fRec->fLength) {
                 memcpy(dst + offset + len, fRec->data() + offset,
+<<<<<<< HEAD
                     fRec->fLength - offset);
+=======
+                       fRec->fLength - offset);
+>>>>>>> miniblink49
             }
 
             this->swap(tmp);
@@ -536,16 +798,23 @@ void SkString::insert(size_t offset, const char text[], size_t len)
     }
 }
 
+<<<<<<< HEAD
 void SkString::insertUnichar(size_t offset, SkUnichar uni)
 {
     char buffer[kMaxBytesInUTF8Sequence];
     size_t len = SkUTF8_FromUnichar(uni, buffer);
+=======
+void SkString::insertUnichar(size_t offset, SkUnichar uni) {
+    char    buffer[kMaxBytesInUTF8Sequence];
+    size_t  len = SkUTF8_FromUnichar(uni, buffer);
+>>>>>>> miniblink49
 
     if (len) {
         this->insert(offset, buffer, len);
     }
 }
 
+<<<<<<< HEAD
 void SkString::insertS32(size_t offset, int32_t dec)
 {
     char buffer[SkStrAppendS32_MaxSize];
@@ -582,6 +851,39 @@ void SkString::insertHex(size_t offset, uint32_t hex, int minDigits)
 
     char buffer[8];
     char* p = buffer + sizeof(buffer);
+=======
+void SkString::insertS32(size_t offset, int32_t dec) {
+    char    buffer[SkStrAppendS32_MaxSize];
+    char*   stop = SkStrAppendS32(buffer, dec);
+    this->insert(offset, buffer, stop - buffer);
+}
+
+void SkString::insertS64(size_t offset, int64_t dec, int minDigits) {
+    char    buffer[SkStrAppendS64_MaxSize];
+    char*   stop = SkStrAppendS64(buffer, dec, minDigits);
+    this->insert(offset, buffer, stop - buffer);
+}
+
+void SkString::insertU32(size_t offset, uint32_t dec) {
+    char    buffer[SkStrAppendU32_MaxSize];
+    char*   stop = SkStrAppendU32(buffer, dec);
+    this->insert(offset, buffer, stop - buffer);
+}
+
+void SkString::insertU64(size_t offset, uint64_t dec, int minDigits) {
+    char    buffer[SkStrAppendU64_MaxSize];
+    char*   stop = SkStrAppendU64(buffer, dec, minDigits);
+    this->insert(offset, buffer, stop - buffer);
+}
+
+void SkString::insertHex(size_t offset, uint32_t hex, int minDigits) {
+    minDigits = SkPin32(minDigits, 0, 8);
+
+    static const char gHex[] = "0123456789ABCDEF";
+
+    char    buffer[8];
+    char*   p = buffer + sizeof(buffer);
+>>>>>>> miniblink49
 
     do {
         *--p = gHex[hex & 0xF];
@@ -597,6 +899,7 @@ void SkString::insertHex(size_t offset, uint32_t hex, int minDigits)
     this->insert(offset, p, buffer + sizeof(buffer) - p);
 }
 
+<<<<<<< HEAD
 void SkString::insertScalar(size_t offset, SkScalar value)
 {
     char buffer[SkStrAppendScalar_MaxSize];
@@ -612,43 +915,83 @@ void SkString::printf(const char format[], ...)
 void SkString::appendf(const char format[], ...)
 {
     char buffer[kBufferSize];
+=======
+void SkString::insertScalar(size_t offset, SkScalar value) {
+    char    buffer[SkStrAppendScalar_MaxSize];
+    char*   stop = SkStrAppendScalar(buffer, value);
+    this->insert(offset, buffer, stop - buffer);
+}
+
+void SkString::printf(const char format[], ...) {
+    char    buffer[kBufferSize];
+    int length;
+    ARGS_TO_BUFFER(format, buffer, kBufferSize, length);
+
+    this->set(buffer, length);
+}
+
+void SkString::appendf(const char format[], ...) {
+    char    buffer[kBufferSize];
+>>>>>>> miniblink49
     int length;
     ARGS_TO_BUFFER(format, buffer, kBufferSize, length);
 
     this->append(buffer, length);
 }
 
+<<<<<<< HEAD
 void SkString::appendVAList(const char format[], va_list args)
 {
     char buffer[kBufferSize];
+=======
+void SkString::appendVAList(const char format[], va_list args) {
+    char    buffer[kBufferSize];
+>>>>>>> miniblink49
     int length = VSNPRINTF(buffer, kBufferSize, format, args);
     SkASSERT(length >= 0 && length < SkToInt(kBufferSize));
 
     this->append(buffer, length);
 }
 
+<<<<<<< HEAD
 void SkString::prependf(const char format[], ...)
 {
     char buffer[kBufferSize];
+=======
+void SkString::prependf(const char format[], ...) {
+    char    buffer[kBufferSize];
+>>>>>>> miniblink49
     int length;
     ARGS_TO_BUFFER(format, buffer, kBufferSize, length);
 
     this->prepend(buffer, length);
 }
 
+<<<<<<< HEAD
 void SkString::prependVAList(const char format[], va_list args)
 {
     char buffer[kBufferSize];
+=======
+void SkString::prependVAList(const char format[], va_list args) {
+    char    buffer[kBufferSize];
+>>>>>>> miniblink49
     int length = VSNPRINTF(buffer, kBufferSize, format, args);
     SkASSERT(length >= 0 && length < SkToInt(kBufferSize));
 
     this->prepend(buffer, length);
 }
 
+<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////
 
 void SkString::remove(size_t offset, size_t length)
 {
+=======
+
+///////////////////////////////////////////////////////////////////////////////
+
+void SkString::remove(size_t offset, size_t length) {
+>>>>>>> miniblink49
     size_t size = this->size();
 
     if (offset < size) {
@@ -658,8 +1001,13 @@ void SkString::remove(size_t offset, size_t length)
         SkASSERT(length <= size);
         SkASSERT(offset <= size - length);
         if (length > 0) {
+<<<<<<< HEAD
             SkString tmp(size - length);
             char* dst = tmp.writable_str();
+=======
+            SkString    tmp(size - length);
+            char*       dst = tmp.writable_str();
+>>>>>>> miniblink49
             const char* src = this->c_str();
 
             if (offset) {
@@ -675,8 +1023,12 @@ void SkString::remove(size_t offset, size_t length)
     }
 }
 
+<<<<<<< HEAD
 void SkString::swap(SkString& other)
 {
+=======
+void SkString::swap(SkString& other) {
+>>>>>>> miniblink49
     this->validate();
     other.validate();
 
@@ -685,6 +1037,7 @@ void SkString::swap(SkString& other)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 SkString SkStringPrintf(const char* format, ...)
 {
     SkString formattedOutput;
@@ -721,6 +1074,26 @@ void SkStrSplit(const char* str, const char* delimiters, SkStrSplitMode splitMod
             // Skip one delimiter.
             str += 1;
         }
+=======
+SkString SkStringPrintf(const char* format, ...) {
+    SkString formattedOutput;
+    char buffer[kBufferSize];
+    SK_UNUSED int length;
+    ARGS_TO_BUFFER(format, buffer, kBufferSize, length);
+    formattedOutput.set(buffer);
+    return formattedOutput;
+}
+
+void SkStrSplit(const char* str, const char* delimiters, SkTArray<SkString>* out) {
+    const char* end = str + strlen(str);
+    while (str != end) {
+        // Find a token.
+        const size_t len = strcspn(str, delimiters);
+        out->push_back().set(str, len);
+        str += len;
+        // Skip any delimiters.
+        str += strspn(str, delimiters);
+>>>>>>> miniblink49
     }
 }
 

@@ -37,19 +37,28 @@ namespace v8 {
 class Isolate;
 class Object;
 class Value;
+<<<<<<< HEAD
 template <class T>
 class Local;
+=======
+template <class T> class Local;
+>>>>>>> miniblink49
 }
 
 namespace blink {
 
 class WebArrayBufferConverter {
 public:
+<<<<<<< HEAD
     BLINK_EXPORT static v8::Local<v8::Value> toV8Value(WebArrayBuffer*,
         v8::Local<v8::Object>,
         v8::Isolate*);
     BLINK_EXPORT static WebArrayBuffer* createFromV8Value(v8::Local<v8::Value>,
         v8::Isolate*);
+=======
+    BLINK_EXPORT static v8::Local<v8::Value> toV8Value(WebArrayBuffer*, v8::Local<v8::Object>, v8::Isolate*);
+    BLINK_EXPORT static WebArrayBuffer* createFromV8Value(v8::Local<v8::Value>, v8::Isolate*);
+>>>>>>> miniblink49
 };
 
 } // namespace blink

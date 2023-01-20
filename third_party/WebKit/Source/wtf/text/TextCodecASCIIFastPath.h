@@ -31,10 +31,15 @@
 
 namespace WTF {
 
+<<<<<<< HEAD
 template <size_t size>
 struct UCharByteFiller;
 template <>
 struct UCharByteFiller<4> {
+=======
+template<size_t size> struct UCharByteFiller;
+template<> struct UCharByteFiller<4> {
+>>>>>>> miniblink49
     static void copy(LChar* destination, const uint8_t* source)
     {
         memcpy(destination, source, 4);
@@ -48,8 +53,12 @@ struct UCharByteFiller<4> {
         destination[3] = source[3];
     }
 };
+<<<<<<< HEAD
 template <>
 struct UCharByteFiller<8> {
+=======
+template<> struct UCharByteFiller<8> {
+>>>>>>> miniblink49
     static void copy(LChar* destination, const uint8_t* source)
     {
         memcpy(destination, source, 8);

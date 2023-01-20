@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkDrawLine_DEFINED
 #define SkDrawLine_DEFINED
 
@@ -15,8 +19,12 @@
 class SkLine : public SkBoundable {
     DECLARE_MEMBER_INFO(Line);
     SkLine();
+<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
 
+=======
+    bool draw(SkAnimateMaker& ) override;
+>>>>>>> miniblink49
 private:
     SkScalar x1;
     SkScalar x2;

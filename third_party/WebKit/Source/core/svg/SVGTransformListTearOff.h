@@ -32,42 +32,28 @@
 #define SVGTransformListTearOff_h
 
 #include "core/svg/SVGTransformList.h"
+#include "core/svg/SVGTransformTearOff.h"
 #include "core/svg/properties/SVGListPropertyTearOffHelper.h"
 
 namespace blink {
 
-class SVGMatrixTearOff;
-class SVGTransformTearOff;
-
 class SVGTransformListTearOff final
-    : public SVGListPropertyTearOffHelper<SVGTransformListTearOff,
-          SVGTransformList>,
-      public ScriptWrappable {
+    : public SVGListPropertyTearOffHelper<SVGTransformListTearOff, SVGTransformList>
+    , public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SVGTransformListTearOff* create(
-        SVGTransformList* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    static PassRefPtrWillBeRawPtr<SVGTransformListTearOff> create(PassRefPtrWillBeRawPtr<SVGTransformList> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
     {
-        return new SVGTransformListTearOff(target, contextElement,
-            propertyIsAnimVal, attributeName);
+        return adoptRefWillBeNoop(new SVGTransformListTearOff(target, contextElement, propertyIsAnimVal, attributeName));
     }
 
     ~SVGTransformListTearOff() override;
 
-    SVGTransformTearOff* createSVGTransformFromMatrix(SVGMatrixTearOff*) const;
-    SVGTransformTearOff* consolidate(ExceptionState&);
-
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+    PassRefPtrWillBeRawPtr<SVGTransformTearOff> createSVGTransformFromMatrix(PassRefPtrWillBeRawPtr<SVGMatrixTearOff>) const;
+    PassRefPtrWillBeRawPtr<SVGTransformTearOff> consolidate(ExceptionState&);
 
 private:
-    SVGTransformListTearOff(SVGTransformList*,
-        SVGElement*,
-        PropertyIsAnimValType,
-        const QualifiedName&);
+    SVGTransformListTearOff(PassRefPtrWillBeRawPtr<SVGTransformList>, SVGElement*, PropertyIsAnimValType, const QualifiedName&);
 };
 
 } // namespace blink

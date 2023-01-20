@@ -2,26 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/css/parser/MediaQueryParser.h"
 
 #include "core/MediaTypeNames.h"
+#include "core/css/parser/CSSPropertyParser.h"
 #include "core/css/parser/CSSTokenizer.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-MediaQuerySet* MediaQueryParser::parseMediaQuerySet(const String& queryString)
+PassRefPtrWillBeRawPtr<MediaQuerySet> MediaQueryParser::parseMediaQuerySet(const String& queryString)
 {
-    return parseMediaQuerySet(CSSTokenizer(queryString).tokenRange());
+    return parseMediaQuerySet(CSSTokenizer::Scope(queryString).tokenRange());
 }
 
-MediaQuerySet* MediaQueryParser::parseMediaQuerySet(CSSParserTokenRange range)
+PassRefPtrWillBeRawPtr<MediaQuerySet> MediaQueryParser::parseMediaQuerySet(CSSParserTokenRange range)
 {
     return MediaQueryParser(MediaQuerySetParser).parseImpl(range);
 }
 
-MediaQuerySet* MediaQueryParser::parseMediaCondition(
-    CSSParserTokenRange range)
+PassRefPtrWillBeRawPtr<MediaQuerySet> MediaQueryParser::parseMediaCondition(CSSParserTokenRange range)
 {
     return MediaQueryParser(MediaConditionParser).parseImpl(range);
 }
@@ -51,38 +52,36 @@ MediaQueryParser::MediaQueryParser(ParserType parserType)
 
 MediaQueryParser::~MediaQueryParser() { }
 
-void MediaQueryParser::setStateAndRestrict(
-    State state,
-    MediaQuery::RestrictorType restrictor)
+void MediaQueryParser::setStateAndRestrict(State state, MediaQuery::Restrictor restrictor)
 {
     m_mediaQueryData.setRestrictor(restrictor);
     m_state = state;
 }
 
 // State machine member functions start here
-void MediaQueryParser::readRestrictor(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readRestrictor(CSSParserTokenType type, const CSSParserToken& token)
 {
     readMediaType(type, token);
 }
 
-void MediaQueryParser::readMediaNot(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readMediaNot(CSSParserTokenType type, const CSSParserToken& token)
 {
-    if (type == IdentToken && equalIgnoringASCIICase(token.value(), "not"))
+	if (type == IdentToken && token.value().equalIgnoringCase("not"))
         setStateAndRestrict(ReadFeatureStart, MediaQuery::Not);
     else
         readFeatureStart(type, token);
 }
 
-static bool isRestrictorOrLogicalOperator(const CSSParserToken& token)
+static bool isRestrictorOrLogicalOperator(const String& tokenValue)
 {
     // FIXME: it would be more efficient to use lower-case always for tokenValue.
-    return equalIgnoringASCIICase(token.value(), "not") || equalIgnoringASCIICase(token.value(), "and") || equalIgnoringASCIICase(token.value(), "or") || equalIgnoringASCIICase(token.value(), "only");
+    return equalIgnoringCase(tokenValue, "not")
+        || equalIgnoringCase(tokenValue, "and")
+        || equalIgnoringCase(tokenValue, "or")
+        || equalIgnoringCase(tokenValue, "only");
 }
 
-void MediaQueryParser::readMediaType(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readMediaType(CSSParserTokenType type, const CSSParserToken& token)
 {
     if (type == LeftParenthesisToken) {
         if (m_mediaQueryData.restrictor() != MediaQuery::None)
@@ -90,14 +89,15 @@ void MediaQueryParser::readMediaType(CSSParserTokenType type,
         else
             m_state = ReadFeature;
     } else if (type == IdentToken) {
-        if (m_state == ReadRestrictor && equalIgnoringASCIICase(token.value(), "not")) {
+		if (m_state == ReadRestrictor && token.value().equalIgnoringCase("not")) {
             setStateAndRestrict(ReadMediaType, MediaQuery::Not);
-        } else if (m_state == ReadRestrictor && equalIgnoringASCIICase(token.value(), "only")) {
+        } else if (m_state == ReadRestrictor && token.value().equalIgnoringCase("only")) {
             setStateAndRestrict(ReadMediaType, MediaQuery::Only);
-        } else if (m_mediaQueryData.restrictor() != MediaQuery::None && isRestrictorOrLogicalOperator(token)) {
+        } else if (m_mediaQueryData.restrictor() != MediaQuery::None
+            && isRestrictorOrLogicalOperator(token.value())) {
             m_state = SkipUntilComma;
         } else {
-            m_mediaQueryData.setMediaType(token.value().toString());
+            m_mediaQueryData.setMediaType(token.value());
             m_state = ReadAnd;
         }
     } else if (type == EOFToken && (!m_querySet->queryVector().size() || m_state != ReadRestrictor)) {
@@ -109,10 +109,9 @@ void MediaQueryParser::readMediaType(CSSParserTokenType type,
     }
 }
 
-void MediaQueryParser::readAnd(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readAnd(CSSParserTokenType type, const CSSParserToken& token)
 {
-    if (type == IdentToken && equalIgnoringASCIICase(token.value(), "and")) {
+	if (type == IdentToken && token.value().equalIgnoringCase("and")) {
         m_state = ReadFeatureStart;
     } else if (type == CommaToken && m_parserType != MediaConditionParser) {
         m_querySet->addMediaQuery(m_mediaQueryData.takeMediaQuery());
@@ -124,8 +123,7 @@ void MediaQueryParser::readAnd(CSSParserTokenType type,
     }
 }
 
-void MediaQueryParser::readFeatureStart(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readFeatureStart(CSSParserTokenType type, const CSSParserToken& token)
 {
     if (type == LeftParenthesisToken)
         m_state = ReadFeature;
@@ -133,19 +131,17 @@ void MediaQueryParser::readFeatureStart(CSSParserTokenType type,
         m_state = SkipUntilComma;
 }
 
-void MediaQueryParser::readFeature(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readFeature(CSSParserTokenType type, const CSSParserToken& token)
 {
     if (type == IdentToken) {
-        m_mediaQueryData.setMediaFeature(token.value().toString());
+        m_mediaQueryData.setMediaFeature(token.value());
         m_state = ReadFeatureColon;
     } else {
         m_state = SkipUntilComma;
     }
 }
 
-void MediaQueryParser::readFeatureColon(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readFeatureColon(CSSParserTokenType type, const CSSParserToken& token)
 {
     if (type == ColonToken)
         m_state = ReadFeatureValue;
@@ -155,10 +151,9 @@ void MediaQueryParser::readFeatureColon(CSSParserTokenType type,
         m_state = SkipUntilBlockEnd;
 }
 
-void MediaQueryParser::readFeatureValue(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readFeatureValue(CSSParserTokenType type, const CSSParserToken& token)
 {
-    if (type == DimensionToken && token.unitType() == CSSPrimitiveValue::UnitType::Unknown) {
+    if (type == DimensionToken && token.unitType() == CSSPrimitiveValue::CSS_UNKNOWN) {
         m_state = SkipUntilComma;
     } else {
         if (m_mediaQueryData.tryAddParserToken(type, token))
@@ -168,8 +163,7 @@ void MediaQueryParser::readFeatureValue(CSSParserTokenType type,
     }
 }
 
-void MediaQueryParser::readFeatureEnd(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::readFeatureEnd(CSSParserTokenType type, const CSSParserToken& token)
 {
     if (type == RightParenthesisToken || type == EOFToken) {
         if (m_mediaQueryData.addExpression())
@@ -184,8 +178,7 @@ void MediaQueryParser::readFeatureEnd(CSSParserTokenType type,
     }
 }
 
-void MediaQueryParser::skipUntilComma(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::skipUntilComma(CSSParserTokenType type, const CSSParserToken& token)
 {
     if ((type == CommaToken && !m_blockWatcher.blockLevel()) || type == EOFToken) {
         m_state = ReadRestrictor;
@@ -194,20 +187,19 @@ void MediaQueryParser::skipUntilComma(CSSParserTokenType type,
     }
 }
 
-void MediaQueryParser::skipUntilBlockEnd(CSSParserTokenType type,
-    const CSSParserToken& token)
+void MediaQueryParser::skipUntilBlockEnd(CSSParserTokenType type, const CSSParserToken& token)
 {
-    if (token.getBlockType() == CSSParserToken::BlockEnd && !m_blockWatcher.blockLevel())
+    if (token.blockType() == CSSParserToken::BlockEnd && !m_blockWatcher.blockLevel())
         m_state = SkipUntilComma;
 }
 
-void MediaQueryParser::done(CSSParserTokenType type,
-    const CSSParserToken& token) { }
+void MediaQueryParser::done(CSSParserTokenType type, const CSSParserToken& token) { }
 
 void MediaQueryParser::handleBlocks(const CSSParserToken& token)
 {
-    if (token.getBlockType() == CSSParserToken::BlockStart && (token.type() != LeftParenthesisToken || m_blockWatcher.blockLevel()))
-        m_state = SkipUntilBlockEnd;
+    if (token.blockType() == CSSParserToken::BlockStart
+        && (token.type() != LeftParenthesisToken || m_blockWatcher.blockLevel()))
+            m_state = SkipUntilBlockEnd;
 }
 
 void MediaQueryParser::processToken(const CSSParserToken& token)
@@ -223,7 +215,7 @@ void MediaQueryParser::processToken(const CSSParserToken& token)
 }
 
 // The state machine loop
-MediaQuerySet* MediaQueryParser::parseImpl(CSSParserTokenRange range)
+PassRefPtrWillBeRawPtr<MediaQuerySet> MediaQueryParser::parseImpl(CSSParserTokenRange range)
 {
     while (!range.atEnd())
         processToken(range.consume());
@@ -243,6 +235,7 @@ MediaQuerySet* MediaQueryParser::parseImpl(CSSParserTokenRange range)
 MediaQueryData::MediaQueryData()
     : m_restrictor(MediaQuery::None)
     , m_mediaType(MediaTypeNames::all)
+    , m_expressions(adoptPtrWillBeNoop(new ExpressionHeapVector))
     , m_mediaTypeSet(false)
 {
 }
@@ -254,31 +247,30 @@ void MediaQueryData::clear()
     m_mediaTypeSet = false;
     m_mediaFeature = String();
     m_valueList.clear();
-    m_expressions.clear();
+    m_expressions = adoptPtrWillBeNoop(new ExpressionHeapVector);
 }
 
-MediaQuery* MediaQueryData::takeMediaQuery()
+PassOwnPtrWillBeRawPtr<MediaQuery> MediaQueryData::takeMediaQuery()
 {
-    MediaQuery* mediaQuery = MediaQuery::create(
-        m_restrictor, std::move(m_mediaType), std::move(m_expressions));
+    OwnPtrWillBeRawPtr<MediaQuery> mediaQuery = adoptPtrWillBeNoop(new MediaQuery(m_restrictor, m_mediaType, m_expressions.release()));
     clear();
-    return mediaQuery;
+    return mediaQuery.release();
 }
 
 bool MediaQueryData::addExpression()
 {
-    MediaQueryExp* expression = MediaQueryExp::createIfValid(m_mediaFeature, m_valueList);
+    OwnPtrWillBeRawPtr<MediaQueryExp> expression = MediaQueryExp::createIfValid(m_mediaFeature, m_valueList);
     bool isValid = !!expression;
-    m_expressions.push_back(expression);
+    m_expressions->append(expression.release());
     m_valueList.clear();
     return isValid;
 }
 
-bool MediaQueryData::tryAddParserToken(CSSParserTokenType type,
-    const CSSParserToken& token)
+bool MediaQueryData::tryAddParserToken(CSSParserTokenType type, const CSSParserToken& token)
 {
-    if (type == NumberToken || type == PercentageToken || type == DimensionToken || type == DelimiterToken || type == IdentToken) {
-        m_valueList.push_back(token);
+    if (type == NumberToken || type == PercentageToken || type == DimensionToken
+        || type == DelimiterToken || type == IdentToken) {
+        m_valueList.append(token);
         return true;
     }
 

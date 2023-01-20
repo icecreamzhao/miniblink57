@@ -34,10 +34,14 @@
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutPoint.h"
 #include "platform/geometry/LayoutRectOutsets.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
 #include <iosfwd>
+=======
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -45,6 +49,7 @@ class FloatRect;
 class DoubleRect;
 
 class PLATFORM_EXPORT LayoutRect {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -89,16 +94,38 @@ public:
         const FloatRect&); // don't do this implicitly since it's lossy
     explicit LayoutRect(
         const DoubleRect&); // don't do this implicitly since it's lossy
+=======
+public:
+    LayoutRect() { }
+    LayoutRect(const LayoutPoint& location, const LayoutSize& size)
+        : m_location(location), m_size(size) { }
+    LayoutRect(LayoutUnit x, LayoutUnit y, LayoutUnit width, LayoutUnit height)
+        : m_location(LayoutPoint(x, y)), m_size(LayoutSize(width, height)) { }
+    LayoutRect(const FloatPoint& location, const FloatSize& size)
+        : m_location(location), m_size(size) { }
+    LayoutRect(const DoublePoint& location, const DoubleSize& size)
+        : m_location(location), m_size(size) { }
+    LayoutRect(const IntPoint& location, const IntSize& size)
+        : m_location(location), m_size(size) { }
+    explicit LayoutRect(const IntRect& rect) : m_location(rect.location()), m_size(rect.size()) { }
+
+    explicit LayoutRect(const FloatRect&); // don't do this implicitly since it's lossy
+    explicit LayoutRect(const DoubleRect&); // don't do this implicitly since it's lossy
+>>>>>>> miniblink49
 
     LayoutPoint location() const { return m_location; }
     LayoutSize size() const { return m_size; }
 
     IntPoint pixelSnappedLocation() const { return roundedIntPoint(m_location); }
+<<<<<<< HEAD
     IntSize pixelSnappedSize() const
     {
         return IntSize(snapSizeToPixel(m_size.width(), m_location.x()),
             snapSizeToPixel(m_size.height(), m_location.y()));
     }
+=======
+    IntSize pixelSnappedSize() const { return IntSize(snapSizeToPixel(m_size.width(), m_location.x()), snapSizeToPixel(m_size.height(), m_location.y())); }
+>>>>>>> miniblink49
 
     void setLocation(const LayoutPoint& location) { m_location = location; }
     void setSize(const LayoutSize& size) { m_size = size; }
@@ -110,8 +137,17 @@ public:
     LayoutUnit width() const { return m_size.width(); }
     LayoutUnit height() const { return m_size.height(); }
 
+<<<<<<< HEAD
     int pixelSnappedWidth() const { return snapSizeToPixel(width(), x()); }
     int pixelSnappedHeight() const { return snapSizeToPixel(height(), y()); }
+=======
+    int pixelSnappedX() const { return x().round(); }
+    int pixelSnappedY() const { return y().round(); }
+    int pixelSnappedWidth() const { return snapSizeToPixel(width(), x()); }
+    int pixelSnappedHeight() const { return snapSizeToPixel(height(), y()); }
+    int pixelSnappedMaxX() const { return (m_location.x() + m_size.width()).round(); }
+    int pixelSnappedMaxY() const { return (m_location.y() + m_size.height()).round(); }
+>>>>>>> miniblink49
 
     void setX(LayoutUnit x) { m_location.setX(x); }
     void setY(LayoutUnit y) { m_location.setY(y); }
@@ -120,6 +156,7 @@ public:
 
     ALWAYS_INLINE bool isEmpty() const { return m_size.isEmpty(); }
 
+<<<<<<< HEAD
     // NOTE: The result is rounded to integer values, and thus may be not the
     // exact center point.
     LayoutPoint center() const
@@ -142,6 +179,16 @@ public:
     }
     void move(LayoutUnit dx, LayoutUnit dy) { m_location.move(dx, dy); }
     void move(int dx, int dy) { m_location.move(LayoutUnit(dx), LayoutUnit(dy)); }
+=======
+    // NOTE: The result is rounded to integer values, and thus may be not the exact
+    // center point.
+    LayoutPoint center() const { return LayoutPoint(x() + width() / 2, y() + height() / 2); }
+
+    void move(const LayoutSize& size) { m_location += size; }
+    void move(const IntSize& size) { m_location.move(size.width(), size.height()); }
+    void moveBy(const LayoutPoint& offset) { m_location.move(offset.x(), offset.y()); }
+    void move(LayoutUnit dx, LayoutUnit dy) { m_location.move(dx, dy); }
+>>>>>>> miniblink49
 
     void expand(const LayoutSize& size) { m_size += size; }
     void expand(const LayoutRectOutsets& box)
@@ -150,21 +197,29 @@ public:
         m_size.expand(box.left() + box.right(), box.top() + box.bottom());
     }
     void expand(LayoutUnit dw, LayoutUnit dh) { m_size.expand(dw, dh); }
+<<<<<<< HEAD
     void expandEdges(LayoutUnit top,
         LayoutUnit right,
         LayoutUnit bottom,
         LayoutUnit left)
+=======
+    void expandEdges(LayoutUnit top, LayoutUnit right, LayoutUnit bottom, LayoutUnit left)
+>>>>>>> miniblink49
     {
         m_location.move(-left, -top);
         m_size.expand(left + right, top + bottom);
     }
     void contract(const LayoutSize& size) { m_size -= size; }
     void contract(LayoutUnit dw, LayoutUnit dh) { m_size.expand(-dw, -dh); }
+<<<<<<< HEAD
     void contract(int dw, int dh) { m_size.expand(-dw, -dh); }
     void contractEdges(LayoutUnit top,
         LayoutUnit right,
         LayoutUnit bottom,
         LayoutUnit left)
+=======
+    void contractEdges(LayoutUnit top, LayoutUnit right, LayoutUnit bottom, LayoutUnit left)
+>>>>>>> miniblink49
     {
         m_location.move(left, top);
         m_size.shrink(left + right, top + bottom);
@@ -174,22 +229,35 @@ public:
     {
         LayoutUnit delta = edge - x();
         setX(edge);
+<<<<<<< HEAD
         setWidth((width() - delta).clampNegativeToZero());
+=======
+        setWidth(std::max<LayoutUnit>(0, width() - delta));
+>>>>>>> miniblink49
     }
     void shiftMaxXEdgeTo(LayoutUnit edge)
     {
         LayoutUnit delta = edge - maxX();
+<<<<<<< HEAD
         setWidth((width() + delta).clampNegativeToZero());
+=======
+        setWidth(std::max<LayoutUnit>(0, width() + delta));
+>>>>>>> miniblink49
     }
     void shiftYEdgeTo(LayoutUnit edge)
     {
         LayoutUnit delta = edge - y();
         setY(edge);
+<<<<<<< HEAD
         setHeight((height() - delta).clampNegativeToZero());
+=======
+        setHeight(std::max<LayoutUnit>(0, height() - delta));
+>>>>>>> miniblink49
     }
     void shiftMaxYEdgeTo(LayoutUnit edge)
     {
         LayoutUnit delta = edge - maxY();
+<<<<<<< HEAD
         setHeight((height() + delta).clampNegativeToZero());
     }
 
@@ -210,11 +278,21 @@ public:
         return LayoutPoint(m_location.x() + m_size.width(),
             m_location.y() + m_size.height());
     } // typically bottomRight
+=======
+        setHeight(std::max<LayoutUnit>(0, height() + delta));
+    }
+
+    LayoutPoint minXMinYCorner() const { return m_location; } // typically topLeft
+    LayoutPoint maxXMinYCorner() const { return LayoutPoint(m_location.x() + m_size.width(), m_location.y()); } // typically topRight
+    LayoutPoint minXMaxYCorner() const { return LayoutPoint(m_location.x(), m_location.y() + m_size.height()); } // typically bottomLeft
+    LayoutPoint maxXMaxYCorner() const { return LayoutPoint(m_location.x() + m_size.width(), m_location.y() + m_size.height()); } // typically bottomRight
+>>>>>>> miniblink49
 
     bool intersects(const LayoutRect&) const;
     bool contains(const LayoutRect&) const;
 
     // This checks to see if the rect contains x,y in the traditional sense.
+<<<<<<< HEAD
     // Equivalent to checking if the rect contains a 1x1 rect below and to the
     // right of (px,py).
     bool contains(LayoutUnit px, LayoutUnit py) const
@@ -225,11 +303,18 @@ public:
     {
         return contains(point.x(), point.y());
     }
+=======
+    // Equivalent to checking if the rect contains a 1x1 rect below and to the right of (px,py).
+    bool contains(LayoutUnit px, LayoutUnit py) const
+        { return px >= x() && px < maxX() && py >= y() && py < maxY(); }
+    bool contains(const LayoutPoint& point) const { return contains(point.x(), point.y()); }
+>>>>>>> miniblink49
 
     void intersect(const LayoutRect&);
     void unite(const LayoutRect&);
     void uniteIfNonZero(const LayoutRect&);
 
+<<<<<<< HEAD
     // Set this rect to be the intersection of itself and the argument rect
     // using edge-inclusive geometry.  If the two rectangles overlap but the
     // overlap region is zero-area (either because one of the two rectangles
@@ -244,6 +329,8 @@ public:
     // is (100, 100, 150x100).
     void uniteEvenIfEmpty(const LayoutRect&);
 
+=======
+>>>>>>> miniblink49
     void inflateX(LayoutUnit dx)
     {
         m_location.setX(m_location.x() - dx);
@@ -254,6 +341,7 @@ public:
         m_location.setY(m_location.y() - dy);
         m_size.setHeight(m_size.height() + dy + dy);
     }
+<<<<<<< HEAD
     void inflate(LayoutUnit d)
     {
         inflateX(d);
@@ -266,10 +354,25 @@ public:
     LayoutRect transposedRect() const
     {
         return LayoutRect(m_location.transposedPoint(), m_size.transposedSize());
+=======
+    void inflate(LayoutUnit d) { inflateX(d); inflateY(d); }
+    void scale(float s);
+    void scale(float xAxisScale, float yAxisScale);
+
+    LayoutRect transposedRect() const { return LayoutRect(m_location.transposedPoint(), m_size.transposedSize()); }
+
+    static LayoutRect infiniteRect()
+    {
+        // Return a rect that is slightly smaller than the true max rect to allow pixelSnapping to round up to the nearest IntRect without overflowing.
+        // FIXME(crbug.com/440143): Remove this hack.
+        static LayoutRect infiniteRect(LayoutUnit::nearlyMin() / 2, LayoutUnit::nearlyMin() / 2, LayoutUnit::nearlyMax(), LayoutUnit::nearlyMax());
+        return infiniteRect;
+>>>>>>> miniblink49
     }
 
     static IntRect infiniteIntRect()
     {
+<<<<<<< HEAD
         // Due to saturated arithemetic this value is not the same as
         // LayoutRect(IntRect(INT_MIN/2, INT_MIN/2, INT_MAX, INT_MAX)).
         static IntRect infiniteIntRect(
@@ -279,6 +382,17 @@ public:
     }
 
     String toString() const;
+=======
+        // Due to saturated arithemetic this value is not the same as LayoutRect(IntRect(INT_MIN/2, INT_MIN/2, INT_MAX/2, INT_MAX/2)).
+        static IntRect infiniteIntRect(infiniteRect());
+        return infiniteIntRect;
+    }
+
+#ifndef NDEBUG
+    // Prints the rect to the screen.
+    void show(bool showRawValue = false) const;
+#endif
+>>>>>>> miniblink49
 
 private:
     LayoutPoint m_location;
@@ -301,6 +415,7 @@ inline LayoutRect unionRect(const LayoutRect& a, const LayoutRect& b)
 
 PLATFORM_EXPORT LayoutRect unionRect(const Vector<LayoutRect>&);
 
+<<<<<<< HEAD
 inline LayoutRect unionRectEvenIfEmpty(const LayoutRect& a,
     const LayoutRect& b)
 {
@@ -311,6 +426,8 @@ inline LayoutRect unionRectEvenIfEmpty(const LayoutRect& a,
 
 PLATFORM_EXPORT LayoutRect unionRectEvenIfEmpty(const Vector<LayoutRect>&);
 
+=======
+>>>>>>> miniblink49
 ALWAYS_INLINE bool operator==(const LayoutRect& a, const LayoutRect& b)
 {
     return a.location() == b.location() && a.size() == b.size();
@@ -323,6 +440,7 @@ inline bool operator!=(const LayoutRect& a, const LayoutRect& b)
 
 inline IntRect pixelSnappedIntRect(const LayoutRect& rect)
 {
+<<<<<<< HEAD
     return IntRect(roundedIntPoint(rect.location()),
         IntSize(snapSizeToPixel(rect.width(), rect.x()),
             snapSizeToPixel(rect.height(), rect.y())));
@@ -353,10 +471,29 @@ inline IntRect pixelSnappedIntRectFromEdges(LayoutUnit left,
 {
     return IntRect(left.round(), top.round(), snapSizeToPixel(right - left, left),
         snapSizeToPixel(bottom - top, top));
+=======
+    return IntRect(roundedIntPoint(rect.location()), IntSize(
+        snapSizeToPixel(rect.width(), rect.x()),
+        snapSizeToPixel(rect.height(), rect.y())));
+}
+
+PLATFORM_EXPORT IntRect enclosingIntRect(const LayoutRect&);
+PLATFORM_EXPORT LayoutRect enclosingLayoutRect(const FloatRect&);
+
+inline IntRect pixelSnappedIntRect(LayoutUnit left, LayoutUnit top, LayoutUnit width, LayoutUnit height)
+{
+    return IntRect(left.round(), top.round(), snapSizeToPixel(width, left), snapSizeToPixel(height, top));
+}
+
+inline IntRect pixelSnappedIntRectFromEdges(LayoutUnit left, LayoutUnit top, LayoutUnit right, LayoutUnit bottom)
+{
+    return IntRect(left.round(), top.round(), snapSizeToPixel(right - left, left), snapSizeToPixel(bottom - top, top));
+>>>>>>> miniblink49
 }
 
 inline IntRect pixelSnappedIntRect(LayoutPoint location, LayoutSize size)
 {
+<<<<<<< HEAD
     return IntRect(roundedIntPoint(location),
         pixelSnappedIntSize(size, location));
 }
@@ -365,6 +502,11 @@ inline IntRect pixelSnappedIntRect(LayoutPoint location, LayoutSize size)
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const LayoutRect&, std::ostream*);
 
+=======
+    return IntRect(roundedIntPoint(location), pixelSnappedIntSize(size, location));
+}
+
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif // LayoutRect_h

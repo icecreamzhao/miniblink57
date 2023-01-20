@@ -27,12 +27,16 @@
 #define KURLHash_h
 
 #include "platform/weborigin/KURL.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/StringHash.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 // KURLHash doesn't support null KURLs.  get(), contains(), and add() on
 // HashMap<KURL,..., KURLHash> cause a null-pointer dereference when passed null
 // KURLs.
@@ -42,11 +46,21 @@ struct KURLHash {
     static unsigned hash(const KURL& key)
     {
         return key.getString().impl()->hash();
+=======
+struct KURLHash {
+    static unsigned hash(const KURL& key)
+    {
+        return key.string().impl()->hash();
+>>>>>>> miniblink49
     }
 
     static bool equal(const KURL& a, const KURL& b)
     {
+<<<<<<< HEAD
         return StringHash::equal(a.getString(), b.getString());
+=======
+        return StringHash::equal(a.string(), b.string());
+>>>>>>> miniblink49
     }
 
     static const bool safeToCompareToEmptyOrDeleted = false;
@@ -56,9 +70,13 @@ struct KURLHash {
 
 namespace WTF {
 
+<<<<<<< HEAD
 template <>
 struct HashTraits<blink::KURL> : SimpleClassHashTraits<blink::KURL> {
 };
+=======
+template<> struct HashTraits<blink::KURL> : SimpleClassHashTraits<blink::KURL> { };
+>>>>>>> miniblink49
 
 } // namespace WTF
 

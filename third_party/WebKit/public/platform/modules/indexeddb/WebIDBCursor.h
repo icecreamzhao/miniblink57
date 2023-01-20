@@ -38,11 +38,16 @@ class WebIDBCursor {
 public:
     virtual ~WebIDBCursor() { }
 
+<<<<<<< HEAD
     virtual void advance(unsigned long, WebIDBCallbacks*) = 0;
     virtual void continueFunction(const WebIDBKey&,
         const WebIDBKey& primaryKey,
         WebIDBCallbacks*)
         = 0;
+=======
+    virtual void advance(unsigned long, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void continueFunction(const WebIDBKey&, const WebIDBKey& primaryKey, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
     virtual void postSuccessHandlerCallback() { } // Only used in frontend.
 
 protected:

@@ -19,6 +19,10 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/text/TextBreakIteratorInternalICU.h"
 
 #include "platform/Language.h"

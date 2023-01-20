@@ -20,8 +20,12 @@ public:
      *  includes nested SkPictures, but does not include large objects that
      *  SkRecord holds a reference to (e.g. paths, or pixels backing bitmaps).
      */
+<<<<<<< HEAD
     static size_t ApproximateBytesUsed(const SkPicture* pict)
     {
+=======
+    static size_t ApproximateBytesUsed(const SkPicture* pict) {
+>>>>>>> miniblink49
         return pict->approximateBytesUsed();
     }
 };

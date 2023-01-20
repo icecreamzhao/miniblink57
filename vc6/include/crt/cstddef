@@ -9,6 +9,7 @@
  #include <stddef.h>
 #endif /* _STD_USING */
 
+<<<<<<< HEAD
 #if _GLOBAL_USING && !defined(RC_INVOKED)
 _STD_BEGIN
 using _CSTD ptrdiff_t; using _CSTD size_t;
@@ -21,6 +22,19 @@ namespace std {
 typedef double max_align_t;	// most aligned type
 }
 #endif /* __cplusplus */
+=======
+#if _GLOBAL_USING && !defined(RC_INVOKED)
+_STD_BEGIN
+using _CSTD ptrdiff_t; using _CSTD size_t;
+_STD_END
+#endif /* _GLOBAL_USING */
+
+#if !defined(RC_INVOKED)
+namespace std {
+typedef double max_align_t;	// most aligned type
+}
+
+>>>>>>> miniblink49
 #endif /* !defined(RC_INVOKED) */
 
 #endif /* _CSTDDEF_ */

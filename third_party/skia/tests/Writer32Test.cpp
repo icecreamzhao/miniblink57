@@ -11,16 +11,25 @@
 #include "Test.h"
 
 static void check_contents(skiatest::Reporter* reporter, const SkWriter32& writer,
+<<<<<<< HEAD
     const void* expected, size_t size)
 {
+=======
+                           const void* expected, size_t size) {
+>>>>>>> miniblink49
     SkAutoSMalloc<256> storage(size);
     REPORTER_ASSERT(reporter, writer.bytesWritten() == size);
     writer.flatten(storage.get());
     REPORTER_ASSERT(reporter, !memcmp(storage.get(), expected, size));
 }
 
+<<<<<<< HEAD
 static void test_reserve(skiatest::Reporter* reporter)
 {
+=======
+
+static void test_reserve(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     // There used to be a bug where we'd assert your first reservation had to
     // fit in external storage if you used it.  This would crash in debug mode.
     uint8_t storage[4];
@@ -28,6 +37,7 @@ static void test_reserve(skiatest::Reporter* reporter)
     writer.reserve(40);
 }
 
+<<<<<<< HEAD
 static void test_string_null(skiatest::Reporter* reporter)
 {
     uint8_t storage[8];
@@ -35,12 +45,24 @@ static void test_string_null(skiatest::Reporter* reporter)
 
     // Can we write nullptr?
     writer.writeString(nullptr);
+=======
+static void test_string_null(skiatest::Reporter* reporter) {
+    uint8_t storage[8];
+    SkWriter32 writer(storage, sizeof(storage));
+
+    // Can we write NULL?
+    writer.writeString(NULL);
+>>>>>>> miniblink49
     const int32_t expected[] = { 0x0, 0x0 };
     check_contents(reporter, writer, expected, sizeof(expected));
 }
 
+<<<<<<< HEAD
 static void test_rewind(skiatest::Reporter* reporter)
 {
+=======
+static void test_rewind(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkSWriter32<32> writer;
     int32_t array[3] = { 1, 2, 4 };
 
@@ -50,7 +72,11 @@ static void test_rewind(skiatest::Reporter* reporter)
     }
     check_contents(reporter, writer, array, sizeof(array));
 
+<<<<<<< HEAD
     writer.rewindToOffset(2 * sizeof(int32_t));
+=======
+    writer.rewindToOffset(2*sizeof(int32_t));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, sizeof(array) - 4 == writer.bytesWritten());
     writer.writeInt(3);
     REPORTER_ASSERT(reporter, sizeof(array) == writer.bytesWritten());
@@ -64,16 +90,25 @@ static void test_rewind(skiatest::Reporter* reporter)
         for (int i = 0; i < 100; ++i) {
             writer.writeInt(i);
         }
+<<<<<<< HEAD
         REPORTER_ASSERT(reporter, 100 * 4 == writer.bytesWritten());
         for (int j = 100 * 4; j >= 0; j -= 16) {
+=======
+        REPORTER_ASSERT(reporter, 100*4 == writer.bytesWritten());
+        for (int j = 100*4; j >= 0; j -= 16) {
+>>>>>>> miniblink49
             writer.rewindToOffset(j);
         }
         REPORTER_ASSERT(reporter, writer.bytesWritten() < 16);
     }
 }
 
+<<<<<<< HEAD
 static void test_ptr(skiatest::Reporter* reporter)
 {
+=======
+static void test_ptr(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     SkSWriter32<32> writer;
 
     void* p0 = reporter;
@@ -101,11 +136,18 @@ static void test_ptr(skiatest::Reporter* reporter)
     REPORTER_ASSERT(reporter, reader.readInt() == 0x66);
 }
 
+<<<<<<< HEAD
 static void test1(skiatest::Reporter* reporter, SkWriter32* writer)
 {
     const uint32_t data[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     for (size_t i = 0; i < SK_ARRAY_COUNT(data); ++i) {
         REPORTER_ASSERT(reporter, i * 4 == writer->bytesWritten());
+=======
+static void test1(skiatest::Reporter* reporter, SkWriter32* writer) {
+    const uint32_t data[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    for (size_t i = 0; i < SK_ARRAY_COUNT(data); ++i) {
+        REPORTER_ASSERT(reporter, i*4 == writer->bytesWritten());
+>>>>>>> miniblink49
         writer->write32(data[i]);
         REPORTER_ASSERT(reporter, data[i] == writer->readTAt<uint32_t>(i * 4));
     }
@@ -116,8 +158,12 @@ static void test1(skiatest::Reporter* reporter, SkWriter32* writer)
     REPORTER_ASSERT(reporter, !memcmp(data, buffer, sizeof(buffer)));
 }
 
+<<<<<<< HEAD
 static void test2(skiatest::Reporter* reporter, SkWriter32* writer)
 {
+=======
+static void test2(skiatest::Reporter* reporter, SkWriter32* writer) {
+>>>>>>> miniblink49
     static const char gStr[] = "abcdefghimjklmnopqrstuvwxyz";
     size_t i;
 
@@ -148,6 +194,7 @@ static void test2(skiatest::Reporter* reporter, SkWriter32* writer)
     REPORTER_ASSERT(reporter, reader.eof());
 }
 
+<<<<<<< HEAD
 static void testWritePad(skiatest::Reporter* reporter, SkWriter32* writer)
 {
     // Create some random data to write.
@@ -158,6 +205,20 @@ static void testWritePad(skiatest::Reporter* reporter, SkWriter32* writer)
         SkRandom rand(0);
         for (size_t i = 0; i < dataSize; i++) {
             originalData[(int)i] = rand.nextU();
+=======
+static void testWritePad(skiatest::Reporter* reporter, SkWriter32* writer) {
+    // Create some random data to write.
+    const size_t dataSize = 10<<2;
+    SkASSERT(SkIsAlign4(dataSize));
+
+    SkAutoMalloc originalData(dataSize);
+    {
+        SkRandom rand(0);
+        uint32_t* ptr = static_cast<uint32_t*>(originalData.get());
+        uint32_t* stop = ptr + (dataSize>>2);
+        while (ptr < stop) {
+            *ptr++ = rand.nextU();
+>>>>>>> miniblink49
         }
 
         // Write  the random data to the writer at different lengths for
@@ -188,8 +249,12 @@ static void testWritePad(skiatest::Reporter* reporter, SkWriter32* writer)
     }
 }
 
+<<<<<<< HEAD
 static void testOverwriteT(skiatest::Reporter* reporter, SkWriter32* writer)
 {
+=======
+static void testOverwriteT(skiatest::Reporter* reporter, SkWriter32* writer) {
+>>>>>>> miniblink49
     const size_t padding = 64;
 
     const uint32_t uint1 = 0x12345678;
@@ -213,7 +278,12 @@ static void testOverwriteT(skiatest::Reporter* reporter, SkWriter32* writer)
 
     REPORTER_ASSERT(reporter, writer->readTAt<uint32_t>(padding) == uint1);
     REPORTER_ASSERT(reporter, writer->readTAt<SkRect>(padding + sizeof(uint32_t)) == rect1);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, writer->readTAt<SkScalar>(padding + sizeof(uint32_t) + sizeof(SkRect)) == scalar1);
+=======
+    REPORTER_ASSERT(reporter, writer->readTAt<SkScalar>(
+                        padding + sizeof(uint32_t) + sizeof(SkRect)) == scalar1);
+>>>>>>> miniblink49
 
     writer->overwriteTAt(padding, uint2);
     writer->overwriteTAt(padding + sizeof(uint32_t), rect2);
@@ -221,11 +291,19 @@ static void testOverwriteT(skiatest::Reporter* reporter, SkWriter32* writer)
 
     REPORTER_ASSERT(reporter, writer->readTAt<uint32_t>(padding) == uint2);
     REPORTER_ASSERT(reporter, writer->readTAt<SkRect>(padding + sizeof(uint32_t)) == rect2);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, writer->readTAt<SkScalar>(padding + sizeof(uint32_t) + sizeof(SkRect)) == scalar2);
 }
 
 DEF_TEST(Writer32_dynamic, reporter)
 {
+=======
+    REPORTER_ASSERT(reporter, writer->readTAt<SkScalar>(
+                        padding + sizeof(uint32_t) + sizeof(SkRect)) == scalar2);
+}
+
+DEF_TEST(Writer32_dynamic, reporter) {
+>>>>>>> miniblink49
     SkWriter32 writer;
     test1(reporter, &writer);
 
@@ -239,8 +317,25 @@ DEF_TEST(Writer32_dynamic, reporter)
     testOverwriteT(reporter, &writer);
 }
 
+<<<<<<< HEAD
 DEF_TEST(Writer32_small, reporter)
 {
+=======
+DEF_TEST(Writer32_contiguous, reporter) {
+    uint32_t storage[256];
+    SkWriter32 writer;
+    writer.reset(storage, sizeof(storage));
+    // This write is small enough to fit in storage, so it's contiguous.
+    test1(reporter, &writer);
+    REPORTER_ASSERT(reporter, writer.contiguousArray() != NULL);
+
+    // Everything other aspect of contiguous/non-contiguous is an
+    // implementation detail, not part of the public contract for
+    // SkWriter32, and so not tested here.
+}
+
+DEF_TEST(Writer32_small, reporter) {
+>>>>>>> miniblink49
     SkSWriter32<8 * sizeof(intptr_t)> writer;
     test1(reporter, &writer);
     writer.reset(); // should just rewind our storage
@@ -253,8 +348,12 @@ DEF_TEST(Writer32_small, reporter)
     testOverwriteT(reporter, &writer);
 }
 
+<<<<<<< HEAD
 DEF_TEST(Writer32_large, reporter)
 {
+=======
+DEF_TEST(Writer32_large, reporter) {
+>>>>>>> miniblink49
     SkSWriter32<1024 * sizeof(intptr_t)> writer;
     test1(reporter, &writer);
     writer.reset(); // should just rewind our storage
@@ -267,14 +366,19 @@ DEF_TEST(Writer32_large, reporter)
     testOverwriteT(reporter, &writer);
 }
 
+<<<<<<< HEAD
 DEF_TEST(Writer32_misc, reporter)
 {
+=======
+DEF_TEST(Writer32_misc, reporter) {
+>>>>>>> miniblink49
     test_reserve(reporter);
     test_string_null(reporter);
     test_ptr(reporter);
     test_rewind(reporter);
 }
 
+<<<<<<< HEAD
 DEF_TEST(Writer32_data, reporter)
 {
     const char* str = "0123456789";
@@ -317,3 +421,5 @@ DEF_TEST(Writer32_data, reporter)
     REPORTER_ASSERT(reporter, reader.offset() == sizeWritten);
     REPORTER_ASSERT(reporter, reader.eof());
 }
+=======
+>>>>>>> miniblink49

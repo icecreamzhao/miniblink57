@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/text/BidiTextRun.h"
 
 #include "platform/text/BidiResolver.h"
@@ -40,7 +44,11 @@ TextDirection directionForRun(TextRun& run, bool* hasStrongDirectionality)
     if (!hasStrongDirectionality) {
         // 8bit is Latin-1 and therefore is always LTR.
         if (run.is8Bit())
+<<<<<<< HEAD
             return TextDirection::kLtr;
+=======
+            return LTR;
+>>>>>>> miniblink49
 
         // length == 1 for more than 90% of cases of width() for CJK text.
         if (run.length() == 1 && U16_IS_SINGLE(run.characters16()[0]))
@@ -48,21 +56,33 @@ TextDirection directionForRun(TextRun& run, bool* hasStrongDirectionality)
     }
 
     BidiResolver<TextRunIterator, BidiCharacterRun> bidiResolver;
+<<<<<<< HEAD
     bidiResolver.setStatus(
         BidiStatus(run.direction(), run.directionalOverride()));
+=======
+    bidiResolver.setStatus(BidiStatus(run.direction(), run.directionalOverride()));
+>>>>>>> miniblink49
     bidiResolver.setPositionIgnoringNestedIsolates(TextRunIterator(&run, 0));
     return bidiResolver.determineDirectionality(hasStrongDirectionality);
 }
 
+<<<<<<< HEAD
 TextDirection determineDirectionality(const String& value,
     bool* hasStrongDirectionality)
+=======
+TextDirection determineDirectionality(const String& value, bool* hasStrongDirectionality)
+>>>>>>> miniblink49
 {
     TextRun run(value);
     return directionForRun(run, hasStrongDirectionality);
 }
 
+<<<<<<< HEAD
 TextRun textRunWithDirectionality(const String& value,
     bool* hasStrongDirectionality)
+=======
+TextRun textRunWithDirectionality(const String& value, bool* hasStrongDirectionality)
+>>>>>>> miniblink49
 {
     TextRun run(value);
     TextDirection direction = directionForRun(run, hasStrongDirectionality);
@@ -72,3 +92,7 @@ TextRun textRunWithDirectionality(const String& value,
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

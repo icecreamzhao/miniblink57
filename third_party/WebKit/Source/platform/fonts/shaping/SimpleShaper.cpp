@@ -20,14 +20,24 @@
  *
  */
 
+<<<<<<< HEAD
 #include "platform/fonts/shaping/SimpleShaper.h"
 
+=======
+#include "config.h"
+#include "platform/fonts/shaping/SimpleShaper.h"
+
+#include "platform/fonts/Character.h"
+>>>>>>> miniblink49
 #include "platform/fonts/Font.h"
 #include "platform/fonts/GlyphBuffer.h"
 #include "platform/fonts/Latin1TextIterator.h"
 #include "platform/fonts/SimpleFontData.h"
 #include "platform/fonts/UTF16TextIterator.h"
+<<<<<<< HEAD
 #include "platform/text/Character.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/MathExtras.h"
 #include "wtf/text/CharacterNames.h"
 
@@ -49,7 +59,11 @@ SimpleShaper::SimpleShaper(const Font* font, const TextRun& run, const GlyphData
         m_expansionPerOpportunity = 0;
     } else {
         bool isAfterExpansion = m_isAfterExpansion;
+<<<<<<< HEAD
         unsigned expansionOpportunityCount = m_textRun.is8Bit() ? Character::expansionOpportunityCount(m_textRun.characters8(), m_textRun.length(), m_textRun.direction(), isAfterExpansion, m_textRun.getTextJustify()) : Character::expansionOpportunityCount(m_textRun.characters16(), m_textRun.length(), m_textRun.direction(), isAfterExpansion, m_textRun.getTextJustify());
+=======
+        unsigned expansionOpportunityCount = m_textRun.is8Bit() ? Character::expansionOpportunityCount(m_textRun.characters8(), m_textRun.length(), m_textRun.direction(), isAfterExpansion, m_textRun.textJustify()) : Character::expansionOpportunityCount(m_textRun.characters16(), m_textRun.length(), m_textRun.direction(), isAfterExpansion, m_textRun.textJustify());
+>>>>>>> miniblink49
         if (isAfterExpansion && !m_textRun.allowsTrailingExpansion())
             expansionOpportunityCount--;
 
@@ -72,7 +86,11 @@ float SimpleShaper::characterWidth(UChar32 character, const GlyphData& glyphData
     ASSERT(fontData);
 
     if (UNLIKELY(character == tabulationCharacter && m_textRun.allowTabs()))
+<<<<<<< HEAD
         return m_font->tabWidth(*fontData, m_textRun.getTabSize(), m_textRun.xPos() + m_runWidthSoFar);
+=======
+        return m_font->tabWidth(*fontData, m_textRun.tabSize(), m_textRun.xPos() + m_runWidthSoFar);
+>>>>>>> miniblink49
 
     float width = fontData->widthForGlyph(glyphData.glyph);
 
@@ -87,10 +105,17 @@ float SimpleShaper::adjustSpacing(float width, const CharacterData& charData)
 {
     // Account for letter-spacing.
     if (width)
+<<<<<<< HEAD
         width += m_font->getFontDescription().letterSpacing();
 
     bool isExpansionOpportunity = Character::treatAsSpace(charData.character) || (m_textRun.getTextJustify() == TextJustifyDistribute);
     if (isExpansionOpportunity || (m_textRun.getTextJustify() == TextJustifyAuto && Character::isCJKIdeographOrSymbol(charData.character))) {
+=======
+        width += m_font->fontDescription().letterSpacing();
+
+    bool isExpansionOpportunity = Character::treatAsSpace(charData.character) || (m_textRun.textJustify() == TextJustifyDistribute);
+    if (isExpansionOpportunity || (m_textRun.textJustify() == TextJustifyAuto && Character::isCJKIdeographOrSymbol(charData.character))) {
+>>>>>>> miniblink49
         // Distribute the run's total expansion evenly over all expansion opportunities in the run.
         if (m_expansion) {
             if (!isExpansionOpportunity && !m_isAfterExpansion) {
@@ -99,7 +124,11 @@ float SimpleShaper::adjustSpacing(float width, const CharacterData& charData)
                 m_runWidthSoFar += m_expansionPerOpportunity;
             }
             if (m_textRun.allowsTrailingExpansion()
+<<<<<<< HEAD
                 || (m_textRun.ltr() && charData.characterOffset + charData.clusterLength < m_textRun.length())
+=======
+                || (m_textRun.ltr() && charData.characterOffset + charData.clusterLength < static_cast<size_t>(m_textRun.length()))
+>>>>>>> miniblink49
                 || (m_textRun.rtl() && charData.characterOffset)) {
                 m_expansion -= m_expansionPerOpportunity;
                 width += m_expansionPerOpportunity;
@@ -113,8 +142,13 @@ float SimpleShaper::adjustSpacing(float width, const CharacterData& charData)
         // We apply additional space between "words" by adding width to the space character.
         if (isExpansionOpportunity && (charData.character != tabulationCharacter || !m_textRun.allowTabs())
             && (charData.characterOffset || charData.character == noBreakSpaceCharacter)
+<<<<<<< HEAD
             && m_font->getFontDescription().wordSpacing()) {
             width += m_font->getFontDescription().wordSpacing();
+=======
+            && m_font->fontDescription().wordSpacing()) {
+            width += m_font->fontDescription().wordSpacing();
+>>>>>>> miniblink49
         }
     } else {
         m_isAfterExpansion = false;
@@ -126,7 +160,11 @@ float SimpleShaper::adjustSpacing(float width, const CharacterData& charData)
 template <typename TextIterator>
 unsigned SimpleShaper::advanceInternal(TextIterator& textIterator, GlyphBuffer* glyphBuffer)
 {
+<<<<<<< HEAD
     bool hasExtraSpacing = (m_font->getFontDescription().letterSpacing() || m_font->getFontDescription().wordSpacing() || m_expansion)
+=======
+    bool hasExtraSpacing = (m_font->fontDescription().letterSpacing() || m_font->fontDescription().wordSpacing() || m_expansion)
+>>>>>>> miniblink49
         && !m_textRun.spacingDisabled();
 
     const SimpleFontData* lastFontData = m_font->primaryFont();
@@ -194,14 +232,24 @@ unsigned SimpleShaper::advanceInternal(TextIterator& textIterator, GlyphBuffer* 
     return consumedCharacters;
 }
 
+<<<<<<< HEAD
 unsigned SimpleShaper::advance(int offset, GlyphBuffer* glyphBuffer)
 {
     int length = m_textRun.length();
+=======
+unsigned SimpleShaper::advance(unsigned offset, GlyphBuffer* glyphBuffer)
+{
+    unsigned length = m_textRun.length();
+>>>>>>> miniblink49
 
     if (offset > length)
         offset = length;
 
+<<<<<<< HEAD
     if (m_currentCharacter >= static_cast<unsigned>(offset))
+=======
+    if (m_currentCharacter >= offset)
+>>>>>>> miniblink49
         return 0;
 
     if (m_textRun.is8Bit()) {

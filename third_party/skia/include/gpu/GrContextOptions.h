@@ -12,6 +12,7 @@
 
 struct GrContextOptions {
     GrContextOptions()
+<<<<<<< HEAD
         : fSuppressPrints(false)
         , fMaxTextureSizeOverride(SK_MaxS32)
         , fMaxTileSizeOverride(0)
@@ -27,6 +28,20 @@ struct GrContextOptions {
         , fDoManualMipmapping(false)
     {
     }
+=======
+        : fDrawPathToCompressedTexture(false)
+        , fSuppressPrints(false)
+        , fMaxTextureSizeOverride(SK_MaxS32)
+        , fMinTextureSizeOverride(0)
+        , fSuppressDualSourceBlending(false)
+        , fGeometryBufferMapThreshold(-1)
+        , fUseDrawInsteadOfPartialRenderTargetWrite(false) {}
+
+    // EXPERIMENTAL
+    // May be removed in the future, or may become standard depending
+    // on the outcomes of a variety of internal tests.
+    bool fDrawPathToCompressedTexture;
+>>>>>>> miniblink49
 
     // Suppress prints for the GrContext.
     bool fSuppressPrints;
@@ -35,15 +50,21 @@ struct GrContextOptions {
         overrides can only reduce the feature set or limits, never increase them beyond the
         detected values. */
 
+<<<<<<< HEAD
     int fMaxTextureSizeOverride;
     /** If non-zero, overrides the maximum size of a tile for sw-backed images and bitmaps rendered
         by SkGpuDevice. */
     int fMaxTileSizeOverride;
+=======
+    int  fMaxTextureSizeOverride;
+    int  fMinTextureSizeOverride;
+>>>>>>> miniblink49
     bool fSuppressDualSourceBlending;
 
     /** the threshold in bytes above which we will use a buffer mapping API to map vertex and index
         buffers to CPU memory in order to update them.  A value of -1 means the GrContext should
         deduce the optimal value for this platform. */
+<<<<<<< HEAD
     int fBufferMapThreshold;
 
     /** some gpus have problems with partial writes of the rendertarget */
@@ -75,6 +96,12 @@ struct GrContextOptions {
         the driver's implementation (glGenerateMipmap) contains bugs. This requires mipmap
         level and LOD control (ie desktop or ES3). */
     bool fDoManualMipmapping;
+=======
+    int  fGeometryBufferMapThreshold;
+
+    /** some gpus have problems with partial writes of the rendertarget */
+    bool fUseDrawInsteadOfPartialRenderTargetWrite;
+>>>>>>> miniblink49
 };
 
 #endif

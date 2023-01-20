@@ -61,11 +61,11 @@ void calculateWebTimingInformations(ResourceHandleInternal* job)
 // libcurl does not implement its own thread synchronization primitives.
 // these two functions provide mutexes for cookies, and for the global DNS
 // cache.
-WTF::RecursiveMutex* sharedResourceMutex(curl_lock_data data)
+WTF::Mutex* sharedResourceMutex(curl_lock_data data)
 {
-    DEFINE_STATIC_LOCAL(RecursiveMutex, cookieMutex, ());
-    DEFINE_STATIC_LOCAL(RecursiveMutex, dnsMutex, ());
-    DEFINE_STATIC_LOCAL(RecursiveMutex, shareMutex, ());
+    DEFINE_STATIC_LOCAL(Mutex, cookieMutex, ());
+    DEFINE_STATIC_LOCAL(Mutex, dnsMutex, ());
+    DEFINE_STATIC_LOCAL(Mutex, shareMutex, ());
 
     switch (data) {
     case CURL_LOCK_DATA_COOKIE:
@@ -82,13 +82,13 @@ WTF::RecursiveMutex* sharedResourceMutex(curl_lock_data data)
 
 void curl_lock_callback(CURL* /* handle */, curl_lock_data data, curl_lock_access /* access */, void* /* userPtr */)
 {
-    if (WTF::RecursiveMutex* mutex = sharedResourceMutex(data))
+    if (WTF::Mutex* mutex = sharedResourceMutex(data))
         mutex->lock();
 }
 
 void curl_unlock_callback(CURL* /* handle */, curl_lock_data data, void* /* userPtr */)
 {
-    if (WTF::RecursiveMutex* mutex = sharedResourceMutex(data))
+    if (WTF::Mutex* mutex = sharedResourceMutex(data))
         mutex->unlock();
 }
 
@@ -124,13 +124,12 @@ bool isAppendableHeader(const String &key) {
     };
 
     // Custom headers start with 'X-', and need no further checking.
-    if (key.startsWith("x-", WTF::TextCaseASCIIInsensitive))
+    if (key.startsWith("x-", WTF::TextCaseInsensitive))
         return true;
 
-    for (unsigned i = 0; appendableHeaders[i]; ++i) {
+    for (unsigned i = 0; appendableHeaders[i]; ++i)
         if (equalIgnoringCase(key, appendableHeaders[i]))
             return true;
-    }
 
     return false;
 }
@@ -178,13 +177,13 @@ public:
         WebURLLoaderInternal* job = (WebURLLoaderInternal*)this;
         int jobId = manager->addLiveJobs(job);
         m_id = jobId;
-        manager->getIoThread(WebURLLoaderManager::kIoThreadTypeOther)->postTask(FROM_HERE, WTF::bind(&GetFaviconTask::getFaviconUrl, jobId, m_webView->getId()));
+        manager->getIoThread()->postTask(FROM_HERE, WTF::bind(&GetFaviconTask::getFaviconUrl, jobId, m_webView->getId()));
         return jobId;
     }
 
     virtual void cancel() override
     {
-        if (wkeIsWebviewValid(m_webView))
+        if (net::ActivatingObjCheck::inst()->isActivating(m_webviewId))
             m_callback(m_webView, m_param, "", nullptr);
     }
 
@@ -198,13 +197,9 @@ private:
 
     static void exit(GetFaviconTask* self, int jobId)
     {
-        if (!WTF::isMainThread()) {
-            blink::Platform::current()->mainThread()->postTask(FROM_HERE, WTF::bind(&GetFaviconTask::exit, WTF::unretained(self), jobId));
-            return;
-        }
         WebURLLoaderManager* manager = WebURLLoaderManager::sharedInstance();
         if (manager)
-           manager->removeLiveJobs(jobId);
+            manager->removeLiveJobs(jobId);
         delete self;
     }
 
@@ -221,8 +216,7 @@ private:
             return;
         }
 
-        if (wkeIsWebviewValid(self->m_webView))
-            self->m_callback(self->m_webView, self->m_param, self->m_url.c_str(), self->m_buf);
+        self->m_callback(self->m_webView, self->m_param, self->m_url.c_str(), self->m_buf);
         exit(self, jobId);
     }
 
@@ -242,8 +236,7 @@ private:
         self->onNetGetFaviconImpl(jobId, webviewId);
     }
 
-    void onNetGetFaviconImpl(int jobId, int webviewId)
-    {
+    void onNetGetFaviconImpl(int jobId, int webviewId) {
         CURL* curl = curl_easy_init();
         if (!curl) {
             blink::Platform::current()->mainThread()->postTask(FROM_HERE, WTF::bind(onNetGetFaviconFinish, jobId, webviewId));
@@ -286,8 +279,7 @@ private:
 
         WebURLLoaderManager* manager = WebURLLoaderManager::sharedInstance();
         if (!manager) {
-            if (wkeIsWebviewValid(self->m_webView))
-                self->m_callback(self->m_webView, self->m_param, "", nullptr);
+            self->m_callback(self->m_webView, self->m_param, "", nullptr);
             exit(self, jobId);
             return;
         }
@@ -300,8 +292,7 @@ private:
         }
 
         if (urls.isEmpty()) {
-            if (wkeIsWebviewValid(self->m_webView))
-                self->m_callback(self->m_webView, self->m_param, "", nullptr);
+            self->m_callback(self->m_webView, self->m_param, "", nullptr);
             exit(self, jobId);
             return;
         }

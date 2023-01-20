@@ -18,6 +18,7 @@
   },
   'targets': [
     {
+<<<<<<< HEAD
       'target_name': 'yasm-win',
       'type': 'executable',
       'sources': [
@@ -29,6 +30,8 @@
       }],
     },
     {
+=======
+>>>>>>> miniblink49
       'target_name': 'libjpeg-turbo',
       'type': 'static_library',
       'include_dirs': [
@@ -44,7 +47,13 @@
       ],
       'msvs_settings': {
         'VCCLCompilerTool': {
+<<<<<<< HEAD
           'WarningLevel': '0',
+=======
+          'AdditionalOptions': [
+            '/w',
+          ],
+>>>>>>> miniblink49
         },
       },
       'xcode_settings': {
@@ -53,8 +62,15 @@
         ],
       },
       'sources': [
+<<<<<<< HEAD
         '../third_party/externals/libjpeg-turbo/jcapimin.c',
         '../third_party/externals/libjpeg-turbo/jcapistd.c',
+=======
+        '../third_party/externals/libjpeg-turbo/jaricom.c',
+        '../third_party/externals/libjpeg-turbo/jcapimin.c',
+        '../third_party/externals/libjpeg-turbo/jcapistd.c',
+        '../third_party/externals/libjpeg-turbo/jcarith.c',
+>>>>>>> miniblink49
         '../third_party/externals/libjpeg-turbo/jccoefct.c',
         '../third_party/externals/libjpeg-turbo/jccolor.c',
         '../third_party/externals/libjpeg-turbo/jcdctmgr.c',
@@ -66,12 +82,20 @@
         '../third_party/externals/libjpeg-turbo/jcmaster.c',
         '../third_party/externals/libjpeg-turbo/jcomapi.c',
         '../third_party/externals/libjpeg-turbo/jconfig.h',
+<<<<<<< HEAD
+=======
+        '../third_party/externals/libjpeg-turbo/jconfigint.h',
+>>>>>>> miniblink49
         '../third_party/externals/libjpeg-turbo/jcparam.c',
         '../third_party/externals/libjpeg-turbo/jcphuff.c',
         '../third_party/externals/libjpeg-turbo/jcprepct.c',
         '../third_party/externals/libjpeg-turbo/jcsample.c',
         '../third_party/externals/libjpeg-turbo/jdapimin.c',
         '../third_party/externals/libjpeg-turbo/jdapistd.c',
+<<<<<<< HEAD
+=======
+        '../third_party/externals/libjpeg-turbo/jdarith.c',
+>>>>>>> miniblink49
         '../third_party/externals/libjpeg-turbo/jdcoefct.c',
         '../third_party/externals/libjpeg-turbo/jdcolor.c',
         '../third_party/externals/libjpeg-turbo/jdct.h',
@@ -102,6 +126,10 @@
         '../third_party/externals/libjpeg-turbo/jmorecfg.h',
         '../third_party/externals/libjpeg-turbo/jpegint.h',
         '../third_party/externals/libjpeg-turbo/jpeglib.h',
+<<<<<<< HEAD
+=======
+        '../third_party/externals/libjpeg-turbo/jpeglibmangler.h',
+>>>>>>> miniblink49
         '../third_party/externals/libjpeg-turbo/jquant1.c',
         '../third_party/externals/libjpeg-turbo/jquant2.c',
         '../third_party/externals/libjpeg-turbo/jutils.c',
@@ -120,6 +148,7 @@
 
       # Add target-specific source files.
       'conditions': [
+<<<<<<< HEAD
         # TODO (msarett): Is it possible to enable cross compiling for Android on other platforms?
         [ 'skia_os == "android" and host_os != "linux" and "x86" in skia_arch_type', {
            'sources': [
@@ -127,13 +156,26 @@
            ],
         }],
         [ 'skia_arch_type == "x86" and (skia_os != "android" or host_os == "linux")', {
+=======
+        # FIXME (msarett): Reenable yasm on Android for x86 and x86_64
+        # https://code.google.com/p/skia/issues/detail?id=4028
+        [ 'skia_os == "android" and "x86" in skia_arch_type', {
+          'sources': [
+            '../third_party/externals/libjpeg-turbo/jsimd_none.c',
+          ],
+        }],
+        [ 'skia_arch_type == "x86" and skia_os != "android"', {
+>>>>>>> miniblink49
           'sources': [
             '../third_party/externals/libjpeg-turbo/simd/jsimd_i386.c',
             '../third_party/externals/libjpeg-turbo/simd/jccolor-mmx.asm',
             '../third_party/externals/libjpeg-turbo/simd/jccolor-sse2.asm',
             '../third_party/externals/libjpeg-turbo/simd/jcgray-mmx.asm',
             '../third_party/externals/libjpeg-turbo/simd/jcgray-sse2.asm',
+<<<<<<< HEAD
             '../third_party/externals/libjpeg-turbo/simd/jchuff-sse2.asm',
+=======
+>>>>>>> miniblink49
             '../third_party/externals/libjpeg-turbo/simd/jcsample-mmx.asm',
             '../third_party/externals/libjpeg-turbo/simd/jcsample-sse2.asm',
             '../third_party/externals/libjpeg-turbo/simd/jdcolor-mmx.asm',
@@ -165,12 +207,19 @@
             '../third_party/externals/libjpeg-turbo/simd/jsimdcpu.asm',
           ],
         }],
+<<<<<<< HEAD
         [ 'skia_arch_type == "x86_64" and (skia_os != "android" or host_os == "linux")', {
+=======
+        [ 'skia_arch_type == "x86_64" and skia_os != "android"', {
+>>>>>>> miniblink49
           'sources': [
             '../third_party/externals/libjpeg-turbo/simd/jsimd_x86_64.c',
             '../third_party/externals/libjpeg-turbo/simd/jccolor-sse2-64.asm',
             '../third_party/externals/libjpeg-turbo/simd/jcgray-sse2-64.asm',
+<<<<<<< HEAD
             '../third_party/externals/libjpeg-turbo/simd/jchuff-sse2-64.asm',
+=======
+>>>>>>> miniblink49
             '../third_party/externals/libjpeg-turbo/simd/jcsample-sse2-64.asm',
             '../third_party/externals/libjpeg-turbo/simd/jdcolor-sse2-64.asm',
             '../third_party/externals/libjpeg-turbo/simd/jdmerge-sse2-64.asm',
@@ -194,7 +243,11 @@
         }],
         [ 'skia_arch_type == "arm"', {
           'conditions': [
+<<<<<<< HEAD
             [ 'arm_version >= 7 and arm_neon == 1', {
+=======
+            [ 'arm_version >= 7 and (arm_neon == 1 or arm_neon_optional == 1)', {
+>>>>>>> miniblink49
               'sources': [
                 '../third_party/externals/libjpeg-turbo/simd/jsimd_arm.c',
                 '../third_party/externals/libjpeg-turbo/simd/jsimd_arm_neon.S',
@@ -206,6 +259,7 @@
             }],
           ],
         }],
+<<<<<<< HEAD
         # mips simd is supported in later versions of libjpeg-turbo.  If we
         # choose to update our copy of libjpeg-turbo we can enable mips simd.
         [ '"mips" in skia_arch_type', {
@@ -227,6 +281,31 @@
           ],
           'variables': {
             'yasm_path': '<(PRODUCT_DIR)/yasm.exe',
+=======
+        [ 'skia_arch_type == "mips"', {
+          'conditions': [
+            [ 'skia_arch_width == 64', {
+              'sources': [
+                '../third_party/externals/libjpeg-turbo/simd/jsimd_mips.c',
+                '../third_party/externals/libjpeg-turbo/simd/jsimd_mips_dspr2_asm.h',
+                '../third_party/externals/libjpeg-turbo/simd/jsimd_mips_dspr2.S',
+              ],
+            }, {
+              'sources': [
+                '../third_party/externals/libjpeg-turbo/jsimd_none.c',
+              ],
+            }],
+          ],
+        }],
+      
+        # Build rules for an asm file.
+        # On Windows, we use the precompiled yasm binary.
+        # On Linux, we build our patched yasm and use it except when use_system_yasm is 1.
+        # On Mac, we always build our patched yasm and use it.
+        [ 'skia_os == "win"', {
+          'variables': {
+            'yasm_path': '../third_party/externals/yasm/binaries/win/yasm.exe',
+>>>>>>> miniblink49
             'conditions': [
               [ 'skia_arch_type == "x86"', {
                 'yasm_format': '-fwin32',
@@ -234,6 +313,10 @@
                   '-D__x86__',
                   '-DWIN32',
                   '-DMSVC',
+<<<<<<< HEAD
+=======
+                  '-Iwin/'
+>>>>>>> miniblink49
                 ],
               }, {
                 'yasm_format': '-fwin64',
@@ -241,11 +324,16 @@
                   '-D__x86_64__',
                   '-DWIN64',
                   '-DMSVC',
+<<<<<<< HEAD
+=======
+                  '-Iwin/'
+>>>>>>> miniblink49
                 ],
               }],
             ],
           },
         }],
+<<<<<<< HEAD
         [ 'skia_os == "android" and host_os == "linux" and \
           (skia_arch_type == "x86" or skia_arch_type == "x86_64")', {
           'dependencies': [
@@ -253,20 +341,33 @@
           ],
           'variables': {
             'yasm_path': '<(PRODUCT_DIR)/yasm',
+=======
+        [ 'skia_os == "android" and (skia_arch_type == "x86" or skia_arch_type == "x86_64")', {
+          'variables': {
+            'yasm_path': '../third_party/yasm/config/android/yasm',
+>>>>>>> miniblink49
             'conditions': [
               [ 'skia_arch_type == "x86"', {
                 'yasm_format': '-felf',
                 'yasm_flags': [
                   '-D__x86__',
                   '-DELF',
+<<<<<<< HEAD
                   '-DPIC',
+=======
+                  '-Ilinux/'
+>>>>>>> miniblink49
                 ],
               }, {
                 'yasm_format': '-felf64',
                 'yasm_flags': [
                   '-D__x86_64__',
                   '-DELF',
+<<<<<<< HEAD
                   '-DPIC',
+=======
+                  '-Ilinux/'
+>>>>>>> miniblink49
                 ],
               }],
             ],
@@ -285,19 +386,31 @@
                 'yasm_flags': [
                   '-D__x86__',
                   '-DMACHO',
+<<<<<<< HEAD
+=======
+                  '-Imac/'
+>>>>>>> miniblink49
                 ],
               }, {
                 'yasm_format': '-fmacho64',
                 'yasm_flags': [
                   '-D__x86_64__',
                   '-DMACHO',
+<<<<<<< HEAD
+=======
+                  '-Imac/'
+>>>>>>> miniblink49
                 ],
               }],
             ],
           },
         }],
         [ '(skia_os == "linux" or skia_os == "freebsd" or skia_os == "openbsd" or \
+<<<<<<< HEAD
             skia_os == "solaris")', {
+=======
+            skia_os == "solaris" or skia_os == "chromeos")', {
+>>>>>>> miniblink49
           'dependencies': [
             'yasm.gyp:yasm#host',
           ],
@@ -309,12 +422,20 @@
                 'yasm_flags': [
                   '-D__x86__',
                   '-DELF',
+<<<<<<< HEAD
+=======
+                  '-Ilinux/'
+>>>>>>> miniblink49
                 ],
               }, {
                 'yasm_format': '-felf64',
                 'yasm_flags': [
                   '-D__x86_64__',
                   '-DELF',
+<<<<<<< HEAD
+=======
+                  '-Ilinux/'
+>>>>>>> miniblink49
                 ],
               }],
             ],
@@ -326,8 +447,12 @@
           'rule_name': 'assemble',
           'extension': 'asm',
           'conditions': [
+<<<<<<< HEAD
             [ '(skia_arch_type == "x86" or skia_arch_type == "x86_64") and \
                (skia_os != "android" or host_os == "linux")', {
+=======
+            [ 'skia_arch_type == "x86" or skia_arch_type == "x86_64"', {
+>>>>>>> miniblink49
               'inputs': [],
               'outputs': [
                 '<(shared_generated_dir)/<(RULE_INPUT_ROOT).<(object_suffix)',

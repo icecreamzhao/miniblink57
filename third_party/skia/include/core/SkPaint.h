@@ -9,16 +9,27 @@
 #define SkPaint_DEFINED
 
 #include "SkColor.h"
+<<<<<<< HEAD
+=======
+#include "SkDrawLooper.h"
+>>>>>>> miniblink49
 #include "SkFilterQuality.h"
 #include "SkMatrix.h"
 #include "SkXfermode.h"
 
+<<<<<<< HEAD
+=======
+class SkAnnotation;
+>>>>>>> miniblink49
 class SkAutoDescriptor;
 class SkAutoGlyphCache;
 class SkColorFilter;
 class SkData;
 class SkDescriptor;
+<<<<<<< HEAD
 class SkDrawLooper;
+=======
+>>>>>>> miniblink49
 class SkReadBuffer;
 class SkWriteBuffer;
 class SkGlyph;
@@ -30,11 +41,22 @@ class SkPath;
 class SkPathEffect;
 struct SkPoint;
 class SkRasterizer;
+<<<<<<< HEAD
 struct SkScalerContextEffects;
+=======
+>>>>>>> miniblink49
 class SkShader;
 class SkSurfaceProps;
 class SkTypeface;
 
+<<<<<<< HEAD
+=======
+typedef const SkGlyph& (*SkDrawCacheProc)(SkGlyphCache*, const char**,
+                                           SkFixed x, SkFixed y);
+
+typedef const SkGlyph& (*SkMeasureCacheProc)(SkGlyphCache*, const char**);
+
+>>>>>>> miniblink49
 #define kBicubicFilterBitmap_Flag kHighQualityFilterBitmap_Flag
 
 /** \class SkPaint
@@ -42,23 +64,37 @@ class SkTypeface;
     The SkPaint class holds the style and color information about how to draw
     geometries, text and bitmaps.
 */
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 class SK_API SkPaint {
 public:
     SkPaint();
     SkPaint(const SkPaint& paint);
+<<<<<<< HEAD
     SkPaint(SkPaint&& paint);
     ~SkPaint();
 
     SkPaint& operator=(const SkPaint&);
     SkPaint& operator=(SkPaint&&);
+=======
+    ~SkPaint();
+
+    SkPaint& operator=(const SkPaint&);
+>>>>>>> miniblink49
 
     /** operator== may give false negatives: two paints that draw equivalently
         may return false.  It will never give false positives: two paints that
         are not equivalent always return false.
     */
     SK_API friend bool operator==(const SkPaint& a, const SkPaint& b);
+<<<<<<< HEAD
     friend bool operator!=(const SkPaint& a, const SkPaint& b)
     {
+=======
+    friend bool operator!=(const SkPaint& a, const SkPaint& b) {
+>>>>>>> miniblink49
         return !(a == b);
     }
 
@@ -85,6 +121,7 @@ public:
                               TARGET_LCD_V is used>
     */
     enum Hinting {
+<<<<<<< HEAD
         kNo_Hinting = 0,
         kSlight_Hinting = 1,
         kNormal_Hinting = 2, //!< this is the default
@@ -93,6 +130,15 @@ public:
 
     Hinting getHinting() const
     {
+=======
+        kNo_Hinting            = 0,
+        kSlight_Hinting        = 1,
+        kNormal_Hinting        = 2,     //!< this is the default
+        kFull_Hinting          = 3
+    };
+
+    Hinting getHinting() const {
+>>>>>>> miniblink49
         return static_cast<Hinting>(fBitfields.fHinting);
     }
 
@@ -101,6 +147,7 @@ public:
     /** Specifies the bit values that are stored in the paint's flags.
     */
     enum Flags {
+<<<<<<< HEAD
         kAntiAlias_Flag = 0x01, //!< mask to enable antialiasing
         kDither_Flag = 0x04, //!< mask to enable dithering
         kUnderlineText_Flag = 0x08, //!< mask to enable underline text
@@ -114,6 +161,21 @@ public:
         kAutoHinting_Flag = 0x800, //!< mask to force Freetype's autohinter
         kVerticalText_Flag = 0x1000,
         kGenA8FromLCD_Flag = 0x2000, // hack for GDI -- do not use if you can help it
+=======
+        kAntiAlias_Flag       = 0x01,   //!< mask to enable antialiasing
+        kDither_Flag          = 0x04,   //!< mask to enable dithering
+        kUnderlineText_Flag   = 0x08,   //!< mask to enable underline text
+        kStrikeThruText_Flag  = 0x10,   //!< mask to enable strike-thru text
+        kFakeBoldText_Flag    = 0x20,   //!< mask to enable fake-bold text
+        kLinearText_Flag      = 0x40,   //!< mask to enable linear-text
+        kSubpixelText_Flag    = 0x80,   //!< mask to enable subpixel text positioning
+        kDevKernText_Flag     = 0x100,  //!< mask to enable device kerning text
+        kLCDRenderText_Flag   = 0x200,  //!< mask to enable subpixel glyph renderering
+        kEmbeddedBitmapText_Flag = 0x400, //!< mask to enable embedded bitmap strikes
+        kAutoHinting_Flag     = 0x800,  //!< mask to force Freetype's autohinter
+        kVerticalText_Flag    = 0x1000,
+        kGenA8FromLCD_Flag    = 0x2000, // hack for GDI -- do not use if you can help it
+>>>>>>> miniblink49
         // when adding extra flags, note that the fFlags member is specified
         // with a bit-width and you'll have to expand it.
 
@@ -133,8 +195,12 @@ public:
     /** Helper for getFlags(), returning true if kAntiAlias_Flag bit is set
         @return true if the antialias bit is set in the paint's flags.
         */
+<<<<<<< HEAD
     bool isAntiAlias() const
     {
+=======
+    bool isAntiAlias() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kAntiAlias_Flag);
     }
 
@@ -146,8 +212,12 @@ public:
     /** Helper for getFlags(), returning true if kDither_Flag bit is set
         @return true if the dithering bit is set in the paint's flags.
         */
+<<<<<<< HEAD
     bool isDither() const
     {
+=======
+    bool isDither() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kDither_Flag);
     }
 
@@ -159,8 +229,12 @@ public:
     /** Helper for getFlags(), returning true if kLinearText_Flag bit is set
         @return true if the lineartext bit is set in the paint's flags
     */
+<<<<<<< HEAD
     bool isLinearText() const
     {
+=======
+    bool isLinearText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kLinearText_Flag);
     }
 
@@ -173,8 +247,12 @@ public:
     /** Helper for getFlags(), returning true if kSubpixelText_Flag bit is set
         @return true if the lineartext bit is set in the paint's flags
     */
+<<<<<<< HEAD
     bool isSubpixelText() const
     {
+=======
+    bool isSubpixelText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kSubpixelText_Flag);
     }
 
@@ -185,8 +263,12 @@ public:
      */
     void setSubpixelText(bool subpixelText);
 
+<<<<<<< HEAD
     bool isLCDRenderText() const
     {
+=======
+    bool isLCDRenderText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kLCDRenderText_Flag);
     }
 
@@ -198,8 +280,12 @@ public:
      */
     void setLCDRenderText(bool lcdText);
 
+<<<<<<< HEAD
     bool isEmbeddedBitmapText() const
     {
+=======
+    bool isEmbeddedBitmapText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kEmbeddedBitmapText_Flag);
     }
 
@@ -209,8 +295,12 @@ public:
     */
     void setEmbeddedBitmapText(bool useEmbeddedBitmapText);
 
+<<<<<<< HEAD
     bool isAutohinted() const
     {
+=======
+    bool isAutohinted() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kAutoHinting_Flag);
     }
 
@@ -221,8 +311,12 @@ public:
     */
     void setAutohinted(bool useAutohinter);
 
+<<<<<<< HEAD
     bool isVerticalText() const
     {
+=======
+    bool isVerticalText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kVerticalText_Flag);
     }
 
@@ -239,8 +333,12 @@ public:
     /** Helper for getFlags(), returning true if kUnderlineText_Flag bit is set
         @return true if the underlineText bit is set in the paint's flags.
     */
+<<<<<<< HEAD
     bool isUnderlineText() const
     {
+=======
+    bool isUnderlineText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kUnderlineText_Flag);
     }
 
@@ -253,8 +351,12 @@ public:
     /** Helper for getFlags(), returns true if kStrikeThruText_Flag bit is set
         @return true if the strikeThruText bit is set in the paint's flags.
     */
+<<<<<<< HEAD
     bool isStrikeThruText() const
     {
+=======
+    bool isStrikeThruText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kStrikeThruText_Flag);
     }
 
@@ -267,8 +369,12 @@ public:
     /** Helper for getFlags(), returns true if kFakeBoldText_Flag bit is set
         @return true if the kFakeBoldText_Flag bit is set in the paint's flags.
     */
+<<<<<<< HEAD
     bool isFakeBoldText() const
     {
+=======
+    bool isFakeBoldText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kFakeBoldText_Flag);
     }
 
@@ -281,8 +387,12 @@ public:
     /** Helper for getFlags(), returns true if kDevKernText_Flag bit is set
         @return true if the kernText bit is set in the paint's flags.
     */
+<<<<<<< HEAD
     bool isDevKernText() const
     {
+=======
+    bool isDevKernText() const {
+>>>>>>> miniblink49
         return SkToBool(this->getFlags() & kDevKernText_Flag);
     }
 
@@ -296,11 +406,18 @@ public:
      *  Return the filter level. This affects the quality (and performance) of
      *  drawing scaled images.
      */
+<<<<<<< HEAD
     SkFilterQuality getFilterQuality() const
     {
         return (SkFilterQuality)fBitfields.fFilterQuality;
     }
 
+=======
+    SkFilterQuality getFilterQuality() const {
+        return (SkFilterQuality)fBitfields.fFilterQuality;
+    }
+    
+>>>>>>> miniblink49
     /**
      *  Set the filter quality. This affects the quality (and performance) of
      *  drawing scaled images.
@@ -317,9 +434,15 @@ public:
         then stroked.
     */
     enum Style {
+<<<<<<< HEAD
         kFill_Style, //!< fill the geometry
         kStroke_Style, //!< stroke the geometry
         kStrokeAndFill_Style, //!< fill and stroke the geometry
+=======
+        kFill_Style,            //!< fill the geometry
+        kStroke_Style,          //!< stroke the geometry
+        kStrokeAndFill_Style,   //!< fill and stroke the geometry
+>>>>>>> miniblink49
     };
     enum {
         kStyleCount = kStrokeAndFill_Style + 1
@@ -409,6 +532,7 @@ public:
     /** Cap enum specifies the settings for the paint's strokecap. This is the
         treatment that is applied to the beginning and end of each non-closed
         contour (e.g. lines).
+<<<<<<< HEAD
 
         If the cap is round or square, the caps are drawn when the contour has
         a zero length. Zero length contours can be created by following moveTo
@@ -423,6 +547,13 @@ public:
         kButt_Cap, //!< begin/end contours with no extension
         kRound_Cap, //!< begin/end contours with a semi-circle extension
         kSquare_Cap, //!< begin/end contours with a half square extension
+=======
+    */
+    enum Cap {
+        kButt_Cap,      //!< begin/end contours with no extension
+        kRound_Cap,     //!< begin/end contours with a semi-circle extension
+        kSquare_Cap,    //!< begin/end contours with a half square extension
+>>>>>>> miniblink49
 
         kCapCount,
         kDefault_Cap = kButt_Cap
@@ -432,9 +563,15 @@ public:
         the treatment that is applied to corners in paths and rectangles.
     */
     enum Join {
+<<<<<<< HEAD
         kMiter_Join, //!< connect path segments with a sharp join
         kRound_Join, //!< connect path segments with a round join
         kBevel_Join, //!< connect path segments with a flat bevel join
+=======
+        kMiter_Join,    //!< connect path segments with a sharp join
+        kRound_Join,    //!< connect path segments with a round join
+        kBevel_Join,    //!< connect path segments with a flat bevel join
+>>>>>>> miniblink49
 
         kJoinCount,
         kDefault_Join = kMiter_Join
@@ -480,10 +617,16 @@ public:
      *              drawn with a hairline (width == 0)
      */
     bool getFillPath(const SkPath& src, SkPath* dst, const SkRect* cullRect,
+<<<<<<< HEAD
         SkScalar resScale = 1) const;
 
     bool getFillPath(const SkPath& src, SkPath* dst) const
     {
+=======
+                     SkScalar resScale = 1) const;
+
+    bool getFillPath(const SkPath& src, SkPath* dst) const {
+>>>>>>> miniblink49
         return this->getFillPath(src, dst, NULL, 1);
     }
 
@@ -492,7 +635,11 @@ public:
       The shader's reference count is not affected.
         @return the paint's shader (or NULL)
     */
+<<<<<<< HEAD
     SkShader* getShader() const { return fShader.get(); }
+=======
+    SkShader* getShader() const { return fShader; }
+>>>>>>> miniblink49
 
     /** Set or clear the shader object.
      *  Shaders specify the source color(s) for what is being drawn. If a paint
@@ -515,16 +662,24 @@ public:
      *  @param shader   May be NULL. The shader to be installed in the paint
      *  @return         shader
      */
+<<<<<<< HEAD
     void setShader(sk_sp<SkShader>);
 #ifdef SK_SUPPORT_LEGACY_CREATESHADER_PTR
     SkShader* setShader(SkShader* shader);
 #endif
+=======
+    SkShader* setShader(SkShader* shader);
+>>>>>>> miniblink49
 
     /** Get the paint's colorfilter. If there is a colorfilter, its reference
         count is not changed.
         @return the paint's colorfilter (or NULL)
     */
+<<<<<<< HEAD
     SkColorFilter* getColorFilter() const { return fColorFilter.get(); }
+=======
+    SkColorFilter* getColorFilter() const { return fColorFilter; }
+>>>>>>> miniblink49
 
     /** Set or clear the paint's colorfilter, returning the parameter.
         <p />
@@ -533,17 +688,25 @@ public:
         @param filter   May be NULL. The filter to be installed in the paint
         @return         filter
     */
+<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_COLORFILTER_PTR
     SkColorFilter* setColorFilter(SkColorFilter* filter);
 #endif
     void setColorFilter(sk_sp<SkColorFilter>);
+=======
+    SkColorFilter* setColorFilter(SkColorFilter* filter);
+>>>>>>> miniblink49
 
     /** Get the paint's xfermode object.
         <p />
       The xfermode's reference count is not affected.
         @return the paint's xfermode (or NULL)
     */
+<<<<<<< HEAD
     SkXfermode* getXfermode() const { return fXfermode.get(); }
+=======
+    SkXfermode* getXfermode() const { return fXfermode; }
+>>>>>>> miniblink49
 
     /** Set or clear the xfermode object.
         <p />
@@ -555,10 +718,14 @@ public:
                         paint
         @return         xfermode
     */
+<<<<<<< HEAD
     void setXfermode(sk_sp<SkXfermode>);
 #ifdef SK_SUPPORT_LEGACY_XFERMODE_PTR
     SkXfermode* setXfermode(SkXfermode* xfermode);
 #endif
+=======
+    SkXfermode* setXfermode(SkXfermode* xfermode);
+>>>>>>> miniblink49
 
     /** Create an xfermode based on the specified Mode, and assign it into the
         paint, returning the mode that was set. If the Mode is SrcOver, then
@@ -566,16 +733,23 @@ public:
      */
     SkXfermode* setXfermodeMode(SkXfermode::Mode);
 
+<<<<<<< HEAD
     SkBlendMode getBlendMode() const;
     bool isSrcOver() const;
     void setBlendMode(SkBlendMode mode);
 
+=======
+>>>>>>> miniblink49
     /** Get the paint's patheffect object.
         <p />
       The patheffect reference count is not affected.
         @return the paint's patheffect (or NULL)
     */
+<<<<<<< HEAD
     SkPathEffect* getPathEffect() const { return fPathEffect.get(); }
+=======
+    SkPathEffect* getPathEffect() const { return fPathEffect; }
+>>>>>>> miniblink49
 
     /** Set or clear the patheffect object.
         <p />
@@ -587,17 +761,25 @@ public:
                         paint
         @return         effect
     */
+<<<<<<< HEAD
     void setPathEffect(sk_sp<SkPathEffect>);
 #ifdef SK_SUPPORT_LEGACY_PATHEFFECT_PTR
     SkPathEffect* setPathEffect(SkPathEffect* effect);
 #endif
+=======
+    SkPathEffect* setPathEffect(SkPathEffect* effect);
+>>>>>>> miniblink49
 
     /** Get the paint's maskfilter object.
         <p />
       The maskfilter reference count is not affected.
         @return the paint's maskfilter (or NULL)
     */
+<<<<<<< HEAD
     SkMaskFilter* getMaskFilter() const { return fMaskFilter.get(); }
+=======
+    SkMaskFilter* getMaskFilter() const { return fMaskFilter; }
+>>>>>>> miniblink49
 
     /** Set or clear the maskfilter object.
         <p />
@@ -609,10 +791,14 @@ public:
                             the paint
         @return             maskfilter
     */
+<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_MASKFILTER_PTR
     SkMaskFilter* setMaskFilter(SkMaskFilter* maskfilter);
 #endif
     void setMaskFilter(sk_sp<SkMaskFilter>);
+=======
+    SkMaskFilter* setMaskFilter(SkMaskFilter* maskfilter);
+>>>>>>> miniblink49
 
     // These attributes are for text/fonts
 
@@ -622,7 +808,11 @@ public:
         measuring text. The typeface reference count is not affected.
         @return the paint's typeface (or NULL)
     */
+<<<<<<< HEAD
     SkTypeface* getTypeface() const { return fTypeface.get(); }
+=======
+    SkTypeface* getTypeface() const { return fTypeface; }
+>>>>>>> miniblink49
 
     /** Set or clear the typeface object.
         <p />
@@ -634,17 +824,25 @@ public:
                         paint
         @return         typeface
     */
+<<<<<<< HEAD
     void setTypeface(sk_sp<SkTypeface>);
 #ifdef SK_SUPPORT_LEGACY_TYPEFACE_PTR
     SkTypeface* setTypeface(SkTypeface* typeface);
 #endif
+=======
+    SkTypeface* setTypeface(SkTypeface* typeface);
+>>>>>>> miniblink49
 
     /** Get the paint's rasterizer (or NULL).
         <p />
         The raster controls how paths/text are turned into alpha masks.
         @return the paint's rasterizer (or NULL)
     */
+<<<<<<< HEAD
     SkRasterizer* getRasterizer() const { return fRasterizer.get(); }
+=======
+    SkRasterizer* getRasterizer() const { return fRasterizer; }
+>>>>>>> miniblink49
 
     /** Set or clear the rasterizer object.
         <p />
@@ -657,6 +855,7 @@ public:
                           the paint.
         @return           rasterizer
     */
+<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_MINOR_EFFECT_PTR
     SkRasterizer* setRasterizer(SkRasterizer* rasterizer);
 #endif
@@ -665,12 +864,32 @@ public:
     SkImageFilter* getImageFilter() const { return fImageFilter.get(); }
     SkImageFilter* setImageFilter(SkImageFilter*);
     void setImageFilter(sk_sp<SkImageFilter>);
+=======
+    SkRasterizer* setRasterizer(SkRasterizer* rasterizer);
+
+    SkImageFilter* getImageFilter() const { return fImageFilter; }
+    SkImageFilter* setImageFilter(SkImageFilter*);
+
+    SkAnnotation* getAnnotation() const { return fAnnotation; }
+    SkAnnotation* setAnnotation(SkAnnotation*);
+
+    /**
+     *  Returns true if there is an annotation installed on this paint, and
+     *  the annotation specifics no-drawing.
+     */
+    SK_ATTR_DEPRECATED("use getAnnotation and check for non-null")
+    bool isNoDrawAnnotation() const { return this->getAnnotation() != NULL; }
+>>>>>>> miniblink49
 
     /**
      *  Return the paint's SkDrawLooper (if any). Does not affect the looper's
      *  reference count.
      */
+<<<<<<< HEAD
     SkDrawLooper* getLooper() const { return fLooper.get(); }
+=======
+    SkDrawLooper* getLooper() const { return fLooper; }
+>>>>>>> miniblink49
 
     /**
      *  Set or clear the looper object.
@@ -683,10 +902,14 @@ public:
      *  @param looper May be NULL. The new looper to be installed in the paint.
      *  @return looper
      */
+<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_MINOR_EFFECT_PTR
     SkDrawLooper* setLooper(SkDrawLooper* looper);
 #endif
     void setLooper(sk_sp<SkDrawLooper>);
+=======
+    SkDrawLooper* setLooper(SkDrawLooper* looper);
+>>>>>>> miniblink49
 
     enum Align {
         kLeft_Align,
@@ -700,12 +923,20 @@ public:
     /** Return the paint's Align value for drawing text.
         @return the paint's Align value for drawing text.
     */
+<<<<<<< HEAD
     Align getTextAlign() const { return (Align)fBitfields.fTextAlign; }
+=======
+    Align   getTextAlign() const { return (Align)fBitfields.fTextAlign; }
+>>>>>>> miniblink49
 
     /** Set the paint's text alignment.
         @param align set the paint's Align value for drawing text.
     */
+<<<<<<< HEAD
     void setTextAlign(Align align);
+=======
+    void    setTextAlign(Align align);
+>>>>>>> miniblink49
 
     /** Return the paint's text size.
         @return the paint's text size.
@@ -747,6 +978,7 @@ public:
         methods like measureText() and getTextWidths().
     */
     enum TextEncoding {
+<<<<<<< HEAD
         kUTF8_TextEncoding, //!< the text parameters are UTF8
         kUTF16_TextEncoding, //!< the text parameters are UTF16
         kUTF32_TextEncoding, //!< the text parameters are UTF32
@@ -756,6 +988,16 @@ public:
     TextEncoding getTextEncoding() const
     {
         return (TextEncoding)fBitfields.fTextEncoding;
+=======
+        kUTF8_TextEncoding,     //!< the text parameters are UTF8
+        kUTF16_TextEncoding,    //!< the text parameters are UTF16
+        kUTF32_TextEncoding,    //!< the text parameters are UTF32
+        kGlyphID_TextEncoding   //!< the text parameters are glyph indices
+    };
+
+    TextEncoding getTextEncoding() const {
+      return (TextEncoding)fBitfields.fTextEncoding;
+>>>>>>> miniblink49
     }
 
     void setTextEncoding(TextEncoding encoding);
@@ -769,6 +1011,7 @@ public:
             kUnderlinePositionIsValid_Flag = 1 << 1,
         };
 
+<<<<<<< HEAD
         uint32_t fFlags; //!< Bit field to identify which values are unknown
         SkScalar fTop; //!< The greatest distance above the baseline for any glyph (will be <= 0)
         SkScalar fAscent; //!< The recommended distance above the baseline (will be <= 0)
@@ -782,6 +1025,21 @@ public:
         SkScalar fXHeight; //!< The height of an 'x' in px, or 0 if no 'x' in face
         SkScalar fCapHeight; //!< The cap height (> 0), or 0 if cannot be determined.
         SkScalar fUnderlineThickness; //!< underline thickness, or 0 if cannot be determined
+=======
+        uint32_t    fFlags;       //!< Bit field to identify which values are unknown
+        SkScalar    fTop;       //!< The greatest distance above the baseline for any glyph (will be <= 0)
+        SkScalar    fAscent;    //!< The recommended distance above the baseline (will be <= 0)
+        SkScalar    fDescent;   //!< The recommended distance below the baseline (will be >= 0)
+        SkScalar    fBottom;    //!< The greatest distance below the baseline for any glyph (will be >= 0)
+        SkScalar    fLeading;   //!< The recommended distance to add between lines of text (will be >= 0)
+        SkScalar    fAvgCharWidth;  //!< the average character width (>= 0)
+        SkScalar    fMaxCharWidth;  //!< the max character width (>= 0)
+        SkScalar    fXMin;      //!< The minimum bounding box x value for all glyphs
+        SkScalar    fXMax;      //!< The maximum bounding box x value for all glyphs
+        SkScalar    fXHeight;   //!< The height of an 'x' in px, or 0 if no 'x' in face
+        SkScalar    fCapHeight;  //!< The cap height (> 0), or 0 if cannot be determined.
+        SkScalar    fUnderlineThickness; //!< underline thickness, or 0 if cannot be determined
+>>>>>>> miniblink49
 
         /**  Underline Position - position of the top of the Underline stroke
                 relative to the baseline, this can have following values
@@ -789,14 +1047,22 @@ public:
                 - Positive - means below baseline.
                 - Zero     - mean underline should be drawn on baseline.
          */
+<<<<<<< HEAD
         SkScalar fUnderlinePosition; //!< underline position, or 0 if cannot be determined
+=======
+        SkScalar    fUnderlinePosition; //!< underline position, or 0 if cannot be determined
+>>>>>>> miniblink49
 
         /**  If the fontmetrics has a valid underlinethickness, return true, and set the
                 thickness param to that value. If it doesn't return false and ignore the
                 thickness param.
         */
+<<<<<<< HEAD
         bool hasUnderlineThickness(SkScalar* thickness) const
         {
+=======
+        bool hasUnderlineThickness(SkScalar* thickness) const {
+>>>>>>> miniblink49
             if (SkToBool(fFlags & kUnderlineThinknessIsValid_Flag)) {
                 *thickness = fUnderlineThickness;
                 return true;
@@ -808,14 +1074,22 @@ public:
                 thickness param to that value. If it doesn't return false and ignore the
                 thickness param.
         */
+<<<<<<< HEAD
         bool hasUnderlinePosition(SkScalar* position) const
         {
+=======
+        bool hasUnderlinePosition(SkScalar* position) const {
+>>>>>>> miniblink49
             if (SkToBool(fFlags & kUnderlinePositionIsValid_Flag)) {
                 *position = fUnderlinePosition;
                 return true;
             }
             return false;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     };
 
     /** Return the recommend spacing between lines (which will be
@@ -841,7 +1115,11 @@ public:
         is returned.
     */
     int textToGlyphs(const void* text, size_t byteLength,
+<<<<<<< HEAD
         uint16_t glyphs[]) const;
+=======
+                     uint16_t glyphs[]) const;
+>>>>>>> miniblink49
 
     /** Return true if all of the specified text has a corresponding non-zero
         glyph ID. If any of the code-points in the text are not supported in
@@ -863,8 +1141,12 @@ public:
         want to have the text converted into glyph IDs, call textToGlyphs
         instead.
     */
+<<<<<<< HEAD
     int countText(const void* text, size_t byteLength) const
     {
+=======
+    int countText(const void* text, size_t byteLength) const {
+>>>>>>> miniblink49
         return this->textToGlyphs(text, byteLength, NULL);
     }
 
@@ -888,8 +1170,12 @@ public:
      *  @param length   Number of bytes of text to measure
      *  @return         The advance width of the text
      */
+<<<<<<< HEAD
     SkScalar measureText(const void* text, size_t length) const
     {
+=======
+    SkScalar measureText(const void* text, size_t length) const {
+>>>>>>> miniblink49
         return this->measureText(text, length, NULL);
     }
 
@@ -906,8 +1192,13 @@ public:
      *  @return         The number of bytes of text that were measured. Will be
      *                  <= length.
      */
+<<<<<<< HEAD
     size_t breakText(const void* text, size_t length, SkScalar maxWidth,
         SkScalar* measuredWidth = NULL) const;
+=======
+    size_t  breakText(const void* text, size_t length, SkScalar maxWidth,
+                      SkScalar* measuredWidth = NULL) const;
+>>>>>>> miniblink49
 
     /** Return the advances for the text. These will be vertical advances if
      *  isVerticalText() returns true.
@@ -922,6 +1213,7 @@ public:
      *  @return the number of unichars in the specified text.
      */
     int getTextWidths(const void* text, size_t byteLength, SkScalar widths[],
+<<<<<<< HEAD
         SkRect bounds[] = NULL) const;
 
     /** Return the path (outline) for the specified text.
@@ -985,6 +1277,19 @@ public:
      */
     int getPosTextIntercepts(const void* text, size_t length, const SkPoint pos[],
         const SkScalar bounds[2], SkScalar* intervals) const;
+=======
+                      SkRect bounds[] = NULL) const;
+
+    /** Return the path (outline) for the specified text.
+        Note: just like SkCanvas::drawText, this will respect the Align setting
+              in the paint.
+    */
+    void getTextPath(const void* text, size_t length, SkScalar x, SkScalar y,
+                     SkPath* path) const;
+
+    void getPosTextPath(const void* text, size_t length,
+                        const SkPoint pos[], SkPath* path) const;
+>>>>>>> miniblink49
 
     /**
      *  Return a rectangle that represents the union of the bounds of all
@@ -1005,7 +1310,16 @@ public:
      bounds (i.e. there is nothing complex like a patheffect that would make
      the bounds computation expensive.
      */
+<<<<<<< HEAD
     bool canComputeFastBounds() const;
+=======
+    bool canComputeFastBounds() const {
+        if (this->getLooper()) {
+            return this->getLooper()->canComputeFastBounds(*this);
+        }
+        return !this->getRasterizer();
+    }
+>>>>>>> miniblink49
 
     /** Only call this if canComputeFastBounds() returned true. This takes a
      raw rectangle (the raw bounds of a shape), and adjusts it for stylistic
@@ -1028,8 +1342,12 @@ public:
      }
      }
      */
+<<<<<<< HEAD
     const SkRect& computeFastBounds(const SkRect& orig, SkRect* storage) const
     {
+=======
+    const SkRect& computeFastBounds(const SkRect& orig, SkRect* storage) const {
+>>>>>>> miniblink49
         SkPaint::Style style = this->getStyle();
         // ultra fast-case: filling with no effects that affect geometry
         if (kFill_Style == style) {
@@ -1046,22 +1364,34 @@ public:
     }
 
     const SkRect& computeFastStrokeBounds(const SkRect& orig,
+<<<<<<< HEAD
         SkRect* storage) const
     {
+=======
+                                          SkRect* storage) const {
+>>>>>>> miniblink49
         return this->doComputeFastBounds(orig, storage, kStroke_Style);
     }
 
     // Take the style explicitly, so the caller can force us to be stroked
     // without having to make a copy of the paint just to change that field.
     const SkRect& doComputeFastBounds(const SkRect& orig, SkRect* storage,
+<<<<<<< HEAD
         Style) const;
+=======
+                                      Style) const;
+>>>>>>> miniblink49
 
     /**
      *  Return a matrix that applies the paint's text values: size, scale, skew
      */
     static SkMatrix* SetTextMatrix(SkMatrix* matrix, SkScalar size,
+<<<<<<< HEAD
         SkScalar scaleX, SkScalar skewX)
     {
+=======
+                                   SkScalar scaleX, SkScalar skewX) {
+>>>>>>> miniblink49
         matrix->setScale(size * scaleX, size);
         if (skewX) {
             matrix->postSkew(skewX, 0);
@@ -1069,6 +1399,7 @@ public:
         return matrix;
     }
 
+<<<<<<< HEAD
     SkMatrix* setTextMatrix(SkMatrix* matrix) const
     {
         return SetTextMatrix(matrix, fTextSize, fTextScaleX, fTextSkewX);
@@ -1106,11 +1437,49 @@ private:
             unsigned fTextEncoding : 2; // 3 values
             unsigned fHinting : 2;
             unsigned fFilterQuality : 2;
+=======
+    SkMatrix* setTextMatrix(SkMatrix* matrix) const {
+        return SetTextMatrix(matrix, fTextSize, fTextScaleX, fTextSkewX);
+    }
+
+    SK_TO_STRING_NONVIRT()
+
+private:
+    SkTypeface*     fTypeface;
+    SkPathEffect*   fPathEffect;
+    SkShader*       fShader;
+    SkXfermode*     fXfermode;
+    SkMaskFilter*   fMaskFilter;
+    SkColorFilter*  fColorFilter;
+    SkRasterizer*   fRasterizer;
+    SkDrawLooper*   fLooper;
+    SkImageFilter*  fImageFilter;
+    SkAnnotation*   fAnnotation;
+
+    SkScalar        fTextSize;
+    SkScalar        fTextScaleX;
+    SkScalar        fTextSkewX;
+    SkColor         fColor;
+    SkScalar        fWidth;
+    SkScalar        fMiterLimit;
+    union {
+        struct {
+            // all of these bitfields should add up to 32
+            unsigned        fFlags : 16;
+            unsigned        fTextAlign : 2;
+            unsigned        fCapType : 2;
+            unsigned        fJoinType : 2;
+            unsigned        fStyle : 2;
+            unsigned        fTextEncoding : 2;  // 3 values
+            unsigned        fHinting : 2;
+            unsigned        fFilterQuality : 2;
+>>>>>>> miniblink49
             //unsigned      fFreeBits : 2;
         } fBitfields;
         uint32_t fBitfieldsUInt;
     };
 
+<<<<<<< HEAD
     GlyphCacheProc getGlyphCacheProc(bool needFullMetrics) const;
 
     SkScalar measure_text(SkGlyphCache*, const char* text, size_t length,
@@ -1124,11 +1493,19 @@ private:
 
         kFakeGammaAndBoostContrast_ScalerContextFlags = kFakeGamma_ScalerContextFlag | kBoostContrast_ScalerContextFlag,
     };
+=======
+    SkDrawCacheProc    getDrawCacheProc() const;
+    SkMeasureCacheProc getMeasureCacheProc(bool needFullMetrics) const;
+
+    SkScalar measure_text(SkGlyphCache*, const char* text, size_t length,
+                          int* count, SkRect* bounds) const;
+>>>>>>> miniblink49
 
     /*
      * Allocs an SkDescriptor on the heap and return it to the caller as a refcnted
      * SkData.  Caller is responsible for managing the lifetime of this object.
      */
+<<<<<<< HEAD
     void getScalerContextDescriptor(SkScalerContextEffects*, SkAutoDescriptor*,
         const SkSurfaceProps& surfaceProps,
         uint32_t scalerContextFlags, const SkMatrix*) const;
@@ -1141,6 +1518,17 @@ private:
         void (*proc)(SkTypeface*, const SkScalerContextEffects&,
             const SkDescriptor*, void*),
         void* context) const;
+=======
+    void getScalerContextDescriptor(SkAutoDescriptor*, const SkSurfaceProps& surfaceProps,
+                                    const SkMatrix*, bool ignoreGamma) const;
+
+    SkGlyphCache* detachCache(const SkSurfaceProps* surfaceProps, const SkMatrix*,
+                              bool ignoreGamma) const;
+
+    void descriptorProc(const SkSurfaceProps* surfaceProps, const SkMatrix* deviceMatrix,
+                        void (*proc)(SkTypeface*, const SkDescriptor*, void*),
+                        void* context, bool ignoreGamma) const;
+>>>>>>> miniblink49
 
     /*
      * The luminance color is used to determine which Gamma Canonical color to map to.  This is
@@ -1149,6 +1537,11 @@ private:
      */
     SkColor computeLuminanceColor() const;
 
+<<<<<<< HEAD
+=======
+    static void Term();
+
+>>>>>>> miniblink49
     enum {
         /*  This is the size we use when we ask for a glyph's path. We then
          *  post-transform it as we draw to match the request.
@@ -1164,14 +1557,22 @@ private:
          *  constraints, but since we ask for unhinted paths, the two values
          *  need not match per-se.
          */
+<<<<<<< HEAD
         kCanonicalTextSizeForPaths = 64,
+=======
+        kCanonicalTextSizeForPaths  = 64,
+>>>>>>> miniblink49
 
         /*
          *  Above this size (taking into account CTM and textSize), we never use
          *  the cache for bits or metrics (we might overflow), so we just ask
          *  for a caononical size and post-transform that.
          */
+<<<<<<< HEAD
         kMaxSizeForGlyphCache = 256,
+=======
+        kMaxSizeForGlyphCache       = 256,
+>>>>>>> miniblink49
     };
 
     static bool TooBigToUseCache(const SkMatrix& ctm, const SkMatrix& textM);
@@ -1181,8 +1582,12 @@ private:
     // have change it to kCanonicalTextSizeForPaths.
     SkScalar setupForAsPaths();
 
+<<<<<<< HEAD
     static SkScalar MaxCacheSize2()
     {
+=======
+    static SkScalar MaxCacheSize2() {
+>>>>>>> miniblink49
         static const SkScalar kMaxSize = SkIntToScalar(kMaxSizeForGlyphCache);
         static const SkScalar kMag2Max = kMaxSize * kMaxSize;
         return kMag2Max;
@@ -1192,6 +1597,7 @@ private:
     friend class SkAutoGlyphCacheNoGamma;
     friend class SkCanvas;
     friend class SkDraw;
+<<<<<<< HEAD
     friend class SkPDFDevice;
     friend class GrAtlasTextBlob;
     friend class GrAtlasTextContext;
@@ -1201,6 +1607,19 @@ private:
     friend class GrGLPathRendering;
     friend class SkScalerContext;
     friend class SkTextBaseIter;
+=======
+    friend class SkGraphics; // So Term() can be called.
+    friend class SkPDFDevice;
+    friend class GrBitmapTextContext;
+    friend class GrAtlasTextContext;
+    friend class GrDistanceFieldTextContext;
+    friend class GrStencilAndCoverTextContext;
+    friend class GrPathRendering;
+    friend class GrTextContext;
+    friend class GrGLPathRendering;
+    friend class SkScalerContext;
+    friend class SkTextToPathIter;
+>>>>>>> miniblink49
     friend class SkCanonicalizePaint;
 };
 

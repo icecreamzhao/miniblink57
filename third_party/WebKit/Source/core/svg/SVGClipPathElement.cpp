@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGClipPathElement.h"
 
 #include "core/layout/svg/LayoutSVGResourceClipper.h"
@@ -27,10 +29,7 @@ namespace blink {
 
 inline SVGClipPathElement::SVGClipPathElement(Document& document)
     : SVGGraphicsElement(SVGNames::clipPathTag, document)
-    , m_clipPathUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(
-          this,
-          SVGNames::clipPathUnitsAttr,
-          SVGUnitTypes::kSvgUnitTypeUserspaceonuse))
+    , m_clipPathUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(this, SVGNames::clipPathUnitsAttr, SVGUnitTypes::SVG_UNIT_TYPE_USERSPACEONUSE))
 {
     addToPropertyMap(m_clipPathUnits);
 }
@@ -65,8 +64,7 @@ void SVGClipPathElement::childrenChanged(const ChildrenChange& change)
         return;
 
     if (LayoutObject* object = layoutObject())
-        object->setNeedsLayoutAndFullPaintInvalidation(
-            LayoutInvalidationReason::ChildChanged);
+        object->setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::ChildChanged);
 }
 
 LayoutObject* SVGClipPathElement::createLayoutObject(const ComputedStyle&)
@@ -74,4 +72,4 @@ LayoutObject* SVGClipPathElement::createLayoutObject(const ComputedStyle&)
     return new LayoutSVGResourceClipper(this);
 }
 
-} // namespace blink
+}

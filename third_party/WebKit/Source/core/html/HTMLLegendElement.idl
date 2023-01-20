@@ -25,5 +25,5 @@ interface HTMLLegendElement : HTMLElement {
 
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLLegendElement-partial
-    [CEReactions, Reflect] attribute DOMString align;
+    [Reflect] attribute DOMString align;
 };

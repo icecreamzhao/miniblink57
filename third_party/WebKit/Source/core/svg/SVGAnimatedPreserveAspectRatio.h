@@ -31,37 +31,22 @@
 #ifndef SVGAnimatedPreserveAspectRatio_h
 #define SVGAnimatedPreserveAspectRatio_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGPreserveAspectRatioTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-class SVGAnimatedPreserveAspectRatio
-    : public SVGAnimatedProperty<SVGPreserveAspectRatio>,
-      public ScriptWrappable {
+class SVGAnimatedPreserveAspectRatio : public SVGAnimatedProperty<SVGPreserveAspectRatio> {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SVGAnimatedPreserveAspectRatio* create(
-        SVGElement* contextElement,
-        const QualifiedName& attributeName)
+    static PassRefPtrWillBeRawPtr<SVGAnimatedPreserveAspectRatio> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> initialValue)
     {
-        return new SVGAnimatedPreserveAspectRatio(contextElement, attributeName);
-    }
-
-    DEFINE_INLINE_VIRTUAL_TRACE_WRAPPERS()
-    {
-        visitor->traceWrappers(contextElement());
+        return adoptRefWillBeNoop(new SVGAnimatedPreserveAspectRatio(contextElement, attributeName, initialValue));
     }
 
 protected:
-    SVGAnimatedPreserveAspectRatio(SVGElement* contextElement,
-        const QualifiedName& attributeName)
-        : SVGAnimatedProperty<SVGPreserveAspectRatio>(
-            contextElement,
-            attributeName,
-            SVGPreserveAspectRatio::create())
+    SVGAnimatedPreserveAspectRatio(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> initialValue)
+        : SVGAnimatedProperty<SVGPreserveAspectRatio>(contextElement, attributeName, initialValue)
     {
     }
 };

@@ -10,12 +10,22 @@
 
 #include "SkColor.h"
 #include "SkFlattenable.h"
+<<<<<<< HEAD
 #include "SkRefCnt.h"
 #include "SkXfermode.h"
 
 class GrContext;
 class GrFragmentProcessor;
 class SkBitmap;
+=======
+#include "SkTDArray.h"
+#include "SkXfermode.h"
+
+class SkBitmap;
+class GrProcessor;
+class GrContext;
+class GrProcessorDataManager;
+>>>>>>> miniblink49
 
 /**
  *  ColorFilters are optional objects in the drawing pipeline. When present in
@@ -68,12 +78,19 @@ public:
     */
     virtual void filterSpan(const SkPMColor src[], int count, SkPMColor result[]) const = 0;
 
+<<<<<<< HEAD
     virtual void filterSpan4f(const SkPM4f src[], int count, SkPM4f result[]) const;
 
     enum Flags {
         /** If set the filter methods will not change the alpha channel of the colors.
         */
         kAlphaUnchanged_Flag = 1 << 0,
+=======
+    enum Flags {
+        /** If set the filter methods will not change the alpha channel of the colors.
+        */
+        kAlphaUnchanged_Flag = 0x01,
+>>>>>>> miniblink49
     };
 
     /** Returns the flags for this filter. Override in subclasses to return custom flags.
@@ -87,7 +104,11 @@ public:
      *
      *  e.g. result(color) == this_filter(inner(color))
      */
+<<<<<<< HEAD
     virtual sk_sp<SkColorFilter> makeComposed(sk_sp<SkColorFilter>) const { return nullptr; }
+=======
+    virtual SkColorFilter* newComposed(const SkColorFilter* /*inner*/) const { return NULL; }
+>>>>>>> miniblink49
 
     /**
      *  Apply this colorfilter to the specified SkColor. This routine handles
@@ -97,11 +118,14 @@ public:
      */
     SkColor filterColor(SkColor) const;
 
+<<<<<<< HEAD
     /**
      *  Filters a single color.
      */
     SkColor4f filterColor4f(const SkColor4f&) const;
 
+=======
+>>>>>>> miniblink49
     /** Create a colorfilter that uses the specified color and mode.
         If the Mode is DST, this function will return NULL (since that
         mode will have no effect on the result).
@@ -111,11 +135,22 @@ public:
         @return colorfilter object that applies the src color and mode,
                     or NULL if the mode will have no effect.
     */
+<<<<<<< HEAD
     static sk_sp<SkColorFilter> MakeModeFilter(SkColor c, SkXfermode::Mode mode);
     static sk_sp<SkColorFilter> MakeModeFilter(SkColor c, SkBlendMode mode)
     {
         return MakeModeFilter(c, SkXfermode::SkBlendModeToSkXfermodeMode(mode));
     }
+=======
+    static SkColorFilter* CreateModeFilter(SkColor c, SkXfermode::Mode mode);
+
+    /** Create a colorfilter that multiplies the RGB channels by one color, and
+        then adds a second color, pinning the result for each component to
+        [0..255]. The alpha components of the mul and add arguments
+        are ignored.
+    */
+    static SkColorFilter* CreateLightingFilter(SkColor mul, SkColor add);
+>>>>>>> miniblink49
 
     /** Construct a colorfilter whose effect is to first apply the inner filter and then apply
      *  the outer filter to the result of the inner's.
@@ -124,6 +159,7 @@ public:
      *  Due to internal limits, it is possible that this will return NULL, so the caller must
      *  always check.
      */
+<<<<<<< HEAD
     static sk_sp<SkColorFilter> MakeComposeFilter(sk_sp<SkColorFilter> outer,
         sk_sp<SkColorFilter> inner);
 
@@ -167,6 +203,25 @@ public:
     bool affectsTransparentBlack() const
     {
         return this->filterColor(0) != 0;
+=======
+    static SkColorFilter* CreateComposeFilter(SkColorFilter* outer, SkColorFilter* inner);
+
+    /**
+     *  A subclass may implement this factory function to work with the GPU backend.
+     *  If it returns true, then 1 or more fragment processors will have been appended to the
+     *  array, each of which has been ref'd, so that the caller is responsible for calling unref()
+     *  on them when they are finished. If more than one processor is appended, they will be
+     *  applied in FIFO order.
+     *
+     *  The fragment processor(s) must each return their color as a premul normalized value
+     *  e.g. each component between [0..1] and each color component <= alpha.
+     *
+     *  If the subclass returns false, then it should not modify the array at all.
+     */
+    virtual bool asFragmentProcessors(GrContext*, GrProcessorDataManager*,
+                                      SkTDArray<GrFragmentProcessor*>*) const {
+        return false;
+>>>>>>> miniblink49
     }
 
     SK_TO_STRING_PUREVIRT()
@@ -175,7 +230,11 @@ public:
     SK_DEFINE_FLATTENABLE_TYPE(SkColorFilter)
 
 protected:
+<<<<<<< HEAD
     SkColorFilter() { }
+=======
+    SkColorFilter() {}
+>>>>>>> miniblink49
 
 private:
     /*

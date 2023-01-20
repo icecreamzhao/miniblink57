@@ -20,13 +20,14 @@
 #ifndef MediaQueryList_h
 #define MediaQueryList_h
 
-#include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/dom/ActiveDOMObject.h"
 #include "core/events/EventTarget.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
@@ -35,25 +36,18 @@ class MediaQueryListListener;
 class MediaQueryMatcher;
 class MediaQuerySet;
 
-// MediaQueryList interface is specified at
-// http://dev.w3.org/csswg/cssom-view/#the-mediaquerylist-interface
-// The objects of this class are returned by window.matchMedia. They may be used
-// to retrieve the current value of the given media query and to add/remove
-// listeners that will be called whenever the value of the query changes.
+// MediaQueryList interface is specified at http://dev.w3.org/csswg/cssom-view/#the-mediaquerylist-interface
+// The objects of this class are returned by window.matchMedia. They may be used to
+// retrieve the current value of the given media query and to add/remove listeners that
+// will be called whenever the value of the query changes.
 
-class CORE_EXPORT MediaQueryList final
-    : public EventTargetWithInlineData,
-      public ActiveScriptWrappable<MediaQueryList>,
-      public ContextLifecycleObserver {
+class CORE_EXPORT MediaQueryList final : public EventTargetWithInlineData, public RefCountedWillBeNoBase<MediaQueryList>, public ActiveDOMObject {
+    REFCOUNTED_EVENT_TARGET(MediaQueryList);
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(MediaQueryList);
-    WTF_MAKE_NONCOPYABLE(MediaQueryList);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaQueryList);
 public:
-    static MediaQueryList* create(ExecutionContext*,
-        MediaQueryMatcher*,
-        MediaQuerySet*);
-    ~MediaQueryList() override;
+    static PassRefPtrWillBeRawPtr<MediaQueryList> create(ExecutionContext*, PassRefPtrWillBeRawPtr<MediaQueryMatcher>, PassRefPtrWillBeRawPtr<MediaQuerySet>);
+    virtual ~MediaQueryList();
 
     String media() const;
     bool matches();
@@ -62,37 +56,33 @@ public:
 
     // These two functions are provided for compatibility with JS code
     // written before the change listener became a DOM event.
-    void addDeprecatedListener(EventListener*);
-    void removeDeprecatedListener(EventListener*);
+    void addDeprecatedListener(PassRefPtr<EventListener>);
+    void removeDeprecatedListener(PassRefPtr<EventListener>);
 
-    // C++ code can use these functions to listen to changes instead of having to
-    // use DOM event listeners.
-    void addListener(MediaQueryListListener*);
-    void removeListener(MediaQueryListListener*);
+    // C++ code can use these functions to listen to changes instead of having to use DOM event listeners.
+    void addListener(PassRefPtrWillBeRawPtr<MediaQueryListListener>);
+    void removeListener(PassRefPtrWillBeRawPtr<MediaQueryListListener>);
 
     // Will return true if a DOM event should be scheduled.
-    bool mediaFeaturesChanged(
-        HeapVector<Member<MediaQueryListListener>>* listenersToNotify);
+    bool mediaFeaturesChanged(WillBeHeapVector<RefPtrWillBeMember<MediaQueryListListener>>* listenersToNotify);
 
     DECLARE_VIRTUAL_TRACE();
 
-    // From ScriptWrappable
-    bool hasPendingActivity() const final;
+    // From ActiveDOMObject
+    virtual bool hasPendingActivity() const override;
+    virtual void stop() override;
 
-    // From ContextLifecycleObserver
-    void contextDestroyed(ExecutionContext*) override;
-
-    const AtomicString& interfaceName() const override;
-    ExecutionContext* getExecutionContext() const override;
+    virtual const AtomicString& interfaceName() const override;
+    virtual ExecutionContext* executionContext() const override;
 
 private:
-    MediaQueryList(ExecutionContext*, MediaQueryMatcher*, MediaQuerySet*);
+    MediaQueryList(ExecutionContext*, PassRefPtrWillBeRawPtr<MediaQueryMatcher>, PassRefPtrWillBeRawPtr<MediaQuerySet>);
 
     bool updateMatches();
 
-    Member<MediaQueryMatcher> m_matcher;
-    Member<MediaQuerySet> m_media;
-    using ListenerList = HeapListHashSet<Member<MediaQueryListListener>>;
+    RefPtrWillBeMember<MediaQueryMatcher> m_matcher;
+    RefPtrWillBeMember<MediaQuerySet> m_media;
+    typedef WillBeHeapListHashSet<RefPtrWillBeMember<MediaQueryListListener>> ListenerList;
     ListenerList m_listeners;
     bool m_matchesDirty;
     bool m_matches;

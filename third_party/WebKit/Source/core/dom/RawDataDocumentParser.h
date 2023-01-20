@@ -45,11 +45,22 @@ protected:
     }
 
 private:
-    void insert(const SegmentedString&) final { }
+    void flush() override
+    {
+        // Make sure appendBytes is called at least once.
+        appendBytes(0, 0);
+    }
 
-    void append(const String&) final { NOTREACHED(); }
+    void insert(const SegmentedString&) override
+    {
+    }
+
+    void append(const String&) override
+    {
+        ASSERT_NOT_REACHED();
+    }
 };
 
-} // namespace blink
+};
 
 #endif // RawDataDocumentParser_h

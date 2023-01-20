@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef GrGLContext_DEFINED
 #define GrGLContext_DEFINED
 
@@ -12,6 +13,16 @@
 #include "GrGLUtil.h"
 #include "gl/GrGLExtensions.h"
 #include "gl/GrGLInterface.h"
+=======
+
+#ifndef GrGLContext_DEFINED
+#define GrGLContext_DEFINED
+
+#include "gl/GrGLExtensions.h"
+#include "gl/GrGLInterface.h"
+#include "GrGLCaps.h"
+#include "GrGLUtil.h"
+>>>>>>> miniblink49
 
 struct GrContextOptions;
 
@@ -32,8 +43,12 @@ public:
     GrGLDriverVersion driverVersion() const { return fDriverVersion; }
     const GrGLCaps* caps() const { return fGLCaps.get(); }
     GrGLCaps* caps() { return fGLCaps; }
+<<<<<<< HEAD
     bool hasExtension(const char* ext) const
     {
+=======
+    bool hasExtension(const char* ext) const {
+>>>>>>> miniblink49
         return fInterface->hasExtension(ext);
     }
 
@@ -41,6 +56,7 @@ public:
 
 protected:
     struct ConstructorArgs {
+<<<<<<< HEAD
         const GrGLInterface* fInterface;
         GrGLVersion fGLVersion;
         GrGLSLGeneration fGLSLGeneration;
@@ -49,10 +65,21 @@ protected:
         GrGLDriver fDriver;
         GrGLDriverVersion fDriverVersion;
         const GrContextOptions* fContextOptions;
+=======
+        const GrGLInterface*                fInterface;
+        GrGLVersion                         fGLVersion;
+        GrGLSLGeneration                    fGLSLGeneration;
+        GrGLVendor                          fVendor;
+        GrGLRenderer                        fRenderer;
+        GrGLDriver                          fDriver;
+        GrGLDriverVersion                   fDriverVersion;
+        const  GrContextOptions*            fContextOptions;
+>>>>>>> miniblink49
     };
 
     GrGLContextInfo(const ConstructorArgs& args);
 
+<<<<<<< HEAD
     SkAutoTUnref<const GrGLInterface> fInterface;
     GrGLVersion fGLVersion;
     GrGLSLGeneration fGLSLGeneration;
@@ -61,6 +88,16 @@ protected:
     GrGLDriver fDriver;
     GrGLDriverVersion fDriverVersion;
     SkAutoTUnref<GrGLCaps> fGLCaps;
+=======
+    SkAutoTUnref<const GrGLInterface>   fInterface;
+    GrGLVersion                         fGLVersion;
+    GrGLSLGeneration                    fGLSLGeneration;
+    GrGLVendor                          fVendor;
+    GrGLRenderer                        fRenderer;
+    GrGLDriver                          fDriver;
+    GrGLDriverVersion                   fDriverVersion;
+    SkAutoTUnref<GrGLCaps>              fGLCaps;
+>>>>>>> miniblink49
 };
 
 /**
@@ -77,10 +114,14 @@ public:
     const GrGLInterface* interface() const { return fInterface; }
 
 private:
+<<<<<<< HEAD
     GrGLContext(const ConstructorArgs& args)
         : INHERITED(args)
     {
     }
+=======
+    GrGLContext(const ConstructorArgs& args) : INHERITED(args) {}
+>>>>>>> miniblink49
 
     typedef GrGLContextInfo INHERITED;
 };

@@ -31,12 +31,16 @@
 #ifndef CryptoResult_h
 #define CryptoResult_h
 
+<<<<<<< HEAD
 #include "platform/PlatformExport.h"
+=======
+>>>>>>> miniblink49
 #include "public/platform/WebCrypto.h"
 #include "wtf/ThreadSafeRefCounted.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 // Result cancellation status interface to allow non-Blink webcrypto threads
 // to query for status.
 class CryptoResultCancel : public ThreadSafeRefCounted<CryptoResultCancel> {
@@ -49,6 +53,10 @@ public:
 // Receives notification of completion of the crypto operation.
 class PLATFORM_EXPORT CryptoResult
     : public GarbageCollectedFinalized<CryptoResult> {
+=======
+// Receives notification of completion of the crypto operation.
+class CryptoResult : public ThreadSafeRefCounted<CryptoResult> {
+>>>>>>> miniblink49
 public:
     virtual ~CryptoResult() { }
 
@@ -57,13 +65,27 @@ public:
     virtual void completeWithJson(const char* utf8Data, unsigned length) = 0;
     virtual void completeWithBoolean(bool) = 0;
     virtual void completeWithKey(const WebCryptoKey&) = 0;
+<<<<<<< HEAD
     virtual void completeWithKeyPair(const WebCryptoKey& publicKey,
         const WebCryptoKey& privateKey)
         = 0;
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
+=======
+    virtual void completeWithKeyPair(const WebCryptoKey& publicKey, const WebCryptoKey& privateKey) = 0;
+    virtual bool cancelled() const = 0;
+
+    WebCryptoResult result()
+    {
+        return WebCryptoResult(this);
+    }
+>>>>>>> miniblink49
 };
 
 } // namespace blink
 
+<<<<<<< HEAD
 #endif // CryptoResult_h
+=======
+#endif
+>>>>>>> miniblink49

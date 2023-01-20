@@ -23,6 +23,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/dom/TransformSource.h"
 
 #include <libxml/tree.h>
@@ -36,7 +38,10 @@ TransformSource::TransformSource(xmlDocPtr source)
 
 TransformSource::~TransformSource()
 {
+#ifdef MINIBLINK_NOT_IMPLEMENTED
     xmlFreeDoc(m_source);
+#endif // MINIBLINK_NOT_IMPLEMENTED
+	notImplemented();
 }
 
 } // namespace blink

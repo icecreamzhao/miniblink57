@@ -43,15 +43,9 @@ enum NavigationPolicy {
     NavigationPolicyNewForegroundTab,
     NavigationPolicyNewWindow,
     NavigationPolicyNewPopup,
-    NavigationPolicyHandledByClient,
 };
 
-CORE_EXPORT bool navigationPolicyFromMouseEvent(unsigned short button,
-    bool ctrl,
-    bool shift,
-    bool alt,
-    bool meta,
-    NavigationPolicy*);
+CORE_EXPORT bool navigationPolicyFromMouseEvent(unsigned short button, bool ctrl, bool shift, bool alt, bool meta, NavigationPolicy*);
 
 } // namespace blink
 

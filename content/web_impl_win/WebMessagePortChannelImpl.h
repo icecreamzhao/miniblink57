@@ -14,7 +14,7 @@ namespace content {
 class PlatformMessagePortChannel;
 
 // This is thread safe.
-class WebMessagePortChannelImpl : public blink::GarbageCollectedFinalized<WebMessagePortChannelImpl>, public blink::WebMessagePortChannel {
+class WebMessagePortChannelImpl : public NoBaseWillBeGarbageCollectedFinalized<WebMessagePortChannelImpl>, public blink::WebMessagePortChannel {
 public:
     WebMessagePortChannelImpl(PlatformMessagePortChannel::MessagePortQueue* incoming, PlatformMessagePortChannel::MessagePortQueue* outgoing);
 
@@ -36,7 +36,7 @@ private:
     blink::Member<PlatformMessagePortChannel> m_channel;
     blink::Persistent<WebMessagePortChannelImpl> m_keepAlive;
 
-    WTF::RecursiveMutex m_mutex;
+    WTF::Mutex m_mutex;
 };
 
 }  // namespace content

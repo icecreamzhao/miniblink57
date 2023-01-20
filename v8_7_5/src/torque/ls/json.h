@@ -14,6 +14,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace torque {
         namespace ls {
 
@@ -147,3 +148,112 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_TORQUE_LS_JSON_H_
+=======
+namespace torque {
+namespace ls {
+
+struct JsonValue;
+
+using JsonObject = std::map<std::string, JsonValue>;
+using JsonArray = std::vector<JsonValue>;
+
+struct JsonValue {
+ public:
+  enum { OBJECT, ARRAY, STRING, NUMBER, BOOL, IS_NULL } tag;
+
+  static JsonValue From(double number) {
+    JsonValue result;
+    result.tag = JsonValue::NUMBER;
+    result.number_ = number;
+    return result;
+  }
+
+  static JsonValue From(JsonObject object) {
+    JsonValue result;
+    result.tag = JsonValue::OBJECT;
+    result.object_ = base::make_unique<JsonObject>(std::move(object));
+    return result;
+  }
+
+  static JsonValue From(bool b) {
+    JsonValue result;
+    result.tag = JsonValue::BOOL;
+    result.flag_ = b;
+    return result;
+  }
+
+  static JsonValue From(const std::string& string) {
+    JsonValue result;
+    result.tag = JsonValue::STRING;
+    result.string_ = string;
+    return result;
+  }
+
+  static JsonValue From(JsonArray array) {
+    JsonValue result;
+    result.tag = JsonValue::ARRAY;
+    result.array_ = base::make_unique<JsonArray>(std::move(array));
+    return result;
+  }
+
+  static JsonValue JsonNull() {
+    JsonValue result;
+    result.tag = JsonValue::IS_NULL;
+    return result;
+  }
+
+  bool IsNumber() const { return tag == NUMBER; }
+  double ToNumber() const {
+    CHECK(IsNumber());
+    return number_;
+  }
+
+  bool IsBool() const { return tag == BOOL; }
+  bool ToBool() const {
+    CHECK(IsBool());
+    return flag_;
+  }
+
+  bool IsString() const { return tag == STRING; }
+  const std::string& ToString() const {
+    CHECK(IsString());
+    return string_;
+  }
+
+  bool IsObject() const { return object_ && tag == OBJECT; }
+  const JsonObject& ToObject() const {
+    CHECK(IsObject());
+    return *object_;
+  }
+  JsonObject& ToObject() {
+    CHECK(IsObject());
+    return *object_;
+  }
+
+  bool IsArray() const { return array_ && tag == ARRAY; }
+  const JsonArray& ToArray() const {
+    CHECK(IsArray());
+    return *array_;
+  }
+  JsonArray& ToArray() {
+    CHECK(IsArray());
+    return *array_;
+  }
+
+ private:
+  double number_ = 0;
+  bool flag_ = false;
+  std::string string_;
+  std::unique_ptr<JsonObject> object_;
+  std::unique_ptr<JsonArray> array_;
+};
+
+std::string SerializeToString(const JsonValue& value);
+
+}  // namespace ls
+}  // namespace torque
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_TORQUE_LS_JSON_H_
+>>>>>>> miniblink49

@@ -28,22 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/svg/SVGStaticStringList.h"
 
 #include "core/svg/SVGElement.h"
-#include "core/svg/SVGStringListTearOff.h"
 
 namespace blink {
 
-SVGStaticStringList::SVGStaticStringList(SVGElement* contextElement,
-    const QualifiedName& attributeName)
+SVGStaticStringList::SVGStaticStringList(SVGElement* contextElement, const QualifiedName& attributeName)
     : SVGAnimatedPropertyBase(AnimatedUnknown, contextElement, attributeName)
     , m_value(SVGStringList::create())
 {
     ASSERT(contextElement);
 }
 
-SVGStaticStringList::~SVGStaticStringList() { }
+SVGStaticStringList::~SVGStaticStringList()
+{
+}
 
 DEFINE_TRACE(SVGStaticStringList)
 {
@@ -57,24 +58,18 @@ SVGPropertyBase* SVGStaticStringList::currentValueBase()
     return m_value.get();
 }
 
-const SVGPropertyBase& SVGStaticStringList::baseValueBase() const
-{
-    ASSERT_NOT_REACHED();
-    return *m_value;
-}
-
 bool SVGStaticStringList::isAnimating() const
 {
     return false;
 }
 
-SVGPropertyBase* SVGStaticStringList::createAnimatedValue()
+PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGStaticStringList::createAnimatedValue()
 {
     ASSERT_NOT_REACHED();
     return nullptr;
 }
 
-void SVGStaticStringList::setAnimatedValue(SVGPropertyBase*)
+void SVGStaticStringList::setAnimatedValue(PassRefPtrWillBeRawPtr<SVGPropertyBase>)
 {
     ASSERT_NOT_REACHED();
 }
@@ -92,15 +87,19 @@ bool SVGStaticStringList::needsSynchronizeAttribute()
 SVGStringListTearOff* SVGStaticStringList::tearOff()
 {
     if (!m_tearOff)
-        m_tearOff = SVGStringListTearOff::create(
-            m_value, contextElement(), PropertyIsNotAnimVal, attributeName());
+        m_tearOff = SVGStringListTearOff::create(m_value, contextElement(), PropertyIsNotAnimVal, attributeName());
 
     return m_tearOff.get();
 }
 
-SVGParsingError SVGStaticStringList::setBaseValueAsString(const String& value)
+void SVGStaticStringList::setBaseValueAsString(const String& value, SVGParsingError& parseError)
 {
-    return m_value->setValueAsString(value);
+    TrackExceptionState es;
+
+    m_value->setValueAsString(value, es);
+
+    if (es.hadException())
+        parseError = ParsingAttributeFailedError;
 }
 
-} // namespace blink
+}

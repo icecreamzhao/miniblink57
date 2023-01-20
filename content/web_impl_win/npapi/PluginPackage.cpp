@@ -35,7 +35,6 @@
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 
 #define PURE = 0
-#define interface struct
 
 #include <Shlwapi.h>
 #include <string.h>
@@ -68,13 +67,13 @@ void PluginPackage::freeLibrarySoon()
     m_freeLibraryTimer.startOneShot(0, FROM_HERE);
 }
 
-void PluginPackage::freeLibraryTimerFired(blink::TimerBase*)
+void PluginPackage::freeLibraryTimerFired(blink::Timer<PluginPackage>*)
 {
     if (!m_isVirtual)
         ASSERT(m_module);
     // Do nothing if the module got loaded again meanwhile
     if (!m_loadCount) {
-        //::FreeLibrary(m_module); // by weolar: ²»Ð¶ÔØÄ£¿é£¬ÒòÎª_NPN_IsAliveÀïµÄliveObjectMap»¹ÓÐNPObject£¬ÄÇ¸öÓÐÄ£¿éÀïµÄÐéº¯Êý±í
+        //::FreeLibrary(m_module); // by weolar: ï¿½ï¿½Ð¶ï¿½ï¿½Ä£ï¿½é£¬ï¿½ï¿½Îª_NPN_IsAliveï¿½ï¿½ï¿½liveObjectMapï¿½ï¿½ï¿½ï¿½NPObjectï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½éº¯ï¿½ï¿½ï¿½ï¿½
         m_module = 0;
     }
 }
@@ -204,9 +203,8 @@ PassRefPtr<PluginPackage> PluginPackage::createVirtualPackage(
     package->m_mimeToDescriptions.add(mimeDescription, description);
     package->m_mimeToExtensions.add(mimeDescription, extensionsVector);
 
-//     database->addVirtualPlugin(package);
-//     database->setPreferredPluginForMIMEType(description, package.get());
-    DebugBreak();
+    database->addVirtualPlugin(package);
+    database->setPreferredPluginForMIMEType(description, package.get());
 
     return package.release();
 }

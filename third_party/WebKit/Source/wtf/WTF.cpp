@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/WTF.h"
 
 #include "wtf/Assertions.h"
@@ -37,6 +38,15 @@
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/StringStatics.h"
 #include "wtf/typed_arrays/ArrayBufferContents.h"
+=======
+#include "config.h"
+#include "WTF.h"
+
+#include "wtf/ArrayBufferContents.h"
+#include "wtf/Assertions.h"
+#include "wtf/FastMalloc.h"
+#include "wtf/Partitions.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -44,6 +54,7 @@ extern void initializeThreading();
 
 bool s_initialized;
 bool s_shutdown;
+<<<<<<< HEAD
 void (*s_callOnMainThreadFunction)(MainThreadFunction, void*);
 ThreadIdentifier s_mainThreadIdentifier;
 
@@ -74,13 +85,49 @@ void initialize(void (*callOnMainThreadFunction)(MainThreadFunction, void*))
     s_mainThreadIdentifier = currentThread();
     AtomicString::init();
     StringStatics::init();
+=======
+
+static void maxObservedSizeFunction(size_t sizeInMB)
+{
+//     const size_t supportedMaxSizeInMB = 4 * 1024;
+//     if (sizeInMB >= supportedMaxSizeInMB)
+//         sizeInMB = supportedMaxSizeInMB - 1;
+// 
+//     // Send a UseCounter only when we see the highest memory usage
+//     // we've ever seen.
+//     DEFINE_STATIC_LOCAL(EnumerationHistogram, committedSizeHistogram, ("PartitionAlloc.CommittedSize", supportedMaxSizeInMB));
+//     committedSizeHistogram.count(sizeInMB);
+}
+
+void initialize(TimeFunction currentTimeFunction, TimeFunction monotonicallyIncreasingTimeFunction, TimeFunction systemTraceTimeFunction, HistogramEnumerationFunction histogramEnumerationFunction, AdjustAmountOfExternalAllocatedMemoryFunction adjustAmountOfExternalAllocatedMemoryFunction)
+{
+    // WTF, and Blink in general, cannot handle being re-initialized, even if shutdown first.
+    // Make that explicit here.
+    ASSERT(!s_initialized);
+    ASSERT(!s_shutdown);
+    s_initialized = true;
+    setCurrentTimeFunction(currentTimeFunction);
+    setMonotonicallyIncreasingTimeFunction(monotonicallyIncreasingTimeFunction);
+    setSystemTraceTimeFunction(systemTraceTimeFunction);
+    Partitions::initialize(maxObservedSizeFunction);
+    //Partitions::setHistogramEnumeration(histogramEnumerationFunction);
+    ArrayBufferContents::setAdjustAmoutOfExternalAllocatedMemoryFunction(adjustAmountOfExternalAllocatedMemoryFunction);
+    initializeThreading();
+>>>>>>> miniblink49
 }
 
 void shutdown()
 {
+<<<<<<< HEAD
     RELEASE_ASSERT(s_initialized);
     RELEASE_ASSERT(!s_shutdown);
     s_shutdown = true;
+=======
+    ASSERT(s_initialized);
+    ASSERT(!s_shutdown);
+    s_shutdown = true;
+    Partitions::shutdown();
+>>>>>>> miniblink49
 }
 
 bool isShutdown()

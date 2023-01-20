@@ -5,25 +5,18 @@
 #ifndef SVGForeignObjectPainter_h
 #define SVGForeignObjectPainter_h
 
-#include "wtf/Allocator.h"
-
 namespace blink {
 
 struct PaintInfo;
 class LayoutSVGForeignObject;
 
 class SVGForeignObjectPainter {
-    STACK_ALLOCATED();
-
 public:
-    SVGForeignObjectPainter(const LayoutSVGForeignObject& layoutSVGForeignObject)
-        : m_layoutSVGForeignObject(layoutSVGForeignObject)
-    {
-    }
+    SVGForeignObjectPainter(LayoutSVGForeignObject& layoutSVGForeignObject) : m_layoutSVGForeignObject(layoutSVGForeignObject) { }
     void paint(const PaintInfo&);
 
 private:
-    const LayoutSVGForeignObject& m_layoutSVGForeignObject;
+    LayoutSVGForeignObject& m_layoutSVGForeignObject;
 };
 
 } // namespace blink

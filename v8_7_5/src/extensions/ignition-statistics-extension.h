@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class IgnitionStatisticsExtension : public v8::Extension {
     public:
         IgnitionStatisticsExtension()
@@ -31,3 +32,24 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_EXTENSIONS_IGNITION_STATISTICS_EXTENSION_H_
+=======
+class IgnitionStatisticsExtension : public v8::Extension {
+ public:
+  IgnitionStatisticsExtension()
+      : v8::Extension("v8/ignition-statistics", kSource) {}
+
+  v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
+      v8::Isolate* isolate, v8::Local<v8::String> name) override;
+
+  static void GetIgnitionDispatchCounters(
+      const v8::FunctionCallbackInfo<v8::Value>& args);
+
+ private:
+  static const char* const kSource;
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_EXTENSIONS_IGNITION_STATISTICS_EXTENSION_H_
+>>>>>>> miniblink49

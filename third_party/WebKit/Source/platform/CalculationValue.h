@@ -33,14 +33,23 @@
 
 #include "platform/Length.h"
 #include "platform/LengthFunctions.h"
+<<<<<<< HEAD
+=======
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/RefCounted.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT CalculationValue : public RefCounted<CalculationValue> {
 public:
+<<<<<<< HEAD
     static PassRefPtr<CalculationValue> create(PixelsAndPercent value,
         ValueRange range)
+=======
+    static PassRefPtr<CalculationValue> create(PixelsAndPercent value, ValueRange range)
+>>>>>>> miniblink49
     {
         return adoptRef(new CalculationValue(value, range));
     }
@@ -50,6 +59,7 @@ public:
         float value = pixels() + percent() / 100 * maxValue;
         return (isNonNegative() && value < 0) ? 0 : value;
     }
+<<<<<<< HEAD
     bool operator==(const CalculationValue& o) const
     {
         return pixels() == o.pixels() && percent() == o.percent();
@@ -62,6 +72,13 @@ public:
     float pixels() const { return m_value.pixels; }
     float percent() const { return m_value.percent; }
     PixelsAndPercent getPixelsAndPercent() const { return m_value; }
+=======
+    bool operator==(const CalculationValue& o) const { return pixels() == o.pixels() && percent() == o.percent(); }
+    bool isNonNegative() const { return m_isNonNegative; }
+    float pixels() const { return m_value.pixels; }
+    float percent() const { return m_value.percent; }
+    PixelsAndPercent pixelsAndPercent() const { return m_value; }
+>>>>>>> miniblink49
 
 private:
     CalculationValue(PixelsAndPercent value, ValueRange range)

@@ -6,23 +6,20 @@
 #define CompositingInputsUpdater_h
 
 #include "core/layout/LayoutGeometryMap.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
-class PaintLayer;
+class DeprecatedPaintLayer;
 
 class CompositingInputsUpdater {
-    STACK_ALLOCATED();
-
 public:
-    explicit CompositingInputsUpdater(PaintLayer* rootLayer);
+    explicit CompositingInputsUpdater(DeprecatedPaintLayer* rootLayer);
     ~CompositingInputsUpdater();
 
     void update();
 
-#if DCHECK_IS_ON()
-    static void assertNeedsCompositingInputsUpdateBitsCleared(PaintLayer*);
+#if ENABLE(ASSERT)
+    static void assertNeedsCompositingInputsUpdateBitsCleared(DeprecatedPaintLayer*);
 #endif
 
 private:
@@ -35,30 +32,28 @@ private:
         AncestorInfo()
             : ancestorStackingContext(nullptr)
             , enclosingCompositedLayer(nullptr)
-            , lastOverflowClipLayer(nullptr)
             , lastScrollingAncestor(nullptr)
-            , hasAncestorWithClipRelatedProperty(false)
+            , hasAncestorWithClipOrOverflowClip(false)
             , hasAncestorWithClipPath(false)
         {
         }
 
-        PaintLayer* ancestorStackingContext;
-        PaintLayer* enclosingCompositedLayer;
-        PaintLayer* lastOverflowClipLayer;
+        DeprecatedPaintLayer* ancestorStackingContext;
+        DeprecatedPaintLayer* enclosingCompositedLayer;
         // Notice that lastScrollingAncestor isn't the same thing as
         // ancestorScrollingLayer. The former is just the nearest scrolling
-        // along the PaintLayer::parent() chain. The latter is the layer that
+        // along the DeprecatedPaintLayer::parent() chain. The latter is the layer that
         // actually controls the scrolling of this layer, which we find on the
         // containing block chain.
-        PaintLayer* lastScrollingAncestor;
-        bool hasAncestorWithClipRelatedProperty;
+        DeprecatedPaintLayer* lastScrollingAncestor;
+        bool hasAncestorWithClipOrOverflowClip;
         bool hasAncestorWithClipPath;
     };
 
-    void updateRecursive(PaintLayer*, UpdateType, AncestorInfo);
+    void updateRecursive(DeprecatedPaintLayer*, UpdateType, AncestorInfo);
 
     LayoutGeometryMap m_geometryMap;
-    PaintLayer* m_rootLayer;
+    DeprecatedPaintLayer* m_rootLayer;
 };
 
 } // namespace blink

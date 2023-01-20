@@ -39,28 +39,33 @@ namespace blink {
 
 class AnimatableImage final : public AnimatableValue {
 public:
-    ~AnimatableImage() override { }
-    static PassRefPtr<AnimatableImage> create(CSSValue* value)
+    virtual ~AnimatableImage() { }
+    static PassRefPtrWillBeRawPtr<AnimatableImage> create(PassRefPtrWillBeRawPtr<CSSValue> value)
     {
-        return adoptRef(new AnimatableImage(value));
+        return adoptRefWillBeNoop(new AnimatableImage(value));
     }
     CSSValue* toCSSValue() const { return m_value.get(); }
 
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_value);
+        AnimatableValue::trace(visitor);
+    }
+
 protected:
-    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
-        double fraction) const override;
-    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
+    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
-    AnimatableImage(CSSValue* value)
+    AnimatableImage(PassRefPtrWillBeRawPtr<CSSValue> value)
         : m_value(value)
     {
-        DCHECK(m_value.get());
+        ASSERT(m_value.get());
     }
-    AnimatableType type() const override { return TypeImage; }
-    bool equalTo(const AnimatableValue*) const override;
+    virtual AnimatableType type() const override { return TypeImage; }
+    virtual bool equalTo(const AnimatableValue*) const override;
 
-    const Persistent<CSSValue> m_value;
+    const RefPtrWillBeMember<CSSValue> m_value;
 };
 
 DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableImage, isImage());

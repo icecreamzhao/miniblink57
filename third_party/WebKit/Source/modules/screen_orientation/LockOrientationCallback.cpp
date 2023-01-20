@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/screen_orientation/LockOrientationCallback.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
@@ -11,13 +15,23 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 LockOrientationCallback::LockOrientationCallback(
     ScriptPromiseResolver* resolver)
+=======
+LockOrientationCallback::LockOrientationCallback(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+>>>>>>> miniblink49
     : m_resolver(resolver)
 {
 }
 
+<<<<<<< HEAD
 LockOrientationCallback::~LockOrientationCallback() { }
+=======
+LockOrientationCallback::~LockOrientationCallback()
+{
+}
+>>>>>>> miniblink49
 
 void LockOrientationCallback::onSuccess()
 {
@@ -32,6 +46,7 @@ void LockOrientationCallback::onError(WebLockOrientationError error)
     switch (error) {
     case WebLockOrientationErrorNotAvailable:
         code = NotSupportedError;
+<<<<<<< HEAD
         msg = "screen.orientation.lock() is not available on this device.";
         break;
     case WebLockOrientationErrorFullscreenRequired:
@@ -43,6 +58,17 @@ void LockOrientationCallback::onError(WebLockOrientationError error)
         code = AbortError;
         msg = "A call to screen.orientation.lock() or screen.orientation.unlock() "
               "canceled this call.";
+=======
+        msg = "lockOrientation() is not available on this device.";
+        break;
+    case WebLockOrientationErrorFullScreenRequired:
+        code = SecurityError;
+        msg = "The page needs to be fullscreen in order to call lockOrientation().";
+        break;
+    case WebLockOrientationErrorCanceled:
+        code = AbortError;
+        msg = "A call to lockOrientation() or unlockOrientation() canceled this call.";
+>>>>>>> miniblink49
         break;
     }
 

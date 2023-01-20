@@ -17,8 +17,13 @@
 #ifndef __UDATA_H__
 #define __UDATA_H__
 
+<<<<<<< HEAD
 #include "unicode/localpointer.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/localpointer.h"
+>>>>>>> miniblink49
 
 U_CDECL_BEGIN
 
@@ -36,7 +41,11 @@ U_CDECL_BEGIN
  *
  * See the User Guide Data Management chapter.
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 #ifndef U_HIDE_INTERNAL_API
 /**
  * Character used to separate package names from tree names 
@@ -169,9 +178,16 @@ typedef struct UDataMemory UDataMemory;
  * @stable ICU 2.0
  */
 typedef UBool U_CALLCONV
+<<<<<<< HEAD
 UDataMemoryIsAcceptable(void* context,
     const char* type, const char* name,
     const UDataInfo* pInfo);
+=======
+UDataMemoryIsAcceptable(void *context,
+                        const char *type, const char *name,
+                        const UDataInfo *pInfo);
+
+>>>>>>> miniblink49
 
 /**
  * Convenience function.
@@ -194,9 +210,15 @@ UDataMemoryIsAcceptable(void* context,
  * @see udata_openChoice
  * @stable ICU 2.0
  */
+<<<<<<< HEAD
 U_STABLE UDataMemory* U_EXPORT2
 udata_open(const char* path, const char* type, const char* name,
     UErrorCode* pErrorCode);
+=======
+U_STABLE UDataMemory * U_EXPORT2
+udata_open(const char *path, const char *type, const char *name,
+           UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Data loading function.
@@ -246,10 +268,17 @@ udata_open(const char* path, const char* type, const char* name,
  *         to get a pointer to the actual data.
  * @stable ICU 2.0
  */
+<<<<<<< HEAD
 U_STABLE UDataMemory* U_EXPORT2
 udata_openChoice(const char* path, const char* type, const char* name,
     UDataMemoryIsAcceptable* isAcceptable, void* context,
     UErrorCode* pErrorCode);
+=======
+U_STABLE UDataMemory * U_EXPORT2
+udata_openChoice(const char *path, const char *type, const char *name,
+                 UDataMemoryIsAcceptable *isAcceptable, void *context,
+                 UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Close the data memory.
@@ -259,7 +288,11 @@ udata_openChoice(const char* path, const char* type, const char* name,
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 udata_close(UDataMemory* pData);
+=======
+udata_close(UDataMemory *pData);
+>>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -289,8 +322,13 @@ U_NAMESPACE_END
  * @param pData The pointer to data memory object
  * @stable ICU 2.0
  */
+<<<<<<< HEAD
 U_STABLE const void* U_EXPORT2
 udata_getMemory(UDataMemory* pData);
+=======
+U_STABLE const void * U_EXPORT2
+udata_getMemory(UDataMemory *pData);
+>>>>>>> miniblink49
 
 /**
  * Get the information from the data memory header.
@@ -311,7 +349,11 @@ udata_getMemory(UDataMemory* pData);
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 udata_getInfo(UDataMemory* pData, UDataInfo* pInfo);
+=======
+udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
+>>>>>>> miniblink49
 
 /**
  * This function bypasses the normal ICU data loading process and
@@ -357,7 +399,12 @@ udata_getInfo(UDataMemory* pData, UDataInfo* pInfo);
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 udata_setCommonData(const void* data, UErrorCode* err);
+=======
+udata_setCommonData(const void *data, UErrorCode *err);
+
+>>>>>>> miniblink49
 
 /**
  * This function bypasses the normal ICU data loading process for application-specific
@@ -387,7 +434,11 @@ udata_setCommonData(const void* data, UErrorCode* err);
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 udata_setAppData(const char* packageName, const void* data, UErrorCode* err);
+=======
+udata_setAppData(const char *packageName, const void *data, UErrorCode *err);
+>>>>>>> miniblink49
 
 /**
  * Possible settings for udata_setFileAccess()
@@ -421,7 +472,11 @@ typedef enum UDataFileAccess {
  * @stable ICU 3.4 
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 udata_setFileAccess(UDataFileAccess access, UErrorCode* status);
+=======
+udata_setFileAccess(UDataFileAccess access, UErrorCode *status);
+>>>>>>> miniblink49
 
 U_CDECL_END
 

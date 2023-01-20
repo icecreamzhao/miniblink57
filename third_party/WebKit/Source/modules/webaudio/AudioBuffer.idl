@@ -26,11 +26,17 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // See https://webaudio.github.io/web-audio-api/#AudioBuffer
 [
     Constructor(BaseAudioContext context, AudioBufferOptions options),
     RaisesException=Constructor,
     Measure
+=======
+[
+    GarbageCollected,
+    Conditional=WEB_AUDIO
+>>>>>>> miniblink49
 ] interface AudioBuffer {
     readonly attribute long length; // in sample-frames
     readonly attribute double duration; // in seconds

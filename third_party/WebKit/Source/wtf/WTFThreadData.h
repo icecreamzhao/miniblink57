@@ -34,21 +34,32 @@
 #include "wtf/Threading.h"
 #include "wtf/WTFExport.h"
 #include "wtf/text/StringHash.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace WTF {
 
 class AtomicStringTable;
 struct ICUConverterWrapper;
 
+<<<<<<< HEAD
 class WTF_EXPORT WTFThreadData {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     WTF_MAKE_NONCOPYABLE(WTFThreadData);
 
+=======
+typedef void (*AtomicStringTableDestructor)(AtomicStringTable*);
+
+class WTF_EXPORT WTFThreadData {
+    WTF_MAKE_NONCOPYABLE(WTFThreadData);
+>>>>>>> miniblink49
 public:
     WTFThreadData();
     ~WTFThreadData();
 
+<<<<<<< HEAD
     AtomicStringTable& getAtomicStringTable() { return *m_atomicStringTable; }
 
     ICUConverterWrapper& cachedConverterICU() { return *m_cachedConverterICU; }
@@ -71,12 +82,38 @@ private:
 
     static ThreadSpecific<WTFThreadData>* staticData;
     friend WTFThreadData& wtfThreadData();
+=======
+    AtomicStringTable* atomicStringTable()
+    {
+        return m_atomicStringTable;
+    }
+
+    ICUConverterWrapper& cachedConverterICU() { return *m_cachedConverterICU; }
+
+private:
+    AtomicStringTable* m_atomicStringTable;
+    AtomicStringTableDestructor m_atomicStringTableDestructor;
+    OwnPtr<ICUConverterWrapper> m_cachedConverterICU;
+
+    static ThreadSpecific<WTFThreadData>* staticData;
+    friend WTFThreadData& wtfThreadData();
+    friend class AtomicStringTable;
+>>>>>>> miniblink49
 };
 
 inline WTFThreadData& wtfThreadData()
 {
+<<<<<<< HEAD
     // WTFThreadData is used on main thread before it could possibly be used
     // on secondary ones, so there is no need for synchronization here.
+=======
+    // WRT WebCore:
+    //    WTFThreadData is used on main thread before it could possibly be used
+    //    on secondary ones, so there is no need for synchronization here.
+    // WRT JavaScriptCore:
+    //    wtfThreadData() is initially called from initializeThreading(), ensuring
+    //    this is initially called in a pthread_once locked context.
+>>>>>>> miniblink49
     if (!WTFThreadData::staticData)
         WTFThreadData::staticData = new ThreadSpecific<WTFThreadData>;
     return **WTFThreadData::staticData;

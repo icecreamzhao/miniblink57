@@ -19,9 +19,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/layout/svg/LayoutSVGForeignObject.h"
 
 #include "core/layout/HitTestResult.h"
+#include "core/layout/LayoutView.h"
 #include "core/layout/svg/SVGLayoutSupport.h"
 #include "core/layout/svg/SVGResourcesCache.h"
 #include "core/paint/SVGForeignObjectPainter.h"
@@ -35,71 +38,41 @@ LayoutSVGForeignObject::LayoutSVGForeignObject(SVGForeignObjectElement* node)
 {
 }
 
-LayoutSVGForeignObject::~LayoutSVGForeignObject() { }
-
-bool LayoutSVGForeignObject::isChildAllowed(LayoutObject* child,
-    const ComputedStyle& style) const
+LayoutSVGForeignObject::~LayoutSVGForeignObject()
 {
-    // Disallow arbitary SVG content. Only allow proper <svg xmlns="svgNS">
-    // subdocuments.
-    return !child->isSVGChild();
 }
 
-void LayoutSVGForeignObject::paint(const PaintInfo& paintInfo,
-    const LayoutPoint&) const
+bool LayoutSVGForeignObject::isChildAllowed(LayoutObject* child, const ComputedStyle& style) const
+{
+    // Disallow arbitary SVG content. Only allow proper <svg xmlns="svgNS"> subdocuments.
+    return !child->isSVG() || child->isSVGRoot();
+}
+
+void LayoutSVGForeignObject::paint(const PaintInfo& paintInfo, const LayoutPoint&)
 {
     SVGForeignObjectPainter(*this).paint(paintInfo);
 }
 
-AffineTransform LayoutSVGForeignObject::localToSVGParentTransform() const
+const AffineTransform& LayoutSVGForeignObject::localToParentTransform() const
 {
-    // Unlike other viewport-defining SVG objects, here localSVGTransform applies
-    // to the viewport offset.
-    return localSVGTransform() * AffineTransform::translation(location().x(), location().y());
-}
-
-LayoutUnit LayoutSVGForeignObject::elementX() const
-{
-    return LayoutUnit(
-        roundf(SVGLengthContext(toSVGElement(node()))
-                   .valueForLength(styleRef().svgStyle().x(), styleRef(),
-                       SVGLengthMode::Width)));
-}
-
-LayoutUnit LayoutSVGForeignObject::elementY() const
-{
-    return LayoutUnit(
-        roundf(SVGLengthContext(toSVGElement(node()))
-                   .valueForLength(styleRef().svgStyle().y(), styleRef(),
-                       SVGLengthMode::Height)));
-}
-
-LayoutUnit LayoutSVGForeignObject::elementWidth() const
-{
-    return LayoutUnit(SVGLengthContext(toSVGElement(node()))
-                          .valueForLength(styleRef().width(), styleRef(),
-                              SVGLengthMode::Width));
-}
-
-LayoutUnit LayoutSVGForeignObject::elementHeight() const
-{
-    return LayoutUnit(SVGLengthContext(toSVGElement(node()))
-                          .valueForLength(styleRef().height(), styleRef(),
-                              SVGLengthMode::Height));
+    m_localToParentTransform = localTransform();
+    m_localToParentTransform.translate(m_viewport.x(), m_viewport.y());
+    return m_localToParentTransform;
 }
 
 void LayoutSVGForeignObject::updateLogicalWidth()
 {
-    setLogicalWidth(styleRef().isHorizontalWritingMode() ? elementWidth()
-                                                         : elementHeight());
+    // FIXME: Investigate in size rounding issues
+    // FIXME: Remove unnecessary rounding when layout is off ints: webkit.org/b/63656
+    setWidth(static_cast<int>(roundf(m_viewport.width())));
 }
 
-void LayoutSVGForeignObject::computeLogicalHeight(
-    LayoutUnit,
-    LayoutUnit logicalTop,
-    LogicalExtentComputedValues& computedValues) const
+void LayoutSVGForeignObject::computeLogicalHeight(LayoutUnit, LayoutUnit logicalTop, LogicalExtentComputedValues& computedValues) const
 {
-    computedValues.m_extent = styleRef().isHorizontalWritingMode() ? elementHeight() : elementWidth();
+    // FIXME: Investigate in size rounding issues
+    // FIXME: Remove unnecessary rounding when layout is off ints: webkit.org/b/63656
+    // FIXME: Is this correct for vertical writing mode?
+    computedValues.m_extent = static_cast<int>(roundf(m_viewport.height()));
     computedValues.m_position = logicalTop;
 }
 
@@ -111,28 +84,36 @@ void LayoutSVGForeignObject::layout()
 
     bool updateCachedBoundariesInParents = false;
     if (m_needsTransformUpdate) {
-        m_localTransform = foreign->calculateTransform(SVGElement::IncludeMotionTransform);
+        m_localTransform = foreign->calculateAnimatedLocalTransform();
         m_needsTransformUpdate = false;
         updateCachedBoundariesInParents = true;
     }
 
-    LayoutRect oldViewport = frameRect();
+    FloatRect oldViewport = m_viewport;
 
-    // Set box origin to the foreignObject x/y translation, so positioned objects
-    // in XHTML content get correct positions. A regular LayoutBoxModelObject
-    // would pull this information from ComputedStyle - in SVG those properties
-    // are ignored for non <svg> elements, so we mimic what happens when
-    // specifying them through CSS.
-    setX(elementX());
-    setY(elementY());
+    // Cache viewport boundaries
+    SVGLengthContext lengthContext(foreign);
+    FloatPoint viewportLocation(
+        lengthContext.valueForLength(styleRef().svgStyle().x(), styleRef(), SVGLengthMode::Width),
+        lengthContext.valueForLength(styleRef().svgStyle().y(), styleRef(), SVGLengthMode::Height));
+    m_viewport = FloatRect(viewportLocation, FloatSize(
+        lengthContext.valueForLength(styleRef().width(), styleRef(), SVGLengthMode::Width),
+        lengthContext.valueForLength(styleRef().height(), styleRef(), SVGLengthMode::Height)));
+    if (!updateCachedBoundariesInParents)
+        updateCachedBoundariesInParents = oldViewport != m_viewport;
+
+    // Set box origin to the foreignObject x/y translation, so positioned objects in XHTML content get correct
+    // positions. A regular LayoutBoxModelObject would pull this information from ComputedStyle - in SVG those
+    // properties are ignored for non <svg> elements, so we mimic what happens when specifying them through CSS.
+
+    // FIXME: Investigate in location rounding issues - only affects LayoutSVGForeignObject & LayoutSVGText
+    setLocation(roundedIntPoint(viewportLocation));
 
     bool layoutChanged = everHadLayout() && selfNeedsLayout();
     LayoutBlock::layout();
     ASSERT(!needsLayout());
 
     // If our bounds changed, notify the parents.
-    if (!updateCachedBoundariesInParents)
-        updateCachedBoundariesInParents = oldViewport != frameRect();
     if (updateCachedBoundariesInParents)
         LayoutSVGBlock::setNeedsBoundariesUpdate();
 
@@ -141,32 +122,27 @@ void LayoutSVGForeignObject::layout()
         SVGResourcesCache::clientLayoutChanged(this);
 }
 
-bool LayoutSVGForeignObject::nodeAtFloatPoint(HitTestResult& result,
-    const FloatPoint& pointInParent,
-    HitTestAction hitTestAction)
+bool LayoutSVGForeignObject::nodeAtFloatPoint(HitTestResult& result, const FloatPoint& pointInParent, HitTestAction hitTestAction)
 {
     // Embedded content is drawn in the foreground phase.
     if (hitTestAction != HitTestForeground)
         return false;
 
-    AffineTransform localTransform = this->localSVGTransform();
+    AffineTransform localTransform = this->localTransform();
     if (!localTransform.isInvertible())
         return false;
 
     FloatPoint localPoint = localTransform.inverse().mapPoint(pointInParent);
 
     // Early exit if local point is not contained in clipped viewport area
-    if (SVGLayoutSupport::isOverflowHidden(this) && !frameRect().contains(LayoutPoint(localPoint)))
+    if (SVGLayoutSupport::isOverflowHidden(this) && !m_viewport.contains(localPoint))
         return false;
 
     // FOs establish a stacking context, so we need to hit-test all layers.
-    HitTestLocation hitTestLocation(localPoint);
-    return LayoutBlock::nodeAtPoint(result, hitTestLocation, LayoutPoint(),
-               HitTestForeground)
-        || LayoutBlock::nodeAtPoint(result, hitTestLocation, LayoutPoint(),
-            HitTestFloat)
-        || LayoutBlock::nodeAtPoint(result, hitTestLocation, LayoutPoint(),
-            HitTestChildBlockBackgrounds);
+    HitTestLocation hitTestLocation(roundedLayoutPoint(localPoint));
+    return LayoutBlock::nodeAtPoint(result, hitTestLocation, LayoutPoint(), HitTestForeground)
+        || LayoutBlock::nodeAtPoint(result, hitTestLocation, LayoutPoint(), HitTestFloat)
+        || LayoutBlock::nodeAtPoint(result, hitTestLocation, LayoutPoint(), HitTestChildBlockBackgrounds);
 }
 
-} // namespace blink
+}

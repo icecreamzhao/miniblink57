@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "skdiff_html.h"
 #include "SkStream.h"
 #include "SkTime.h"
@@ -14,19 +15,36 @@
 /// or natural size, whichever is smallest.
 static int compute_image_height(int height, int width)
 {
+=======
+#include "skdiff.h"
+#include "skdiff_html.h"
+#include "SkStream.h"
+#include "SkTime.h"
+
+/// Make layout more consistent by scaling image to 240 height, 360 width,
+/// or natural size, whichever is smallest.
+static int compute_image_height(int height, int width) {
+>>>>>>> miniblink49
     int retval = 240;
     if (height < retval) {
         retval = height;
     }
+<<<<<<< HEAD
     float scale = (float)retval / height;
     if (width * scale > 360) {
         scale = (float)360 / width;
+=======
+    float scale = (float) retval / height;
+    if (width * scale > 360) {
+        scale = (float) 360 / width;
+>>>>>>> miniblink49
         retval = static_cast<int>(height * scale);
     }
     return retval;
 }
 
 static void print_table_header(SkFILEWStream* stream,
+<<<<<<< HEAD
     const int matchCount,
     const int colorThreshold,
     const RecordArray& differences,
@@ -34,6 +52,14 @@ static void print_table_header(SkFILEWStream* stream,
     const SkString& comparisonDir,
     bool doOutputDate = false)
 {
+=======
+                               const int matchCount,
+                               const int colorThreshold,
+                               const RecordArray& differences,
+                               const SkString &baseDir,
+                               const SkString &comparisonDir,
+                               bool doOutputDate = false) {
+>>>>>>> miniblink49
     stream->writeText("<table>\n");
     stream->writeText("<tr><th>");
     stream->writeText("select image</th>\n<th>");
@@ -78,12 +104,22 @@ static void print_table_header(SkFILEWStream* stream,
     stream->writeText("</tr>\n");
 }
 
+<<<<<<< HEAD
 static void print_pixel_count(SkFILEWStream* stream, const DiffRecord& diff)
 {
     stream->writeText("<br>(");
     stream->writeDecAsText(static_cast<int>(diff.fFractionDifference * diff.fBase.fBitmap.width() * diff.fBase.fBitmap.height()));
     stream->writeText(" pixels)");
     /*
+=======
+static void print_pixel_count(SkFILEWStream* stream, const DiffRecord& diff) {
+    stream->writeText("<br>(");
+    stream->writeDecAsText(static_cast<int>(diff.fFractionDifference *
+                                            diff.fBase.fBitmap.width() *
+                                            diff.fBase.fBitmap.height()));
+    stream->writeText(" pixels)");
+/*
+>>>>>>> miniblink49
     stream->writeDecAsText(diff.fWeightedFraction *
                            diff.fBaseWidth *
                            diff.fBaseHeight);
@@ -91,21 +127,31 @@ static void print_pixel_count(SkFILEWStream* stream, const DiffRecord& diff)
 */
 }
 
+<<<<<<< HEAD
 static void print_checkbox_cell(SkFILEWStream* stream, const DiffRecord& diff)
 {
+=======
+static void print_checkbox_cell(SkFILEWStream* stream, const DiffRecord& diff) {
+>>>>>>> miniblink49
     stream->writeText("<td><input type=\"checkbox\" name=\"");
     stream->writeText(diff.fBase.fFilename.c_str());
     stream->writeText("\" checked=\"yes\"></td>");
 }
 
+<<<<<<< HEAD
 static void print_label_cell(SkFILEWStream* stream, const DiffRecord& diff)
 {
     char metricBuf[20];
+=======
+static void print_label_cell(SkFILEWStream* stream, const DiffRecord& diff) {
+    char metricBuf [20];
+>>>>>>> miniblink49
 
     stream->writeText("<td><b>");
     stream->writeText(diff.fBase.fFilename.c_str());
     stream->writeText("</b><br>");
     switch (diff.fResult) {
+<<<<<<< HEAD
     case DiffRecord::kEqualBits_Result:
         SkDEBUGFAIL("should not encounter DiffRecord with kEqualBits here");
         return;
@@ -116,6 +162,18 @@ static void print_label_cell(SkFILEWStream* stream, const DiffRecord& diff)
         stream->writeText("Image sizes differ</td>");
         return;
     case DiffRecord::kDifferentPixels_Result:
+=======
+      case DiffRecord::kEqualBits_Result:
+        SkDEBUGFAIL("should not encounter DiffRecord with kEqualBits here");
+        return;
+      case DiffRecord::kEqualPixels_Result:
+        SkDEBUGFAIL("should not encounter DiffRecord with kEqualPixels here");
+        return;
+      case DiffRecord::kDifferentSizes_Result:
+        stream->writeText("Image sizes differ</td>");
+        return;
+      case DiffRecord::kDifferentPixels_Result:
+>>>>>>> miniblink49
         sprintf(metricBuf, "%.4f%%", 100 * diff.fFractionDifference);
         stream->writeText(metricBuf);
         stream->writeText(" of pixels differ");
@@ -129,8 +187,13 @@ static void print_label_cell(SkFILEWStream* stream, const DiffRecord& diff)
         }
         stream->writeText("<br>");
         if (SkScalarRoundToInt(diff.fAverageMismatchA) > 0) {
+<<<<<<< HEAD
             stream->writeText("<br>Average alpha channel mismatch ");
             stream->writeDecAsText(SkScalarRoundToInt(diff.fAverageMismatchA));
+=======
+          stream->writeText("<br>Average alpha channel mismatch ");
+          stream->writeDecAsText(SkScalarRoundToInt(diff.fAverageMismatchA));
+>>>>>>> miniblink49
         }
 
         stream->writeText("<br>Max alpha channel mismatch ");
@@ -142,6 +205,7 @@ static void print_label_cell(SkFILEWStream* stream, const DiffRecord& diff)
         stream->writeText("<br>");
         stream->writeText("<br>Average color mismatch ");
         stream->writeDecAsText(SkScalarRoundToInt(MAX3(diff.fAverageMismatchR,
+<<<<<<< HEAD
             diff.fAverageMismatchG,
             diff.fAverageMismatchB)));
         stream->writeText("<br>Max color mismatch ");
@@ -151,20 +215,39 @@ static void print_label_cell(SkFILEWStream* stream, const DiffRecord& diff)
         stream->writeText("</td>");
         break;
     case DiffRecord::kCouldNotCompare_Result:
+=======
+                                                       diff.fAverageMismatchG,
+                                                       diff.fAverageMismatchB)));
+        stream->writeText("<br>Max color mismatch ");
+        stream->writeDecAsText(MAX3(diff.fMaxMismatchR,
+                                    diff.fMaxMismatchG,
+                                    diff.fMaxMismatchB));
+        stream->writeText("</td>");
+        break;
+      case DiffRecord::kCouldNotCompare_Result:
+>>>>>>> miniblink49
         stream->writeText("Could not compare.<br>base: ");
         stream->writeText(DiffResource::getStatusDescription(diff.fBase.fStatus));
         stream->writeText("<br>comparison: ");
         stream->writeText(DiffResource::getStatusDescription(diff.fComparison.fStatus));
         stream->writeText("</td>");
         return;
+<<<<<<< HEAD
     default:
+=======
+      default:
+>>>>>>> miniblink49
         SkDEBUGFAIL("encountered DiffRecord with unknown result type");
         return;
     }
 }
 
+<<<<<<< HEAD
 static void print_image_cell(SkFILEWStream* stream, const SkString& path, int height)
 {
+=======
+static void print_image_cell(SkFILEWStream* stream, const SkString& path, int height) {
+>>>>>>> miniblink49
     stream->writeText("<td><a href=\"");
     stream->writeText(path.c_str());
     stream->writeText("\"><img src=\"");
@@ -174,8 +257,12 @@ static void print_image_cell(SkFILEWStream* stream, const SkString& path, int he
     stream->writeText("px\"></a></td>");
 }
 
+<<<<<<< HEAD
 static void print_link_cell(SkFILEWStream* stream, const SkString& path, const char* text)
 {
+=======
+static void print_link_cell(SkFILEWStream* stream, const SkString& path, const char* text) {
+>>>>>>> miniblink49
     stream->writeText("<td><a href=\"");
     stream->writeText(path.c_str());
     stream->writeText("\">");
@@ -184,8 +271,12 @@ static void print_link_cell(SkFILEWStream* stream, const SkString& path, const c
 }
 
 static void print_diff_resource_cell(SkFILEWStream* stream, DiffResource& resource,
+<<<<<<< HEAD
     const SkString& relativePath, bool local)
 {
+=======
+                                     const SkString& relativePath, bool local) {
+>>>>>>> miniblink49
     if (resource.fBitmap.empty()) {
         if (DiffResource::kCouldNotDecode_Status == resource.fStatus) {
             if (local && !resource.fFilename.isEmpty()) {
@@ -215,8 +306,12 @@ static void print_diff_resource_cell(SkFILEWStream* stream, DiffResource& resour
     print_image_cell(stream, resource.fFullPath, height);
 }
 
+<<<<<<< HEAD
 static void print_diff_row(SkFILEWStream* stream, DiffRecord& diff, const SkString& relativePath)
 {
+=======
+static void print_diff_row(SkFILEWStream* stream, DiffRecord& diff, const SkString& relativePath) {
+>>>>>>> miniblink49
     stream->writeText("<tr>\n");
     print_checkbox_cell(stream, diff);
     print_label_cell(stream, diff);
@@ -229,12 +324,20 @@ static void print_diff_row(SkFILEWStream* stream, DiffRecord& diff, const SkStri
 }
 
 void print_diff_page(const int matchCount,
+<<<<<<< HEAD
     const int colorThreshold,
     const RecordArray& differences,
     const SkString& baseDir,
     const SkString& comparisonDir,
     const SkString& outputDir)
 {
+=======
+                     const int colorThreshold,
+                     const RecordArray& differences,
+                     const SkString& baseDir,
+                     const SkString& comparisonDir,
+                     const SkString& outputDir) {
+>>>>>>> miniblink49
 
     SkASSERT(!baseDir.isEmpty());
     SkASSERT(!comparisonDir.isEmpty());
@@ -289,12 +392,17 @@ void print_diff_page(const int matchCount,
         "}\n"
         "</script>\n</head>\n<body>\n");
     print_table_header(&outputStream, matchCount, colorThreshold, differences,
+<<<<<<< HEAD
         baseDir, comparisonDir);
+=======
+                       baseDir, comparisonDir);
+>>>>>>> miniblink49
     int i;
     for (i = 0; i < differences.count(); i++) {
         DiffRecord* diff = differences[i];
 
         switch (diff->fResult) {
+<<<<<<< HEAD
         // Cases in which there is no diff to report.
         case DiffRecord::kEqualBits_Result:
         case DiffRecord::kEqualPixels_Result:
@@ -306,6 +414,19 @@ void print_diff_page(const int matchCount,
             print_diff_row(&outputStream, *diff, relativePath);
             continue;
         default:
+=======
+          // Cases in which there is no diff to report.
+          case DiffRecord::kEqualBits_Result:
+          case DiffRecord::kEqualPixels_Result:
+            continue;
+          // Cases in which we want a detailed pixel diff.
+          case DiffRecord::kDifferentPixels_Result:
+          case DiffRecord::kDifferentSizes_Result:
+          case DiffRecord::kCouldNotCompare_Result:
+            print_diff_row(&outputStream, *diff, relativePath);
+            continue;
+          default:
+>>>>>>> miniblink49
             SkDEBUGFAIL("encountered DiffRecord with unknown result type");
             continue;
         }

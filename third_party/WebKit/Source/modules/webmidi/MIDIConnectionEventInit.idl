@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIConnectionEventInit
 
 dictionary MIDIConnectionEventInit : EventInit {
@@ -9,4 +10,10 @@ dictionary MIDIConnectionEventInit : EventInit {
     // https://crbug.com/647693
     // https://github.com/WebAudio/web-midi-api/issues/168
     MIDIPort? port;
+=======
+// http://webaudio.github.io/web-midi-api/#idl-def-MIDIConnectionEventInit
+
+dictionary MIDIConnectionEventInit : EventInit {
+    MIDIPort port;
+>>>>>>> miniblink49
 };

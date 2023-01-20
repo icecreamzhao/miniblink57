@@ -35,6 +35,7 @@
 #include "wtf/WTFExport.h"
 #include <stdint.h>
 
+<<<<<<< HEAD
 // For portability, we do not make use of C++11 thread-safe statics, as
 // supported by some toolchains. Make use of double-checked locking to reduce
 // overhead.  Note that this uses system-wide default lock, and cannot be used
@@ -54,6 +55,36 @@
     }                                                                    \
     T& name = *static_cast<T*>(name##Pointer)
 
+=======
+// For portability, we do not make use of C++11 thread-safe statics, as supported
+// by some toolchains. Make use of double-checked locking to reduce overhead.
+#define AtomicallyInitializedStaticReferenceInternal(T, name, initializer, LOCK, UNLOCK) \
+    /* Init to nullptr is thread-safe on all implementations. */        \
+    static void* name##Pointer = nullptr;                               \
+    if (!WTF::acquireLoad(&name##Pointer)) {                            \
+        LOCK;                                                           \
+        if (!WTF::acquireLoad(&name##Pointer)) {                        \
+            WTF::RemoveConst<T>::Type* initializerResult = initializer; \
+            WTF::releaseStore(&name##Pointer, initializerResult);       \
+        }                                                               \
+        UNLOCK;                                                         \
+    }                                                                   \
+    T& name = *static_cast<T*>(name##Pointer)
+
+// Uses system-wide default lock. This version cannot be used before
+// WTF::initializeThreading() is called.
+#define AtomicallyInitializedStaticReference(T, name, initializer)      \
+    AtomicallyInitializedStaticReferenceInternal(                       \
+        T, name, initializer, \
+        WTF::lockAtomicallyInitializedStaticMutex(),                    \
+        WTF::unlockAtomicallyInitializedStaticMutex())
+
+// Same as above but uses a given lock.
+#define AtomicallyInitializedStaticReferenceWithLock(T, name, initializer, lockable)  \
+    AtomicallyInitializedStaticReferenceInternal(                       \
+        T, name, initializer, lockable.lock(), lockable.unlock());
+
+>>>>>>> miniblink49
 namespace WTF {
 
 #if OS(WIN)
@@ -62,16 +93,23 @@ typedef uint32_t ThreadIdentifier;
 typedef intptr_t ThreadIdentifier;
 #endif
 
+<<<<<<< HEAD
 namespace internal {
     ThreadIdentifier currentThreadSyscall();
 } // namespace internal
 
+=======
+>>>>>>> miniblink49
 WTF_EXPORT ThreadIdentifier currentThread();
 
 WTF_EXPORT void lockAtomicallyInitializedStaticMutex();
 WTF_EXPORT void unlockAtomicallyInitializedStaticMutex();
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
 WTF_EXPORT bool isAtomicallyInitializedStaticMutexLockHeld();
 WTF_EXPORT bool isBeforeThreadCreated();
 WTF_EXPORT void willCreateThread();
@@ -79,7 +117,12 @@ WTF_EXPORT void willCreateThread();
 
 } // namespace WTF
 
+<<<<<<< HEAD
 using WTF::currentThread;
 using WTF::ThreadIdentifier;
+=======
+using WTF::ThreadIdentifier;
+using WTF::currentThread;
+>>>>>>> miniblink49
 
 #endif // Threading_h

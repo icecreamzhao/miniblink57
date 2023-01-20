@@ -5,20 +5,31 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+#include "gm.h"
+>>>>>>> miniblink49
 #include "SkBlurDrawLooper.h"
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
 #include "SkGradientShader.h"
 #include "SkMatrix.h"
 #include "SkTArray.h"
+<<<<<<< HEAD
 #include "gm.h"
+=======
+>>>>>>> miniblink49
 
 namespace skiagm {
 
 class RectsGM : public GM {
 public:
+<<<<<<< HEAD
     RectsGM()
     {
+=======
+    RectsGM() {
+>>>>>>> miniblink49
         this->setBGColor(0xFF000000);
         this->makePaints();
         this->makeMatrices();
@@ -26,6 +37,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("rects");
@@ -38,6 +50,18 @@ protected:
 
     void makePaints()
     {
+=======
+
+    SkString onShortName() override {
+        return SkString("rects");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(1200, 900);
+    }
+
+    void makePaints() {
+>>>>>>> miniblink49
         {
             // no AA
             SkPaint p;
@@ -67,10 +91,18 @@ protected:
             SkPaint p;
             p.setColor(SK_ColorWHITE);
             p.setAntiAlias(true);
+<<<<<<< HEAD
             p.setMaskFilter(SkBlurMaskFilter::Make(
                 kNormal_SkBlurStyle,
                 SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(5)),
                 SkBlurMaskFilter::kHighQuality_BlurFlag));
+=======
+            SkMaskFilter* mf = SkBlurMaskFilter::Create(
+                                   kNormal_SkBlurStyle,
+                                   SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(5)),
+                                   SkBlurMaskFilter::kHighQuality_BlurFlag);
+            p.setMaskFilter(mf)->unref();
+>>>>>>> miniblink49
             fPaints.push_back(p);
         }
 
@@ -82,9 +114,19 @@ protected:
             SkPoint center = SkPoint::Make(SkIntToScalar(-5), SkIntToScalar(30));
             SkColor colors[] = { SK_ColorBLUE, SK_ColorRED, SK_ColorGREEN };
             SkScalar pos[] = { 0, SK_ScalarHalf, SK_Scalar1 };
+<<<<<<< HEAD
             p.setShader(SkGradientShader::MakeRadial(center, 20, colors, pos,
                 SK_ARRAY_COUNT(colors),
                 SkShader::kClamp_TileMode));
+=======
+            SkShader* s = SkGradientShader::CreateRadial(center,
+                                                         SkIntToScalar(20),
+                                                         colors,
+                                                         pos,
+                                                         SK_ARRAY_COUNT(colors),
+                                                         SkShader::kClamp_TileMode);
+            p.setShader(s)->unref();
+>>>>>>> miniblink49
             fPaints.push_back(p);
         }
 
@@ -93,10 +135,22 @@ protected:
             SkPaint p;
             p.setColor(SK_ColorWHITE);
             p.setAntiAlias(true);
+<<<<<<< HEAD
             p.setLooper(SkBlurDrawLooper::Make(SK_ColorWHITE,
                 SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(10)),
                 SkIntToScalar(5), SkIntToScalar(10),
                 SkBlurDrawLooper::kIgnoreTransform_BlurFlag | SkBlurDrawLooper::kOverrideColor_BlurFlag | SkBlurDrawLooper::kHighQuality_BlurFlag));
+=======
+            SkBlurDrawLooper* shadowLooper =
+                SkBlurDrawLooper::Create(SK_ColorWHITE,
+                                         SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(10)),
+                                         SkIntToScalar(5), SkIntToScalar(10),
+                                         SkBlurDrawLooper::kIgnoreTransform_BlurFlag |
+                                         SkBlurDrawLooper::kOverrideColor_BlurFlag |
+                                         SkBlurDrawLooper::kHighQuality_BlurFlag);
+            SkAutoUnref aurL0(shadowLooper);
+            p.setLooper(shadowLooper);
+>>>>>>> miniblink49
             fPaints.push_back(p);
         }
 
@@ -162,8 +216,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     void makeMatrices()
     {
+=======
+    void makeMatrices() {
+>>>>>>> miniblink49
         {
             // 1x1.5 scale
             SkMatrix m;
@@ -207,8 +265,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     void makeRects()
     {
+=======
+    void makeRects() {
+>>>>>>> miniblink49
         {
             // small square
             SkRect r = SkRect::MakeLTRB(0, 0, 30, 30);
@@ -241,6 +303,7 @@ protected:
     }
 
     // position the current test on the canvas
+<<<<<<< HEAD
     static void position(SkCanvas* canvas, int testCount)
     {
         canvas->translate(SK_Scalar1 * 100 * (testCount % 10) + SK_Scalar1 / 4,
@@ -249,6 +312,14 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    static void position(SkCanvas* canvas, int testCount) {
+        canvas->translate(SK_Scalar1 * 100 * (testCount % 10) + SK_Scalar1 / 4,
+                          SK_Scalar1 * 100 * (testCount / 10) + 3 * SK_Scalar1 / 4);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         canvas->translate(20 * SK_Scalar1, 20 * SK_Scalar1);
 
         int testCount = 0;
@@ -278,9 +349,15 @@ protected:
     }
 
 private:
+<<<<<<< HEAD
     SkTArray<SkPaint> fPaints;
     SkTArray<SkMatrix> fMatrices;
     SkTArray<SkRect> fRects;
+=======
+    SkTArray<SkPaint>  fPaints;
+    SkTArray<SkMatrix> fMatrices;
+    SkTArray<SkRect>   fRects;
+>>>>>>> miniblink49
 
     typedef GM INHERITED;
 };

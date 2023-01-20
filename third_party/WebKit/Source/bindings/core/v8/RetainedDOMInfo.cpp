@@ -28,25 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "bindings/core/v8/RetainedDOMInfo.h"
 
-#include "bindings/core/v8/V8Node.h"
-#include "bindings/core/v8/WrapperTypeInfo.h"
 #include "core/dom/ContainerNode.h"
 #include "core/dom/NodeTraversal.h"
 
 namespace blink {
-
-v8::RetainedObjectInfo* RetainedDOMInfo::createRetainedDOMInfo(
-    uint16_t classId,
-    v8::Local<v8::Value> wrapper)
-{
-    ASSERT(classId == WrapperTypeInfo::NodeClassId);
-    if (!wrapper->IsObject())
-        return 0;
-    Node* node = V8Node::toImpl(wrapper.As<v8::Object>());
-    return node ? new RetainedDOMInfo(node) : nullptr;
-}
 
 RetainedDOMInfo::RetainedDOMInfo(Node* root)
     : m_root(root)
@@ -54,7 +42,9 @@ RetainedDOMInfo::RetainedDOMInfo(Node* root)
     ASSERT(m_root);
 }
 
-RetainedDOMInfo::~RetainedDOMInfo() { }
+RetainedDOMInfo::~RetainedDOMInfo()
+{
+}
 
 void RetainedDOMInfo::Dispose()
 {
@@ -68,25 +58,22 @@ bool RetainedDOMInfo::IsEquivalent(v8::RetainedObjectInfo* other)
         return true;
     if (strcmp(GetLabel(), other->GetLabel()))
         return false;
-    return static_cast<blink::RetainedObjectInfo*>(other)
-               ->GetEquivalenceClass()
-        == this->GetEquivalenceClass();
+    return static_cast<blink::RetainedObjectInfo*>(other)->GetEquivalenceClass() == this->GetEquivalenceClass();
 }
 
 intptr_t RetainedDOMInfo::GetHash()
 {
-    return PtrHash<void>::hash(m_root);
+    return PtrHash<void*>::hash(m_root);
 }
 
 const char* RetainedDOMInfo::GetGroupLabel()
 {
-    return m_root->isConnected() ? "(Document DOM trees)"
-                                 : "(Detached DOM trees)";
+    return m_root->inDocument() ? "(Document DOM trees)" : "(Detached DOM trees)";
 }
 
 const char* RetainedDOMInfo::GetLabel()
 {
-    return m_root->isConnected() ? "Document DOM tree" : "Detached DOM tree";
+    return m_root->inDocument() ? "Document DOM tree" : "Detached DOM tree";
 }
 
 intptr_t RetainedDOMInfo::GetElementCount()
@@ -101,48 +88,49 @@ intptr_t RetainedDOMInfo::GetElementCount()
 
 intptr_t RetainedDOMInfo::GetEquivalenceClass()
 {
-    return reinterpret_cast<intptr_t>(m_root.get());
+    return reinterpret_cast<intptr_t>(m_root);
 }
 
-SuspendableObjectsInfo::SuspendableObjectsInfo(
-    int numberOfObjectsWithPendingActivity)
+ActiveDOMObjectsInfo::ActiveDOMObjectsInfo(int numberOfObjectsWithPendingActivity)
     : m_numberOfObjectsWithPendingActivity(numberOfObjectsWithPendingActivity)
 {
 }
 
-SuspendableObjectsInfo::~SuspendableObjectsInfo() { }
+ActiveDOMObjectsInfo::~ActiveDOMObjectsInfo()
+{
+}
 
-void SuspendableObjectsInfo::Dispose()
+void ActiveDOMObjectsInfo::Dispose()
 {
     delete this;
 }
 
-bool SuspendableObjectsInfo::IsEquivalent(v8::RetainedObjectInfo* other)
+bool ActiveDOMObjectsInfo::IsEquivalent(v8::RetainedObjectInfo* other)
 {
     return this == other;
 }
 
-intptr_t SuspendableObjectsInfo::GetHash()
+intptr_t ActiveDOMObjectsInfo::GetHash()
 {
-    return PtrHash<void>::hash(this);
+    return PtrHash<void*>::hash(this);
 }
 
-const char* SuspendableObjectsInfo::GetGroupLabel()
+const char* ActiveDOMObjectsInfo::GetGroupLabel()
 {
     return "(Pending activities group)";
 }
 
-const char* SuspendableObjectsInfo::GetLabel()
+const char* ActiveDOMObjectsInfo::GetLabel()
 {
     return "Pending activities";
 }
 
-intptr_t SuspendableObjectsInfo::GetElementCount()
+intptr_t ActiveDOMObjectsInfo::GetElementCount()
 {
     return m_numberOfObjectsWithPendingActivity;
 }
 
-intptr_t SuspendableObjectsInfo::GetEquivalenceClass()
+intptr_t ActiveDOMObjectsInfo::GetEquivalenceClass()
 {
     return reinterpret_cast<intptr_t>(this);
 }

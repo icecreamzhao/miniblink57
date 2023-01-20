@@ -28,8 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #ifndef WebAXEnums_11h
 #define WebAXEnums_11h
+=======
+#ifndef WebAXEnums_h
+#define WebAXEnums_h
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,12 +49,17 @@ enum WebAXEvent {
     WebAXEventBlur,
     WebAXEventCheckedStateChanged,
     WebAXEventChildrenChanged,
+<<<<<<< HEAD
     WebAXEventClicked,
     WebAXEventDocumentSelectionChanged,
     WebAXEventExpandedChanged,
     WebAXEventFocus,
     WebAXEventHide,
     WebAXEventHover,
+=======
+    WebAXEventFocus,
+    WebAXEventHide,
+>>>>>>> miniblink49
     WebAXEventInvalidStatusChanged,
     WebAXEventLayoutComplete,
     WebAXEventLiveRegionChanged,
@@ -77,13 +87,19 @@ enum WebAXEvent {
 // Enforced in AssertMatchingEnums.cpp.
 enum WebAXRole {
     WebAXRoleUnknown = 0,
+<<<<<<< HEAD
     WebAXRoleAbbr,
+=======
+>>>>>>> miniblink49
     WebAXRoleAlertDialog,
     WebAXRoleAlert,
     WebAXRoleAnnotation,
     WebAXRoleApplication,
     WebAXRoleArticle,
+<<<<<<< HEAD
     WebAXRoleAudio,
+=======
+>>>>>>> miniblink49
     WebAXRoleBanner,
     WebAXRoleBlockquote,
     WebAXRoleBusyIndicator,
@@ -111,7 +127,10 @@ enum WebAXRole {
     WebAXRoleDiv,
     WebAXRoleDocument,
     WebAXRoleEmbeddedObject,
+<<<<<<< HEAD
     WebAXRoleFeed,
+=======
+>>>>>>> miniblink49
     WebAXRoleFigcaption,
     WebAXRoleFigure,
     WebAXRoleFooter,
@@ -129,7 +148,10 @@ enum WebAXRole {
     WebAXRoleInputTime,
     WebAXRoleLabel,
     WebAXRoleLegend,
+<<<<<<< HEAD
     WebAXRoleLineBreak,
+=======
+>>>>>>> miniblink49
     WebAXRoleLink,
     WebAXRoleListBoxOption,
     WebAXRoleListBox,
@@ -187,7 +209,10 @@ enum WebAXRole {
     WebAXRoleTab,
     WebAXRoleTableHeaderContainer,
     WebAXRoleTable,
+<<<<<<< HEAD
     WebAXRoleTerm,
+=======
+>>>>>>> miniblink49
     WebAXRoleTextField,
     WebAXRoleTime,
     WebAXRoleTimer,
@@ -197,8 +222,13 @@ enum WebAXRole {
     WebAXRoleTreeItem,
     WebAXRoleTree,
     WebAXRoleUserInterfaceTooltip,
+<<<<<<< HEAD
     WebAXRoleVideo,
     WebAXRoleWebArea,
+=======
+    WebAXRoleWebArea,
+    WebAXRoleLineBreak,
+>>>>>>> miniblink49
     WebAXRoleWindow,
 };
 
@@ -212,6 +242,10 @@ enum WebAXState {
     WebAXStateFocused,
     WebAXStateHaspopup,
     WebAXStateHovered,
+<<<<<<< HEAD
+=======
+    WebAXStateIndeterminate,
+>>>>>>> miniblink49
     WebAXStateInvisible,
     WebAXStateLinked,
     WebAXStateMultiline,
@@ -227,6 +261,7 @@ enum WebAXState {
     WebAXStateVisited,
 };
 
+<<<<<<< HEAD
 enum class WebAXSupportedAction {
     None = 0,
     Activate,
@@ -239,6 +274,8 @@ enum class WebAXSupportedAction {
     Uncheck
 };
 
+=======
+>>>>>>> miniblink49
 enum WebAXTextDirection {
     WebAXTextDirectionLR,
     WebAXTextDirectionRL,
@@ -273,6 +310,7 @@ enum WebAXOrientation {
     WebAXOrientationHorizontal,
 };
 
+<<<<<<< HEAD
 enum WebAXAriaCurrentState {
     WebAXAriaCurrentStateUndefined = 0,
     WebAXAriaCurrentStateFalse,
@@ -284,6 +322,8 @@ enum WebAXAriaCurrentState {
     WebAXAriaCurrentStateTime
 };
 
+=======
+>>>>>>> miniblink49
 // Only used by HTML form controls and any other element that has
 // an aria-invalid attribute specified.
 enum WebAXInvalidState {
@@ -295,12 +335,15 @@ enum WebAXInvalidState {
     WebAXInvalidStateOther
 };
 
+<<<<<<< HEAD
 enum WebAXMarkerType {
     WebAXMarkerTypeSpelling = 1 << 0,
     WebAXMarkerTypeGrammar = 1 << 1,
     WebAXMarkerTypeTextMatch = 1 << 2
 };
 
+=======
+>>>>>>> miniblink49
 // Used for exposing text attributes.
 enum WebAXTextStyle {
     WebAXTextStyleNone = 0,
@@ -314,6 +357,7 @@ enum WebAXTextStyle {
 // because on some platforms this determines how the accessible name
 // is exposed.
 enum WebAXNameFrom {
+<<<<<<< HEAD
     WebAXNameFromUninitialized = -1,
     WebAXNameFromAttribute = 0,
     WebAXNameFromCaption,
@@ -322,12 +366,19 @@ enum WebAXNameFrom {
     WebAXNameFromRelatedElement,
     WebAXNameFromValue,
     WebAXNameFromTitle,
+=======
+    WebAXNameFromAttribute = 0,
+    WebAXNameFromContents,
+    WebAXNameFromPlaceholder,
+    WebAXNameFromRelatedElement,
+>>>>>>> miniblink49
 };
 
 // The source of the accessible description of an element. This is needed
 // because on some platforms this determines how the accessible description
 // is exposed.
 enum WebAXDescriptionFrom {
+<<<<<<< HEAD
     WebAXDescriptionFromUninitialized = -1,
     WebAXDescriptionFromAttribute = 0,
     WebAXDescriptionFromContents,
@@ -338,6 +389,10 @@ enum WebAXDescriptionFrom {
 enum WebAXTextAffinity {
     WebAXTextAffinityUpstream,
     WebAXTextAffinityDownstream
+=======
+    WebAXDescriptionFromPlaceholder,
+    WebAXDescriptionFromRelatedElement
+>>>>>>> miniblink49
 };
 
 } // namespace blink

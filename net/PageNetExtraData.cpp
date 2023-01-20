@@ -6,7 +6,7 @@
 #include "net/StorageMgr.h"
 #include "net/WebStorageNamespaceImpl.h"
 #include "net/DefaultFullPath.h"
-#include <shlwapi.h>
+#include <Shlwapi.h>
 
 namespace net {
     
@@ -24,8 +24,8 @@ PageNetExtraData::~PageNetExtraData()
 
 void PageNetExtraData::setCookieJarFullPath(const std::string& fullPathUtf8)
 {
-    WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-    WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
+    WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+    WTF::Locker<WTF::Mutex> locker(*mutex);
 
     if (m_cookieJar) {
         OutputDebugStringA("PageNetExtraData::setCookieJarPath has been set");
@@ -53,7 +53,7 @@ std::string PageNetExtraData::getCookieJarFullPath()
 blink::WebStorageNamespace* PageNetExtraData::createWebStorageNamespace()
 {
     if (m_localStotageFullPath.isEmpty())
-        m_localStotageFullPath = String::fromUTF8(getDefaultLocalStorageFullPath().c_str());
+        m_localStotageFullPath = getDefaultLocalStorageFullPath();
 
     WebStorageNamespaceImpl* storageArea = nullptr;
     if (m_localStorage) {
@@ -70,8 +70,8 @@ blink::WebStorageNamespace* PageNetExtraData::createWebStorageNamespace()
 
 void PageNetExtraData::setLocalStorageFullPath(const std::string& fullPathUtf8)
 {
-    WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-    WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
+    WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+    WTF::Locker<WTF::Mutex> locker(*mutex);
 
     if (m_localStorage) {
         OutputDebugStringA("PageNetExtraData::setStorageAreaFullPath has been set");

@@ -30,9 +30,12 @@ class SVGPathByteStreamBuilder final : public SVGPathConsumer {
 public:
     SVGPathByteStreamBuilder(SVGPathByteStream&);
 
+private:
+    void incrementPathSegmentCount() override { }
+    bool continueConsuming() override { return true; }
+
     void emitSegment(const PathSegmentData&) override;
 
-private:
     SVGPathByteStream& m_byteStream;
 };
 

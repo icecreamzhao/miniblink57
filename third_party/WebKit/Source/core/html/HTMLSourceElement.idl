@@ -25,12 +25,14 @@
 
 // https://html.spec.whatwg.org/#the-source-element
 
-interface HTMLSourceElement : HTMLElement {
-    [CEReactions, Reflect, URL] attribute DOMString src;
-    [CEReactions] attribute DOMString type;
+[
+    RuntimeEnabled=Media
+] interface HTMLSourceElement : HTMLElement {
+    [Reflect, URL] attribute DOMString src;
+    attribute DOMString type;
 
     // https://html.spec.whatwg.org/#the-source-element-when-used-with-the-picture-element
-    [CEReactions, Reflect] attribute DOMString srcset;
-    [CEReactions, Reflect] attribute DOMString sizes;
-    [CEReactions, Reflect] attribute DOMString media;
+    [Reflect] attribute DOMString srcset;
+    [Reflect] attribute DOMString sizes;
+    [Reflect] attribute DOMString media;
 };

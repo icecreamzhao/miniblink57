@@ -2,9 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "modules/storage/StorageNamespaceController.h"
 
 //#include "modules/storage/InspectorDOMStorageAgent.h"
+=======
+#include "config.h"
+#include "modules/storage/StorageNamespaceController.h"
+
+#include "modules/storage/InspectorDOMStorageAgent.h"
+>>>>>>> miniblink49
 #include "modules/storage/StorageClient.h"
 #include "modules/storage/StorageNamespace.h"
 
@@ -21,6 +28,7 @@ StorageNamespaceController::StorageNamespaceController(StorageClient* client)
 {
 }
 
+<<<<<<< HEAD
 StorageNamespaceController::~StorageNamespaceController() { }
 
 DEFINE_TRACE(StorageNamespaceController)
@@ -43,6 +51,16 @@ StorageNamespace* StorageNamespaceController::localStorage()
 StorageClient* StorageNamespaceController::getStorageClient()
 {
     return m_client;
+=======
+StorageNamespaceController::~StorageNamespaceController()
+{
+}
+
+DEFINE_TRACE(StorageNamespaceController)
+{
+    WillBeHeapSupplement<Page>::trace(visitor);
+    visitor->trace(m_inspectorAgent);
+>>>>>>> miniblink49
 }
 
 StorageNamespace* StorageNamespaceController::sessionStorage(bool optionalCreate)
@@ -52,12 +70,18 @@ StorageNamespace* StorageNamespaceController::sessionStorage(bool optionalCreate
     return m_sessionStorage.get();
 }
 
+<<<<<<< HEAD
 void StorageNamespaceController::provideStorageNamespaceTo(
     Page& page,
     StorageClient* client)
 {
     StorageNamespaceController::provideTo(page, supplementName(),
         new StorageNamespaceController(client));
+=======
+void StorageNamespaceController::provideStorageNamespaceTo(Page& page, StorageClient* client)
+{
+    StorageNamespaceController::provideTo(page, supplementName(), adoptPtrWillBeNoop(new StorageNamespaceController(client)));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

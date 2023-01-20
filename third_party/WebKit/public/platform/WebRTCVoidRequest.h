@@ -42,6 +42,14 @@ class RTCVoidRequest;
 
 class WebRTCVoidRequest {
 public:
+<<<<<<< HEAD
+=======
+    class ExtraData {
+    public:
+        virtual ~ExtraData() { }
+    };
+
+>>>>>>> miniblink49
     WebRTCVoidRequest() { }
     WebRTCVoidRequest(const WebRTCVoidRequest& other) { assign(other); }
     ~WebRTCVoidRequest() { reset(); }
@@ -60,6 +68,16 @@ public:
     BLINK_PLATFORM_EXPORT void requestSucceeded() const;
     BLINK_PLATFORM_EXPORT void requestFailed(const WebString& error) const;
 
+<<<<<<< HEAD
+=======
+    // Extra data associated with this object.
+    // If non-null, the extra data pointer will be deleted when the object is destroyed.
+    // Setting the extra data pointer will cause any existing non-null
+    // extra data pointer to be deleted.
+    BLINK_PLATFORM_EXPORT ExtraData* extraData() const;
+    BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
+
+>>>>>>> miniblink49
 #if INSIDE_BLINK
     BLINK_PLATFORM_EXPORT WebRTCVoidRequest(RTCVoidRequest*);
 #endif

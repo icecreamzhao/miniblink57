@@ -8,6 +8,7 @@
 #ifndef SkTouchGesture_DEFINED
 #define SkTouchGesture_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkTDArray.h"
 #include "SkMatrix.h"
 
@@ -16,6 +17,13 @@ struct SkFlingState {
         : fActive(false)
     {
     }
+=======
+#include "SkTDArray.h"
+#include "SkMatrix.h"
+
+struct SkFlingState {
+    SkFlingState() : fActive(false) {}
+>>>>>>> miniblink49
 
     bool isActive() const { return fActive; }
     void stop() { fActive = false; }
@@ -24,10 +32,17 @@ struct SkFlingState {
     bool evaluateMatrix(SkMatrix* matrix);
 
 private:
+<<<<<<< HEAD
     SkPoint fDirection;
     SkScalar fSpeed0;
     double fTime0;
     bool fActive;
+=======
+    SkPoint     fDirection;
+    SkScalar    fSpeed0;
+    double      fTime0;
+    bool        fActive;
+>>>>>>> miniblink49
 };
 
 class SkTouchGesture {
@@ -46,8 +61,11 @@ public:
     const SkMatrix& localM();
     const SkMatrix& globalM() const { return fGlobalM; }
 
+<<<<<<< HEAD
     void setTransLimit(const SkRect& contentRect, const SkRect& windowRect);
 
+=======
+>>>>>>> miniblink49
 private:
     enum State {
         kEmpty_State,
@@ -56,6 +74,7 @@ private:
     };
 
     struct Rec {
+<<<<<<< HEAD
         void* fOwner;
         float fStartX, fStartY;
         float fPrevX, fPrevY;
@@ -75,6 +94,23 @@ private:
     bool fIsTransLimited = false;
 
     void limitTrans(); // here we only limit the translation with respect to globalM
+=======
+        void*   fOwner;
+        float   fStartX, fStartY;
+        float   fPrevX, fPrevY;
+        float   fLastX, fLastY;
+        SkMSec  fPrevT, fLastT;
+    };
+    SkTDArray<Rec> fTouches;
+
+    State           fState;
+    SkMatrix        fLocalM, fGlobalM;
+    SkFlingState    fFlinger;
+    SkMSec          fLastUpT;
+    SkPoint         fLastUpP;
+
+
+>>>>>>> miniblink49
     void flushLocalM();
     int findRec(void* owner) const;
     void appendNewRec(void* owner, float x, float y);

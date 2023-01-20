@@ -43,16 +43,22 @@ namespace blink {
 class DevToolsHost;
 class WebLocalFrameImpl;
 
+<<<<<<< HEAD
 class WebDevToolsFrontendImpl final : public WebDevToolsFrontend,
                                       public InspectorFrontendClient {
     WTF_MAKE_NONCOPYABLE(WebDevToolsFrontendImpl);
 
+=======
+class WebDevToolsFrontendImpl final : public WebDevToolsFrontend, public InspectorFrontendClient {
+    WTF_MAKE_NONCOPYABLE(WebDevToolsFrontendImpl);
+>>>>>>> miniblink49
 public:
     WebDevToolsFrontendImpl(WebLocalFrameImpl*, WebDevToolsFrontendClient*);
     ~WebDevToolsFrontendImpl() override;
 
     void didClearWindowObject(WebLocalFrameImpl*);
 
+<<<<<<< HEAD
     void sendMessageToEmbedder(const WTF::String&) override;
     void sendMessageToBackend(const WTF::String&) override;
     
@@ -70,6 +76,22 @@ private:
     Persistent<WebLocalFrameImpl> m_webFrame;
     WebDevToolsFrontendClient* m_client;
     Persistent<DevToolsHost> m_devtoolsHost;
+=======
+    void sendMessageToBackend(const WTF::String&) override;
+
+    void sendMessageToEmbedder(const WTF::String&) override;
+
+    bool isUnderTest() override;
+
+    void showContextMenu(LocalFrame*, float x, float y, PassRefPtrWillBeRawPtr<ContextMenuProvider>) override;
+
+    void setInjectedScriptForOrigin(const String& origin, const String& source) override;
+
+private:
+    WebLocalFrameImpl* m_webFrame;
+    WebDevToolsFrontendClient* m_client;
+    RefPtrWillBePersistent<DevToolsHost> m_devtoolsHost;
+>>>>>>> miniblink49
     typedef HashMap<String, String> InjectedScriptForOriginMap;
     InjectedScriptForOriginMap m_injectedScriptForOrigin;
 };

@@ -31,49 +31,46 @@
 #ifndef Animation_h
 #define Animation_h
 
-#include "bindings/core/v8/ActiveScriptWrappable.h"
-#include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseProperty.h"
 #include "core/CSSPropertyNames.h"
 #include "core/CoreExport.h"
-#include "core/animation/AnimationEffectReadOnly.h"
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/animation/AnimationEffect.h"
+#include "core/dom/ActiveDOMObject.h"
 #include "core/dom/DOMException.h"
 #include "core/events/EventTarget.h"
-#include "platform/animation/CompositorAnimationDelegate.h"
-#include "platform/animation/CompositorAnimationPlayerClient.h"
 #include "platform/heap/Handle.h"
+#include "public/platform/WebCompositorAnimationDelegate.h"
+#include "public/platform/WebCompositorAnimationPlayerClient.h"
 #include "wtf/RefPtr.h"
-#include <memory>
 
 namespace blink {
 
 class AnimationTimeline;
-class CompositorAnimationPlayer;
 class Element;
 class ExceptionState;
-class TreeScope;
+class WebCompositorAnimationPlayer;
 
-class CORE_EXPORT Animation final : public EventTargetWithInlineData,
-                                    public ActiveScriptWrappable<Animation>,
-                                    public ContextLifecycleObserver,
-                                    public CompositorAnimationDelegate,
-                                    public CompositorAnimationPlayerClient {
+class CORE_EXPORT Animation final
+    : public EventTargetWithInlineData
+    , public RefCountedWillBeNoBase<Animation>
+    , public ActiveDOMObject
+    , public WebCompositorAnimationDelegate
+    , public WebCompositorAnimationPlayerClient {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(Animation);
-
+    REFCOUNTED_EVENT_TARGET(Animation);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Animation);
 public:
-    enum AnimationPlayState { Unset,
+    enum AnimationPlayState {
         Idle,
         Pending,
         Running,
         Paused,
-        Finished };
+        Finished
+    };
 
-    static Animation* create(AnimationEffectReadOnly*, AnimationTimeline*);
     ~Animation();
-    void dispose();
+    static PassRefPtrWillBeRawPtr<Animation> create(AnimationEffect*, AnimationTimeline*);
 
     // Returns whether the animation is finished.
     bool update(TimingUpdateReason);
@@ -93,40 +90,40 @@ public:
     double currentTimeInternal() const;
     double unlimitedCurrentTimeInternal() const;
 
-    void setCurrentTimeInternal(double newCurrentTime,
-        TimingUpdateReason = TimingUpdateOnDemand);
+    void setCurrentTimeInternal(double newCurrentTime, TimingUpdateReason = TimingUpdateOnDemand);
     bool paused() const { return m_paused && !m_isPausedForTesting; }
     static const char* playStateString(AnimationPlayState);
     String playState() const { return playStateString(playStateInternal()); }
     AnimationPlayState playStateInternal() const;
 
-    void pause(ExceptionState& = ASSERT_NO_EXCEPTION);
-    void play(ExceptionState& = ASSERT_NO_EXCEPTION);
-    void reverse(ExceptionState& = ASSERT_NO_EXCEPTION);
-    void finish(ExceptionState& = ASSERT_NO_EXCEPTION);
+    void pause();
+    void play();
+    void reverse();
+    void finish(ExceptionState&);
 
     ScriptPromise finished(ScriptState*);
     ScriptPromise ready(ScriptState*);
 
-    bool playing() const
-    {
-        return !(playStateInternal() == Idle || limited() || m_paused || m_isPausedForTesting);
-    }
+    bool playing() const { return !(playStateInternal() == Idle || limited() || m_paused || m_isPausedForTesting); }
     bool limited() const { return limited(currentTimeInternal()); }
     bool finishedInternal() const { return m_finished; }
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(finish);
-    DEFINE_ATTRIBUTE_EVENT_LISTENER(cancel);
 
-    const AtomicString& interfaceName() const override;
-    ExecutionContext* getExecutionContext() const override;
-    bool hasPendingActivity() const final;
-    void contextDestroyed(ExecutionContext*) override;
+    virtual const AtomicString& interfaceName() const override;
+    virtual ExecutionContext* executionContext() const override;
+    virtual bool hasPendingActivity() const override;
+    virtual void stop() override;
+    virtual bool dispatchEvent(PassRefPtrWillBeRawPtr<Event>) override;
 
     double playbackRate() const;
     void setPlaybackRate(double);
     const AnimationTimeline* timeline() const { return m_timeline; }
     AnimationTimeline* timeline() { return m_timeline; }
+
+#if !ENABLE(OILPAN)
+    void detachFromTimeline();
+#endif
 
     double calculateStartTime(double currentTime) const;
     bool hasStartTime() const { return !isNull(m_startTime); }
@@ -136,18 +133,18 @@ public:
     void setStartTime(double);
     void setStartTimeInternal(double);
 
-    const AnimationEffectReadOnly* effect() const { return m_content.get(); }
-    AnimationEffectReadOnly* effect() { return m_content.get(); }
-    void setEffect(AnimationEffectReadOnly*);
+    double startClip() const { return startClipInternal() * 1000; }
+    double endClip() const { return endClipInternal() * 1000; }
+    void setStartClip(double t) { setStartClipInternal(t / 1000); }
+    void setEndClip(double t) { setEndClipInternal(t / 1000); }
 
-    void setId(const String& id) { m_id = id; }
-    const String& id() const { return m_id; }
+    const AnimationEffect* effect() const { return m_content.get(); }
+    AnimationEffect* effect() { return m_content.get(); }
+    void setEffect(AnimationEffect*);
 
     // Pausing via this method is not reflected in the value returned by
     // paused() and must never overlap with pausing via pause().
     void pauseForTesting(double pauseTime);
-    void disableCompositedAnimationForTesting();
-
     // This should only be used for CSS
     void unpause();
 
@@ -164,45 +161,30 @@ public:
     void setCompositorPending(bool effectChanged = false);
     void notifyCompositorStartTime(double timelineTime);
     void notifyStartTime(double timelineTime);
-    // CompositorAnimationPlayerClient implementation.
-    CompositorAnimationPlayer* compositorPlayer() const override
-    {
-        return m_compositorPlayer ? m_compositorPlayer->player() : nullptr;
-    }
+    // WebCompositorAnimationPlayerClient implementation.
+    WebCompositorAnimationPlayer* compositorPlayer() const override { return m_compositorPlayer.get(); }
 
     bool affects(const Element&, CSSPropertyID) const;
 
-    // Returns whether we should continue with the commit for this animation or
-    // wait until next commit.
-    bool preCommit(int compositorGroup, bool startOnCompositor);
+    void preCommit(int compositorGroup, bool startOnCompositor);
     void postCommit(double timelineTime);
 
     unsigned sequenceNumber() const { return m_sequenceNumber; }
     int compositorGroup() const { return m_compositorGroup; }
 
-    static bool hasLowerPriority(const Animation* animation1,
-        const Animation* animation2)
+    static bool hasLowerPriority(const Animation* animation1, const Animation* animation2)
     {
         return animation1->sequenceNumber() < animation2->sequenceNumber();
     }
 
-    bool effectSuppressed() const { return m_effectSuppressed; }
-    void setEffectSuppressed(bool);
-
-    void invalidateKeyframeEffect(const TreeScope&);
+    virtual bool addEventListener(const AtomicString& eventType, PassRefPtr<EventListener>, bool useCapture = false) override;
 
     DECLARE_VIRTUAL_TRACE();
 
-protected:
-    DispatchEventResult dispatchEventInternal(Event*) override;
-    void addedEventListener(const AtomicString& eventType,
-        RegisteredEventListener&) override;
-
 private:
-    Animation(ExecutionContext*, AnimationTimeline&, AnimationEffectReadOnly*);
+    Animation(ExecutionContext*, AnimationTimeline&, AnimationEffect*);
 
     void clearOutdated();
-    void forceServiceOnNextFrame();
 
     double effectEnd() const;
     bool limited(double currentTime) const;
@@ -223,36 +205,36 @@ private:
     void detachCompositorTimeline();
     void attachCompositedLayers();
     void detachCompositedLayers();
-    // CompositorAnimationDelegate implementation.
+    // WebCompositorAnimationDelegate implementation.
     void notifyAnimationStarted(double monotonicTime, int group) override;
     void notifyAnimationFinished(double monotonicTime, int group) override { }
-    void notifyAnimationAborted(double monotonicTime, int group) override { }
 
-    using AnimationPromise = ScriptPromiseProperty<Member<Animation>,
-        Member<Animation>,
-        Member<DOMException>>;
-    void resolvePromiseAsync(AnimationPromise*);
-
-    String m_id;
+    double startClipInternal() const { return m_startClip; }
+    double endClipInternal() const { return m_endClip; }
+    void setStartClipInternal(double t) { m_startClip = t; }
+    void setEndClipInternal(double t) { m_endClip = t; }
+    bool clipped(double);
+    double clipTimeToEffectChange(double) const;
 
     AnimationPlayState m_playState;
     double m_playbackRate;
     double m_startTime;
     double m_holdTime;
+    double m_startClip;
+    double m_endClip;
 
     unsigned m_sequenceNumber;
 
-    Member<AnimationPromise> m_finishedPromise;
-    Member<AnimationPromise> m_readyPromise;
+    typedef ScriptPromiseProperty<RawPtrWillBeMember<Animation>, RawPtrWillBeMember<Animation>, Member<DOMException>> AnimationPromise;
+    PersistentWillBeMember<AnimationPromise> m_finishedPromise;
+    PersistentWillBeMember<AnimationPromise> m_readyPromise;
 
-    Member<AnimationEffectReadOnly> m_content;
-    Member<AnimationTimeline> m_timeline;
-
+    RefPtrWillBeMember<AnimationEffect> m_content;
+    RawPtrWillBeMember<AnimationTimeline> m_timeline;
     // Reflects all pausing, including via pauseForTesting().
     bool m_paused;
     bool m_held;
     bool m_isPausedForTesting;
-    bool m_isCompositedAnimationDisabledForTesting;
 
     // This indicates timing information relevant to the animation's effect
     // has changed by means other than the ordinary progression of time
@@ -262,19 +244,16 @@ private:
     // Holds a 'finished' event queued for asynchronous dispatch via the
     // ScriptedAnimationController. This object remains active until the
     // event is actually dispatched.
-    Member<Event> m_pendingFinishedEvent;
+    RefPtrWillBeMember<Event> m_pendingFinishedEvent;
 
-    Member<Event> m_pendingCancelledEvent;
-
-    enum CompositorAction { None,
+    enum CompositorAction {
+        None,
         Pause,
         Start,
-        PauseThenStart };
+        PauseThenStart
+    };
 
     class CompositorState {
-        USING_FAST_MALLOC(CompositorState);
-        WTF_MAKE_NONCOPYABLE(CompositorState);
-
     public:
         CompositorState(Animation& animation)
             : startTime(animation.m_startTime)
@@ -282,8 +261,7 @@ private:
             , playbackRate(animation.m_playbackRate)
             , effectChanged(false)
             , pendingAction(Start)
-        {
-        }
+        { }
         double startTime;
         double holdTime;
         double playbackRate;
@@ -299,60 +277,26 @@ private:
 
     class PlayStateUpdateScope {
         STACK_ALLOCATED();
-
     public:
-        PlayStateUpdateScope(Animation&,
-            TimingUpdateReason,
-            CompositorPendingChange = SetCompositorPending);
+        PlayStateUpdateScope(Animation&, TimingUpdateReason, CompositorPendingChange = SetCompositorPending);
         ~PlayStateUpdateScope();
-
     private:
-        Member<Animation> m_animation;
+        RawPtrWillBeMember<Animation> m_animation;
         AnimationPlayState m_initialPlayState;
         CompositorPendingChange m_compositorPendingChange;
-    };
-
-    // CompositorAnimationPlayer objects need to eagerly sever
-    // their connection to their Animation delegate; use a separate
-    // 'holder' on-heap object to accomplish that.
-    class CompositorAnimationPlayerHolder
-        : public GarbageCollectedFinalized<CompositorAnimationPlayerHolder> {
-        USING_PRE_FINALIZER(CompositorAnimationPlayerHolder, dispose);
-
-    public:
-        static CompositorAnimationPlayerHolder* create(Animation*);
-
-        void detach();
-
-        DEFINE_INLINE_TRACE() { visitor->trace(m_animation); }
-
-        CompositorAnimationPlayer* player() const
-        {
-            return m_compositorPlayer.get();
-        }
-
-    private:
-        explicit CompositorAnimationPlayerHolder(Animation*);
-
-        void dispose();
-
-        std::unique_ptr<CompositorAnimationPlayer> m_compositorPlayer;
-        Member<Animation> m_animation;
     };
 
     // This mirrors the known compositor state. It is created when a compositor
     // animation is started. Updated once the start time is known and each time
     // modifications are pushed to the compositor.
-    std::unique_ptr<CompositorState> m_compositorState;
+    OwnPtr<CompositorState> m_compositorState;
     bool m_compositorPending;
     int m_compositorGroup;
 
-    Member<CompositorAnimationPlayerHolder> m_compositorPlayer;
+    OwnPtr<WebCompositorAnimationPlayer> m_compositorPlayer;
 
     bool m_currentTimePending;
     bool m_stateIsBeingUpdated;
-
-    bool m_effectSuppressed;
 };
 
 } // namespace blink

@@ -28,20 +28,16 @@ namespace blink {
 
 class HTMLInputElement;
 
-// Each LayoutFileUploadControl contains a LayoutButton (for opening the file
-// chooser), and sufficient space to draw a file icon and filename. The
-// LayoutButton has a shadow node associated with it to receive click/hover
-// events.
+// Each LayoutFileUploadControl contains a LayoutButton (for opening the file chooser), and
+// sufficient space to draw a file icon and filename. The LayoutButton has a shadow node
+// associated with it to receive click/hover events.
 
 class CORE_EXPORT LayoutFileUploadControl final : public LayoutBlockFlow {
 public:
     LayoutFileUploadControl(HTMLInputElement*);
-    ~LayoutFileUploadControl() override;
+    virtual ~LayoutFileUploadControl();
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectFileUploadControl || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectFileUploadControl || LayoutBlockFlow::isOfType(type); }
 
     String buttonValue();
     String fileTextValue() const;
@@ -51,19 +47,17 @@ public:
 
     static const int afterButtonSpacing = 4;
 
-    const char* name() const override { return "LayoutFileUploadControl"; }
+    virtual const char* name() const override { return "LayoutFileUploadControl"; }
 
 private:
-    void updateFromElement() override;
-    void computeIntrinsicLogicalWidths(
-        LayoutUnit& minLogicalWidth,
-        LayoutUnit& maxLogicalWidth) const override;
-    void computePreferredLogicalWidths() override;
-    void paintObject(const PaintInfo&, const LayoutPoint&) const override;
+    virtual void updateFromElement() override;
+    virtual void computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const override;
+    virtual void computePreferredLogicalWidths() override;
+    virtual void paintObject(const PaintInfo&, const LayoutPoint&) override;
 
     int maxFilenameWidth() const;
 
-    PositionWithAffinity positionForPoint(const LayoutPoint&) override;
+    virtual PositionWithAffinity positionForPoint(const LayoutPoint&) override;
 
     bool m_canReceiveDroppedFiles;
 };

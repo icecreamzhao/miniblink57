@@ -12,6 +12,7 @@
 #include "mozilla/mozalloc_abort.h"
 #include "mozilla/mozalloc_oom.h"
 
+<<<<<<< HEAD
 void sk_abort_no_print()
 {
     mozalloc_abort("Abort from sk_abort");
@@ -19,10 +20,19 @@ void sk_abort_no_print()
 
 void sk_out_of_memory(void)
 {
+=======
+void sk_throw() {
+    SkDEBUGFAIL("sk_throw");
+    mozalloc_abort("Abort from sk_throw");
+}
+
+void sk_out_of_memory(void) {
+>>>>>>> miniblink49
     SkDEBUGFAIL("sk_out_of_memory");
     mozalloc_handle_oom(0);
 }
 
+<<<<<<< HEAD
 void* sk_malloc_throw(size_t size)
 {
     return sk_malloc_flags(size, SK_MALLOC_THROW);
@@ -50,5 +60,28 @@ void* sk_calloc(size_t size)
 
 void* sk_calloc_throw(size_t size)
 {
+=======
+void* sk_malloc_throw(size_t size) {
+    return sk_malloc_flags(size, SK_MALLOC_THROW);
+}
+
+void* sk_realloc_throw(void* addr, size_t size) {
+    return moz_xrealloc(addr, size);
+}
+
+void sk_free(void* p) {
+    moz_free(p);
+}
+
+void* sk_malloc_flags(size_t size, unsigned flags) {
+    return (flags & SK_MALLOC_THROW) ? moz_xmalloc(size) : moz_malloc(size);
+}
+
+void* sk_calloc(size_t size) {
+    return moz_calloc(size, 1);
+}
+
+void* sk_calloc_throw(size_t size) {
+>>>>>>> miniblink49
     return moz_xcalloc(size, 1);
 }

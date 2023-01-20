@@ -20,6 +20,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/filters/FEDiffuseLighting.h"
 
 #include "platform/graphics/filters/LightSource.h"
@@ -27,6 +31,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 FEDiffuseLighting::FEDiffuseLighting(Filter* filter,
     const Color& lightingColor,
     float surfaceScale,
@@ -55,6 +60,24 @@ FEDiffuseLighting* FEDiffuseLighting::create(
 }
 
 FEDiffuseLighting::~FEDiffuseLighting() { }
+=======
+FEDiffuseLighting::FEDiffuseLighting(Filter* filter, const Color& lightingColor, float surfaceScale,
+    float diffuseConstant, float kernelUnitLengthX, float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
+    : FELighting(filter, DiffuseLighting, lightingColor, surfaceScale, diffuseConstant, 0, 0, kernelUnitLengthX, kernelUnitLengthY, lightSource)
+{
+}
+
+PassRefPtrWillBeRawPtr<FEDiffuseLighting> FEDiffuseLighting::create(Filter* filter, const Color& lightingColor,
+    float surfaceScale, float diffuseConstant, float kernelUnitLengthX,
+    float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
+{
+    return adoptRefWillBeNoop(new FEDiffuseLighting(filter, lightingColor, surfaceScale, diffuseConstant, kernelUnitLengthX, kernelUnitLengthY, lightSource));
+}
+
+FEDiffuseLighting::~FEDiffuseLighting()
+{
+}
+>>>>>>> miniblink49
 
 Color FEDiffuseLighting::lightingColor() const
 {
@@ -96,6 +119,35 @@ bool FEDiffuseLighting::setDiffuseConstant(float diffuseConstant)
     return true;
 }
 
+<<<<<<< HEAD
+=======
+float FEDiffuseLighting::kernelUnitLengthX() const
+{
+    return m_kernelUnitLengthX;
+}
+
+bool FEDiffuseLighting::setKernelUnitLengthX(float kernelUnitLengthX)
+{
+    if (m_kernelUnitLengthX == kernelUnitLengthX)
+        return false;
+    m_kernelUnitLengthX = kernelUnitLengthX;
+    return true;
+}
+
+float FEDiffuseLighting::kernelUnitLengthY() const
+{
+    return m_kernelUnitLengthY;
+}
+
+bool FEDiffuseLighting::setKernelUnitLengthY(float kernelUnitLengthY)
+{
+    if (m_kernelUnitLengthY == kernelUnitLengthY)
+        return false;
+    m_kernelUnitLengthY = kernelUnitLengthY;
+    return true;
+}
+
+>>>>>>> miniblink49
 const LightSource* FEDiffuseLighting::lightSource() const
 {
     return m_lightSource.get();
@@ -106,14 +158,23 @@ void FEDiffuseLighting::setLightSource(PassRefPtr<LightSource> lightSource)
     m_lightSource = lightSource;
 }
 
+<<<<<<< HEAD
 TextStream& FEDiffuseLighting::externalRepresentation(TextStream& ts,
     int indent) const
+=======
+TextStream& FEDiffuseLighting::externalRepresentation(TextStream& ts, int indent) const
+>>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[feDiffuseLighting";
     FilterEffect::externalRepresentation(ts);
     ts << " surfaceScale=\"" << m_surfaceScale << "\" "
+<<<<<<< HEAD
        << "diffuseConstant=\"" << m_diffuseConstant << "\"]\n";
+=======
+       << "diffuseConstant=\"" << m_diffuseConstant << "\" "
+       << "kernelUnitLength=\"" << m_kernelUnitLengthX << ", " << m_kernelUnitLengthY << "\"]\n";
+>>>>>>> miniblink49
     inputEffect(0)->externalRepresentation(ts, indent + 1);
     return ts;
 }

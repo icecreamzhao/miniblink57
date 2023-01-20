@@ -10,14 +10,22 @@
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutRect.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
+=======
+#include "web/ViewportAnchor.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class FrameView;
 class Node;
 class PageScaleConstraintsSet;
+<<<<<<< HEAD
 class ScrollableArea;
 class VisualViewport;
+=======
+class PinchViewport;
+>>>>>>> miniblink49
 
 // The rotation anchor provides a way to anchor a viewport origin to a DOM node.
 // In particular, the user supplies an anchor point (in view coordinates, e.g.,
@@ -27,6 +35,7 @@ class VisualViewport;
 // viewport origin maintains its orientation relative to the anchor. If there is
 // no node or it is lost during the resize, we fall back to the resize anchor
 // logic.
+<<<<<<< HEAD
 class RotationViewportAnchor {
     STACK_ALLOCATED();
 
@@ -35,6 +44,12 @@ public:
         VisualViewport&,
         const FloatSize& anchorInInnerViewCoords,
         PageScaleConstraintsSet&);
+=======
+class RotationViewportAnchor : public ViewportAnchor {
+    STACK_ALLOCATED();
+public:
+    RotationViewportAnchor(FrameView& rootFrameView, PinchViewport&, const FloatSize& anchorInInnerViewCoords, PageScaleConstraintsSet&);
+>>>>>>> miniblink49
     ~RotationViewportAnchor();
 
 private:
@@ -43,6 +58,7 @@ private:
 
     FloatPoint getInnerOrigin(const FloatSize& innerSize) const;
 
+<<<<<<< HEAD
     void computeOrigins(const FloatSize& innerSize,
         IntPoint& mainFrameOffset,
         FloatPoint& visualViewportOffset) const;
@@ -50,11 +66,15 @@ private:
 
     Member<FrameView> m_rootFrameView;
     Member<VisualViewport> m_visualViewport;
+=======
+    void computeOrigins(const FloatSize& innerSize, IntPoint& mainFrameOffset, FloatPoint& pinchViewportOffset) const;
+>>>>>>> miniblink49
 
     float m_oldPageScaleFactor;
     float m_oldMinimumPageScaleFactor;
 
     // Inner viewport origin in the reference frame of the document in CSS pixels
+<<<<<<< HEAD
     FloatPoint m_visualViewportInDocument;
 
     // Inner viewport origin in the reference frame of the outer viewport
@@ -62,6 +82,15 @@ private:
     FloatSize m_normalizedVisualViewportOffset;
 
     Member<Node> m_anchorNode;
+=======
+    FloatPoint m_pinchViewportInDocument;
+
+    // Inner viewport origin in the reference frame of the outer viewport
+    // normalized to the outer viewport size.
+    FloatSize m_normalizedPinchViewportOffset;
+
+    RefPtrWillBeMember<Node> m_anchorNode;
+>>>>>>> miniblink49
     LayoutRect m_anchorNodeBounds;
 
     FloatSize m_anchorInInnerViewCoords;

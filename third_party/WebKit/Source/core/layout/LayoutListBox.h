@@ -40,31 +40,24 @@ class HTMLSelectElement;
 class LayoutListBox final : public LayoutBlockFlow {
 public:
     explicit LayoutListBox(Element*);
-    ~LayoutListBox() override;
+    virtual ~LayoutListBox();
 
     unsigned size() const;
 
     // Unlike scrollRectToVisible this will not scroll parent boxes.
     void scrollToRect(const LayoutRect&);
 
-    const char* name() const override { return "LayoutListBox"; }
+    virtual const char* name() const override { return "LayoutListBox"; }
 
 private:
     HTMLSelectElement* selectElement() const;
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectListBox || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectListBox || LayoutBlockFlow::isOfType(type); }
 
-    void computeLogicalHeight(LayoutUnit logicalHeight,
-        LayoutUnit logicalTop,
-        LogicalExtentComputedValues&) const override;
-    void computeIntrinsicLogicalWidths(
-        LayoutUnit& minLogicalWidth,
-        LayoutUnit& maxLogicalWidth) const override;
+    virtual void computeLogicalHeight(LayoutUnit logicalHeight, LayoutUnit logicalTop, LogicalExtentComputedValues&) const override;
+    virtual void computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const override;
 
-    void stopAutoscroll() override;
+    virtual void stopAutoscroll() override;
 
     LayoutUnit defaultItemHeight() const;
     LayoutUnit itemHeight() const;
@@ -72,6 +65,6 @@ private:
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutListBox, isListBox());
 
-} // namespace blink
+} // namepace blink
 
 #endif // LayoutListBox_h

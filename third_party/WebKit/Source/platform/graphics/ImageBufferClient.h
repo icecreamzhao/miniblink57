@@ -33,8 +33,11 @@
 
 #include "platform/PlatformExport.h"
 
+<<<<<<< HEAD
 class SkCanvas;
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class PLATFORM_EXPORT ImageBufferClient {
@@ -42,11 +45,20 @@ public:
     virtual ~ImageBufferClient() { }
     virtual void notifySurfaceInvalid() = 0;
     virtual bool isDirty() = 0;
+<<<<<<< HEAD
     virtual void didDisableAcceleration() = 0;
     virtual void didFinalizeFrame() = 0;
     virtual void restoreCanvasMatrixClipStack(SkCanvas*) const = 0;
+=======
+    virtual void didFinalizeFrame() = 0;
+    virtual void restoreCanvasMatrixClipStack() = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink
 
 #endif
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

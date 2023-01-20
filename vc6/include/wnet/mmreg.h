@@ -14,8 +14,11 @@ Revision History:
 
 --*/
 
+<<<<<<< HEAD
 #include "windows.h"
 
+=======
+>>>>>>> miniblink49
 // Define the following to skip definitions
 //
 // NOMMIDS      Multimedia IDs are not defined

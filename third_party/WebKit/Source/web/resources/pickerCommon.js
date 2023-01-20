@@ -11,6 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,6 +23,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 /**
@@ -90,6 +103,7 @@ Rectangle.intersection = function(rect1, rect2) {
 };
 
 /**
+<<<<<<< HEAD
  * @param {!number} width in CSS pixel
  * @param {!number} height in CSS pixel
  */
@@ -104,6 +118,21 @@ function resizeWindow(width, height) {
  * @param {?number} minWidth in DIP
  * @param {?number} minHeight in DIP
  * @return {!Rectangle} Adjusted rectangle in DIP
+=======
+ * @param {!number} width
+ * @param {!number} height
+ */
+function resizeWindow(width, height) {
+    setWindowRect(adjustWindowRect(width, height, width, height));
+}
+
+/**
+ * @param {!number} width
+ * @param {!number} height
+ * @param {?number} minWidth
+ * @param {?number} minHeight
+ * @return {!Rectangle}
+>>>>>>> miniblink49
  */
 function adjustWindowRect(width, height, minWidth, minHeight) {
     if (typeof minWidth !== "number")
@@ -111,7 +140,11 @@ function adjustWindowRect(width, height, minWidth, minHeight) {
     if (typeof minHeight !== "number")
         minHeight = 0;
 
+<<<<<<< HEAD
     var windowRect = new Rectangle(0, 0, Math.ceil(width), Math.ceil(height));
+=======
+    var windowRect = new Rectangle(0, 0, width, height);
+>>>>>>> miniblink49
 
     if (!global.params.anchorRectInScreen)
         return windowRect;
@@ -125,9 +158,12 @@ function adjustWindowRect(width, height, minWidth, minHeight) {
     return windowRect;
 }
 
+<<<<<<< HEAD
 /**
  * Arguments are DIPs.
  */
+=======
+>>>>>>> miniblink49
 function _adjustWindowRectVertically(windowRect, availRect, anchorRect, minHeight) {
     var availableSpaceAbove = anchorRect.y - availRect.y;
     availableSpaceAbove = Math.max(0, Math.min(availRect.height, availableSpaceAbove));
@@ -145,9 +181,12 @@ function _adjustWindowRectVertically(windowRect, availRect, anchorRect, minHeigh
     }
 }
 
+<<<<<<< HEAD
 /**
  * Arguments are DIPs.
  */
+=======
+>>>>>>> miniblink49
 function _adjustWindowRectHorizontally(windowRect, availRect, anchorRect, minWidth) {
     windowRect.width = Math.min(windowRect.width, availRect.width);
     windowRect.width = Math.max(windowRect.width, minWidth);
@@ -160,7 +199,11 @@ function _adjustWindowRectHorizontally(windowRect, availRect, anchorRect, minWid
 }
 
 /**
+<<<<<<< HEAD
  * @param {!Rectangle} rect Window position and size in DIP.
+=======
+ * @param {!Rectangle} rect
+>>>>>>> miniblink49
  */
 function setWindowRect(rect) {
     if (window.frameElement) {
@@ -172,17 +215,25 @@ function setWindowRect(rect) {
 }
 
 function hideWindow() {
+<<<<<<< HEAD
     setWindowRect(adjustWindowRect(1, 1, 1, 1));
+=======
+    resizeWindow(1, 1);
+>>>>>>> miniblink49
 }
 
 /**
  * @return {!boolean}
  */
 function isWindowHidden() {
+<<<<<<< HEAD
     // window.innerWidth and innerHeight are zoom-adjusted values.  If we call
     // setWindowRect with width=100 and the zoom-level is 2.0, innerWidth will
     // return 50.
     return window.innerWidth <= 1 && window.innerHeight <= 1;
+=======
+    return window.innerWidth === 1 && window.innerHeight === 1;
+>>>>>>> miniblink49
 }
 
 window.addEventListener("resize", function() {
@@ -324,6 +375,10 @@ Picker.prototype.cleanup = function() {};
 window.addEventListener("keyup", function(event) {
     // JAWS dispatches extra Alt events and unless we handle them they move the
     // focus and close the popup.
+<<<<<<< HEAD
     if (event.key === "Alt")
+=======
+    if (event.keyIdentifier === "Alt")
+>>>>>>> miniblink49
         event.preventDefault();
 }, true);

@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,6 +28,28 @@
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+#if ENABLE(WEB_AUDIO)
+#include "modules/webaudio/OscillatorNode.h"
+
+#include "bindings/core/v8/ExceptionMessages.h"
+#include "bindings/core/v8/ExceptionState.h"
+#include "core/dom/ExceptionCode.h"
+#include "modules/webaudio/AudioContext.h"
+>>>>>>> miniblink49
 #include "modules/webaudio/AudioNodeOutput.h"
 #include "modules/webaudio/PeriodicWave.h"
 #include "platform/audio/AudioUtilities.h"
@@ -39,18 +62,27 @@ namespace blink {
 
 using namespace VectorMath;
 
+<<<<<<< HEAD
 OscillatorHandler::OscillatorHandler(AudioNode& node,
     float sampleRate,
     AudioParamHandler& frequency,
     AudioParamHandler& detune)
+=======
+OscillatorHandler::OscillatorHandler(AudioNode& node, float sampleRate, AudioParamHandler& frequency, AudioParamHandler& detune)
+>>>>>>> miniblink49
     : AudioScheduledSourceHandler(NodeTypeOscillator, node, sampleRate)
     , m_type(SINE)
     , m_frequency(frequency)
     , m_detune(detune)
     , m_firstRender(true)
     , m_virtualReadIndex(0)
+<<<<<<< HEAD
     , m_phaseIncrements(AudioUtilities::kRenderQuantumFrames)
     , m_detuneValues(AudioUtilities::kRenderQuantumFrames)
+=======
+    , m_phaseIncrements(ProcessingSizeInFrames)
+    , m_detuneValues(ProcessingSizeInFrames)
+>>>>>>> miniblink49
 {
     // Sets up default wavetable.
     setType(m_type);
@@ -61,11 +93,15 @@ OscillatorHandler::OscillatorHandler(AudioNode& node,
     initialize();
 }
 
+<<<<<<< HEAD
 PassRefPtr<OscillatorHandler> OscillatorHandler::create(
     AudioNode& node,
     float sampleRate,
     AudioParamHandler& frequency,
     AudioParamHandler& detune)
+=======
+PassRefPtr<OscillatorHandler> OscillatorHandler::create(AudioNode& node, float sampleRate, AudioParamHandler& frequency, AudioParamHandler& detune)
+>>>>>>> miniblink49
 {
     return adoptRef(new OscillatorHandler(node, sampleRate, frequency, detune));
 }
@@ -94,8 +130,12 @@ String OscillatorHandler::type() const
     }
 }
 
+<<<<<<< HEAD
 void OscillatorHandler::setType(const String& type,
     ExceptionState& exceptionState)
+=======
+void OscillatorHandler::setType(const String& type, ExceptionState& exceptionState)
+>>>>>>> miniblink49
 {
     if (type == "sine") {
         setType(SINE);
@@ -106,16 +146,23 @@ void OscillatorHandler::setType(const String& type,
     } else if (type == "triangle") {
         setType(TRIANGLE);
     } else if (type == "custom") {
+<<<<<<< HEAD
         exceptionState.throwDOMException(InvalidStateError,
             "'type' cannot be set directly to "
             "'custom'.  Use setPeriodicWave() to "
             "create a custom Oscillator type.");
+=======
+        exceptionState.throwDOMException(
+            InvalidStateError,
+            "'type' cannot be set directly to 'custom'.  Use setPeriodicWave() to create a custom Oscillator type.");
+>>>>>>> miniblink49
     }
 }
 
 bool OscillatorHandler::setType(unsigned type)
 {
     PeriodicWave* periodicWave = nullptr;
+<<<<<<< HEAD
 
     switch (type) {
     case SINE:
@@ -134,6 +181,35 @@ bool OscillatorHandler::setType(unsigned type)
     default:
         // Return false for invalid types, including CUSTOM since
         // setPeriodicWave() method must be called explicitly.
+=======
+    float sampleRate = this->sampleRate();
+
+    switch (type) {
+    case SINE: {
+        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveSine, (PeriodicWave::createSine(sampleRate)));
+        periodicWave = periodicWaveSine;
+        break;
+    }
+    case SQUARE: {
+        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveSquare, (PeriodicWave::createSquare(sampleRate)));
+        periodicWave = periodicWaveSquare;
+        break;
+    }
+    case SAWTOOTH: {
+        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveSawtooth, (PeriodicWave::createSawtooth(sampleRate)));
+        periodicWave = periodicWaveSawtooth;
+        break;
+    }
+    case TRIANGLE: {
+        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveTriangle, (PeriodicWave::createTriangle(sampleRate)));
+        periodicWave = periodicWaveTriangle;
+        break;
+    }
+    case CUSTOM:
+    default:
+        // Return error for invalid types, including CUSTOM since setPeriodicWave() method must be
+        // called explicitly.
+>>>>>>> miniblink49
         ASSERT_NOT_REACHED();
         return false;
     }
@@ -143,11 +219,18 @@ bool OscillatorHandler::setType(unsigned type)
     return true;
 }
 
+<<<<<<< HEAD
 bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(
     size_t framesToProcess)
 {
     bool isGood = framesToProcess <= m_phaseIncrements.size() && framesToProcess <= m_detuneValues.size();
     DCHECK(isGood);
+=======
+bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(size_t framesToProcess)
+{
+    bool isGood = framesToProcess <= m_phaseIncrements.size() && framesToProcess <= m_detuneValues.size();
+    ASSERT(isGood);
+>>>>>>> miniblink49
     if (!isGood)
         return false;
 
@@ -169,11 +252,17 @@ bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(
 
         // Get the sample-accurate frequency values and convert to phase increments.
         // They will be converted to phase increments below.
+<<<<<<< HEAD
         m_frequency->calculateSampleAccurateValues(phaseIncrements,
             framesToProcess);
     } else {
         // Handle ordinary parameter smoothing/de-zippering if there are no
         // scheduled changes.
+=======
+        m_frequency->calculateSampleAccurateValues(phaseIncrements, framesToProcess);
+    } else {
+        // Handle ordinary parameter smoothing/de-zippering if there are no scheduled changes.
+>>>>>>> miniblink49
         m_frequency->smooth();
         float frequency = m_frequency->smoothedValue();
         finalScale *= frequency;
@@ -190,6 +279,7 @@ bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(
         float k = 1.0 / 1200;
         vsmul(detuneValues, 1, &k, detuneValues, 1, framesToProcess);
         for (unsigned i = 0; i < framesToProcess; ++i)
+<<<<<<< HEAD
             detuneValues[i] = powf(
                 2, detuneValues[i]); // FIXME: converting to expf() will be faster.
 
@@ -201,6 +291,16 @@ bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(
     } else {
         // Handle ordinary parameter smoothing/de-zippering if there are no
         // scheduled changes.
+=======
+            detuneValues[i] = powf(2, detuneValues[i]); // FIXME: converting to expf() will be faster.
+
+        if (hasFrequencyChanges) {
+            // Multiply frequencies by detune scalings.
+            vmul(detuneValues, 1, phaseIncrements, 1, phaseIncrements, 1, framesToProcess);
+        }
+    } else {
+        // Handle ordinary parameter smoothing/de-zippering if there are no scheduled changes.
+>>>>>>> miniblink49
         m_detune->smooth();
         float detune = m_detune->smoothedValue();
         float detuneScale = powf(2, detune / 1200);
@@ -224,15 +324,23 @@ void OscillatorHandler::process(size_t framesToProcess)
         return;
     }
 
+<<<<<<< HEAD
     DCHECK_LE(framesToProcess, m_phaseIncrements.size());
+=======
+    ASSERT(framesToProcess <= m_phaseIncrements.size());
+>>>>>>> miniblink49
     if (framesToProcess > m_phaseIncrements.size())
         return;
 
     // The audio thread can't block on this lock, so we call tryLock() instead.
     MutexTryLocker tryLocker(m_processLock);
     if (!tryLocker.locked()) {
+<<<<<<< HEAD
         // Too bad - the tryLock() failed. We must be in the middle of changing
         // wave-tables.
+=======
+        // Too bad - the tryLock() failed. We must be in the middle of changing wave-tables.
+>>>>>>> miniblink49
         outputBus->zero();
         return;
     }
@@ -245,10 +353,15 @@ void OscillatorHandler::process(size_t framesToProcess)
 
     size_t quantumFrameOffset;
     size_t nonSilentFramesToProcess;
+<<<<<<< HEAD
     double startFrameOffset;
 
     updateSchedulingInfo(framesToProcess, outputBus, quantumFrameOffset,
         nonSilentFramesToProcess, startFrameOffset);
+=======
+
+    updateSchedulingInfo(framesToProcess, outputBus, quantumFrameOffset, nonSilentFramesToProcess);
+>>>>>>> miniblink49
 
     if (!nonSilentFramesToProcess) {
         outputBus->zero();
@@ -260,7 +373,11 @@ void OscillatorHandler::process(size_t framesToProcess)
 
     float* destP = outputBus->channel(0)->mutableData();
 
+<<<<<<< HEAD
     DCHECK_LE(quantumFrameOffset, framesToProcess);
+=======
+    ASSERT(quantumFrameOffset <= framesToProcess);
+>>>>>>> miniblink49
 
     // We keep virtualReadIndex double-precision since we're accumulating values.
     double virtualReadIndex = m_virtualReadIndex;
@@ -279,8 +396,12 @@ void OscillatorHandler::process(size_t framesToProcess)
         float detune = m_detune->smoothedValue();
         float detuneScale = powf(2, detune / 1200);
         frequency *= detuneScale;
+<<<<<<< HEAD
         m_periodicWave->waveDataForFundamentalFrequency(
             frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
+=======
+        m_periodicWave->waveDataForFundamentalFrequency(frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
+>>>>>>> miniblink49
     }
 
     float incr = frequency * rateScale;
@@ -292,6 +413,7 @@ void OscillatorHandler::process(size_t framesToProcess)
     destP += quantumFrameOffset;
     int n = nonSilentFramesToProcess;
 
+<<<<<<< HEAD
     // If startFrameOffset is not 0, that means the oscillator doesn't actually
     // start at quantumFrameOffset, but just past that time.  Adjust destP and n
     // to reflect that, and adjust virtualReadIndex to start the value at
@@ -305,6 +427,8 @@ void OscillatorHandler::process(size_t framesToProcess)
         virtualReadIndex = -startFrameOffset * frequency * rateScale;
     }
 
+=======
+>>>>>>> miniblink49
     while (n--) {
         unsigned readIndex = static_cast<unsigned>(virtualReadIndex);
         unsigned readIndex2 = readIndex + 1;
@@ -317,8 +441,12 @@ void OscillatorHandler::process(size_t framesToProcess)
             incr = *phaseIncrements++;
 
             frequency = invRateScale * incr;
+<<<<<<< HEAD
             m_periodicWave->waveDataForFundamentalFrequency(
                 frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
+=======
+            m_periodicWave->waveDataForFundamentalFrequency(frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
+>>>>>>> miniblink49
         }
 
         float sample1Lower = lowerWaveData[readIndex];
@@ -336,8 +464,12 @@ void OscillatorHandler::process(size_t framesToProcess)
 
         *destP++ = sample;
 
+<<<<<<< HEAD
         // Increment virtual read index and wrap virtualReadIndex into the range
         // 0 -> periodicWaveSize.
+=======
+        // Increment virtual read index and wrap virtualReadIndex into the range 0 -> periodicWaveSize.
+>>>>>>> miniblink49
         virtualReadIndex += incr;
         virtualReadIndex -= floor(virtualReadIndex * invPeriodicWaveSize) * periodicWaveSize;
     }
@@ -349,8 +481,12 @@ void OscillatorHandler::process(size_t framesToProcess)
 
 void OscillatorHandler::setPeriodicWave(PeriodicWave* periodicWave)
 {
+<<<<<<< HEAD
     DCHECK(isMainThread());
     DCHECK(periodicWave);
+=======
+    ASSERT(isMainThread());
+>>>>>>> miniblink49
 
     // This synchronizes with process().
     MutexLocker processLocker(m_processLock);
@@ -365,6 +501,7 @@ bool OscillatorHandler::propagatesSilence() const
 
 // ----------------------------------------------------------------
 
+<<<<<<< HEAD
 OscillatorNode::OscillatorNode(BaseAudioContext& context)
     : AudioScheduledSourceNode(context)
     ,
@@ -436,6 +573,21 @@ OscillatorNode* OscillatorNode::create(BaseAudioContext* context,
         node->setPeriodicWave(options.periodicWave());
 
     return node;
+=======
+OscillatorNode::OscillatorNode(AudioContext& context, float sampleRate)
+    : AudioScheduledSourceNode(context)
+    // Use musical pitch standard A440 as a default.
+    , m_frequency(AudioParam::create(context, 440))
+    // Default to no detuning.
+    , m_detune(AudioParam::create(context, 0))
+{
+    setHandler(OscillatorHandler::create(*this, sampleRate, m_frequency->handler(), m_detune->handler()));
+}
+
+OscillatorNode* OscillatorNode::create(AudioContext& context, float sampleRate)
+{
+    return new OscillatorNode(context, sampleRate);
+>>>>>>> miniblink49
 }
 
 DEFINE_TRACE(OscillatorNode)
@@ -455,8 +607,12 @@ String OscillatorNode::type() const
     return oscillatorHandler().type();
 }
 
+<<<<<<< HEAD
 void OscillatorNode::setType(const String& type,
     ExceptionState& exceptionState)
+=======
+void OscillatorNode::setType(const String& type, ExceptionState& exceptionState)
+>>>>>>> miniblink49
 {
     oscillatorHandler().setType(type, exceptionState);
 }
@@ -477,3 +633,8 @@ void OscillatorNode::setPeriodicWave(PeriodicWave* wave)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

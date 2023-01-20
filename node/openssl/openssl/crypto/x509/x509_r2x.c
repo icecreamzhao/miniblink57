@@ -1,3 +1,4 @@
+/* crypto/x509/x509_r2x.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -52,28 +53,27 @@
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
- * [including the GNU Public Licence.] */
+ * [including the GNU Public Licence.]
+ */
 
-#include <openssl/asn1.h>
+#include <stdio.h>
+#include "cryptlib.h"
 #include <openssl/bn.h>
-#include <openssl/buf.h>
-#include <openssl/digest.h>
-#include <openssl/err.h>
 #include <openssl/evp.h>
-#include <openssl/obj.h>
+#include <openssl/asn1.h>
 #include <openssl/x509.h>
+#include <openssl/objects.h>
+#include <openssl/buffer.h>
 
 X509 *X509_REQ_to_X509(X509_REQ *r, int days, EVP_PKEY *pkey)
 {
     X509 *ret = NULL;
     X509_CINF *xi = NULL;
     X509_NAME *xn;
-    EVP_PKEY *pubkey = NULL;
-    int res;
 
     if ((ret = X509_new()) == NULL) {
-        OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
-        return NULL;
+        X509err(X509_F_X509_REQ_TO_X509, ERR_R_MALLOC_FAILURE);
+        goto err;
     }
 
     /* duplicate the request */
@@ -84,16 +84,14 @@ X509 *X509_REQ_to_X509(X509_REQ *r, int days, EVP_PKEY *pkey)
             goto err;
         if (!ASN1_INTEGER_set(xi->version, 2))
             goto err;
-        /*
-         * xi->extensions=ri->attributes; <- bad, should not ever be done
-         * ri->attributes=NULL;
-         */
+/*-     xi->extensions=ri->attributes; <- bad, should not ever be done
+        ri->attributes=NULL; */
     }
 
     xn = X509_REQ_get_subject_name(r);
-    if (X509_set_subject_name(ret, xn) == 0)
+    if (X509_set_subject_name(ret, X509_NAME_dup(xn)) == 0)
         goto err;
-    if (X509_set_issuer_name(ret, xn) == 0)
+    if (X509_set_issuer_name(ret, X509_NAME_dup(xn)) == 0)
         goto err;
 
     if (X509_gmtime_adj(xi->validity->notBefore, 0) == NULL)
@@ -102,11 +100,9 @@ X509 *X509_REQ_to_X509(X509_REQ *r, int days, EVP_PKEY *pkey)
         NULL)
         goto err;
 
-    pubkey = X509_REQ_get_pubkey(r);
-    res = X509_set_pubkey(ret, pubkey);
-    EVP_PKEY_free(pubkey);
+    X509_set_pubkey(ret, X509_REQ_get_pubkey(r));
 
-    if (!res || !X509_sign(ret, pkey, EVP_md5()))
+    if (!X509_sign(ret, pkey, EVP_md5()))
         goto err;
     if (0) {
  err:

@@ -31,6 +31,7 @@
 #ifndef VDMXParser_h
 #define VDMXParser_h
 
+<<<<<<< HEAD
 #include <cstddef>
 #include <stdint.h>
 
@@ -39,5 +40,14 @@ bool parseVDMX(int* ymax, int* ymin,
     const uint8_t* vdmx, size_t vdmxLength,
     unsigned targetPixelSize);
 } // namespace blink
+=======
+#include <stdint.h>
+
+namespace blink {
+    bool parseVDMX(int* ymax, int* ymin,
+                   const uint8_t* vdmx, size_t vdmxLength,
+                   unsigned targetPixelSize);
+}  // namespace blink
+>>>>>>> miniblink49
 
 #endif

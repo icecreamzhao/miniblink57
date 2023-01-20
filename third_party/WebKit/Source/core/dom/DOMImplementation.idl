@@ -22,6 +22,8 @@
 
 [
     SetWrapperReferenceFrom=document,
+    TypeChecking=Interface,
+    WillBeGarbageCollected,
 ] interface DOMImplementation {
     [NewObject, RaisesException] DocumentType createDocumentType(DOMString qualifiedName, DOMString publicId, DOMString systemId);
     [NewObject, RaisesException] XMLDocument createDocument(DOMString? namespaceURI, [TreatNullAs=EmptyString] DOMString qualifiedName, optional DocumentType? doctype = null);

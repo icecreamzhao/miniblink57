@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,12 +9,21 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkFDot6_DEFINED
 #define SkFDot6_DEFINED
 
 #include "SkFixed.h"
 #include "SkMath.h"
 #include "SkScalar.h"
+=======
+
+#ifndef SkFDot6_DEFINED
+#define SkFDot6_DEFINED
+
+#include "SkScalar.h"
+#include "SkMath.h"
+>>>>>>> miniblink49
 
 typedef int32_t SkFDot6;
 
@@ -22,7 +35,11 @@ typedef int32_t SkFDot6;
 inline SkFDot6 SkScalarRoundToFDot6(SkScalar x, int shift = 0)
 {
     union {
+<<<<<<< HEAD
         double fDouble;
+=======
+        double  fDouble;
+>>>>>>> miniblink49
         int32_t fBits[2];
     } tmp;
     int fractionalBits = 6 + shift;
@@ -36,6 +53,7 @@ inline SkFDot6 SkScalarRoundToFDot6(SkScalar x, int shift = 0)
 #endif
 }
 
+<<<<<<< HEAD
 #define SK_FDot6One (64)
 #define SK_FDot6Half (32)
 
@@ -72,6 +90,40 @@ inline SkFixed SkFDot6Div(SkFDot6 a, SkFDot6 b)
 
     if (a == (int16_t)a) {
         return SkLeftShift(a, 16) / b;
+=======
+#define SK_FDot6One         (64)
+#define SK_FDot6Half        (32)
+
+#ifdef SK_DEBUG
+    inline SkFDot6 SkIntToFDot6(S16CPU x) {
+        SkASSERT(SkToS16(x) == x);
+        return x << 6;
+    }
+#else
+    #define SkIntToFDot6(x) ((x) << 6)
+#endif
+
+#define SkFDot6Floor(x)     ((x) >> 6)
+#define SkFDot6Ceil(x)      (((x) + 63) >> 6)
+#define SkFDot6Round(x)     (((x) + 32) >> 6)
+
+#define SkFixedToFDot6(x)   ((x) >> 10)
+
+inline SkFixed SkFDot6ToFixed(SkFDot6 x) {
+    SkASSERT((x << 10 >> 10) == x);
+
+    return x << 10;
+}
+
+#define SkScalarToFDot6(x)  (SkFDot6)((x) * 64)
+#define SkFDot6ToScalar(x)  ((SkScalar)(x) * 0.015625f)
+
+inline SkFixed SkFDot6Div(SkFDot6 a, SkFDot6 b) {
+    SkASSERT(b != 0);
+
+    if (a == (int16_t)a) {
+        return (a << 16) / b;
+>>>>>>> miniblink49
     } else {
         return SkFixedDiv(a, b);
     }

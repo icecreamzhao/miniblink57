@@ -24,35 +24,32 @@
  *
  */
 
+#include "config.h"
 #include "core/dom/ElementDataCache.h"
 
 #include "core/dom/ElementData.h"
 
 namespace blink {
 
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(ElementDataCache)
+
 inline unsigned attributeHash(const Vector<Attribute>& attributes)
 {
-    return StringHasher::hashMemory(attributes.data(),
-        attributes.size() * sizeof(Attribute));
+    return StringHasher::hashMemory(attributes.data(), attributes.size() * sizeof(Attribute));
 }
 
-inline bool hasSameAttributes(const Vector<Attribute>& attributes,
-    ShareableElementData& elementData)
+inline bool hasSameAttributes(const Vector<Attribute>& attributes, ShareableElementData& elementData)
 {
     if (attributes.size() != elementData.attributes().size())
         return false;
-    return !memcmp(attributes.data(), elementData.m_attributeArray,
-        attributes.size() * sizeof(Attribute));
+    return !memcmp(attributes.data(), elementData.m_attributeArray, attributes.size() * sizeof(Attribute));
 }
 
-ShareableElementData*
-ElementDataCache::cachedShareableElementDataWithAttributes(
-    const Vector<Attribute>& attributes)
+PassRefPtrWillBeRawPtr<ShareableElementData> ElementDataCache::cachedShareableElementDataWithAttributes(const Vector<Attribute>& attributes)
 {
-    DCHECK(!attributes.isEmpty());
+    ASSERT(!attributes.isEmpty());
 
-    ShareableElementDataCache::ValueType* it = m_shareableElementDataCache.add(attributeHash(attributes), nullptr)
-                                                   .storedValue;
+    ShareableElementDataCache::ValueType* it = m_shareableElementDataCache.add(attributeHash(attributes), nullptr).storedValue;
 
     // FIXME: This prevents sharing when there's a hash collision.
     if (it->value && !hasSameAttributes(attributes, *it->value))
@@ -64,11 +61,15 @@ ElementDataCache::cachedShareableElementDataWithAttributes(
     return it->value.get();
 }
 
-ElementDataCache::ElementDataCache() { }
+ElementDataCache::ElementDataCache()
+{
+}
 
 DEFINE_TRACE(ElementDataCache)
 {
+#if ENABLE(OILPAN)
     visitor->trace(m_shareableElementDataCache);
+#endif
 }
 
-} // namespace blink
+}

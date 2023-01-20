@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2012 Google Inc.
  *
@@ -10,7 +14,11 @@
 
 #include "GrPathRenderer.h"
 
+<<<<<<< HEAD
 class GrTextureProvider;
+=======
+class GrContext;
+>>>>>>> miniblink49
 
 /**
  * This class uses the software side to render a path to an SkBitmap and
@@ -18,6 +26,7 @@ class GrTextureProvider;
  */
 class GrSoftwarePathRenderer : public GrPathRenderer {
 public:
+<<<<<<< HEAD
     GrSoftwarePathRenderer(GrTextureProvider* texProvider)
         : fTexProvider(texProvider)
     {
@@ -52,6 +61,34 @@ private:
 
 private:
     GrTextureProvider* fTexProvider;
+=======
+    GrSoftwarePathRenderer(GrContext* context)
+        : fContext(context) {
+    }
+
+    virtual bool canDrawPath(const GrDrawTarget*,
+                             const GrPipelineBuilder*,
+                             const SkMatrix& viewMatrix,
+                             const SkPath&,
+                             const GrStrokeInfo&,
+                             bool antiAlias) const override;
+protected:
+    virtual StencilSupport onGetStencilSupport(const GrDrawTarget*,
+                                               const GrPipelineBuilder*,
+                                               const SkPath&,
+                                               const GrStrokeInfo&) const override;
+
+    virtual bool onDrawPath(GrDrawTarget*,
+                            GrPipelineBuilder*,
+                            GrColor,
+                            const SkMatrix& viewMatrix,
+                            const SkPath&,
+                            const GrStrokeInfo&,
+                            bool antiAlias) override;
+
+private:
+    GrContext*     fContext;
+>>>>>>> miniblink49
 
     typedef GrPathRenderer INHERITED;
 };

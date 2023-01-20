@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Copyright 2015 Google Inc.
  *
@@ -5,6 +6,8 @@
  * found in the LICENSE file.
  */
 
+=======
+>>>>>>> miniblink49
 #include "SkApplication.h"
 #import "SkCanvas.h"
 #import "SkPaint.h"
@@ -33,7 +36,11 @@ protected:
         canvas->drawRect(r, p);
     }
 private:
+<<<<<<< HEAD
     typedef SkView INHERITED;
+=======
+    typedef SkView INHERITED; 
+>>>>>>> miniblink49
 };
 
 void application_init() {
@@ -42,6 +49,10 @@ void application_init() {
 }
 
 void application_term() {
+<<<<<<< HEAD
+=======
+    SkGraphics::Term();
+>>>>>>> miniblink49
     SkEvent::Term();
 }
 

@@ -10,8 +10,12 @@
 #include "SkBitmap.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsBuilder, reporter)
 {
+=======
+DEF_TEST(PathOpsBuilder, reporter) {
+>>>>>>> miniblink49
     SkOpBuilder builder;
     SkPath result;
     REPORTER_ASSERT(reporter, builder.resolve(&result));
@@ -32,7 +36,11 @@ DEF_TEST(PathOpsBuilder, reporter)
     REPORTER_ASSERT(reporter, builder.resolve(&result));
     bool closed;
     SkPath::Direction dir;
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, result.isRect(nullptr, &closed, &dir));
+=======
+    REPORTER_ASSERT(reporter, result.isRect(NULL, &closed, &dir));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, closed);
     REPORTER_ASSERT(reporter, dir == SkPath::kCCW_Direction);
     int pixelDiff = comparePaths(reporter, __FUNCTION__, rectPath, result);
@@ -43,7 +51,11 @@ DEF_TEST(PathOpsBuilder, reporter)
     rectPath.addRect(0, 1, 2, 3, SkPath::kCCW_Direction);
     builder.add(rectPath, kUnion_SkPathOp);
     REPORTER_ASSERT(reporter, builder.resolve(&result));
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, result.isRect(nullptr, &closed, &dir));
+=======
+    REPORTER_ASSERT(reporter, result.isRect(NULL, &closed, &dir));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, closed);
     REPORTER_ASSERT(reporter, dir == SkPath::kCCW_Direction);
     REPORTER_ASSERT(reporter, rectPath == result);
@@ -59,7 +71,11 @@ DEF_TEST(PathOpsBuilder, reporter)
     builder.add(rect2, kUnion_SkPathOp);
     builder.add(rect3, kUnion_SkPathOp);
     REPORTER_ASSERT(reporter, builder.resolve(&result));
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, result.isRect(nullptr, &closed, &dir));
+=======
+    REPORTER_ASSERT(reporter, result.isRect(NULL, &closed, &dir));
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, closed);
     SkRect expected;
     expected.set(0, 1, 5, 3);
@@ -80,8 +96,12 @@ DEF_TEST(PathOpsBuilder, reporter)
     REPORTER_ASSERT(reporter, pixelDiff == 0);
 }
 
+<<<<<<< HEAD
 DEF_TEST(BuilderIssue3838, reporter)
 {
+=======
+DEF_TEST(BuilderIssue3838, reporter) {
+>>>>>>> miniblink49
     SkPath path;
     path.moveTo(200, 170);
     path.lineTo(220, 170);
@@ -103,8 +123,12 @@ DEF_TEST(BuilderIssue3838, reporter)
     REPORTER_ASSERT(reporter, pixelDiff == 0);
 }
 
+<<<<<<< HEAD
 DEF_TEST(BuilderIssue3838_2, reporter)
 {
+=======
+DEF_TEST(BuilderIssue3838_2, reporter) {
+>>>>>>> miniblink49
     SkPath path;
     path.addCircle(100, 100, 50);
 
@@ -118,8 +142,12 @@ DEF_TEST(BuilderIssue3838_2, reporter)
     REPORTER_ASSERT(reporter, pixelDiff == 0);
 }
 
+<<<<<<< HEAD
 DEF_TEST(BuilderIssue3838_3, reporter)
 {
+=======
+DEF_TEST(BuilderIssue3838_3, reporter) {
+>>>>>>> miniblink49
     SkPath path;
     path.moveTo(40, 10);
     path.lineTo(60, 10);
@@ -140,8 +168,12 @@ DEF_TEST(BuilderIssue3838_3, reporter)
     REPORTER_ASSERT(reporter, pixelDiff == 0);
 }
 
+<<<<<<< HEAD
 DEF_TEST(BuilderIssue502792_2, reporter)
 {
+=======
+DEF_TEST(BuilderIssue502792_2, reporter) {
+>>>>>>> miniblink49
     SkPath path, pathB;
     path.setFillType(SkPath::kWinding_FillType);
     path.addRect(0, 0, 1, 1, SkPath::kCW_Direction);
@@ -155,6 +187,7 @@ DEF_TEST(BuilderIssue502792_2, reporter)
     SkPath result;
     builder.resolve(&result);
 }
+<<<<<<< HEAD
 
 DEF_TEST(Fuzz846, reporter)
 {
@@ -353,3 +386,5 @@ DEF_TEST(SkOpBuilder618991, reporter)
     builder.add(path1, SkPathOp::kUnion_SkPathOp);
     builder.resolve(&path0);
 }
+=======
+>>>>>>> miniblink49

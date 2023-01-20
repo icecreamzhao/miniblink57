@@ -41,7 +41,7 @@ class HTMLSummaryElement;
 class DetailsMarkerControl final : public HTMLDivElement {
 public:
     explicit DetailsMarkerControl(Document&);
-    static DetailsMarkerControl* create(Document&);
+    static PassRefPtrWillBeRawPtr<DetailsMarkerControl> create(Document&);
 
 private:
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
@@ -50,13 +50,13 @@ private:
     HTMLSummaryElement* summaryElement();
 };
 
-inline DetailsMarkerControl* DetailsMarkerControl::create(Document& document)
+inline PassRefPtrWillBeRawPtr<DetailsMarkerControl> DetailsMarkerControl::create(Document& document)
 {
-    DetailsMarkerControl* element = new DetailsMarkerControl(document);
-    element->setShadowPseudoId(AtomicString("-webkit-details-marker"));
-    return element;
+    RefPtrWillBeRawPtr<DetailsMarkerControl> element = adoptRefWillBeNoop(new DetailsMarkerControl(document));
+    element->setShadowPseudoId(AtomicString("-webkit-details-marker", AtomicString::ConstructFromLiteral));
+    return element.release();
 }
 
-} // namespace blink
+}
 
 #endif

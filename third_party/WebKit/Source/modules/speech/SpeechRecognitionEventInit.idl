@@ -2,9 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#speechrecognitionevent
 
 dictionary SpeechRecognitionEventInit : EventInit {
     unsigned long resultIndex;
     SpeechRecognitionResultList? results;
+=======
+// FIXME: Add spec URL.
+
+dictionary SpeechRecognitionEventInit : EventInit {
+    unsigned long resultIndex;
+    SpeechRecognitionResultList results;
+>>>>>>> miniblink49
 };

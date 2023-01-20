@@ -7,8 +7,12 @@
 #include "PathOpsExtendedTest.h"
 #include "PathOpsThreadedCommon.h"
 
+<<<<<<< HEAD
 static void testSimplifyDegeneratesMain(PathOpsThreadState* data)
 {
+=======
+static void testSimplifyDegeneratesMain(PathOpsThreadState* data) {
+>>>>>>> miniblink49
     SkASSERT(data);
     PathOpsThreadState& state = *data;
     char pathStr[1024];
@@ -25,6 +29,7 @@ static void testSimplifyDegeneratesMain(PathOpsThreadState* data)
     for (int d = 0; d < 16; ++d) {
         int dx = d & 0x03;
         int dy = d >> 2;
+<<<<<<< HEAD
         for (int e = d; e < 16; ++e) {
             int ex = e & 0x03;
             int ey = e >> 2;
@@ -32,6 +37,16 @@ static void testSimplifyDegeneratesMain(PathOpsThreadState* data)
                 int fx = f & 0x03;
                 int fy = f >> 2;
                 if (state.fD && (ex - dx) * (fy - dy) != (ey - dy) * (fx - dx)) {
+=======
+        for (int e = d ; e < 16; ++e) {
+            int ex = e & 0x03;
+            int ey = e >> 2;
+            for (int f = d ; f < 16; ++f) {
+                int fx = f & 0x03;
+                int fy = f >> 2;
+                if (state.fD && (ex - dx) * (fy - dy)
+                        != (ey - dy) * (fx - dx)) {
+>>>>>>> miniblink49
                     continue;
                 }
                 SkPath path, out;
@@ -67,13 +82,18 @@ static void testSimplifyDegeneratesMain(PathOpsThreadState* data)
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsSimplifyDegeneratesThreaded, reporter)
 {
+=======
+DEF_TEST(PathOpsSimplifyDegeneratesThreaded, reporter) {
+>>>>>>> miniblink49
     initializeTests(reporter, "testDegenerates");
     PathOpsThreadedTestRunner testRunner(reporter);
     for (int a = 0; a < 16; ++a) {
         int ax = a & 0x03;
         int ay = a >> 2;
+<<<<<<< HEAD
         for (int b = a; b < 16; ++b) {
             int bx = b & 0x03;
             int by = b >> 2;
@@ -86,6 +106,20 @@ DEF_TEST(PathOpsSimplifyDegeneratesThreaded, reporter)
             }
             if (!reporter->allowExtendedTest())
                 goto finish;
+=======
+        for (int b = a ; b < 16; ++b) {
+            int bx = b & 0x03;
+            int by = b >> 2;
+            for (int c = a ; c < 16; ++c) {
+                int cx = c & 0x03;
+                int cy = c >> 2;
+                bool abcIsATriangle = (bx - ax) * (cy - ay) != (by - ay) * (cx - ax);
+                *testRunner.fRunnables.append() = SkNEW_ARGS(PathOpsThreadedRunnable,
+                        (&testSimplifyDegeneratesMain, a, b, c, abcIsATriangle,
+                        &testRunner));
+            }
+            if (!reporter->allowExtendedTest()) goto finish;
+>>>>>>> miniblink49
         }
     }
 finish:

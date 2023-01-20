@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/WebEntities.h"
 
 #include "public/platform/WebString.h"
@@ -38,7 +42,11 @@ namespace blink {
 
 WebEntities::WebEntities(bool xmlEntities)
 {
+<<<<<<< HEAD
     DCHECK(m_entitiesMap.isEmpty());
+=======
+    ASSERT(m_entitiesMap.isEmpty());
+>>>>>>> miniblink49
     m_entitiesMap.set(0x003c, "lt");
     m_entitiesMap.set(0x003e, "gt");
     m_entitiesMap.set(0x0026, "amp");

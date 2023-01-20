@@ -99,7 +99,11 @@
 #ifdef OS390
 /* The features header is needed to get (u)int64_t sometimes. */
 #include <features.h>
+<<<<<<< HEAD
 #if !U_HAVE_INT8_T
+=======
+#if ! U_HAVE_INT8_T
+>>>>>>> miniblink49
 typedef signed char int8_t;
 #endif
 #if !defined(__uint8_t)
@@ -112,6 +116,7 @@ typedef unsigned char uint8_t;
 
 #else /* U_HAVE_INTTYPES_H */
 
+<<<<<<< HEAD
 #if !U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
@@ -143,6 +148,39 @@ typedef signed long long int64_t;
 
 #if !U_HAVE_UINT64_T
 typedef unsigned long long uint64_t;
+=======
+#if ! U_HAVE_INT8_T
+typedef signed char int8_t;
+#endif
+
+#if ! U_HAVE_UINT8_T
+typedef unsigned char uint8_t;
+#endif
+
+#if ! U_HAVE_INT16_T
+typedef signed short int16_t;
+#endif
+
+#if ! U_HAVE_UINT16_T
+typedef unsigned short uint16_t;
+#endif
+
+#if ! U_HAVE_INT32_T
+typedef signed int int32_t;
+#endif
+
+#if ! U_HAVE_UINT32_T
+typedef unsigned int uint32_t;
+#endif
+
+#if ! U_HAVE_INT64_T
+    typedef signed long long int64_t;
+/* else we may not have a 64-bit type */
+#endif
+
+#if ! U_HAVE_UINT64_T
+    typedef unsigned long long uint64_t;
+>>>>>>> miniblink49
 /* else we may not have a 64-bit type */
 #endif
 
@@ -209,7 +247,11 @@ typedef unsigned long long uint64_t;
 
 /* Define the library suffix in a C syntax. */
 #define U_HAVE_LIB_SUFFIX 0
+<<<<<<< HEAD
 #define U_LIB_SUFFIX_C_NAME
+=======
+#define U_LIB_SUFFIX_C_NAME 
+>>>>>>> miniblink49
 #define U_LIB_SUFFIX_C_NAME_STRING ""
 
 /*===========================================================================*/
@@ -217,17 +259,28 @@ typedef unsigned long long uint64_t;
 /*===========================================================================*/
 
 #if ((defined(OS390) && (!defined(__CHARSET_LIB) || !__CHARSET_LIB))) || defined(OS400)
+<<<<<<< HEAD
 #define U_CHARSET_FAMILY 1
+=======
+#   define U_CHARSET_FAMILY 1
+>>>>>>> miniblink49
 #endif
 
 /*===========================================================================*/
 /* Information about wchar support                                           */
 /*===========================================================================*/
 
+<<<<<<< HEAD
 #define U_HAVE_WCHAR_H 1
 #define U_SIZEOF_WCHAR_T 4
 
 #define U_HAVE_WCSCPY 1
+=======
+#define U_HAVE_WCHAR_H      1
+#define U_SIZEOF_WCHAR_T    4
+
+#define U_HAVE_WCSCPY       1
+>>>>>>> miniblink49
 
 /**
  * \def U_DECLARE_UTF16
@@ -237,6 +290,7 @@ typedef unsigned long long uint64_t;
  */
 #if 1 || defined(U_CHECK_UTF16_STRING)
 #if (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
+<<<<<<< HEAD
     || (defined(__HP_aCC) && __HP_aCC >= 035000)                              \
     || (defined(__HP_cc) && __HP_cc >= 111106)
 #define U_DECLARE_UTF16(string) u##string
@@ -247,6 +301,18 @@ typedef unsigned long long uint64_t;
 #elif U_SIZEOF_WCHAR_T == 2 \
     && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
 #define U_DECLARE_UTF16(string) L##string
+=======
+    || (defined(__HP_aCC) && __HP_aCC >= 035000) \
+    || (defined(__HP_cc) && __HP_cc >= 111106)
+#define U_DECLARE_UTF16(string) u ## string
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
+/* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
+/* Sun's C compiler has issues with this notation, and it's unreliable. */
+#define U_DECLARE_UTF16(string) U ## string
+#elif U_SIZEOF_WCHAR_T == 2 \
+    && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
+#define U_DECLARE_UTF16(string) L ## string
+>>>>>>> miniblink49
 #endif
 #endif
 
@@ -254,6 +320,7 @@ typedef unsigned long long uint64_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
+<<<<<<< HEAD
 #define U_HAVE_NL_LANGINFO_CODESET 1
 #define U_NL_LANGINFO_CODESET CODESET
 
@@ -269,6 +336,23 @@ typedef unsigned long long uint64_t;
 
 #define U_HAVE_MMAP 1
 #define U_HAVE_POPEN 1
+=======
+#define U_HAVE_NL_LANGINFO_CODESET  1
+#define U_NL_LANGINFO_CODESET       CODESET
+
+#if 1
+#define U_TZSET         tzset
+#endif
+#if 0
+#define U_TIMEZONE      
+#endif
+#if 1
+#define U_TZNAME        tzname
+#endif
+
+#define U_HAVE_MMAP     1
+#define U_HAVE_POPEN    1
+>>>>>>> miniblink49
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
@@ -289,7 +373,11 @@ typedef unsigned long long uint64_t;
 #ifdef U_CYGWIN
 #define U_IMPORT __declspec(dllimport)
 #else
+<<<<<<< HEAD
 #define U_IMPORT
+=======
+#define U_IMPORT 
+>>>>>>> miniblink49
 #endif
 
 /*===========================================================================*/
@@ -297,6 +385,7 @@ typedef unsigned long long uint64_t;
 /*===========================================================================*/
 
 #ifndef U_INLINE
+<<<<<<< HEAD
 #ifdef __cplusplus
 #define U_INLINE inline
 #else
@@ -305,9 +394,23 @@ typedef unsigned long long uint64_t;
 #endif
 
 #define U_ALIGN_CODE(n)
+=======
+#   ifdef __cplusplus
+#       define U_INLINE inline
+#   else
+#       define U_INLINE inline
+#   endif
+#endif
+
+#define U_ALIGN_CODE(n) 
+>>>>>>> miniblink49
 
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
+<<<<<<< HEAD
 #define U_MAKE "/usr/local/bin/gmake"
+=======
+#define U_MAKE  "/usr/local/bin/gmake"
+>>>>>>> miniblink49

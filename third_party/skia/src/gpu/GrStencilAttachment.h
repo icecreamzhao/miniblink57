@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef GrStencilAttachment_DEFINED
 #define GrStencilAttachment_DEFINED
 
@@ -16,8 +24,14 @@ class GrResourceKey;
 
 class GrStencilAttachment : public GrGpuResource {
 public:
+<<<<<<< HEAD
     virtual ~GrStencilAttachment()
     {
+=======
+    
+
+    virtual ~GrStencilAttachment() {
+>>>>>>> miniblink49
         // TODO: allow SB to be purged and detach itself from rts
     }
 
@@ -28,9 +42,14 @@ public:
 
     // called to note the last clip drawn to this buffer.
     void setLastClip(int32_t clipStackGenID,
+<<<<<<< HEAD
         const SkIRect& clipSpaceRect,
         const SkIPoint clipSpaceToStencilOffset)
     {
+=======
+                     const SkIRect& clipSpaceRect,
+                     const SkIPoint clipSpaceToStencilOffset) {
+>>>>>>> miniblink49
         fLastClipStackGenID = clipStackGenID;
         fLastClipStackRect = clipSpaceRect;
         fLastClipSpaceOffset = clipSpaceToStencilOffset;
@@ -38,38 +57,69 @@ public:
 
     // called to determine if we have to render the clip into SB.
     bool mustRenderClip(int32_t clipStackGenID,
+<<<<<<< HEAD
         const SkIRect& clipSpaceRect,
         const SkIPoint clipSpaceToStencilOffset) const
     {
         return fLastClipStackGenID != clipStackGenID || fLastClipSpaceOffset != clipSpaceToStencilOffset || !fLastClipStackRect.contains(clipSpaceRect);
+=======
+                        const SkIRect& clipSpaceRect,
+                        const SkIPoint clipSpaceToStencilOffset) const {
+        return fLastClipStackGenID != clipStackGenID ||
+               fLastClipSpaceOffset != clipSpaceToStencilOffset ||
+               !fLastClipStackRect.contains(clipSpaceRect);
+>>>>>>> miniblink49
     }
 
     // We create a unique stencil buffer at each width, height and sampleCnt and share it for
     // all render targets that require a stencil with those params.
     static void ComputeSharedStencilAttachmentKey(int width, int height, int sampleCnt,
+<<<<<<< HEAD
         GrUniqueKey* key);
 
 protected:
     GrStencilAttachment(GrGpu* gpu, int width, int height, int bits, int sampleCnt)
         : GrGpuResource(gpu)
+=======
+                                                  GrUniqueKey* key);
+
+protected:
+    GrStencilAttachment(GrGpu* gpu, LifeCycle lifeCycle, int width, int height, int bits,
+                        int sampleCnt)
+        : GrGpuResource(gpu, lifeCycle)
+>>>>>>> miniblink49
         , fWidth(width)
         , fHeight(height)
         , fBits(bits)
         , fSampleCnt(sampleCnt)
+<<<<<<< HEAD
         , fLastClipStackGenID(SkClipStack::kInvalidGenID)
     {
+=======
+        , fLastClipStackGenID(SkClipStack::kInvalidGenID) {
+>>>>>>> miniblink49
         fLastClipStackRect.setEmpty();
     }
 
 private:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     int fWidth;
     int fHeight;
     int fBits;
     int fSampleCnt;
 
+<<<<<<< HEAD
     int32_t fLastClipStackGenID;
     SkIRect fLastClipStackRect;
     SkIPoint fLastClipSpaceOffset;
+=======
+    int32_t     fLastClipStackGenID;
+    SkIRect     fLastClipStackRect;
+    SkIPoint    fLastClipSpaceOffset;
+>>>>>>> miniblink49
 
     typedef GrGpuResource INHERITED;
 };

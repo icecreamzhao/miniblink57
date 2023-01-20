@@ -32,10 +32,19 @@
 
 namespace blink {
 
+<<<<<<< HEAD
+=======
+class WebBlobInfo;
+class WebData;
+>>>>>>> miniblink49
 class WebIDBCursor;
 class WebIDBDatabase;
 class WebIDBDatabaseError;
 class WebIDBKey;
+<<<<<<< HEAD
+=======
+class WebIDBKeyPath;
+>>>>>>> miniblink49
 struct WebIDBMetadata;
 struct WebIDBValue;
 
@@ -44,6 +53,7 @@ public:
     virtual ~WebIDBCallbacks() { }
 
     // Pointers transfer ownership.
+<<<<<<< HEAD
     virtual void onError(const WebIDBDatabaseError&) = 0;
     virtual void onSuccess(const WebVector<WebString>&) = 0;
     virtual void onSuccess(WebIDBCursor*,
@@ -69,6 +79,23 @@ public:
         WebString dataLossMessage)
         = 0;
     virtual void detach() = 0;
+=======
+    virtual void onError(const WebIDBDatabaseError&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(const WebVector<WebString>&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(WebIDBCursor*, const WebIDBKey&, const WebIDBKey& primaryKey, const WebData&, const WebVector<WebBlobInfo>&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(WebIDBDatabase*, const WebIDBMetadata&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(const WebIDBKey&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(const WebData&, const WebVector<WebBlobInfo>&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(const WebIDBValue&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(const WebVector<WebIDBValue>&) { BLINK_ASSERT_NOT_REACHED(); }
+    // TODO(cmumford): Eliminate redundant onSuccess overloads http://crbug.com/487711
+    virtual void onSuccess(const WebData&, const WebVector<WebBlobInfo>&, const WebIDBKey&, const WebIDBKeyPath&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(long long) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess() { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onSuccess(const WebIDBKey&, const WebIDBKey& primaryKey, const WebData&, const WebVector<WebBlobInfo>&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onBlocked(long long oldVersion) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onUpgradeNeeded(long long oldVersion, WebIDBDatabase*, const WebIDBMetadata&, unsigned short dataLoss, WebString dataLossMessage) { BLINK_ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -8,14 +8,22 @@
 #ifndef SkPictureRecorder_DEFINED
 #define SkPictureRecorder_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkMiniRecorder.h"
+=======
+#include "../../src/core/SkMiniRecorder.h"
+>>>>>>> miniblink49
 #include "SkBBHFactory.h"
 #include "SkPicture.h"
 #include "SkRefCnt.h"
 
 #ifdef SK_BUILD_FOR_ANDROID_FRAMEWORK
 namespace android {
+<<<<<<< HEAD
 class Picture;
+=======
+    class Picture;
+>>>>>>> miniblink49
 };
 #endif
 
@@ -35,9 +43,15 @@ public:
         // information should also be extracted at the same time.
         kComputeSaveLayerInfo_RecordFlag = 0x01,
 
+<<<<<<< HEAD
         // If you call drawPicture() or drawDrawable() on the recording canvas, this flag forces
         // that object to playback its contents immediately rather than reffing the object.
         kPlaybackDrawPicture_RecordFlag = 0x02,
+=======
+        // If you call drawPicture() on the recording canvas, this flag forces
+        // that to use SkPicture::playback() immediately rather than (e.g.) reffing the picture.
+        kPlaybackDrawPicture_RecordFlag  = 0x02,
+>>>>>>> miniblink49
     };
 
     /** Returns the canvas that records the drawing commands.
@@ -48,6 +62,7 @@ public:
         @return the canvas.
     */
     SkCanvas* beginRecording(const SkRect& bounds,
+<<<<<<< HEAD
         SkBBHFactory* bbhFactory = NULL,
         uint32_t recordFlags = 0);
 
@@ -55,6 +70,14 @@ public:
         SkBBHFactory* bbhFactory = NULL,
         uint32_t recordFlags = 0)
     {
+=======
+                             SkBBHFactory* bbhFactory = NULL,
+                             uint32_t recordFlags = 0);
+
+    SkCanvas* beginRecording(SkScalar width, SkScalar height,
+                             SkBBHFactory* bbhFactory = NULL,
+                             uint32_t recordFlags = 0) {
+>>>>>>> miniblink49
         return this->beginRecording(SkRect::MakeWH(width, height), bbhFactory, recordFlags);
     }
 
@@ -73,7 +96,11 @@ public:
      *  reflect their current state, but will not contain a live reference to the drawables
      *  themselves.
      */
+<<<<<<< HEAD
     sk_sp<SkPicture> finishRecordingAsPicture();
+=======
+    SkPicture* SK_WARN_UNUSED_RESULT endRecordingAsPicture();
+>>>>>>> miniblink49
 
     /**
      *  Signal that the caller is done recording, and update the cull rect to use for bounding
@@ -84,7 +111,11 @@ public:
      *                  and subsequent culling operations.
      *  @return the picture containing the recorded content.
      */
+<<<<<<< HEAD
     sk_sp<SkPicture> finishRecordingAsPictureWithCull(const SkRect& cullRect);
+=======
+    SkPicture* SK_WARN_UNUSED_RESULT endRecordingAsPicture(const SkRect& cullRect);
+>>>>>>> miniblink49
 
     /**
      *  Signal that the caller is done recording. This invalidates the canvas returned by
@@ -96,6 +127,7 @@ public:
      *  and therefore this drawable will reflect the current state of those nested drawables anytime
      *  it is drawn or a new picture is snapped from it (by calling drawable->newPictureSnapshot()).
      */
+<<<<<<< HEAD
     sk_sp<SkDrawable> finishRecordingAsDrawable();
 
 #ifdef SK_SUPPORT_LEGACY_PICTURE_PTR
@@ -113,6 +145,12 @@ public:
     }
     SkPicture* SK_WARN_UNUSED_RESULT endRecording() { return this->endRecordingAsPicture(); }
 #endif
+=======
+    SkDrawable* SK_WARN_UNUSED_RESULT endRecordingAsDrawable();
+
+    // Legacy API -- use endRecordingAsPicture instead.
+    SkPicture* SK_WARN_UNUSED_RESULT endRecording() { return this->endRecordingAsPicture(); }
+>>>>>>> miniblink49
 
 private:
     void reset();
@@ -126,6 +164,7 @@ private:
     friend class SkPictureRecorderReplayTester; // for unit testing
     void partialReplay(SkCanvas* canvas) const;
 
+<<<<<<< HEAD
     bool fActivelyRecording;
     uint32_t fFlags;
     SkRect fCullRect;
@@ -133,6 +172,15 @@ private:
     SkAutoTUnref<SkRecorder> fRecorder;
     SkAutoTUnref<SkRecord> fRecord;
     SkMiniRecorder fMiniRecorder;
+=======
+    bool                          fActivelyRecording;
+    uint32_t                      fFlags;
+    SkRect                        fCullRect;
+    SkAutoTUnref<SkBBoxHierarchy> fBBH;
+    SkAutoTUnref<SkRecorder>      fRecorder;
+    SkAutoTUnref<SkRecord>        fRecord;
+    SkMiniRecorder                fMiniRecorder;
+>>>>>>> miniblink49
 
     typedef SkNoncopyable INHERITED;
 };

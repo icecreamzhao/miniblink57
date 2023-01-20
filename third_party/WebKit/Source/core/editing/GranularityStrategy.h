@@ -7,13 +7,10 @@
 
 #include "core/editing/SelectionStrategy.h"
 #include "core/editing/VisibleSelection.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 class GranularityStrategy {
-    USING_FAST_MALLOC(GranularityStrategy);
-
 public:
     virtual ~GranularityStrategy();
     virtual SelectionStrategy GetType() const = 0;
@@ -108,8 +105,7 @@ private:
     // Current selection granularity being used.
     TextGranularity m_granularity;
 
-    // Horizontal offset in pixels in absolute coordinates applied to the extent
-    // point.
+    // Horizontal offset in pixels in absolute coordinates applied to the extent point.
     int m_offset;
 
     // This defines location of the offset-adjusted extent point (from the

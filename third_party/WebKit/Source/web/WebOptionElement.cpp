@@ -28,23 +28,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebOptionElement.h"
 
 #include "core/HTMLNames.h"
 #include "core/html/HTMLOptionElement.h"
+<<<<<<< HEAD
+=======
+#include "core/html/HTMLSelectElement.h"
+>>>>>>> miniblink49
 #include "public/platform/WebString.h"
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
 
+<<<<<<< HEAD
+=======
+void WebOptionElement::setValue(const WebString& newValue)
+{
+    unwrap<HTMLOptionElement>()->setValue(newValue);
+}
+
+>>>>>>> miniblink49
 WebString WebOptionElement::value() const
 {
     return constUnwrap<HTMLOptionElement>()->value();
 }
 
+<<<<<<< HEAD
 WebString WebOptionElement::text() const
 {
     return constUnwrap<HTMLOptionElement>()->displayLabel();
+=======
+int WebOptionElement::index() const
+{
+    return constUnwrap<HTMLOptionElement>()->index();
+}
+
+WebString WebOptionElement::text() const
+{
+    return constUnwrap<HTMLOptionElement>()->text();
+>>>>>>> miniblink49
 }
 
 WebString WebOptionElement::label() const
@@ -52,21 +79,38 @@ WebString WebOptionElement::label() const
     return constUnwrap<HTMLOptionElement>()->label();
 }
 
+<<<<<<< HEAD
 WebOptionElement::WebOptionElement(HTMLOptionElement* elem)
+=======
+bool WebOptionElement::isEnabled() const
+{
+    return !(constUnwrap<HTMLOptionElement>()->isDisabledFormControl());
+}
+
+WebOptionElement::WebOptionElement(const PassRefPtrWillBeRawPtr<HTMLOptionElement>& elem)
+>>>>>>> miniblink49
     : WebElement(elem)
 {
 }
 
+<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebOptionElement,
     isHTMLOptionElement(constUnwrap<Node>()));
 
 WebOptionElement& WebOptionElement::operator=(HTMLOptionElement* elem)
+=======
+WebOptionElement& WebOptionElement::operator=(const PassRefPtrWillBeRawPtr<HTMLOptionElement>& elem)
+>>>>>>> miniblink49
 {
     m_private = elem;
     return *this;
 }
 
+<<<<<<< HEAD
 WebOptionElement::operator HTMLOptionElement*() const
+=======
+WebOptionElement::operator PassRefPtrWillBeRawPtr<HTMLOptionElement>() const
+>>>>>>> miniblink49
 {
     return toHTMLOptionElement(m_private.get());
 }

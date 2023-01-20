@@ -6,34 +6,33 @@ electron.ipcMain = ipcMain;
 var App = require("./../browser/api/app").App;
 electron.app = new App();
 
-electron.BrowserWindow = require("./../browser/api/browser-window.js");
-electron.BrowserView = require("./../browser/api/browser-view.js");
-electron.webContents = require("./../browser/api/web-contents.js");
-electron.session = require("./../browser/api/session.js").session;
+electron.BrowserWindow = require("./../browser/api/browser-window");
+
+electron.webContents = require("./../browser/api/web-contents");
 
 const EventEmitter = require('events').EventEmitter;
 Object.setPrototypeOf(App.prototype, EventEmitter.prototype);
 
-const MenuItem = require('./api/menu-item.js');
+const MenuItem = require('./api/menu-item');
 electron.MenuItem = MenuItem;
 
-const Menu = require('./api/menu.js');
+const Menu = require('./api/menu');
 electron.Menu = Menu;
 
-const isPromise = require('./../common/api/is-promise.js').isPromise;
+const isPromise = require('./../common/api/is-promise').isPromise;
 electron.isPromise = isPromise;
 
-///const dialog = require('./api/dialog.js').dialog;
-///electron.dialog = dialog;
+const dialog = require('./api/dialog').dialog;
+electron.dialog = dialog;
 
-const net = require('./api/net.js').net;
+const net = require('./api/net').net;
 electron.net = net;
 
-///electron.shell = require("./../common/api/shell.js").Shell;
-///electron.screen = require("./../common/api/screen.js").Screen;
-///electron.tray = require("./../common/api/screen.js").Tray;
-///electron.clipboard = require("./../common/api/clipboard.js");
-///electron.nativeImage = require("./../common/api/native-image.js").NativeImage;
+electron.shell = require("./../common/api/shell").Shell;
+electron.screen = require("./../common/api/screen").Screen;
+electron.tray = require("./../common/api/screen").Tray;
+electron.clipboard = require("./../common/api/clipboard");
+electron.nativeImage = require("./../common/api/native-image").NativeImage;
 
 function SystemPreferences () {}
 SystemPreferences.prototype.isDarkMode = function() { return false; }
@@ -45,7 +44,7 @@ electron.systemPreferences = new SystemPreferences();
 
 ////////////////////////////////////////////////////////////////
 
-electron.protocol = require("./api/protocol.js").protocol;
+electron.protocol = require("./api/protocol").protocol;
 
 // function Protocol() {}
 // Protocol.prototype.registerStandardSchemes = function(schemes) {}
@@ -102,9 +101,7 @@ Tray.prototype.setContextMenu = function(menu) {}
 
 electron.Tray = Tray;
 */
-
-///electron.Tray = require("./api/tray").Tray;
-
+electron.Tray = require("./api/tray").Tray;
 ////////////////////////////////////////////////////////////////
 function GlobalShortcut() {}
 GlobalShortcut.prototype.register = function(accelerator, callback) {}

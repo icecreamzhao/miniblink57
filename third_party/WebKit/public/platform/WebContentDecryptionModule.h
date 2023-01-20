@@ -43,10 +43,14 @@ public:
     // Must return non-null.
     virtual WebContentDecryptionModuleSession* createSession() = 0;
 
+<<<<<<< HEAD
     virtual void setServerCertificate(const unsigned char* certificate,
         size_t certificateLength,
         WebContentDecryptionModuleResult)
         = 0;
+=======
+    virtual void setServerCertificate(const unsigned char* certificate, size_t certificateLength, WebContentDecryptionModuleResult) = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

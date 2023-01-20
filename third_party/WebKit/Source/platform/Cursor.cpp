@@ -23,13 +23,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/Cursor.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 IntPoint determineHotSpot(Image* image,
     bool hotSpotSpecified,
     const IntPoint& specifiedHotSpot)
+=======
+IntPoint determineHotSpot(Image* image, bool hotSpotSpecified, const IntPoint& specifiedHotSpot)
+>>>>>>> miniblink49
 {
     if (image->isNull())
         return IntPoint();
@@ -44,12 +52,19 @@ IntPoint determineHotSpot(Image* image,
 
         return IntPoint(
             clampTo<int>(specifiedHotSpot.x(), imageRect.x(), imageRect.maxX() - 1),
+<<<<<<< HEAD
             clampTo<int>(specifiedHotSpot.y(), imageRect.y(),
                 imageRect.maxY() - 1));
     }
 
     // If hot spot is not specified externally, it can be extracted from some
     // image formats (e.g. .cur).
+=======
+            clampTo<int>(specifiedHotSpot.y(), imageRect.y(), imageRect.maxY() - 1));
+    }
+
+    // If hot spot is not specified externally, it can be extracted from some image formats (e.g. .cur).
+>>>>>>> miniblink49
     IntPoint intrinsicHotSpot;
     bool imageHasIntrinsicHotSpot = image->getHotSpot(intrinsicHotSpot);
     if (imageHasIntrinsicHotSpot && imageRect.contains(intrinsicHotSpot))
@@ -59,6 +74,104 @@ IntPoint determineHotSpot(Image* image,
     return IntPoint();
 }
 
+<<<<<<< HEAD
+=======
+const Cursor& Cursor::fromType(Cursor::Type type)
+{
+    switch (type) {
+    case Cursor::Pointer:
+        return pointerCursor();
+    case Cursor::Cross:
+        return crossCursor();
+    case Cursor::Hand:
+        return handCursor();
+    case Cursor::IBeam:
+        return iBeamCursor();
+    case Cursor::Wait:
+        return waitCursor();
+    case Cursor::Help:
+        return helpCursor();
+    case Cursor::EastResize:
+        return eastResizeCursor();
+    case Cursor::NorthResize:
+        return northResizeCursor();
+    case Cursor::NorthEastResize:
+        return northEastResizeCursor();
+    case Cursor::NorthWestResize:
+        return northWestResizeCursor();
+    case Cursor::SouthResize:
+        return southResizeCursor();
+    case Cursor::SouthEastResize:
+        return southEastResizeCursor();
+    case Cursor::SouthWestResize:
+        return southWestResizeCursor();
+    case Cursor::WestResize:
+        return westResizeCursor();
+    case Cursor::NorthSouthResize:
+        return northSouthResizeCursor();
+    case Cursor::EastWestResize:
+        return eastWestResizeCursor();
+    case Cursor::NorthEastSouthWestResize:
+        return northEastSouthWestResizeCursor();
+    case Cursor::NorthWestSouthEastResize:
+        return northWestSouthEastResizeCursor();
+    case Cursor::ColumnResize:
+        return columnResizeCursor();
+    case Cursor::RowResize:
+        return rowResizeCursor();
+    case Cursor::MiddlePanning:
+        return middlePanningCursor();
+    case Cursor::EastPanning:
+        return eastPanningCursor();
+    case Cursor::NorthPanning:
+        return northPanningCursor();
+    case Cursor::NorthEastPanning:
+        return northEastPanningCursor();
+    case Cursor::NorthWestPanning:
+        return northWestPanningCursor();
+    case Cursor::SouthPanning:
+        return southPanningCursor();
+    case Cursor::SouthEastPanning:
+        return southEastPanningCursor();
+    case Cursor::SouthWestPanning:
+        return southWestPanningCursor();
+    case Cursor::WestPanning:
+        return westPanningCursor();
+    case Cursor::Move:
+        return moveCursor();
+    case Cursor::VerticalText:
+        return verticalTextCursor();
+    case Cursor::Cell:
+        return cellCursor();
+    case Cursor::ContextMenu:
+        return contextMenuCursor();
+    case Cursor::Alias:
+        return aliasCursor();
+    case Cursor::Progress:
+        return progressCursor();
+    case Cursor::NoDrop:
+        return noDropCursor();
+    case Cursor::Copy:
+        return copyCursor();
+    case Cursor::None:
+        return noneCursor();
+    case Cursor::NotAllowed:
+        return notAllowedCursor();
+    case Cursor::ZoomIn:
+        return zoomInCursor();
+    case Cursor::ZoomOut:
+        return zoomOutCursor();
+    case Cursor::Grab:
+        return grabCursor();
+    case Cursor::Grabbing:
+        return grabbingCursor();
+    case Cursor::Custom:
+        ASSERT_NOT_REACHED();
+    }
+    return pointerCursor();
+}
+
+>>>>>>> miniblink49
 Cursor::Cursor(Image* image, bool hotSpotSpecified, const IntPoint& hotSpot)
     : m_type(Custom)
     , m_image(image)
@@ -67,10 +180,14 @@ Cursor::Cursor(Image* image, bool hotSpotSpecified, const IntPoint& hotSpot)
 {
 }
 
+<<<<<<< HEAD
 Cursor::Cursor(Image* image,
     bool hotSpotSpecified,
     const IntPoint& hotSpot,
     float scale)
+=======
+Cursor::Cursor(Image* image, bool hotSpotSpecified, const IntPoint& hotSpot, float scale)
+>>>>>>> miniblink49
     : m_type(Custom)
     , m_image(image)
     , m_hotSpot(determineHotSpot(image, hotSpotSpecified, hotSpot))
@@ -101,7 +218,13 @@ Cursor& Cursor::operator=(const Cursor& other)
     return *this;
 }
 
+<<<<<<< HEAD
 Cursor::~Cursor() { }
+=======
+Cursor::~Cursor()
+{
+}
+>>>>>>> miniblink49
 
 const Cursor& pointerCursor()
 {

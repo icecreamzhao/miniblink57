@@ -23,6 +23,7 @@
         'views.gyp:views',
       ],
     },
+<<<<<<< HEAD
     {
       'target_name': 'SkiaSDLExample',
       'type': 'executable',
@@ -38,5 +39,7 @@
         'sdl.gyp:sdl',
       ],
     },
+=======
+>>>>>>> miniblink49
   ],
 }

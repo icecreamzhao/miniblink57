@@ -36,8 +36,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 template <typename T>
 class WebVector;
+=======
+template <typename T> class WebVector;
+>>>>>>> miniblink49
 
 // Gets called back when WebViewClient finished choosing a file.
 class WebFileChooserCompletion {
@@ -79,9 +83,14 @@ public:
     // FIXME: Deprecate either one of the didChooseFile (and rename it to
     // didChooseFile*s*).
     virtual void didChooseFile(const WebVector<SelectedFileInfo>&) { }
+<<<<<<< HEAD
 
 protected:
     virtual ~WebFileChooserCompletion() { }
+=======
+protected:
+    virtual ~WebFileChooserCompletion() {}
+>>>>>>> miniblink49
 };
 
 } // namespace blink

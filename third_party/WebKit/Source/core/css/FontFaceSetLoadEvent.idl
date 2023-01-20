@@ -28,12 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://dev.w3.org/csswg/css-font-loading/#fontfacesetloadevent
+// http://dev.w3.org/csswg/css-font-loading/#fontfacesetloadevent
 
+// TODO(philipj): This interface should have a constructor and
+// [Exposed=Window,Worker], and thus not [NoInterfaceObject].
 [
-  Constructor(DOMString type, optional FontFaceSetLoadEventInit eventInitDict),
-  // TODO(lunalu): Exposed=(Window,Worker)
-  Exposed=Window
+    NoInterfaceObject,
 ] interface FontFaceSetLoadEvent : Event {
-    [SameObject] readonly attribute FrozenArray<FontFace> fontfaces;
+    readonly attribute sequence<FontFace> fontfaces;
 };

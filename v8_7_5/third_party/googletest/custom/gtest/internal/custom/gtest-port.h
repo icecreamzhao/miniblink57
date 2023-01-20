@@ -16,6 +16,7 @@ namespace std {
 
 namespace tr1 {
 
+<<<<<<< HEAD
     using std::get;
     using std::make_tuple;
     using std::tuple;
@@ -25,3 +26,14 @@ namespace tr1 {
 } // namespace std
 
 #endif // THIRD_PARTY_GOOGLETEST_CUSTOM_GTEST_INTERNAL_CUSTOM_GTEST_PORT_H_
+=======
+using std::get;
+using std::make_tuple;
+using std::tuple;
+
+}  // namespace tr1
+
+}  // namespace std
+
+#endif  // THIRD_PARTY_GOOGLETEST_CUSTOM_GTEST_INTERNAL_CUSTOM_GTEST_PORT_H_
+>>>>>>> miniblink49

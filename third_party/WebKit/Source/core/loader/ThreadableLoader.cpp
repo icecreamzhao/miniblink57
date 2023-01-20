@@ -28,52 +28,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/loader/ThreadableLoader.h"
 
 #include "core/dom/Document.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/loader/DocumentThreadableLoader.h"
+#include "core/loader/ThreadableLoaderClientWrapper.h"
+#include "core/loader/WorkerLoaderClientBridge.h"
 #include "core/loader/WorkerThreadableLoader.h"
 #include "core/workers/WorkerGlobalScope.h"
+#include "core/workers/WorkerThread.h"
 
 namespace blink {
 
-ThreadableLoader* ThreadableLoader::create(
-    ExecutionContext& context,
-    ThreadableLoaderClient* client,
-    const ThreadableLoaderOptions& options,
-    const ResourceLoaderOptions& resourceLoaderOptions,
-    ClientSpec clientSpec)
+PassRefPtr<ThreadableLoader> ThreadableLoader::create(ExecutionContext& context, ThreadableLoaderClient* client, const ResourceRequest& request, const ThreadableLoaderOptions& options, const ResourceLoaderOptions& resourceLoaderOptions)
 {
-    DCHECK(client);
+    ASSERT(client);
 
     if (context.isWorkerGlobalScope()) {
-        return WorkerThreadableLoader::create(toWorkerGlobalScope(context), client,
-            options, resourceLoaderOptions);
+        WorkerGlobalScope& workerGlobalScope = toWorkerGlobalScope(context);
+        RefPtr<ThreadableLoaderClientWrapper> clientWrapper(ThreadableLoaderClientWrapper::create(client));
+        OwnPtr<ThreadableLoaderClient> clientBridge(WorkerLoaderClientBridge::create(clientWrapper, workerGlobalScope.thread()->workerLoaderProxy()));
+        return WorkerThreadableLoader::create(workerGlobalScope, clientWrapper, clientBridge.release(), request, options, resourceLoaderOptions);
     }
 
-    return DocumentThreadableLoader::create(toDocument(context), client, options,
-        resourceLoaderOptions, clientSpec);
+    return DocumentThreadableLoader::create(toDocument(context), client, request, options, resourceLoaderOptions);
 }
 
-void ThreadableLoader::loadResourceSynchronously(
-    ExecutionContext& context,
-    const ResourceRequest& request,
-    ThreadableLoaderClient& client,
-    const ThreadableLoaderOptions& options,
-    const ResourceLoaderOptions& resourceLoaderOptions,
-    ClientSpec clientSpec)
+void ThreadableLoader::loadResourceSynchronously(ExecutionContext& context, const ResourceRequest& request, ThreadableLoaderClient& client, const ThreadableLoaderOptions& options, const ResourceLoaderOptions& resourceLoaderOptions)
 {
     if (context.isWorkerGlobalScope()) {
-        WorkerThreadableLoader::loadResourceSynchronously(
-            toWorkerGlobalScope(context), request, client, options,
-            resourceLoaderOptions);
+        WorkerThreadableLoader::loadResourceSynchronously(toWorkerGlobalScope(context), request, client, options, resourceLoaderOptions);
         return;
     }
 
-    DocumentThreadableLoader::loadResourceSynchronously(
-        toDocument(context), request, client, options, resourceLoaderOptions,
-        clientSpec);
+    DocumentThreadableLoader::loadResourceSynchronously(toDocument(context), request, client, options, resourceLoaderOptions);
 }
 
 } // namespace blink

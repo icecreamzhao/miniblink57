@@ -28,6 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/dom/MutationObserverRegistration.h"
 
 #include "core/dom/Node.h"
@@ -35,22 +37,13 @@
 
 namespace blink {
 
-MutationObserverRegistration* MutationObserverRegistration::create(
-    MutationObserver& observer,
-    Node* registrationNode,
-    MutationObserverOptions options,
-    const HashSet<AtomicString>& attributeFilter)
+PassOwnPtrWillBeRawPtr<MutationObserverRegistration> MutationObserverRegistration::create(MutationObserver& observer, Node* registrationNode, MutationObserverOptions options, const HashSet<AtomicString>& attributeFilter)
 {
-    return new MutationObserverRegistration(observer, registrationNode, options,
-        attributeFilter);
+    return adoptPtrWillBeNoop(new MutationObserverRegistration(observer, registrationNode, options, attributeFilter));
 }
 
-MutationObserverRegistration::MutationObserverRegistration(
-    MutationObserver& observer,
-    Node* registrationNode,
-    MutationObserverOptions options,
-    const HashSet<AtomicString>& attributeFilter)
-    : m_observer(this, &observer)
+MutationObserverRegistration::MutationObserverRegistration(MutationObserver& observer, Node* registrationNode, MutationObserverOptions options, const HashSet<AtomicString>& attributeFilter)
+    : m_observer(observer)
     , m_registrationNode(registrationNode)
     , m_options(options)
     , m_attributeFilter(attributeFilter)
@@ -58,7 +51,12 @@ MutationObserverRegistration::MutationObserverRegistration(
     m_observer->observationStarted(this);
 }
 
-MutationObserverRegistration::~MutationObserverRegistration() { }
+MutationObserverRegistration::~MutationObserverRegistration()
+{
+#if !ENABLE(OILPAN)
+    dispose();
+#endif
+}
 
 void MutationObserverRegistration::dispose()
 {
@@ -67,9 +65,7 @@ void MutationObserverRegistration::dispose()
     m_observer.clear();
 }
 
-void MutationObserverRegistration::resetObservation(
-    MutationObserverOptions options,
-    const HashSet<AtomicString>& attributeFilter)
+void MutationObserverRegistration::resetObservation(MutationObserverOptions options, const HashSet<AtomicString>& attributeFilter)
 {
     clearTransientRegistrations();
     m_options = options;
@@ -85,11 +81,11 @@ void MutationObserverRegistration::observedSubtreeNodeWillDetach(Node& node)
     m_observer->setHasTransientRegistration();
 
     if (!m_transientRegistrationNodes) {
-        m_transientRegistrationNodes = new NodeHashSet;
+        m_transientRegistrationNodes = adoptPtrWillBeNoop(new NodeHashSet);
 
-        DCHECK(m_registrationNode);
-        DCHECK(!m_registrationNodeKeepAlive);
-        m_registrationNodeKeepAlive = m_registrationNode.get(); // Balanced in clearTransientRegistrations.
+        ASSERT(m_registrationNode);
+        ASSERT(!m_registrationNodeKeepAlive);
+        m_registrationNodeKeepAlive = PassRefPtrWillBeRawPtr<Node>(m_registrationNode.get()); // Balanced in clearTransientRegistrations.
     }
     m_transientRegistrationNodes->add(&node);
 }
@@ -97,7 +93,7 @@ void MutationObserverRegistration::observedSubtreeNodeWillDetach(Node& node)
 void MutationObserverRegistration::clearTransientRegistrations()
 {
     if (!m_transientRegistrationNodes) {
-        DCHECK(!m_registrationNodeKeepAlive);
+        ASSERT(!m_registrationNodeKeepAlive);
         return;
     }
 
@@ -106,25 +102,20 @@ void MutationObserverRegistration::clearTransientRegistrations()
 
     m_transientRegistrationNodes.clear();
 
-    DCHECK(m_registrationNodeKeepAlive);
+    ASSERT(m_registrationNodeKeepAlive);
     m_registrationNodeKeepAlive = nullptr; // Balanced in observeSubtreeNodeWillDetach.
 }
 
 void MutationObserverRegistration::unregister()
 {
-    // |this| can outlives m_registrationNode.
-    if (m_registrationNode)
-        m_registrationNode->unregisterMutationObserver(this);
-    else
-        dispose();
+    ASSERT(m_registrationNode);
+    m_registrationNode->unregisterMutationObserver(this);
+    // The above line will cause this object to be deleted, so don't do any more in this function.
 }
 
-bool MutationObserverRegistration::shouldReceiveMutationFrom(
-    Node& node,
-    MutationObserver::MutationType type,
-    const QualifiedName* attributeName) const
+bool MutationObserverRegistration::shouldReceiveMutationFrom(Node& node, MutationObserver::MutationType type, const QualifiedName* attributeName) const
 {
-    DCHECK((type == MutationObserver::Attributes && attributeName) || !attributeName);
+    ASSERT((type == MutationObserver::Attributes && attributeName) || !attributeName);
     if (!(m_options & type))
         return false;
 
@@ -140,15 +131,13 @@ bool MutationObserverRegistration::shouldReceiveMutationFrom(
     return m_attributeFilter.contains(attributeName->localName());
 }
 
-void MutationObserverRegistration::addRegistrationNodesToSet(
-    HeapHashSet<Member<Node>>& nodes) const
+void MutationObserverRegistration::addRegistrationNodesToSet(WillBeHeapHashSet<RawPtrWillBeMember<Node>>& nodes) const
 {
-    DCHECK(m_registrationNode);
+    ASSERT(m_registrationNode);
     nodes.add(m_registrationNode.get());
     if (!m_transientRegistrationNodes)
         return;
-    for (NodeHashSet::const_iterator iter = m_transientRegistrationNodes->begin();
-         iter != m_transientRegistrationNodes->end(); ++iter)
+    for (NodeHashSet::const_iterator iter = m_transientRegistrationNodes->begin(); iter != m_transientRegistrationNodes->end(); ++iter)
         nodes.add(iter->get());
 }
 
@@ -157,12 +146,9 @@ DEFINE_TRACE(MutationObserverRegistration)
     visitor->trace(m_observer);
     visitor->trace(m_registrationNode);
     visitor->trace(m_registrationNodeKeepAlive);
+#if ENABLE(OILPAN)
     visitor->trace(m_transientRegistrationNodes);
-}
-
-DEFINE_TRACE_WRAPPERS(MutationObserverRegistration)
-{
-    visitor->traceWrappers(m_observer);
+#endif
 }
 
 } // namespace blink

@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebDOMMessageEvent.h"
 
 #include "bindings/core/v8/SerializedScriptValue.h"
@@ -36,13 +40,17 @@
 #include "core/events/MessageEvent.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "public/platform/WebString.h"
+<<<<<<< HEAD
 #include "public/web/WebDocument.h"
+=======
+>>>>>>> miniblink49
 #include "public/web/WebFrame.h"
 #include "public/web/WebSerializedScriptValue.h"
 #include "web/WebLocalFrameImpl.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebDOMMessageEvent::WebDOMMessageEvent(
     const WebSerializedScriptValue& messageData,
     const WebString& origin,
@@ -59,21 +67,43 @@ WebDOMMessageEvent::WebDOMMessageEvent(
         Document* coreDocument = targetDocument;
         ports = MessagePort::toMessagePortArray(coreDocument, channels);
     }
+=======
+void WebDOMMessageEvent::initMessageEvent(const WebString& type, bool canBubble, bool cancelable, const WebSerializedScriptValue& messageData, const WebString& origin, const WebFrame* sourceFrame, const WebString& lastEventId, const WebMessagePortChannelArray& webChannels)
+{
+    ASSERT(m_private.get());
+    ASSERT(isMessageEvent());
+    DOMWindow* window = nullptr;
+    // TODO(alexmos): Figure out if this is the right thing to do.
+    if (sourceFrame)
+        window = toCoreFrame(sourceFrame)->domWindow();
+    MessagePortArray* ports = nullptr;
+    // TODO(alexmos): make ports work properly with OOPIF.
+    if (sourceFrame && sourceFrame->isWebLocalFrame())
+        ports = MessagePort::toMessagePortArray(toLocalDOMWindow(window)->document(), webChannels);
+>>>>>>> miniblink49
     // Use an empty array for |ports| when it is null because this function
     // is used to implement postMessage().
     if (!ports)
         ports = new MessagePortArray;
+<<<<<<< HEAD
     // TODO(esprehn): Chromium always passes empty string for lastEventId, is that
     // right?
     unwrap<MessageEvent>()->initMessageEvent("message", false, false, messageData,
         origin, "" /*lastEventId*/, window,
         ports);
+=======
+    unwrap<MessageEvent>()->initMessageEvent(type, canBubble, cancelable, messageData, origin, lastEventId, window, ports);
+>>>>>>> miniblink49
 }
 
 WebSerializedScriptValue WebDOMMessageEvent::data() const
 {
+<<<<<<< HEAD
     return WebSerializedScriptValue(
         constUnwrap<MessageEvent>()->dataAsSerializedScriptValue());
+=======
+    return WebSerializedScriptValue(constUnwrap<MessageEvent>()->dataAsSerializedScriptValue());
+>>>>>>> miniblink49
 }
 
 WebString WebDOMMessageEvent::origin() const
@@ -87,7 +117,11 @@ WebMessagePortChannelArray WebDOMMessageEvent::releaseChannels()
     WebMessagePortChannelArray webChannels(channels ? channels->size() : 0);
     if (channels) {
         for (size_t i = 0; i < channels->size(); ++i)
+<<<<<<< HEAD
             webChannels[i] = (*channels)[i].release();
+=======
+            webChannels[i] = (*channels)[i].leakPtr();
+>>>>>>> miniblink49
     }
     return webChannels;
 }

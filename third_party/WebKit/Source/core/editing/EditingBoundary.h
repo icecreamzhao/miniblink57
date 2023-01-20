@@ -34,6 +34,11 @@ enum EditingBoundaryCrossingRule {
     CanSkipOverEditingBoundary
 };
 
-} // namespace blink
+enum EditableType {
+    ContentIsEditable,
+    HasEditableAXRole
+};
+
+}
 
 #endif // EditingBoundary_h

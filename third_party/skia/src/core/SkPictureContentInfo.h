@@ -9,7 +9,10 @@
 #define SkPictureContentInfo_DEFINED
 
 #include "SkTDArray.h"
+<<<<<<< HEAD
 #include "SkPaint.h"
+=======
+>>>>>>> miniblink49
 
 class GrContext;
 
@@ -25,8 +28,13 @@ public:
     int numInteriorLayers() const { return fNumInteriorLayers; }
     int numLeafLayers() const { return fNumLeafLayers; }
 
+<<<<<<< HEAD
     bool suitableForGpuRasterization(GrContext* context, const char** reason,
         int sampleCount) const;
+=======
+    bool suitableForGpuRasterization(GrContext* context, const char **reason,
+                                     int sampleCount) const;
+>>>>>>> miniblink49
 
     void addOperation() { ++fNumOperations; }
 
@@ -75,7 +83,11 @@ private:
     int fNumLeafLayers;
 
     enum Flags {
+<<<<<<< HEAD
         kSave_Flag = 0x1,
+=======
+        kSave_Flag      = 0x1,
+>>>>>>> miniblink49
         kSaveLayer_Flag = 0x2,
 
         // Did the current save or saveLayer contain another saveLayer.

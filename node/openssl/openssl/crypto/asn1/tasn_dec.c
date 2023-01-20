@@ -1,78 +1,69 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
- *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
+/* tasn_dec.c */
+/*
+ * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
+ * 2000.
+ */
+/* ====================================================================
+ * Copyright (c) 2000-2005 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 1. Redistributions of source code must retain the copyright
+ *
+ * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
+ *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
+ * 3. All advertising materials mentioning features or use of this
+ *    software must display the following acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
  *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.] */
-
-#include <openssl/asn1.h>
-
-#include <limits.h>
-#include <string.h>
-
-#include <openssl/asn1t.h>
-#include <openssl/buf.h>
-#include <openssl/err.h>
-#include <openssl/mem.h>
-
-#include "../internal.h"
-
-/*
- * Constructed types with a recursive definition (such as can be found in PKCS7)
- * could eventually exceed the stack given malicious input with excessive
- * recursion. Therefore we limit the stack depth. This is the maximum number of
- * recursive invocations of asn1_item_embed_d2i().
+ * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
+ *    endorse or promote products derived from this software without
+ *    prior written permission. For written permission, please contact
+ *    licensing@OpenSSL.org.
+ *
+ * 5. Products derived from this software may not be called "OpenSSL"
+ *    nor may "OpenSSL" appear in their names without prior written
+ *    permission of the OpenSSL Project.
+ *
+ * 6. Redistributions of any form whatsoever must retain the following
+ *    acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
+ * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This product includes cryptographic software written by Eric Young
+ * (eay@cryptsoft.com).  This product includes software written by Tim
+ * Hudson (tjh@cryptsoft.com).
+ *
  */
-#define ASN1_MAX_CONSTRUCTED_NEST 30
+
+#include <stddef.h>
+#include <string.h>
+#include <openssl/asn1.h>
+#include <openssl/asn1t.h>
+#include <openssl/objects.h>
+#include <openssl/buffer.h>
+#include <openssl/err.h>
 
 static int asn1_check_eoc(const unsigned char **in, long len);
 static int asn1_find_end(const unsigned char **in, long len, char inf);
@@ -90,11 +81,11 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
 static int asn1_template_ex_d2i(ASN1_VALUE **pval,
                                 const unsigned char **in, long len,
                                 const ASN1_TEMPLATE *tt, char opt,
-                                ASN1_TLC *ctx, int depth);
+                                ASN1_TLC *ctx);
 static int asn1_template_noexp_d2i(ASN1_VALUE **val,
                                    const unsigned char **in, long len,
                                    const ASN1_TEMPLATE *tt, char opt,
-                                   ASN1_TLC *ctx, int depth);
+                                   ASN1_TLC *ctx);
 static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
                                  const unsigned char **in, long len,
                                  const ASN1_ITEM *it,
@@ -103,23 +94,24 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
 
 /* Table to convert tags to bit values, used for MSTRING type */
 static const unsigned long tag2bit[32] = {
-    0, 0, 0, B_ASN1_BIT_STRING, /* tags 0 - 3 */
-    B_ASN1_OCTET_STRING, 0, 0, B_ASN1_UNKNOWN, /* tags 4- 7 */
-    B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, /* tags
-                                                                     * 8-11 */
-    B_ASN1_UTF8STRING, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, /* tags
-                                                                        * 12-15
-                                                                        */
-    B_ASN1_SEQUENCE, 0, B_ASN1_NUMERICSTRING, B_ASN1_PRINTABLESTRING, /* tags
-                                                                       * 16-19
-                                                                       */
-    B_ASN1_T61STRING, B_ASN1_VIDEOTEXSTRING, B_ASN1_IA5STRING, /* tags 20-22 */
-    B_ASN1_UTCTIME, B_ASN1_GENERALIZEDTIME, /* tags 23-24 */
-    B_ASN1_GRAPHICSTRING, B_ASN1_ISO64STRING, B_ASN1_GENERALSTRING, /* tags
-                                                                     * 25-27 */
-    B_ASN1_UNIVERSALSTRING, B_ASN1_UNKNOWN, B_ASN1_BMPSTRING, B_ASN1_UNKNOWN, /* tags
-                                                                               * 28-31
-                                                                               */
+    /* tags  0 -  3 */
+    0, 0, 0, B_ASN1_BIT_STRING,
+    /* tags  4- 7 */
+    B_ASN1_OCTET_STRING, 0, 0, B_ASN1_UNKNOWN,
+    /* tags  8-11 */
+    B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN,
+    /* tags 12-15 */
+    B_ASN1_UTF8STRING, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN, B_ASN1_UNKNOWN,
+    /* tags 16-19 */
+    B_ASN1_SEQUENCE, 0, B_ASN1_NUMERICSTRING, B_ASN1_PRINTABLESTRING,
+    /* tags 20-22 */
+    B_ASN1_T61STRING, B_ASN1_VIDEOTEXSTRING, B_ASN1_IA5STRING,
+    /* tags 23-24 */
+    B_ASN1_UTCTIME, B_ASN1_GENERALIZEDTIME,
+    /* tags 25-27 */
+    B_ASN1_GRAPHICSTRING, B_ASN1_ISO64STRING, B_ASN1_GENERALSTRING,
+    /* tags 28-31 */
+    B_ASN1_UNIVERSALSTRING, B_ASN1_UNKNOWN, B_ASN1_BMPSTRING, B_ASN1_UNKNOWN,
 };
 
 unsigned long ASN1_tag2bit(int tag)
@@ -156,14 +148,23 @@ ASN1_VALUE *ASN1_item_d2i(ASN1_VALUE **pval,
     return NULL;
 }
 
+int ASN1_template_d2i(ASN1_VALUE **pval,
+                      const unsigned char **in, long len,
+                      const ASN1_TEMPLATE *tt)
+{
+    ASN1_TLC c;
+    asn1_tlc_clear_nc(&c);
+    return asn1_template_ex_d2i(pval, in, len, tt, 0, &c);
+}
+
 /*
  * Decode an item, taking care of IMPLICIT tagging, if any. If 'opt' set and
  * tag mismatch return -1 to handle OPTIONAL
  */
 
-static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
-                            long len, const ASN1_ITEM *it, int tag, int aclass,
-                            char opt, ASN1_TLC *ctx, int depth)
+int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
+                     const ASN1_ITEM *it,
+                     int tag, int aclass, char opt, ASN1_TLC *ctx)
 {
     const ASN1_TEMPLATE *tt, *errtt = NULL;
     const ASN1_COMPAT_FUNCS *cf;
@@ -188,19 +189,6 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
     else
         asn1_cb = 0;
 
-    /*
-     * Bound |len| to comfortably fit in an int. Lengths in this module often
-     * switch between int and long without overflow checks.
-     */
-    if (len > INT_MAX/2) {
-        len = INT_MAX/2;
-    }
-
-    if (++depth > ASN1_MAX_CONSTRUCTED_NEST) {
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_TOO_DEEP);
-        goto err;
-    }
-
     switch (it->itype) {
     case ASN1_ITYPE_PRIMITIVE:
         if (it->templates) {
@@ -211,12 +199,12 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
              * template in the template itself.
              */
             if ((tag != -1) || opt) {
-                OPENSSL_PUT_ERROR(ASN1,
-                                  ASN1_R_ILLEGAL_OPTIONS_ON_ITEM_TEMPLATE);
+                ASN1err(ASN1_F_ASN1_ITEM_EX_D2I,
+                        ASN1_R_ILLEGAL_OPTIONS_ON_ITEM_TEMPLATE);
                 goto err;
             }
             return asn1_template_ex_d2i(pval, in, len,
-                                        it->templates, opt, ctx, depth);
+                                        it->templates, opt, ctx);
         }
         return asn1_d2i_ex_primitive(pval, in, len, it,
                                      tag, aclass, opt, ctx);
@@ -228,7 +216,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         ret = asn1_check_tlen(NULL, &otag, &oclass, NULL, NULL,
                               &p, len, -1, 0, 1, ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         }
 
@@ -237,7 +225,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             /* If OPTIONAL, assume this is OK */
             if (opt)
                 return -1;
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_MSTRING_NOT_UNIVERSAL);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_MSTRING_NOT_UNIVERSAL);
             goto err;
         }
         /* Check tag matches bit map */
@@ -245,7 +233,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             /* If OPTIONAL, assume this is OK */
             if (opt)
                 return -1;
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_MSTRING_WRONG_TAG);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_MSTRING_WRONG_TAG);
             goto err;
         }
         return asn1_d2i_ex_primitive(pval, in, len, it, otag, 0, 0, ctx);
@@ -274,7 +262,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             ret = asn1_check_tlen(NULL, NULL, NULL, NULL, NULL,
                                   &p, len, exptag, aclass, 1, ctx);
             if (!ret) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+                ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
                 goto err;
             }
             if (ret == -1)
@@ -297,7 +285,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             wp = *(unsigned char **)in;
             imphack = *wp;
             if (p == NULL) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+                ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
                 goto err;
             }
             *wp = (unsigned char)((*p & V_ASN1_CONSTRUCTED)
@@ -312,13 +300,12 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         if (ptmpval)
             return 1;
 
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+        ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
         goto err;
 
     case ASN1_ITYPE_CHOICE:
         if (asn1_cb && !asn1_cb(ASN1_OP_D2I_PRE, pval, it, NULL))
             goto auxerr;
-
         if (*pval) {
             /* Free up and zero CHOICE value if initialised */
             i = asn1_get_choice_selector(pval, it);
@@ -329,7 +316,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
                 asn1_set_choice_selector(pval, -1, it);
             }
         } else if (!ASN1_item_ex_new(pval, it)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         }
         /* CHOICE type, try each possibility in turn */
@@ -339,7 +326,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             /*
              * We mark field as OPTIONAL so its absence can be recognised.
              */
-            ret = asn1_template_ex_d2i(pchptr, &p, len, tt, 1, ctx, depth);
+            ret = asn1_template_ex_d2i(pchptr, &p, len, tt, 1, ctx);
             /* If field not present, try the next one */
             if (ret == -1)
                 continue;
@@ -348,7 +335,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
                 break;
             /* Otherwise must be an ASN1 parsing error */
             errtt = tt;
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         }
 
@@ -360,7 +347,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
                 ASN1_item_ex_free(pval, it);
                 return -1;
             }
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NO_MATCHING_CHOICE_TYPE);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_NO_MATCHING_CHOICE_TYPE);
             goto err;
         }
 
@@ -384,7 +371,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         ret = asn1_check_tlen(&len, NULL, NULL, &seq_eoc, &cst,
                               &p, len, tag, aclass, opt, ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         } else if (ret == -1)
             return -1;
@@ -396,12 +383,12 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         else
             seq_nolen = seq_eoc;
         if (!cst) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_SEQUENCE_NOT_CONSTRUCTED);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_SEQUENCE_NOT_CONSTRUCTED);
             goto err;
         }
 
         if (!*pval && !ASN1_item_ex_new(pval, it)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         }
 
@@ -413,9 +400,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             if (tt->flags & ASN1_TFLG_ADB_MASK) {
                 const ASN1_TEMPLATE *seqtt;
                 ASN1_VALUE **pseqval;
-                seqtt = asn1_do_adb(pval, tt, 0);
-                if (seqtt == NULL)
-                    continue;
+                seqtt = asn1_do_adb(pval, tt, 1);
                 pseqval = asn1_get_field_ptr(pval, seqtt);
                 ASN1_template_free(pseqval, seqtt);
             }
@@ -426,7 +411,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             const ASN1_TEMPLATE *seqtt;
             ASN1_VALUE **pseqval;
             seqtt = asn1_do_adb(pval, tt, 1);
-            if (seqtt == NULL)
+            if (!seqtt)
                 goto err;
             pseqval = asn1_get_field_ptr(pval, seqtt);
             /* Have we ran out of data? */
@@ -435,7 +420,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             q = p;
             if (asn1_check_eoc(&p, len)) {
                 if (!seq_eoc) {
-                    OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNEXPECTED_EOC);
+                    ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_UNEXPECTED_EOC);
                     goto err;
                 }
                 len -= p - q;
@@ -457,8 +442,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
              * attempt to read in field, allowing each to be OPTIONAL
              */
 
-            ret = asn1_template_ex_d2i(pseqval, &p, len, seqtt, isopt, ctx,
-                                       depth);
+            ret = asn1_template_ex_d2i(pseqval, &p, len, seqtt, isopt, ctx);
             if (!ret) {
                 errtt = seqtt;
                 goto err;
@@ -475,12 +459,12 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
 
         /* Check for EOC if expecting one */
         if (seq_eoc && !asn1_check_eoc(&p, len)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_EOC);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_MISSING_EOC);
             goto err;
         }
         /* Check all data read */
         if (!seq_nolen && len) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_SEQUENCE_LENGTH_MISMATCH);
+            ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_SEQUENCE_LENGTH_MISMATCH);
             goto err;
         }
 
@@ -492,7 +476,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         for (; i < it->tcount; tt++, i++) {
             const ASN1_TEMPLATE *seqtt;
             seqtt = asn1_do_adb(pval, tt, 1);
-            if (seqtt == NULL)
+            if (!seqtt)
                 goto err;
             if (seqtt->flags & ASN1_TFLG_OPTIONAL) {
                 ASN1_VALUE **pseqval;
@@ -500,7 +484,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
                 ASN1_template_free(pseqval, seqtt);
             } else {
                 errtt = seqtt;
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_FIELD_MISSING);
+                ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_FIELD_MISSING);
                 goto err;
             }
         }
@@ -516,7 +500,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         return 0;
     }
  auxerr:
-    OPENSSL_PUT_ERROR(ASN1, ASN1_R_AUX_ERROR);
+    ASN1err(ASN1_F_ASN1_ITEM_EX_D2I, ASN1_R_AUX_ERROR);
  err:
     if (combine == 0)
         ASN1_item_ex_free(pval, it);
@@ -528,13 +512,6 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
     return 0;
 }
 
-int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
-                     const ASN1_ITEM *it,
-                     int tag, int aclass, char opt, ASN1_TLC *ctx)
-{
-    return asn1_item_ex_d2i(pval, in, len, it, tag, aclass, opt, ctx, 0);
-}
-
 /*
  * Templates are handled with two separate functions. One handles any
  * EXPLICIT tag and the other handles the rest.
@@ -543,7 +520,7 @@ int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
 static int asn1_template_ex_d2i(ASN1_VALUE **val,
                                 const unsigned char **in, long inlen,
                                 const ASN1_TEMPLATE *tt, char opt,
-                                ASN1_TLC *ctx, int depth)
+                                ASN1_TLC *ctx)
 {
     int flags, aclass;
     int ret;
@@ -568,18 +545,19 @@ static int asn1_template_ex_d2i(ASN1_VALUE **val,
                               &p, inlen, tt->tag, aclass, opt, ctx);
         q = p;
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             return 0;
         } else if (ret == -1)
             return -1;
         if (!cst) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_EXPLICIT_TAG_NOT_CONSTRUCTED);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_EX_D2I,
+                    ASN1_R_EXPLICIT_TAG_NOT_CONSTRUCTED);
             return 0;
         }
         /* We've found the field so it can't be OPTIONAL now */
-        ret = asn1_template_noexp_d2i(val, &p, len, tt, 0, ctx, depth);
+        ret = asn1_template_noexp_d2i(val, &p, len, tt, 0, ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_EX_D2I, ERR_R_NESTED_ASN1_ERROR);
             return 0;
         }
         /* We read the field in OK so update length */
@@ -587,7 +565,7 @@ static int asn1_template_ex_d2i(ASN1_VALUE **val,
         if (exp_eoc) {
             /* If NDEF we must have an EOC here */
             if (!asn1_check_eoc(&p, len)) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_EOC);
+                ASN1err(ASN1_F_ASN1_TEMPLATE_EX_D2I, ASN1_R_MISSING_EOC);
                 goto err;
             }
         } else {
@@ -595,12 +573,13 @@ static int asn1_template_ex_d2i(ASN1_VALUE **val,
              * Otherwise we must hit the EXPLICIT tag end or its an error
              */
             if (len) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_EXPLICIT_LENGTH_MISMATCH);
+                ASN1err(ASN1_F_ASN1_TEMPLATE_EX_D2I,
+                        ASN1_R_EXPLICIT_LENGTH_MISMATCH);
                 goto err;
             }
         }
     } else
-        return asn1_template_noexp_d2i(val, in, inlen, tt, opt, ctx, depth);
+        return asn1_template_noexp_d2i(val, in, inlen, tt, opt, ctx);
 
     *in = p;
     return 1;
@@ -613,17 +592,18 @@ static int asn1_template_ex_d2i(ASN1_VALUE **val,
 static int asn1_template_noexp_d2i(ASN1_VALUE **val,
                                    const unsigned char **in, long len,
                                    const ASN1_TEMPLATE *tt, char opt,
-                                   ASN1_TLC *ctx, int depth)
+                                   ASN1_TLC *ctx)
 {
     int flags, aclass;
     int ret;
-    const unsigned char *p;
+    const unsigned char *p, *q;
     if (!val)
         return 0;
     flags = tt->flags;
     aclass = flags & ASN1_TFLG_TAG_CLASS;
 
     p = *in;
+    q = p;
 
     if (flags & ASN1_TFLG_SK_MASK) {
         /* SET OF, SEQUENCE OF */
@@ -644,7 +624,7 @@ static int asn1_template_noexp_d2i(ASN1_VALUE **val,
         ret = asn1_check_tlen(&len, NULL, NULL, &sk_eoc, NULL,
                               &p, len, sktag, skaclass, opt, ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I, ERR_R_NESTED_ASN1_ERROR);
             return 0;
         } else if (ret == -1)
             return -1;
@@ -663,18 +643,19 @@ static int asn1_template_noexp_d2i(ASN1_VALUE **val,
         }
 
         if (!*val) {
-            OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I, ERR_R_MALLOC_FAILURE);
             goto err;
         }
 
         /* Read as many items as we can */
         while (len > 0) {
             ASN1_VALUE *skfield;
-            const unsigned char *q = p;
+            q = p;
             /* See if EOC found */
             if (asn1_check_eoc(&p, len)) {
                 if (!sk_eoc) {
-                    OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNEXPECTED_EOC);
+                    ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I,
+                            ASN1_R_UNEXPECTED_EOC);
                     goto err;
                 }
                 len -= p - q;
@@ -682,38 +663,38 @@ static int asn1_template_noexp_d2i(ASN1_VALUE **val,
                 break;
             }
             skfield = NULL;
-             if (!asn1_item_ex_d2i(&skfield, &p, len, ASN1_ITEM_ptr(tt->item),
-                                   -1, 0, 0, ctx, depth)) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            if (!ASN1_item_ex_d2i(&skfield, &p, len,
+                                  ASN1_ITEM_ptr(tt->item), -1, 0, 0, ctx)) {
+                ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I,
+                        ERR_R_NESTED_ASN1_ERROR);
                 goto err;
             }
             len -= p - q;
             if (!sk_ASN1_VALUE_push((STACK_OF(ASN1_VALUE) *)*val, skfield)) {
-                ASN1_item_ex_free(&skfield, ASN1_ITEM_ptr(tt->item));
-                OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
+                ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I, ERR_R_MALLOC_FAILURE);
                 goto err;
             }
         }
         if (sk_eoc) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_EOC);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I, ASN1_R_MISSING_EOC);
             goto err;
         }
     } else if (flags & ASN1_TFLG_IMPTAG) {
         /* IMPLICIT tagging */
-        ret = asn1_item_ex_d2i(val, &p, len, ASN1_ITEM_ptr(tt->item), tt->tag,
-                               aclass, opt, ctx, depth);
+        ret = ASN1_item_ex_d2i(val, &p, len,
+                               ASN1_ITEM_ptr(tt->item), tt->tag, aclass, opt,
+                               ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         } else if (ret == -1)
             return -1;
     } else {
         /* Nothing special */
-        ret = asn1_item_ex_d2i(val, &p, len, ASN1_ITEM_ptr(tt->item),
-                               -1, tt->flags & ASN1_TFLG_COMBINE, opt, ctx,
-                               depth);
+        ret = ASN1_item_ex_d2i(val, &p, len, ASN1_ITEM_ptr(tt->item),
+                               -1, tt->flags & ASN1_TFLG_COMBINE, opt, ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_TEMPLATE_NOEXP_D2I, ERR_R_NESTED_ASN1_ERROR);
             goto err;
         } else if (ret == -1)
             return -1;
@@ -736,11 +717,11 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
     long plen;
     char cst, inf, free_cont = 0;
     const unsigned char *p;
-    BUF_MEM buf = {0, NULL, 0 };
+    BUF_MEM buf = { 0, NULL, 0 };
     const unsigned char *cont = NULL;
     long len;
     if (!pval) {
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_NULL);
+        ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE, ASN1_R_ILLEGAL_NULL);
         return 0;               /* Should never happen */
     }
 
@@ -754,18 +735,19 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
         /* If type is ANY need to figure out type from tag */
         unsigned char oclass;
         if (tag >= 0) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_TAGGED_ANY);
+            ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE, ASN1_R_ILLEGAL_TAGGED_ANY);
             return 0;
         }
         if (opt) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_OPTIONAL_ANY);
+            ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE,
+                    ASN1_R_ILLEGAL_OPTIONAL_ANY);
             return 0;
         }
         p = *in;
         ret = asn1_check_tlen(NULL, &utype, &oclass, NULL, NULL,
                               &p, inlen, -1, 0, 0, ctx);
         if (!ret) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE, ERR_R_NESTED_ASN1_ERROR);
             return 0;
         }
         if (oclass != V_ASN1_UNIVERSAL)
@@ -780,7 +762,7 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
     ret = asn1_check_tlen(&plen, NULL, NULL, &inf, &cst,
                           &p, inlen, tag, aclass, opt, ctx);
     if (!ret) {
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+        ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE, ERR_R_NESTED_ASN1_ERROR);
         return 0;
     } else if (ret == -1)
         return -1;
@@ -797,7 +779,8 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
         }
         /* SEQUENCE and SET must be constructed */
         else if (!cst) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_TYPE_NOT_CONSTRUCTED);
+            ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE,
+                    ASN1_R_TYPE_NOT_CONSTRUCTED);
             return 0;
         }
 
@@ -815,8 +798,7 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
         if (utype == V_ASN1_NULL || utype == V_ASN1_BOOLEAN
             || utype == V_ASN1_OBJECT || utype == V_ASN1_INTEGER
             || utype == V_ASN1_ENUMERATED) {
-            /* These types only have primitive encodings. */
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_TYPE_NOT_PRIMITIVE);
+            ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE, ASN1_R_TYPE_NOT_PRIMITIVE);
             return 0;
         }
 
@@ -834,7 +816,7 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
         len = buf.length;
         /* Append a final null to string */
         if (!BUF_MEM_grow_clean(&buf, len + 1)) {
-            OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
+            ASN1err(ASN1_F_ASN1_D2I_EX_PRIMITIVE, ERR_R_MALLOC_FAILURE);
             goto err;
         }
         buf.data[len] = 0;
@@ -896,7 +878,7 @@ int asn1_ex_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
 
     case V_ASN1_NULL:
         if (len) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NULL_IS_WRONG_LENGTH);
+            ASN1err(ASN1_F_ASN1_EX_C2I, ASN1_R_NULL_IS_WRONG_LENGTH);
             goto err;
         }
         *pval = (ASN1_VALUE *)1;
@@ -904,7 +886,7 @@ int asn1_ex_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
 
     case V_ASN1_BOOLEAN:
         if (len != 1) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_BOOLEAN_IS_WRONG_LENGTH);
+            ASN1err(ASN1_F_ASN1_EX_C2I, ASN1_R_BOOLEAN_IS_WRONG_LENGTH);
             goto err;
         } else {
             ASN1_BOOLEAN *tbool;
@@ -946,18 +928,19 @@ int asn1_ex_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
     case V_ASN1_SEQUENCE:
     default:
         if (utype == V_ASN1_BMPSTRING && (len & 1)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_BMPSTRING_IS_WRONG_LENGTH);
+            ASN1err(ASN1_F_ASN1_EX_C2I, ASN1_R_BMPSTRING_IS_WRONG_LENGTH);
             goto err;
         }
         if (utype == V_ASN1_UNIVERSALSTRING && (len & 3)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNIVERSALSTRING_IS_WRONG_LENGTH);
+            ASN1err(ASN1_F_ASN1_EX_C2I,
+                    ASN1_R_UNIVERSALSTRING_IS_WRONG_LENGTH);
             goto err;
         }
         /* All based on ASN1_STRING and handled the same */
         if (!*pval) {
             stmp = ASN1_STRING_type_new(utype);
             if (!stmp) {
-                OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
+                ASN1err(ASN1_F_ASN1_EX_C2I, ERR_R_MALLOC_FAILURE);
                 goto err;
             }
             *pval = (ASN1_VALUE *)stmp;
@@ -974,7 +957,7 @@ int asn1_ex_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
             *free_cont = 0;
         } else {
             if (!ASN1_STRING_set(stmp, cont, len)) {
-                OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
+                ASN1err(ASN1_F_ASN1_EX_C2I, ERR_R_MALLOC_FAILURE);
                 ASN1_STRING_free(stmp);
                 *pval = NULL;
                 goto err;
@@ -1032,7 +1015,7 @@ static int asn1_find_end(const unsigned char **in, long len, char inf)
         /* Just read in a header: only care about the length */
         if (!asn1_check_tlen(&plen, NULL, NULL, &inf, NULL, &p, len,
                              -1, 0, 0, NULL)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_FIND_END, ERR_R_NESTED_ASN1_ERROR);
             return 0;
         }
         if (inf)
@@ -1042,7 +1025,7 @@ static int asn1_find_end(const unsigned char **in, long len, char inf)
         len -= p - q;
     }
     if (expected_eoc) {
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_EOC);
+        ASN1err(ASN1_F_ASN1_FIND_END, ASN1_R_MISSING_EOC);
         return 0;
     }
     *in = p;
@@ -1089,7 +1072,7 @@ static int asn1_collect(BUF_MEM *buf, const unsigned char **in, long len,
              * EOC is illegal outside indefinite length constructed form
              */
             if (!inf) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNEXPECTED_EOC);
+                ASN1err(ASN1_F_ASN1_COLLECT, ASN1_R_UNEXPECTED_EOC);
                 return 0;
             }
             inf = 0;
@@ -1098,14 +1081,14 @@ static int asn1_collect(BUF_MEM *buf, const unsigned char **in, long len,
 
         if (!asn1_check_tlen(&plen, NULL, NULL, &ininf, &cst, &p,
                              len, tag, aclass, 0, NULL)) {
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+            ASN1err(ASN1_F_ASN1_COLLECT, ERR_R_NESTED_ASN1_ERROR);
             return 0;
         }
 
         /* If indefinite length constructed update max length */
         if (cst) {
             if (depth >= ASN1_MAX_STRING_NEST) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_STRING);
+                ASN1err(ASN1_F_ASN1_COLLECT, ASN1_R_NESTED_ASN1_STRING);
                 return 0;
             }
             if (!asn1_collect(buf, &p, plen, ininf, tag, aclass, depth + 1))
@@ -1115,7 +1098,7 @@ static int asn1_collect(BUF_MEM *buf, const unsigned char **in, long len,
         len -= p - q;
     }
     if (inf) {
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_EOC);
+        ASN1err(ASN1_F_ASN1_COLLECT, ASN1_R_MISSING_EOC);
         return 0;
     }
     *in = p;
@@ -1128,10 +1111,10 @@ static int collect_data(BUF_MEM *buf, const unsigned char **p, long plen)
     if (buf) {
         len = buf->length;
         if (!BUF_MEM_grow_clean(buf, len + plen)) {
-            OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
+            ASN1err(ASN1_F_COLLECT_DATA, ERR_R_MALLOC_FAILURE);
             return 0;
         }
-        OPENSSL_memcpy(buf->data + len, *p, plen);
+        memcpy(buf->data + len, *p, plen);
     }
     *p += plen;
     return 1;
@@ -1191,7 +1174,7 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
              * total amount of data available.
              */
             if (!(i & 0x81) && ((plen + ctx->hdrlen) > len)) {
-                OPENSSL_PUT_ERROR(ASN1, ASN1_R_TOO_LONG);
+                ASN1err(ASN1_F_ASN1_CHECK_TLEN, ASN1_R_TOO_LONG);
                 asn1_tlc_clear(ctx);
                 return 0;
             }
@@ -1199,7 +1182,7 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
     }
 
     if (i & 0x80) {
-        OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_OBJECT_HEADER);
+        ASN1err(ASN1_F_ASN1_CHECK_TLEN, ASN1_R_BAD_OBJECT_HEADER);
         asn1_tlc_clear(ctx);
         return 0;
     }
@@ -1211,7 +1194,7 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
             if (opt)
                 return -1;
             asn1_tlc_clear(ctx);
-            OPENSSL_PUT_ERROR(ASN1, ASN1_R_WRONG_TAG);
+            ASN1err(ASN1_F_ASN1_CHECK_TLEN, ASN1_R_WRONG_TAG);
             return 0;
         }
         /*

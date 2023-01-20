@@ -39,6 +39,7 @@ namespace blink {
 
 class HTMLFormControlElement;
 
+<<<<<<< HEAD
 // Provides readonly access to some properties of a DOM form control element
 // node.
 class WebFormControlElement : public WebElement {
@@ -51,6 +52,13 @@ public:
         : WebElement(e)
     {
     }
+=======
+// Provides readonly access to some properties of a DOM form control element node.
+class WebFormControlElement : public WebElement {
+public:
+    WebFormControlElement() : WebElement() { }
+    WebFormControlElement(const WebFormControlElement& e) : WebElement(e) { }
+>>>>>>> miniblink49
 
     WebFormControlElement& operator=(const WebFormControlElement& e)
     {
@@ -70,6 +78,7 @@ public:
     // Returns true if autocomplete attribute of the element is not set as "off".
     BLINK_EXPORT bool autoComplete() const;
 
+<<<<<<< HEAD
     // Sets value for input element, textarea element and select element. For
     // select element it finds the option with value matches the given parameter
     // and make the option as the current selection.
@@ -77,6 +86,12 @@ public:
     // Sets the autofilled value for input element, textarea element and select
     // element and sends a sequence of events to the element.
     BLINK_EXPORT void setAutofillValue(const WebString&);
+=======
+    // Sets value for input element, textarea element and select element. For select
+    // element it finds the option with value matches the given parameter and make the
+    // option as the current selection.
+    BLINK_EXPORT void setValue(const WebString&, bool sendEvents = false);
+>>>>>>> miniblink49
     // Returns value of element. For select element, it returns the value of
     // the selected option if present. If no selected option, an empty string
     // is returned. If element doesn't fall into input element, textarea element
@@ -84,12 +99,20 @@ public:
     BLINK_EXPORT WebString value() const;
     // Sets suggested value for element. For select element it finds the option
     // with value matches the given parameter and make the option as the suggested
+<<<<<<< HEAD
     // selection. The goal of introducing suggested value is to not leak any
     // information to JavaScript.
     BLINK_EXPORT void setSuggestedValue(const WebString&);
     // Returns suggested value of element. If element doesn't fall into input
     // element, textarea element and select element categories, a null string is
     // returned.
+=======
+    // selection. The goal of introducing suggested value is to not leak any information
+    // to JavaScript.
+    BLINK_EXPORT void setSuggestedValue(const WebString&);
+    // Returns suggested value of element. If element doesn't fall into input element,
+    // textarea element and select element categories, a null string is returned.
+>>>>>>> miniblink49
     BLINK_EXPORT WebString suggestedValue() const;
 
     // Returns the non-sanitized, exact value inside the text input field
@@ -108,6 +131,7 @@ public:
     // element nor textarea element, 0 is returned.
     BLINK_EXPORT int selectionEnd() const;
 
+<<<<<<< HEAD
     // Returns text-align(only left and right are supported. see crbug.com/482339)
     // of text of element.
     BLINK_EXPORT WebString alignmentForFormData() const;
@@ -115,6 +139,14 @@ public:
     // Returns direction of text of element.
     BLINK_EXPORT WebString directionForFormData() const;
 
+=======
+    // Returns direction of text of element.
+    BLINK_EXPORT WebString directionForFormData() const;
+
+    // Returns true if sumit is activated.
+    BLINK_EXPORT bool isActivatedSubmit() const;
+
+>>>>>>> miniblink49
     // Returns the name that should be used for the specified |element| when
     // storing autofill data.  This is either the field name or its id, an empty
     // string if it has no name and no id.
@@ -123,6 +155,7 @@ public:
     BLINK_EXPORT WebFormElement form() const;
 
 #if BLINK_IMPLEMENTATION
+<<<<<<< HEAD
     WebFormControlElement(HTMLFormControlElement*);
     WebFormControlElement& operator=(HTMLFormControlElement*);
     operator HTMLFormControlElement*() const;
@@ -131,6 +164,14 @@ public:
 
 DECLARE_WEB_NODE_TYPE_CASTS(WebFormControlElement);
 
+=======
+    WebFormControlElement(const PassRefPtrWillBeRawPtr<HTMLFormControlElement>&);
+    WebFormControlElement& operator=(const PassRefPtrWillBeRawPtr<HTMLFormControlElement>&);
+    operator PassRefPtrWillBeRawPtr<HTMLFormControlElement>() const;
+#endif
+};
+
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif

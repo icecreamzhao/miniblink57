@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/MonthInputType.h"
 
 #include "core/HTMLNames.h"
@@ -39,6 +40,7 @@
 #include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
 #include "wtf/MathExtras.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -49,9 +51,9 @@ static const int monthDefaultStep = 1;
 static const int monthDefaultStepBase = 0;
 static const int monthStepScaleFactor = 1;
 
-InputType* MonthInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> MonthInputType::create(HTMLInputElement& element)
 {
-    return new MonthInputType(element);
+    return adoptRefWillBeNoop(new MonthInputType(element));
 }
 
 void MonthInputType::countUsage()
@@ -70,7 +72,7 @@ double MonthInputType::valueAsDate() const
     if (!parseToDateComponents(element().value(), &date))
         return DateComponents::invalidMilliseconds();
     double msec = date.millisecondsSinceEpoch();
-    DCHECK(std_isfinite(msec));
+    ASSERT(std::isfinite(msec));
     return msec;
 }
 
@@ -87,48 +89,37 @@ Decimal MonthInputType::defaultValueForStepUp() const
     DateComponents date;
     date.setMillisecondsSinceEpochForMonth(convertToLocalTime(currentTimeMS()));
     double months = date.monthsSinceEpoch();
-    DCHECK(std_isfinite(months));
+    ASSERT(std::isfinite(months));
     return Decimal::fromDouble(months);
 }
 
-StepRange MonthInputType::createStepRange(
-    AnyStepHandling anyStepHandling) const
+StepRange MonthInputType::createStepRange(AnyStepHandling anyStepHandling) const
 {
-    DEFINE_STATIC_LOCAL(
-        const StepRange::StepDescription, stepDescription,
-        (monthDefaultStep, monthDefaultStepBase, monthStepScaleFactor,
-            StepRange::ParsedStepValueShouldBeInteger));
+    DEFINE_STATIC_LOCAL(const StepRange::StepDescription, stepDescription, (monthDefaultStep, monthDefaultStepBase, monthStepScaleFactor, StepRange::ParsedStepValueShouldBeInteger));
 
-    return InputType::createStepRange(
-        anyStepHandling, Decimal::fromDouble(monthDefaultStepBase),
-        Decimal::fromDouble(DateComponents::minimumMonth()),
-        Decimal::fromDouble(DateComponents::maximumMonth()), stepDescription);
+    return InputType::createStepRange(anyStepHandling, Decimal::fromDouble(monthDefaultStepBase), Decimal::fromDouble(DateComponents::minimumMonth()), Decimal::fromDouble(DateComponents::maximumMonth()), stepDescription);
 }
 
-Decimal MonthInputType::parseToNumber(const String& src,
-    const Decimal& defaultValue) const
+Decimal MonthInputType::parseToNumber(const String& src, const Decimal& defaultValue) const
 {
     DateComponents date;
     if (!parseToDateComponents(src, &date))
         return defaultValue;
     double months = date.monthsSinceEpoch();
-    DCHECK(std_isfinite(months));
+    ASSERT(std::isfinite(months));
     return Decimal::fromDouble(months);
 }
 
-bool MonthInputType::parseToDateComponentsInternal(const String& string,
-    DateComponents* out) const
+bool MonthInputType::parseToDateComponentsInternal(const String& string, DateComponents* out) const
 {
-    DCHECK(out);
+    ASSERT(out);
     unsigned end;
     return out->parseMonth(string, 0, end) && end == string.length();
 }
 
-bool MonthInputType::setMillisecondToDateComponents(
-    double value,
-    DateComponents* date) const
+bool MonthInputType::setMillisecondToDateComponents(double value, DateComponents* date) const
 {
-    DCHECK(date);
+    ASSERT(date);
     return date->setMonthsSinceEpoch(value);
 }
 
@@ -137,51 +128,29 @@ bool MonthInputType::canSetSuggestedValue()
     return true;
 }
 
-void MonthInputType::warnIfValueIsInvalid(const String& value) const
-{
-    if (value != element().sanitizeValue(value))
-        addWarningToConsole(
-            "The specified value %s does not conform to the required format.  The "
-            "format is \"yyyy-MM\" where yyyy is year in four or more digits, and "
-            "MM is 01-12.",
-            value);
-}
-
-String MonthInputType::formatDateTimeFieldsState(
-    const DateTimeFieldsState& dateTimeFieldsState) const
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+String MonthInputType::formatDateTimeFieldsState(const DateTimeFieldsState& dateTimeFieldsState) const
 {
     if (!dateTimeFieldsState.hasMonth() || !dateTimeFieldsState.hasYear())
         return emptyString();
-    return String::format("%04u-%02u", dateTimeFieldsState.year(),
-        dateTimeFieldsState.month());
+    return String::format("%04u-%02u", dateTimeFieldsState.year(), dateTimeFieldsState.month());
 }
 
-void MonthInputType::setupLayoutParameters(
-    DateTimeEditElement::LayoutParameters& layoutParameters,
-    const DateComponents& date) const
+void MonthInputType::setupLayoutParameters(DateTimeEditElement::LayoutParameters& layoutParameters, const DateComponents& date) const
 {
     layoutParameters.dateTimeFormat = layoutParameters.locale.monthFormat();
     layoutParameters.fallbackDateTimeFormat = "yyyy-MM";
-    if (!parseToDateComponents(element().fastGetAttribute(minAttr),
-            &layoutParameters.minimum))
+    if (!parseToDateComponents(element().fastGetAttribute(minAttr), &layoutParameters.minimum))
         layoutParameters.minimum = DateComponents();
-    if (!parseToDateComponents(element().fastGetAttribute(maxAttr),
-            &layoutParameters.maximum))
+    if (!parseToDateComponents(element().fastGetAttribute(maxAttr), &layoutParameters.maximum))
         layoutParameters.maximum = DateComponents();
     layoutParameters.placeholderForMonth = "--";
     layoutParameters.placeholderForYear = "----";
 }
 
-bool MonthInputType::isValidFormat(bool hasYear,
-    bool hasMonth,
-    bool hasWeek,
-    bool hasDay,
-    bool hasAMPM,
-    bool hasHour,
-    bool hasMinute,
-    bool hasSecond) const
+bool MonthInputType::isValidFormat(bool hasYear, bool hasMonth, bool hasWeek, bool hasDay, bool hasAMPM, bool hasHour, bool hasMinute, bool hasSecond) const
 {
     return hasYear && hasMonth;
 }
-
+#endif
 } // namespace blink

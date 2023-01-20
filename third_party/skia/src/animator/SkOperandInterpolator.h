@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkOperandInterpolator_DEFINED
 #define SkOperandInterpolator_DEFINED
 
@@ -19,7 +23,11 @@ public:
     SkOperandInterpolator(int elemCount, int frameCount, SkDisplayTypes type);
     SkOperand* getValues() { return fValues; }
     int getValuesCount() { return fFrameCount * fElemCount; }
+<<<<<<< HEAD
     void reset(int elemCount, int frameCount, SkDisplayTypes type);
+=======
+    void    reset(int elemCount, int frameCount, SkDisplayTypes type);
+>>>>>>> miniblink49
 
     /** Add or replace a key frame, copying the values[] data into the interpolator.
         @param index    The index of this frame (frames must be ordered by time)
@@ -31,12 +39,23 @@ public:
                         1 is a linear blend (default)
                         (1...inf) is a cubic log/lag/log blend (fast to change at the beginning and end)
     */
+<<<<<<< HEAD
     bool setKeyFrame(int index, SkMSec time, const SkOperand values[], SkScalar blend = SK_Scalar1);
     Result timeToValues(SkMSec time, SkOperand values[]) const;
     SkDEBUGCODE(static void UnitTest();) private : SkDisplayTypes fType;
     SkOperand* fValues; // pointer into fStorage
 #ifdef SK_DEBUG
     SkOperand (*fValuesArray)[10];
+=======
+    bool    setKeyFrame(int index, SkMSec time, const SkOperand values[], SkScalar blend = SK_Scalar1);
+    Result timeToValues(SkMSec time, SkOperand values[]) const;
+    SkDEBUGCODE(static void UnitTest();)
+private:
+    SkDisplayTypes fType;
+    SkOperand* fValues;     // pointer into fStorage
+#ifdef SK_DEBUG
+    SkOperand(* fValuesArray)[10];
+>>>>>>> miniblink49
 #endif
     typedef SkInterpolatorBase INHERITED;
 };

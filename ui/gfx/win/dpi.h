@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -50,3 +51,23 @@ namespace win {
 } // namespace gfx
 
 #endif // UI_GFX_DPI_WIN_H_
+=======
+#ifndef dpi_h
+#define dpi_h
+
+namespace gfx {
+
+    namespace win {
+
+        void InitDeviceScaleFactor();
+
+        float GetDeviceScaleFactor();
+
+        int GetSystemMetricsInDIP(int metric);
+
+    } // namespace win
+
+} // namespace gfx
+
+#endif // dpi_h
+>>>>>>> miniblink49

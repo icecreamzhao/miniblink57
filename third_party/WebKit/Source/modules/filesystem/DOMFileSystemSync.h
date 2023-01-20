@@ -43,6 +43,7 @@ class FileEntrySync;
 class FileWriterSync;
 class ExceptionState;
 
+<<<<<<< HEAD
 class DOMFileSystemSync final : public DOMFileSystemBase,
                                 public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -52,6 +53,12 @@ public:
         const String& name,
         FileSystemType type,
         const KURL& rootURL)
+=======
+class DOMFileSystemSync final : public DOMFileSystemBase, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static DOMFileSystemSync* create(ExecutionContext* context, const String& name, FileSystemType type, const KURL& rootURL)
+>>>>>>> miniblink49
     {
         return new DOMFileSystemSync(context, name, type, rootURL);
     }
@@ -60,7 +67,11 @@ public:
 
     ~DOMFileSystemSync() override;
 
+<<<<<<< HEAD
     void reportError(ErrorCallbackBase*, FileError::ErrorCode) override;
+=======
+    void reportError(ErrorCallback*, FileError*) override;
+>>>>>>> miniblink49
 
     DirectoryEntrySync* root();
 
@@ -70,10 +81,14 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     DOMFileSystemSync(ExecutionContext*,
         const String& name,
         FileSystemType,
         const KURL& rootURL);
+=======
+    DOMFileSystemSync(ExecutionContext*, const String& name, FileSystemType, const KURL& rootURL);
+>>>>>>> miniblink49
     Member<DirectoryEntrySync> m_rootEntry;
 };
 

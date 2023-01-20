@@ -22,6 +22,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/filters/FEOffset.h"
 
 #include "SkOffsetImageFilter.h"
@@ -38,9 +42,15 @@ FEOffset::FEOffset(Filter* filter, float dx, float dy)
 {
 }
 
+<<<<<<< HEAD
 FEOffset* FEOffset::create(Filter* filter, float dx, float dy)
 {
     return new FEOffset(filter, dx, dy);
+=======
+PassRefPtrWillBeRawPtr<FEOffset> FEOffset::create(Filter* filter, float dx, float dy)
+{
+    return adoptRefWillBeNoop(new FEOffset(filter, dx, dy));
+>>>>>>> miniblink49
 }
 
 float FEOffset::dx() const
@@ -63,6 +73,7 @@ void FEOffset::setDy(float dy)
     m_dy = dy;
 }
 
+<<<<<<< HEAD
 FloatRect FEOffset::mapEffect(const FloatRect& rect) const
 {
     FloatRect result = rect;
@@ -80,6 +91,24 @@ sk_sp<SkImageFilter> FEOffset::createImageFilter()
         SkFloatToScalar(filter->applyVerticalScale(m_dy)),
         SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()),
         &cropRect);
+=======
+FloatRect FEOffset::mapRect(const FloatRect& rect, bool forward)
+{
+    FloatRect result = rect;
+    if (forward)
+        result.move(filter()->applyHorizontalScale(m_dx), filter()->applyVerticalScale(m_dy));
+    else
+        result.move(-filter()->applyHorizontalScale(m_dx), -filter()->applyVerticalScale(m_dy));
+    return result;
+}
+
+PassRefPtr<SkImageFilter> FEOffset::createImageFilter(SkiaImageFilterBuilder* builder)
+{
+    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
+    Filter* filter = this->filter();
+    SkImageFilter::CropRect cropRect = getCropRect(builder->cropOffset());
+    return adoptRef(SkOffsetImageFilter::Create(SkFloatToScalar(filter->applyHorizontalScale(m_dx)), SkFloatToScalar(filter->applyVerticalScale(m_dy)), input.get(), &cropRect));
+>>>>>>> miniblink49
 }
 
 TextStream& FEOffset::externalRepresentation(TextStream& ts, int indent) const

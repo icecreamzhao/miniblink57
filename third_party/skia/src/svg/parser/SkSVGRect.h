@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkSVGRect_DEFINED
 #define SkSVGRect_DEFINED
 
@@ -13,7 +21,10 @@
 class SkSVGRect : public SkSVGElement {
     DECLARE_SVG_INFO(Rect);
     SkSVGRect();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkString f_height;
     SkString f_width;

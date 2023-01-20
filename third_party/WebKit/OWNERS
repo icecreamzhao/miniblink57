@@ -1,5 +1,13 @@
+set noparent
+
 # Blink API OWNERS
-file://third_party/WebKit/API_OWNERS
+darin@chromium.org
+dglazkov@chromium.org
+jochen@chromium.org
+tkent@chromium.org
+chrishtr@chromium.org
+pdr@chromium.org
+philipj@opera.com
 
 # For .gyp* / *.gn* changes only.
 dpranke@chromium.org
@@ -7,7 +15,6 @@ thakis@chromium.org
 
 per-file .gitignore=*
 per-file DEPS=*
+per-file WATCHLISTS=*
 per-file PRESUBMIT*.py=dpranke@chromium.org
 per-file PRESUBMIT*.py=thakis@chromium.org
-
-# COMPONENT: Blink

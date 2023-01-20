@@ -31,12 +31,11 @@
 #ifndef NavigatorID_h
 #define NavigatorID_h
 
-#include "core/CoreExport.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class CORE_EXPORT NavigatorID {
+class NavigatorID {
 public:
     String appCodeName();
     String appName();

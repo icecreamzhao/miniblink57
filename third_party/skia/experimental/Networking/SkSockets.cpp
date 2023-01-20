@@ -4,6 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #include "SkSockets.h"
 #include "SkData.h"
 #include <errno.h>
@@ -13,6 +14,16 @@
 
 SkSocket::SkSocket()
 {
+=======
+#include <netdb.h>
+#include <unistd.h>
+#include <errno.h>
+#include <fcntl.h>
+#include "SkSockets.h"
+#include "SkData.h"
+
+SkSocket::SkSocket() {
+>>>>>>> miniblink49
     fMaxfd = 0;
     FD_ZERO(&fMasterSet);
     fConnected = false;
@@ -22,14 +33,22 @@ SkSocket::SkSocket()
     fSockfd = this->createSocket();
 }
 
+<<<<<<< HEAD
 SkSocket::~SkSocket()
 {
+=======
+SkSocket::~SkSocket() {
+>>>>>>> miniblink49
     this->closeSocket(fSockfd);
     shutdown(fSockfd, 2); //stop sending/receiving
 }
 
+<<<<<<< HEAD
 int SkSocket::createSocket()
 {
+=======
+int SkSocket::createSocket() {
+>>>>>>> miniblink49
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         SkDebugf("ERROR opening socket\n");
@@ -49,8 +68,12 @@ int SkSocket::createSocket()
     return sockfd;
 }
 
+<<<<<<< HEAD
 void SkSocket::closeSocket(int sockfd)
 {
+=======
+void SkSocket::closeSocket(int sockfd) {
+>>>>>>> miniblink49
     if (!fReady)
         return;
 
@@ -68,6 +91,7 @@ void SkSocket::closeSocket(int sockfd)
         fConnected = false;
 }
 
+<<<<<<< HEAD
 void SkSocket::onFailedConnection(int sockfd)
 {
     this->closeSocket(sockfd);
@@ -75,21 +99,36 @@ void SkSocket::onFailedConnection(int sockfd)
 
 void SkSocket::setNonBlocking(int sockfd)
 {
+=======
+void SkSocket::onFailedConnection(int sockfd) {
+    this->closeSocket(sockfd);
+}
+
+void SkSocket::setNonBlocking(int sockfd) {
+>>>>>>> miniblink49
     int flags = fcntl(sockfd, F_GETFL);
     fcntl(sockfd, F_SETFL, flags | O_NONBLOCK);
 }
 
+<<<<<<< HEAD
 void SkSocket::addToMasterSet(int sockfd)
 {
+=======
+void SkSocket::addToMasterSet(int sockfd) {
+>>>>>>> miniblink49
     FD_SET(sockfd, &fMasterSet);
     if (sockfd > fMaxfd)
         fMaxfd = sockfd;
 }
 
 int SkSocket::readPacket(void (*onRead)(int, const void*, size_t, DataType,
+<<<<<<< HEAD
                              void*),
     void* context)
 {
+=======
+                                        void*), void* context) {
+>>>>>>> miniblink49
     if (!fConnected || !fReady || NULL == onRead || NULL == context
         || fReadSuspended)
         return -1;
@@ -98,7 +137,11 @@ int SkSocket::readPacket(void (*onRead)(int, const void*, size_t, DataType,
 
     char packet[PACKET_SIZE];
     for (int i = 0; i <= fMaxfd; ++i) {
+<<<<<<< HEAD
         if (!FD_ISSET(i, &fMasterSet))
+=======
+        if (!FD_ISSET (i, &fMasterSet))
+>>>>>>> miniblink49
             continue;
 
         memset(packet, 0, PACKET_SIZE);
@@ -112,7 +155,11 @@ int SkSocket::readPacket(void (*onRead)(int, const void*, size_t, DataType,
         h.bytes = 0;
         while (!h.done && fConnected && !failure) {
             int retval = read(i, packet + bytesReadInPacket,
+<<<<<<< HEAD
                 PACKET_SIZE - bytesReadInPacket);
+=======
+                              PACKET_SIZE - bytesReadInPacket);
+>>>>>>> miniblink49
 
             ++attempts;
             if (retval < 0) {
@@ -177,16 +224,25 @@ int SkSocket::readPacket(void (*onRead)(int, const void*, size_t, DataType,
     return totalBytesRead;
 }
 
+<<<<<<< HEAD
 int SkSocket::writePacket(void* data, size_t size, DataType type)
 {
     if (size < 0 || NULL == data || !fConnected || !fReady || fWriteSuspended)
+=======
+int SkSocket::writePacket(void* data, size_t size, DataType type) {
+    if (size < 0|| NULL == data || !fConnected || !fReady || fWriteSuspended)
+>>>>>>> miniblink49
         return -1;
 
     int totalBytesWritten = 0;
     header h;
     char packet[PACKET_SIZE];
     for (int i = 0; i <= fMaxfd; ++i) {
+<<<<<<< HEAD
         if (!FD_ISSET(i, &fMasterSet))
+=======
+        if (!FD_ISSET (i, &fMasterSet))
+>>>>>>> miniblink49
             continue;
 
         int bytesWrittenInTransfer = 0;
@@ -202,10 +258,17 @@ int SkSocket::writePacket(void* data, size_t size, DataType type)
             memcpy(packet + sizeof(bool), &h.bytes, sizeof(int));
             memcpy(packet + sizeof(bool) + sizeof(int), &h.type, sizeof(DataType));
             memcpy(packet + HEADER_SIZE, (char*)data + bytesWrittenInTransfer,
+<<<<<<< HEAD
                 h.bytes);
 
             int retval = write(i, packet + bytesWrittenInPacket,
                 PACKET_SIZE - bytesWrittenInPacket);
+=======
+                   h.bytes);
+
+            int retval = write(i, packet + bytesWrittenInPacket,
+                               PACKET_SIZE - bytesWrittenInPacket);
+>>>>>>> miniblink49
             attempts++;
 
             if (retval < 0) {
@@ -251,8 +314,12 @@ int SkSocket::writePacket(void* data, size_t size, DataType type)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
 SkTCPServer::SkTCPServer(int port)
 {
+=======
+SkTCPServer::SkTCPServer(int port) {
+>>>>>>> miniblink49
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = INADDR_ANY;
@@ -264,6 +331,7 @@ SkTCPServer::SkTCPServer(int port)
     }
 }
 
+<<<<<<< HEAD
 SkTCPServer::~SkTCPServer()
 {
     this->disconnectAll();
@@ -271,6 +339,13 @@ SkTCPServer::~SkTCPServer()
 
 int SkTCPServer::acceptConnections()
 {
+=======
+SkTCPServer::~SkTCPServer() {
+    this->disconnectAll();
+}
+
+int SkTCPServer::acceptConnections() {
+>>>>>>> miniblink49
     if (!fReady)
         return -1;
 
@@ -282,7 +357,11 @@ int SkTCPServer::acceptConnections()
         FD_ZERO(&workingSet);
         FD_SET(fSockfd, &workingSet);
         timeval timeout;
+<<<<<<< HEAD
         timeout.tv_sec = 0;
+=======
+        timeout.tv_sec  = 0;
+>>>>>>> miniblink49
         timeout.tv_usec = 0;
         int sel = select(fSockfd + 1, &workingSet, NULL, NULL, &timeout);
         if (sel < 0) {
@@ -295,7 +374,11 @@ int SkTCPServer::acceptConnections()
         sockaddr_in clientAddr;
         socklen_t clientLen = sizeof(clientAddr);
         newfd = accept(fSockfd, (struct sockaddr*)&clientAddr, &clientLen);
+<<<<<<< HEAD
         if (newfd < 0) {
+=======
+        if (newfd< 0) {
+>>>>>>> miniblink49
             SkDebugf("accept() failed with error %s\n", strerror(errno));
             continue;
         }
@@ -309,8 +392,13 @@ int SkTCPServer::acceptConnections()
     return 0;
 }
 
+<<<<<<< HEAD
 int SkTCPServer::disconnectAll()
 {
+=======
+
+int SkTCPServer::disconnectAll() {
+>>>>>>> miniblink49
     if (!fConnected || !fReady)
         return -1;
     for (int i = 0; i <= fMaxfd; ++i) {
@@ -322,8 +410,12 @@ int SkTCPServer::disconnectAll()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
 SkTCPClient::SkTCPClient(const char* hostname, int port)
 {
+=======
+SkTCPClient::SkTCPClient(const char* hostname, int port) {
+>>>>>>> miniblink49
     //Add fSockfd since the client will be using it to read/write
     this->addToMasterSet(fSockfd);
 
@@ -331,16 +423,27 @@ SkTCPClient::SkTCPClient(const char* hostname, int port)
     if (server) {
         fServerAddr.sin_family = AF_INET;
         memcpy((char*)&fServerAddr.sin_addr.s_addr, (char*)server->h_addr,
+<<<<<<< HEAD
             server->h_length);
         fServerAddr.sin_port = htons(port);
     } else {
+=======
+               server->h_length);
+        fServerAddr.sin_port = htons(port);
+    }
+    else {
+>>>>>>> miniblink49
         //SkDebugf("ERROR, no such host\n");
         fReady = false;
     }
 }
 
+<<<<<<< HEAD
 void SkTCPClient::onFailedConnection(int sockfd)
 { //cleanup and recreate socket
+=======
+void SkTCPClient::onFailedConnection(int sockfd) { //cleanup and recreate socket
+>>>>>>> miniblink49
     SkASSERT(sockfd == fSockfd);
     this->closeSocket(fSockfd);
     fSockfd = this->createSocket();
@@ -348,8 +451,12 @@ void SkTCPClient::onFailedConnection(int sockfd)
     this->addToMasterSet(fSockfd);
 }
 
+<<<<<<< HEAD
 int SkTCPClient::connectToServer()
 {
+=======
+int SkTCPClient::connectToServer() {
+>>>>>>> miniblink49
     if (!fReady)
         return -1;
     if (fConnected)

@@ -28,6 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/html/HTMLTemplateElement.h"
 
 #include "core/dom/Document.h"
@@ -40,33 +42,36 @@ using namespace HTMLNames;
 
 inline HTMLTemplateElement::HTMLTemplateElement(Document& document)
     : HTMLElement(templateTag, document)
-    , m_content(this, nullptr)
 {
 }
 
 DEFINE_NODE_FACTORY(HTMLTemplateElement)
 
-HTMLTemplateElement::~HTMLTemplateElement() { }
+HTMLTemplateElement::~HTMLTemplateElement()
+{
+#if !ENABLE(OILPAN)
+    if (m_content)
+        m_content->clearHost();
+#endif
+}
 
 DocumentFragment* HTMLTemplateElement::content() const
 {
     if (!m_content)
-        m_content = TemplateContentDocumentFragment::create(
-            document().ensureTemplateDocument(),
-            const_cast<HTMLTemplateElement*>(this));
+        m_content = TemplateContentDocumentFragment::create(document().ensureTemplateDocument(), const_cast<HTMLTemplateElement*>(this));
 
     return m_content.get();
 }
 
-Node* HTMLTemplateElement::cloneNode(bool deep)
+PassRefPtrWillBeRawPtr<Node> HTMLTemplateElement::cloneNode(bool deep)
 {
     if (!deep)
         return cloneElementWithoutChildren();
 
-    Node* clone = cloneElementWithChildren();
+    RefPtrWillBeRawPtr<Node> clone = cloneElementWithChildren();
     if (m_content)
-        content()->cloneChildNodes(toHTMLTemplateElement(clone)->content());
-    return clone;
+        content()->cloneChildNodes(toHTMLTemplateElement(clone.get())->content());
+    return clone.release();
 }
 
 void HTMLTemplateElement::didMoveToNewDocument(Document& oldDocument)
@@ -81,12 +86,6 @@ DEFINE_TRACE(HTMLTemplateElement)
 {
     visitor->trace(m_content);
     HTMLElement::trace(visitor);
-}
-
-DEFINE_TRACE_WRAPPERS(HTMLTemplateElement)
-{
-    visitor->traceWrappers(m_content);
-    HTMLElement::traceWrappers(visitor);
 }
 
 } // namespace blink

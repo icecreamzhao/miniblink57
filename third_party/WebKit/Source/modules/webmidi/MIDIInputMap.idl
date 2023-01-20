@@ -2,9 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIInput
 
 interface MIDIInputMap {
+=======
+// FIXME: Implement forEach.
+// callback ForEachCallback = void(DOMString id, MIDIInput port);
+
+[
+    GarbageCollected,
+] interface MIDIInputMap {
+>>>>>>> miniblink49
     readonly attribute unsigned long size;
     readonly maplike<DOMString, MIDIInput>;
 };

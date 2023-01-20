@@ -6,6 +6,7 @@
  */
 
 #include "SkLinearGradient.h"
+<<<<<<< HEAD
 #include "Sk4fLinearGradient.h"
 #include "SkRefCnt.h"
 
@@ -21,17 +22,53 @@ static inline int repeat_8bits(int x)
 
 static inline int mirror_8bits(int x)
 {
+=======
+
+static inline int repeat_bits(int x, const int bits) {
+    return x & ((1 << bits) - 1);
+}
+
+static inline int repeat_8bits(int x) {
+    return x & 0xFF;
+}
+
+// Visual Studio 2010 (MSC_VER=1600) optimizes bit-shift code incorrectly.
+// See http://code.google.com/p/skia/issues/detail?id=472
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#pragma optimize("", off)
+#endif
+
+static inline int mirror_bits(int x, const int bits) {
+    if (x & (1 << bits)) {
+        x = ~x;
+    }
+    return x & ((1 << bits) - 1);
+}
+
+static inline int mirror_8bits(int x) {
+>>>>>>> miniblink49
     if (x & 256) {
         x = ~x;
     }
     return x & 255;
 }
 
+<<<<<<< HEAD
 static SkMatrix pts_to_unit_matrix(const SkPoint pts[2])
 {
     SkVector vec = pts[1] - pts[0];
     SkScalar mag = vec.length();
     SkScalar inv = mag ? SkScalarInvert(mag) : 0;
+=======
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#pragma optimize("", on)
+#endif
+
+static SkMatrix pts_to_unit_matrix(const SkPoint pts[2]) {
+    SkVector    vec = pts[1] - pts[0];
+    SkScalar    mag = vec.length();
+    SkScalar    inv = mag ? SkScalarInvert(mag) : 0;
+>>>>>>> miniblink49
 
     vec.scale(inv);
     SkMatrix matrix;
@@ -41,6 +78,7 @@ static SkMatrix pts_to_unit_matrix(const SkPoint pts[2])
     return matrix;
 }
 
+<<<<<<< HEAD
 static bool use_4f_context(const SkShader::ContextRec& rec, uint32_t flags)
 {
 #ifdef FORCE_4F_CONTEXT
@@ -51,11 +89,14 @@ static bool use_4f_context(const SkShader::ContextRec& rec, uint32_t flags)
 #endif
 }
 
+=======
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////
 
 SkLinearGradient::SkLinearGradient(const SkPoint pts[2], const Descriptor& desc)
     : SkGradientShaderBase(desc, pts_to_unit_matrix(pts))
     , fStart(pts[0])
+<<<<<<< HEAD
     , fEnd(pts[1])
 {
 }
@@ -65,21 +106,39 @@ sk_sp<SkFlattenable> SkLinearGradient::CreateProc(SkReadBuffer& buffer)
     DescriptorScope desc;
     if (!desc.unflatten(buffer)) {
         return nullptr;
+=======
+    , fEnd(pts[1]) {
+}
+
+SkFlattenable* SkLinearGradient::CreateProc(SkReadBuffer& buffer) {
+    DescriptorScope desc;
+    if (!desc.unflatten(buffer)) {
+        return NULL;
+>>>>>>> miniblink49
     }
     SkPoint pts[2];
     pts[0] = buffer.readPoint();
     pts[1] = buffer.readPoint();
+<<<<<<< HEAD
     return SkGradientShader::MakeLinear(pts, desc.fColors, desc.fPos, desc.fCount, desc.fTileMode,
         desc.fGradFlags, desc.fLocalMatrix);
 }
 
 void SkLinearGradient::flatten(SkWriteBuffer& buffer) const
 {
+=======
+    return SkGradientShader::CreateLinear(pts, desc.fColors, desc.fPos, desc.fCount,
+                                          desc.fTileMode, desc.fGradFlags, desc.fLocalMatrix);
+}
+
+void SkLinearGradient::flatten(SkWriteBuffer& buffer) const {
+>>>>>>> miniblink49
     this->INHERITED::flatten(buffer);
     buffer.writePoint(fStart);
     buffer.writePoint(fEnd);
 }
 
+<<<<<<< HEAD
 size_t SkLinearGradient::onContextSize(const ContextRec& rec) const
 {
     return use_4f_context(rec, fGradFlags)
@@ -168,10 +227,33 @@ SkLinearGradient::LinearGradientContext::LinearGradientContext(
             if (i > 0) {
                 SkASSERT(rec[i - 1].fPos <= rec[i].fPos);
             }
+=======
+size_t SkLinearGradient::contextSize() const {
+    return sizeof(LinearGradientContext);
+}
+
+SkShader::Context* SkLinearGradient::onCreateContext(const ContextRec& rec, void* storage) const {
+    return SkNEW_PLACEMENT_ARGS(storage, LinearGradientContext, (*this, rec));
+}
+
+SkLinearGradient::LinearGradientContext::LinearGradientContext(
+        const SkLinearGradient& shader, const ContextRec& rec)
+    : INHERITED(shader, rec)
+{
+    unsigned mask = SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask;
+    if ((fDstToIndex.getType() & ~mask) == 0) {
+        // when we dither, we are (usually) not const-in-Y
+        if ((fFlags & SkShader::kHasSpan16_Flag) && !rec.fPaint->isDither()) {
+            // only claim this if we do have a 16bit mode (i.e. none of our
+            // colors have alpha), and if we are not dithering (which obviously
+            // is not const in Y).
+            fFlags |= SkShader::kConstInY16_Flag;
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 #define NO_CHECK_ITER                                                                \
     do {                                                                             \
         unsigned fi = SkGradFixedToFixed(fx) >> SkGradientShaderBase::kCache32Shift; \
@@ -179,22 +261,42 @@ SkLinearGradient::LinearGradientContext::LinearGradientContext(
         fx += dx;                                                                    \
         *dstC++ = cache[toggle + fi];                                                \
         toggle = next_dither_toggle(toggle);                                         \
+=======
+#define NO_CHECK_ITER               \
+    do {                            \
+    unsigned fi = SkGradFixedToFixed(fx) >> SkGradientShaderBase::kCache32Shift; \
+    SkASSERT(fi <= 0xFF);           \
+    fx += dx;                       \
+    *dstC++ = cache[toggle + fi];   \
+    toggle = next_dither_toggle(toggle); \
+>>>>>>> miniblink49
     } while (0)
 
 namespace {
 
 typedef void (*LinearShadeProc)(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+<<<<<<< HEAD
     SkPMColor* dstC, const SkPMColor* cache,
     int toggle, int count);
+=======
+                                SkPMColor* dstC, const SkPMColor* cache,
+                                int toggle, int count);
+>>>>>>> miniblink49
 
 // Linear interpolation (lerp) is unnecessary if there are no sharp
 // discontinuities in the gradient - which must be true if there are
 // only 2 colors - but it's cheap.
 void shadeSpan_linear_vertical_lerp(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+<<<<<<< HEAD
     SkPMColor* SK_RESTRICT dstC,
     const SkPMColor* SK_RESTRICT cache,
     int toggle, int count)
 {
+=======
+                                    SkPMColor* SK_RESTRICT dstC,
+                                    const SkPMColor* SK_RESTRICT cache,
+                                    int toggle, int count) {
+>>>>>>> miniblink49
     // We're a vertical gradient, so no change in a span.
     // If colors change sharply across the gradient, dithering is
     // insufficient (it subsamples the color space) and we need to lerp.
@@ -215,10 +317,16 @@ void shadeSpan_linear_vertical_lerp(TileProc proc, SkGradFixed dx, SkGradFixed f
 }
 
 void shadeSpan_linear_clamp(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+<<<<<<< HEAD
     SkPMColor* SK_RESTRICT dstC,
     const SkPMColor* SK_RESTRICT cache,
     int toggle, int count)
 {
+=======
+                            SkPMColor* SK_RESTRICT dstC,
+                            const SkPMColor* SK_RESTRICT cache,
+                            int toggle, int count) {
+>>>>>>> miniblink49
     SkClampRange range;
     range.init(fx, dx, count, 0, SkGradientShaderBase::kCache32Count - 1);
     range.validate(count);
@@ -234,6 +342,7 @@ void shadeSpan_linear_clamp(TileProc proc, SkGradFixed dx, SkGradFixed fx,
         int unroll = count >> 3;
         fx = range.fFx1;
         for (int i = 0; i < unroll; i++) {
+<<<<<<< HEAD
             NO_CHECK_ITER;
             NO_CHECK_ITER;
             NO_CHECK_ITER;
@@ -242,6 +351,12 @@ void shadeSpan_linear_clamp(TileProc proc, SkGradFixed dx, SkGradFixed fx,
             NO_CHECK_ITER;
             NO_CHECK_ITER;
             NO_CHECK_ITER;
+=======
+            NO_CHECK_ITER;  NO_CHECK_ITER;
+            NO_CHECK_ITER;  NO_CHECK_ITER;
+            NO_CHECK_ITER;  NO_CHECK_ITER;
+            NO_CHECK_ITER;  NO_CHECK_ITER;
+>>>>>>> miniblink49
         }
         if ((count &= 7) > 0) {
             do {
@@ -258,10 +373,16 @@ void shadeSpan_linear_clamp(TileProc proc, SkGradFixed dx, SkGradFixed fx,
 }
 
 void shadeSpan_linear_mirror(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+<<<<<<< HEAD
     SkPMColor* SK_RESTRICT dstC,
     const SkPMColor* SK_RESTRICT cache,
     int toggle, int count)
 {
+=======
+                             SkPMColor* SK_RESTRICT dstC,
+                             const SkPMColor* SK_RESTRICT cache,
+                             int toggle, int count) {
+>>>>>>> miniblink49
     do {
         unsigned fi = mirror_8bits(SkGradFixedToFixed(fx) >> 8);
         SkASSERT(fi <= 0xFF);
@@ -272,10 +393,16 @@ void shadeSpan_linear_mirror(TileProc proc, SkGradFixed dx, SkGradFixed fx,
 }
 
 void shadeSpan_linear_repeat(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+<<<<<<< HEAD
     SkPMColor* SK_RESTRICT dstC,
     const SkPMColor* SK_RESTRICT cache,
     int toggle, int count)
 {
+=======
+        SkPMColor* SK_RESTRICT dstC,
+        const SkPMColor* SK_RESTRICT cache,
+        int toggle, int count) {
+>>>>>>> miniblink49
     do {
         unsigned fi = repeat_8bits(SkGradFixedToFixed(fx) >> 8);
         SkASSERT(fi <= 0xFF);
@@ -288,6 +415,7 @@ void shadeSpan_linear_repeat(TileProc proc, SkGradFixed dx, SkGradFixed fx,
 }
 
 void SkLinearGradient::LinearGradientContext::shadeSpan(int x, int y, SkPMColor* SK_RESTRICT dstC,
+<<<<<<< HEAD
     int count)
 {
     SkASSERT(count > 0);
@@ -316,6 +444,29 @@ void SkLinearGradient::LinearGradientContext::shadeSpan(int x, int y, SkPMColor*
             const auto step = fDstToIndex.fixedStepInX(SkIntToScalar(y));
             // todo: do we need a real/high-precision value for dx here?
             dx = SkScalarToGradFixed(step.fX);
+=======
+                                                        int count) {
+    SkASSERT(count > 0);
+
+    const SkLinearGradient& linearGradient = static_cast<const SkLinearGradient&>(fShader);
+
+    SkPoint             srcPt;
+    SkMatrix::MapXYProc dstProc = fDstToIndexProc;
+    TileProc            proc = linearGradient.fTileProc;
+    const SkPMColor* SK_RESTRICT cache = fCache->getCache32();
+    int                 toggle = init_dither_toggle(x, y);
+
+    if (fDstToIndexClass != kPerspective_MatrixClass) {
+        dstProc(fDstToIndex, SkIntToScalar(x) + SK_ScalarHalf,
+                             SkIntToScalar(y) + SK_ScalarHalf, &srcPt);
+        SkGradFixed dx, fx = SkScalarToGradFixed(srcPt.fX);
+
+        if (fDstToIndexClass == kFixedStepInX_MatrixClass) {
+            SkFixed dxStorage[1];
+            (void)fDstToIndex.fixedStepInX(SkIntToScalar(y), dxStorage, NULL);
+            // todo: do we need a real/high-precision value for dx here?
+            dx = SkFixedToGradFixed(dxStorage[0]);
+>>>>>>> miniblink49
         } else {
             SkASSERT(fDstToIndexClass == kLinear_MatrixClass);
             dx = SkScalarToGradFixed(fDstToIndex.getScaleX());
@@ -333,8 +484,13 @@ void SkLinearGradient::LinearGradientContext::shadeSpan(int x, int y, SkPMColor*
         }
         (*shadeProc)(proc, dx, fx, dstC, cache, toggle, count);
     } else {
+<<<<<<< HEAD
         SkScalar dstX = SkIntToScalar(x);
         SkScalar dstY = SkIntToScalar(y);
+=======
+        SkScalar    dstX = SkIntToScalar(x);
+        SkScalar    dstY = SkIntToScalar(y);
+>>>>>>> miniblink49
         do {
             dstProc(fDstToIndex, dstX, dstY, &srcPt);
             unsigned fi = proc(SkScalarToFixed(srcPt.fX));
@@ -346,8 +502,28 @@ void SkLinearGradient::LinearGradientContext::shadeSpan(int x, int y, SkPMColor*
     }
 }
 
+<<<<<<< HEAD
 SkShader::GradientType SkLinearGradient::asAGradient(GradientInfo* info) const
 {
+=======
+SkShader::BitmapType SkLinearGradient::asABitmap(SkBitmap* bitmap,
+                                                SkMatrix* matrix,
+                                                TileMode xy[]) const {
+    if (bitmap) {
+        this->getGradientTableBitmap(bitmap);
+    }
+    if (matrix) {
+        matrix->preConcat(fPtsToUnit);
+    }
+    if (xy) {
+        xy[0] = fTileMode;
+        xy[1] = kClamp_TileMode;
+    }
+    return kLinear_BitmapType;
+}
+
+SkShader::GradientType SkLinearGradient::asAGradient(GradientInfo* info) const {
+>>>>>>> miniblink49
     if (info) {
         commonAsAGradient(info);
         info->fPoint[0] = fStart;
@@ -356,16 +532,191 @@ SkShader::GradientType SkLinearGradient::asAGradient(GradientInfo* info) const
     return kLinear_GradientType;
 }
 
+<<<<<<< HEAD
 #if SK_SUPPORT_GPU
 
 #include "SkGr.h"
 #include "glsl/GrGLSLCaps.h"
 #include "glsl/GrGLSLFragmentShaderBuilder.h"
+=======
+static void dither_memset16(uint16_t dst[], uint16_t value, uint16_t other,
+                            int count) {
+    if (reinterpret_cast<uintptr_t>(dst) & 2) {
+        *dst++ = value;
+        count -= 1;
+        SkTSwap(value, other);
+    }
+
+    sk_memset32((uint32_t*)dst, (value << 16) | other, count >> 1);
+
+    if (count & 1) {
+        dst[count - 1] = value;
+    }
+}
+
+#define NO_CHECK_ITER_16                \
+    do {                                \
+    unsigned fi = SkGradFixedToFixed(fx) >> SkGradientShaderBase::kCache16Shift;  \
+    SkASSERT(fi < SkGradientShaderBase::kCache16Count);       \
+    fx += dx;                           \
+    *dstC++ = cache[toggle + fi];       \
+    toggle = next_dither_toggle16(toggle);            \
+    } while (0)
+
+namespace {
+
+typedef void (*LinearShade16Proc)(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+                                  uint16_t* dstC, const uint16_t* cache,
+                                  int toggle, int count);
+
+void shadeSpan16_linear_vertical(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+                                 uint16_t* SK_RESTRICT dstC,
+                                 const uint16_t* SK_RESTRICT cache,
+                                 int toggle, int count) {
+    // we're a vertical gradient, so no change in a span
+    unsigned fi = proc(SkGradFixedToFixed(fx)) >> SkGradientShaderBase::kCache16Shift;
+    SkASSERT(fi < SkGradientShaderBase::kCache16Count);
+    dither_memset16(dstC, cache[toggle + fi],
+        cache[next_dither_toggle16(toggle) + fi], count);
+}
+
+void shadeSpan16_linear_clamp(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+                              uint16_t* SK_RESTRICT dstC,
+                              const uint16_t* SK_RESTRICT cache,
+                              int toggle, int count) {
+    SkClampRange range;
+    range.init(fx, dx, count, 0, SkGradientShaderBase::kCache32Count - 1);
+    range.validate(count);
+
+    if ((count = range.fCount0) > 0) {
+        dither_memset16(dstC,
+            cache[toggle + range.fV0],
+            cache[next_dither_toggle16(toggle) + range.fV0],
+            count);
+        dstC += count;
+    }
+    if ((count = range.fCount1) > 0) {
+        int unroll = count >> 3;
+        fx = range.fFx1;
+        for (int i = 0; i < unroll; i++) {
+            NO_CHECK_ITER_16;  NO_CHECK_ITER_16;
+            NO_CHECK_ITER_16;  NO_CHECK_ITER_16;
+            NO_CHECK_ITER_16;  NO_CHECK_ITER_16;
+            NO_CHECK_ITER_16;  NO_CHECK_ITER_16;
+        }
+        if ((count &= 7) > 0) {
+            do {
+                NO_CHECK_ITER_16;
+            } while (--count != 0);
+        }
+    }
+    if ((count = range.fCount2) > 0) {
+        dither_memset16(dstC,
+            cache[toggle + range.fV1],
+            cache[next_dither_toggle16(toggle) + range.fV1],
+            count);
+    }
+}
+
+void shadeSpan16_linear_mirror(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+                               uint16_t* SK_RESTRICT dstC,
+                               const uint16_t* SK_RESTRICT cache,
+                               int toggle, int count) {
+    do {
+        unsigned fi = mirror_bits(SkGradFixedToFixed(fx) >> SkGradientShaderBase::kCache16Shift,
+                                        SkGradientShaderBase::kCache16Bits);
+        SkASSERT(fi < SkGradientShaderBase::kCache16Count);
+        fx += dx;
+        *dstC++ = cache[toggle + fi];
+        toggle = next_dither_toggle16(toggle);
+    } while (--count != 0);
+}
+
+void shadeSpan16_linear_repeat(TileProc proc, SkGradFixed dx, SkGradFixed fx,
+                               uint16_t* SK_RESTRICT dstC,
+                               const uint16_t* SK_RESTRICT cache,
+                               int toggle, int count) {
+    do {
+        unsigned fi = repeat_bits(SkGradFixedToFixed(fx) >> SkGradientShaderBase::kCache16Shift,
+                                  SkGradientShaderBase::kCache16Bits);
+        SkASSERT(fi < SkGradientShaderBase::kCache16Count);
+        fx += dx;
+        *dstC++ = cache[toggle + fi];
+        toggle = next_dither_toggle16(toggle);
+    } while (--count != 0);
+}
+}
+
+static bool fixed_nearly_zero(SkFixed x) {
+    return SkAbs32(x) < (SK_Fixed1 >> 12);
+}
+
+void SkLinearGradient::LinearGradientContext::shadeSpan16(int x, int y,
+                                                          uint16_t* SK_RESTRICT dstC, int count) {
+    SkASSERT(count > 0);
+
+    const SkLinearGradient& linearGradient = static_cast<const SkLinearGradient&>(fShader);
+
+    SkPoint             srcPt;
+    SkMatrix::MapXYProc dstProc = fDstToIndexProc;
+    TileProc            proc = linearGradient.fTileProc;
+    const uint16_t* SK_RESTRICT cache = fCache->getCache16();
+    int                 toggle = init_dither_toggle16(x, y);
+
+    if (fDstToIndexClass != kPerspective_MatrixClass) {
+        dstProc(fDstToIndex, SkIntToScalar(x) + SK_ScalarHalf,
+                             SkIntToScalar(y) + SK_ScalarHalf, &srcPt);
+        SkGradFixed dx, fx = SkScalarToGradFixed(srcPt.fX);
+
+        if (fDstToIndexClass == kFixedStepInX_MatrixClass) {
+            SkFixed dxStorage[1];
+            (void)fDstToIndex.fixedStepInX(SkIntToScalar(y), dxStorage, NULL);
+            // todo: do we need a real/high-precision value for dx here?
+            dx = SkFixedToGradFixed(dxStorage[0]);
+        } else {
+            SkASSERT(fDstToIndexClass == kLinear_MatrixClass);
+            dx = SkScalarToGradFixed(fDstToIndex.getScaleX());
+        }
+
+        LinearShade16Proc shadeProc = shadeSpan16_linear_repeat;
+        if (fixed_nearly_zero(SkGradFixedToFixed(dx))) {
+            shadeProc = shadeSpan16_linear_vertical;
+        } else if (SkShader::kClamp_TileMode == linearGradient.fTileMode) {
+            shadeProc = shadeSpan16_linear_clamp;
+        } else if (SkShader::kMirror_TileMode == linearGradient.fTileMode) {
+            shadeProc = shadeSpan16_linear_mirror;
+        } else {
+            SkASSERT(SkShader::kRepeat_TileMode == linearGradient.fTileMode);
+        }
+        (*shadeProc)(proc, dx, fx, dstC, cache, toggle, count);
+    } else {
+        SkScalar    dstX = SkIntToScalar(x);
+        SkScalar    dstY = SkIntToScalar(y);
+        do {
+            dstProc(fDstToIndex, dstX, dstY, &srcPt);
+            unsigned fi = proc(SkScalarToFixed(srcPt.fX));
+            SkASSERT(fi <= 0xFFFF);
+
+            int index = fi >> kCache16Shift;
+            *dstC++ = cache[toggle + index];
+            toggle = next_dither_toggle16(toggle);
+
+            dstX += SK_Scalar1;
+        } while (--count != 0);
+    }
+}
+
+#if SK_SUPPORT_GPU
+
+#include "gl/builders/GrGLProgramBuilder.h"
+#include "SkGr.h"
+>>>>>>> miniblink49
 
 /////////////////////////////////////////////////////////////////////
 
 class GrGLLinearGradient : public GrGLGradientEffect {
 public:
+<<<<<<< HEAD
     GrGLLinearGradient(const GrProcessor&) { }
 
     virtual ~GrGLLinearGradient() { }
@@ -374,10 +725,29 @@ public:
 
     static void GenKey(const GrProcessor& processor, const GrGLSLCaps&, GrProcessorKeyBuilder* b)
     {
+=======
+
+    GrGLLinearGradient(const GrProcessor&) {}
+
+    virtual ~GrGLLinearGradient() { }
+
+    virtual void emitCode(GrGLFPBuilder*,
+                          const GrFragmentProcessor&,
+                          const char* outputColor,
+                          const char* inputColor,
+                          const TransformedCoordsArray&,
+                          const TextureSamplerArray&) override;
+
+    static void GenKey(const GrProcessor& processor, const GrGLSLCaps&, GrProcessorKeyBuilder* b) {
+>>>>>>> miniblink49
         b->add32(GenBaseGradientKey(processor));
     }
 
 private:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     typedef GrGLGradientEffect INHERITED;
 };
 
@@ -385,18 +755,29 @@ private:
 
 class GrLinearGradient : public GrGradientEffect {
 public:
+<<<<<<< HEAD
     static sk_sp<GrFragmentProcessor> Make(GrContext* ctx,
         const SkLinearGradient& shader,
         const SkMatrix& matrix,
         SkShader::TileMode tm)
     {
         return sk_sp<GrFragmentProcessor>(new GrLinearGradient(ctx, shader, matrix, tm));
+=======
+
+    static GrFragmentProcessor* Create(GrContext* ctx,
+                                       GrProcessorDataManager* procDataManager,
+                                       const SkLinearGradient& shader,
+                                       const SkMatrix& matrix,
+                                       SkShader::TileMode tm) {
+        return SkNEW_ARGS(GrLinearGradient, (ctx, procDataManager, shader, matrix, tm));
+>>>>>>> miniblink49
     }
 
     virtual ~GrLinearGradient() { }
 
     const char* name() const override { return "Linear Gradient"; }
 
+<<<<<<< HEAD
 private:
     GrLinearGradient(GrContext* ctx,
         const SkLinearGradient& shader,
@@ -418,6 +799,26 @@ private:
         GrGLLinearGradient::GenKey(*this, caps, b);
     }
 
+=======
+    virtual void getGLProcessorKey(const GrGLSLCaps& caps,
+                                   GrProcessorKeyBuilder* b) const override {
+        GrGLLinearGradient::GenKey(*this, caps, b);
+    }
+
+    GrGLFragmentProcessor* createGLInstance() const override {
+        return SkNEW_ARGS(GrGLLinearGradient, (*this));
+    }
+
+private:
+    GrLinearGradient(GrContext* ctx,
+                     GrProcessorDataManager* procDataManager,
+                     const SkLinearGradient& shader,
+                     const SkMatrix& matrix,
+                     SkShader::TileMode tm)
+        : INHERITED(ctx, procDataManager, shader, matrix, tm) {
+        this->initClassID<GrLinearGradient>();
+    }
+>>>>>>> miniblink49
     GR_DECLARE_FRAGMENT_PROCESSOR_TEST;
 
     typedef GrGradientEffect INHERITED;
@@ -427,26 +828,45 @@ private:
 
 GR_DEFINE_FRAGMENT_PROCESSOR_TEST(GrLinearGradient);
 
+<<<<<<< HEAD
 sk_sp<GrFragmentProcessor> GrLinearGradient::TestCreate(GrProcessorTestData* d)
 {
     SkPoint points[] = { { d->fRandom->nextUScalar1(), d->fRandom->nextUScalar1() },
         { d->fRandom->nextUScalar1(), d->fRandom->nextUScalar1() } };
+=======
+GrFragmentProcessor* GrLinearGradient::TestCreate(GrProcessorTestData* d) {
+    SkPoint points[] = {{d->fRandom->nextUScalar1(), d->fRandom->nextUScalar1()},
+                        {d->fRandom->nextUScalar1(), d->fRandom->nextUScalar1()}};
+>>>>>>> miniblink49
 
     SkColor colors[kMaxRandomGradientColors];
     SkScalar stopsArray[kMaxRandomGradientColors];
     SkScalar* stops = stopsArray;
     SkShader::TileMode tm;
     int colorCount = RandomGradientParams(d->fRandom, colors, &stops, &tm);
+<<<<<<< HEAD
     auto shader = SkGradientShader::MakeLinear(points, colors, stops, colorCount, tm);
     sk_sp<GrFragmentProcessor> fp = shader->asFragmentProcessor(d->fContext,
         GrTest::TestMatrix(d->fRandom), NULL, kNone_SkFilterQuality,
         SkSourceGammaTreatment::kRespect);
     GrAlwaysAssert(fp);
+=======
+    SkAutoTUnref<SkShader> shader(SkGradientShader::CreateLinear(points,
+                                                                 colors, stops, colorCount,
+                                                                 tm));
+    SkPaint paint;
+    GrColor paintColor;
+    GrFragmentProcessor* fp;
+    SkAssertResult(shader->asFragmentProcessor(d->fContext, paint,
+                                               GrTest::TestMatrix(d->fRandom), NULL,
+                                               &paintColor, d->fProcDataManager, &fp));
+>>>>>>> miniblink49
     return fp;
 }
 
 /////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void GrGLLinearGradient::emitCode(EmitArgs& args)
 {
     const GrLinearGradient& ge = args.fFp.cast<GrLinearGradient>();
@@ -460,10 +880,24 @@ void GrGLLinearGradient::emitCode(EmitArgs& args)
         args.fOutputColor,
         args.fInputColor,
         args.fTexSamplers);
+=======
+void GrGLLinearGradient::emitCode(GrGLFPBuilder* builder,
+                                  const GrFragmentProcessor& fp,
+                                  const char* outputColor,
+                                  const char* inputColor,
+                                  const TransformedCoordsArray& coords,
+                                  const TextureSamplerArray& samplers) {
+    const GrLinearGradient& ge = fp.cast<GrLinearGradient>();
+    this->emitUniforms(builder, ge);
+    SkString t = builder->getFragmentShaderBuilder()->ensureFSCoords2D(coords, 0);
+    t.append(".x");
+    this->emitColor(builder, ge, t.c_str(), outputColor, inputColor, samplers);
+>>>>>>> miniblink49
 }
 
 /////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 sk_sp<GrFragmentProcessor> SkLinearGradient::asFragmentProcessor(
     GrContext* context,
     const SkMatrix& viewm,
@@ -471,30 +905,65 @@ sk_sp<GrFragmentProcessor> SkLinearGradient::asFragmentProcessor(
     SkFilterQuality,
     SkSourceGammaTreatment) const
 {
+=======
+bool SkLinearGradient::asFragmentProcessor(GrContext* context, const SkPaint& paint,
+                                           const SkMatrix& viewm, const SkMatrix* localMatrix,
+                                           GrColor* paintColor,
+                                           GrProcessorDataManager* procDataManager,
+                                           GrFragmentProcessor** fp)  const {
+>>>>>>> miniblink49
     SkASSERT(context);
 
     SkMatrix matrix;
     if (!this->getLocalMatrix().invert(&matrix)) {
+<<<<<<< HEAD
         return nullptr;
+=======
+        return false;
+>>>>>>> miniblink49
     }
     if (localMatrix) {
         SkMatrix inv;
         if (!localMatrix->invert(&inv)) {
+<<<<<<< HEAD
             return nullptr;
+=======
+            return false;
+>>>>>>> miniblink49
         }
         matrix.postConcat(inv);
     }
     matrix.postConcat(fPtsToUnit);
 
+<<<<<<< HEAD
     sk_sp<GrFragmentProcessor> inner(GrLinearGradient::Make(context, *this, matrix, fTileMode));
     return GrFragmentProcessor::MulOutputByInputAlpha(std::move(inner));
+=======
+    *paintColor = SkColor2GrColorJustAlpha(paint.getColor());
+    *fp = GrLinearGradient::Create(context, procDataManager, *this, matrix, fTileMode);
+
+    return true;
+}
+
+#else
+
+bool SkLinearGradient::asFragmentProcessor(GrContext*, const SkPaint&, const SkMatrix&,
+                                           const SkMatrix*, GrColor*, GrProcessorDataManager*,
+                                           GrFragmentProcessor**)  const {
+    SkDEBUGFAIL("Should not call in GPU-less build");
+    return false;
+>>>>>>> miniblink49
 }
 
 #endif
 
 #ifndef SK_IGNORE_TO_STRING
+<<<<<<< HEAD
 void SkLinearGradient::toString(SkString* str) const
 {
+=======
+void SkLinearGradient::toString(SkString* str) const {
+>>>>>>> miniblink49
     str->append("SkLinearGradient (");
 
     str->appendf("start: (%f, %f)", fStart.fX, fStart.fY);
@@ -505,6 +974,7 @@ void SkLinearGradient::toString(SkString* str) const
     str->append(")");
 }
 #endif
+<<<<<<< HEAD
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -803,3 +1273,5 @@ void SkLinearGradient::LinearGradientContext::shade4_clamp(int x, int y, SkPMCol
         }
     }
 }
+=======
+>>>>>>> miniblink49

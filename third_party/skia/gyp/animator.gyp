@@ -20,8 +20,11 @@
       ],
       'include_dirs': [
         '../include/animator',
+<<<<<<< HEAD
         '../include/private',
         '../src/core',
+=======
+>>>>>>> miniblink49
         '../src/utils',
       ],
       'sources': [
@@ -175,6 +178,10 @@
         '../src/animator/SkTextOnPath.h',
         '../src/animator/SkTextToPath.cpp',
         '../src/animator/SkTextToPath.h',
+<<<<<<< HEAD
+=======
+        '../src/animator/SkTime.cpp',
+>>>>>>> miniblink49
         '../src/animator/SkTypedArray.cpp',
         '../src/animator/SkTypedArray.h',
         '../src/animator/SkXMLAnimatorWriter.cpp',

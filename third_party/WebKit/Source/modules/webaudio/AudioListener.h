@@ -30,7 +30,10 @@
 #define AudioListener_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+<<<<<<< HEAD
 #include "modules/webaudio/AudioParam.h"
+=======
+>>>>>>> miniblink49
 #include "platform/geometry/FloatPoint3D.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Vector.h"
@@ -40,6 +43,7 @@ namespace blink {
 class HRTFDatabaseLoader;
 class PannerHandler;
 
+<<<<<<< HEAD
 // AudioListener maintains the state of the listener in the audio scene as
 // defined in the OpenAL specification.
 
@@ -118,20 +122,60 @@ public:
         float upX,
         float upY,
         float upZ)
+=======
+// AudioListener maintains the state of the listener in the audio scene as defined in the OpenAL specification.
+
+class AudioListener : public GarbageCollectedFinalized<AudioListener>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static AudioListener* create()
+    {
+        return new AudioListener();
+    }
+    virtual ~AudioListener();
+
+    // Position
+    void setPosition(float x, float y, float z) { setPosition(FloatPoint3D(x, y, z)); }
+    const FloatPoint3D& position() const { return m_position; }
+
+    // Orientation and Up-vector
+    void setOrientation(float x, float y, float z, float upX, float upY, float upZ)
+>>>>>>> miniblink49
     {
         setOrientation(FloatPoint3D(x, y, z));
         setUpVector(FloatPoint3D(upX, upY, upZ));
     }
+<<<<<<< HEAD
+=======
+    const FloatPoint3D& orientation() const { return m_orientation; }
+    const FloatPoint3D& upVector() const { return m_upVector; }
+
+    // Velocity
+    void setVelocity(float x, float y, float z) { setVelocity(FloatPoint3D(x, y, z)); }
+    const FloatPoint3D& velocity() const { return m_velocity; }
+
+    // Doppler factor
+    void setDopplerFactor(double);
+    double dopplerFactor() const { return m_dopplerFactor; }
+
+    // Speed of sound
+    void setSpeedOfSound(double);
+    double speedOfSound() const { return m_speedOfSound; }
+>>>>>>> miniblink49
 
     Mutex& listenerLock() { return m_listenerLock; }
     void addPanner(PannerHandler&);
     void removePanner(PannerHandler&);
 
     // HRTF DB loader
+<<<<<<< HEAD
     HRTFDatabaseLoader* hrtfDatabaseLoader()
     {
         return m_hrtfDatabaseLoader.get();
     }
+=======
+    HRTFDatabaseLoader* hrtfDatabaseLoader() { return m_hrtfDatabaseLoader.get(); }
+>>>>>>> miniblink49
     void createAndLoadHRTFDatabaseLoader(float);
     bool isHRTFDatabaseLoaded();
     void waitForHRTFDatabaseLoaderThreadCompletion();
@@ -139,11 +183,16 @@ public:
     DECLARE_TRACE();
 
 private:
+<<<<<<< HEAD
     AudioListener(BaseAudioContext&);
+=======
+    AudioListener();
+>>>>>>> miniblink49
 
     void setPosition(const FloatPoint3D&);
     void setOrientation(const FloatPoint3D&);
     void setUpVector(const FloatPoint3D&);
+<<<<<<< HEAD
 
     void markPannersAsDirty(unsigned);
 
@@ -188,6 +237,18 @@ private:
     AudioFloatArray m_upXValues;
     AudioFloatArray m_upYValues;
     AudioFloatArray m_upZValues;
+=======
+    void setVelocity(const FloatPoint3D&);
+
+    void markPannersAsDirty(unsigned);
+
+    FloatPoint3D m_position;
+    FloatPoint3D m_orientation;
+    FloatPoint3D m_upVector;
+    FloatPoint3D m_velocity;
+    double m_dopplerFactor;
+    double m_speedOfSound;
+>>>>>>> miniblink49
 
     // Synchronize a panner's process() with setting of the state of the listener.
     mutable Mutex m_listenerLock;

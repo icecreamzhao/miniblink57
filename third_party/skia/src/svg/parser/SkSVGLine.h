@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkSVGLine_DEFINED
 #define SkSVGLine_DEFINED
 
@@ -12,7 +20,10 @@
 
 class SkSVGLine : public SkSVGElement {
     DECLARE_SVG_INFO(Line);
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SkString f_x1;
     SkString f_x2;

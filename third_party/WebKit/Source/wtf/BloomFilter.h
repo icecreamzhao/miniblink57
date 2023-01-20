@@ -26,12 +26,16 @@
 #ifndef BloomFilter_h
 #define BloomFilter_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Compiler.h"
 #include "wtf/text/AtomicString.h"
 
 namespace WTF {
 
+<<<<<<< HEAD
 // Counting bloom filter with k=2 and 8 bit counters. Uses 2^keyBits bytes of
 // memory.  False positive rate is approximately (1-e^(-2n/m))^2, where n is
 // the number of unique keys and m is the table size (==2^keyBits).
@@ -39,6 +43,13 @@ template <unsigned keyBits>
 class BloomFilter {
     USING_FAST_MALLOC(BloomFilter);
 
+=======
+// Counting bloom filter with k=2 and 8 bit counters. Uses 2^keyBits bytes of memory.
+// False positive rate is approximately (1-e^(-2n/m))^2, where n is the number of unique
+// keys and m is the table size (==2^keyBits).
+template <unsigned keyBits>
+class BloomFilter {
+>>>>>>> miniblink49
 public:
     static_assert(keyBits <= 16, "bloom filter key size check");
 
@@ -53,10 +64,14 @@ public:
 
     // The filter may give false positives (claim it may contain a key it doesn't)
     // but never false negatives (claim it doesn't contain a key it does).
+<<<<<<< HEAD
     bool mayContain(unsigned hash) const
     {
         return firstSlot(hash) && secondSlot(hash);
     }
+=======
+    bool mayContain(unsigned hash) const { return firstSlot(hash) && secondSlot(hash); }
+>>>>>>> miniblink49
 
     // The filter must be cleared before reuse even if all keys are removed.
     // Otherwise overflowed keys will stick around.
@@ -64,6 +79,7 @@ public:
 
     void add(const AtomicString& string) { add(string.impl()->existingHash()); }
     void add(const String& string) { add(string.impl()->hash()); }
+<<<<<<< HEAD
     void remove(const AtomicString& string)
     {
         remove(string.impl()->existingHash());
@@ -80,6 +96,15 @@ public:
     }
 
 #if DCHECK_IS_ON()
+=======
+    void remove(const AtomicString& string) { remove(string.impl()->existingHash()); }
+    void remove(const String& string) { remove(string.impl()->hash()); }
+
+    bool mayContain(const AtomicString& string) const { return mayContain(string.impl()->existingHash()); }
+    bool mayContain(const String& string) const { return mayContain(string.impl()->hash()); }
+
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     // Slow.
     bool likelyEmpty() const;
     bool isClear() const;
@@ -88,6 +113,7 @@ public:
 private:
     uint8_t& firstSlot(unsigned hash) { return m_table[hash & keyMask]; }
     uint8_t& secondSlot(unsigned hash) { return m_table[(hash >> 16) & keyMask]; }
+<<<<<<< HEAD
     const uint8_t& firstSlot(unsigned hash) const
     {
         return m_table[hash & keyMask];
@@ -96,6 +122,10 @@ private:
     {
         return m_table[(hash >> 16) & keyMask];
     }
+=======
+    const uint8_t& firstSlot(unsigned hash) const { return m_table[hash & keyMask]; }
+    const uint8_t& secondSlot(unsigned hash) const { return m_table[(hash >> 16) & keyMask]; }
+>>>>>>> miniblink49
 
     uint8_t m_table[tableSize];
 };
@@ -116,8 +146,13 @@ inline void BloomFilter<keyBits>::remove(unsigned hash)
 {
     uint8_t& first = firstSlot(hash);
     uint8_t& second = secondSlot(hash);
+<<<<<<< HEAD
     DCHECK(first);
     DCHECK(second);
+=======
+    ASSERT(first);
+    ASSERT(second);
+>>>>>>> miniblink49
     // In case of an overflow, the slot sticks in the table until clear().
     if (LIKELY(first < maximumCount()))
         --first;
@@ -131,7 +166,11 @@ inline void BloomFilter<keyBits>::clear()
     memset(m_table, 0, tableSize);
 }
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
 template <unsigned keyBits>
 bool BloomFilter<keyBits>::likelyEmpty() const
 {
@@ -153,7 +192,11 @@ bool BloomFilter<keyBits>::isClear() const
 }
 #endif
 
+<<<<<<< HEAD
 } // namespace WTF
+=======
+}
+>>>>>>> miniblink49
 
 using WTF::BloomFilter;
 

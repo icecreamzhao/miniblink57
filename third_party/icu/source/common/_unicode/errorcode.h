@@ -23,8 +23,13 @@
  *                 ICU C and C++ APIs from C++ user code.
  */
 
+<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+>>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -76,12 +81,17 @@ U_NAMESPACE_BEGIN
  *
  * @stable ICU 4.2
  */
+<<<<<<< HEAD
 class U_COMMON_API ErrorCode : public UMemory {
+=======
+class U_COMMON_API ErrorCode: public UMemory {
+>>>>>>> miniblink49
 public:
     /**
      * Default constructor. Initializes its UErrorCode to U_ZERO_ERROR.
      * @stable ICU 4.2
      */
+<<<<<<< HEAD
     ErrorCode()
         : errorCode(U_ZERO_ERROR)
     {
@@ -92,6 +102,15 @@ public:
     operator UErrorCode&() { return errorCode; }
     /** Conversion operator, returns a pointer. @stable ICU 4.2 */
     operator UErrorCode*() { return &errorCode; }
+=======
+    ErrorCode() : errorCode(U_ZERO_ERROR) {}
+    /** Destructor, does nothing. See class documentation for details. @stable ICU 4.2 */
+    virtual ~ErrorCode();
+    /** Conversion operator, returns a reference. @stable ICU 4.2 */
+    operator UErrorCode & () { return errorCode; }
+    /** Conversion operator, returns a pointer. @stable ICU 4.2 */
+    operator UErrorCode * () { return &errorCode; }
+>>>>>>> miniblink49
     /** Tests for U_SUCCESS(). @stable ICU 4.2 */
     UBool isSuccess() const { return U_SUCCESS(errorCode); }
     /** Tests for U_FAILURE(). @stable ICU 4.2 */
@@ -99,7 +118,11 @@ public:
     /** Returns the UErrorCode value. @stable ICU 4.2 */
     UErrorCode get() const { return errorCode; }
     /** Sets the UErrorCode value. @stable ICU 4.2 */
+<<<<<<< HEAD
     void set(UErrorCode value) { errorCode = value; }
+=======
+    void set(UErrorCode value) { errorCode=value; }
+>>>>>>> miniblink49
     /** Returns the UErrorCode value and resets it to U_ZERO_ERROR. @stable ICU 4.2 */
     UErrorCode reset();
     /**
@@ -132,9 +155,17 @@ protected:
      * Throw an exception, log an error, terminate the program, or similar.
      * @stable ICU 4.2
      */
+<<<<<<< HEAD
     virtual void handleFailure() const { }
+=======
+    virtual void handleFailure() const {}
+>>>>>>> miniblink49
 };
 
 U_NAMESPACE_END
 
+<<<<<<< HEAD
 #endif // __ERRORCODE_H__
+=======
+#endif  // __ERRORCODE_H__
+>>>>>>> miniblink49

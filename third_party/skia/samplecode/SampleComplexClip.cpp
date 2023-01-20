@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -11,15 +15,23 @@
 
 class ComplexClipView : public SampleView {
 public:
+<<<<<<< HEAD
     ComplexClipView()
     {
+=======
+    ComplexClipView() {
+>>>>>>> miniblink49
         this->setBGColor(0xFFA0DDA0);
     }
 
 protected:
     // overrides from SkEventSink
+<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
+=======
+    virtual bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ComplexClip");
             return true;
@@ -27,6 +39,7 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
         SkPath path;
@@ -43,6 +56,23 @@ protected:
         path.lineTo(SkIntToScalar(150), SkIntToScalar(125));
         path.quadTo(SkIntToScalar(150), SkIntToScalar(150), SkIntToScalar(125), SkIntToScalar(150));
         path.lineTo(SkIntToScalar(50), SkIntToScalar(150));
+=======
+    virtual void onDrawContent(SkCanvas* canvas) {
+        SkPath path;
+        path.moveTo(SkIntToScalar(0),   SkIntToScalar(50));
+        path.quadTo(SkIntToScalar(0),   SkIntToScalar(0),   SkIntToScalar(50),  SkIntToScalar(0));
+        path.lineTo(SkIntToScalar(175), SkIntToScalar(0));
+        path.quadTo(SkIntToScalar(200), SkIntToScalar(0),   SkIntToScalar(200), SkIntToScalar(25));
+        path.lineTo(SkIntToScalar(200), SkIntToScalar(150));
+        path.quadTo(SkIntToScalar(200), SkIntToScalar(200), SkIntToScalar(150), SkIntToScalar(200));
+        path.lineTo(SkIntToScalar(0),   SkIntToScalar(200));
+        path.close();
+        path.moveTo(SkIntToScalar(50),  SkIntToScalar(50));
+        path.lineTo(SkIntToScalar(150), SkIntToScalar(50));
+        path.lineTo(SkIntToScalar(150), SkIntToScalar(125));
+        path.quadTo(SkIntToScalar(150), SkIntToScalar(150), SkIntToScalar(125), SkIntToScalar(150));
+        path.lineTo(SkIntToScalar(50),  SkIntToScalar(150));
+>>>>>>> miniblink49
         path.close();
         path.setFillType(SkPath::kEvenOdd_FillType);
         SkColor pathColor = SK_ColorBLACK;
@@ -51,19 +81,34 @@ protected:
         pathPaint.setColor(pathColor);
 
         SkPath clipA;
+<<<<<<< HEAD
         clipA.moveTo(SkIntToScalar(10), SkIntToScalar(20));
         clipA.lineTo(SkIntToScalar(165), SkIntToScalar(22));
         clipA.lineTo(SkIntToScalar(70), SkIntToScalar(105));
         clipA.lineTo(SkIntToScalar(165), SkIntToScalar(177));
         clipA.lineTo(SkIntToScalar(-5), SkIntToScalar(180));
+=======
+        clipA.moveTo(SkIntToScalar(10),  SkIntToScalar(20));
+        clipA.lineTo(SkIntToScalar(165), SkIntToScalar(22));
+        clipA.lineTo(SkIntToScalar(70),  SkIntToScalar(105));
+        clipA.lineTo(SkIntToScalar(165), SkIntToScalar(177));
+        clipA.lineTo(SkIntToScalar(-5),  SkIntToScalar(180));
+>>>>>>> miniblink49
         clipA.close();
         SkColor colorA = SK_ColorCYAN;
 
         SkPath clipB;
+<<<<<<< HEAD
         clipB.moveTo(SkIntToScalar(40), SkIntToScalar(10));
         clipB.lineTo(SkIntToScalar(190), SkIntToScalar(15));
         clipB.lineTo(SkIntToScalar(195), SkIntToScalar(190));
         clipB.lineTo(SkIntToScalar(40), SkIntToScalar(185));
+=======
+        clipB.moveTo(SkIntToScalar(40),  SkIntToScalar(10));
+        clipB.lineTo(SkIntToScalar(190), SkIntToScalar(15));
+        clipB.lineTo(SkIntToScalar(195), SkIntToScalar(190));
+        clipB.lineTo(SkIntToScalar(40),  SkIntToScalar(185));
+>>>>>>> miniblink49
         clipB.lineTo(SkIntToScalar(155), SkIntToScalar(100));
         clipB.close();
         SkColor colorB = SK_ColorRED;
@@ -74,7 +119,11 @@ protected:
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setStrokeWidth(0);
 
+<<<<<<< HEAD
         canvas->translate(SkIntToScalar(10), SkIntToScalar(10));
+=======
+        canvas->translate(SkIntToScalar(10),SkIntToScalar(10));
+>>>>>>> miniblink49
         canvas->drawPath(path, pathPaint);
         paint.setColor(colorA);
         canvas->drawPath(clipA, paint);
@@ -83,6 +132,7 @@ protected:
 
         static const struct {
             SkRegion::Op fOp;
+<<<<<<< HEAD
             const char* fName;
         } gOps[] = { //extra spaces in names for measureText
             { SkRegion::kIntersect_Op, "Isect " },
@@ -90,6 +140,15 @@ protected:
             { SkRegion::kUnion_Op, "Union " },
             { SkRegion::kXOR_Op, "Xor " },
             { SkRegion::kReverseDifference_Op, "RDiff " }
+=======
+            const char*  fName;
+        } gOps[] = { //extra spaces in names for measureText
+            {SkRegion::kIntersect_Op,         "Isect "},
+            {SkRegion::kDifference_Op,        "Diff " },
+            {SkRegion::kUnion_Op,             "Union "},
+            {SkRegion::kXOR_Op,               "Xor "  },
+            {SkRegion::kReverseDifference_Op, "RDiff "}
+>>>>>>> miniblink49
         };
 
         canvas->translate(0, SkIntToScalar(40));
@@ -105,6 +164,7 @@ protected:
                     canvas->save();
                 }
                 canvas->save();
+<<<<<<< HEAD
                 // set clip
                 clipA.setFillType(invA ? SkPath::kInverseEvenOdd_FillType : SkPath::kEvenOdd_FillType);
                 canvas->clipPath(clipA);
@@ -112,6 +172,16 @@ protected:
 
                 // draw path clipped
                 canvas->drawPath(path, pathPaint);
+=======
+                    // set clip
+                    clipA.setFillType(invA ? SkPath::kInverseEvenOdd_FillType :
+                                             SkPath::kEvenOdd_FillType);
+                    canvas->clipPath(clipA);
+                    canvas->clipPath(clipB, gOps[op].fOp);
+
+                    // draw path clipped
+                    canvas->drawPath(path, pathPaint);
+>>>>>>> miniblink49
                 canvas->restore();
 
                 // draw path in hairline
@@ -133,12 +203,20 @@ protected:
                 txtX += paint.measureText(aTxt, strlen(aTxt));
                 paint.setColor(SK_ColorBLACK);
                 canvas->drawText(gOps[op].fName, strlen(gOps[op].fName),
+<<<<<<< HEAD
                     txtX, SkIntToScalar(220), paint);
+=======
+                                    txtX, SkIntToScalar(220), paint);
+>>>>>>> miniblink49
                 txtX += paint.measureText(gOps[op].fName, strlen(gOps[op].fName));
                 paint.setColor(colorB);
                 canvas->drawText("B", 1, txtX, SkIntToScalar(220), paint);
 
+<<<<<<< HEAD
                 canvas->translate(SkIntToScalar(250), 0);
+=======
+                canvas->translate(SkIntToScalar(250),0);
+>>>>>>> miniblink49
             }
         }
         canvas->restore();

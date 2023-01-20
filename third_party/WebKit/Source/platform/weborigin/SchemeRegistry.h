@@ -28,7 +28,10 @@
 #define SchemeRegistry_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
 #include "wtf/text/StringHash.h"
@@ -36,6 +39,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 using URLSchemesSet = HashSet<String>;
 
 template <typename T>
@@ -50,6 +54,19 @@ public:
     static void registerURLSchemeAsLocal(const String&);
     static bool shouldTreatURLSchemeAsLocal(const String&);
 
+=======
+using URLSchemesSet = HashSet<String, CaseFoldingHash>;
+
+template <typename T>
+using URLSchemesMap = HashMap<String, T, CaseFoldingHash>;
+
+class PLATFORM_EXPORT SchemeRegistry {
+public:
+    static void registerURLSchemeAsLocal(const String&);
+    static bool shouldTreatURLSchemeAsLocal(const String&);
+
+    static void registerURLSchemeAsRestrictingMixedContent(const String&);
+>>>>>>> miniblink49
     static bool shouldTreatURLSchemeAsRestrictingMixedContent(const String&);
 
     // Subresources transported by secure schemes do not trigger mixed content
@@ -69,8 +86,12 @@ public:
     static void registerURLSchemeAsEmptyDocument(const String&);
     static bool shouldLoadURLSchemeAsEmptyDocument(const String&);
 
+<<<<<<< HEAD
     static void setDomainRelaxationForbiddenForURLScheme(bool forbidden,
         const String&);
+=======
+    static void setDomainRelaxationForbiddenForURLScheme(bool forbidden, const String&);
+>>>>>>> miniblink49
     static bool isDomainRelaxationForbiddenForURLScheme(const String&);
 
     // Such schemes should delegate to SecurityOrigin::canRequest for any URL
@@ -79,10 +100,15 @@ public:
 
     // Schemes against which javascript: URLs should not be allowed to run (stop
     // bookmarklets from running on sensitive pages).
+<<<<<<< HEAD
     static void registerURLSchemeAsNotAllowingJavascriptURLs(
         const String& scheme);
     static bool shouldTreatURLSchemeAsNotAllowingJavascriptURLs(
         const String& scheme);
+=======
+    static void registerURLSchemeAsNotAllowingJavascriptURLs(const String& scheme);
+    static bool shouldTreatURLSchemeAsNotAllowingJavascriptURLs(const String& scheme);
+>>>>>>> miniblink49
 
     // Allow non-HTTP schemes to be registered to allow CORS requests.
     static void registerURLSchemeAsCORSEnabled(const String& scheme);
@@ -91,6 +117,7 @@ public:
     // Serialize the registered schemes in a comma-separated list.
     static String listOfCORSEnabledURLSchemes();
 
+<<<<<<< HEAD
     // "Legacy" schemes (e.g. 'ftp:', 'gopher:') which we might want to treat
     // differently from "webby" schemes.
     static bool shouldTreatURLSchemeAsLegacy(const String& scheme);
@@ -117,6 +144,14 @@ public:
     static void registerURLSchemeAsAllowedForReferrer(const String& scheme);
     static void removeURLSchemeAsAllowedForReferrer(const String& scheme);
     static bool shouldTreatURLSchemeAsAllowedForReferrer(const String& scheme);
+=======
+    // "Legacy" schemes (e.g. 'ftp:', 'gopher:') which we might want to treat differently from "webby" schemes.
+    static bool shouldTreatURLSchemeAsLegacy(const String& scheme);
+
+    // Schemes that can register a service worker.
+    static void registerURLSchemeAsAllowingServiceWorkers(const String& scheme);
+    static bool shouldTreatURLSchemeAsAllowingServiceWorkers(const String& scheme);
+>>>>>>> miniblink49
 
     // Allow resources from some schemes to load on a page, regardless of its
     // Content Security Policy.
@@ -129,6 +164,7 @@ public:
         // Add more policy areas as needed by clients.
         PolicyAreaAll = ~static_cast<uint32_t>(0),
     };
+<<<<<<< HEAD
     static void registerURLSchemeAsBypassingContentSecurityPolicy(
         const String& scheme,
         PolicyAreas = PolicyAreaAll);
@@ -143,6 +179,11 @@ public:
     static void registerURLSchemeBypassingSecureContextCheck(
         const String& scheme);
     static bool schemeShouldBypassSecureContextCheck(const String& scheme);
+=======
+    static void registerURLSchemeAsBypassingContentSecurityPolicy(const String& scheme, PolicyAreas = PolicyAreaAll);
+    static void removeURLSchemeRegisteredAsBypassingContentSecurityPolicy(const String& scheme);
+    static bool schemeShouldBypassContentSecurityPolicy(const String& scheme, PolicyAreas = PolicyAreaAll);
+>>>>>>> miniblink49
 
 private:
     static const URLSchemesSet& localSchemes();

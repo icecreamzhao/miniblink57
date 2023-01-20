@@ -19,20 +19,18 @@
  *
 */
 
+#include "config.h"
 #include "core/layout/HitTestResult.h"
 
 #include "core/HTMLNames.h"
-#include "core/InputTypeNames.h"
+#include "core/dom/DocumentMarkerController.h"
 #include "core/dom/PseudoElement.h"
-#include "core/dom/shadow/FlatTreeTraversal.h"
+#include "core/dom/shadow/ComposedTreeTraversal.h"
 #include "core/dom/shadow/ShadowRoot.h"
-#include "core/editing/EditingUtilities.h"
 #include "core/editing/FrameSelection.h"
+#include "core/fetch/ImageResource.h"
 #include "core/frame/LocalFrame.h"
-#if ENABLE_WML
-#include "core/wml/WMLAElement.h"
-#include "core/wml/WMLElement.h"
-#endif
+#include "core/html/HTMLAnchorElement.h"
 #include "core/html/HTMLAreaElement.h"
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLInputElement.h"
@@ -41,8 +39,9 @@
 #include "core/html/HTMLTextAreaElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/layout/LayoutImage.h"
+#include "core/layout/LayoutTextFragment.h"
+#include "core/page/FrameTree.h"
 #include "core/svg/SVGElement.h"
-#include "platform/geometry/Region.h"
 #include "platform/scroll/Scrollbar.h"
 
 namespace blink {
@@ -56,8 +55,7 @@ HitTestResult::HitTestResult()
 {
 }
 
-HitTestResult::HitTestResult(const HitTestRequest& request,
-    const LayoutPoint& point)
+HitTestResult::HitTestResult(const HitTestRequest& request, const LayoutPoint& point)
     : m_hitTestLocation(point)
     , m_hitTestRequest(request)
     , m_cacheable(true)
@@ -66,17 +64,8 @@ HitTestResult::HitTestResult(const HitTestRequest& request,
 {
 }
 
-HitTestResult::HitTestResult(const HitTestRequest& request,
-    const LayoutPoint& centerPoint,
-    unsigned topPadding,
-    unsigned rightPadding,
-    unsigned bottomPadding,
-    unsigned leftPadding)
-    : m_hitTestLocation(centerPoint,
-        topPadding,
-        rightPadding,
-        bottomPadding,
-        leftPadding)
+HitTestResult::HitTestResult(const HitTestRequest& request, const LayoutPoint& centerPoint, unsigned topPadding, unsigned rightPadding, unsigned bottomPadding, unsigned leftPadding)
+    : m_hitTestLocation(centerPoint, topPadding, rightPadding, bottomPadding, leftPadding)
     , m_hitTestRequest(request)
     , m_cacheable(true)
     , m_pointInInnerNodeFrame(centerPoint)
@@ -84,8 +73,7 @@ HitTestResult::HitTestResult(const HitTestRequest& request,
 {
 }
 
-HitTestResult::HitTestResult(const HitTestRequest& otherRequest,
-    const HitTestLocation& other)
+HitTestResult::HitTestResult(const HitTestRequest& otherRequest, const HitTestLocation& other)
     : m_hitTestLocation(other)
     , m_hitTestRequest(otherRequest)
     , m_cacheable(true)
@@ -107,12 +95,12 @@ HitTestResult::HitTestResult(const HitTestResult& other)
     , m_isOverWidget(other.isOverWidget())
 {
     // Only copy the NodeSet in case of list hit test.
-    m_listBasedTestResult = other.m_listBasedTestResult
-        ? new NodeSet(*other.m_listBasedTestResult)
-        : nullptr;
+    m_listBasedTestResult = adoptPtrWillBeNoop(other.m_listBasedTestResult ? new NodeSet(*other.m_listBasedTestResult) : 0);
 }
 
-HitTestResult::~HitTestResult() { }
+HitTestResult::~HitTestResult()
+{
+}
 
 HitTestResult& HitTestResult::operator=(const HitTestResult& other)
 {
@@ -123,9 +111,28 @@ HitTestResult& HitTestResult::operator=(const HitTestResult& other)
     return *this;
 }
 
+unsigned HitTestResult::equalityScore(const HitTestResult& other) const
+{
+    return (m_hitTestRequest.equalForCacheability(other.m_hitTestRequest) << 7)
+        | ((m_innerNode == other.innerNode()) << 6)
+        | ((m_innerPossiblyPseudoNode == other.innerPossiblyPseudoNode()) << 5)
+        | ((m_pointInInnerNodeFrame == other.m_pointInInnerNodeFrame) << 4)
+        | ((m_localPoint == other.localPoint()) << 3)
+        | ((m_innerURLElement == other.URLElement()) << 2)
+        | ((m_scrollbar == other.scrollbar()) << 1)
+        | (m_isOverWidget == other.isOverWidget());
+}
+
 bool HitTestResult::equalForCacheability(const HitTestResult& other) const
 {
-    return m_hitTestRequest.equalForCacheability(other.m_hitTestRequest) && m_innerNode == other.innerNode() && m_innerPossiblyPseudoNode == other.innerPossiblyPseudoNode() && m_pointInInnerNodeFrame == other.m_pointInInnerNodeFrame && m_localPoint == other.localPoint() && m_innerURLElement == other.URLElement() && m_scrollbar == other.scrollbar() && m_isOverWidget == other.isOverWidget();
+    return m_hitTestRequest.equalForCacheability(other.m_hitTestRequest)
+        && m_innerNode == other.innerNode()
+        && m_innerPossiblyPseudoNode == other.innerPossiblyPseudoNode()
+        && m_pointInInnerNodeFrame == other.m_pointInInnerNodeFrame
+        && m_localPoint == other.localPoint()
+        && m_innerURLElement == other.URLElement()
+        && m_scrollbar == other.scrollbar()
+        && m_isOverWidget == other.isOverWidget();
 }
 
 void HitTestResult::cacheValues(const HitTestResult& other)
@@ -146,9 +153,7 @@ void HitTestResult::populateFromCachedResult(const HitTestResult& other)
     m_cacheable = other.m_cacheable;
 
     // Only copy the NodeSet in case of list hit test.
-    m_listBasedTestResult = other.m_listBasedTestResult
-        ? new NodeSet(*other.m_listBasedTestResult)
-        : nullptr;
+    m_listBasedTestResult = adoptPtrWillBeNoop(other.m_listBasedTestResult ? new NodeSet(*other.m_listBasedTestResult) : 0);
 }
 
 DEFINE_TRACE(HitTestResult)
@@ -157,7 +162,9 @@ DEFINE_TRACE(HitTestResult)
     visitor->trace(m_innerPossiblyPseudoNode);
     visitor->trace(m_innerURLElement);
     visitor->trace(m_scrollbar);
+#if ENABLE(OILPAN)
     visitor->trace(m_listBasedTestResult);
+#endif
 }
 
 PositionWithAffinity HitTestResult::position() const
@@ -167,9 +174,8 @@ PositionWithAffinity HitTestResult::position() const
     LayoutObject* layoutObject = this->layoutObject();
     if (!layoutObject)
         return PositionWithAffinity();
-    if (m_innerPossiblyPseudoNode->isPseudoElement() && m_innerPossiblyPseudoNode->getPseudoId() == PseudoIdBefore)
-        return mostForwardCaretPosition(
-            Position(m_innerNode, PositionAnchorType::BeforeChildren));
+    if (m_innerPossiblyPseudoNode->isPseudoElement() && m_innerPossiblyPseudoNode->pseudoId() == BEFORE)
+        return Position(m_innerNode, PositionAnchorType::BeforeChildren).downstream();
     return layoutObject->positionForPoint(localPoint());
 }
 
@@ -183,7 +189,7 @@ void HitTestResult::setToShadowHostIfInUserAgentShadowRoot()
     if (Node* node = innerNode()) {
         if (ShadowRoot* containingShadowRoot = node->containingShadowRoot()) {
             if (containingShadowRoot->type() == ShadowRootType::UserAgent)
-                setInnerNode(node->ownerShadowHost());
+                setInnerNode(node->shadowHost());
         }
     }
 }
@@ -196,20 +202,25 @@ HTMLAreaElement* HitTestResult::imageAreaForImage() const
         imageElement = toHTMLImageElement(m_innerNode);
     } else if (m_innerNode->isInShadowTree()) {
         if (m_innerNode->containingShadowRoot()->type() == ShadowRootType::UserAgent) {
-            if (isHTMLImageElement(m_innerNode->ownerShadowHost()))
-                imageElement = toHTMLImageElement(m_innerNode->ownerShadowHost());
+            if (isHTMLImageElement(m_innerNode->shadowHost()))
+                imageElement = toHTMLImageElement(m_innerNode->shadowHost());
         }
     }
 
     if (!imageElement || !imageElement->layoutObject() || !imageElement->layoutObject()->isBox())
         return nullptr;
 
-    HTMLMapElement* map = imageElement->treeScope().getImageMap(
-        imageElement->fastGetAttribute(usemapAttr));
+    HTMLMapElement* map = imageElement->treeScope().getImageMap(imageElement->fastGetAttribute(usemapAttr));
     if (!map)
         return nullptr;
 
-    return map->areaForPoint(localPoint(), imageElement->layoutObject());
+    LayoutBox* box = toLayoutBox(imageElement->layoutObject());
+    LayoutRect contentBox = box->contentBoxRect();
+    float scaleFactor = 1 / box->style()->effectiveZoom();
+    LayoutPoint location = localPoint();
+    location.scale(scaleFactor, scaleFactor);
+
+    return map->areaForPoint(location, contentBox.size());
 }
 
 void HitTestResult::setInnerNode(Node* n)
@@ -218,10 +229,8 @@ void HitTestResult::setInnerNode(Node* n)
     if (n && n->isPseudoElement())
         n = toPseudoElement(n)->findAssociatedNode();
     m_innerNode = n;
-    if (HTMLAreaElement* area = imageAreaForImage()) {
+    if (HTMLAreaElement* area = imageAreaForImage())
         m_innerNode = area;
-        m_innerPossiblyPseudoNode = area;
-    }
 }
 
 void HitTestResult::setURLElement(Element* n)
@@ -251,16 +260,31 @@ bool HitTestResult::isSelected() const
     return false;
 }
 
+String HitTestResult::spellingToolTip(TextDirection& dir) const
+{
+    dir = LTR;
+    // Return the tool tip string associated with this point, if any. Only markers associated with bad grammar
+    // currently supply strings, but maybe someday markers associated with misspelled words will also.
+    if (!m_innerNode)
+        return String();
+
+    DocumentMarker* marker = m_innerNode->document().markers().markerContainingPoint(m_hitTestLocation.point(), DocumentMarker::Grammar);
+    if (!marker)
+        return String();
+
+    if (LayoutObject* layoutObject = m_innerNode->layoutObject())
+        dir = layoutObject->style()->direction();
+    return marker->description();
+}
+
 String HitTestResult::title(TextDirection& dir) const
 {
-    dir = TextDirection::kLtr;
+    dir = LTR;
     // Find the title in the nearest enclosing DOM node.
-    // For <area> tags in image maps, walk the tree for the <area>, not the <img>
-    // using it.
+    // For <area> tags in image maps, walk the tree for the <area>, not the <img> using it.
     if (m_innerNode.get())
         m_innerNode->updateDistribution();
-    for (Node* titleNode = m_innerNode.get(); titleNode;
-         titleNode = FlatTreeTraversal::parent(*titleNode)) {
+    for (Node* titleNode = m_innerNode.get(); titleNode; titleNode = ComposedTreeTraversal::parent(*titleNode)) {
         if (titleNode->isElementNode()) {
             String title = toElement(titleNode)->title();
             if (!title.isNull()) {
@@ -302,7 +326,7 @@ Image* HitTestResult::image() const
     if (layoutObject && layoutObject->isImage()) {
         LayoutImage* image = toLayoutImage(layoutObject);
         if (image->cachedImage() && !image->cachedImage()->errorOccurred())
-            return image->cachedImage()->getImage();
+            return image->cachedImage()->imageForLayoutObject(image);
     }
 
     return nullptr;
@@ -312,10 +336,7 @@ IntRect HitTestResult::imageRect() const
 {
     if (!image())
         return IntRect();
-    return innerNodeOrImageMapImage()
-        ->layoutBox()
-        ->absoluteContentQuad()
-        .enclosingBoundingBox();
+    return innerNodeOrImageMapImage()->layoutBox()->absoluteContentQuad().enclosingBoundingBox();
 }
 
 KURL HitTestResult::absoluteImageURL() const
@@ -324,26 +345,22 @@ KURL HitTestResult::absoluteImageURL() const
     if (!innerNodeOrImageMapImage)
         return KURL();
 
-    AtomicString urlString;
-    // Always return a url for image elements and input elements with type=image,
-    // even if they don't have a LayoutImage (e.g. because the image didn't load
-    // and we are using an alt container). For other elements we don't create alt
-    // containers so ensure they contain a loaded image.
-    if (isHTMLImageElement(*innerNodeOrImageMapImage) || (isHTMLInputElement(*innerNodeOrImageMapImage) && toHTMLInputElement(innerNodeOrImageMapImage)->type() == InputTypeNames::image))
-        urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
-    else if ((innerNodeOrImageMapImage->layoutObject() && innerNodeOrImageMapImage->layoutObject()->isImage()) && (isHTMLEmbedElement(*innerNodeOrImageMapImage) || isHTMLObjectElement(*innerNodeOrImageMapImage) || isSVGImageElement(*innerNodeOrImageMapImage)))
-        urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
-
-#if ENABLE_WML
-//     if (innerNodeOrImageMapImage->isElementNode() && isWMLImageElement(toElement(*innerNodeOrImageMapImage)))
-//         urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
-#endif
-
-    if (urlString.isEmpty())
+    LayoutObject* layoutObject = innerNodeOrImageMapImage->layoutObject();
+    if (!(layoutObject && layoutObject->isImage()))
         return KURL();
 
-    return innerNodeOrImageMapImage->document().completeURL(
-        stripLeadingAndTrailingHTMLSpaces(urlString));
+    AtomicString urlString;
+    if (isHTMLEmbedElement(*innerNodeOrImageMapImage)
+        || isHTMLImageElement(*innerNodeOrImageMapImage)
+        || isHTMLInputElement(*innerNodeOrImageMapImage)
+        || isHTMLObjectElement(*innerNodeOrImageMapImage)
+        || isSVGImageElement(*innerNodeOrImageMapImage)) {
+        urlString = toElement(*innerNodeOrImageMapImage).imageSourceURL();
+    } else {
+        return KURL();
+    }
+
+    return innerNodeOrImageMapImage->document().completeURL(stripLeadingAndTrailingHTMLSpaces(urlString));
 }
 
 KURL HitTestResult::absoluteMediaURL() const
@@ -375,11 +392,18 @@ KURL HitTestResult::absoluteLinkURL() const
 
 bool HitTestResult::isLiveLink() const
 {
-#if ENABLE_WML
-//     if (m_innerURLElement && isWMLAOrAnchorElement(*m_innerURLElement))
-//         return m_innerURLElement->isLink();
-#endif
     return m_innerURLElement && m_innerURLElement->isLiveLink();
+}
+
+bool HitTestResult::isMisspelled() const
+{
+    if (!innerNode() || !innerNode()->layoutObject())
+        return false;
+    VisiblePosition pos(innerNode()->layoutObject()->positionForPoint(localPoint()));
+    if (pos.isNull())
+        return false;
+    return m_innerNode->document().markers().markersInRange(
+        makeRange(pos, pos).get(), DocumentMarker::MisspellingMarkers()).size() > 0;
 }
 
 bool HitTestResult::isOverLink() const
@@ -394,11 +418,10 @@ String HitTestResult::textContent() const
     return m_innerURLElement->textContent();
 }
 
-// FIXME: This function needs a better name and may belong in a different class.
-// It's not really isContentEditable(); it's more like needsEditingContextMenu.
-// In many ways, this function would make more sense in the ContextMenu class,
-// except that WebElementDictionary hooks into it. Anyway, we should architect
-// this better.
+// FIXME: This function needs a better name and may belong in a different class. It's not
+// really isContentEditable(); it's more like needsEditingContextMenu(). In many ways, this
+// function would make more sense in the ContextMenu class, except that WebElementDictionary
+// hooks into it. Anyway, we should architect this better.
 bool HitTestResult::isContentEditable() const
 {
     if (!m_innerNode)
@@ -412,49 +435,45 @@ bool HitTestResult::isContentEditable() const
         return !inputElement.isDisabledOrReadOnly() && inputElement.isTextField();
     }
 
-    return hasEditableStyle(*m_innerNode);
+    return m_innerNode->hasEditableStyle();
 }
 
-ListBasedHitTestBehavior HitTestResult::addNodeToListBasedTestResult(
-    Node* node,
-    const HitTestLocation& location,
-    const LayoutRect& rect)
+bool HitTestResult::addNodeToListBasedTestResult(Node* node, const HitTestLocation& locationInContainer, const LayoutRect& rect)
 {
-    // If not a list-based test, stop testing because the hit has been found.
+    // If not a list-based test, this function should be a no-op.
     if (!hitTestRequest().listBased())
-        return StopHitTesting;
+        return false;
 
+    // If node is null, return true so the hit test can continue.
     if (!node)
-        return ContinueHitTesting;
+        return true;
 
     mutableListBasedTestResult().add(node);
 
     if (hitTestRequest().penetratingList())
-        return ContinueHitTesting;
+        return true;
 
-    return rect.contains(LayoutRect(location.boundingBox())) ? StopHitTesting
-                                                             : ContinueHitTesting;
+    bool regionFilled = rect.contains(LayoutRect(locationInContainer.boundingBox()));
+    return !regionFilled;
 }
 
-ListBasedHitTestBehavior HitTestResult::addNodeToListBasedTestResult(
-    Node* node,
-    const HitTestLocation& location,
-    const Region& region)
+bool HitTestResult::addNodeToListBasedTestResult(Node* node, const HitTestLocation& locationInContainer, const FloatRect& rect)
 {
-    // If not a list-based test, stop testing because the hit has been found.
+    // If not a list-based test, this function should be a no-op.
     if (!hitTestRequest().listBased())
-        return StopHitTesting;
+        return false;
 
+    // If node is null, return true so the hit test can continue.
     if (!node)
-        return ContinueHitTesting;
+        return true;
 
     mutableListBasedTestResult().add(node);
 
     if (hitTestRequest().penetratingList())
-        return ContinueHitTesting;
+        return true;
 
-    return region.contains(location.boundingBox()) ? StopHitTesting
-                                                   : ContinueHitTesting;
+    bool regionFilled = rect.contains(locationInContainer.boundingBox());
+    return !regionFilled;
 }
 
 void HitTestResult::append(const HitTestResult& other)
@@ -476,9 +495,7 @@ void HitTestResult::append(const HitTestResult& other)
 
     if (other.m_listBasedTestResult) {
         NodeSet& set = mutableListBasedTestResult();
-        for (NodeSet::const_iterator it = other.m_listBasedTestResult->begin(),
-                                     last = other.m_listBasedTestResult->end();
-             it != last; ++it)
+        for (NodeSet::const_iterator it = other.m_listBasedTestResult->begin(), last = other.m_listBasedTestResult->end(); it != last; ++it)
             set.add(it->get());
     }
 }
@@ -486,20 +503,18 @@ void HitTestResult::append(const HitTestResult& other)
 const HitTestResult::NodeSet& HitTestResult::listBasedTestResult() const
 {
     if (!m_listBasedTestResult)
-        m_listBasedTestResult = new NodeSet;
+        m_listBasedTestResult = adoptPtrWillBeNoop(new NodeSet);
     return *m_listBasedTestResult;
 }
 
 HitTestResult::NodeSet& HitTestResult::mutableListBasedTestResult()
 {
     if (!m_listBasedTestResult)
-        m_listBasedTestResult = new NodeSet;
+        m_listBasedTestResult = adoptPtrWillBeNoop(new NodeSet);
     return *m_listBasedTestResult;
 }
 
-void HitTestResult::resolveRectBasedTest(
-    Node* resolvedInnerNode,
-    const LayoutPoint& resolvedPointInMainFrame)
+void HitTestResult::resolveRectBasedTest(Node* resolvedInnerNode, const LayoutPoint& resolvedPointInMainFrame)
 {
     ASSERT(isRectBasedTest());
     ASSERT(m_hitTestLocation.containsPoint(FloatPoint(resolvedPointInMainFrame)));
@@ -509,18 +524,16 @@ void HitTestResult::resolveRectBasedTest(
     m_innerPossiblyPseudoNode = nullptr;
     m_listBasedTestResult = nullptr;
 
-    // Update the HitTestResult as if the supplied node had been hit in normal
-    // point-based hit-test.
-    // Note that we don't know the local point after a rect-based hit-test, but we
-    // never use it so shouldn't bother with the cost of computing it.
+    // Update the HitTestResult as if the supplied node had been hit in normal point-based hit-test.
+    // Note that we don't know the local point after a rect-based hit-test, but we never use
+    // it so shouldn't bother with the cost of computing it.
     resolvedInnerNode->layoutObject()->updateHitTestResult(*this, LayoutPoint());
     ASSERT(!isRectBasedTest());
 }
 
 Element* HitTestResult::innerElement() const
 {
-    for (Node* node = m_innerNode.get(); node;
-         node = FlatTreeTraversal::parent(*node)) {
+    for (Node* node = m_innerNode.get(); node; node = ComposedTreeTraversal::parent(*node)) {
         if (node->isElementNode())
             return toElement(node);
     }

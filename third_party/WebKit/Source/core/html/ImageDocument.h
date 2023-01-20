@@ -25,59 +25,53 @@
 #ifndef ImageDocument_h
 #define ImageDocument_h
 
-#include "core/html/HTMLDivElement.h"
 #include "core/html/HTMLDocument.h"
-#include "core/html/HTMLImageElement.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 class ImageResource;
+class HTMLImageElement;
 
-class CORE_EXPORT ImageDocument final : public HTMLDocument {
+class ImageDocument final : public HTMLDocument {
 public:
-    static ImageDocument* create(
-        const DocumentInit& initializer = DocumentInit())
+    static PassRefPtrWillBeRawPtr<ImageDocument> create(const DocumentInit& initializer = DocumentInit())
     {
-        return new ImageDocument(initializer);
+        return adoptRefWillBeNoop(new ImageDocument(initializer));
     }
 
-    ImageResourceContent* cachedImage();
+    enum ScaleType {
+        ScaleZoomedDocument,
+        ScaleOnlyUnzoomedDocument
+    };
 
-    // TODO(hiroshige): Remove this.
-    ImageResource* cachedImageResourceDeprecated();
-
+    ImageResource* cachedImage();
     HTMLImageElement* imageElement() const { return m_imageElement.get(); }
 
-    void windowSizeChanged();
+    void windowSizeChanged(ScaleType);
     void imageUpdated();
     void imageClicked(int x, int y);
-    void imageLoaded();
-    void updateImageStyle();
-    bool shouldShrinkToFit() const;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit ImageDocument(const DocumentInit&);
 
-    DocumentParser* createParser() override;
+    PassRefPtrWillBeRawPtr<DocumentParser> createParser() override;
+#if !ENABLE(OILPAN)
+    void dispose() override;
+#endif
 
-    void createDocumentStructure();
-
-    // Calculates how large the div needs to be to properly center the image.
-    int calculateDivWidth();
+    void createDocumentStructure(bool loadingMultipartContent);
 
     // These methods are for m_shrinkToFitMode == Desktop.
-    void resizeImageToFit();
-    void restoreImageSize();
+    void resizeImageToFit(ScaleType);
+    void restoreImageSize(ScaleType);
     bool imageFitsInWindow() const;
-    // Calculates the image size multiplier that's needed to fit the image to
-    // the window, taking into account page zoom and device scale.
+    bool shouldShrinkToFit() const;
     float scale() const;
 
-    Member<HTMLDivElement> m_divElement;
-    Member<HTMLImageElement> m_imageElement;
+    RefPtrWillBeMember<HTMLImageElement> m_imageElement;
 
     // Whether enough of the image has been loaded to determine its size
     bool m_imageSizeIsKnown;
@@ -88,25 +82,15 @@ private:
     // Whether the image should be shrunk or not
     bool m_shouldShrinkImage;
 
-    // Whether the image has finished loading or not
-    bool m_imageIsLoaded;
-
-    // Size of the checkerboard background tiles
-    int m_styleCheckerSize;
-
-    // Desktop: State of the mouse cursor in the image style
-    enum MouseCursorMode { Default,
-        ZoomIn,
-        ZoomOut };
-    MouseCursorMode m_styleMouseCursorMode;
-
-    enum ShrinkToFitMode { Viewport,
-        Desktop };
+    enum ShrinkToFitMode {
+        Viewport,
+        Desktop
+    };
     ShrinkToFitMode m_shrinkToFitMode;
 };
 
 DEFINE_DOCUMENT_TYPE_CASTS(ImageDocument);
 
-} // namespace blink
+}
 
 #endif // ImageDocument_h

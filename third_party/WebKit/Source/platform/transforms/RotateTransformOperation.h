@@ -25,14 +25,18 @@
 #ifndef RotateTransformOperation_h
 #define RotateTransformOperation_h
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatPoint3D.h"
 #include "platform/transforms/Rotation.h"
+=======
+>>>>>>> miniblink49
 #include "platform/transforms/TransformOperation.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT RotateTransformOperation : public TransformOperation {
 public:
+<<<<<<< HEAD
     static PassRefPtr<RotateTransformOperation> create(double angle,
         OperationType type)
     {
@@ -98,10 +102,67 @@ protected:
 
     const Rotation m_rotation;
     const OperationType m_type;
+=======
+    static PassRefPtr<RotateTransformOperation> create(double angle, OperationType type)
+    {
+        return adoptRef(new RotateTransformOperation(0, 0, 1, angle, type));
+    }
+
+    static PassRefPtr<RotateTransformOperation> create(double x, double y, double z, double angle, OperationType type)
+    {
+        return adoptRef(new RotateTransformOperation(x, y, z, angle, type));
+    }
+
+    double x() const { return m_x; }
+    double y() const { return m_y; }
+    double z() const { return m_z; }
+    double angle() const { return m_angle; }
+
+    FloatPoint3D axis() const;
+    static bool shareSameAxis(const RotateTransformOperation* fromRotation, const RotateTransformOperation* toRotation, FloatPoint3D* axis, double* fromAngle, double* toAngle);
+
+    virtual bool canBlendWith(const TransformOperation& other) const;
+    OperationType type() const override { return m_type; }
+
+    void apply(TransformationMatrix& transform, const FloatSize& /*borderBoxSize*/) const override
+    {
+        transform.rotate3d(m_x, m_y, m_z, m_angle);
+    }
+
+    static bool isMatchingOperationType(OperationType type) { return type == Rotate || type == RotateX || type == RotateY || type == RotateZ || type == Rotate3D; }
+
+private:
+    bool operator==(const TransformOperation& o) const override
+    {
+        if (!isSameType(o))
+            return false;
+        const RotateTransformOperation* r = static_cast<const RotateTransformOperation*>(&o);
+        return m_x == r->m_x && m_y == r->m_y && m_z == r->m_z && m_angle == r->m_angle;
+    }
+
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+
+    RotateTransformOperation(double x, double y, double z, double angle, OperationType type)
+        : m_x(x)
+        , m_y(y)
+        , m_z(z)
+        , m_angle(angle)
+        , m_type(type)
+    {
+        ASSERT(isMatchingOperationType(type));
+    }
+
+    double m_x;
+    double m_y;
+    double m_z;
+    double m_angle;
+    OperationType m_type;
+>>>>>>> miniblink49
 };
 
 DEFINE_TRANSFORM_TYPE_CASTS(RotateTransformOperation);
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT RotateAroundOriginTransformOperation final
     : public RotateTransformOperation {
 public:
@@ -137,6 +198,8 @@ private:
 
 DEFINE_TRANSFORM_TYPE_CASTS(RotateAroundOriginTransformOperation);
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif // RotateTransformOperation_h

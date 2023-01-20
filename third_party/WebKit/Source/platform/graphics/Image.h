@@ -28,6 +28,7 @@
 #define Image_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/SharedBuffer.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/graphics/Color.h"
@@ -48,6 +49,23 @@ class SkCanvas;
 class SkImage;
 class SkMatrix;
 class SkPaint;
+=======
+#include "platform/geometry/IntRect.h"
+#include "platform/graphics/Color.h"
+#include "platform/graphics/GraphicsTypes.h"
+#include "platform/graphics/ImageAnimationPolicy.h"
+#include "platform/graphics/ImageOrientation.h"
+#include "third_party/skia/include/core/SkCanvas.h"
+#include "wtf/Assertions.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
+#include "wtf/RetainPtr.h"
+#include "wtf/text/WTFString.h"
+
+class SkBitmap;
+class SkImage;
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -55,14 +73,28 @@ class FloatPoint;
 class FloatRect;
 class FloatSize;
 class GraphicsContext;
+<<<<<<< HEAD
 class Image;
 
 class PLATFORM_EXPORT Image : public ThreadSafeRefCounted<Image> {
+=======
+class Length;
+class SharedBuffer;
+class Image;
+
+// This class gets notified when an image creates or destroys decoded frames and when it advances animation frames.
+class ImageObserver;
+
+class PLATFORM_EXPORT Image : public RefCounted<Image> {
+>>>>>>> miniblink49
     friend class GeneratedImage;
     friend class CrossfadeGeneratedImage;
     friend class GradientGeneratedImage;
     friend class GraphicsContext;
+<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(Image);
+=======
+>>>>>>> miniblink49
 
 public:
     virtual ~Image();
@@ -72,6 +104,7 @@ public:
 
     virtual bool isSVGImage() const { return false; }
     virtual bool isBitmapImage() const { return false; }
+<<<<<<< HEAD
 
     // To increase accuracy of currentFrameKnownToBeOpaque() it may,
     // for applicable image types, be told to pre-cache metadata for
@@ -87,6 +120,13 @@ public:
     virtual bool currentFrameIsComplete() { return false; }
     virtual bool currentFrameIsLazyDecoded() { return false; }
     virtual bool isTextureBacked() const { return false; }
+=======
+    virtual bool isLazyDecodedBitmap() { return false; }
+    virtual bool isImmutableBitmap() { return false; }
+    virtual bool currentFrameKnownToBeOpaque() = 0;
+
+    virtual PassRefPtr<SkImage> skImage();
+>>>>>>> miniblink49
 
     // Derived classes should override this if they can assure that the current
     // image frame contains only resources from its own security origin.
@@ -95,8 +135,20 @@ public:
     static Image* nullImage();
     bool isNull() const { return size().isEmpty(); }
 
+<<<<<<< HEAD
     virtual bool usesContainerSize() const { return false; }
     virtual bool hasRelativeSize() const { return false; }
+=======
+    virtual void setContainerSize(const IntSize&) { }
+    virtual bool usesContainerSize() const { return false; }
+    virtual bool hasRelativeWidth() const { return false; }
+    virtual bool hasRelativeHeight() const { return false; }
+
+    // Computes (extracts) the intrinsic dimensions and ratio from the Image. The intrinsic ratio
+    // will be the 'viewport' of the image. (Same as the dimensions for a raster image. For SVG
+    // images it can be the dimensions defined by the 'viewBox'.)
+    virtual void computeIntrinsicDimensions(Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio);
+>>>>>>> miniblink49
 
     virtual IntSize size() const = 0;
     IntRect rect() const { return IntRect(IntPoint(), size()); }
@@ -104,6 +156,7 @@ public:
     int height() const { return size().height(); }
     virtual bool getHotSpot(IntPoint&) const { return false; }
 
+<<<<<<< HEAD
     enum SizeAvailability { SizeAvailable,
         SizeUnavailable };
     virtual SizeAvailability setData(PassRefPtr<SharedBuffer> data,
@@ -129,12 +182,30 @@ public:
         CatchUp };
     virtual void startAnimation(CatchUpAnimation = CatchUp) { }
     virtual void resetAnimation() { }
+=======
+    bool setData(PassRefPtr<SharedBuffer> data, bool allDataReceived);
+    virtual bool dataChanged(bool /*allDataReceived*/) { return false; }
+
+    virtual String filenameExtension() const { return String(); } // null string if unknown
+
+    virtual void destroyDecodedData(bool destroyAll) = 0;
+
+    SharedBuffer* data() { return m_encodedImageData.get(); }
+
+    // Animation begins whenever someone draws the image, so startAnimation() is not normally called.
+    // It will automatically pause once all observers no longer want to render the image anywhere.
+    enum CatchUpAnimation { DoNotCatchUp, CatchUp };
+    virtual void startAnimation(CatchUpAnimation = CatchUp) { }
+    virtual void stopAnimation() {}
+    virtual void resetAnimation() {}
+>>>>>>> miniblink49
 
     // True if this image can potentially animate.
     virtual bool maybeAnimated() { return false; }
 
     // Set animationPolicy
     virtual void setAnimationPolicy(ImageAnimationPolicy) { }
+<<<<<<< HEAD
     virtual ImageAnimationPolicy animationPolicy()
     {
         return ImageAnimationPolicyAllowed;
@@ -167,11 +238,35 @@ public:
     virtual sk_sp<SkImage> imageForCurrentFrame(const ColorBehavior&) = 0;
     virtual PassRefPtr<Image> imageForDefaultFrame();
 
+=======
+    virtual ImageAnimationPolicy animationPolicy() { return ImageAnimationPolicyAllowed; }
+    virtual void advanceTime(double deltaTimeInSeconds) { }
+
+    // Typically the ImageResource that owns us.
+    ImageObserver* imageObserver() const { return m_imageObserver; }
+    void setImageObserver(ImageObserver* observer) { m_imageObserver = observer; }
+
+    enum TileRule { StretchTile, RoundTile, SpaceTile, RepeatTile };
+
+    virtual bool bitmapForCurrentFrame(SkBitmap*) WARN_UNUSED_RETURN;
+
+    virtual PassRefPtr<Image> imageForDefaultFrame();
+
+    virtual void drawPattern(GraphicsContext*, const FloatRect&,
+        const FloatSize&, const FloatPoint& phase, SkXfermode::Mode,
+        const FloatRect&, const IntSize& repeatSpacing = IntSize());
+
+#if ENABLE(ASSERT)
+    virtual bool notSolidColor() { return true; }
+#endif
+
+>>>>>>> miniblink49
     enum ImageClampingMode {
         ClampImageToSourceRect,
         DoNotClampImageToSourceRect
     };
 
+<<<<<<< HEAD
     virtual void draw(SkCanvas*,
         const SkPaint&,
         const FloatRect& dstRect,
@@ -199,10 +294,14 @@ public:
     static FloatRect computeSubsetForTile(const FloatRect& tile,
         const FloatRect& dest,
         const FloatSize& imageSize);
+=======
+    virtual void draw(SkCanvas*, const SkPaint&, const FloatRect& dstRect, const FloatRect& srcRect, RespectImageOrientationEnum, ImageClampingMode) = 0;
+>>>>>>> miniblink49
 
 protected:
     Image(ImageObserver* = 0);
 
+<<<<<<< HEAD
     void drawTiledBackground(GraphicsContext&,
         const FloatRect& dstRect,
         const FloatPoint& srcPoint,
@@ -239,6 +338,25 @@ private:
 #define DEFINE_IMAGE_TYPE_CASTS(typeName)                            \
     DEFINE_TYPE_CASTS(typeName, Image, image, image->is##typeName(), \
         image.is##typeName())
+=======
+    static void fillWithSolidColor(GraphicsContext*, const FloatRect& dstRect, const Color&, SkXfermode::Mode);
+
+    void drawTiled(GraphicsContext*, const FloatRect& dstRect, const FloatPoint& srcPoint, const FloatSize& tileSize,
+        SkXfermode::Mode, const IntSize& repeatSpacing);
+    void drawTiled(GraphicsContext*, const FloatRect& dstRect, const FloatRect& srcRect, const FloatSize& tileScaleFactor, TileRule hRule, TileRule vRule, SkXfermode::Mode);
+
+    // Supporting tiled drawing
+    virtual bool mayFillWithSolidColor() { return false; }
+    virtual Color solidColor() const { return Color(); }
+
+private:
+    RefPtr<SharedBuffer> m_encodedImageData;
+    ImageObserver* m_imageObserver;
+};
+
+#define DEFINE_IMAGE_TYPE_CASTS(typeName) \
+    DEFINE_TYPE_CASTS(typeName, Image, image, image->is##typeName(), image.is##typeName())
+>>>>>>> miniblink49
 
 } // namespace blink
 

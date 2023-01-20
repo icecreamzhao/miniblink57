@@ -555,7 +555,11 @@ static int dprintf_formatf(
   void *data, /* untouched by format(), just sent to the stream() function in
                  the second argument */
   /* function pointer called for each output character */
+<<<<<<< HEAD
   int (__cdecl *stream)(int, FILE *),
+=======
+  int (*stream)(int, FILE *),
+>>>>>>> miniblink49
   const char *format,    /* %-formatted string */
   va_list ap_save) /* list of parameters */
 {
@@ -978,7 +982,11 @@ static int dprintf_formatf(
 }
 
 /* fputc() look-alike */
+<<<<<<< HEAD
 static int __cdecl addbyter(int output, FILE *data)
+=======
+static int addbyter(int output, FILE *data)
+>>>>>>> miniblink49
 {
   struct nsprintf *infop = (struct nsprintf *)data;
   unsigned char outc = (unsigned char)output;
@@ -1026,7 +1034,11 @@ int curl_msnprintf(char *buffer, size_t maxlength, const char *format, ...)
 }
 
 /* fputc() look-alike */
+<<<<<<< HEAD
 static int __cdecl alloc_addbyter(int output, FILE *data)
+=======
+static int alloc_addbyter(int output, FILE *data)
+>>>>>>> miniblink49
 {
   struct asprintf *infop = (struct asprintf *)data;
   unsigned char outc = (unsigned char)output;
@@ -1113,7 +1125,11 @@ char *curl_mvaprintf(const char *format, va_list ap_save)
   return strdup("");
 }
 
+<<<<<<< HEAD
 static int __cdecl storebuffer(int output, FILE *data)
+=======
+static int storebuffer(int output, FILE *data)
+>>>>>>> miniblink49
 {
   char **buffer = (char **)data;
   unsigned char outc = (unsigned char)output;

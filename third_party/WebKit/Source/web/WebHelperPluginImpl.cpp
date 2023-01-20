@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/WebHelperPluginImpl.h"
 
 #include "core/html/HTMLObjectElement.h"
@@ -41,6 +45,7 @@ namespace blink {
 
 DEFINE_TYPE_CASTS(WebHelperPluginImpl, WebHelperPlugin, plugin, true, true);
 
+<<<<<<< HEAD
 WebHelperPlugin* WebHelperPlugin::create(const WebString& pluginType,
     WebLocalFrame* frame)
 {
@@ -49,6 +54,14 @@ WebHelperPlugin* WebHelperPlugin::create(const WebString& pluginType,
              ->initialize(pluginType, toWebLocalFrameImpl(frame)))
         return 0;
     return plugin.release();
+=======
+WebHelperPlugin* WebHelperPlugin::create(const WebString& pluginType, WebLocalFrame* frame)
+{
+    OwnPtr<WebHelperPlugin> plugin = adoptPtr<WebHelperPlugin>(new WebHelperPluginImpl());
+    if (!toWebHelperPluginImpl(plugin.get())->initialize(pluginType, toWebLocalFrameImpl(frame)))
+        return 0;
+    return plugin.leakPtr();
+>>>>>>> miniblink49
 }
 
 WebHelperPluginImpl::WebHelperPluginImpl()
@@ -56,6 +69,7 @@ WebHelperPluginImpl::WebHelperPluginImpl()
 {
 }
 
+<<<<<<< HEAD
 bool WebHelperPluginImpl::initialize(const String& pluginType,
     WebLocalFrameImpl* frame)
 {
@@ -71,10 +85,43 @@ bool WebHelperPluginImpl::initialize(const String& pluginType,
         m_objectElement.get(), frame->frame()->document()->url(),
         attributeNames, attributeValues, pluginType, false,
         FrameLoaderClient::AllowDetachedPlugin));
+=======
+WebHelperPluginImpl::~WebHelperPluginImpl()
+{
+#if ENABLE(OILPAN)
+    // FIXME: Oilpan: it is potentially problematic to support plugin
+    // disposal during an Oilpan GC. If it happens, we need to know
+    // and evaluate possible ways to handle it.
+    ASSERT(!ThreadState::current()->sweepForbidden());
+    if (m_pluginContainer)
+        m_pluginContainer->dispose();
+#endif
+}
+
+bool WebHelperPluginImpl::initialize(const String& pluginType, WebLocalFrameImpl* frame)
+{
+    ASSERT(!m_objectElement && !m_pluginContainer);
+    if (!frame->frame()->loader().client())
+        return false;
+
+    m_objectElement = HTMLObjectElement::create(*frame->frame()->document(), 0, false);
+    Vector<String> attributeNames;
+    Vector<String> attributeValues;
+    ASSERT(frame->frame()->document()->url().isValid());
+    m_pluginContainer = adoptRefWillBeNoop(toWebPluginContainerImpl(frame->frame()->loader().client()->createPlugin(
+        m_objectElement.get(),
+        frame->frame()->document()->url(),
+        attributeNames,
+        attributeValues,
+        pluginType,
+        false,
+        FrameLoaderClient::AllowDetachedPlugin).leakRef()));
+>>>>>>> miniblink49
 
     if (!m_pluginContainer)
         return false;
 
+<<<<<<< HEAD
     // Getting a placeholder plugin is also failure, since it's not the plugin the
     // caller needed.
     return !getPlugin()->isPlaceholder();
@@ -84,11 +131,20 @@ void WebHelperPluginImpl::reallyDestroy(TimerBase*)
 {
     if (m_pluginContainer)
         m_pluginContainer->dispose();
+=======
+    // Getting a placeholder plugin is also failure, since it's not the plugin the caller needed.
+    return !getPlugin()->isPlaceholder();
+}
+
+void WebHelperPluginImpl::reallyDestroy(Timer<WebHelperPluginImpl>*)
+{
+>>>>>>> miniblink49
     delete this;
 }
 
 void WebHelperPluginImpl::destroy()
 {
+<<<<<<< HEAD
     // Defer deletion so we don't do too much work when called via
     // stopSuspendableObjects().
     // FIXME: It's not clear why we still need this. The original code held a
@@ -96,12 +152,25 @@ void WebHelperPluginImpl::destroy()
     // frame detach to run, which isn't allowed inside stopSuspendableObjects().
     // Removing this causes one Chrome test to fail with a timeout.
     m_destructionTimer.startOneShot(0, BLINK_FROM_HERE);
+=======
+    // Defer deletion so we don't do too much work when called via stopActiveDOMObjects().
+    // FIXME: It's not clear why we still need this. The original code held a Page and a
+    // WebFrame, and destroying it would cause JavaScript triggered by frame detach to run,
+    // which isn't allowed inside stopActiveDOMObjects(). Removing this causes one Chrome test
+    // to fail with a timeout.
+    m_destructionTimer.startOneShot(0, FROM_HERE);
+>>>>>>> miniblink49
 }
 
 WebPlugin* WebHelperPluginImpl::getPlugin()
 {
+<<<<<<< HEAD
     DCHECK(m_pluginContainer);
     DCHECK(m_pluginContainer->plugin());
+=======
+    ASSERT(m_pluginContainer);
+    ASSERT(m_pluginContainer->plugin());
+>>>>>>> miniblink49
     return m_pluginContainer->plugin();
 }
 

@@ -32,8 +32,15 @@ namespace blink {
 
 class GeolocationError : public GarbageCollectedFinalized<GeolocationError> {
 public:
+<<<<<<< HEAD
     enum ErrorCode { PermissionDenied,
         PositionUnavailable };
+=======
+    enum ErrorCode {
+        PermissionDenied,
+        PositionUnavailable
+    };
+>>>>>>> miniblink49
 
     static GeolocationError* create(ErrorCode code, const String& message)
     {

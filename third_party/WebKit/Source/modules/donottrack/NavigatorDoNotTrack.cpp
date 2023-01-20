@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/donottrack/NavigatorDoNotTrack.h"
 
 #include "core/frame/LocalFrame.h"
@@ -36,14 +40,28 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 NavigatorDoNotTrack::NavigatorDoNotTrack(Navigator& navigator)
     : Supplement<Navigator>(navigator)
+=======
+NavigatorDoNotTrack::NavigatorDoNotTrack(LocalFrame* frame)
+    : DOMWindowProperty(frame)
+{
+}
+
+NavigatorDoNotTrack::~NavigatorDoNotTrack()
+>>>>>>> miniblink49
 {
 }
 
 DEFINE_TRACE(NavigatorDoNotTrack)
 {
+<<<<<<< HEAD
     Supplement<Navigator>::trace(visitor);
+=======
+    HeapSupplement<Navigator>::trace(visitor);
+    DOMWindowProperty::trace(visitor);
+>>>>>>> miniblink49
 }
 
 const char* NavigatorDoNotTrack::supplementName()
@@ -53,10 +71,16 @@ const char* NavigatorDoNotTrack::supplementName()
 
 NavigatorDoNotTrack& NavigatorDoNotTrack::from(Navigator& navigator)
 {
+<<<<<<< HEAD
     NavigatorDoNotTrack* supplement = static_cast<NavigatorDoNotTrack*>(
         Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
         supplement = new NavigatorDoNotTrack(navigator);
+=======
+    NavigatorDoNotTrack* supplement = static_cast<NavigatorDoNotTrack*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
+    if (!supplement) {
+        supplement = new NavigatorDoNotTrack(navigator.frame());
+>>>>>>> miniblink49
         provideTo(navigator, supplementName(), supplement);
     }
     return *supplement;
@@ -69,10 +93,16 @@ String NavigatorDoNotTrack::doNotTrack(Navigator& navigator)
 
 String NavigatorDoNotTrack::doNotTrack()
 {
+<<<<<<< HEAD
     LocalFrame* frame = supplementable()->frame();
     if (!frame || !frame->loader().client())
         return String();
     return frame->loader().client()->doNotTrackValue();
+=======
+    if (!frame() || !frame()->loader().client())
+        return String();
+    return frame()->loader().client()->doNotTrackValue();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

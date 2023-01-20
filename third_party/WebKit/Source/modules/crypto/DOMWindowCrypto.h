@@ -31,7 +31,11 @@
 #ifndef DOMWindowCrypto_h
 #define DOMWindowCrypto_h
 
+<<<<<<< HEAD
 #include "core/frame/LocalDOMWindow.h"
+=======
+#include "core/frame/DOMWindowProperty.h"
+>>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -39,12 +43,19 @@ namespace blink {
 
 class Crypto;
 class DOMWindow;
+<<<<<<< HEAD
 class LocalDOMWindow;
 
 class DOMWindowCrypto final : public GarbageCollected<DOMWindowCrypto>,
                               public Supplement<LocalDOMWindow> {
     USING_GARBAGE_COLLECTED_MIXIN(DOMWindowCrypto);
 
+=======
+
+class DOMWindowCrypto final : public NoBaseWillBeGarbageCollected<DOMWindowCrypto>, public WillBeHeapSupplement<LocalDOMWindow>, public DOMWindowProperty {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMWindowCrypto);
+    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowCrypto);
+>>>>>>> miniblink49
 public:
     static DOMWindowCrypto& from(LocalDOMWindow&);
     static Crypto* crypto(DOMWindow&);
@@ -56,7 +67,11 @@ private:
     explicit DOMWindowCrypto(LocalDOMWindow&);
     static const char* supplementName();
 
+<<<<<<< HEAD
     mutable Member<Crypto> m_crypto;
+=======
+    mutable PersistentWillBeMember<Crypto> m_crypto;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

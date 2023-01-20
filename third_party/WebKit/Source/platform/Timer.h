@@ -27,6 +27,7 @@
 #define Timer_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/WebTaskRunner.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebTraceLocation.h"
@@ -37,6 +38,14 @@
 #include "wtf/Threading.h"
 #include "wtf/Vector.h"
 #include "wtf/WeakPtr.h"
+=======
+#include "platform/heap/Handle.h"
+#include "public/platform/WebTraceLocation.h"
+#include "wtf/AddressSanitizer.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/Threading.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,6 +53,7 @@ namespace blink {
 
 class PLATFORM_EXPORT TimerBase {
     WTF_MAKE_NONCOPYABLE(TimerBase);
+<<<<<<< HEAD
 
 public:
     explicit TimerBase(RefPtr<WebTaskRunner>);
@@ -52,6 +62,13 @@ public:
     void start(double nextFireInterval,
         double repeatInterval,
         const WebTraceLocation&);
+=======
+public:
+    TimerBase();
+    virtual ~TimerBase();
+
+    void start(double nextFireInterval, double repeatInterval, const WebTraceLocation&);
+>>>>>>> miniblink49
 
     void startRepeating(double repeatInterval, const WebTraceLocation& caller)
     {
@@ -62,13 +79,18 @@ public:
         start(interval, 0, caller);
     }
 
+<<<<<<< HEAD
     // Timer cancellation is fast enough that you shouldn't have to worry
     // about it unless you're canceling tens of thousands of tasks.
     virtual void stop();
+=======
+    void stop();
+>>>>>>> miniblink49
     bool isActive() const;
     const WebTraceLocation& location() const { return m_location; }
 
     double nextFireInterval() const;
+<<<<<<< HEAD
     double repeatInterval() const { return m_repeatInterval; }
 
     void augmentRepeatInterval(double delta)
@@ -79,11 +101,24 @@ public:
     }
 
     void moveToNewTaskRunner(RefPtr<WebTaskRunner>);
+=======
+    double nextUnalignedFireInterval() const;
+    double repeatInterval() const { return m_repeatInterval; }
+
+    void augmentRepeatInterval(double delta) {
+        double now = monotonicallyIncreasingTime();
+        setNextFireTime(now, m_nextFireTime - now + delta);
+        m_repeatInterval += delta;
+    }
+
+    void didChangeAlignmentInterval(double now);
+>>>>>>> miniblink49
 
     struct PLATFORM_EXPORT Comparator {
         bool operator()(const TimerBase* a, const TimerBase* b) const;
     };
 
+<<<<<<< HEAD
 protected:
     static RefPtr<WebTaskRunner> getTimerTaskRunner();
     static RefPtr<WebTaskRunner> getUnthrottledTaskRunner();
@@ -97,11 +132,21 @@ private:
     virtual bool canFire() const { return true; }
 
     double timerMonotonicallyIncreasingTime() const;
+=======
+private:
+    virtual void fired() = 0;
+
+    NO_LAZY_SWEEP_SANITIZE_ADDRESS
+    virtual bool canFire() const { return true; }
+
+    virtual double alignedFireTime(double fireTime) const { return fireTime; }
+>>>>>>> miniblink49
 
     void setNextFireTime(double now, double delay);
 
     void runInternal();
 
+<<<<<<< HEAD
     double m_nextFireTime; // 0 if inactive
     double m_repeatInterval; // 0 if not repeating
     WebTraceLocation m_location;
@@ -111,28 +156,83 @@ private:
     ThreadIdentifier m_thread;
 #endif
     WTF::WeakPtrFactory<TimerBase> m_weakPtrFactory;
+=======
+    class CancellableTimerTask final : public WebThread::Task {
+        WTF_MAKE_NONCOPYABLE(CancellableTimerTask);
+    public:
+        explicit CancellableTimerTask(TimerBase* timer) : m_timer(timer) { }
+
+        ~CancellableTimerTask() override
+        {
+            if (m_timer)
+                m_timer->m_cancellableTimerTask = nullptr;
+        }
+
+        NO_LAZY_SWEEP_SANITIZE_ADDRESS
+        void run() override
+        {
+            if (m_timer) {
+                m_timer->m_cancellableTimerTask = nullptr;
+                m_timer->runInternal();
+                m_timer = nullptr;
+            }
+        }
+
+        void cancel()
+        {
+            m_timer = nullptr;
+        }
+
+    private:
+        TimerBase* m_timer; // NOT OWNED
+    };
+
+    double m_nextFireTime; // 0 if inactive
+    double m_unalignedNextFireTime; // m_nextFireTime not considering alignment interval
+    double m_repeatInterval; // 0 if not repeating
+    WebTraceLocation m_location;
+    CancellableTimerTask* m_cancellableTimerTask; // NOT OWNED
+    WebScheduler* m_webScheduler; // Not owned.
+
+#if ENABLE(ASSERT)
+    ThreadIdentifier m_thread;
+#endif
+>>>>>>> miniblink49
 
     friend class ThreadTimers;
     friend class TimerHeapLessThanFunction;
     friend class TimerHeapReference;
 };
 
+<<<<<<< HEAD
 template <typename T, bool = IsGarbageCollectedType<T>::value>
+=======
+template<typename T, bool = IsGarbageCollectedType<T>::value>
+>>>>>>> miniblink49
 class TimerIsObjectAliveTrait {
 public:
     static bool isHeapObjectAlive(T*) { return true; }
 };
 
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 class TimerIsObjectAliveTrait<T, true> {
 public:
     static bool isHeapObjectAlive(T* objectPointer)
     {
+<<<<<<< HEAD
         return !ThreadHeap::willObjectBeLazilySwept(objectPointer);
+=======
+        return !Heap::willObjectBeLazilySwept(objectPointer);
+>>>>>>> miniblink49
     }
 };
 
 template <typename TimerFiredClass>
+<<<<<<< HEAD
 class TaskRunnerTimer : public TimerBase {
 public:
     using TimerFiredFunction = void (TimerFiredClass::*)(TimerBase*);
@@ -152,11 +252,30 @@ protected:
     void fired() override { (m_object->*m_function)(this); }
 
     NO_SANITIZE_ADDRESS
+=======
+class Timer : public TimerBase {
+public:
+    typedef void (TimerFiredClass::*TimerFiredFunction)(Timer*);
+
+    Timer(TimerFiredClass* o, TimerFiredFunction f)
+        : m_object(o), m_function(f)
+    {
+    }
+
+protected:
+    void fired() override
+    {
+        (m_object->*m_function)(this);
+    }
+
+    NO_LAZY_SWEEP_SANITIZE_ADDRESS
+>>>>>>> miniblink49
     bool canFire() const override
     {
         // Oilpan: if a timer fires while Oilpan heaps are being lazily
         // swept, it is not safe to proceed if the object is about to
         // be swept (and this timer will be stopped while doing so.)
+<<<<<<< HEAD
         return TimerIsObjectAliveTrait<TimerFiredClass>::isHeapObjectAlive(
             m_object);
     }
@@ -165,12 +284,21 @@ private:
     // FIXME: Oilpan: TimerBase should be moved to the heap and m_object should be
     // traced.  This raw pointer is safe as long as Timer<X> is held by the X
     // itself (That's the case
+=======
+        return TimerIsObjectAliveTrait<TimerFiredClass>::isHeapObjectAlive(m_object);
+    }
+
+private:
+    // FIXME: Oilpan: TimerBase should be moved to the heap and m_object should be traced.
+    // This raw pointer is safe as long as Timer<X> is held by the X itself (That's the case
+>>>>>>> miniblink49
     // in the current code base).
     GC_PLUGIN_IGNORE("363031")
     TimerFiredClass* m_object;
     TimerFiredFunction m_function;
 };
 
+<<<<<<< HEAD
 // TODO(dcheng): Consider removing this overload once all timers are using the
 // appropriate task runner. https://crbug.com/624694
 template <typename TimerFiredClass>
@@ -218,6 +346,13 @@ inline bool TimerBase::isActive() const
     DCHECK_EQ(m_thread, currentThread());
 #endif
     return m_weakPtrFactory.hasWeakPtrs();
+=======
+NO_LAZY_SWEEP_SANITIZE_ADDRESS
+inline bool TimerBase::isActive() const
+{
+    ASSERT(m_thread == currentThread());
+    return m_cancellableTimerTask;
+>>>>>>> miniblink49
 }
 
 } // namespace blink

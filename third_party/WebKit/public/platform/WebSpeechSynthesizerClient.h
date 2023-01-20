@@ -42,12 +42,17 @@ public:
     virtual void didResumeSpeaking(const WebSpeechSynthesisUtterance&) = 0;
     virtual void didFinishSpeaking(const WebSpeechSynthesisUtterance&) = 0;
     virtual void speakingErrorOccurred(const WebSpeechSynthesisUtterance&) = 0;
+<<<<<<< HEAD
     virtual void wordBoundaryEventOccurred(const WebSpeechSynthesisUtterance&,
         unsigned charIndex)
         = 0;
     virtual void sentenceBoundaryEventOccurred(const WebSpeechSynthesisUtterance&,
         unsigned charIndex)
         = 0;
+=======
+    virtual void wordBoundaryEventOccurred(const WebSpeechSynthesisUtterance&, unsigned charIndex) = 0;
+    virtual void sentenceBoundaryEventOccurred(const WebSpeechSynthesisUtterance&, unsigned charIndex) = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

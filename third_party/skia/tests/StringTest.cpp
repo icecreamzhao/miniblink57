@@ -5,15 +5,23 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkString.h"
 #include "Test.h"
 #include <stdarg.h>
 #include <stdio.h>
+=======
+#include <stdarg.h>
+#include <stdio.h>
+#include "SkString.h"
+#include "Test.h"
+>>>>>>> miniblink49
 
 // Windows vsnprintf doesn't 0-terminate safely), but is so far
 // encapsulated in SkString that we can't test it directly.
 
 #ifdef SK_BUILD_FOR_WIN
+<<<<<<< HEAD
 #define VSNPRINTF(buffer, size, format, args) \
     vsnprintf_s(buffer, size, _TRUNCATE, format, args)
 #else
@@ -39,6 +47,31 @@ DEF_TEST(String, reporter)
     SkString b((size_t)0);
     SkString c("");
     SkString d(nullptr, 0);
+=======
+    #define VSNPRINTF(buffer, size, format, args)   \
+        vsnprintf_s(buffer, size, _TRUNCATE, format, args)
+#else
+    #define VSNPRINTF   vsnprintf
+#endif
+
+#define ARGS_TO_BUFFER(format, buffer, size)        \
+    do {                                            \
+        va_list args;                               \
+        va_start(args, format);                     \
+        VSNPRINTF(buffer, size, format, args);      \
+        va_end(args);                               \
+    } while (0)
+
+static void printfAnalog(char* buffer, int size, const char format[], ...) {
+    ARGS_TO_BUFFER(format, buffer, size);
+}
+
+DEF_TEST(String, reporter) {
+    SkString    a;
+    SkString    b((size_t)0);
+    SkString    c("");
+    SkString    d(NULL, 0);
+>>>>>>> miniblink49
 
     REPORTER_ASSERT(reporter, a.isEmpty());
     REPORTER_ASSERT(reporter, a == b && a == c && a == d);
@@ -56,6 +89,7 @@ DEF_TEST(String, reporter)
     REPORTER_ASSERT(reporter, a.equals("hello"));
     REPORTER_ASSERT(reporter, !a.equals("help"));
 
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, a.startsWith("hell"));
     REPORTER_ASSERT(reporter, a.startsWith('h'));
     REPORTER_ASSERT(reporter, !a.startsWith("ell"));
@@ -78,6 +112,30 @@ DEF_TEST(String, reporter)
     SkString e(a);
     SkString f("hello");
     SkString g("helloz", 5);
+=======
+    REPORTER_ASSERT(reporter,  a.startsWith("hell"));
+    REPORTER_ASSERT(reporter,  a.startsWith('h'));
+    REPORTER_ASSERT(reporter, !a.startsWith( "ell"));
+    REPORTER_ASSERT(reporter, !a.startsWith( 'e'));
+    REPORTER_ASSERT(reporter,  a.startsWith(""));
+    REPORTER_ASSERT(reporter,  a.endsWith("llo"));
+    REPORTER_ASSERT(reporter,  a.endsWith('o'));
+    REPORTER_ASSERT(reporter, !a.endsWith("ll" ));
+    REPORTER_ASSERT(reporter, !a.endsWith('l'));
+    REPORTER_ASSERT(reporter,  a.endsWith(""));
+    REPORTER_ASSERT(reporter,  a.contains("he"));
+    REPORTER_ASSERT(reporter,  a.contains("ll"));
+    REPORTER_ASSERT(reporter,  a.contains("lo"));
+    REPORTER_ASSERT(reporter,  a.contains("hello"));
+    REPORTER_ASSERT(reporter, !a.contains("hellohello"));
+    REPORTER_ASSERT(reporter,  a.contains(""));
+    REPORTER_ASSERT(reporter,  a.contains('e'));
+    REPORTER_ASSERT(reporter, !a.contains('z'));
+
+    SkString    e(a);
+    SkString    f("hello");
+    SkString    g("helloz", 5);
+>>>>>>> miniblink49
 
     REPORTER_ASSERT(reporter, a == e && a == f && a == g);
 
@@ -150,6 +208,7 @@ DEF_TEST(String, reporter)
     a.appendU64(0x0000000001000000ULL, 15);
     REPORTER_ASSERT(reporter, a.equals("000000016777216"));
 
+<<<<<<< HEAD
     a.printf("%i", 0);
     REPORTER_ASSERT(reporter, a.equals("0"));
     a.printf("%g", 3.14);
@@ -172,19 +231,45 @@ DEF_TEST(String, reporter)
         { 3.4028234e38f, "3.4028235e+38" },
         { -3.4028234e38f, "-3.4028235e+38" },
 #endif
+=======
+    static const struct {
+        SkScalar    fValue;
+        const char* fString;
+    } gRec[] = {
+        { 0,            "0" },
+        { SK_Scalar1,   "1" },
+        { -SK_Scalar1,  "-1" },
+        { SK_Scalar1/2, "0.5" },
+  #ifdef SK_BUILD_FOR_WIN
+        { 3.4028234e38f,   "3.4028235e+038" },
+        { -3.4028234e38f, "-3.4028235e+038" },
+  #else
+        { 3.4028234e38f,   "3.4028235e+38" },
+        { -3.4028234e38f, "-3.4028235e+38" },
+  #endif
+>>>>>>> miniblink49
     };
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); i++) {
         a.reset();
         a.appendScalar(gRec[i].fValue);
         REPORTER_ASSERT(reporter, a.size() <= SkStrAppendScalar_MaxSize);
+<<<<<<< HEAD
         if (!a.equals(gRec[i].fString)) {
             ERRORF(reporter, "received <%s> expected <%s>\n", a.c_str(), gRec[i].fString);
         }
+=======
+//        SkDebugf(" received <%s> expected <%s>\n", a.c_str(), gRec[i].fString);
+        REPORTER_ASSERT(reporter, a.equals(gRec[i].fString));
+>>>>>>> miniblink49
     }
 
     REPORTER_ASSERT(reporter, SkStringPrintf("%i", 0).equals("0"));
 
+<<<<<<< HEAD
     char buffer[40];
+=======
+    char buffer [40];
+>>>>>>> miniblink49
     memset(buffer, 'a', 40);
     REPORTER_ASSERT(reporter, buffer[18] == 'a');
     REPORTER_ASSERT(reporter, buffer[19] == 'a');
@@ -194,6 +279,7 @@ DEF_TEST(String, reporter)
     REPORTER_ASSERT(reporter, buffer[19] == 0);
     REPORTER_ASSERT(reporter, buffer[20] == 'a');
 
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, SkStringPrintf("%i", 0).equals("0"));
 
     // 2000 is larger than the static buffer size inside SkString.cpp
@@ -218,6 +304,11 @@ DEF_TEST(String, reporter)
 
 DEF_TEST(String_SkStrSplit, r)
 {
+=======
+}
+
+DEF_TEST(String_SkStrSplit, r) {
+>>>>>>> miniblink49
     SkTArray<SkString> results;
 
     SkStrSplit("a-_b_c-dee--f-_-_-g-", "-_", &results);
@@ -228,6 +319,7 @@ DEF_TEST(String_SkStrSplit, r)
     REPORTER_ASSERT(r, results[3].equals("dee"));
     REPORTER_ASSERT(r, results[4].equals("f"));
     REPORTER_ASSERT(r, results[5].equals("g"));
+<<<<<<< HEAD
 
     results.reset();
     SkStrSplit("\n", "\n", &results);
@@ -290,4 +382,6 @@ DEF_TEST(String_SkStrSplit_All, r)
     REPORTER_ASSERT(r, results[1].equals("a"));
     REPORTER_ASSERT(r, results[2].equals("b"));
     REPORTER_ASSERT(r, results[3].equals(""));
+=======
+>>>>>>> miniblink49
 }

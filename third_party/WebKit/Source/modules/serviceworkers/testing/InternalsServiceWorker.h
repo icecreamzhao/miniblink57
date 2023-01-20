@@ -5,16 +5,22 @@
 #ifndef InternalsServiceWorker_h
 #define InternalsServiceWorker_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class Internals;
 class ServiceWorker;
 
 class InternalsServiceWorker {
+<<<<<<< HEAD
     STATIC_ONLY(InternalsServiceWorker);
 
+=======
+>>>>>>> miniblink49
 public:
     static void terminateServiceWorker(Internals&, ServiceWorker*);
 };

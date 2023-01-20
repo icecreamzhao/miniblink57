@@ -39,16 +39,13 @@ namespace blink {
 class SpaceSplitString;
 
 class SelectRuleFeatureSet : public RuleFeatureSet {
-    DISALLOW_NEW();
-
+    DISALLOW_ALLOCATION();
 public:
-    void collectFeaturesFromSelectorList(const CSSSelectorList&);
-    bool checkSelectorsForClassChange(
-        const SpaceSplitString& changedClasses) const;
-    bool checkSelectorsForClassChange(const SpaceSplitString& oldClasses,
-        const SpaceSplitString& newClasses) const;
+    void collectFeaturesFromSelector(const CSSSelector&);
+    bool checkSelectorsForClassChange(const SpaceSplitString& changedClasses) const;
+    bool checkSelectorsForClassChange(const SpaceSplitString& oldClasses, const SpaceSplitString& newClasses) const;
 };
 
-} // namespace blink
+}
 
 #endif

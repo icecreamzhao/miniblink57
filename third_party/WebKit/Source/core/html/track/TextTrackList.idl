@@ -29,7 +29,8 @@
     SetWrapperReferenceFrom=owner,
 ] interface TextTrackList : EventTarget {
     readonly attribute unsigned long length;
-    getter TextTrack (unsigned long index);
+    // TODO(philipj): This getter should be anonymous.
+    [Measure] getter TextTrack item(unsigned long index);
     TextTrack? getTrackById(DOMString id);
 
     attribute EventHandler onchange;

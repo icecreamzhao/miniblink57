@@ -2,8 +2,7 @@
 
 namespace node {
 
-void DumpBacktrace(FILE* fp)
-{
+void DumpBacktrace(FILE* fp) {
 }
 
-} // namespace node
+}  // namespace node

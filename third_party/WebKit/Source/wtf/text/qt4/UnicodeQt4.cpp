@@ -3,12 +3,18 @@
 #include <ctype.h>
 
 #include "QtGlobal.h"
+<<<<<<< HEAD
 #include "UnicodeQt4.h"
 #include "qunicodetables.h"
+=======
+#include "qunicodetables.h"
+#include "UnicodeQt4.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 namespace Unicode {
 
+<<<<<<< HEAD
     int toLower(UChar* result, int resultLength, const UChar* src, int srcLength, bool* error)
     {
         int i = 0;
@@ -28,6 +34,32 @@ namespace Unicode {
         *error = false;
         return i;
     }
+=======
+int toLower(UChar* result, int resultLength, const UChar* src, int srcLength, bool* error)
+{
+    int i = 0;
+    for (i = 0; i < resultLength && i < srcLength; ++i) {
+        result[i] = tolower(src[i]);
+    }
+    *error = false;
+    return i;
+}
+
+int toUpper(UChar* result, int resultLength, const UChar* src, int srcLength, bool* error)
+{
+    int i = 0;
+    for (i = 0; i < resultLength && i < srcLength; ++i) {
+        result[i] = toupper(src[i]);
+    }
+    *error = false;
+    return i;
+}
+
+bool isChineseUtf16Char(UChar c)
+{
+    return 0x4E00 <= c && c <= 0x9Fff;
+}
+>>>>>>> miniblink49
 
 } // namespace Unicode
 } // namespace WTF
@@ -68,7 +100,11 @@ otherwise returns the character itself.
 */
 QChar QChar::toLower() const
 {
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs);
+>>>>>>> miniblink49
     if (!p->lowerCaseSpecial)
         return ucs + p->lowerCaseDiff;
     return ucs;
@@ -84,7 +120,11 @@ uint QChar::toLower(uint ucs4)
 {
     if (ucs4 > UNICODE_LAST_CODEPOINT)
         return ucs4;
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs4);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs4);
+>>>>>>> miniblink49
     if (!p->lowerCaseSpecial)
         return ucs4 + p->lowerCaseDiff;
     return ucs4;
@@ -98,7 +138,11 @@ the character itself.
 */
 ushort QChar::toLower(ushort ucs2)
 {
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs2);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs2);
+>>>>>>> miniblink49
     if (!p->lowerCaseSpecial)
         return ucs2 + p->lowerCaseDiff;
     return ucs2;
@@ -110,7 +154,11 @@ otherwise returns the character itself.
 */
 QChar QChar::toUpper() const
 {
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs);
+>>>>>>> miniblink49
     if (!p->upperCaseSpecial)
         return ucs + p->upperCaseDiff;
     return ucs;
@@ -126,7 +174,11 @@ uint QChar::toUpper(uint ucs4)
 {
     if (ucs4 > UNICODE_LAST_CODEPOINT)
         return ucs4;
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs4);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs4);
+>>>>>>> miniblink49
     if (!p->upperCaseSpecial)
         return ucs4 + p->upperCaseDiff;
     return ucs4;
@@ -140,7 +192,11 @@ the character itself.
 */
 ushort QChar::toUpper(ushort ucs2)
 {
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs2);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs2);
+>>>>>>> miniblink49
     if (!p->upperCaseSpecial)
         return ucs2 + p->upperCaseDiff;
     return ucs2;
@@ -152,7 +208,11 @@ otherwise returns the character itself.
 */
 QChar QChar::toTitleCase() const
 {
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs);
+>>>>>>> miniblink49
     if (!p->titleCaseSpecial)
         return ucs + p->titleCaseDiff;
     return ucs;
@@ -168,7 +228,11 @@ uint QChar::toTitleCase(uint ucs4)
 {
     if (ucs4 > UNICODE_LAST_CODEPOINT)
         return ucs4;
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs4);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs4);
+>>>>>>> miniblink49
     if (!p->titleCaseSpecial)
         return ucs4 + p->titleCaseDiff;
     return ucs4;
@@ -182,7 +246,11 @@ the character itself.
 */
 ushort QChar::toTitleCase(ushort ucs2)
 {
+<<<<<<< HEAD
     const QUnicodeTables::Properties* p = QUnicodeTables::qGetProp(ucs2);
+=======
+    const QUnicodeTables::Properties *p = QUnicodeTables::qGetProp(ucs2);
+>>>>>>> miniblink49
     if (!p->titleCaseSpecial)
         return ucs2 + p->titleCaseDiff;
     return ucs2;
@@ -193,7 +261,11 @@ Returns the character's direction.
 */
 QChar::Direction QChar::direction() const
 {
+<<<<<<< HEAD
     return (QChar::Direction)QUnicodeTables::qGetProp(ucs)->direction;
+=======
+    return (QChar::Direction) QUnicodeTables::qGetProp(ucs)->direction;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -204,7 +276,11 @@ QChar::Direction QChar::direction(uint ucs4)
 {
     if (ucs4 > UNICODE_LAST_CODEPOINT)
         return QChar::DirL;
+<<<<<<< HEAD
     return (QChar::Direction)QUnicodeTables::qGetProp(ucs4)->direction;
+=======
+    return (QChar::Direction) QUnicodeTables::qGetProp(ucs4)->direction;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -213,7 +289,11 @@ Returns the direction of the UCS-2-encoded character specified by \a ucs2.
 */
 QChar::Direction QChar::direction(ushort ucs2)
 {
+<<<<<<< HEAD
     return (QChar::Direction)QUnicodeTables::qGetProp(ucs2)->direction;
+=======
+    return (QChar::Direction) QUnicodeTables::qGetProp(ucs2)->direction;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -222,7 +302,11 @@ Returns the category of the UCS-2-encoded character specified by \a ucs2.
 */
 QChar::Category QChar::category(ushort ucs2)
 {
+<<<<<<< HEAD
     return (QChar::Category)QUnicodeTables::qGetProp(ucs2)->category;
+=======
+    return (QChar::Category) QUnicodeTables::qGetProp(ucs2)->category;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -234,7 +318,11 @@ QChar::Category QChar::category(uint ucs4)
 {
     if (ucs4 > UNICODE_LAST_CODEPOINT)
         return QChar::NoCategory;
+<<<<<<< HEAD
     return (QChar::Category)QUnicodeTables::qGetProp(ucs4)->category;
+=======
+    return (QChar::Category) QUnicodeTables::qGetProp(ucs4)->category;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -283,6 +371,10 @@ QChar::Decomposition QChar::decompositionTag() const
     return decompositionTag(ucs);
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*!
 \overload
 Returns the tag defining the composition of the UCS-4-encoded character
@@ -308,7 +400,11 @@ position non-spacing marks around a base character.
 */
 unsigned char QChar::combiningClass() const
 {
+<<<<<<< HEAD
     return (unsigned char)QUnicodeTables::qGetProp(ucs)->combiningClass;
+=======
+    return (unsigned char) QUnicodeTables::qGetProp(ucs)->combiningClass;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -320,7 +416,11 @@ unsigned char QChar::combiningClass(uint ucs4)
 {
     if (ucs4 > UNICODE_LAST_CODEPOINT)
         return 0;
+<<<<<<< HEAD
     return (unsigned char)QUnicodeTables::qGetProp(ucs4)->combiningClass;
+=======
+    return (unsigned char) QUnicodeTables::qGetProp(ucs4)->combiningClass;
+>>>>>>> miniblink49
 }
 
 /*!
@@ -330,5 +430,9 @@ Returns the combining class for the UCS-2-encoded character specified by
 */
 unsigned char QChar::combiningClass(ushort ucs2)
 {
+<<<<<<< HEAD
     return (unsigned char)QUnicodeTables::qGetProp(ucs2)->combiningClass;
+=======
+    return (unsigned char) QUnicodeTables::qGetProp(ucs2)->combiningClass;
+>>>>>>> miniblink49
 }

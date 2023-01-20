@@ -26,16 +26,28 @@ public:
      *  While it returns true, use src/dst to draw the image/bitmap
      */
     bool next(SkRect* src, SkRect* dst);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
 private:
     SkScalar fSrcX[4];
     SkScalar fSrcY[4];
     SkScalar fDstX[4];
     SkScalar fDstY[4];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     int fCurrX;
     int fCurrY;
     bool fDone;
 };
 
 #endif
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

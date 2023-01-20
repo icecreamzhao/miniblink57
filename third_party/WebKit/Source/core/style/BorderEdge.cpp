@@ -2,33 +2,31 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/style/BorderEdge.h"
 
 namespace blink {
 
-BorderEdge::BorderEdge(int edgeWidth,
-    const Color& edgeColor,
-    EBorderStyle edgeStyle,
-    bool edgeIsPresent)
+BorderEdge::BorderEdge(int edgeWidth, const Color& edgeColor, EBorderStyle edgeStyle, bool edgeIsPresent)
     : width(edgeWidth)
     , color(edgeColor)
     , isPresent(edgeIsPresent)
     , style(edgeStyle)
 {
-    if (style == BorderStyleDouble && edgeWidth < 3)
-        style = BorderStyleSolid;
+    if (style == DOUBLE && edgeWidth < 3)
+        style = SOLID;
 }
 
 BorderEdge::BorderEdge()
     : width(0)
     , isPresent(false)
-    , style(BorderStyleHidden)
+    , style(BHIDDEN)
 {
 }
 
 bool BorderEdge::hasVisibleColorAndStyle() const
 {
-    return style > BorderStyleHidden && color.alpha() > 0;
+    return style > BHIDDEN && color.alpha() > 0;
 }
 
 bool BorderEdge::shouldRender() const
@@ -43,10 +41,10 @@ bool BorderEdge::presentButInvisible() const
 
 bool BorderEdge::obscuresBackgroundEdge() const
 {
-    if (!isPresent || color.hasAlpha() || style == BorderStyleHidden)
+    if (!isPresent || color.hasAlpha() || style == BHIDDEN)
         return false;
 
-    if (style == BorderStyleDotted || style == BorderStyleDashed)
+    if (style == DOTTED || style == DASHED)
         return false;
 
     return true;
@@ -54,10 +52,10 @@ bool BorderEdge::obscuresBackgroundEdge() const
 
 bool BorderEdge::obscuresBackground() const
 {
-    if (!isPresent || color.hasAlpha() || style == BorderStyleHidden)
+    if (!isPresent || color.hasAlpha() || style == BHIDDEN)
         return false;
 
-    if (style == BorderStyleDotted || style == BorderStyleDashed || style == BorderStyleDouble)
+    if (style == DOTTED || style == DASHED || style == DOUBLE)
         return false;
 
     return true;
@@ -73,8 +71,9 @@ int BorderEdge::getDoubleBorderStripeWidth(DoubleBorderStripe stripe) const
     ASSERT(stripe == DoubleBorderStripeOuter || stripe == DoubleBorderStripeInner);
 
     // We need certain integer rounding results.
-    return stripe == DoubleBorderStripeOuter ? (usedWidth() + 1) / 3
-                                             : (usedWidth() * 2 + 1) / 3;
+    return stripe == DoubleBorderStripeOuter
+        ? (usedWidth() + 1) / 3
+        : (usedWidth() * 2 + 1) / 3;
 }
 
 bool BorderEdge::sharesColorWith(const BorderEdge& other) const

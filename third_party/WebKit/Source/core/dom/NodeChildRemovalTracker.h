@@ -34,7 +34,6 @@ namespace blink {
 
 class NodeChildRemovalTracker {
     STACK_ALLOCATED();
-
 public:
     explicit NodeChildRemovalTracker(Node&);
     ~NodeChildRemovalTracker();
@@ -45,7 +44,7 @@ private:
     Node& node() const { return *m_node; }
     NodeChildRemovalTracker* previous() { return m_previous; }
 
-    Member<Node> m_node;
+    RawPtrWillBeMember<Node> m_node;
     // Using raw pointers are safe because these NodeChildRemovalTrackers are
     // guaranteed to be on a stack.
     NodeChildRemovalTracker* m_previous;
@@ -66,15 +65,14 @@ inline NodeChildRemovalTracker::~NodeChildRemovalTracker()
 
 inline bool NodeChildRemovalTracker::isBeingRemoved(Node* node)
 {
-    for (NodeChildRemovalTracker* removal = s_last; removal;
-         removal = removal->previous()) {
-        if (removal->node().isShadowIncludingInclusiveAncestorOf(node))
+    for (NodeChildRemovalTracker* removal = s_last; removal; removal = removal->previous()) {
+        if (removal->node().containsIncludingShadowDOM(node))
             return true;
     }
 
     return false;
 }
 
-} // namespace blink
+} // namespace
 
 #endif

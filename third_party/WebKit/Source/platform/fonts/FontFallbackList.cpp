@@ -26,19 +26,42 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/fonts/FontFallbackList.h"
 
 #include "platform/FontFamilyNames.h"
 #include "platform/fonts/AlternateFontFamily.h"
 #include "platform/fonts/FontCache.h"
 #include "platform/fonts/FontCacheKey.h"
+=======
+#include "config.h"
+#include "platform/fonts/FontFallbackList.h"
+
+#include "platform/FontFamilyNames.h"
+#include "platform/fonts/FontCache.h"
+>>>>>>> miniblink49
 #include "platform/fonts/FontDescription.h"
 #include "platform/fonts/FontFamily.h"
 #include "platform/fonts/SegmentedFontData.h"
 #include "wtf/text/CharacterNames.h"
+<<<<<<< HEAD
 
 namespace blink {
 
+=======
+#include "wtf/RefCountedLeakCounter.h"
+#ifndef NDEBUG
+#include <set> // weolar TODO
+#endif
+
+namespace blink {
+
+#ifndef NDEBUG
+DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, FontFallbackListCounter, ("FontFallbackListCounter"));
+std::set<void*>* g_activatingFontFallbackList = nullptr;
+#endif
+
+>>>>>>> miniblink49
 FontFallbackList::FontFallbackList()
     : m_pageZero(0)
     , m_cachedPrimarySimpleFontData(0)
@@ -48,9 +71,35 @@ FontFallbackList::FontFallbackList()
     , m_generation(FontCache::fontCache()->generation())
     , m_hasLoadingFallback(false)
 {
+<<<<<<< HEAD
 }
 
 void FontFallbackList::invalidate(FontSelector* fontSelector)
+=======
+#ifndef NDEBUG
+    FontFallbackListCounter.increment();
+    if (!g_activatingFontFallbackList)
+        g_activatingFontFallbackList = new std::set<void*>();
+    g_activatingFontFallbackList->insert(this);
+
+//     WTF::String outstr = String::format("FontFallbackList::FontFallbackList: %p\n", this);
+//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
+#endif
+}
+
+FontFallbackList::~FontFallbackList()
+{
+    releaseFontData();
+#ifndef NDEBUG
+//     WTF::String outstr = String::format("FontFallbackList::~FontFallbackList: %p\n", this);
+//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
+    g_activatingFontFallbackList->erase(this);
+    FontFallbackListCounter.decrement();
+#endif
+}
+
+void FontFallbackList::invalidate(PassRefPtrWillBeRawPtr<FontSelector> fontSelector)
+>>>>>>> miniblink49
 {
     releaseFontData();
     m_fontList.clear();
@@ -59,10 +108,17 @@ void FontFallbackList::invalidate(FontSelector* fontSelector)
     m_cachedPrimarySimpleFontData = 0;
     m_familyIndex = 0;
     m_hasLoadingFallback = false;
+<<<<<<< HEAD
     if (m_fontSelector != fontSelector)
         m_fontSelector = fontSelector;
     m_fontSelectorVersion = m_fontSelector ? m_fontSelector->version() : 0;
     m_generation = FontCache::fontCache()->generation();
+=======
+    m_fontSelector = fontSelector;
+    m_fontSelectorVersion = m_fontSelector ? m_fontSelector->version() : 0;
+    m_generation = FontCache::fontCache()->generation();
+    m_cachingWordShaper.clear();
+>>>>>>> miniblink49
 }
 
 void FontFallbackList::releaseFontData()
@@ -74,7 +130,10 @@ void FontFallbackList::releaseFontData()
             FontCache::fontCache()->releaseFontData(toSimpleFontData(m_fontList[i]));
         }
     }
+<<<<<<< HEAD
     m_shapeCache.reset(); // Clear the weak pointer to the cache instance.
+=======
+>>>>>>> miniblink49
 }
 
 bool FontFallbackList::loadingCustomFonts() const
@@ -107,7 +166,11 @@ const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const Fon
 {
     bool shouldLoadCustomFont = true;
 
+<<<<<<< HEAD
     for (unsigned fontIndex = 0;; ++fontIndex) {
+=======
+    for (unsigned fontIndex = 0; ; ++fontIndex) {
+>>>>>>> miniblink49
         const FontData* fontData = fontDataAt(fontDescription, fontIndex);
         if (!fontData) {
             // All fonts are custom fonts and are loading. Return the first FontData.
@@ -133,8 +196,13 @@ const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const Fon
 
         if (fontData->isSegmented()) {
             const SegmentedFontData* segmented = toSegmentedFontData(fontData);
+<<<<<<< HEAD
             for (unsigned i = 0; i < segmented->numFaces(); i++) {
                 const SimpleFontData* rangeFontData = segmented->faceAt(i)->fontData();
+=======
+            for (unsigned i = 0; i < segmented->numRanges(); i++) {
+                const SimpleFontData* rangeFontData = segmented->rangeAt(i).fontData().get();
+>>>>>>> miniblink49
                 if (!rangeFontData->isLoadingFallback())
                     return rangeFontData;
             }
@@ -152,6 +220,7 @@ const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const Fon
 
 PassRefPtr<FontData> FontFallbackList::getFontData(const FontDescription& fontDescription, int& familyIndex) const
 {
+<<<<<<< HEAD
     const FontFamily* currFamily = &fontDescription.family();
     for (int i = 0; currFamily && i < familyIndex; i++)
         currFamily = currFamily->next();
@@ -169,6 +238,35 @@ PassRefPtr<FontData> FontFallbackList::getFontData(const FontDescription& fontDe
         }
     }
     familyIndex = cAllFamiliesScanned;
+=======
+    RefPtr<FontData> result;
+
+    int startIndex = familyIndex;
+    const FontFamily* startFamily = &fontDescription.family();
+    for (int i = 0; startFamily && i < startIndex; i++)
+        startFamily = startFamily->next();
+    const FontFamily* currFamily = startFamily;
+    while (currFamily && !result) {
+        familyIndex++;
+        if (currFamily->family().length()) {
+            if (m_fontSelector)
+                result = m_fontSelector->getFontData(fontDescription, currFamily->family());
+
+            if (!result)
+                result = FontCache::fontCache()->getFontData(fontDescription, currFamily->family());
+        }
+        currFamily = currFamily->next();
+    }
+
+    if (!currFamily)
+        familyIndex = cAllFamiliesScanned;
+
+    if (result || startIndex)
+        return result.release();
+
+    // If it's the primary font that we couldn't find, we try the following. In all other cases, we will
+    // just use per-character system fallback.
+>>>>>>> miniblink49
 
     if (m_fontSelector) {
         // Try the user's preferred standard font.
@@ -180,6 +278,7 @@ PassRefPtr<FontData> FontFallbackList::getFontData(const FontDescription& fontDe
     return FontCache::fontCache()->getLastResortFallbackFont(fontDescription);
 }
 
+<<<<<<< HEAD
 FallbackListCompositeKey FontFallbackList::compositeKey(const FontDescription& fontDescription) const
 {
     FallbackListCompositeKey key(fontDescription);
@@ -205,6 +304,8 @@ FallbackListCompositeKey FontFallbackList::compositeKey(const FontDescription& f
 
     return key;
 }
+=======
+>>>>>>> miniblink49
 
 const FontData* FontFallbackList::fontDataAt(const FontDescription& fontDescription, unsigned realizedFontIndex) const
 {

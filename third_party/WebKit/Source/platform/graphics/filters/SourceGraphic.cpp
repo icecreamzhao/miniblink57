@@ -18,10 +18,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "platform/graphics/filters/SourceGraphic.h"
 
 #include "platform/graphics/filters/Filter.h"
 #include "platform/text/TextStream.h"
+<<<<<<< HEAD
+=======
+#include "third_party/skia/include/core/SkPicture.h"
+#include "third_party/skia/include/effects/SkPictureImageFilter.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -31,6 +41,7 @@ SourceGraphic::SourceGraphic(Filter* filter)
     setOperatingColorSpace(ColorSpaceDeviceRGB);
 }
 
+<<<<<<< HEAD
 SourceGraphic::~SourceGraphic() { }
 
 SourceGraphic* SourceGraphic::create(Filter* filter)
@@ -50,6 +61,45 @@ void SourceGraphic::setSourceRect(const IntRect& sourceRect)
 
 TextStream& SourceGraphic::externalRepresentation(TextStream& ts,
     int indent) const
+=======
+SourceGraphic::~SourceGraphic()
+{
+}
+
+PassRefPtrWillBeRawPtr<SourceGraphic> SourceGraphic::create(Filter* filter)
+{
+    return adoptRefWillBeNoop(new SourceGraphic(filter));
+}
+
+const AtomicString& SourceGraphic::effectName()
+{
+    DEFINE_STATIC_LOCAL(const AtomicString, s_effectName, ("SourceGraphic", AtomicString::ConstructFromLiteral));
+    return s_effectName;
+}
+
+FloatRect SourceGraphic::determineAbsolutePaintRect(const FloatRect& requestedRect)
+{
+    FloatRect srcRect = filter()->sourceImageRect();
+    srcRect.intersect(requestedRect);
+    addAbsolutePaintRect(srcRect);
+    return srcRect;
+}
+
+void SourceGraphic::setPicture(PassRefPtr<const SkPicture> picture)
+{
+    m_picture = picture;
+}
+
+PassRefPtr<SkImageFilter> SourceGraphic::createImageFilter(SkiaImageFilterBuilder*)
+{
+    if (!m_picture)
+        return nullptr;
+
+    return adoptRef(SkPictureImageFilter::Create(m_picture.get(), m_picture->cullRect()));
+}
+
+TextStream& SourceGraphic::externalRepresentation(TextStream& ts, int indent) const
+>>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[SourceGraphic]\n";

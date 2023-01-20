@@ -18,7 +18,11 @@
     Boston, MA 02110-1301, USA.
 */
 
+<<<<<<< HEAD
 // https://www.w3.org/TR/html5/webappapis.html#navigatorcontentutils
+=======
+// http://www.w3.org/TR/html5/system-state-and-capabilities.html#custom-handlers
+>>>>>>> miniblink49
 partial interface Navigator {
     [RuntimeEnabled=NavigatorContentUtils, RaisesException] void registerProtocolHandler(DOMString scheme, DOMString url, DOMString title);
     [RuntimeEnabled=CustomSchemeHandler, RaisesException] DOMString isProtocolHandlerRegistered(DOMString scheme, DOMString url);

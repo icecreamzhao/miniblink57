@@ -17,8 +17,13 @@
 #ifndef __UENUM_H
 #define __UENUM_H
 
+<<<<<<< HEAD
 #include "unicode/localpointer.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/localpointer.h"
+>>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 #include "unicode/strenum.h"
@@ -28,7 +33,11 @@
  * \file
  * \brief C API: String Enumeration 
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 /**
  * An enumeration object.
  * For usage in C programs.
@@ -107,8 +116,13 @@ uenum_count(UEnumeration* en, UErrorCode* status);
  */
 U_STABLE const UChar* U_EXPORT2
 uenum_unext(UEnumeration* en,
+<<<<<<< HEAD
     int32_t* resultLength,
     UErrorCode* status);
+=======
+            int32_t* resultLength,
+            UErrorCode* status);
+>>>>>>> miniblink49
 
 /**
  * Returns the next element in the iterator's list.  If there are
@@ -140,8 +154,13 @@ uenum_unext(UEnumeration* en,
  */
 U_STABLE const char* U_EXPORT2
 uenum_next(UEnumeration* en,
+<<<<<<< HEAD
     int32_t* resultLength,
     UErrorCode* status);
+=======
+           int32_t* resultLength,
+           UErrorCode* status);
+>>>>>>> miniblink49
 
 /**
  * Resets the iterator to the current list of service IDs.  This
@@ -184,7 +203,11 @@ uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec)
  */
 U_STABLE UEnumeration* U_EXPORT2
 uenum_openUCharStringsEnumeration(const UChar* const strings[], int32_t count,
+<<<<<<< HEAD
     UErrorCode* ec);
+=======
+                                 UErrorCode* ec);
+>>>>>>> miniblink49
 
 /* Note:  next function is not hidden as draft, as it is used internally (it was formerly an internal function). */
 
@@ -201,6 +224,10 @@ uenum_openUCharStringsEnumeration(const UChar* const strings[], int32_t count,
  */
 U_STABLE UEnumeration* U_EXPORT2
 uenum_openCharStringsEnumeration(const char* const strings[], int32_t count,
+<<<<<<< HEAD
     UErrorCode* ec);
+=======
+                                 UErrorCode* ec);
+>>>>>>> miniblink49
 
 #endif

@@ -1,6 +1,10 @@
 /*
+<<<<<<< HEAD
  * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
  * rights reserved.
+=======
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+>>>>>>> miniblink49
  * Copyright (C) 2005 Alexey Proskuryakov.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,6 +29,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/text/UnicodeUtilities.h"
 
 #include "wtf/text/CharacterNames.h"
@@ -54,8 +62,12 @@ static inline CharType foldQuoteMarkOrSoftHyphen(CharType c)
     case rightSingleQuotationMarkCharacter:
         return '\'';
     case softHyphenCharacter:
+<<<<<<< HEAD
         // Replace soft hyphen with an ignorable character so that their presence
         // or absence will
+=======
+        // Replace soft hyphen with an ignorable character so that their presence or absence will
+>>>>>>> miniblink49
         // not affect string comparison.
         return 0;
     default:
@@ -77,23 +89,38 @@ void foldQuoteMarksAndSoftHyphens(String& s)
     s.replace(leftSingleQuotationMarkCharacter, '\'');
     s.replace(rightDoubleQuotationMarkCharacter, '"');
     s.replace(rightSingleQuotationMarkCharacter, '\'');
+<<<<<<< HEAD
     // Replace soft hyphen with an ignorable character so that their presence or
     // absence will
     // not affect string comparison.
     s.replace(softHyphenCharacter, static_cast<UChar>('\0'));
+=======
+    // Replace soft hyphen with an ignorable character so that their presence or absence will
+    // not affect string comparison.
+    s.replace(softHyphenCharacter, 0);
+>>>>>>> miniblink49
 }
 
 static bool isNonLatin1Separator(UChar32 character)
 {
+<<<<<<< HEAD
     //   DCHECK_GE(character, 256);
     //   return U_GET_GC_MASK(character) &
     //          (U_GC_S_MASK | U_GC_P_MASK | U_GC_Z_MASK | U_GC_CF_MASK);
     DebugBreak();
     return false;
+=======
+    ASSERT_ARG(character, character >= 256);
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    return U_GET_GC_MASK(character) & (U_GC_S_MASK | U_GC_P_MASK | U_GC_Z_MASK | U_GC_CF_MASK);
+#endif // MINIBLINK_NOT_IMPLEMENTED
+    return true; // 非latin字符全认为是分隔符
+>>>>>>> miniblink49
 }
 
 bool isSeparator(UChar32 character)
 {
+<<<<<<< HEAD
     // clang-format off
   static const bool latin1SeparatorTable[256] = {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -120,6 +147,27 @@ bool isSeparator(UChar32 character)
       0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
   };
     // clang-format on
+=======
+    static const bool latin1SeparatorTable[256] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // space ! " # $ % & ' ( ) * + , - . /
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, //                         : ; < = > ?
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //   @
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, //                         [ \ ] ^ _
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //   `
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, //                           { | } ~
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+
+>>>>>>> miniblink49
     if (character < 256)
         return latin1SeparatorTable[character];
 
@@ -304,6 +352,7 @@ bool containsKanaLetters(const String& pattern)
     return false;
 }
 
+<<<<<<< HEAD
 void normalizeCharactersIntoNFCForm(const UChar* characters,
     unsigned length,
     Vector<UChar>& buffer)
@@ -341,6 +390,37 @@ static inline size_t compareKanaLetterAndComposedVoicedSoundMarks(
     const UChar* firstEnd,
     const UChar* second,
     const UChar* secondEnd)
+=======
+void normalizeCharactersIntoNFCForm(const UChar* characters, unsigned length, Vector<UChar>& buffer)
+{
+    ASSERT(length);
+
+    buffer.resize(length);
+
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    UErrorCode status = U_ZERO_ERROR;
+    size_t bufferSize = unorm_normalize(characters, length, UNORM_NFC, 0, buffer.data(), length, &status);
+    ASSERT(status == U_ZERO_ERROR || status == U_STRING_NOT_TERMINATED_WARNING || status == U_BUFFER_OVERFLOW_ERROR);
+    ASSERT(bufferSize);
+
+    buffer.resize(bufferSize);
+
+    if (status == U_ZERO_ERROR || status == U_STRING_NOT_TERMINATED_WARNING)
+        return;
+
+    status = U_ZERO_ERROR;
+    unorm_normalize(characters, length, UNORM_NFC, 0, buffer.data(), bufferSize, &status);
+    ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+#endif // MINIBLINK_NOT_IMPLEMENTED
+    notImplemented();
+}
+
+// This function returns kNotFound if |first| and |second| contain different Kana letters.
+// If |first| and |second| contain the same Kana letter
+// then function returns offset in characters from |first|.
+// Pointers to both strings increase simultaneously so so it is possible to use one offset value.
+static inline size_t compareKanaLetterAndComposedVoicedSoundMarks(const UChar* first, const UChar* firstEnd, const UChar* second, const UChar* secondEnd)
+>>>>>>> miniblink49
 {
     const UChar* start = first;
     // Check for differences in the kana letter character itself.
@@ -351,8 +431,12 @@ static inline size_t compareKanaLetterAndComposedVoicedSoundMarks(
     ++first;
     ++second;
 
+<<<<<<< HEAD
     // Check for differences in combining voiced sound marks found after the
     // letter.
+=======
+    // Check for differences in combining voiced sound marks found after the letter.
+>>>>>>> miniblink49
     while (true) {
         const bool secondIsNotSoundMark = second == secondEnd || !isCombiningVoicedSoundMark(*second);
         if (first == firstEnd || !isCombiningVoicedSoundMark(*first)) {
@@ -367,10 +451,14 @@ static inline size_t compareKanaLetterAndComposedVoicedSoundMarks(
     }
 }
 
+<<<<<<< HEAD
 bool checkOnlyKanaLettersInStrings(const UChar* firstData,
     unsigned firstLength,
     const UChar* secondData,
     unsigned secondLength)
+=======
+bool checkOnlyKanaLettersInStrings(const UChar* firstData, unsigned firstLength, const UChar* secondData, unsigned secondLength)
+>>>>>>> miniblink49
 {
     const UChar* a = firstData;
     const UChar* aEnd = firstData + firstLength;
@@ -379,18 +467,28 @@ bool checkOnlyKanaLettersInStrings(const UChar* firstData,
     const UChar* bEnd = secondData + secondLength;
     while (true) {
         // Skip runs of non-kana-letter characters. This is necessary so we can
+<<<<<<< HEAD
         // correctly handle strings where the |firstData| and |secondData| have
         // different-length runs of characters that match, while still double
         // checking the correctness of matches of kana letters with other kana
         // letters.
+=======
+        // correctly handle strings where the |firstData| and |secondData| have different-length
+        // runs of characters that match, while still double checking the correctness
+        // of matches of kana letters with other kana letters.
+>>>>>>> miniblink49
         while (a != aEnd && !isKanaLetter(*a))
             ++a;
         while (b != bEnd && !isKanaLetter(*b))
             ++b;
 
         // If we reached the end of either the target or the match, we should have
+<<<<<<< HEAD
         // reached the end of both; both should have the same number of kana
         // letters.
+=======
+        // reached the end of both; both should have the same number of kana letters.
+>>>>>>> miniblink49
         if (a == aEnd || b == bEnd) {
             return a == aEnd && b == bEnd;
         }
@@ -406,10 +504,14 @@ bool checkOnlyKanaLettersInStrings(const UChar* firstData,
     }
 }
 
+<<<<<<< HEAD
 bool checkKanaStringsEqual(const UChar* firstData,
     unsigned firstLength,
     const UChar* secondData,
     unsigned secondLength)
+=======
+bool checkKanaStringsEqual(const UChar* firstData, unsigned firstLength, const UChar* secondData, unsigned secondLength)
+>>>>>>> miniblink49
 {
     const UChar* a = firstData;
     const UChar* aEnd = firstData + firstLength;
@@ -424,8 +526,12 @@ bool checkKanaStringsEqual(const UChar* firstData,
         }
 
         // If we reached the end of either the target or the match, we should have
+<<<<<<< HEAD
         // reached the end of both; both should have the same number of kana
         // letters.
+=======
+        // reached the end of both; both should have the same number of kana letters.
+>>>>>>> miniblink49
         if (a == aEnd || b == bEnd) {
             return a == aEnd && b == bEnd;
         }
@@ -444,4 +550,8 @@ bool checkKanaStringsEqual(const UChar* firstData,
     }
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

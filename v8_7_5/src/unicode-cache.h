@@ -13,6 +13,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     // Caching predicates used by scanners.
     class UnicodeCache {
     public:
@@ -31,3 +32,23 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_UNICODE_CACHE_H_
+=======
+// Caching predicates used by scanners.
+class UnicodeCache {
+ public:
+  UnicodeCache() = default;
+  typedef unibrow::Utf8Decoder<512> Utf8Decoder;
+
+  StaticResource<Utf8Decoder>* utf8_decoder() { return &utf8_decoder_; }
+
+ private:
+  StaticResource<Utf8Decoder> utf8_decoder_;
+
+  DISALLOW_COPY_AND_ASSIGN(UnicodeCache);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_UNICODE_CACHE_H_
+>>>>>>> miniblink49

@@ -27,8 +27,7 @@
 #define TypeAhead_h
 
 #include "core/CoreExport.h"
-#include "wtf/Allocator.h"
-#include "wtf/Time.h"
+#include "core/dom/DOMTimeStamp.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
 
@@ -46,8 +45,6 @@ public:
 };
 
 class TypeAhead {
-    DISALLOW_NEW();
-
 public:
     TypeAhead(TypeAheadDataSource*);
 
@@ -61,12 +58,9 @@ public:
     // Returns the index for the matching option.
     int handleEvent(KeyboardEvent*, MatchModeFlags);
     bool hasActiveSession(KeyboardEvent*);
-    void resetSession();
-
 private:
     TypeAheadDataSource* m_dataSource;
-    // platform timestamp of last keyboard event in seconds
-    TimeTicks m_lastTypeTime;
+    DOMTimeStamp m_lastTypeTime;
     UChar m_repeatingChar;
     StringBuilder m_buffer;
 };

@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/css/CSSFontFeatureValue.h"
 
 #include "wtf/text/StringBuilder.h"
@@ -41,7 +42,7 @@ String CSSFontFeatureValue::customCSSText() const
     StringBuilder builder;
     builder.append('\'');
     builder.append(m_tag);
-    builder.append("' ");
+    builder.appendLiteral("' ");
     builder.appendNumber(m_value);
     return builder.toString();
 }
@@ -51,4 +52,4 @@ bool CSSFontFeatureValue::equals(const CSSFontFeatureValue& other) const
     return m_tag == other.m_tag && m_value == other.m_value;
 }
 
-} // namespace blink
+}

@@ -23,11 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://dev.w3.org/csswg/cssom/#the-cssrulelist-interface
+// http://dev.w3.org/csswg/cssom/#the-cssrulelist-interface
 
-// TODO(foolip): CSSRuleList should be an [ArrayClass].
+// TODO(philipj): CSSRuleList should be an [ArrayClass].
 [
     DependentLifetime,
+    WillBeGarbageCollected,
 ] interface CSSRuleList {
     [Measure] getter CSSRule? item(unsigned long index);
     readonly attribute unsigned long length;

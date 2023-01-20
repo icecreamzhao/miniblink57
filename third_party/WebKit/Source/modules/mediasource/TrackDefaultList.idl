@@ -8,6 +8,10 @@
 [
     Constructor(optional sequence<TrackDefault> trackDefaults = []),
     RaisesException=Constructor,
+<<<<<<< HEAD
+=======
+    GarbageCollected,
+>>>>>>> miniblink49
     RuntimeEnabled=MediaSourceExperimental,
 ] interface TrackDefaultList {
     readonly attribute unsigned long length;

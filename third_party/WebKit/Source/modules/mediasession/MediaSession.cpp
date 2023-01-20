@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "modules/mediasession/MediaSession.h"
 
 #include "bindings/modules/v8/MediaSessionActionHandler.h"
@@ -266,6 +267,24 @@ DEFINE_TRACE_WRAPPERS(MediaSession)
 {
     for (auto handler : m_actionHandlers.values())
         visitor->traceWrappers(handler);
+=======
+#include "config.h"
+#include "modules/mediasession/MediaSession.h"
+
+namespace blink {
+
+MediaSession* MediaSession::create()
+{
+    return new MediaSession;
+}
+
+void MediaSession::activate()
+{
+}
+
+void MediaSession::deactivate()
+{
+>>>>>>> miniblink49
 }
 
 } // namespace blink

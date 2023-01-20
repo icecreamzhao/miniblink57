@@ -48,14 +48,20 @@ class SQLTransactionCoordinator;
 class SQLTransactionErrorCallback;
 class VoidCallback;
 
+<<<<<<< HEAD
 class Database final : public GarbageCollectedFinalized<Database>,
                        public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class Database final : public GarbageCollectedFinalized<Database>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     virtual ~Database();
     DECLARE_TRACE();
 
+<<<<<<< HEAD
     bool openAndVerifyVersion(bool setVersionInNewDatabase,
         DatabaseError&,
         String& errorMessage);
@@ -64,6 +70,12 @@ public:
     SQLTransactionBackend* runTransaction(SQLTransaction*,
         bool readOnly,
         const ChangeVersionData*);
+=======
+    bool openAndVerifyVersion(bool setVersionInNewDatabase, DatabaseError&, String& errorMessage);
+    void close();
+
+    SQLTransactionBackend* runTransaction(SQLTransaction*, bool readOnly, const ChangeVersionData*);
+>>>>>>> miniblink49
     void scheduleTransactionStep(SQLTransactionBackend*);
     void inProgressTransactionCompleted();
 
@@ -72,11 +84,17 @@ public:
 
     // Direct support for the DOM API
     String version() const;
+<<<<<<< HEAD
     void changeVersion(const String& oldVersion,
+=======
+    void changeVersion(
+        const String& oldVersion,
+>>>>>>> miniblink49
         const String& newVersion,
         SQLTransactionCallback*,
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback);
+<<<<<<< HEAD
     void transaction(SQLTransactionCallback*,
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback);
@@ -91,6 +109,24 @@ public:
     String stringIdentifier() const;
     String displayName() const;
     unsigned estimatedSize() const;
+=======
+    void transaction(
+        SQLTransactionCallback*,
+        SQLTransactionErrorCallback*,
+        VoidCallback* successCallback);
+    void readTransaction(
+        SQLTransactionCallback*,
+        SQLTransactionErrorCallback*,
+        VoidCallback* successCallback);
+
+    bool opened() const { return m_opened; }
+    bool isNew() const { return m_new; }
+
+    SecurityOrigin* securityOrigin() const;
+    String stringIdentifier() const;
+    String displayName() const;
+    unsigned long estimatedSize() const;
+>>>>>>> miniblink49
     String fileName() const;
     SQLiteDatabase& sqliteDatabase() { return m_sqliteDatabase; }
 
@@ -111,11 +147,16 @@ public:
     void closeImmediately();
     void closeDatabase();
 
+<<<<<<< HEAD
     DatabaseContext* getDatabaseContext() const
     {
         return m_databaseContext.get();
     }
     ExecutionContext* getExecutionContext() const;
+=======
+    DatabaseContext* databaseContext() const { return m_databaseContext.get(); }
+    ExecutionContext* executionContext() const;
+>>>>>>> miniblink49
 
 private:
     class DatabaseOpenTask;
@@ -123,6 +164,7 @@ private:
     class DatabaseTransactionTask;
     class DatabaseTableNamesTask;
 
+<<<<<<< HEAD
     Database(DatabaseContext*,
         const String& name,
         const String& expectedVersion,
@@ -131,10 +173,15 @@ private:
     bool performOpenAndVerify(bool setVersionInNewDatabase,
         DatabaseError&,
         String& errorMessage);
+=======
+    Database(DatabaseContext*, const String& name, const String& expectedVersion, const String& displayName, unsigned long estimatedSize);
+    bool performOpenAndVerify(bool setVersionInNewDatabase, DatabaseError&, String& errorMessage);
+>>>>>>> miniblink49
 
     void scheduleTransaction();
 
     bool getVersionFromDatabase(String& version, bool shouldCacheVersion = true);
+<<<<<<< HEAD
     bool setVersionInDatabase(const String& version,
         bool shouldCacheVersion = true);
     void setExpectedVersion(const String&);
@@ -144,12 +191,24 @@ private:
     bool getActualVersionForTransaction(String& version);
 
     void runTransaction(SQLTransactionCallback*,
+=======
+    bool setVersionInDatabase(const String& version, bool shouldCacheVersion = true);
+    void setExpectedVersion(const String&);
+    const String& expectedVersion() const { return m_expectedVersion; }
+    String getCachedVersion()const;
+    void setCachedVersion(const String&);
+    bool getActualVersionForTransaction(String& version);
+
+    void runTransaction(
+        SQLTransactionCallback*,
+>>>>>>> miniblink49
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback,
         bool readOnly,
         const ChangeVersionData* = 0);
     Vector<String> performGetTableNames();
 
+<<<<<<< HEAD
     void reportOpenDatabaseResult(int errorSite,
         int webSqlErrorCode,
         int sqliteErrorCode,
@@ -178,6 +237,23 @@ private:
     RefPtr<SecurityOrigin> m_databaseThreadSecurityOrigin;
     Member<DatabaseContext>
         m_databaseContext; // Associated with m_executionContext.
+=======
+    void reportOpenDatabaseResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode, double duration);
+    void reportChangeVersionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
+    void reportStartTransactionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
+    void reportCommitTransactionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
+    void reportExecuteStatementResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
+    void reportVacuumDatabaseResult(int sqliteErrorCode);
+    void logErrorMessage(const String&);
+    static const char* databaseInfoTableName();
+#if !LOG_DISABLED || !ERROR_DISABLED
+    String databaseDebugName() const { return m_contextThreadSecurityOrigin->toString() + "::" + m_name; }
+#endif
+
+    RefPtr<SecurityOrigin> m_contextThreadSecurityOrigin;
+    RefPtr<SecurityOrigin> m_databaseThreadSecurityOrigin;
+    Member<DatabaseContext> m_databaseContext; // Associated with m_executionContext.
+>>>>>>> miniblink49
 
     String m_name;
     String m_expectedVersion;
@@ -186,14 +262,22 @@ private:
     String m_filename;
 
     DatabaseGuid m_guid;
+<<<<<<< HEAD
     int m_opened;
+=======
+    bool m_opened;
+>>>>>>> miniblink49
     bool m_new;
 
     SQLiteDatabase m_sqliteDatabase;
 
     Member<DatabaseAuthorizer> m_databaseAuthorizer;
 
+<<<<<<< HEAD
     Deque<CrossThreadPersistent<SQLTransactionBackend>> m_transactionQueue;
+=======
+    HeapDeque<Member<SQLTransactionBackend>> m_transactionQueue;
+>>>>>>> miniblink49
     Mutex m_transactionInProgressMutex;
     bool m_transactionInProgress;
     bool m_isTransactionQueueEnabled;

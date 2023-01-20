@@ -19,48 +19,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/CSSRule.h"
 
-#include "bindings/core/v8/ScriptWrappableVisitor.h"
 #include "core/css/CSSStyleSheet.h"
 #include "core/css/StyleRule.h"
 #include "core/css/StyleSheetContents.h"
+#include "platform/NotImplemented.h"
 
 namespace blink {
 
-struct SameSizeAsCSSRule : public GarbageCollectedFinalized<SameSizeAsCSSRule>,
-                           public ScriptWrappable {
+struct SameSizeAsCSSRule : public RefCountedWillBeGarbageCollectedFinalized<SameSizeAsCSSRule>, public ScriptWrappable {
     virtual ~SameSizeAsCSSRule();
     unsigned char bitfields;
     void* pointerUnion;
 };
 
-static_assert(sizeof(CSSRule) == sizeof(SameSizeAsCSSRule),
-    "CSSRule should stay small");
+static_assert(sizeof(CSSRule) == sizeof(SameSizeAsCSSRule), "CSSRule should stay small");
 
-const CSSParserContext* CSSRule::parserContext() const
+void CSSRule::setCSSText(const String&)
+{
+    notImplemented();
+}
+
+const CSSParserContext& CSSRule::parserContext() const
 {
     CSSStyleSheet* styleSheet = parentStyleSheet();
-    return styleSheet ? styleSheet->contents()->parserContext()
-                      : strictCSSParserContext();
-}
-
-void CSSRule::setParentStyleSheet(CSSStyleSheet* styleSheet)
-{
-    m_parentIsRule = false;
-    m_parentStyleSheet = styleSheet;
-    ScriptWrappableVisitor::writeBarrier(this, m_parentStyleSheet);
-}
-
-void CSSRule::setParentRule(CSSRule* rule)
-{
-    m_parentIsRule = true;
-    m_parentRule = rule;
-    ScriptWrappableVisitor::writeBarrier(this, m_parentRule);
+    return styleSheet ? styleSheet->contents()->parserContext() : strictCSSParserContext();
 }
 
 DEFINE_TRACE(CSSRule)
 {
+#if ENABLE(OILPAN)
     // This makes the parent link strong, which is different from the
     // pre-oilpan world, where the parent link is mysteriously zeroed under
     // some circumstances.
@@ -68,6 +58,7 @@ DEFINE_TRACE(CSSRule)
         visitor->trace(m_parentRule);
     else
         visitor->trace(m_parentStyleSheet);
+#endif
 }
 
 } // namespace blink

@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/css/CSSFontFaceSource.h"
 
 #include "core/css/CSSFontFace.h"
@@ -38,10 +39,11 @@ CSSFontFaceSource::CSSFontFaceSource()
 {
 }
 
-CSSFontFaceSource::~CSSFontFaceSource() { }
+CSSFontFaceSource::~CSSFontFaceSource()
+{
+}
 
-PassRefPtr<SimpleFontData> CSSFontFaceSource::getFontData(
-    const FontDescription& fontDescription)
+PassRefPtr<SimpleFontData> CSSFontFaceSource::getFontData(const FontDescription& fontDescription)
 {
     // If the font hasn't loaded or an error occurred, then we've got nothing.
     if (!isValid())
@@ -53,16 +55,12 @@ PassRefPtr<SimpleFontData> CSSFontFaceSource::getFontData(
     }
 
     // See if we have a mapping in our FontData cache.
-    // TODO(drott): Check whether losing traits information here is problematic.
-    // crbug.com/516677
     FontCacheKey key = fontDescription.cacheKey(FontFaceCreationParams());
 
-    RefPtr<SimpleFontData>& fontData = m_fontDataTable.add(key, nullptr).storedValue->value;
+    RefPtr<SimpleFontData>& fontData = m_fontDataTable.add(key.hash(), nullptr).storedValue->value;
     if (!fontData)
         fontData = createFontData(fontDescription);
-    // No release, because fontData is a reference to a RefPtr that is held in the
-    // m_fontDataTable.
-    return fontData;
+    return fontData; // No release, because fontData is a reference to a RefPtr that is held in the m_fontDataTable.
 }
 
 DEFINE_TRACE(CSSFontFaceSource)
@@ -70,4 +68,4 @@ DEFINE_TRACE(CSSFontFaceSource)
     visitor->trace(m_face);
 }
 
-} // namespace blink
+}

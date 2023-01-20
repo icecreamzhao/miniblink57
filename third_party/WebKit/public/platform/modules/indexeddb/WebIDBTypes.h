@@ -55,17 +55,26 @@ enum WebIDBCursorDirection {
     WebIDBCursorDirectionNextNoDuplicate = 1,
     WebIDBCursorDirectionPrev = 2,
     WebIDBCursorDirectionPrevNoDuplicate = 3,
+<<<<<<< HEAD
+=======
+    WebIDBCursorDirectionLast = WebIDBCursorDirectionPrevNoDuplicate
+>>>>>>> miniblink49
 };
 
 enum WebIDBTaskType {
     WebIDBTaskTypeNormal = 0,
     WebIDBTaskTypePreemptive,
+<<<<<<< HEAD
+=======
+    WebIDBTaskTypeLast = WebIDBTaskTypePreemptive
+>>>>>>> miniblink49
 };
 
 enum WebIDBPutMode {
     WebIDBPutModeAddOrUpdate,
     WebIDBPutModeAddOnly,
     WebIDBPutModeCursorUpdate,
+<<<<<<< HEAD
 };
 
 enum WebIDBOperationType {
@@ -74,12 +83,19 @@ enum WebIDBOperationType {
     WebIDBDelete,
     WebIDBClear,
     WebIDBOperationTypeCount,
+=======
+    WebIDBPutModeLast = WebIDBPutModeCursorUpdate
+>>>>>>> miniblink49
 };
 
 enum WebIDBTransactionMode {
     WebIDBTransactionModeReadOnly = 0,
     WebIDBTransactionModeReadWrite,
     WebIDBTransactionModeVersionChange,
+<<<<<<< HEAD
+=======
+    WebIDBTransactionModeLast = WebIDBTransactionModeVersionChange
+>>>>>>> miniblink49
 };
 
 } // namespace blink

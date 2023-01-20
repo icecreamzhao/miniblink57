@@ -28,8 +28,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 enum FontBaseline { AlphabeticBaseline,
     IdeographicBaseline };
+=======
+enum FontBaseline { AlphabeticBaseline, IdeographicBaseline };
+>>>>>>> miniblink49
 
 } // namespace blink
 

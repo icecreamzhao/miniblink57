@@ -5,43 +5,39 @@
 #ifndef CompositingReasonFinder_h
 #define CompositingReasonFinder_h
 
-#include "core/CoreExport.h"
 #include "core/layout/compositing/CompositingTriggers.h"
 #include "platform/graphics/CompositingReasons.h"
-#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
-class PaintLayer;
+class DeprecatedPaintLayer;
 class LayoutObject;
 class ComputedStyle;
 class LayoutView;
 
-class CORE_EXPORT CompositingReasonFinder {
-    DISALLOW_NEW();
+class CompositingReasonFinder {
     WTF_MAKE_NONCOPYABLE(CompositingReasonFinder);
-
 public:
     explicit CompositingReasonFinder(LayoutView&);
 
     CompositingReasons potentialCompositingReasonsFromStyle(LayoutObject*) const;
-    CompositingReasons directReasons(const PaintLayer*) const;
+    CompositingReasons directReasons(const DeprecatedPaintLayer*) const;
 
     void updateTriggers();
 
     bool hasOverflowScrollTrigger() const;
     bool requiresCompositingForScrollableFrame() const;
-    static bool requiresCompositingForAnimation(const ComputedStyle&);
-    static bool requiresCompositingForEffectAnimation(const ComputedStyle&);
-    static bool requiresCompositingForTransformAnimation(const ComputedStyle&);
-    static bool requiresCompositingForTransform(const LayoutObject&);
+    bool requiresCompositingForAnimation(const ComputedStyle&) const;
 
 private:
     bool isMainFrame() const;
 
-    CompositingReasons nonStyleDeterminedDirectReasons(const PaintLayer*) const;
-    bool requiresCompositingForScrollDependentPosition(const PaintLayer*) const;
+    CompositingReasons nonStyleDeterminedDirectReasons(const DeprecatedPaintLayer*) const;
+
+    bool requiresCompositingForTransform(LayoutObject*) const;
+    bool requiresCompositingForPositionFixed(const DeprecatedPaintLayer*) const;
+    bool requiresCompositingForScrollBlocksOn(const LayoutObject*) const;
 
     LayoutView& m_layoutView;
     CompositingTriggerFlags m_compositingTriggers;

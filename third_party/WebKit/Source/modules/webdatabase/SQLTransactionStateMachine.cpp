@@ -23,13 +23,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/webdatabase/SQLTransactionStateMachine.h"
 
+=======
+#include "config.h"
+#include "modules/webdatabase/SQLTransactionStateMachine.h"
+
+#include "platform/Logging.h"
+>>>>>>> miniblink49
 #include "wtf/Assertions.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if !LOG_DISABLED
+>>>>>>> miniblink49
 const char* nameForSQLTransactionState(SQLTransactionState state)
 {
     switch (state) {

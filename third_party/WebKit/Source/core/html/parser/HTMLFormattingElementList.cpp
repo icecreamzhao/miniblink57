@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLFormattingElementList.h"
 
 #ifndef NDEBUG
@@ -32,17 +33,19 @@
 namespace blink {
 
 // Biblically, Noah's Ark only had room for two of each animal, but in the
-// Book of Hixie (aka
-// http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html#list-of-active-formatting-elements),
+// Book of Hixie (aka http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html#list-of-active-formatting-elements),
 // Noah's Ark of Formatting Elements can fit three of each element.
 static const size_t kNoahsArkCapacity = 3;
 
-HTMLFormattingElementList::HTMLFormattingElementList() { }
+HTMLFormattingElementList::HTMLFormattingElementList()
+{
+}
 
-HTMLFormattingElementList::~HTMLFormattingElementList() { }
+HTMLFormattingElementList::~HTMLFormattingElementList()
+{
+}
 
-Element* HTMLFormattingElementList::closestElementInScopeWithName(
-    const AtomicString& targetName)
+Element* HTMLFormattingElementList::closestElementInScopeWithName(const AtomicString& targetName)
 {
     for (unsigned i = 1; i <= m_entries.size(); ++i) {
         const Entry& entry = m_entries[m_entries.size() - i];
@@ -59,8 +62,7 @@ bool HTMLFormattingElementList::contains(Element* element)
     return !!find(element);
 }
 
-HTMLFormattingElementList::Entry* HTMLFormattingElementList::find(
-    Element* element)
+HTMLFormattingElementList::Entry* HTMLFormattingElementList::find(Element* element)
 {
     size_t index = m_entries.reverseFind(element);
     if (index != kNotFound) {
@@ -70,17 +72,14 @@ HTMLFormattingElementList::Entry* HTMLFormattingElementList::find(
     return nullptr;
 }
 
-HTMLFormattingElementList::Bookmark HTMLFormattingElementList::bookmarkFor(
-    Element* element)
+HTMLFormattingElementList::Bookmark HTMLFormattingElementList::bookmarkFor(Element* element)
 {
     size_t index = m_entries.reverseFind(element);
     ASSERT(index != kNotFound);
     return Bookmark(&at(index));
 }
 
-void HTMLFormattingElementList::swapTo(Element* oldElement,
-    HTMLStackItem* newItem,
-    const Bookmark& bookmark)
+void HTMLFormattingElementList::swapTo(Element* oldElement, PassRefPtrWillBeRawPtr<HTMLStackItem> newItem, const Bookmark& bookmark)
 {
     ASSERT(contains(oldElement));
     ASSERT(!contains(newItem->element()));
@@ -90,15 +89,15 @@ void HTMLFormattingElementList::swapTo(Element* oldElement,
         return;
     }
     size_t index = bookmark.mark() - first();
-    SECURITY_DCHECK(index < size());
+    ASSERT_WITH_SECURITY_IMPLICATION(index < size());
     m_entries.insert(index + 1, newItem);
     remove(oldElement);
 }
 
-void HTMLFormattingElementList::append(HTMLStackItem* item)
+void HTMLFormattingElementList::append(PassRefPtrWillBeRawPtr<HTMLStackItem> item)
 {
-    ensureNoahsArkCondition(item);
-    m_entries.push_back(item);
+    ensureNoahsArkCondition(item.get());
+    m_entries.append(item);
 }
 
 void HTMLFormattingElementList::remove(Element* element)
@@ -110,82 +109,81 @@ void HTMLFormattingElementList::remove(Element* element)
 
 void HTMLFormattingElementList::appendMarker()
 {
-    m_entries.push_back(Entry::MarkerEntry);
+    m_entries.append(Entry::MarkerEntry);
 }
 
 void HTMLFormattingElementList::clearToLastMarker()
 {
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html#clear-the-list-of-active-formatting-elements-up-to-the-last-marker
     while (m_entries.size()) {
-        bool shouldStop = m_entries.back().isMarker();
-        m_entries.pop_back();
+        bool shouldStop = m_entries.last().isMarker();
+        m_entries.removeLast();
         if (shouldStop)
             break;
     }
 }
 
-void HTMLFormattingElementList::tryToEnsureNoahsArkConditionQuickly(
-    HTMLStackItem* newItem,
-    HeapVector<Member<HTMLStackItem>>& remainingCandidates)
+void HTMLFormattingElementList::tryToEnsureNoahsArkConditionQuickly(HTMLStackItem* newItem, WillBeHeapVector<RawPtrWillBeMember<HTMLStackItem>>& remainingCandidates)
 {
     ASSERT(remainingCandidates.isEmpty());
 
     if (m_entries.size() < kNoahsArkCapacity)
         return;
 
-    // Use a vector with inline capacity to avoid a malloc in the common case of a
-    // quickly ensuring the condition.
-    HeapVector<Member<HTMLStackItem>, 10> candidates;
+    // Use a vector with inline capacity to avoid a malloc in the common case
+    // of a quickly ensuring the condition.
+    WillBeHeapVector<RawPtrWillBeMember<HTMLStackItem>, 10> candidates;
 
     size_t newItemAttributeCount = newItem->attributes().size();
 
-    for (size_t i = m_entries.size(); i;) {
+    for (size_t i = m_entries.size(); i; ) {
         --i;
         Entry& entry = m_entries[i];
         if (entry.isMarker())
             break;
 
         // Quickly reject obviously non-matching candidates.
-        HTMLStackItem* candidate = entry.stackItem();
+        HTMLStackItem* candidate = entry.stackItem().get();
         if (newItem->localName() != candidate->localName() || newItem->namespaceURI() != candidate->namespaceURI())
             continue;
         if (candidate->attributes().size() != newItemAttributeCount)
             continue;
 
-        candidates.push_back(candidate);
+        candidates.append(candidate);
     }
 
-    // There's room for the new element in the ark. There's no need to copy out
-    // the remainingCandidates.
     if (candidates.size() < kNoahsArkCapacity)
-        return;
+        return; // There's room for the new element in the ark. There's no need to copy out the remainingCandidates.
 
     remainingCandidates.appendVector(candidates);
 }
 
-void HTMLFormattingElementList::ensureNoahsArkCondition(
-    HTMLStackItem* newItem)
+void HTMLFormattingElementList::ensureNoahsArkCondition(HTMLStackItem* newItem)
 {
-    HeapVector<Member<HTMLStackItem>> candidates;
+    WillBeHeapVector<RawPtrWillBeMember<HTMLStackItem>> candidates;
     tryToEnsureNoahsArkConditionQuickly(newItem, candidates);
     if (candidates.isEmpty())
         return;
 
     // We pre-allocate and re-use this second vector to save one malloc per
     // attribute that we verify.
-    HeapVector<Member<HTMLStackItem>> remainingCandidates;
+    WillBeHeapVector<RawPtrWillBeMember<HTMLStackItem>> remainingCandidates;
     remainingCandidates.reserveInitialCapacity(candidates.size());
 
-    for (const auto& attribute : newItem->attributes()) {
-        for (const auto& candidate : candidates) {
-            // These properties should already have been checked by
-            // tryToEnsureNoahsArkConditionQuickly.
+    const Vector<Attribute>& attributes = newItem->attributes();
+    for (size_t i = 0; i < attributes.size(); ++i) {
+        const Attribute& attribute = attributes[i];
+
+        for (size_t j = 0; j < candidates.size(); ++j) {
+            HTMLStackItem* candidate = candidates[j];
+
+            // These properties should already have been checked by tryToEnsureNoahsArkConditionQuickly.
             ASSERT(newItem->attributes().size() == candidate->attributes().size());
             ASSERT(newItem->localName() == candidate->localName() && newItem->namespaceURI() == candidate->namespaceURI());
 
             Attribute* candidateAttribute = candidate->getAttributeItem(attribute.name());
             if (candidateAttribute && candidateAttribute->value() == attribute.value())
-                remainingCandidates.push_back(candidate);
+                remainingCandidates.append(candidate);
         }
 
         if (remainingCandidates.size() < kNoahsArkCapacity)
@@ -209,12 +207,12 @@ void HTMLFormattingElementList::show()
     for (unsigned i = 1; i <= m_entries.size(); ++i) {
         const Entry& entry = m_entries[m_entries.size() - i];
         if (entry.isMarker())
-            LOG(INFO) << "marker";
+            fprintf(stderr, "marker\n");
         else
-            LOG(INFO) << *entry.element();
+            entry.element()->showNode();
     }
 }
 
 #endif
 
-} // namespace blink
+}

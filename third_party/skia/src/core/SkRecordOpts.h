@@ -24,7 +24,11 @@ void SkRecordNoopSaveLayerDrawRestores(SkRecord*);
 // the alpha of the first SaveLayer to the second SaveLayer.
 void SkRecordMergeSvgOpacityAndFilterLayers(SkRecord*);
 
+<<<<<<< HEAD
 // Experimental optimizers
 void SkRecordOptimize2(SkRecord*);
 
 #endif //SkRecordOpts_DEFINED
+=======
+#endif//SkRecordOpts_DEFINED
+>>>>>>> miniblink49

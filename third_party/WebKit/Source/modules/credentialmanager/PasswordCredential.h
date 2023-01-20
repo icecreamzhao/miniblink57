@@ -7,15 +7,21 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "bindings/core/v8/SerializedScriptValue.h"
+<<<<<<< HEAD
 #include "bindings/modules/v8/FormDataOrURLSearchParams.h"
 #include "modules/ModulesExport.h"
 #include "modules/credentialmanager/SiteBoundCredential.h"
 #include "platform/heap/Handle.h"
 #include "platform/network/EncodedFormData.h"
+=======
+#include "modules/credentialmanager/Credential.h"
+#include "platform/heap/Handle.h"
+>>>>>>> miniblink49
 #include "platform/weborigin/KURL.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class HTMLFormElement;
 class PasswordCredentialData;
 class WebPasswordCredential;
@@ -50,10 +56,36 @@ public:
     // Internal methods
     PassRefPtr<EncodedFormData> encodeFormData(String& contentType) const;
     const String& password() const;
+=======
+class DOMFormData;
+class WebPasswordCredential;
+
+class PasswordCredential final : public Credential {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static PasswordCredential* create(const String& id, const String& password, ExceptionState& exceptionState)
+    {
+        return create(id, password, emptyString(), emptyString(), exceptionState);
+    }
+
+    static PasswordCredential* create(const String& id, const String& password, const String& name, ExceptionState& exceptionState)
+    {
+        return create(id, password, name, emptyString(), exceptionState);
+    }
+
+    static PasswordCredential* create(const String& id, const String& password, const String& name, const String& icon, ExceptionState&);
+    static PasswordCredential* create(WebPasswordCredential*);
+
+    // PasswordCredential.idl
+    const String& password() const;
+    DOMFormData* formData() const { return m_formData; }
+
+>>>>>>> miniblink49
     DECLARE_VIRTUAL_TRACE();
 
 private:
     PasswordCredential(WebPasswordCredential*);
+<<<<<<< HEAD
     PasswordCredential(const String& id,
         const String& password,
         const String& name,
@@ -62,6 +94,11 @@ private:
     String m_idName;
     String m_passwordName;
     CredentialPostBodyType m_additionalData;
+=======
+    PasswordCredential(const String& id, const String& password, const String& name, const KURL& icon);
+
+    Member<DOMFormData> m_formData;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

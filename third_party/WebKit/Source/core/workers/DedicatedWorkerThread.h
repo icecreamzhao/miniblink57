@@ -30,45 +30,31 @@
 #ifndef DedicatedWorkerThread_h
 #define DedicatedWorkerThread_h
 
+#include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/workers/WorkerThread.h"
-#include <memory>
 
 namespace blink {
 
-class InProcessWorkerObjectProxy;
+class WorkerObjectProxy;
 class WorkerThreadStartupData;
 
-class CORE_EXPORT DedicatedWorkerThread : public WorkerThread {
+class DedicatedWorkerThread final : public WorkerThread {
 public:
-    static std::unique_ptr<DedicatedWorkerThread> create(
-        PassRefPtr<WorkerLoaderProxy>,
-        InProcessWorkerObjectProxy&,
-        double timeOrigin);
-    ~DedicatedWorkerThread() override;
-
-    WorkerBackingThread& workerBackingThread() override
-    {
-        return *m_workerBackingThread;
-    }
-    void clearWorkerBackingThread() override;
-    InProcessWorkerObjectProxy& workerObjectProxy() const
-    {
-        return m_workerObjectProxy;
-    }
+    static PassRefPtr<DedicatedWorkerThread> create(PassRefPtr<WorkerLoaderProxy>, WorkerObjectProxy&, double timeOrigin);
+    WorkerObjectProxy& workerObjectProxy() const { return m_workerObjectProxy; }
+    virtual ~DedicatedWorkerThread();
 
 protected:
-    DedicatedWorkerThread(PassRefPtr<WorkerLoaderProxy>,
-        InProcessWorkerObjectProxy&,
-        double timeOrigin);
-    WorkerOrWorkletGlobalScope* createWorkerGlobalScope(
-        std::unique_ptr<WorkerThreadStartupData>) override;
+    PassRefPtrWillBeRawPtr<WorkerGlobalScope> createWorkerGlobalScope(PassOwnPtr<WorkerThreadStartupData>) override;
+    void postInitialize() override;
+    WebThreadSupportingGC& backingThread() override;
 
 private:
-    friend class DedicatedWorkerThreadForTest;
+    DedicatedWorkerThread(PassRefPtr<WorkerLoaderProxy>, WorkerObjectProxy&, double timeOrigin);
 
-    std::unique_ptr<WorkerBackingThread> m_workerBackingThread;
-    InProcessWorkerObjectProxy& m_workerObjectProxy;
+    WorkerObjectProxy& m_workerObjectProxy;
     double m_timeOrigin;
+    OwnPtr<WebThreadSupportingGC> m_thread;
 };
 
 } // namespace blink

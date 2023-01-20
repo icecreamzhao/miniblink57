@@ -11,6 +11,7 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -21,12 +22,28 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef MediaStream_h
 #define MediaStream_h
 
+<<<<<<< HEAD
 #include "core/dom/ExecutionContext.h"
+=======
+#include "core/dom/ContextLifecycleObserver.h"
+>>>>>>> miniblink49
 #include "core/html/URLRegistry.h"
 #include "modules/EventTargetModules.h"
 #include "modules/ModulesExport.h"
@@ -38,6 +55,7 @@ namespace blink {
 
 class ExceptionState;
 
+<<<<<<< HEAD
 class MODULES_EXPORT MediaStream final : public EventTargetWithInlineData,
                                          public ContextClient,
                                          public URLRegistrable,
@@ -45,13 +63,32 @@ class MODULES_EXPORT MediaStream final : public EventTargetWithInlineData,
     USING_GARBAGE_COLLECTED_MIXIN(MediaStream);
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class MODULES_EXPORT MediaStream final
+    : public RefCountedGarbageCollectedEventTargetWithInlineData<MediaStream>
+    , public URLRegistrable
+    , public MediaStreamDescriptorClient
+    , public ContextLifecycleObserver {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(MediaStream);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaStream);
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static MediaStream* create(ExecutionContext*);
     static MediaStream* create(ExecutionContext*, MediaStream*);
     static MediaStream* create(ExecutionContext*, const MediaStreamTrackVector&);
+<<<<<<< HEAD
     static MediaStream* create(ExecutionContext*, MediaStreamDescriptor*);
     ~MediaStream() override;
 
+=======
+    static MediaStream* create(ExecutionContext*, PassRefPtr<MediaStreamDescriptor>);
+    ~MediaStream() override;
+
+    // DEPRECATED
+    String label() const { return m_descriptor->id(); }
+
+>>>>>>> miniblink49
     String id() const { return m_descriptor->id(); }
 
     void addTrack(MediaStreamTrack*, ExceptionState&);
@@ -64,9 +101,18 @@ public:
     MediaStreamTrackVector getTracks();
 
     bool active() const { return m_descriptor->active(); }
+<<<<<<< HEAD
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(active);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(inactive);
+=======
+    bool ended() const;
+    void stop();
+
+    DEFINE_ATTRIBUTE_EVENT_LISTENER(active);
+    DEFINE_ATTRIBUTE_EVENT_LISTENER(inactive);
+    DEFINE_ATTRIBUTE_EVENT_LISTENER(ended);
+>>>>>>> miniblink49
     DEFINE_ATTRIBUTE_EVENT_LISTENER(addtrack);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(removetrack);
 
@@ -75,6 +121,7 @@ public:
     // MediaStreamDescriptorClient
     void streamEnded() override;
 
+<<<<<<< HEAD
     MediaStreamDescriptor* descriptor() const { return m_descriptor; }
 
     // EventTarget
@@ -83,10 +130,18 @@ public:
     {
         return ContextClient::getExecutionContext();
     }
+=======
+    MediaStreamDescriptor* descriptor() const { return m_descriptor.get(); }
+
+    // EventTarget
+    const AtomicString& interfaceName() const override;
+    ExecutionContext* executionContext() const override;
+>>>>>>> miniblink49
 
     // URLRegistrable
     URLRegistry& registry() const override;
 
+<<<<<<< HEAD
     DECLARE_VIRTUAL_TRACE();
 
 protected:
@@ -100,6 +155,18 @@ private:
     MediaStream(ExecutionContext*,
         const MediaStreamTrackVector& audioTracks,
         const MediaStreamTrackVector& videoTracks);
+=======
+    // Oilpan: need to eagerly unregister as m_descriptor client.
+    EAGERLY_FINALIZE();
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+    MediaStream(ExecutionContext*, PassRefPtr<MediaStreamDescriptor>);
+    MediaStream(ExecutionContext*, const MediaStreamTrackVector& audioTracks, const MediaStreamTrackVector& videoTracks);
+
+    // ContextLifecycleObserver
+    void contextDestroyed() override;
+>>>>>>> miniblink49
 
     // MediaStreamDescriptorClient
     void addRemoteTrack(MediaStreamComponent*) override;
@@ -107,6 +174,7 @@ private:
 
     bool emptyOrOnlyEndedTracks();
 
+<<<<<<< HEAD
     void scheduleDispatchEvent(Event*);
     void scheduledEventTimerFired(TimerBase*);
 
@@ -121,6 +189,22 @@ private:
 using MediaStreamVector = HeapVector<Member<MediaStream>>;
 
 MediaStream* toMediaStream(MediaStreamDescriptor*);
+=======
+    void scheduleDispatchEvent(PassRefPtrWillBeRawPtr<Event>);
+    void scheduledEventTimerFired(Timer<MediaStream>*);
+
+    bool m_stopped;
+
+    MediaStreamTrackVector m_audioTracks;
+    MediaStreamTrackVector m_videoTracks;
+    RefPtr<MediaStreamDescriptor> m_descriptor;
+
+    Timer<MediaStream> m_scheduledEventTimer;
+    WillBeHeapVector<RefPtrWillBeMember<Event>> m_scheduledEvents;
+};
+
+typedef HeapVector<Member<MediaStream>> MediaStreamVector;
+>>>>>>> miniblink49
 
 } // namespace blink
 

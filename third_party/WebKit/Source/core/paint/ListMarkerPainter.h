@@ -5,27 +5,24 @@
 #ifndef ListMarkerPainter_h
 #define ListMarkerPainter_h
 
-#include "wtf/Allocator.h"
-
 namespace blink {
 
 struct PaintInfo;
+class Path;
 class LayoutListMarker;
 class LayoutPoint;
 
 class ListMarkerPainter {
-    STACK_ALLOCATED();
-
 public:
-    ListMarkerPainter(const LayoutListMarker& layoutListMarker)
-        : m_layoutListMarker(layoutListMarker)
-    {
-    }
+    ListMarkerPainter(LayoutListMarker& layoutListMarker) : m_layoutListMarker(layoutListMarker) { }
 
     void paint(const PaintInfo&, const LayoutPoint& paintOffset);
 
 private:
-    const LayoutListMarker& m_layoutListMarker;
+    Path getCanonicalPath() const;
+    Path getPath(const LayoutPoint& origin) const;
+
+    LayoutListMarker& m_layoutListMarker;
 };
 
 } // namespace blink

@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkPath.h"
 #include "gm.h"
 
@@ -13,6 +14,14 @@ DEF_SIMPLE_GM(PlusMergesAA, canvas, 256, 256)
     SkPaint p;
     p.setColor(SK_ColorRED);
     p.setAntiAlias(true); //  <-- crucial to the test that we use AA
+=======
+#include "gm.h"
+
+DEF_SIMPLE_GM(PlusMergesAA, canvas, 256, 256) {
+    SkPaint p;
+    p.setColor(SK_ColorRED);
+    p.setAntiAlias(true);  //  <-- crucial to the test that we use AA
+>>>>>>> miniblink49
 
     // Draw a two red squares.
     canvas->drawRect(SkRect::MakeWH(100, 100), p);
@@ -38,9 +47,16 @@ DEF_SIMPLE_GM(PlusMergesAA, canvas, 256, 256)
 
     // Using Plus on the right should merge the AA of seam together completely covering the red.
     canvas->saveLayer(nullptr, nullptr);
+<<<<<<< HEAD
     p.setXfermodeMode(SkXfermode::kPlus_Mode);
     canvas->translate(150, 0);
     canvas->drawPath(upperLeft, p);
     canvas->drawPath(bottomRight, p);
+=======
+      p.setXfermodeMode(SkXfermode::kPlus_Mode);
+      canvas->translate(150, 0);
+      canvas->drawPath(upperLeft, p);
+      canvas->drawPath(bottomRight, p);
+>>>>>>> miniblink49
     canvas->restore();
 }

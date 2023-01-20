@@ -28,7 +28,6 @@ namespace blink {
 
 class SVGPolylineElement final : public SVGPolyElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGPolylineElement);
 

@@ -29,23 +29,29 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-import json5_generator
+import in_generator
 import template_expander
 import name_utilities
 from make_settings import to_passing_type, to_idl_type
 
 
-class MakeInternalSettingsWriter(json5_generator.Writer):
+class MakeInternalSettingsWriter(in_generator.Writer):
+    defaults = {
+        'type': 'bool',
+        'initial': None,
+        'invalidate': None,
+    }
+    default_parameters = {}
     filters = {
         'upper_first': name_utilities.upper_first,
         'to_passing_type': to_passing_type,
         'to_idl_type': to_idl_type,
     }
 
-    def __init__(self, json5_file_path):
-        super(MakeInternalSettingsWriter, self).__init__(json5_file_path)
+    def __init__(self, in_file_path):
+        super(MakeInternalSettingsWriter, self).__init__(in_file_path)
 
-        self.json5_file.name_dictionaries.sort(key=lambda entry: entry['name'])
+        self.in_file.name_dictionaries.sort(key=lambda entry: entry['name'])
 
         self._outputs = {
             ('InternalSettingsGenerated.h'): self.generate_header,
@@ -53,7 +59,7 @@ class MakeInternalSettingsWriter(json5_generator.Writer):
             ('InternalSettingsGenerated.idl'): self.generate_idl,
         }
         self._template_context = {
-            'settings': self.json5_file.name_dictionaries,
+            'settings': self.in_file.name_dictionaries,
         }
 
     @template_expander.use_jinja('InternalSettingsGenerated.h.tmpl', filters=filters)
@@ -70,4 +76,4 @@ class MakeInternalSettingsWriter(json5_generator.Writer):
 
 
 if __name__ == '__main__':
-    json5_generator.Maker(MakeInternalSettingsWriter).main()
+    in_generator.Maker(MakeInternalSettingsWriter).main(sys.argv)

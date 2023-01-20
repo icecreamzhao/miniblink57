@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/events/EventPath.h"
 
 #include "core/HTMLNames.h"
@@ -9,8 +10,7 @@
 #include "core/dom/PseudoElement.h"
 #include "core/style/ComputedStyleConstants.h"
 #include "core/testing/DummyPageHolder.h"
-#include "testing/gtest/include/gtest/gtest.h"
-#include <memory>
+#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -21,7 +21,7 @@ protected:
 private:
     void SetUp() override;
 
-    std::unique_ptr<DummyPageHolder> m_dummyPageHolder;
+    OwnPtr<DummyPageHolder> m_dummyPageHolder;
 };
 
 void EventPathTest::SetUp()
@@ -31,8 +31,8 @@ void EventPathTest::SetUp()
 
 TEST_F(EventPathTest, ShouldBeEmptyForPseudoElementWithoutParentElement)
 {
-    Element* div = document().createElement(HTMLNames::divTag, CreatedByCreateElement);
-    PseudoElement* pseudo = PseudoElement::create(div, PseudoIdFirstLetter);
+    RefPtrWillBeRawPtr<Element> div = document().createElement(HTMLNames::divTag, false);
+    RefPtrWillBeRawPtr<PseudoElement> pseudo = PseudoElement::create(div.get(), FIRST_LETTER);
     pseudo->dispose();
     EventPath eventPath(*pseudo);
     EXPECT_TRUE(eventPath.isEmpty());

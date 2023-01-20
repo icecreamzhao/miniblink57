@@ -15,9 +15,13 @@ struct WebMediaKeySystemConfiguration;
 class BLINK_PLATFORM_EXPORT WebContentDecryptionModuleAccess {
 public:
     virtual ~WebContentDecryptionModuleAccess();
+<<<<<<< HEAD
     virtual void createContentDecryptionModule(
         WebContentDecryptionModuleResult)
         = 0;
+=======
+    virtual void createContentDecryptionModule(WebContentDecryptionModuleResult) = 0;
+>>>>>>> miniblink49
     virtual WebMediaKeySystemConfiguration getConfiguration() = 0;
 };
 

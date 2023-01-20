@@ -10,6 +10,7 @@
 namespace ots {
 
 struct OpenTypeGSUB {
+<<<<<<< HEAD
     OpenTypeGSUB()
         : num_lookups(0)
         , data(NULL)
@@ -27,3 +28,22 @@ struct OpenTypeGSUB {
 } // namespace ots
 
 #endif // OTS_GSUB_H_
+=======
+  OpenTypeGSUB()
+      : num_lookups(0),
+        data(NULL),
+        length(0) {
+  }
+
+  // Number of lookups in GPSUB table
+  uint16_t num_lookups;
+
+  const uint8_t *data;
+  size_t length;
+};
+
+}  // namespace ots
+
+#endif  // OTS_GSUB_H_
+
+>>>>>>> miniblink49

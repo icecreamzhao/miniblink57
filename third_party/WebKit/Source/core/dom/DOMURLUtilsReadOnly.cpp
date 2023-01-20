@@ -24,6 +24,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/DOMURLUtilsReadOnly.h"
 
 #include "platform/weborigin/KnownPorts.h"
@@ -36,7 +37,7 @@ String DOMURLUtilsReadOnly::href()
     const KURL& kurl = url();
     if (kurl.isNull())
         return input();
-    return kurl.getString();
+    return kurl.string();
 }
 
 String DOMURLUtilsReadOnly::origin(const KURL& kurl)

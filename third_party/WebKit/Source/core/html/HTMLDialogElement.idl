@@ -26,11 +26,11 @@
 // https://html.spec.whatwg.org/#the-dialog-element
 
 interface HTMLDialogElement : HTMLElement {
-    [CEReactions, Reflect] attribute boolean open;
+    [Reflect] attribute boolean open;
     attribute DOMString returnValue;
     // FIXME: show() and showModal() should take an anchor argument.
-    [CEReactions] void show();
-    [CEReactions, RaisesException] void showModal();
+    void show();
+    [RaisesException] void showModal();
     // FIXME: The returnValue argument should have no default value.
-    [CEReactions, RaisesException] void close(optional DOMString returnValue = null);
+    [RaisesException] void close(optional DOMString returnValue = null);
 };

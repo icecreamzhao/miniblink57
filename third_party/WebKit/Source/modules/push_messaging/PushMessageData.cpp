@@ -2,11 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/push_messaging/PushMessageData.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/ScriptState.h"
 #include "bindings/core/v8/V8Binding.h"
+<<<<<<< HEAD
 #include "bindings/modules/v8/ArrayBufferOrArrayBufferViewOrUSVString.h"
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/fileapi/Blob.h"
@@ -14,10 +19,16 @@
 #include "wtf/Assertions.h"
 #include "wtf/text/TextEncoding.h"
 #include <memory>
+=======
+#include "core/dom/DOMArrayBuffer.h"
+#include "core/fileapi/Blob.h"
+#include "platform/blob/BlobData.h"
+>>>>>>> miniblink49
 #include <v8.h>
 
 namespace blink {
 
+<<<<<<< HEAD
 PushMessageData* PushMessageData::create(const String& messageString)
 {
     // The standard supports both an empty but valid message and a null message.
@@ -61,16 +72,40 @@ PushMessageData::~PushMessageData() { }
 DOMArrayBuffer* PushMessageData::arrayBuffer() const
 {
     return DOMArrayBuffer::create(m_data.data(), m_data.size());
+=======
+PushMessageData::PushMessageData()
+{
+}
+
+PushMessageData::PushMessageData(const String& messageData)
+    : m_messageData(messageData)
+{
+}
+
+PushMessageData::~PushMessageData()
+{
+}
+
+PassRefPtr<DOMArrayBuffer> PushMessageData::arrayBuffer() const
+{
+    return DOMArrayBuffer::create(m_messageData.characters8(), m_messageData.length());
+>>>>>>> miniblink49
 }
 
 Blob* PushMessageData::blob() const
 {
+<<<<<<< HEAD
     std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->appendBytes(m_data.data(), m_data.size());
+=======
+    OwnPtr<BlobData> blobData = BlobData::create();
+    blobData->appendText(m_messageData, false);
+>>>>>>> miniblink49
 
     // Note that the content type of the Blob object is deliberately not being
     // provided, following the specification.
 
+<<<<<<< HEAD
     const long long byteLength = blobData->length();
     return Blob::create(BlobDataHandle::create(std::move(blobData), byteLength));
 }
@@ -82,15 +117,45 @@ ScriptValue PushMessageData::json(ScriptState* scriptState,
     v8::Local<v8::Value> parsed = fromJSONString(scriptState->isolate(), text(), exceptionState);
     if (exceptionState.hadException())
         return ScriptValue();
+=======
+    const long long blobSize = blobData->length();
+    return Blob::create(BlobDataHandle::create(blobData.release(), blobSize));
+}
+
+ScriptValue PushMessageData::json(ScriptState* scriptState, ExceptionState& exceptionState) const
+{
+    v8::Isolate* isolate = scriptState->isolate();
+
+    ScriptState::Scope scope(scriptState);
+    v8::Local<v8::String> dataString = v8String(isolate, m_messageData);
+
+    v8::TryCatch block;
+    v8::Local<v8::Value> parsed;
+    if (!v8Call(v8::JSON::Parse(isolate, dataString), parsed, block)) {
+        exceptionState.rethrowV8Exception(block.Exception());
+        return ScriptValue();
+    }
+>>>>>>> miniblink49
 
     return ScriptValue(scriptState, parsed);
 }
 
+<<<<<<< HEAD
 String PushMessageData::text() const
 {
     return UTF8Encoding().decode(m_data.data(), m_data.size());
 }
 
 DEFINE_TRACE(PushMessageData) { }
+=======
+const String& PushMessageData::text() const
+{
+    return m_messageData;
+}
+
+DEFINE_TRACE(PushMessageData)
+{
+}
+>>>>>>> miniblink49
 
 } // namespace blink

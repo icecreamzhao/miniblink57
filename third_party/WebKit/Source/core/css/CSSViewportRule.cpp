@@ -28,6 +28,7 @@
  * SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/css/CSSViewportRule.h"
 
 #include "core/css/PropertySetCSSStyleDeclaration.h"
@@ -37,21 +38,24 @@
 
 namespace blink {
 
-CSSViewportRule::CSSViewportRule(StyleRuleViewport* viewportRule,
-    CSSStyleSheet* sheet)
+CSSViewportRule::CSSViewportRule(StyleRuleViewport* viewportRule, CSSStyleSheet* sheet)
     : CSSRule(sheet)
     , m_viewportRule(viewportRule)
 {
 }
 
-CSSViewportRule::~CSSViewportRule() { }
+CSSViewportRule::~CSSViewportRule()
+{
+#if !ENABLE(OILPAN)
+    if (m_propertiesCSSOMWrapper)
+        m_propertiesCSSOMWrapper->clearParentRule();
+#endif
+}
 
 CSSStyleDeclaration* CSSViewportRule::style() const
 {
     if (!m_propertiesCSSOMWrapper)
-        m_propertiesCSSOMWrapper = StyleRuleCSSStyleDeclaration::create(
-            m_viewportRule->mutableProperties(),
-            const_cast<CSSViewportRule*>(this));
+        m_propertiesCSSOMWrapper = StyleRuleCSSStyleDeclaration::create(m_viewportRule->mutableProperties(), const_cast<CSSViewportRule*>(this));
 
     return m_propertiesCSSOMWrapper.get();
 }
@@ -59,7 +63,7 @@ CSSStyleDeclaration* CSSViewportRule::style() const
 String CSSViewportRule::cssText() const
 {
     StringBuilder result;
-    result.append("@viewport { ");
+    result.appendLiteral("@viewport { ");
 
     String decls = m_viewportRule->properties().asText();
     result.append(decls);

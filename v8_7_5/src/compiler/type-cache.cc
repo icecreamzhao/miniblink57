@@ -6,6 +6,7 @@
 
 #include "src/base/lazy-instance.h"
 
+<<<<<<< HEAD
 #include "src/objects-inl.h" // weolar
 
 namespace v8 {
@@ -17,3 +18,14 @@ namespace internal {
     } // namespace compiler
 } // namespace internal
 } // namespace v8
+=======
+namespace v8 {
+namespace internal {
+namespace compiler {
+
+DEFINE_LAZY_LEAKY_OBJECT_GETTER(const TypeCache, TypeCache::Get)
+
+}  // namespace compiler
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

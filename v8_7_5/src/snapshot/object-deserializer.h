@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class SerializedCodeData;
     class SharedFunctionInfo;
 
@@ -34,3 +35,29 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_SNAPSHOT_OBJECT_DESERIALIZER_H_
+=======
+class SerializedCodeData;
+class SharedFunctionInfo;
+
+// Deserializes the object graph rooted at a given object.
+class ObjectDeserializer final : public Deserializer {
+ public:
+  static MaybeHandle<SharedFunctionInfo> DeserializeSharedFunctionInfo(
+      Isolate* isolate, const SerializedCodeData* data, Handle<String> source);
+
+ private:
+  explicit ObjectDeserializer(const SerializedCodeData* data);
+
+  // Deserialize an object graph. Fail gracefully.
+  MaybeHandle<HeapObject> Deserialize(Isolate* isolate);
+
+  void FlushICache();
+  void LinkAllocationSites();
+  void CommitPostProcessedObjects();
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_SNAPSHOT_OBJECT_DESERIALIZER_H_
+>>>>>>> miniblink49

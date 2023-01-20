@@ -7,6 +7,7 @@
 
 class SkSPRITE_CLASSNAME : public SkSpriteBlitter {
 public:
+<<<<<<< HEAD
     SkSPRITE_CLASSNAME(const SkPixmap& source SkSPRITE_ARGS)
         : SkSpriteBlitter(source)
     {
@@ -19,14 +20,31 @@ public:
         int srcX = x - fLeft;
         int srcY = y - fTop;
         SkSPRITE_DST_TYPE* SK_RESTRICT dst = fDst.SkSPRITE_DST_GETADDR(x, y);
+=======
+    SkSPRITE_CLASSNAME(const SkPixmap& source SkSPRITE_ARGS) : SkSpriteBlitter(source) {
+        SkSPRITE_INIT
+    }
+
+    virtual void blitRect(int x, int y, int width, int height) {
+        SkASSERT(width > 0 && height > 0);
+        int srcX = x - fLeft;
+        int srcY = y - fTop;
+        SkSPRITE_DST_TYPE* SK_RESTRICT dst =fDst.SkSPRITE_DST_GETADDR(x, y);
+>>>>>>> miniblink49
         const SkSPRITE_SRC_TYPE* SK_RESTRICT src = fSource.SkSPRITE_SRC_GETADDR(srcX, srcY);
         size_t dstRB = fDst.rowBytes();
         size_t srcRB = fSource.rowBytes();
 
         SkDEBUGCODE((void)fDst.SkSPRITE_DST_GETADDR(x + width - 1, y + height - 1);)
+<<<<<<< HEAD
             SkDEBUGCODE((void)fSource.SkSPRITE_SRC_GETADDR(srcX + width - 1, srcY + height - 1);)
 
                 SkSPRITE_PREAMBLE(fSource, srcX, srcY);
+=======
+        SkDEBUGCODE((void)fSource.SkSPRITE_SRC_GETADDR(srcX + width  - 1, srcY + height - 1);)
+
+        SkSPRITE_PREAMBLE(fSource, srcX, srcY);
+>>>>>>> miniblink49
 
         do {
             SkSPRITE_DST_TYPE* d = dst;
@@ -36,7 +54,11 @@ public:
 #endif
 
 #ifdef SkSPRITE_ROW_PROC
+<<<<<<< HEAD
                 SkSPRITE_ROW_PROC(d, s, width, x, y);
+=======
+            SkSPRITE_ROW_PROC(d, s, width, x, y);
+>>>>>>> miniblink49
 #else
             int w = width;
             do {
@@ -45,12 +67,20 @@ public:
                 d += 1;
             } while (--w != 0);
 #endif
+<<<<<<< HEAD
             dst = (SkSPRITE_DST_TYPE * SK_RESTRICT)((char*)dst + dstRB);
             src = (const SkSPRITE_SRC_TYPE* SK_RESTRICT)((const char*)src + srcRB);
             SkSPRITE_NEXT_ROW
 #ifdef SkSPRITE_ROW_PROC
                 y
                 += 1;
+=======
+            dst = (SkSPRITE_DST_TYPE* SK_RESTRICT)((char*)dst + dstRB);
+            src = (const SkSPRITE_SRC_TYPE* SK_RESTRICT)((const char*)src + srcRB);
+            SkSPRITE_NEXT_ROW
+#ifdef SkSPRITE_ROW_PROC
+            y += 1;
+>>>>>>> miniblink49
 #endif
         } while (--height != 0);
 
@@ -76,5 +106,9 @@ private:
 #undef SkSPRITE_BEGIN_ROW
 
 #ifdef SkSPRITE_ROW_PROC
+<<<<<<< HEAD
 #undef SkSPRITE_ROW_PROC
+=======
+    #undef SkSPRITE_ROW_PROC
+>>>>>>> miniblink49
 #endif

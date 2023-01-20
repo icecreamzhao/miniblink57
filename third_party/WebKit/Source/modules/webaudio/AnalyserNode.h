@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,6 +22,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef AnalyserNode_h
@@ -32,8 +45,11 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class BaseAudioContext;
 class AnalyserOptions;
+=======
+>>>>>>> miniblink49
 class ExceptionState;
 
 class AnalyserHandler final : public AudioBasicInspectorHandler {
@@ -55,6 +71,7 @@ public:
     void setMaxDecibels(double k, ExceptionState&);
     double maxDecibels() const { return m_analyser.maxDecibels(); }
 
+<<<<<<< HEAD
     void setMinMaxDecibels(double min, double max, ExceptionState&);
 
     void setSmoothingTimeConstant(double k, ExceptionState&);
@@ -79,6 +96,15 @@ public:
     {
         m_analyser.getByteTimeDomainData(array);
     }
+=======
+    void setSmoothingTimeConstant(double k, ExceptionState&);
+    double smoothingTimeConstant() const { return m_analyser.smoothingTimeConstant(); }
+
+    void getFloatFrequencyData(DOMFloat32Array* array) { m_analyser.getFloatFrequencyData(array); }
+    void getByteFrequencyData(DOMUint8Array* array) { m_analyser.getByteFrequencyData(array); }
+    void getFloatTimeDomainData(DOMFloat32Array* array) { m_analyser.getFloatTimeDomainData(array); }
+    void getByteTimeDomainData(DOMUint8Array* array) { m_analyser.getByteTimeDomainData(array); }
+>>>>>>> miniblink49
 
 private:
     AnalyserHandler(AudioNode&, float sampleRate);
@@ -88,12 +114,17 @@ private:
 
 class AnalyserNode final : public AudioBasicInspectorNode {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static AnalyserNode* create(BaseAudioContext&, ExceptionState&);
     static AnalyserNode* create(BaseAudioContext*,
         const AnalyserOptions&,
         ExceptionState&);
+=======
+public:
+    static AnalyserNode* create(AudioContext&, float sampleRate);
+>>>>>>> miniblink49
 
     unsigned fftSize() const;
     void setFftSize(unsigned size, ExceptionState&);
@@ -110,10 +141,15 @@ public:
     void getByteTimeDomainData(DOMUint8Array*);
 
 private:
+<<<<<<< HEAD
     AnalyserNode(BaseAudioContext&);
     AnalyserHandler& analyserHandler() const;
 
     void setMinMaxDecibels(double min, double max, ExceptionState&);
+=======
+    AnalyserNode(AudioContext&, float sampleRate);
+    AnalyserHandler& analyserHandler() const;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

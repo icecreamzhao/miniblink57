@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/layout/svg/line/SVGInlineFlowBox.h"
 
 #include "core/layout/svg/line/SVGInlineTextBox.h"
@@ -27,12 +28,20 @@
 
 namespace blink {
 
-void SVGInlineFlowBox::paint(const PaintInfo& paintInfo,
-    const LayoutPoint& paintOffset,
-    LayoutUnit,
-    LayoutUnit) const
+void SVGInlineFlowBox::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset, LayoutUnit, LayoutUnit)
 {
     SVGInlineFlowBoxPainter(*this).paint(paintInfo, paintOffset);
+}
+
+LayoutRect SVGInlineFlowBox::calculateBoundaries() const
+{
+    LayoutRect childRect;
+    for (InlineBox* child = firstChild(); child; child = child->nextOnLine()) {
+        if (!child->isSVGInlineTextBox() && !child->isSVGInlineFlowBox())
+            continue;
+        childRect.unite(child->calculateBoundaries());
+    }
+    return childRect;
 }
 
 } // namespace blink

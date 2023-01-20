@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All
- * rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2012 Samsung Electronics. All rights reserved.
  *
@@ -21,13 +20,15 @@
  *
  */
 
+#include "config.h"
 #include "core/html/forms/ImageInputType.h"
 
 #include "core/HTMLNames.h"
 #include "core/InputTypeNames.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "core/events/MouseEvent.h"
-#include "core/html/FormData.h"
+#include "core/fetch/ImageResource.h"
+#include "core/html/FormDataList.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLImageFallbackHelper.h"
 #include "core/html/HTMLImageLoader.h"
@@ -35,6 +36,7 @@
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/layout/LayoutBlockFlow.h"
 #include "core/layout/LayoutImage.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
@@ -47,9 +49,9 @@ inline ImageInputType::ImageInputType(HTMLInputElement& element)
 {
 }
 
-InputType* ImageInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> ImageInputType::create(HTMLInputElement& element)
 {
-    return new ImageInputType(element);
+    return adoptRefWillBeNoop(new ImageInputType(element));
 }
 
 const AtomicString& ImageInputType::formControlType() const
@@ -62,24 +64,25 @@ bool ImageInputType::isFormDataAppendable() const
     return true;
 }
 
-void ImageInputType::appendToFormData(FormData& formData) const
+bool ImageInputType::appendFormData(FormDataList& encoding, bool) const
 {
     if (!element().isActivatedSubmit())
-        return;
+        return false;
     const AtomicString& name = element().name();
     if (name.isEmpty()) {
-        formData.append("x", m_clickLocation.x());
-        formData.append("y", m_clickLocation.y());
-        return;
+        encoding.appendData("x", m_clickLocation.x());
+        encoding.appendData("y", m_clickLocation.y());
+        return true;
     }
 
     DEFINE_STATIC_LOCAL(String, dotXString, (".x"));
     DEFINE_STATIC_LOCAL(String, dotYString, (".y"));
-    formData.append(name + dotXString, m_clickLocation.x());
-    formData.append(name + dotYString, m_clickLocation.y());
+    encoding.appendData(name + dotXString, m_clickLocation.x());
+    encoding.appendData(name + dotYString, m_clickLocation.y());
 
     if (!element().value().isEmpty())
-        formData.append(name, element().value());
+        encoding.appendData(name, element().value());
+    return true;
 }
 
 String ImageInputType::resultForDialogSubmit() const
@@ -101,23 +104,24 @@ static IntPoint extractClickLocation(Event* event)
     if (!event->underlyingEvent() || !event->underlyingEvent()->isMouseEvent())
         return IntPoint();
     MouseEvent* mouseEvent = toMouseEvent(event->underlyingEvent());
-    if (!mouseEvent->hasPosition())
+    if (mouseEvent->isSimulated())
         return IntPoint();
     return IntPoint(mouseEvent->offsetX(), mouseEvent->offsetY());
 }
 
 void ImageInputType::handleDOMActivateEvent(Event* event)
 {
-    if (element().isDisabledFormControl() || !element().form())
+    RefPtrWillBeRawPtr<HTMLInputElement> element(this->element());
+    if (element->isDisabledFormControl() || !element->form())
         return;
+    element->setActivatedSubmit(true);
     m_clickLocation = extractClickLocation(event);
-    element().form()->prepareForSubmission(
-        event, &element()); // Event handlers can run.
+    element->form()->prepareForSubmission(event); // Event handlers can run.
+    element->setActivatedSubmit(false);
     event->setDefaultHandled();
 }
 
-LayoutObject* ImageInputType::createLayoutObject(
-    const ComputedStyle& style) const
+LayoutObject* ImageInputType::createLayoutObject(const ComputedStyle& style) const
 {
     if (m_useFallbackContent)
         return new LayoutBlockFlow(&element());
@@ -140,8 +144,7 @@ void ImageInputType::srcAttributeChanged()
 {
     if (!element().layoutObject())
         return;
-    element().ensureImageLoader().updateFromElement(
-        ImageLoader::UpdateIgnorePreviousError);
+    element().ensureImageLoader().updateFromElement(ImageLoader::UpdateIgnorePreviousError);
 }
 
 void ImageInputType::valueAttributeChanged()
@@ -181,6 +184,11 @@ bool ImageInputType::isEnumeratable()
     return false;
 }
 
+bool ImageInputType::isImage() const
+{
+    return true;
+}
+
 bool ImageInputType::shouldRespectHeightAndWidthAttributes()
 {
     return true;
@@ -188,50 +196,46 @@ bool ImageInputType::shouldRespectHeightAndWidthAttributes()
 
 unsigned ImageInputType::height() const
 {
-    if (!element().layoutObject()) {
+    RefPtrWillBeRawPtr<HTMLInputElement> element(this->element());
+
+    if (!element->layoutObject()) {
         // Check the attribute first for an explicit pixel value.
         unsigned height;
-        if (parseHTMLNonNegativeInteger(element().fastGetAttribute(heightAttr),
-                height))
+        if (parseHTMLNonNegativeInteger(element->fastGetAttribute(heightAttr), height))
             return height;
 
         // If the image is available, use its height.
-        HTMLImageLoader* imageLoader = element().imageLoader();
+        HTMLImageLoader* imageLoader = element->imageLoader();
         if (imageLoader && imageLoader->image())
-            return imageLoader->image()
-                ->imageSize(LayoutObject::shouldRespectImageOrientation(nullptr), 1)
-                .height()
-                .toUnsigned();
+            return imageLoader->image()->imageSizeForLayoutObject(element->layoutObject(), 1).height();
     }
 
-    element().document().updateStyleAndLayout();
+    element->document().updateLayout();
 
-    LayoutBox* box = element().layoutBox();
-    return box ? adjustForAbsoluteZoom(box->contentHeight().toInt(), box) : 0;
+    LayoutBox* box = element->layoutBox();
+    return box ? adjustForAbsoluteZoom(box->contentHeight(), box) : 0;
 }
 
 unsigned ImageInputType::width() const
 {
-    if (!element().layoutObject()) {
+    RefPtrWillBeRawPtr<HTMLInputElement> element(this->element());
+
+    if (!element->layoutObject()) {
         // Check the attribute first for an explicit pixel value.
         unsigned width;
-        if (parseHTMLNonNegativeInteger(element().fastGetAttribute(widthAttr),
-                width))
+        if (parseHTMLNonNegativeInteger(element->fastGetAttribute(widthAttr), width))
             return width;
 
         // If the image is available, use its width.
-        HTMLImageLoader* imageLoader = element().imageLoader();
+        HTMLImageLoader* imageLoader = element->imageLoader();
         if (imageLoader && imageLoader->image())
-            return imageLoader->image()
-                ->imageSize(LayoutObject::shouldRespectImageOrientation(nullptr), 1)
-                .width()
-                .toUnsigned();
+            return imageLoader->image()->imageSizeForLayoutObject(element->layoutObject(), 1).width();
     }
 
-    element().document().updateStyleAndLayout();
+    element->document().updateLayout();
 
-    LayoutBox* box = element().layoutBox();
-    return box ? adjustForAbsoluteZoom(box->contentWidth().toInt(), box) : 0;
+    LayoutBox* box = element->layoutBox();
+    return box ? adjustForAbsoluteZoom(box->contentWidth(), box) : 0;
 }
 
 bool ImageInputType::hasLegalLinkAttribute(const QualifiedName& name) const
@@ -269,18 +273,15 @@ void ImageInputType::ensurePrimaryContent()
     if (!m_useFallbackContent)
         return;
     m_useFallbackContent = false;
-    if (ShadowRoot* root = element().userAgentShadowRoot())
-        root->removeChildren();
-    createShadowSubtree();
     reattachFallbackContent();
 }
 
 void ImageInputType::reattachFallbackContent()
 {
-    // This can happen inside of attachLayoutTree() in the middle of a recalcStyle
-    // so we need to reattach synchronously here.
+    // This can happen inside of attach() in the middle of a recalcStyle so we need to
+    // reattach synchronously here.
     if (element().document().inStyleRecalc())
-        element().reattachLayoutTree();
+        element().reattach();
     else
         element().lazyReattachIfAttached();
 }
@@ -294,14 +295,12 @@ void ImageInputType::createShadowSubtree()
     HTMLImageFallbackHelper::createAltTextShadowTree(element());
 }
 
-PassRefPtr<ComputedStyle> ImageInputType::customStyleForLayoutObject(
-    PassRefPtr<ComputedStyle> newStyle)
+PassRefPtr<ComputedStyle> ImageInputType::customStyleForLayoutObject(PassRefPtr<ComputedStyle> newStyle)
 {
     if (!m_useFallbackContent)
         return newStyle;
 
-    return HTMLImageFallbackHelper::customStyleForAltText(element(),
-        std::move(newStyle));
+    return HTMLImageFallbackHelper::customStyleForAltText(element(), newStyle);
 }
 
 } // namespace blink

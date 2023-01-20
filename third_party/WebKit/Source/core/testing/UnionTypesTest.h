@@ -5,26 +5,22 @@
 #ifndef UnionTypesTest_h
 #define UnionTypesTest_h
 
-#include "bindings/core/v8/DoubleOrInternalEnum.h"
-#include "bindings/core/v8/DoubleOrString.h"
-#include "bindings/core/v8/DoubleOrStringOrStringArray.h"
-#include "bindings/core/v8/DoubleOrStringOrStringSequence.h"
-#include "bindings/core/v8/NodeListOrElement.h"
+#include "bindings/core/v8/UnionTypesCore.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class UnionTypesTest final : public GarbageCollectedFinalized<UnionTypesTest>,
-                             public ScriptWrappable {
+class UnionTypesTest final : public GarbageCollectedFinalized<UnionTypesTest>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static UnionTypesTest* create() { return new UnionTypesTest(); }
+    static UnionTypesTest* create()
+    {
+        return new UnionTypesTest();
+    }
     virtual ~UnionTypesTest() { }
 
     void doubleOrStringOrStringArrayAttribute(DoubleOrStringOrStringArray&);
-    void setDoubleOrStringOrStringArrayAttribute(
-        const DoubleOrStringOrStringArray&);
+    void setDoubleOrStringOrStringArrayAttribute(const DoubleOrStringOrStringArray&);
 
     String doubleOrStringArg(DoubleOrString&);
     String doubleOrInternalEnumArg(DoubleOrInternalEnum&);
@@ -35,8 +31,7 @@ public:
     String nodeListOrElementOrNullArg(NodeListOrElement&);
 
     String doubleOrStringOrStringArrayArg(const DoubleOrStringOrStringArray&);
-    String doubleOrStringOrStringSequenceArg(
-        const DoubleOrStringOrStringSequence&);
+    String doubleOrStringOrStringSequenceArg(const DoubleOrStringOrStringSequence&);
 
     DEFINE_INLINE_TRACE() { }
 

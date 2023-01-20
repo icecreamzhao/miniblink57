@@ -6,44 +6,34 @@
 #define ClientHintsPreferences_h
 
 #include "core/CoreExport.h"
-#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class CORE_EXPORT ClientHintsPreferences {
-    DISALLOW_NEW();
+class ResourceFetcher;
 
+class ClientHintsPreferences {
 public:
-    class Context {
-    public:
-        virtual void countClientHintsDPR() = 0;
-        virtual void countClientHintsResourceWidth() = 0;
-        virtual void countClientHintsViewportWidth() = 0;
+    ClientHintsPreferences()
+        : m_shouldSendDPR(false)
+        , m_shouldSendResourceWidth(false)
+        , m_shouldSendViewportWidth(false)
+    {
+    }
 
-    protected:
-        virtual ~Context() { }
-    };
+    void set(const ClientHintsPreferences& other)
+    {
+        m_shouldSendDPR = other.m_shouldSendDPR;
+        m_shouldSendResourceWidth = other.m_shouldSendResourceWidth;
+        m_shouldSendViewportWidth = other.m_shouldSendViewportWidth;
+    }
 
-    ClientHintsPreferences();
-
-    void updateFrom(const ClientHintsPreferences&);
-    void updateFromAcceptClientHintsHeader(const String& headerValue, Context*);
-
-    bool shouldSendDPR() const { return m_shouldSendDPR; }
     void setShouldSendDPR(bool should) { m_shouldSendDPR = should; }
-
+    void setShouldSendResourceWidth(bool should) { m_shouldSendResourceWidth = should; }
+    void setShouldSendViewportWidth(bool should) { m_shouldSendViewportWidth = should; }
+    bool shouldSendDPR() const { return m_shouldSendDPR; }
     bool shouldSendResourceWidth() const { return m_shouldSendResourceWidth; }
-    void setShouldSendResourceWidth(bool should)
-    {
-        m_shouldSendResourceWidth = should;
-    }
-
     bool shouldSendViewportWidth() const { return m_shouldSendViewportWidth; }
-    void setShouldSendViewportWidth(bool should)
-    {
-        m_shouldSendViewportWidth = should;
-    }
 
 private:
     bool m_shouldSendDPR;
@@ -51,6 +41,7 @@ private:
     bool m_shouldSendViewportWidth;
 };
 
+CORE_EXPORT void handleAcceptClientHintsHeader(const String& headerValue, ClientHintsPreferences&, ResourceFetcher*);
 } // namespace blink
-
 #endif
+

@@ -28,6 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/css/CSSPropertySourceData.h"
 
 #include "wtf/StaticConstructors.h"
@@ -53,12 +55,7 @@ unsigned SourceRange::length() const
     return end - start;
 }
 
-CSSPropertySourceData::CSSPropertySourceData(const String& name,
-    const String& value,
-    bool important,
-    bool disabled,
-    bool parsedOk,
-    const SourceRange& range)
+CSSPropertySourceData::CSSPropertySourceData(const String& name, const String& value, bool important, bool disabled, bool parsedOk, const SourceRange& range)
     : name(name)
     , value(value)
     , important(important)
@@ -76,6 +73,18 @@ CSSPropertySourceData::CSSPropertySourceData(const CSSPropertySourceData& other)
     , parsedOk(other.parsedOk)
     , range(other.range)
 {
+}
+
+DEFINE_TRACE(CSSRuleSourceData)
+{
+#if ENABLE(OILPAN)
+    visitor->trace(ruleHeaderRange);
+    visitor->trace(ruleBodyRange);
+    visitor->trace(selectorRanges);
+    visitor->trace(styleSourceData);
+    visitor->trace(childRules);
+    visitor->trace(mediaSourceData);
+#endif
 }
 
 } // namespace blink

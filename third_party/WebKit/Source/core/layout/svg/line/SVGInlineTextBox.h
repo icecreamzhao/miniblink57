@@ -29,78 +29,41 @@ namespace blink {
 
 class SVGInlineTextBox final : public InlineTextBox {
 public:
-    SVGInlineTextBox(LineLayoutItem, int start, unsigned short length);
+    SVGInlineTextBox(LayoutObject&, int start, unsigned short length);
 
-    bool isSVGInlineTextBox() const override { return true; }
+    virtual bool isSVGInlineTextBox() const override { return true; }
 
-    LayoutUnit virtualLogicalHeight() const override { return m_logicalHeight; }
+    virtual LayoutUnit virtualLogicalHeight() const override { return m_logicalHeight; }
     void setLogicalHeight(LayoutUnit height) { m_logicalHeight = height; }
 
-    int offsetForPosition(LayoutUnit x,
-        bool includePartialGlyphs = true) const override;
-    LayoutUnit positionForOffset(int offset) const override;
+    virtual int offsetForPosition(LayoutUnit x, bool includePartialGlyphs = true) const override;
+    virtual LayoutUnit positionForOffset(int offset) const override;
 
-    void paint(const PaintInfo&,
-        const LayoutPoint&,
-        LayoutUnit lineTop,
-        LayoutUnit lineBottom) const override;
-    LayoutRect localSelectionRect(int startPosition,
-        int endPosition) const override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&, LayoutUnit lineTop, LayoutUnit lineBottom) override;
+    virtual LayoutRect localSelectionRect(int startPosition, int endPosition) override;
 
-    bool mapStartEndPositionsIntoFragmentCoordinates(const SVGTextFragment&,
-        int& startPosition,
-        int& endPosition) const;
+    bool mapStartEndPositionsIntoFragmentCoordinates(const SVGTextFragment&, int& startPosition, int& endPosition) const;
 
-    // Calculate the bounding rect of all text fragments.
-    LayoutRect calculateBoundaries() const;
+    virtual LayoutRect calculateBoundaries() const override;
 
     void clearTextFragments() { m_textFragments.clear(); }
     Vector<SVGTextFragment>& textFragments() { return m_textFragments; }
-    const Vector<SVGTextFragment>& textFragments() const
-    {
-        return m_textFragments;
-    }
+    const Vector<SVGTextFragment>& textFragments() const { return m_textFragments; }
 
-    void dirtyLineBoxes() override;
+    virtual void dirtyLineBoxes() override;
 
     bool startsNewTextChunk() const { return m_startsNewTextChunk; }
-    void setStartsNewTextChunk(bool newTextChunk)
-    {
-        m_startsNewTextChunk = newTextChunk;
-    }
+    void setStartsNewTextChunk(bool newTextChunk) { m_startsNewTextChunk = newTextChunk; }
 
-    int offsetForPositionInFragment(const SVGTextFragment&,
-        LayoutUnit position,
-        bool includePartialGlyphs) const;
-    FloatRect selectionRectForTextFragment(const SVGTextFragment&,
-        int fragmentStartPosition,
-        int fragmentEndPosition,
-        const ComputedStyle&) const;
+    int offsetForPositionInFragment(const SVGTextFragment&, LayoutUnit position, bool includePartialGlyphs) const;
+    FloatRect selectionRectForTextFragment(const SVGTextFragment&, int fragmentStartPosition, int fragmentEndPosition, const ComputedStyle&);
     TextRun constructTextRun(const ComputedStyle&, const SVGTextFragment&) const;
 
 private:
-    void paintDocumentMarker(GraphicsContext&,
-        const LayoutPoint&,
-        const DocumentMarker&,
-        const ComputedStyle&,
-        const Font&,
-        bool) const final;
-    void paintTextMatchMarkerForeground(const PaintInfo&,
-        const LayoutPoint&,
-        const DocumentMarker&,
-        const ComputedStyle&,
-        const Font&) const final;
-    void paintTextMatchMarkerBackground(const PaintInfo&,
-        const LayoutPoint&,
-        const DocumentMarker&,
-        const ComputedStyle&,
-        const Font&) const final;
+    virtual void paintDocumentMarker(GraphicsContext*, const LayoutPoint&, DocumentMarker*, const ComputedStyle&, const Font&, bool) override final;
+    virtual void paintTextMatchMarker(GraphicsContext*, const LayoutPoint&, DocumentMarker*, const ComputedStyle&, const Font&) override final;
 
-    bool nodeAtPoint(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        LayoutUnit lineTop,
-        LayoutUnit lineBottom) override;
+    virtual bool nodeAtPoint(HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, LayoutUnit lineTop, LayoutUnit lineBottom) override;
 
     LayoutUnit m_logicalHeight;
     bool m_startsNewTextChunk : 1;

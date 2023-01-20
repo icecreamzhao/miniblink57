@@ -13,6 +13,7 @@
     # If these become 'permanent', they should be moved into common_variables.gypi
     #
     'skia_for_android_framework_defines': [
+<<<<<<< HEAD
       'SK_SUPPORT_LEGACY_UNBALANCED_PIXELREF_LOCKCOUNT',
       # Needed until we fix https://bug.skia.org/2440 .
       'SK_SUPPORT_LEGACY_CLIPTOLAYERFLAG',
@@ -29,6 +30,15 @@
       'SK_SUPPORT_LEGACY_IMAGEFACTORY',
       'SK_SUPPORT_LEGACY_XFERMODE_PTR',
       'SK_SUPPORT_LEGACY_TYPEFACE_PTR',
+=======
+      'SK_SUPPORT_LEGACY_PUBLIC_IMAGEINFO_FIELDS',
+      'SK_SUPPORT_LEGACY_GETDEVICE',
+      'SK_SUPPORT_LEGACY_UNBALANCED_PIXELREF_LOCKCOUNT',
+      # Needed until we fix skbug.com/2440.
+      'SK_SUPPORT_LEGACY_CLIPTOLAYERFLAG',
+      'SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS',
+      'SK_SUPPORT_LEGACY_SCALAR_DIV',
+>>>>>>> miniblink49
     ],
   },
 }

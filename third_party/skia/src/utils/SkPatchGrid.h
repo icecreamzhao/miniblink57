@@ -13,12 +13,21 @@
 #include "SkXfermode.h"
 
 /**
+<<<<<<< HEAD
  * Class that represents a grid of patches. Adjacent patches share their corners and a color is
  * specified at each one of them. The colors are bilinearly interpolated across the patch.
  *
  * This implementation defines a bidimensional array of patches. There are 3 arrays to store the
  * control points of the patches to avoid storing repeated data since there are several points
  * shared between adjacent patches.
+=======
+ * Class that represents a grid of patches. Adjacent patches share their corners and a color is 
+ * specified at each one of them. The colors are bilinearly interpolated across the patch.
+ *
+ * This implementation defines a bidimensional array of patches. There are 3 arrays to store the 
+ * control points of the patches to avoid storing repeated data since there are several points
+ * shared between adjacent patches. 
+>>>>>>> miniblink49
  *
  * The array fCornerPts stores the corner control points of the patches.
  * The array fHrzPts holds the intermidiate control points of the top and bottom curves of a patch.
@@ -54,11 +63,19 @@
  *               \      / \      /
  *                H8   H9  H10  H11
  *
+<<<<<<< HEAD
  * When trying to get a patch at a certain position it justs builds it with the corresponding
  * points.
  * When adding a patch it tries to add the points at their corresponding position trying to comply
  * with the adjacent points or overwriting them.
  *
+=======
+ * When trying to get a patch at a certain position it justs builds it with the corresponding 
+ * points.
+ * When adding a patch it tries to add the points at their corresponding position trying to comply
+ * with the adjacent points or overwriting them.
+ * 
+>>>>>>> miniblink49
  * Based the idea on the SVG2 spec for mesh gradients in which a grid of patches is build as in the
  * the following example:
  * <meshGradient x="100" y="100">
@@ -77,14 +94,21 @@
  * </meshGradient>
  */
 class SkPatchGrid {
+<<<<<<< HEAD
 
 public:
+=======
+    
+public:
+    
+>>>>>>> miniblink49
     enum VertexType {
         kNone_VertexType = 0X00,
         kColors_VertexType = 0x01,
         kTexs_VertexType = 0x02,
         kColorsAndTexs_VertexType = 0x03
     };
+<<<<<<< HEAD
 
     SkPatchGrid(int rows = 0, int cols = 0, VertexType flags = kNone_VertexType,
         SkXfermode* xfer = nullptr);
@@ -109,10 +133,37 @@ public:
      */
     bool getPatch(int x, int y, SkPoint cubics[12], SkColor colors[4], SkPoint texCoords[4]) const;
 
+=======
+    
+    SkPatchGrid(int rows = 0, int cols = 0, VertexType flags = kNone_VertexType,
+                SkXfermode* xfer = NULL);
+    
+    ~SkPatchGrid();
+    
+    /**
+     * Add a patch at location (x,y) overwriting the previous patch and shared points so they 
+     * mantain C0 connectivity.
+     * The control points must be passed in a clockwise order starting at the top left corner.
+     * The colors and texCoords are the values at the corners of the patch which will be bilerp 
+     * across it, they must also be in counterclockwise order starting at the top left corner.
+     */
+    bool setPatch(int x, int y, const SkPoint cubics[12], const SkColor colors[4],
+                  const SkPoint texCoords[4]);
+    
+    /**
+     * Get patch at location (x,y). If cubics, colors or texCoords is not NULL it sets patch's
+     * array with its corresponding values.
+     * The function returns false if the cubics parameter is NULL or if the (x,y) coordinates are 
+     * not within the range of the grid.
+     */
+    bool getPatch(int x, int y, SkPoint cubics[12], SkColor colors[4], SkPoint texCoords[4]) const;
+    
+>>>>>>> miniblink49
     /**
      * Resets the grid of patches to contain rows and cols of patches.
      */
     void reset(int rows, int cols, VertexType flags, SkXfermode* xMode);
+<<<<<<< HEAD
 
     /**
      * Draws the grid of patches. The patches are drawn starting at patch (0,0) drawing columns, so
@@ -129,6 +180,23 @@ public:
         return SkISize::Make(fCols, fRows);
     }
 
+=======
+    
+    /**
+     * Draws the grid of patches. The patches are drawn starting at patch (0,0) drawing columns, so 
+     * for a 2x2 grid the order would be (0,0)->(0,1)->(1,0)->(1,1). The order follows the order 
+     * of the parametric coordinates of the coons patch.
+     */
+    void draw(SkCanvas* canvas, SkPaint& paint);
+    
+    /**
+     * Get the dimensions of the grid of patches.
+     */
+    SkISize getDimensions() const {
+        return SkISize::Make(fCols, fRows);
+    }
+    
+>>>>>>> miniblink49
 private:
     int fRows, fCols;
     VertexType fModeFlags;
@@ -140,4 +208,8 @@ private:
     SkXfermode* fXferMode;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #endif

@@ -2,20 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/css/StyleRuleKeyframe.h"
 
 #include "core/css/StylePropertySet.h"
 #include "core/css/parser/CSSParser.h"
 #include "wtf/text/StringBuilder.h"
-#include <memory>
 
 namespace blink {
 
-StyleRuleKeyframe::StyleRuleKeyframe(std::unique_ptr<Vector<double>> keys,
-    StylePropertySet* properties)
-    : StyleRuleBase(Keyframe)
-    , m_properties(properties)
-    , m_keys(*keys)
+StyleRuleKeyframe::StyleRuleKeyframe(PassOwnPtr<Vector<double>> keys, PassRefPtrWillBeRawPtr<StylePropertySet> properties)
+: StyleRuleBase(Keyframe)
+, m_properties(properties)
+, m_keys(*keys)
 {
 }
 
@@ -26,7 +25,7 @@ String StyleRuleKeyframe::keyText() const
     StringBuilder keyText;
     for (unsigned i = 0; i < m_keys.size(); ++i) {
         if (i)
-            keyText.append(", ");
+            keyText.append(',');
         keyText.appendNumber(m_keys.at(i) * 100);
         keyText.append('%');
     }
@@ -38,7 +37,7 @@ bool StyleRuleKeyframe::setKeyText(const String& keyText)
 {
     ASSERT(!keyText.isNull());
 
-    std::unique_ptr<Vector<double>> keys = CSSParser::parseKeyframeKeyList(keyText);
+    OwnPtr<Vector<double>> keys = CSSParser::parseKeyframeKeyList(keyText);
     if (!keys || keys->isEmpty())
         return false;
 
@@ -62,7 +61,7 @@ String StyleRuleKeyframe::cssText() const
 {
     StringBuilder result;
     result.append(keyText());
-    result.append(" { ");
+    result.appendLiteral(" { ");
     String decls = m_properties->asText();
     result.append(decls);
     if (!decls.isEmpty())

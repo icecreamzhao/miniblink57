@@ -1,6 +1,10 @@
 /*
+<<<<<<< HEAD
  * Copyright (C) 2003, 2004, 2005, 2006 Apple Computer, Inc.
  * All rights reserved.
+=======
+ * Copyright (C) 2003, 2004, 2005, 2006 Apple Computer, Inc.  All rights reserved.
+>>>>>>> miniblink49
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -24,15 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/IntSize.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace blink {
 
+<<<<<<< HEAD
 IntSize::IntSize(const CGSize& s)
     : m_width(static_cast<int>(s.width))
     , m_height(static_cast<int>(s.height))
+=======
+IntSize::IntSize(const CGSize& s) : m_width(static_cast<int>(s.width)), m_height(static_cast<int>(s.height))
+>>>>>>> miniblink49
 {
 }
 
@@ -41,4 +53,8 @@ IntSize::operator CGSize() const
     return CGSizeMake(m_width, m_height);
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

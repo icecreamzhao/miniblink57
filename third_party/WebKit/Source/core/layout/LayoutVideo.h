@@ -35,51 +35,48 @@ class HTMLVideoElement;
 class LayoutVideo final : public LayoutMedia {
 public:
     LayoutVideo(HTMLVideoElement*);
-    ~LayoutVideo() override;
+    virtual ~LayoutVideo();
+
+    IntRect videoBox() const;
 
     static LayoutSize defaultSize();
-
-    LayoutRect replacedContentRect() const final;
 
     bool supportsAcceleratedRendering() const;
 
     bool shouldDisplayVideo() const;
     HTMLVideoElement* videoElement() const;
+    bool acceleratedRenderingInUse();
 
-    const char* name() const override { return "LayoutVideo"; }
+    virtual const char* name() const override { return "LayoutVideo"; }
 
 private:
-    void updateFromElement() override;
+    virtual void updateFromElement() override;
 
-    void intrinsicSizeChanged() override;
+    virtual void intrinsicSizeChanged() override;
     LayoutSize calculateIntrinsicSize();
     void updateIntrinsicSize();
 
-    void imageChanged(WrappedImagePtr, const IntRect*) override;
+    virtual void imageChanged(WrappedImagePtr, const IntRect*) override;
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectVideo || LayoutMedia::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectVideo || LayoutMedia::isOfType(type); }
 
-    void paintReplaced(const PaintInfo&, const LayoutPoint&) const override;
+    virtual void paintReplaced(const PaintInfo&, const LayoutPoint&) override;
 
-    void layout() override;
+    virtual void layout() override;
 
-    LayoutUnit computeReplacedLogicalWidth(
-        ShouldComputePreferred = ComputeActual) const override;
-    LayoutUnit computeReplacedLogicalHeight(
-        LayoutUnit estimatedUsedWidth = LayoutUnit()) const override;
-    LayoutUnit minimumReplacedHeight() const override;
+    virtual LayoutUnit computeReplacedLogicalWidth(ShouldComputePreferred  = ComputeActual) const override;
+    virtual LayoutUnit computeReplacedLogicalHeight() const override;
+    virtual LayoutUnit minimumReplacedHeight() const override;
 
-    LayoutUnit offsetLeft(const Element*) const override;
-    LayoutUnit offsetTop(const Element*) const override;
-    LayoutUnit offsetWidth() const override;
-    LayoutUnit offsetHeight() const override;
+    virtual LayoutUnit offsetLeft() const override;
+    virtual LayoutUnit offsetTop() const override;
+    virtual LayoutUnit offsetWidth() const override;
+    virtual LayoutUnit offsetHeight() const override;
 
-    CompositingReasons additionalCompositingReasons() const override;
+    virtual CompositingReasons additionalCompositingReasons() const override;
 
     void updatePlayer();
+
 
     LayoutSize m_cachedImageSize;
 };

@@ -27,7 +27,6 @@
 #define BackgroundHTMLInputStream_h
 
 #include "platform/text/SegmentedString.h"
-#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
@@ -36,9 +35,7 @@ namespace blink {
 typedef size_t HTMLInputCheckpoint;
 
 class BackgroundHTMLInputStream {
-    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(BackgroundHTMLInputStream);
-
 public:
     BackgroundHTMLInputStream();
 
@@ -49,49 +46,31 @@ public:
 
     // An HTMLInputCheckpoint is valid until the next call to rewindTo, at which
     // point all outstanding checkpoints are invalidated.
-    HTMLInputCheckpoint createCheckpoint(
-        size_t tokensExtractedSincePreviousCheckpoint);
+    HTMLInputCheckpoint createCheckpoint(size_t tokensExtractedSincePreviousCheckpoint);
     void rewindTo(HTMLInputCheckpoint, const String& unparsedInput);
     void invalidateCheckpointsBefore(HTMLInputCheckpoint);
 
-    size_t totalCheckpointTokenCount() const
-    {
-        return m_totalCheckpointTokenCount;
-    }
+    size_t totalCheckpointTokenCount() const { return m_totalCheckpointTokenCount; }
 
 private:
     struct Checkpoint {
-        Checkpoint(const SegmentedString& i, size_t n, size_t t)
-            : input(i)
-            , numberOfSegmentsAlreadyAppended(n)
-            , tokensExtractedSincePreviousCheckpoint(t)
-        {
-        }
+        Checkpoint(const SegmentedString& i, size_t n, size_t t) : input(i), numberOfSegmentsAlreadyAppended(n), tokensExtractedSincePreviousCheckpoint(t) { }
 
         SegmentedString input;
         size_t numberOfSegmentsAlreadyAppended;
         size_t tokensExtractedSincePreviousCheckpoint;
 
-#if DCHECK_IS_ON()
-        bool isNull() const
-        {
-            return input.isEmpty() && !numberOfSegmentsAlreadyAppended;
-        }
+#if ENABLE(ASSERT)
+        bool isNull() const { return input.isEmpty() && !numberOfSegmentsAlreadyAppended; }
 #endif
-        void clear()
-        {
-            input.clear();
-            numberOfSegmentsAlreadyAppended = 0;
-            tokensExtractedSincePreviousCheckpoint = 0;
-        }
+        void clear() { input.clear(); numberOfSegmentsAlreadyAppended = 0; tokensExtractedSincePreviousCheckpoint = 0;}
     };
 
     SegmentedString m_current;
     Vector<String> m_segments;
     Vector<Checkpoint> m_checkpoints;
 
-    // Note: These indicies may === vector.size(), in which case there are no
-    // valid checkpoints/segments at this time.
+    // Note: These indicies may === vector.size(), in which case there are no valid checkpoints/segments at this time.
     size_t m_firstValidCheckpointIndex;
     size_t m_firstValidSegmentIndex;
     size_t m_totalCheckpointTokenCount;
@@ -99,6 +78,6 @@ private:
     void updateTotalCheckpointTokenCount();
 };
 
-} // namespace blink
+}
 
-#endif // BackgroundHTMLInputStream_h
+#endif

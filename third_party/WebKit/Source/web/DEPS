@@ -3,6 +3,10 @@ include_rules = [
     "+bindings",
     "+core",
     "+gin/public",
+<<<<<<< HEAD
+=======
+    "+heap",
+>>>>>>> miniblink49
     "+modules",
     "+painting",
     "+platform",
@@ -11,6 +15,9 @@ include_rules = [
     "+skia",
     "+third_party/khronos",
     "+third_party/skia",
+<<<<<<< HEAD
     "+ui/gfx/geometry",
+=======
+>>>>>>> miniblink49
     "+web",
 ]

@@ -7,6 +7,7 @@
 
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkString.h"
@@ -14,6 +15,14 @@
 
 static void draw_gradient2(SkCanvas* canvas, const SkRect& rect, SkScalar delta)
 {
+=======
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+#include "SkString.h"
+
+static void draw_gradient2(SkCanvas* canvas, const SkRect& rect, SkScalar delta) {
+>>>>>>> miniblink49
     SkColor colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE, SK_ColorMAGENTA };
     SkScalar pos[] = { 0, 0.25f, 0.75f, SK_Scalar1 };
 
@@ -28,6 +37,7 @@ static void draw_gradient2(SkCanvas* canvas, const SkRect& rect, SkScalar delta)
     SkPoint c1 = { l + 3 * w / 5, t + h / 2 };
     SkScalar r0 = w / 5;
     SkScalar r1 = 2 * w / 5;
+<<<<<<< HEAD
     SkPaint paint;
     paint.setShader(SkGradientShader::MakeTwoPointConical(c0, r0, c1, r1, colors,
         pos, SK_ARRAY_COUNT(pos),
@@ -39,13 +49,32 @@ class DegenerateTwoPtRadialsView : public SampleView {
 public:
     DegenerateTwoPtRadialsView()
     {
+=======
+    SkShader* s = SkGradientShader::CreateTwoPointConical(c0, r0, c1, r1, colors,
+                                                         pos, SK_ARRAY_COUNT(pos),
+                                                         SkShader::kClamp_TileMode);
+    SkPaint paint;
+    paint.setShader(s)->unref();
+
+    canvas->drawRect(rect, paint);
+}
+
+
+class DegenerateTwoPtRadialsView : public SampleView {
+public:
+    DegenerateTwoPtRadialsView() {
+>>>>>>> miniblink49
         fTime = 0;
         this->setBGColor(0xFFDDDDDD);
     }
 
 protected:
+<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
+=======
+    bool onQuery(SkEvent* evt) override {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "DegenerateTwoPtRadials");
             return true;
@@ -53,8 +82,12 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
+=======
+    void onDrawContent(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkScalar delta = fTime / 15.f;
         int intPart = SkScalarFloorToInt(delta);
         delta = delta - SK_Scalar1 * intPart;
@@ -75,17 +108,28 @@ protected:
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setColor(SK_ColorBLACK);
+<<<<<<< HEAD
         canvas->drawText(txt.c_str(), txt.size(), l + w / 2 + w * DELTA_SCALE * delta, t + h + SK_Scalar1 * 10, paint);
     }
 
     bool onAnimate(const SkAnimTimer& timer) override
     {
+=======
+        canvas->drawText(txt.c_str(), txt.size(), l + w/2 + w*DELTA_SCALE*delta, t + h + SK_Scalar1 * 10, paint);
+    }
+
+    bool onAnimate(const SkAnimTimer& timer) override {
+>>>>>>> miniblink49
         fTime = SkDoubleToScalar(timer.secs() / 15);
         return true;
     }
 
 private:
+<<<<<<< HEAD
     SkScalar fTime;
+=======
+    SkScalar           fTime;
+>>>>>>> miniblink49
     typedef SampleView INHERITED;
 };
 

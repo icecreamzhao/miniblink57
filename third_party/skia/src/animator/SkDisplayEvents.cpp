@@ -6,16 +6,26 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkDisplayEvents.h"
 #include "SkADrawable.h"
+=======
+
+#include "SkDisplayEvents.h"
+>>>>>>> miniblink49
 #include "SkAnimateMaker.h"
 #include "SkAnimator.h"
 #include "SkDisplayEvent.h"
 #include "SkDisplayMovie.h"
+<<<<<<< HEAD
+=======
+#include "SkADrawable.h"
+>>>>>>> miniblink49
 #ifdef SK_DEBUG
 #include "SkDump.h"
 #endif
 
+<<<<<<< HEAD
 SkEventState::SkEventState()
     : fCode(0)
     , fDisable(false)
@@ -36,6 +46,19 @@ SkEvents::~SkEvents()
 bool SkEvents::doEvent(SkAnimateMaker& maker, SkDisplayEvent::Kind kind, SkEventState* state)
 {
     /*#ifdef SK_DUMP_ENABLED
+=======
+SkEventState::SkEventState() : fCode(0), fDisable(false), fDisplayable(0), fX(0), fY(0) {
+}
+
+SkEvents::SkEvents() {
+}
+
+SkEvents::~SkEvents() {
+}
+
+bool SkEvents::doEvent(SkAnimateMaker& maker, SkDisplayEvent::Kind kind, SkEventState* state) {
+/*#ifdef SK_DUMP_ENABLED
+>>>>>>> miniblink49
     if (maker.fDumpEvents) {
         SkDebugf("doEvent: ");
         SkString str;
@@ -51,11 +74,19 @@ bool SkEvents::doEvent(SkAnimateMaker& maker, SkDisplayEvent::Kind kind, SkEvent
     SkDisplayable** firstMovie = maker.fMovies.begin();
     SkDisplayable** endMovie = maker.fMovies.end();
     for (SkDisplayable** ptr = firstMovie; ptr < endMovie; ptr++) {
+<<<<<<< HEAD
         SkDisplayMovie* movie = (SkDisplayMovie*)*ptr;
         if (kind != SkDisplayEvent::kOnload)
             movie->doEvent(kind, state);
     }
     SkDisplayable* displayable = state ? state->fDisplayable : nullptr;
+=======
+        SkDisplayMovie* movie = (SkDisplayMovie*) *ptr;
+        if (kind != SkDisplayEvent::kOnload)
+            movie->doEvent(kind, state);
+    }
+    SkDisplayable* displayable = state ? state->fDisplayable : NULL;
+>>>>>>> miniblink49
     int keyCode = state ? state->fCode : 0;
     int count = fEvents.count();
     for (int index = 0; index < count; index++) {
@@ -64,6 +95,7 @@ bool SkEvents::doEvent(SkAnimateMaker& maker, SkDisplayEvent::Kind kind, SkEvent
             continue;
         if (evt->kind != kind)
             continue;
+<<<<<<< HEAD
         if (evt->code != (SkKey)-1) {
             if ((int)evt->code > keyCode || (int)(evt->fMax != (SkKey)-1 ? evt->fMax : evt->code) < keyCode)
                 continue;
@@ -72,6 +104,16 @@ bool SkEvents::doEvent(SkAnimateMaker& maker, SkDisplayEvent::Kind kind, SkEvent
         if (evt->fTarget != nullptr && evt->fTarget != displayable)
             continue;
         if (state == nullptr || state->fDisable == 0) {
+=======
+        if (evt->code != (SkKey) -1) {
+            if ((int) evt->code > keyCode || (int) (evt->fMax != (SkKey) -1 ? evt->fMax : evt->code) < keyCode)
+                continue;
+            evt->fLastCode = (SkKey) keyCode;
+        }
+        if (evt->fTarget != NULL && evt->fTarget != displayable)
+            continue;
+        if (state == NULL || state->fDisable == 0) {
+>>>>>>> miniblink49
             if (kind >= SkDisplayEvent::kMouseDown && kind <= SkDisplayEvent::kMouseUp) {
                 evt->x = state->fX;
                 evt->y = state->fY;
@@ -85,8 +127,12 @@ bool SkEvents::doEvent(SkAnimateMaker& maker, SkDisplayEvent::Kind kind, SkEvent
 }
 
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
 void SkEvents::dump(SkAnimateMaker& maker)
 {
+=======
+void SkEvents::dump(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     int index;
     SkTDDrawableArray& drawArray = maker.fDisplayList.fDrawList;
     int count = drawArray.count();
@@ -103,19 +149,33 @@ void SkEvents::dump(SkAnimateMaker& maker)
 #endif
 
 // currently this only removes onLoad events
+<<<<<<< HEAD
 void SkEvents::removeEvent(SkDisplayEvent::Kind kind, SkEventState* state)
 {
     int keyCode = state ? state->fCode : 0;
     SkDisplayable* displayable = state ? state->fDisplayable : nullptr;
+=======
+void SkEvents::removeEvent(SkDisplayEvent::Kind kind, SkEventState* state) {
+    int keyCode = state ? state->fCode : 0;
+    SkDisplayable* displayable = state ? state->fDisplayable : NULL;
+>>>>>>> miniblink49
     for (SkDisplayEvent** evtPtr = fEvents.begin(); evtPtr < fEvents.end(); evtPtr++) {
         SkDisplayEvent* evt = *evtPtr;
         if (evt->kind != kind)
             continue;
+<<<<<<< HEAD
         if (evt->code != (SkKey)-1) {
             if ((int)evt->code > keyCode || (int)(evt->fMax != (SkKey)-1 ? evt->fMax : evt->code) < keyCode)
                 continue;
         }
         if (evt->fTarget != nullptr && evt->fTarget != displayable)
+=======
+        if (evt->code != (SkKey) -1) {
+            if ((int) evt->code > keyCode || (int) (evt->fMax != (SkKey) -1 ? evt->fMax : evt->code) < keyCode)
+                continue;
+        }
+        if (evt->fTarget != NULL && evt->fTarget != displayable)
+>>>>>>> miniblink49
             continue;
         int index = fEvents.find(evt);
         fEvents.remove(index);

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkSVGFilter.h"
 #include "SkSVGParser.h"
 
@@ -18,7 +26,12 @@ const SkSVGAttribute SkSVGFilter::gAttributes[] = {
 
 DEFINE_SVG_INFO(Filter)
 
+<<<<<<< HEAD
 void SkSVGFilter::translate(SkSVGParser& parser, bool defState)
 {
     //  INHERITED::translate(parser, defState);
+=======
+void SkSVGFilter::translate(SkSVGParser& parser, bool defState) {
+//  INHERITED::translate(parser, defState);
+>>>>>>> miniblink49
 }

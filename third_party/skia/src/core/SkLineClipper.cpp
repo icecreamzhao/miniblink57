@@ -7,9 +7,13 @@
 
 #include "SkLineClipper.h"
 
+<<<<<<< HEAD
 template <typename T>
 T pin_unsorted(T value, T limit0, T limit1)
 {
+=======
+template <typename T> T pin_unsorted(T value, T limit0, T limit1) {
+>>>>>>> miniblink49
     if (limit1 < limit0) {
         SkTSwap(limit0, limit1);
     }
@@ -25,8 +29,12 @@ T pin_unsorted(T value, T limit0, T limit1)
 }
 
 // return X coordinate of intersection with horizontal line at Y
+<<<<<<< HEAD
 static SkScalar sect_with_horizontal(const SkPoint src[2], SkScalar Y)
 {
+=======
+static SkScalar sect_with_horizontal(const SkPoint src[2], SkScalar Y) {
+>>>>>>> miniblink49
     SkScalar dy = src[1].fY - src[0].fY;
     if (SkScalarNearlyZero(dy)) {
         return SkScalarAve(src[0].fX, src[1].fX);
@@ -47,8 +55,12 @@ static SkScalar sect_with_horizontal(const SkPoint src[2], SkScalar Y)
 }
 
 // return Y coordinate of intersection with vertical line at X
+<<<<<<< HEAD
 static SkScalar sect_with_vertical(const SkPoint src[2], SkScalar X)
 {
+=======
+static SkScalar sect_with_vertical(const SkPoint src[2], SkScalar X) {
+>>>>>>> miniblink49
     SkScalar dx = src[1].fX - src[0].fX;
     if (SkScalarNearlyZero(dx)) {
         return SkScalarAve(src[0].fY, src[1].fY);
@@ -66,14 +78,19 @@ static SkScalar sect_with_vertical(const SkPoint src[2], SkScalar X)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static inline bool nestedLT(SkScalar a, SkScalar b, SkScalar dim)
 {
+=======
+static inline bool nestedLT(SkScalar a, SkScalar b, SkScalar dim) {
+>>>>>>> miniblink49
     return a <= b && (a < b || dim > 0);
 }
 
 // returns true if outer contains inner, even if inner is empty.
 // note: outer.contains(inner) always returns false if inner is empty.
 static inline bool containsNoEmptyCheck(const SkRect& outer,
+<<<<<<< HEAD
     const SkRect& inner)
 {
     return outer.fLeft <= inner.fLeft && outer.fTop <= inner.fTop && outer.fRight >= inner.fRight && outer.fBottom >= inner.fBottom;
@@ -82,6 +99,15 @@ static inline bool containsNoEmptyCheck(const SkRect& outer,
 bool SkLineClipper::IntersectLine(const SkPoint src[2], const SkRect& clip,
     SkPoint dst[2])
 {
+=======
+                                        const SkRect& inner) {
+    return  outer.fLeft <= inner.fLeft && outer.fTop <= inner.fTop &&
+            outer.fRight >= inner.fRight && outer.fBottom >= inner.fBottom;
+}
+
+bool SkLineClipper::IntersectLine(const SkPoint src[2], const SkRect& clip,
+                                  SkPoint dst[2]) {
+>>>>>>> miniblink49
     SkRect bounds;
 
     bounds.set(src[0], src[1]);
@@ -93,7 +119,14 @@ bool SkLineClipper::IntersectLine(const SkPoint src[2], const SkRect& clip,
     }
     // check for no overlap, and only permit coincident edges if the line
     // and the edge are colinear
+<<<<<<< HEAD
     if (nestedLT(bounds.fRight, clip.fLeft, bounds.width()) || nestedLT(clip.fRight, bounds.fLeft, bounds.width()) || nestedLT(bounds.fBottom, clip.fTop, bounds.height()) || nestedLT(clip.fBottom, bounds.fTop, bounds.height())) {
+=======
+    if (nestedLT(bounds.fRight, clip.fLeft, bounds.width()) ||
+        nestedLT(clip.fRight, bounds.fLeft, bounds.width()) ||
+        nestedLT(bounds.fBottom, clip.fTop, bounds.height()) ||
+        nestedLT(clip.fBottom, bounds.fTop, bounds.height())) {
+>>>>>>> miniblink49
         return false;
     }
 
@@ -127,7 +160,12 @@ bool SkLineClipper::IntersectLine(const SkPoint src[2], const SkRect& clip,
     }
 
     // check for quick-reject in X again, now that we may have been chopped
+<<<<<<< HEAD
     if ((tmp[index1].fX <= clip.fLeft || tmp[index0].fX >= clip.fRight) && tmp[index0].fX < tmp[index1].fX) {
+=======
+    if ((tmp[index1].fX <= clip.fLeft || tmp[index0].fX >= clip.fRight) &&
+        tmp[index0].fX < tmp[index1].fX) {
+>>>>>>> miniblink49
         // only reject if we have a non-zero width
         return false;
     }
@@ -150,8 +188,12 @@ bool SkLineClipper::IntersectLine(const SkPoint src[2], const SkRect& clip,
 // return value between the two limits, where the limits are either ascending
 // or descending.
 static bool is_between_unsorted(SkScalar value,
+<<<<<<< HEAD
     SkScalar limit0, SkScalar limit1)
 {
+=======
+                                SkScalar limit0, SkScalar limit1) {
+>>>>>>> miniblink49
     if (limit0 < limit1) {
         return limit0 <= value && value <= limit1;
     } else {
@@ -165,10 +207,16 @@ static bool is_between_unsorted(SkScalar value,
 // sect_with_horizontal. If we didn't explicitly pin, is_between_unsorted would
 // fail.
 //
+<<<<<<< HEAD
 static void sect_with_horizontal_test_for_pin_results()
 {
     const SkPoint pts[] = {
         { -540000, -720000 },
+=======
+static void sect_with_horizontal_test_for_pin_results() {
+    const SkPoint pts[] = {
+        { -540000,    -720000 },
+>>>>>>> miniblink49
         { -9.10000017e-05f, 9.99999996e-13f }
     };
     float x = sect_with_horizontal(pts, 0);
@@ -177,8 +225,12 @@ static void sect_with_horizontal_test_for_pin_results()
 #endif
 
 int SkLineClipper::ClipLine(const SkPoint pts[], const SkRect& clip, SkPoint lines[],
+<<<<<<< HEAD
     bool canCullToTheRight)
 {
+=======
+                            bool canCullToTheRight) {
+>>>>>>> miniblink49
 
 #ifdef SK_DEBUG
     {
@@ -202,10 +254,17 @@ int SkLineClipper::ClipLine(const SkPoint pts[], const SkRect& clip, SkPoint lin
 
     // Check if we're completely clipped out in Y (above or below
 
+<<<<<<< HEAD
     if (pts[index1].fY <= clip.fTop) { // we're above the clip
         return 0;
     }
     if (pts[index0].fY >= clip.fBottom) { // we're below the clip
+=======
+    if (pts[index1].fY <= clip.fTop) {  // we're above the clip
+        return 0;
+    }
+    if (pts[index0].fY >= clip.fBottom) {  // we're below the clip
+>>>>>>> miniblink49
         return 0;
     }
 
@@ -228,7 +287,11 @@ int SkLineClipper::ClipLine(const SkPoint pts[], const SkRect& clip, SkPoint lin
 
     // temp storage for up to 3 segments
     SkPoint resultStorage[kMaxPoints];
+<<<<<<< HEAD
     SkPoint* result; // points to our results, either tmp or resultStorage
+=======
+    SkPoint* result;    // points to our results, either tmp or resultStorage
+>>>>>>> miniblink49
     int lineCount = 1;
     bool reverse;
 
@@ -242,11 +305,19 @@ int SkLineClipper::ClipLine(const SkPoint pts[], const SkRect& clip, SkPoint lin
         reverse = true;
     }
 
+<<<<<<< HEAD
     if (tmp[index1].fX <= clip.fLeft) { // wholly to the left
         tmp[0].fX = tmp[1].fX = clip.fLeft;
         result = tmp;
         reverse = false;
     } else if (tmp[index0].fX >= clip.fRight) { // wholly to the right
+=======
+    if (tmp[index1].fX <= clip.fLeft) {  // wholly to the left
+        tmp[0].fX = tmp[1].fX = clip.fLeft;
+        result = tmp;
+        reverse = false;
+    } else if (tmp[index0].fX >= clip.fRight) {    // wholly to the right
+>>>>>>> miniblink49
         if (canCullToTheRight) {
             return 0;
         }

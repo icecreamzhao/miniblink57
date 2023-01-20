@@ -28,13 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // All of the functions in this file should move to new homes and this file
 // should be deleted.
+=======
+// All of the functions in this file should move to new homes and this file should be deleted.
+>>>>>>> miniblink49
 
 #ifndef SkiaUtils_h
 #define SkiaUtils_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/graphics/GraphicsTypes.h"
 #include "platform/graphics/Image.h"
 #include "platform/transforms/AffineTransform.h"
@@ -42,12 +47,21 @@
 #include "third_party/skia/include/core/SkColor.h"
 #include "third_party/skia/include/core/SkRefCnt.h"
 #include "third_party/skia/include/core/SkScalar.h"
+=======
+#include "platform/geometry/FloatRect.h"
+#include "platform/graphics/Color.h"
+#include "platform/graphics/GraphicsTypes.h"
+#include "platform/transforms/AffineTransform.h"
+#include "third_party/skia/include/core/SkCanvas.h"
+#include "third_party/skia/include/effects/SkCornerPathEffect.h"
+>>>>>>> miniblink49
 #include "wtf/MathExtras.h"
 
 namespace blink {
 
 class GraphicsContext;
 
+<<<<<<< HEAD
 /**** constants ****/
 
 enum {
@@ -65,6 +79,11 @@ SkBlendMode PLATFORM_EXPORT
         WebBlendMode = WebBlendModeNormal);
 CompositeOperator PLATFORM_EXPORT compositeOperatorFromSkia(SkBlendMode);
 WebBlendMode PLATFORM_EXPORT blendModeFromSkia(SkBlendMode);
+=======
+SkXfermode::Mode PLATFORM_EXPORT WebCoreCompositeToSkiaComposite(CompositeOperator, WebBlendMode = WebBlendModeNormal);
+CompositeOperator PLATFORM_EXPORT compositeOperatorFromSkia(SkXfermode::Mode);
+WebBlendMode PLATFORM_EXPORT blendModeFromSkia(SkXfermode::Mode);
+>>>>>>> miniblink49
 
 // Map alpha values from [0, 1] to [0, 256] for alpha blending.
 int PLATFORM_EXPORT clampedAlphaForBlending(float);
@@ -77,21 +96,49 @@ SkColor PLATFORM_EXPORT scaleAlpha(SkColor, float);
 // alpha is in the range [0, 256].
 SkColor PLATFORM_EXPORT scaleAlpha(SkColor, int);
 
+<<<<<<< HEAD
 // Skia has problems when passed infinite, etc floats, filter them to 0.
 inline SkScalar WebCoreFloatToSkScalar(float f)
 {
     return SkFloatToScalar(std_isfinite(f) ? f : 0);
+=======
+inline SkFilterQuality WebCoreInterpolationQualityToSkFilterQuality(InterpolationQuality quality)
+{
+    // FIXME: this reflects existing client mappings, but should probably
+    // be expanded to map higher level interpolations more accurately.
+    return quality != InterpolationNone ? kLow_SkFilterQuality : kNone_SkFilterQuality;
+}
+
+// Skia has problems when passed infinite, etc floats, filter them to 0.
+inline SkScalar WebCoreFloatToSkScalar(float f)
+{
+    return SkFloatToScalar(std::isfinite(f) ? f : 0);
+>>>>>>> miniblink49
 }
 
 inline SkScalar WebCoreDoubleToSkScalar(double d)
 {
+<<<<<<< HEAD
     return SkDoubleToScalar(std_isfinite(d) ? d : 0);
+=======
+    return SkDoubleToScalar(std::isfinite(d) ? d : 0);
+}
+
+inline SkRect WebCoreFloatRectToSKRect(const FloatRect& rect)
+{
+    return SkRect::MakeLTRB(SkFloatToScalar(rect.x()), SkFloatToScalar(rect.y()),
+        SkFloatToScalar(rect.maxX()), SkFloatToScalar(rect.maxY()));
+>>>>>>> miniblink49
 }
 
 inline bool WebCoreFloatNearlyEqual(float a, float b)
 {
+<<<<<<< HEAD
     return SkScalarNearlyEqual(WebCoreFloatToSkScalar(a),
         WebCoreFloatToSkScalar(b));
+=======
+    return SkScalarNearlyEqual(WebCoreFloatToSkScalar(a), WebCoreFloatToSkScalar(b));
+>>>>>>> miniblink49
 }
 
 inline SkPath::FillType WebCoreWindRuleToSkFillType(WindRule rule)
@@ -112,19 +159,33 @@ inline WindRule SkFillTypeToWindRule(SkPath::FillType fillType)
     return RULE_NONZERO;
 }
 
+<<<<<<< HEAD
+=======
+// Determine if a given WebKit point is contained in a path
+bool SkPathContainsPoint(const SkPath&, const FloatPoint&, SkPath::FillType);
+
+>>>>>>> miniblink49
 SkMatrix PLATFORM_EXPORT affineTransformToSkMatrix(const AffineTransform&);
 
 bool nearlyIntegral(float value);
 
+<<<<<<< HEAD
 InterpolationQuality limitInterpolationQuality(const GraphicsContext&,
     InterpolationQuality resampling);
 
 InterpolationQuality computeInterpolationQuality(float srcWidth,
+=======
+InterpolationQuality limitInterpolationQuality(const GraphicsContext*, InterpolationQuality resampling);
+
+InterpolationQuality computeInterpolationQuality(
+    float srcWidth,
+>>>>>>> miniblink49
     float srcHeight,
     float destWidth,
     float destHeight,
     bool isDataComplete = true);
 
+<<<<<<< HEAD
 // This replicates the old skia behavior when it used to take radius for blur.
 // Now it takes sigma.
 inline SkScalar skBlurRadiusToSigma(SkScalar radius)
@@ -205,3 +266,18 @@ sk_sp<T> toSkSp(const RefPtr<T>& ref)
 } // namespace blink
 
 #endif // SkiaUtils_h
+=======
+// This replicates the old skia behavior when it used to take radius for blur. Now it takes sigma.
+inline SkScalar skBlurRadiusToSigma(SkScalar radius)
+{
+    SkASSERT(radius >= 0);
+    return 0.288675f * radius + 0.5f;
+}
+
+template<typename PrimitiveType>
+void drawPlatformFocusRing(const PrimitiveType&, SkCanvas*, SkColor, int width);
+
+} // namespace blink
+
+#endif  // SkiaUtils_h
+>>>>>>> miniblink49

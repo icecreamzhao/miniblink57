@@ -26,14 +26,13 @@
 #ifndef DecodedDataDocumentParser_h
 #define DecodedDataDocumentParser_h
 
-#include "core/CoreExport.h"
 #include "core/dom/DocumentParser.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
 
 namespace blink {
 class TextResourceDecoder;
 
-class CORE_EXPORT DecodedDataDocumentParser : public DocumentParser {
+class DecodedDataDocumentParser : public DocumentParser {
 public:
     // Only used by the XMLDocumentParser to communicate back to
     // XMLHttpRequest if the responseXML was well formed.
@@ -41,12 +40,12 @@ public:
 
     // The below functions are used by DocumentWriter (the loader).
     void appendBytes(const char* bytes, size_t length) override;
-    virtual void flush();
+    void flush() override;
     bool needsDecoder() const final { return m_needsDecoder; }
-    void setDecoder(std::unique_ptr<TextResourceDecoder>) override;
+    void setDecoder(PassOwnPtr<TextResourceDecoder>) override;
     TextResourceDecoder* decoder() final;
 
-    std::unique_ptr<TextResourceDecoder> takeDecoder();
+    PassOwnPtr<TextResourceDecoder> takeDecoder();
 
 protected:
     explicit DecodedDataDocumentParser(Document&);
@@ -56,9 +55,9 @@ private:
     void updateDocument(String& decodedData);
 
     bool m_needsDecoder;
-    std::unique_ptr<TextResourceDecoder> m_decoder;
+    OwnPtr<TextResourceDecoder> m_decoder;
 };
 
-} // namespace blink
+}
 
 #endif // DecodedDataDocumentParser_h

@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/EmptyNodeList.h"
 
 #include "core/dom/Node.h"
@@ -36,7 +37,12 @@
 
 namespace blink {
 
-EmptyNodeList::~EmptyNodeList() { }
+EmptyNodeList::~EmptyNodeList()
+{
+#if !ENABLE(OILPAN)
+    m_owner->nodeLists()->removeEmptyChildNodeList(this);
+#endif
+}
 
 Node* EmptyNodeList::virtualOwnerNode() const
 {

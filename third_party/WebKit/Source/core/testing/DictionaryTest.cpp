@@ -2,13 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "core/testing/DictionaryTest.h"
+#include "config.h"
+#include "DictionaryTest.h"
 
-#include "bindings/core/v8/ScriptState.h"
-#include "bindings/core/v8/V8ObjectBuilder.h"
 #include "core/testing/InternalDictionary.h"
 #include "core/testing/InternalDictionaryDerived.h"
-#include "core/testing/InternalDictionaryDerivedDerived.h"
 
 namespace blink {
 
@@ -17,7 +15,9 @@ DictionaryTest::DictionaryTest()
 {
 }
 
-DictionaryTest::~DictionaryTest() { }
+DictionaryTest::~DictionaryTest()
+{
+}
 
 void DictionaryTest::set(const InternalDictionary& testingDictionary)
 {
@@ -66,12 +66,6 @@ void DictionaryTest::set(const InternalDictionary& testingDictionary)
     if (testingDictionary.hasDoubleOrStringSequenceMember())
         m_doubleOrStringSequenceMember = testingDictionary.doubleOrStringSequenceMember();
     m_eventTargetOrNullMember = testingDictionary.eventTargetOrNullMember();
-    if (testingDictionary.hasDictionaryMember()) {
-        NonThrowableExceptionState exceptionState;
-        m_dictionaryMemberProperties = testingDictionary.dictionaryMember().getOwnPropertiesAsStringHashMap(
-            exceptionState);
-    }
-    m_prefixGetMember = testingDictionary.getPrefixGetMember();
 }
 
 void DictionaryTest::get(InternalDictionary& result)
@@ -116,23 +110,8 @@ void DictionaryTest::get(InternalDictionary& result)
     if (!m_doubleOrStringMember.isNull())
         result.setDoubleOrStringMember(m_doubleOrStringMember);
     if (!m_doubleOrStringSequenceMember.isNull())
-        result.setDoubleOrStringSequenceMember(
-            m_doubleOrStringSequenceMember.get());
+        result.setDoubleOrStringSequenceMember(m_doubleOrStringSequenceMember.get());
     result.setEventTargetOrNullMember(m_eventTargetOrNullMember);
-    result.setPrefixGetMember(m_prefixGetMember);
-}
-
-ScriptValue DictionaryTest::getDictionaryMemberProperties(
-    ScriptState* scriptState)
-{
-    if (!m_dictionaryMemberProperties)
-        return ScriptValue();
-    V8ObjectBuilder builder(scriptState);
-    HashMap<String, String> properties = m_dictionaryMemberProperties.get();
-    for (HashMap<String, String>::iterator it = properties.begin();
-         it != properties.end(); ++it)
-        builder.addString(it->key, it->value);
-    return builder.scriptValue();
 }
 
 void DictionaryTest::setDerived(const InternalDictionaryDerived& derived)
@@ -151,50 +130,6 @@ void DictionaryTest::getDerived(InternalDictionaryDerived& result)
     result.setDerivedStringMember(m_derivedStringMember);
     result.setDerivedStringMemberWithDefault(m_derivedStringMemberWithDefault);
     result.setRequiredBooleanMember(m_requiredBooleanMember);
-}
-
-void DictionaryTest::setDerivedDerived(
-    const InternalDictionaryDerivedDerived& derived)
-{
-    setDerived(derived);
-    if (derived.hasDerivedDerivedStringMember())
-        m_derivedDerivedStringMember = derived.derivedDerivedStringMember();
-}
-
-void DictionaryTest::getDerivedDerived(
-    InternalDictionaryDerivedDerived& result)
-{
-    getDerived(result);
-    result.setDerivedDerivedStringMember(m_derivedDerivedStringMember);
-}
-
-String DictionaryTest::stringFromIterable(
-    ScriptState* scriptState,
-    Dictionary iterable,
-    ExceptionState& exceptionState) const
-{
-    StringBuilder result;
-    ExecutionContext* executionContext = scriptState->getExecutionContext();
-    DictionaryIterator iterator = iterable.getIterator(executionContext);
-    if (iterator.isNull())
-        return emptyString();
-
-    bool firstLoop = true;
-    while (iterator.next(executionContext, exceptionState)) {
-        if (exceptionState.hadException())
-            return emptyString();
-
-        if (firstLoop)
-            firstLoop = false;
-        else
-            result.append(',');
-
-        v8::Local<v8::Value> value;
-        if (v8Call(iterator.value(), value))
-            result.append(toCoreString(value->ToString()));
-    }
-
-    return result.toString();
 }
 
 void DictionaryTest::reset()
@@ -226,8 +161,6 @@ void DictionaryTest::reset()
     m_derivedStringMember = String();
     m_derivedStringMemberWithDefault = String();
     m_requiredBooleanMember = false;
-    m_dictionaryMemberProperties = nullptr;
-    m_prefixGetMember = ScriptValue();
 }
 
 DEFINE_TRACE(DictionaryTest)
@@ -238,4 +171,4 @@ DEFINE_TRACE(DictionaryTest)
     visitor->trace(m_eventTargetOrNullMember);
 }
 
-} // namespace blink
+}

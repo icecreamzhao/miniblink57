@@ -32,9 +32,11 @@
 
 namespace blink {
 
+template<typename T> class EventSender;
+typedef EventSender<HTMLSourceElement> SourceEventSender;
+
 class HTMLSourceElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     class Listener;
 
@@ -48,31 +50,27 @@ public:
     void scheduleErrorEvent();
     void cancelPendingErrorEvent();
 
-    bool mediaQueryMatches() const;
+    void dispatchPendingEvent(SourceEventSender*);
 
-    void removeMediaQueryListListener();
-    void addMediaQueryListListener();
+    bool mediaQueryMatches() const;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit HTMLSourceElement(Document&);
 
-    void dispatchPendingEvent();
-
     void didMoveToNewDocument(Document& oldDocument) override;
 
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;
     bool isURLAttribute(const Attribute&) const override;
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
 
     void notifyMediaQueryChanged();
     void createMediaQueryList(const AtomicString& media);
 
-    Member<MediaQueryList> m_mediaQueryList;
-    Member<Listener> m_listener;
-    TaskHandle m_pendingErrorEvent;
+    RefPtrWillBeMember<MediaQueryList> m_mediaQueryList;
+    RefPtrWillBeMember<Listener> m_listener;
 };
 
 } // namespace blink

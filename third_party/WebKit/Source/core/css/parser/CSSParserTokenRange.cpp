@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/css/parser/CSSParserTokenRange.h"
 
 #include "wtf/StaticConstructors.h"
@@ -16,9 +17,7 @@ void CSSParserTokenRange::initStaticEOFToken()
     new ((void*)&staticEOFToken) CSSParserToken(EOFToken);
 }
 
-CSSParserTokenRange CSSParserTokenRange::makeSubRange(
-    const CSSParserToken* first,
-    const CSSParserToken* last) const
+CSSParserTokenRange CSSParserTokenRange::makeSubRange(const CSSParserToken* first, const CSSParserToken* last) const
 {
     if (first == &staticEOFToken)
         first = m_last;
@@ -30,14 +29,14 @@ CSSParserTokenRange CSSParserTokenRange::makeSubRange(
 
 CSSParserTokenRange CSSParserTokenRange::consumeBlock()
 {
-    ASSERT(peek().getBlockType() == CSSParserToken::BlockStart);
+    ASSERT(peek().blockType() == CSSParserToken::BlockStart);
     const CSSParserToken* start = &peek() + 1;
     unsigned nestingLevel = 0;
     do {
         const CSSParserToken& token = consume();
-        if (token.getBlockType() == CSSParserToken::BlockStart)
+        if (token.blockType() == CSSParserToken::BlockStart)
             nestingLevel++;
-        else if (token.getBlockType() == CSSParserToken::BlockEnd)
+        else if (token.blockType() == CSSParserToken::BlockEnd)
             nestingLevel--;
     } while (nestingLevel && m_first < m_last);
 
@@ -48,15 +47,14 @@ CSSParserTokenRange CSSParserTokenRange::consumeBlock()
 
 void CSSParserTokenRange::consumeComponentValue()
 {
-    // FIXME: This is going to do multiple passes over large sections of a
-    // stylesheet. We should consider optimising this by precomputing where each
-    // block ends.
+    // FIXME: This is going to do multiple passes over large sections of a stylesheet.
+    // We should consider optimising this by precomputing where each block ends.
     unsigned nestingLevel = 0;
     do {
         const CSSParserToken& token = consume();
-        if (token.getBlockType() == CSSParserToken::BlockStart)
+        if (token.blockType() == CSSParserToken::BlockStart)
             nestingLevel++;
-        else if (token.getBlockType() == CSSParserToken::BlockEnd)
+        else if (token.blockType() == CSSParserToken::BlockEnd)
             nestingLevel--;
     } while (nestingLevel && m_first < m_last);
 }

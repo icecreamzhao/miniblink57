@@ -29,21 +29,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/SubmitInputType.h"
 
 #include "core/InputTypeNames.h"
 #include "core/events/Event.h"
-#include "core/html/FormData.h"
+#include "core/html/FormDataList.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "platform/text/PlatformLocale.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-InputType* SubmitInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> SubmitInputType::create(HTMLInputElement& element)
 {
     UseCounter::count(element.document(), UseCounter::InputTypeSubmit);
-    return new SubmitInputType(element);
+    return adoptRefWillBeNoop(new SubmitInputType(element));
 }
 
 const AtomicString& SubmitInputType::formControlType() const
@@ -51,10 +53,12 @@ const AtomicString& SubmitInputType::formControlType() const
     return InputTypeNames::submit;
 }
 
-void SubmitInputType::appendToFormData(FormData& formData) const
+bool SubmitInputType::appendFormData(FormDataList& encoding, bool) const
 {
-    if (element().isActivatedSubmit())
-        formData.append(element().name(), element().valueOrDefaultLabel());
+    if (!element().isActivatedSubmit())
+        return false;
+    encoding.appendData(element().name(), element().valueWithDefault());
+    return true;
 }
 
 bool SubmitInputType::supportsRequired() const
@@ -64,10 +68,12 @@ bool SubmitInputType::supportsRequired() const
 
 void SubmitInputType::handleDOMActivateEvent(Event* event)
 {
-    if (element().isDisabledFormControl() || !element().form())
+    RefPtrWillBeRawPtr<HTMLInputElement> element(this->element());
+    if (element->isDisabledFormControl() || !element->form())
         return;
-    element().form()->prepareForSubmission(
-        event, &element()); // Event handlers can run.
+    element->setActivatedSubmit(true);
+    element->form()->prepareForSubmission(event); // Event handlers can run.
+    element->setActivatedSubmit(false);
     event->setDefaultHandled();
 }
 
@@ -76,7 +82,7 @@ bool SubmitInputType::canBeSuccessfulSubmitButton()
     return true;
 }
 
-String SubmitInputType::defaultLabel() const
+String SubmitInputType::defaultValue() const
 {
     return locale().queryString(WebLocalizedString::SubmitButtonDefaultLabel);
 }

@@ -28,12 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://w3c.github.io/navigation-timing/#the-performancenavigation-interface
+// http://www.w3.org/TR/navigation-timing/#sec-navigation-info-interface
 
-// Legacy support for NT1(https://www.w3.org/TR/navigation-timing/).
+// TODO(philipj): This interface been morphed into PerformanceNavigationTiming
+// in the latest spec:
+// https://w3c.github.io/navigation-timing/#sec-PerformanceNavigationTiming
 
 [
-    Exposed=Window,
+    GarbageCollected
 ] interface PerformanceNavigation {
     const unsigned short TYPE_NAVIGATE = 0;
     const unsigned short TYPE_RELOAD = 1;
@@ -41,5 +43,4 @@
     const unsigned short TYPE_RESERVED = 255;
     readonly attribute unsigned short type;
     readonly attribute unsigned short redirectCount;
-    serializer = {attribute};
 };

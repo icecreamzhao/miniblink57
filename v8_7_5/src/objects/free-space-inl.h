@@ -18,6 +18,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(FreeSpace, HeapObject)
 
     SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
@@ -66,3 +67,54 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_FREE_SPACE_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(FreeSpace, HeapObject)
+
+SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
+RELAXED_SMI_ACCESSORS(FreeSpace, size, kSizeOffset)
+
+int FreeSpace::Size() { return size(); }
+
+FreeSpace FreeSpace::next() {
+#ifdef DEBUG
+  Heap* heap = GetHeapFromWritableObject(*this);
+  Object free_space_map =
+      Isolate::FromHeap(heap)->root(RootIndex::kFreeSpaceMap);
+  DCHECK_IMPLIES(!map_slot().contains_value(free_space_map->ptr()),
+                 !heap->deserialization_complete() &&
+                     map_slot().contains_value(kNullAddress));
+#endif
+  DCHECK_LE(kNextOffset + kTaggedSize, relaxed_read_size());
+  return FreeSpace::unchecked_cast(*ObjectSlot(address() + kNextOffset));
+}
+
+void FreeSpace::set_next(FreeSpace next) {
+#ifdef DEBUG
+  Heap* heap = GetHeapFromWritableObject(*this);
+  Object free_space_map =
+      Isolate::FromHeap(heap)->root(RootIndex::kFreeSpaceMap);
+  DCHECK_IMPLIES(!map_slot().contains_value(free_space_map->ptr()),
+                 !heap->deserialization_complete() &&
+                     map_slot().contains_value(kNullAddress));
+#endif
+  DCHECK_LE(kNextOffset + kTaggedSize, relaxed_read_size());
+  ObjectSlot(address() + kNextOffset).Relaxed_Store(next);
+}
+
+FreeSpace FreeSpace::cast(HeapObject o) {
+  SLOW_DCHECK(!GetHeapFromWritableObject(o)->deserialization_complete() ||
+              o->IsFreeSpace());
+  return bit_cast<FreeSpace>(o);
+}
+
+FreeSpace FreeSpace::unchecked_cast(const Object o) {
+  return bit_cast<FreeSpace>(o);
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_FREE_SPACE_INL_H_
+>>>>>>> miniblink49

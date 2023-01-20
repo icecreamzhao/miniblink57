@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://w3c.github.io/gamepad/#gamepadevent-interface
 
 dictionary GamepadEventInit : EventInit {
@@ -9,4 +10,10 @@ dictionary GamepadEventInit : EventInit {
     // https://crbug.com/647693
     // https://github.com/w3c/gamepad/issues/35
     Gamepad? gamepad;
+=======
+// https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html#gamepadevent-interface
+
+dictionary GamepadEventInit : EventInit {
+    Gamepad gamepad;
+>>>>>>> miniblink49
 };

@@ -28,6 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "platform/PlatformInstrumentation.h"
 
 namespace blink {
@@ -44,4 +49,8 @@ const char PlatformInstrumentation::LazyPixelRef[] = "LazyPixelRef";
 const char PlatformInstrumentation::ImageTypeArgument[] = "imageType";
 const char PlatformInstrumentation::CachedArgument[] = "cached";
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

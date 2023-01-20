@@ -11,6 +11,7 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,6 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/mediastream/MediaStreamTrack.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
@@ -30,6 +46,7 @@
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/events/Event.h"
+<<<<<<< HEAD
 #include "core/frame/Deprecation.h"
 #include "modules/mediastream/MediaConstraintsImpl.h"
 #include "modules/mediastream/MediaStream.h"
@@ -60,18 +77,49 @@ MediaStreamTrack* MediaStreamTrack::create(ExecutionContext* context,
 MediaStreamTrack::MediaStreamTrack(ExecutionContext* context,
     MediaStreamComponent* component)
     : ContextLifecycleObserver(context)
+=======
+#include "modules/mediastream/MediaStream.h"
+#include "modules/mediastream/MediaStreamTrackSourcesCallback.h"
+#include "modules/mediastream/MediaStreamTrackSourcesRequestImpl.h"
+#include "modules/mediastream/UserMediaController.h"
+#include "platform/mediastream/MediaStreamCenter.h"
+#include "platform/mediastream/MediaStreamComponent.h"
+#include "public/platform/WebSourceInfo.h"
+
+namespace blink {
+
+MediaStreamTrack* MediaStreamTrack::create(ExecutionContext* context, MediaStreamComponent* component)
+{
+    MediaStreamTrack* track = new MediaStreamTrack(context, component);
+    track->suspendIfNeeded();
+    return track;
+}
+
+MediaStreamTrack::MediaStreamTrack(ExecutionContext* context, MediaStreamComponent* component)
+    : ActiveDOMObject(context)
+>>>>>>> miniblink49
     , m_readyState(MediaStreamSource::ReadyStateLive)
     , m_isIteratingRegisteredMediaStreams(false)
     , m_stopped(false)
     , m_component(component)
+<<<<<<< HEAD
     ,
     // The source's constraints aren't yet initialized at creation time.
     m_constraints()
+=======
+>>>>>>> miniblink49
 {
     m_component->source()->addObserver(this);
 }
 
+<<<<<<< HEAD
 MediaStreamTrack::~MediaStreamTrack() { }
+=======
+MediaStreamTrack::~MediaStreamTrack()
+{
+    m_component->source()->removeObserver(this);
+}
+>>>>>>> miniblink49
 
 String MediaStreamTrack::kind() const
 {
@@ -85,7 +133,11 @@ String MediaStreamTrack::kind() const
         return videoKind;
     }
 
+<<<<<<< HEAD
     NOTREACHED();
+=======
+    ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
     return audioKind;
 }
 
@@ -112,8 +164,12 @@ void MediaStreamTrack::setEnabled(bool enabled)
     m_component->setEnabled(enabled);
 
     if (!ended())
+<<<<<<< HEAD
         MediaStreamCenter::instance().didSetMediaStreamTrackEnabled(
             m_component.get());
+=======
+        MediaStreamCenter::instance().didSetMediaStreamTrackEnabled(m_component.get());
+>>>>>>> miniblink49
 }
 
 bool MediaStreamTrack::muted() const
@@ -121,6 +177,7 @@ bool MediaStreamTrack::muted() const
     return m_component->muted();
 }
 
+<<<<<<< HEAD
 String MediaStreamTrack::contentHint() const
 {
     WebMediaStreamTrack::ContentHintType hint = m_component->contentHint();
@@ -177,11 +234,21 @@ void MediaStreamTrack::setContentHint(const String& hint)
     m_component->setContentHint(translatedHint);
 }
 
+=======
+>>>>>>> miniblink49
 bool MediaStreamTrack::remote() const
 {
     return m_component->source()->remote();
 }
 
+<<<<<<< HEAD
+=======
+bool MediaStreamTrack::readonly() const
+{
+    return m_component->source()->readonly();
+}
+
+>>>>>>> miniblink49
 String MediaStreamTrack::readyState() const
 {
     if (ended())
@@ -196,10 +263,29 @@ String MediaStreamTrack::readyState() const
         return "ended";
     }
 
+<<<<<<< HEAD
     NOTREACHED();
     return String();
 }
 
+=======
+    ASSERT_NOT_REACHED();
+    return String();
+}
+
+void MediaStreamTrack::getSources(ExecutionContext* context, MediaStreamTrackSourcesCallback* callback, ExceptionState& exceptionState)
+{
+    LocalFrame* frame = toDocument(context)->frame();
+    UserMediaController* userMedia = UserMediaController::from(frame);
+    if (!userMedia) {
+        exceptionState.throwDOMException(NotSupportedError, "No sources controller available; is this a detached window?");
+        return;
+    }
+    MediaStreamTrackSourcesRequest* request = MediaStreamTrackSourcesRequestImpl::create(*context, callback);
+    userMedia->requestSources(request);
+}
+
+>>>>>>> miniblink49
 void MediaStreamTrack::stopTrack(ExceptionState& exceptionState)
 {
     if (ended())
@@ -213,6 +299,7 @@ void MediaStreamTrack::stopTrack(ExceptionState& exceptionState)
 
 MediaStreamTrack* MediaStreamTrack::clone(ExecutionContext* context)
 {
+<<<<<<< HEAD
     // TODO(pbos): Make sure m_readyState and m_stopped carries over on cloned
     // tracks.
     MediaStreamComponent* clonedComponent = component()->clone();
@@ -266,6 +353,14 @@ void MediaStreamTrack::getSettings(MediaTrackSettings& settings)
     }
 }
 
+=======
+    RefPtr<MediaStreamComponent> clonedComponent = MediaStreamComponent::create(component()->source());
+    MediaStreamTrack* clonedTrack = MediaStreamTrack::create(context, clonedComponent.get());
+    MediaStreamCenter::instance().didCreateMediaStreamTrack(clonedComponent.get());
+    return clonedTrack;
+}
+
+>>>>>>> miniblink49
 bool MediaStreamTrack::ended() const
 {
     return m_stopped || (m_readyState == MediaStreamSource::ReadyStateEnded);
@@ -276,7 +371,11 @@ void MediaStreamTrack::sourceChangedState()
     if (ended())
         return;
 
+<<<<<<< HEAD
     m_readyState = m_component->source()->getReadyState();
+=======
+    m_readyState = m_component->source()->readyState();
+>>>>>>> miniblink49
     switch (m_readyState) {
     case MediaStreamSource::ReadyStateLive:
         m_component->setMuted(false);
@@ -295,19 +394,35 @@ void MediaStreamTrack::sourceChangedState()
 
 void MediaStreamTrack::propagateTrackEnded()
 {
+<<<<<<< HEAD
     CHECK(!m_isIteratingRegisteredMediaStreams);
     m_isIteratingRegisteredMediaStreams = true;
     for (HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.begin();
          iter != m_registeredMediaStreams.end(); ++iter)
+=======
+    RELEASE_ASSERT(!m_isIteratingRegisteredMediaStreams);
+    m_isIteratingRegisteredMediaStreams = true;
+    for (HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.begin(); iter != m_registeredMediaStreams.end(); ++iter)
+>>>>>>> miniblink49
         (*iter)->trackEnded();
     m_isIteratingRegisteredMediaStreams = false;
 }
 
+<<<<<<< HEAD
 void MediaStreamTrack::contextDestroyed(ExecutionContext*)
+=======
+MediaStreamComponent* MediaStreamTrack::component()
+{
+    return m_component.get();
+}
+
+void MediaStreamTrack::stop()
+>>>>>>> miniblink49
 {
     m_stopped = true;
 }
 
+<<<<<<< HEAD
 bool MediaStreamTrack::hasPendingActivity() const
 {
     // If 'ended' listeners exist and the object hasn't yet reached
@@ -329,20 +444,36 @@ std::unique_ptr<AudioSourceProvider> MediaStreamTrack::createWebAudioSource()
 {
     return MediaStreamCenter::instance().createWebAudioSourceFromMediaStreamTrack(
         component());
+=======
+PassOwnPtr<AudioSourceProvider> MediaStreamTrack::createWebAudioSource()
+{
+    return MediaStreamCenter::instance().createWebAudioSourceFromMediaStreamTrack(component());
+>>>>>>> miniblink49
 }
 
 void MediaStreamTrack::registerMediaStream(MediaStream* mediaStream)
 {
+<<<<<<< HEAD
     CHECK(!m_isIteratingRegisteredMediaStreams);
     CHECK(!m_registeredMediaStreams.contains(mediaStream));
+=======
+    RELEASE_ASSERT(!m_isIteratingRegisteredMediaStreams);
+    RELEASE_ASSERT(!m_registeredMediaStreams.contains(mediaStream));
+>>>>>>> miniblink49
     m_registeredMediaStreams.add(mediaStream);
 }
 
 void MediaStreamTrack::unregisterMediaStream(MediaStream* mediaStream)
 {
+<<<<<<< HEAD
     CHECK(!m_isIteratingRegisteredMediaStreams);
     HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.find(mediaStream);
     CHECK(iter != m_registeredMediaStreams.end());
+=======
+    RELEASE_ASSERT(!m_isIteratingRegisteredMediaStreams);
+    HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.find(mediaStream);
+    RELEASE_ASSERT(iter != m_registeredMediaStreams.end());
+>>>>>>> miniblink49
     m_registeredMediaStreams.remove(iter);
 }
 
@@ -351,17 +482,28 @@ const AtomicString& MediaStreamTrack::interfaceName() const
     return EventTargetNames::MediaStreamTrack;
 }
 
+<<<<<<< HEAD
 ExecutionContext* MediaStreamTrack::getExecutionContext() const
 {
     return ContextLifecycleObserver::getExecutionContext();
+=======
+ExecutionContext* MediaStreamTrack::executionContext() const
+{
+    return ActiveDOMObject::executionContext();
+>>>>>>> miniblink49
 }
 
 DEFINE_TRACE(MediaStreamTrack)
 {
     visitor->trace(m_registeredMediaStreams);
+<<<<<<< HEAD
     visitor->trace(m_component);
     EventTargetWithInlineData::trace(visitor);
     ContextLifecycleObserver::trace(visitor);
+=======
+    RefCountedGarbageCollectedEventTargetWithInlineData<MediaStreamTrack>::trace(visitor);
+    ActiveDOMObject::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

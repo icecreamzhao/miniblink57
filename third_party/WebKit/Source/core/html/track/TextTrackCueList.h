@@ -27,37 +27,36 @@
 #define TextTrackCueList_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/html/track/TextTrackCue.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class TextTrackCueList final : public GarbageCollected<TextTrackCueList>,
-                               public ScriptWrappable {
+class TextTrackCueList final : public RefCountedWillBeGarbageCollected<TextTrackCueList>, public ScriptWrappable {
+    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(TextTrackCueList);
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static TextTrackCueList* create() { return new TextTrackCueList; }
+    static PassRefPtrWillBeRawPtr<TextTrackCueList> create()
+    {
+        return adoptRefWillBeNoop(new TextTrackCueList);
+    }
 
     unsigned long length() const;
 
-    TextTrackCue* anonymousIndexedGetter(unsigned index) const;
+    TextTrackCue* item(unsigned index) const;
     TextTrackCue* getCueById(const AtomicString&) const;
 
-    bool add(TextTrackCue*);
+    bool add(PassRefPtrWillBeRawPtr<TextTrackCue>);
     bool remove(TextTrackCue*);
 
     void collectActiveCues(TextTrackCueList&) const;
     void updateCueIndex(TextTrackCue*);
-    bool isCueIndexValid(unsigned probeIndex) const
-    {
-        return probeIndex < m_firstInvalidIndex;
-    }
+    bool isCueIndexValid(unsigned probeIndex) const { return probeIndex < m_firstInvalidIndex; }
     void validateCueIndexes();
 
     DECLARE_TRACE();
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
 private:
     TextTrackCueList();
@@ -65,7 +64,7 @@ private:
     void invalidateCueIndex(size_t index);
     void clear();
 
-    HeapVector<TraceWrapperMember<TextTrackCue>> m_list;
+    WillBeHeapVector<RefPtrWillBeMember<TextTrackCue>> m_list;
     size_t m_firstInvalidIndex;
 };
 

@@ -17,38 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGString.h"
 
 #include "core/svg/SVGAnimateElement.h"
 
 namespace blink {
 
-void SVGString::add(SVGPropertyBase*, SVGElement*)
+void SVGString::add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
 {
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
 }
 
-void SVGString::calculateAnimatedValue(SVGAnimationElement* animationElement,
-    float percentage,
-    unsigned repeatCount,
-    SVGPropertyBase* from,
-    SVGPropertyBase* to,
-    SVGPropertyBase*,
-    SVGElement*)
+void SVGString::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
 {
     ASSERT(animationElement);
 
     String fromString = toSVGString(from)->m_value;
     String toString = toSVGString(to)->m_value;
 
-    animationElement->animateDiscreteType<String>(percentage, fromString,
-        toString, m_value);
+    animationElement->animateDiscreteType<String>(percentage, fromString, toString, m_value);
 }
 
-float SVGString::calculateDistance(SVGPropertyBase*, SVGElement*)
+float SVGString::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
 {
     // No paced animations for strings.
     return -1;
 }
 
-} // namespace blink
+}

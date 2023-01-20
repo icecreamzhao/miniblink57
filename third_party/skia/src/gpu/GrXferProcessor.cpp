@@ -6,13 +6,18 @@
  */
 
 #include "GrXferProcessor.h"
+<<<<<<< HEAD
 #include "GrPipeline.h"
+=======
+#include "GrPipelineBuilder.h"
+>>>>>>> miniblink49
 #include "GrProcOptInfo.h"
 #include "gl/GrGLCaps.h"
 
 GrXferProcessor::GrXferProcessor()
     : fWillReadDstColor(false)
     , fDstReadUsesMixedSamples(false)
+<<<<<<< HEAD
     , fDstTextureOffset()
 {
 }
@@ -24,6 +29,19 @@ GrXferProcessor::GrXferProcessor(const DstTexture* dstTexture,
     , fDstReadUsesMixedSamples(willReadDstColor && hasMixedSamples)
     , fDstTextureOffset()
 {
+=======
+    , fReadsCoverage(true)
+    , fDstTextureOffset() {
+}
+
+GrXferProcessor::GrXferProcessor(const DstTexture* dstTexture,
+                                 bool willReadDstColor,
+                                 bool hasMixedSamples)
+    : fWillReadDstColor(willReadDstColor)
+    , fDstReadUsesMixedSamples(willReadDstColor && hasMixedSamples)
+    , fReadsCoverage(true)
+    , fDstTextureOffset() {
+>>>>>>> miniblink49
     if (dstTexture && dstTexture->texture()) {
         SkASSERT(willReadDstColor);
         fDstTexture.reset(dstTexture->texture());
@@ -33,6 +51,7 @@ GrXferProcessor::GrXferProcessor(const DstTexture* dstTexture,
     }
 }
 
+<<<<<<< HEAD
 GrXferProcessor::OptFlags GrXferProcessor::getOptimizations(
     const GrPipelineOptimizations& optimizations,
     bool doesStencilWrite,
@@ -43,10 +62,23 @@ GrXferProcessor::OptFlags GrXferProcessor::getOptimizations(
         doesStencilWrite,
         overrideColor,
         caps);
+=======
+GrXferProcessor::OptFlags GrXferProcessor::getOptimizations(const GrProcOptInfo& colorPOI,
+                                                            const GrProcOptInfo& coveragePOI,
+                                                            bool doesStencilWrite,
+                                                            GrColor* overrideColor,
+                                                            const GrCaps& caps) {
+    GrXferProcessor::OptFlags flags = this->onGetOptimizations(colorPOI,
+                                                               coveragePOI,
+                                                               doesStencilWrite,
+                                                               overrideColor,
+                                                               caps);
+>>>>>>> miniblink49
 
     if (this->willReadDstColor()) {
         // When performing a dst read we handle coverage in the base class.
         SkASSERT(!(flags & GrXferProcessor::kIgnoreCoverage_OptFlag));
+<<<<<<< HEAD
         if (optimizations.fCoveragePOI.isSolidWhite()) {
             flags |= GrXferProcessor::kIgnoreCoverage_OptFlag;
         }
@@ -56,14 +88,31 @@ GrXferProcessor::OptFlags GrXferProcessor::getOptimizations(
 
 bool GrXferProcessor::hasSecondaryOutput() const
 {
+=======
+        if (coveragePOI.isSolidWhite()) {
+            flags |= GrXferProcessor::kIgnoreCoverage_OptFlag;
+        }
+    }
+    if (flags & GrXferProcessor::kIgnoreCoverage_OptFlag) {
+        fReadsCoverage = false;
+    }
+    return flags;
+}
+
+bool GrXferProcessor::hasSecondaryOutput() const {
+>>>>>>> miniblink49
     if (!this->willReadDstColor()) {
         return this->onHasSecondaryOutput();
     }
     return this->dstReadUsesMixedSamples();
 }
 
+<<<<<<< HEAD
 void GrXferProcessor::getBlendInfo(BlendInfo* blendInfo) const
 {
+=======
+void GrXferProcessor::getBlendInfo(BlendInfo* blendInfo) const {
+>>>>>>> miniblink49
     blendInfo->reset();
     if (!this->willReadDstColor()) {
         this->onGetBlendInfo(blendInfo);
@@ -72,8 +121,12 @@ void GrXferProcessor::getBlendInfo(BlendInfo* blendInfo) const
     }
 }
 
+<<<<<<< HEAD
 void GrXferProcessor::getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const
 {
+=======
+void GrXferProcessor::getGLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const {
+>>>>>>> miniblink49
     uint32_t key = this->willReadDstColor() ? 0x1 : 0x0;
     if (key) {
         if (const GrTexture* dstTexture = this->getDstTexture()) {
@@ -82,6 +135,7 @@ void GrXferProcessor::getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKey
                 key |= 0x4;
             }
         }
+<<<<<<< HEAD
         if (this->dstReadUsesMixedSamples()) {
             key |= 0x8;
         }
@@ -142,10 +196,76 @@ static const char* equation_string(GrBlendEquation eq)
         return "hsl_color";
     case kHSLLuminosity_GrBlendEquation:
         return "hsl_luminosity";
+=======
+        if (this->readsCoverage()) {
+            key |= 0x8;
+        }
+        if (this->dstReadUsesMixedSamples()) {
+            key |= 0x10;
+        }
+    }
+    b->add32(key);
+    this->onGetGLProcessorKey(caps, b);
+}
+
+bool GrXferProcessor::willNeedXferBarrier(const GrRenderTarget* rt,
+                                          const GrCaps& caps,
+                                          GrXferBarrierType* outBarrierType) const {
+    if (static_cast<const GrSurface*>(rt) == this->getDstTexture()) {
+        // Texture barriers are required when a shader reads and renders to the same texture.
+        SkASSERT(rt);
+        SkASSERT(caps.textureBarrierSupport());
+        *outBarrierType = kTexture_GrXferBarrierType;
+        return true;
+    }
+    return this->onWillNeedXferBarrier(rt, caps, outBarrierType);
+}
+
+#ifdef SK_DEBUG
+static const char* equation_string(GrBlendEquation eq) {
+    switch (eq) {
+        case kAdd_GrBlendEquation:
+            return "add";
+        case kSubtract_GrBlendEquation:
+            return "subtract";
+        case kReverseSubtract_GrBlendEquation:
+            return "reverse_subtract";
+        case kScreen_GrBlendEquation:
+            return "screen";
+        case kOverlay_GrBlendEquation:
+            return "overlay";
+        case kDarken_GrBlendEquation:
+            return "darken";
+        case kLighten_GrBlendEquation:
+            return "lighten";
+        case kColorDodge_GrBlendEquation:
+            return "color_dodge";
+        case kColorBurn_GrBlendEquation:
+            return "color_burn";
+        case kHardLight_GrBlendEquation:
+            return "hard_light";
+        case kSoftLight_GrBlendEquation:
+            return "soft_light";
+        case kDifference_GrBlendEquation:
+            return "difference";
+        case kExclusion_GrBlendEquation:
+            return "exclusion";
+        case kMultiply_GrBlendEquation:
+            return "multiply";
+        case kHSLHue_GrBlendEquation:
+            return "hsl_hue";
+        case kHSLSaturation_GrBlendEquation:
+            return "hsl_saturation";
+        case kHSLColor_GrBlendEquation:
+            return "hsl_color";
+        case kHSLLuminosity_GrBlendEquation:
+            return "hsl_luminosity";
+>>>>>>> miniblink49
     };
     return "";
 }
 
+<<<<<<< HEAD
 static const char* coeff_string(GrBlendCoeff coeff)
 {
     switch (coeff) {
@@ -185,22 +305,71 @@ static const char* coeff_string(GrBlendCoeff coeff)
         return "src2_alpha";
     case kIS2A_GrBlendCoeff:
         return "inv_src2_alpha";
+=======
+static const char* coeff_string(GrBlendCoeff coeff) {
+    switch (coeff) {
+        case kZero_GrBlendCoeff:
+            return "zero";
+        case kOne_GrBlendCoeff:
+            return "one";
+        case kSC_GrBlendCoeff:
+            return "src_color";
+        case kISC_GrBlendCoeff:
+            return "inv_src_color";
+        case kDC_GrBlendCoeff:
+            return "dst_color";
+        case kIDC_GrBlendCoeff:
+            return "inv_dst_color";
+        case kSA_GrBlendCoeff:
+            return "src_alpha";
+        case kISA_GrBlendCoeff:
+            return "inv_src_alpha";
+        case kDA_GrBlendCoeff:
+            return "dst_alpha";
+        case kIDA_GrBlendCoeff:
+            return "inv_dst_alpha";
+        case kConstC_GrBlendCoeff:
+            return "const_color";
+        case kIConstC_GrBlendCoeff:
+            return "inv_const_color";
+        case kConstA_GrBlendCoeff:
+            return "const_alpha";
+        case kIConstA_GrBlendCoeff:
+            return "inv_const_alpha";
+        case kS2C_GrBlendCoeff:
+            return "src2_color";
+        case kIS2C_GrBlendCoeff:
+            return "inv_src2_color";
+        case kS2A_GrBlendCoeff:
+            return "src2_alpha";
+        case kIS2A_GrBlendCoeff:
+            return "inv_src2_alpha";
+>>>>>>> miniblink49
     }
     return "";
 }
 
+<<<<<<< HEAD
 SkString GrXferProcessor::BlendInfo::dump() const
 {
     SkString out;
     out.printf("write_color(%d) equation(%s) src_coeff(%s) dst_coeff:(%s) const(0x%08x)",
         fWriteColor, equation_string(fEquation), coeff_string(fSrcBlend),
         coeff_string(fDstBlend), fBlendConstant);
+=======
+SkString GrXferProcessor::BlendInfo::dump() const {
+    SkString out;
+    out.printf("write_color(%d) equation(%s) src_coeff(%s) dst_coeff:(%s) const(0x%08x)",
+               fWriteColor, equation_string(fEquation), coeff_string(fSrcBlend),
+               coeff_string(fDstBlend), fBlendConstant);
+>>>>>>> miniblink49
     return out;
 }
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 GrXferProcessor* GrXPFactory::createXferProcessor(const GrPipelineOptimizations& optimizations,
     bool hasMixedSamples,
     const DstTexture* dstTexture,
@@ -231,4 +400,32 @@ bool GrXPFactory::willReadDstColor(const GrCaps& caps,
     const GrPipelineOptimizations& optimizations) const
 {
     return optimizations.fOverrides.fUsePLSDstRead || this->onWillReadDstColor(caps, optimizations);
+=======
+GrXferProcessor* GrXPFactory::createXferProcessor(const GrProcOptInfo& colorPOI,
+                                                  const GrProcOptInfo& coveragePOI,
+                                                  bool hasMixedSamples,
+                                                  const DstTexture* dstTexture,
+                                                  const GrCaps& caps) const {
+#ifdef SK_DEBUG
+    if (this->willReadDstColor(caps, colorPOI, coveragePOI, hasMixedSamples)) {
+        if (!caps.shaderCaps()->dstReadInShaderSupport()) {
+            SkASSERT(dstTexture && dstTexture->texture());
+        } else {
+            SkASSERT(!dstTexture || !dstTexture->texture()); 
+        }
+    } else {
+        SkASSERT(!dstTexture || !dstTexture->texture()); 
+    }
+    SkASSERT(!hasMixedSamples || caps.shaderCaps()->dualSourceBlendingSupport());
+#endif
+    return this->onCreateXferProcessor(caps, colorPOI, coveragePOI, hasMixedSamples, dstTexture);
+}
+
+bool GrXPFactory::willNeedDstTexture(const GrCaps& caps,
+                                     const GrProcOptInfo& colorPOI,
+                                     const GrProcOptInfo& coveragePOI,
+                                     bool hasMixedSamples) const {
+    return (this->willReadDstColor(caps, colorPOI, coveragePOI, hasMixedSamples) &&
+            !caps.shaderCaps()->dstReadInShaderSupport());
+>>>>>>> miniblink49
 }

@@ -25,11 +25,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/Pattern.h"
 
 #include "platform/graphics/ImagePattern.h"
 #include "platform/graphics/PicturePattern.h"
 #include "platform/graphics/skia/SkiaUtils.h"
+=======
+#include "config.h"
+#include "platform/graphics/Pattern.h"
+
+#include "platform/graphics/BitmapPattern.h"
+#include "platform/graphics/PicturePattern.h"
+#include "platform/graphics/StaticBitmapPattern.h"
+>>>>>>> miniblink49
 #include "third_party/skia/include/core/SkImage.h"
 #include "third_party/skia/include/core/SkPicture.h"
 #include "third_party/skia/include/core/SkShader.h"
@@ -37,6 +46,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 PassRefPtr<Pattern> Pattern::createImagePattern(PassRefPtr<Image> tileImage,
     RepeatMode repeatMode)
 {
@@ -47,6 +57,20 @@ PassRefPtr<Pattern> Pattern::createPicturePattern(sk_sp<SkPicture> picture,
     RepeatMode repeatMode)
 {
     return PicturePattern::create(std::move(picture), repeatMode);
+=======
+PassRefPtr<Pattern> Pattern::createBitmapPattern(PassRefPtr<Image> tileImage, RepeatMode repeatMode)
+{
+    if (tileImage->skImage())
+        return StaticBitmapPattern::create(tileImage, repeatMode);
+
+    return BitmapPattern::create(tileImage, repeatMode);
+}
+
+PassRefPtr<Pattern> Pattern::createPicturePattern(PassRefPtr<const SkPicture> picture,
+    RepeatMode repeatMode)
+{
+    return PicturePattern::create(picture, repeatMode);
+>>>>>>> miniblink49
 }
 
 Pattern::Pattern(RepeatMode repeatMode, int64_t externalMemoryAllocated)
@@ -61,6 +85,7 @@ Pattern::~Pattern()
     adjustExternalMemoryAllocated(-m_externalMemoryAllocated);
 }
 
+<<<<<<< HEAD
 void Pattern::applyToPaint(SkPaint& paint, const SkMatrix& localMatrix)
 {
     if (!m_cachedShader || isLocalMatrixChanged(localMatrix))
@@ -72,6 +97,24 @@ void Pattern::applyToPaint(SkPaint& paint, const SkMatrix& localMatrix)
 bool Pattern::isLocalMatrixChanged(const SkMatrix& localMatrix) const
 {
     return localMatrix != m_cachedShader->getLocalMatrix();
+=======
+SkShader* Pattern::shader()
+{
+    if (!m_pattern) {
+        m_pattern = createShader();
+    }
+
+    return m_pattern.get();
+}
+
+void Pattern::setPatternSpaceTransform(const AffineTransform& patternSpaceTransformation)
+{
+    if (patternSpaceTransformation == m_patternSpaceTransformation)
+        return;
+
+    m_patternSpaceTransformation = patternSpaceTransformation;
+    m_pattern.clear();
+>>>>>>> miniblink49
 }
 
 void Pattern::adjustExternalMemoryAllocated(int64_t delta)

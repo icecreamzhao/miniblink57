@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // See https://webaudio.github.io/web-audio-api/#the-stereopannernode-interface
 [
     Constructor(BaseAudioContext context, optional StereoPannerOptions options),
@@ -13,3 +14,13 @@ interface StereoPannerNode : AudioNode {
     readonly attribute AudioParam pan;
 
 };
+=======
+[
+    NoInterfaceObject,
+    Conditional=WEB_AUDIO
+] interface StereoPannerNode : AudioNode {
+
+    readonly attribute AudioParam pan;
+
+};
+>>>>>>> miniblink49

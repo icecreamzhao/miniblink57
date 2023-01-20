@@ -10,10 +10,9 @@
 #include "bindings/core/v8/ScriptPromiseProperties.h"
 #include "core/CoreExport.h"
 #include "core/dom/ContextLifecycleObserver.h"
-#include "wtf/Compiler.h"
+#include "wtf/OwnPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
-#include <memory>
 #include <v8.h>
 
 namespace blink {
@@ -22,12 +21,8 @@ class DOMWrapperWorld;
 class ExecutionContext;
 class ScriptState;
 
-// TODO(yhirano): Remove NEVER_INLINE once we find the cause of crashes.
-class CORE_EXPORT ScriptPromisePropertyBase
-    : public GarbageCollectedFinalized<ScriptPromisePropertyBase>,
-      public ContextClient {
-    USING_GARBAGE_COLLECTED_MIXIN(ScriptPromisePropertyBase);
-
+class CORE_EXPORT ScriptPromisePropertyBase : public GarbageCollectedFinalized<ScriptPromisePropertyBase>, public ContextLifecycleObserver {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ScriptPromisePropertyBase);
 public:
     virtual ~ScriptPromisePropertyBase();
 
@@ -42,7 +37,7 @@ public:
         Resolved,
         Rejected,
     };
-    State getState() const { return m_state; }
+    State state() const { return m_state; }
 
     ScriptPromise promise(DOMWrapperWorld&);
 
@@ -59,31 +54,18 @@ protected:
     // the property's execution context and the world it is
     // creating/settling promises in; the implementation should use
     // this context.
-    virtual v8::Local<v8::Object> holder(
-        v8::Isolate*,
-        v8::Local<v8::Object> creationContext)
-        = 0;
-    virtual v8::Local<v8::Value> resolvedValue(
-        v8::Isolate*,
-        v8::Local<v8::Object> creationContext)
-        = 0;
-    virtual v8::Local<v8::Value> rejectedValue(
-        v8::Isolate*,
-        v8::Local<v8::Object> creationContext)
-        = 0;
+    virtual v8::Local<v8::Object> holder(v8::Isolate*, v8::Local<v8::Object> creationContext) = 0;
+    virtual v8::Local<v8::Value> resolvedValue(v8::Isolate*, v8::Local<v8::Object> creationContext) = 0;
+    virtual v8::Local<v8::Value> rejectedValue(v8::Isolate*, v8::Local<v8::Object> creationContext) = 0;
 
-    NEVER_INLINE void resetBase();
+    void resetBase();
 
 private:
-    typedef Vector<std::unique_ptr<ScopedPersistent<v8::Object>>>
-        WeakPersistentSet;
+    typedef Vector<OwnPtr<ScopedPersistent<v8::Object>>> WeakPersistentSet;
 
     void resolveOrRejectInternal(v8::Local<v8::Promise::Resolver>);
     v8::Local<v8::Object> ensureHolderWrapper(ScriptState*);
-    NEVER_INLINE void clearWrappers();
-    // TODO(yhirano): Remove these functions once we find the cause of crashes.
-    NEVER_INLINE void checkThis();
-    NEVER_INLINE void checkWrappers();
+    void clearWrappers();
 
     v8::Local<v8::String> promiseName();
     v8::Local<v8::String> resolverName();

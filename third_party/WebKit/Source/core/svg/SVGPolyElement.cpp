@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGPolyElement.h"
 
 #include "core/layout/svg/LayoutSVGShape.h"
@@ -28,9 +29,7 @@ namespace blink {
 
 SVGPolyElement::SVGPolyElement(const QualifiedName& tagName, Document& document)
     : SVGGeometryElement(tagName, document)
-    , m_points(SVGAnimatedPointList::create(this,
-          SVGNames::pointsAttr,
-          SVGPointList::create()))
+    , m_points(SVGAnimatedPointList::create(this, SVGNames::pointsAttr, SVGPointList::create()))
 {
     addToPropertyMap(m_points);
 }
@@ -45,7 +44,7 @@ Path SVGPolyElement::asPathFromPoints() const
 {
     Path path;
 
-    SVGPointList* pointsValue = points()->currentValue();
+    RefPtrWillBeRawPtr<SVGPointList> pointsValue = points()->currentValue();
     if (pointsValue->isEmpty())
         return path;
 
@@ -78,4 +77,4 @@ void SVGPolyElement::svgAttributeChanged(const QualifiedName& attrName)
     SVGGeometryElement::svgAttributeChanged(attrName);
 }
 
-} // namespace blink
+}

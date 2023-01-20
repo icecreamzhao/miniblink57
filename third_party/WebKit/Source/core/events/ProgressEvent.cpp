@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/events/ProgressEvent.h"
 
 namespace blink {
@@ -34,8 +35,7 @@ ProgressEvent::ProgressEvent()
 {
 }
 
-ProgressEvent::ProgressEvent(const AtomicString& type,
-    const ProgressEventInit& initializer)
+ProgressEvent::ProgressEvent(const AtomicString& type, const ProgressEventInit& initializer)
     : Event(type, initializer)
     , m_lengthComputable(initializer.lengthComputable())
     , m_loaded(initializer.loaded())
@@ -43,11 +43,8 @@ ProgressEvent::ProgressEvent(const AtomicString& type,
 {
 }
 
-ProgressEvent::ProgressEvent(const AtomicString& type,
-    bool lengthComputable,
-    unsigned long long loaded,
-    unsigned long long total)
-    : Event(type, false, false)
+ProgressEvent::ProgressEvent(const AtomicString& type, bool lengthComputable, unsigned long long loaded, unsigned long long total)
+    : Event(type, false, true)
     , m_lengthComputable(lengthComputable)
     , m_loaded(loaded)
     , m_total(total)
@@ -64,4 +61,4 @@ DEFINE_TRACE(ProgressEvent)
     Event::trace(visitor);
 }
 
-} // namespace blink
+}

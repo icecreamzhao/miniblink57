@@ -24,6 +24,7 @@ static void testSimplifyQuadsMain(PathOpsThreadState* data)
     int cy = state.fC >> 2;
     int dx = state.fD & 0x03;
     int dy = state.fD >> 2;
+<<<<<<< HEAD
     for (int e = 0; e < 16; ++e) {
         int ex = e & 0x03;
         int ey = e >> 2;
@@ -34,26 +35,50 @@ static void testSimplifyQuadsMain(PathOpsThreadState* data)
                 int gx = g & 0x03;
                 int gy = g >> 2;
                 for (int h = g; h < 16; ++h) {
+=======
+    for (int e = 0 ; e < 16; ++e) {
+        int ex = e & 0x03;
+        int ey = e >> 2;
+        for (int f = e ; f < 16; ++f) {
+            int fx = f & 0x03;
+            int fy = f >> 2;
+            for (int g = f ; g < 16; ++g) {
+                int gx = g & 0x03;
+                int gy = g >> 2;
+                for (int h = g ; h < 16; ++h) {
+>>>>>>> miniblink49
                     int hx = h & 0x03;
                     int hy = h >> 2;
                     SkPath path, out;
                     path.setFillType(SkPath::kWinding_FillType);
                     path.moveTo(SkIntToScalar(ax), SkIntToScalar(ay));
                     path.quadTo(SkIntToScalar(bx), SkIntToScalar(by),
+<<<<<<< HEAD
                         SkIntToScalar(cx), SkIntToScalar(cy));
+=======
+                            SkIntToScalar(cx), SkIntToScalar(cy));
+>>>>>>> miniblink49
                     path.lineTo(SkIntToScalar(dx), SkIntToScalar(dy));
                     path.close();
                     path.moveTo(SkIntToScalar(ex), SkIntToScalar(ey));
                     path.lineTo(SkIntToScalar(fx), SkIntToScalar(fy));
                     path.quadTo(SkIntToScalar(gx), SkIntToScalar(gy),
+<<<<<<< HEAD
                         SkIntToScalar(hx), SkIntToScalar(hy));
+=======
+                            SkIntToScalar(hx), SkIntToScalar(hy));
+>>>>>>> miniblink49
                     path.close();
                     if (progress) {
                         static int quadTest = 66;
                         char* str = pathStr;
                         str += sprintf(str, "static void testQuads%d(skiatest::Reporter* reporter,"
+<<<<<<< HEAD
                                             "const char* filename) {\n",
                             quadTest);
+=======
+                                "const char* filename) {\n", quadTest);
+>>>>>>> miniblink49
                         str += sprintf(str, "    SkPath path;\n");
                         str += sprintf(str, "    path.moveTo(%d, %d);\n", ax, ay);
                         str += sprintf(str, "    path.quadTo(%d, %d, %d, %d);\n", bx, by, cx, cy);
@@ -79,12 +104,17 @@ static void testSimplifyQuadsMain(PathOpsThreadState* data)
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsSimplifyQuadsThreaded, reporter)
 {
+=======
+DEF_TEST(PathOpsSimplifyQuadsThreaded, reporter) {
+>>>>>>> miniblink49
     initializeTests(reporter, "testQuads");
     PathOpsThreadedTestRunner testRunner(reporter);
     int a = 0;
     for (; a < 16; ++a) {
+<<<<<<< HEAD
         for (int b = a; b < 16; ++b) {
             for (int c = b; c < 16; ++c) {
                 for (int d = c; d < 16; ++d) {
@@ -93,9 +123,22 @@ DEF_TEST(PathOpsSimplifyQuadsThreaded, reporter)
                 }
                 if (!reporter->allowExtendedTest())
                     goto finish;
+=======
+        for (int b = a ; b < 16; ++b) {
+            for (int c = b ; c < 16; ++c) {
+                for (int d = c; d < 16; ++d) {
+                    *testRunner.fRunnables.append() = SkNEW_ARGS(PathOpsThreadedRunnable,
+                            (&testSimplifyQuadsMain, a, b, c, d, &testRunner));
+                }
+                if (!reporter->allowExtendedTest()) goto finish;
+>>>>>>> miniblink49
             }
         }
     }
 finish:
     testRunner.render();
+<<<<<<< HEAD
+=======
+    ShowTestArray("testQuads");
+>>>>>>> miniblink49
 }

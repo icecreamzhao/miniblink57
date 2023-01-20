@@ -12,6 +12,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     void StoreBuffer::InsertDeletionIntoStoreBuffer(Address start, Address end)
     {
         if (top_ + sizeof(Address) * 2 > limit_[current_]) {
@@ -36,3 +37,27 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_HEAP_STORE_BUFFER_INL_H_
+=======
+void StoreBuffer::InsertDeletionIntoStoreBuffer(Address start, Address end) {
+  if (top_ + sizeof(Address) * 2 > limit_[current_]) {
+    StoreBufferOverflow(heap_->isolate());
+  }
+  *top_ = MarkDeletionAddress(start);
+  top_++;
+  *top_ = end;
+  top_++;
+}
+
+void StoreBuffer::InsertIntoStoreBuffer(Address slot) {
+  if (top_ + sizeof(Address) > limit_[current_]) {
+    StoreBufferOverflow(heap_->isolate());
+  }
+  *top_ = slot;
+  top_++;
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_HEAP_STORE_BUFFER_INL_H_
+>>>>>>> miniblink49

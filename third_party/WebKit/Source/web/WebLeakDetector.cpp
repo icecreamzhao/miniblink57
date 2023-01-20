@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/web/WebLeakDetector.h"
 
 #include "bindings/core/v8/V8GCController.h"
@@ -41,11 +42,32 @@
 #include "platform/Timer.h"
 #include "public/web/WebFrame.h"
 #include "web/WebLocalFrameImpl.h"
+=======
+#include "config.h"
+
+#include "public/web/WebLeakDetector.h"
+
+#include "bindings/core/v8/ScriptPromise.h"
+#include "bindings/core/v8/V8Binding.h"
+#include "bindings/core/v8/V8GCController.h"
+#include "core/dom/ActiveDOMObject.h"
+#include "core/dom/Document.h"
+#include "core/fetch/MemoryCache.h"
+#include "core/fetch/ResourceFetcher.h"
+#include "core/inspector/InstanceCounters.h"
+#include "core/layout/LayoutObject.h"
+#include "modules/webaudio/AudioNode.h"
+#include "platform/Timer.h"
+#include "public/web/WebDocument.h"
+#include "public/web/WebLocalFrame.h"
+#include "web/WebEmbeddedWorkerImpl.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 namespace {
 
+<<<<<<< HEAD
     class WebLeakDetectorImpl final : public WebLeakDetector {
         WTF_MAKE_NONCOPYABLE(WebLeakDetectorImpl);
 
@@ -178,6 +200,102 @@ namespace {
         showLiveDocumentInstances();
 #endif
     }
+=======
+// FIXME: Oilpan: It may take multiple GC to collect on-heap objects referenced from off-heap objects.
+// Please see comment in Heap::collectAllGarbage()
+static const int kNumberOfGCsToClaimChains = 5;
+
+class WebLeakDetectorImpl final : public WebLeakDetector {
+WTF_MAKE_NONCOPYABLE(WebLeakDetectorImpl);
+public:
+    explicit WebLeakDetectorImpl(WebLeakDetectorClient* client)
+        : m_client(client)
+        , m_delayedGCAndReportTimer(this, &WebLeakDetectorImpl::delayedGCAndReport)
+        , m_delayedReportTimer(this, &WebLeakDetectorImpl::delayedReport)
+        , m_numberOfGCNeeded(0)
+    {
+        ASSERT(m_client);
+    }
+
+    ~WebLeakDetectorImpl() override {}
+
+    void collectGarbageAndGetDOMCounts(WebLocalFrame*) override;
+
+private:
+    void delayedGCAndReport(Timer<WebLeakDetectorImpl>*);
+    void delayedReport(Timer<WebLeakDetectorImpl>*);
+
+    WebLeakDetectorClient* m_client;
+    Timer<WebLeakDetectorImpl> m_delayedGCAndReportTimer;
+    Timer<WebLeakDetectorImpl> m_delayedReportTimer;
+    int m_numberOfGCNeeded;
+};
+
+void WebLeakDetectorImpl::collectGarbageAndGetDOMCounts(WebLocalFrame* frame)
+{
+    WebEmbeddedWorkerImpl::terminateAll();
+    memoryCache()->evictResources();
+
+    {
+        RefPtrWillBeRawPtr<Document> document = PassRefPtrWillBeRawPtr<Document>(frame->document());
+        if (ResourceFetcher* fetcher = document->fetcher())
+            fetcher->garbageCollectDocumentResources();
+    }
+
+    // FIXME: HTML5 Notification should be closed because notification affects the result of number of DOM objects.
+
+    for (int i = 0; i < kNumberOfGCsToClaimChains; ++i)
+        V8GCController::collectGarbage(v8::Isolate::GetCurrent());
+    // Note: Oilpan precise GC is scheduled at the end of the event loop.
+
+    // Task queue may contain delayed object destruction tasks.
+    // This method is called from navigation hook inside FrameLoader,
+    // so previous document is still held by the loader until the next event loop.
+    // Complete all pending tasks before proceeding to gc.
+    m_numberOfGCNeeded = 2;
+    m_delayedGCAndReportTimer.startOneShot(0, FROM_HERE);
+}
+
+void WebLeakDetectorImpl::delayedGCAndReport(Timer<WebLeakDetectorImpl>*)
+{
+    // We do a second and third GC here to address flakiness
+    // The second GC is necessary as Resource GC may have postponed clean-up tasks to next event loop.
+    // The third GC is necessary for cleaning up Document after worker object died.
+
+    for (int i = 0; i < kNumberOfGCsToClaimChains; ++i)
+        V8GCController::collectGarbage(V8PerIsolateData::mainThreadIsolate());
+    // Note: Oilpan precise GC is scheduled at the end of the event loop.
+
+    // Inspect counters on the next event loop.
+    if (--m_numberOfGCNeeded)
+        m_delayedGCAndReportTimer.startOneShot(0, FROM_HERE);
+    else
+        m_delayedReportTimer.startOneShot(0, FROM_HERE);
+}
+
+void WebLeakDetectorImpl::delayedReport(Timer<WebLeakDetectorImpl>*)
+{
+    ASSERT(m_client);
+
+    WebLeakDetectorClient::Result result;
+    result.numberOfLiveAudioNodes = InstanceCounters::counterValue(InstanceCounters::AudioHandlerCounter);
+    result.numberOfLiveDocuments = InstanceCounters::counterValue(InstanceCounters::DocumentCounter);
+    result.numberOfLiveNodes = InstanceCounters::counterValue(InstanceCounters::NodeCounter);
+    result.numberOfLiveLayoutObjects = InstanceCounters::counterValue(InstanceCounters::LayoutObjectCounter);
+    result.numberOfLiveRenderObjects = result.numberOfLiveLayoutObjects;
+    result.numberOfLiveResources = InstanceCounters::counterValue(InstanceCounters::ResourceCounter);
+    result.numberOfLiveActiveDOMObjects = InstanceCounters::counterValue(InstanceCounters::ActiveDOMObjectCounter);
+    result.numberOfLiveScriptPromises = InstanceCounters::counterValue(InstanceCounters::ScriptPromiseCounter);
+    result.numberOfLiveFrames = InstanceCounters::counterValue(InstanceCounters::FrameCounter);
+    result.numberOfLiveV8PerContextData = InstanceCounters::counterValue(InstanceCounters::V8PerContextDataCounter);
+
+    m_client->onLeakDetectionComplete(result);
+
+#ifndef NDEBUG
+    showLiveDocumentInstances();
+#endif
+}
+>>>>>>> miniblink49
 
 } // namespace
 

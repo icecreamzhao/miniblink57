@@ -9,10 +9,17 @@
 #include "SkFontMgr_custom.h"
 
 #ifndef SK_FONT_FILE_PREFIX
+<<<<<<< HEAD
 #define SK_FONT_FILE_PREFIX "/usr/share/fonts/"
 #endif
 
 SkFontMgr* SkFontMgr::Factory()
 {
+=======
+#    define SK_FONT_FILE_PREFIX "/usr/share/fonts/"
+#endif
+
+SkFontMgr* SkFontMgr::Factory() {
+>>>>>>> miniblink49
     return SkFontMgr_New_Custom_Directory(SK_FONT_FILE_PREFIX);
 }

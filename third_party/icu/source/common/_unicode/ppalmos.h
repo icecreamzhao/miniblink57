@@ -16,11 +16,19 @@
 #ifndef U_PPALMOS_H
 #define U_PPALMOS_H
 
+<<<<<<< HEAD
 /**
   * \file
   * \brief Configuration constants for the Palm OS platform
   */
 
+=======
+ /**
+  * \file
+  * \brief Configuration constants for the Palm OS platform
+  */
+  
+>>>>>>> miniblink49
 /* Define the platform we're on. */
 #ifndef U_PALMOS
 #define U_PALMOS
@@ -89,6 +97,10 @@
 #define U_HAVE_UINT64_T U_HAVE_INTTYPES_H
 #endif
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
@@ -99,6 +111,7 @@
 #include <inttypes.h>
 #else /* U_HAVE_INTTYPES_H */
 
+<<<<<<< HEAD
 #if !U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
@@ -136,6 +149,45 @@ typedef signed __int64 int64_t;
 typedef unsigned long long uint64_t;
 #else
 typedef unsigned __int64 uint64_t;
+=======
+#if ! U_HAVE_INT8_T
+typedef signed char int8_t;
+#endif
+
+#if ! U_HAVE_UINT8_T
+typedef unsigned char uint8_t;
+#endif
+
+#if ! U_HAVE_INT16_T
+typedef signed short int16_t;
+#endif
+
+#if ! U_HAVE_UINT16_T
+typedef unsigned short uint16_t;
+#endif
+
+#if ! U_HAVE_INT32_T
+typedef signed int int32_t;
+#endif
+
+#if ! U_HAVE_UINT32_T
+typedef unsigned int uint32_t;
+#endif
+
+#if ! U_HAVE_INT64_T
+#if U_INT64_IS_LONG_LONG
+    typedef signed long long int64_t;
+#else
+    typedef signed __int64 int64_t;
+#endif
+#endif
+
+#if ! U_HAVE_UINT64_T
+#if U_INT64_IS_LONG_LONG
+    typedef unsigned long long uint64_t;
+#else
+    typedef unsigned __int64 uint64_t;
+>>>>>>> miniblink49
 #endif
 #endif
 #endif
@@ -202,7 +254,11 @@ typedef unsigned __int64 uint64_t;
 
 /* Define the library suffix in a C syntax. */
 #define U_HAVE_LIB_SUFFIX 0
+<<<<<<< HEAD
 #define U_LIB_SUFFIX_C_NAME
+=======
+#define U_LIB_SUFFIX_C_NAME 
+>>>>>>> miniblink49
 #define U_LIB_SUFFIX_C_NAME_STRING ""
 
 /*===========================================================================*/
@@ -212,12 +268,17 @@ typedef unsigned __int64 uint64_t;
 #define U_HAVE_WCHAR_H 1
 #define U_SIZEOF_WCHAR_T 2
 
+<<<<<<< HEAD
 #define U_HAVE_WCSCPY 0
+=======
+#define U_HAVE_WCSCPY    0
+>>>>>>> miniblink49
 
 /*===========================================================================*/
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
+<<<<<<< HEAD
 /* TODO: Fix Palm OS's determination of a timezone */
 #if 0
 #define U_TZSET _tzset
@@ -227,6 +288,18 @@ typedef unsigned __int64 uint64_t;
 #endif
 #if 0
 #define U_TZNAME _tzname
+=======
+
+/* TODO: Fix Palm OS's determination of a timezone */
+#if 0
+#define U_TZSET         _tzset
+#endif
+#if 0
+#define U_TIMEZONE      _timezone
+#endif
+#if 0
+#define U_TZNAME        _tzname
+>>>>>>> miniblink49
 #endif
 
 #define U_HAVE_MMAP 0
@@ -245,6 +318,7 @@ typedef unsigned __int64 uint64_t;
 /*===========================================================================*/
 
 #ifndef U_INLINE
+<<<<<<< HEAD
 #ifdef __cplusplus
 #define U_INLINE inline
 #else
@@ -254,16 +328,35 @@ typedef unsigned __int64 uint64_t;
 
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define U_ALIGN_CODE(val) __asm align val
+=======
+#   ifdef __cplusplus
+#       define U_INLINE inline
+#   else
+#       define U_INLINE __inline
+#   endif
+#endif
+
+#if defined(_MSC_VER) && defined(_M_IX86)
+#define U_ALIGN_CODE(val)    __asm      align val
+>>>>>>> miniblink49
 #else
 #define U_ALIGN_CODE(val)
 #endif
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
 #ifndef U_MAKE
+<<<<<<< HEAD
 #define U_MAKE "nmake"
+=======
+#define U_MAKE  "nmake"
+>>>>>>> miniblink49
 #define U_MAKE_IS_NMAKE 1
 #endif
 

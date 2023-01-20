@@ -18,6 +18,10 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "wtf/text/StringImpl.h"
 
 #import <CoreFoundation/CFBase.h>
@@ -31,6 +35,7 @@ namespace WTF {
 // object. CF objects need to be "made collectable" for autorelease to work
 // properly under GC.
 
+<<<<<<< HEAD
 static inline id HardAutorelease(CFTypeRef object) {
   if (object)
     CFMakeCollectable(object);
@@ -43,3 +48,19 @@ StringImpl::operator NSString*() {
 }
 
 }  // namespace WTF
+=======
+static inline id HardAutorelease(CFTypeRef object)
+{
+    if (object)
+        CFMakeCollectable(object);
+    [(id)object autorelease];
+    return (id)object;
+}
+
+StringImpl::operator NSString *()
+{
+    return HardAutorelease(createCFString().leakRef());
+}
+
+}
+>>>>>>> miniblink49

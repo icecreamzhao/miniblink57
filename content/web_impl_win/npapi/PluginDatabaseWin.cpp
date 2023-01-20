@@ -117,8 +117,8 @@ void PluginDatabase::getPluginPathsInDirectories(HashSet<String>& paths) const
                 continue;
 
             String filename = String(findFileData.cFileName, wcslen(findFileData.cFileName));
-            if ((!filename.startsWith("np", TextCaseASCIIInsensitive) || !filename.endsWith("dll", TextCaseASCIIInsensitive)) &&
-                (!equalIgnoringCase(filename, "Plugin.dll") || !it->endsWith("Shockwave 10", TextCaseASCIIInsensitive)))
+            if ((!filename.startsWith("np", TextCaseInsensitive) || !filename.endsWith("dll", TextCaseInsensitive)) &&
+                (!equalIgnoringCase(filename, "Plugin.dll") || !it->endsWith("Shockwave 10", TextCaseInsensitive)))
                 continue;
 
             String fullPath = *it + "\\" + filename;

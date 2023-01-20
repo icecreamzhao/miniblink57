@@ -23,9 +23,16 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/TemporaryChange.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+#include "wtf/TemporaryChange.h"
+
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace WTF {
 

@@ -37,13 +37,10 @@ namespace blink {
 
 class TelephoneInputType final : public BaseTextInputType {
 public:
-    static InputType* create(HTMLInputElement&);
+    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
 
 private:
-    TelephoneInputType(HTMLInputElement& element)
-        : BaseTextInputType(element)
-    {
-    }
+    TelephoneInputType(HTMLInputElement& element) : BaseTextInputType(element) { }
     void countUsage() override;
     const AtomicString& formControlType() const override;
 };

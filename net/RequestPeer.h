@@ -6,7 +6,6 @@
 #define CONTENT_PUBLIC_CHILD_REQUEST_PEER_H_
 
 #include <string>
-#include "third_party/WebKit/Source/wtf/OwnPtr.h"
 #include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 #include "third_party/WebKit/Source/wtf/PassRefPtr.h"
 
@@ -46,7 +45,7 @@ public:
 
     // Called as upload progress is made.
     // note: only for requests with upload progress enabled.
-    virtual void OnUploadProgress(uint64_t position, uint64_t size) = 0;
+    virtual void OnUploadProgress(uint64 position, uint64 size) = 0;
 
     // Called when a redirect occurs.  The implementation may return false to
     // suppress the redirect.  The ResourceResponseInfo provides information about
@@ -82,7 +81,7 @@ public:
         bool staleCopyInCache,
         const std::string& securityInfo,
         const double& completionTime,
-        int64_t totalTransferSize) = 0;
+        int64 totalTransferSize) = 0;
 
     // This is a combined notification of
     //  - OnReceivedResponse,
@@ -102,7 +101,7 @@ public:
         bool staleCopyInCache,
         const std::string& securityInfo,
         const double& completionTime,
-        int64_t totalTransferSize) = 0;
+        int64 totalTransferSize) = 0;
 
 protected:
     virtual ~RequestPeer() {}

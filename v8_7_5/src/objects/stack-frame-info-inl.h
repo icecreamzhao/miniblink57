@@ -18,6 +18,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(StackFrameInfo, Struct)
 
     NEVER_READ_ONLY_SPACE_IMPL(StackFrameInfo)
@@ -51,3 +52,39 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_STACK_FRAME_INFO_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(StackFrameInfo, Struct)
+
+NEVER_READ_ONLY_SPACE_IMPL(StackFrameInfo)
+
+CAST_ACCESSOR(StackFrameInfo)
+
+SMI_ACCESSORS(StackFrameInfo, line_number, kLineNumberOffset)
+SMI_ACCESSORS(StackFrameInfo, column_number, kColumnNumberOffset)
+SMI_ACCESSORS(StackFrameInfo, script_id, kScriptIdOffset)
+ACCESSORS(StackFrameInfo, script_name, Object, kScriptNameOffset)
+ACCESSORS(StackFrameInfo, script_name_or_source_url, Object,
+          kScriptNameOrSourceUrlOffset)
+ACCESSORS(StackFrameInfo, function_name, Object, kFunctionNameOffset)
+SMI_ACCESSORS(StackFrameInfo, flag, kFlagOffset)
+BOOL_ACCESSORS(StackFrameInfo, flag, is_eval, kIsEvalBit)
+BOOL_ACCESSORS(StackFrameInfo, flag, is_constructor, kIsConstructorBit)
+BOOL_ACCESSORS(StackFrameInfo, flag, is_wasm, kIsWasmBit)
+SMI_ACCESSORS(StackFrameInfo, id, kIdOffset)
+
+OBJECT_CONSTRUCTORS_IMPL(StackTraceFrame, Struct)
+NEVER_READ_ONLY_SPACE_IMPL(StackTraceFrame)
+CAST_ACCESSOR(StackTraceFrame)
+
+ACCESSORS(StackTraceFrame, frame_array, Object, kFrameArrayOffset)
+SMI_ACCESSORS(StackTraceFrame, frame_index, kFrameIndexOffset)
+ACCESSORS(StackTraceFrame, frame_info, Object, kFrameInfoOffset)
+SMI_ACCESSORS(StackTraceFrame, id, kIdOffset)
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_STACK_FRAME_INFO_INL_H_
+>>>>>>> miniblink49

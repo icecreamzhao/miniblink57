@@ -55,10 +55,14 @@ public:
 
     BLINK_PLATFORM_EXPORT void assign(const WebMediaDeviceInfo&);
 
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void initialize(const WebString& deviceId,
         MediaDeviceKind,
         const WebString& label,
         const WebString& groupId);
+=======
+    BLINK_PLATFORM_EXPORT void initialize(const WebString& deviceId, MediaDeviceKind, const WebString& label, const WebString& groupId);
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT void reset();
     bool isNull() const { return m_private.isNull(); }
 

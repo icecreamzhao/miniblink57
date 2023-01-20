@@ -8,10 +8,16 @@
 #ifndef SkAlphaThresholdFilter_DEFINED
 #define SkAlphaThresholdFilter_DEFINED
 
+<<<<<<< HEAD
 #include "SkImageFilter.h"
 
 class SkRegion;
 
+=======
+#include "SkRegion.h"
+#include "SkImageFilter.h"
+
+>>>>>>> miniblink49
 class SK_API SkAlphaThresholdFilter {
 public:
     /**
@@ -21,6 +27,7 @@ public:
      * The 0,0 point of the region corresponds to the upper left corner of the
      * source image.
      */
+<<<<<<< HEAD
     static sk_sp<SkImageFilter> Make(const SkRegion& region, SkScalar innerMin,
         SkScalar outerMax, sk_sp<SkImageFilter> input,
         const SkImageFilter::CropRect* cropRect = nullptr);
@@ -34,6 +41,10 @@ public:
 #endif
 
     SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP();
+=======
+    static SkImageFilter* Create(const SkRegion& region, SkScalar innerThreshold,
+                                 SkScalar outerThreshold, SkImageFilter* input = NULL);
+>>>>>>> miniblink49
 };
 
 #endif

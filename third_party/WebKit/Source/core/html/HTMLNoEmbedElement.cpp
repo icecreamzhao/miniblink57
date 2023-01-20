@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/HTMLNoEmbedElement.h"
 
 #include "core/HTMLNames.h"
@@ -53,4 +54,4 @@ bool HTMLNoEmbedElement::layoutObjectIsNeeded(const ComputedStyle& style)
     return Element::layoutObjectIsNeeded(style);
 }
 
-} // namespace blink
+}

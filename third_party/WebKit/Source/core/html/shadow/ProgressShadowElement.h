@@ -41,14 +41,41 @@ class HTMLProgressElement;
 
 class ProgressShadowElement : public HTMLDivElement {
 public:
-    DECLARE_NODE_FACTORY(ProgressShadowElement);
-
-private:
     explicit ProgressShadowElement(Document&);
     HTMLProgressElement* progressElement() const;
+
+protected:
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
 };
 
-} // namespace blink
+class ProgressInnerElement final : public ProgressShadowElement {
+public:
+    DECLARE_NODE_FACTORY(ProgressInnerElement);
+
+private:
+    explicit ProgressInnerElement(Document&);
+
+    LayoutObject* createLayoutObject(const ComputedStyle&) override;
+    bool layoutObjectIsNeeded(const ComputedStyle&) override;
+};
+
+class ProgressBarElement final : public ProgressShadowElement {
+public:
+    DECLARE_NODE_FACTORY(ProgressBarElement);
+
+private:
+    explicit ProgressBarElement(Document&);
+};
+
+class ProgressValueElement final : public ProgressShadowElement {
+public:
+    DECLARE_NODE_FACTORY(ProgressValueElement);
+    void setWidthPercentage(double);
+
+private:
+    explicit ProgressValueElement(Document&);
+};
+
+}
 
 #endif // ProgressShadowElement_h

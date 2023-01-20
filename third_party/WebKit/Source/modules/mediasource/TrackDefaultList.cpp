@@ -2,6 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/mediasource/TrackDefaultList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -16,9 +21,13 @@ TrackDefaultList* TrackDefaultList::create()
     return new TrackDefaultList();
 }
 
+<<<<<<< HEAD
 TrackDefaultList* TrackDefaultList::create(
     const HeapVector<Member<TrackDefault>>& trackDefaults,
     ExceptionState& exceptionState)
+=======
+TrackDefaultList* TrackDefaultList::create(const HeapVector<Member<TrackDefault>>& trackDefaults, ExceptionState& exceptionState)
+>>>>>>> miniblink49
 {
     // Per 11 Dec 2014 Editor's Draft
     // https://w3c.github.io/media-source/#trackdefaultlist
@@ -36,14 +45,23 @@ TrackDefaultList* TrackDefaultList::create(
     for (const auto& trackDefault : trackDefaults) {
         TypeAndID key = TypeAndID(trackDefault->type(), trackDefault->byteStreamTrackID());
         if (!typeAndIDToTrackDefaultMap.add(key, trackDefault).isNewEntry) {
+<<<<<<< HEAD
             exceptionState.throwDOMException(
                 InvalidAccessError, "Duplicate TrackDefault type (" + key.first + ") and byteStreamTrackID (" + key.second + ")");
+=======
+            exceptionState.throwDOMException(InvalidAccessError, "Duplicate TrackDefault type (" + key.first + ") and byteStreamTrackID (" + key.second + ")");
+>>>>>>> miniblink49
             return nullptr;
         }
     }
 
+<<<<<<< HEAD
     // 2. Store a shallow copy of |trackDefaults| in this new object so the values
     //    can be returned by the accessor methods.
+=======
+    // 2. Store a shallow copy of |trackDefaults| in this new object so the values can
+    //    be returned by the accessor methods.
+>>>>>>> miniblink49
     // This step is done in constructor initializer.
     return new TrackDefaultList(trackDefaults);
 }
@@ -62,10 +80,18 @@ TrackDefault* TrackDefaultList::item(unsigned index) const
     return m_trackDefaults[index].get();
 }
 
+<<<<<<< HEAD
 TrackDefaultList::TrackDefaultList() { }
 
 TrackDefaultList::TrackDefaultList(
     const HeapVector<Member<TrackDefault>>& trackDefaults)
+=======
+TrackDefaultList::TrackDefaultList()
+{
+}
+
+TrackDefaultList::TrackDefaultList(const HeapVector<Member<TrackDefault>>& trackDefaults)
+>>>>>>> miniblink49
     : m_trackDefaults(trackDefaults)
 {
 }

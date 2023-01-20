@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
@@ -16,16 +20,24 @@
  */
 class FSRectBench : public Benchmark {
 public:
+<<<<<<< HEAD
     FSRectBench()
         : fInit(false)
     {
     }
+=======
+    FSRectBench() : fInit(false) { }
+>>>>>>> miniblink49
 
 protected:
     const char* onGetName() override { return "fullscreen_rects"; }
 
+<<<<<<< HEAD
     void onDelayedSetup() override
     {
+=======
+    void onPreDraw() override {
+>>>>>>> miniblink49
         if (!fInit) {
             SkRandom rand;
             static const SkScalar kMinOffset = 0;
@@ -42,8 +54,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         for (int i = 0; i < loops; ++i) {
             paint.setColor(fColors[i % N]);
@@ -57,11 +73,19 @@ private:
         H = 480,
         N = 300,
     };
+<<<<<<< HEAD
     SkRect fRects[N];
+=======
+    SkRect  fRects[N];
+>>>>>>> miniblink49
     SkColor fColors[N];
     bool fInit;
 
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_BENCH(return new FSRectBench();)
+=======
+DEF_BENCH( return SkNEW_ARGS(FSRectBench, ()); )
+>>>>>>> miniblink49

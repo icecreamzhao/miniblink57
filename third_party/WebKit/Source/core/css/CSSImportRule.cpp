@@ -1,8 +1,7 @@
 /*
  * (C) 1999-2003 Lars Knoll (knoll@kde.org)
  * (C) 2002-2003 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2002, 2005, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2002, 2005, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/CSSImportRule.h"
 
 #include "core/css/CSSStyleSheet.h"
@@ -36,7 +36,16 @@ CSSImportRule::CSSImportRule(StyleRuleImport* importRule, CSSStyleSheet* parent)
 {
 }
 
-CSSImportRule::~CSSImportRule() { }
+CSSImportRule::~CSSImportRule()
+{
+#if !ENABLE(OILPAN)
+    if (m_styleSheetCSSOMWrapper)
+        m_styleSheetCSSOMWrapper->clearOwnerRule();
+
+    if (m_mediaCSSOMWrapper)
+        m_mediaCSSOMWrapper->clearParentRule();
+#endif // ENABLE(OILPAN)
+}
 
 String CSSImportRule::href() const
 {
@@ -46,17 +55,16 @@ String CSSImportRule::href() const
 MediaList* CSSImportRule::media() const
 {
     if (!m_mediaCSSOMWrapper)
-        m_mediaCSSOMWrapper = MediaList::create(m_importRule->mediaQueries(),
-            const_cast<CSSImportRule*>(this));
+        m_mediaCSSOMWrapper = MediaList::create(m_importRule->mediaQueries(), const_cast<CSSImportRule*>(this));
     return m_mediaCSSOMWrapper.get();
 }
 
 String CSSImportRule::cssText() const
 {
     StringBuilder result;
-    result.append("@import url(\"");
+    result.appendLiteral("@import url(\"");
     result.append(m_importRule->href());
-    result.append("\")");
+    result.appendLiteral("\")");
 
     if (m_importRule->mediaQueries()) {
         String mediaText = m_importRule->mediaQueries()->mediaText();
@@ -72,14 +80,11 @@ String CSSImportRule::cssText() const
 
 CSSStyleSheet* CSSImportRule::styleSheet() const
 {
-    // TODO(yukishiino): CSSImportRule.styleSheet attribute is not nullable,
-    // thus this function must not return nullptr.
     if (!m_importRule->styleSheet())
-        return nullptr;
+        return 0;
 
     if (!m_styleSheetCSSOMWrapper)
-        m_styleSheetCSSOMWrapper = CSSStyleSheet::create(
-            m_importRule->styleSheet(), const_cast<CSSImportRule*>(this));
+        m_styleSheetCSSOMWrapper = CSSStyleSheet::create(m_importRule->styleSheet(), const_cast<CSSImportRule*>(this));
     return m_styleSheetCSSOMWrapper.get();
 }
 

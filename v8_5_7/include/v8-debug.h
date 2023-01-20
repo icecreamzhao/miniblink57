@@ -135,7 +135,11 @@ class V8_EXPORT Debug {
    * A EventCallback2 does not take possession of the event data,
    * and must not rely on the data persisting after the handler returns.
    */
+<<<<<<< HEAD
   typedef void (V8CALL *EventCallback)(const EventDetails& event_details);
+=======
+  typedef void (*EventCallback)(const EventDetails& event_details);
+>>>>>>> miniblink49
 
   /**
    * Debug message callback function.
@@ -145,18 +149,29 @@ class V8_EXPORT Debug {
    * A MessageHandler does not take possession of the message data,
    * and must not rely on the data persisting after the handler returns.
    */
+<<<<<<< HEAD
   typedef void (V8CALL *MessageHandler)(const Message& message);
+=======
+  typedef void (*MessageHandler)(const Message& message);
+>>>>>>> miniblink49
 
   /**
    * Callback function for the host to ensure debug messages are processed.
    */
+<<<<<<< HEAD
   typedef void (V8CALL *DebugMessageDispatchHandler)();
 
   static bool V8CALL SetDebugEventListener(Isolate* isolate, EventCallback that,
+=======
+  typedef void (*DebugMessageDispatchHandler)();
+
+  static bool SetDebugEventListener(Isolate* isolate, EventCallback that,
+>>>>>>> miniblink49
                                     Local<Value> data = Local<Value>());
 
   // Schedule a debugger break to happen when JavaScript code is run
   // in the given isolate.
+<<<<<<< HEAD
   static void V8CALL DebugBreak(Isolate* isolate);
 
   // Remove scheduled debugger break in given isolate if it has not
@@ -174,6 +189,25 @@ class V8_EXPORT Debug {
 
   V8_DEPRECATED("No longer supported",
                 static void V8CALL SendCommand(Isolate* isolate,
+=======
+  static void DebugBreak(Isolate* isolate);
+
+  // Remove scheduled debugger break in given isolate if it has not
+  // happened yet.
+  static void CancelDebugBreak(Isolate* isolate);
+
+  // Check if a debugger break is scheduled in the given isolate.
+  V8_DEPRECATED("No longer supported",
+                static bool CheckDebugBreak(Isolate* isolate));
+
+  // Message based interface. The message protocol is JSON.
+  V8_DEPRECATED("No longer supported",
+                static void SetMessageHandler(Isolate* isolate,
+                                              MessageHandler handler));
+
+  V8_DEPRECATED("No longer supported",
+                static void SendCommand(Isolate* isolate,
+>>>>>>> miniblink49
                                         const uint16_t* command, int length,
                                         ClientData* client_data = NULL));
 
@@ -196,7 +230,11 @@ class V8_EXPORT Debug {
    * \endcode
    */
   // TODO(dcarney): data arg should be a MaybeLocal
+<<<<<<< HEAD
   static MaybeLocal<Value> V8CALL Call(Local<Context> context,
+=======
+  static MaybeLocal<Value> Call(Local<Context> context,
+>>>>>>> miniblink49
                                 v8::Local<v8::Function> fun,
                                 Local<Value> data = Local<Value>());
 
@@ -204,7 +242,11 @@ class V8_EXPORT Debug {
    * Returns a mirror object for the given object.
    */
   V8_DEPRECATED("No longer supported",
+<<<<<<< HEAD
                 static MaybeLocal<Value> V8CALL GetMirror(Local<Context> context,
+=======
+                static MaybeLocal<Value> GetMirror(Local<Context> context,
+>>>>>>> miniblink49
                                                    v8::Local<v8::Value> obj));
 
   /**
@@ -239,7 +281,11 @@ class V8_EXPORT Debug {
    * of this method.
    */
   V8_DEPRECATED("No longer supported",
+<<<<<<< HEAD
                 static void V8CALL ProcessDebugMessages(Isolate* isolate));
+=======
+                static void ProcessDebugMessages(Isolate* isolate));
+>>>>>>> miniblink49
 
   /**
    * Debugger is running in its own context which is entered while debugger
@@ -248,7 +294,11 @@ class V8_EXPORT Debug {
    * to change. The Context exists only when the debugger is active, i.e. at
    * least one DebugEventListener or MessageHandler is set.
    */
+<<<<<<< HEAD
   static Local<Context> V8CALL GetDebugContext(Isolate* isolate);
+=======
+  static Local<Context> GetDebugContext(Isolate* isolate);
+>>>>>>> miniblink49
 
   /**
    * While in the debug context, this method returns the top-most non-debug
@@ -256,21 +306,33 @@ class V8_EXPORT Debug {
    */
   V8_DEPRECATED(
       "No longer supported",
+<<<<<<< HEAD
       static MaybeLocal<Context> V8CALL GetDebuggedContext(Isolate* isolate));
+=======
+      static MaybeLocal<Context> GetDebuggedContext(Isolate* isolate));
+>>>>>>> miniblink49
 
   /**
    * Enable/disable LiveEdit functionality for the given Isolate
    * (default Isolate if not provided). V8 will abort if LiveEdit is
    * unexpectedly used. LiveEdit is enabled by default.
    */
+<<<<<<< HEAD
   static void V8CALL SetLiveEditEnabled(Isolate* isolate, bool enable);
+=======
+  static void SetLiveEditEnabled(Isolate* isolate, bool enable);
+>>>>>>> miniblink49
 
   /**
    * Returns array of internal properties specific to the value type. Result has
    * the following format: [<name>, <value>,...,<name>, <value>]. Result array
    * will be allocated in the current context.
    */
+<<<<<<< HEAD
   static MaybeLocal<Array> V8CALL GetInternalProperties(Isolate* isolate,
+=======
+  static MaybeLocal<Array> GetInternalProperties(Isolate* isolate,
+>>>>>>> miniblink49
                                                  Local<Value> value);
 
   /**
@@ -278,8 +340,13 @@ class V8_EXPORT Debug {
    * The change of this flag triggers deoptimization of all functions that
    * contain calls at tail position.
    */
+<<<<<<< HEAD
   static bool V8CALL IsTailCallEliminationEnabled(Isolate* isolate);
   static void V8CALL SetTailCallEliminationEnabled(Isolate* isolate, bool enabled);
+=======
+  static bool IsTailCallEliminationEnabled(Isolate* isolate);
+  static void SetTailCallEliminationEnabled(Isolate* isolate, bool enabled);
+>>>>>>> miniblink49
 };
 
 

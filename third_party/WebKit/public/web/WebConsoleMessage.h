@@ -42,11 +42,16 @@ struct WebConsoleMessage {
         LevelInfo = 5,
         LevelWarning = 2,
         LevelError = 3,
+<<<<<<< HEAD
+=======
+        LevelRevokedError = 6,
+>>>>>>> miniblink49
         LevelLast = LevelInfo
     };
 
     Level level;
     WebString text;
+<<<<<<< HEAD
     WebString url;
     unsigned lineNumber;
     unsigned columnNumber;
@@ -64,6 +69,14 @@ struct WebConsoleMessage {
         , columnNumber(0)
     {
     }
+=======
+
+    WebConsoleMessage()
+        : level(LevelLog) { }
+    WebConsoleMessage(Level level, const WebString& text)
+        : level(level)
+        , text(text) { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

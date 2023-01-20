@@ -35,11 +35,10 @@
 #include "net/FileStream.h"
 #include "net/FileStreamClient.h"
 #include "net/LambdaTask.h"
-#include "net/WebURLLoaderManager.h"
 #include "content/web_impl_win/BlinkPlatformImpl.h"
 #include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
-//#include <wtf/MainThread.h>
+#include <wtf/MainThread.h>
 #include <wtf/text/WTFStringUtil.h>
 #include <vector>
 #include <functional>
@@ -73,11 +72,9 @@ AsyncFileStream::AsyncFileStream(FileStreamClient* client)
 {
     ASSERT(isMainThread());
 
-//     content::BlinkPlatformImpl* platformImpl = (content::BlinkPlatformImpl*)blink::Platform::current();
-//     m_blinkThread = platformImpl->currentThread();
-    WebURLLoaderManager* netManager = WebURLLoaderManager::sharedInstance();
-    m_fileThread = netManager->getIoThread(WebURLLoaderManager::kIoThreadTypeOther);
-    //m_fileThread = nullptr; //platformImpl->ioThread();
+    content::BlinkPlatformImpl* platformImpl = (content::BlinkPlatformImpl*)blink::Platform::current();
+    m_blinkThread = platformImpl->currentThread();
+    m_fileThread = platformImpl->ioThread();
 
     m_asyncTaskInfo = new AsyncTaskInfo(m_stream, m_blinkThread, m_fileThread, m_client);
 }
@@ -111,39 +108,39 @@ AsyncFileStream::~AsyncFileStream()
     });
 }
 
-// static void getSizeOnFileThread(AsyncTaskInfo* info, const Vector<UChar>* path, double expectedModificationTime)
-// {
-//     if (info->destroyed) {
-//         delete path;
-//         return;
-//     }
-// 
-//     long long size = info->stream->getSize(String(path->data(), path->size()), expectedModificationTime);
-//     callOnBlinkThread(info, [info, size] {
-//         if (info->destroyed)
-//             return;
-// 
-//         info->client->didGetSize(size);
-//     });
-// 
-//     delete path;
-// }
+static void getSizeOnFileThread(AsyncTaskInfo* info, const Vector<UChar>* path, double expectedModificationTime)
+{
+    if (info->destroyed) {
+        delete path;
+        return;
+    }
 
-// void AsyncFileStream::getSize(const String& path, double expectedModificationTime)
-// {
-// //     StringCapture capturedPath(path);
-// //     // FIXME: Explicit return type here and in all the other cases like this below is a workaround for a deficiency
-// //     // in the Windows compiler at the time of this writing. Could remove it if that is resolved.
-// //     perform([capturedPath, expectedModificationTime](FileStream& stream) -> std::function<void(FileStreamClient&)> {
-// //         long long size = stream.getSize(capturedPath.string(), expectedModificationTime);
-// //         return [size](FileStreamClient& client) {
-// //             client.didGetSize(size);
-// //         };
-// //     });
-// 
-//     Vector<UChar>* capturedPath = new Vector<UChar>(WTF::ensureUTF16UChar(path, false));
-//     m_fileThread->postTask(FROM_HERE, WTF::bind(getSizeOnFileThread, m_asyncTaskInfo, capturedPath, expectedModificationTime));
-// }
+    long long size = info->stream->getSize(String(path->data(), path->size()), expectedModificationTime);
+    callOnBlinkThread(info, [info, size] {
+        if (info->destroyed)
+            return;
+
+        info->client->didGetSize(size);
+    });
+
+    delete path;
+}
+
+void AsyncFileStream::getSize(const String& path, double expectedModificationTime)
+{
+//     StringCapture capturedPath(path);
+//     // FIXME: Explicit return type here and in all the other cases like this below is a workaround for a deficiency
+//     // in the Windows compiler at the time of this writing. Could remove it if that is resolved.
+//     perform([capturedPath, expectedModificationTime](FileStream& stream) -> std::function<void(FileStreamClient&)> {
+//         long long size = stream.getSize(capturedPath.string(), expectedModificationTime);
+//         return [size](FileStreamClient& client) {
+//             client.didGetSize(size);
+//         };
+//     });
+
+    Vector<UChar>* capturedPath = new Vector<UChar>(WTF::ensureUTF16UChar(path, false));
+    m_fileThread->postTask(FROM_HERE, WTF::bind(getSizeOnFileThread, m_asyncTaskInfo, capturedPath, expectedModificationTime));
+}
 
 static void openForReadOnFileThread(AsyncTaskInfo* info, const Vector<UChar>* path, long long offset, long long length)
 {
@@ -175,7 +172,7 @@ void AsyncFileStream::openForRead(const String& path, long long offset, long lon
 //     });
 
     Vector<UChar>* capturedPath = new Vector<UChar>(WTF::ensureUTF16UChar(path, false));
-    m_fileThread->postTask(FROM_HERE, WTF::bind(openForReadOnFileThread, WTF::unretained(m_asyncTaskInfo), WTF::unretained(capturedPath), offset, length));
+    m_fileThread->postTask(FROM_HERE, WTF::bind(openForReadOnFileThread, m_asyncTaskInfo, capturedPath, offset, length));
 }
 
 static void openForWriteOnFileThread(AsyncTaskInfo* info, const Vector<UChar>* path)
@@ -207,7 +204,7 @@ void AsyncFileStream::openForWrite(const String& path)
 //     });
 
     Vector<UChar>* capturedPath = new Vector<UChar>(WTF::ensureUTF16UChar(path, false));
-    m_fileThread->postTask(FROM_HERE, WTF::bind(openForWriteOnFileThread, WTF::unretained(m_asyncTaskInfo), WTF::unretained(capturedPath)));
+    m_fileThread->postTask(FROM_HERE, WTF::bind(openForWriteOnFileThread, m_asyncTaskInfo, capturedPath));
 }
 
 void AsyncFileStream::close()
@@ -247,7 +244,7 @@ void AsyncFileStream::read(char* buffer, int length)
 //         };
 //     });
 
-    m_fileThread->postTask(FROM_HERE, WTF::bind(readOnFileThread, WTF::unretained(m_asyncTaskInfo), WTF::unretained(buffer), length));
+    m_fileThread->postTask(FROM_HERE, WTF::bind(readOnFileThread, m_asyncTaskInfo, buffer, length));
 }
 
 static void writeOnFileThread(AsyncTaskInfo* info, Vector<UChar>* blobURL, long long position, int length) {
@@ -278,7 +275,7 @@ void AsyncFileStream::write(const String& blobURL, long long position, int lengt
 //     });
 
     Vector<UChar>* capturedBlobURL = new Vector<UChar>(WTF::ensureUTF16UChar(blobURL, false));
-    m_fileThread->postTask(FROM_HERE, WTF::bind(writeOnFileThread, WTF::unretained(m_asyncTaskInfo), WTF::unretained(capturedBlobURL), position, length));
+    m_fileThread->postTask(FROM_HERE, WTF::bind(writeOnFileThread, m_asyncTaskInfo, capturedBlobURL, position, length));
 }
 
 static void truncateOnFileThread(AsyncTaskInfo* info, long long position)
@@ -303,7 +300,7 @@ void AsyncFileStream::truncate(long long position)
 //             client.didTruncate(success);
 //         };
 //     });
-    m_fileThread->postTask(FROM_HERE, WTF::bind(truncateOnFileThread, WTF::unretained(m_asyncTaskInfo), position));
+    m_fileThread->postTask(FROM_HERE, WTF::bind(truncateOnFileThread, m_asyncTaskInfo, position));
 }
 
 } // namespace WebCore

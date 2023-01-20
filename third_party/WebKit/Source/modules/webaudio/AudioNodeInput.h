@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,6 +22,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef AudioNodeInput_h
@@ -29,14 +42,19 @@
 #include "modules/webaudio/AudioNode.h"
 #include "modules/webaudio/AudioSummingJunction.h"
 #include "platform/audio/AudioBus.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
 #include <memory>
+=======
+#include "wtf/HashSet.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class AudioNodeOutput;
 
+<<<<<<< HEAD
 // An AudioNodeInput represents an input to an AudioNode and can be connected
 // from one or more AudioNodeOutputs.  In the case of multiple connections, the
 // input will act as a unity-gain summing junction, mixing all the outputs.  The
@@ -48,6 +66,15 @@ class AudioNodeInput final : public AudioSummingJunction {
 
 public:
     static std::unique_ptr<AudioNodeInput> create(AudioHandler&);
+=======
+// An AudioNodeInput represents an input to an AudioNode and can be connected from one or more AudioNodeOutputs.
+// In the case of multiple connections, the input will act as a unity-gain summing junction, mixing all the outputs.
+// The number of channels of the input's bus is the maximum of the number of channels of all its connections.
+
+class AudioNodeInput final : public AudioSummingJunction {
+public:
+    static PassOwnPtr<AudioNodeInput> create(AudioHandler&);
+>>>>>>> miniblink49
 
     // AudioSummingJunction
     void didUpdate() override;
@@ -59,14 +86,19 @@ public:
     void connect(AudioNodeOutput&);
     void disconnect(AudioNodeOutput&);
 
+<<<<<<< HEAD
     // disable() will take the output out of the active connections list and set
     // aside in a disabled list.
+=======
+    // disable() will take the output out of the active connections list and set aside in a disabled list.
+>>>>>>> miniblink49
     // enable() will put the output back into the active connections list.
     // Must be called with the context's graph lock.
     void enable(AudioNodeOutput&);
     void disable(AudioNodeOutput&);
 
     // pull() processes all of the AudioNodes connected to us.
+<<<<<<< HEAD
     // In the case of multiple connections it sums the result into an internal
     // summing bus.  In the single connection case, it allows in-place processing
     // where possible using inPlaceBus.  It returns the bus which it rendered
@@ -86,6 +118,23 @@ public:
 
     // The number of channels of the connection with the largest number of
     // channels.
+=======
+    // In the case of multiple connections it sums the result into an internal summing bus.
+    // In the single connection case, it allows in-place processing where possible using inPlaceBus.
+    // It returns the bus which it rendered into, returning inPlaceBus if in-place processing was performed.
+    // Called from context's audio thread.
+    AudioBus* pull(AudioBus* inPlaceBus, size_t framesToProcess);
+
+    // bus() contains the rendered audio after pull() has been called for each time quantum.
+    // Called from context's audio thread.
+    AudioBus* bus();
+
+    // updateInternalBus() updates m_internalSummingBus appropriately for the number of channels.
+    // This must be called when we own the context's graph lock in the audio thread at the very start or end of the render quantum.
+    void updateInternalBus();
+
+    // The number of channels of the connection with the largest number of channels.
+>>>>>>> miniblink49
     unsigned numberOfChannels() const;
 
 private:

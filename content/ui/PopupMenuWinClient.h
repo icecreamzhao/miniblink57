@@ -2,7 +2,7 @@
 #ifndef content_browser_PopupMenuWinClient_h
 #define content_browser_PopupMenuWinClient_h
 
-#include <windows.h>
+typedef struct HWND__ *HWND;
 
 namespace content {
 

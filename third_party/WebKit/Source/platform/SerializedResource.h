@@ -33,12 +33,16 @@
 
 #include "platform/SharedBuffer.h"
 #include "platform/weborigin/KURL.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 struct SerializedResource {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     KURL url;
     String mimeType;
@@ -47,6 +51,13 @@ struct SerializedResource {
     SerializedResource(const KURL& url,
         const String& mimeType,
         PassRefPtr<const SharedBuffer> data)
+=======
+    KURL url;
+    String mimeType;
+    RefPtr<SharedBuffer> data;
+
+    SerializedResource(const KURL& url, const String& mimeType, PassRefPtr<SharedBuffer> data)
+>>>>>>> miniblink49
         : url(url)
         , mimeType(mimeType)
         , data(data)
@@ -54,6 +65,13 @@ struct SerializedResource {
     }
 };
 
+<<<<<<< HEAD
 } // namespace blink
 
 #endif // SerializedResource_h
+=======
+}
+
+#endif // SerializedResource_h
+
+>>>>>>> miniblink49

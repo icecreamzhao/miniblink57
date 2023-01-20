@@ -32,39 +32,38 @@
 #define InspectorInputAgent_h
 
 #include "core/CoreExport.h"
+#include "core/InspectorFrontend.h"
 #include "core/inspector/InspectorBaseAgent.h"
-#include "core/inspector/protocol/Input.h"
 #include "wtf/Noncopyable.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
-class InspectedFrames;
+class InspectorPageAgent;
+class PlatformKeyboardEvent;
+class PlatformMouseEvent;
 
-class CORE_EXPORT InspectorInputAgent final
-    : public InspectorBaseAgent<protocol::Input::Metainfo> {
+typedef String ErrorString;
+
+class CORE_EXPORT InspectorInputAgent final : public InspectorBaseAgent<InspectorInputAgent, InspectorFrontend::Input>, public InspectorBackendDispatcher::InputCommandHandler {
     WTF_MAKE_NONCOPYABLE(InspectorInputAgent);
-
 public:
-    static InspectorInputAgent* create(InspectedFrames* inspectedFrames)
+    static PassOwnPtrWillBeRawPtr<InspectorInputAgent> create(InspectorPageAgent* pageAgent)
     {
-        return new InspectorInputAgent(inspectedFrames);
+        return adoptPtrWillBeNoop(new InspectorInputAgent(pageAgent));
     }
 
-    ~InspectorInputAgent() override;
+    virtual ~InspectorInputAgent();
     DECLARE_VIRTUAL_TRACE();
 
     // Methods called from the frontend for simulating input.
-    Response dispatchTouchEvent(
-        const String& type,
-        std::unique_ptr<protocol::Array<protocol::Input::TouchPoint>> touchPoints,
-        Maybe<int> modifiers,
-        Maybe<double> timestamp) override;
-
+    virtual void dispatchTouchEvent(ErrorString*, const String& type, const RefPtr<JSONArray>& touchPoints, const int* modifiers, const double* timestamp) override;
 private:
-    explicit InspectorInputAgent(InspectedFrames*);
+    explicit InspectorInputAgent(InspectorPageAgent*);
 
-    Member<InspectedFrames> m_inspectedFrames;
+    RawPtrWillBeMember<InspectorPageAgent> m_pageAgent;
 };
+
 
 } // namespace blink
 

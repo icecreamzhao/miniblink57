@@ -28,7 +28,11 @@
 #ifndef DatabaseContext_h
 #define DatabaseContext_h
 
+<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
+=======
+#include "core/dom/ActiveDOMObject.h"
+>>>>>>> miniblink49
 #include "platform/heap/Handle.h"
 
 namespace blink {
@@ -38,20 +42,36 @@ class DatabaseThread;
 class ExecutionContext;
 class SecurityOrigin;
 
+<<<<<<< HEAD
 class DatabaseContext final : public GarbageCollectedFinalized<DatabaseContext>,
                               public ContextLifecycleObserver {
     USING_GARBAGE_COLLECTED_MIXIN(DatabaseContext);
 
+=======
+class DatabaseContext final
+    : public GarbageCollectedFinalized<DatabaseContext>
+    , public ActiveDOMObject {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DatabaseContext);
+>>>>>>> miniblink49
 public:
     friend class DatabaseManager;
 
     static DatabaseContext* create(ExecutionContext*);
 
+<<<<<<< HEAD
     ~DatabaseContext();
     DECLARE_VIRTUAL_TRACE();
 
     // For life-cycle management (inherited from ContextLifecycleObserver):
     void contextDestroyed(ExecutionContext*) override;
+=======
+    ~DatabaseContext() override;
+    DECLARE_VIRTUAL_TRACE();
+
+    // For life-cycle management (inherited from ActiveDOMObject):
+    void contextDestroyed() override;
+    void stop() override;
+>>>>>>> miniblink49
 
     DatabaseContext* backend();
     DatabaseThread* databaseThread();
@@ -63,15 +83,23 @@ public:
 
     bool allowDatabaseAccess() const;
 
+<<<<<<< HEAD
     SecurityOrigin* getSecurityOrigin() const;
+=======
+    SecurityOrigin* securityOrigin() const;
+>>>>>>> miniblink49
     bool isContextThread() const;
 
 private:
     explicit DatabaseContext(ExecutionContext*);
 
     Member<DatabaseThread> m_databaseThread;
+<<<<<<< HEAD
     bool m_hasOpenDatabases; // This never changes back to false, even after the
         // database thread is closed.
+=======
+    bool m_hasOpenDatabases; // This never changes back to false, even after the database thread is closed.
+>>>>>>> miniblink49
     bool m_hasRequestedTermination;
 };
 

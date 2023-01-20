@@ -29,6 +29,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/layout/LayoutRubyText.h"
 
 namespace blink {
@@ -38,10 +40,11 @@ LayoutRubyText::LayoutRubyText(Element* element)
 {
 }
 
-LayoutRubyText::~LayoutRubyText() { }
+LayoutRubyText::~LayoutRubyText()
+{
+}
 
-bool LayoutRubyText::isChildAllowed(LayoutObject* child,
-    const ComputedStyle&) const
+bool LayoutRubyText::isChildAllowed(LayoutObject* child, const ComputedStyle&) const
 {
     return child->isInline();
 }
@@ -53,28 +56,23 @@ ETextAlign LayoutRubyText::textAlignmentForLine(bool endsWithSoftBreak) const
     if (textAlign != ComputedStyle::initialTextAlign())
         return LayoutBlockFlow::textAlignmentForLine(endsWithSoftBreak);
 
-    // The default behavior is to allow ruby text to expand if it is shorter than
-    // the ruby base.
-    return ETextAlign::kJustify;
+    // The default behavior is to allow ruby text to expand if it is shorter than the ruby base.
+    return JUSTIFY;
 }
 
-void LayoutRubyText::adjustInlineDirectionLineBounds(
-    unsigned expansionOpportunityCount,
-    LayoutUnit& logicalLeft,
-    LayoutUnit& logicalWidth) const
+void LayoutRubyText::adjustInlineDirectionLineBounds(unsigned expansionOpportunityCount, LayoutUnit& logicalLeft, LayoutUnit& logicalWidth) const
 {
     ETextAlign textAlign = style()->textAlign();
     // FIXME: This check is bogus since user can set the initial value.
     if (textAlign != ComputedStyle::initialTextAlign())
-        return LayoutBlockFlow::adjustInlineDirectionLineBounds(
-            expansionOpportunityCount, logicalLeft, logicalWidth);
+        return LayoutBlockFlow::adjustInlineDirectionLineBounds(expansionOpportunityCount, logicalLeft, logicalWidth);
 
-    int maxPreferredLogicalWidth = this->maxPreferredLogicalWidth().toInt();
+    int maxPreferredLogicalWidth = this->maxPreferredLogicalWidth();
     if (maxPreferredLogicalWidth >= logicalWidth)
         return;
 
-    // Inset the ruby text by half the inter-ideograph expansion amount, but no
-    // more than a full-width ruby character on each side.
+    // Inset the ruby text by half the inter-ideograph expansion amount, but no more than a full-width
+    // ruby character on each side.
     LayoutUnit inset = (logicalWidth - maxPreferredLogicalWidth) / (expansionOpportunityCount + 1);
     if (expansionOpportunityCount)
         inset = std::min(LayoutUnit(2 * style()->fontSize()), inset);

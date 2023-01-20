@@ -5,67 +5,49 @@
 #ifndef CSSValueInterpolationType_h
 #define CSSValueInterpolationType_h
 
-#include "core/animation/CSSInterpolationType.h"
+#include "core/animation/InterpolationType.h"
 
 namespace blink {
 
 // Never supports pairwise conversion while always supporting single conversion.
 // A catch all for default for CSSValues.
-class CSSValueInterpolationType : public CSSInterpolationType {
+class CSSValueInterpolationType : public InterpolationType {
 public:
-    CSSValueInterpolationType(PropertyHandle property)
-        : CSSInterpolationType(property)
-    {
-    }
+    CSSValueInterpolationType(CSSPropertyID property)
+        : InterpolationType(property)
+    { }
 
-    PairwiseInterpolationValue maybeConvertPairwise(
-        const PropertySpecificKeyframe& startKeyframe,
-        const PropertySpecificKeyframe& endKeyframe,
-        const InterpolationEnvironment&,
-        const InterpolationValue& underlying,
-        ConversionCheckers&) const final
-    {
-        return nullptr;
-    }
-
-    InterpolationValue maybeConvertStandardPropertyUnderlyingValue(
-        const StyleResolverState&) const final
-    {
-        return nullptr;
-    }
-
-    InterpolationValue maybeConvertNeutral(const InterpolationValue& underlying,
-        ConversionCheckers&) const final
-    {
-        // This type will never interpolate or composite with the underlying value.
-        // Returning nullptr here means no value will be applied and the value in
-        // ComputedStyle will remain unchanged.
-        return nullptr;
-    }
-    InterpolationValue maybeConvertInitial(const StyleResolverState&,
-        ConversionCheckers&) const final;
-    InterpolationValue maybeConvertInherit(const StyleResolverState&,
-        ConversionCheckers&) const final;
-    InterpolationValue maybeConvertValue(const CSSValue& value,
-        const StyleResolverState&,
-        ConversionCheckers&) const final;
-
-    void composite(UnderlyingValueOwner& underlyingValueOwner,
-        double underlyingFraction,
-        const InterpolationValue& value,
-        double interpolationFraction) const final
-    {
-        underlyingValueOwner.set(*this, value);
-    }
-
-    void applyStandardPropertyValue(const InterpolableValue&,
-        const NonInterpolableValue*,
-        StyleResolverState&) const final;
-
-    const CSSValue* createCSSValue(const InterpolableValue&,
-        const NonInterpolableValue*,
-        const StyleResolverState&) const final;
+    virtual PassOwnPtrWillBeRawPtr<InterpolationValue> maybeConvertSingle(const CSSPropertySpecificKeyframe&, const StyleResolverState*, ConversionCheckers&) const override final;
+    virtual void apply(const InterpolableValue&, const NonInterpolableValue*, StyleResolverState&) const override final;
 };
+
+class DefaultNonInterpolableValue : public NonInterpolableValue {
+public:
+    virtual ~DefaultNonInterpolableValue() { }
+    static PassRefPtrWillBeRawPtr<DefaultNonInterpolableValue> create(PassRefPtrWillBeRawPtr<CSSValue> cssValue)
+    {
+        return adoptRefWillBeNoop(new DefaultNonInterpolableValue(cssValue));
+    }
+
+    CSSValue* cssValue() const { return m_cssValue.get(); }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        NonInterpolableValue::trace(visitor);
+        visitor->trace(m_cssValue);
+    }
+
+    DECLARE_NON_INTERPOLABLE_VALUE_TYPE();
+
+private:
+    DefaultNonInterpolableValue(PassRefPtrWillBeRawPtr<CSSValue> cssValue)
+        : m_cssValue(cssValue)
+    { }
+
+    RefPtrWillBeMember<CSSValue> m_cssValue;
+};
+
+DEFINE_NON_INTERPOLABLE_VALUE_TYPE_CASTS(DefaultNonInterpolableValue);
 
 } // namespace blink
 

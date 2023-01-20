@@ -24,11 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/clipboard/ClipboardUtilities.h"
 
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
 
+<<<<<<< HEAD
+=======
+#if USING_VC6RT == 1
+#define PURE                    = 0
+#endif
+
+>>>>>>> miniblink49
 #include <shlwapi.h>
 
 namespace blink {

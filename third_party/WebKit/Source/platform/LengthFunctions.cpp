@@ -21,17 +21,30 @@
     Boston, MA 02110-1301, USA.
 */
 
+<<<<<<< HEAD
 #include "platform/LengthFunctions.h"
 
 #include "platform/LayoutUnit.h"
 #include "platform/LengthPoint.h"
+=======
+#include "config.h"
+#include "platform/LengthFunctions.h"
+
+#include "platform/LayoutUnit.h"
+>>>>>>> miniblink49
 #include "platform/LengthSize.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 int intValueForLength(const Length& length, int maximumValue)
 {
     return valueForLength(length, LayoutUnit(maximumValue)).toInt();
+=======
+int intValueForLength(const Length& length, LayoutUnit maximumValue)
+{
+    return static_cast<int>(valueForLength(length, maximumValue));
+>>>>>>> miniblink49
 }
 
 float floatValueForLength(const Length& length, float maximumValue)
@@ -45,7 +58,13 @@ float floatValueForLength(const Length& length, float maximumValue)
     case Auto:
         return static_cast<float>(maximumValue);
     case Calculated:
+<<<<<<< HEAD
         return length.nonNanCalculatedValue(LayoutUnit(maximumValue));
+=======
+        return length.nonNanCalculatedValue(maximumValue);
+    case Intrinsic:
+    case MinIntrinsic:
+>>>>>>> miniblink49
     case MinContent:
     case MaxContent:
     case FitContent:
@@ -60,6 +79,7 @@ float floatValueForLength(const Length& length, float maximumValue)
     return 0;
 }
 
+<<<<<<< HEAD
 LayoutUnit minimumValueForLength(const Length& length,
     LayoutUnit maximumValue)
 {
@@ -76,6 +96,23 @@ LayoutUnit minimumValueForLength(const Length& length,
     case FillAvailable:
     case Auto:
         return LayoutUnit();
+=======
+LayoutUnit minimumValueForLength(const Length& length, LayoutUnit maximumValue)
+{
+    switch (length.type()) {
+    case Fixed:
+        return length.value();
+    case Percent:
+        // Don't remove the extra cast to float. It is needed for rounding on 32-bit Intel machines that use the FPU stack.
+        return static_cast<float>(maximumValue * length.percent() / 100.0f);
+    case Calculated:
+        return length.nonNanCalculatedValue(maximumValue.toFloat());
+    case FillAvailable:
+    case Auto:
+        return 0;
+    case Intrinsic:
+    case MinIntrinsic:
+>>>>>>> miniblink49
     case MinContent:
     case MaxContent:
     case FitContent:
@@ -84,6 +121,7 @@ LayoutUnit minimumValueForLength(const Length& length,
     case DeviceHeight:
     case MaxSizeNone:
         ASSERT_NOT_REACHED();
+<<<<<<< HEAD
         return LayoutUnit();
     }
     ASSERT_NOT_REACHED();
@@ -96,6 +134,18 @@ LayoutUnit roundedMinimumValueForLength(const Length& length,
     if (length.type() == Percent)
         return static_cast<LayoutUnit>(
             round(maximumValue * length.percent() / 100.0f));
+=======
+        return 0;
+    }
+    ASSERT_NOT_REACHED();
+    return 0;
+}
+
+LayoutUnit roundedMinimumValueForLength(const Length& length, LayoutUnit maximumValue)
+{
+    if (length.type() == Percent)
+        return static_cast<LayoutUnit>(round(maximumValue * length.percent() / 100.0f));
+>>>>>>> miniblink49
     return minimumValueForLength(length, maximumValue);
 }
 
@@ -109,6 +159,11 @@ LayoutUnit valueForLength(const Length& length, LayoutUnit maximumValue)
     case FillAvailable:
     case Auto:
         return maximumValue;
+<<<<<<< HEAD
+=======
+    case Intrinsic:
+    case MinIntrinsic:
+>>>>>>> miniblink49
     case MinContent:
     case MaxContent:
     case FitContent:
@@ -117,6 +172,7 @@ LayoutUnit valueForLength(const Length& length, LayoutUnit maximumValue)
     case DeviceHeight:
     case MaxSizeNone:
         ASSERT_NOT_REACHED();
+<<<<<<< HEAD
         return LayoutUnit();
     }
     ASSERT_NOT_REACHED();
@@ -135,6 +191,17 @@ FloatPoint floatPointForLengthPoint(const LengthPoint& LengthPoint,
 {
     return FloatPoint(floatValueForLength(LengthPoint.x(), boxSize.width()),
         floatValueForLength(LengthPoint.y(), boxSize.height()));
+=======
+        return 0;
+    }
+    ASSERT_NOT_REACHED();
+    return 0;
+}
+
+FloatSize floatSizeForLengthSize(const LengthSize& lengthSize, const FloatSize& boxSize)
+{
+    return FloatSize(floatValueForLength(lengthSize.width(), boxSize.width()), floatValueForLength(lengthSize.height(), boxSize.height()));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

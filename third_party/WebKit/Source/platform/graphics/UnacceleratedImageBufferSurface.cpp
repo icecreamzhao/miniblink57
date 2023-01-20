@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/UnacceleratedImageBufferSurface.h"
 
 #include "platform/graphics/skia/SkiaUtils.h"
@@ -61,11 +62,35 @@ UnacceleratedImageBufferSurface::UnacceleratedImageBufferSurface(
         if (m_surface)
             clear();
     }
+=======
+#include "config.h"
+#include "platform/graphics/UnacceleratedImageBufferSurface.h"
+
+#include "third_party/skia/include/core/SkSurface.h"
+#include "wtf/PassRefPtr.h"
+
+namespace blink {
+
+UnacceleratedImageBufferSurface::UnacceleratedImageBufferSurface(const IntSize& size, OpacityMode opacityMode)
+    : ImageBufferSurface(size, opacityMode)
+{
+    SkAlphaType alphaType = (Opaque == opacityMode) ? kOpaque_SkAlphaType : kPremul_SkAlphaType;
+    SkImageInfo info = SkImageInfo::MakeN32(size.width(), size.height(), alphaType);
+    SkSurfaceProps disableLCDProps(0, kUnknown_SkPixelGeometry);
+    m_surface = adoptRef(SkSurface::NewRaster(info, Opaque == opacityMode ? 0 : &disableLCDProps));
+
+    if (m_surface)
+        clear();
+>>>>>>> miniblink49
 }
 
 UnacceleratedImageBufferSurface::~UnacceleratedImageBufferSurface() { }
 
+<<<<<<< HEAD
 SkCanvas* UnacceleratedImageBufferSurface::canvas()
+=======
+SkCanvas* UnacceleratedImageBufferSurface::canvas() const
+>>>>>>> miniblink49
 {
     return m_surface->getCanvas();
 }
@@ -75,11 +100,17 @@ bool UnacceleratedImageBufferSurface::isValid() const
     return m_surface;
 }
 
+<<<<<<< HEAD
 sk_sp<SkImage> UnacceleratedImageBufferSurface::newImageSnapshot(
     AccelerationHint,
     SnapshotReason)
 {
     return m_surface->makeImageSnapshot();
+=======
+PassRefPtr<SkImage> UnacceleratedImageBufferSurface::newImageSnapshot() const
+{
+    return adoptRef(m_surface->newImageSnapshot());
+>>>>>>> miniblink49
 }
 
 } // namespace blink

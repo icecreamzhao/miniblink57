@@ -12,16 +12,28 @@
 #ifndef __DTINTRV_H__
 #define __DTINTRV_H__
 
+<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+>>>>>>> miniblink49
 
 /**
  * \file
  * \brief C++ API: Date Interval data type
  */
 
+<<<<<<< HEAD
 U_NAMESPACE_BEGIN
 
+=======
+
+U_NAMESPACE_BEGIN
+
+
+>>>>>>> miniblink49
 /**
  * This class represents a date interval.
  * It is a pair of UDate representing from UDate 1 to UDate 2.
@@ -29,6 +41,10 @@ U_NAMESPACE_BEGIN
 **/
 class U_COMMON_API DateInterval : public UObject {
 public:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /** 
      * Construct a DateInterval given a from date and a to date.
      * @param fromDate  The from date in date interval.
@@ -42,7 +58,11 @@ public:
      * @stable ICU 4.0
      */
     virtual ~DateInterval();
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
     /** 
      * Get the from date.
      * @return  the from date in dateInterval.
@@ -57,6 +77,10 @@ public:
      */
     UDate getToDate() const;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * Return the class ID for this class. This is useful only for comparing to
      * a return value from getDynamicClassID(). For example:
@@ -83,6 +107,10 @@ public:
      */
     virtual UClassID getDynamicClassID(void) const;
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> miniblink49
     /**
      * Copy constructor.
      * @stable ICU 4.0
@@ -109,13 +137,21 @@ public:
      */
     UBool operator!=(const DateInterval& other) const;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * clone this object. 
      * The caller owns the result and should delete it when done.
      * @return a cloned DateInterval
      * @stable ICU 4.0
      */
+<<<<<<< HEAD
     virtual DateInterval* clone() const;
+=======
+     virtual DateInterval* clone() const;
+>>>>>>> miniblink49
 
 private:
     /** 
@@ -126,6 +162,7 @@ private:
     UDate fromDate;
     UDate toDate;
 
+<<<<<<< HEAD
 }; // end class DateInterval
 
 inline UDate
@@ -146,6 +183,29 @@ DateInterval::operator!=(const DateInterval& other) const
     return (!operator==(other));
 }
 
+=======
+} ;// end class DateInterval
+
+
+inline UDate 
+DateInterval::getFromDate() const { 
+    return fromDate; 
+}
+
+
+inline UDate 
+DateInterval::getToDate() const { 
+    return toDate; 
+}
+
+
+inline UBool 
+DateInterval::operator!=(const DateInterval& other) const { 
+    return ( !operator==(other) );
+}
+
+
+>>>>>>> miniblink49
 U_NAMESPACE_END
 
 #endif

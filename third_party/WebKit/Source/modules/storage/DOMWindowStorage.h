@@ -5,7 +5,11 @@
 #ifndef DOMWindowStorage_h
 #define DOMWindowStorage_h
 
+<<<<<<< HEAD
 #include "core/frame/LocalDOMWindow.h"
+=======
+#include "core/frame/DOMWindowProperty.h"
+>>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -13,6 +17,7 @@ namespace blink {
 
 class DOMWindow;
 class ExceptionState;
+<<<<<<< HEAD
 class LocalDOMWindow;
 class Storage;
 
@@ -20,6 +25,13 @@ class DOMWindowStorage final : public GarbageCollected<DOMWindowStorage>,
                                public Supplement<LocalDOMWindow> {
     USING_GARBAGE_COLLECTED_MIXIN(DOMWindowStorage);
 
+=======
+class Storage;
+
+class DOMWindowStorage final : public NoBaseWillBeGarbageCollected<DOMWindowStorage>, public WillBeHeapSupplement<LocalDOMWindow>, public DOMWindowProperty {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMWindowStorage);
+    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowStorage);
+>>>>>>> miniblink49
 public:
     static DOMWindowStorage& from(LocalDOMWindow&);
     static Storage* sessionStorage(DOMWindow&, ExceptionState&);
@@ -36,8 +48,15 @@ private:
     explicit DOMWindowStorage(LocalDOMWindow&);
     static const char* supplementName();
 
+<<<<<<< HEAD
     mutable Member<Storage> m_sessionStorage;
     mutable Member<Storage> m_localStorage;
+=======
+    RawPtrWillBeMember<LocalDOMWindow> m_window;
+    mutable PersistentWillBeMember<Storage> m_sessionStorage;
+    mutable PersistentWillBeMember<Storage> m_localStorage;
+
+>>>>>>> miniblink49
 };
 
 } // namespace blink

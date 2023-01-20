@@ -25,28 +25,29 @@
 
 namespace blink {
 
+template<typename T> class EventSender;
+typedef EventSender<HTMLDetailsElement> DetailsEventSender;
+
 class HTMLDetailsElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static HTMLDetailsElement* create(Document&);
+    static PassRefPtrWillBeRawPtr<HTMLDetailsElement> create(Document&);
     void toggleOpen();
     ~HTMLDetailsElement() override;
+
+    void dispatchPendingEvent(DetailsEventSender*);
 
     Element* findMainSummary() const;
 
 private:
     explicit HTMLDetailsElement(Document&);
 
-    void dispatchPendingEvent();
-
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     void didAddUserAgentShadowRoot(ShadowRoot&) override;
     bool isInteractiveContent() const override;
 
     bool m_isOpen;
-    TaskHandle m_pendingEvent;
 };
 
 } // namespace blink

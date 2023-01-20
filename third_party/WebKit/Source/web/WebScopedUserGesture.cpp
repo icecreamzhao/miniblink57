@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/web/WebScopedUserGesture.h"
 
 #include "core/dom/DocumentUserGestureToken.h"
@@ -38,11 +39,28 @@
 namespace blink {
 
 WebScopedUserGesture::WebScopedUserGesture(const WebUserGestureToken& token)
+=======
+#include "config.h"
+#include "public/web/WebScopedUserGesture.h"
+
+#include "platform/UserGestureIndicator.h"
+#include "public/web/WebUserGestureToken.h"
+
+namespace blink {
+
+void WebScopedUserGesture::initialize()
+{
+    m_indicator.reset(new UserGestureIndicator(DefinitelyProcessingNewUserGesture));
+}
+
+void WebScopedUserGesture::initializeWithToken(const WebUserGestureToken& token)
+>>>>>>> miniblink49
 {
     if (!token.isNull())
         m_indicator.reset(new UserGestureIndicator(token));
 }
 
+<<<<<<< HEAD
 WebScopedUserGesture::WebScopedUserGesture(WebLocalFrame* frame)
 {
     m_indicator.reset(new UserGestureIndicator(DocumentUserGestureToken::create(
@@ -52,4 +70,11 @@ WebScopedUserGesture::WebScopedUserGesture(WebLocalFrame* frame)
 
 WebScopedUserGesture::~WebScopedUserGesture() { }
 
+=======
+void WebScopedUserGesture::reset()
+{
+    m_indicator.reset(0);
+}
+
+>>>>>>> miniblink49
 } // namespace blink

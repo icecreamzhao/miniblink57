@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGFEMergeNodeElement.h"
 
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
@@ -26,7 +28,7 @@ namespace blink {
 
 inline SVGFEMergeNodeElement::SVGFEMergeNodeElement(Document& document)
     : SVGElement(SVGNames::feMergeNodeTag, document)
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
 {
     addToPropertyMap(m_in1);
 }
@@ -50,4 +52,4 @@ void SVGFEMergeNodeElement::svgAttributeChanged(const QualifiedName& attrName)
     SVGElement::svgAttributeChanged(attrName);
 }
 
-} // namespace blink
+}

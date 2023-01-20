@@ -28,6 +28,10 @@
 
 [
     NoInterfaceObject,
+<<<<<<< HEAD
+=======
+    GarbageCollected,
+>>>>>>> miniblink49
 ] interface SQLResultSetRowList {
     readonly attribute unsigned long length;
     [RaisesException, CallWith=ScriptState] getter any item(unsigned long index);

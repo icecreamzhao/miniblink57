@@ -8,11 +8,15 @@
 #ifndef skdiff_DEFINED
 #define skdiff_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkTDArray.h"
+=======
+>>>>>>> miniblink49
 #include "SkBitmap.h"
 #include "SkColor.h"
 #include "SkColorPriv.h"
 #include "SkString.h"
+<<<<<<< HEAD
 
 #if defined(SK_BUILD_FOR_WIN32)
 #define PATH_DIV_STR "\\"
@@ -24,6 +28,21 @@
 
 #define MAX2(a, b) (((b) < (a)) ? (a) : (b))
 #define MAX3(a, b, c) (((b) < (a)) ? MAX2((a), (c)) : MAX2((b), (c)))
+=======
+#include "SkTDArray.h"
+
+#if defined(SK_BUILD_FOR_WIN32)
+    #define PATH_DIV_STR "\\"
+    #define PATH_DIV_CHAR '\\'
+#else
+    #define PATH_DIV_STR "/"
+    #define PATH_DIV_CHAR '/'
+#endif
+
+#define MAX2(a,b) (((b) < (a)) ? (a) : (b))
+#define MAX3(a,b,c) (((b) < (a)) ? MAX2((a), (c)) : MAX2((b), (c)))
+
+>>>>>>> miniblink49
 
 struct DiffResource {
     enum Status {
@@ -53,15 +72,26 @@ struct DiffResource {
         /** NOT A VALID VALUE -- used to set up arrays and to represent an unknown value. */
         kStatusCount
     };
+<<<<<<< HEAD
     static char const* const StatusNames[DiffResource::kStatusCount];
+=======
+    static char const * const StatusNames[DiffResource::kStatusCount];
+>>>>>>> miniblink49
 
     /** Returns the Status with this name.
      *  If there is no Status with this name, returns kStatusCount.
      */
+<<<<<<< HEAD
     static Status getStatusByName(const char* name);
 
     /** Returns a text description of the given Status type. */
     static const char* getStatusDescription(Status status);
+=======
+    static Status getStatusByName(const char *name);
+
+    /** Returns a text description of the given Status type. */
+    static const char *getStatusDescription(Status status);
+>>>>>>> miniblink49
 
     /** Returns true if the Status indicates some kind of failure. */
     static bool isStatusFailed(Status status);
@@ -72,11 +102,15 @@ struct DiffResource {
      */
     static bool getMatchingStatuses(char* selector, bool statuses[kStatusCount]);
 
+<<<<<<< HEAD
     DiffResource()
         : fFilename()
         , fFullPath()
         , fBitmap()
         , fStatus(kUnknown_Status) {};
+=======
+    DiffResource() : fFilename(), fFullPath(), fBitmap(), fStatus(kUnknown_Status) { };
+>>>>>>> miniblink49
 
     /** If isEmpty() indicates no filename available. */
     SkString fFilename;
@@ -99,17 +133,30 @@ struct DiffRecord {
         kCouldNotCompare_Result,
         kUnknown_Result,
 
+<<<<<<< HEAD
         kResultCount // NOT A VALID VALUE--used to set up arrays. Must be last.
     };
     static char const* const ResultNames[DiffRecord::kResultCount];
+=======
+        kResultCount  // NOT A VALID VALUE--used to set up arrays. Must be last.
+    };
+    static char const * const ResultNames[DiffRecord::kResultCount];
+>>>>>>> miniblink49
 
     /** Returns the Result with this name.
      *  If there is no Result with this name, returns kResultCount.
      */
+<<<<<<< HEAD
     static Result getResultByName(const char* name);
 
     /** Returns a text description of the given Result type. */
     static const char* getResultDescription(Result result);
+=======
+    static Result getResultByName(const char *name);
+
+    /** Returns a text description of the given Result type. */
+    static const char *getResultDescription(Result result);
+>>>>>>> miniblink49
 
     DiffRecord()
         : fBase()
@@ -127,7 +174,12 @@ struct DiffRecord {
         , fMaxMismatchR(0)
         , fMaxMismatchG(0)
         , fMaxMismatchB(0)
+<<<<<<< HEAD
         , fResult(kUnknown_Result) {};
+=======
+        , fResult(kUnknown_Result) {
+    };
+>>>>>>> miniblink49
 
     DiffResource fBase;
     DiffResource fComparison;
@@ -160,11 +212,17 @@ typedef SkTDArray<DiffRecord*> RecordArray;
 
 /// A wrapper for any sortProc (comparison routine) which applies a first-order
 /// sort beforehand, and a tiebreaker if the sortProc returns 0.
+<<<<<<< HEAD
 template <typename T>
 static int compare(const void* untyped_lhs, const void* untyped_rhs)
 {
     const DiffRecord* lhs = *reinterpret_cast<DiffRecord* const*>(untyped_lhs);
     const DiffRecord* rhs = *reinterpret_cast<DiffRecord* const*>(untyped_rhs);
+=======
+template<typename T> static int compare(const void* untyped_lhs, const void* untyped_rhs) {
+    const DiffRecord* lhs = *reinterpret_cast<DiffRecord* const *>(untyped_lhs);
+    const DiffRecord* rhs = *reinterpret_cast<DiffRecord* const *>(untyped_rhs);
+>>>>>>> miniblink49
 
     // First-order sort... these comparisons should be applied before comparing
     // pixel values, no matter what.
@@ -187,6 +245,7 @@ static int compare(const void* untyped_lhs, const void* untyped_rhs)
 /// from largest to smallest.
 class CompareDiffMetrics {
 public:
+<<<<<<< HEAD
     static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs)
     {
         if (lhs->fFractionDifference < rhs->fFractionDifference) {
@@ -194,6 +253,14 @@ public:
         }
         if (rhs->fFractionDifference < lhs->fFractionDifference) {
             return -1;
+=======
+    static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs) {
+        if (lhs->fFractionDifference < rhs->fFractionDifference) {
+          return 1;
+        }
+        if (rhs->fFractionDifference < lhs->fFractionDifference) {
+          return -1;
+>>>>>>> miniblink49
         }
         return 0;
     }
@@ -201,8 +268,12 @@ public:
 
 class CompareDiffWeighted {
 public:
+<<<<<<< HEAD
     static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs)
     {
+=======
+    static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs) {
+>>>>>>> miniblink49
         if (lhs->fWeightedFraction < rhs->fWeightedFraction) {
             return 1;
         }
@@ -217,6 +288,7 @@ public:
 /// from largest to smallest.
 class CompareDiffMeanMismatches {
 public:
+<<<<<<< HEAD
     static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs)
     {
         float leftValue = MAX3(lhs->fAverageMismatchR,
@@ -225,6 +297,15 @@ public:
         float rightValue = MAX3(rhs->fAverageMismatchR,
             rhs->fAverageMismatchG,
             rhs->fAverageMismatchB);
+=======
+    static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs) {
+        float leftValue = MAX3(lhs->fAverageMismatchR,
+                               lhs->fAverageMismatchG,
+                               lhs->fAverageMismatchB);
+        float rightValue = MAX3(rhs->fAverageMismatchR,
+                                rhs->fAverageMismatchG,
+                                rhs->fAverageMismatchB);
+>>>>>>> miniblink49
         if (leftValue < rightValue) {
             return 1;
         }
@@ -239,6 +320,7 @@ public:
 /// from largest to smallest.
 class CompareDiffMaxMismatches {
 public:
+<<<<<<< HEAD
     static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs)
     {
         uint32_t leftValue = MAX3(lhs->fMaxMismatchR,
@@ -247,6 +329,15 @@ public:
         uint32_t rightValue = MAX3(rhs->fMaxMismatchR,
             rhs->fMaxMismatchG,
             rhs->fMaxMismatchB);
+=======
+    static int comparePixels(const DiffRecord* lhs, const DiffRecord* rhs) {
+        uint32_t leftValue = MAX3(lhs->fMaxMismatchR,
+                                  lhs->fMaxMismatchG,
+                                  lhs->fMaxMismatchB);
+        uint32_t rightValue = MAX3(rhs->fMaxMismatchR,
+                                   rhs->fMaxMismatchG,
+                                   rhs->fMaxMismatchB);
+>>>>>>> miniblink49
         if (leftValue < rightValue) {
             return 1;
         }
@@ -258,12 +349,20 @@ public:
     }
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /// Parameterized routine to compute the color of a pixel in a difference image.
 typedef SkPMColor (*DiffMetricProc)(SkPMColor, SkPMColor);
 
 // from gm
+<<<<<<< HEAD
 static inline SkPMColor compute_diff_pmcolor(SkPMColor c0, SkPMColor c1)
 {
+=======
+static inline SkPMColor compute_diff_pmcolor(SkPMColor c0, SkPMColor c1) {
+>>>>>>> miniblink49
     int dr = SkGetPackedR32(c0) - SkGetPackedR32(c1);
     int dg = SkGetPackedG32(c0) - SkGetPackedG32(c1);
     int db = SkGetPackedB32(c0) - SkGetPackedB32(c1);

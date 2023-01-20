@@ -31,8 +31,13 @@
 #ifndef WebMediaPlayerClient_h
 #define WebMediaPlayerClient_h
 
+<<<<<<< HEAD
 #include "WebCommon.h"
 #include "WebMediaPlayer.h"
+=======
+#include "WebMediaPlayer.h"
+#include "WebMediaPlayerEncryptedMediaClient.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -40,9 +45,16 @@ class WebInbandTextTrack;
 class WebLayer;
 class WebMediaSource;
 
+<<<<<<< HEAD
 enum class WebRemotePlaybackAvailability;
 
 class BLINK_PLATFORM_EXPORT WebMediaPlayerClient {
+=======
+// TODO(srirama): Remove this inheritance when we get rid of the MediaPlayer
+// and MediaPlayerClient interfaces by having HTMLMediaElement implement
+// WebMediaPlayerClient interface. See crbug.com/350571.
+class WebMediaPlayerClient : public WebMediaPlayerEncryptedMediaClient {
+>>>>>>> miniblink49
 public:
     enum VideoTrackKind {
         VideoTrackKindNone,
@@ -72,6 +84,7 @@ public:
     virtual void sizeChanged() = 0;
     virtual void playbackStateChanged() = 0;
     virtual void setWebLayer(WebLayer*) = 0;
+<<<<<<< HEAD
     virtual WebMediaPlayer::TrackId addAudioTrack(const WebString& id,
         AudioTrackKind,
         const WebString& label,
@@ -85,11 +98,17 @@ public:
         const WebString& language,
         bool selected)
         = 0;
+=======
+    virtual WebMediaPlayer::TrackId addAudioTrack(const WebString& id, AudioTrackKind, const WebString& label, const WebString& language, bool enabled) = 0;
+    virtual void removeAudioTrack(WebMediaPlayer::TrackId) = 0;
+    virtual WebMediaPlayer::TrackId addVideoTrack(const WebString& id, VideoTrackKind, const WebString& label, const WebString& language, bool selected) = 0;
+>>>>>>> miniblink49
     virtual void removeVideoTrack(WebMediaPlayer::TrackId) = 0;
     virtual void addTextTrack(WebInbandTextTrack*) = 0;
     virtual void removeTextTrack(WebInbandTextTrack*) = 0;
     virtual void mediaSourceOpened(WebMediaSource*) = 0;
     virtual void requestSeek(double) = 0;
+<<<<<<< HEAD
     virtual void remoteRouteAvailabilityChanged(
         WebRemotePlaybackAvailability)
         = 0;
@@ -114,6 +133,11 @@ public:
 
     // Returns the selected video track id (or an empty id if there's none).
     virtual WebMediaPlayer::TrackId getSelectedVideoTrackId() = 0;
+=======
+    virtual void remoteRouteAvailabilityChanged(bool) = 0;
+    virtual void connectedToRemoteDevice() = 0;
+    virtual void disconnectedFromRemoteDevice() = 0;
+>>>>>>> miniblink49
 
 protected:
     ~WebMediaPlayerClient() { }

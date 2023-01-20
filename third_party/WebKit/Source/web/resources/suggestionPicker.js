@@ -11,6 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,6 +23,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 /**
@@ -138,8 +151,12 @@ SuggestionPicker.prototype._measureMaxContentWidth = function() {
 
 SuggestionPicker.prototype._fixWindowSize = function() {
     var ListBorder = 2;
+<<<<<<< HEAD
     var zoom = this._config.zoomFactor;
     var desiredWindowWidth = (this._measureMaxContentWidth() + ListBorder) * zoom;
+=======
+    var desiredWindowWidth = this._measureMaxContentWidth() + ListBorder;
+>>>>>>> miniblink49
     if (typeof this._config.inputWidth === "number")
         desiredWindowWidth = Math.max(this._config.inputWidth, desiredWindowWidth);
     var totalHeight = ListBorder;
@@ -153,6 +170,7 @@ SuggestionPicker.prototype._fixWindowSize = function() {
         if (maxHeight === 0 && entryCount == SuggestionPicker.NumberOfVisibleEntries)
             maxHeight = totalHeight;
     }
+<<<<<<< HEAD
     var desiredWindowHeight = totalHeight * zoom;
     if (maxHeight !== 0 && totalHeight > maxHeight * zoom) {
         this._containerElement.style.maxHeight = (maxHeight - ListBorder) + "px";
@@ -162,6 +180,18 @@ SuggestionPicker.prototype._fixWindowSize = function() {
     }
     var windowRect = adjustWindowRect(desiredWindowWidth, desiredWindowHeight, desiredWindowWidth, 0);
     this._containerElement.style.height = (windowRect.height / zoom - ListBorder) + "px";
+=======
+    var desiredWindowHeight = totalHeight;
+    if (maxHeight !== 0 && totalHeight > maxHeight) {
+        this._containerElement.style.maxHeight = (maxHeight - ListBorder) + "px";
+        desiredWindowWidth += getScrollbarWidth();
+        desiredWindowHeight = maxHeight;
+        this._containerElement.style.overflowY = "scroll";
+    }
+
+    var windowRect = adjustWindowRect(desiredWindowWidth, desiredWindowHeight, desiredWindowWidth, 0);
+    this._containerElement.style.height = (windowRect.height - ListBorder) + "px";
+>>>>>>> miniblink49
     setWindowRect(windowRect);
 };
 
@@ -252,11 +282,19 @@ SuggestionPicker.prototype._findLastVisibleEntry = function() {
  */
 SuggestionPicker.prototype._handleBodyKeyDown = function(event) {
     var eventHandled = false;
+<<<<<<< HEAD
     var key = event.key;
     if (key === "Escape") {
         this.handleCancel();
         eventHandled = true;
     } else if (key == "ArrowUp") {
+=======
+    var key = event.keyIdentifier;
+    if (key === "U+001B") { // ESC
+        this.handleCancel();
+        eventHandled = true;
+    } else if (key == "Up") {
+>>>>>>> miniblink49
         if (document.activeElement && document.activeElement.classList.contains(SuggestionPicker.ListEntryClass)) {
             for (var node = document.activeElement.previousElementSibling; node; node = node.previousElementSibling) {
                 if (node.classList.contains(SuggestionPicker.ListEntryClass)) {
@@ -269,7 +307,11 @@ SuggestionPicker.prototype._handleBodyKeyDown = function(event) {
             this._element.querySelector("." + SuggestionPicker.ListEntryClass + ":last-child").focus();
         }
         eventHandled = true;
+<<<<<<< HEAD
     } else if (key == "ArrowDown") {
+=======
+    } else if (key == "Down") {
+>>>>>>> miniblink49
         if (document.activeElement && document.activeElement.classList.contains(SuggestionPicker.ListEntryClass)) {
             for (var node = document.activeElement.nextElementSibling; node; node = node.nextElementSibling) {
                 if (node.classList.contains(SuggestionPicker.ListEntryClass)) {

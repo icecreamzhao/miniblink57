@@ -27,57 +27,59 @@
 #define CSSImageSetValue_h
 
 #include "core/css/CSSValueList.h"
-#include "platform/CrossOriginAttributeValue.h"
+#include "core/fetch/ResourceLoaderOptions.h"
 #include "platform/weborigin/Referrer.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 class Document;
+class StyleFetchedImageSet;
 class StyleImage;
 
 class CSSImageSetValue : public CSSValueList {
 public:
-    static CSSImageSetValue* create() { return new CSSImageSetValue(); }
+
+    static PassRefPtrWillBeRawPtr<CSSImageSetValue> create()
+    {
+        return adoptRefWillBeNoop(new CSSImageSetValue());
+    }
     ~CSSImageSetValue();
 
-    bool isCachePending(float deviceScaleFactor) const;
-    StyleImage* cachedImage(float deviceScaleFactor) const;
-    StyleImage* cacheImage(
-        const Document&,
-        float deviceScaleFactor,
-        CrossOriginAttributeValue = CrossOriginAttributeNotSet);
+    StyleFetchedImageSet* cachedImageSet(Document*, float deviceScaleFactor, const ResourceLoaderOptions&);
+    StyleFetchedImageSet* cachedImageSet(Document*, float deviceScaleFactor);
+
+    // Returns a StyleFetchedImageSet if the best fit image has been cached already, otherwise a StylePendingImage.
+    StyleImage* cachedOrPendingImageSet(float);
 
     String customCSSText() const;
 
+    bool isPending() const { return !m_accessedBestFitImage; }
+
     struct ImageWithScale {
-        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         String imageURL;
         Referrer referrer;
         float scaleFactor;
     };
 
-    CSSImageSetValue* valueWithURLsMadeAbsolute();
-
     bool hasFailedOrCanceledSubresources() const;
 
-    DECLARE_TRACE_AFTER_DISPATCH();
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValueList::traceAfterDispatch(visitor); }
 
 protected:
-    ImageWithScale bestImageForScaleFactor(float scaleFactor);
+    ImageWithScale bestImageForScaleFactor();
 
 private:
     CSSImageSetValue();
 
     void fillImageSet();
-    static inline bool compareByScaleFactor(ImageWithScale first,
-        ImageWithScale second)
-    {
-        return first.scaleFactor < second.scaleFactor;
-    }
+    static inline bool compareByScaleFactor(ImageWithScale first, ImageWithScale second) { return first.scaleFactor < second.scaleFactor; }
 
-    float m_cachedScaleFactor;
-    Member<StyleImage> m_cachedImage;
+    RefPtr<StyleImage> m_imageSet;
+    bool m_accessedBestFitImage;
+
+    // This represents the scale factor that we used to find the best fit image. It does not necessarily
+    // correspond to the scale factor of the best fit image.
+    float m_scaleFactor;
 
     Vector<ImageWithScale> m_imagesInSet;
 };

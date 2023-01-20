@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/webdatabase/sqlite/SQLiteTransaction.h"
 
 #include "modules/webdatabase/sqlite/SQLiteDatabase.h"
@@ -72,11 +76,18 @@ void SQLiteTransaction::commit()
 
 void SQLiteTransaction::rollback()
 {
+<<<<<<< HEAD
     // We do not use the 'm_inProgress = m_db.executeCommand("ROLLBACK")'
     // construct here, because m_inProgress should always be set to false after a
     // ROLLBACK, and m_db.executeCommand("ROLLBACK") can sometimes harmlessly
     // fail, thus returning a non-zero/true result
     // (http://www.sqlite.org/lang_transaction.html).
+=======
+    // We do not use the 'm_inProgress = m_db.executeCommand("ROLLBACK")' construct here,
+    // because m_inProgress should always be set to false after a ROLLBACK, and
+    // m_db.executeCommand("ROLLBACK") can sometimes harmlessly fail, thus returning
+    // a non-zero/true result (http://www.sqlite.org/lang_transaction.html).
+>>>>>>> miniblink49
     if (m_inProgress) {
         ASSERT(m_db.m_transactionInProgress);
         m_db.executeCommand("ROLLBACK");

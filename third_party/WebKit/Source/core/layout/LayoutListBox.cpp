@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2006, 2007, 2008, 2011 Apple Inc. All rights reserved.
- *               2009 Torch Mobile Inc. All rights reserved.
- *                    (http://www.torchmobile.com/)
+ *               2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,19 +27,44 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/LayoutListBox.h"
 
+#include "core/HTMLNames.h"
+#include "core/css/CSSFontSelector.h"
+#include "core/css/resolver/StyleResolver.h"
+#include "core/dom/AXObjectCache.h"
+#include "core/dom/Document.h"
 #include "core/dom/ElementTraversal.h"
+#include "core/dom/NodeComputedStyle.h"
+#include "core/dom/StyleEngine.h"
+#include "core/editing/FrameSelection.h"
+#include "core/frame/FrameView.h"
+#include "core/frame/LocalFrame.h"
 #include "core/html/HTMLDivElement.h"
 #include "core/html/HTMLOptGroupElement.h"
 #include "core/html/HTMLOptionElement.h"
 #include "core/html/HTMLSelectElement.h"
-#include "core/paint/PaintLayer.h"
+#include "core/input/EventHandler.h"
+#include "core/layout/HitTestResult.h"
+#include "core/layout/LayoutText.h"
+#include "core/layout/LayoutTheme.h"
+#include "core/layout/LayoutView.h"
+#include "core/layout/TextRunConstructor.h"
+#include "core/page/FocusController.h"
+#include "core/page/Page.h"
+#include "core/page/SpatialNavigation.h"
+#include "core/paint/DeprecatedPaintLayer.h"
+#include "platform/fonts/FontCache.h"
+#include "platform/graphics/GraphicsContext.h"
+#include "platform/text/BidiTextRun.h"
+#include <math.h>
 
 namespace blink {
 
-// Default size when the multiple attribute is present but size attribute is
-// absent.
+using namespace HTMLNames;
+
+// Default size when the multiple attribute is present but size attribute is absent.
 const int defaultSize = 4;
 
 const int defaultPaddingBottom = 1;
@@ -53,7 +77,9 @@ LayoutListBox::LayoutListBox(Element* element)
     ASSERT(isHTMLSelectElement(element));
 }
 
-LayoutListBox::~LayoutListBox() { }
+LayoutListBox::~LayoutListBox()
+{
+}
 
 inline HTMLSelectElement* LayoutListBox::selectElement() const
 {
@@ -71,45 +97,31 @@ unsigned LayoutListBox::size() const
 
 LayoutUnit LayoutListBox::defaultItemHeight() const
 {
-    const SimpleFontData* fontData = style()->font().primaryFont();
-    if (!fontData)
-        return LayoutUnit();
-    return LayoutUnit(fontData->getFontMetrics().height() + defaultPaddingBottom);
+    return style()->fontMetrics().height() + defaultPaddingBottom;
 }
 
 LayoutUnit LayoutListBox::itemHeight() const
 {
     HTMLSelectElement* select = selectElement();
     if (!select)
-        return LayoutUnit();
-
-    const auto& items = select->listItems();
-    if (items.isEmpty())
+        return 0;
+    Element* baseItem = ElementTraversal::firstChild(*select);
+    if (!baseItem)
         return defaultItemHeight();
-
-    LayoutUnit maxHeight;
-    for (Element* element : items) {
-        if (isHTMLOptGroupElement(element))
-            element = &toHTMLOptGroupElement(element)->optGroupLabelElement();
-        LayoutObject* layoutObject = element->layoutObject();
-        LayoutUnit itemHeight;
-        if (layoutObject && layoutObject->isBox())
-            itemHeight = toLayoutBox(layoutObject)->size().height();
-        else
-            itemHeight = defaultItemHeight();
-        maxHeight = std::max(maxHeight, itemHeight);
-    }
-    return maxHeight;
+    if (isHTMLOptGroupElement(baseItem))
+        baseItem = &toHTMLOptGroupElement(baseItem)->optGroupLabelElement();
+    else if (!isHTMLOptionElement(baseItem))
+        return defaultItemHeight();
+    LayoutObject* baseItemLayoutObject = baseItem->layoutObject();
+    if (!baseItemLayoutObject || !baseItemLayoutObject->isBox())
+        return defaultItemHeight();
+    return toLayoutBox(baseItemLayoutObject)->size().height();
 }
 
-void LayoutListBox::computeLogicalHeight(
-    LayoutUnit,
-    LayoutUnit logicalTop,
-    LogicalExtentComputedValues& computedValues) const
+void LayoutListBox::computeLogicalHeight(LayoutUnit, LayoutUnit logicalTop, LogicalExtentComputedValues& computedValues) const
 {
     LayoutUnit height = itemHeight() * size();
-    // FIXME: The item height should have been added before updateLogicalHeight
-    // was called to avoid this hack.
+    // FIXME: The item height should have been added before updateLogicalHeight was called to avoid this hack.
     setIntrinsicContentLogicalHeight(height);
 
     height += borderAndPaddingHeight();
@@ -125,24 +137,19 @@ void LayoutListBox::stopAutoscroll()
     select->handleMouseRelease();
 }
 
-void LayoutListBox::computeIntrinsicLogicalWidths(
-    LayoutUnit& minLogicalWidth,
-    LayoutUnit& maxLogicalWidth) const
+void LayoutListBox::computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const
 {
-    LayoutBlockFlow::computeIntrinsicLogicalWidths(minLogicalWidth,
-        maxLogicalWidth);
-    if (style()->width().isPercentOrCalc())
-        minLogicalWidth = LayoutUnit();
+    LayoutBlockFlow::computeIntrinsicLogicalWidths(minLogicalWidth, maxLogicalWidth);
+    if (style()->width().hasPercent())
+        minLogicalWidth = 0;
 }
 
 void LayoutListBox::scrollToRect(const LayoutRect& rect)
 {
     if (hasOverflowClip()) {
         ASSERT(layer());
-        ASSERT(layer()->getScrollableArea());
-        layer()->getScrollableArea()->scrollIntoView(
-            rect, ScrollAlignment::alignToEdgeIfNeeded,
-            ScrollAlignment::alignToEdgeIfNeeded);
+        ASSERT(layer()->scrollableArea());
+        layer()->scrollableArea()->scrollIntoView(rect, ScrollAlignment::alignToEdgeIfNeeded, ScrollAlignment::alignToEdgeIfNeeded);
     }
 }
 

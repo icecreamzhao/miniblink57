@@ -33,12 +33,10 @@
 
 #include "core/CoreExport.h"
 #include "platform/geometry/FloatSize.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 struct CORE_EXPORT PageScaleConstraints {
-    DISALLOW_NEW();
     FloatSize layoutSize;
 
     float initialScale;
@@ -51,8 +49,7 @@ struct CORE_EXPORT PageScaleConstraints {
     void overrideWith(const PageScaleConstraints& other);
     float clampToConstraints(float pageScaleFactor) const;
     void clampAll();
-    void fitToContentsWidth(float contentsWidth,
-        int viewWidthNotIncludingScrollbars);
+    void fitToContentsWidth(float contentsWidth, int viewWidthNotIncludingScrollbars);
     void resolveAutoInitialScale();
 
     bool operator==(const PageScaleConstraints& other) const;

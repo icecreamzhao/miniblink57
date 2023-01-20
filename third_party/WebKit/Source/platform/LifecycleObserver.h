@@ -28,6 +28,7 @@
 #define LifecycleObserver_h
 
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 
 namespace blink {
 
@@ -42,6 +43,34 @@ public:
     Context* lifecycleContext() const { return m_lifecycleContext; }
 
     void clearContext() { setContext(nullptr); }
+=======
+#include "wtf/Assertions.h"
+
+namespace blink {
+
+template<typename T, typename Observer, typename Notifier>
+class LifecycleObserver : public WillBeGarbageCollectedMixin {
+public:
+    using Context = T;
+
+#if !ENABLE(OILPAN)
+    virtual ~LifecycleObserver()
+    {
+        clearContext();
+    }
+#endif
+
+    EAGERLY_FINALIZE_WILL_BE_REMOVED();
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_lifecycleContext);
+    }
+
+    virtual void contextDestroyed() { }
+
+    Context* lifecycleContext() const { return m_lifecycleContext; }
+    void clearLifecycleContext() { m_lifecycleContext = nullptr; }
+>>>>>>> miniblink49
 
 protected:
     explicit LifecycleObserver(Context* context)
@@ -52,6 +81,7 @@ protected:
 
     void setContext(Context*);
 
+<<<<<<< HEAD
 private:
     WeakMember<Context> m_lifecycleContext;
 };
@@ -72,6 +102,27 @@ inline void LifecycleObserver<Context, Observer>::setContext(Context* context)
         static_cast<Notifier*>(m_lifecycleContext)
             ->addObserver(static_cast<Observer*>(this));
     }
+=======
+    void clearContext()
+    {
+        setContext(nullptr);
+    }
+
+private:
+    RawPtrWillBeWeakMember<Context> m_lifecycleContext;
+};
+
+template<typename T, typename Observer, typename Notifier>
+inline void LifecycleObserver<T, Observer, Notifier>::setContext(typename LifecycleObserver<T, Observer, Notifier>::Context* context)
+{
+    if (m_lifecycleContext)
+        static_cast<Notifier*>(m_lifecycleContext.get())->removeObserver(static_cast<Observer*>(this));
+
+    m_lifecycleContext = context;
+
+    if (m_lifecycleContext)
+        static_cast<Notifier*>(m_lifecycleContext.get())->addObserver(static_cast<Observer*>(this));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -26,6 +26,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/css/CSSSupportsRule.h"
 
 #include "core/css/CSSRule.h"
@@ -34,9 +35,8 @@
 
 namespace blink {
 
-CSSSupportsRule::CSSSupportsRule(StyleRuleSupports* supportsRule,
-    CSSStyleSheet* parent)
-    : CSSConditionRule(supportsRule, parent)
+CSSSupportsRule::CSSSupportsRule(StyleRuleSupports* supportsRule, CSSStyleSheet* parent)
+    : CSSGroupingRule(supportsRule, parent)
 {
 }
 
@@ -44,13 +44,18 @@ String CSSSupportsRule::cssText() const
 {
     StringBuilder result;
 
-    result.append("@supports ");
+    result.appendLiteral("@supports ");
     result.append(conditionText());
-    result.append(" {\n");
+    result.appendLiteral(" {\n");
     appendCSSTextForItems(result);
     result.append('}');
 
     return result.toString();
+}
+
+String CSSSupportsRule::conditionText() const
+{
+    return toStyleRuleSupports(m_groupRule.get())->conditionText();
 }
 
 } // namespace blink

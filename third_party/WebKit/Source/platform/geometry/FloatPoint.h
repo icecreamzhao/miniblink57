@@ -29,12 +29,17 @@
 
 #include "platform/geometry/FloatSize.h"
 #include "platform/geometry/IntPoint.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkPoint.h"
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/MathExtras.h"
 #include <algorithm>
 #include <iosfwd>
+=======
+#include "wtf/MathExtras.h"
+#include <algorithm>
+>>>>>>> miniblink49
 
 #if OS(MACOSX)
 typedef struct CGPoint CGPoint;
@@ -44,6 +49,11 @@ typedef struct CGPoint CGPoint;
 #endif
 #endif
 
+<<<<<<< HEAD
+=======
+struct SkPoint;
+
+>>>>>>> miniblink49
 namespace blink {
 
 class DoublePoint;
@@ -53,6 +63,7 @@ class LayoutPoint;
 class LayoutSize;
 
 class PLATFORM_EXPORT FloatPoint {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -85,6 +96,17 @@ public:
         , m_y(size.height())
     {
     }
+=======
+public:
+    FloatPoint() : m_x(0), m_y(0) { }
+    FloatPoint(float x, float y) : m_x(x), m_y(y) { }
+    FloatPoint(const IntPoint&);
+    explicit FloatPoint(const DoublePoint&);
+    explicit FloatPoint(const LayoutPoint&);
+    explicit FloatPoint(const FloatSize& size) : m_x(size.width()), m_y(size.height()) { }
+    explicit FloatPoint(const LayoutSize&);
+    explicit FloatPoint(const IntSize& size) : m_x(size.width()), m_y(size.height()) { }
+>>>>>>> miniblink49
 
     static FloatPoint zero() { return FloatPoint(); }
 
@@ -133,11 +155,25 @@ public:
         m_y *= sy;
     }
 
+<<<<<<< HEAD
     float dot(const FloatPoint& a) const { return m_x * a.x() + m_y * a.y(); }
 
     float slopeAngleRadians() const;
     float length() const;
     float lengthSquared() const { return m_x * m_x + m_y * m_y; }
+=======
+    float dot(const FloatPoint& a) const
+    {
+        return m_x * a.x() + m_y * a.y();
+    }
+
+    float slopeAngleRadians() const;
+    float length() const;
+    float lengthSquared() const
+    {
+        return m_x * m_x + m_y * m_y;
+    }
+>>>>>>> miniblink49
 
     FloatPoint expandedTo(const FloatPoint& other) const
     {
@@ -149,7 +185,14 @@ public:
         return FloatPoint(std::min(m_x, other.m_x), std::min(m_y, other.m_y));
     }
 
+<<<<<<< HEAD
     FloatPoint transposedPoint() const { return FloatPoint(m_y, m_x); }
+=======
+    FloatPoint transposedPoint() const
+    {
+        return FloatPoint(m_y, m_x);
+    }
+>>>>>>> miniblink49
 
     FloatPoint scaledBy(float scale) const
     {
@@ -165,6 +208,7 @@ public:
 #endif
 #endif
 
+<<<<<<< HEAD
     // Can we remove this one?
     SkPoint data() const;
 
@@ -172,10 +216,18 @@ public:
 
     String toString() const;
 
+=======
+    SkPoint data() const;
+
+>>>>>>> miniblink49
 private:
     float m_x, m_y;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 inline FloatPoint& operator+=(FloatPoint& a, const FloatSize& b)
 {
     a.move(b.width(), b.height());
@@ -285,6 +337,7 @@ inline FloatSize toFloatSize(const FloatPoint& a)
     return FloatSize(a.x(), a.y());
 }
 
+<<<<<<< HEAD
 // Find point where lines through the two pairs of points intersect.
 // Returns false if the lines don't intersect.
 PLATFORM_EXPORT bool findIntersection(const FloatPoint& p1,
@@ -298,5 +351,11 @@ PLATFORM_EXPORT bool findIntersection(const FloatPoint& p1,
 void PrintTo(const FloatPoint&, std::ostream*);
 
 } // namespace blink
+=======
+// Find point where lines through the two pairs of points intersect. Returns false if the lines don't intersect.
+PLATFORM_EXPORT bool findIntersection(const FloatPoint& p1, const FloatPoint& p2, const FloatPoint& d1, const FloatPoint& d2, FloatPoint& intersection);
+
+}
+>>>>>>> miniblink49
 
 #endif

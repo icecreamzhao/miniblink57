@@ -15,7 +15,10 @@
 class GrContext;
 class GrGpu;
 class GrResourceCache;
+<<<<<<< HEAD
 class SkTraceMemoryDump;
+=======
+>>>>>>> miniblink49
 
 /**
  * Base class for GrGpuResource. Handles the various types of refs we need. Separated out as a base
@@ -44,21 +47,33 @@ class SkTraceMemoryDump;
  * GrIORef and GrGpuResource are separate classes for organizational reasons and to be
  * able to give access via friendship to only the functions related to pending IO operations.
  */
+<<<<<<< HEAD
 template <typename DERIVED>
 class GrIORef : public SkNoncopyable {
+=======
+template <typename DERIVED> class GrIORef : public SkNoncopyable {
+>>>>>>> miniblink49
 public:
     // Some of the signatures are written to mirror SkRefCnt so that GrGpuResource can work with
     // templated helper classes (e.g. SkAutoTUnref). However, we have different categories of
     // refs (e.g. pending reads). We also don't require thread safety as GrCacheable objects are
     // not intended to cross thread boundaries.
+<<<<<<< HEAD
     void ref() const
     {
+=======
+    void ref() const {
+>>>>>>> miniblink49
         this->validate();
         ++fRefCnt;
     }
 
+<<<<<<< HEAD
     void unref() const
     {
+=======
+    void unref() const {
+>>>>>>> miniblink49
         this->validate();
 
         if (!(--fRefCnt)) {
@@ -70,8 +85,12 @@ public:
         this->didRemoveRefOrPendingIO(kRef_CntType);
     }
 
+<<<<<<< HEAD
     void validate() const
     {
+=======
+    void validate() const {
+>>>>>>> miniblink49
 #ifdef SK_DEBUG
         SkASSERT(fRefCnt >= 0);
         SkASSERT(fPendingReads >= 0);
@@ -81,12 +100,16 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     GrIORef()
         : fRefCnt(1)
         , fPendingReads(0)
         , fPendingWrites(0)
     {
     }
+=======
+    GrIORef() : fRefCnt(1), fPendingReads(0), fPendingWrites(0) { }
+>>>>>>> miniblink49
 
     enum CntType {
         kRef_CntType,
@@ -103,35 +126,55 @@ protected:
     bool internalHasRef() const { return SkToBool(fRefCnt); }
 
 private:
+<<<<<<< HEAD
     void addPendingRead() const
     {
+=======
+    void addPendingRead() const {
+>>>>>>> miniblink49
         this->validate();
         ++fPendingReads;
     }
 
+<<<<<<< HEAD
     void completedRead() const
     {
+=======
+    void completedRead() const {
+>>>>>>> miniblink49
         this->validate();
         --fPendingReads;
         this->didRemoveRefOrPendingIO(kPendingRead_CntType);
     }
 
+<<<<<<< HEAD
     void addPendingWrite() const
     {
+=======
+    void addPendingWrite() const {
+>>>>>>> miniblink49
         this->validate();
         ++fPendingWrites;
     }
 
+<<<<<<< HEAD
     void completedWrite() const
     {
+=======
+    void completedWrite() const {
+>>>>>>> miniblink49
         this->validate();
         --fPendingWrites;
         this->didRemoveRefOrPendingIO(kPendingWrite_CntType);
     }
 
 private:
+<<<<<<< HEAD
     void didRemoveRefOrPendingIO(CntType cntTypeRemoved) const
     {
+=======
+    void didRemoveRefOrPendingIO(CntType cntTypeRemoved) const {
+>>>>>>> miniblink49
         if (0 == fPendingReads && 0 == fPendingWrites && 0 == fRefCnt) {
             static_cast<const DERIVED*>(this)->notifyAllCntsAreZero(cntTypeRemoved);
         }
@@ -145,8 +188,12 @@ private:
     friend class GrGpuResourceRef;
     friend class GrResourceCache; // to check IO ref counts.
 
+<<<<<<< HEAD
     template <typename, GrIOType>
     friend class GrPendingIOResource;
+=======
+    template <typename, GrIOType> friend class GrPendingIOResource;
+>>>>>>> miniblink49
 };
 
 /**
@@ -154,6 +201,38 @@ private:
  */
 class SK_API GrGpuResource : public GrIORef<GrGpuResource> {
 public:
+<<<<<<< HEAD
+=======
+    
+
+    enum LifeCycle {
+        /**
+         * The resource is cached and owned by Skia. Resources with this status may be kept alive
+         * by the cache as either scratch or unique resources even when there are no refs to them.
+         * The cache may release them whenever there are no refs.
+         */
+        kCached_LifeCycle,
+
+        /**
+         * The resource is uncached. As soon as there are no more refs to it, it is released. Under
+         * the hood the cache may opaquely recycle it as a cached resource.
+         */
+        kUncached_LifeCycle,
+
+        /**
+         * Similar to uncached, but Skia does not manage the lifetime of the underlying backend
+         * 3D API object(s). The client is responsible for freeing those. Used to inject client-
+         * created GPU resources into Skia (e.g. to render to a client-created texture).
+         */
+        kBorrowed_LifeCycle,
+
+        /**
+         * An external resource with ownership transfered into Skia. Skia will free the resource.
+         */
+        kAdopted_LifeCycle,
+    };
+
+>>>>>>> miniblink49
     /**
      * Tests whether a object has been abandoned or released. All objects will
      * be in this state after their creating GrContext is destroyed or has
@@ -182,8 +261,12 @@ public:
      *
      * @return the amount of GPU memory used in bytes
      */
+<<<<<<< HEAD
     size_t gpuMemorySize() const
     {
+=======
+    size_t gpuMemorySize() const {
+>>>>>>> miniblink49
         if (kInvalidGpuMemorySize == fGpuMemorySize) {
             fGpuMemorySize = this->onGpuMemorySize();
             SkASSERT(kInvalidGpuMemorySize != fGpuMemorySize);
@@ -240,6 +323,7 @@ public:
      */
     void abandon();
 
+<<<<<<< HEAD
     /**
      * Dumps memory usage information for this GrGpuResource to traceMemoryDump.
      * Typically, subclasses should not need to override this, and should only
@@ -258,6 +342,14 @@ protected:
     void registerWithCacheWrapped();
 
     GrGpuResource(GrGpu*);
+=======
+protected:
+    // This must be called by every GrGpuObject. It should be called once the object is fully
+    // initialized (i.e. not in a base class constructor).
+    void registerWithCache();
+
+    GrGpuResource(GrGpu*, LifeCycle);
+>>>>>>> miniblink49
     virtual ~GrGpuResource();
 
     GrGpu* getGpu() const { return fGpu; }
@@ -269,6 +361,16 @@ protected:
         backend API calls should be made. */
     virtual void onAbandon() { }
 
+<<<<<<< HEAD
+=======
+    bool shouldFreeResources() const { return fLifeCycle != kBorrowed_LifeCycle; }
+
+    bool isExternal() const {
+        return GrGpuResource::kAdopted_LifeCycle == fLifeCycle ||
+               GrGpuResource::kBorrowed_LifeCycle == fLifeCycle;
+    }
+
+>>>>>>> miniblink49
     /**
      * This entry point should be called whenever gpuMemorySize() should report a different size.
      * The cache will call gpuMemorySize() to update the current size of the resource.
@@ -276,6 +378,7 @@ protected:
     void didChangeGpuMemorySize() const;
 
     /**
+<<<<<<< HEAD
      * Allows subclasses to add additional backing information to the SkTraceMemoryDump. Called by
      * onMemoryDump. The default implementation adds no backing information.
      **/
@@ -291,6 +394,15 @@ private:
     virtual void computeScratchKey(GrScratchKey*) const {};
 
     /**
+=======
+     * Optionally called by the GrGpuResource subclass if the resource can be used as scratch.
+     * By default resources are not usable as scratch. This should only be called once.
+     **/
+    void setScratchKey(const GrScratchKey& scratchKey);
+
+private:
+    /**
+>>>>>>> miniblink49
      * Frees the object in the underlying 3D API. Called by CacheAccess.
      */
     void release();
@@ -314,6 +426,7 @@ private:
 
     // An index into a heap when this resource is purgeable or an array when not. This is maintained
     // by the cache.
+<<<<<<< HEAD
     int fCacheArrayIndex;
     // This value reflects how recently this resource was accessed in the cache. This is maintained
     // by the cache.
@@ -333,6 +446,26 @@ private:
     const uint32_t fUniqueID;
 
     SkAutoTUnref<const SkData> fData;
+=======
+    int                         fCacheArrayIndex;
+    // This value reflects how recently this resource was accessed in the cache. This is maintained
+    // by the cache.
+    uint32_t                    fTimestamp;
+
+    static const size_t kInvalidGpuMemorySize = ~static_cast<size_t>(0);
+    GrScratchKey                fScratchKey;
+    GrUniqueKey                 fUniqueKey;
+
+    // This is not ref'ed but abandon() or release() will be called before the GrGpu object
+    // is destroyed. Those calls set will this to NULL.
+    GrGpu*                      fGpu;
+    mutable size_t              fGpuMemorySize;
+
+    LifeCycle                   fLifeCycle;
+    const uint32_t              fUniqueID;
+
+    SkAutoTUnref<const SkData>  fData;
+>>>>>>> miniblink49
 
     typedef GrIORef<GrGpuResource> INHERITED;
     friend class GrIORef<GrGpuResource>; // to access notifyAllCntsAreZero and notifyRefCntIsZero.

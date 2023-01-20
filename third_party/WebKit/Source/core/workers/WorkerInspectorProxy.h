@@ -6,62 +6,54 @@
 #define WorkerInspectorProxy_h
 
 #include "core/CoreExport.h"
-#include "core/inspector/ConsoleMessage.h"
-#include "core/workers/WorkerThread.h"
-#include "platform/heap/Handle.h"
+#include "public/platform/WebThread.h"
 #include "wtf/Forward.h"
 
 namespace blink {
 
-class Document;
+class ExecutionContext;
 class KURL;
+class WebTraceLocation;
+class WorkerGlobalScopeProxy;
+class WorkerThread;
 
 // A proxy for talking to the worker inspector on the worker thread.
 // All of these methods should be called on the main thread.
-class CORE_EXPORT WorkerInspectorProxy final
-    : public GarbageCollectedFinalized<WorkerInspectorProxy> {
+class CORE_EXPORT WorkerInspectorProxy final {
 public:
-    static WorkerInspectorProxy* create();
+    static PassOwnPtr<WorkerInspectorProxy> create();
 
     ~WorkerInspectorProxy();
-    DECLARE_TRACE();
 
-    class CORE_EXPORT PageInspector {
+    class PageInspector {
     public:
         virtual ~PageInspector() { }
-        virtual void dispatchMessageFromWorker(WorkerInspectorProxy*,
-            const String&)
-            = 0;
+        virtual void dispatchMessageFromWorker(const String&) = 0;
+        virtual void workerConsoleAgentEnabled(WorkerGlobalScopeProxy*) = 0;
     };
 
-    WorkerThreadStartMode workerStartMode(Document*);
-    void workerThreadCreated(Document*, WorkerThread*, const KURL&);
+    void workerThreadCreated(ExecutionContext*, WorkerThread*, const KURL&);
     void workerThreadTerminated();
-    void dispatchMessageFromWorker(const String&);
-    void addConsoleMessageFromWorker(MessageLevel,
-        const String& message,
-        std::unique_ptr<SourceLocation>);
 
     void connectToInspector(PageInspector*);
-    void disconnectFromInspector(PageInspector*);
+    void disconnectFromInspector();
     void sendMessageToInspector(const String&);
-    void writeTimelineStartedEvent(const String& sessionId);
+    void writeTimelineStartedEvent(const String& sessionId, const String& workerId);
 
-    const String& url() { return m_url; }
-    Document* getDocument() { return m_document; }
-    const String& inspectorId();
+    PageInspector* pageInspector() const { return m_pageInspector; }
 
-    using WorkerInspectorProxySet = PersistentHeapHashSet<WeakMember<WorkerInspectorProxy>>;
-    static const WorkerInspectorProxySet& allProxies();
+    void setWorkerGlobalScopeProxy(WorkerGlobalScopeProxy* proxy) { m_workerGlobalScopeProxy = proxy; }
+    WorkerGlobalScopeProxy* workerGlobalScopeProxy() const { return m_workerGlobalScopeProxy; }
 
 private:
     WorkerInspectorProxy();
 
+    void addDebuggerTaskForWorker(const WebTraceLocation&, PassOwnPtr<WebThread::Task>);
+
     WorkerThread* m_workerThread;
-    Member<Document> m_document;
-    PageInspector* m_pageInspector;
-    String m_url;
-    String m_inspectorId;
+    ExecutionContext* m_executionContext;
+    WorkerInspectorProxy::PageInspector* m_pageInspector;
+    WorkerGlobalScopeProxy* m_workerGlobalScopeProxy;
 };
 
 } // namespace blink

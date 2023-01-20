@@ -12,6 +12,7 @@
 namespace ots {
 
 struct OpenTypeHDMXDeviceRecord {
+<<<<<<< HEAD
     uint8_t pixel_size;
     uint8_t max_width;
     std::vector<uint8_t> widths;
@@ -25,5 +26,20 @@ struct OpenTypeHDMX {
 };
 
 } // namespace ots
+=======
+  uint8_t pixel_size;
+  uint8_t max_width;
+  std::vector<uint8_t> widths;
+};
+
+struct OpenTypeHDMX {
+  uint16_t version;
+  int32_t size_device_record;
+  int32_t pad_len;
+  std::vector<OpenTypeHDMXDeviceRecord> records;
+};
+
+}  // namespace ots
+>>>>>>> miniblink49
 
 #endif

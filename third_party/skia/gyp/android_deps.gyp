@@ -52,13 +52,18 @@
             },
           },
           {
+<<<<<<< HEAD
             'target_name': 'libjpeg-turbo',
+=======
+            'target_name': 'jpeg',
+>>>>>>> miniblink49
             'type': 'none',
             'direct_dependent_settings': {
               'libraries' : [
                 '-ljpeg',
               ],
               'include_dirs': [
+<<<<<<< HEAD
                 'external/libjpeg-turbo',
               ],
             },
@@ -84,6 +89,9 @@
               ],
               'include_dirs': [
                 'external/piex',
+=======
+                'external/jpeg',
+>>>>>>> miniblink49
               ],
             },
           },

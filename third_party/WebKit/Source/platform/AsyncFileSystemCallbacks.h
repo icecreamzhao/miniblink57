@@ -35,15 +35,22 @@
 #include "platform/FileSystemType.h"
 #include "platform/blob/BlobData.h"
 #include "public/platform/WebFileWriter.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "wtf/Assertions.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT AsyncFileSystemCallbacks {
+<<<<<<< HEAD
     USING_FAST_MALLOC(AsyncFileSystemCallbacks);
     WTF_MAKE_NONCOPYABLE(AsyncFileSystemCallbacks);
 
@@ -52,11 +59,17 @@ public:
         : m_blockUntilCompletion(false)
     {
     }
+=======
+    WTF_MAKE_NONCOPYABLE(AsyncFileSystemCallbacks);
+public:
+    AsyncFileSystemCallbacks() : m_blockUntilCompletion(false) { }
+>>>>>>> miniblink49
 
     // Called when a requested operation is completed successfully.
     virtual void didSucceed() { ASSERT_NOT_REACHED(); }
 
     // Called when a requested file system is opened.
+<<<<<<< HEAD
     virtual void didOpenFileSystem(const String& name, const KURL& rootURL)
     {
         ASSERT_NOT_REACHED();
@@ -71,11 +84,18 @@ public:
     {
         ASSERT_NOT_REACHED();
     }
+=======
+    virtual void didOpenFileSystem(const String& name, const KURL& rootURL) { ASSERT_NOT_REACHED(); }
+
+    // Called when a filesystem URL is resolved.
+    virtual void didResolveURL(const String& name, const KURL& rootURL, FileSystemType, const String& filePath, bool isDirectory) { ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
 
     // Called when a file metadata is read successfully.
     virtual void didReadMetadata(const FileMetadata&) { ASSERT_NOT_REACHED(); }
 
     // Called when a snapshot file is created successfully.
+<<<<<<< HEAD
     virtual void didCreateSnapshotFile(const FileMetadata&,
         PassRefPtr<BlobDataHandle> snapshot)
     {
@@ -99,6 +119,18 @@ public:
     {
         ASSERT_NOT_REACHED();
     }
+=======
+    virtual void didCreateSnapshotFile(const FileMetadata&, PassRefPtr<BlobDataHandle> snapshot) { ASSERT_NOT_REACHED(); }
+
+    // Called when a directory entry is read.
+    virtual void didReadDirectoryEntry(const String& name, bool isDirectory) { ASSERT_NOT_REACHED(); }
+
+    // Called after a chunk of directory entries have been read (i.e. indicates it's good time to call back to the application). If hasMore is true there can be more chunks.
+    virtual void didReadDirectoryEntries(bool hasMore) { ASSERT_NOT_REACHED(); }
+
+    // Called when an AsyncFileWrter has been created successfully.
+    virtual void didCreateFileWriter(PassOwnPtr<WebFileWriter>, long long length) { ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
 
     // Called when there was an error.
     virtual void didFail(int code) = 0;

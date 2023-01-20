@@ -31,6 +31,7 @@
 #ifndef WrappedResourceRequest_h
 #define WrappedResourceRequest_h
 
+<<<<<<< HEAD
 #include "public/platform/WebURLRequest.h"
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
@@ -54,6 +55,50 @@ public:
         : WrappedResourceRequest(const_cast<ResourceRequest&>(resourceRequest))
     {
     }
+=======
+#include "platform/exported/WebURLRequestPrivate.h"
+#include "public/platform/WebURLRequest.h"
+
+namespace blink {
+
+class WrappedResourceRequest : public WebURLRequest {
+public:
+    ~WrappedResourceRequest()
+    {
+        reset(); // Need to drop reference to m_handle
+    }
+
+    WrappedResourceRequest() { }
+
+    WrappedResourceRequest(ResourceRequest& resourceRequest)
+    {
+        bind(resourceRequest);
+    }
+
+    WrappedResourceRequest(const ResourceRequest& resourceRequest)
+    {
+        bind(resourceRequest);
+    }
+
+    void bind(ResourceRequest& resourceRequest)
+    {
+        m_handle.m_resourceRequest = &resourceRequest;
+        assign(&m_handle);
+    }
+
+    void bind(const ResourceRequest& resourceRequest)
+    {
+        bind(*const_cast<ResourceRequest*>(&resourceRequest));
+    }
+
+private:
+    class Handle : public WebURLRequestPrivate {
+    public:
+        virtual void dispose() { m_resourceRequest = 0; }
+    };
+
+    Handle m_handle;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

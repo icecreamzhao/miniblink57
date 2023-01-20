@@ -34,27 +34,17 @@ class LayoutIFrame final : public LayoutPart {
 public:
     explicit LayoutIFrame(Element*);
 
-    const char* name() const override { return "LayoutIFrame"; }
-
-#ifdef TENCENT_FITSCREEN_FRAEME_FLATTEN
-    bool flattenFrame() const;
-#endif
-#ifdef TENCENT_FITSCREEN
-    void initialIntrinsicSize();
-#endif
+    virtual const char* name() const override { return "LayoutIFrame"; }
 
 private:
-    bool shouldComputeSizeAsReplaced() const override;
-    bool isInlineBlockOrInlineTable() const override;
+    virtual bool shouldComputeSizeAsReplaced() const override;
+    virtual bool isInlineBlockOrInlineTable() const override;
 
-    void layout() override;
+    virtual void layout() override;
 
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectLayoutIFrame || LayoutPart::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectLayoutIFrame || LayoutPart::isOfType(type); }
 
-    PaintLayerType layerTypeRequired() const override;
+    virtual DeprecatedPaintLayerType layerTypeRequired() const override;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutIFrame, isLayoutIFrame());

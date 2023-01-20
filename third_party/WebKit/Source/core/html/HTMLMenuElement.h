@@ -29,7 +29,6 @@ namespace blink {
 
 class HTMLMenuElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLMenuElement);
 

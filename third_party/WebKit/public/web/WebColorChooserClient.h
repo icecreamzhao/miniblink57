@@ -42,6 +42,10 @@ public:
     // Called when color chooser has ended.
     virtual void didEndChooser() { }
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 }
 
 #endif // WebColorChooserClient_h

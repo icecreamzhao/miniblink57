@@ -9,19 +9,30 @@
 
 #include "Test.h"
 
+<<<<<<< HEAD
 static SkScalar* iset(SkScalar array[3], int a, int b, int c)
 {
+=======
+static SkScalar* iset(SkScalar array[3], int a, int b, int c) {
+>>>>>>> miniblink49
     array[0] = SkIntToScalar(a);
     array[1] = SkIntToScalar(b);
     array[2] = SkIntToScalar(c);
     return array;
 }
 
+<<<<<<< HEAD
 DEF_TEST(Interpolator, reporter)
 {
     SkInterpolator inter(3, 2);
     SkScalar v1[3], v2[3], v[3];
     SkInterpolator::Result result;
+=======
+DEF_TEST(Interpolator, reporter) {
+    SkInterpolator  inter(3, 2);
+    SkScalar        v1[3], v2[3], v[3];
+    SkInterpolator::Result          result;
+>>>>>>> miniblink49
 
     inter.setKeyFrame(0, 100, iset(v1, 10, 20, 30), 0);
     inter.setKeyFrame(1, 200, iset(v2, 110, 220, 330));
@@ -60,6 +71,7 @@ DEF_TEST(Interpolator, reporter)
     result = inter.timeToValues(175, v);
     REPORTER_ASSERT(reporter, result == SkInterpolator::kNormal_Result);
 
+<<<<<<< HEAD
     for (SkScalar val = -0.1f; val <= 1.1f; val += 0.1f) {
         REPORTER_ASSERT(reporter, SkScalarNearlyEqual(SkTPin(0.f, val, 1.f), SkUnitCubicInterp(val, 1.f / 3, 1.f / 3, 2.f / 3, 2.f / 3)));
     }
@@ -89,4 +101,6 @@ DEF_TEST(Interpolator, reporter)
         ++i;
         SkDebugf("\n");
     }
+=======
+>>>>>>> miniblink49
 }

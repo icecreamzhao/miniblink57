@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkSVGLinearGradient.h"
 #include "SkSVGParser.h"
 
@@ -19,8 +27,12 @@ const SkSVGAttribute SkSVGLinearGradient::gAttributes[] = {
 
 DEFINE_SVG_INFO(LinearGradient)
 
+<<<<<<< HEAD
 void SkSVGLinearGradient::translate(SkSVGParser& parser, bool defState)
 {
+=======
+void SkSVGLinearGradient::translate(SkSVGParser& parser, bool defState) {
+>>>>>>> miniblink49
     if (fMatrixID.size() == 0)
         parser.translateMatrix(f_gradientTransform, &fMatrixID);
     parser._startElement("linearGradient");

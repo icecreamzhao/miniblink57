@@ -1944,6 +1944,7 @@ static CURLcode findprotocol(struct Curl_easy *data,
   const struct Curl_handler * const *pp;
   const struct Curl_handler *p;
 
+<<<<<<< HEAD
 #if 1 // def USE_HSTS
   /* HSTS means we override any http access with https if the domain
   is listed in the HSTS database.
@@ -1955,6 +1956,19 @@ static CURLcode findprotocol(struct Curl_easy *data,
       protostr = "https";
     }
   }
+=======
+#if 1 // def USE_HSTS
+  /* HSTS means we override any http access with https if the domain
+  is listed in the HSTS database.
+  https://github.com/curl/curl/pull/2682/files
+  */
+  if (strcasecompare(protostr, "http")) {
+    if (0 != strstr(conn->host.name, "passport.liepin.com")) {
+      infof(data, "Domain found in HSTS database, upgrading to https\n");
+      protostr = "https";
+    }
+  }
+>>>>>>> miniblink49
 #endif
 
   /* Scan protocol handler table and match against 'protostr' to set a few
@@ -2001,11 +2015,19 @@ static CURLcode parseurlandfillconn(struct Curl_easy *data,
                                     char **userp, char **passwdp,
                                     char **optionsp)
 {
+<<<<<<< HEAD
   char *at = 0;
   char *fragment = 0;
   char *path = data->state.path;
   char *query = 0;
   int rc = 0;
+=======
+  char *at;
+  char *fragment;
+  char *path = data->state.path;
+  char *query;
+  int rc;
+>>>>>>> miniblink49
   const char *protop = "";
   CURLcode result;
   bool rebuild_url = FALSE;
@@ -2418,8 +2440,11 @@ static CURLcode parseurlandfillconn(struct Curl_easy *data,
     /* Override any scope that was set above.  */
     conn->scope_id = data->set.scope_id;
 
+<<<<<<< HEAD
   // https://github.com/curl/curl/commit/46e164069d1a5230e4e64cbd2ff46c46cce056bb#diff-8fb104c402dc51bdffef05a372f32aa2
 #if 1
+=======
+>>>>>>> miniblink49
   /* Remove the fragment part of the path. Per RFC 2396, this is always the
      last part of the URI. We are looking for the first '#' so that we deal
      gracefully with non conformant URI such as http://example.com#foo#bar. */
@@ -2441,10 +2466,13 @@ static CURLcode parseurlandfillconn(struct Curl_easy *data,
    *   conn->host.name is B
    *   data->state.path is /C
    */
+<<<<<<< HEAD
 #else
   fragment = fragment;
 #endif
 
+=======
+>>>>>>> miniblink49
   return CURLE_OK;
 }
 

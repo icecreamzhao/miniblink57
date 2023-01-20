@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLBaseElement.h"
 
 #include "core/HTMLNames.h"
@@ -39,20 +40,18 @@ inline HTMLBaseElement::HTMLBaseElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLBaseElement)
 
-void HTMLBaseElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLBaseElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == hrefAttr || params.name == targetAttr)
+    if (name == hrefAttr || name == targetAttr)
         document().processBaseElement();
     else
-        HTMLElement::parseAttribute(params);
+        HTMLElement::parseAttribute(name, value);
 }
 
-Node::InsertionNotificationRequest HTMLBaseElement::insertedInto(
-    ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLBaseElement::insertedInto(ContainerNode* insertionPoint)
 {
     HTMLElement::insertedInto(insertionPoint);
-    if (insertionPoint->isConnected())
+    if (insertionPoint->inDocument())
         document().processBaseElement();
     return InsertionDone;
 }
@@ -60,7 +59,7 @@ Node::InsertionNotificationRequest HTMLBaseElement::insertedInto(
 void HTMLBaseElement::removedFrom(ContainerNode* insertionPoint)
 {
     HTMLElement::removedFrom(insertionPoint);
-    if (insertionPoint->isConnected())
+    if (insertionPoint->inDocument())
         document().processBaseElement();
 }
 
@@ -71,21 +70,17 @@ bool HTMLBaseElement::isURLAttribute(const Attribute& attribute) const
 
 KURL HTMLBaseElement::href() const
 {
-    // This does not use the getURLAttribute function because that will resolve
-    // relative to the document's base URL; base elements like this one can be
-    // used to set that base URL. Thus we need to resolve relative to the
-    // document's URL and ignore the base URL.
+    // This does not use the getURLAttribute function because that will resolve relative to the document's base URL;
+    // base elements like this one can be used to set that base URL. Thus we need to resolve relative to the document's
+    // URL and ignore the base URL.
 
     const AtomicString& attributeValue = fastGetAttribute(hrefAttr);
     if (attributeValue.isNull())
         return document().url();
 
-    KURL url = document().encoding().isValid()
-        ? KURL(document().url(),
-            stripLeadingAndTrailingHTMLSpaces(attributeValue))
-        : KURL(document().url(),
-            stripLeadingAndTrailingHTMLSpaces(attributeValue),
-            document().encoding());
+    KURL url = document().encoding().isValid() ?
+        KURL(document().url(), stripLeadingAndTrailingHTMLSpaces(attributeValue)) :
+        KURL(document().url(), stripLeadingAndTrailingHTMLSpaces(attributeValue), document().encoding());
 
     if (!url.isValid())
         return KURL();
@@ -98,4 +93,4 @@ void HTMLBaseElement::setHref(const AtomicString& value)
     setAttribute(hrefAttr, value);
 }
 
-} // namespace blink
+}

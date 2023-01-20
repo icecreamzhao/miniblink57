@@ -9,9 +9,15 @@
 #define GrBezierEffect_DEFINED
 
 #include "GrCaps.h"
+<<<<<<< HEAD
 #include "GrGeometryProcessor.h"
 #include "GrInvariantOutput.h"
 #include "GrProcessor.h"
+=======
+#include "GrProcessor.h"
+#include "GrGeometryProcessor.h"
+#include "GrInvariantOutput.h"
+>>>>>>> miniblink49
 #include "GrTypesPriv.h"
 
 /**
@@ -58,6 +64,7 @@ class GrGLConicEffect;
 
 class GrConicEffect : public GrGeometryProcessor {
 public:
+<<<<<<< HEAD
     static sk_sp<GrGeometryProcessor> Make(GrColor color,
         const SkMatrix& viewMatrix,
         const GrPrimitiveEdgeType edgeType,
@@ -88,6 +95,36 @@ public:
                     localMatrix, usesLocalCoords));
         default:
             return nullptr;
+=======
+    static GrGeometryProcessor* Create(GrColor color,
+                                       const SkMatrix& viewMatrix,
+                                       const GrPrimitiveEdgeType edgeType,
+                                       const GrCaps& caps,
+                                       const SkMatrix& localMatrix,
+                                       bool usesLocalCoords,
+                                       uint8_t coverage = 0xff) {
+        switch (edgeType) {
+            case kFillAA_GrProcessorEdgeType:
+                if (!caps.shaderCaps()->shaderDerivativeSupport()) {
+                    return NULL;
+                }
+                return SkNEW_ARGS(GrConicEffect, (color, viewMatrix, coverage,
+                                                  kFillAA_GrProcessorEdgeType,
+                                                  localMatrix, usesLocalCoords));
+            case kHairlineAA_GrProcessorEdgeType:
+                if (!caps.shaderCaps()->shaderDerivativeSupport()) {
+                    return NULL;
+                }
+                return SkNEW_ARGS(GrConicEffect, (color, viewMatrix, coverage,
+                                                  kHairlineAA_GrProcessorEdgeType,
+                                                  localMatrix, usesLocalCoords));
+            case kFillBW_GrProcessorEdgeType:
+                return SkNEW_ARGS(GrConicEffect, (color, viewMatrix, coverage,
+                                                  kFillBW_GrProcessorEdgeType,
+                                                  localMatrix, usesLocalCoords));
+            default:
+                return NULL;
+>>>>>>> miniblink49
         }
     }
 
@@ -107,6 +144,7 @@ public:
     bool usesLocalCoords() const { return fUsesLocalCoords; }
     uint8_t coverageScale() const { return fCoverageScale; }
 
+<<<<<<< HEAD
     void getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
 
     GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps&) const override;
@@ -123,6 +161,27 @@ private:
     GrPrimitiveEdgeType fEdgeType;
     const Attribute* fInPosition;
     const Attribute* fInConicCoeffs;
+=======
+    virtual void getGLProcessorKey(const GrBatchTracker& bt,
+                                   const GrGLSLCaps& caps,
+                                   GrProcessorKeyBuilder* b) const override;
+
+    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
+                                                     const GrGLSLCaps&) const override;
+
+private:
+    GrConicEffect(GrColor, const SkMatrix& viewMatrix, uint8_t coverage, GrPrimitiveEdgeType,
+                  const SkMatrix& localMatrix, bool usesLocalCoords);
+
+    GrColor             fColor;
+    SkMatrix            fViewMatrix;
+    SkMatrix            fLocalMatrix;
+    bool                fUsesLocalCoords;
+    uint8_t             fCoverageScale;
+    GrPrimitiveEdgeType fEdgeType;
+    const Attribute*    fInPosition;
+    const Attribute*    fInConicCoeffs;
+>>>>>>> miniblink49
 
     GR_DECLARE_GEOMETRY_PROCESSOR_TEST;
 
@@ -142,6 +201,7 @@ class GrGLQuadEffect;
 
 class GrQuadEffect : public GrGeometryProcessor {
 public:
+<<<<<<< HEAD
     static sk_sp<GrGeometryProcessor> Make(GrColor color,
         const SkMatrix& viewMatrix,
         const GrPrimitiveEdgeType edgeType,
@@ -172,6 +232,36 @@ public:
                     localMatrix, usesLocalCoords));
         default:
             return nullptr;
+=======
+    static GrGeometryProcessor* Create(GrColor color,
+                                       const SkMatrix& viewMatrix,
+                                       const GrPrimitiveEdgeType edgeType,
+                                       const GrCaps& caps,
+                                       const SkMatrix& localMatrix,
+                                       bool usesLocalCoords,
+                                       uint8_t coverage = 0xff) {
+        switch (edgeType) {
+            case kFillAA_GrProcessorEdgeType:
+                if (!caps.shaderCaps()->shaderDerivativeSupport()) {
+                    return NULL;
+                }
+                return SkNEW_ARGS(GrQuadEffect, (color, viewMatrix, coverage,
+                                                 kFillAA_GrProcessorEdgeType,
+                                                 localMatrix, usesLocalCoords));
+            case kHairlineAA_GrProcessorEdgeType:
+                if (!caps.shaderCaps()->shaderDerivativeSupport()) {
+                    return NULL;
+                }
+                return SkNEW_ARGS(GrQuadEffect, (color, viewMatrix, coverage,
+                                                 kHairlineAA_GrProcessorEdgeType,
+                                                 localMatrix, usesLocalCoords));
+            case kFillBW_GrProcessorEdgeType:
+                return SkNEW_ARGS(GrQuadEffect, (color, viewMatrix, coverage,
+                                                 kFillBW_GrProcessorEdgeType,
+                                                 localMatrix, usesLocalCoords));
+            default:
+                return NULL;
+>>>>>>> miniblink49
         }
     }
 
@@ -191,6 +281,7 @@ public:
     bool usesLocalCoords() const { return fUsesLocalCoords; }
     uint8_t coverageScale() const { return fCoverageScale; }
 
+<<<<<<< HEAD
     void getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
 
     GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps&) const override;
@@ -207,6 +298,27 @@ private:
     GrPrimitiveEdgeType fEdgeType;
     const Attribute* fInPosition;
     const Attribute* fInHairQuadEdge;
+=======
+    virtual void getGLProcessorKey(const GrBatchTracker& bt,
+                                   const GrGLSLCaps& caps,
+                                   GrProcessorKeyBuilder* b) const override;
+
+    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
+                                                     const GrGLSLCaps&) const override;
+
+private:
+    GrQuadEffect(GrColor, const SkMatrix& viewMatrix, uint8_t coverage, GrPrimitiveEdgeType,
+                 const SkMatrix& localMatrix, bool usesLocalCoords);
+
+    GrColor             fColor;
+    SkMatrix            fViewMatrix;
+    SkMatrix            fLocalMatrix;
+    bool                fUsesLocalCoords;
+    uint8_t             fCoverageScale;
+    GrPrimitiveEdgeType fEdgeType;
+    const Attribute*    fInPosition;
+    const Attribute*    fInHairQuadEdge;
+>>>>>>> miniblink49
 
     GR_DECLARE_GEOMETRY_PROCESSOR_TEST;
 
@@ -228,6 +340,7 @@ class GrGLCubicEffect;
 
 class GrCubicEffect : public GrGeometryProcessor {
 public:
+<<<<<<< HEAD
     static sk_sp<GrGeometryProcessor> Make(GrColor color,
         const SkMatrix& viewMatrix,
         const GrPrimitiveEdgeType edgeType,
@@ -251,6 +364,29 @@ public:
                 new GrCubicEffect(color, viewMatrix, kFillBW_GrProcessorEdgeType));
         default:
             return nullptr;
+=======
+    static GrGeometryProcessor* Create(GrColor color,
+                                       const SkMatrix& viewMatrix,
+                                       const GrPrimitiveEdgeType edgeType,
+                                       const GrCaps& caps) {
+        switch (edgeType) {
+            case kFillAA_GrProcessorEdgeType:
+                if (!caps.shaderCaps()->shaderDerivativeSupport()) {
+                    return NULL;
+                }
+                return SkNEW_ARGS(GrCubicEffect, (color, viewMatrix, kFillAA_GrProcessorEdgeType));
+            case kHairlineAA_GrProcessorEdgeType:
+                if (!caps.shaderCaps()->shaderDerivativeSupport()) {
+                    return NULL;
+                }
+                return SkNEW_ARGS(GrCubicEffect, (color, viewMatrix,
+                                                  kHairlineAA_GrProcessorEdgeType));
+            case kFillBW_GrProcessorEdgeType:
+                return SkNEW_ARGS(GrCubicEffect, (color, viewMatrix,
+                                                  kFillBW_GrProcessorEdgeType));
+            default:
+                return NULL;
+>>>>>>> miniblink49
         }
     }
 
@@ -267,18 +403,35 @@ public:
     bool colorIgnored() const { return GrColor_ILLEGAL == fColor; }
     const SkMatrix& viewMatrix() const { return fViewMatrix; }
 
+<<<<<<< HEAD
     void getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
 
     GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps&) const override;
+=======
+    virtual void getGLProcessorKey(const GrBatchTracker& bt,
+                                   const GrGLSLCaps& caps,
+                                   GrProcessorKeyBuilder* b) const override;
+
+    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
+                                                     const GrGLSLCaps&) const override;
+>>>>>>> miniblink49
 
 private:
     GrCubicEffect(GrColor, const SkMatrix& viewMatrix, GrPrimitiveEdgeType);
 
+<<<<<<< HEAD
     GrColor fColor;
     SkMatrix fViewMatrix;
     GrPrimitiveEdgeType fEdgeType;
     const Attribute* fInPosition;
     const Attribute* fInCubicCoeffs;
+=======
+    GrColor             fColor;
+    SkMatrix            fViewMatrix;
+    GrPrimitiveEdgeType fEdgeType;
+    const Attribute*    fInPosition;
+    const Attribute*    fInCubicCoeffs;
+>>>>>>> miniblink49
 
     GR_DECLARE_GEOMETRY_PROCESSOR_TEST;
 

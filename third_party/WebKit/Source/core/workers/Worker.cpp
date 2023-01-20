@@ -2,14 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/workers/Worker.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/frame/UseCounter.h"
-#include "core/workers/DedicatedWorkerMessagingProxyProvider.h"
-#include "core/workers/InProcessWorkerMessagingProxy.h"
+#include "core/workers/WorkerGlobalScopeProxy.h"
+#include "core/workers/WorkerGlobalScopeProxyProvider.h"
 
 namespace blink {
 
@@ -18,27 +19,24 @@ Worker::Worker(ExecutionContext* context)
 {
 }
 
-Worker* Worker::create(ExecutionContext* context,
-    const String& url,
-    ExceptionState& exceptionState)
+PassRefPtrWillBeRawPtr<Worker> Worker::create(ExecutionContext* context, const String& url, ExceptionState& exceptionState)
 {
-    DCHECK(isMainThread());
+    ASSERT(isMainThread());
     Document* document = toDocument(context);
     UseCounter::count(context, UseCounter::WorkerStart);
     if (!document->page()) {
-        exceptionState.throwDOMException(InvalidAccessError,
-            "The context provided is invalid.");
+        exceptionState.throwDOMException(InvalidAccessError, "The context provided is invalid.");
         return nullptr;
     }
-    Worker* worker = new Worker(context);
+    RefPtrWillBeRawPtr<Worker> worker = adoptRefWillBeNoop(new Worker(context));
     if (worker->initialize(context, url, exceptionState))
-        return worker;
+        return worker.release();
     return nullptr;
 }
 
 Worker::~Worker()
 {
-    DCHECK(isMainThread());
+    ASSERT(isMainThread());
 }
 
 const AtomicString& Worker::interfaceName() const
@@ -46,13 +44,12 @@ const AtomicString& Worker::interfaceName() const
     return EventTargetNames::Worker;
 }
 
-InProcessWorkerMessagingProxy* Worker::createInProcessWorkerMessagingProxy(
-    ExecutionContext* context)
+WorkerGlobalScopeProxy* Worker::createWorkerGlobalScopeProxy(ExecutionContext* context)
 {
     Document* document = toDocument(context);
-    DedicatedWorkerMessagingProxyProvider* proxyProvider = DedicatedWorkerMessagingProxyProvider::from(*document->page());
-    DCHECK(proxyProvider);
-    return proxyProvider->createWorkerMessagingProxy(this);
+    WorkerGlobalScopeProxyProvider* proxyProvider = WorkerGlobalScopeProxyProvider::from(*document->page());
+    ASSERT(proxyProvider);
+    return proxyProvider->createWorkerGlobalScopeProxy(this);
 }
 
 } // namespace blink

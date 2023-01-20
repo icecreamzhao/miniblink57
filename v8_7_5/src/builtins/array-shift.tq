@@ -6,7 +6,11 @@ namespace array_shift {
   extern builtin ArrayShift(Context, JSFunction, Object, int32);
 
   macro TryFastArrayShift(implicit context: Context)(
+<<<<<<< HEAD
       receiver: Object, arguments: Arguments): Object
+=======
+      receiver: Object, arguments: constexpr Arguments): Object
+>>>>>>> miniblink49
       labels Slow {
     const array: FastJSArray = Cast<FastJSArray>(receiver) otherwise Slow;
     let witness = NewFastJSArrayWitness(array);
@@ -34,7 +38,10 @@ namespace array_shift {
       const result = witness.LoadElementOrUndefined(0);
       witness.ChangeLength(newLength);
       witness.MoveElements(0, 1, Convert<intptr>(newLength));
+<<<<<<< HEAD
       witness.StoreHole(newLength);
+=======
+>>>>>>> miniblink49
       return result;
     }
     label Runtime {

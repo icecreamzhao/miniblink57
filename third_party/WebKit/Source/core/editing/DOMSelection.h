@@ -31,11 +31,12 @@
 #define DOMSelection_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/dom/ContextLifecycleObserver.h"
-#include "core/editing/Position.h"
-#include "core/editing/VisibleSelection.h"
+#include "core/dom/Position.h"
+#include "core/frame/DOMWindowProperty.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
@@ -43,17 +44,15 @@ class ExceptionState;
 class Node;
 class Range;
 class TreeScope;
+class VisibleSelection;
 
-class CORE_EXPORT DOMSelection final : public GarbageCollected<DOMSelection>,
-                                       public ScriptWrappable,
-                                       public ContextClient {
+class DOMSelection final : public RefCountedWillBeGarbageCollected<DOMSelection>, public ScriptWrappable, public DOMWindowProperty {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(DOMSelection);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMSelection);
 public:
-    static DOMSelection* create(const TreeScope* treeScope)
+    static PassRefPtrWillBeRawPtr<DOMSelection> create(const TreeScope* treeScope)
     {
-        return new DOMSelection(treeScope);
+        return adoptRefWillBeNoop(new DOMSelection(treeScope));
     }
 
     void clearTreeScope();
@@ -65,20 +64,14 @@ public:
     Node* extentNode() const;
     int extentOffset() const;
     String type() const;
-    void setBaseAndExtent(Node* baseNode,
-        int baseOffset,
-        Node* extentNode,
-        int extentOffset,
-        ExceptionState& = ASSERT_NO_EXCEPTION);
-    void modify(const String& alter,
-        const String& direction,
-        const String& granularity);
+    void setBaseAndExtent(Node* baseNode, int baseOffset, Node* extentNode, int extentOffset, ExceptionState&);
+    void modify(const String& alter, const String& direction, const String& granularity);
 
     // Mozilla Selection Object API
     // In Firefox, anchor/focus are the equal to the start/end of the selection,
-    // but reflect the direction in which the selection was made by the user. That
-    // does not mean that they are base/extent, since the base/extent don't
-    // reflect expansion.
+    // but reflect the direction in which the selection was made by the user. That does
+    // not mean that they are base/extent, since the base/extent don't reflect
+    // expansion.
     // These methods return the valid equivalents of internal editing positions.
     Node* anchorNode() const;
     int anchorOffset() const;
@@ -90,7 +83,7 @@ public:
     void collapseToEnd(ExceptionState&);
     void collapseToStart(ExceptionState&);
     void extend(Node*, int offset, ExceptionState&);
-    Range* getRangeAt(int, ExceptionState&);
+    PassRefPtrWillBeRawPtr<Range> getRangeAt(int, ExceptionState&);
     void removeAllRanges();
     void addRange(Range*);
     void deleteFromDocument();
@@ -107,8 +100,6 @@ public:
 private:
     explicit DOMSelection(const TreeScope*);
 
-    bool isAvailable() const;
-
     // Convenience method for accessors, does not check m_frame present.
     const VisibleSelection& visibleSelection() const;
 
@@ -119,7 +110,7 @@ private:
 
     void addConsoleError(const String& message);
 
-    Member<const TreeScope> m_treeScope;
+    RawPtrWillBeMember<const TreeScope> m_treeScope;
 };
 
 } // namespace blink

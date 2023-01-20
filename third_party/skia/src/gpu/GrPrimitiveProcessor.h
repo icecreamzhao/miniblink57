@@ -42,6 +42,7 @@
  * it emits the appropriate color, or none at all, as directed.
  */
 
+<<<<<<< HEAD
 class GrGLSLCaps;
 class GrGLSLPrimitiveProcessor;
 
@@ -78,21 +79,78 @@ public:
     bool readsLocalCoords() const
     {
         return SkToBool(kReadsLocalCoords_Flag & fFlags);
+=======
+/*
+ * A struct for tracking batching decisions.  While this lives on GrOptState, it is managed
+ * entirely by the derived classes of the GP.
+ * // TODO this was an early attempt at handling out of order batching.  It should be
+ * used carefully as it is being replaced by GrBatch
+ */
+class GrBatchTracker {
+public:
+    template <typename T> const T& cast() const {
+        SkASSERT(sizeof(T) <= kMaxSize);
+        return *reinterpret_cast<const T*>(fData.get());
+    }
+
+    template <typename T> T* cast() {
+        SkASSERT(sizeof(T) <= kMaxSize);
+        return reinterpret_cast<T*>(fData.get());
+    }
+
+    static const size_t kMaxSize = 32;
+
+private:
+    SkAlignedSStorage<kMaxSize> fData;
+};
+
+class GrGLSLCaps;
+class GrGLPrimitiveProcessor;
+
+struct GrInitInvariantOutput;
+
+/*
+ * This class allows the GrPipeline to communicate information about the pipeline to a
+ * GrPrimitiveProcessor that will be used in conjunction with the GrPipeline.
+ */
+class GrPipelineInfo {
+public:
+    /** Does the pipeline require the GrPrimitiveProcessor's color? */
+    bool readsColor() const { return SkToBool(kReadsColor_GrPipelineInfoFlag & fFlags); }
+
+    /** Does the pipeline require the GrPrimitiveProcessor's coverage? */
+    bool readsCoverage() const { return SkToBool(kReadsCoverage_GrPipelineInfoFlag & fFlags); }
+
+    /** Does the pipeline require access to (implicit or explicit) local coordinates? */
+    bool readsLocalCoords() const {
+        return SkToBool(kReadsLocalCoords_GrPipelineInfoFlag & fFlags);
+>>>>>>> miniblink49
     }
 
     /** Does the pipeline allow the GrPrimitiveProcessor to combine color and coverage into one
         color output ? */
+<<<<<<< HEAD
     bool canTweakAlphaForCoverage() const
     {
         return SkToBool(kCanTweakAlphaForCoverage_Flag & fFlags);
+=======
+    bool canTweakAlphaForCoverage() const {
+        return SkToBool(kCanTweakAlphaForCoverage_GrPipelineInfoFlag & fFlags);
+>>>>>>> miniblink49
     }
 
     /** Does the pipeline require the GrPrimitiveProcessor to specify a specific color (and if
         so get the color)? */
+<<<<<<< HEAD
     bool getOverrideColorIfSet(GrColor* overrideColor) const
     {
         if (SkToBool(kUseOverrideColor_Flag & fFlags)) {
             SkASSERT(SkToBool(kReadsColor_Flag & fFlags));
+=======
+    bool getOverrideColorIfSet(GrColor* overrideColor) const {
+        if (SkToBool(kUseOverrideColor_GrPipelineInfoFlag & fFlags)) {
+            SkASSERT(SkToBool(kReadsColor_GrPipelineInfoFlag & fFlags));
+>>>>>>> miniblink49
             if (overrideColor) {
                 *overrideColor = fOverrideColor;
             }
@@ -101,6 +159,7 @@ public:
         return false;
     }
 
+<<<<<<< HEAD
     /**
      * Returns true if the pipeline's color output will be affected by the existing render target
      * destination pixel values (meaning we need to be careful with overlapping draws). Note that we
@@ -138,21 +197,72 @@ private:
 
     uint32_t fFlags;
     GrColor fOverrideColor;
+=======
+private:
+    enum {
+        // If this is not set the primitive processor need not produce a color output
+        kReadsColor_GrPipelineInfoFlag                  = 0x1,
+
+        // If this is not set the primitive processor need not produce a coverage output
+        kReadsCoverage_GrPipelineInfoFlag               = 0x2,
+
+        // If this is not set the primitive processor need not produce local coordinates
+        kReadsLocalCoords_GrPipelineInfoFlag            = 0x4,
+
+        // If this flag is set then the primitive processor may produce color*coverage as
+        // its color output (and not output a separate coverage).
+        kCanTweakAlphaForCoverage_GrPipelineInfoFlag    = 0x8,
+
+        // If this flag is set the GrPrimitiveProcessor must produce fOverrideColor as its
+        // output color. If not set fOverrideColor is to be ignored.
+        kUseOverrideColor_GrPipelineInfoFlag            = 0x10,
+    };
+
+    uint32_t    fFlags;
+    GrColor     fOverrideColor;
+>>>>>>> miniblink49
 
     friend class GrPipeline; // To initialize this
 };
 
 /*
+<<<<<<< HEAD
+=======
+ * This enum is shared by GrPrimitiveProcessors and GrGLPrimitiveProcessors to coordinate shaders
+ * with vertex attributes / uniforms.
+ */
+enum GrGPInput {
+    kAllOnes_GrGPInput,
+    kAttribute_GrGPInput,
+    kUniform_GrGPInput,
+    kIgnored_GrGPInput,
+};
+
+/*
+>>>>>>> miniblink49
  * GrPrimitiveProcessor defines an interface which all subclasses must implement.  All
  * GrPrimitiveProcessors must proivide seed color and coverage for the Ganesh color / coverage
  * pipelines, and they must provide some notion of equality
  */
 class GrPrimitiveProcessor : public GrProcessor {
 public:
+<<<<<<< HEAD
+=======
+    virtual void initBatchTracker(GrBatchTracker*, const GrPipelineInfo&) const = 0;
+
+    virtual bool canMakeEqual(const GrBatchTracker& mine,
+                              const GrPrimitiveProcessor& that,
+                              const GrBatchTracker& theirs) const = 0;
+
+    virtual void getInvariantOutputColor(GrInitInvariantOutput* out) const = 0;
+    virtual void getInvariantOutputCoverage(GrInitInvariantOutput* out) const = 0;
+
+>>>>>>> miniblink49
     // Only the GrGeometryProcessor subclass actually has a geo shader or vertex attributes, but
     // we put these calls on the base class to prevent having to cast
     virtual bool willUseGeoShader() const = 0;
 
+<<<<<<< HEAD
     struct Attribute {
         Attribute()
             : fName(nullptr)
@@ -168,14 +278,41 @@ public:
             , fPrecision(precision)
         {
         }
+=======
+    /*
+     * This is a safeguard to prevent GrPrimitiveProcessor's from going beyond platform specific
+     * attribute limits. This number can almost certainly be raised if required.
+     */
+    static const int kMaxVertexAttribs = 6;
+
+    struct Attribute {
+        Attribute()
+            : fName(NULL)
+            , fType(kFloat_GrVertexAttribType)
+            , fOffset(0) {}
+        Attribute(const char* name, GrVertexAttribType type,
+                  GrSLPrecision precision = kDefault_GrSLPrecision)
+            : fName(name)
+            , fType(type)
+            , fOffset(SkAlign4(GrVertexAttribTypeSize(type)))
+            , fPrecision(precision) {}
+>>>>>>> miniblink49
         const char* fName;
         GrVertexAttribType fType;
         size_t fOffset;
         GrSLPrecision fPrecision;
     };
 
+<<<<<<< HEAD
     int numAttribs() const { return fAttribs.count(); }
     const Attribute& getAttrib(int index) const { return fAttribs[index]; }
+=======
+    int numAttribs() const { return fNumAttribs; }
+    const Attribute& getAttrib(int index) const {
+        SkASSERT(index < fNumAttribs);
+        return fAttribs[index];
+    }
+>>>>>>> miniblink49
 
     // Returns the vertex stride of the GP.  A common use case is to request geometry from a
     // drawtarget based off of the stride, and to populate this memory using an implicit array of
@@ -183,6 +320,7 @@ public:
     size_t getVertexStride() const { return fVertexStride; }
 
     /**
+<<<<<<< HEAD
      * Computes a transformKey from an array of coord transforms. Will only look at the first
      * <numCoords> transforms in the array.
      *
@@ -190,19 +328,33 @@ public:
      */
     uint32_t getTransformKey(const SkTArray<const GrCoordTransform*, true>& coords,
         int numCoords) const;
+=======
+     * Gets a transformKey from an array of coord transforms
+     */
+    uint32_t getTransformKey(const SkTArray<const GrCoordTransform*, true>&) const;
+>>>>>>> miniblink49
 
     /**
      * Sets a unique key on the GrProcessorKeyBuilder that is directly associated with this geometry
      * processor's GL backend implementation.
+<<<<<<< HEAD
      *
      * TODO: A better name for this function  would be "compute" instead of "get".
      */
     virtual void getGLSLProcessorKey(const GrGLSLCaps& caps,
         GrProcessorKeyBuilder* b) const = 0;
+=======
+     */
+    virtual void getGLProcessorKey(const GrBatchTracker& bt,
+                                   const GrGLSLCaps& caps,
+                                   GrProcessorKeyBuilder* b) const = 0;
+
+>>>>>>> miniblink49
 
     /** Returns a new instance of the appropriate *GL* implementation class
         for the given GrProcessor; caller is responsible for deleting
         the object. */
+<<<<<<< HEAD
     virtual GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps& caps) const = 0;
 
     virtual bool isPathRendering() const { return false; }
@@ -242,6 +394,28 @@ private:
     void notifyRefCntIsZero() const final {};
     virtual bool hasExplicitLocalCoords() const = 0;
 
+=======
+    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
+                                                     const GrGLSLCaps& caps) const = 0;
+
+    bool isPathRendering() const { return fIsPathRendering; }
+
+protected:
+    GrPrimitiveProcessor(bool isPathRendering)
+        : fNumAttribs(0)
+        , fVertexStride(0)
+        , fIsPathRendering(isPathRendering) {}
+
+    Attribute fAttribs[kMaxVertexAttribs];
+    int fNumAttribs;
+    size_t fVertexStride;
+
+private:
+    virtual bool hasExplicitLocalCoords() const = 0;
+
+    bool fIsPathRendering;
+
+>>>>>>> miniblink49
     typedef GrProcessor INHERITED;
 };
 

@@ -7,7 +7,6 @@
 #include "content/ui/ClipboardUtil.h"
 
 #include "base/strings/string_util.h"
-#include "base/strings/utf_string_conversions.h"
 #include "base/json/json_reader.h"
 #include "base/values.h"
 
@@ -80,13 +79,6 @@ FORMATETC* ClipboardUtil::getCustomTextsType()
     static unsigned int cf = RegisterClipboardFormat(L"MiniBlinkCustomTextsType");
     static FORMATETC urlFormat = { (CLIPFORMAT)cf, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
     return &urlFormat;
-}
-
-FORMATETC* ClipboardUtil::htmlFormat()
-{
-    static CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormat(L"HTML Format");
-    static FORMATETC htmlFormat = { cf, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
-    return &htmlFormat;
 }
 
 bool ClipboardUtil::getWebLocData(IDataObject* dataObject, std::string& url, std::string* title)
@@ -185,7 +177,7 @@ base::DictionaryValue* ClipboardUtil::getCustomPlainTexts(IDataObject* dataObjec
     
     base::JSONReader jsonReader;
     std::unique_ptr<base::Value> jsonVal = jsonReader.ReadToValue(json);
-    if (!jsonVal || !jsonVal->IsType(base::Value::Type::DICTIONARY))
+    if (!jsonVal || !jsonVal->IsType(base::Value::TYPE_DICTIONARY))
         return nullptr;
 
     base::DictionaryValue* dictVal = nullptr;
@@ -293,7 +285,7 @@ void ClipboardUtil::cfHtmlExtractMetadata(const std::string& cfHtml, std::string
 
             if (srcEnd != std::string::npos && srcStart != std::string::npos) {
                 *baseUrl = cfHtml.substr(srcStart, srcEnd - srcStart);
-                base::TrimWhitespaceASCII(*baseUrl, base::TRIM_ALL, baseUrl);
+                base::TrimWhitespace(*baseUrl, base::TRIM_ALL, baseUrl);
             }
         }
     }

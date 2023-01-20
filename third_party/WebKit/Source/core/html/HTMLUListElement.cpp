@@ -20,6 +20,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLUListElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -36,35 +37,19 @@ inline HTMLUListElement::HTMLUListElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLUListElement)
 
-bool HTMLUListElement::isPresentationAttribute(
-    const QualifiedName& name) const
+bool HTMLUListElement::isPresentationAttribute(const QualifiedName& name) const
 {
     if (name == typeAttr)
         return true;
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLUListElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLUListElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
-    if (name == typeAttr) {
-        if (equalIgnoringCase(value, "disc"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
-                CSSValueDisc);
-        else if (equalIgnoringCase(value, "circle"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
-                CSSValueCircle);
-        else if (equalIgnoringCase(value, "square"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
-                CSSValueSquare);
-        else if (equalIgnoringCase(value, "none"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
-                CSSValueNone);
-    } else {
+    if (name == typeAttr)
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, value);
+    else
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
-    }
 }
 
-} // namespace blink
+}

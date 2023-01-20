@@ -12,12 +12,17 @@ namespace skiagm {
 // Draw rects with various stroke widths at 1/8 pixel increments
 class ThinStrokedRectsGM : public GM {
 public:
+<<<<<<< HEAD
     ThinStrokedRectsGM()
     {
+=======
+    ThinStrokedRectsGM() {
+>>>>>>> miniblink49
         this->setBGColor(0xFF000000);
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("thinstrokedrects");
@@ -30,6 +35,17 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    SkString onShortName() override {
+        return SkString("thinstrokedrects");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(240, 320);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
 
         SkPaint paint;
         paint.setColor(SK_ColorWHITE);
@@ -46,7 +62,11 @@ protected:
         canvas->translate(5, 5);
         for (int i = 0; i < 8; ++i) {
             canvas->save();
+<<<<<<< HEAD
             canvas->translate(i * 0.125f, i * 30.0f);
+=======
+            canvas->translate(i*0.125f, i*30.0f);
+>>>>>>> miniblink49
             for (size_t j = 0; j < SK_ARRAY_COUNT(gStrokeWidths); ++j) {
                 paint.setStrokeWidth(gStrokeWidths[j]);
                 canvas->drawRect(rect, paint);
@@ -60,7 +80,11 @@ protected:
         canvas->translate(0, 15);
         for (int i = 0; i < 8; ++i) {
             canvas->save();
+<<<<<<< HEAD
             canvas->translate(i * 0.125f, i * 30.0f);
+=======
+            canvas->translate(i*0.125f, i*30.0f);
+>>>>>>> miniblink49
             canvas->scale(0.5f, 0.5f);
             for (size_t j = 0; j < SK_ARRAY_COUNT(gStrokeWidths); ++j) {
                 paint.setStrokeWidth(2.0f * gStrokeWidths[j]);
@@ -77,5 +101,10 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new ThinStrokedRectsGM;)
+=======
+DEF_GM( return SkNEW(ThinStrokedRectsGM); )
+
+>>>>>>> miniblink49
 }

@@ -2,22 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// https://drafts.fxtf.org/geometry/#dompointreadonly
+// http://dev.w3.org/fxtf/geometry/#DOMPoint
 
 [
-    Constructor(optional unrestricted double x = 0, optional unrestricted double y = 0,
-                optional unrestricted double z = 0, optional unrestricted double w = 1),
+    Constructor(unrestricted double x, unrestricted double y,
+                unrestricted double z, unrestricted double w),
     // FIXME: Exposed=(Window,Worker)
+    GarbageCollected,
     RuntimeEnabled=GeometryInterfaces,
 ] interface DOMPointReadOnly {
-    [NewObject] static DOMPointReadOnly fromPoint(optional DOMPointInit other);
-
     readonly attribute unrestricted double x;
     readonly attribute unrestricted double y;
     readonly attribute unrestricted double z;
     readonly attribute unrestricted double w;
 
-    [RaisesException] DOMPoint matrixTransform(optional DOMMatrixInit matrix);
-
-    serializer = { attribute };
+    // FIXME: Implement matrixTransform.
+    // DOMPoint matrixTransform(DOMMatrixReadOnly matrix);
 };

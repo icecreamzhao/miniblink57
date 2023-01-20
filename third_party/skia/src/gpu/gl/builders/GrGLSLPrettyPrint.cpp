@@ -10,6 +10,7 @@ namespace GrGLSLPrettyPrint {
 
 class GLSLPrettyPrint {
 public:
+<<<<<<< HEAD
     GLSLPrettyPrint() { }
 
     SkString prettify(const char** strings,
@@ -17,6 +18,14 @@ public:
         int count,
         bool countlines)
     {
+=======
+    GLSLPrettyPrint() {}
+
+    SkString prettify(const char** strings,
+                      int* lengths,
+                      int count,
+                      bool countlines) {
+>>>>>>> miniblink49
         fCountlines = countlines;
         fTabs = 0;
         fLinecount = 1;
@@ -87,7 +96,12 @@ public:
                     parensDepth++;
                 } else if (!parensDepth && this->hasToken(";")) {
                     this->newline();
+<<<<<<< HEAD
                 } else if ('\t' == fInput[fIndex] || '\n' == fInput[fIndex] || (fFreshline && ' ' == fInput[fIndex])) {
+=======
+                } else if ('\t' == fInput[fIndex] || '\n' == fInput[fIndex] ||
+                        (fFreshline && ' ' == fInput[fIndex])) {
+>>>>>>> miniblink49
                     fIndex++;
                 } else {
                     this->appendChar(fInput[fIndex]);
@@ -96,10 +110,15 @@ public:
         }
         return fPretty;
     }
+<<<<<<< HEAD
 
 private:
     void appendChar(char c)
     {
+=======
+private:
+    void appendChar(char c) {
+>>>>>>> miniblink49
         this->tabString();
         fPretty.appendf("%c", fInput[fIndex++]);
         fFreshline = false;
@@ -107,8 +126,12 @@ private:
 
     // hasToken automatically consumes the next token, if it is a match, and then tabs
     // if necessary, before inserting the token into the pretty string
+<<<<<<< HEAD
     bool hasToken(const char* token)
     {
+=======
+    bool hasToken(const char* token) {
+>>>>>>> miniblink49
         size_t i = fIndex;
         for (size_t j = 0; token[j] && fLength > i; i++, j++) {
             if (token[j] != fInput[i]) {
@@ -122,8 +145,12 @@ private:
         return true;
     }
 
+<<<<<<< HEAD
     void parseUntilNewline()
     {
+=======
+    void parseUntilNewline() {
+>>>>>>> miniblink49
         while (fLength > fIndex) {
             if ('\n' == fInput[fIndex]) {
                 fIndex++;
@@ -139,8 +166,12 @@ private:
     // this code assumes it is not actually searching for a newline.  If you need to search for a
     // newline, then use the function above.  If you do search for a newline with this function
     // it will consume the entire string and the output will certainly not be prettified
+<<<<<<< HEAD
     void parseUntil(const char* token)
     {
+=======
+    void parseUntil(const char* token) {
+>>>>>>> miniblink49
         while (fLength > fIndex) {
             // For embedded newlines,  this code will make sure to embed the newline in the
             // pretty string, increase the linecount, and tab out the next line to the appropriate
@@ -162,8 +193,12 @@ private:
     }
 
     // We only tab if on a newline, otherwise consider the line tabbed
+<<<<<<< HEAD
     void tabString()
     {
+=======
+    void tabString() {
+>>>>>>> miniblink49
         if (fFreshline) {
             for (int t = 0; t < fTabs; t++) {
                 fPretty.append("\t");
@@ -173,8 +208,12 @@ private:
 
     // newline is really a request to add a newline, if we are on a fresh line there is no reason
     // to add another newline
+<<<<<<< HEAD
     void newline()
     {
+=======
+    void newline() {
+>>>>>>> miniblink49
         if (!fFreshline) {
             fFreshline = true;
             fPretty.append("\n");
@@ -182,8 +221,12 @@ private:
         }
     }
 
+<<<<<<< HEAD
     void lineNumbering()
     {
+=======
+    void lineNumbering() {
+>>>>>>> miniblink49
         if (fCountlines) {
             fPretty.appendf("%4d\t", fLinecount++);
         }
@@ -202,10 +245,16 @@ private:
 };
 
 SkString PrettyPrintGLSL(const char** strings,
+<<<<<<< HEAD
     int* lengths,
     int count,
     bool countlines)
 {
+=======
+                         int* lengths,
+                         int count,
+                         bool countlines) {
+>>>>>>> miniblink49
     GLSLPrettyPrint pp;
     return pp.prettify(strings, lengths, count, countlines);
 }

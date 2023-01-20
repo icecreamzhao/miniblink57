@@ -40,6 +40,10 @@
 
 namespace blink {
 
+<<<<<<< HEAD
+=======
+class ScriptPromiseResolver;
+>>>>>>> miniblink49
 MODULES_EXPORT ExceptionCode webCryptoErrorToExceptionCode(WebCryptoErrorType);
 
 // Wrapper around a Promise to notify completion of the crypto operation.
@@ -48,6 +52,7 @@ MODULES_EXPORT ExceptionCode webCryptoErrorToExceptionCode(WebCryptoErrorType);
 // "origin thread".
 //
 //  * At creation time there must be an active ExecutionContext.
+<<<<<<< HEAD
 //  * All methods of the CryptoResult implementation must be called from
 //    the origin thread. The exception is that destruction may happen on
 //    another thread.
@@ -59,18 +64,36 @@ public:
 
     ~CryptoResultImpl();
 
+=======
+//  * The CryptoResult interface must only be called from the origin thread.
+//  * ref(), deref(), cancelled() and cancel() can be called from any thread.
+//  * One of the completeWith***() functions must be called, or the
+//    m_resolver will be leaked until the ExecutionContext is destroyed.
+class CryptoResultImpl final : public CryptoResult {
+public:
+    ~CryptoResultImpl();
+
+    static PassRefPtrWillBeRawPtr<CryptoResultImpl> create(ScriptState*);
+
+>>>>>>> miniblink49
     void completeWithError(WebCryptoErrorType, const WebString&) override;
     void completeWithBuffer(const void* bytes, unsigned bytesSize) override;
     void completeWithJson(const char* utf8Data, unsigned length) override;
     void completeWithBoolean(bool) override;
     void completeWithKey(const WebCryptoKey&) override;
+<<<<<<< HEAD
     void completeWithKeyPair(const WebCryptoKey& publicKey,
         const WebCryptoKey& privateKey) override;
+=======
+    void completeWithKeyPair(const WebCryptoKey& publicKey, const WebCryptoKey& privateKey) override;
+    bool cancelled() const override;
+>>>>>>> miniblink49
 
     // If called after completion (including cancellation) will return an empty
     // ScriptPromise.
     ScriptPromise promise();
 
+<<<<<<< HEAD
     WebCryptoResult result() { return WebCryptoResult(this, m_cancel.get()); }
 
     DECLARE_VIRTUAL_TRACE();
@@ -111,8 +134,25 @@ private:
     // cancellation status object for the purpose, which will outlive the
     // result object and can be safely accessed by multiple threads.
     RefPtr<ResultCancel> m_cancel;
+=======
+private:
+    class Resolver;
+    explicit CryptoResultImpl(ScriptState*);
+
+    void clearResolver();
+    void cancel();
+
+    // FIXME: ScriptPromiseResolver should not be exported.
+    // Instead, use ScriptPromise.
+    ScriptPromiseResolver* m_resolver;
+    volatile int m_cancelled;
+>>>>>>> miniblink49
 };
 
 } // namespace blink
 
+<<<<<<< HEAD
 #endif // CryptoResultImpl_h
+=======
+#endif
+>>>>>>> miniblink49

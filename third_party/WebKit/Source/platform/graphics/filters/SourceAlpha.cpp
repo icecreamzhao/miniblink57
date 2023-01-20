@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/filters/SourceAlpha.h"
 
 #include "platform/graphics/filters/Filter.h"
@@ -29,6 +33,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 SourceAlpha* SourceAlpha::create(FilterEffect* sourceEffect)
 {
     return new SourceAlpha(sourceEffect);
@@ -54,6 +59,45 @@ sk_sp<SkImageFilter> SourceAlpha::createImageFilter()
 
 TextStream& SourceAlpha::externalRepresentation(TextStream& ts,
     int indent) const
+=======
+PassRefPtrWillBeRawPtr<SourceAlpha> SourceAlpha::create(FilterEffect* sourceEffect)
+{
+    return adoptRefWillBeNoop(new SourceAlpha(sourceEffect));
+}
+
+const AtomicString& SourceAlpha::effectName()
+{
+    DEFINE_STATIC_LOCAL(const AtomicString, s_effectName, ("SourceAlpha", AtomicString::ConstructFromLiteral));
+    return s_effectName;
+}
+
+SourceAlpha::SourceAlpha(FilterEffect* sourceEffect)
+    : FilterEffect(sourceEffect->filter())
+{
+    setOperatingColorSpace(sourceEffect->operatingColorSpace());
+    inputEffects().append(sourceEffect);
+}
+
+FloatRect SourceAlpha::determineAbsolutePaintRect(const FloatRect& requestedRect)
+{
+    return inputEffect(0)->determineAbsolutePaintRect(requestedRect);
+}
+
+PassRefPtr<SkImageFilter> SourceAlpha::createImageFilter(SkiaImageFilterBuilder* builder)
+{
+    RefPtr<SkImageFilter> sourceGraphic(builder->build(inputEffect(0), operatingColorSpace()));
+    SkScalar matrix[20] = {
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0,
+        0, 0, 0, SK_Scalar1, 0
+    };
+    RefPtr<SkColorFilter> colorFilter(adoptRef(SkColorMatrixFilter::Create(matrix)));
+    return adoptRef(SkColorFilterImageFilter::Create(colorFilter.get(), sourceGraphic.get()));
+}
+
+TextStream& SourceAlpha::externalRepresentation(TextStream& ts, int indent) const
+>>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[SourceAlpha]\n";

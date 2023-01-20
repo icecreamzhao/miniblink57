@@ -2,17 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "modules/webaudio/DynamicsCompressorNode.h"
 #include "core/testing/DummyPageHolder.h"
 #include "modules/webaudio/BaseAudioContext.h"
 #include "modules/webaudio/OfflineAudioContext.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include <memory>
+=======
+#include "config.h"
+#include "modules/webaudio/DynamicsCompressorNode.h"
+
+#include "core/testing/DummyPageHolder.h"
+#include "modules/webaudio/OfflineAudioContext.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
 TEST(DynamicsCompressorNodeTest, ProcessorLifetime)
 {
+<<<<<<< HEAD
     std::unique_ptr<DummyPageHolder> page = DummyPageHolder::create();
     OfflineAudioContext* context = OfflineAudioContext::create(
         &page->document(), 2, 1, 48000, ASSERT_NO_EXCEPTION);
@@ -20,6 +30,14 @@ TEST(DynamicsCompressorNodeTest, ProcessorLifetime)
     DynamicsCompressorHandler& handler = node->dynamicsCompressorHandler();
     EXPECT_TRUE(handler.m_dynamicsCompressor);
     BaseAudioContext::AutoLocker locker(context);
+=======
+    OwnPtr<DummyPageHolder> page = DummyPageHolder::create();
+    OfflineAudioContext* context = OfflineAudioContext::create(&page->document(), 2, 1, 48000, ASSERT_NO_EXCEPTION);
+    DynamicsCompressorNode* node = context->createDynamicsCompressor(ASSERT_NO_EXCEPTION);
+    DynamicsCompressorHandler& handler = node->dynamicsCompressorHandler();
+    EXPECT_TRUE(handler.m_dynamicsCompressor);
+    AudioContext::AutoLocker locker(context);
+>>>>>>> miniblink49
     handler.dispose();
     // m_dynamicsCompressor should live after dispose() because an audio thread
     // is using it.

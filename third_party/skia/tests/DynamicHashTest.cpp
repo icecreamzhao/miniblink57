@@ -18,12 +18,19 @@ struct Entry {
     static uint32_t Hash(const int& key) { return key; }
 };
 
+<<<<<<< HEAD
 class Hash : public SkTDynamicHash<Entry, int> {
 public:
     Hash()
         : INHERITED()
     {
     }
+=======
+
+class Hash : public SkTDynamicHash<Entry, int> {
+public:
+    Hash() : INHERITED() {}
+>>>>>>> miniblink49
 
     // Promote protected methods to public for this test.
     int capacity() const { return this->INHERITED::capacity(); }
@@ -33,12 +40,20 @@ private:
     typedef SkTDynamicHash<Entry, int> INHERITED;
 };
 
+<<<<<<< HEAD
 } // namespace
 
 #define ASSERT(x) REPORTER_ASSERT(reporter, x)
 
 DEF_TEST(DynamicHash_growth, reporter)
 {
+=======
+}  // namespace
+
+#define ASSERT(x) REPORTER_ASSERT(reporter, x)
+
+DEF_TEST(DynamicHash_growth, reporter) {
+>>>>>>> miniblink49
     Entry a = { 1, 2.0 };
     Entry b = { 2, 3.0 };
     Entry c = { 3, 4.0 };
@@ -66,8 +81,12 @@ DEF_TEST(DynamicHash_growth, reporter)
     ASSERT(hash.count() == 5);
 }
 
+<<<<<<< HEAD
 DEF_TEST(DynamicHash_add, reporter)
 {
+=======
+DEF_TEST(DynamicHash_add, reporter) {
+>>>>>>> miniblink49
     Hash hash;
     Entry a = { 1, 2.0 };
     Entry b = { 2, 3.0 };
@@ -79,8 +98,12 @@ DEF_TEST(DynamicHash_add, reporter)
     ASSERT(hash.count() == 2);
 }
 
+<<<<<<< HEAD
 DEF_TEST(DynamicHash_lookup, reporter)
 {
+=======
+DEF_TEST(DynamicHash_lookup, reporter) {
+>>>>>>> miniblink49
     Hash hash;
 
     // These collide.
@@ -105,6 +128,7 @@ DEF_TEST(DynamicHash_lookup, reporter)
     ASSERT(hash.countCollisions(9) == 2);
 
     // We can find our data right?
+<<<<<<< HEAD
     ASSERT(hash.find(1) != nullptr);
     ASSERT(hash.find(1)->value == 2.0);
     ASSERT(hash.find(5) != nullptr);
@@ -117,6 +141,19 @@ DEF_TEST(DynamicHash_lookup, reporter)
 
 DEF_TEST(DynamicHash_remove, reporter)
 {
+=======
+    ASSERT(hash.find(1) != NULL);
+    ASSERT(hash.find(1)->value == 2.0);
+    ASSERT(hash.find(5) != NULL);
+    ASSERT(hash.find(5)->value == 3.0);
+
+    // These aren't in the hash.
+    ASSERT(hash.find(2) == NULL);
+    ASSERT(hash.find(9) == NULL);
+}
+
+DEF_TEST(DynamicHash_remove, reporter) {
+>>>>>>> miniblink49
     Hash hash;
 
     // These collide.
@@ -129,13 +166,19 @@ DEF_TEST(DynamicHash_remove, reporter)
     hash.remove(1);
     // a should be marked deleted, and b should still be findable.
 
+<<<<<<< HEAD
     ASSERT(hash.find(1) == nullptr);
     ASSERT(hash.find(5) != nullptr);
+=======
+    ASSERT(hash.find(1) == NULL);
+    ASSERT(hash.find(5) != NULL);
+>>>>>>> miniblink49
     ASSERT(hash.find(5)->value == 3.0);
 
     // This will go in the same slot as 'a' did before.
     ASSERT(hash.countCollisions(9) == 0);
     hash.add(&c);
+<<<<<<< HEAD
     ASSERT(hash.find(9) != nullptr);
     ASSERT(hash.find(9)->value == 4.0);
     ASSERT(hash.find(5) != nullptr);
@@ -145,6 +188,15 @@ DEF_TEST(DynamicHash_remove, reporter)
 template <typename T>
 static void TestIter(skiatest::Reporter* reporter)
 {
+=======
+    ASSERT(hash.find(9) != NULL);
+    ASSERT(hash.find(9)->value == 4.0);
+    ASSERT(hash.find(5) != NULL);
+    ASSERT(hash.find(5)->value == 3.0);
+}
+
+template<typename T> static void TestIter(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     Hash hash;
 
     int count = 0;
@@ -165,11 +217,19 @@ static void TestIter(skiatest::Reporter* reporter)
 
     // should see all 3 unique keys when iterating over hash
     count = 0;
+<<<<<<< HEAD
     int keys[3] = { 0, 0, 0 };
     for (T iter(&hash); !iter.done(); ++iter) {
         int key = (*iter).key;
         keys[count] = key;
         ASSERT(hash.find(key) != nullptr);
+=======
+    int keys[3] = {0, 0, 0};
+    for (T iter(&hash); !iter.done(); ++iter) {
+        int key = (*iter).key;
+        keys[count] = key;
+        ASSERT(hash.find(key) != NULL);
+>>>>>>> miniblink49
         ++count;
     }
     ASSERT(3 == count);
@@ -185,21 +245,33 @@ static void TestIter(skiatest::Reporter* reporter)
         int key = (*iter).key;
         keys[count] = key;
         ASSERT(key != 1);
+<<<<<<< HEAD
         ASSERT(hash.find(key) != nullptr);
+=======
+        ASSERT(hash.find(key) != NULL);
+>>>>>>> miniblink49
         ++count;
     }
     ASSERT(2 == count);
     ASSERT(keys[0] != keys[1]);
 }
 
+<<<<<<< HEAD
 DEF_TEST(DynamicHash_iterator, reporter)
 {
+=======
+DEF_TEST(DynamicHash_iterator, reporter) {
+>>>>>>> miniblink49
     TestIter<Hash::Iter>(reporter);
     TestIter<Hash::ConstIter>(reporter);
 }
 
+<<<<<<< HEAD
 static void TestResetOrRewind(skiatest::Reporter* reporter, bool testReset)
 {
+=======
+static void TestResetOrRewind(skiatest::Reporter* reporter, bool testReset) {
+>>>>>>> miniblink49
     Hash hash;
     Entry a = { 1, 2.0 };
     Entry b = { 2, 3.0 };
@@ -225,6 +297,7 @@ static void TestResetOrRewind(skiatest::Reporter* reporter, bool testReset)
     ASSERT(hash.count() == 2);
     ASSERT(hash.capacity() == 4);
 
+<<<<<<< HEAD
     ASSERT(hash.find(1) != nullptr);
     ASSERT(hash.find(2) != nullptr);
 }
@@ -236,5 +309,16 @@ DEF_TEST(DynamicHash_reset, reporter)
 
 DEF_TEST(DynamicHash_rewind, reporter)
 {
+=======
+    ASSERT(hash.find(1) != NULL);
+    ASSERT(hash.find(2) != NULL);
+}
+
+DEF_TEST(DynamicHash_reset, reporter) {
+    TestResetOrRewind(reporter, true);
+}
+
+DEF_TEST(DynamicHash_rewind, reporter) {
+>>>>>>> miniblink49
     TestResetOrRewind(reporter, false);
 }

@@ -17,8 +17,13 @@ public:
     bool filter(SkPaint*, Type) override;
 
 private:
+<<<<<<< HEAD
     uint16_t fClearFlags; // user specified
     uint16_t fSetFlags; // user specified
+=======
+    uint16_t    fClearFlags;    // user specified
+    uint16_t    fSetFlags;      // user specified
+>>>>>>> miniblink49
 };
 
 #endif

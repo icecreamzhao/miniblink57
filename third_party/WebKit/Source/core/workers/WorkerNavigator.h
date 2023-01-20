@@ -27,7 +27,6 @@
 #define WorkerNavigator_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/CoreExport.h"
 #include "core/frame/NavigatorCPU.h"
 #include "core/frame/NavigatorID.h"
 #include "core/frame/NavigatorOnLine.h"
@@ -37,16 +36,9 @@
 
 namespace blink {
 
-class CORE_EXPORT WorkerNavigator final
-    : public GarbageCollectedFinalized<WorkerNavigator>,
-      public ScriptWrappable,
-      public NavigatorCPU,
-      public NavigatorID,
-      public NavigatorOnLine,
-      public Supplementable<WorkerNavigator> {
+class WorkerNavigator final : public GarbageCollectedFinalized<WorkerNavigator>, public ScriptWrappable, public NavigatorCPU, public NavigatorID, public NavigatorOnLine, public HeapSupplementable<WorkerNavigator> {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(WorkerNavigator);
-
 public:
     static WorkerNavigator* create(const String& userAgent)
     {
@@ -54,7 +46,7 @@ public:
     }
     virtual ~WorkerNavigator();
 
-    String userAgent() const override;
+    virtual String userAgent() const override;
 
     DECLARE_TRACE();
 

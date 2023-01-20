@@ -18,6 +18,6 @@
 
 #include "ares_setup.h"
 
-extern char* ares_strdup(const char* s1);
+extern char *ares_strdup(const char *s1);
 
 #endif /* HEADER_CARES_STRDUP_H */

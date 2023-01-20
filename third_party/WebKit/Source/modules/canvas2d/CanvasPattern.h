@@ -30,12 +30,18 @@
 #include "core/svg/SVGMatrixTearOff.h"
 #include "platform/graphics/Pattern.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class ExceptionState;
 class Image;
 
+<<<<<<< HEAD
 class CanvasPattern final : public GarbageCollectedFinalized<CanvasPattern>,
                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -53,6 +59,19 @@ public:
 
     Pattern* getPattern() const { return m_pattern.get(); }
     const AffineTransform& getTransform() const { return m_patternTransform; }
+=======
+class CanvasPattern final : public GarbageCollectedFinalized<CanvasPattern>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static Pattern::RepeatMode parseRepetitionType(const String&, ExceptionState&);
+
+    static CanvasPattern* create(PassRefPtr<Image> image, Pattern::RepeatMode repeat, bool originClean)
+    {
+        return new CanvasPattern(image, repeat, originClean);
+    }
+
+    Pattern* pattern() const { return m_pattern.get(); }
+>>>>>>> miniblink49
 
     bool originClean() const { return m_originClean; }
 
@@ -64,7 +83,10 @@ private:
     CanvasPattern(PassRefPtr<Image>, Pattern::RepeatMode, bool originClean);
 
     RefPtr<Pattern> m_pattern;
+<<<<<<< HEAD
     AffineTransform m_patternTransform;
+=======
+>>>>>>> miniblink49
     bool m_originClean;
 };
 

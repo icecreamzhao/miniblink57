@@ -8,6 +8,7 @@
 #include "SkQuadClipper.h"
 #include "SkGeometry.h"
 
+<<<<<<< HEAD
 SkQuadClipper::SkQuadClipper()
 {
     fClip.setEmpty();
@@ -15,6 +16,13 @@ SkQuadClipper::SkQuadClipper()
 
 void SkQuadClipper::setClip(const SkIRect& clip)
 {
+=======
+SkQuadClipper::SkQuadClipper() {
+    fClip.setEmpty();
+}
+
+void SkQuadClipper::setClip(const SkIRect& clip) {
+>>>>>>> miniblink49
     // conver to scalars, since that's where we'll see the points
     fClip.set(clip);
 }
@@ -22,17 +30,28 @@ void SkQuadClipper::setClip(const SkIRect& clip)
 ///////////////////////////////////////////////////////////////////////////////
 
 static bool chopMonoQuadAt(SkScalar c0, SkScalar c1, SkScalar c2,
+<<<<<<< HEAD
     SkScalar target, SkScalar* t)
 {
+=======
+                           SkScalar target, SkScalar* t) {
+>>>>>>> miniblink49
     /* Solve F(t) = y where F(t) := [0](1-t)^2 + 2[1]t(1-t) + [2]t^2
      *  We solve for t, using quadratic equation, hence we have to rearrange
      * our cooefficents to look like At^2 + Bt + C
      */
     SkScalar A = c0 - c1 - c1 + c2;
+<<<<<<< HEAD
     SkScalar B = 2 * (c1 - c0);
     SkScalar C = c0 - target;
 
     SkScalar roots[2]; // we only expect one, but make room for 2 for safety
+=======
+    SkScalar B = 2*(c1 - c0);
+    SkScalar C = c0 - target;
+
+    SkScalar roots[2];  // we only expect one, but make room for 2 for safety
+>>>>>>> miniblink49
     int count = SkFindUnitQuadRoots(A, B, C, roots);
     if (count) {
         *t = roots[0];
@@ -41,8 +60,12 @@ static bool chopMonoQuadAt(SkScalar c0, SkScalar c1, SkScalar c2,
     return false;
 }
 
+<<<<<<< HEAD
 static bool chopMonoQuadAtY(SkPoint pts[3], SkScalar y, SkScalar* t)
 {
+=======
+static bool chopMonoQuadAtY(SkPoint pts[3], SkScalar y, SkScalar* t) {
+>>>>>>> miniblink49
     return chopMonoQuadAt(pts[0].fY, pts[1].fY, pts[2].fY, y, t);
 }
 
@@ -52,8 +75,12 @@ static bool chopMonoQuadAtY(SkPoint pts[3], SkScalar y, SkScalar* t)
  communicate that to setQuadratic, and then avoid having to flip it back
  here (only to have setQuadratic do the flip again)
  */
+<<<<<<< HEAD
 bool SkQuadClipper::clipQuad(const SkPoint srcPts[3], SkPoint dst[3])
 {
+=======
+bool SkQuadClipper::clipQuad(const SkPoint srcPts[3], SkPoint dst[3]) {
+>>>>>>> miniblink49
     bool reverse;
 
     // we need the data to be monotonically increasing in Y

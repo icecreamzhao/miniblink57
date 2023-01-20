@@ -8,8 +8,15 @@
 #include "src/code-stub-assembler.h"
 
 namespace v8 {
+<<<<<<< HEAD
 namespace internal {
 } // namespace internal
 } // namespace v8
 
 #endif // V8_BUILTINS_BUILTINS_OBJECT_GEN_H_
+=======
+namespace internal {}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_BUILTINS_BUILTINS_OBJECT_GEN_H_
+>>>>>>> miniblink49

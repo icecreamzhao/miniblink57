@@ -28,21 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLParserThread.h"
 
-#include "platform/CrossThreadFunctional.h"
-#include "platform/WaitableEvent.h"
-#include "platform/heap/SafePoint.h"
+#include "platform/Task.h"
+#include "platform/ThreadSafeFunctional.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebTraceLocation.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-static HTMLParserThread* s_sharedThread = nullptr;
+static HTMLParserThread* s_sharedThread = 0;
 
-HTMLParserThread::HTMLParserThread() { }
+HTMLParserThread::HTMLParserThread()
+{
+}
 
-HTMLParserThread::~HTMLParserThread() { }
+HTMLParserThread::~HTMLParserThread()
+{
+}
 
 void HTMLParserThread::init()
 {
@@ -58,26 +63,18 @@ void HTMLParserThread::setupHTMLParserThread()
 
 void HTMLParserThread::shutdown()
 {
-    ASSERT(isMainThread());
     ASSERT(s_sharedThread);
-    // currentThread will always be non-null in production, but can be null in
-    // Chromium unit tests.
-    if (Platform::current()->currentThread() && s_sharedThread->m_thread) {
-        WaitableEvent waitableEvent;
-        s_sharedThread->postTask(
-            crossThreadBind(&HTMLParserThread::cleanupHTMLParserThread,
-                crossThreadUnretained(s_sharedThread),
-                crossThreadUnretained(&waitableEvent)));
-        waitableEvent.wait();
+    // currentThread will always be non-null in production, but can be null in Chromium unit tests.
+    if (Platform::current()->currentThread() && s_sharedThread->isRunning()) {
+        s_sharedThread->postTask(threadSafeBind(&HTMLParserThread::cleanupHTMLParserThread, AllowCrossThreadAccess(s_sharedThread)));
     }
     delete s_sharedThread;
-    s_sharedThread = nullptr;
+    s_sharedThread = 0;
 }
 
-void HTMLParserThread::cleanupHTMLParserThread(WaitableEvent* waitableEvent)
+void HTMLParserThread::cleanupHTMLParserThread()
 {
     m_thread->shutdown();
-    waitableEvent->signal();
 }
 
 HTMLParserThread* HTMLParserThread::shared()
@@ -85,16 +82,23 @@ HTMLParserThread* HTMLParserThread::shared()
     return s_sharedThread;
 }
 
-void HTMLParserThread::postTask(std::unique_ptr<CrossThreadClosure> closure)
+WebThread& HTMLParserThread::platformThread()
 {
-    ASSERT(isMainThread());
-    if (!m_thread) {
+    if (!isRunning()) {
         m_thread = WebThreadSupportingGC::create("HTMLParserThread");
-        postTask(crossThreadBind(&HTMLParserThread::setupHTMLParserThread,
-            crossThreadUnretained(this)));
+        postTask(threadSafeBind(&HTMLParserThread::setupHTMLParserThread, AllowCrossThreadAccess(this)));
     }
+    return m_thread->platformThread();
+}
 
-    m_thread->postTask(BLINK_FROM_HERE, std::move(closure));
+bool HTMLParserThread::isRunning()
+{
+    return !!m_thread;
+}
+
+void HTMLParserThread::postTask(PassOwnPtr<Closure> closure)
+{
+    platformThread().postTask(FROM_HERE, new Task(closure));
 }
 
 } // namespace blink

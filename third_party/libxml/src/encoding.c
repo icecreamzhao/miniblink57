@@ -146,7 +146,11 @@ closeIcuConverter(uconv_t *conv)
 #endif /* LIBXML_ICU_ENABLED */
 
 static int
+<<<<<<< HEAD
 gbkToUTF8(unsigned char* out, int *outlen, const unsigned char* in, int* inlen) {
+=======
+gbkToUTF8(unsigned char* out, int *outlen, const unsigned char* in, int* inlen) {
+>>>>>>> miniblink49
     return -1; // 并不会真正走到这里，因为blink在外部会强制转码并且设置固定utf16解码方式
 }
 
@@ -300,7 +304,11 @@ UTF8Toascii(unsigned char* out, int *outlen,
  *     if the return value is positive, else unpredictable.
  * The value of @outlen after return is the number of octets consumed.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 isolat1ToUTF8(unsigned char* out, int *outlen,
               const unsigned char* in, int *inlen) {
     unsigned char* outstart = out;
@@ -389,7 +397,11 @@ UTF8ToUTF8(unsigned char* out, int *outlen,
  *     if the return value is positive, else unpredictable.
  * The value of @outlen after return is the number of octets consumed.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 UTF8Toisolat1(unsigned char* out, int *outlen,
               const unsigned char* in, int *inlen) {
     const unsigned char* processed = in;
@@ -919,7 +931,11 @@ UTF8ToUTF16BE(unsigned char* outb, int *outlen,
  * 
  * Returns one of the XML_CHAR_ENCODING_... values.
  */
+<<<<<<< HEAD
 xmlCharEncoding XMLCALL
+=======
+xmlCharEncoding
+>>>>>>> miniblink49
 xmlDetectCharEncoding(const unsigned char* in, int len)
 {
     if (in == NULL) 
@@ -979,7 +995,11 @@ xmlDetectCharEncoding(const unsigned char* in, int len)
  *
  * Unregisters all aliases
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlCleanupEncodingAliases(void) {
     int i;
 
@@ -1006,7 +1026,11 @@ xmlCleanupEncodingAliases(void) {
  * 
  * Returns NULL if not found, otherwise the original name
  */
+<<<<<<< HEAD
 const char * XMLCALL
+=======
+const char *
+>>>>>>> miniblink49
 xmlGetEncodingAlias(const char *alias) {
     int i;
     char upper[100];
@@ -1044,7 +1068,11 @@ xmlGetEncodingAlias(const char *alias) {
  * 
  * Returns 0 in case of success, -1 in case of error
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlAddEncodingAlias(const char *name, const char *alias) {
     int i;
     char upper[100];
@@ -1101,7 +1129,11 @@ xmlAddEncodingAlias(const char *name, const char *alias) {
  * 
  * Returns 0 in case of success, -1 in case of error
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlDelEncodingAlias(const char *alias) {
     int i;
 
@@ -1137,7 +1169,11 @@ xmlDelEncodingAlias(const char *alias) {
  * Returns one of the XML_CHAR_ENCODING_... values or XML_CHAR_ENCODING_NONE
  * if not recognized.
  */
+<<<<<<< HEAD
 xmlCharEncoding XMLCALL
+=======
+xmlCharEncoding
+>>>>>>> miniblink49
 xmlParseCharEncoding(const char* name)
 {
     const char *alias;
@@ -1221,7 +1257,11 @@ xmlParseCharEncoding(const char* name)
  * Returns the canonical name for the given encoding
  */
 
+<<<<<<< HEAD
 const char* XMLCALL
+=======
+const char*
+>>>>>>> miniblink49
 xmlGetCharEncodingName(xmlCharEncoding enc) {
     switch (enc) {
         case XML_CHAR_ENCODING_ERROR:
@@ -1305,7 +1345,11 @@ static xmlCharEncodingHandlerPtr xmlDefaultCharEncodingHandler = NULL;
  *
  * Returns the xmlCharEncodingHandlerPtr created (or NULL in case of error).
  */
+<<<<<<< HEAD
 xmlCharEncodingHandlerPtr XMLCALL
+=======
+xmlCharEncodingHandlerPtr
+>>>>>>> miniblink49
 xmlNewCharEncodingHandler(const char *name, 
                           xmlCharEncodingInputFunc input,
                           xmlCharEncodingOutputFunc output) {
@@ -1383,7 +1427,11 @@ xmlNewCharEncodingHandler(const char *name,
  * NOTE: while public, this function usually doesn't need to be called
  *       in normal processing.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlInitCharEncodingHandlers(void) {
     unsigned short int tst = 0x1234;
     unsigned char *ptr = (unsigned char *) &tst; 
@@ -1417,7 +1465,10 @@ xmlInitCharEncodingHandlers(void) {
 #ifdef LIBXML_HTML_ENABLED
     xmlNewCharEncodingHandler("HTML", NULL, UTF8ToHtml);
 #endif
+<<<<<<< HEAD
     xmlNewCharEncodingHandler("GBK", gbkToUTF8, NULL);
+=======
+>>>>>>> miniblink49
 #else
     xmlUTF16LEHandler = 
           xmlNewCharEncodingHandler("UTF-16LE", UTF16LEToUTF8, NULL);
@@ -1427,6 +1478,10 @@ xmlInitCharEncodingHandlers(void) {
     xmlNewCharEncodingHandler("ISO-8859-1", isolat1ToUTF8, NULL);
     xmlNewCharEncodingHandler("ASCII", asciiToUTF8, NULL);
     xmlNewCharEncodingHandler("US-ASCII", asciiToUTF8, NULL);
+<<<<<<< HEAD
+=======
+    xmlNewCharEncodingHandler("GBK", gbkToUTF8, NULL);
+>>>>>>> miniblink49
 #endif /* LIBXML_OUTPUT_ENABLED */
 #if !defined(LIBXML_ICONV_ENABLED) && !defined(LIBXML_ICU_ENABLED)
 #ifdef LIBXML_ISO8859X_ENABLED
@@ -1442,7 +1497,11 @@ xmlInitCharEncodingHandlers(void) {
  * Cleanup the memory allocated for the char encoding support, it
  * unregisters all the encoding handlers and the aliases.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlCleanupCharEncodingHandlers(void) {
     xmlCleanupEncodingAliases();
 
@@ -1468,7 +1527,11 @@ xmlCleanupCharEncodingHandlers(void) {
  *
  * Register the char encoding handler, surprising, isn't it ?
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlRegisterCharEncodingHandler(xmlCharEncodingHandlerPtr handler) {
     if (handlers == NULL) xmlInitCharEncodingHandlers();
     if ((handler == NULL) || (handlers == NULL)) {
@@ -1494,7 +1557,11 @@ xmlRegisterCharEncodingHandler(xmlCharEncodingHandlerPtr handler) {
  *
  * Returns the handler or NULL if not found
  */
+<<<<<<< HEAD
 xmlCharEncodingHandlerPtr XMLCALL
+=======
+xmlCharEncodingHandlerPtr
+>>>>>>> miniblink49
 xmlGetCharEncodingHandler(xmlCharEncoding enc) {
     xmlCharEncodingHandlerPtr handler;
 
@@ -1626,7 +1693,11 @@ xmlGetCharEncodingHandler(xmlCharEncoding enc) {
  *
  * Returns the handler or NULL if not found
  */
+<<<<<<< HEAD
 xmlCharEncodingHandlerPtr XMLCALL
+=======
+xmlCharEncodingHandlerPtr
+>>>>>>> miniblink49
 xmlFindCharEncodingHandler(const char *name) {
     const char *nalias;
     const char *norig;
@@ -2024,7 +2095,11 @@ xmlCharEncFirstLineInt(xmlCharEncodingHandler *handler, xmlBufferPtr out,
  *     -2 if the transcoding fails (for *in is not valid utf8 string or
  *        the result of transformation can't fit into the encoding we want), or
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlCharEncFirstLine(xmlCharEncodingHandler *handler, xmlBufferPtr out,
                  xmlBufferPtr in) {
     return(xmlCharEncFirstLineInt(handler, out, in, -1));
@@ -2043,7 +2118,11 @@ xmlCharEncFirstLine(xmlCharEncodingHandler *handler, xmlBufferPtr out,
  *     -2 if the transcoding fails (for *in is not valid utf8 string or
  *        the result of transformation can't fit into the encoding we want), or
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlCharEncInFunc(xmlCharEncodingHandler * handler, xmlBufferPtr out,
                  xmlBufferPtr in)
 {
@@ -2155,7 +2234,11 @@ xmlCharEncInFunc(xmlCharEncodingHandler * handler, xmlBufferPtr out,
  *     -2 if the transcoding fails (for *in is not valid utf8 string or
  *        the result of transformation can't fit into the encoding we want), or
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlCharEncOutFunc(xmlCharEncodingHandler *handler, xmlBufferPtr out,
                   xmlBufferPtr in) {
     int ret = -2;
@@ -2355,7 +2438,11 @@ retry:
  *
  * Returns 0 if success, or -1 in case of error
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 xmlCharEncCloseFunc(xmlCharEncodingHandler *handler) {
     int ret = 0;
     if (handler == NULL) return(-1);
@@ -2424,7 +2511,11 @@ xmlCharEncCloseFunc(xmlCharEncodingHandler *handler) {
  * Returns the index in bytes from the beginning of the entity or -1
  *         in case the index could not be computed.
  */
+<<<<<<< HEAD
 long XMLCALL
+=======
+long
+>>>>>>> miniblink49
 xmlByteConsumed(xmlParserCtxtPtr ctxt) {
     xmlParserInputPtr in;
     

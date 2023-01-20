@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,6 +11,7 @@
 #include "SkUnPreMultiply.h"
 #include "SkColorPriv.h"
 
+<<<<<<< HEAD
 SkColor SkUnPreMultiply::PMColorToColor(SkPMColor c)
 {
     const unsigned a = SkGetPackedA32(c);
@@ -25,6 +30,24 @@ uint32_t SkUnPreMultiply::UnPreMultiplyPreservingByteOrder(SkPMColor c)
         ApplyScale(scale, SkGetPackedR32(c)),
         ApplyScale(scale, SkGetPackedG32(c)),
         ApplyScale(scale, SkGetPackedB32(c)));
+=======
+SkColor SkUnPreMultiply::PMColorToColor(SkPMColor c) {
+    const unsigned a = SkGetPackedA32(c);
+    const Scale scale = GetScale(a);
+    return SkColorSetARGB(a,
+                          ApplyScale(scale, SkGetPackedR32(c)),
+                          ApplyScale(scale, SkGetPackedG32(c)),
+                          ApplyScale(scale, SkGetPackedB32(c)));
+}
+
+uint32_t SkUnPreMultiply::UnPreMultiplyPreservingByteOrder(SkPMColor c) {
+    const U8CPU a = SkGetPackedA32(c);
+    const Scale scale = GetScale(a);
+    return SkPackARGB32NoCheck(a,
+                               ApplyScale(scale, SkGetPackedR32(c)),
+                               ApplyScale(scale, SkGetPackedG32(c)),
+                               ApplyScale(scale, SkGetPackedB32(c)));
+>>>>>>> miniblink49
 }
 
 const uint32_t SkUnPreMultiply::gTable[] = {
@@ -63,8 +86,12 @@ const uint32_t SkUnPreMultiply::gTable[] = {
 };
 
 #ifdef BUILD_DIVIDE_TABLE
+<<<<<<< HEAD
 void SkUnPreMultiply_BuildTable()
 {
+=======
+void SkUnPreMultiply_BuildTable() {
+>>>>>>> miniblink49
     for (unsigned i = 0; i <= 255; i++) {
         uint32_t scale;
 

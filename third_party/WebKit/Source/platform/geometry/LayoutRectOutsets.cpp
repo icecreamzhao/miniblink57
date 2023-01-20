@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/LayoutRectOutsets.h"
 
 #include "wtf/Assertions.h"
@@ -55,16 +59,24 @@ LayoutUnit LayoutRectOutsets::logicalRight(WritingMode writingMode) const
     return isHorizontalWritingMode(writingMode) ? m_right : m_bottom;
 }
 
+<<<<<<< HEAD
 LayoutRectOutsets LayoutRectOutsets::logicalOutsets(
     WritingMode writingMode) const
+=======
+LayoutRectOutsets LayoutRectOutsets::logicalOutsets(WritingMode writingMode) const
+>>>>>>> miniblink49
 {
     if (!isHorizontalWritingMode(writingMode))
         return LayoutRectOutsets(m_left, m_bottom, m_right, m_top);
     return *this;
 }
 
+<<<<<<< HEAD
 LayoutRectOutsets LayoutRectOutsets::logicalOutsetsWithFlippedLines(
     WritingMode writingMode) const
+=======
+LayoutRectOutsets LayoutRectOutsets::logicalOutsetsWithFlippedLines(WritingMode writingMode) const
+>>>>>>> miniblink49
 {
     LayoutRectOutsets outsets = logicalOutsets(writingMode);
     if (isFlippedLinesWritingMode(writingMode))
@@ -75,11 +87,21 @@ LayoutRectOutsets LayoutRectOutsets::logicalOutsetsWithFlippedLines(
 LayoutUnit LayoutRectOutsets::before(WritingMode writingMode) const
 {
     switch (writingMode) {
+<<<<<<< HEAD
     case WritingMode::kHorizontalTb:
         return m_top;
     case WritingMode::kVerticalLr:
         return m_left;
     case WritingMode::kVerticalRl:
+=======
+    case TopToBottomWritingMode:
+        return m_top;
+    case BottomToTopWritingMode:
+        return m_bottom;
+    case LeftToRightWritingMode:
+        return m_left;
+    case RightToLeftWritingMode:
+>>>>>>> miniblink49
         return m_right;
     }
     ASSERT_NOT_REACHED();
@@ -89,33 +111,52 @@ LayoutUnit LayoutRectOutsets::before(WritingMode writingMode) const
 LayoutUnit LayoutRectOutsets::after(WritingMode writingMode) const
 {
     switch (writingMode) {
+<<<<<<< HEAD
     case WritingMode::kHorizontalTb:
         return m_bottom;
     case WritingMode::kVerticalLr:
         return m_right;
     case WritingMode::kVerticalRl:
+=======
+    case TopToBottomWritingMode:
+        return m_bottom;
+    case BottomToTopWritingMode:
+        return m_top;
+    case LeftToRightWritingMode:
+        return m_right;
+    case RightToLeftWritingMode:
+>>>>>>> miniblink49
         return m_left;
     }
     ASSERT_NOT_REACHED();
     return m_bottom;
 }
 
+<<<<<<< HEAD
 LayoutUnit LayoutRectOutsets::start(WritingMode writingMode,
     TextDirection direction) const
+=======
+LayoutUnit LayoutRectOutsets::start(WritingMode writingMode, TextDirection direction) const
+>>>>>>> miniblink49
 {
     if (isHorizontalWritingMode(writingMode))
         return isLeftToRightDirection(direction) ? m_left : m_right;
     return isLeftToRightDirection(direction) ? m_top : m_bottom;
 }
 
+<<<<<<< HEAD
 LayoutUnit LayoutRectOutsets::end(WritingMode writingMode,
     TextDirection direction) const
+=======
+LayoutUnit LayoutRectOutsets::end(WritingMode writingMode, TextDirection direction) const
+>>>>>>> miniblink49
 {
     if (isHorizontalWritingMode(writingMode))
         return isLeftToRightDirection(direction) ? m_right : m_left;
     return isLeftToRightDirection(direction) ? m_bottom : m_top;
 }
 
+<<<<<<< HEAD
 LayoutUnit LayoutRectOutsets::over(WritingMode writingMode) const
 {
     return isHorizontalWritingMode(writingMode) ? m_top : m_right;
@@ -136,6 +177,21 @@ void LayoutRectOutsets::setBefore(WritingMode writingMode, LayoutUnit value)
         m_left = value;
         break;
     case WritingMode::kVerticalRl:
+=======
+void LayoutRectOutsets::setBefore(WritingMode writingMode, LayoutUnit value)
+{
+    switch (writingMode) {
+    case TopToBottomWritingMode:
+        m_top = value;
+        break;
+    case BottomToTopWritingMode:
+        m_bottom = value;
+        break;
+    case LeftToRightWritingMode:
+        m_left = value;
+        break;
+    case RightToLeftWritingMode:
+>>>>>>> miniblink49
         m_right = value;
         break;
     default:
@@ -147,6 +203,7 @@ void LayoutRectOutsets::setBefore(WritingMode writingMode, LayoutUnit value)
 void LayoutRectOutsets::setAfter(WritingMode writingMode, LayoutUnit value)
 {
     switch (writingMode) {
+<<<<<<< HEAD
     case WritingMode::kHorizontalTb:
         m_bottom = value;
         break;
@@ -154,6 +211,18 @@ void LayoutRectOutsets::setAfter(WritingMode writingMode, LayoutUnit value)
         m_right = value;
         break;
     case WritingMode::kVerticalRl:
+=======
+    case TopToBottomWritingMode:
+        m_bottom = value;
+        break;
+    case BottomToTopWritingMode:
+        m_top = value;
+        break;
+    case LeftToRightWritingMode:
+        m_right = value;
+        break;
+    case RightToLeftWritingMode:
+>>>>>>> miniblink49
         m_left = value;
         break;
     default:
@@ -162,9 +231,13 @@ void LayoutRectOutsets::setAfter(WritingMode writingMode, LayoutUnit value)
     }
 }
 
+<<<<<<< HEAD
 void LayoutRectOutsets::setStart(WritingMode writingMode,
     TextDirection direction,
     LayoutUnit value)
+=======
+void LayoutRectOutsets::setStart(WritingMode writingMode, TextDirection direction, LayoutUnit value)
+>>>>>>> miniblink49
 {
     if (isHorizontalWritingMode(writingMode)) {
         if (isLeftToRightDirection(direction))
@@ -179,9 +252,13 @@ void LayoutRectOutsets::setStart(WritingMode writingMode,
     }
 }
 
+<<<<<<< HEAD
 void LayoutRectOutsets::setEnd(WritingMode writingMode,
     TextDirection direction,
     LayoutUnit value)
+=======
+void LayoutRectOutsets::setEnd(WritingMode writingMode, TextDirection direction, LayoutUnit value)
+>>>>>>> miniblink49
 {
     if (isHorizontalWritingMode(writingMode)) {
         if (isLeftToRightDirection(direction))

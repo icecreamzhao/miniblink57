@@ -8,11 +8,16 @@
 #ifndef SkFontMgr_android_parser_DEFINED
 #define SkFontMgr_android_parser_DEFINED
 
+<<<<<<< HEAD
 #include "SkFontMgr.h"
 #include "SkString.h"
 #include "SkTArray.h"
 #include "SkTDArray.h"
 #include "SkTypes.h"
+=======
+#include "SkString.h"
+#include "SkTDArray.h"
+>>>>>>> miniblink49
 
 #include <climits>
 #include <limits>
@@ -26,6 +31,7 @@
 class SkLanguage {
 public:
     SkLanguage() { }
+<<<<<<< HEAD
     SkLanguage(const SkString& tag)
         : fTag(tag)
     {
@@ -42,6 +48,12 @@ public:
         : fTag(b.fTag)
     {
     }
+=======
+    SkLanguage(const SkString& tag) : fTag(tag) { }
+    SkLanguage(const char* tag) : fTag(tag) { }
+    SkLanguage(const char* tag, size_t len) : fTag(tag, len) { }
+    SkLanguage(const SkLanguage& b) : fTag(b.fTag) { }
+>>>>>>> miniblink49
 
     /** Gets a BCP 47 language identifier for this SkLanguage.
         @return a BCP 47 language identifier representing this language
@@ -53,6 +65,7 @@ public:
     */
     SkLanguage getParent() const;
 
+<<<<<<< HEAD
     bool operator==(const SkLanguage& b) const
     {
         return fTag == b.fTag;
@@ -63,6 +76,15 @@ public:
     }
     SkLanguage& operator=(const SkLanguage& b)
     {
+=======
+    bool operator==(const SkLanguage& b) const {
+        return fTag == b.fTag;
+    }
+    bool operator!=(const SkLanguage& b) const {
+        return fTag != b.fTag;
+    }
+    SkLanguage& operator=(const SkLanguage& b) {
+>>>>>>> miniblink49
         fTag = b.fTag;
         return *this;
     }
@@ -73,29 +95,50 @@ private:
 };
 
 enum FontVariants {
+<<<<<<< HEAD
     kDefault_FontVariant = 0x01,
     kCompact_FontVariant = 0x02,
     kElegant_FontVariant = 0x04,
     kLast_FontVariant = kElegant_FontVariant,
+=======
+   kDefault_FontVariant = 0x01,
+   kCompact_FontVariant = 0x02,
+   kElegant_FontVariant = 0x04,
+   kLast_FontVariant = kElegant_FontVariant,
+>>>>>>> miniblink49
 };
 typedef uint32_t FontVariant;
 
 // Must remain trivially movable (can be memmoved).
 struct FontFileInfo {
+<<<<<<< HEAD
     FontFileInfo()
         : fIndex(0)
         , fWeight(0)
         , fStyle(Style::kAuto)
     {
     }
+=======
+    FontFileInfo() : fIndex(0), fWeight(0), fStyle(Style::kAuto) { }
+>>>>>>> miniblink49
 
     SkString fFileName;
     int fIndex;
     int fWeight;
+<<<<<<< HEAD
     enum class Style { kAuto,
         kNormal,
         kItalic } fStyle;
     SkTArray<SkFontMgr::FontParameters::Axis, true> fAxes;
+=======
+    enum class Style { kAuto, kNormal, kItalic } fStyle;
+    struct Axis {
+        Axis() : fTag(SkSetFourByteTag('\0','\0','\0','\0')), fValue(0) { }
+        SkFourByteTag fTag;
+        SkFixed fValue;
+    };
+    SkTArray<Axis, true> fAxes;
+>>>>>>> miniblink49
 };
 
 /**
@@ -111,8 +154,12 @@ struct FontFamily {
         , fOrder(-1)
         , fIsFallbackFont(isFallbackFont)
         , fBasePath(basePath)
+<<<<<<< HEAD
     {
     }
+=======
+    { }
+>>>>>>> miniblink49
 
     SkTArray<SkString, true> fNames;
     SkTArray<FontFileInfo, true> fFonts;
@@ -130,6 +177,7 @@ void GetSystemFontFamilies(SkTDArray<FontFamily*>& fontFamilies);
 
 /** Parses font configuration files and appends result to fontFamilies. */
 void GetCustomFontFamilies(SkTDArray<FontFamily*>& fontFamilies,
+<<<<<<< HEAD
     const SkString& basePath,
     const char* fontsXml,
     const char* fallbackFontsXml,
@@ -137,15 +185,30 @@ void GetCustomFontFamilies(SkTDArray<FontFamily*>& fontFamilies,
 
 } // SkFontMgr_Android_Parser namespace
 
+=======
+                           const SkString& basePath,
+                           const char* fontsXml,
+                           const char* fallbackFontsXml,
+                           const char* langFallbackFontsDir = NULL);
+
+} // SkFontMgr_Android_Parser namespace
+
+
+>>>>>>> miniblink49
 /** Parses a null terminated string into an integer type, checking for overflow.
  *  http://www.w3.org/TR/html-markup/datatypes.html#common.data.integer.non-negative-def
  *
  *  If the string cannot be parsed into 'value', returns false and does not change 'value'.
  */
+<<<<<<< HEAD
 template <typename T>
 static bool parse_non_negative_integer(const char* s, T* value)
 {
     static_assert(std::numeric_limits<T>::is_integer, "T_must_be_integer");
+=======
+template <typename T> static bool parse_non_negative_integer(const char* s, T* value) {
+    SK_COMPILE_ASSERT(std::numeric_limits<T>::is_integer, T_must_be_integer);
+>>>>>>> miniblink49
 
     if (*s == '\0') {
         return false;
@@ -181,12 +244,19 @@ static bool parse_non_negative_integer(const char* s, T* value)
  *
  *  If the string cannot be parsed into 'value', returns false and does not change 'value'.
  */
+<<<<<<< HEAD
 template <int N, typename T>
 static bool parse_fixed(const char* s, T* value)
 {
     static_assert(std::numeric_limits<T>::is_integer, "T_must_be_integer");
     static_assert(std::numeric_limits<T>::is_signed, "T_must_be_signed");
     static_assert(sizeof(T) * CHAR_BIT - N >= 5, "N_must_leave_four_bits_plus_sign");
+=======
+template <int N, typename T> static bool parse_fixed(const char* s, T* value) {
+    SK_COMPILE_ASSERT(std::numeric_limits<T>::is_integer, T_must_be_integer);
+    SK_COMPILE_ASSERT(std::numeric_limits<T>::is_signed, T_must_be_signed);
+    SK_COMPILE_ASSERT(sizeof(T) * CHAR_BIT - N >= 5, N_must_leave_four_bits_plus_sign);
+>>>>>>> miniblink49
 
     bool negate = false;
     if (*s == '-') {
@@ -232,7 +302,11 @@ static bool parse_fixed(const char* s, T* value)
         n = -n;
         frac = -frac;
     }
+<<<<<<< HEAD
     *value = SkLeftShift(n, N) + frac;
+=======
+    *value = (n << N) + frac;
+>>>>>>> miniblink49
     return true;
 }
 

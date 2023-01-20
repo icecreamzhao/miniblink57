@@ -31,11 +31,16 @@ namespace WTF {
 
 using std::swap;
 
+<<<<<<< HEAD
 template <typename RandomAccessIterator, typename Predicate>
 inline void siftDown(RandomAccessIterator array,
     ptrdiff_t start,
     ptrdiff_t end,
     Predicate compareLess)
+=======
+template<typename RandomAccessIterator, typename Predicate>
+inline void siftDown(RandomAccessIterator array, ptrdiff_t start, ptrdiff_t end, Predicate compareLess)
+>>>>>>> miniblink49
 {
     ptrdiff_t root = start;
 
@@ -47,6 +52,7 @@ inline void siftDown(RandomAccessIterator array,
         if (compareLess(array[root], array[child])) {
             swap(array[root], array[child]);
             root = child;
+<<<<<<< HEAD
         } else {
             return;
         }
@@ -57,6 +63,15 @@ template <typename RandomAccessIterator, typename Predicate>
 inline void heapify(RandomAccessIterator array,
     ptrdiff_t count,
     Predicate compareLess)
+=======
+        } else
+            return;
+    }
+}
+
+template<typename RandomAccessIterator, typename Predicate>
+inline void heapify(RandomAccessIterator array, ptrdiff_t count, Predicate compareLess)
+>>>>>>> miniblink49
 {
     ptrdiff_t start = (count - 2) / 2;
 
@@ -66,10 +81,15 @@ inline void heapify(RandomAccessIterator array,
     }
 }
 
+<<<<<<< HEAD
 template <typename RandomAccessIterator, typename Predicate>
 void heapSort(RandomAccessIterator start,
     RandomAccessIterator end,
     Predicate compareLess)
+=======
+template<typename RandomAccessIterator, typename Predicate>
+void heapSort(RandomAccessIterator start, RandomAccessIterator end, Predicate compareLess)
+>>>>>>> miniblink49
 {
     ptrdiff_t count = end - start;
     heapify(start, count, compareLess);
@@ -82,6 +102,7 @@ void heapSort(RandomAccessIterator start,
     }
 }
 
+<<<<<<< HEAD
 template <typename RandomAccessIterator, typename Predicate>
 inline void nonCopyingSort(RandomAccessIterator start,
     RandomAccessIterator end,
@@ -90,6 +111,13 @@ inline void nonCopyingSort(RandomAccessIterator start,
     // heapsort happens to use only swaps, not copies, but the essential thing
     // about this function is the fact that it does not copy, not the specific
     // algorithm
+=======
+template<typename RandomAccessIterator, typename Predicate>
+inline void nonCopyingSort(RandomAccessIterator start, RandomAccessIterator end, Predicate compareLess)
+{
+    // heapsort happens to use only swaps, not copies, but the essential thing about
+    // this function is the fact that it does not copy, not the specific algorithm
+>>>>>>> miniblink49
     heapSort(start, end, compareLess);
 }
 

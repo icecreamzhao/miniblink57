@@ -27,7 +27,7 @@
 #include "core/dom/ProcessingInstruction.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/PassRefPtr.h"
-#include "third_party/libxml/src/include/libxml/tree.h"
+#include <libxml/tree.h>
 #include "third_party/libxslt/libxslt/transform.h"
 
 namespace blink {
@@ -36,38 +36,29 @@ class XSLImportRule;
 
 class XSLStyleSheet final : public StyleSheet {
 public:
-    static XSLStyleSheet* create(XSLImportRule* parentImport,
-        const String& originalURL,
-        const KURL& finalURL)
+    static PassRefPtrWillBeRawPtr<XSLStyleSheet> create(XSLImportRule* parentImport, const String& originalURL, const KURL& finalURL)
     {
-        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-        return new XSLStyleSheet(parentImport, originalURL, finalURL);
+        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+        return adoptRefWillBeNoop(new XSLStyleSheet(parentImport, originalURL, finalURL));
     }
-    static XSLStyleSheet* create(ProcessingInstruction* parentNode,
-        const String& originalURL,
-        const KURL& finalURL)
+    static PassRefPtrWillBeRawPtr<XSLStyleSheet> create(ProcessingInstruction* parentNode, const String& originalURL, const KURL& finalURL)
     {
-        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-        return new XSLStyleSheet(parentNode, originalURL, finalURL, false);
+        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+        return adoptRefWillBeNoop(new XSLStyleSheet(parentNode, originalURL, finalURL, false));
     }
-    static XSLStyleSheet* createEmbedded(ProcessingInstruction* parentNode,
-        const KURL& finalURL)
+    static PassRefPtrWillBeRawPtr<XSLStyleSheet> createEmbedded(ProcessingInstruction* parentNode, const KURL& finalURL)
     {
-        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-        return new XSLStyleSheet(parentNode, finalURL.getString(), finalURL, true);
+        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+        return adoptRefWillBeNoop(new XSLStyleSheet(parentNode, finalURL.string(), finalURL, true));
     }
 
     // Taking an arbitrary node is unsafe, because owner node pointer can become
     // stale. XSLTProcessor ensures that the stylesheet doesn't outlive its
     // parent, in part by not exposing it to JavaScript.
-    static XSLStyleSheet* createForXSLTProcessor(Document* document,
-        Node* stylesheetRootNode,
-        const String& originalURL,
-        const KURL& finalURL)
+    static PassRefPtrWillBeRawPtr<XSLStyleSheet> createForXSLTProcessor(Document* document, Node* stylesheetRootNode, const String& originalURL, const KURL& finalURL)
     {
-        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-        return new XSLStyleSheet(document, stylesheetRootNode, originalURL,
-            finalURL, false);
+        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+        return adoptRefWillBeNoop(new XSLStyleSheet(document, stylesheetRootNode, originalURL, finalURL, false));
     }
 
     ~XSLStyleSheet() override;
@@ -82,16 +73,12 @@ public:
     void loadChildSheet(const String& href);
 
     Document* ownerDocument();
-    XSLStyleSheet* parentStyleSheet() const override
-    {
-        return m_parentStyleSheet;
-    }
+    XSLStyleSheet* parentStyleSheet() const override { return m_parentStyleSheet; }
     void setParentStyleSheet(XSLStyleSheet*);
 
     xmlDocPtr document();
     xsltStylesheetPtr compileStyleSheet();
-    xmlDocPtr locateStylesheetSubResource(xmlDocPtr parentDoc,
-        const xmlChar* uri);
+    xmlDocPtr locateStylesheetSubResource(xmlDocPtr parentDoc, const xmlChar* uri);
 
     void clearDocuments();
 
@@ -112,25 +99,16 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    XSLStyleSheet(Node* parentNode,
-        const String& originalURL,
-        const KURL& finalURL,
-        bool embedded);
-    XSLStyleSheet(Document* ownerDocument,
-        Node* styleSheetRootNode,
-        const String& originalURL,
-        const KURL& finalURL,
-        bool embedded);
-    XSLStyleSheet(XSLImportRule* parentImport,
-        const String& originalURL,
-        const KURL& finalURL);
+    XSLStyleSheet(Node* parentNode, const String& originalURL, const KURL& finalURL, bool embedded);
+    XSLStyleSheet(Document* ownerDocument, Node* styleSheetRootNode, const String& originalURL, const KURL& finalURL, bool embedded);
+    XSLStyleSheet(XSLImportRule* parentImport, const String& originalURL, const KURL& finalURL);
 
-    Member<Node> m_ownerNode;
+    RawPtrWillBeMember<Node> m_ownerNode;
     String m_originalURL;
     KURL m_finalURL;
     bool m_isDisabled;
 
-    HeapVector<Member<XSLImportRule>> m_children;
+    PersistentHeapVectorWillBeHeapVector<Member<XSLImportRule>> m_children;
 
     bool m_embedded;
     bool m_processed;
@@ -139,15 +117,11 @@ private:
     bool m_stylesheetDocTaken;
     bool m_compilationFailed;
 
-    Member<XSLStyleSheet> m_parentStyleSheet;
-    Member<Document> m_ownerDocument;
+    RawPtrWillBeMember<XSLStyleSheet> m_parentStyleSheet;
+    RefPtrWillBeMember<Document> m_ownerDocument;
 };
 
-DEFINE_TYPE_CASTS(XSLStyleSheet,
-    StyleSheet,
-    sheet,
-    !sheet->isCSSStyleSheet(),
-    !sheet.isCSSStyleSheet());
+DEFINE_TYPE_CASTS(XSLStyleSheet, StyleSheet, sheet, !sheet->isCSSStyleSheet(), !sheet.isCSSStyleSheet());
 
 } // namespace blink
 

@@ -53,19 +53,17 @@
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
- * [including the GNU Public Licence.] */
-
-#include <openssl/pem.h>
+ * [including the GNU Public Licence.]
+ */
 
 #include <stdio.h>
-
-#include <openssl/buf.h>
-#include <openssl/err.h>
-#include <openssl/mem.h>
+#include "cryptlib.h"
+#include <openssl/buffer.h>
+#include <openssl/objects.h>
 #include <openssl/evp.h>
-#include <openssl/obj.h>
 #include <openssl/rand.h>
 #include <openssl/x509.h>
+#include <openssl/pem.h>
 
 /* Handle 'other' PEMs: not private keys */
 
@@ -82,7 +80,7 @@ void *PEM_ASN1_read_bio(d2i_of_void *d2i, const char *name, BIO *bp, void **x,
     p = data;
     ret = d2i(x, &p, len);
     if (ret == NULL)
-        OPENSSL_PUT_ERROR(PEM, ERR_R_ASN1_LIB);
+        PEMerr(PEM_F_PEM_ASN1_READ_BIO, ERR_R_ASN1_LIB);
     OPENSSL_free(data);
-    return ret;
+    return (ret);
 }

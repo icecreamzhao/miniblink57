@@ -43,9 +43,13 @@ class SecurityOrigin;
 class ExecutionContext;
 
 class DatabaseManager {
+<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(DatabaseManager);
     USING_FAST_MALLOC(DatabaseManager);
 
+=======
+    WTF_MAKE_NONCOPYABLE(DatabaseManager); WTF_MAKE_FAST_ALLOCATED(DatabaseManager);
+>>>>>>> miniblink49
 public:
     static DatabaseManager& manager();
     static void terminateDatabaseThread();
@@ -55,6 +59,7 @@ public:
     void registerDatabaseContext(DatabaseContext*);
     void unregisterDatabaseContext(DatabaseContext*);
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
     void didConstructDatabaseContext();
     void didDestructDatabaseContext();
@@ -81,6 +86,21 @@ public:
     String fullPathForDatabase(SecurityOrigin*,
         const String& name,
         bool createIfDoesNotExist = true);
+=======
+#if ENABLE(ASSERT)
+    void didConstructDatabaseContext();
+    void didDestructDatabaseContext();
+#else
+    void didConstructDatabaseContext() { }
+    void didDestructDatabaseContext() { }
+#endif
+
+    static void throwExceptionForDatabaseError(DatabaseError, const String& errorMessage, ExceptionState&);
+
+    Database* openDatabase(ExecutionContext*, const String& name, const String& expectedVersion, const String& displayName, unsigned long estimatedSize, DatabaseCallback*, DatabaseError&, String& errorMessage);
+
+    String fullPathForDatabase(SecurityOrigin*, const String& name, bool createIfDoesNotExist = true);
+>>>>>>> miniblink49
 
 private:
     DatabaseManager();
@@ -94,6 +114,7 @@ private:
     DatabaseContext* existingDatabaseContextFor(ExecutionContext*);
 
     Database* openDatabaseInternal(ExecutionContext*,
+<<<<<<< HEAD
         const String& name,
         const String& expectedVersion,
         const String& displayName,
@@ -101,12 +122,17 @@ private:
         bool setVersionInNewDatabase,
         DatabaseError&,
         String& errorMessage);
+=======
+        const String& name, const String& expectedVersion, const String& displayName,
+        unsigned long estimatedSize, bool setVersionInNewDatabase, DatabaseError&, String& errorMessage);
+>>>>>>> miniblink49
 
     static void logErrorMessage(ExecutionContext*, const String& message);
 
     // m_contextMap can have two or more entries even though we don't support
     // Web SQL on workers because single Blink process can have multiple main
     // contexts.
+<<<<<<< HEAD
     typedef PersistentHeapHashMap<Member<ExecutionContext>,
         Member<DatabaseContext>>
         ContextMap;
@@ -114,6 +140,13 @@ private:
 #if DCHECK_IS_ON()
     int m_databaseContextRegisteredCount = 0;
     int m_databaseContextInstanceCount = 0;
+=======
+    typedef PersistentHeapHashMap<ExecutionContext*, Member<DatabaseContext>> ContextMap;
+    ContextMap m_contextMap;
+#if ENABLE(ASSERT)
+    int m_databaseContextRegisteredCount;
+    int m_databaseContextInstanceCount;
+>>>>>>> miniblink49
 #endif
 };
 

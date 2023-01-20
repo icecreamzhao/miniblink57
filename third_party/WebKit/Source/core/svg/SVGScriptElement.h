@@ -23,6 +23,8 @@
 
 #include "core/SVGNames.h"
 #include "core/dom/ScriptLoaderClient.h"
+#include "core/svg/SVGAnimatedBoolean.h"
+#include "core/svg/SVGAnimatedString.h"
 #include "core/svg/SVGElement.h"
 #include "core/svg/SVGURIReference.h"
 #include "platform/heap/Handle.h"
@@ -31,32 +33,27 @@ namespace blink {
 
 class ScriptLoader;
 
-class SVGScriptElement final : public SVGElement,
-                               public SVGURIReference,
-                               public ScriptLoaderClient {
+class SVGScriptElement final
+    : public SVGElement
+    , public SVGURIReference
+    , public ScriptLoaderClient {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(SVGScriptElement);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGScriptElement);
 public:
-    static SVGScriptElement* create(Document&, bool wasInsertedByParser);
+    static PassRefPtrWillBeRawPtr<SVGScriptElement> create(Document&, bool wasInsertedByParser);
 
     ScriptLoader* loader() const { return m_loader.get(); }
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     bool isAnimatableAttribute(const QualifiedName&) const override;
 #endif
-
-    // ScriptLoaderClient
-    AtomicString nonce() const override { return m_nonce; }
-    void setNonce(const String& nonce) override { m_nonce = AtomicString(nonce); }
-    void clearNonce() override { m_nonce = nullAtom; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     SVGScriptElement(Document&, bool wasInsertedByParser, bool alreadyStarted);
 
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void didNotifySubtreeInsertionsToDocument() override;
     void childrenChanged(const ChildrenChange&) override;
@@ -81,11 +78,10 @@ private:
 
     void dispatchLoadEvent() override;
 
-    Element* cloneElementWithoutAttributesAndChildren() override;
+    PassRefPtrWillBeRawPtr<Element> cloneElementWithoutAttributesAndChildren() override;
     bool layoutObjectIsNeeded(const ComputedStyle&) override { return false; }
 
-    Member<ScriptLoader> m_loader;
-    AtomicString m_nonce;
+    OwnPtrWillBeMember<ScriptLoader> m_loader;
 };
 
 } // namespace blink

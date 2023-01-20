@@ -32,12 +32,16 @@
 #define DataTransferItemFileSystem_h
 
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class DataTransferItem;
 class Entry;
+<<<<<<< HEAD
 class ScriptState;
 
 class DataTransferItemFileSystem {
@@ -45,6 +49,17 @@ class DataTransferItemFileSystem {
 
 public:
     static Entry* webkitGetAsEntry(ScriptState*, DataTransferItem&);
+=======
+class ExecutionContext;
+
+class DataTransferItemFileSystem {
+public:
+    static Entry* webkitGetAsEntry(ExecutionContext*, DataTransferItem&);
+
+private:
+    DataTransferItemFileSystem();
+    ~DataTransferItemFileSystem();
+>>>>>>> miniblink49
 };
 
 } // namespace blink

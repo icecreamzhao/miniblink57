@@ -6,17 +6,28 @@
  */
 
 #include "PathOpsTSectDebug.h"
+<<<<<<< HEAD
 #include "SkIntersectionHelper.h"
 #include "SkMutex.h"
 #include "SkOpCoincidence.h"
 #include "SkOpContour.h"
+=======
+#include "SkOpCoincidence.h"
+#include "SkOpContour.h"
+#include "SkIntersectionHelper.h"
+#include "SkMutex.h"
+>>>>>>> miniblink49
 #include "SkOpSegment.h"
 #include "SkString.h"
 
 extern bool FLAGS_runFail;
 
+<<<<<<< HEAD
 inline void DebugDumpDouble(double x)
 {
+=======
+inline void DebugDumpDouble(double x) {
+>>>>>>> miniblink49
     if (x == floor(x)) {
         SkDebugf("%.0f", x);
     } else {
@@ -24,8 +35,12 @@ inline void DebugDumpDouble(double x)
     }
 }
 
+<<<<<<< HEAD
 inline void DebugDumpFloat(float x)
 {
+=======
+inline void DebugDumpFloat(float x) {
+>>>>>>> miniblink49
     if (x == floorf(x)) {
         SkDebugf("%.0f", x);
     } else {
@@ -33,13 +48,18 @@ inline void DebugDumpFloat(float x)
     }
 }
 
+<<<<<<< HEAD
 inline void DebugDumpHexFloat(float x)
 {
+=======
+inline void DebugDumpHexFloat(float x) {
+>>>>>>> miniblink49
     SkDebugf("SkBits2Float(0x%08x)", SkFloat2Bits(x));
 }
 
 // if not defined by PathOpsDebug.cpp ...
 #if !defined SK_DEBUG && FORCE_RELEASE
+<<<<<<< HEAD
 bool SkPathOpsDebug::ValidWind(int wind)
 {
     return wind > SK_MinS32 + 0xFFFF && wind < SK_MaxS32 - 0xFFFF;
@@ -47,6 +67,13 @@ bool SkPathOpsDebug::ValidWind(int wind)
 
 void SkPathOpsDebug::WindingPrintf(int wind)
 {
+=======
+bool SkPathOpsDebug::ValidWind(int wind) {
+    return wind > SK_MinS32 + 0xFFFF && wind < SK_MaxS32 - 0xFFFF;
+}
+
+void SkPathOpsDebug::WindingPrintf(int wind) {
+>>>>>>> miniblink49
     if (wind == SK_MinS32) {
         SkDebugf("?");
     } else {
@@ -55,18 +82,27 @@ void SkPathOpsDebug::WindingPrintf(int wind)
 }
 #endif
 
+<<<<<<< HEAD
 void SkDConic::dump() const
 {
+=======
+void SkDConic::dump() const {
+>>>>>>> miniblink49
     dumpInner();
     SkDebugf("},\n");
 }
 
+<<<<<<< HEAD
 void SkDConic::dumpID(int id) const
 {
+=======
+void SkDConic::dumpID(int id) const {
+>>>>>>> miniblink49
     dumpInner();
     SkDebugf("} id=%d\n", id);
 }
 
+<<<<<<< HEAD
 void SkDConic::dumpInner() const
 {
     SkDebugf("{");
@@ -76,20 +112,42 @@ void SkDConic::dumpInner() const
 
 void SkDCubic::dump() const
 {
+=======
+void SkDConic::dumpInner() const {
+    SkDebugf("{{");
+    int index = 0;
+    do {
+        fPts[index].dump();
+        SkDebugf(", ");
+    } while (++index < 2);
+    fPts[index].dump();
+    SkDebugf("}, %1.9g", fWeight);
+}
+
+void SkDCubic::dump() const {
+>>>>>>> miniblink49
     this->dumpInner();
     SkDebugf("}},\n");
 }
 
+<<<<<<< HEAD
 void SkDCubic::dumpID(int id) const
 {
+=======
+void SkDCubic::dumpID(int id) const {
+>>>>>>> miniblink49
     this->dumpInner();
     SkDebugf("}} id=%d\n", id);
 }
 
 static inline bool double_is_NaN(double x) { return x != x; }
 
+<<<<<<< HEAD
 void SkDCubic::dumpInner() const
 {
+=======
+void SkDCubic::dumpInner() const {
+>>>>>>> miniblink49
     SkDebugf("{{");
     int index = 0;
     do {
@@ -108,6 +166,7 @@ void SkDCubic::dumpInner() const
     fPts[index].dump();
 }
 
+<<<<<<< HEAD
 void SkDCurve::dumpID(int id) const
 {
 #ifndef SK_RELEASE
@@ -126,34 +185,69 @@ void SkDCurve::dumpID(int id) const
         break;
     default:
         SkASSERT(0);
+=======
+void SkDCurve::dumpID(int id) const {
+#ifndef SK_RELEASE
+    switch(fVerb) {
+        case SkPath::kLine_Verb:
+            fLine.dumpID(id);
+            break;
+        case SkPath::kQuad_Verb:
+            fQuad.dumpID(id);
+            break;
+        case SkPath::kConic_Verb:
+            fConic.dumpID(id);
+            break;
+        case SkPath::kCubic_Verb:
+            fCubic.dumpID(id);
+            break;
+        default:
+            SkASSERT(0);
+>>>>>>> miniblink49
     }
 #else
     fCubic.dumpID(id);
 #endif
 }
 
+<<<<<<< HEAD
 void SkDLine::dump() const
 {
+=======
+void SkDLine::dump() const {
+>>>>>>> miniblink49
     this->dumpInner();
     SkDebugf("}},\n");
 }
 
+<<<<<<< HEAD
 void SkDLine::dumpID(int id) const
 {
+=======
+void SkDLine::dumpID(int id) const {
+>>>>>>> miniblink49
     this->dumpInner();
     SkDebugf("}} id=%d\n", id);
 }
 
+<<<<<<< HEAD
 void SkDLine::dumpInner() const
 {
+=======
+void SkDLine::dumpInner() const {
+>>>>>>> miniblink49
     SkDebugf("{{");
     fPts[0].dump();
     SkDebugf(", ");
     fPts[1].dump();
 }
 
+<<<<<<< HEAD
 void SkDPoint::dump() const
 {
+=======
+void SkDPoint::dump() const {
+>>>>>>> miniblink49
     SkDebugf("{");
     DebugDumpDouble(fX);
     SkDebugf(", ");
@@ -161,8 +255,12 @@ void SkDPoint::dump() const
     SkDebugf("}");
 }
 
+<<<<<<< HEAD
 void SkDPoint::Dump(const SkPoint& pt)
 {
+=======
+void SkDPoint::Dump(const SkPoint& pt) {
+>>>>>>> miniblink49
     SkDebugf("{");
     DebugDumpFloat(pt.fX);
     SkDebugf(", ");
@@ -170,8 +268,12 @@ void SkDPoint::Dump(const SkPoint& pt)
     SkDebugf("}");
 }
 
+<<<<<<< HEAD
 void SkDPoint::DumpHex(const SkPoint& pt)
 {
+=======
+void SkDPoint::DumpHex(const SkPoint& pt) {
+>>>>>>> miniblink49
     SkDebugf("{");
     DebugDumpHexFloat(pt.fX);
     SkDebugf(", ");
@@ -179,20 +281,32 @@ void SkDPoint::DumpHex(const SkPoint& pt)
     SkDebugf("}");
 }
 
+<<<<<<< HEAD
 void SkDQuad::dump() const
 {
+=======
+void SkDQuad::dump() const {
+>>>>>>> miniblink49
     dumpInner();
     SkDebugf("}},\n");
 }
 
+<<<<<<< HEAD
 void SkDQuad::dumpID(int id) const
 {
+=======
+void SkDQuad::dumpID(int id) const {
+>>>>>>> miniblink49
     dumpInner();
     SkDebugf("}} id=%d\n", id);
 }
 
+<<<<<<< HEAD
 void SkDQuad::dumpInner() const
 {
+=======
+void SkDQuad::dumpInner() const {
+>>>>>>> miniblink49
     SkDebugf("{{");
     int index = 0;
     do {
@@ -202,6 +316,7 @@ void SkDQuad::dumpInner() const
     fPts[index].dump();
 }
 
+<<<<<<< HEAD
 void SkIntersections::dump() const
 {
     SkDebugf("used=%d of %d", fUsed, fMax);
@@ -212,11 +327,23 @@ void SkIntersections::dump() const
             fPt[index].fX, fPt[index].fY);
         if (index < 2 && fNearlySame[index]) {
             SkDebugf(" pt2=(%1.9g,%1.9g)", fPt2[index].fX, fPt2[index].fY);
+=======
+void SkIntersections::dump() const {
+    SkDebugf("used=%d of %d", fUsed, fMax);
+    for (int index = 0; index < fUsed; ++index) {
+        SkDebugf(" t=(%s%1.9g,%s%1.9g) pt=(%1.9g,%1.9g)",
+                fIsCoincident[0] & (1 << index) ? "*" : "", fT[0][index],
+                fIsCoincident[1] & (1 << index) ? "*" : "", fT[1][index],
+                fPt[index].fX, fPt[index].fY);
+        if (index < 2 && fNearlySame[index]) {
+            SkDebugf(" pt2=(%1.9g,%1.9g)",fPt2[index].fX, fPt2[index].fY);
+>>>>>>> miniblink49
         }
     }
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 const SkOpAngle* SkPathOpsDebug::DebugAngleAngle(const SkOpAngle* angle, int id)
 {
     return angle->debugAngle(id);
@@ -369,62 +496,213 @@ const SkOpSpanBase* SkPathOpsDebug::DebugSpanSpan(const SkOpSpanBase* span, int 
 
 void SkOpContour::dumpContours() const
 {
+=======
+const SkOpAngle* SkPathOpsDebug::DebugAngleAngle(const SkOpAngle* angle, int id) {
+    return angle->debugAngle(id);
+}
+
+SkOpContour* SkPathOpsDebug::DebugAngleContour(SkOpAngle* angle, int id) {
+    return angle->debugContour(id);
+}
+
+const SkOpPtT* SkPathOpsDebug::DebugAnglePtT(const SkOpAngle* angle, int id) {
+    return angle->debugPtT(id);
+}
+
+const SkOpSegment* SkPathOpsDebug::DebugAngleSegment(const SkOpAngle* angle, int id) {
+    return angle->debugSegment(id);
+}
+
+const SkOpSpanBase* SkPathOpsDebug::DebugAngleSpan(const SkOpAngle* angle, int id) {
+    return angle->debugSpan(id);
+}
+
+const SkOpAngle* SkPathOpsDebug::DebugContourAngle(SkOpContour* contour, int id) {
+    return contour->debugAngle(id);
+}
+
+SkOpContour* SkPathOpsDebug::DebugContourContour(SkOpContour* contour, int id) {
+    return contour->debugContour(id);
+}
+
+const SkOpPtT* SkPathOpsDebug::DebugContourPtT(SkOpContour* contour, int id) {
+    return contour->debugPtT(id);
+}
+
+const SkOpSegment* SkPathOpsDebug::DebugContourSegment(SkOpContour* contour, int id) {
+    return contour->debugSegment(id);
+}
+
+const SkOpSpanBase* SkPathOpsDebug::DebugContourSpan(SkOpContour* contour, int id) {
+    return contour->debugSpan(id);
+}
+
+const SkOpAngle* SkPathOpsDebug::DebugCoincidenceAngle(SkOpCoincidence* coin, int id) {
+    return coin->debugAngle(id);
+}
+
+SkOpContour* SkPathOpsDebug::DebugCoincidenceContour(SkOpCoincidence* coin, int id) {
+    return coin->debugContour(id);
+}
+
+const SkOpPtT* SkPathOpsDebug::DebugCoincidencePtT(SkOpCoincidence* coin, int id) {
+    return coin->debugPtT(id);
+}
+
+const SkOpSegment* SkPathOpsDebug::DebugCoincidenceSegment(SkOpCoincidence* coin, int id) {
+    return coin->debugSegment(id);
+}
+
+const SkOpSpanBase* SkPathOpsDebug::DebugCoincidenceSpan(SkOpCoincidence* coin, int id) {
+    return coin->debugSpan(id);
+}
+
+const SkOpAngle* SkPathOpsDebug::DebugPtTAngle(const SkOpPtT* ptT, int id) {
+    return ptT->debugAngle(id);
+}
+
+SkOpContour* SkPathOpsDebug::DebugPtTContour(SkOpPtT* ptT, int id) {
+    return ptT->debugContour(id);
+}
+
+const SkOpPtT* SkPathOpsDebug::DebugPtTPtT(const SkOpPtT* ptT, int id) {
+    return ptT->debugPtT(id);
+}
+
+const SkOpSegment* SkPathOpsDebug::DebugPtTSegment(const SkOpPtT* ptT, int id) {
+    return ptT->debugSegment(id);
+}
+
+const SkOpSpanBase* SkPathOpsDebug::DebugPtTSpan(const SkOpPtT* ptT, int id) {
+    return ptT->debugSpan(id);
+}
+
+const SkOpAngle* SkPathOpsDebug::DebugSegmentAngle(const SkOpSegment* span, int id) {
+    return span->debugAngle(id);
+}
+
+SkOpContour* SkPathOpsDebug::DebugSegmentContour(SkOpSegment* span, int id) {
+    return span->debugContour(id);
+}
+
+const SkOpPtT* SkPathOpsDebug::DebugSegmentPtT(const SkOpSegment* span, int id) {
+    return span->debugPtT(id);
+}
+
+const SkOpSegment* SkPathOpsDebug::DebugSegmentSegment(const SkOpSegment* span, int id) {
+    return span->debugSegment(id);
+}
+
+const SkOpSpanBase* SkPathOpsDebug::DebugSegmentSpan(const SkOpSegment* span, int id) {
+    return span->debugSpan(id);
+}
+
+const SkOpAngle* SkPathOpsDebug::DebugSpanAngle(const SkOpSpanBase* span, int id) {
+    return span->debugAngle(id);
+}
+
+SkOpContour* SkPathOpsDebug::DebugSpanContour(SkOpSpanBase* span, int id) {
+    return span->debugContour(id);
+}
+
+const SkOpPtT* SkPathOpsDebug::DebugSpanPtT(const SkOpSpanBase* span, int id) {
+    return span->debugPtT(id);
+}
+
+const SkOpSegment* SkPathOpsDebug::DebugSpanSegment(const SkOpSpanBase* span, int id) {
+    return span->debugSegment(id);
+}
+
+const SkOpSpanBase* SkPathOpsDebug::DebugSpanSpan(const SkOpSpanBase* span, int id) {
+    return span->debugSpan(id);
+}
+
+void SkOpContour::dumpContours() const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dump();
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursAll() const
 {
+=======
+void SkOpContour::dumpContoursAll() const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpAll();
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursAngles() const
 {
+=======
+void SkOpContour::dumpContoursAngles() const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpAngles();
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursPts() const
 {
+=======
+void SkOpContour::dumpContoursPts() const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpPts();
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursPt(int segmentID) const
 {
+=======
+void SkOpContour::dumpContoursPt(int segmentID) const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpPt(segmentID);
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursSegment(int segmentID) const
 {
+=======
+void SkOpContour::dumpContoursSegment(int segmentID) const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpSegment(segmentID);
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursSpan(int spanID) const
 {
+=======
+void SkOpContour::dumpContoursSpan(int spanID) const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpSpan(spanID);
     } while ((contour = contour->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpContoursSpans() const
 {
+=======
+void SkOpContour::dumpContoursSpans() const {
+>>>>>>> miniblink49
     SkOpContour* contour = this->globalState()->contourHead();
     do {
         contour->dumpSpans();
@@ -432,14 +710,22 @@ void SkOpContour::dumpContoursSpans() const
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 const SkTSpan<TCurve, OppCurve>* DebugSpan(const SkTSect<TCurve, OppCurve>* sect, int id)
 {
+=======
+const SkTSpan<TCurve, OppCurve>* DebugSpan(const SkTSect<TCurve, OppCurve>* sect, int id) {
+>>>>>>> miniblink49
     return sect->debugSpan(id);
 }
 
 void DontCallDebugSpan(int id);
+<<<<<<< HEAD
 void DontCallDebugSpan(int id)
 { // exists to instantiate the templates
+=======
+void DontCallDebugSpan(int id) {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -464,14 +750,22 @@ void DontCallDebugSpan(int id)
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 const SkTSpan<TCurve, OppCurve>* DebugT(const SkTSect<TCurve, OppCurve>* sect, double t)
 {
+=======
+const SkTSpan<TCurve, OppCurve>* DebugT(const SkTSect<TCurve, OppCurve>* sect, double t) {
+>>>>>>> miniblink49
     return sect->debugT(t);
 }
 
 void DontCallDebugT(double t);
+<<<<<<< HEAD
 void DontCallDebugT(double t)
 { // exists to instantiate the templates
+=======
+void DontCallDebugT(double t) {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -496,14 +790,22 @@ void DontCallDebugT(double t)
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void Dump(const SkTSect<TCurve, OppCurve>* sect)
 {
+=======
+void Dump(const SkTSect<TCurve, OppCurve>* sect) {
+>>>>>>> miniblink49
     sect->dump();
 }
 
 void DontCallDumpTSect();
+<<<<<<< HEAD
 void DontCallDumpTSect()
 { // exists to instantiate the templates
+=======
+void DontCallDumpTSect() {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -528,14 +830,22 @@ void DontCallDumpTSect()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpBoth(SkTSect<TCurve, OppCurve>* sect1, SkTSect<OppCurve, TCurve>* sect2)
 {
+=======
+void DumpBoth(SkTSect<TCurve, OppCurve>* sect1, SkTSect<OppCurve, TCurve>* sect2) {
+>>>>>>> miniblink49
     sect1->dumpBoth(sect2);
 }
 
 void DontCallDumpBoth();
+<<<<<<< HEAD
 void DontCallDumpBoth()
 { // exists to instantiate the templates
+=======
+void DontCallDumpBoth() {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -560,14 +870,22 @@ void DontCallDumpBoth()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpBounded(SkTSect<TCurve, OppCurve>* sect1, int id)
 {
+=======
+void DumpBounded(SkTSect<TCurve, OppCurve>* sect1, int id) {
+>>>>>>> miniblink49
     sect1->dumpBounded(id);
 }
 
 void DontCallDumpBounded();
+<<<<<<< HEAD
 void DontCallDumpBounded()
 {
+=======
+void DontCallDumpBounded() {
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -592,14 +910,22 @@ void DontCallDumpBounded()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpBounds(SkTSect<TCurve, OppCurve>* sect1)
 {
+=======
+void DumpBounds(SkTSect<TCurve, OppCurve>* sect1) {
+>>>>>>> miniblink49
     sect1->dumpBounds();
 }
 
 void DontCallDumpBounds();
+<<<<<<< HEAD
 void DontCallDumpBounds()
 {
+=======
+void DontCallDumpBounds() {
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -624,14 +950,22 @@ void DontCallDumpBounds()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpCoin(SkTSect<TCurve, OppCurve>* sect1)
 {
+=======
+void DumpCoin(SkTSect<TCurve, OppCurve>* sect1) {
+>>>>>>> miniblink49
     sect1->dumpCoin();
 }
 
 void DontCallDumpCoin();
+<<<<<<< HEAD
 void DontCallDumpCoin()
 { // exists to instantiate the templates
+=======
+void DontCallDumpCoin() {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -656,14 +990,22 @@ void DontCallDumpCoin()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpCoinCurves(SkTSect<TCurve, OppCurve>* sect1)
 {
+=======
+void DumpCoinCurves(SkTSect<TCurve, OppCurve>* sect1) {
+>>>>>>> miniblink49
     sect1->dumpCoinCurves();
 }
 
 void DontCallDumpCoinCurves();
+<<<<<<< HEAD
 void DontCallDumpCoinCurves()
 { // exists to instantiate the templates
+=======
+void DontCallDumpCoinCurves() {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -688,14 +1030,22 @@ void DontCallDumpCoinCurves()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpCurves(const SkTSect<TCurve, OppCurve>* sect)
 {
+=======
+void DumpCurves(const SkTSect<TCurve, OppCurve>* sect) {
+>>>>>>> miniblink49
     sect->dumpCurves();
 }
 
 void DontCallDumpCurves();
+<<<<<<< HEAD
 void DontCallDumpCurves()
 { // exists to instantiate the templates
+=======
+void DontCallDumpCurves() {  // exists to instantiate the templates
+>>>>>>> miniblink49
     SkDQuad quad;
     SkDConic conic;
     SkDCubic cubic;
@@ -720,12 +1070,17 @@ void DontCallDumpCurves()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void Dump(const SkTSpan<TCurve, OppCurve>* span)
 {
+=======
+void Dump(const SkTSpan<TCurve, OppCurve>* span) {
+>>>>>>> miniblink49
     span->dump();
 }
 
 void DontCallDumpTSpan();
+<<<<<<< HEAD
 void DontCallDumpTSpan()
 { // exists to instantiate the templates
     SkTSpan<SkDQuad, SkDQuad> q1q2;
@@ -746,6 +1101,18 @@ void DontCallDumpTSpan()
     c1k2.debugInit();
     SkTSpan<SkDCubic, SkDCubic> c1c2;
     c1c2.debugInit();
+=======
+void DontCallDumpTSpan() {  // exists to instantiate the templates
+    SkTSpan<SkDQuad, SkDQuad> q1q2; q1q2.debugInit();
+    SkTSpan<SkDQuad, SkDConic> q1k2; q1k2.debugInit();
+    SkTSpan<SkDQuad, SkDCubic> q1c2; q1c2.debugInit();
+    SkTSpan<SkDConic, SkDQuad> k1q2; k1q2.debugInit();
+    SkTSpan<SkDConic, SkDConic> k1k2; k1k2.debugInit();
+    SkTSpan<SkDConic, SkDCubic> k1c2; k1c2.debugInit();
+    SkTSpan<SkDCubic, SkDQuad> c1q2; c1q2.debugInit();
+    SkTSpan<SkDCubic, SkDConic> c1k2; c1k2.debugInit();
+    SkTSpan<SkDCubic, SkDCubic> c1c2; c1c2.debugInit();
+>>>>>>> miniblink49
     Dump(&q1q2);
     Dump(&q1k2);
     Dump(&q1c2);
@@ -758,6 +1125,7 @@ void DontCallDumpTSpan()
 }
 
 template <typename TCurve, typename OppCurve>
+<<<<<<< HEAD
 void DumpAll(const SkTSpan<TCurve, OppCurve>* span)
 {
     span->dumpAll();
@@ -836,10 +1204,14 @@ void DontCallDumpSpanBounded()
 template <typename TCurve, typename OppCurve>
 void DumpCoin(const SkTSpan<TCurve, OppCurve>* span)
 {
+=======
+void DumpCoin(const SkTSpan<TCurve, OppCurve>* span) {
+>>>>>>> miniblink49
     span->dumpCoin();
 }
 
 void DontCallDumpSpanCoin();
+<<<<<<< HEAD
 void DontCallDumpSpanCoin()
 { // exists to instantiate the templates
     SkTSpan<SkDQuad, SkDQuad> q1q2;
@@ -860,6 +1232,18 @@ void DontCallDumpSpanCoin()
     c1k2.debugInit();
     SkTSpan<SkDCubic, SkDCubic> c1c2;
     c1c2.debugInit();
+=======
+void DontCallDumpSpanCoin() {  // exists to instantiate the templates
+    SkTSpan<SkDQuad, SkDQuad> q1q2; q1q2.debugInit();
+    SkTSpan<SkDQuad, SkDConic> q1k2; q1k2.debugInit();
+    SkTSpan<SkDQuad, SkDCubic> q1c2; q1c2.debugInit();
+    SkTSpan<SkDConic, SkDQuad> k1q2; k1q2.debugInit();
+    SkTSpan<SkDConic, SkDConic> k1k2; k1k2.debugInit();
+    SkTSpan<SkDConic, SkDCubic> k1c2; k1c2.debugInit();
+    SkTSpan<SkDCubic, SkDQuad> c1q2; c1q2.debugInit();
+    SkTSpan<SkDCubic, SkDConic> c1k2; c1k2.debugInit();
+    SkTSpan<SkDCubic, SkDCubic> c1c2; c1c2.debugInit();
+>>>>>>> miniblink49
     DumpCoin(&q1q2);
     DumpCoin(&q1k2);
     DumpCoin(&q1c2);
@@ -871,8 +1255,12 @@ void DontCallDumpSpanCoin()
     DumpCoin(&c1c2);
 }
 
+<<<<<<< HEAD
 static void dumpTestCase(const SkDQuad& quad1, const SkDQuad& quad2, int testNo)
 {
+=======
+static void dumpTestCase(const SkDQuad& quad1, const SkDQuad& quad2, int testNo) {
+>>>>>>> miniblink49
     SkDebugf("\n<div id=\"quad%d\">\n", testNo);
     quad1.dumpInner();
     SkDebugf("}}, ");
@@ -880,14 +1268,22 @@ static void dumpTestCase(const SkDQuad& quad1, const SkDQuad& quad2, int testNo)
     SkDebugf("</div>\n\n");
 }
 
+<<<<<<< HEAD
 static void dumpTestTrailer()
 {
+=======
+static void dumpTestTrailer() {
+>>>>>>> miniblink49
     SkDebugf("</div>\n\n<script type=\"text/javascript\">\n\n");
     SkDebugf("    var testDivs = [\n");
 }
 
+<<<<<<< HEAD
 static void dumpTestList(int testNo, double min)
 {
+=======
+static void dumpTestList(int testNo, double min) {
+>>>>>>> miniblink49
     SkDebugf("        quad%d,", testNo);
     if (min > 0) {
         SkDebugf("  // %1.9g", min);
@@ -895,8 +1291,12 @@ static void dumpTestList(int testNo, double min)
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 void DumpQ(const SkDQuad& quad1, const SkDQuad& quad2, int testNo)
 {
+=======
+void DumpQ(const SkDQuad& quad1, const SkDQuad& quad2, int testNo) {
+>>>>>>> miniblink49
     SkDebugf("\n");
     dumpTestCase(quad1, quad2, testNo);
     dumpTestTrailer();
@@ -904,6 +1304,7 @@ void DumpQ(const SkDQuad& quad1, const SkDQuad& quad2, int testNo)
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 void DumpT(const SkDQuad& quad, double t)
 {
     SkDLine line = { { quad.ptAtT(t), quad[0] } };
@@ -932,10 +1333,35 @@ const SkOpSegment* SkOpAngle::debugSegment(int id) const
 
 int SkOpAngle::debugSign() const
 {
+=======
+void DumpT(const SkDQuad& quad, double t) {
+    SkDLine line = {{quad.ptAtT(t), quad[0]}};
+    line.dump();
+}
+
+const SkOpAngle* SkOpAngle::debugAngle(int id) const {
+    return this->segment()->debugAngle(id);
+}
+
+SkOpContour* SkOpAngle::debugContour(int id) {
+    return this->segment()->debugContour(id);
+}
+
+const SkOpPtT* SkOpAngle::debugPtT(int id) const {
+    return this->segment()->debugPtT(id);
+}
+
+const SkOpSegment* SkOpAngle::debugSegment(int id) const {
+    return this->segment()->debugSegment(id);
+}
+
+int SkOpAngle::debugSign() const {
+>>>>>>> miniblink49
     SkASSERT(fStart->t() != fEnd->t());
     return fStart->t() < fEnd->t() ? -1 : 1;
 }
 
+<<<<<<< HEAD
 const SkOpSpanBase* SkOpAngle::debugSpan(int id) const
 {
     return this->segment()->debugSpan(id);
@@ -943,13 +1369,25 @@ const SkOpSpanBase* SkOpAngle::debugSpan(int id) const
 
 void SkOpAngle::dump() const
 {
+=======
+const SkOpSpanBase* SkOpAngle::debugSpan(int id) const {
+    return this->segment()->debugSpan(id);
+}
+
+void SkOpAngle::dump() const {
+>>>>>>> miniblink49
     dumpOne(true);
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 void SkOpAngle::dumpOne(bool functionHeader) const
 {
     //    fSegment->debugValidate();
+=======
+void SkOpAngle::dumpOne(bool functionHeader) const {
+//    fSegment->debugValidate();
+>>>>>>> miniblink49
     const SkOpSegment* segment = this->segment();
     const SkOpSpan& mSpan = *fStart->starter(fEnd);
     if (functionHeader) {
@@ -966,7 +1404,11 @@ void SkOpAngle::dumpOne(bool functionHeader) const
     }
     SkDebugf(" sect=%d/%d ", fSectorStart, fSectorEnd);
     SkDebugf(" s=%1.9g [%d] e=%1.9g [%d]", fStart->t(), fStart->debugID(),
+<<<<<<< HEAD
         fEnd->t(), fEnd->debugID());
+=======
+                fEnd->t(), fEnd->debugID());
+>>>>>>> miniblink49
     SkDebugf(" sgn=%d windVal=%d", this->debugSign(), mSpan.windValue());
 
     SkDebugf(" windSum=");
@@ -987,8 +1429,12 @@ void SkOpAngle::dumpOne(bool functionHeader) const
     }
 }
 
+<<<<<<< HEAD
 void SkOpAngle::dumpTo(const SkOpSegment* segment, const SkOpAngle* to) const
 {
+=======
+void SkOpAngle::dumpTo(const SkOpSegment* segment, const SkOpAngle* to) const {
+>>>>>>> miniblink49
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
     const char* indent = "";
@@ -1009,8 +1455,12 @@ void SkOpAngle::dumpTo(const SkOpSegment* segment, const SkOpAngle* to) const
     } while (next && next != first);
 }
 
+<<<<<<< HEAD
 void SkOpAngle::dumpCurves() const
 {
+=======
+void SkOpAngle::dumpCurves() const {
+>>>>>>> miniblink49
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
     do {
@@ -1019,8 +1469,12 @@ void SkOpAngle::dumpCurves() const
     } while (next && next != first);
 }
 
+<<<<<<< HEAD
 void SkOpAngle::dumpLoop() const
 {
+=======
+void SkOpAngle::dumpLoop() const {
+>>>>>>> miniblink49
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
     do {
@@ -1030,8 +1484,12 @@ void SkOpAngle::dumpLoop() const
     } while (next && next != first);
 }
 
+<<<<<<< HEAD
 void SkOpAngle::dumpTest() const
 {
+=======
+void SkOpAngle::dumpTest() const {
+>>>>>>> miniblink49
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
     do {
@@ -1039,13 +1497,21 @@ void SkOpAngle::dumpTest() const
         SkOpSegment* segment = next->segment();
         segment->dumpPts();
         SkDebugf(", %d, %1.9g, %1.9g, {} },\n", SkPathOpsVerbToPoints(segment->verb()) + 1,
+<<<<<<< HEAD
             next->start()->t(), next->end()->t());
+=======
+                next->start()->t(), next->end()->t());
+>>>>>>> miniblink49
         next = next->fNext;
     } while (next && next != first);
 }
 
+<<<<<<< HEAD
 bool SkOpPtT::debugMatchID(int id) const
 {
+=======
+bool SkOpPtT::debugMatchID(int id) const {
+>>>>>>> miniblink49
     int limit = this->debugLoopLimit(false);
     int loop = 0;
     const SkOpPtT* ptT = this;
@@ -1057,6 +1523,7 @@ bool SkOpPtT::debugMatchID(int id) const
     return false;
 }
 
+<<<<<<< HEAD
 const SkOpAngle* SkOpPtT::debugAngle(int id) const
 {
     return this->span()->debugAngle(id);
@@ -1086,12 +1553,41 @@ void SkOpPtT::dump() const
 {
     SkDebugf("seg=%d span=%d ptT=%d",
         this->segment()->debugID(), this->span()->debugID(), this->debugID());
+=======
+const SkOpAngle* SkOpPtT::debugAngle(int id) const {
+    return this->span()->debugAngle(id);
+}
+
+SkOpContour* SkOpPtT::debugContour(int id) {
+    return this->span()->debugContour(id);
+}
+
+const SkOpPtT* SkOpPtT::debugPtT(int id) const {
+    return this->span()->debugPtT(id);
+}
+
+const SkOpSegment* SkOpPtT::debugSegment(int id) const {
+    return this->span()->debugSegment(id);
+}
+
+const SkOpSpanBase* SkOpPtT::debugSpan(int id) const {
+    return this->span()->debugSpan(id);
+}
+
+void SkOpPtT::dump() const {
+    SkDebugf("seg=%d span=%d ptT=%d",
+            this->segment()->debugID(), this->span()->debugID(), this->debugID());
+>>>>>>> miniblink49
     this->dumpBase();
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 void SkOpPtT::dumpAll() const
 {
+=======
+void SkOpPtT::dumpAll() const {
+>>>>>>> miniblink49
     contour()->indentDump();
     const SkOpPtT* next = this;
     int limit = debugLoopLimit(true);
@@ -1099,7 +1595,11 @@ void SkOpPtT::dumpAll() const
     do {
         SkDebugf("%.*s", contour()->debugIndent(), "        ");
         SkDebugf("seg=%d span=%d ptT=%d",
+<<<<<<< HEAD
             next->segment()->debugID(), next->span()->debugID(), next->debugID());
+=======
+                next->segment()->debugID(), next->span()->debugID(), next->debugID());
+>>>>>>> miniblink49
         next->dumpBase();
         SkDebugf("\n");
         if (limit && ++loop >= limit) {
@@ -1110,6 +1610,7 @@ void SkOpPtT::dumpAll() const
     contour()->outdentDump();
 }
 
+<<<<<<< HEAD
 void SkOpPtT::dumpBase() const
 {
     SkDebugf(" t=%1.9g pt=(%1.9g,%1.9g)%s%s", this->fT, this->fPt.fX, this->fPt.fY,
@@ -1143,12 +1644,44 @@ const SkOpSpanBase* SkOpSpanBase::debugSpan(int id) const
 
 void SkOpSpanBase::dump() const
 {
+=======
+void SkOpPtT::dumpBase() const {
+    SkDebugf(" t=%1.9g pt=(%1.9g,%1.9g)%s%s", this->fT, this->fPt.fX, this->fPt.fY,
+            this->fDuplicatePt ? " dup" : "", this->fDeleted ? " deleted" : "");
+}
+
+const SkOpAngle* SkOpSpanBase::debugAngle(int id) const {
+    return this->segment()->debugAngle(id);
+}
+
+SkOpContour* SkOpSpanBase::debugContour(int id) {
+    return this->segment()->debugContour(id);
+}
+
+const SkOpPtT* SkOpSpanBase::debugPtT(int id) const {
+    return this->segment()->debugPtT(id);
+}
+
+const SkOpSegment* SkOpSpanBase::debugSegment(int id) const {
+    return this->segment()->debugSegment(id);
+}
+
+const SkOpSpanBase* SkOpSpanBase::debugSpan(int id) const {
+    return this->segment()->debugSpan(id);
+}
+
+void SkOpSpanBase::dump() const {
+>>>>>>> miniblink49
     this->dumpAll();
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 void SkOpSpanBase::dumpAll() const
 {
+=======
+void SkOpSpanBase::dumpAll() const {
+>>>>>>> miniblink49
     SkDebugf("%.*s", contour()->debugIndent(), "        ");
     SkDebugf("seg=%d span=%d", this->segment()->debugID(), this->debugID());
     this->dumpBase();
@@ -1156,8 +1689,12 @@ void SkOpSpanBase::dumpAll() const
     this->fPtT.dumpAll();
 }
 
+<<<<<<< HEAD
 void SkOpSpanBase::dumpBase() const
 {
+=======
+void SkOpSpanBase::dumpBase() const {
+>>>>>>> miniblink49
     if (this->fAligned) {
         SkDebugf(" aligned");
     }
@@ -1177,8 +1714,12 @@ void SkOpSpanBase::dumpBase() const
     SkDebugf(" adds=%d", fSpanAdds);
 }
 
+<<<<<<< HEAD
 void SkOpSpanBase::dumpCoin() const
 {
+=======
+void SkOpSpanBase::dumpCoin() const {
+>>>>>>> miniblink49
     const SkOpSpan* span = this->upCastable();
     if (!span) {
         return;
@@ -1189,8 +1730,12 @@ void SkOpSpanBase::dumpCoin() const
     span->dumpCoin();
 }
 
+<<<<<<< HEAD
 void SkOpSpan::dumpCoin() const
 {
+=======
+void SkOpSpan::dumpCoin() const {
+>>>>>>> miniblink49
     const SkOpSpan* coincident = fCoincident;
     bool ok = debugCoinLoopCheck();
     this->dump();
@@ -1204,8 +1749,12 @@ void SkOpSpan::dumpCoin() const
     } while ((coincident = coincident->fCoincident) != this);
 }
 
+<<<<<<< HEAD
 bool SkOpSpan::dumpSpan() const
 {
+=======
+bool SkOpSpan::dumpSpan() const {
+>>>>>>> miniblink49
     SkOpSpan* coin = fCoincident;
     if (this != coin) {
         SkDebugf(" coinStart seg/span=%d/%d", coin->segment()->debugID(), coin->debugID());
@@ -1224,6 +1773,7 @@ bool SkOpSpan::dumpSpan() const
     return this != coin;
 }
 
+<<<<<<< HEAD
 const SkOpAngle* SkOpSegment::debugAngle(int id) const
 {
     return this->contour()->debugAngle(id);
@@ -1251,6 +1801,29 @@ const SkOpSpanBase* SkOpSegment::debugSpan(int id) const
 
 void SkOpSegment::dump() const
 {
+=======
+const SkOpAngle* SkOpSegment::debugAngle(int id) const {
+    return this->contour()->debugAngle(id);
+}
+
+SkOpContour* SkOpSegment::debugContour(int id) {
+    return this->contour()->debugContour(id);
+}
+
+const SkOpPtT* SkOpSegment::debugPtT(int id) const {
+    return this->contour()->debugPtT(id);
+}
+
+const SkOpSegment* SkOpSegment::debugSegment(int id) const {
+    return this->contour()->debugSegment(id);
+}
+
+const SkOpSpanBase* SkOpSegment::debugSpan(int id) const {
+    return this->contour()->debugSpan(id);
+}
+
+void SkOpSegment::dump() const {
+>>>>>>> miniblink49
     SkDebugf("%.*s", contour()->debugIndent(), "        ");
     this->dumpPts();
     const SkOpSpanBase* span = &fHead;
@@ -1264,8 +1837,12 @@ void SkOpSegment::dump() const
     contour()->outdentDump();
 }
 
+<<<<<<< HEAD
 void SkOpSegment::dumpAll() const
 {
+=======
+void SkOpSegment::dumpAll() const {
+>>>>>>> miniblink49
     SkDebugf("%.*s", contour()->debugIndent(), "        ");
     this->dumpPts();
     const SkOpSpanBase* span = &fHead;
@@ -1276,13 +1853,21 @@ void SkOpSegment::dumpAll() const
     contour()->outdentDump();
 }
 
+<<<<<<< HEAD
 void SkOpSegment::dumpAngles() const
 {
+=======
+void SkOpSegment::dumpAngles() const {
+>>>>>>> miniblink49
     SkDebugf("seg=%d\n", debugID());
     const SkOpSpanBase* span = &fHead;
     do {
         const SkOpAngle* fAngle = span->fromAngle();
+<<<<<<< HEAD
         const SkOpAngle* tAngle = span->final() ? nullptr : span->upCast()->toAngle();
+=======
+        const SkOpAngle* tAngle = span->final() ? NULL : span->upCast()->toAngle();
+>>>>>>> miniblink49
         if (fAngle) {
             SkDebugf("  span=%d from=%d ", span->debugID(), fAngle->debugID());
             fAngle->dumpTo(this, tAngle);
@@ -1294,18 +1879,28 @@ void SkOpSegment::dumpAngles() const
     } while (!span->final() && (span = span->upCast()->next()));
 }
 
+<<<<<<< HEAD
 void SkOpSegment::dumpCoin() const
 {
+=======
+void SkOpSegment::dumpCoin() const {
+>>>>>>> miniblink49
     const SkOpSpan* span = &fHead;
     do {
         span->dumpCoin();
     } while ((span = span->next()->upCastable()));
 }
 
+<<<<<<< HEAD
 void SkOpSegment::dumpPtsInner(const char* prefix) const
 {
     int last = SkPathOpsVerbToPoints(fVerb);
     SkDebugf("%s=%d {{", prefix, this->debugID());
+=======
+void SkOpSegment::dumpPtsInner() const {
+    int last = SkPathOpsVerbToPoints(fVerb);
+    SkDebugf("seg=%d {{", this->debugID());
+>>>>>>> miniblink49
     if (fVerb == SkPath::kConic_Verb) {
         SkDebugf("{");
     }
@@ -1321,6 +1916,7 @@ void SkOpSegment::dumpPtsInner(const char* prefix) const
     }
 }
 
+<<<<<<< HEAD
 void SkOpSegment::dumpPts(const char* prefix) const
 {
     dumpPtsInner(prefix);
@@ -1329,6 +1925,14 @@ void SkOpSegment::dumpPts(const char* prefix) const
 
 void SkCoincidentSpans::dump() const
 {
+=======
+void SkOpSegment::dumpPts() const {
+    dumpPtsInner();
+    SkDebugf("\n");
+}
+
+void SkCoincidentSpans::dump() const {
+>>>>>>> miniblink49
     SkDebugf("- seg=%d span=%d ptT=%d ", fCoinPtTStart->segment()->debugID(),
         fCoinPtTStart->span()->debugID(), fCoinPtTStart->debugID());
     fCoinPtTStart->dumpBase();
@@ -1355,30 +1959,45 @@ void SkCoincidentSpans::dump() const
     SkDebugf("\n");
 }
 
+<<<<<<< HEAD
 void SkOpCoincidence::dump() const
 {
+=======
+void SkOpCoincidence::dump() const {
+>>>>>>> miniblink49
     SkCoincidentSpans* span = fHead;
     while (span) {
         span->dump();
         span = span->fNext;
     }
+<<<<<<< HEAD
     if (!fTop || fHead == fTop) {
+=======
+    if (!fTop) {
+>>>>>>> miniblink49
         return;
     }
     SkDebugf("top:\n");
     span = fTop;
+<<<<<<< HEAD
     if (fHead) {
         span->dump();
         return;
     }
+=======
+>>>>>>> miniblink49
     while (span) {
         span->dump();
         span = span->fNext;
     }
 }
 
+<<<<<<< HEAD
 void SkOpContour::dump() const
 {
+=======
+void SkOpContour::dump() const {
+>>>>>>> miniblink49
     SkDebugf("contour=%d count=%d op=%d xor=%d\n", this->debugID(), fCount, fOperand, fXor);
     if (!fCount) {
         return;
@@ -1392,8 +2011,12 @@ void SkOpContour::dump() const
     this->outdentDump();
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpAll() const
 {
+=======
+void SkOpContour::dumpAll() const {
+>>>>>>> miniblink49
     SkDebugf("contour=%d count=%d op=%d xor=%d\n", this->debugID(), fCount, fOperand, fXor);
     if (!fCount) {
         return;
@@ -1407,8 +2030,13 @@ void SkOpContour::dumpAll() const
     this->outdentDump();
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpAngles() const
 {
+=======
+
+void SkOpContour::dumpAngles() const {
+>>>>>>> miniblink49
     SkDebugf("contour=%d\n", this->debugID());
     const SkOpSegment* segment = &fHead;
     do {
@@ -1417,8 +2045,12 @@ void SkOpContour::dumpAngles() const
     } while ((segment = segment->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpPt(int index) const
 {
+=======
+void SkOpContour::dumpPt(int index) const {
+>>>>>>> miniblink49
     const SkOpSegment* segment = &fHead;
     do {
         if (segment->debugID() == index) {
@@ -1427,6 +2059,7 @@ void SkOpContour::dumpPt(int index) const
     } while ((segment = segment->next()));
 }
 
+<<<<<<< HEAD
 void SkOpContour::dumpPts(const char* prefix) const
 {
     SkDebugf("contour=%d\n", this->debugID());
@@ -1439,12 +2072,25 @@ void SkOpContour::dumpPts(const char* prefix) const
 
 void SkOpContour::dumpPtsX(const char* prefix) const
 {
+=======
+void SkOpContour::dumpPts() const {
+    SkDebugf("contour=%d\n", this->debugID());
+    const SkOpSegment* segment = &fHead;
+    do {
+        SkDebugf("  seg=%d ", segment->debugID());
+        segment->dumpPts();
+    } while ((segment = segment->next()));
+}
+
+void SkOpContour::dumpPtsX() const {
+>>>>>>> miniblink49
     if (!this->fCount) {
         SkDebugf("<empty>\n");
         return;
     }
     const SkOpSegment* segment = &fHead;
     do {
+<<<<<<< HEAD
         segment->dumpPts(prefix);
     } while ((segment = segment->next()));
 }
@@ -1460,11 +2106,27 @@ void SkOpContour::dumpSegments(const char* prefix, SkPathOp op) const
     const SkOpContour* c = this;
     do {
         if (!firstOp && c->operand() && op >= 0) {
+=======
+        segment->dumpPts();
+    } while ((segment = segment->next()));
+}
+
+void SkOpContour::dumpSegment(int index) const {
+    debugSegment(index)->dump();
+}
+
+void SkOpContour::dumpSegments(SkPathOp op) const {
+    bool firstOp = false;
+    const SkOpContour* c = this;
+    do {
+        if (!firstOp && c->operand()) {
+>>>>>>> miniblink49
 #if DEBUG_ACTIVE_OP
             SkDebugf("op %s\n", SkPathOpsDebug::kPathOpStr[op]);
 #endif
             firstOp = true;
         }
+<<<<<<< HEAD
         c->dumpPtsX(prefix);
     } while ((c = c->next()));
 }
@@ -1476,6 +2138,17 @@ void SkOpContour::dumpSpan(int index) const
 
 void SkOpContour::dumpSpans() const
 {
+=======
+        c->dumpPtsX();
+    } while ((c = c->next()));
+}
+
+void SkOpContour::dumpSpan(int index) const {
+    debugSpan(index)->dump();
+}
+
+void SkOpContour::dumpSpans() const {
+>>>>>>> miniblink49
     SkDebugf("contour=%d\n", this->debugID());
     const SkOpSegment* segment = &fHead;
     do {
@@ -1484,8 +2157,12 @@ void SkOpContour::dumpSpans() const
     } while ((segment = segment->next()));
 }
 
+<<<<<<< HEAD
 void SkOpCurve::dump() const
 {
+=======
+void SkOpCurve::dump() const {
+>>>>>>> miniblink49
     int count = SkPathOpsVerbToPoints(SkDEBUGRELEASE(fVerb, SkPath::kCubic_Verb));
     SkDebugf("{{");
     int index;
@@ -1496,8 +2173,12 @@ void SkOpCurve::dump() const
 }
 
 #ifdef SK_DEBUG
+<<<<<<< HEAD
 const SkOpAngle* SkOpGlobalState::debugAngle(int id) const
 {
+=======
+const SkOpAngle* SkOpGlobalState::debugAngle(int id) const {
+>>>>>>> miniblink49
     const SkOpContour* contour = fContourHead;
     do {
         const SkOpSegment* segment = contour->first();
@@ -1521,22 +2202,36 @@ const SkOpAngle* SkOpGlobalState::debugAngle(int id) const
             segment = segment->next();
         }
     } while ((contour = contour->next()));
+<<<<<<< HEAD
     return nullptr;
 }
 
 SkOpContour* SkOpGlobalState::debugContour(int id)
 {
+=======
+    return NULL;
+}
+
+SkOpContour* SkOpGlobalState::debugContour(int id) {
+>>>>>>> miniblink49
     SkOpContour* contour = fContourHead;
     do {
         if (contour->debugID() == id) {
             return contour;
         }
     } while ((contour = contour->next()));
+<<<<<<< HEAD
     return nullptr;
 }
 
 const SkOpPtT* SkOpGlobalState::debugPtT(int id) const
 {
+=======
+    return NULL;
+}
+
+const SkOpPtT* SkOpGlobalState::debugPtT(int id) const {
+>>>>>>> miniblink49
     const SkOpContour* contour = fContourHead;
     do {
         const SkOpSegment* segment = contour->first();
@@ -1556,11 +2251,18 @@ const SkOpPtT* SkOpGlobalState::debugPtT(int id) const
             segment = segment->next();
         }
     } while ((contour = contour->next()));
+<<<<<<< HEAD
     return nullptr;
 }
 
 const SkOpSegment* SkOpGlobalState::debugSegment(int id) const
 {
+=======
+    return NULL;
+}
+
+const SkOpSegment* SkOpGlobalState::debugSegment(int id) const {
+>>>>>>> miniblink49
     const SkOpContour* contour = fContourHead;
     do {
         const SkOpSegment* segment = contour->first();
@@ -1571,11 +2273,18 @@ const SkOpSegment* SkOpGlobalState::debugSegment(int id) const
             segment = segment->next();
         }
     } while ((contour = contour->next()));
+<<<<<<< HEAD
     return nullptr;
 }
 
 const SkOpSpanBase* SkOpGlobalState::debugSpan(int id) const
 {
+=======
+    return NULL;
+}
+
+const SkOpSpanBase* SkOpGlobalState::debugSpan(int id) const {
+>>>>>>> miniblink49
     const SkOpContour* contour = fContourHead;
     do {
         const SkOpSegment* segment = contour->first();
@@ -1593,7 +2302,11 @@ const SkOpSpanBase* SkOpGlobalState::debugSpan(int id) const
             segment = segment->next();
         }
     } while ((contour = contour->next()));
+<<<<<<< HEAD
     return nullptr;
+=======
+    return NULL;
+>>>>>>> miniblink49
 }
 #endif
 

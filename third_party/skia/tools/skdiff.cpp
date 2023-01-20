@@ -11,7 +11,11 @@
 #include "SkColorPriv.h"
 #include "SkTypes.h"
 
+<<<<<<< HEAD
 /*static*/ char const* const DiffRecord::ResultNames[DiffRecord::kResultCount] = {
+=======
+/*static*/ char const * const DiffRecord::ResultNames[DiffRecord::kResultCount] = {
+>>>>>>> miniblink49
     "EqualBits",
     "EqualPixels",
     "DifferentPixels",
@@ -20,8 +24,12 @@
     "Unknown",
 };
 
+<<<<<<< HEAD
 DiffRecord::Result DiffRecord::getResultByName(const char* name)
 {
+=======
+DiffRecord::Result DiffRecord::getResultByName(const char *name) {
+>>>>>>> miniblink49
     for (int result = 0; result < DiffRecord::kResultCount; ++result) {
         if (0 == strcmp(DiffRecord::ResultNames[result], name)) {
             return static_cast<DiffRecord::Result>(result);
@@ -30,7 +38,11 @@ DiffRecord::Result DiffRecord::getResultByName(const char* name)
     return DiffRecord::kResultCount;
 }
 
+<<<<<<< HEAD
 static char const* const ResultDescriptions[DiffRecord::kResultCount] = {
+=======
+static char const * const ResultDescriptions[DiffRecord::kResultCount] = {
+>>>>>>> miniblink49
     "contain exactly the same bits",
     "contain the same pixel values, but not the same bits",
     "have identical dimensions but some differing pixels",
@@ -39,12 +51,20 @@ static char const* const ResultDescriptions[DiffRecord::kResultCount] = {
     "not compared yet",
 };
 
+<<<<<<< HEAD
 const char* DiffRecord::getResultDescription(DiffRecord::Result result)
 {
     return ResultDescriptions[result];
 }
 
 /*static*/ char const* const DiffResource::StatusNames[DiffResource::kStatusCount] = {
+=======
+const char* DiffRecord::getResultDescription(DiffRecord::Result result) {
+    return ResultDescriptions[result];
+}
+
+/*static*/ char const * const DiffResource::StatusNames[DiffResource::kStatusCount] = {
+>>>>>>> miniblink49
     "Decoded",
     "CouldNotDecode",
 
@@ -60,8 +80,12 @@ const char* DiffRecord::getResultDescription(DiffRecord::Result result)
     "Unknown",
 };
 
+<<<<<<< HEAD
 DiffResource::Status DiffResource::getStatusByName(const char* name)
 {
+=======
+DiffResource::Status DiffResource::getStatusByName(const char *name) {
+>>>>>>> miniblink49
     for (int status = 0; status < DiffResource::kStatusCount; ++status) {
         if (0 == strcmp(DiffResource::StatusNames[status], name)) {
             return static_cast<DiffResource::Status>(status);
@@ -70,7 +94,11 @@ DiffResource::Status DiffResource::getStatusByName(const char* name)
     return DiffResource::kStatusCount;
 }
 
+<<<<<<< HEAD
 static char const* const StatusDescriptions[DiffResource::kStatusCount] = {
+=======
+static char const * const StatusDescriptions[DiffResource::kStatusCount] = {
+>>>>>>> miniblink49
     "decoded",
     "could not be decoded",
 
@@ -86,6 +114,7 @@ static char const* const StatusDescriptions[DiffResource::kStatusCount] = {
     "unknown",
 };
 
+<<<<<<< HEAD
 const char* DiffResource::getStatusDescription(DiffResource::Status status)
 {
     return StatusDescriptions[status];
@@ -98,6 +127,21 @@ bool DiffResource::isStatusFailed(DiffResource::Status status)
 
 bool DiffResource::getMatchingStatuses(char* selector, bool statuses[kStatusCount])
 {
+=======
+const char* DiffResource::getStatusDescription(DiffResource::Status status) {
+    return StatusDescriptions[status];
+}
+
+bool DiffResource::isStatusFailed(DiffResource::Status status) {
+    return DiffResource::kCouldNotDecode_Status == status ||
+           DiffResource::kCouldNotRead_Status == status ||
+           DiffResource::kDoesNotExist_Status == status ||
+           DiffResource::kUnspecified_Status == status ||
+           DiffResource::kUnknown_Status == status;
+}
+
+bool DiffResource::getMatchingStatuses(char* selector, bool statuses[kStatusCount]) {
+>>>>>>> miniblink49
     if (!strcmp(selector, "any")) {
         for (int statusIndex = 0; statusIndex < kStatusCount; ++statusIndex) {
             statuses[statusIndex] = true;
@@ -142,21 +186,36 @@ bool DiffResource::getMatchingStatuses(char* selector, bool statuses[kStatusCoun
     return understood;
 }
 
+<<<<<<< HEAD
 static inline bool colors_match_thresholded(SkPMColor c0, SkPMColor c1, const int threshold)
 {
+=======
+static inline bool colors_match_thresholded(SkPMColor c0, SkPMColor c1, const int threshold) {
+>>>>>>> miniblink49
     int da = SkGetPackedA32(c0) - SkGetPackedA32(c1);
     int dr = SkGetPackedR32(c0) - SkGetPackedR32(c1);
     int dg = SkGetPackedG32(c0) - SkGetPackedG32(c1);
     int db = SkGetPackedB32(c0) - SkGetPackedB32(c1);
 
+<<<<<<< HEAD
     return ((SkAbs32(da) <= threshold) && (SkAbs32(dr) <= threshold) && (SkAbs32(dg) <= threshold) && (SkAbs32(db) <= threshold));
+=======
+    return ((SkAbs32(da) <= threshold) &&
+            (SkAbs32(dr) <= threshold) &&
+            (SkAbs32(dg) <= threshold) &&
+            (SkAbs32(db) <= threshold));
+>>>>>>> miniblink49
 }
 
 const SkPMColor PMCOLOR_WHITE = SkPreMultiplyColor(SK_ColorWHITE);
 const SkPMColor PMCOLOR_BLACK = SkPreMultiplyColor(SK_ColorBLACK);
 
+<<<<<<< HEAD
 void compute_diff(DiffRecord* dr, DiffMetricProc diffFunction, const int colorThreshold)
 {
+=======
+void compute_diff(DiffRecord* dr, DiffMetricProc diffFunction, const int colorThreshold) {
+>>>>>>> miniblink49
     const int w = dr->fComparison.fBitmap.width();
     const int h = dr->fComparison.fBitmap.height();
     if (w != dr->fBase.fBitmap.width() || h != dr->fBase.fBitmap.height()) {
@@ -190,7 +249,11 @@ void compute_diff(DiffRecord* dr, DiffMetricProc diffFunction, const int colorTh
             totalMismatchB += thisB;
             // In HSV, value is defined as max RGB component.
             int value = MAX3(thisR, thisG, thisB);
+<<<<<<< HEAD
             dr->fWeightedFraction += ((float)value) / 255;
+=======
+            dr->fWeightedFraction += ((float) value) / 255;
+>>>>>>> miniblink49
             if (thisA > dr->fMaxMismatchA) {
                 dr->fMaxMismatchA = thisA;
             }
@@ -219,6 +282,7 @@ void compute_diff(DiffRecord* dr, DiffMetricProc diffFunction, const int colorTh
     }
     dr->fResult = DiffRecord::kDifferentPixels_Result;
     int pixelCount = w * h;
+<<<<<<< HEAD
     dr->fFractionDifference = ((float)mismatchedPixels) / pixelCount;
     dr->fWeightedFraction /= pixelCount;
     dr->fTotalMismatchA = totalMismatchA;
@@ -226,4 +290,13 @@ void compute_diff(DiffRecord* dr, DiffMetricProc diffFunction, const int colorTh
     dr->fAverageMismatchR = ((float)totalMismatchR) / pixelCount;
     dr->fAverageMismatchG = ((float)totalMismatchG) / pixelCount;
     dr->fAverageMismatchB = ((float)totalMismatchB) / pixelCount;
+=======
+    dr->fFractionDifference = ((float) mismatchedPixels) / pixelCount;
+    dr->fWeightedFraction /= pixelCount;
+    dr->fTotalMismatchA = totalMismatchA;
+    dr->fAverageMismatchA = ((float) totalMismatchA) / pixelCount;
+    dr->fAverageMismatchR = ((float) totalMismatchR) / pixelCount;
+    dr->fAverageMismatchG = ((float) totalMismatchG) / pixelCount;
+    dr->fAverageMismatchB = ((float) totalMismatchB) / pixelCount;
+>>>>>>> miniblink49
 }

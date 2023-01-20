@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/UserActionElementSet.h"
 
 #include "core/dom/Element.h"
@@ -31,19 +32,30 @@
 
 namespace blink {
 
-UserActionElementSet::UserActionElementSet() { }
+UserActionElementSet::UserActionElementSet()
+{
+}
 
-UserActionElementSet::~UserActionElementSet() { }
+UserActionElementSet::~UserActionElementSet()
+{
+}
 
 void UserActionElementSet::didDetach(Element& element)
 {
-    DCHECK(element.isUserActionElement());
+    ASSERT(element.isUserActionElement());
     clearFlags(&element, IsActiveFlag | InActiveChainFlag | IsHoveredFlag);
 }
 
+#if !ENABLE(OILPAN)
+void UserActionElementSet::documentDidRemoveLastRef()
+{
+    m_elements.clear();
+}
+#endif
+
 bool UserActionElementSet::hasFlags(const Node* node, unsigned flags) const
 {
-    DCHECK(node->isUserActionElement() && node->isElementNode());
+    ASSERT(node->isUserActionElement() && node->isElementNode());
     return hasFlags(toElement(node), flags);
 }
 
@@ -61,10 +73,9 @@ void UserActionElementSet::clearFlags(Node* node, unsigned flags)
     return clearFlags(toElement(node), flags);
 }
 
-inline bool UserActionElementSet::hasFlags(const Element* element,
-    unsigned flags) const
+inline bool UserActionElementSet::hasFlags(const Element* element, unsigned flags) const
 {
-    DCHECK(element->isUserActionElement());
+    ASSERT(element->isUserActionElement());
     ElementFlagMap::const_iterator found = m_elements.find(const_cast<Element*>(element));
     if (found == m_elements.end())
         return false;
@@ -74,7 +85,7 @@ inline bool UserActionElementSet::hasFlags(const Element* element,
 inline void UserActionElementSet::clearFlags(Element* element, unsigned flags)
 {
     if (!element->isUserActionElement()) {
-        DCHECK(m_elements.end() == m_elements.find(element));
+        ASSERT(m_elements.end() == m_elements.find(element));
         return;
     }
 
@@ -98,7 +109,7 @@ inline void UserActionElementSet::setFlags(Element* element, unsigned flags)
 {
     ElementFlagMap::iterator result = m_elements.find(element);
     if (result != m_elements.end()) {
-        DCHECK(element->isUserActionElement());
+        ASSERT(element->isUserActionElement());
         result->value |= flags;
         return;
     }
@@ -109,7 +120,9 @@ inline void UserActionElementSet::setFlags(Element* element, unsigned flags)
 
 DEFINE_TRACE(UserActionElementSet)
 {
+#if ENABLE(OILPAN)
     visitor->trace(m_elements);
+#endif
 }
 
-} // namespace blink
+}

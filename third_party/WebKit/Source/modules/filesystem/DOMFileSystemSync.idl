@@ -30,6 +30,10 @@
 
 [
     NoInterfaceObject,
+<<<<<<< HEAD
+=======
+    GarbageCollected,
+>>>>>>> miniblink49
 ] interface DOMFileSystemSync {
     readonly attribute DOMString name;
     readonly attribute DirectoryEntrySync root;

@@ -20,14 +20,23 @@
         'xml.gyp:xml',
       ],
       'include_dirs': [
+<<<<<<< HEAD
         '../include/private',
         '../include/views',
         '../include/views/unix',
         '../src/core',
+=======
+        '../include/views',
+        '../include/views/unix',
+>>>>>>> miniblink49
         '../src/gpu',
       ],
       'sources': [
         '../include/views/SkApplication.h',
+<<<<<<< HEAD
+=======
+        '../include/views/SkBGViewArtist.h',
+>>>>>>> miniblink49
         '../include/views/SkEvent.h',
         '../include/views/SkEventSink.h',
         '../include/views/SkKey.h',
@@ -36,6 +45,7 @@
         '../include/views/SkOSWindow_SDL.h',
         '../include/views/SkOSWindow_Unix.h',
         '../include/views/SkOSWindow_Win.h',
+<<<<<<< HEAD
         '../include/views/SkSystemEventTypes.h',
         '../include/views/SkTouchGesture.h',
         '../include/views/SkView.h',
@@ -44,10 +54,28 @@
         '../src/views/SkEvent.cpp',
         '../src/views/SkEventSink.cpp',
         '../src/views/SkOSMenu.cpp',
+=======
+        '../include/views/SkStackViewLayout.h',
+        '../include/views/SkSystemEventTypes.h',
+        '../include/views/SkTouchGesture.h',
+        '../include/views/SkView.h',
+        '../include/views/SkViewInflate.h',
+        '../include/views/SkWidget.h',
+        '../include/views/SkWindow.h',
+
+        '../src/views/SkBGViewArtist.cpp',
+        '../src/views/SkEvent.cpp',
+        '../src/views/SkEventSink.cpp',
+        '../src/views/SkOSMenu.cpp',
+        '../src/views/SkParsePaint.cpp',
+        '../src/views/SkProgressView.cpp',
+        '../src/views/SkStackViewLayout.cpp',
+>>>>>>> miniblink49
         '../src/views/SkTagList.cpp',
         '../src/views/SkTagList.h',
         '../src/views/SkTouchGesture.cpp',
         '../src/views/SkView.cpp',
+<<<<<<< HEAD
         '../src/views/SkViewPriv.cpp',
         '../src/views/SkViewPriv.h',
         '../src/views/SkWindow.cpp',
@@ -56,6 +84,13 @@
         '../src/views/unix/SkOSWindow_Unix.cpp',
         '../src/views/unix/keysym2ucs.c',
         '../src/views/unix/skia_unix.cpp',
+=======
+        '../src/views/SkViewInflate.cpp',
+        '../src/views/SkViewPriv.cpp',
+        '../src/views/SkViewPriv.h',
+        '../src/views/SkWidgets.cpp',
+        '../src/views/SkWindow.cpp',
+>>>>>>> miniblink49
 
         # Mac
         '../src/views/mac/SkEventNotifier.h',
@@ -67,9 +102,27 @@
         '../src/views/mac/SkOSWindow_Mac.mm',
         '../src/views/mac/skia_mac.mm',
 
+<<<<<<< HEAD
         # Windows
         '../src/views/win/SkOSWindow_win.cpp',
         '../src/views/win/skia_win.cpp',
+=======
+        # SDL
+        '../src/views/sdl/SkOSWindow_SDL.cpp',
+
+        # *nix
+        '../src/views/unix/SkOSWindow_Unix.cpp',
+        '../src/views/unix/keysym2ucs.c',
+        '../src/views/unix/skia_unix.cpp',
+
+        # Windows
+        '../src/views/win/SkOSWindow_win.cpp',
+        '../src/views/win/skia_win.cpp',
+
+      ],
+      'sources!' : [
+        '../src/views/sdl/SkOSWindow_SDL.cpp',
+>>>>>>> miniblink49
       ],
       'conditions': [
         [ 'skia_gpu == 1', {
@@ -77,7 +130,11 @@
             '../src/gpu',
           ],
         }],
+<<<<<<< HEAD
         [ 'skia_os == "mac" and skia_use_sdl == 0', {
+=======
+        [ 'skia_os == "mac"', {
+>>>>>>> miniblink49
           'link_settings': {
             'libraries': [
               '$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework',
@@ -98,7 +155,11 @@
           '../src/views/mac/skia_mac.mm',
           ],
         }],
+<<<<<<< HEAD
         [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris"] and skia_use_sdl == 0', {
+=======
+        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
+>>>>>>> miniblink49
           'link_settings': {
             'libraries': [
               '-lGL',
@@ -125,6 +186,7 @@
             '../include/gpu',
           ],
         }],
+<<<<<<< HEAD
         [ 'skia_angle', {
           'dependencies': [
             'angle.gyp:*',
@@ -176,6 +238,8 @@
             }],
           ],
         }],
+=======
+>>>>>>> miniblink49
       ],
       'direct_dependent_settings': {
         'include_dirs': [

@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -32,6 +33,29 @@ namespace blink {
 
 WaveShaperProcessor::WaveShaperProcessor(float sampleRate,
     size_t numberOfChannels)
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+#if ENABLE(WEB_AUDIO)
+#include "modules/webaudio/WaveShaperProcessor.h"
+
+#include "modules/webaudio/WaveShaperDSPKernel.h"
+
+namespace blink {
+
+WaveShaperProcessor::WaveShaperProcessor(float sampleRate, size_t numberOfChannels)
+>>>>>>> miniblink49
     : AudioDSPKernelProcessor(sampleRate, numberOfChannels)
     , m_oversample(OverSampleNone)
 {
@@ -43,6 +67,7 @@ WaveShaperProcessor::~WaveShaperProcessor()
         uninitialize();
 }
 
+<<<<<<< HEAD
 std::unique_ptr<AudioDSPKernel> WaveShaperProcessor::createKernel()
 {
     return WTF::makeUnique<WaveShaperDSPKernel>(this);
@@ -64,6 +89,19 @@ void WaveShaperProcessor::setCurve(const float* curveData,
     // Copy the curve data, if any, to our internal buffer.
     m_curve = WTF::makeUnique<Vector<float>>(curveLength);
     memcpy(m_curve->data(), curveData, sizeof(float) * curveLength);
+=======
+PassOwnPtr<AudioDSPKernel> WaveShaperProcessor::createKernel()
+{
+    return adoptPtr(new WaveShaperDSPKernel(this));
+}
+
+void WaveShaperProcessor::setCurve(DOMFloat32Array* curve)
+{
+    // This synchronizes with process().
+    MutexLocker processLocker(m_processLock);
+
+    m_curve = curve;
+>>>>>>> miniblink49
 }
 
 void WaveShaperProcessor::setOversample(OverSampleType oversample)
@@ -81,9 +119,13 @@ void WaveShaperProcessor::setOversample(OverSampleType oversample)
     }
 }
 
+<<<<<<< HEAD
 void WaveShaperProcessor::process(const AudioBus* source,
     AudioBus* destination,
     size_t framesToProcess)
+=======
+void WaveShaperProcessor::process(const AudioBus* source, AudioBus* destination, size_t framesToProcess)
+>>>>>>> miniblink49
 {
     if (!isInitialized()) {
         destination->zero();
@@ -91,13 +133,18 @@ void WaveShaperProcessor::process(const AudioBus* source,
     }
 
     bool channelCountMatches = source->numberOfChannels() == destination->numberOfChannels() && source->numberOfChannels() == m_kernels.size();
+<<<<<<< HEAD
     DCHECK(channelCountMatches);
+=======
+    ASSERT(channelCountMatches);
+>>>>>>> miniblink49
     if (!channelCountMatches)
         return;
 
     // The audio thread can't block on this lock, so we call tryLock() instead.
     MutexTryLocker tryLocker(m_processLock);
     if (tryLocker.locked()) {
+<<<<<<< HEAD
         // For each channel of our input, process using the corresponding
         // WaveShaperDSPKernel into the output channel.
         for (unsigned i = 0; i < m_kernels.size(); ++i)
@@ -107,8 +154,20 @@ void WaveShaperProcessor::process(const AudioBus* source,
     } else {
         // Too bad - the tryLock() failed. We must be in the middle of a setCurve()
         // call.
+=======
+        // For each channel of our input, process using the corresponding WaveShaperDSPKernel into the output channel.
+        for (unsigned i = 0; i < m_kernels.size(); ++i)
+            m_kernels[i]->process(source->channel(i)->data(), destination->channel(i)->mutableData(), framesToProcess);
+    } else {
+        // Too bad - the tryLock() failed. We must be in the middle of a setCurve() call.
+>>>>>>> miniblink49
         destination->zero();
     }
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

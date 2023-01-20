@@ -9,17 +9,26 @@
 #define SkCoreBlitters_DEFINED
 
 #include "SkBitmapProcShader.h"
+<<<<<<< HEAD
 #include "SkBlitRow.h"
 #include "SkBlitter.h"
+=======
+#include "SkBlitter.h"
+#include "SkBlitRow.h"
+>>>>>>> miniblink49
 #include "SkShader.h"
 #include "SkSmallAllocator.h"
 
 class SkRasterBlitter : public SkBlitter {
 public:
+<<<<<<< HEAD
     SkRasterBlitter(const SkPixmap& device)
         : fDevice(device)
     {
     }
+=======
+    SkRasterBlitter(const SkPixmap& device) : fDevice(device) {}
+>>>>>>> miniblink49
 
 protected:
     const SkPixmap fDevice;
@@ -36,7 +45,11 @@ public:
       *  exchange that object.
       */
     SkShaderBlitter(const SkPixmap& device, const SkPaint& paint,
+<<<<<<< HEAD
         SkShader::Context* shaderContext);
+=======
+                    SkShader::Context* shaderContext);
+>>>>>>> miniblink49
     virtual ~SkShaderBlitter();
 
     /**
@@ -49,10 +62,16 @@ public:
     SkShader::Context* getShaderContext() const override { return fShaderContext; }
 
 protected:
+<<<<<<< HEAD
     uint32_t fShaderFlags;
     const SkShader* fShader;
     SkShader::Context* fShaderContext;
     bool fConstInY;
+=======
+    uint32_t            fShaderFlags;
+    const SkShader*     fShader;
+    SkShader::Context*  fShaderContext;
+>>>>>>> miniblink49
 
 private:
     // illegal
@@ -96,7 +115,11 @@ private:
 class SkA8_Shader_Blitter : public SkShaderBlitter {
 public:
     SkA8_Shader_Blitter(const SkPixmap& device, const SkPaint& paint,
+<<<<<<< HEAD
         SkShader::Context* shaderContext);
+=======
+                        SkShader::Context* shaderContext);
+>>>>>>> miniblink49
     virtual ~SkA8_Shader_Blitter();
     void blitH(int x, int y, int width) override;
     void blitAntiH(int x, int y, const SkAlpha antialias[], const int16_t runs[]) override;
@@ -104,8 +127,13 @@ public:
 
 private:
     SkXfermode* fXfermode;
+<<<<<<< HEAD
     SkPMColor* fBuffer;
     uint8_t* fAAExpand;
+=======
+    SkPMColor*  fBuffer;
+    uint8_t*    fAAExpand;
+>>>>>>> miniblink49
 
     // illegal
     SkA8_Shader_Blitter& operator=(const SkA8_Shader_Blitter&);
@@ -128,8 +156,13 @@ public:
     void blitAntiV2(int x, int y, U8CPU a0, U8CPU a1) override;
 
 protected:
+<<<<<<< HEAD
     SkColor fColor;
     SkPMColor fPMColor;
+=======
+    SkColor                fColor;
+    SkPMColor              fPMColor;
+>>>>>>> miniblink49
 
 private:
     unsigned fSrcA, fSrcR, fSrcG, fSrcB;
@@ -143,10 +176,14 @@ private:
 class SkARGB32_Opaque_Blitter : public SkARGB32_Blitter {
 public:
     SkARGB32_Opaque_Blitter(const SkPixmap& device, const SkPaint& paint)
+<<<<<<< HEAD
         : INHERITED(device, paint)
     {
         SkASSERT(paint.getAlpha() == 0xFF);
     }
+=======
+        : INHERITED(device, paint) { SkASSERT(paint.getAlpha() == 0xFF); }
+>>>>>>> miniblink49
     void blitMask(const SkMask&, const SkIRect&) override;
     void blitAntiH2(int x, int y, U8CPU a0, U8CPU a1) override;
     void blitAntiV2(int x, int y, U8CPU a0, U8CPU a1) override;
@@ -158,9 +195,13 @@ private:
 class SkARGB32_Black_Blitter : public SkARGB32_Opaque_Blitter {
 public:
     SkARGB32_Black_Blitter(const SkPixmap& device, const SkPaint& paint)
+<<<<<<< HEAD
         : INHERITED(device, paint)
     {
     }
+=======
+        : INHERITED(device, paint) {}
+>>>>>>> miniblink49
     void blitAntiH(int x, int y, const SkAlpha antialias[], const int16_t runs[]) override;
     void blitAntiH2(int x, int y, U8CPU a0, U8CPU a1) override;
     void blitAntiV2(int x, int y, U8CPU a0, U8CPU a1) override;
@@ -172,7 +213,11 @@ private:
 class SkARGB32_Shader_Blitter : public SkShaderBlitter {
 public:
     SkARGB32_Shader_Blitter(const SkPixmap& device, const SkPaint& paint,
+<<<<<<< HEAD
         SkShader::Context* shaderContext);
+=======
+                            SkShader::Context* shaderContext);
+>>>>>>> miniblink49
     virtual ~SkARGB32_Shader_Blitter();
     void blitH(int x, int y, int width) override;
     void blitV(int x, int y, int height, SkAlpha alpha) override;
@@ -181,11 +226,20 @@ public:
     void blitMask(const SkMask&, const SkIRect&) override;
 
 private:
+<<<<<<< HEAD
     SkXfermode* fXfermode;
     SkPMColor* fBuffer;
     SkBlitRow::Proc32 fProc32;
     SkBlitRow::Proc32 fProc32Blend;
     bool fShadeDirectlyIntoDevice;
+=======
+    SkXfermode*         fXfermode;
+    SkPMColor*          fBuffer;
+    SkBlitRow::Proc32   fProc32;
+    SkBlitRow::Proc32   fProc32Blend;
+    bool                fShadeDirectlyIntoDevice;
+    bool                fConstInY;
+>>>>>>> miniblink49
 
     // illegal
     SkARGB32_Shader_Blitter& operator=(const SkARGB32_Shader_Blitter&);
@@ -193,12 +247,15 @@ private:
     typedef SkShaderBlitter INHERITED;
 };
 
+<<<<<<< HEAD
 SkBlitter* SkBlitter_ARGB32_Create(const SkPixmap& device, const SkPaint&, SkShader::Context*,
     SkTBlitterAllocator*);
 
 SkBlitter* SkBlitter_F16_Create(const SkPixmap& device, const SkPaint&, SkShader::Context*,
     SkTBlitterAllocator*);
 
+=======
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////
 
 /*  These return the correct subclass of blitter for their device config.
@@ -215,7 +272,12 @@ SkBlitter* SkBlitter_F16_Create(const SkPixmap& device, const SkPaint&, SkShader
  */
 
 SkBlitter* SkBlitter_ChooseD565(const SkPixmap& device, const SkPaint& paint,
+<<<<<<< HEAD
     SkShader::Context* shaderContext,
     SkTBlitterAllocator* allocator);
+=======
+                                SkShader::Context* shaderContext,
+                                SkTBlitterAllocator* allocator);
+>>>>>>> miniblink49
 
 #endif

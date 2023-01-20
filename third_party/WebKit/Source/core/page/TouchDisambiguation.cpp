@@ -28,6 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/page/TouchDisambiguation.h"
 
 #include "core/HTMLNames.h"
@@ -64,9 +66,7 @@ static IntRect boundingBoxForEventNodes(Node* eventNode)
     return eventNode->document().view()->contentsToRootFrame(result);
 }
 
-static float scoreTouchTarget(IntPoint touchPoint,
-    int padding,
-    IntRect boundingBox)
+static float scoreTouchTarget(IntPoint touchPoint, int padding, IntRect boundingBox)
 {
     if (boundingBox.isEmpty())
         return 0;
@@ -86,10 +86,7 @@ struct TouchTargetData {
     float score;
 };
 
-void findGoodTouchTargets(const IntRect& touchBoxInRootFrame,
-    LocalFrame* mainFrame,
-    Vector<IntRect>& goodTargets,
-    HeapVector<Member<Node>>& highlightNodes)
+void findGoodTouchTargets(const IntRect& touchBoxInRootFrame, LocalFrame* mainFrame, Vector<IntRect>& goodTargets, WillBeHeapVector<RawPtrWillBeMember<Node>>& highlightNodes)
 {
     goodTargets.clear();
 
@@ -98,15 +95,13 @@ void findGoodTouchTargets(const IntRect& touchBoxInRootFrame,
     IntPoint touchPoint = touchBoxInRootFrame.center();
     IntPoint contentsPoint = mainFrame->view()->rootFrameToContents(touchPoint);
 
-    HitTestResult result = mainFrame->eventHandler().hitTestResultAtPoint(
-        contentsPoint, HitTestRequest::ReadOnly | HitTestRequest::Active | HitTestRequest::ListBased,
-        LayoutSize(touchPointPadding, touchPointPadding));
-    const HeapListHashSet<Member<Node>>& hitResults = result.listBasedTestResult();
+    HitTestResult result = mainFrame->eventHandler().hitTestResultAtPoint(contentsPoint, HitTestRequest::ReadOnly | HitTestRequest::Active | HitTestRequest::ListBased, LayoutSize(touchPointPadding, touchPointPadding));
+    const WillBeHeapListHashSet<RefPtrWillBeMember<Node>>& hitResults = result.listBasedTestResult();
 
     // Blacklist nodes that are container of disambiguated nodes.
-    // It is not uncommon to have a clickable <div> that contains other clickable
-    // objects.  This heuristic avoids excessive disambiguation in that case.
-    HeapHashSet<Member<Node>> blackList;
+    // It is not uncommon to have a clickable <div> that contains other clickable objects.
+    // This heuristic avoids excessive disambiguation in that case.
+    WillBeHeapHashSet<RawPtrWillBeMember<Node>> blackList;
     for (const auto& hitResult : hitResults) {
         // Ignore any Nodes that can't be clicked on.
         LayoutObject* layoutObject = hitResult.get()->layoutObject();
@@ -114,8 +109,7 @@ void findGoodTouchTargets(const IntRect& touchBoxInRootFrame,
             continue;
 
         // Blacklist all of the Node's containers.
-        for (LayoutBlock* container = layoutObject->containingBlock(); container;
-             container = container->containingBlock()) {
+        for (LayoutBlock* container = layoutObject->containingBlock(); container; container = container->containingBlock()) {
             Node* containerNode = container->node();
             if (!containerNode)
                 continue;
@@ -124,21 +118,18 @@ void findGoodTouchTargets(const IntRect& touchBoxInRootFrame,
         }
     }
 
-    HeapHashMap<Member<Node>, TouchTargetData> touchTargets;
+    WillBeHeapHashMap<RawPtrWillBeMember<Node>, TouchTargetData> touchTargets;
     float bestScore = 0;
     for (const auto& hitResult : hitResults) {
-        if (!hitResult)
-            continue;
-        for (Node& node : NodeTraversal::inclusiveAncestorsOf(*hitResult)) {
-            if (blackList.contains(&node))
+        for (Node* node = hitResult.get(); node; node = node->parentNode()) {
+            if (blackList.contains(node))
                 continue;
-            if (node.isDocumentNode() || isHTMLHtmlElement(node) || isHTMLBodyElement(node))
+            if (node->isDocumentNode() || isHTMLHtmlElement(*node) || isHTMLBodyElement(*node))
                 break;
-            if (node.willRespondToMouseClickEvents()) {
-                TouchTargetData& targetData = touchTargets.add(&node, TouchTargetData()).storedValue->value;
-                targetData.windowBoundingBox = boundingBoxForEventNodes(&node);
-                targetData.score = scoreTouchTarget(touchPoint, touchPointPadding,
-                    targetData.windowBoundingBox);
+            if (node->willRespondToMouseClickEvents()) {
+                TouchTargetData& targetData = touchTargets.add(node, TouchTargetData()).storedValue->value;
+                targetData.windowBoundingBox = boundingBoxForEventNodes(node);
+                targetData.score = scoreTouchTarget(touchPoint, touchPointPadding, targetData.windowBoundingBox);
                 bestScore = std::max(bestScore, targetData.score);
                 break;
             }
@@ -146,14 +137,12 @@ void findGoodTouchTargets(const IntRect& touchBoxInRootFrame,
     }
 
     for (const auto& touchTarget : touchTargets) {
-        // Currently the scoring function uses the overlap area with the fat point
-        // as the score.  We ignore the candidates that has less than 1/2 overlap
-        // (we consider not really ambiguous enough) than the best candidate to
-        // avoid excessive popups.
+        // Currently the scoring function uses the overlap area with the fat point as the score.
+        // We ignore the candidates that has less than 1/2 overlap (we consider not really ambiguous enough) than the best candidate to avoid excessive popups.
         if (touchTarget.value.score < bestScore * 0.5)
             continue;
-        goodTargets.push_back(touchTarget.value.windowBoundingBox);
-        highlightNodes.push_back(touchTarget.key);
+        goodTargets.append(touchTarget.value.windowBoundingBox);
+        highlightNodes.append(touchTarget.key);
     }
 }
 

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkSVGFeColorMatrix_DEFINED
 #define SkSVGFeColorMatrix_DEFINED
 
@@ -12,13 +20,19 @@
 
 class SkSVGFeColorMatrix : public SkSVGElement {
     DECLARE_SVG_INFO(FeColorMatrix);
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     SkString f_color_interpolation_filters;
     SkString f_result;
     SkString f_type;
     SkString f_values;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef SkSVGElement INHERITED;
 };

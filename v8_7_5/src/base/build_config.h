@@ -13,7 +13,11 @@
 //   or with gcc, run: "echo | gcc -E -dM -"
 #if defined(_M_X64) || defined(__x86_64__)
 #define V8_HOST_ARCH_X64 1
+<<<<<<< HEAD
 #if defined(__x86_64__) && __SIZEOF_POINTER__ == 4 // Check for x32.
+=======
+#if defined(__x86_64__) && __SIZEOF_POINTER__ == 4  // Check for x32.
+>>>>>>> miniblink49
 #define V8_HOST_ARCH_32_BIT 1
 #else
 #define V8_HOST_ARCH_64_BIT 1
@@ -51,6 +55,7 @@
 #error "Host architecture was not detected as supported by v8"
 #endif
 
+<<<<<<< HEAD
 #if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7__)
 #define CAN_USE_ARMV7_INSTRUCTIONS 1
 #ifdef __ARM_ARCH_EXT_IDIV__
@@ -59,21 +64,47 @@
 #ifndef CAN_USE_VFP3_INSTRUCTIONS
 #define CAN_USE_VFP3_INSTRUCTIONS 1
 #endif
+=======
+#if defined(__ARM_ARCH_7A__) || \
+    defined(__ARM_ARCH_7R__) || \
+    defined(__ARM_ARCH_7__)
+# define CAN_USE_ARMV7_INSTRUCTIONS 1
+#ifdef __ARM_ARCH_EXT_IDIV__
+#define CAN_USE_SUDIV 1
+#endif
+# ifndef CAN_USE_VFP3_INSTRUCTIONS
+#define CAN_USE_VFP3_INSTRUCTIONS 1
+# endif
+>>>>>>> miniblink49
 #endif
 
 #if defined(__ARM_ARCH_8A__)
 #define CAN_USE_ARMV7_INSTRUCTIONS 1
 #define CAN_USE_SUDIV 1
+<<<<<<< HEAD
 #define CAN_USE_ARMV8_INSTRUCTIONS 1
+=======
+# define CAN_USE_ARMV8_INSTRUCTIONS 1
+>>>>>>> miniblink49
 #ifndef CAN_USE_VFP3_INSTRUCTIONS
 #define CAN_USE_VFP3_INSTRUCTIONS 1
 #endif
 #endif
 
+<<<<<<< HEAD
 // Target architecture detection. This may be set externally. If not, detect
 // in the same way as the host architecture, that is, target the native
 // environment as presented by the compiler.
 #if !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_IA32 && !V8_TARGET_ARCH_ARM && !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_MIPS && !V8_TARGET_ARCH_MIPS64 && !V8_TARGET_ARCH_PPC && !V8_TARGET_ARCH_S390
+=======
+
+// Target architecture detection. This may be set externally. If not, detect
+// in the same way as the host architecture, that is, target the native
+// environment as presented by the compiler.
+#if !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_IA32 && !V8_TARGET_ARCH_ARM &&      \
+    !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_MIPS && !V8_TARGET_ARCH_MIPS64 && \
+    !V8_TARGET_ARCH_PPC && !V8_TARGET_ARCH_S390
+>>>>>>> miniblink49
 #if defined(_M_X64) || defined(__x86_64__)
 #define V8_TARGET_ARCH_X64 1
 #elif defined(_M_IX86) || defined(__i386__)
@@ -98,7 +129,11 @@
 #define V8_TARGET_ARCH_32_BIT 1
 #elif V8_TARGET_ARCH_X64
 #if !V8_TARGET_ARCH_32_BIT && !V8_TARGET_ARCH_64_BIT
+<<<<<<< HEAD
 #if defined(__x86_64__) && __SIZEOF_POINTER__ == 4 // Check for x32.
+=======
+#if defined(__x86_64__) && __SIZEOF_POINTER__ == 4  // Check for x32.
+>>>>>>> miniblink49
 #define V8_TARGET_ARCH_32_BIT 1
 #else
 #define V8_TARGET_ARCH_64_BIT 1
@@ -132,10 +167,19 @@
 #if V8_TARGET_ARCH_IA32 && !V8_HOST_ARCH_IA32
 #error Target architecture ia32 is only supported on ia32 host
 #endif
+<<<<<<< HEAD
 #if (V8_TARGET_ARCH_X64 && V8_TARGET_ARCH_64_BIT && !(V8_HOST_ARCH_X64 && V8_HOST_ARCH_64_BIT))
 #error Target architecture x64 is only supported on x64 host
 #endif
 #if (V8_TARGET_ARCH_X64 && V8_TARGET_ARCH_32_BIT && !(V8_HOST_ARCH_X64 && V8_HOST_ARCH_32_BIT))
+=======
+#if (V8_TARGET_ARCH_X64 && V8_TARGET_ARCH_64_BIT && \
+     !(V8_HOST_ARCH_X64 && V8_HOST_ARCH_64_BIT))
+#error Target architecture x64 is only supported on x64 host
+#endif
+#if (V8_TARGET_ARCH_X64 && V8_TARGET_ARCH_32_BIT && \
+     !(V8_HOST_ARCH_X64 && V8_HOST_ARCH_32_BIT))
+>>>>>>> miniblink49
 #error Target architecture x32 is only supported on x64 host with x32 support
 #endif
 #if (V8_TARGET_ARCH_ARM && !(V8_HOST_ARCH_IA32 || V8_HOST_ARCH_ARM))
@@ -172,7 +216,11 @@
 #else
 #define V8_TARGET_LITTLE_ENDIAN 1
 #endif
+<<<<<<< HEAD
 #elif __BIG_ENDIAN__ // FOR PPCGR on AIX
+=======
+#elif __BIG_ENDIAN__  // FOR PPCGR on AIX
+>>>>>>> miniblink49
 #define V8_TARGET_BIG_ENDIAN 1
 #elif V8_TARGET_ARCH_PPC_LE
 #define V8_TARGET_LITTLE_ENDIAN 1
@@ -202,4 +250,8 @@ const int kPageSizeBits = 19;
 const int kPageSizeBits = 18;
 #endif
 
+<<<<<<< HEAD
 #endif // V8_BASE_BUILD_CONFIG_H_
+=======
+#endif  // V8_BASE_BUILD_CONFIG_H_
+>>>>>>> miniblink49

@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebSpeechSynthesisVoice.h"
 
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"

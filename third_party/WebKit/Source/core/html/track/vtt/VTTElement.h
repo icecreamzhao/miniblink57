@@ -44,20 +44,14 @@ enum VTTNodeType {
 
 class VTTElement final : public Element {
 public:
-    static VTTElement* create(const VTTNodeType, Document*);
-    static VTTElement* create(const QualifiedName&, Document*);
-    HTMLElement* createEquivalentHTMLElement(Document&);
+    static PassRefPtrWillBeRawPtr<VTTElement> create(const VTTNodeType, Document*);
+    static PassRefPtrWillBeRawPtr<VTTElement> create(const QualifiedName&, Document*);
+    PassRefPtrWillBeRawPtr<HTMLElement> createEquivalentHTMLElement(Document&);
 
-    Element* cloneElementWithoutAttributesAndChildren() override;
+    PassRefPtrWillBeRawPtr<Element> cloneElementWithoutAttributesAndChildren() override;
 
-    void setVTTNodeType(VTTNodeType type)
-    {
-        m_webVTTNodeType = static_cast<unsigned>(type);
-    }
-    VTTNodeType webVTTNodeType() const
-    {
-        return static_cast<VTTNodeType>(m_webVTTNodeType);
-    }
+    void setVTTNodeType(VTTNodeType type) { m_webVTTNodeType = static_cast<unsigned>(type); }
+    VTTNodeType webVTTNodeType() const { return static_cast<VTTNodeType>(m_webVTTNodeType); }
 
     bool isPastNode() const { return m_isPastNode; }
     void setIsPastNode(bool);
@@ -68,8 +62,7 @@ public:
 
     static const QualifiedName& voiceAttributeName()
     {
-        DEFINE_STATIC_LOCAL(QualifiedName, voiceAttr,
-            (nullAtom, "voice", nullAtom));
+        DEFINE_STATIC_LOCAL(QualifiedName, voiceAttr, (nullAtom, "voice", nullAtom));
         return voiceAttr;
     }
 

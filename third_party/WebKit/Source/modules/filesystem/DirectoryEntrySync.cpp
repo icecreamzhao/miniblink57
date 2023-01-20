@@ -28,10 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/DirectoryEntrySync.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
+<<<<<<< HEAD
+=======
+#include "core/dom/ExceptionCode.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/DirectoryReaderSync.h"
 #include "modules/filesystem/FileEntrySync.h"
 #include "modules/filesystem/FileSystemFlags.h"
@@ -39,8 +47,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 DirectoryEntrySync::DirectoryEntrySync(DOMFileSystemBase* fileSystem,
     const String& fullPath)
+=======
+DirectoryEntrySync::DirectoryEntrySync(DOMFileSystemBase* fileSystem, const String& fullPath)
+>>>>>>> miniblink49
     : EntrySync(fileSystem, fullPath)
 {
 }
@@ -50,6 +62,7 @@ DirectoryReaderSync* DirectoryEntrySync::createReader()
     return DirectoryReaderSync::create(m_fileSystem, m_fullPath);
 }
 
+<<<<<<< HEAD
 FileEntrySync* DirectoryEntrySync::getFile(const String& path,
     const FileSystemFlags& options,
     ExceptionState& exceptionState)
@@ -70,15 +83,32 @@ DirectoryEntrySync* DirectoryEntrySync::getDirectory(
     m_fileSystem->getDirectory(this, path, options, helper->getSuccessCallback(),
         helper->getErrorCallback(),
         DOMFileSystemBase::Synchronous);
+=======
+FileEntrySync* DirectoryEntrySync::getFile(const String& path, const FileSystemFlags& options, ExceptionState& exceptionState)
+{
+    EntrySyncCallbackHelper* helper = EntrySyncCallbackHelper::create();
+    m_fileSystem->getFile(this, path, options, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
+    return static_cast<FileEntrySync*>(helper->getResult(exceptionState));
+}
+
+DirectoryEntrySync* DirectoryEntrySync::getDirectory(const String& path, const FileSystemFlags& options, ExceptionState& exceptionState)
+{
+    EntrySyncCallbackHelper* helper = EntrySyncCallbackHelper::create();
+    m_fileSystem->getDirectory(this, path, options, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
+>>>>>>> miniblink49
     return static_cast<DirectoryEntrySync*>(helper->getResult(exceptionState));
 }
 
 void DirectoryEntrySync::removeRecursively(ExceptionState& exceptionState)
 {
     VoidSyncCallbackHelper* helper = VoidSyncCallbackHelper::create();
+<<<<<<< HEAD
     m_fileSystem->removeRecursively(this, helper->getSuccessCallback(),
         helper->getErrorCallback(),
         DOMFileSystemBase::Synchronous);
+=======
+    m_fileSystem->removeRecursively(this, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
+>>>>>>> miniblink49
     helper->getResult(exceptionState);
 }
 
@@ -87,4 +117,8 @@ DEFINE_TRACE(DirectoryEntrySync)
     EntrySync::trace(visitor);
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

@@ -337,7 +337,11 @@ AstType::bitset AstBitsetType::Lub(i::Object* value) {
 AstType::bitset AstBitsetType::Lub(double value) {
   DisallowHeapAllocation no_allocation;
   if (i::IsMinusZero(value)) return kMinusZero;
+<<<<<<< HEAD
   if (std_isnan(value)) return kNaN;
+=======
+  if (std::isnan(value)) return kNaN;
+>>>>>>> miniblink49
   if (IsUint32Double(value) || IsInt32Double(value)) return Lub(value, value);
   return kOtherNumber;
 }

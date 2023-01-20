@@ -2,98 +2,102 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/css/MediaValuesCached.h"
 
 #include "core/css/CSSPrimitiveValue.h"
 #include "core/dom/Document.h"
 #include "core/frame/LocalFrame.h"
 #include "core/layout/LayoutObject.h"
-#include "core/layout/api/LayoutViewItem.h"
 
 namespace blink {
 
-MediaValuesCached::MediaValuesCachedData::MediaValuesCachedData(
-    Document& document)
-    : MediaValuesCached::MediaValuesCachedData()
+PassRefPtr<MediaValues> MediaValuesCached::create()
+{
+    return adoptRef(new MediaValuesCached());
+}
+
+PassRefPtr<MediaValues> MediaValuesCached::create(MediaValuesCachedData& data)
+{
+    return adoptRef(new MediaValuesCached(data));
+}
+
+PassRefPtr<MediaValues> MediaValuesCached::create(Document& document)
+{
+    return MediaValuesCached::create(frameFrom(document));
+}
+
+PassRefPtr<MediaValues> MediaValuesCached::create(LocalFrame* frame)
+{
+    // FIXME - Added an assert here so we can better understand when a frame is present without its view().
+    ASSERT(!frame || frame->view());
+    if (!frame || !frame->view())
+        return adoptRef(new MediaValuesCached());
+    ASSERT(frame->document() && frame->document()->layoutView());
+    return adoptRef(new MediaValuesCached(frame));
+}
+
+MediaValuesCached::MediaValuesCached()
+{
+}
+
+MediaValuesCached::MediaValuesCached(LocalFrame* frame)
 {
     ASSERT(isMainThread());
-    LocalFrame* frame = MediaValues::frameFrom(document);
-    // TODO(hiroshige): Clean up |frame->view()| conditions.
-    ASSERT(!frame || frame->view());
-    if (frame && frame->view()) {
-        ASSERT(frame->document() && !frame->document()->layoutViewItem().isNull());
-
-        // In case that frame is missing (e.g. for images that their document does
-        // not have a frame)
-        // We simply leave the MediaValues object with the default
-        // MediaValuesCachedData values.
-        viewportWidth = MediaValues::calculateViewportWidth(frame);
-        viewportHeight = MediaValues::calculateViewportHeight(frame);
-        deviceWidth = MediaValues::calculateDeviceWidth(frame);
-        deviceHeight = MediaValues::calculateDeviceHeight(frame);
-        devicePixelRatio = MediaValues::calculateDevicePixelRatio(frame);
-        colorBitsPerComponent = MediaValues::calculateColorBitsPerComponent(frame);
-        monochromeBitsPerComponent = MediaValues::calculateMonochromeBitsPerComponent(frame);
-        primaryPointerType = MediaValues::calculatePrimaryPointerType(frame);
-        availablePointerTypes = MediaValues::calculateAvailablePointerTypes(frame);
-        primaryHoverType = MediaValues::calculatePrimaryHoverType(frame);
-        availableHoverTypes = MediaValues::calculateAvailableHoverTypes(frame);
-        defaultFontSize = MediaValues::calculateDefaultFontSize(frame);
-        threeDEnabled = MediaValues::calculateThreeDEnabled(frame);
-        strictMode = MediaValues::calculateStrictMode(frame);
-        displayMode = MediaValues::calculateDisplayMode(frame);
-        mediaType = MediaValues::calculateMediaType(frame);
-        displayShape = MediaValues::calculateDisplayShape(frame);
-    }
+    ASSERT(frame);
+    // In case that frame is missing (e.g. for images that their document does not have a frame)
+    // We simply leave the MediaValues object with the default MediaValuesCachedData values.
+    m_data.viewportWidth = calculateViewportWidth(frame);
+    m_data.viewportHeight = calculateViewportHeight(frame);
+    m_data.deviceWidth = calculateDeviceWidth(frame);
+    m_data.deviceHeight = calculateDeviceHeight(frame);
+    m_data.devicePixelRatio = calculateDevicePixelRatio(frame);
+    m_data.colorBitsPerComponent = calculateColorBitsPerComponent(frame);
+    m_data.monochromeBitsPerComponent = calculateMonochromeBitsPerComponent(frame);
+    m_data.primaryPointerType = calculatePrimaryPointerType(frame);
+    m_data.availablePointerTypes = calculateAvailablePointerTypes(frame);
+    m_data.primaryHoverType = calculatePrimaryHoverType(frame);
+    m_data.availableHoverTypes = calculateAvailableHoverTypes(frame);
+    m_data.defaultFontSize = calculateDefaultFontSize(frame);
+    m_data.threeDEnabled = calculateThreeDEnabled(frame);
+    m_data.strictMode = calculateStrictMode(frame);
+    m_data.displayMode = calculateDisplayMode(frame);
+    const String mediaType = calculateMediaType(frame);
+    if (!mediaType.isEmpty())
+        m_data.mediaType = mediaType.isolatedCopy();
 }
-
-MediaValuesCached* MediaValuesCached::create()
-{
-    return new MediaValuesCached();
-}
-
-MediaValuesCached* MediaValuesCached::create(
-    const MediaValuesCachedData& data)
-{
-    return new MediaValuesCached(data);
-}
-
-MediaValuesCached::MediaValuesCached() { }
 
 MediaValuesCached::MediaValuesCached(const MediaValuesCachedData& data)
     : m_data(data)
 {
 }
 
-MediaValues* MediaValuesCached::copy() const
+PassRefPtr<MediaValues> MediaValuesCached::copy() const
 {
-    return new MediaValuesCached(m_data);
+    return adoptRef(new MediaValuesCached(m_data));
 }
 
-bool MediaValuesCached::computeLength(double value,
-    CSSPrimitiveValue::UnitType type,
-    int& result) const
+bool MediaValuesCached::computeLength(double value, CSSPrimitiveValue::UnitType type, int& result) const
 {
-    return MediaValues::computeLength(value, type, m_data.defaultFontSize,
-        m_data.viewportWidth, m_data.viewportHeight,
-        result);
+    return MediaValues::computeLength(value, type, m_data.defaultFontSize, m_data.viewportWidth, m_data.viewportHeight, result);
 }
 
-bool MediaValuesCached::computeLength(double value,
-    CSSPrimitiveValue::UnitType type,
-    double& result) const
+bool MediaValuesCached::computeLength(double value, CSSPrimitiveValue::UnitType type, double& result) const
 {
-    return MediaValues::computeLength(value, type, m_data.defaultFontSize,
-        m_data.viewportWidth, m_data.viewportHeight,
-        result);
+    return MediaValues::computeLength(value, type, m_data.defaultFontSize, m_data.viewportWidth, m_data.viewportHeight, result);
 }
 
-double MediaValuesCached::viewportWidth() const
+bool MediaValuesCached::isSafeToSendToAnotherThread() const
+{
+    return hasOneRef();
+}
+
+int MediaValuesCached::viewportWidth() const
 {
     return m_data.viewportWidth;
 }
 
-double MediaValuesCached::viewportHeight() const
+int MediaValuesCached::viewportHeight() const
 {
     return m_data.viewportHeight;
 }
@@ -165,7 +169,7 @@ WebDisplayMode MediaValuesCached::displayMode() const
 
 Document* MediaValuesCached::document() const
 {
-    return nullptr;
+    return 0;
 }
 
 bool MediaValuesCached::hasValues() const
@@ -173,16 +177,14 @@ bool MediaValuesCached::hasValues() const
     return true;
 }
 
-void MediaValuesCached::overrideViewportDimensions(double width,
-    double height)
+void MediaValuesCached::setViewportWidth(int width)
 {
     m_data.viewportWidth = width;
+}
+
+void MediaValuesCached::setViewportHeight(int height)
+{
     m_data.viewportHeight = height;
 }
 
-DisplayShape MediaValuesCached::displayShape() const
-{
-    return m_data.displayShape;
-}
-
-} // namespace blink
+} // namespace

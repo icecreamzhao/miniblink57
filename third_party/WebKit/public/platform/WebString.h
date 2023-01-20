@@ -33,13 +33,23 @@
 
 #include "WebCommon.h"
 #include "WebPrivatePtr.h"
+<<<<<<< HEAD
 #include "base/strings/latin1_string_conversions.h"
 #include "base/strings/nullable_string16.h"
 #include "base/strings/string16.h"
+=======
+>>>>>>> miniblink49
 #include <string>
 
 #if INSIDE_BLINK
 #include "wtf/Forward.h"
+<<<<<<< HEAD
+=======
+#else
+#include <base/strings/latin1_string_conversions.h>
+#include <base/strings/nullable_string16.h>
+#include <base/strings/string16.h>
+>>>>>>> miniblink49
 #endif
 
 namespace WTF {
@@ -48,6 +58,7 @@ class StringImpl;
 
 namespace blink {
 
+<<<<<<< HEAD
 // Use either one of static methods to convert ASCII, Latin1, UTF-8 or
 // UTF-16 string into WebString:
 //
@@ -80,10 +91,16 @@ namespace blink {
 // * WebString FilePathToWebString(const base::FilePath&);
 //
 // It is inexpensive to copy a WebString object.
+=======
+// A UTF-16 string container.  It is inexpensive to copy a WebString
+// object.
+//
+>>>>>>> miniblink49
 // WARNING: It is not safe to pass a WebString across threads!!!
 //
 class WebString {
 public:
+<<<<<<< HEAD
     enum class UTF8ConversionMode {
         // Ignores errors for invalid characters.
         kLenient,
@@ -94,11 +111,20 @@ public:
         kStrictReplacingErrorsWithFFFD,
     };
 
+=======
+>>>>>>> miniblink49
     ~WebString() { reset(); }
 
     WebString() { }
 
+<<<<<<< HEAD
     WebString(const WebUChar* data, size_t len) { assign(data, len); }
+=======
+    WebString(const WebUChar* data, size_t len)
+    {
+        assign(data, len);
+    }
+>>>>>>> miniblink49
 
     WebString(const WebString& s) { assign(s); }
 
@@ -113,6 +139,7 @@ public:
     BLINK_COMMON_EXPORT void assign(const WebUChar* data, size_t len);
 
     BLINK_COMMON_EXPORT bool equals(const WebString&) const;
+<<<<<<< HEAD
     BLINK_COMMON_EXPORT bool equals(const char* characters) const;
 
     BLINK_COMMON_EXPORT size_t length() const;
@@ -125,6 +152,20 @@ public:
 
     BLINK_COMMON_EXPORT static WebString fromUTF8(const char* data,
         size_t length);
+=======
+
+    BLINK_COMMON_EXPORT size_t length() const;
+
+    // Caller must check bounds.
+    BLINK_COMMON_EXPORT WebUChar at(unsigned) const;
+
+    bool isEmpty() const { return !length(); }
+    bool isNull() const { return m_private.isNull(); }
+
+    BLINK_COMMON_EXPORT std::string utf8() const;
+
+    BLINK_COMMON_EXPORT static WebString fromUTF8(const char* data, size_t length);
+>>>>>>> miniblink49
     BLINK_COMMON_EXPORT static WebString fromUTF8(const char* data);
 
     static WebString fromUTF8(const std::string& s)
@@ -132,6 +173,7 @@ public:
         return fromUTF8(s.data(), s.length());
     }
 
+<<<<<<< HEAD
     base::string16 utf16() const
     {
         return base::Latin1OrUTF16ToUTF16(length(), data8(), (const base::char16*)data16());
@@ -150,12 +192,18 @@ public:
 
     BLINK_COMMON_EXPORT static WebString fromLatin1(const WebLChar* data,
         size_t length);
+=======
+    BLINK_COMMON_EXPORT std::string latin1() const;
+
+    BLINK_COMMON_EXPORT static WebString fromLatin1(const WebLChar* data, size_t length);
+>>>>>>> miniblink49
 
     static WebString fromLatin1(const std::string& s)
     {
         return fromLatin1(reinterpret_cast<const WebLChar*>(s.data()), s.length());
     }
 
+<<<<<<< HEAD
     // This asserts if the string contains non-ascii characters.
     // Use this rather than calling base::UTF16ToASCII() which always incurs
     // (likely unnecessary) string16 conversion.
@@ -169,12 +217,19 @@ public:
 
     template <int N>
     WebString(const char (&data)[N])
+=======
+    template <int N> WebString(const char (&data)[N])
+>>>>>>> miniblink49
     {
         assign(fromUTF8(data, N - 1));
     }
 
+<<<<<<< HEAD
     template <int N>
     WebString& operator=(const char (&data)[N])
+=======
+    template <int N> WebString& operator=(const char (&data)[N])
+>>>>>>> miniblink49
     {
         assign(fromUTF8(data, N - 1));
         return *this;
@@ -185,15 +240,25 @@ public:
     BLINK_COMMON_EXPORT WebString& operator=(const WTF::String&);
     BLINK_COMMON_EXPORT operator WTF::String() const;
 
+<<<<<<< HEAD
     BLINK_COMMON_EXPORT operator WTF::StringView() const;
 
+=======
+>>>>>>> miniblink49
     BLINK_COMMON_EXPORT WebString(const WTF::AtomicString&);
     BLINK_COMMON_EXPORT WebString& operator=(const WTF::AtomicString&);
     BLINK_COMMON_EXPORT operator WTF::AtomicString() const;
 #else
+<<<<<<< HEAD
     // WARNING: implicit conversions to/from string16 are being deprecated,
     // use fromUTF16() or utf16() instead in new changes.
     WebString(const base::string16& s) { assign(s.data(), s.length()); }
+=======
+    WebString(const base::string16& s)
+    {
+        assign(s.data(), s.length());
+    }
+>>>>>>> miniblink49
 
     WebString& operator=(const base::string16& s)
     {
@@ -225,8 +290,12 @@ public:
 
     operator base::NullableString16() const
     {
+<<<<<<< HEAD
         return base::NullableString16(operator base::string16(),
             m_private.isNull());
+=======
+        return base::NullableString16(operator base::string16(), m_private.isNull());
+>>>>>>> miniblink49
     }
 #endif
 
@@ -240,6 +309,7 @@ private:
     WebPrivatePtr<WTF::StringImpl> m_private;
 };
 
+<<<<<<< HEAD
 inline bool operator==(const WebString& a, const char* b)
 {
     return a.equals(b);
@@ -260,6 +330,8 @@ inline bool operator!=(const char* a, const WebString& b)
     return !(a == b);
 }
 
+=======
+>>>>>>> miniblink49
 inline bool operator==(const WebString& a, const WebString& b)
 {
     return a.equals(b);

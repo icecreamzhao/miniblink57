@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,8 +11,12 @@
 
 #include "SkDumpCanvas.h"
 
+<<<<<<< HEAD
 #ifdef SK_DEBUG
 #include "SkData.h"
+=======
+#ifdef SK_DEVELOPER
+>>>>>>> miniblink49
 #include "SkPatchUtils.h"
 #include "SkPicture.h"
 #include "SkPixelRef.h"
@@ -19,6 +27,7 @@
 #include <stdio.h>
 
 // needed just to know that these are all subclassed from SkFlattenable
+<<<<<<< HEAD
 #include "SkColorFilter.h"
 #include "SkMaskFilter.h"
 #include "SkPathEffect.h"
@@ -43,6 +52,30 @@ static void toString(const SkRRect& rrect, SkString* str)
     str->appendf("[%g,%g %g:%g]",
         SkScalarToFloat(r.fLeft), SkScalarToFloat(r.fTop),
         SkScalarToFloat(r.width()), SkScalarToFloat(r.height()));
+=======
+#include "SkShader.h"
+#include "SkPathEffect.h"
+#include "SkXfermode.h"
+#include "SkColorFilter.h"
+#include "SkPathEffect.h"
+#include "SkMaskFilter.h"
+
+static void toString(const SkRect& r, SkString* str) {
+    str->appendf("[%g,%g %g:%g]",
+                 SkScalarToFloat(r.fLeft), SkScalarToFloat(r.fTop),
+                 SkScalarToFloat(r.width()), SkScalarToFloat(r.height()));
+}
+
+static void toString(const SkIRect& r, SkString* str) {
+    str->appendf("[%d,%d %d:%d]", r.fLeft, r.fTop, r.width(), r.height());
+}
+
+static void toString(const SkRRect& rrect, SkString* str) {
+    SkRect r = rrect.getBounds();
+    str->appendf("[%g,%g %g:%g]",
+                 SkScalarToFloat(r.fLeft), SkScalarToFloat(r.fTop),
+                 SkScalarToFloat(r.width()), SkScalarToFloat(r.height()));
+>>>>>>> miniblink49
     if (rrect.isOval()) {
         str->append("()");
     } else if (rrect.isSimple()) {
@@ -56,6 +89,7 @@ static void toString(const SkRRect& rrect, SkString* str)
             rrect.radii(SkRRect::kLowerLeft_Corner),
         };
         str->appendf("(%g,%g %g,%g %g,%g %g,%g)",
+<<<<<<< HEAD
             radii[0].x(), radii[0].y(),
             radii[1].x(), radii[1].y(),
             radii[2].x(), radii[2].y(),
@@ -65,10 +99,21 @@ static void toString(const SkRRect& rrect, SkString* str)
 
 static void dumpVerbs(const SkPath& path, SkString* str)
 {
+=======
+                     radii[0].x(), radii[0].y(),
+                     radii[1].x(), radii[1].y(),
+                     radii[2].x(), radii[2].y(),
+                     radii[3].x(), radii[3].y());
+    }
+}
+
+static void dumpVerbs(const SkPath& path, SkString* str) {
+>>>>>>> miniblink49
     SkPath::Iter iter(path, false);
     SkPoint pts[4];
     for (;;) {
         switch (iter.next(pts, false)) {
+<<<<<<< HEAD
         case SkPath::kMove_Verb:
             str->appendf(" M%g,%g", pts[0].fX, pts[0].fY);
             break;
@@ -91,12 +136,40 @@ static void dumpVerbs(const SkPath& path, SkString* str)
         case SkPath::kConic_Verb:
             SkASSERT(0);
             break;
+=======
+            case SkPath::kMove_Verb:
+                str->appendf(" M%g,%g", pts[0].fX, pts[0].fY);
+                break;
+            case SkPath::kLine_Verb:
+                str->appendf(" L%g,%g", pts[0].fX, pts[0].fY);
+                break;
+            case SkPath::kQuad_Verb:
+                str->appendf(" Q%g,%g,%g,%g", pts[1].fX, pts[1].fY,
+                             pts[2].fX, pts[2].fY);
+                break;
+            case SkPath::kCubic_Verb:
+                str->appendf(" C%g,%g,%g,%g,%g,%g", pts[1].fX, pts[1].fY,
+                             pts[2].fX, pts[2].fY, pts[3].fX, pts[3].fY);
+                break;
+            case SkPath::kClose_Verb:
+                str->append("X");
+                break;
+            case SkPath::kDone_Verb:
+                return;
+            case SkPath::kConic_Verb:
+                SkASSERT(0);
+                break;
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 static void toString(const SkPath& path, SkString* str)
 {
+=======
+static void toString(const SkPath& path, SkString* str) {
+>>>>>>> miniblink49
     if (path.isEmpty()) {
         str->append("path:empty");
     } else {
@@ -111,16 +184,24 @@ static void toString(const SkPath& path, SkString* str)
     }
 }
 
+<<<<<<< HEAD
 static const char* toString(SkRegion::Op op)
 {
+=======
+static const char* toString(SkRegion::Op op) {
+>>>>>>> miniblink49
     static const char* gOpNames[] = {
         "DIFF", "SECT", "UNION", "XOR", "RDIFF", "REPLACE"
     };
     return gOpNames[op];
 }
 
+<<<<<<< HEAD
 static void toString(const SkRegion& rgn, SkString* str)
 {
+=======
+static void toString(const SkRegion& rgn, SkString* str) {
+>>>>>>> miniblink49
     str->append("Region:[");
     toString(rgn.getBounds(), str);
     str->append("]");
@@ -129,16 +210,24 @@ static void toString(const SkRegion& rgn, SkString* str)
     }
 }
 
+<<<<<<< HEAD
 static const char* toString(SkCanvas::VertexMode vm)
 {
+=======
+static const char* toString(SkCanvas::VertexMode vm) {
+>>>>>>> miniblink49
     static const char* gVMNames[] = {
         "TRIANGLES", "STRIP", "FAN"
     };
     return gVMNames[vm];
 }
 
+<<<<<<< HEAD
 static const char* toString(SkCanvas::PointMode pm)
 {
+=======
+static const char* toString(SkCanvas::PointMode pm) {
+>>>>>>> miniblink49
     static const char* gPMNames[] = {
         "POINTS", "LINES", "POLYGON"
     };
@@ -146,6 +235,7 @@ static const char* toString(SkCanvas::PointMode pm)
 }
 
 static void toString(const void* text, size_t byteLen, SkPaint::TextEncoding enc,
+<<<<<<< HEAD
     SkString* str)
 {
     // FIXME: this code appears to be untested - and probably unused - and probably wrong
@@ -169,32 +259,73 @@ static void toString(const void* text, size_t byteLen, SkPaint::TextEncoding enc
     default:
         SkASSERT(false);
         break;
+=======
+                     SkString* str) {
+    // FIXME: this code appears to be untested - and probably unused - and probably wrong
+    switch (enc) {
+        case SkPaint::kUTF8_TextEncoding:
+            str->appendf("\"%.*s\"%s", (int)SkTMax<size_t>(byteLen, 32), (const char*) text,
+                        byteLen > 32 ? "..." : "");
+            break;
+        case SkPaint::kUTF16_TextEncoding:
+            str->appendf("\"%.*ls\"%s", (int)SkTMax<size_t>(byteLen, 32), (const wchar_t*) text,
+                        byteLen > 64 ? "..." : "");
+            break;
+        case SkPaint::kUTF32_TextEncoding:
+            str->appendf("\"%.*ls\"%s", (int)SkTMax<size_t>(byteLen, 32), (const wchar_t*) text,
+                        byteLen > 128 ? "..." : "");
+            break;
+        case SkPaint::kGlyphID_TextEncoding:
+            str->append("<glyphs>");
+            break;
+
+        default:
+            SkASSERT(false);
+            break;
+>>>>>>> miniblink49
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 #define WIDE_OPEN 16384
 
 SkDumpCanvas::SkDumpCanvas(Dumper* dumper)
     : INHERITED(WIDE_OPEN, WIDE_OPEN)
 {
+=======
+#define WIDE_OPEN   16384
+
+SkDumpCanvas::SkDumpCanvas(Dumper* dumper) : INHERITED(WIDE_OPEN, WIDE_OPEN) {
+>>>>>>> miniblink49
     fNestLevel = 0;
     SkSafeRef(dumper);
     fDumper = dumper;
 }
 
+<<<<<<< HEAD
 SkDumpCanvas::~SkDumpCanvas()
 {
+=======
+SkDumpCanvas::~SkDumpCanvas() {
+>>>>>>> miniblink49
     SkSafeUnref(fDumper);
 }
 
 void SkDumpCanvas::dump(Verb verb, const SkPaint* paint,
+<<<<<<< HEAD
     const char format[], ...)
 {
     static const size_t BUFFER_SIZE = 1024;
 
     char buffer[BUFFER_SIZE];
+=======
+                        const char format[], ...) {
+    static const size_t BUFFER_SIZE = 1024;
+
+    char    buffer[BUFFER_SIZE];
+>>>>>>> miniblink49
     va_list args;
     va_start(args, format);
     vsnprintf(buffer, BUFFER_SIZE, format, args);
@@ -207,6 +338,7 @@ void SkDumpCanvas::dump(Verb verb, const SkPaint* paint,
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void SkDumpCanvas::willSave()
 {
     this->dump(kSave_Verb, nullptr, "save()");
@@ -222,6 +354,21 @@ SkCanvas::SaveLayerStrategy SkDumpCanvas::getSaveLayerStrategy(const SaveLayerRe
         toString(*rec.fBounds, &str);
     }
     const SkPaint* paint = rec.fPaint;
+=======
+void SkDumpCanvas::willSave() {
+    this->dump(kSave_Verb, NULL, "save()");
+    this->INHERITED::willSave();
+}
+
+SkCanvas::SaveLayerStrategy SkDumpCanvas::willSaveLayer(const SkRect* bounds, const SkPaint* paint,
+                                                        SaveFlags flags) {
+    SkString str;
+    str.printf("saveLayer(0x%X)", flags);
+    if (bounds) {
+        str.append(" bounds");
+        toString(*bounds, &str);
+    }
+>>>>>>> miniblink49
     if (paint) {
         if (paint->getAlpha() != 0xFF) {
             str.appendf(" alpha:0x%02X", paint->getAlpha());
@@ -231,6 +378,7 @@ SkCanvas::SaveLayerStrategy SkDumpCanvas::getSaveLayerStrategy(const SaveLayerRe
         }
     }
     this->dump(kSave_Verb, paint, str.c_str());
+<<<<<<< HEAD
     return this->INHERITED::getSaveLayerStrategy(rec);
 }
 
@@ -259,21 +407,57 @@ void SkDumpCanvas::didConcat(const SkMatrix& matrix)
         matrix.toString(&str);
         this->dump(kMatrix_Verb, nullptr, "concat(%s)", str.c_str());
         break;
+=======
+    return this->INHERITED::willSaveLayer(bounds, paint, flags);
+}
+
+void SkDumpCanvas::willRestore() {
+    this->dump(kRestore_Verb, NULL, "restore");
+    this->INHERITED::willRestore();
+}
+
+void SkDumpCanvas::didConcat(const SkMatrix& matrix) {
+    SkString str;
+
+    switch (matrix.getType()) {
+        case SkMatrix::kTranslate_Mask:
+            this->dump(kMatrix_Verb, NULL, "translate(%g %g)",
+                       SkScalarToFloat(matrix.getTranslateX()),
+                       SkScalarToFloat(matrix.getTranslateY()));
+            break;
+        case SkMatrix::kScale_Mask:
+            this->dump(kMatrix_Verb, NULL, "scale(%g %g)",
+                       SkScalarToFloat(matrix.getScaleX()),
+                       SkScalarToFloat(matrix.getScaleY()));
+            break;
+        default:
+            matrix.toString(&str);
+            this->dump(kMatrix_Verb, NULL, "concat(%s)", str.c_str());
+            break;
+>>>>>>> miniblink49
     }
 
     this->INHERITED::didConcat(matrix);
 }
 
+<<<<<<< HEAD
 void SkDumpCanvas::didSetMatrix(const SkMatrix& matrix)
 {
     SkString str;
     matrix.toString(&str);
     this->dump(kMatrix_Verb, nullptr, "setMatrix(%s)", str.c_str());
+=======
+void SkDumpCanvas::didSetMatrix(const SkMatrix& matrix) {
+    SkString str;
+    matrix.toString(&str);
+    this->dump(kMatrix_Verb, NULL, "setMatrix(%s)", str.c_str());
+>>>>>>> miniblink49
     this->INHERITED::didSetMatrix(matrix);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 const char* SkDumpCanvas::EdgeStyleToAAString(ClipEdgeStyle edgeStyle)
 {
     return kSoft_ClipEdgeStyle == edgeStyle ? "AA" : "BW";
@@ -312,17 +496,57 @@ void SkDumpCanvas::onClipRegion(const SkRegion& deviceRgn, SkRegion::Op op)
     toString(deviceRgn, &str);
     this->dump(kClip_Verb, nullptr, "clipRegion(%s %s)", str.c_str(),
         toString(op));
+=======
+const char* SkDumpCanvas::EdgeStyleToAAString(ClipEdgeStyle edgeStyle) {
+    return kSoft_ClipEdgeStyle == edgeStyle ? "AA" : "BW";
+}
+
+void SkDumpCanvas::onClipRect(const SkRect& rect, SkRegion::Op op, ClipEdgeStyle edgeStyle) {
+    SkString str;
+    toString(rect, &str);
+    this->dump(kClip_Verb, NULL, "clipRect(%s %s %s)", str.c_str(), toString(op),
+               EdgeStyleToAAString(edgeStyle));
+    this->INHERITED::onClipRect(rect, op, edgeStyle);
+}
+
+void SkDumpCanvas::onClipRRect(const SkRRect& rrect, SkRegion::Op op, ClipEdgeStyle edgeStyle) {
+    SkString str;
+    toString(rrect, &str);
+    this->dump(kClip_Verb, NULL, "clipRRect(%s %s %s)", str.c_str(), toString(op),
+               EdgeStyleToAAString(edgeStyle));
+    this->INHERITED::onClipRRect(rrect, op, edgeStyle);
+}
+
+void SkDumpCanvas::onClipPath(const SkPath& path, SkRegion::Op op, ClipEdgeStyle edgeStyle) {
+    SkString str;
+    toString(path, &str);
+    this->dump(kClip_Verb, NULL, "clipPath(%s %s %s)", str.c_str(), toString(op),
+               EdgeStyleToAAString(edgeStyle));
+    this->INHERITED::onClipPath(path, op, edgeStyle);
+}
+
+void SkDumpCanvas::onClipRegion(const SkRegion& deviceRgn, SkRegion::Op op) {
+    SkString str;
+    toString(deviceRgn, &str);
+    this->dump(kClip_Verb, NULL, "clipRegion(%s %s)", str.c_str(),
+               toString(op));
+>>>>>>> miniblink49
     this->INHERITED::onClipRegion(deviceRgn, op);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void SkDumpCanvas::onDrawPaint(const SkPaint& paint)
 {
+=======
+void SkDumpCanvas::onDrawPaint(const SkPaint& paint) {
+>>>>>>> miniblink49
     this->dump(kDrawPaint_Verb, &paint, "drawPaint()");
 }
 
 void SkDumpCanvas::onDrawPoints(PointMode mode, size_t count,
+<<<<<<< HEAD
     const SkPoint pts[], const SkPaint& paint)
 {
     this->dump(kDrawPoints_Verb, &paint, "drawPoints(%s, %d)", toString(mode),
@@ -331,43 +555,71 @@ void SkDumpCanvas::onDrawPoints(PointMode mode, size_t count,
 
 void SkDumpCanvas::onDrawOval(const SkRect& rect, const SkPaint& paint)
 {
+=======
+                               const SkPoint pts[], const SkPaint& paint) {
+    this->dump(kDrawPoints_Verb, &paint, "drawPoints(%s, %d)", toString(mode),
+               count);
+}
+
+void SkDumpCanvas::onDrawOval(const SkRect& rect, const SkPaint& paint) {
+>>>>>>> miniblink49
     SkString str;
     toString(rect, &str);
     this->dump(kDrawOval_Verb, &paint, "drawOval(%s)", str.c_str());
 }
 
+<<<<<<< HEAD
 void SkDumpCanvas::onDrawRect(const SkRect& rect, const SkPaint& paint)
 {
+=======
+void SkDumpCanvas::onDrawRect(const SkRect& rect, const SkPaint& paint) {
+>>>>>>> miniblink49
     SkString str;
     toString(rect, &str);
     this->dump(kDrawRect_Verb, &paint, "drawRect(%s)", str.c_str());
 }
 
+<<<<<<< HEAD
 void SkDumpCanvas::onDrawRRect(const SkRRect& rrect, const SkPaint& paint)
 {
+=======
+void SkDumpCanvas::onDrawRRect(const SkRRect& rrect, const SkPaint& paint) {
+>>>>>>> miniblink49
     SkString str;
     toString(rrect, &str);
     this->dump(kDrawDRRect_Verb, &paint, "drawRRect(%s)", str.c_str());
 }
 
 void SkDumpCanvas::onDrawDRRect(const SkRRect& outer, const SkRRect& inner,
+<<<<<<< HEAD
     const SkPaint& paint)
 {
+=======
+                                const SkPaint& paint) {
+>>>>>>> miniblink49
     SkString str0, str1;
     toString(outer, &str0);
     toString(inner, &str0);
     this->dump(kDrawRRect_Verb, &paint, "drawDRRect(%s,%s)",
+<<<<<<< HEAD
         str0.c_str(), str1.c_str());
 }
 
 void SkDumpCanvas::onDrawPath(const SkPath& path, const SkPaint& paint)
 {
+=======
+               str0.c_str(), str1.c_str());
+}
+
+void SkDumpCanvas::onDrawPath(const SkPath& path, const SkPaint& paint) {
+>>>>>>> miniblink49
     SkString str;
     toString(path, &str);
     this->dump(kDrawPath_Verb, &paint, "drawPath(%s)", str.c_str());
 }
 
 void SkDumpCanvas::onDrawBitmap(const SkBitmap& bitmap, SkScalar x, SkScalar y,
+<<<<<<< HEAD
     const SkPaint* paint)
 {
     SkString str;
@@ -379,27 +631,54 @@ void SkDumpCanvas::onDrawBitmap(const SkBitmap& bitmap, SkScalar x, SkScalar y,
 void SkDumpCanvas::onDrawBitmapRect(const SkBitmap& bitmap, const SkRect* src, const SkRect& dst,
     const SkPaint* paint, SrcRectConstraint)
 {
+=======
+                                const SkPaint* paint) {
+    SkString str;
+    bitmap.toString(&str);
+    this->dump(kDrawBitmap_Verb, paint, "drawBitmap(%s %g %g)", str.c_str(),
+               SkScalarToFloat(x), SkScalarToFloat(y));
+}
+
+void SkDumpCanvas::onDrawBitmapRect(const SkBitmap& bitmap, const SkRect* src, const SkRect& dst,
+                                    const SkPaint* paint, DrawBitmapRectFlags flags) {
+>>>>>>> miniblink49
     SkString bs, rs;
     bitmap.toString(&bs);
     toString(dst, &rs);
     // show the src-rect only if its not everything
+<<<<<<< HEAD
     if (src && (src->fLeft > 0 || src->fTop > 0 || src->fRight < SkIntToScalar(bitmap.width()) || src->fBottom < SkIntToScalar(bitmap.height()))) {
+=======
+    if (src && (src->fLeft > 0 || src->fTop > 0 ||
+                src->fRight < SkIntToScalar(bitmap.width()) ||
+                src->fBottom < SkIntToScalar(bitmap.height()))) {
+>>>>>>> miniblink49
         SkString ss;
         toString(*src, &ss);
         rs.prependf("%s ", ss.c_str());
     }
 
+<<<<<<< HEAD
     this->dump(kDrawBitmap_Verb, paint, "drawBitmapRect(%s %s)", bs.c_str(), rs.c_str());
 }
 
 void SkDumpCanvas::onDrawBitmapNine(const SkBitmap& bitmap, const SkIRect& center,
     const SkRect& dst, const SkPaint* paint)
 {
+=======
+    this->dump(kDrawBitmap_Verb, paint, "drawBitmapRectToRect(%s %s)",
+               bs.c_str(), rs.c_str());
+}
+
+void SkDumpCanvas::onDrawBitmapNine(const SkBitmap& bitmap, const SkIRect& center,
+                                    const SkRect& dst, const SkPaint* paint) {
+>>>>>>> miniblink49
     SkString str, centerStr, dstStr;
     bitmap.toString(&str);
     toString(center, &centerStr);
     toString(dst, &dstStr);
     this->dump(kDrawBitmap_Verb, paint, "drawBitmapNine(%s %s %s)", str.c_str(),
+<<<<<<< HEAD
         centerStr.c_str(), dstStr.c_str());
 }
 
@@ -414,15 +693,36 @@ void SkDumpCanvas::onDrawImage(const SkImage* image, SkScalar x, SkScalar y, con
 void SkDumpCanvas::onDrawImageRect(const SkImage* image, const SkRect* src, const SkRect& dst,
     const SkPaint* paint, SrcRectConstraint)
 {
+=======
+               centerStr.c_str(), dstStr.c_str());
+}
+
+void SkDumpCanvas::onDrawImage(const SkImage* image, SkScalar x, SkScalar y, const SkPaint* paint) {
+    SkString str;
+    image->toString(&str);
+    this->dump(kDrawBitmap_Verb, paint, "drawImage(%s %g %g)", str.c_str(),
+               SkScalarToFloat(x), SkScalarToFloat(y));
+}
+
+void SkDumpCanvas::onDrawImageRect(const SkImage* image, const SkRect* src, const SkRect& dst,
+                                   const SkPaint* paint) {
+>>>>>>> miniblink49
     SkString bs, rs;
     image->toString(&bs);
     toString(dst, &rs);
     // show the src-rect only if its not everything
+<<<<<<< HEAD
     if (src && (src->fLeft > 0 || src->fTop > 0 || src->fRight < SkIntToScalar(image->width()) || src->fBottom < SkIntToScalar(image->height()))) {
+=======
+    if (src && (src->fLeft > 0 || src->fTop > 0 ||
+                src->fRight < SkIntToScalar(image->width()) ||
+                src->fBottom < SkIntToScalar(image->height()))) {
+>>>>>>> miniblink49
         SkString ss;
         toString(*src, &ss);
         rs.prependf("%s ", ss.c_str());
     }
+<<<<<<< HEAD
 
     this->dump(kDrawBitmap_Verb, paint, "drawImageRectToRect(%s %s)",
         bs.c_str(), rs.c_str());
@@ -469,6 +769,56 @@ void SkDumpCanvas::onDrawTextOnPath(const void* text, size_t byteLength, const S
 void SkDumpCanvas::onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
     const SkPaint& paint)
 {
+=======
+    
+    this->dump(kDrawBitmap_Verb, paint, "drawImageRectToRect(%s %s)",
+               bs.c_str(), rs.c_str());
+}
+
+void SkDumpCanvas::onDrawSprite(const SkBitmap& bitmap, int x, int y, const SkPaint* paint) {
+    SkString str;
+    bitmap.toString(&str);
+    this->dump(kDrawBitmap_Verb, paint, "drawSprite(%s %d %d)", str.c_str(),
+               x, y);
+}
+
+void SkDumpCanvas::onDrawText(const void* text, size_t byteLength, SkScalar x, SkScalar y,
+                              const SkPaint& paint) {
+    SkString str;
+    toString(text, byteLength, paint.getTextEncoding(), &str);
+    this->dump(kDrawText_Verb, &paint, "drawText(%s [%d] %g %g)", str.c_str(),
+               byteLength, SkScalarToFloat(x), SkScalarToFloat(y));
+}
+
+void SkDumpCanvas::onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[],
+                                 const SkPaint& paint) {
+    SkString str;
+    toString(text, byteLength, paint.getTextEncoding(), &str);
+    this->dump(kDrawText_Verb, &paint, "drawPosText(%s [%d] %g %g ...)",
+               str.c_str(), byteLength, SkScalarToFloat(pos[0].fX),
+               SkScalarToFloat(pos[0].fY));
+}
+
+void SkDumpCanvas::onDrawPosTextH(const void* text, size_t byteLength, const SkScalar xpos[],
+                                  SkScalar constY, const SkPaint& paint) {
+    SkString str;
+    toString(text, byteLength, paint.getTextEncoding(), &str);
+    this->dump(kDrawText_Verb, &paint, "drawPosTextH(%s [%d] %g %g ...)",
+               str.c_str(), byteLength, SkScalarToFloat(xpos[0]),
+               SkScalarToFloat(constY));
+}
+
+void SkDumpCanvas::onDrawTextOnPath(const void* text, size_t byteLength, const SkPath& path,
+                                    const SkMatrix* matrix, const SkPaint& paint) {
+    SkString str;
+    toString(text, byteLength, paint.getTextEncoding(), &str);
+    this->dump(kDrawText_Verb, &paint, "drawTextOnPath(%s [%d])",
+               str.c_str(), byteLength);
+}
+
+void SkDumpCanvas::onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
+                                  const SkPaint& paint) {
+>>>>>>> miniblink49
     SkString str;
     toString(blob->bounds(), &str);
     this->dump(kDrawText_Verb, &paint, "drawTextBlob(%p) [%s]", blob, str.c_str());
@@ -476,6 +826,7 @@ void SkDumpCanvas::onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y
 }
 
 void SkDumpCanvas::onDrawPicture(const SkPicture* picture, const SkMatrix* matrix,
+<<<<<<< HEAD
     const SkPaint* paint)
 {
     this->dump(kDrawPicture_Verb, nullptr, "drawPicture(%p) %f:%f:%f:%f", picture,
@@ -504,10 +855,38 @@ void SkDumpCanvas::onDrawPatch(const SkPoint cubics[12], const SkColor colors[4]
     const SkPoint texCoords[4], SkXfermode* xmode,
     const SkPaint& paint)
 {
+=======
+                                 const SkPaint* paint) {
+    this->dump(kDrawPicture_Verb, NULL, "drawPicture(%p) %f:%f:%f:%f", picture,
+               picture->cullRect().fLeft, picture->cullRect().fTop,
+               picture->cullRect().fRight, picture->cullRect().fBottom);
+    fNestLevel += 1;
+    this->INHERITED::onDrawPicture(picture, matrix, paint);
+    fNestLevel -= 1;
+    this->dump(kDrawPicture_Verb, NULL, "endPicture(%p) %f:%f:%f:%f", &picture,
+               picture->cullRect().fLeft, picture->cullRect().fTop,
+               picture->cullRect().fRight, picture->cullRect().fBottom);
+}
+
+void SkDumpCanvas::onDrawVertices(VertexMode vmode, int vertexCount,
+                                  const SkPoint vertices[], const SkPoint texs[],
+                                  const SkColor colors[], SkXfermode* xmode,
+                                  const uint16_t indices[], int indexCount,
+                                  const SkPaint& paint) {
+    this->dump(kDrawVertices_Verb, &paint, "drawVertices(%s [%d] %g %g ...)",
+               toString(vmode), vertexCount, SkScalarToFloat(vertices[0].fX),
+               SkScalarToFloat(vertices[0].fY));
+}
+
+void SkDumpCanvas::onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
+                               const SkPoint texCoords[4], SkXfermode* xmode,
+                               const SkPaint& paint) {
+>>>>>>> miniblink49
     //dumps corner points and colors in clockwise order starting on upper-left corner
     this->dump(kDrawPatch_Verb, &paint, "drawPatch(Vertices{[%f, %f], [%f, %f], [%f, %f], [%f, %f]}\
               | Colors{[0x%x], [0x%x], [0x%x], [0x%x]} | TexCoords{[%f,%f], [%f,%f], [%f,%f], \
                [%f,%f]})",
+<<<<<<< HEAD
         cubics[SkPatchUtils::kTopP0_CubicCtrlPts].fX,
         cubics[SkPatchUtils::kTopP0_CubicCtrlPts].fY,
         cubics[SkPatchUtils::kTopP3_CubicCtrlPts].fX,
@@ -527,35 +906,64 @@ void SkDumpCanvas::onDrawAnnotation(const SkRect& rect, const char key[], SkData
     toString(rect, &str);
     this->dump(kDrawAnnotation_Verb, nullptr, "drawAnnotation(%s \"%s\" (%zu))",
         str.c_str(), key, value ? value->size() : 0);
+=======
+              cubics[SkPatchUtils::kTopP0_CubicCtrlPts].fX,
+              cubics[SkPatchUtils::kTopP0_CubicCtrlPts].fY,
+              cubics[SkPatchUtils::kTopP3_CubicCtrlPts].fX,
+              cubics[SkPatchUtils::kTopP3_CubicCtrlPts].fY,
+              cubics[SkPatchUtils::kBottomP3_CubicCtrlPts].fX,
+              cubics[SkPatchUtils::kBottomP3_CubicCtrlPts].fY,
+              cubics[SkPatchUtils::kBottomP0_CubicCtrlPts].fX,
+              cubics[SkPatchUtils::kBottomP0_CubicCtrlPts].fY,
+              colors[0], colors[1], colors[2], colors[3],
+              texCoords[0].x(), texCoords[0].y(), texCoords[1].x(), texCoords[1].y(),
+              texCoords[2].x(), texCoords[2].y(), texCoords[3].x(), texCoords[3].y());
+>>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 SkFormatDumper::SkFormatDumper(void (*proc)(const char*, void*), void* refcon)
 {
+=======
+SkFormatDumper::SkFormatDumper(void (*proc)(const char*, void*), void* refcon) {
+>>>>>>> miniblink49
     fProc = proc;
     fRefcon = refcon;
 }
 
+<<<<<<< HEAD
 static void appendPtr(SkString* str, const void* ptr, const char name[])
 {
+=======
+static void appendPtr(SkString* str, const void* ptr, const char name[]) {
+>>>>>>> miniblink49
     if (ptr) {
         str->appendf(" %s:%p", name, ptr);
     }
 }
 
 static void appendFlattenable(SkString* str, const SkFlattenable* ptr,
+<<<<<<< HEAD
     const char name[])
 {
+=======
+                              const char name[]) {
+>>>>>>> miniblink49
     if (ptr) {
         str->appendf(" %s:%p", name, ptr);
     }
 }
 
 void SkFormatDumper::dump(SkDumpCanvas* canvas, SkDumpCanvas::Verb verb,
+<<<<<<< HEAD
     const char str[], const SkPaint* p)
 {
+=======
+                          const char str[], const SkPaint* p) {
+>>>>>>> miniblink49
     SkString msg, tab;
     const int level = canvas->getNestLevel() + canvas->getSaveCount() - 1;
     SkASSERT(level >= 0);
@@ -563,7 +971,11 @@ void SkFormatDumper::dump(SkDumpCanvas* canvas, SkDumpCanvas::Verb verb,
 #if 0
         tab.append("\t");
 #else
+<<<<<<< HEAD
         tab.append("    "); // tabs are often too wide to be useful
+=======
+        tab.append("    ");   // tabs are often too wide to be useful
+>>>>>>> miniblink49
 #endif
     }
     msg.printf("%s%s", tab.c_str(), str);
@@ -592,6 +1004,7 @@ void SkFormatDumper::dump(SkDumpCanvas* canvas, SkDumpCanvas::Verb verb,
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static void dumpToDebugf(const char text[], void*)
 {
     SkDebugf("%s\n", text);
@@ -601,5 +1014,12 @@ SkDebugfDumper::SkDebugfDumper()
     : INHERITED(dumpToDebugf, nullptr)
 {
 }
+=======
+static void dumpToDebugf(const char text[], void*) {
+    SkDebugf("%s\n", text);
+}
+
+SkDebugfDumper::SkDebugfDumper() : INHERITED(dumpToDebugf, NULL) {}
+>>>>>>> miniblink49
 
 #endif

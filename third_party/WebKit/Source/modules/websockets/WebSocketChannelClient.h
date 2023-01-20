@@ -34,8 +34,13 @@
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
 #include "wtf/Vector.h"
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 #include <stdint.h>
 
 namespace blink {
@@ -43,11 +48,17 @@ namespace blink {
 class MODULES_EXPORT WebSocketChannelClient : public GarbageCollectedMixin {
 public:
     virtual ~WebSocketChannelClient() { }
+<<<<<<< HEAD
     virtual void didConnect(const String& subprotocol, const String& extensions)
     {
     }
     virtual void didReceiveTextMessage(const String&) { }
     virtual void didReceiveBinaryMessage(std::unique_ptr<Vector<char>>) { }
+=======
+    virtual void didConnect(const String& subprotocol, const String& extensions) { }
+    virtual void didReceiveTextMessage(const String&) { }
+    virtual void didReceiveBinaryMessage(PassOwnPtr<Vector<char>>) { }
+>>>>>>> miniblink49
     virtual void didError() { }
     virtual void didConsumeBufferedAmount(uint64_t consumed) { }
     virtual void didStartClosingHandshake() { }
@@ -55,9 +66,13 @@ public:
         ClosingHandshakeIncomplete,
         ClosingHandshakeComplete
     };
+<<<<<<< HEAD
     virtual void didClose(ClosingHandshakeCompletionStatus,
         unsigned short /* code */,
         const String& /* reason */) { }
+=======
+    virtual void didClose(ClosingHandshakeCompletionStatus, unsigned short /* code */, const String& /* reason */) { }
+>>>>>>> miniblink49
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 
 protected:

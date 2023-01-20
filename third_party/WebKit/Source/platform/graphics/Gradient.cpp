@@ -25,13 +25,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/Gradient.h"
 
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/skia/SkiaUtils.h"
 #include "third_party/skia/include/core/SkColor.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkMatrix.h"
+=======
+>>>>>>> miniblink49
 #include "third_party/skia/include/core/SkShader.h"
 #include "third_party/skia/include/effects/SkGradientShader.h"
 #include <algorithm>
@@ -54,11 +61,15 @@ Gradient::Gradient(const FloatPoint& p0, const FloatPoint& p1)
 {
 }
 
+<<<<<<< HEAD
 Gradient::Gradient(const FloatPoint& p0,
     float r0,
     const FloatPoint& p1,
     float r1,
     float aspectRatio)
+=======
+Gradient::Gradient(const FloatPoint& p0, float r0, const FloatPoint& p1, float r1, float aspectRatio)
+>>>>>>> miniblink49
     : m_p0(p0)
     , m_p1(p1)
     , m_r0(r0)
@@ -71,10 +82,18 @@ Gradient::Gradient(const FloatPoint& p0,
 {
 }
 
+<<<<<<< HEAD
 Gradient::~Gradient() { }
 
 static inline bool compareStops(const Gradient::ColorStop& a,
     const Gradient::ColorStop& b)
+=======
+Gradient::~Gradient()
+{
+}
+
+static inline bool compareStops(const Gradient::ColorStop& a, const Gradient::ColorStop& b)
+>>>>>>> miniblink49
 {
     return a.stop < b.stop;
 }
@@ -84,11 +103,19 @@ void Gradient::addColorStop(const Gradient::ColorStop& stop)
     if (m_stops.isEmpty()) {
         m_stopsSorted = true;
     } else {
+<<<<<<< HEAD
         m_stopsSorted = m_stopsSorted && compareStops(m_stops.back(), stop);
     }
 
     m_stops.push_back(stop);
     m_cachedShader.reset();
+=======
+        m_stopsSorted = m_stopsSorted && compareStops(m_stops.last(), stop);
+    }
+
+    m_stops.append(stop);
+    m_gradient.clear();
+>>>>>>> miniblink49
 }
 
 void Gradient::sortStopsIfNecessary()
@@ -106,9 +133,14 @@ void Gradient::sortStopsIfNecessary()
 
 void Gradient::setSpreadMethod(GradientSpreadMethod spreadMethod)
 {
+<<<<<<< HEAD
     // FIXME: Should it become necessary, allow calls to this method after
     // |m_gradient| has been set.
     DCHECK(!m_cachedShader);
+=======
+    // FIXME: Should it become necessary, allow calls to this method after m_gradient has been set.
+    ASSERT(!m_gradient);
+>>>>>>> miniblink49
 
     if (m_spreadMethod == spreadMethod)
         return;
@@ -122,13 +154,30 @@ void Gradient::setDrawsInPMColorSpace(bool drawInPMColorSpace)
         return;
 
     m_drawInPMColorSpace = drawInPMColorSpace;
+<<<<<<< HEAD
     m_cachedShader.reset();
+=======
+    m_gradient.clear();
+}
+
+void Gradient::setGradientSpaceTransform(const AffineTransform& gradientSpaceTransformation)
+{
+    if (m_gradientSpaceTransformation == gradientSpaceTransformation)
+        return;
+
+    m_gradientSpaceTransformation = gradientSpaceTransformation;
+    m_gradient.clear();
+>>>>>>> miniblink49
 }
 
 // Determine the total number of stops needed, including pseudo-stops at the
 // ends as necessary.
+<<<<<<< HEAD
 static size_t totalStopsNeeded(const Gradient::ColorStop* stopData,
     size_t count)
+=======
+static size_t totalStopsNeeded(const Gradient::ColorStop* stopData, size_t count)
+>>>>>>> miniblink49
 {
     // N.B.: The tests in this function should kept in sync with the ones in
     // fillStops(), or badness happens.
@@ -153,9 +202,13 @@ static inline SkColor makeSkColor(const Color& c)
 // enough to hold information for all stops, including the new endpoints if
 // stops at 0.0 and 1.0 aren't already included.
 static void fillStops(const Gradient::ColorStop* stopData,
+<<<<<<< HEAD
     size_t count,
     ColorStopOffsetVector& pos,
     ColorStopColorVector& colors)
+=======
+    size_t count, ColorStopOffsetVector& pos, ColorStopColorVector& colors)
+>>>>>>> miniblink49
 {
     const Gradient::ColorStop* stop = stopData;
     size_t start = 0;
@@ -188,8 +241,16 @@ static void fillStops(const Gradient::ColorStop* stopData,
     }
 }
 
+<<<<<<< HEAD
 sk_sp<SkShader> Gradient::createShader(const SkMatrix& localMatrix)
 {
+=======
+SkShader* Gradient::shader()
+{
+    if (m_gradient)
+        return m_gradient.get();
+
+>>>>>>> miniblink49
     sortStopsIfNecessary();
     ASSERT(m_stopsSorted);
 
@@ -214,6 +275,7 @@ sk_sp<SkShader> Gradient::createShader(const SkMatrix& localMatrix)
         break;
     }
 
+<<<<<<< HEAD
     sk_sp<SkShader> shader;
     uint32_t shouldDrawInPMColorSpace = m_drawInPMColorSpace ? SkGradientShader::kInterpolateColorsInPremul_Flag
                                                              : 0;
@@ -228,19 +290,37 @@ sk_sp<SkShader> Gradient::createShader(const SkMatrix& localMatrix)
             adjustedLocalMatrix.preTranslate(-m_p0.x(), -m_p0.y());
             ASSERT(m_p0 == m_p1);
         }
+=======
+    uint32_t shouldDrawInPMColorSpace = m_drawInPMColorSpace ? SkGradientShader::kInterpolateColorsInPremul_Flag : 0;
+    if (m_radial) {
+        if (aspectRatio() != 1) {
+            // CSS3 elliptical gradients: apply the elliptical scaling at the
+            // gradient center point.
+            m_gradientSpaceTransformation.translate(m_p0.x(), m_p0.y());
+            m_gradientSpaceTransformation.scale(1, 1 / aspectRatio());
+            m_gradientSpaceTransformation.translate(-m_p0.x(), -m_p0.y());
+            ASSERT(m_p0 == m_p1);
+        }
+        SkMatrix localMatrix = affineTransformToSkMatrix(m_gradientSpaceTransformation);
+>>>>>>> miniblink49
 
         // Since the two-point radial gradient is slower than the plain radial,
         // only use it if we have to.
         if (m_p0 == m_p1 && m_r0 <= 0.0f) {
+<<<<<<< HEAD
             shader = SkGradientShader::MakeRadial(
                 m_p1.data(), m_r1, colors.data(), pos.data(),
                 static_cast<int>(countUsed), tile, shouldDrawInPMColorSpace,
                 &adjustedLocalMatrix);
+=======
+            m_gradient = adoptRef(SkGradientShader::CreateRadial(m_p1.data(), m_r1, colors.data(), pos.data(), static_cast<int>(countUsed), tile, shouldDrawInPMColorSpace, &localMatrix));
+>>>>>>> miniblink49
         } else {
             // The radii we give to Skia must be positive. If we're given a
             // negative radius, ask for zero instead.
             SkScalar radius0 = m_r0 >= 0.0f ? WebCoreFloatToSkScalar(m_r0) : 0;
             SkScalar radius1 = m_r1 >= 0.0f ? WebCoreFloatToSkScalar(m_r1) : 0;
+<<<<<<< HEAD
             shader = SkGradientShader::MakeTwoPointConical(
                 m_p0.data(), radius0, m_p1.data(), radius1, colors.data(), pos.data(),
                 static_cast<int>(countUsed), tile, shouldDrawInPMColorSpace,
@@ -270,6 +350,21 @@ void Gradient::applyToPaint(SkPaint& paint, const SkMatrix& localMatrix)
 
     // Legacy behavior: gradients are always dithered.
     paint.setDither(true);
+=======
+            m_gradient = adoptRef(SkGradientShader::CreateTwoPointConical(m_p0.data(), radius0, m_p1.data(), radius1, colors.data(), pos.data(), static_cast<int>(countUsed), tile, shouldDrawInPMColorSpace, &localMatrix));
+        }
+    } else {
+        SkPoint pts[2] = { m_p0.data(), m_p1.data() };
+        SkMatrix localMatrix = affineTransformToSkMatrix(m_gradientSpaceTransformation);
+        m_gradient = adoptRef(SkGradientShader::CreateLinear(pts, colors.data(), pos.data(), static_cast<int>(countUsed), tile, shouldDrawInPMColorSpace, &localMatrix));
+    }
+
+    if (!m_gradient) {
+        // use last color, since our "geometry" was degenerate (e.g. radius==0)
+        m_gradient = adoptRef(SkShader::CreateColorShader(colors[countUsed - 1]));
+    }
+    return m_gradient.get();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

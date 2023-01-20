@@ -33,6 +33,7 @@ namespace blink {
 
 class SpeechSynthesisEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static SpeechSynthesisEvent* create();
@@ -41,21 +42,31 @@ public:
         unsigned charIndex,
         float elapsedTime,
         const String& name);
+=======
+public:
+    static PassRefPtrWillBeRawPtr<SpeechSynthesisEvent> create();
+    static PassRefPtrWillBeRawPtr<SpeechSynthesisEvent> create(const AtomicString& type, SpeechSynthesisUtterance*, unsigned charIndex, float elapsedTime, const String& name);
+>>>>>>> miniblink49
 
     SpeechSynthesisUtterance* utterance() const { return m_utterance; }
     unsigned charIndex() const { return m_charIndex; }
     float elapsedTime() const { return m_elapsedTime; }
     const String& name() const { return m_name; }
 
+<<<<<<< HEAD
     const AtomicString& interfaceName() const override
     {
         return EventNames::SpeechSynthesisEvent;
     }
+=======
+    const AtomicString& interfaceName() const override { return EventNames::SpeechSynthesisEvent; }
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     SpeechSynthesisEvent();
+<<<<<<< HEAD
     SpeechSynthesisEvent(const AtomicString& type,
         SpeechSynthesisUtterance*,
         unsigned charIndex,
@@ -63,6 +74,11 @@ private:
         const String& name);
 
     Member<SpeechSynthesisUtterance> m_utterance;
+=======
+    SpeechSynthesisEvent(const AtomicString& type, SpeechSynthesisUtterance*, unsigned charIndex, float elapsedTime, const String& name);
+
+    PersistentWillBeMember<SpeechSynthesisUtterance> m_utterance;
+>>>>>>> miniblink49
     unsigned m_charIndex;
     float m_elapsedTime;
     String m_name;

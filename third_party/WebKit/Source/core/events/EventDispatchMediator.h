@@ -31,34 +31,31 @@
 #ifndef EventDispatchMediator_h
 #define EventDispatchMediator_h
 
-#include "core/events/EventDispatchResult.h"
 #include "platform/heap/Handle.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class Event;
 class EventDispatcher;
 
-class EventDispatchMediator
-    : public GarbageCollectedFinalized<EventDispatchMediator> {
+class EventDispatchMediator : public RefCountedWillBeGarbageCollectedFinalized<EventDispatchMediator> {
 public:
-    static EventDispatchMediator* create(Event*);
+    static PassRefPtrWillBeRawPtr<EventDispatchMediator> create(PassRefPtrWillBeRawPtr<Event>);
     virtual ~EventDispatchMediator() { }
     DECLARE_VIRTUAL_TRACE();
-    virtual DispatchEventResult dispatchEvent(EventDispatcher&) const;
+    virtual bool dispatchEvent(EventDispatcher&) const;
     Event& event() const { return *m_event; }
 
 protected:
-    explicit EventDispatchMediator(Event*);
+    explicit EventDispatchMediator(PassRefPtrWillBeRawPtr<Event>);
     EventDispatchMediator() { }
-    void setEvent(Event* event)
-    {
-        DCHECK(event);
-        m_event = event;
-    }
+    void setEvent(PassRefPtrWillBeRawPtr<Event> event) { ASSERT(event.get()); m_event = event; }
 
 private:
-    Member<Event> m_event;
+    RefPtrWillBeMember<Event> m_event;
 };
 
 } // namespace blink

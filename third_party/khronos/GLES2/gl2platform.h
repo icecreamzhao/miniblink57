@@ -20,7 +20,11 @@
 #include <KHR/khrplatform.h>
 
 #ifndef GL_APICALL
+<<<<<<< HEAD
 #define GL_APICALL KHRONOS_APICALL
+=======
+#define GL_APICALL  KHRONOS_APICALL
+>>>>>>> miniblink49
 #endif
 
 #ifndef GL_APIENTRY

@@ -7,14 +7,20 @@
 
 #include "core/frame/SuspendableTimer.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "platform/heap/SelfKeepAlive.h"
 #include "wtf/Vector.h"
 #include <v8.h>
+=======
+#include "wtf/OwnPtr.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class LocalFrame;
 class ScriptSourceCode;
+<<<<<<< HEAD
 class ScriptState;
 class WebScriptExecutionCallback;
 
@@ -57,6 +63,25 @@ private:
         ScriptState*,
         WebScriptExecutionCallback*,
         Executor*);
+=======
+class WebScriptExecutionCallback;
+
+class SuspendableScriptExecutor final : public RefCountedWillBeRefCountedGarbageCollected<SuspendableScriptExecutor>, public SuspendableTimer {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SuspendableScriptExecutor);
+public:
+    static void createAndRun(LocalFrame*, int worldID, const WillBeHeapVector<ScriptSourceCode>& sources, int extensionGroup, bool userGesture, WebScriptExecutionCallback*);
+    ~SuspendableScriptExecutor() override;
+
+    void contextDestroyed() override;
+
+    // Eager finalization is needed to promptly stop this timer object.
+    // (see DOMTimer comment for more.)
+    EAGERLY_FINALIZE();
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+    SuspendableScriptExecutor(LocalFrame*, int worldID, const WillBeHeapVector<ScriptSourceCode>& sources, int extensionGroup, bool userGesture, WebScriptExecutionCallback*);
+>>>>>>> miniblink49
 
     void fired() override;
 
@@ -64,12 +89,24 @@ private:
     void executeAndDestroySelf();
     void dispose();
 
+<<<<<<< HEAD
     RefPtr<ScriptState> m_scriptState;
     WebScriptExecutionCallback* m_callback;
 
     SelfKeepAlive<SuspendableScriptExecutor> m_keepAlive;
 
     Member<Executor> m_executor;
+=======
+    RefPtrWillBeMember<LocalFrame> m_frame;
+    int m_worldID;
+    WillBeHeapVector<ScriptSourceCode> m_sources;
+    int m_extensionGroup;
+    bool m_userGesture;
+    WebScriptExecutionCallback* m_callback;
+#if ENABLE(ASSERT)
+    bool m_disposed;
+#endif
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -33,10 +33,9 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/Range.h"
-#include "core/layout/api/LineLayoutText.h"
+#include "core/layout/LayoutText.h"
 #include "core/layout/line/InlineTextBox.h"
 #include "wtf/HashMap.h"
-#include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
@@ -45,18 +44,15 @@ class InlineTextBox;
 
 // High-level abstraction of InlineTextBox to allow the accessibility module to
 // get information about InlineTextBoxes without tight coupling.
-class CORE_EXPORT AbstractInlineTextBox
-    : public RefCounted<AbstractInlineTextBox> {
+class CORE_EXPORT AbstractInlineTextBox : public RefCounted<AbstractInlineTextBox> {
 private:
-    AbstractInlineTextBox(LineLayoutText lineLayoutItem,
-        InlineTextBox* inlineTextBox)
-        : m_lineLayoutItem(lineLayoutItem)
+    AbstractInlineTextBox(LayoutText* layoutText, InlineTextBox* inlineTextBox)
+        : m_layoutText(layoutText)
         , m_inlineTextBox(inlineTextBox)
     {
     }
 
-    static PassRefPtr<AbstractInlineTextBox> getOrCreate(LineLayoutText,
-        InlineTextBox*);
+    static PassRefPtr<AbstractInlineTextBox> getOrCreate(LayoutText*, InlineTextBox*);
     static void willDestroy(InlineTextBox*);
 
     friend class LayoutText;
@@ -64,29 +60,26 @@ private:
 
 public:
     struct WordBoundaries {
-        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-        WordBoundaries(int startIndex, int endIndex)
-            : startIndex(startIndex)
-            , endIndex(endIndex)
-        {
-        }
+        WordBoundaries(int startIndex, int endIndex) : startIndex(startIndex), endIndex(endIndex) { }
         int startIndex;
         int endIndex;
     };
 
-    enum Direction { LeftToRight,
+    enum Direction {
+        LeftToRight,
         RightToLeft,
         TopToBottom,
-        BottomToTop };
+        BottomToTop
+    };
 
     ~AbstractInlineTextBox();
 
-    LineLayoutText getLineLayoutItem() const { return m_lineLayoutItem; }
+    LayoutText* layoutText() const { return m_layoutText; }
 
     PassRefPtr<AbstractInlineTextBox> nextInlineTextBox() const;
-    LayoutRect localBounds() const;
+    LayoutRect bounds() const;
     unsigned len() const;
-    Direction getDirection() const;
+    Direction direction() const;
     void characterWidths(Vector<float>&) const;
     void wordBoundaries(Vector<WordBoundaries>&) const;
     String text() const;
@@ -98,13 +91,11 @@ public:
 private:
     void detach();
 
-    // Weak ptrs; these are nulled when InlineTextBox::destroy() calls
-    // AbstractInlineTextBox::willDestroy.
-    LineLayoutText m_lineLayoutItem;
+    // Weak ptrs; these are nulled when InlineTextBox::destroy() calls AbstractInlineTextBox::willDestroy.
+    LayoutText* m_layoutText;
     InlineTextBox* m_inlineTextBox;
 
-    typedef HashMap<InlineTextBox*, RefPtr<AbstractInlineTextBox>>
-        InlineToAbstractInlineTextBoxHashMap;
+    typedef HashMap<InlineTextBox*, RefPtr<AbstractInlineTextBox>> InlineToAbstractInlineTextBoxHashMap;
     static InlineToAbstractInlineTextBoxHashMap* gAbstractInlineTextBoxMap;
 };
 

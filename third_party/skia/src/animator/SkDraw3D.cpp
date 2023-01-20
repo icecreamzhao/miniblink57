@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkDraw3D.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -23,8 +27,12 @@ const SkMemberInfo Sk3D_Point::fInfo[] = {
 
 DEFINE_NO_VIRTUALS_GET_MEMBER(Sk3D_Point);
 
+<<<<<<< HEAD
 Sk3D_Point::Sk3D_Point()
 {
+=======
+Sk3D_Point::Sk3D_Point() {
+>>>>>>> miniblink49
     fPoint.set(0, 0, 0);
 }
 
@@ -44,6 +52,7 @@ const SkMemberInfo Sk3D_Camera::fInfo[] = {
 
 DEFINE_GET_MEMBER(Sk3D_Camera);
 
+<<<<<<< HEAD
 Sk3D_Camera::Sk3D_Camera()
     : hackWidth(0)
     , hackHeight(0)
@@ -57,6 +66,15 @@ Sk3D_Camera::~Sk3D_Camera()
 
 bool Sk3D_Camera::draw(SkAnimateMaker& maker)
 {
+=======
+Sk3D_Camera::Sk3D_Camera() : hackWidth(0), hackHeight(0), patch(NULL) {
+}
+
+Sk3D_Camera::~Sk3D_Camera() {
+}
+
+bool Sk3D_Camera::draw(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     fCamera.update();
     SkMatrix matrix;
     fCamera.patchToMatrix(patch->fPatch, &matrix);
@@ -66,15 +84,26 @@ bool Sk3D_Camera::draw(SkAnimateMaker& maker)
     return false;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 enum Sk3D_Patch_Functions {
     SK_FUNCTION(rotateDegrees)
 };
 
 const SkFunctionParamType Sk3D_Patch::fFunctionParameters[] = {
+<<<<<<< HEAD
     (SkFunctionParamType)SkType_Float,
     (SkFunctionParamType)SkType_Float,
     (SkFunctionParamType)SkType_Float,
     (SkFunctionParamType)0 // terminator for parameter list (there may be multiple parameter lists)
+=======
+    (SkFunctionParamType) SkType_Float,
+    (SkFunctionParamType) SkType_Float,
+    (SkFunctionParamType) SkType_Float,
+    (SkFunctionParamType) 0 // terminator for parameter list (there may be multiple parameter lists)
+>>>>>>> miniblink49
 };
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -91,6 +120,7 @@ const SkMemberInfo Sk3D_Patch::fInfo[] = {
 DEFINE_GET_MEMBER(Sk3D_Patch);
 
 void Sk3D_Patch::executeFunction(SkDisplayable* target, int index,
+<<<<<<< HEAD
     SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
     SkScriptValue*)
 {
@@ -109,5 +139,23 @@ void Sk3D_Patch::executeFunction(SkDisplayable* target, int index,
 
 const SkFunctionParamType* Sk3D_Patch::getFunctionsParameters()
 {
+=======
+        SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
+        SkScriptValue* ) {
+    SkASSERT(target == this);
+    switch (index) {
+        case SK_FUNCTION(rotateDegrees):
+            SkASSERT(parameters.count() == 3);
+            SkASSERT(type == SkType_Float);
+            fPatch.rotateDegrees(parameters[0].fOperand.fScalar,
+                parameters[1].fOperand.fScalar, parameters[2].fOperand.fScalar);
+            break;
+        default:
+            SkASSERT(0);
+    }
+}
+
+const SkFunctionParamType* Sk3D_Patch::getFunctionsParameters() {
+>>>>>>> miniblink49
     return fFunctionParameters;
 }

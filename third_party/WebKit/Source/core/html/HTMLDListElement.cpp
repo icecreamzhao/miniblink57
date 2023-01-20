@@ -20,6 +20,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLDListElement.h"
 
 #include "core/HTMLNames.h"
@@ -35,4 +36,4 @@ inline HTMLDListElement::HTMLDListElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLDListElement)
 
-} // namespace blink
+}

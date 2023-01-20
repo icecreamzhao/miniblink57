@@ -2,8 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://w3c.github.io/mediacapture-main/#navigatorusermedia
 
 partial interface Navigator {
     [SameObject] readonly attribute MediaDevices mediaDevices;
 };
+=======
+// http://w3c.github.io/mediacapture-main/#navigatorusermedia
+
+partial interface Navigator {
+    [RuntimeEnabled=EnumerateDevices] readonly attribute MediaDevices mediaDevices;
+};
+
+>>>>>>> miniblink49

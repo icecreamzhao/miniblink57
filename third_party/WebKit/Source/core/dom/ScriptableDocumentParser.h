@@ -26,14 +26,13 @@
 #ifndef ScriptableDocumentParser_h
 #define ScriptableDocumentParser_h
 
-#include "core/CoreExport.h"
 #include "core/dom/DecodedDataDocumentParser.h"
 #include "core/dom/ParserContentPolicy.h"
 #include "wtf/text/TextPosition.h"
 
 namespace blink {
 
-class CORE_EXPORT ScriptableDocumentParser : public DecodedDataDocumentParser {
+class ScriptableDocumentParser : public DecodedDataDocumentParser {
 public:
     // Only used by Document::open for deciding if its safe to act on a
     // JavaScript document.open() call right now, or it should be ignored.
@@ -50,18 +49,13 @@ public:
     virtual OrdinalNumber lineNumber() const = 0;
     virtual TextPosition textPosition() const = 0;
 
-    void setWasCreatedByScript(bool wasCreatedByScript)
-    {
-        m_wasCreatedByScript = wasCreatedByScript;
-    }
+    void setWasCreatedByScript(bool wasCreatedByScript) { m_wasCreatedByScript = wasCreatedByScript; }
     bool wasCreatedByScript() const { return m_wasCreatedByScript; }
 
-    ParserContentPolicy getParserContentPolicy() { return m_parserContentPolicy; }
+    ParserContentPolicy parserContentPolicy() { return m_parserContentPolicy; }
 
 protected:
-    explicit ScriptableDocumentParser(
-        Document&,
-        ParserContentPolicy = AllowScriptingContent);
+    explicit ScriptableDocumentParser(Document&, ParserContentPolicy = AllowScriptingContent);
 
 private:
     ScriptableDocumentParser* asScriptableDocumentParser() final { return this; }
@@ -71,6 +65,6 @@ private:
     ParserContentPolicy m_parserContentPolicy;
 };
 
-} // namespace blink
+}
 
 #endif // ScriptableDocumentParser_h

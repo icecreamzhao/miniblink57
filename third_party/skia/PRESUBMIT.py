@@ -9,7 +9,10 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts
 for more details about the presubmit API built into gcl.
 """
 
+<<<<<<< HEAD
 import collections
+=======
+>>>>>>> miniblink49
 import csv
 import fnmatch
 import os
@@ -23,6 +26,12 @@ REVERT_CL_SUBJECT_PREFIX = 'Revert '
 
 SKIA_TREE_STATUS_URL = 'http://skia-tree-status.appspot.com'
 
+<<<<<<< HEAD
+=======
+CQ_KEYWORDS_THAT_NEED_APPENDING = ('CQ_INCLUDE_TRYBOTS', 'CQ_EXTRA_TRYBOTS',
+                                   'CQ_EXCLUDE_TRYBOTS', 'CQ_TRYBOTS')
+
+>>>>>>> miniblink49
 # Please add the complete email address here (and not just 'xyz@' or 'xyz').
 PUBLIC_API_OWNERS = (
     'reed@chromium.org',
@@ -36,6 +45,7 @@ PUBLIC_API_OWNERS = (
 AUTHORS_FILE_NAME = 'AUTHORS'
 
 DOCS_PREVIEW_URL = 'https://skia.org/?cl='
+<<<<<<< HEAD
 GOLD_TRYBOT_URL = 'https://gold.skia.org/search?issue='
 
 # Path to CQ bots feature is described in https://bug.skia.org/4364
@@ -55,6 +65,8 @@ PATH_PREFIX_TO_EXTRA_TRYBOTS = {
     # 'src/svg/parser/': 'master3:ghi,jkl;master4:mno',
     # 'src/image/SkImage_Base.h': 'master5:pqr,stu;master1:abc1;master2:def',
 }
+=======
+>>>>>>> miniblink49
 
 
 def _CheckChangeHasEol(input_api, output_api, source_file_filter=None):
@@ -84,7 +96,10 @@ def _PythonChecks(input_api, output_api):
       'R0201',  # Method could be a function.
       'E1003',  # Using class name in super.
       'W0613',  # Unused argument.
+<<<<<<< HEAD
       'W0105',  # String statement has no effect.
+=======
+>>>>>>> miniblink49
   )
   # Run Pylint on only the modified python files. Unfortunately it still runs
   # Pylint on the whole file instead of just the modified lines.
@@ -135,7 +150,11 @@ def _IfDefChecks(input_api, output_api):
     results.append(
         output_api.PresubmitError(
             'The following files have #if or #ifdef before includes:\n%s\n\n'
+<<<<<<< HEAD
             'See https://bug.skia.org/3362 for why this should be fixed.' %
+=======
+            'See skbug.com/3362 for why this should be fixed.' %
+>>>>>>> miniblink49
                 '\n'.join(failing_files)))
   return results
 
@@ -262,11 +281,27 @@ def _CheckOwnerIsInAuthorsFile(input_api, output_api):
           # Found a match, the user is in the AUTHORS file break out of the loop
           break
       else:
+<<<<<<< HEAD
+=======
+        # TODO(rmistry): Remove the below CLA messaging once a CLA checker has
+        # been added to the CQ.
+>>>>>>> miniblink49
         results.append(
           output_api.PresubmitError(
             'The email %s is not in Skia\'s AUTHORS file.\n'
             'Issue owner, this CL must include an addition to the Skia AUTHORS '
+<<<<<<< HEAD
             'file.'
+=======
+            'file.\n'
+            'Googler reviewers, please check that the AUTHORS entry '
+            'corresponds to an email address in http://goto/cla-signers. If it '
+            'does not then ask the issue owner to sign the CLA at '
+            'https://developers.google.com/open-source/cla/individual '
+            '(individual) or '
+            'https://developers.google.com/open-source/cla/corporate '
+            '(corporate).'
+>>>>>>> miniblink49
             % owner_email))
     except IOError:
       # Do not fail if authors file cannot be found.
@@ -288,10 +323,15 @@ def _CheckLGTMsForPublicAPI(input_api, output_api):
     affected_file_path = affected_file.LocalPath()
     file_path, file_ext = os.path.splitext(affected_file_path)
     # We only care about files that end in .h and are under the top-level
+<<<<<<< HEAD
     # include dir, but not include/private.
     if (file_ext == '.h' and
         'include' == file_path.split(os.path.sep)[0] and
         'private' not in file_path):
+=======
+    # include dir.
+    if file_ext == '.h' and 'include' == file_path.split(os.path.sep)[0]:
+>>>>>>> miniblink49
       requires_owner_check = True
 
   if not requires_owner_check:
@@ -306,7 +346,14 @@ def _CheckLGTMsForPublicAPI(input_api, output_api):
       # It is a revert CL, ignore the public api owners check.
       return results
 
+<<<<<<< HEAD
     if issue_properties['cq_dry_run']:
+=======
+    # TODO(rmistry): Stop checking for COMMIT=false once crbug/470609 is
+    # resolved.
+    if issue_properties['cq_dry_run'] or re.search(
+        r'^COMMIT=false$', issue_properties['description'], re.M):
+>>>>>>> miniblink49
       # Ignore public api owners check for dry run CLs since they are not
       # going to be committed.
       return results
@@ -336,12 +383,17 @@ def _CheckLGTMsForPublicAPI(input_api, output_api):
   if not lgtm_from_owner:
     results.append(
         output_api.PresubmitError(
+<<<<<<< HEAD
             "If this CL adds to or changes Skia's public API, you need an LGTM "
             "from any of %s.  If this CL only removes from or doesn't change "
             "Skia's public API, please add a short note to the CL saying so "
             "and add one of those reviewers on a TBR= line.  If you don't know "
             "if this CL affects Skia's public API, treat it like it does."
             % str(PUBLIC_API_OWNERS)))
+=======
+            'Since the CL is editing public API, you must have an LGTM from '
+            'one of: %s' % str(PUBLIC_API_OWNERS)))
+>>>>>>> miniblink49
   return results
 
 
@@ -349,7 +401,10 @@ def PostUploadHook(cl, change, output_api):
   """git cl upload will call this hook after the issue is created/modified.
 
   This hook does the following:
+<<<<<<< HEAD
   * Adds a link to the CL's Gold trybot results.
+=======
+>>>>>>> miniblink49
   * Adds a link to preview docs changes if there are any docs changes in the CL.
   * Adds 'NOTRY=true' if the CL contains only docs changes.
   * Adds 'NOTREECHECKS=true' for non master branch changes since they do not
@@ -358,7 +413,10 @@ def PostUploadHook(cl, change, output_api):
     work on them.
   * Adds 'NOPRESUBMIT=true' for non master branch changes since those don't
     run the presubmit checks.
+<<<<<<< HEAD
   * Adds extra trybots for the paths defined in PATH_TO_EXTRA_TRYBOTS.
+=======
+>>>>>>> miniblink49
   """
 
   results = []
@@ -380,6 +438,7 @@ def PostUploadHook(cl, change, output_api):
     original_description = rietveld_obj.get_description(issue)
     new_description = original_description
 
+<<<<<<< HEAD
     # Add GOLD_TRYBOT_URL if it does not exist yet.
     if not re.search(r'^GOLD_TRYBOT_URL=', new_description, re.M | re.I):
       new_description += '\nGOLD_TRYBOT_URL= %s%s' % (GOLD_TRYBOT_URL, issue)
@@ -389,6 +448,8 @@ def PostUploadHook(cl, change, output_api):
               'Note: Results may take sometime to be populated after trybots '
               'complete.'))
 
+=======
+>>>>>>> miniblink49
     # If the change includes only doc changes then add NOTRY=true in the
     # CL's description if it does not exist yet.
     if all_docs_changes and not re.search(
@@ -437,6 +498,7 @@ def PostUploadHook(cl, change, output_api):
             output_api.PresubmitNotifyResult(
                 'Branch changes do not run the presubmit checks.'))
 
+<<<<<<< HEAD
     # Automatically set CQ_EXTRA_TRYBOTS if any of the changed files here begin
     # with the paths of interest.
     cq_master_to_trybots = collections.defaultdict(set)
@@ -453,6 +515,36 @@ def PostUploadHook(cl, change, output_api):
     if cq_master_to_trybots:
       new_description = _AddCQExtraTrybotsToDesc(
           cq_master_to_trybots, new_description)
+=======
+    # Read and process the HASHTAGS file.
+    hashtags_fullpath = os.path.join(change._local_root, 'HASHTAGS')
+    with open(hashtags_fullpath, 'rb') as hashtags_csv:
+      hashtags_reader = csv.reader(hashtags_csv, delimiter=',')
+      for row in hashtags_reader:
+        if not row or row[0].startswith('#'):
+          # Ignore empty lines and comments
+          continue
+        hashtag = row[0]
+        # Search for the hashtag in the description.
+        if re.search('#%s' % hashtag, new_description, re.M | re.I):
+          for mapped_text in row[1:]:
+            # Special case handling for CQ_KEYWORDS_THAT_NEED_APPENDING.
+            appended_description = _HandleAppendingCQKeywords(
+                hashtag, mapped_text, new_description, results, output_api)
+            if appended_description:
+              new_description = appended_description
+              continue
+
+            # Add the mapped text if it does not already exist in the
+            # CL's description.
+            if not re.search(
+                r'^%s$' % mapped_text, new_description, re.M | re.I):
+              new_description += '\n%s' % mapped_text
+              results.append(
+                  output_api.PresubmitNotifyResult(
+                      'Found \'#%s\', automatically added \'%s\' to the CL\'s '
+                      'description' % (hashtag, mapped_text)))
+>>>>>>> miniblink49
 
     # If the description has changed update it.
     if new_description != original_description:
@@ -461,6 +553,7 @@ def PostUploadHook(cl, change, output_api):
     return results
 
 
+<<<<<<< HEAD
 def _AddCQExtraTrybotsToDesc(cq_master_to_trybots, description):
   """Adds the specified master and trybots to the CQ_EXTRA_TRYBOTS keyword.
 
@@ -504,6 +597,31 @@ def _GetCQExtraTrybotsStr(cq_master_to_trybots):
   for master, trybots in cq_master_to_trybots.iteritems():
     sections.append('%s:%s' % (master, ','.join(trybots)))
   return 'CQ_EXTRA_TRYBOTS=%s' % ';'.join(sections)
+=======
+def _HandleAppendingCQKeywords(hashtag, keyword_and_value, description,
+                               results, output_api):
+  """Handles the CQ keywords that need appending if specified in hashtags."""
+  keyword = keyword_and_value.split('=')[0]
+  if keyword in CQ_KEYWORDS_THAT_NEED_APPENDING:
+    # If the keyword is already in the description then append to it.
+    match = re.search(
+        r'^%s=(.*)$' % keyword, description, re.M | re.I)
+    if match:
+      old_values = match.group(1).split(';')
+      new_value = keyword_and_value.split('=')[1]
+      if new_value in old_values:
+        # Do not need to do anything here.
+        return description
+      # Update the description with the new values.
+      new_description = description.replace(
+          match.group(0), "%s;%s" % (match.group(0), new_value))
+      results.append(
+          output_api.PresubmitNotifyResult(
+          'Found \'#%s\', automatically appended \'%s\' to %s in '
+          'the CL\'s description' % (hashtag, new_value, keyword)))
+      return new_description
+  return None
+>>>>>>> miniblink49
 
 
 def CheckChangeOnCommit(input_api, output_api):

@@ -23,20 +23,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/exported/WebSpeechSynthesizerClientImpl.h"
 
 #include "platform/speech/PlatformSpeechSynthesisUtterance.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebSpeechSynthesizerClientImpl::WebSpeechSynthesizerClientImpl(
     PlatformSpeechSynthesizer* synthesizer,
     PlatformSpeechSynthesizerClient* client)
+=======
+WebSpeechSynthesizerClientImpl::WebSpeechSynthesizerClientImpl(PlatformSpeechSynthesizer* synthesizer, PlatformSpeechSynthesizerClient* client)
+>>>>>>> miniblink49
     : m_synthesizer(synthesizer)
     , m_client(client)
 {
 }
 
+<<<<<<< HEAD
 WebSpeechSynthesizerClientImpl::~WebSpeechSynthesizerClientImpl() { }
 
 void WebSpeechSynthesizerClientImpl::setVoiceList(
@@ -45,50 +54,89 @@ void WebSpeechSynthesizerClientImpl::setVoiceList(
     Vector<RefPtr<PlatformSpeechSynthesisVoice>> outVoices;
     for (size_t i = 0; i < voices.size(); i++)
         outVoices.push_back(voices[i]);
+=======
+WebSpeechSynthesizerClientImpl::~WebSpeechSynthesizerClientImpl()
+{
+}
+
+void WebSpeechSynthesizerClientImpl::setVoiceList(const WebVector<WebSpeechSynthesisVoice>& voices)
+{
+    HeapVector<Member<PlatformSpeechSynthesisVoice>> outVoices;
+    for (size_t i = 0; i < voices.size(); i++)
+        outVoices.append(voices[i]);
+>>>>>>> miniblink49
     m_synthesizer->setVoiceList(outVoices);
     m_client->voicesDidChange();
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::didStartSpeaking(
     const WebSpeechSynthesisUtterance& utterance)
+=======
+void WebSpeechSynthesizerClientImpl::didStartSpeaking(const WebSpeechSynthesisUtterance& utterance)
+>>>>>>> miniblink49
 {
     m_client->didStartSpeaking(utterance);
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::didFinishSpeaking(
     const WebSpeechSynthesisUtterance& utterance)
+=======
+void WebSpeechSynthesizerClientImpl::didFinishSpeaking(const WebSpeechSynthesisUtterance& utterance)
+>>>>>>> miniblink49
 {
     m_client->didFinishSpeaking(utterance);
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::didPauseSpeaking(
     const WebSpeechSynthesisUtterance& utterance)
+=======
+void WebSpeechSynthesizerClientImpl::didPauseSpeaking(const WebSpeechSynthesisUtterance& utterance)
+>>>>>>> miniblink49
 {
     m_client->didPauseSpeaking(utterance);
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::didResumeSpeaking(
     const WebSpeechSynthesisUtterance& utterance)
+=======
+void WebSpeechSynthesizerClientImpl::didResumeSpeaking(const WebSpeechSynthesisUtterance& utterance)
+>>>>>>> miniblink49
 {
     m_client->didResumeSpeaking(utterance);
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::speakingErrorOccurred(
     const WebSpeechSynthesisUtterance& utterance)
+=======
+void WebSpeechSynthesizerClientImpl::speakingErrorOccurred(const WebSpeechSynthesisUtterance& utterance)
+>>>>>>> miniblink49
 {
     m_client->speakingErrorOccurred(utterance);
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::wordBoundaryEventOccurred(
     const WebSpeechSynthesisUtterance& utterance,
     unsigned charIndex)
+=======
+void WebSpeechSynthesizerClientImpl::wordBoundaryEventOccurred(const WebSpeechSynthesisUtterance& utterance, unsigned charIndex)
+>>>>>>> miniblink49
 {
     m_client->boundaryEventOccurred(utterance, SpeechWordBoundary, charIndex);
 }
 
+<<<<<<< HEAD
 void WebSpeechSynthesizerClientImpl::sentenceBoundaryEventOccurred(
     const WebSpeechSynthesisUtterance& utterance,
     unsigned charIndex)
+=======
+void WebSpeechSynthesizerClientImpl::sentenceBoundaryEventOccurred(const WebSpeechSynthesisUtterance& utterance, unsigned charIndex)
+>>>>>>> miniblink49
 {
     m_client->boundaryEventOccurred(utterance, SpeechSentenceBoundary, charIndex);
 }

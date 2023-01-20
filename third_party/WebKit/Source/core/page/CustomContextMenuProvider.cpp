@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/page/CustomContextMenuProvider.h"
 
 #include "core/dom/Document.h"
@@ -18,14 +19,15 @@ namespace blink {
 
 using namespace HTMLNames;
 
-CustomContextMenuProvider::CustomContextMenuProvider(HTMLMenuElement& menu,
-    HTMLElement& subject)
+CustomContextMenuProvider::CustomContextMenuProvider(HTMLMenuElement& menu, HTMLElement& subject)
     : m_menu(menu)
     , m_subjectElement(subject)
 {
 }
 
-CustomContextMenuProvider::~CustomContextMenuProvider() { }
+CustomContextMenuProvider::~CustomContextMenuProvider()
+{
+}
 
 DEFINE_TRACE(CustomContextMenuProvider)
 {
@@ -40,15 +42,12 @@ void CustomContextMenuProvider::populateContextMenu(ContextMenu* menu)
     populateContextMenuItems(*m_menu, *menu);
 }
 
-void CustomContextMenuProvider::contextMenuItemSelected(
-    const ContextMenuItem* item)
+void CustomContextMenuProvider::contextMenuItemSelected(const ContextMenuItem* item)
 {
     if (HTMLElement* element = menuItemAt(item->action())) {
-        MouseEvent* click = MouseEvent::create(
-            EventTypeNames::click, m_menu->document().domWindow(), Event::create(),
-            SimulatedClickCreationScope::FromUserAgent);
+        RefPtrWillBeRawPtr<SimulatedMouseEvent> click = SimulatedMouseEvent::create(EventTypeNames::click, m_menu->document().domWindow(), Event::create());
         click->setRelatedTarget(m_subjectElement.get());
-        element->dispatchEvent(click);
+        element->dispatchEvent(click.release());
     }
 }
 
@@ -66,47 +65,38 @@ void CustomContextMenuProvider::appendSeparator(ContextMenu& contextMenu)
 
     // Collapse all sequences of two or more adjacent separators in the menu or
     // any submenus to a single separator.
-    ContextMenuItem lastItem = contextMenu.items().back();
+    ContextMenuItem lastItem = contextMenu.items().last();
     if (lastItem.type() == SeparatorType)
         return;
 
-    contextMenu.appendItem(ContextMenuItem(
-        SeparatorType, ContextMenuItemCustomTagNoAction, String(), String()));
+    contextMenu.appendItem(ContextMenuItem(SeparatorType, ContextMenuItemCustomTagNoAction, String(), String()));
 }
 
-void CustomContextMenuProvider::appendMenuItem(HTMLMenuItemElement* menuItem,
-    ContextMenu& contextMenu)
+void CustomContextMenuProvider::appendMenuItem(HTMLMenuItemElement* menuItem, ContextMenu& contextMenu)
 {
     // Avoid menuitems with no label.
     String labelString = menuItem->fastGetAttribute(labelAttr);
     if (labelString.isEmpty())
         return;
 
-    m_menuItems.push_back(menuItem);
+    m_menuItems.append(menuItem);
 
     bool enabled = !menuItem->fastHasAttribute(disabledAttr);
     String icon = menuItem->fastGetAttribute(iconAttr);
     if (!icon.isEmpty()) {
-        // To obtain the absolute URL of the icon when the attribute's value is not
-        // the empty string, the attribute's value must be resolved relative to the
-        // element.
+        // To obtain the absolute URL of the icon when the attribute's value is not the empty string,
+        // the attribute's value must be resolved relative to the element.
         KURL iconURL = KURL(menuItem->baseURI(), icon);
-        icon = iconURL.getString();
+        icon = iconURL.string();
     }
-    ContextMenuAction action = static_cast<ContextMenuAction>(
-        ContextMenuItemBaseCustomTag + m_menuItems.size() - 1);
+    ContextMenuAction action = static_cast<ContextMenuAction>(ContextMenuItemBaseCustomTag + m_menuItems.size() - 1);
     if (equalIgnoringCase(menuItem->fastGetAttribute(typeAttr), "checkbox") || equalIgnoringCase(menuItem->fastGetAttribute(typeAttr), "radio"))
-        contextMenu.appendItem(
-            ContextMenuItem(CheckableActionType, action, labelString, icon, enabled,
-                menuItem->fastHasAttribute(checkedAttr)));
+        contextMenu.appendItem(ContextMenuItem(CheckableActionType, action, labelString, icon, enabled, menuItem->fastHasAttribute(checkedAttr)));
     else
-        contextMenu.appendItem(
-            ContextMenuItem(ActionType, action, labelString, icon, enabled, false));
+        contextMenu.appendItem(ContextMenuItem(ActionType, action, labelString, icon, enabled, false));
 }
 
-void CustomContextMenuProvider::populateContextMenuItems(
-    const HTMLMenuElement& menu,
-    ContextMenu& contextMenu)
+void CustomContextMenuProvider::populateContextMenuItems(const HTMLMenuElement& menu, ContextMenu& contextMenu)
 {
     HTMLElement* nextElement = Traversal<HTMLElement>::firstWithin(menu);
     while (nextElement) {
@@ -122,9 +112,7 @@ void CustomContextMenuProvider::populateContextMenuItems(
                 appendSeparator(contextMenu);
             } else if (!labelString.isEmpty()) {
                 populateContextMenuItems(*toHTMLMenuElement(nextElement), subMenu);
-                contextMenu.appendItem(
-                    ContextMenuItem(SubmenuType, ContextMenuItemCustomTagNoAction,
-                        labelString, String(), &subMenu));
+                contextMenu.appendItem(ContextMenuItem(SubmenuType, ContextMenuItemCustomTagNoAction, labelString, String(), &subMenu));
             }
             nextElement = Traversal<HTMLElement>::nextSibling(*nextElement);
         } else if (isHTMLMenuItemElement(*nextElement)) {
@@ -138,7 +126,7 @@ void CustomContextMenuProvider::populateContextMenuItems(
     }
 
     // Remove separators at the end of the menu and any submenus.
-    while (contextMenu.items().size() && contextMenu.items().back().type() == SeparatorType)
+    while (contextMenu.items().size() && contextMenu.items().last().type() == SeparatorType)
         contextMenu.removeLastItem();
 }
 

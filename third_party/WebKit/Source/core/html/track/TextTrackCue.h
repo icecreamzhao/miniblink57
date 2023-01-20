@@ -35,18 +35,19 @@
 #include "core/events/EventTarget.h"
 #include "core/html/HTMLDivElement.h"
 #include "platform/heap/Handle.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
 class TextTrack;
 
-class TextTrackCue : public EventTargetWithInlineData {
+class TextTrackCue : public EventTargetWithInlineData, public RefCountedWillBeNoBase<TextTrackCue> {
     DEFINE_WRAPPERTYPEINFO();
-
+    REFCOUNTED_EVENT_TARGET(TextTrackCue);
 public:
     static const AtomicString& cueShadowPseudoId()
     {
-        DEFINE_STATIC_LOCAL(const AtomicString, cue, ("cue"));
+        DEFINE_STATIC_LOCAL(const AtomicString, cue, ("cue", AtomicString::ConstructFromLiteral));
         return cue;
     }
 
@@ -73,6 +74,9 @@ public:
     void updateCueIndex(unsigned cueIndex) { m_cueIndex = cueIndex; }
     void invalidateCueIndex();
 
+    using EventTarget::dispatchEvent;
+    bool dispatchEvent(PassRefPtrWillBeRawPtr<Event>) override;
+
     bool isActive() const { return m_isActive; }
     void setIsActive(bool active) { m_isActive = active; }
 
@@ -86,8 +90,10 @@ public:
     virtual void updatePastAndFutureNodes(double movieTime) = 0;
 
     // FIXME: Refactor to eliminate removeDisplayTree(). https://crbug.com/322434
-    enum RemovalNotification { DontNotifyRegion,
-        NotifyRegion };
+    enum RemovalNotification {
+        DontNotifyRegion,
+        NotifyRegion
+    };
     virtual void removeDisplayTree(RemovalNotification = NotifyRegion) = 0;
 
     const AtomicString& interfaceName() const override;
@@ -106,14 +112,13 @@ protected:
 
     void cueWillChange();
     virtual void cueDidChange();
-    DispatchEventResult dispatchEventInternal(Event*) override;
 
 private:
     AtomicString m_id;
     double m_startTime;
     double m_endTime;
 
-    Member<TextTrack> m_track;
+    RawPtrWillBeMember<TextTrack> m_track;
 
     unsigned m_cueIndex;
 

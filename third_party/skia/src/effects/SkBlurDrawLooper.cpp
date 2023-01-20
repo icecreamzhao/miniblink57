@@ -6,6 +6,7 @@
  */
 
 #include "SkBlurDrawLooper.h"
+<<<<<<< HEAD
 #include "SkBlurMask.h" // just for SkBlurMask::ConvertRadiusToSigma
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
@@ -20,10 +21,26 @@
 SkBlurDrawLooper::SkBlurDrawLooper(SkColor color, SkScalar sigma,
     SkScalar dx, SkScalar dy, uint32_t flags)
 {
+=======
+#include "SkBlurMask.h"     // just for SkBlurMask::ConvertRadiusToSigma
+#include "SkBlurMaskFilter.h"
+#include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkMaskFilter.h"
+#include "SkPaint.h"
+#include "SkString.h"
+#include "SkStringUtils.h"
+
+SkBlurDrawLooper::SkBlurDrawLooper(SkColor color, SkScalar sigma,
+                                   SkScalar dx, SkScalar dy, uint32_t flags) {
+>>>>>>> miniblink49
     this->init(sigma, dx, dy, color, flags);
 }
 
 // only call from constructor
+<<<<<<< HEAD
 void SkBlurDrawLooper::initEffects()
 {
     SkASSERT(fBlurFlags <= kAll_BlurFlag);
@@ -35,6 +52,22 @@ void SkBlurDrawLooper::initEffects()
         fBlur = SkBlurMaskFilter::Make(kNormal_SkBlurStyle, fSigma, flags);
     } else {
         fBlur = nullptr;
+=======
+void SkBlurDrawLooper::initEffects() {
+    SkASSERT(fBlurFlags <= kAll_BlurFlag);
+    if (fSigma > 0) {
+        uint32_t flags = fBlurFlags & kIgnoreTransform_BlurFlag ?
+                            SkBlurMaskFilter::kIgnoreTransform_BlurFlag :
+                            SkBlurMaskFilter::kNone_BlurFlag;
+
+        flags |= fBlurFlags & kHighQuality_BlurFlag ?
+                    SkBlurMaskFilter::kHighQuality_BlurFlag :
+                    SkBlurMaskFilter::kNone_BlurFlag;
+
+        fBlur = SkBlurMaskFilter::Create(kNormal_SkBlurStyle, fSigma, flags);
+    } else {
+        fBlur = NULL;
+>>>>>>> miniblink49
     }
 
     if (fBlurFlags & kOverrideColor_BlurFlag) {
@@ -42,15 +75,26 @@ void SkBlurDrawLooper::initEffects()
         // be baked into the blurred mask.
         SkColor opaqueColor = SkColorSetA(fBlurColor, 255);
         //The SrcIn xfer mode will multiply 'color' by the incoming alpha
+<<<<<<< HEAD
         fColorFilter = SkColorFilter::MakeModeFilter(opaqueColor, SkXfermode::kSrcIn_Mode);
     } else {
         fColorFilter = nullptr;
+=======
+        fColorFilter = SkColorFilter::CreateModeFilter(opaqueColor,
+                                                       SkXfermode::kSrcIn_Mode);
+    } else {
+        fColorFilter = NULL;
+>>>>>>> miniblink49
     }
 }
 
 void SkBlurDrawLooper::init(SkScalar sigma, SkScalar dx, SkScalar dy,
+<<<<<<< HEAD
     SkColor color, uint32_t flags)
 {
+=======
+                            SkColor color, uint32_t flags) {
+>>>>>>> miniblink49
     fSigma = sigma;
     fDx = dx;
     fDy = dy;
@@ -60,18 +104,29 @@ void SkBlurDrawLooper::init(SkScalar sigma, SkScalar dx, SkScalar dy,
     this->initEffects();
 }
 
+<<<<<<< HEAD
 sk_sp<SkFlattenable> SkBlurDrawLooper::CreateProc(SkReadBuffer& buffer)
 {
+=======
+SkFlattenable* SkBlurDrawLooper::CreateProc(SkReadBuffer& buffer) {
+>>>>>>> miniblink49
     const SkColor color = buffer.readColor();
     const SkScalar sigma = buffer.readScalar();
     const SkScalar dx = buffer.readScalar();
     const SkScalar dy = buffer.readScalar();
     const uint32_t flags = buffer.read32();
+<<<<<<< HEAD
     return Make(color, sigma, dx, dy, flags);
 }
 
 void SkBlurDrawLooper::flatten(SkWriteBuffer& buffer) const
 {
+=======
+    return Create(color, sigma, dx, dy, flags);
+}
+
+void SkBlurDrawLooper::flatten(SkWriteBuffer& buffer) const {
+>>>>>>> miniblink49
     buffer.writeColor(fBlurColor);
     buffer.writeScalar(fSigma);
     buffer.writeScalar(fDx);
@@ -79,8 +134,17 @@ void SkBlurDrawLooper::flatten(SkWriteBuffer& buffer) const
     buffer.write32(fBlurFlags);
 }
 
+<<<<<<< HEAD
 bool SkBlurDrawLooper::asABlurShadow(BlurShadowRec* rec) const
 {
+=======
+SkBlurDrawLooper::~SkBlurDrawLooper() {
+    SkSafeUnref(fBlur);
+    SkSafeUnref(fColorFilter);
+}
+
+bool SkBlurDrawLooper::asABlurShadow(BlurShadowRec* rec) const {
+>>>>>>> miniblink49
     if (fSigma <= 0 || (fBlurFlags & fBlurFlags & kIgnoreTransform_BlurFlag)) {
         return false;
     }
@@ -90,13 +154,19 @@ bool SkBlurDrawLooper::asABlurShadow(BlurShadowRec* rec) const
         rec->fColor = fBlurColor;
         rec->fOffset.set(fDx, fDy);
         rec->fStyle = kNormal_SkBlurStyle;
+<<<<<<< HEAD
         rec->fQuality = (fBlurFlags & kHighQuality_BlurFlag) ? kHigh_SkBlurQuality : kLow_SkBlurQuality;
+=======
+        rec->fQuality = (fBlurFlags & kHighQuality_BlurFlag) ?
+                        kHigh_SkBlurQuality : kLow_SkBlurQuality;
+>>>>>>> miniblink49
     }
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 SkDrawLooper::Context* SkBlurDrawLooper::createContext(SkCanvas*, void* storage) const
 {
     return new (storage) BlurDrawLooperContext(this);
@@ -148,12 +218,64 @@ bool SkBlurDrawLooper::BlurDrawLooperContext::next(SkCanvas* canvas,
     default:
         SkASSERT(kDone == fState);
         return false;
+=======
+SkDrawLooper::Context* SkBlurDrawLooper::createContext(SkCanvas*, void* storage) const {
+    return SkNEW_PLACEMENT_ARGS(storage, BlurDrawLooperContext, (this));
+}
+
+SkBlurDrawLooper::BlurDrawLooperContext::BlurDrawLooperContext(
+        const SkBlurDrawLooper* looper)
+    : fLooper(looper), fState(SkBlurDrawLooper::kBeforeEdge) {}
+
+bool SkBlurDrawLooper::BlurDrawLooperContext::next(SkCanvas* canvas,
+                                                   SkPaint* paint) {
+    switch (fState) {
+        case kBeforeEdge:
+            // we do nothing if a maskfilter is already installed
+            if (paint->getMaskFilter()) {
+                fState = kDone;
+                return false;
+            }
+#ifdef SK_BUILD_FOR_ANDROID
+            SkColor blurColor;
+            blurColor = fLooper->fBlurColor;
+            if (SkColorGetA(blurColor) == 255) {
+                blurColor = SkColorSetA(blurColor, paint->getAlpha());
+            }
+            paint->setColor(blurColor);
+#else
+            paint->setColor(fLooper->fBlurColor);
+#endif
+            paint->setMaskFilter(fLooper->fBlur);
+            paint->setColorFilter(fLooper->fColorFilter);
+            canvas->save();
+            if (fLooper->fBlurFlags & kIgnoreTransform_BlurFlag) {
+                SkMatrix transform(canvas->getTotalMatrix());
+                transform.postTranslate(fLooper->fDx, fLooper->fDy);
+                canvas->setMatrix(transform);
+            } else {
+                canvas->translate(fLooper->fDx, fLooper->fDy);
+            }
+            fState = kAfterEdge;
+            return true;
+        case kAfterEdge:
+            canvas->restore();
+            fState = kDone;
+            return true;
+        default:
+            SkASSERT(kDone == fState);
+            return false;
+>>>>>>> miniblink49
     }
 }
 
 #ifndef SK_IGNORE_TO_STRING
+<<<<<<< HEAD
 void SkBlurDrawLooper::toString(SkString* str) const
 {
+=======
+void SkBlurDrawLooper::toString(SkString* str) const {
+>>>>>>> miniblink49
     str->append("SkBlurDrawLooper: ");
 
     str->append("dx: ");
@@ -171,11 +293,19 @@ void SkBlurDrawLooper::toString(SkString* str) const
     } else {
         bool needsSeparator = false;
         SkAddFlagToString(str, SkToBool(kIgnoreTransform_BlurFlag & fBlurFlags), "IgnoreTransform",
+<<<<<<< HEAD
             &needsSeparator);
         SkAddFlagToString(str, SkToBool(kOverrideColor_BlurFlag & fBlurFlags), "OverrideColor",
             &needsSeparator);
         SkAddFlagToString(str, SkToBool(kHighQuality_BlurFlag & fBlurFlags), "HighQuality",
             &needsSeparator);
+=======
+                          &needsSeparator);
+        SkAddFlagToString(str, SkToBool(kOverrideColor_BlurFlag & fBlurFlags), "OverrideColor",
+                          &needsSeparator);
+        SkAddFlagToString(str, SkToBool(kHighQuality_BlurFlag & fBlurFlags), "HighQuality",
+                          &needsSeparator);
+>>>>>>> miniblink49
     }
     str->append(")");
 

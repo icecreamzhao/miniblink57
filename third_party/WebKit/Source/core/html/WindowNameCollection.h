@@ -11,12 +11,10 @@ namespace blink {
 
 class WindowNameCollection final : public HTMLNameCollection {
 public:
-    static WindowNameCollection* create(ContainerNode& document,
-        CollectionType type,
-        const AtomicString& name)
+    static PassRefPtrWillBeRawPtr<WindowNameCollection> create(ContainerNode& document, CollectionType type, const AtomicString& name)
     {
-        DCHECK_EQ(type, WindowNamedItems);
-        return new WindowNameCollection(document, name);
+        ASSERT_UNUSED(type, type == WindowNamedItems);
+        return adoptRefWillBeNoop(new WindowNameCollection(document, name));
     }
 
     bool elementMatches(const Element&) const;
@@ -25,11 +23,7 @@ private:
     WindowNameCollection(ContainerNode& document, const AtomicString& name);
 };
 
-DEFINE_TYPE_CASTS(WindowNameCollection,
-    LiveNodeListBase,
-    collection,
-    collection->type() == WindowNamedItems,
-    collection.type() == WindowNamedItems);
+DEFINE_TYPE_CASTS(WindowNameCollection, LiveNodeListBase, collection, collection->type() == WindowNamedItems, collection.type() == WindowNamedItems);
 
 } // namespace blink
 

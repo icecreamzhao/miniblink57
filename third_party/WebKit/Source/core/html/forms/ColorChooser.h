@@ -38,7 +38,7 @@ namespace blink {
 class AXObject;
 class Color;
 
-class CORE_EXPORT ColorChooser : public GarbageCollectedMixin {
+class CORE_EXPORT ColorChooser : public WillBeGarbageCollectedMixin {
 public:
     ColorChooser();
     virtual ~ColorChooser();

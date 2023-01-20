@@ -28,30 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGPointTearOff.h"
 
+#include "bindings/core/v8/ExceptionState.h"
+#include "core/dom/ExceptionCode.h"
 #include "core/svg/SVGElement.h"
 #include "core/svg/SVGMatrixTearOff.h"
 
 namespace blink {
 
-SVGPointTearOff::SVGPointTearOff(SVGPoint* target,
-    SVGElement* contextElement,
-    PropertyIsAnimValType propertyIsAnimVal,
-    const QualifiedName& attributeName)
-    : SVGPropertyTearOff<SVGPoint>(target,
-        contextElement,
-        propertyIsAnimVal,
-        attributeName)
+SVGPointTearOff::SVGPointTearOff(PassRefPtrWillBeRawPtr<SVGPoint> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName)
+    : SVGPropertyTearOff<SVGPoint>(target, contextElement, propertyIsAnimVal, attributeName)
 {
 }
 
 void SVGPointTearOff::setX(float f, ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        throwReadOnly(exceptionState);
+        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
         return;
     }
+
     target()->setX(f);
     commitChange();
 }
@@ -59,23 +58,18 @@ void SVGPointTearOff::setX(float f, ExceptionState& exceptionState)
 void SVGPointTearOff::setY(float f, ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        throwReadOnly(exceptionState);
+        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
         return;
     }
+
     target()->setY(f);
     commitChange();
 }
 
-SVGPointTearOff* SVGPointTearOff::matrixTransform(SVGMatrixTearOff* matrix)
+PassRefPtrWillBeRawPtr<SVGPointTearOff> SVGPointTearOff::matrixTransform(PassRefPtrWillBeRawPtr<SVGMatrixTearOff> matrix)
 {
     FloatPoint point = target()->matrixTransform(matrix->value());
-    return SVGPointTearOff::create(SVGPoint::create(point), 0,
-        PropertyIsNotAnimVal);
+    return SVGPointTearOff::create(SVGPoint::create(point), 0, PropertyIsNotAnimVal);
 }
 
-DEFINE_TRACE_WRAPPERS(SVGPointTearOff)
-{
-    visitor->traceWrappers(contextElement());
 }
-
-} // namespace blink

@@ -33,30 +33,22 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/frame/DOMWindowProperty.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class CSSTiming;
 class DocumentLoadTiming;
 class DocumentLoader;
-class DocumentParserTiming;
 class DocumentTiming;
 class LocalFrame;
-class PaintTiming;
 class ResourceLoadTiming;
 class ScriptState;
 class ScriptValue;
 
-// Legacy support for NT1(https://www.w3.org/TR/navigation-timing/).
-class CORE_EXPORT PerformanceTiming final
-    : public GarbageCollected<PerformanceTiming>,
-      public ScriptWrappable,
-      public ContextClient {
+class CORE_EXPORT PerformanceTiming final : public GarbageCollectedFinalized<PerformanceTiming>, public ScriptWrappable, public DOMWindowProperty {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(PerformanceTiming);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PerformanceTiming);
 public:
     static PerformanceTiming* create(LocalFrame* frame)
     {
@@ -84,33 +76,7 @@ public:
     unsigned long long domComplete() const;
     unsigned long long loadEventStart() const;
     unsigned long long loadEventEnd() const;
-
-    // The below are non-spec timings, for Page Load UMA metrics.
-
-    // The time the first document layout is performed.
     unsigned long long firstLayout() const;
-    // The time the first paint operation was performed.
-    unsigned long long firstPaint() const;
-    // The time the first paint operation for visible text was performed.
-    unsigned long long firstTextPaint() const;
-    // The time the first paint operation for image was performed.
-    unsigned long long firstImagePaint() const;
-    // The time of the first 'contentful' paint. A contentful paint is a paint
-    // that includes content of some kind (for example, text or image content).
-    unsigned long long firstContentfulPaint() const;
-    // The time of the first 'meaningful' paint, A meaningful paint is a paint
-    // where the page's primary content is visible.
-    unsigned long long firstMeaningfulPaint() const;
-
-    unsigned long long parseStart() const;
-    unsigned long long parseStop() const;
-    unsigned long long parseBlockedOnScriptLoadDuration() const;
-    unsigned long long parseBlockedOnScriptLoadFromDocumentWriteDuration() const;
-    unsigned long long parseBlockedOnScriptExecutionDuration() const;
-    unsigned long long parseBlockedOnScriptExecutionFromDocumentWriteDuration()
-        const;
-    unsigned long long authorStyleSheetParseDurationBeforeFCP() const;
-    unsigned long long updateStyleDurationBeforeFCP() const;
 
     ScriptValue toJSONForBinding(ScriptState*) const;
 
@@ -123,9 +89,6 @@ private:
     explicit PerformanceTiming(LocalFrame*);
 
     const DocumentTiming* documentTiming() const;
-    const CSSTiming* cssTiming() const;
-    const DocumentParserTiming* documentParserTiming() const;
-    const PaintTiming* paintTiming() const;
     DocumentLoader* documentLoader() const;
     DocumentLoadTiming* documentLoadTiming() const;
     ResourceLoadTiming* resourceLoadTiming() const;

@@ -23,46 +23,64 @@
 #define SVGFitToViewBox_h
 
 #include "core/SVGNames.h"
+#include "core/dom/Document.h"
 #include "core/dom/QualifiedName.h"
 #include "core/svg/SVGAnimatedPreserveAspectRatio.h"
 #include "core/svg/SVGAnimatedRect.h"
+#include "core/svg/SVGDocumentExtensions.h"
+#include "core/svg/SVGParsingError.h"
 #include "core/svg/SVGPreserveAspectRatio.h"
 #include "core/svg/SVGRect.h"
 #include "platform/heap/Handle.h"
+#include "wtf/HashSet.h"
 
 namespace blink {
 
 class AffineTransform;
+class Document;
 
-class SVGFitToViewBox : public GarbageCollectedMixin {
+class SVGFitToViewBox : public WillBeGarbageCollectedMixin {
 public:
-    static AffineTransform viewBoxToViewTransform(const FloatRect& viewBoxRect,
-        SVGPreserveAspectRatio*,
-        float viewWidth,
-        float viewHeight);
+    enum PropertyMapPolicy {
+        PropertyMapPolicyAdd,
+        PropertyMapPolicySkip,
+    };
+
+    static AffineTransform viewBoxToViewTransform(const FloatRect& viewBoxRect, PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio>, float viewWidth, float viewHeight);
 
     static bool isKnownAttribute(const QualifiedName&);
+    static void addSupportedAttributes(HashSet<QualifiedName>&);
 
-    bool hasEmptyViewBox() const
+    bool parseAttribute(const QualifiedName& name, const AtomicString& value, Document& document, SVGParsingError& parseError)
     {
-        return m_viewBox->currentValue()->isValid() && m_viewBox->currentValue()->value().isEmpty();
+        if (name == SVGNames::viewBoxAttr) {
+            m_viewBox->setBaseValueAsString(value, parseError);
+            return true;
+        }
+        if (name == SVGNames::preserveAspectRatioAttr) {
+            m_preserveAspectRatio->setBaseValueAsString(value, parseError);
+            return true;
+        }
+        return false;
     }
+
+    bool hasEmptyViewBox() const { return m_viewBox->currentValue()->isValid() && m_viewBox->currentValue()->value().isEmpty(); }
 
     // JS API
     SVGAnimatedRect* viewBox() const { return m_viewBox.get(); }
-    SVGAnimatedPreserveAspectRatio* preserveAspectRatio() const
-    {
-        return m_preserveAspectRatio.get();
-    }
+    SVGAnimatedPreserveAspectRatio* preserveAspectRatio() const { return m_preserveAspectRatio.get(); }
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    explicit SVGFitToViewBox(SVGElement*);
+    explicit SVGFitToViewBox(SVGElement*, PropertyMapPolicy = PropertyMapPolicyAdd);
+    void updateViewBox(const FloatRect&);
+    void clearViewBox() { m_viewBox = nullptr; }
+    void clearPreserveAspectRatio() { m_preserveAspectRatio = nullptr; }
 
 private:
-    Member<SVGAnimatedRect> m_viewBox;
-    Member<SVGAnimatedPreserveAspectRatio> m_preserveAspectRatio;
+    RefPtrWillBeMember<SVGAnimatedRect> m_viewBox;
+    RefPtrWillBeMember<SVGAnimatedPreserveAspectRatio> m_preserveAspectRatio;
 };
 
 } // namespace blink

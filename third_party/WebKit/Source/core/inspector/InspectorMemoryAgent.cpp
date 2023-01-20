@@ -28,24 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/inspector/InspectorMemoryAgent.h"
 
-#include "platform/InstanceCounters.h"
+#include "core/inspector/InstanceCounters.h"
+#include "wtf/OwnPtr.h"
 
 namespace blink {
 
-InspectorMemoryAgent::~InspectorMemoryAgent() { }
+InspectorMemoryAgent::~InspectorMemoryAgent()
+{
+}
 
-Response InspectorMemoryAgent::getDOMCounters(int* documents,
-    int* nodes,
-    int* jsEventListeners)
+void InspectorMemoryAgent::getDOMCounters(ErrorString*, int* documents, int* nodes, int* jsEventListeners)
 {
     *documents = InstanceCounters::counterValue(InstanceCounters::DocumentCounter);
     *nodes = InstanceCounters::counterValue(InstanceCounters::NodeCounter);
     *jsEventListeners = InstanceCounters::counterValue(InstanceCounters::JSEventListenerCounter);
-    return Response::OK();
 }
 
-InspectorMemoryAgent::InspectorMemoryAgent() = default;
+InspectorMemoryAgent::InspectorMemoryAgent()
+    : InspectorBaseAgent<InspectorMemoryAgent, InspectorFrontend::Memory>("Memory")
+{
+}
 
 } // namespace blink
+

@@ -9,9 +9,15 @@
 
 #include "../include/core/SkCanvas.h"
 #include "../include/core/SkPicture.h"
+<<<<<<< HEAD
 #include "../include/core/SkPictureRecorder.h"
 #include "../include/core/SkStream.h"
 #include "../include/core/SkString.h"
+=======
+#include "../include/core/SkStream.h"
+#include "../include/core/SkString.h"
+#include "../include/core/SkPictureRecorder.h"
+>>>>>>> miniblink49
 #include <cstring>
 
 // Verify that replay of a recording into a clipped canvas
@@ -22,10 +28,15 @@
 namespace {
 
 class Drawer {
+<<<<<<< HEAD
 public:
     explicit Drawer()
         : fImageInfo(SkImageInfo::MakeN32Premul(200, 100))
     {
+=======
+ public:
+    explicit Drawer() : fImageInfo(SkImageInfo::MakeN32Premul(200, 100)) {
+>>>>>>> miniblink49
         fCircleBM.allocPixels(SkImageInfo::MakeN32Premul(100, 100));
         SkCanvas canvas(fCircleBM);
         canvas.clear(0xffffffff);
@@ -36,8 +47,12 @@ public:
 
     const SkImageInfo& imageInfo() const { return fImageInfo; }
 
+<<<<<<< HEAD
     void draw(SkCanvas* canvas, const SkRect& clipRect, SkXfermode::Mode mode) const
     {
+=======
+    void draw(SkCanvas* canvas, const SkRect& clipRect, SkXfermode::Mode mode) const {
+>>>>>>> miniblink49
         SkPaint greenPaint;
         greenPaint.setColor(0xff008000);
         SkPaint blackPaint;
@@ -48,11 +63,16 @@ public:
         layerPaint.setColor(0xff000000);
         layerPaint.setXfermodeMode(mode);
         SkRect canvasRect(SkRect::MakeWH(SkIntToScalar(fImageInfo.width()),
+<<<<<<< HEAD
             SkIntToScalar(fImageInfo.height())));
+=======
+                                         SkIntToScalar(fImageInfo.height())));
+>>>>>>> miniblink49
 
         canvas->clipRect(clipRect);
         canvas->clear(0xff000000);
 
+<<<<<<< HEAD
         canvas->saveLayer(nullptr, &blackPaint);
         canvas->drawRect(canvasRect, greenPaint);
         canvas->saveLayer(nullptr, &layerPaint);
@@ -62,31 +82,60 @@ public:
     }
 
 private:
+=======
+        canvas->saveLayer(NULL, &blackPaint);
+            canvas->drawRect(canvasRect, greenPaint);
+            canvas->saveLayer(NULL, &layerPaint);
+                canvas->drawBitmapRect(fCircleBM, SkRect::MakeXYWH(20,20,60,60), &blackPaint);
+            canvas->restore();
+        canvas->restore();
+    }
+
+ private:
+>>>>>>> miniblink49
     const SkImageInfo fImageInfo;
     SkBitmap fCircleBM;
 };
 
 class RecordingStrategy {
+<<<<<<< HEAD
 public:
     virtual ~RecordingStrategy() { }
     virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
         const SkRect& intoClip,
         SkXfermode::Mode)
         = 0;
+=======
+ public:
+    virtual ~RecordingStrategy() {}
+    virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
+                                            const SkRect& intoClip,
+                                            SkXfermode::Mode) = 0;
+>>>>>>> miniblink49
 };
 
 class BitmapBackedCanvasStrategy : public RecordingStrategy {
     // This version just draws into a bitmap-backed canvas.
+<<<<<<< HEAD
 public:
     BitmapBackedCanvasStrategy(const SkImageInfo& imageInfo)
     {
+=======
+ public:
+    BitmapBackedCanvasStrategy(const SkImageInfo& imageInfo) {
+>>>>>>> miniblink49
         fBitmap.allocPixels(imageInfo);
     }
 
     virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
+<<<<<<< HEAD
         const SkRect& intoClip,
         SkXfermode::Mode mode)
     {
+=======
+                                            const SkRect& intoClip,
+                                            SkXfermode::Mode mode) {
+>>>>>>> miniblink49
         SkCanvas canvas(fBitmap);
         canvas.clear(0xffffffff);
         // Note that the scene is drawn just into the clipped region!
@@ -95,7 +144,11 @@ public:
         return fBitmap;
     }
 
+<<<<<<< HEAD
 private:
+=======
+ private:
+>>>>>>> miniblink49
     SkBitmap fBitmap;
 };
 
@@ -103,15 +156,23 @@ class PictureStrategy : public RecordingStrategy {
     // This version draws the entire scene into an SkPictureRecorder.
     // Then it then replays the scene through a clip rectangle.
     // This backend proved to be buggy.
+<<<<<<< HEAD
 public:
     PictureStrategy(const SkImageInfo& imageInfo)
     {
         fBitmap.allocPixels(imageInfo);
         fWidth = imageInfo.width();
+=======
+ public:
+    PictureStrategy(const SkImageInfo& imageInfo) {
+        fBitmap.allocPixels(imageInfo);
+        fWidth  = imageInfo.width();
+>>>>>>> miniblink49
         fHeight = imageInfo.height();
     }
 
     virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
+<<<<<<< HEAD
         const SkRect& intoClip,
         SkXfermode::Mode mode)
     {
@@ -123,6 +184,18 @@ public:
             &factory);
         drawer.draw(canvas, canvasRect, mode);
         sk_sp<SkPicture> picture(recorder.finishRecordingAsPicture());
+=======
+                                            const SkRect& intoClip,
+                                            SkXfermode::Mode mode) {
+        SkRTreeFactory factory;
+        SkPictureRecorder recorder;
+        SkRect canvasRect(SkRect::MakeWH(SkIntToScalar(fWidth),SkIntToScalar(fHeight)));
+        SkCanvas* canvas = recorder.beginRecording(SkIntToScalar(fWidth),
+                                                   SkIntToScalar(fHeight),
+                                                   &factory);
+        drawer.draw(canvas, canvasRect, mode);
+        SkAutoTUnref<SkPicture> picture(recorder.endRecording());
+>>>>>>> miniblink49
 
         SkCanvas replayCanvas(fBitmap);
         replayCanvas.clear(0xffffffff);
@@ -131,7 +204,11 @@ public:
         return fBitmap;
     }
 
+<<<<<<< HEAD
 private:
+=======
+ private:
+>>>>>>> miniblink49
     SkBitmap fBitmap;
     int fWidth;
     int fHeight;
@@ -139,8 +216,13 @@ private:
 
 } // namespace
 
+<<<<<<< HEAD
 DEF_TEST(SkRecordingAccuracyXfermode, reporter)
 {
+=======
+
+DEF_TEST(SkRecordingAccuracyXfermode, reporter) {
+>>>>>>> miniblink49
 #define FINEGRAIN 0
     const Drawer drawer;
 
@@ -165,12 +247,20 @@ DEF_TEST(SkRecordingAccuracyXfermode, reporter)
         // The pixel arrays should match.
 #if FINEGRAIN
         REPORTER_ASSERT(reporter,
+<<<<<<< HEAD
             0 == memcmp(goldenBM.getPixels(), pictureBM.getPixels(), pixelsSize));
+=======
+                        0 == memcmp(goldenBM.getPixels(), pictureBM.getPixels(), pixelsSize));
+>>>>>>> miniblink49
 #else
         if (memcmp(goldenBM.getPixels(), pictureBM.getPixels(), pixelsSize)) {
             numErrors++;
             errors.appendf("For SkXfermode %d %s:    SkPictureRecorder bitmap is wrong\n",
+<<<<<<< HEAD
                 iMode, SkXfermode::ModeName(mode));
+=======
+                           iMode, SkXfermode::ModeName(mode));
+>>>>>>> miniblink49
         }
 #endif
     }

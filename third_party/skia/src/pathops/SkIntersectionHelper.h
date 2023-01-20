@@ -4,9 +4,12 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #ifndef SkIntersectionHelper_DEFINED
 #define SkIntersectionHelper_DEFINED
 
+=======
+>>>>>>> miniblink49
 #include "SkOpContour.h"
 #include "SkOpSegment.h"
 #include "SkPath.h"
@@ -26,6 +29,7 @@ public:
         kCubic_Segment = SkPath::kCubic_Verb,
     };
 
+<<<<<<< HEAD
     bool advance()
     {
         fSegment = fSegment->next();
@@ -75,6 +79,47 @@ public:
     SegmentType segmentType() const
     {
         SegmentType type = (SegmentType)fSegment->verb();
+=======
+    bool advance() {
+        fSegment = fSegment->next();
+        return fSegment != NULL;
+    }
+
+    SkScalar bottom() const {
+        return bounds().fBottom;
+    }
+
+    const SkPathOpsBounds& bounds() const {
+        return fSegment->bounds();
+    }
+
+    SkOpContour* contour() const {
+        return fSegment->contour();
+    }
+
+    void init(SkOpContour* contour) {
+        fSegment = contour->first();
+    }
+
+    SkScalar left() const {
+        return bounds().fLeft;
+    }
+
+    const SkPoint* pts() const {
+        return fSegment->pts();
+    }
+
+    SkScalar right() const {
+        return bounds().fRight;
+    }
+
+    SkOpSegment* segment() const {
+        return fSegment;
+    }
+
+    SegmentType segmentType() const {
+        SegmentType type = (SegmentType) fSegment->verb();
+>>>>>>> miniblink49
         if (type != kLine_Segment) {
             return type;
         }
@@ -87,6 +132,7 @@ public:
         return kLine_Segment;
     }
 
+<<<<<<< HEAD
     bool startAfter(const SkIntersectionHelper& after)
     {
         fSegment = after.fSegment->next();
@@ -120,11 +166,42 @@ public:
 
     bool yFlipped() const
     {
+=======
+    bool startAfter(const SkIntersectionHelper& after) {
+        fSegment = after.fSegment->next();
+        return fSegment != NULL;
+    }
+
+    SkScalar top() const {
+        return bounds().fTop;
+    }
+
+    SkScalar weight() const {
+        return fSegment->weight();
+    }
+
+    SkScalar x() const {
+        return bounds().fLeft;
+    }
+
+    bool xFlipped() const {
+        return x() != pts()[0].fX;
+    }
+
+    SkScalar y() const {
+        return bounds().fTop;
+    }
+
+    bool yFlipped() const {
+>>>>>>> miniblink49
         return y() != pts()[0].fY;
     }
 
 private:
     SkOpSegment* fSegment;
 };
+<<<<<<< HEAD
 
 #endif
+=======
+>>>>>>> miniblink49

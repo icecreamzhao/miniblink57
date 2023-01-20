@@ -28,10 +28,14 @@
 #define IntPoint_h
 
 #include "platform/geometry/IntSize.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/MathExtras.h"
 #include "wtf/SaturatedArithmetic.h"
+=======
+#include "wtf/MathExtras.h"
+>>>>>>> miniblink49
 #include "wtf/VectorTraits.h"
 
 #if OS(MACOSX)
@@ -45,6 +49,7 @@ typedef struct CGPoint CGPoint;
 namespace blink {
 
 class PLATFORM_EXPORT IntPoint {
+<<<<<<< HEAD
     USING_FAST_MALLOC(IntPoint);
 
 public:
@@ -63,6 +68,12 @@ public:
         , m_y(size.height())
     {
     }
+=======
+public:
+    IntPoint() : m_x(0), m_y(0) { }
+    IntPoint(int x, int y) : m_x(x), m_y(y) { }
+    explicit IntPoint(const IntSize& size) : m_x(size.width()), m_y(size.height()) { }
+>>>>>>> miniblink49
 
     static IntPoint zero() { return IntPoint(); }
 
@@ -74,6 +85,7 @@ public:
 
     void move(const IntSize& s) { move(s.width(), s.height()); }
     void moveBy(const IntPoint& offset) { move(offset.x(), offset.y()); }
+<<<<<<< HEAD
     void move(int dx, int dy)
     {
         m_x += dx;
@@ -85,6 +97,9 @@ public:
         m_y = SaturatedAddition(m_y, dy);
     }
 
+=======
+    void move(int dx, int dy) { m_x += dx; m_y += dy; }
+>>>>>>> miniblink49
     void scale(float sx, float sy)
     {
         m_x = lroundf(static_cast<float>(m_x * sx));
@@ -105,6 +120,7 @@ public:
 
     int distanceSquaredToPoint(const IntPoint&) const;
 
+<<<<<<< HEAD
     void clampNegativeToZero() { *this = expandedTo(zero()); }
 
     IntPoint transposedPoint() const { return IntPoint(m_y, m_x); }
@@ -117,12 +133,33 @@ public:
 #if defined(__OBJC__) && !defined(NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES)
     explicit IntPoint(
         const NSPoint&); // don't do this implicitly since it's lossy
+=======
+    void clampNegativeToZero()
+    {
+        *this = expandedTo(zero());
+    }
+
+    IntPoint transposedPoint() const
+    {
+        return IntPoint(m_y, m_x);
+    }
+
+#if OS(MACOSX)
+    explicit IntPoint(const CGPoint&); // don't do this implicitly since it's lossy
+    operator CGPoint() const;
+
+#if defined(__OBJC__) && !defined(NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES)
+    explicit IntPoint(const NSPoint&); // don't do this implicitly since it's lossy
+>>>>>>> miniblink49
     operator NSPoint() const;
 #endif
 #endif
 
+<<<<<<< HEAD
     String toString() const;
 
+=======
+>>>>>>> miniblink49
 private:
     int m_x, m_y;
 };
@@ -184,10 +221,13 @@ inline int IntPoint::distanceSquaredToPoint(const IntPoint& point) const
     return ((*this) - point).diagonalLengthSquared();
 }
 
+<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const IntPoint&, std::ostream*);
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(blink::IntPoint);

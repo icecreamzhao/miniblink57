@@ -23,11 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/fileapi/FileList.h"
+
 
 namespace blink {
 
-FileList::FileList() { }
+FileList::FileList()
+{
+}
 
 File* FileList::item(unsigned index) const
 {
@@ -40,11 +44,11 @@ Vector<String> FileList::pathsForUserVisibleFiles() const
 {
     Vector<String> paths;
     for (unsigned i = 0; i < m_files.size(); ++i) {
-        if (m_files[i]->getUserVisibility() == File::IsUserVisible) {
+        if (m_files[i]->userVisibility() == File::IsUserVisible) {
             if (m_files[i]->hasBackingFile())
-                paths.push_back(m_files[i]->path());
+                paths.append(m_files[i]->path());
             else
-                paths.push_back(m_files[i]->name());
+                paths.append(m_files[i]->name());
         }
     }
 

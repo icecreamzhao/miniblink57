@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
- * (http://www.torchmobile.com/)
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  * Copyright (C) 2009 Adam Barth. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,44 +32,69 @@
 #define NavigationScheduler_h
 
 #include "core/CoreExport.h"
-#include "platform/WebTaskRunner.h"
+#include "platform/Timer.h"
 #include "platform/heap/Handle.h"
-#include "public/platform/WebScheduler.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
-#include <memory>
 
 namespace blink {
 
 class Document;
 class FormSubmission;
 class LocalFrame;
+class NavigationScheduler;
 class ScheduledNavigation;
 
-class CORE_EXPORT NavigationScheduler final
-    : public GarbageCollectedFinalized<NavigationScheduler> {
-    WTF_MAKE_NONCOPYABLE(NavigationScheduler);
-
+class NavigationDisablerForBeforeUnload {
+    WTF_MAKE_NONCOPYABLE(NavigationDisablerForBeforeUnload);
+    STACK_ALLOCATED();
 public:
-    static NavigationScheduler* create(LocalFrame* frame)
+    NavigationDisablerForBeforeUnload()
     {
-        return new NavigationScheduler(frame);
+        s_navigationDisableCount++;
     }
+    ~NavigationDisablerForBeforeUnload()
+    {
+        ASSERT(s_navigationDisableCount);
+        s_navigationDisableCount--;
+    }
+    static bool isNavigationAllowed() { return !s_navigationDisableCount; }
 
+private:
+    static unsigned s_navigationDisableCount;
+};
+
+class FrameNavigationDisabler {
+    WTF_MAKE_NONCOPYABLE(FrameNavigationDisabler);
+    STACK_ALLOCATED();
+public:
+    explicit FrameNavigationDisabler(LocalFrame*);
+    ~FrameNavigationDisabler();
+
+private:
+    FrameNavigationDisabler() = delete;
+
+    NavigationScheduler& m_navigationScheduler;
+};
+
+class CORE_EXPORT NavigationScheduler final {
+    WTF_MAKE_NONCOPYABLE(NavigationScheduler);
+    DISALLOW_ALLOCATION();
+public:
+    explicit NavigationScheduler(LocalFrame*);
     ~NavigationScheduler();
 
     bool locationChangePending();
-    bool isNavigationScheduledWithin(double intervalInSeconds) const;
 
     void scheduleRedirect(double delay, const String& url);
-    void scheduleLocationChange(Document*,
-        const String& url,
-        bool replacesCurrentItem = true);
-    void schedulePageBlock(Document*, int reason);
-    void scheduleFormSubmission(Document*, FormSubmission*);
+    void scheduleLocationChange(Document*, const String& url, bool lockBackForwardList = true);
+    void schedulePageBlock(Document*);
+    void scheduleFormSubmission(Document*, PassRefPtrWillBeRawPtr<FormSubmission>);
     void scheduleReload();
 
     void startTimer();
@@ -79,39 +103,24 @@ public:
     DECLARE_TRACE();
 
 private:
-    explicit NavigationScheduler(LocalFrame*);
+    friend class FrameNavigationDisabler;
+
+    void disableFrameNavigation() { ++m_navigationDisableCount; }
+    void enableFrameNavigation() { --m_navigationDisableCount; }
+    bool isFrameNavigationAllowed() const { return !m_navigationDisableCount; }
 
     bool shouldScheduleReload() const;
     bool shouldScheduleNavigation(const String& url) const;
 
-    void navigateTask();
-    void schedule(ScheduledNavigation*);
+    void timerFired(Timer<NavigationScheduler>*);
+    void schedule(PassOwnPtrWillBeRawPtr<ScheduledNavigation>);
 
-    static bool mustReplaceCurrentItem(LocalFrame* targetFrame);
+    static bool mustLockBackForwardList(LocalFrame* targetFrame);
 
-    Member<LocalFrame> m_frame;
-    TaskHandle m_navigateTaskHandle;
-    Member<ScheduledNavigation> m_redirect;
-
-    // Exists because we can't deref m_frame in destructor.
-    WebScheduler::NavigatingFrameType m_frameType;
-};
-
-class NavigationDisablerForBeforeUnload {
-    WTF_MAKE_NONCOPYABLE(NavigationDisablerForBeforeUnload);
-    STACK_ALLOCATED();
-
-public:
-    NavigationDisablerForBeforeUnload() { s_navigationDisableCount++; }
-    ~NavigationDisablerForBeforeUnload()
-    {
-        DCHECK(s_navigationDisableCount);
-        s_navigationDisableCount--;
-    }
-    static bool isNavigationAllowed() { return !s_navigationDisableCount; }
-
-private:
-    static unsigned s_navigationDisableCount;
+    RawPtrWillBeMember<LocalFrame> m_frame;
+    Timer<NavigationScheduler> m_timer;
+    OwnPtrWillBeMember<ScheduledNavigation> m_redirect;
+    int m_navigationDisableCount;
 };
 
 } // namespace blink

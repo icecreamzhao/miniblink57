@@ -43,8 +43,15 @@ typedef ImageDecoder WebImageDecoderPrivate;
 
 class WebImageDecoder : public WebNonCopyable {
 public:
+<<<<<<< HEAD
     enum Type { TypeBMP,
         TypeICO };
+=======
+    enum Type {
+        TypeBMP,
+        TypeICO
+    };
+>>>>>>> miniblink49
 
     ~WebImageDecoder() { reset(); }
 
@@ -66,8 +73,12 @@ public:
     // Returns the size of the image.
     BLINK_EXPORT WebSize size() const;
 
+<<<<<<< HEAD
     // Gives frame count for the image. For multiple frames, decoder scans the
     // image data for the count.
+=======
+    // Gives frame count for the image. For multiple frames, decoder scans the image data for the count.
+>>>>>>> miniblink49
     BLINK_EXPORT size_t frameCount() const;
 
     // Returns if the frame at given index is completely decoded.

@@ -28,6 +28,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/Threading.h"
 
 #if OS(POSIX)
@@ -35,15 +36,38 @@
 #include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
 #include "wtf/HashMap.h"
+=======
+#include "config.h"
+#include "wtf/Threading.h"
+
+#if USE(PTHREADS)
+
+#include "wtf/DateMath.h"
+#include "wtf/HashMap.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/StdLibExtras.h"
 #include "wtf/ThreadSpecific.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/WTFThreadData.h"
+<<<<<<< HEAD
 #include "wtf/dtoa/double-conversion.h"
 #include <errno.h>
 #include <limits.h>
 #include <sched.h>
 #include <sys/time.h>
+=======
+#include "wtf/dtoa.h"
+#include "wtf/dtoa/cached-powers.h"
+#include <errno.h>
+
+#if !COMPILER(MSVC)
+#include <limits.h>
+#include <sched.h>
+#include <sys/time.h>
+#endif
+>>>>>>> miniblink49
 
 #if OS(MACOSX)
 #include <objc/objc-auto.h>
@@ -59,6 +83,7 @@
 
 namespace WTF {
 
+<<<<<<< HEAD
 namespace internal {
 
     ThreadIdentifier currentThreadSyscall()
@@ -76,19 +101,32 @@ namespace internal {
 
 } // namespace internal
 
+=======
+>>>>>>> miniblink49
 static Mutex* atomicallyInitializedStaticMutex;
 
 void initializeThreading()
 {
     // This should only be called once.
+<<<<<<< HEAD
     DCHECK(!atomicallyInitializedStaticMutex);
 
     // StringImpl::empty() does not construct its static string in a threadsafe
     // fashion, so ensure it has been initialized from here.
+=======
+    ASSERT(!atomicallyInitializedStaticMutex);
+
+    // StringImpl::empty() does not construct its static string in a threadsafe fashion,
+    // so ensure it has been initialized from here.
+>>>>>>> miniblink49
     StringImpl::empty();
     StringImpl::empty16Bit();
     atomicallyInitializedStaticMutex = new Mutex;
     wtfThreadData();
+<<<<<<< HEAD
+=======
+    s_dtoaP5Mutex = new Mutex;
+>>>>>>> miniblink49
     initializeDates();
     // Force initialization of static DoubleToStringConverter converter variable
     // inside EcmaScriptConverter function while we are in single thread mode.
@@ -97,7 +135,11 @@ void initializeThreading()
 
 void lockAtomicallyInitializedStaticMutex()
 {
+<<<<<<< HEAD
     DCHECK(atomicallyInitializedStaticMutex);
+=======
+    ASSERT(atomicallyInitializedStaticMutex);
+>>>>>>> miniblink49
     atomicallyInitializedStaticMutex->lock();
 }
 
@@ -108,7 +150,19 @@ void unlockAtomicallyInitializedStaticMutex()
 
 ThreadIdentifier currentThread()
 {
+<<<<<<< HEAD
     return wtfThreadData().threadId();
+=======
+#if OS(MACOSX)
+    return pthread_mach_thread_np(pthread_self());
+#elif OS(LINUX)
+    return syscall(__NR_gettid);
+#elif OS(ANDROID)
+    return gettid();
+#else
+    return reinterpret_cast<uintptr_t>(pthread_self());
+#endif
+>>>>>>> miniblink49
 }
 
 MutexBase::MutexBase(bool recursive)
@@ -118,8 +172,13 @@ MutexBase::MutexBase(bool recursive)
     pthread_mutexattr_settype(&attr, recursive ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
 
     int result = pthread_mutex_init(&m_mutex.m_internalMutex, &attr);
+<<<<<<< HEAD
     DCHECK_EQ(result, 0);
 #if DCHECK_IS_ON()
+=======
+    ASSERT_UNUSED(result, !result);
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     m_mutex.m_recursionCount = 0;
 #endif
 
@@ -129,26 +188,44 @@ MutexBase::MutexBase(bool recursive)
 MutexBase::~MutexBase()
 {
     int result = pthread_mutex_destroy(&m_mutex.m_internalMutex);
+<<<<<<< HEAD
     DCHECK_EQ(result, 0);
+=======
+    ASSERT_UNUSED(result, !result);
+>>>>>>> miniblink49
 }
 
 void MutexBase::lock()
 {
     int result = pthread_mutex_lock(&m_mutex.m_internalMutex);
+<<<<<<< HEAD
     DCHECK_EQ(result, 0);
 #if DCHECK_IS_ON()
+=======
+    ASSERT_UNUSED(result, !result);
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     ++m_mutex.m_recursionCount;
 #endif
 }
 
 void MutexBase::unlock()
 {
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
     DCHECK(m_mutex.m_recursionCount);
     --m_mutex.m_recursionCount;
 #endif
     int result = pthread_mutex_unlock(&m_mutex.m_internalMutex);
     DCHECK_EQ(result, 0);
+=======
+#if ENABLE(ASSERT)
+    ASSERT(m_mutex.m_recursionCount);
+    --m_mutex.m_recursionCount;
+#endif
+    int result = pthread_mutex_unlock(&m_mutex.m_internalMutex);
+    ASSERT_UNUSED(result, !result);
+>>>>>>> miniblink49
 }
 
 // There is a separate tryLock implementation for the Mutex and the
@@ -160,10 +237,17 @@ bool Mutex::tryLock()
 {
     int result = pthread_mutex_trylock(&m_mutex.m_internalMutex);
     if (result == 0) {
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
         // The Mutex class is not recursive, so the recursionCount should be
         // zero after getting the lock.
         DCHECK(!m_mutex.m_recursionCount);
+=======
+#if ENABLE(ASSERT)
+        // The Mutex class is not recursive, so the recursionCount should be
+        // zero after getting the lock.
+        ASSERT(!m_mutex.m_recursionCount);
+>>>>>>> miniblink49
         ++m_mutex.m_recursionCount;
 #endif
         return true;
@@ -171,7 +255,11 @@ bool Mutex::tryLock()
     if (result == EBUSY)
         return false;
 
+<<<<<<< HEAD
     NOTREACHED();
+=======
+    ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
     return false;
 }
 
@@ -179,7 +267,11 @@ bool RecursiveMutex::tryLock()
 {
     int result = pthread_mutex_trylock(&m_mutex.m_internalMutex);
     if (result == 0) {
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
         ++m_mutex.m_recursionCount;
 #endif
         return true;
@@ -187,13 +279,21 @@ bool RecursiveMutex::tryLock()
     if (result == EBUSY)
         return false;
 
+<<<<<<< HEAD
     NOTREACHED();
+=======
+    ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
     return false;
 }
 
 ThreadCondition::ThreadCondition()
 {
+<<<<<<< HEAD
     pthread_cond_init(&m_condition, nullptr);
+=======
+    pthread_cond_init(&m_condition, NULL);
+>>>>>>> miniblink49
 }
 
 ThreadCondition::~ThreadCondition()
@@ -205,8 +305,13 @@ void ThreadCondition::wait(MutexBase& mutex)
 {
     PlatformMutex& platformMutex = mutex.impl();
     int result = pthread_cond_wait(&m_condition, &platformMutex.m_internalMutex);
+<<<<<<< HEAD
     DCHECK_EQ(result, 0);
 #if DCHECK_IS_ON()
+=======
+    ASSERT_UNUSED(result, !result);
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     ++platformMutex.m_recursionCount;
 #endif
 }
@@ -229,9 +334,14 @@ bool ThreadCondition::timedWait(MutexBase& mutex, double absoluteTime)
     targetTime.tv_nsec = timeNanoseconds;
 
     PlatformMutex& platformMutex = mutex.impl();
+<<<<<<< HEAD
     int result = pthread_cond_timedwait(
         &m_condition, &platformMutex.m_internalMutex, &targetTime);
 #if DCHECK_IS_ON()
+=======
+    int result = pthread_cond_timedwait(&m_condition, &platformMutex.m_internalMutex, &targetTime);
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     ++platformMutex.m_recursionCount;
 #endif
     return result == 0;
@@ -240,16 +350,27 @@ bool ThreadCondition::timedWait(MutexBase& mutex, double absoluteTime)
 void ThreadCondition::signal()
 {
     int result = pthread_cond_signal(&m_condition);
+<<<<<<< HEAD
     DCHECK_EQ(result, 0);
+=======
+    ASSERT_UNUSED(result, !result);
+>>>>>>> miniblink49
 }
 
 void ThreadCondition::broadcast()
 {
     int result = pthread_cond_broadcast(&m_condition);
+<<<<<<< HEAD
     DCHECK_EQ(result, 0);
 }
 
 #if DCHECK_IS_ON()
+=======
+    ASSERT_UNUSED(result, !result);
+}
+
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
 static bool s_threadCreated = false;
 
 bool isAtomicallyInitializedStaticMutexLockHeld()
@@ -270,4 +391,8 @@ void willCreateThread()
 
 } // namespace WTF
 
+<<<<<<< HEAD
 #endif // OS(POSIX)
+=======
+#endif // USE(PTHREADS)
+>>>>>>> miniblink49

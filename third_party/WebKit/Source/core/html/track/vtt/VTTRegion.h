@@ -37,6 +37,8 @@
 #include "platform/Timer.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/heap/Handle.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
@@ -46,12 +48,13 @@ class HTMLDivElement;
 class VTTCueBox;
 class VTTScanner;
 
-class VTTRegion final : public GarbageCollectedFinalized<VTTRegion>,
-                        public ScriptWrappable {
+class VTTRegion final : public RefCountedWillBeGarbageCollectedFinalized<VTTRegion>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static VTTRegion* create() { return new VTTRegion; }
+    static PassRefPtrWillBeRawPtr<VTTRegion> create()
+    {
+        return adoptRefWillBeNoop(new VTTRegion());
+    }
 
     virtual ~VTTRegion();
 
@@ -89,9 +92,9 @@ public:
 
     bool isScrollingRegion() { return m_scroll; }
 
-    HTMLDivElement* getDisplayTree(Document&);
+    PassRefPtrWillBeRawPtr<HTMLDivElement> getDisplayTree(Document&);
 
-    void appendVTTCueBox(VTTCueBox*);
+    void appendVTTCueBox(PassRefPtrWillBeRawPtr<VTTCueBox>);
     void displayLastVTTCueBox();
     void willRemoveVTTCueBox(VTTCueBox*);
 
@@ -105,7 +108,7 @@ private:
     // The timer is needed to continue processing when cue scrolling ended.
     void startTimer();
     void stopTimer();
-    void scrollTimerFired(TimerBase*);
+    void scrollTimerFired(Timer<VTTRegion>*);
 
     enum RegionSetting {
         None,
@@ -133,14 +136,14 @@ private:
 
     // The cue container is the container that is scrolled up to obtain the
     // effect of scrolling cues when this is enabled for the regions.
-    Member<HTMLDivElement> m_cueContainer;
-    Member<HTMLDivElement> m_regionDisplayTree;
+    RefPtrWillBeMember<HTMLDivElement> m_cueContainer;
+    RefPtrWillBeMember<HTMLDivElement> m_regionDisplayTree;
 
     // The member variable track can be a raw pointer as it will never
     // reference a destroyed TextTrack, as this member variable
     // is cleared in the TextTrack destructor and it is generally
     // set/reset within the addRegion and removeRegion methods.
-    Member<TextTrack> m_track;
+    RawPtrWillBeMember<TextTrack> m_track;
 
     // Keep track of the current numeric value of the css "top" property.
     double m_currentTop;

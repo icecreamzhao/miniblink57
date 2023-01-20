@@ -31,7 +31,7 @@
 #include "wtf/text/StringHash.h"
 
 #include <libxml/parserInternals.h>
-#include <third_party/libxslt/libxslt/documents.h>
+#include "third_party/libxslt/libxslt/documents.h"
 
 namespace blink {
 
@@ -39,42 +39,30 @@ class LocalFrame;
 class Document;
 class DocumentFragment;
 
-class XSLTProcessor final : public GarbageCollectedFinalized<XSLTProcessor>,
-                            public ScriptWrappable {
+class XSLTProcessor : public GarbageCollectedFinalized<XSLTProcessor>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     static XSLTProcessor* create(Document& document)
     {
-        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
+        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
         return new XSLTProcessor(document);
     }
     ~XSLTProcessor();
 
-    void setXSLStyleSheet(XSLStyleSheet* styleSheet)
-    {
-        m_stylesheet = styleSheet;
-    }
-    bool transformToString(Node* source,
-        String& resultMIMEType,
-        String& resultString,
-        String& resultEncoding);
-    Document* createDocumentFromSource(const String& source,
-        const String& sourceEncoding,
-        const String& sourceMIMEType,
-        Node* sourceNode,
-        LocalFrame*);
+    void setXSLStyleSheet(PassRefPtrWillBeRawPtr<XSLStyleSheet> styleSheet) { m_stylesheet = styleSheet; }
+    bool transformToString(Node* source, String& resultMIMEType, String& resultString, String& resultEncoding);
+    PassRefPtrWillBeRawPtr<Document> createDocumentFromSource(const String& source, const String& sourceEncoding, const String& sourceMIMEType, Node* sourceNode, LocalFrame*);
 
     // DOM methods
-    void importStylesheet(Node* style) { m_stylesheetRootNode = style; }
-    DocumentFragment* transformToFragment(Node* source, Document* ouputDoc);
-    Document* transformToDocument(Node* source);
+    void importStylesheet(PassRefPtrWillBeRawPtr<Node> style)
+    {
+        m_stylesheetRootNode = style;
+    }
+    PassRefPtrWillBeRawPtr<DocumentFragment> transformToFragment(Node* source, Document* ouputDoc);
+    PassRefPtrWillBeRawPtr<Document> transformToDocument(Node* source);
 
-    void setParameter(const String& namespaceURI,
-        const String& localName,
-        const String& value);
-    String getParameter(const String& namespaceURI,
-        const String& localName) const;
+    void setParameter(const String& namespaceURI, const String& localName, const String& value);
+    String getParameter(const String& namespaceURI, const String& localName) const;
     void removeParameter(const String& namespaceURI, const String& localName);
     void clearParameters() { m_parameters.clear(); }
 
@@ -93,12 +81,11 @@ public:
 private:
     XSLTProcessor(Document& document)
         : m_document(&document)
-    {
-    }
+    { }
 
-    Member<XSLStyleSheet> m_stylesheet;
-    Member<Node> m_stylesheetRootNode;
-    Member<Document> m_document;
+    RefPtrWillBeMember<XSLStyleSheet> m_stylesheet;
+    RefPtrWillBeMember<Node> m_stylesheetRootNode;
+    RefPtrWillBeMember<Document> m_document;
     ParameterMap m_parameters;
 };
 

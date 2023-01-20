@@ -26,13 +26,24 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/image-decoders/webp/WEBPImageDecoder.h"
 
+=======
+#include "config.h"
+#include "platform/image-decoders/webp/WEBPImageDecoder.h"
+
+#if USE(QCMSLIB)
+#include "qcms.h"
+#endif
+
+>>>>>>> miniblink49
 #if CPU(BIG_ENDIAN) || CPU(MIDDLE_ENDIAN)
 #error Blink assumes a little-endian target.
 #endif
 
 #if SK_B32_SHIFT // Output little-endian RGBA pixels (Android).
+<<<<<<< HEAD
 inline WEBP_CSP_MODE outputMode(bool hasAlpha)
 {
     return hasAlpha ? MODE_rgbA : MODE_RGBA;
@@ -57,6 +68,44 @@ inline void findBlendRangeAtRow(const blink::IntRect& src,
     int& width2)
 {
     SECURITY_DCHECK(canvasY >= src.y() && canvasY < src.maxY());
+=======
+inline WEBP_CSP_MODE outputMode(bool hasAlpha) { return hasAlpha ? MODE_rgbA : MODE_RGBA; }
+#else // Output little-endian BGRA pixels.
+inline WEBP_CSP_MODE outputMode(bool hasAlpha) { return hasAlpha ? MODE_bgrA : MODE_BGRA; }
+#endif
+
+inline uint8_t blendChannel(uint8_t src, uint8_t srcA, uint8_t dst, uint8_t dstA, unsigned scale)
+{
+    unsigned blendUnscaled = src * srcA + dst * dstA;
+    ASSERT(blendUnscaled < (1ULL << 32) / scale);
+    return (blendUnscaled * scale) >> 24;
+}
+
+inline uint32_t blendSrcOverDstNonPremultiplied(uint32_t src, uint32_t dst)
+{
+    uint8_t srcA = SkGetPackedA32(src);
+    if (srcA == 0)
+        return dst;
+
+    uint8_t dstA = SkGetPackedA32(dst);
+    uint8_t dstFactorA = (dstA * SkAlpha255To256(255 - srcA)) >> 8;
+    ASSERT(srcA + dstFactorA < (1U << 8));
+    uint8_t blendA = srcA + dstFactorA;
+    unsigned scale = (1UL << 24) / blendA;
+
+    uint8_t blendR = blendChannel(SkGetPackedR32(src), srcA, SkGetPackedR32(dst), dstFactorA, scale);
+    uint8_t blendG = blendChannel(SkGetPackedG32(src), srcA, SkGetPackedG32(dst), dstFactorA, scale);
+    uint8_t blendB = blendChannel(SkGetPackedB32(src), srcA, SkGetPackedB32(dst), dstFactorA, scale);
+
+    return SkPackARGB32NoCheck(blendA, blendR, blendG, blendB);
+}
+
+// Returns two point ranges (<left, width> pairs) at row 'canvasY', that belong to 'src' but not 'dst'.
+// A point range is empty if the corresponding width is 0.
+inline void findBlendRangeAtRow(const blink::IntRect& src, const blink::IntRect& dst, int canvasY, int& left1, int& width1, int& left2, int& width2)
+{
+    ASSERT_WITH_SECURITY_IMPLICATION(canvasY >= src.y() && canvasY < src.maxY());
+>>>>>>> miniblink49
     left1 = -1;
     width1 = 0;
     left2 = -1;
@@ -79,6 +128,7 @@ inline void findBlendRangeAtRow(const blink::IntRect& src,
     }
 }
 
+<<<<<<< HEAD
 // alphaBlendPremultiplied and alphaBlendNonPremultiplied are separate methods,
 // even though they only differ by one line. This is done so that the compiler
 // can inline blendSrcOverDstPremultiplied() and blensSrcOverDstRaw() calls.
@@ -96,10 +146,21 @@ void alphaBlendPremultiplied(blink::ImageFrame& src,
         if (SkGetPackedA32(*pixel) != 0xff) {
             blink::ImageFrame::PixelData prevPixel = *dst.getAddr(canvasX, canvasY);
             blink::ImageFrame::blendSrcOverDstPremultiplied(pixel, prevPixel);
+=======
+void alphaBlendPremultiplied(blink::ImageFrame& src, blink::ImageFrame& dst, int canvasY, int left, int width)
+{
+    for (int x = 0; x < width; ++x) {
+        int canvasX = left + x;
+        blink::ImageFrame::PixelData& pixel = *src.getAddr(canvasX, canvasY);
+        if (SkGetPackedA32(pixel) != 0xff) {
+            blink::ImageFrame::PixelData prevPixel = *dst.getAddr(canvasX, canvasY);
+            pixel = SkPMSrcOver(pixel, prevPixel);
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 void alphaBlendNonPremultiplied(blink::ImageFrame& src,
     blink::ImageFrame& dst,
     int canvasY,
@@ -112,10 +173,21 @@ void alphaBlendNonPremultiplied(blink::ImageFrame& src,
         if (SkGetPackedA32(*pixel) != 0xff) {
             blink::ImageFrame::PixelData prevPixel = *dst.getAddr(canvasX, canvasY);
             blink::ImageFrame::blendSrcOverDstRaw(pixel, prevPixel);
+=======
+void alphaBlendNonPremultiplied(blink::ImageFrame& src, blink::ImageFrame& dst, int canvasY, int left, int width)
+{
+    for (int x = 0; x < width; ++x) {
+        int canvasX = left + x;
+        blink::ImageFrame::PixelData& pixel = *src.getAddr(canvasX, canvasY);
+        if (SkGetPackedA32(pixel) != 0xff) {
+            blink::ImageFrame::PixelData prevPixel = *dst.getAddr(canvasX, canvasY);
+            pixel = blendSrcOverDstNonPremultiplied(pixel, prevPixel);
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 } // namespace
 
 namespace blink {
@@ -127,15 +199,32 @@ WEBPImageDecoder::WEBPImageDecoder(AlphaOption alphaOption,
     , m_decoder(0)
     , m_formatFlags(0)
     , m_frameBackgroundHasAlpha(false)
+=======
+namespace blink {
+
+WEBPImageDecoder::WEBPImageDecoder(ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption colorOptions, size_t maxDecodedBytes)
+    : ImageDecoder(alphaOption, colorOptions, maxDecodedBytes)
+    , m_decoder(0)
+    , m_formatFlags(0)
+    , m_frameBackgroundHasAlpha(false)
+    , m_hasColorProfile(false)
+#if USE(QCMSLIB)
+    , m_transform(0)
+#endif
+>>>>>>> miniblink49
     , m_demux(0)
     , m_demuxState(WEBP_DEMUX_PARSING_HEADER)
     , m_haveAlreadyParsedThisData(false)
     , m_repetitionCount(cAnimationLoopOnce)
     , m_decodedHeight(0)
 {
+<<<<<<< HEAD
     m_blendFunction = (alphaOption == AlphaPremultiplied)
         ? alphaBlendPremultiplied
         : alphaBlendNonPremultiplied;
+=======
+    m_blendFunction = (alphaOption == ImageSource::AlphaPremultiplied) ? alphaBlendPremultiplied : alphaBlendNonPremultiplied;
+>>>>>>> miniblink49
 }
 
 WEBPImageDecoder::~WEBPImageDecoder()
@@ -145,9 +234,17 @@ WEBPImageDecoder::~WEBPImageDecoder()
 
 void WEBPImageDecoder::clear()
 {
+<<<<<<< HEAD
     WebPDemuxDelete(m_demux);
     m_demux = 0;
     m_consolidatedData.reset();
+=======
+#if USE(QCMSLIB)
+    clearColorTransform();
+#endif
+    WebPDemuxDelete(m_demux);
+    m_demux = 0;
+>>>>>>> miniblink49
     clearDecoder();
 }
 
@@ -159,8 +256,17 @@ void WEBPImageDecoder::clearDecoder()
     m_frameBackgroundHasAlpha = false;
 }
 
+<<<<<<< HEAD
 void WEBPImageDecoder::onSetData(SegmentReader*)
 {
+=======
+void WEBPImageDecoder::setData(SharedBuffer* data, bool allDataReceived)
+{
+    if (failed())
+        return;
+
+    ImageDecoder::setData(data, allDataReceived);
+>>>>>>> miniblink49
     m_haveAlreadyParsedThisData = false;
 }
 
@@ -181,9 +287,13 @@ bool WEBPImageDecoder::frameIsCompleteAtIndex(size_t index) const
 
 float WEBPImageDecoder::frameDurationAtIndex(size_t index) const
 {
+<<<<<<< HEAD
     return index < m_frameBufferCache.size()
         ? m_frameBufferCache[index].duration()
         : 0;
+=======
+    return index < m_frameBufferCache.size() ? m_frameBufferCache[index].duration() : 0;
+>>>>>>> miniblink49
 }
 
 bool WEBPImageDecoder::updateDemuxer()
@@ -201,6 +311,7 @@ bool WEBPImageDecoder::updateDemuxer()
         return false; // Await VP8X header so WebPDemuxPartial succeeds.
 
     WebPDemuxDelete(m_demux);
+<<<<<<< HEAD
     m_consolidatedData = m_data->getAsSkData();
     WebPData inputData = {
         reinterpret_cast<const uint8_t*>(m_consolidatedData->data()),
@@ -212,6 +323,12 @@ bool WEBPImageDecoder::updateDemuxer()
             m_consolidatedData.reset();
         return setFailed();
     }
+=======
+    WebPData inputData = { reinterpret_cast<const uint8_t*>(m_data->data()), m_data->size() };
+    m_demux = WebPDemuxPartial(&inputData, &m_demuxState);
+    if (!m_demux || (isAllDataReceived() && m_demuxState != WEBP_DEMUX_DONE))
+        return setFailed();
+>>>>>>> miniblink49
 
     ASSERT(m_demuxState > WEBP_DEMUX_PARSING_HEADER);
     if (!WebPDemuxGetI(m_demux, WEBP_FF_FRAME_COUNT))
@@ -233,12 +350,22 @@ bool WEBPImageDecoder::updateDemuxer()
             m_repetitionCount = WebPDemuxGetI(m_demux, WEBP_FF_LOOP_COUNT);
             // Repetition count is always <= 16 bits.
             ASSERT(m_repetitionCount == (m_repetitionCount & 0xffff));
+<<<<<<< HEAD
             if (!m_repetitionCount)
                 m_repetitionCount = cAnimationLoopInfinite;
+=======
+            // Repetition count is the number of animation cycles to show,
+            // where 0 means "infinite". But ImageSource::repetitionCount()
+            // returns -1 for "infinite", and 0 and up for "show the image
+            // animation one cycle more than the value". Subtract one here
+            // to correctly handle the finite and infinite cases.
+            --m_repetitionCount;
+>>>>>>> miniblink49
             // FIXME: Implement ICC profile support for animated images.
             m_formatFlags &= ~ICCP_FLAG;
         }
 
+<<<<<<< HEAD
         if ((m_formatFlags & ICCP_FLAG) && !ignoresColorSpace())
             readColorProfile();
     }
@@ -274,18 +401,117 @@ bool WEBPImageDecoder::canReusePreviousFrameBuffer(size_t frameIndex) const
 {
     DCHECK(frameIndex < m_frameBufferCache.size());
     return m_frameBufferCache[frameIndex].getAlphaBlendSource() != ImageFrame::BlendAtopPreviousFrame;
+=======
+#if USE(QCMSLIB)
+        if ((m_formatFlags & ICCP_FLAG) && !ignoresGammaAndColorProfile())
+            readColorProfile();
+#endif
+    }
+
+    ASSERT(isDecodedSizeAvailable());
+    return true;
+}
+
+bool WEBPImageDecoder::initFrameBuffer(size_t frameIndex)
+{
+    ImageFrame& buffer = m_frameBufferCache[frameIndex];
+    if (buffer.status() != ImageFrame::FrameEmpty) // Already initialized.
+        return true;
+
+    const size_t requiredPreviousFrameIndex = buffer.requiredPreviousFrameIndex();
+    if (requiredPreviousFrameIndex == kNotFound) {
+        // This frame doesn't rely on any previous data.
+        if (!buffer.setSize(size().width(), size().height()))
+            return setFailed();
+        m_frameBackgroundHasAlpha = !buffer.originalFrameRect().contains(IntRect(IntPoint(), size()));
+    } else {
+        const ImageFrame& prevBuffer = m_frameBufferCache[requiredPreviousFrameIndex];
+        ASSERT(prevBuffer.status() == ImageFrame::FrameComplete);
+
+        // Preserve the last frame as the starting state for this frame.
+        if (!buffer.copyBitmapData(prevBuffer))
+            return setFailed();
+
+        if (prevBuffer.disposalMethod() == ImageFrame::DisposeOverwriteBgcolor) {
+            // We want to clear the previous frame to transparent, without
+            // affecting pixels in the image outside of the frame.
+            const IntRect& prevRect = prevBuffer.originalFrameRect();
+            ASSERT(!prevRect.contains(IntRect(IntPoint(), size())));
+            buffer.zeroFillFrameRect(prevRect);
+        }
+
+        m_frameBackgroundHasAlpha = prevBuffer.hasAlpha() || (prevBuffer.disposalMethod() == ImageFrame::DisposeOverwriteBgcolor);
+    }
+
+    buffer.setStatus(ImageFrame::FramePartial);
+    // The buffer is transparent outside the decoded area while the image is loading.
+    // The correct value of 'hasAlpha' for the frame will be set when it is fully decoded.
+    buffer.setHasAlpha(true);
+    return true;
+}
+
+size_t WEBPImageDecoder::clearCacheExceptFrame(size_t clearExceptFrame)
+{
+    // If |clearExceptFrame| has status FrameComplete, we preserve that frame.
+    // Otherwise, we preserve a previous frame with status FrameComplete whose data is required
+    // to decode |clearExceptFrame|, either in initFrameBuffer() or ApplyPostProcessing().
+    // All other frames can be cleared.
+    while ((clearExceptFrame < m_frameBufferCache.size()) && (m_frameBufferCache[clearExceptFrame].status() != ImageFrame::FrameComplete))
+        clearExceptFrame = m_frameBufferCache[clearExceptFrame].requiredPreviousFrameIndex();
+
+    return ImageDecoder::clearCacheExceptFrame(clearExceptFrame);
+>>>>>>> miniblink49
 }
 
 void WEBPImageDecoder::clearFrameBuffer(size_t frameIndex)
 {
+<<<<<<< HEAD
     if (m_demux && m_demuxState >= WEBP_DEMUX_PARSED_HEADER && m_frameBufferCache[frameIndex].getStatus() == ImageFrame::FramePartial) {
         // Clear the decoder state so that this partial frame can be decoded again
         // when requested.
+=======
+    if (m_demux && m_demuxState >= WEBP_DEMUX_PARSED_HEADER && m_frameBufferCache[frameIndex].status() == ImageFrame::FramePartial) {
+        // Clear the decoder state so that this partial frame can be decoded again when requested.
+>>>>>>> miniblink49
         clearDecoder();
     }
     ImageDecoder::clearFrameBuffer(frameIndex);
 }
 
+<<<<<<< HEAD
+=======
+#if USE(QCMSLIB)
+
+void WEBPImageDecoder::clearColorTransform()
+{
+    if (m_transform)
+        qcms_transform_release(m_transform);
+    m_transform = 0;
+}
+
+bool WEBPImageDecoder::createColorTransform(const char* data, size_t size)
+{
+    clearColorTransform();
+
+    qcms_profile* deviceProfile = ImageDecoder::qcmsOutputDeviceProfile();
+    if (!deviceProfile)
+        return false;
+    qcms_profile* inputProfile = qcms_profile_from_memory(data, size);
+    if (!inputProfile)
+        return false;
+
+    // We currently only support color profiles for RGB profiled images.
+    ASSERT(rgbData == qcms_profile_get_color_space(inputProfile));
+    // The input image pixels are RGBA format.
+    qcms_data_type format = QCMS_DATA_RGBA_8;
+    // FIXME: Don't force perceptual intent if the image profile contains an intent.
+    m_transform = qcms_transform_create(inputProfile, format, deviceProfile, QCMS_DATA_RGBA_8, QCMS_INTENT_PERCEPTUAL);
+
+    qcms_profile_release(inputProfile);
+    return !!m_transform;
+}
+
+>>>>>>> miniblink49
 void WEBPImageDecoder::readColorProfile()
 {
     WebPChunkIterator chunkIterator;
@@ -297,11 +523,30 @@ void WEBPImageDecoder::readColorProfile()
     const char* profileData = reinterpret_cast<const char*>(chunkIterator.chunk.bytes);
     size_t profileSize = chunkIterator.chunk.size;
 
+<<<<<<< HEAD
     setEmbeddedColorProfile(profileData, profileSize);
+=======
+    // Only accept RGB color profiles from input class devices.
+    bool ignoreProfile = false;
+    if (profileSize < ImageDecoder::iccColorProfileHeaderLength)
+        ignoreProfile = true;
+    else if (!ImageDecoder::rgbColorProfile(profileData, profileSize))
+        ignoreProfile = true;
+    else if (!ImageDecoder::inputDeviceColorProfile(profileData, profileSize))
+        ignoreProfile = true;
+
+    if (!ignoreProfile)
+        m_hasColorProfile = createColorTransform(profileData, profileSize);
+>>>>>>> miniblink49
 
     WebPDemuxReleaseChunkIterator(&chunkIterator);
 }
 
+<<<<<<< HEAD
+=======
+#endif // USE(QCMSLIB)
+
+>>>>>>> miniblink49
 void WEBPImageDecoder::applyPostProcessing(size_t frameIndex)
 {
     ImageFrame& buffer = m_frameBufferCache[frameIndex];
@@ -313,6 +558,7 @@ void WEBPImageDecoder::applyPostProcessing(size_t frameIndex)
         return;
 
     const IntRect& frameRect = buffer.originalFrameRect();
+<<<<<<< HEAD
     SECURITY_DCHECK(width == frameRect.width());
     SECURITY_DCHECK(decodedHeight <= frameRect.height());
     const int left = frameRect.x();
@@ -356,11 +602,45 @@ void WEBPImageDecoder::applyPostProcessing(size_t frameIndex)
         ImageFrame::DisposalMethod prevDisposalMethod = prevBuffer.getDisposalMethod();
         if (prevDisposalMethod == ImageFrame::DisposeKeep) {
             // Blend transparent pixels with pixels in previous canvas.
+=======
+    ASSERT_WITH_SECURITY_IMPLICATION(width == frameRect.width());
+    ASSERT_WITH_SECURITY_IMPLICATION(decodedHeight <= frameRect.height());
+    const int left = frameRect.x();
+    const int top = frameRect.y();
+
+#if USE(QCMSLIB)
+    if (qcms_transform* transform = colorTransform()) {
+        for (int y = m_decodedHeight; y < decodedHeight; ++y) {
+            const int canvasY = top + y;
+            uint8_t* row = reinterpret_cast<uint8_t*>(buffer.getAddr(left, canvasY));
+            qcms_transform_data_type(transform, row, row, width, QCMS_OUTPUT_RGBX);
+            uint8_t* pixel = row;
+            for (int x = 0; x < width; ++x, pixel += 4) {
+                const int canvasX = left + x;
+                buffer.setRGBA(canvasX, canvasY, pixel[0], pixel[1], pixel[2], pixel[3]);
+            }
+        }
+    }
+#endif // USE(QCMSLIB)
+
+    // During the decoding of current frame, we may have set some pixels to be transparent (i.e. alpha < 255).
+    // However, the value of each of these pixels should have been determined by blending it against the value
+    // of that pixel in the previous frame if alpha blend source was 'BlendAtopPreviousFrame'. So, we correct these
+    // pixels based on disposal method of the previous frame and the previous frame buffer.
+    // FIXME: This could be avoided if libwebp decoder had an API that used the previous required frame
+    // to do the alpha-blending by itself.
+    if ((m_formatFlags & ANIMATION_FLAG) && frameIndex && buffer.alphaBlendSource() == ImageFrame::BlendAtopPreviousFrame && buffer.requiredPreviousFrameIndex() != kNotFound) {
+        ImageFrame& prevBuffer = m_frameBufferCache[frameIndex - 1];
+        ASSERT(prevBuffer.status() == ImageFrame::FrameComplete);
+        ImageFrame::DisposalMethod prevDisposalMethod = prevBuffer.disposalMethod();
+        if (prevDisposalMethod == ImageFrame::DisposeKeep) { // Blend transparent pixels with pixels in previous canvas.
+>>>>>>> miniblink49
             for (int y = m_decodedHeight; y < decodedHeight; ++y) {
                 m_blendFunction(buffer, prevBuffer, top + y, left, width);
             }
         } else if (prevDisposalMethod == ImageFrame::DisposeOverwriteBgcolor) {
             const IntRect& prevRect = prevBuffer.originalFrameRect();
+<<<<<<< HEAD
             // We need to blend a transparent pixel with the starting value (from just
             // after the initFrame() call). If the pixel belongs to prevRect, the
             // starting value was fully transparent, so this is a no-op. Otherwise, we
@@ -370,6 +650,15 @@ void WEBPImageDecoder::applyPostProcessing(size_t frameIndex)
                 int left1, width1, left2, width2;
                 findBlendRangeAtRow(frameRect, prevRect, canvasY, left1, width1, left2,
                     width2);
+=======
+            // We need to blend a transparent pixel with its value just after initFrame() call. That is:
+            //   * Blend with fully transparent pixel if it belongs to prevRect <-- This is a no-op.
+            //   * Blend with the pixel in the previous canvas otherwise <-- Needs alpha-blending.
+            for (int y = m_decodedHeight; y < decodedHeight; ++y) {
+                int canvasY = top + y;
+                int left1, width1, left2, width2;
+                findBlendRangeAtRow(frameRect, prevRect, canvasY, left1, width1, left2, width2);
+>>>>>>> miniblink49
                 if (width1 > 0)
                     m_blendFunction(buffer, prevBuffer, canvasY, left1, width1);
                 if (width2 > 0)
@@ -387,8 +676,12 @@ size_t WEBPImageDecoder::decodeFrameCount()
     // If updateDemuxer() fails, return the existing number of frames.  This way
     // if we get halfway through the image before decoding fails, we won't
     // suddenly start reporting that the image has zero frames.
+<<<<<<< HEAD
     return updateDemuxer() ? WebPDemuxGetI(m_demux, WEBP_FF_FRAME_COUNT)
                            : m_frameBufferCache.size();
+=======
+    return updateDemuxer() ? WebPDemuxGetI(m_demux, WEBP_FF_FRAME_COUNT) : m_frameBufferCache.size();
+>>>>>>> miniblink49
 }
 
 void WEBPImageDecoder::initializeNewFrame(size_t index)
@@ -401,6 +694,7 @@ void WEBPImageDecoder::initializeNewFrame(size_t index)
     WebPDemuxGetFrame(m_demux, index + 1, &animatedFrame);
     ASSERT(animatedFrame.complete == 1);
     ImageFrame* buffer = &m_frameBufferCache[index];
+<<<<<<< HEAD
     IntRect frameRect(animatedFrame.x_offset, animatedFrame.y_offset,
         animatedFrame.width, animatedFrame.height);
     buffer->setOriginalFrameRect(
@@ -414,6 +708,14 @@ void WEBPImageDecoder::initializeNewFrame(size_t index)
             : ImageFrame::BlendAtopBgcolor);
     buffer->setRequiredPreviousFrameIndex(
         findRequiredPreviousFrame(index, !animatedFrame.has_alpha));
+=======
+    IntRect frameRect(animatedFrame.x_offset, animatedFrame.y_offset, animatedFrame.width, animatedFrame.height);
+    buffer->setOriginalFrameRect(intersection(frameRect, IntRect(IntPoint(), size())));
+    buffer->setDuration(animatedFrame.duration);
+    buffer->setDisposalMethod(animatedFrame.dispose_method == WEBP_MUX_DISPOSE_BACKGROUND ? ImageFrame::DisposeOverwriteBgcolor : ImageFrame::DisposeKeep);
+    buffer->setAlphaBlendSource(animatedFrame.blend_method == WEBP_MUX_BLEND ? ImageFrame::BlendAtopPreviousFrame : ImageFrame::BlendAtopBgcolor);
+    buffer->setRequiredPreviousFrameIndex(findRequiredPreviousFrame(index, !animatedFrame.has_alpha));
+>>>>>>> miniblink49
     WebPDemuxReleaseIterator(&animatedFrame);
 }
 
@@ -422,7 +724,16 @@ void WEBPImageDecoder::decode(size_t index)
     if (failed())
         return;
 
+<<<<<<< HEAD
     Vector<size_t> framesToDecode = findFramesToDecode(index);
+=======
+    Vector<size_t> framesToDecode;
+    size_t frameToDecode = index;
+    do {
+        framesToDecode.append(frameToDecode);
+        frameToDecode = m_frameBufferCache[frameToDecode].requiredPreviousFrameIndex();
+    } while (frameToDecode != kNotFound && m_frameBufferCache[frameToDecode].status() != ImageFrame::FrameComplete);
+>>>>>>> miniblink49
 
     ASSERT(m_demux);
     for (auto i = framesToDecode.rbegin(); i != framesToDecode.rend(); ++i) {
@@ -438,8 +749,13 @@ void WEBPImageDecoder::decode(size_t index)
         if (failed())
             return;
 
+<<<<<<< HEAD
         // If this returns false, we need more data to continue decoding.
         if (!postDecodeProcessing(*i))
+=======
+        // We need more data to continue decoding.
+        if (m_frameBufferCache[*i].status() != ImageFrame::FrameComplete)
+>>>>>>> miniblink49
             break;
     }
 
@@ -449,9 +765,13 @@ void WEBPImageDecoder::decode(size_t index)
         setFailed();
 }
 
+<<<<<<< HEAD
 bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes,
     size_t dataSize,
     size_t frameIndex)
+=======
+bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes, size_t dataSize, size_t frameIndex)
+>>>>>>> miniblink49
 {
     if (failed())
         return false;
@@ -460,6 +780,7 @@ bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes,
 
     ASSERT(m_frameBufferCache.size() > frameIndex);
     ImageFrame& buffer = m_frameBufferCache[frameIndex];
+<<<<<<< HEAD
     ASSERT(buffer.getStatus() != ImageFrame::FrameComplete);
 
     if (buffer.getStatus() == ImageFrame::FrameEmpty) {
@@ -470,6 +791,16 @@ bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes,
         // The buffer is transparent outside the decoded area while the image is
         // loading. The correct alpha value for the frame will be set when it is
         // fully decoded.
+=======
+    ASSERT(buffer.status() != ImageFrame::FrameComplete);
+
+    if (buffer.status() == ImageFrame::FrameEmpty) {
+        if (!buffer.setSize(size().width(), size().height()))
+            return setFailed();
+        buffer.setStatus(ImageFrame::FramePartial);
+        // The buffer is transparent outside the decoded area while the image is loading.
+        // The correct value of 'hasAlpha' for the frame will be set when it is fully decoded.
+>>>>>>> miniblink49
         buffer.setHasAlpha(true);
         buffer.setOriginalFrameRect(IntRect(IntPoint(), size()));
     }
@@ -479,6 +810,7 @@ bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes,
         WEBP_CSP_MODE mode = outputMode(m_formatFlags & ALPHA_FLAG);
         if (!m_premultiplyAlpha)
             mode = outputMode(false);
+<<<<<<< HEAD
         if (colorTransform()) {
             // Swizzling between RGBA and BGRA is zero cost in a color transform.
             // So when we have a color transform, we should decode to whatever is
@@ -489,6 +821,12 @@ bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes,
             // either faster or the same cost as RGBA.
             mode = MODE_BGRA;
         }
+=======
+#if USE(QCMSLIB)
+        if (colorTransform())
+            mode = MODE_RGBA; // Decode to RGBA for input to libqcms.
+#endif
+>>>>>>> miniblink49
         WebPInitDecBuffer(&m_decoderBuffer);
         m_decoderBuffer.colorspace = mode;
         m_decoderBuffer.u.RGBA.stride = size().width() * sizeof(ImageFrame::PixelData);
@@ -513,7 +851,11 @@ bool WEBPImageDecoder::decodeSingleFrame(const uint8_t* dataBytes,
             applyPostProcessing(frameIndex);
             return false;
         }
+<<<<<<< HEAD
     // FALLTHROUGH
+=======
+        // FALLTHROUGH
+>>>>>>> miniblink49
     default:
         clear();
         return setFailed();

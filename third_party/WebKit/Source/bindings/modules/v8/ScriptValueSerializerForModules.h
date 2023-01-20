@@ -6,7 +6,6 @@
 #define ScriptValueSerializerForModules_h
 
 #include "bindings/core/v8/ScriptValueSerializer.h"
-#include "modules/peerconnection/RTCCertificate.h"
 #include "public/platform/WebCrypto.h"
 #include "public/platform/WebCryptoKey.h"
 #include "public/platform/WebCryptoKeyAlgorithm.h"
@@ -14,11 +13,9 @@
 
 namespace blink {
 
-class SerializedScriptValueWriterForModules final
-    : public SerializedScriptValueWriter {
+class SerializedScriptValueWriterForModules final : public SerializedScriptValueWriter {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SerializedScriptValueWriterForModules);
-
 public:
     SerializedScriptValueWriterForModules()
         : SerializedScriptValueWriter()
@@ -27,7 +24,6 @@ public:
 
     void writeDOMFileSystem(int type, const String& name, const String& url);
     bool writeCryptoKey(const WebCryptoKey&);
-    void writeRTCCertificate(const RTCCertificate&);
 
 private:
     void doWriteHmacKey(const WebCryptoKey&);
@@ -41,37 +37,22 @@ private:
     void doWriteKeyUsages(const WebCryptoKeyUsageMask usages, bool extractable);
 };
 
-DEFINE_TYPE_CASTS(SerializedScriptValueWriterForModules,
-    SerializedScriptValueWriter,
-    writer,
-    true,
-    true);
+DEFINE_TYPE_CASTS(SerializedScriptValueWriterForModules, SerializedScriptValueWriter, writer, true, true);
 
-class SerializedScriptValueReaderForModules final
-    : public SerializedScriptValueReader {
+class SerializedScriptValueReaderForModules final : public SerializedScriptValueReader {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SerializedScriptValueReaderForModules);
-
 public:
-    SerializedScriptValueReaderForModules(const uint8_t* buffer,
-        int length,
-        const WebBlobInfoArray* blobInfo,
-        BlobDataHandleMap& blobDataHandles,
-        ScriptState* scriptState)
-        : SerializedScriptValueReader(buffer,
-            length,
-            blobInfo,
-            blobDataHandles,
-            scriptState)
+    SerializedScriptValueReaderForModules(const uint8_t* buffer, int length, const WebBlobInfoArray* blobInfo, BlobDataHandleMap& blobDataHandles, ScriptState* scriptState)
+        : SerializedScriptValueReader(buffer, length, blobInfo, blobDataHandles, scriptState)
     {
     }
 
-    bool read(v8::Local<v8::Value>*, ScriptValueDeserializer&) override;
+    bool read(v8::Local<v8::Value>*, ScriptValueCompositeCreator&) override;
 
 private:
     bool readDOMFileSystem(v8::Local<v8::Value>*);
     bool readCryptoKey(v8::Local<v8::Value>*);
-    bool readRTCCertificate(v8::Local<v8::Value>*);
     bool doReadHmacKey(WebCryptoKeyAlgorithm&, WebCryptoKeyType&);
     bool doReadAesKey(WebCryptoKeyAlgorithm&, WebCryptoKeyType&);
     bool doReadRsaHashedKey(WebCryptoKeyAlgorithm&, WebCryptoKeyType&);
@@ -83,38 +64,26 @@ private:
     bool doReadKeyUsages(WebCryptoKeyUsageMask& usages, bool& extractable);
 };
 
-DEFINE_TYPE_CASTS(SerializedScriptValueReaderForModules,
-    SerializedScriptValueReader,
-    reader,
-    true,
-    true);
+DEFINE_TYPE_CASTS(SerializedScriptValueReaderForModules, SerializedScriptValueReader, reader, true, true);
 
 class ScriptValueSerializerForModules final : public ScriptValueSerializer {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(ScriptValueSerializerForModules);
-
 public:
-    ScriptValueSerializerForModules(SerializedScriptValueWriter&,
-        WebBlobInfoArray*,
-        ScriptState*);
+    ScriptValueSerializerForModules(SerializedScriptValueWriter&, MessagePortArray* messagePorts, ArrayBufferArray* arrayBuffers, WebBlobInfoArray*, BlobDataHandleMap& blobDataHandles, v8::TryCatch&, ScriptState*);
 
 private:
-    StateBase* doSerializeObject(v8::Local<v8::Object>, StateBase* next) override;
+    ScriptValueSerializer::StateBase* doSerializeValue(v8::Local<v8::Value>, ScriptValueSerializer::StateBase* next) override;
 
-    StateBase* writeDOMFileSystem(v8::Local<v8::Value>, StateBase* next);
+    ScriptValueSerializer::StateBase* writeDOMFileSystem(v8::Local<v8::Value>, ScriptValueSerializer::StateBase* next);
     bool writeCryptoKey(v8::Local<v8::Value>);
-    StateBase* writeRTCCertificate(v8::Local<v8::Value>, StateBase* next);
 };
 
 class ScriptValueDeserializerForModules final : public ScriptValueDeserializer {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(ScriptValueDeserializerForModules);
-
 public:
-    ScriptValueDeserializerForModules(SerializedScriptValueReaderForModules&,
-        MessagePortArray* messagePorts,
-        ArrayBufferContentsArray*,
-        ImageBitmapContentsArray*);
+    ScriptValueDeserializerForModules(SerializedScriptValueReaderForModules&, MessagePortArray* messagePorts, ArrayBufferContentsArray*);
 
 private:
     bool read(v8::Local<v8::Value>*) override;

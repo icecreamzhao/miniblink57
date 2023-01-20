@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "../src/fonts/SkGScalerContext.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
@@ -17,12 +18,32 @@ public:
 protected:
     void onOnceBeforeDraw() override
     {
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+#include "../src/fonts/SkGScalerContext.h"
+
+class ColorTypeGM : public skiagm::GM {
+public:
+    ColorTypeGM()
+        : fColorType(NULL) {
+    }
+
+    virtual ~ColorTypeGM() {
+        SkSafeUnref(fColorType);
+    }
+
+protected:
+    void onOnceBeforeDraw() override {
+>>>>>>> miniblink49
         const SkColor colors[] = {
             SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE,
             SK_ColorMAGENTA, SK_ColorCYAN, SK_ColorYELLOW
         };
         SkMatrix local;
         local.setRotate(180);
+<<<<<<< HEAD
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setShader(SkGradientShader::MakeSweep(0, 0, colors, nullptr, SK_ARRAY_COUNT(colors),
@@ -48,21 +69,60 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+        SkShader* s = SkGradientShader::CreateSweep(0,0, colors, NULL,
+                                                    SK_ARRAY_COUNT(colors), 0, &local);
+
+        SkPaint paint;
+        paint.setAntiAlias(true);
+        paint.setShader(s)->unref();
+
+        SkTypeface* orig = sk_tool_utils::create_portable_typeface("Times",
+                                                            SkTypeface::kBold);
+        if (NULL == orig) {
+            orig = SkTypeface::RefDefault();
+        }
+        fColorType = SkNEW_ARGS(SkGTypeface, (orig, paint));
+        orig->unref();
+    }
+
+    SkString onShortName() override {
+        return SkString("colortype");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(640, 480);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTypeface(fColorType);
 
         for (SkScalar size = 10; size <= 100; size += 10) {
             paint.setTextSize(size);
+<<<<<<< HEAD
             canvas->translate(0, paint.getFontMetrics(nullptr));
+=======
+            canvas->translate(0, paint.getFontMetrics(NULL));
+>>>>>>> miniblink49
             canvas->drawText("Hamburgefons", 12, 10, 10, paint);
         }
     }
 
 private:
+<<<<<<< HEAD
     sk_sp<SkTypeface> fColorType;
+=======
+    SkTypeface* fColorType;
+>>>>>>> miniblink49
 
     typedef skiagm::GM INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_GM(return new ColorTypeGM;)
+=======
+DEF_GM( return SkNEW(ColorTypeGM); )
+>>>>>>> miniblink49

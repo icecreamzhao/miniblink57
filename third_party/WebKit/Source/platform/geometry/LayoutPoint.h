@@ -34,13 +34,17 @@
 #include "platform/geometry/DoublePoint.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/LayoutSize.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/MathExtras.h"
 #include <algorithm>
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT LayoutPoint {
     DISALLOW_NEW();
 
@@ -76,6 +80,16 @@ public:
         , m_y(size.height())
     {
     }
+=======
+class LayoutPoint {
+public:
+    LayoutPoint() { }
+    LayoutPoint(LayoutUnit x, LayoutUnit y) : m_x(x), m_y(y) { }
+    LayoutPoint(const IntPoint& point) : m_x(point.x()), m_y(point.y()) { }
+    explicit LayoutPoint(const FloatPoint& point) : m_x(point.x()), m_y(point.y()) { }
+    explicit LayoutPoint(const DoublePoint& point) : m_x(point.x()), m_y(point.y()) { }
+    explicit LayoutPoint(const LayoutSize& size) : m_x(size.width()), m_y(size.height()) { }
+>>>>>>> miniblink49
 
     static LayoutPoint zero() { return LayoutPoint(); }
 
@@ -88,12 +102,16 @@ public:
     void move(const LayoutSize& s) { move(s.width(), s.height()); }
     void move(const IntSize& s) { move(s.width(), s.height()); }
     void moveBy(const LayoutPoint& offset) { move(offset.x(), offset.y()); }
+<<<<<<< HEAD
     void move(int dx, int dy) { move(LayoutUnit(dx), LayoutUnit(dy)); }
     void move(LayoutUnit dx, LayoutUnit dy)
     {
         m_x += dx;
         m_y += dy;
     }
+=======
+    void move(LayoutUnit dx, LayoutUnit dy) { m_x += dx; m_y += dy; }
+>>>>>>> miniblink49
     void scale(float sx, float sy)
     {
         m_x *= sx;
@@ -110,11 +128,23 @@ public:
         return LayoutPoint(std::min(m_x, other.m_x), std::min(m_y, other.m_y));
     }
 
+<<<<<<< HEAD
     void clampNegativeToZero() { *this = expandedTo(zero()); }
 
     LayoutPoint transposedPoint() const { return LayoutPoint(m_y, m_x); }
 
     String toString() const;
+=======
+    void clampNegativeToZero()
+    {
+        *this = expandedTo(zero());
+    }
+
+    LayoutPoint transposedPoint() const
+    {
+        return LayoutPoint(m_y, m_x);
+    }
+>>>>>>> miniblink49
 
 private:
     LayoutUnit m_x, m_y;
@@ -138,12 +168,15 @@ inline LayoutPoint& operator+=(LayoutPoint& a, const IntSize& b)
     return a;
 }
 
+<<<<<<< HEAD
 ALWAYS_INLINE LayoutPoint& operator-=(LayoutPoint& a, const LayoutPoint& b)
 {
     a.move(-b.x(), -b.y());
     return a;
 }
 
+=======
+>>>>>>> miniblink49
 ALWAYS_INLINE LayoutPoint& operator-=(LayoutPoint& a, const LayoutSize& b)
 {
     a.move(-b.width(), -b.height());
@@ -161,8 +194,12 @@ inline LayoutPoint operator+(const LayoutPoint& a, const LayoutSize& b)
     return LayoutPoint(a.x() + b.width(), a.y() + b.height());
 }
 
+<<<<<<< HEAD
 ALWAYS_INLINE LayoutPoint operator+(const LayoutPoint& a,
     const LayoutPoint& b)
+=======
+ALWAYS_INLINE LayoutPoint operator+(const LayoutPoint& a, const LayoutPoint& b)
+>>>>>>> miniblink49
 {
     return LayoutPoint(a.x() + b.x(), a.y() + b.y());
 }
@@ -239,20 +276,37 @@ inline IntPoint ceiledIntPoint(const LayoutPoint& point)
 
 inline LayoutPoint flooredLayoutPoint(const FloatPoint& p)
 {
+<<<<<<< HEAD
     return LayoutPoint(LayoutUnit::fromFloatFloor(p.x()),
         LayoutUnit::fromFloatFloor(p.y()));
+=======
+    return LayoutPoint(LayoutUnit::fromFloatFloor(p.x()), LayoutUnit::fromFloatFloor(p.y()));
+>>>>>>> miniblink49
 }
 
 inline LayoutPoint ceiledLayoutPoint(const FloatPoint& p)
 {
+<<<<<<< HEAD
     return LayoutPoint(LayoutUnit::fromFloatCeil(p.x()),
         LayoutUnit::fromFloatCeil(p.y()));
+=======
+    return LayoutPoint(LayoutUnit::fromFloatCeil(p.x()), LayoutUnit::fromFloatCeil(p.y()));
+>>>>>>> miniblink49
 }
 
 inline IntSize pixelSnappedIntSize(const LayoutSize& s, const LayoutPoint& p)
 {
+<<<<<<< HEAD
     return IntSize(snapSizeToPixel(s.width(), p.x()),
         snapSizeToPixel(s.height(), p.y()));
+=======
+    return IntSize(snapSizeToPixel(s.width(), p.x()), snapSizeToPixel(s.height(), p.y()));
+}
+
+inline LayoutPoint roundedLayoutPoint(const FloatPoint& p)
+{
+    return LayoutPoint(p);
+>>>>>>> miniblink49
 }
 
 inline IntSize roundedIntSize(const LayoutPoint& p)
@@ -270,9 +324,12 @@ inline LayoutPoint flooredLayoutPoint(const FloatSize& s)
     return flooredLayoutPoint(FloatPoint(s));
 }
 
+<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const LayoutPoint&, std::ostream*);
+=======
+>>>>>>> miniblink49
 
 } // namespace blink
 

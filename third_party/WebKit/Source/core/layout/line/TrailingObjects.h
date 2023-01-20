@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- *               All right reserved.
+ * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All right reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2014 Adobe Systems Inc.
  *
@@ -25,52 +24,42 @@
 #ifndef TrailingObjects_h
 #define TrailingObjects_h
 
-#include "core/layout/api/LineLayoutItem.h"
-#include "core/layout/api/LineLayoutText.h"
-#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class InlineIterator;
+class LayoutObject;
+class LayoutText;
 
 struct BidiRun;
-struct BidiIsolatedRun;
 
-template <class Iterator, class Run, class IsolatedRun>
-class BidiResolver;
-template <class Iterator>
-class MidpointState;
-typedef BidiResolver<InlineIterator, BidiRun, BidiIsolatedRun>
-    InlineBidiResolver;
+template <class Iterator, class Run> class BidiResolver;
+template <class Iterator> class MidpointState;
+typedef BidiResolver<InlineIterator, BidiRun> InlineBidiResolver;
 typedef MidpointState<InlineIterator> LineMidpointState;
 
-// This class allows us to ensure lineboxes are created in the right place on
-// the line when an out-of-flow positioned object or an empty inline is
-// encountered between a trailing space and subsequent spaces and we want to
-// ignore (i.e. collapse) surplus whitespace. So for example:
+// This class allows us to ensure lineboxes are created in the right place on the line when
+// an out-of-flow positioned object or an empty inline is encountered between a trailing space
+// and subsequent spaces and we want to ignore (i.e. collapse) surplus whitespace. So for example:
 //   <div>X <span></span> Y</div>
 // or
 //   <div>X <div style="position: absolute"></div> Y</div>
-// In both of the above snippets the inline and the positioned object occur
-// after a trailing space and before a space that will cause our line breaking
-// algorithm to start ignoring spaces. When it does that we want to ensure that
-// the inline/positioned object gets a linebox and that it is part of the
-// collapsed whitespace. So to achieve this we use appendObjectIfNeeded() to
-// keep track of objects encountered after a trailing whitespace and
-// updateMidpointsForTrailingObjects() to put them in the right place when we
-// start ignoring surplus whitespace.
+// In both of the above snippets the inline and the positioned object occur after a trailing space
+// and before a space that will cause our line breaking algorithm to start ignoring spaces. When it
+// does that we want to ensure that the inline/positioned object gets a linebox and that it is part
+// of the collapsed whitespace. So to achieve this we use appendObjectIfNeeded() to keep track of
+// objects encountered after a trailing whitespace and updateMidpointsForTrailingObjects() to put
+// them in the right place when we start ignoring surplus whitespace.
 
 class TrailingObjects {
-    STACK_ALLOCATED();
-
 public:
     TrailingObjects()
         : m_whitespace(nullptr)
     {
     }
 
-    void setTrailingWhitespace(LineLayoutText whitespace)
+    void setTrailingWhitespace(LayoutText* whitespace)
     {
         ASSERT(whitespace);
         m_whitespace = whitespace;
@@ -78,31 +67,28 @@ public:
 
     void clear()
     {
-        m_whitespace = LineLayoutText();
+        m_whitespace = nullptr;
         // Using resize(0) rather than clear() here saves 2% on
         // PerformanceTests/Layout/line-layout.html because we avoid freeing and
         // re-allocating the underlying buffer repeatedly.
         m_objects.resize(0);
     }
 
-    void appendObjectIfNeeded(LineLayoutItem object)
+    void appendObjectIfNeeded(LayoutObject* object)
     {
         if (m_whitespace)
-            m_objects.push_back(object);
+            m_objects.append(object);
     }
 
-    enum CollapseFirstSpaceOrNot { DoNotCollapseFirstSpace,
-        CollapseFirstSpace };
+    enum CollapseFirstSpaceOrNot { DoNotCollapseFirstSpace, CollapseFirstSpace };
 
-    void updateMidpointsForTrailingObjects(LineMidpointState&,
-        const InlineIterator& lBreak,
-        CollapseFirstSpaceOrNot);
+    void updateMidpointsForTrailingObjects(LineMidpointState&, const InlineIterator& lBreak, CollapseFirstSpaceOrNot);
 
 private:
-    LineLayoutText m_whitespace;
-    Vector<LineLayoutItem, 4> m_objects;
+    LayoutText* m_whitespace;
+    Vector<LayoutObject*, 4> m_objects;
 };
 
-} // namespace blink
+}
 
 #endif // TrailingObjects_h

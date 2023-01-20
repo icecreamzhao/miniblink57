@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkAnimateSet_DEFINED
 #define SkAnimateSet_DEFINED
 
@@ -15,11 +19,18 @@ class SkSet : public SkAnimate {
     DECLARE_MEMBER_INFO(Set);
     SkSet();
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
     void dump(SkAnimateMaker*) override;
 #endif
     void onEndElement(SkAnimateMaker&) override;
     void refresh(SkAnimateMaker&) override;
 
+=======
+    void dump(SkAnimateMaker* ) override;
+#endif
+    void onEndElement(SkAnimateMaker& ) override;
+    void refresh(SkAnimateMaker& ) override;
+>>>>>>> miniblink49
 private:
     typedef SkAnimate INHERITED;
 };

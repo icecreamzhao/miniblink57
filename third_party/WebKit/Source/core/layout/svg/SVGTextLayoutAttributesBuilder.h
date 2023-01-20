@@ -20,70 +20,62 @@
 #ifndef SVGTextLayoutAttributesBuilder_h
 #define SVGTextLayoutAttributesBuilder_h
 
-#include "core/layout/svg/SVGCharacterData.h"
-#include "platform/heap/Handle.h"
-#include "wtf/Allocator.h"
+#include "core/layout/svg/SVGTextLayoutAttributes.h"
 #include "wtf/Vector.h"
+#include "wtf/text/Unicode.h"
 
 namespace blink {
 
 class LayoutBoxModelObject;
+class LayoutSVGInlineText;
 class LayoutSVGText;
 class SVGTextPositioningElement;
 
 // SVGTextLayoutAttributesBuilder performs the first layout phase for SVG text.
 //
-// It extracts the x/y/dx/dy/rotate values from the SVGTextPositioningElements
-// in the DOM. These values are propagated to the corresponding
-// LayoutSVGInlineText layoutObjects.
-// The first layout phase only extracts the relevant information needed in
-// LayoutBlockFlowLine to create the InlineBox tree based on text chunk
-// boundaries & BiDi information.
+// It extracts the x/y/dx/dy/rotate values from the SVGTextPositioningElements in the DOM.
+// These values are propagated to the corresponding LayoutSVGInlineText layoutObjects.
+// The first layout phase only extracts the relevant information needed in LayoutBlockFlowLine
+// to create the InlineBox tree based on text chunk boundaries & BiDi information.
 // The second layout phase is carried out by SVGTextLayoutEngine.
+
 class SVGTextLayoutAttributesBuilder {
-    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SVGTextLayoutAttributesBuilder);
-
 public:
-    explicit SVGTextLayoutAttributesBuilder(LayoutSVGText&);
+    SVGTextLayoutAttributesBuilder();
+    bool buildLayoutAttributesForForSubtree(LayoutSVGText&);
+    void buildLayoutAttributesForText(LayoutSVGInlineText*);
 
-    void buildLayoutAttributes();
+    void rebuildMetricsForTextLayoutObject(LayoutSVGInlineText*);
 
+    // Invoked whenever the underlying DOM tree changes, so that m_textPositions is rebuild.
+    void clearTextPositioningElements() { m_textPositions.clear(); }
+    unsigned numberOfTextPositioningElements() const { return m_textPositions.size(); }
+
+private:
     struct TextPosition {
-        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
-    public:
-        TextPosition(SVGTextPositioningElement* newElement = nullptr,
-            unsigned newStart = 0,
-            unsigned newLength = 0)
+        TextPosition(SVGTextPositioningElement* newElement = nullptr, unsigned newStart = 0, unsigned newLength = 0)
             : element(newElement)
             , start(newStart)
             , length(newLength)
         {
         }
 
-        DECLARE_TRACE();
-
-        Member<SVGTextPositioningElement> element;
+        SVGTextPositioningElement* element;
         unsigned start;
         unsigned length;
     };
 
-private:
     void buildCharacterDataMap(LayoutSVGText&);
-    void buildLayoutAttributes(LayoutSVGText&) const;
-    void collectTextPositioningElements(LayoutBoxModelObject&);
+    void collectTextPositioningElements(LayoutBoxModelObject&, UChar& lastCharacter);
     void fillCharacterDataMap(const TextPosition&);
 
-    LayoutSVGText& m_textRoot;
-    unsigned m_characterCount;
-    HeapVector<TextPosition> m_textPositions;
+private:
+    unsigned m_textLength;
+    Vector<TextPosition> m_textPositions;
     SVGCharacterDataMap m_characterDataMap;
 };
 
 } // namespace blink
-
-WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(
-    blink::SVGTextLayoutAttributesBuilder::TextPosition);
 
 #endif

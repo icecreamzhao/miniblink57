@@ -97,6 +97,7 @@ public:
         : fQuad(q)
         , fLine(&l)
         , fIntersections(i)
+<<<<<<< HEAD
         , fAllowNear(true)
     {
         i->setMax(3); // allow short partial coincidence plus discrete intersection
@@ -122,6 +123,29 @@ public:
             double quadMidT = ((*fIntersections)[0][index] + (*fIntersections)[0][index + 1]) / 2;
             SkDPoint quadMidPt = fQuad.ptAtT(quadMidT);
             double t = fLine->nearPoint(quadMidPt, nullptr);
+=======
+        , fAllowNear(true) {
+        i->setMax(3);  // allow short partial coincidence plus discrete intersection
+    }
+
+    LineQuadraticIntersections(const SkDQuad& q)
+        : fQuad(q) 
+        SkDEBUGPARAMS(fLine(NULL))
+        SkDEBUGPARAMS(fIntersections(NULL))
+        SkDEBUGPARAMS(fAllowNear(false)) {
+    }
+
+    void allowNear(bool allow) {
+        fAllowNear = allow;
+    }
+
+    void checkCoincident() {
+        int last = fIntersections->used() - 1;
+        for (int index = 0; index < last; ) {
+            double quadMidT = ((*fIntersections)[0][index] + (*fIntersections)[0][index + 1]) / 2;
+            SkDPoint quadMidPt = fQuad.ptAtT(quadMidT);
+            double t = fLine->nearPoint(quadMidPt, NULL);
+>>>>>>> miniblink49
             if (t < 0) {
                 ++index;
                 continue;
@@ -139,9 +163,14 @@ public:
         }
     }
 
+<<<<<<< HEAD
     int intersectRay(double roots[2])
     {
         /*
+=======
+    int intersectRay(double roots[2]) {
+    /*
+>>>>>>> miniblink49
         solve by rotating line+quad so line is horizontal, then finding the roots
         set up matrix to rotate quad to x-axis
         |cos(a) -sin(a)|
@@ -165,6 +194,7 @@ public:
         double A = r[2];
         double B = r[1];
         double C = r[0];
+<<<<<<< HEAD
         A += C - 2 * B; // A = a - 2*b + c
         B -= C; // B = -(b - c)
         return SkDQuad::RootsValidT(A, 2 * B, C, roots);
@@ -172,6 +202,14 @@ public:
 
     int intersect()
     {
+=======
+        A += C - 2 * B;  // A = a - 2*b + c
+        B -= C;  // B = -(b - c)
+        return SkDQuad::RootsValidT(A, 2 * B, C, roots);
+    }
+
+    int intersect() {
+>>>>>>> miniblink49
         addExactEndPoints();
         if (fAllowNear) {
             addNearEndPoints();
@@ -190,6 +228,7 @@ public:
         return fIntersections->used();
     }
 
+<<<<<<< HEAD
     int horizontalIntersect(double axisIntercept, double roots[2])
     {
         double D = fQuad[2].fY; // f
@@ -197,12 +236,24 @@ public:
         double F = fQuad[0].fY; // d
         D += F - 2 * E; // D = d - 2*e + f
         E -= F; // E = -(d - e)
+=======
+    int horizontalIntersect(double axisIntercept, double roots[2]) {
+        double D = fQuad[2].fY;  // f
+        double E = fQuad[1].fY;  // e
+        double F = fQuad[0].fY;  // d
+        D += F - 2 * E;         // D = d - 2*e + f
+        E -= F;                 // E = -(d - e)
+>>>>>>> miniblink49
         F -= axisIntercept;
         return SkDQuad::RootsValidT(D, 2 * E, F, roots);
     }
 
+<<<<<<< HEAD
     int horizontalIntersect(double axisIntercept, double left, double right, bool flipped)
     {
+=======
+    int horizontalIntersect(double axisIntercept, double left, double right, bool flipped) {
+>>>>>>> miniblink49
         addExactHorizontalEndPoints(left, right, axisIntercept);
         if (fAllowNear) {
             addNearHorizontalEndPoints(left, right, axisIntercept);
@@ -224,8 +275,12 @@ public:
         return fIntersections->used();
     }
 
+<<<<<<< HEAD
     bool uniqueAnswer(double quadT, const SkDPoint& pt)
     {
+=======
+    bool uniqueAnswer(double quadT, const SkDPoint& pt) {
+>>>>>>> miniblink49
         for (int inner = 0; inner < fIntersections->used(); ++inner) {
             if (fIntersections->pt(inner) != pt) {
                 continue;
@@ -244,11 +299,16 @@ public:
 #if ONE_OFF_DEBUG
         SkDPoint qPt = fQuad.ptAtT(quadT);
         SkDebugf("%s pt=(%1.9g,%1.9g) cPt=(%1.9g,%1.9g)\n", __FUNCTION__, pt.fX, pt.fY,
+<<<<<<< HEAD
             qPt.fX, qPt.fY);
+=======
+                qPt.fX, qPt.fY);
+>>>>>>> miniblink49
 #endif
         return true;
     }
 
+<<<<<<< HEAD
     int verticalIntersect(double axisIntercept, double roots[2])
     {
         double D = fQuad[2].fX; // f
@@ -256,12 +316,24 @@ public:
         double F = fQuad[0].fX; // d
         D += F - 2 * E; // D = d - 2*e + f
         E -= F; // E = -(d - e)
+=======
+    int verticalIntersect(double axisIntercept, double roots[2]) {
+        double D = fQuad[2].fX;  // f
+        double E = fQuad[1].fX;  // e
+        double F = fQuad[0].fX;  // d
+        D += F - 2 * E;         // D = d - 2*e + f
+        E -= F;                 // E = -(d - e)
+>>>>>>> miniblink49
         F -= axisIntercept;
         return SkDQuad::RootsValidT(D, 2 * E, F, roots);
     }
 
+<<<<<<< HEAD
     int verticalIntersect(double axisIntercept, double top, double bottom, bool flipped)
     {
+=======
+    int verticalIntersect(double axisIntercept, double top, double bottom, bool flipped) {
+>>>>>>> miniblink49
         addExactVerticalEndPoints(top, bottom, axisIntercept);
         if (fAllowNear) {
             addNearVerticalEndPoints(top, bottom, axisIntercept);
@@ -285,18 +357,27 @@ public:
 
 protected:
     // add endpoints first to get zero and one t values exactly
+<<<<<<< HEAD
     void addExactEndPoints()
     {
+=======
+    void addExactEndPoints() {
+>>>>>>> miniblink49
         for (int qIndex = 0; qIndex < 3; qIndex += 2) {
             double lineT = fLine->exactPoint(fQuad[qIndex]);
             if (lineT < 0) {
                 continue;
             }
+<<<<<<< HEAD
             double quadT = (double)(qIndex >> 1);
+=======
+            double quadT = (double) (qIndex >> 1);
+>>>>>>> miniblink49
             fIntersections->insert(quadT, lineT, fQuad[qIndex]);
         }
     }
 
+<<<<<<< HEAD
     void addNearEndPoints()
     {
         for (int qIndex = 0; qIndex < 3; qIndex += 2) {
@@ -305,6 +386,15 @@ protected:
                 continue;
             }
             double lineT = fLine->nearPoint(fQuad[qIndex], nullptr);
+=======
+    void addNearEndPoints() {
+        for (int qIndex = 0; qIndex < 3; qIndex += 2) {
+            double quadT = (double) (qIndex >> 1);
+            if (fIntersections->hasT(quadT)) {
+                continue;
+            }
+            double lineT = fLine->nearPoint(fQuad[qIndex], NULL);
+>>>>>>> miniblink49
             if (lineT < 0) {
                 continue;
             }
@@ -313,22 +403,36 @@ protected:
         // FIXME: see if line end is nearly on quad
     }
 
+<<<<<<< HEAD
     void addExactHorizontalEndPoints(double left, double right, double y)
     {
+=======
+    void addExactHorizontalEndPoints(double left, double right, double y) {
+>>>>>>> miniblink49
         for (int qIndex = 0; qIndex < 3; qIndex += 2) {
             double lineT = SkDLine::ExactPointH(fQuad[qIndex], left, right, y);
             if (lineT < 0) {
                 continue;
             }
+<<<<<<< HEAD
             double quadT = (double)(qIndex >> 1);
+=======
+            double quadT = (double) (qIndex >> 1);
+>>>>>>> miniblink49
             fIntersections->insert(quadT, lineT, fQuad[qIndex]);
         }
     }
 
+<<<<<<< HEAD
     void addNearHorizontalEndPoints(double left, double right, double y)
     {
         for (int qIndex = 0; qIndex < 3; qIndex += 2) {
             double quadT = (double)(qIndex >> 1);
+=======
+    void addNearHorizontalEndPoints(double left, double right, double y) {
+        for (int qIndex = 0; qIndex < 3; qIndex += 2) {
+            double quadT = (double) (qIndex >> 1);
+>>>>>>> miniblink49
             if (fIntersections->hasT(quadT)) {
                 continue;
             }
@@ -341,22 +445,36 @@ protected:
         // FIXME: see if line end is nearly on quad
     }
 
+<<<<<<< HEAD
     void addExactVerticalEndPoints(double top, double bottom, double x)
     {
+=======
+    void addExactVerticalEndPoints(double top, double bottom, double x) {
+>>>>>>> miniblink49
         for (int qIndex = 0; qIndex < 3; qIndex += 2) {
             double lineT = SkDLine::ExactPointV(fQuad[qIndex], top, bottom, x);
             if (lineT < 0) {
                 continue;
             }
+<<<<<<< HEAD
             double quadT = (double)(qIndex >> 1);
+=======
+            double quadT = (double) (qIndex >> 1);
+>>>>>>> miniblink49
             fIntersections->insert(quadT, lineT, fQuad[qIndex]);
         }
     }
 
+<<<<<<< HEAD
     void addNearVerticalEndPoints(double top, double bottom, double x)
     {
         for (int qIndex = 0; qIndex < 3; qIndex += 2) {
             double quadT = (double)(qIndex >> 1);
+=======
+    void addNearVerticalEndPoints(double top, double bottom, double x) {
+        for (int qIndex = 0; qIndex < 3; qIndex += 2) {
+            double quadT = (double) (qIndex >> 1);
+>>>>>>> miniblink49
             if (fIntersections->hasT(quadT)) {
                 continue;
             }
@@ -369,8 +487,12 @@ protected:
         // FIXME: see if line end is nearly on quad
     }
 
+<<<<<<< HEAD
     double findLineT(double t)
     {
+=======
+    double findLineT(double t) {
+>>>>>>> miniblink49
         SkDPoint xy = fQuad.ptAtT(t);
         double dx = (*fLine)[1].fX - (*fLine)[0].fX;
         double dy = (*fLine)[1].fY - (*fLine)[0].fY;
@@ -380,8 +502,12 @@ protected:
         return (xy.fY - (*fLine)[0].fY) / dy;
     }
 
+<<<<<<< HEAD
     bool pinTs(double* quadT, double* lineT, SkDPoint* pt, PinTPoint ptSet)
     {
+=======
+    bool pinTs(double* quadT, double* lineT, SkDPoint* pt, PinTPoint ptSet) {
+>>>>>>> miniblink49
         if (!approximately_one_or_less_double(*lineT)) {
             return false;
         }
@@ -424,30 +550,48 @@ private:
 };
 
 int SkIntersections::horizontal(const SkDQuad& quad, double left, double right, double y,
+<<<<<<< HEAD
     bool flipped)
 {
     SkDLine line = { { { left, y }, { right, y } } };
+=======
+                                bool flipped) {
+    SkDLine line = {{{ left, y }, { right, y }}};
+>>>>>>> miniblink49
     LineQuadraticIntersections q(quad, line, this);
     return q.horizontalIntersect(y, left, right, flipped);
 }
 
 int SkIntersections::vertical(const SkDQuad& quad, double top, double bottom, double x,
+<<<<<<< HEAD
     bool flipped)
 {
     SkDLine line = { { { x, top }, { x, bottom } } };
+=======
+                              bool flipped) {
+    SkDLine line = {{{ x, top }, { x, bottom }}};
+>>>>>>> miniblink49
     LineQuadraticIntersections q(quad, line, this);
     return q.verticalIntersect(x, top, bottom, flipped);
 }
 
+<<<<<<< HEAD
 int SkIntersections::intersect(const SkDQuad& quad, const SkDLine& line)
 {
+=======
+int SkIntersections::intersect(const SkDQuad& quad, const SkDLine& line) {
+>>>>>>> miniblink49
     LineQuadraticIntersections q(quad, line, this);
     q.allowNear(fAllowNear);
     return q.intersect();
 }
 
+<<<<<<< HEAD
 int SkIntersections::intersectRay(const SkDQuad& quad, const SkDLine& line)
 {
+=======
+int SkIntersections::intersectRay(const SkDQuad& quad, const SkDLine& line) {
+>>>>>>> miniblink49
     LineQuadraticIntersections q(quad, line, this);
     fUsed = q.intersectRay(fT[0]);
     for (int index = 0; index < fUsed; ++index) {
@@ -456,12 +600,17 @@ int SkIntersections::intersectRay(const SkDQuad& quad, const SkDLine& line)
     return fUsed;
 }
 
+<<<<<<< HEAD
 int SkIntersections::HorizontalIntercept(const SkDQuad& quad, SkScalar y, double* roots)
 {
+=======
+int SkIntersections::HorizontalIntercept(const SkDQuad& quad, SkScalar y, double* roots) {
+>>>>>>> miniblink49
     LineQuadraticIntersections q(quad);
     return q.horizontalIntersect(y, roots);
 }
 
+<<<<<<< HEAD
 int SkIntersections::VerticalIntercept(const SkDQuad& quad, SkScalar x, double* roots)
 {
     LineQuadraticIntersections q(quad);
@@ -479,3 +628,9 @@ int SkDQuad::verticalIntersect(double xIntercept, double roots[2]) const
 {
     return SkIntersections::VerticalIntercept(*this, xIntercept, roots);
 }
+=======
+int SkIntersections::VerticalIntercept(const SkDQuad& quad, SkScalar x, double* roots) {
+    LineQuadraticIntersections q(quad);
+    return q.verticalIntersect(x, roots);
+}
+>>>>>>> miniblink49

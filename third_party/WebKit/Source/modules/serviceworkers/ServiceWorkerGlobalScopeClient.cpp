@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/serviceworkers/ServiceWorkerGlobalScopeClient.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -40,6 +44,7 @@ const char* ServiceWorkerGlobalScopeClient::supplementName()
     return "ServiceWorkerGlobalScopeClient";
 }
 
+<<<<<<< HEAD
 ServiceWorkerGlobalScopeClient* ServiceWorkerGlobalScopeClient::from(
     ExecutionContext* context)
 {
@@ -55,6 +60,18 @@ void provideServiceWorkerGlobalScopeClientToWorker(
 {
     clients->provideSupplement(ServiceWorkerGlobalScopeClient::supplementName(),
         client);
+=======
+ServiceWorkerGlobalScopeClient* ServiceWorkerGlobalScopeClient::from(ExecutionContext* context)
+{
+    WorkerClients* clients = toWorkerGlobalScope(context)->clients();
+    ASSERT(clients);
+    return static_cast<ServiceWorkerGlobalScopeClient*>(WillBeHeapSupplement<WorkerClients>::from(clients, supplementName()));
+}
+
+void provideServiceWorkerGlobalScopeClientToWorker(WorkerClients* clients, PassOwnPtrWillBeRawPtr<ServiceWorkerGlobalScopeClient> client)
+{
+    clients->provideSupplement(ServiceWorkerGlobalScopeClient::supplementName(), client);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

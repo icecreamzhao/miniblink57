@@ -2,62 +2,53 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+
+#include "config.h"
 #include "core/events/PromiseRejectionEvent.h"
 
 #include "bindings/core/v8/DOMWrapperWorld.h"
 
 namespace blink {
 
-PromiseRejectionEvent::PromiseRejectionEvent(
-    ScriptState* state,
-    const AtomicString& type,
-    const PromiseRejectionEventInit& initializer)
-    : Event(type, initializer)
-    , m_world(state->world())
-    , m_promise(this)
-    , m_reason(this)
+PromiseRejectionEvent::PromiseRejectionEvent()
 {
-    DCHECK(initializer.hasPromise());
-    m_promise.set(initializer.promise().isolate(),
-        initializer.promise().v8Value());
+}
+
+PromiseRejectionEvent::PromiseRejectionEvent(ScriptState* state, const AtomicString& type, const PromiseRejectionEventInit& initializer)
+    : Event(type, initializer)
+    , m_scriptState(state)
+{
+    if (initializer.hasPromise()) {
+        m_promise.set(initializer.promise().isolate(), initializer.promise().v8Value());
+        m_promise.setWeak(this, &PromiseRejectionEvent::didCollectPromise);
+    }
     if (initializer.hasReason()) {
-        m_reason.set(initializer.reason().isolate(),
-            initializer.reason().v8Value());
+        m_reason.set(initializer.reason().isolate(), initializer.reason().v8Value());
+        m_reason.setWeak(this, &PromiseRejectionEvent::didCollectReason);
     }
 }
 
-PromiseRejectionEvent::~PromiseRejectionEvent() { }
-
-void PromiseRejectionEvent::dispose()
+PromiseRejectionEvent::~PromiseRejectionEvent()
 {
-    // Clear ScopedPersistents so that V8 doesn't call phantom callbacks
-    // (and touch the ScopedPersistents) after Oilpan starts lazy sweeping.
-    m_promise.clear();
-    m_reason.clear();
-    m_world.clear();
 }
 
-ScriptPromise PromiseRejectionEvent::promise(ScriptState* scriptState) const
+ScriptPromise PromiseRejectionEvent::promise(ScriptState* state) const
 {
-    // Return null when the promise is accessed by a different world than the
-    // world that created the promise.
-    if (!canBeDispatchedInWorld(scriptState->world()))
+    // Return null when the promise is accessed by a different world than the world that created the promise.
+    if (!m_scriptState || !m_scriptState->contextIsValid() || m_scriptState->world().worldId() != state->world().worldId())
         return ScriptPromise();
-    return ScriptPromise(scriptState, m_promise.newLocal(scriptState->isolate()));
+    return ScriptPromise(m_scriptState.get(), m_promise.newLocal(m_scriptState->isolate()));
 }
 
-ScriptValue PromiseRejectionEvent::reason(ScriptState* scriptState) const
+ScriptValue PromiseRejectionEvent::reason(ScriptState* state) const
 {
-    // Return null when the value is accessed by a different world than the world
-    // that created the value.
-    if (m_reason.isEmpty() || !canBeDispatchedInWorld(scriptState->world()))
-        return ScriptValue(scriptState, v8::Undefined(scriptState->isolate()));
-    return ScriptValue(scriptState, m_reason.newLocal(scriptState->isolate()));
+    // Return null when the value is accessed by a different world than the world that created the value.
+    if (m_reason.isEmpty() || !m_scriptState || !m_scriptState->contextIsValid() || m_scriptState->world().worldId() != state->world().worldId())
+        return ScriptValue(state, v8::Null(state->isolate()));
+    return ScriptValue(m_scriptState.get(), m_reason.newLocal(m_scriptState->isolate()));
 }
 
-void PromiseRejectionEvent::setWrapperReference(
-    v8::Isolate* isolate,
-    const v8::Persistent<v8::Object>& wrapper)
+void PromiseRejectionEvent::setWrapperReference(v8::Isolate* isolate, const v8::Persistent<v8::Object>& wrapper)
 {
     // This might create cross world references. However, the regular code path
     // will not create them, and if we get a cross world reference here, the
@@ -74,10 +65,9 @@ const AtomicString& PromiseRejectionEvent::interfaceName() const
     return EventNames::PromiseRejectionEvent;
 }
 
-bool PromiseRejectionEvent::canBeDispatchedInWorld(
-    const DOMWrapperWorld& world) const
+bool PromiseRejectionEvent::canBeDispatchedInWorld(const DOMWrapperWorld& world) const
 {
-    return m_world && m_world->worldId() == world.worldId();
+    return m_scriptState && m_scriptState->contextIsValid() && m_scriptState->world().worldId() == world.worldId();
 }
 
 DEFINE_TRACE(PromiseRejectionEvent)
@@ -85,10 +75,14 @@ DEFINE_TRACE(PromiseRejectionEvent)
     Event::trace(visitor);
 }
 
-DEFINE_TRACE_WRAPPERS(PromiseRejectionEvent)
+void PromiseRejectionEvent::didCollectPromise(const v8::WeakCallbackInfo<PromiseRejectionEvent>& data)
 {
-    visitor->traceWrappers(m_promise);
-    visitor->traceWrappers(m_reason);
+    data.GetParameter()->m_promise.clear();
+}
+
+void PromiseRejectionEvent::didCollectReason(const v8::WeakCallbackInfo<PromiseRejectionEvent>& data)
+{
+    data.GetParameter()->m_reason.clear();
 }
 
 } // namespace blink

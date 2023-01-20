@@ -23,6 +23,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "platform/graphics/filters/FEGaussianBlur.h"
 
 #include "platform/graphics/filters/Filter.h"
@@ -31,6 +36,7 @@
 
 #include "SkBlurImageFilter.h"
 
+<<<<<<< HEAD
 namespace blink {
 
 namespace {
@@ -58,6 +64,15 @@ namespace {
 
 }
 
+=======
+static inline float gaussianKernelFactor()
+{
+    return 3 / 4.f * sqrtf(twoPiFloat);
+}
+
+namespace blink {
+
+>>>>>>> miniblink49
 FEGaussianBlur::FEGaussianBlur(Filter* filter, float x, float y)
     : FilterEffect(filter)
     , m_stdX(x)
@@ -65,6 +80,7 @@ FEGaussianBlur::FEGaussianBlur(Filter* filter, float x, float y)
 {
 }
 
+<<<<<<< HEAD
 FEGaussianBlur* FEGaussianBlur::create(Filter* filter, float x, float y)
 {
     return new FEGaussianBlur(filter, x, y);
@@ -102,6 +118,81 @@ sk_sp<SkImageFilter> FEGaussianBlur::createImageFilter()
 
 TextStream& FEGaussianBlur::externalRepresentation(TextStream& ts,
     int indent) const
+=======
+PassRefPtrWillBeRawPtr<FEGaussianBlur> FEGaussianBlur::create(Filter* filter, float x, float y)
+{
+    return adoptRefWillBeNoop(new FEGaussianBlur(filter, x, y));
+}
+
+IntSize FEGaussianBlur::calculateUnscaledKernelSize(const FloatPoint& std)
+{
+    ASSERT(std.x() >= 0 && std.y() >= 0);
+
+    IntSize kernelSize;
+    // Limit the kernel size to 1000. A bigger radius won't make a big difference for the result image but
+    // inflates the absolute paint rect to much. This is compatible with Firefox' behavior.
+    if (std.x()) {
+        int size = std::max<unsigned>(2, static_cast<unsigned>(floorf(std.x() * gaussianKernelFactor() + 0.5f)));
+        kernelSize.setWidth(size);
+    }
+
+    if (std.y()) {
+        int size = std::max<unsigned>(2, static_cast<unsigned>(floorf(std.y() * gaussianKernelFactor() + 0.5f)));
+        kernelSize.setHeight(size);
+    }
+
+    return kernelSize;
+}
+
+IntSize FEGaussianBlur::calculateKernelSize(Filter* filter, const FloatPoint& std)
+{
+    FloatPoint stdError(filter->applyHorizontalScale(std.x()), filter->applyVerticalScale(std.y()));
+
+    return calculateUnscaledKernelSize(stdError);
+}
+
+FloatRect FEGaussianBlur::mapRect(const FloatRect& rect, bool)
+{
+    FloatRect result = rect;
+    IntSize kernelSize = calculateKernelSize(filter(), FloatPoint(m_stdX, m_stdY));
+
+    // We take the half kernel size and multiply it with three, because we run box blur three times.
+    result.inflateX(3 * kernelSize.width() * 0.5f);
+    result.inflateY(3 * kernelSize.height() * 0.5f);
+    return result;
+}
+
+FloatRect FEGaussianBlur::determineAbsolutePaintRect(const FloatRect& originalRequestedRect)
+{
+    FloatRect requestedRect = originalRequestedRect;
+    if (clipsToBounds())
+        requestedRect.intersect(maxEffectRect());
+
+    FilterEffect* input = inputEffect(0);
+    FloatRect inputRect = input->determineAbsolutePaintRect(mapRect(requestedRect, false));
+    FloatRect outputRect = mapRect(inputRect, true);
+    outputRect.intersect(requestedRect);
+    addAbsolutePaintRect(outputRect);
+
+    // Blur needs space for both input and output pixels in the paint area.
+    // Input is also clipped to subregion.
+    if (clipsToBounds())
+        inputRect.intersect(maxEffectRect());
+    addAbsolutePaintRect(inputRect);
+    return outputRect;
+}
+
+PassRefPtr<SkImageFilter> FEGaussianBlur::createImageFilter(SkiaImageFilterBuilder* builder)
+{
+    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
+    float stdX = filter()->applyHorizontalScale(m_stdX);
+    float stdY = filter()->applyVerticalScale(m_stdY);
+    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
+    return adoptRef(SkBlurImageFilter::Create(SkFloatToScalar(stdX), SkFloatToScalar(stdY), input.get(), &rect));
+}
+
+TextStream& FEGaussianBlur::externalRepresentation(TextStream& ts, int indent) const
+>>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[feGaussianBlur";

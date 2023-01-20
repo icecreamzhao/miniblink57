@@ -30,27 +30,22 @@
 #include "core/CoreExport.h"
 #include "core/dom/Touch.h"
 #include "platform/heap/Handle.h"
+#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class CORE_EXPORT TouchList final : public GarbageCollected<TouchList>,
-                                    public ScriptWrappable {
+class CORE_EXPORT TouchList final : public RefCountedWillBeGarbageCollected<TouchList>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static TouchList* create() { return new TouchList; }
-
-    static TouchList* create(const HeapVector<Member<Touch>>& touches)
+    static PassRefPtrWillBeRawPtr<TouchList> create()
     {
-        TouchList* list = new TouchList;
-        list->m_values.appendVector(touches);
-        return list;
+        return adoptRefWillBeNoop(new TouchList);
     }
 
-    static TouchList* adopt(HeapVector<Member<Touch>>& touches)
+    static PassRefPtrWillBeRawPtr<TouchList> adopt(WillBeHeapVector<RefPtrWillBeMember<Touch>>& touches)
     {
-        return new TouchList(touches);
+        return adoptRefWillBeNoop(new TouchList(touches));
     }
 
     unsigned length() const { return m_values.size(); }
@@ -58,16 +53,19 @@ public:
     Touch* item(unsigned);
     const Touch* item(unsigned) const;
 
-    void append(Touch* touch) { m_values.push_back(touch); }
+    void append(const PassRefPtrWillBeRawPtr<Touch> touch) { m_values.append(touch); }
 
     DECLARE_TRACE();
 
 private:
     TouchList() { }
 
-    TouchList(HeapVector<Member<Touch>>& touches) { m_values.swap(touches); }
+    TouchList(WillBeHeapVector<RefPtrWillBeMember<Touch>>& touches)
+    {
+        m_values.swap(touches);
+    }
 
-    HeapVector<Member<Touch>> m_values;
+    WillBeHeapVector<RefPtrWillBeMember<Touch>> m_values;
 };
 
 } // namespace blink

@@ -28,62 +28,52 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableRepeatable.h"
 
 #include "wtf/MathExtras.h"
 
 namespace blink {
 
-bool AnimatableRepeatable::usesDefaultInterpolationWith(
-    const AnimatableValue* value) const
+bool AnimatableRepeatable::usesDefaultInterpolationWith(const AnimatableValue* value) const
 {
-    const Vector<RefPtr<AnimatableValue>>& fromValues = m_values;
-    const Vector<RefPtr<AnimatableValue>>& toValues = toAnimatableRepeatable(value)->m_values;
-    DCHECK(!fromValues.isEmpty() && !toValues.isEmpty());
+    const WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& fromValues = m_values;
+    const WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& toValues = toAnimatableRepeatable(value)->m_values;
+    ASSERT(!fromValues.isEmpty() && !toValues.isEmpty());
     size_t size = lowestCommonMultiple(fromValues.size(), toValues.size());
-    DCHECK_GT(size, 0U);
+    ASSERT(size > 0);
     for (size_t i = 0; i < size; ++i) {
         const AnimatableValue* from = fromValues[i % fromValues.size()].get();
         const AnimatableValue* to = toValues[i % toValues.size()].get();
-        // Spec: If a pair of values cannot be interpolated, then the lists are not
-        // interpolable.
+        // Spec: If a pair of values cannot be interpolated, then the lists are not interpolable.
         if (AnimatableValue::usesDefaultInterpolation(from, to))
             return true;
     }
     return false;
 }
 
-bool AnimatableRepeatable::interpolateLists(
-    const Vector<RefPtr<AnimatableValue>>& fromValues,
-    const Vector<RefPtr<AnimatableValue>>& toValues,
-    double fraction,
-    Vector<RefPtr<AnimatableValue>>& interpolatedValues)
+bool AnimatableRepeatable::interpolateLists(const WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& fromValues, const WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& toValues, double fraction, WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& interpolatedValues)
 {
-    // Interpolation behaviour spec:
-    // http://www.w3.org/TR/css3-transitions/#animtype-repeatable-list
-    DCHECK(interpolatedValues.isEmpty());
-    DCHECK(!fromValues.isEmpty() && !toValues.isEmpty());
+    // Interpolation behaviour spec: http://www.w3.org/TR/css3-transitions/#animtype-repeatable-list
+    ASSERT(interpolatedValues.isEmpty());
+    ASSERT(!fromValues.isEmpty() && !toValues.isEmpty());
     size_t size = lowestCommonMultiple(fromValues.size(), toValues.size());
-    DCHECK_GT(size, 0U);
+    ASSERT(size > 0);
     for (size_t i = 0; i < size; ++i) {
         const AnimatableValue* from = fromValues[i % fromValues.size()].get();
         const AnimatableValue* to = toValues[i % toValues.size()].get();
-        // Spec: If a pair of values cannot be interpolated, then the lists are not
-        // interpolable.
+        // Spec: If a pair of values cannot be interpolated, then the lists are not interpolable.
         if (AnimatableValue::usesDefaultInterpolation(from, to))
             return false;
-        interpolatedValues.push_back(interpolate(from, to, fraction));
+        interpolatedValues.append(interpolate(from, to, fraction));
     }
     return true;
 }
 
-PassRefPtr<AnimatableValue> AnimatableRepeatable::interpolateTo(
-    const AnimatableValue* value,
-    double fraction) const
+PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableRepeatable::interpolateTo(const AnimatableValue* value, double fraction) const
 {
-    Vector<RefPtr<AnimatableValue>> interpolatedValues;
-    bool success = interpolateLists(m_values, toAnimatableRepeatable(value)->m_values,
-        fraction, interpolatedValues);
+    WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>> interpolatedValues;
+    bool success = interpolateLists(m_values, toAnimatableRepeatable(value)->m_values, fraction, interpolatedValues);
     if (success)
         return create(interpolatedValues);
     return defaultInterpolateTo(this, value, fraction);
@@ -91,7 +81,7 @@ PassRefPtr<AnimatableValue> AnimatableRepeatable::interpolateTo(
 
 bool AnimatableRepeatable::equalTo(const AnimatableValue* value) const
 {
-    const Vector<RefPtr<AnimatableValue>>& otherValues = toAnimatableRepeatable(value)->m_values;
+    const WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& otherValues = toAnimatableRepeatable(value)->m_values;
     if (m_values.size() != otherValues.size())
         return false;
     for (size_t i = 0; i < m_values.size(); ++i) {
@@ -99,6 +89,12 @@ bool AnimatableRepeatable::equalTo(const AnimatableValue* value) const
             return false;
     }
     return true;
+}
+
+DEFINE_TRACE(AnimatableRepeatable)
+{
+    visitor->trace(m_values);
+    AnimatableValue::trace(visitor);
 }
 
 } // namespace blink

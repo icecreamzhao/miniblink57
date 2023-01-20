@@ -28,10 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/webmidi/MIDIAccessor.h"
 
 #include "modules/webmidi/MIDIAccessorClient.h"
 #include "public/platform/Platform.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
@@ -39,23 +44,42 @@
 using blink::WebString;
 using midi::mojom::PortState;
 using midi::mojom::Result;
+=======
+#include "wtf/text/WTFString.h"
+
+using blink::WebString;
+>>>>>>> miniblink49
 
 namespace blink {
 
 // Factory method
+<<<<<<< HEAD
 std::unique_ptr<MIDIAccessor> MIDIAccessor::create(MIDIAccessorClient* client)
 {
     return WTF::wrapUnique(new MIDIAccessor(client));
+=======
+PassOwnPtr<MIDIAccessor> MIDIAccessor::create(MIDIAccessorClient* client)
+{
+    return adoptPtr(new MIDIAccessor(client));
+>>>>>>> miniblink49
 }
 
 MIDIAccessor::MIDIAccessor(MIDIAccessorClient* client)
     : m_client(client)
 {
+<<<<<<< HEAD
     DCHECK(client);
 
     m_accessor = WTF::wrapUnique(Platform::current()->createMIDIAccessor(this));
 
     DCHECK(m_accessor);
+=======
+    ASSERT(client);
+
+    m_accessor = adoptPtr(Platform::current()->createMIDIAccessor(this));
+
+    ASSERT(m_accessor);
+>>>>>>> miniblink49
 }
 
 void MIDIAccessor::startSession()
@@ -63,42 +87,63 @@ void MIDIAccessor::startSession()
     m_accessor->startSession();
 }
 
+<<<<<<< HEAD
 void MIDIAccessor::sendMIDIData(unsigned portIndex,
     const unsigned char* data,
     size_t length,
     double timeStamp)
+=======
+void MIDIAccessor::sendMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
+>>>>>>> miniblink49
 {
     m_accessor->sendMIDIData(portIndex, data, length, timeStamp);
 }
 
+<<<<<<< HEAD
 void MIDIAccessor::didAddInputPort(const WebString& id,
     const WebString& manufacturer,
     const WebString& name,
     const WebString& version,
     PortState state)
+=======
+void MIDIAccessor::didAddInputPort(const WebString& id, const WebString& manufacturer, const WebString& name, const WebString& version, MIDIPortState state)
+>>>>>>> miniblink49
 {
     m_client->didAddInputPort(id, manufacturer, name, version, state);
 }
 
+<<<<<<< HEAD
 void MIDIAccessor::didAddOutputPort(const WebString& id,
     const WebString& manufacturer,
     const WebString& name,
     const WebString& version,
     PortState state)
+=======
+void MIDIAccessor::didAddOutputPort(const WebString& id, const WebString& manufacturer, const WebString& name, const WebString& version, MIDIPortState state)
+>>>>>>> miniblink49
 {
     m_client->didAddOutputPort(id, manufacturer, name, version, state);
 }
 
+<<<<<<< HEAD
 void MIDIAccessor::didSetInputPortState(unsigned portIndex, PortState state)
+=======
+void MIDIAccessor::didSetInputPortState(unsigned portIndex, MIDIPortState state)
+>>>>>>> miniblink49
 {
     m_client->didSetInputPortState(portIndex, state);
 }
 
+<<<<<<< HEAD
 void MIDIAccessor::didSetOutputPortState(unsigned portIndex, PortState state)
+=======
+void MIDIAccessor::didSetOutputPortState(unsigned portIndex, MIDIPortState state)
+>>>>>>> miniblink49
 {
     m_client->didSetOutputPortState(portIndex, state);
 }
 
+<<<<<<< HEAD
 void MIDIAccessor::didStartSession(Result result)
 {
     m_client->didStartSession(result);
@@ -108,6 +153,14 @@ void MIDIAccessor::didReceiveMIDIData(unsigned portIndex,
     const unsigned char* data,
     size_t length,
     double timeStamp)
+=======
+void MIDIAccessor::didStartSession(bool success, const WebString& error, const WebString& message)
+{
+    m_client->didStartSession(success, error, message);
+}
+
+void MIDIAccessor::didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
+>>>>>>> miniblink49
 {
     m_client->didReceiveMIDIData(portIndex, data, length, timeStamp);
 }

@@ -6,7 +6,11 @@ namespace string_html {
   extern runtime StringEscapeQuotes(Context, String): String;
 
   // https://tc39.github.io/ecma262/#sec-createhtml
+<<<<<<< HEAD
   transitioning builtin CreateHTML(implicit context: Context)(
+=======
+  builtin CreateHTML(implicit context: Context)(
+>>>>>>> miniblink49
       receiver: Object, methodName: String, tagName: String, attr: String,
       attrValue: Object): String {
     const tagContents: String = ToThisString(receiver, methodName);
@@ -21,21 +25,33 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.anchor
+<<<<<<< HEAD
   transitioning javascript builtin StringPrototypeAnchor(
+=======
+  javascript builtin StringPrototypeAnchor(
+>>>>>>> miniblink49
       context: Context, receiver: Object, ...arguments): String {
     return CreateHTML(
         receiver, 'String.prototype.anchor', 'a', 'name', arguments[0]);
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.big
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeBig(context: Context, receiver: Object, ...arguments): String {
     return CreateHTML(
         receiver, 'String.prototype.big', 'big', kEmptyString, kEmptyString);
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.blink
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeBlink(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -44,7 +60,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.bold
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeBold(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -52,7 +72,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.fontcolor
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeFontcolor(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -60,7 +84,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.fontsize
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeFontsize(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -68,7 +96,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.fixed
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeFixed(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -76,7 +108,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.italics
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeItalics(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -84,7 +120,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.link
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeLink(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -92,7 +132,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.small
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeSmall(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -101,7 +145,11 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.strike
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeStrike(context: Context, receiver: Object, ...arguments):
       String {
     return CreateHTML(
@@ -110,14 +158,22 @@ namespace string_html {
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.sub
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeSub(context: Context, receiver: Object, ...arguments): String {
     return CreateHTML(
         receiver, 'String.prototype.sub', 'sub', kEmptyString, kEmptyString);
   }
 
   // https://tc39.github.io/ecma262/#sec-string.prototype.sup
+<<<<<<< HEAD
   transitioning javascript builtin
+=======
+  javascript builtin
+>>>>>>> miniblink49
   StringPrototypeSup(context: Context, receiver: Object, ...arguments): String {
     return CreateHTML(
         receiver, 'String.prototype.sup', 'sup', kEmptyString, kEmptyString);

@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/quota/DOMWindowQuota.h"
 
 #include "core/frame/LocalDOMWindow.h"
@@ -38,10 +42,19 @@
 namespace blink {
 
 DOMWindowQuota::DOMWindowQuota(LocalDOMWindow& window)
+<<<<<<< HEAD
     : Supplement<LocalDOMWindow>(window)
 {
 }
 
+=======
+    : DOMWindowProperty(window.frame())
+{
+}
+
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowQuota);
+
+>>>>>>> miniblink49
 const char* DOMWindowQuota::supplementName()
 {
     return "DOMWindowQuota";
@@ -50,11 +63,18 @@ const char* DOMWindowQuota::supplementName()
 // static
 DOMWindowQuota& DOMWindowQuota::from(LocalDOMWindow& window)
 {
+<<<<<<< HEAD
     DOMWindowQuota* supplement = static_cast<DOMWindowQuota*>(
         Supplement<LocalDOMWindow>::from(window, supplementName()));
     if (!supplement) {
         supplement = new DOMWindowQuota(window);
         provideTo(window, supplementName(), supplement);
+=======
+    DOMWindowQuota* supplement = static_cast<DOMWindowQuota*>(WillBeHeapSupplement<LocalDOMWindow>::from(window, supplementName()));
+    if (!supplement) {
+        supplement = new DOMWindowQuota(window);
+        provideTo(window, supplementName(), adoptPtrWillBeNoop(supplement));
+>>>>>>> miniblink49
     }
     return *supplement;
 }
@@ -67,7 +87,11 @@ DeprecatedStorageInfo* DOMWindowQuota::webkitStorageInfo(DOMWindow& window)
 
 DeprecatedStorageInfo* DOMWindowQuota::webkitStorageInfo() const
 {
+<<<<<<< HEAD
     if (!m_storageInfo)
+=======
+    if (!m_storageInfo && frame())
+>>>>>>> miniblink49
         m_storageInfo = DeprecatedStorageInfo::create();
     return m_storageInfo.get();
 }
@@ -75,7 +99,12 @@ DeprecatedStorageInfo* DOMWindowQuota::webkitStorageInfo() const
 DEFINE_TRACE(DOMWindowQuota)
 {
     visitor->trace(m_storageInfo);
+<<<<<<< HEAD
     Supplement<LocalDOMWindow>::trace(visitor);
+=======
+    WillBeHeapSupplement<LocalDOMWindow>::trace(visitor);
+    DOMWindowProperty::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

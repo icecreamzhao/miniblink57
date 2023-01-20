@@ -8,11 +8,16 @@
 #ifndef SkTypeface_win_DEFINED
 #define SkTypeface_win_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkLeanWindows.h"
 #include "SkTypeface.h"
 
 #ifdef SK_BUILD_FOR_WIN
 
+=======
+#include "SkTypeface.h"
+
+>>>>>>> miniblink49
 /**
  *  Like the other Typeface create methods, this returns a new reference to the
  *  corresponding typeface for the specified logfont. The caller is responsible
@@ -41,6 +46,7 @@ SK_API void SkTypeface_SetEnsureLOGFONTAccessibleProc(void (*)(const LOGFONT&));
 class SkFontMgr;
 class SkRemotableFontMgr;
 struct IDWriteFactory;
+<<<<<<< HEAD
 struct IDWriteFontCollection;
 struct IDWriteFontFallback;
 
@@ -50,6 +56,11 @@ SK_API SkFontMgr* SkFontMgr_New_DirectWrite(IDWriteFactory* factory = NULL,
 SK_API SkFontMgr* SkFontMgr_New_DirectWrite(IDWriteFactory* factory,
     IDWriteFontCollection* collection,
     IDWriteFontFallback* fallback);
+=======
+
+SK_API SkFontMgr* SkFontMgr_New_GDI();
+SK_API SkFontMgr* SkFontMgr_New_DirectWrite(IDWriteFactory* factory = NULL);
+>>>>>>> miniblink49
 
 /**
  *  Creates an SkFontMgr which renders using DirectWrite and obtains its data
@@ -67,5 +78,9 @@ SK_API SkFontMgr* SkFontMgr_New_DirectWriteRenderer(SkRemotableFontMgr*);
  */
 SK_API SkRemotableFontMgr* SkRemotableFontMgr_New_DirectWrite();
 
+<<<<<<< HEAD
 #endif // SK_BUILD_FOR_WIN
 #endif // SkTypeface_win_DEFINED
+=======
+#endif
+>>>>>>> miniblink49

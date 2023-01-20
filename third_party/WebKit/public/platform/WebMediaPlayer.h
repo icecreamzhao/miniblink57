@@ -35,6 +35,7 @@
 #include "WebCanvas.h"
 #include "WebContentDecryptionModule.h"
 #include "WebMediaSource.h"
+<<<<<<< HEAD
 #include "WebSetSinkIdCallbacks.h"
 #include "WebString.h"
 
@@ -45,17 +46,35 @@ namespace gles2 {
     class GLES2Interface;
 }
 }
+=======
+#include "WebSetSinkIdError.h"
+#include "WebString.h"
+#include "WebTimeRange.h"
+#include "third_party/skia/include/core/SkXfermode.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WebAudioSourceProvider;
 class WebContentDecryptionModule;
+<<<<<<< HEAD
 class WebMediaPlayerSource;
 class WebSecurityOrigin;
+=======
+>>>>>>> miniblink49
 class WebString;
 class WebURL;
 struct WebRect;
 struct WebSize;
+<<<<<<< HEAD
+=======
+class WebGraphicsContext3D;
+#ifndef MINIBLINK_NO_CHANGE
+class WebMouseEvent;
+class WebKeyboardEvent;
+struct WebPoint;
+#endif
+>>>>>>> miniblink49
 
 class WebMediaPlayer {
 public:
@@ -83,9 +102,19 @@ public:
         PreloadAuto,
     };
 
+<<<<<<< HEAD
     enum class BufferingStrategy {
         Normal,
         Aggressive,
+=======
+    // Represents synchronous exceptions that can be thrown from the Encrypted
+    // Media methods. This is different from the asynchronous MediaKeyError.
+    enum MediaKeyException {
+        MediaKeyExceptionNoError,
+        MediaKeyExceptionInvalidPlayerState,
+        MediaKeyExceptionKeySystemNotSupported,
+        MediaKeyExceptionInvalidAccess,
+>>>>>>> miniblink49
     };
 
     enum CORSMode {
@@ -94,6 +123,7 @@ public:
         CORSModeUseCredentials,
     };
 
+<<<<<<< HEAD
     // Reported to UMA. Do not change existing values.
     enum LoadType {
         LoadTypeURL = 0,
@@ -118,6 +148,19 @@ public:
     virtual ~WebMediaPlayer() { }
 
     virtual void load(LoadType, const WebMediaPlayerSource&, CORSMode) = 0;
+=======
+    enum LoadType {
+        LoadTypeURL,
+        LoadTypeMediaSource,
+        LoadTypeMediaStream,
+    };
+
+    typedef unsigned TrackId;
+
+    virtual ~WebMediaPlayer() { }
+
+    virtual void load(LoadType, const WebURL&, CORSMode) = 0;
+>>>>>>> miniblink49
 
     // Playback controls.
     virtual void play() = 0;
@@ -129,14 +172,19 @@ public:
 
     virtual void requestRemotePlayback() { }
     virtual void requestRemotePlaybackControl() { }
+<<<<<<< HEAD
     virtual void requestRemotePlaybackStop() { }
     virtual void requestRemotePlaybackDisabled(bool disabled) { }
     virtual void setPreload(Preload) { }
     virtual void setBufferingStrategy(BufferingStrategy) { }
+=======
+    virtual void setPreload(Preload) { }
+>>>>>>> miniblink49
     virtual WebTimeRanges buffered() const = 0;
     virtual WebTimeRanges seekable() const = 0;
 
     // Attempts to switch the audio output device.
+<<<<<<< HEAD
     // Implementations of setSinkId take ownership of the WebSetSinkCallbacks
     // object.
     // Note also that setSinkId implementations must make sure that all
@@ -147,6 +195,16 @@ public:
         const WebSecurityOrigin&,
         WebSetSinkIdCallbacks*)
         = 0;
+=======
+    // Implementations of setSinkId take ownership of the WebCallbacks
+    // object, and the WebCallbacks object takes ownership of the returned
+    // error value, if any.
+    // Note also that setSinkId implementations must make sure that all
+    // methods of the WebCallbacks object, including constructors and
+    // destructors, run in the same thread where the object is created
+    // (i.e., the blink thread).
+    virtual void setSinkId(const WebString& deviceId, WebCallbacks<void, WebSetSinkIdError>*) = 0;
+>>>>>>> miniblink49
 
     // True if the loaded media has a playable video/audio track.
     virtual bool hasVideo() const = 0;
@@ -165,10 +223,16 @@ public:
     virtual double currentTime() const = 0;
 
     // Internal states of loading and network.
+<<<<<<< HEAD
     virtual NetworkState getNetworkState() const = 0;
     virtual ReadyState getReadyState() const = 0;
 
     virtual WebString getErrorMessage() = 0;
+=======
+    virtual NetworkState networkState() const = 0;
+    virtual ReadyState readyState() const = 0;
+
+>>>>>>> miniblink49
     virtual bool didLoadingProgress() = 0;
 
     virtual bool hasSingleSecurityOrigin() const = 0;
@@ -176,6 +240,7 @@ public:
 
     virtual double mediaTimeForTimeValue(double timeValue) const = 0;
 
+<<<<<<< HEAD
     virtual unsigned int decodedFrameCount() const = 0;
     virtual unsigned int droppedFrameCount() const = 0;
     virtual unsigned int corruptedFrameCount() const { return 0; }
@@ -261,10 +326,31 @@ public:
         result.completeWithError(
             WebContentDecryptionModuleExceptionNotSupportedError, 0, "ERROR");
     }
+=======
+    virtual unsigned decodedFrameCount() const = 0;
+    virtual unsigned droppedFrameCount() const = 0;
+    virtual unsigned corruptedFrameCount() const { return 0; }
+    virtual unsigned audioDecodedByteCount() const = 0;
+    virtual unsigned videoDecodedByteCount() const = 0;
+
+    virtual void paint(WebCanvas*, const WebRect&, unsigned char alpha, SkXfermode::Mode) = 0;
+    // Do a GPU-GPU textures copy if possible.
+    virtual bool copyVideoTextureToPlatformTexture(WebGraphicsContext3D*, unsigned texture, unsigned internalFormat, unsigned type, bool premultiplyAlpha, bool flipY) { return false; }
+
+    virtual WebAudioSourceProvider* audioSourceProvider() { return nullptr; }
+
+    // Returns whether keySystem is supported. If true, the result will be
+    // reported by an event.
+    virtual MediaKeyException generateKeyRequest(const WebString& keySystem, const unsigned char* initData, unsigned initDataLength) { return MediaKeyExceptionKeySystemNotSupported; }
+    virtual MediaKeyException addKey(const WebString& keySystem, const unsigned char* key, unsigned keyLength, const unsigned char* initData, unsigned initDataLength, const WebString& sessionId) { return MediaKeyExceptionKeySystemNotSupported; }
+    virtual MediaKeyException cancelKeyRequest(const WebString& keySystem, const WebString& sessionId) { return MediaKeyExceptionKeySystemNotSupported; }
+    virtual void setContentDecryptionModule(WebContentDecryptionModule* cdm, WebContentDecryptionModuleResult result) { result.completeWithError(WebContentDecryptionModuleExceptionNotSupportedError, 0, "ERROR"); }
+>>>>>>> miniblink49
 
     // Sets the poster image URL.
     virtual void setPoster(const WebURL& poster) { }
 
+<<<<<<< HEAD
     // Whether the WebMediaPlayer supports overlay fullscreen video mode. When
     // this is true, the video layer will be removed from the layer tree when
     // entering fullscreen, and the WebMediaPlayer is responsible for displaying
@@ -284,6 +370,22 @@ public:
         const WebVector<TrackId>& enabledTrackIds) { }
     // |selectedTrackId| is null if no track is selected.
     virtual void selectedVideoTrackChanged(TrackId* selectedTrackId) { }
+=======
+    // Instruct WebMediaPlayer to enter/exit fullscreen.
+    virtual void enterFullscreen() { }
+
+    virtual void enabledAudioTracksChanged(const WebVector<TrackId>& enabledTrackIds) { }
+    // |selectedTrackId| is null if no track is selected.
+    virtual void selectedVideoTrackChanged(TrackId* selectedTrackId) { }
+
+#ifndef MINIBLINK_NO_CHANGE
+    virtual void setContentsToNativeWindowOffset(const WebPoint& p) = 0;
+    virtual bool handleMouseEvent(const WebMouseEvent& evt) = 0;
+    virtual bool handleKeyboardEvent(const WebKeyboardEvent& evt) = 0;
+    virtual void showMediaControls() = 0;
+    virtual void hideMediaControls() = 0;
+#endif
+>>>>>>> miniblink49
 };
 
 } // namespace blink

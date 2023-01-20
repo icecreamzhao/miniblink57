@@ -11,23 +11,35 @@
 #include "SkDocument.h"
 #include "SkForceLinking.h"
 #include "SkGraphics.h"
+<<<<<<< HEAD
 #include "SkImage.h"
 #include "SkStream.h"
 #include "SkString.h"
 #include "SkSurface.h"
+=======
+#include "SkSurface.h"
+#include "SkImage.h"
+#include "SkStream.h"
+#include "SkString.h"
+>>>>>>> miniblink49
 
 __SK_FORCE_IMAGE_DECODER_LINKING;
 
 DEFINE_string2(outFile, o, "skhello", "The filename to write the image.");
 DEFINE_string2(text, t, "Hello", "The string to write.");
 
+<<<<<<< HEAD
 static void doDraw(SkCanvas* canvas, const SkPaint& paint, const char text[])
 {
+=======
+static void doDraw(SkCanvas* canvas, const SkPaint& paint, const char text[]) {
+>>>>>>> miniblink49
     SkRect bounds;
     canvas->getClipBounds(&bounds);
 
     canvas->drawColor(SK_ColorWHITE);
     canvas->drawText(text, strlen(text),
+<<<<<<< HEAD
         bounds.centerX(), bounds.centerY(),
         paint);
 }
@@ -42,6 +54,21 @@ static bool do_surface(int w, int h, const char path[], const char text[],
     sk_sp<SkImage> image(surface->makeImageSnapshot());
     SkAutoDataUnref data(image->encode());
     if (nullptr == data.get()) {
+=======
+                     bounds.centerX(), bounds.centerY(),
+                     paint);
+}
+
+static bool do_surface(int w, int h, const char path[], const char text[],
+                       const SkPaint& paint) {
+    SkSurfaceProps props(0, kUnknown_SkPixelGeometry);
+    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(w, h, &props));
+    doDraw(surface->getCanvas(), paint, text);
+
+    SkAutoTUnref<SkImage> image(surface->newImageSnapshot());
+    SkAutoDataUnref data(image->encode());
+    if (NULL == data.get()) {
+>>>>>>> miniblink49
         return false;
     }
     SkFILEWStream stream(path);
@@ -49,6 +76,7 @@ static bool do_surface(int w, int h, const char path[], const char text[],
 }
 
 static bool do_document(int w, int h, const char path[], const char text[],
+<<<<<<< HEAD
     const SkPaint& paint)
 {
     sk_sp<SkDocument> doc(SkDocument::MakePDF(path));
@@ -56,14 +84,26 @@ static bool do_document(int w, int h, const char path[], const char text[],
         SkScalar width = SkIntToScalar(w);
         SkScalar height = SkIntToScalar(h);
         doDraw(doc->beginPage(width, height, nullptr), paint, text);
+=======
+                        const SkPaint& paint) {
+    SkAutoTUnref<SkDocument> doc(SkDocument::CreatePDF(path));
+    if (doc.get()) {
+        SkScalar width = SkIntToScalar(w);
+        SkScalar height = SkIntToScalar(h);
+        doDraw(doc->beginPage(width, height, NULL), paint, text);
+>>>>>>> miniblink49
         return true;
     }
     return false;
 }
 
 int tool_main(int argc, char** argv);
+<<<<<<< HEAD
 int tool_main(int argc, char** argv)
 {
+=======
+int tool_main(int argc, char** argv) {
+>>>>>>> miniblink49
     SkCommandLineFlags::SetUsage("");
     SkCommandLineFlags::Parse(argc, argv);
 
@@ -91,7 +131,11 @@ int tool_main(int argc, char** argv)
 
     static const struct {
         bool (*fProc)(int w, int h, const char path[], const char text[],
+<<<<<<< HEAD
             const SkPaint&);
+=======
+                      const SkPaint&);
+>>>>>>> miniblink49
         const char* fSuffix;
     } gRec[] = {
         { do_surface, ".png" },
@@ -109,8 +153,13 @@ int tool_main(int argc, char** argv)
 }
 
 #if !defined SK_BUILD_FOR_IOS
+<<<<<<< HEAD
 int main(int argc, char* const argv[])
 {
     return tool_main(argc, (char**)argv);
+=======
+int main(int argc, char * const argv[]) {
+    return tool_main(argc, (char**) argv);
+>>>>>>> miniblink49
 }
 #endif

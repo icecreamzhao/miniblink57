@@ -28,11 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/quota/DeprecatedStorageInfo.h"
 
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
+<<<<<<< HEAD
 #include "core/dom/TaskRunnerHelper.h"
+=======
+>>>>>>> miniblink49
 #include "modules/quota/DeprecatedStorageQuota.h"
 #include "modules/quota/StorageErrorCallback.h"
 #include "modules/quota/StorageQuotaCallback.h"
@@ -41,6 +49,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 DeprecatedStorageInfo::DeprecatedStorageInfo() { }
 
 void DeprecatedStorageInfo::queryUsageAndQuota(
@@ -92,6 +101,44 @@ DeprecatedStorageQuota* DeprecatedStorageInfo::getStorageQuota(
             m_temporaryStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Temporary);
         return m_temporaryStorage.get();
     case kPersistent:
+=======
+DeprecatedStorageInfo::DeprecatedStorageInfo()
+{
+}
+
+void DeprecatedStorageInfo::queryUsageAndQuota(ExecutionContext* executionContext, int storageType, StorageUsageCallback* successCallback, StorageErrorCallback* errorCallback)
+{
+    // Dispatching the request to DeprecatedStorageQuota, as this interface is deprecated in favor of DeprecatedStorageQuota.
+    DeprecatedStorageQuota* storageQuota = getStorageQuota(storageType);
+    if (!storageQuota) {
+        // Unknown storage type is requested.
+        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
+        return;
+    }
+    storageQuota->queryUsageAndQuota(executionContext, successCallback, errorCallback);
+}
+
+void DeprecatedStorageInfo::requestQuota(ExecutionContext* executionContext, int storageType, unsigned long long newQuotaInBytes, StorageQuotaCallback* successCallback, StorageErrorCallback* errorCallback)
+{
+    // Dispatching the request to DeprecatedStorageQuota, as this interface is deprecated in favor of DeprecatedStorageQuota.
+    DeprecatedStorageQuota* storageQuota = getStorageQuota(storageType);
+    if (!storageQuota) {
+        // Unknown storage type is requested.
+        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
+        return;
+    }
+    storageQuota->requestQuota(executionContext, newQuotaInBytes, successCallback, errorCallback);
+}
+
+DeprecatedStorageQuota* DeprecatedStorageInfo::getStorageQuota(int storageType)
+{
+    switch (storageType) {
+    case TEMPORARY:
+        if (!m_temporaryStorage)
+            m_temporaryStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Temporary);
+        return m_temporaryStorage.get();
+    case PERSISTENT:
+>>>>>>> miniblink49
         if (!m_persistentStorage)
             m_persistentStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Persistent);
         return m_persistentStorage.get();

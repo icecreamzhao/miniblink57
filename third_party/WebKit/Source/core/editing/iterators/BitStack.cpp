@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
- * rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
  * Copyright (C) 2005 Alexey Proskuryakov.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/editing/iterators/BitStack.h"
 
 namespace blink {
@@ -36,7 +36,9 @@ BitStack::BitStack()
 {
 }
 
-BitStack::~BitStack() { }
+BitStack::~BitStack()
+{
+}
 
 void BitStack::push(bool bit)
 {

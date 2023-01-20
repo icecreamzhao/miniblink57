@@ -18,11 +18,16 @@ namespace blink {
 // but some platforms require to poll to have an accurate reporting. When
 // ScreenOrientationDispatcher is listening, that means that the platform should
 // be polling if required.
+<<<<<<< HEAD
 class ScreenOrientationDispatcher final
     : public GarbageCollected<ScreenOrientationDispatcher>,
       public PlatformEventDispatcher {
     USING_GARBAGE_COLLECTED_MIXIN(ScreenOrientationDispatcher);
 
+=======
+class ScreenOrientationDispatcher final : public GarbageCollectedFinalized<ScreenOrientationDispatcher>, public PlatformEventDispatcher {
+    USING_GARBAGE_COLLECTED_MIXIN(ScreenOrientationDispatcher);
+>>>>>>> miniblink49
 public:
     static ScreenOrientationDispatcher& instance();
 

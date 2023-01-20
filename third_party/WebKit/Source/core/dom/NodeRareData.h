@@ -22,88 +22,42 @@
 #ifndef NodeRareData_h
 #define NodeRareData_h
 
-#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/dom/MutationObserverRegistration.h"
 #include "core/dom/NodeListsNodeData.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashSet.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-class NodeMutationObserverData final
-    : public GarbageCollected<NodeMutationObserverData> {
+class NodeMutationObserverData final : public NoBaseWillBeGarbageCollected<NodeMutationObserverData> {
     WTF_MAKE_NONCOPYABLE(NodeMutationObserverData);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(NodeMutationObserverData);
 public:
-    static NodeMutationObserverData* create()
-    {
-        return new NodeMutationObserverData;
-    }
+    WillBeHeapVector<OwnPtrWillBeMember<MutationObserverRegistration>> registry;
+    WillBeHeapHashSet<RawPtrWillBeMember<MutationObserverRegistration>> transientRegistry;
 
-    const HeapVector<TraceWrapperMember<MutationObserverRegistration>>&
-    registry()
+    static PassOwnPtrWillBeRawPtr<NodeMutationObserverData> create()
     {
-        return m_registry;
-    }
-
-    const HeapHashSet<TraceWrapperMember<MutationObserverRegistration>>&
-    transientRegistry()
-    {
-        return m_transientRegistry;
-    }
-
-    void addTransientRegistration(MutationObserverRegistration* registration)
-    {
-        m_transientRegistry.add(
-            TraceWrapperMember<MutationObserverRegistration>(this, registration));
-    }
-
-    void removeTransientRegistration(MutationObserverRegistration* registration)
-    {
-        DCHECK(m_transientRegistry.contains(registration));
-        m_transientRegistry.remove(registration);
-    }
-
-    void addRegistration(MutationObserverRegistration* registration)
-    {
-        m_registry.push_back(
-            TraceWrapperMember<MutationObserverRegistration>(this, registration));
-    }
-
-    void removeRegistration(MutationObserverRegistration* registration)
-    {
-        DCHECK(m_registry.contains(registration));
-        m_registry.remove(m_registry.find(registration));
+        return adoptPtrWillBeNoop(new NodeMutationObserverData);
     }
 
     DEFINE_INLINE_TRACE()
     {
-        visitor->trace(m_registry);
-        visitor->trace(m_transientRegistry);
-    }
-
-    DECLARE_TRACE_WRAPPERS()
-    {
-        for (auto registration : m_registry) {
-            visitor->traceWrappers(registration);
-        }
-        for (auto registration : m_transientRegistry) {
-            visitor->traceWrappers(registration);
-        }
+#if ENABLE(OILPAN)
+        visitor->trace(registry);
+        visitor->trace(transientRegistry);
+#endif
     }
 
 private:
     NodeMutationObserverData() { }
-
-    HeapVector<TraceWrapperMember<MutationObserverRegistration>> m_registry;
-    HeapHashSet<TraceWrapperMember<MutationObserverRegistration>>
-        m_transientRegistry;
 };
 
-class NodeRareData : public GarbageCollectedFinalized<NodeRareData>,
-                     public NodeRareDataBase {
+class NodeRareData : public NoBaseWillBeGarbageCollectedFinalized<NodeRareData>, public NodeRareDataBase {
     WTF_MAKE_NONCOPYABLE(NodeRareData);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(NodeRareData);
 public:
     static NodeRareData* create(LayoutObject* layoutObject)
     {
@@ -112,56 +66,36 @@ public:
 
     void clearNodeLists() { m_nodeLists.clear(); }
     NodeListsNodeData* nodeLists() const { return m_nodeLists.get(); }
-    // ensureNodeLists() and a following NodeListsNodeData functions must be
-    // wrapped with a ThreadState::GCForbiddenScope in order to avoid an
-    // initialized m_nodeLists is cleared by NodeRareData::traceAfterDispatch().
     NodeListsNodeData& ensureNodeLists()
     {
-        DCHECK(ThreadState::current()->isGCForbidden());
-        if (!m_nodeLists) {
+        if (!m_nodeLists)
             m_nodeLists = NodeListsNodeData::create();
-            ScriptWrappableVisitor::writeBarrier(this, m_nodeLists);
-        }
         return *m_nodeLists;
     }
 
-    NodeMutationObserverData* mutationObserverData()
-    {
-        return m_mutationObserverData.get();
-    }
+    NodeMutationObserverData* mutationObserverData() { return m_mutationObserverData.get(); }
     NodeMutationObserverData& ensureMutationObserverData()
     {
-        if (!m_mutationObserverData) {
+        if (!m_mutationObserverData)
             m_mutationObserverData = NodeMutationObserverData::create();
-            ScriptWrappableVisitor::writeBarrier(this, m_mutationObserverData);
-        }
         return *m_mutationObserverData;
     }
 
     unsigned connectedSubframeCount() const { return m_connectedFrameCount; }
-    void incrementConnectedSubframeCount();
-    void decrementConnectedSubframeCount()
+    void incrementConnectedSubframeCount(unsigned amount);
+    void decrementConnectedSubframeCount(unsigned amount)
     {
-        DCHECK(m_connectedFrameCount);
-        --m_connectedFrameCount;
+        ASSERT(m_connectedFrameCount);
+        ASSERT(amount <= m_connectedFrameCount);
+        m_connectedFrameCount -= amount;
     }
 
     bool hasElementFlag(ElementFlags mask) const { return m_elementFlags & mask; }
-    void setElementFlag(ElementFlags mask, bool value)
-    {
-        m_elementFlags = (m_elementFlags & ~mask) | (-(int32_t)value & mask);
-    }
+    void setElementFlag(ElementFlags mask, bool value) { m_elementFlags = (m_elementFlags & ~mask) | (-(int32_t)value & mask); }
     void clearElementFlag(ElementFlags mask) { m_elementFlags &= ~mask; }
 
-    bool hasRestyleFlag(DynamicRestyleFlags mask) const
-    {
-        return m_restyleFlags & mask;
-    }
-    void setRestyleFlag(DynamicRestyleFlags mask)
-    {
-        m_restyleFlags |= mask;
-        RELEASE_ASSERT(m_restyleFlags);
-    }
+    bool hasRestyleFlag(DynamicRestyleFlags mask) const { return m_restyleFlags & mask; }
+    void setRestyleFlag(DynamicRestyleFlags mask) { m_restyleFlags |= mask; RELEASE_ASSERT(m_restyleFlags); }
     bool hasRestyleFlags() const { return m_restyleFlags; }
     void clearRestyleFlags() { m_restyleFlags = 0; }
 
@@ -174,9 +108,6 @@ public:
     DECLARE_TRACE_AFTER_DISPATCH();
     void finalizeGarbageCollectedObject();
 
-    DECLARE_TRACE_WRAPPERS();
-    DECLARE_TRACE_WRAPPERS_AFTER_DISPATCH();
-
 protected:
     explicit NodeRareData(LayoutObject* layoutObject)
         : NodeRareDataBase(layoutObject)
@@ -184,17 +115,15 @@ protected:
         , m_elementFlags(0)
         , m_restyleFlags(0)
         , m_isElementRareData(false)
-    {
-    }
+    { }
 
 private:
-    Member<NodeListsNodeData> m_nodeLists;
-    Member<NodeMutationObserverData> m_mutationObserverData;
+    OwnPtrWillBeMember<NodeListsNodeData> m_nodeLists;
+    OwnPtrWillBeMember<NodeMutationObserverData> m_mutationObserverData;
 
     unsigned m_connectedFrameCount : ConnectedFrameCountBits;
     unsigned m_elementFlags : NumberOfElementFlags;
     unsigned m_restyleFlags : NumberOfDynamicRestyleFlags;
-
 protected:
     unsigned m_isElementRareData : 1;
 };

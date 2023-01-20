@@ -28,9 +28,15 @@
  * For more details see the Normalizer2 C++ class.
  */
 
+<<<<<<< HEAD
 #include "unicode/localpointer.h"
 #include "unicode/uset.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/localpointer.h"
+#include "unicode/uset.h"
+>>>>>>> miniblink49
 
 /**
  * Constants for normalization modes.
@@ -89,6 +95,7 @@ typedef enum {
  * @stable ICU 2.0
  */
 typedef enum UNormalizationCheckResult {
+<<<<<<< HEAD
     /**
    * The input string is not in the normalization form.
    * @stable ICU 2.0
@@ -100,13 +107,30 @@ typedef enum UNormalizationCheckResult {
    */
     UNORM_YES,
     /**
+=======
+  /**
+   * The input string is not in the normalization form.
+   * @stable ICU 2.0
+   */
+  UNORM_NO,
+  /**
+   * The input string is in the normalization form.
+   * @stable ICU 2.0
+   */
+  UNORM_YES,
+  /**
+>>>>>>> miniblink49
    * The input string may or may not be in the normalization form.
    * This value is only returned for composition forms like NFC and FCC,
    * when a backward-combining character is found for which the surrounding text
    * would have to be analyzed further.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UNORM_MAYBE
+=======
+  UNORM_MAYBE
+>>>>>>> miniblink49
 } UNormalizationCheckResult;
 
 /**
@@ -114,7 +138,11 @@ typedef enum UNormalizationCheckResult {
  * @stable ICU 4.4
  */
 struct UNormalizer2;
+<<<<<<< HEAD
 typedef struct UNormalizer2 UNormalizer2; /**< C typedef for struct UNormalizer2. @stable ICU 4.4 */
+=======
+typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer2. @stable ICU 4.4 */
+>>>>>>> miniblink49
 
 #if !UCONFIG_NO_NORMALIZATION
 
@@ -129,8 +157,13 @@ typedef struct UNormalizer2 UNormalizer2; /**< C typedef for struct UNormalizer2
  * @return the requested Normalizer2, if successful
  * @stable ICU 49
  */
+<<<<<<< HEAD
 U_STABLE const UNormalizer2* U_EXPORT2
 unorm2_getNFCInstance(UErrorCode* pErrorCode);
+=======
+U_STABLE const UNormalizer2 * U_EXPORT2
+unorm2_getNFCInstance(UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Returns a UNormalizer2 instance for Unicode NFD normalization.
@@ -143,8 +176,13 @@ unorm2_getNFCInstance(UErrorCode* pErrorCode);
  * @return the requested Normalizer2, if successful
  * @stable ICU 49
  */
+<<<<<<< HEAD
 U_STABLE const UNormalizer2* U_EXPORT2
 unorm2_getNFDInstance(UErrorCode* pErrorCode);
+=======
+U_STABLE const UNormalizer2 * U_EXPORT2
+unorm2_getNFDInstance(UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Returns a UNormalizer2 instance for Unicode NFKC normalization.
@@ -157,8 +195,13 @@ unorm2_getNFDInstance(UErrorCode* pErrorCode);
  * @return the requested Normalizer2, if successful
  * @stable ICU 49
  */
+<<<<<<< HEAD
 U_STABLE const UNormalizer2* U_EXPORT2
 unorm2_getNFKCInstance(UErrorCode* pErrorCode);
+=======
+U_STABLE const UNormalizer2 * U_EXPORT2
+unorm2_getNFKCInstance(UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Returns a UNormalizer2 instance for Unicode NFKD normalization.
@@ -171,8 +214,13 @@ unorm2_getNFKCInstance(UErrorCode* pErrorCode);
  * @return the requested Normalizer2, if successful
  * @stable ICU 49
  */
+<<<<<<< HEAD
 U_STABLE const UNormalizer2* U_EXPORT2
 unorm2_getNFKDInstance(UErrorCode* pErrorCode);
+=======
+U_STABLE const UNormalizer2 * U_EXPORT2
+unorm2_getNFKDInstance(UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Returns a UNormalizer2 instance for Unicode NFKC_Casefold normalization.
@@ -185,8 +233,13 @@ unorm2_getNFKDInstance(UErrorCode* pErrorCode);
  * @return the requested Normalizer2, if successful
  * @stable ICU 49
  */
+<<<<<<< HEAD
 U_STABLE const UNormalizer2* U_EXPORT2
 unorm2_getNFKCCasefoldInstance(UErrorCode* pErrorCode);
+=======
+U_STABLE const UNormalizer2 * U_EXPORT2
+unorm2_getNFKCCasefoldInstance(UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Returns a UNormalizer2 instance which uses the specified data file
@@ -209,11 +262,19 @@ unorm2_getNFKCCasefoldInstance(UErrorCode* pErrorCode);
  * @return the requested UNormalizer2, if successful
  * @stable ICU 4.4
  */
+<<<<<<< HEAD
 U_STABLE const UNormalizer2* U_EXPORT2
 unorm2_getInstance(const char* packageName,
     const char* name,
     UNormalization2Mode mode,
     UErrorCode* pErrorCode);
+=======
+U_STABLE const UNormalizer2 * U_EXPORT2
+unorm2_getInstance(const char *packageName,
+                   const char *name,
+                   UNormalization2Mode mode,
+                   UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Constructs a filtered normalizer wrapping any UNormalizer2 instance
@@ -230,8 +291,13 @@ unorm2_getInstance(const char* packageName,
  * @return the requested UNormalizer2, if successful
  * @stable ICU 4.4
  */
+<<<<<<< HEAD
 U_STABLE UNormalizer2* U_EXPORT2
 unorm2_openFiltered(const UNormalizer2* norm2, const USet* filterSet, UErrorCode* pErrorCode);
+=======
+U_STABLE UNormalizer2 * U_EXPORT2
+unorm2_openFiltered(const UNormalizer2 *norm2, const USet *filterSet, UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Closes a UNormalizer2 instance from unorm2_openFiltered().
@@ -240,7 +306,11 @@ unorm2_openFiltered(const UNormalizer2* norm2, const USet* filterSet, UErrorCode
  * @stable ICU 4.4
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 unorm2_close(UNormalizer2* norm2);
+=======
+unorm2_close(UNormalizer2 *norm2);
+>>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -278,10 +348,17 @@ U_NAMESPACE_END
  * @stable ICU 4.4
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_normalize(const UNormalizer2* norm2,
     const UChar* src, int32_t length,
     UChar* dest, int32_t capacity,
     UErrorCode* pErrorCode);
+=======
+unorm2_normalize(const UNormalizer2 *norm2,
+                 const UChar *src, int32_t length,
+                 UChar *dest, int32_t capacity,
+                 UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 /**
  * Appends the normalized form of the second string to the first string
  * (merging them at the boundary) and returns the length of the first string.
@@ -301,10 +378,17 @@ unorm2_normalize(const UNormalizer2* norm2,
  * @stable ICU 4.4
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_normalizeSecondAndAppend(const UNormalizer2* norm2,
     UChar* first, int32_t firstLength, int32_t firstCapacity,
     const UChar* second, int32_t secondLength,
     UErrorCode* pErrorCode);
+=======
+unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
+                                UChar *first, int32_t firstLength, int32_t firstCapacity,
+                                const UChar *second, int32_t secondLength,
+                                UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 /**
  * Appends the second string to the first string
  * (merging them at the boundary) and returns the length of the first string.
@@ -324,10 +408,17 @@ unorm2_normalizeSecondAndAppend(const UNormalizer2* norm2,
  * @stable ICU 4.4
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_append(const UNormalizer2* norm2,
     UChar* first, int32_t firstLength, int32_t firstCapacity,
     const UChar* second, int32_t secondLength,
     UErrorCode* pErrorCode);
+=======
+unorm2_append(const UNormalizer2 *norm2,
+              UChar *first, int32_t firstLength, int32_t firstCapacity,
+              const UChar *second, int32_t secondLength,
+              UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Gets the decomposition mapping of c.
@@ -349,9 +440,15 @@ unorm2_append(const UNormalizer2* norm2,
  * @stable ICU 4.6
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_getDecomposition(const UNormalizer2* norm2,
     UChar32 c, UChar* decomposition, int32_t capacity,
     UErrorCode* pErrorCode);
+=======
+unorm2_getDecomposition(const UNormalizer2 *norm2,
+                        UChar32 c, UChar *decomposition, int32_t capacity,
+                        UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Gets the raw decomposition mapping of c.
@@ -383,9 +480,15 @@ unorm2_getDecomposition(const UNormalizer2* norm2,
  * @stable ICU 49
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_getRawDecomposition(const UNormalizer2* norm2,
     UChar32 c, UChar* decomposition, int32_t capacity,
     UErrorCode* pErrorCode);
+=======
+unorm2_getRawDecomposition(const UNormalizer2 *norm2,
+                           UChar32 c, UChar *decomposition, int32_t capacity,
+                           UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Performs pairwise composition of a & b and returns the composite if there is one.
@@ -403,7 +506,11 @@ unorm2_getRawDecomposition(const UNormalizer2* norm2,
  * @stable ICU 49
  */
 U_STABLE UChar32 U_EXPORT2
+<<<<<<< HEAD
 unorm2_composePair(const UNormalizer2* norm2, UChar32 a, UChar32 b);
+=======
+unorm2_composePair(const UNormalizer2 *norm2, UChar32 a, UChar32 b);
+>>>>>>> miniblink49
 
 /**
  * Gets the combining class of c.
@@ -415,7 +522,11 @@ unorm2_composePair(const UNormalizer2* norm2, UChar32 a, UChar32 b);
  * @stable ICU 49
  */
 U_STABLE uint8_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_getCombiningClass(const UNormalizer2* norm2, UChar32 c);
+=======
+unorm2_getCombiningClass(const UNormalizer2 *norm2, UChar32 c);
+>>>>>>> miniblink49
 
 /**
  * Tests if the string is normalized.
@@ -434,9 +545,15 @@ unorm2_getCombiningClass(const UNormalizer2* norm2, UChar32 c);
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
+<<<<<<< HEAD
 unorm2_isNormalized(const UNormalizer2* norm2,
     const UChar* s, int32_t length,
     UErrorCode* pErrorCode);
+=======
+unorm2_isNormalized(const UNormalizer2 *norm2,
+                    const UChar *s, int32_t length,
+                    UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Tests if the string is normalized.
@@ -456,9 +573,15 @@ unorm2_isNormalized(const UNormalizer2* norm2,
  * @stable ICU 4.4
  */
 U_STABLE UNormalizationCheckResult U_EXPORT2
+<<<<<<< HEAD
 unorm2_quickCheck(const UNormalizer2* norm2,
     const UChar* s, int32_t length,
     UErrorCode* pErrorCode);
+=======
+unorm2_quickCheck(const UNormalizer2 *norm2,
+                  const UChar *s, int32_t length,
+                  UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Returns the end of the normalized substring of the input string.
@@ -485,9 +608,15 @@ unorm2_quickCheck(const UNormalizer2* norm2,
  * @stable ICU 4.4
  */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 unorm2_spanQuickCheckYes(const UNormalizer2* norm2,
     const UChar* s, int32_t length,
     UErrorCode* pErrorCode);
+=======
+unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
+                         const UChar *s, int32_t length,
+                         UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Tests if the character always has a normalization boundary before it,
@@ -499,7 +628,11 @@ unorm2_spanQuickCheckYes(const UNormalizer2* norm2,
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
+<<<<<<< HEAD
 unorm2_hasBoundaryBefore(const UNormalizer2* norm2, UChar32 c);
+=======
+unorm2_hasBoundaryBefore(const UNormalizer2 *norm2, UChar32 c);
+>>>>>>> miniblink49
 
 /**
  * Tests if the character always has a normalization boundary after it,
@@ -511,7 +644,11 @@ unorm2_hasBoundaryBefore(const UNormalizer2* norm2, UChar32 c);
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
+<<<<<<< HEAD
 unorm2_hasBoundaryAfter(const UNormalizer2* norm2, UChar32 c);
+=======
+unorm2_hasBoundaryAfter(const UNormalizer2 *norm2, UChar32 c);
+>>>>>>> miniblink49
 
 /**
  * Tests if the character is normalization-inert.
@@ -522,7 +659,14 @@ unorm2_hasBoundaryAfter(const UNormalizer2* norm2, UChar32 c);
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
+<<<<<<< HEAD
 unorm2_isInert(const UNormalizer2* norm2, UChar32 c);
 
 #endif /* !UCONFIG_NO_NORMALIZATION */
 #endif /* __UNORM2_H__ */
+=======
+unorm2_isInert(const UNormalizer2 *norm2, UChar32 c);
+
+#endif  /* !UCONFIG_NO_NORMALIZATION */
+#endif  /* __UNORM2_H__ */
+>>>>>>> miniblink49

@@ -22,6 +22,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLTableCellElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -34,13 +35,20 @@
 #include "core/layout/LayoutTableCell.h"
 
 using namespace std;
+using namespace std;
 
 namespace blink {
 
+// Clamp rowspan and colspan at 8k.
+// Firefox used a limit of 8190 for rowspan but they changed it to 65,534.
+// (FIXME: We should consider increasing this limit (crbug.com/78577).
+// Firefox uses a limit of 1,000 for colspan and resets the value to 1
+// but we don't discriminate between rowspan / colspan as it is artificial.
+static const unsigned maxColRowSpan = 8190;
+
 using namespace HTMLNames;
 
-inline HTMLTableCellElement::HTMLTableCellElement(const QualifiedName& tagName,
-    Document& document)
+inline HTMLTableCellElement::HTMLTableCellElement(const QualifiedName& tagName, Document& document)
     : HTMLTablePartElement(tagName, document)
 {
 }
@@ -53,16 +61,7 @@ unsigned HTMLTableCellElement::colSpan() const
     unsigned value = 0;
     if (colSpanValue.isEmpty() || !parseHTMLNonNegativeInteger(colSpanValue, value))
         return 1;
-    // Counting for https://github.com/whatwg/html/issues/1198
-    UseCounter::count(document(), UseCounter::HTMLTableCellElementColspan);
-    if (value > 8190) {
-        UseCounter::count(document(),
-            UseCounter::HTMLTableCellElementColspanGreaterThan8190);
-    } else if (value > 1000) {
-        UseCounter::count(document(),
-            UseCounter::HTMLTableCellElementColspanGreaterThan1000);
-    }
-    return max(1u, min(value, maxColSpan()));
+    return max(1u, min(value, maxColRowSpan));
 }
 
 unsigned HTMLTableCellElement::rowSpan() const
@@ -71,7 +70,7 @@ unsigned HTMLTableCellElement::rowSpan() const
     unsigned value = 0;
     if (rowSpanValue.isEmpty() || !parseHTMLNonNegativeInteger(rowSpanValue, value))
         return 1;
-    return max(1u, min(value, maxRowSpan()));
+    return max(1u, min(value, maxColRowSpan));
 }
 
 int HTMLTableCellElement::cellIndex() const
@@ -80,30 +79,23 @@ int HTMLTableCellElement::cellIndex() const
         return -1;
 
     int index = 0;
-    for (const HTMLTableCellElement* element = Traversal<HTMLTableCellElement>::previousSibling(*this);
-         element;
-         element = Traversal<HTMLTableCellElement>::previousSibling(*element))
+    for (const HTMLTableCellElement* element = Traversal<HTMLTableCellElement>::previousSibling(*this); element; element = Traversal<HTMLTableCellElement>::previousSibling(*element))
         ++index;
 
     return index;
 }
 
-bool HTMLTableCellElement::isPresentationAttribute(
-    const QualifiedName& name) const
+bool HTMLTableCellElement::isPresentationAttribute(const QualifiedName& name) const
 {
     if (name == nowrapAttr || name == widthAttr || name == heightAttr)
         return true;
     return HTMLTablePartElement::isPresentationAttribute(name);
 }
 
-void HTMLTableCellElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLTableCellElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
     if (name == nowrapAttr) {
-        addPropertyToPresentationAttributeStyle(style, CSSPropertyWhiteSpace,
-            CSSValueWebkitNowrap);
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyWhiteSpace, CSSValueWebkitNowrap);
     } else if (name == widthAttr) {
         if (!value.isEmpty()) {
             int widthInt = value.toInt();
@@ -117,24 +109,24 @@ void HTMLTableCellElement::collectStyleForPresentationAttribute(
                 addHTMLLengthToStyle(style, CSSPropertyHeight, value);
         }
     } else {
-        HTMLTablePartElement::collectStyleForPresentationAttribute(name, value,
-            style);
+        HTMLTablePartElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-void HTMLTableCellElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLTableCellElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == rowspanAttr || params.name == colspanAttr) {
+    if (name == rowspanAttr) {
+        if (layoutObject() && layoutObject()->isTableCell())
+            toLayoutTableCell(layoutObject())->colSpanOrRowSpanChanged();
+    } else if (name == colspanAttr) {
         if (layoutObject() && layoutObject()->isTableCell())
             toLayoutTableCell(layoutObject())->colSpanOrRowSpanChanged();
     } else {
-        HTMLTablePartElement::parseAttribute(params);
+        HTMLTablePartElement::parseAttribute(name, value);
     }
 }
 
-const StylePropertySet*
-HTMLTableCellElement::additionalPresentationAttributeStyle()
+const StylePropertySet* HTMLTableCellElement::additionalPresentationAttributeStyle()
 {
     if (HTMLTableElement* table = findParentTable())
         return table->additionalCellStyle();
@@ -146,16 +138,14 @@ bool HTMLTableCellElement::isURLAttribute(const Attribute& attribute) const
     return attribute.name() == backgroundAttr || HTMLTablePartElement::isURLAttribute(attribute);
 }
 
-bool HTMLTableCellElement::hasLegalLinkAttribute(
-    const QualifiedName& name) const
+bool HTMLTableCellElement::hasLegalLinkAttribute(const QualifiedName& name) const
 {
     return (hasTagName(tdTag) && name == backgroundAttr) || HTMLTablePartElement::hasLegalLinkAttribute(name);
 }
 
 const QualifiedName& HTMLTableCellElement::subResourceAttributeName() const
 {
-    return hasTagName(tdTag) ? backgroundAttr
-                             : HTMLTablePartElement::subResourceAttributeName();
+    return hasTagName(tdTag) ? backgroundAttr : HTMLTablePartElement::subResourceAttributeName();
 }
 
 const AtomicString& HTMLTableCellElement::abbr() const
@@ -181,6 +171,27 @@ const AtomicString& HTMLTableCellElement::headers() const
 void HTMLTableCellElement::setRowSpan(unsigned n)
 {
     setUnsignedIntegralAttribute(rowspanAttr, n);
+}
+
+const AtomicString& HTMLTableCellElement::scope() const
+{
+    return fastGetAttribute(scopeAttr);
+}
+
+HTMLTableCellElement* HTMLTableCellElement::cellAbove() const
+{
+    LayoutObject* cellLayoutObject = layoutObject();
+    if (!cellLayoutObject)
+        return nullptr;
+    if (!cellLayoutObject->isTableCell())
+        return nullptr;
+
+    LayoutTableCell* tableCellLayoutObject = toLayoutTableCell(cellLayoutObject);
+    LayoutTableCell* cellAboveLayoutObject = tableCellLayoutObject->table()->cellAbove(tableCellLayoutObject);
+    if (!cellAboveLayoutObject)
+        return nullptr;
+
+    return toHTMLTableCellElement(cellAboveLayoutObject->node());
 }
 
 } // namespace blink

@@ -29,6 +29,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebCString.h"
 
 #include "public/platform/WebString.h"
@@ -61,7 +65,15 @@ void WebCString::assign(const WebCString& other)
 
 void WebCString::assign(const char* data, size_t length)
 {
+<<<<<<< HEAD
     assign(WTF::CString(data, length).impl());
+=======
+    char* newData;
+    RefPtr<WTF::CStringBuffer> buffer =
+        WTF::CString::newUninitialized(length, newData).buffer();
+    memcpy(newData, data, length);
+    assign(buffer.get());
+>>>>>>> miniblink49
 }
 
 size_t WebCString::length() const
@@ -81,12 +93,20 @@ WebString WebCString::utf16() const
 
 WebCString::WebCString(const WTF::CString& s)
 {
+<<<<<<< HEAD
     assign(s.impl());
+=======
+    assign(s.buffer());
+>>>>>>> miniblink49
 }
 
 WebCString& WebCString::operator=(const WTF::CString& s)
 {
+<<<<<<< HEAD
     assign(s.impl());
+=======
+    assign(s.buffer());
+>>>>>>> miniblink49
     return *this;
 }
 
@@ -95,7 +115,11 @@ WebCString::operator WTF::CString() const
     return m_private.get();
 }
 
+<<<<<<< HEAD
 void WebCString::assign(WTF::CStringImpl* p)
+=======
+void WebCString::assign(WTF::CStringBuffer* p)
+>>>>>>> miniblink49
 {
     m_private = p;
 }

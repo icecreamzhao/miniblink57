@@ -36,10 +36,14 @@
 namespace blink {
 
 struct WebFileSystemEntry {
+<<<<<<< HEAD
     WebFileSystemEntry()
         : isDirectory(false)
     {
     }
+=======
+    WebFileSystemEntry() : isDirectory(false) { }
+>>>>>>> miniblink49
 
     // The name of the entry.
     WebString name;

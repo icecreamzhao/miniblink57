@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 The Android Open Source Project
  *
@@ -5,10 +9,17 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkScan_DEFINED
 #define SkScan_DEFINED
 
 #include "SkFixed.h"
+=======
+
+#ifndef SkScan_DEFINED
+#define SkScan_DEFINED
+
+>>>>>>> miniblink49
 #include "SkRect.h"
 
 class SkRasterClip;
@@ -45,9 +56,15 @@ public:
     static void FillPath(const SkPath&, const SkRasterClip&, SkBlitter*);
     static void AntiFillPath(const SkPath&, const SkRasterClip&, SkBlitter*);
     static void FrameRect(const SkRect&, const SkPoint& strokeSize,
+<<<<<<< HEAD
         const SkRasterClip&, SkBlitter*);
     static void AntiFrameRect(const SkRect&, const SkPoint& strokeSize,
         const SkRasterClip&, SkBlitter*);
+=======
+                          const SkRasterClip&, SkBlitter*);
+    static void AntiFrameRect(const SkRect&, const SkPoint& strokeSize,
+                              const SkRasterClip&, SkBlitter*);
+>>>>>>> miniblink49
     static void FillTriangle(const SkPoint pts[], const SkRasterClip&, SkBlitter*);
     static void HairLine(const SkPoint[], int count, const SkRasterClip&, SkBlitter*);
     static void AntiHairLine(const SkPoint[], int count, const SkRasterClip&, SkBlitter*);
@@ -55,10 +72,13 @@ public:
     static void AntiHairRect(const SkRect&, const SkRasterClip&, SkBlitter*);
     static void HairPath(const SkPath&, const SkRasterClip&, SkBlitter*);
     static void AntiHairPath(const SkPath&, const SkRasterClip&, SkBlitter*);
+<<<<<<< HEAD
     static void HairSquarePath(const SkPath&, const SkRasterClip&, SkBlitter*);
     static void AntiHairSquarePath(const SkPath&, const SkRasterClip&, SkBlitter*);
     static void HairRoundPath(const SkPath&, const SkRasterClip&, SkBlitter*);
     static void AntiHairRoundPath(const SkPath&, const SkRasterClip&, SkBlitter*);
+=======
+>>>>>>> miniblink49
 
 private:
     friend class SkAAClip;
@@ -71,11 +91,19 @@ private:
     static void AntiFillXRect(const SkXRect&, const SkRegion*, SkBlitter*);
     static void FillPath(const SkPath&, const SkRegion& clip, SkBlitter*);
     static void AntiFillPath(const SkPath&, const SkRegion& clip, SkBlitter*,
+<<<<<<< HEAD
         bool forceRLE = false);
     static void FillTriangle(const SkPoint pts[], const SkRegion*, SkBlitter*);
 
     static void AntiFrameRect(const SkRect&, const SkPoint& strokeSize,
         const SkRegion*, SkBlitter*);
+=======
+                             bool forceRLE = false);
+    static void FillTriangle(const SkPoint pts[], const SkRegion*, SkBlitter*);
+
+    static void AntiFrameRect(const SkRect&, const SkPoint& strokeSize,
+                              const SkRegion*, SkBlitter*);
+>>>>>>> miniblink49
     static void HairLineRgn(const SkPoint[], int count, const SkRegion*, SkBlitter*);
     static void AntiHairLineRgn(const SkPoint[], int count, const SkRegion*, SkBlitter*);
 };
@@ -84,8 +112,12 @@ private:
     from int to SkFixed. Does not check for overflow if the src coordinates
     exceed 32K
 */
+<<<<<<< HEAD
 static inline void XRect_set(SkXRect* xr, const SkIRect& src)
 {
+=======
+static inline void XRect_set(SkXRect* xr, const SkIRect& src) {
+>>>>>>> miniblink49
     xr->fLeft = SkIntToFixed(src.fLeft);
     xr->fTop = SkIntToFixed(src.fTop);
     xr->fRight = SkIntToFixed(src.fRight);
@@ -96,8 +128,12 @@ static inline void XRect_set(SkXRect* xr, const SkIRect& src)
     from SkScalar to SkFixed. Does not check for overflow if the src coordinates
     exceed 32K
 */
+<<<<<<< HEAD
 static inline void XRect_set(SkXRect* xr, const SkRect& src)
 {
+=======
+static inline void XRect_set(SkXRect* xr, const SkRect& src) {
+>>>>>>> miniblink49
     xr->fLeft = SkScalarToFixed(src.fLeft);
     xr->fTop = SkScalarToFixed(src.fTop);
     xr->fRight = SkScalarToFixed(src.fRight);
@@ -106,8 +142,12 @@ static inline void XRect_set(SkXRect* xr, const SkRect& src)
 
 /** Round the SkXRect coordinates, and store the result in the SkIRect.
 */
+<<<<<<< HEAD
 static inline void XRect_round(const SkXRect& xr, SkIRect* dst)
 {
+=======
+static inline void XRect_round(const SkXRect& xr, SkIRect* dst) {
+>>>>>>> miniblink49
     dst->fLeft = SkFixedRoundToInt(xr.fLeft);
     dst->fTop = SkFixedRoundToInt(xr.fTop);
     dst->fRight = SkFixedRoundToInt(xr.fRight);
@@ -117,8 +157,12 @@ static inline void XRect_round(const SkXRect& xr, SkIRect* dst)
 /** Round the SkXRect coordinates out (i.e. use floor for left/top, and ceiling
     for right/bottom), and store the result in the SkIRect.
 */
+<<<<<<< HEAD
 static inline void XRect_roundOut(const SkXRect& xr, SkIRect* dst)
 {
+=======
+static inline void XRect_roundOut(const SkXRect& xr, SkIRect* dst) {
+>>>>>>> miniblink49
     dst->fLeft = SkFixedFloorToInt(xr.fLeft);
     dst->fTop = SkFixedFloorToInt(xr.fTop);
     dst->fRight = SkFixedCeilToInt(xr.fRight);

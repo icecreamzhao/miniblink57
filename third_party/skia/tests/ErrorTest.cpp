@@ -11,6 +11,7 @@
 #include "Test.h"
 
 typedef struct {
+<<<<<<< HEAD
     skiatest::Reporter* fReporter;
     unsigned int* fIntPointer;
 } ErrorContext;
@@ -29,6 +30,25 @@ static void cb(SkError err, void* context)
 
 DEF_TEST(Error, reporter)
 {
+=======
+    skiatest::Reporter *fReporter;
+    unsigned int *fIntPointer;
+} ErrorContext;
+
+#define CHECK(errcode)                                                        \
+  REPORTER_ASSERT( reporter, (err = SkGetLastError()) == errcode);            \
+  if (err != kNoError_SkError)                                                \
+  {                                                                           \
+     SkClearLastError();                                                      \
+  }
+
+static void cb(SkError err, void *context) {
+    ErrorContext *context_ptr = static_cast<ErrorContext *>(context);
+    REPORTER_ASSERT( context_ptr->fReporter, (*(context_ptr->fIntPointer) == 0xdeadbeef) );
+}
+
+DEF_TEST(Error, reporter) {
+>>>>>>> miniblink49
     // Some previous user of this thread may have left an error laying around.
     SkClearLastError();
 

@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +19,7 @@
  *
  */
 
+#include "config.h"
 #include "core/style/ShadowData.h"
 
 #include "platform/animation/AnimationUtilities.h"
@@ -28,25 +28,21 @@ namespace blink {
 
 bool ShadowData::operator==(const ShadowData& o) const
 {
-    return m_location == o.m_location && m_blur == o.m_blur && m_spread == o.m_spread && m_style == o.m_style && m_color == o.m_color;
+    return m_location == o.m_location
+        && m_blur == o.m_blur
+        && m_spread == o.m_spread
+        && m_style == o.m_style
+        && m_color == o.m_color;
 }
 
-ShadowData ShadowData::blend(const ShadowData& from,
-    double progress,
-    const Color& currentColor) const
+ShadowData ShadowData::blend(const ShadowData& from, double progress, const Color& currentColor) const
 {
     ASSERT(style() == from.style());
     return ShadowData(blink::blend(from.location(), location(), progress),
         clampTo(blink::blend(from.blur(), blur(), progress), 0.0f),
-        blink::blend(from.spread(), spread(), progress), style(),
-        blink::blend(from.color().resolve(currentColor),
-            color().resolve(currentColor), progress));
-}
-
-ShadowData ShadowData::neutralValue()
-{
-    return ShadowData(FloatPoint(0, 0), 0, 0, Normal,
-        StyleColor(Color::transparent));
+        blink::blend(from.spread(), spread(), progress),
+        style(),
+        blink::blend(from.color().resolve(currentColor), color().resolve(currentColor), progress));
 }
 
 } // namespace blink

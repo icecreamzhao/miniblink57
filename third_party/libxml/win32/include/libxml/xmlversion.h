@@ -156,7 +156,11 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the older SAX1 interface is configured in
  */
+<<<<<<< HEAD
 #if 1
+=======
+#if 0
+>>>>>>> miniblink49
 #define LIBXML_SAX1_ENABLED
 #endif
 

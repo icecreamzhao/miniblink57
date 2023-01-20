@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableDouble.h"
 
 #include "platform/animation/AnimationUtilities.h"
@@ -35,11 +36,18 @@
 
 namespace blink {
 
-PassRefPtr<AnimatableValue> AnimatableDouble::interpolateTo(
-    const AnimatableValue* value,
-    double fraction) const
+bool AnimatableDouble::usesDefaultInterpolationWith(const AnimatableValue* value) const
 {
     const AnimatableDouble* other = toAnimatableDouble(value);
+    return (m_constraint == InterpolationIsNonContinuousWithZero) && (!m_number || !other->m_number);
+}
+
+PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableDouble::interpolateTo(const AnimatableValue* value, double fraction) const
+{
+    const AnimatableDouble* other = toAnimatableDouble(value);
+    ASSERT(m_constraint == other->m_constraint);
+    if ((m_constraint == InterpolationIsNonContinuousWithZero) && (!m_number || !other->m_number))
+        return defaultInterpolateTo(this, value, fraction);
     return AnimatableDouble::create(blend(m_number, other->m_number, fraction));
 }
 

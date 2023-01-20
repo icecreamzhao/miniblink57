@@ -31,7 +31,6 @@
 #ifndef HTMLTemplateElement_h
 #define HTMLTemplateElement_h
 
-#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/html/HTMLElement.h"
 
 namespace blink {
@@ -41,7 +40,6 @@ class TemplateContentDocumentFragment;
 
 class HTMLTemplateElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLTemplateElement);
     ~HTMLTemplateElement() override;
@@ -49,15 +47,13 @@ public:
 
     DocumentFragment* content() const;
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
-    Node* cloneNode(bool deep) override;
+    PassRefPtrWillBeRawPtr<Node> cloneNode(bool deep = true) override;
     void didMoveToNewDocument(Document& oldDocument) override;
 
     explicit HTMLTemplateElement(Document&);
 
-    mutable TraceWrapperMember<TemplateContentDocumentFragment> m_content;
+    mutable RefPtrWillBeMember<TemplateContentDocumentFragment> m_content;
 };
 
 } // namespace blink

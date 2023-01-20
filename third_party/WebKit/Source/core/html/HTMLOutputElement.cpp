@@ -28,42 +28,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/HTMLOutputElement.h"
 
-#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/HTMLNames.h"
 
 namespace blink {
 
-inline HTMLOutputElement::HTMLOutputElement(Document& document)
-    : HTMLFormControlElement(HTMLNames::outputTag, document)
+inline HTMLOutputElement::HTMLOutputElement(Document& document, HTMLFormElement* form)
+    : HTMLFormControlElement(HTMLNames::outputTag, document, form)
     , m_isDefaultValueMode(true)
     , m_defaultValue("")
-    , m_tokens(DOMTokenList::create(this))
+    , m_tokens(DOMSettableTokenList::create())
 {
 }
 
-HTMLOutputElement::~HTMLOutputElement() { }
-
-HTMLOutputElement* HTMLOutputElement::create(Document& document)
+PassRefPtrWillBeRawPtr<HTMLOutputElement> HTMLOutputElement::create(Document& document, HTMLFormElement* form)
 {
-    return new HTMLOutputElement(document);
+    return adoptRefWillBeNoop(new HTMLOutputElement(document, form));
 }
 
 const AtomicString& HTMLOutputElement::formControlType() const
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, output, ("output"));
+    DEFINE_STATIC_LOCAL(const AtomicString, output, ("output", AtomicString::ConstructFromLiteral));
     return output;
-}
-
-bool HTMLOutputElement::isDisabledFormControl() const
-{
-    return false;
-}
-
-bool HTMLOutputElement::matchesEnabledPseudoClass() const
-{
-    return false;
 }
 
 bool HTMLOutputElement::supportsFocus() const
@@ -71,16 +60,15 @@ bool HTMLOutputElement::supportsFocus() const
     return HTMLElement::supportsFocus();
 }
 
-void HTMLOutputElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLOutputElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == HTMLNames::forAttr)
-        setFor(params.newValue);
+    if (name == HTMLNames::forAttr)
+        setFor(value);
     else
-        HTMLFormControlElement::parseAttribute(params);
+        HTMLFormControlElement::parseAttribute(name, value);
 }
 
-DOMTokenList* HTMLOutputElement::htmlFor() const
+DOMSettableTokenList* HTMLOutputElement::htmlFor() const
 {
     return m_tokens.get();
 }
@@ -123,11 +111,6 @@ void HTMLOutputElement::setValue(const String& value)
     setTextContent(value);
 }
 
-void HTMLOutputElement::valueWasSet()
-{
-    setSynchronizedLazyAttribute(HTMLNames::forAttr, m_tokens->value());
-}
-
 String HTMLOutputElement::defaultValue() const
 {
     return m_defaultValue;
@@ -144,16 +127,11 @@ void HTMLOutputElement::setDefaultValue(const String& value)
         setTextContent(value);
 }
 
-int HTMLOutputElement::tabIndex() const
-{
-    return HTMLElement::tabIndex();
-}
 
 DEFINE_TRACE(HTMLOutputElement)
 {
     visitor->trace(m_tokens);
     HTMLFormControlElement::trace(visitor);
-    DOMTokenListObserver::trace(visitor);
 }
 
-} // namespace blink
+} // namespace

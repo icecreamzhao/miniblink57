@@ -11,6 +11,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 template <typename T>
 class HeapTerminatedArrayBuilder final
     : public TerminatedArrayBuilder<T, HeapTerminatedArray> {
@@ -21,6 +22,12 @@ public:
         : TerminatedArrayBuilder<T, HeapTerminatedArray>(array)
     {
     }
+=======
+template<typename T>
+class HeapTerminatedArrayBuilder : public TerminatedArrayBuilder<T, HeapTerminatedArray> {
+public:
+    explicit HeapTerminatedArrayBuilder(HeapTerminatedArray<T>* array) : TerminatedArrayBuilder<T, HeapTerminatedArray>(array) { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

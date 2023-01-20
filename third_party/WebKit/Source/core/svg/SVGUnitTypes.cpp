@@ -28,22 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/svg/SVGUnitTypes.h"
 
 namespace blink {
 
-template <>
-const SVGEnumerationStringEntries&
-getStaticStringEntries<SVGUnitTypes::SVGUnitType>()
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGUnitTypes::SVGUnitType>()
 {
     DEFINE_STATIC_LOCAL(SVGEnumerationStringEntries, entries, ());
     if (entries.isEmpty()) {
-        entries.push_back(std::make_pair(SVGUnitTypes::kSvgUnitTypeUserspaceonuse,
-            "userSpaceOnUse"));
-        entries.push_back(std::make_pair(
-            SVGUnitTypes::kSvgUnitTypeObjectboundingbox, "objectBoundingBox"));
+        entries.append(SVGEnumerationBase::StringEntry(SVGUnitTypes::SVG_UNIT_TYPE_USERSPACEONUSE, "userSpaceOnUse"));
+        entries.append(SVGEnumerationBase::StringEntry(SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX, "objectBoundingBox"));
     }
     return entries;
 }
 
-} // namespace blink
+}

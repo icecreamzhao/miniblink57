@@ -28,11 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIAccess
 
 [
     ActiveScriptWrappable,
     DependentLifetime,
+=======
+[
+    ActiveDOMObject,
+>>>>>>> miniblink49
 ] interface MIDIAccess : EventTarget {
     readonly attribute MIDIInputMap inputs;
     readonly attribute MIDIOutputMap outputs;

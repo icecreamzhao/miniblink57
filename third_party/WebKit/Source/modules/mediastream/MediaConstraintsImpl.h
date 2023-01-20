@@ -31,14 +31,19 @@
 #ifndef MediaConstraintsImpl_h
 #define MediaConstraintsImpl_h
 
+<<<<<<< HEAD
 #include "modules/ModulesExport.h"
 #include "modules/mediastream/MediaErrorState.h"
 #include "public/platform/WebMediaConstraints.h"
 #include "wtf/text/WTFString.h"
+=======
+#include "public/platform/WebMediaConstraints.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class Dictionary;
+<<<<<<< HEAD
 class MediaTrackConstraints;
 
 namespace MediaConstraintsImpl {
@@ -57,8 +62,22 @@ namespace MediaConstraintsImpl {
     // Exported for testing only.
     MODULES_EXPORT WebMediaConstraints
     convertConstraintsToWeb(const MediaTrackConstraints&);
+=======
+class ExceptionState;
+
+namespace MediaConstraintsImpl {
+
+WebMediaConstraints create();
+WebMediaConstraints create(const Dictionary&, ExceptionState&);
+
+>>>>>>> miniblink49
 }
 
 } // namespace blink
 
 #endif // MediaConstraintsImpl_h
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> miniblink49

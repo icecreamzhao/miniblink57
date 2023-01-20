@@ -17,17 +17,23 @@ class SkCanvas;
 struct SkUnit3D {
     SkScalar fX, fY, fZ;
 
+<<<<<<< HEAD
     void set(SkScalar x, SkScalar y, SkScalar z)
     {
         fX = x;
         fY = y;
         fZ = z;
+=======
+    void set(SkScalar x, SkScalar y, SkScalar z) {
+        fX = x; fY = y; fZ = z;
+>>>>>>> miniblink49
     }
     static SkScalar Dot(const SkUnit3D&, const SkUnit3D&);
     static void Cross(const SkUnit3D&, const SkUnit3D&, SkUnit3D* cross);
 };
 
 struct SkPoint3D {
+<<<<<<< HEAD
     SkScalar fX, fY, fZ;
 
     void set(SkScalar x, SkScalar y, SkScalar z)
@@ -37,16 +43,32 @@ struct SkPoint3D {
         fZ = z;
     }
     SkScalar normalize(SkUnit3D*) const;
+=======
+    SkScalar    fX, fY, fZ;
+
+    void set(SkScalar x, SkScalar y, SkScalar z) {
+        fX = x; fY = y; fZ = z;
+    }
+    SkScalar    normalize(SkUnit3D*) const;
+>>>>>>> miniblink49
 };
 typedef SkPoint3D SkVector3D;
 
 struct SkMatrix3D {
+<<<<<<< HEAD
     SkScalar fMat[3][4];
 
     void reset();
 
     void setRow(int row, SkScalar a, SkScalar b, SkScalar c, SkScalar d = 0)
     {
+=======
+    SkScalar    fMat[3][4];
+
+    void reset();
+
+    void setRow(int row, SkScalar a, SkScalar b, SkScalar c, SkScalar d = 0) {
+>>>>>>> miniblink49
         SkASSERT((unsigned)row < 3);
         fMat[row][0] = a;
         fMat[row][1] = b;
@@ -68,6 +90,7 @@ struct SkMatrix3D {
     void mapPoint(const SkPoint3D& src, SkPoint3D* dst) const;
     void mapVector(const SkVector3D& src, SkVector3D* dst) const;
 
+<<<<<<< HEAD
     void mapPoint(SkPoint3D* v) const
     {
         this->mapPoint(*v, v);
@@ -75,6 +98,13 @@ struct SkMatrix3D {
 
     void mapVector(SkVector3D* v) const
     {
+=======
+    void mapPoint(SkPoint3D* v) const {
+        this->mapPoint(*v, v);
+    }
+
+    void mapVector(SkVector3D* v) const {
+>>>>>>> miniblink49
         this->mapVector(*v, v);
     }
 };
@@ -83,6 +113,7 @@ class SkPatch3D {
 public:
     SkPatch3D();
 
+<<<<<<< HEAD
     void reset();
     void transform(const SkMatrix3D&, SkPatch3D* dst = NULL) const;
 
@@ -90,10 +121,19 @@ public:
     SkScalar dotWith(SkScalar dx, SkScalar dy, SkScalar dz) const;
     SkScalar dotWith(const SkVector3D& v) const
     {
+=======
+    void    reset();
+    void    transform(const SkMatrix3D&, SkPatch3D* dst = NULL) const;
+
+    // dot a unit vector with the patch's normal
+    SkScalar dotWith(SkScalar dx, SkScalar dy, SkScalar dz) const;
+    SkScalar dotWith(const SkVector3D& v) const {
+>>>>>>> miniblink49
         return this->dotWith(v.fX, v.fY, v.fZ);
     }
 
     // deprecated, but still here for animator (for now)
+<<<<<<< HEAD
     void rotate(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) { }
     void rotateDegrees(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) { }
 
@@ -101,6 +141,15 @@ private:
 public: // make public for SkDraw3D for now
     SkVector3D fU, fV;
     SkPoint3D fOrigin;
+=======
+    void rotate(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) {}
+    void rotateDegrees(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) {}
+
+private:
+public: // make public for SkDraw3D for now
+    SkVector3D  fU, fV;
+    SkPoint3D   fOrigin;
+>>>>>>> miniblink49
 
     friend class SkCamera3D;
 };
@@ -113,6 +162,7 @@ public:
     void update();
     void patchToMatrix(const SkPatch3D&, SkMatrix* matrix) const;
 
+<<<<<<< HEAD
     SkPoint3D fLocation;
     SkPoint3D fAxis;
     SkPoint3D fZenith;
@@ -121,6 +171,16 @@ public:
 private:
     mutable SkMatrix fOrientation;
     mutable bool fNeedToUpdate;
+=======
+    SkPoint3D   fLocation;
+    SkPoint3D   fAxis;
+    SkPoint3D   fZenith;
+    SkPoint3D   fObserver;
+
+private:
+    mutable SkMatrix    fOrientation;
+    mutable bool        fNeedToUpdate;
+>>>>>>> miniblink49
 
     void doUpdate() const;
 };
@@ -152,12 +212,21 @@ public:
 
 private:
     struct Rec {
+<<<<<<< HEAD
         Rec* fNext;
         SkMatrix3D fMatrix;
     };
     Rec* fRec;
     Rec fInitialRec;
     SkCamera3D fCamera;
+=======
+        Rec*        fNext;
+        SkMatrix3D  fMatrix;
+    };
+    Rec*        fRec;
+    Rec         fInitialRec;
+    SkCamera3D  fCamera;
+>>>>>>> miniblink49
 };
 
 #endif

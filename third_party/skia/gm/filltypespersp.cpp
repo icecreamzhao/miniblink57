@@ -1,24 +1,40 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 
 #include "SkGradientShader.h"
 #include "SkPath.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkGradientShader.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
 class FillTypePerspGM : public GM {
     SkPath fPath;
+<<<<<<< HEAD
 
 public:
     FillTypePerspGM() { }
 
     void makePath()
     {
+=======
+public:
+    FillTypePerspGM() {}
+
+    void makePath() {
+>>>>>>> miniblink49
         if (fPath.isEmpty()) {
             const SkScalar radius = SkIntToScalar(45);
             fPath.addCircle(SkIntToScalar(50), SkIntToScalar(50), radius);
@@ -27,6 +43,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("filltypespersp");
@@ -34,12 +51,24 @@ protected:
 
     SkISize onISize() override
     {
+=======
+
+    SkString onShortName() override {
+        return SkString("filltypespersp");
+    }
+
+    SkISize onISize() override {
+>>>>>>> miniblink49
         return SkISize::Make(835, 840);
     }
 
     void showPath(SkCanvas* canvas, int x, int y, SkPath::FillType ft,
+<<<<<<< HEAD
         SkScalar scale, const SkPaint& paint)
     {
+=======
+                  SkScalar scale, const SkPaint& paint) {
+>>>>>>> miniblink49
         const SkRect r = { 0, 0, SkIntToScalar(150), SkIntToScalar(150) };
 
         canvas->save();
@@ -54,6 +83,7 @@ protected:
         canvas->restore();
     }
 
+<<<<<<< HEAD
     void showFour(SkCanvas* canvas, SkScalar scale, bool aa)
     {
         SkPaint paint;
@@ -80,11 +110,39 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    void showFour(SkCanvas* canvas, SkScalar scale, bool aa) {
+        SkPaint paint;
+        SkPoint center = SkPoint::Make(SkIntToScalar(100), SkIntToScalar(100));
+        SkColor colors[] = {SK_ColorBLUE, SK_ColorRED, SK_ColorGREEN};
+        SkScalar pos[] = {0, SK_ScalarHalf, SK_Scalar1};
+        SkShader* s = SkGradientShader::CreateRadial(center,
+                                                     SkIntToScalar(100),
+                                                     colors,
+                                                     pos,
+                                                     SK_ARRAY_COUNT(colors),
+                                                     SkShader::kClamp_TileMode);
+        paint.setShader(s)->unref();
+        paint.setAntiAlias(aa);
+
+        showPath(canvas,   0,   0, SkPath::kWinding_FillType,
+                 scale, paint);
+        showPath(canvas, 200,   0, SkPath::kEvenOdd_FillType,
+                 scale, paint);
+        showPath(canvas,  00, 200, SkPath::kInverseWinding_FillType,
+                 scale, paint);
+        showPath(canvas, 200, 200, SkPath::kInverseEvenOdd_FillType,
+                 scale, paint);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         this->makePath();
 
         // do perspective drawPaint as the background;
         SkPaint bkgnrd;
         SkPoint center = SkPoint::Make(SkIntToScalar(100),
+<<<<<<< HEAD
             SkIntToScalar(100));
         SkColor colors[] = { SK_ColorBLACK, SK_ColorCYAN,
             SK_ColorYELLOW, SK_ColorWHITE };
@@ -103,6 +161,27 @@ protected:
         mat.setPerspY(SK_Scalar1 / 1000);
         canvas->concat(mat);
         canvas->drawPaint(bkgnrd);
+=======
+                                       SkIntToScalar(100));
+        SkColor colors[] = {SK_ColorBLACK, SK_ColorCYAN,
+                            SK_ColorYELLOW, SK_ColorWHITE};
+        SkScalar pos[] = {0, SK_ScalarHalf / 2,
+                          3 * SK_ScalarHalf / 2, SK_Scalar1};
+        SkShader* s = SkGradientShader::CreateRadial(center,
+                                                     SkIntToScalar(1000),
+                                                     colors,
+                                                     pos,
+                                                     SK_ARRAY_COUNT(colors),
+                                                     SkShader::kClamp_TileMode);
+        bkgnrd.setShader(s)->unref();
+        canvas->save();
+            canvas->translate(SkIntToScalar(100), SkIntToScalar(100));
+            SkMatrix mat;
+            mat.reset();
+            mat.setPerspY(SK_Scalar1 / 1000);
+            canvas->concat(mat);
+            canvas->drawPaint(bkgnrd);
+>>>>>>> miniblink49
         canvas->restore();
 
         // draw the paths in perspective
@@ -113,7 +192,11 @@ protected:
         canvas->concat(persp);
 
         canvas->translate(SkIntToScalar(20), SkIntToScalar(20));
+<<<<<<< HEAD
         const SkScalar scale = SkIntToScalar(5) / 4;
+=======
+        const SkScalar scale = SkIntToScalar(5)/4;
+>>>>>>> miniblink49
 
         showFour(canvas, SK_Scalar1, false);
         canvas->translate(SkIntToScalar(450), 0);

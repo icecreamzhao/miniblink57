@@ -31,8 +31,12 @@
 #ifndef FileWriter_h
 #define FileWriter_h
 
+<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "core/dom/ContextLifecycleObserver.h"
+=======
+#include "core/dom/ActiveDOMObject.h"
+>>>>>>> miniblink49
 #include "core/dom/ExecutionContext.h"
 #include "core/fileapi/FileError.h"
 #include "modules/EventTargetModules.h"
@@ -46,6 +50,7 @@ class Blob;
 class ExceptionState;
 class ExecutionContext;
 
+<<<<<<< HEAD
 class FileWriter final : public EventTargetWithInlineData,
                          public FileWriterBase,
                          public ActiveScriptWrappable<FileWriter>,
@@ -55,26 +60,55 @@ class FileWriter final : public EventTargetWithInlineData,
     USING_GARBAGE_COLLECTED_MIXIN(FileWriter);
     USING_PRE_FINALIZER(FileWriter, dispose);
 
+=======
+class FileWriter final
+#if ENABLE(OILPAN)
+    : public EventTargetWithInlineData
+    , public FileWriterBase
+#else
+    : public FileWriterBase
+    , public EventTargetWithInlineData
+#endif
+    , public ActiveDOMObject
+    , public WebFileWriterClient {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(FileWriterBase);
+    DEFINE_WRAPPERTYPEINFO();
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(FileWriter);
+>>>>>>> miniblink49
 public:
     static FileWriter* create(ExecutionContext*);
     ~FileWriter() override;
 
+<<<<<<< HEAD
     enum ReadyState { kInit = 0,
         kWriting = 1,
         kDone = 2 };
+=======
+    enum ReadyState {
+        INIT = 0,
+        WRITING = 1,
+        DONE = 2
+    };
+>>>>>>> miniblink49
 
     void write(Blob*, ExceptionState&);
     void seek(long long position, ExceptionState&);
     void truncate(long long length, ExceptionState&);
     void abort(ExceptionState&);
+<<<<<<< HEAD
     ReadyState getReadyState() const { return m_readyState; }
     DOMException* error() const { return m_error.get(); }
+=======
+    ReadyState readyState() const { return m_readyState; }
+    FileError* error() const { return m_error.get(); }
+>>>>>>> miniblink49
 
     // WebFileWriterClient
     void didWrite(long long bytes, bool complete) override;
     void didTruncate() override;
     void didFail(WebFileError) override;
 
+<<<<<<< HEAD
     // ContextLifecycleObserver
     void contextDestroyed(ExecutionContext*) override;
 
@@ -87,6 +121,15 @@ public:
     {
         return ContextLifecycleObserver::getExecutionContext();
     }
+=======
+    // ActiveDOMObject
+    void stop() override;
+    bool hasPendingActivity() const override;
+
+    // EventTarget
+    const AtomicString& interfaceName() const override;
+    ExecutionContext* executionContext() const override { return ActiveDOMObject::executionContext(); }
+>>>>>>> miniblink49
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(writestart);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(progress);
@@ -117,9 +160,13 @@ private:
 
     void setError(FileError::ErrorCode, ExceptionState&);
 
+<<<<<<< HEAD
     void dispose();
 
     Member<DOMException> m_error;
+=======
+    Member<FileError> m_error;
+>>>>>>> miniblink49
     ReadyState m_readyState;
     Operation m_operationInProgress;
     Operation m_queuedOperation;
@@ -130,6 +177,10 @@ private:
     long long m_recursionDepth;
     double m_lastProgressNotificationTimeMS;
     Member<Blob> m_blobBeingWritten;
+<<<<<<< HEAD
+=======
+    int m_asyncOperationId;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

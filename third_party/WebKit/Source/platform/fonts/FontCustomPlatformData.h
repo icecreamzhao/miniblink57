@@ -34,12 +34,18 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/fonts/FontOrientation.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 class SkTypeface;
 
@@ -47,6 +53,7 @@ namespace blink {
 
 class FontPlatformData;
 class SharedBuffer;
+<<<<<<< HEAD
 class FontVariationSettings;
 
 class PLATFORM_EXPORT FontCustomPlatformData {
@@ -58,6 +65,16 @@ public:
     ~FontCustomPlatformData();
 
     FontPlatformData fontPlatformData(float size, bool bold, bool italic, FontOrientation = FontOrientation::Horizontal, FontVariationSettings* fontVariationSettings = nullptr);
+=======
+
+class PLATFORM_EXPORT FontCustomPlatformData {
+    WTF_MAKE_NONCOPYABLE(FontCustomPlatformData);
+public:
+    static PassOwnPtr<FontCustomPlatformData> create(SharedBuffer*, String& otsParseMessage);
+    ~FontCustomPlatformData();
+
+    FontPlatformData fontPlatformData(float size, bool bold, bool italic, FontOrientation = FontOrientation::Horizontal);
+>>>>>>> miniblink49
 
     static bool supportsFormat(const String&);
 

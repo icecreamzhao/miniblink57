@@ -28,14 +28,10 @@
 
 namespace blink {
 
-template <>
-const SVGEnumerationStringEntries&
-getStaticStringEntries<ChannelSelectorType>();
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<ChannelSelectorType>();
 
-class SVGFEDisplacementMapElement final
-    : public SVGFilterPrimitiveStandardAttributes {
+class SVGFEDisplacementMapElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGFEDisplacementMapElement);
 
@@ -44,30 +40,23 @@ public:
     SVGAnimatedNumber* scale() { return m_scale.get(); }
     SVGAnimatedString* in1() { return m_in1.get(); }
     SVGAnimatedString* in2() { return m_in2.get(); }
-    SVGAnimatedEnumeration<ChannelSelectorType>* xChannelSelector()
-    {
-        return m_xChannelSelector.get();
-    }
-    SVGAnimatedEnumeration<ChannelSelectorType>* yChannelSelector()
-    {
-        return m_yChannelSelector.get();
-    }
+    SVGAnimatedEnumeration<ChannelSelectorType>* xChannelSelector() { return m_xChannelSelector.get(); }
+    SVGAnimatedEnumeration<ChannelSelectorType>* yChannelSelector() { return m_yChannelSelector.get(); }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit SVGFEDisplacementMapElement(Document&);
 
-    bool setFilterEffectAttribute(FilterEffect*,
-        const QualifiedName& attrName) override;
+    bool setFilterEffectAttribute(FilterEffect*, const QualifiedName& attrName) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
+    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
 
-    Member<SVGAnimatedNumber> m_scale;
-    Member<SVGAnimatedString> m_in1;
-    Member<SVGAnimatedString> m_in2;
-    Member<SVGAnimatedEnumeration<ChannelSelectorType>> m_xChannelSelector;
-    Member<SVGAnimatedEnumeration<ChannelSelectorType>> m_yChannelSelector;
+    RefPtrWillBeMember<SVGAnimatedNumber> m_scale;
+    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    RefPtrWillBeMember<SVGAnimatedString> m_in2;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<ChannelSelectorType>> m_xChannelSelector;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<ChannelSelectorType>> m_yChannelSelector;
 };
 
 } // namespace blink

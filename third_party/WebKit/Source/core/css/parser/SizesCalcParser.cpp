@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/css/parser/SizesCalcParser.h"
 
 #include "core/css/MediaValues.h"
@@ -9,8 +10,7 @@
 
 namespace blink {
 
-SizesCalcParser::SizesCalcParser(CSSParserTokenRange range,
-    MediaValues* mediaValues)
+SizesCalcParser::SizesCalcParser(CSSParserTokenRange range, PassRefPtr<MediaValues> mediaValues)
     : m_mediaValues(mediaValues)
     , m_result(0)
 {
@@ -34,8 +34,7 @@ static bool operatorPriority(UChar cc, bool& highPriority)
     return true;
 }
 
-bool SizesCalcParser::handleOperator(Vector<CSSParserToken>& stack,
-    const CSSParserToken& token)
+bool SizesCalcParser::handleOperator(Vector<CSSParserToken>& stack, const CSSParserToken& token)
 {
     // If the token is an operator, o1, then:
     // while there is an operator token, o2, at the top of the stack, and
@@ -48,15 +47,15 @@ bool SizesCalcParser::handleOperator(Vector<CSSParserToken>& stack,
 
     if (!operatorPriority(token.delimiter(), incomingOperatorPriority))
         return false;
-    if (!stack.isEmpty() && stack.back().type() == DelimiterToken) {
-        if (!operatorPriority(stack.back().delimiter(), stackOperatorPriority))
+    if (!stack.isEmpty() && stack.last().type() == DelimiterToken) {
+        if (!operatorPriority(stack.last().delimiter(), stackOperatorPriority))
             return false;
         if (!incomingOperatorPriority || stackOperatorPriority) {
-            appendOperator(stack.back());
-            stack.pop_back();
+            appendOperator(stack.last());
+            stack.removeLast();
         }
     }
-    stack.push_back(token);
+    stack.append(token);
     return true;
 }
 
@@ -64,19 +63,18 @@ void SizesCalcParser::appendNumber(const CSSParserToken& token)
 {
     SizesCalcValue value;
     value.value = token.numericValue();
-    m_valueList.push_back(value);
+    m_valueList.append(value);
 }
 
 bool SizesCalcParser::appendLength(const CSSParserToken& token)
 {
     SizesCalcValue value;
     double result = 0;
-    if (!m_mediaValues->computeLength(token.numericValue(), token.unitType(),
-            result))
+    if (!m_mediaValues->computeLength(token.numericValue(), token.unitType(), result))
         return false;
     value.value = result;
     value.isLength = true;
-    m_valueList.push_back(value);
+    m_valueList.append(value);
     return true;
 }
 
@@ -84,13 +82,12 @@ void SizesCalcParser::appendOperator(const CSSParserToken& token)
 {
     SizesCalcValue value;
     value.operation = token.delimiter();
-    m_valueList.push_back(value);
+    m_valueList.append(value);
 }
 
 bool SizesCalcParser::calcToReversePolishNotation(CSSParserTokenRange range)
 {
-    // This method implements the shunting yard algorithm, to turn the calc syntax
-    // into a reverse polish notation.
+    // This method implements the shunting yard algorithm, to turn the calc syntax into a reverse polish notation.
     // http://en.wikipedia.org/wiki/Shunting-yard_algorithm
 
     Vector<CSSParserToken> stack;
@@ -109,28 +106,25 @@ bool SizesCalcParser::calcToReversePolishNotation(CSSParserTokenRange range)
                 return false;
             break;
         case FunctionToken:
-            if (!equalIgnoringASCIICase(token.value(), "calc"))
+            if (!token.valueEqualsIgnoringCase("calc"))
                 return false;
-        // "calc(" is the same as "("
+            // "calc(" is the same as "("
         case LeftParenthesisToken:
             // If the token is a left parenthesis, then push it onto the stack.
-            stack.push_back(token);
+            stack.append(token);
             break;
         case RightParenthesisToken:
             // If the token is a right parenthesis:
-            // Until the token at the top of the stack is a left parenthesis, pop
-            // operators off the stack onto the output queue.
-            while (!stack.isEmpty() && stack.back().type() != LeftParenthesisToken && stack.back().type() != FunctionToken) {
-                appendOperator(stack.back());
-                stack.pop_back();
+            // Until the token at the top of the stack is a left parenthesis, pop operators off the stack onto the output queue.
+            while (!stack.isEmpty() && stack.last().type() != LeftParenthesisToken && stack.last().type() != FunctionToken) {
+                appendOperator(stack.last());
+                stack.removeLast();
             }
-            // If the stack runs out without finding a left parenthesis, then there
-            // are mismatched parentheses.
+            // If the stack runs out without finding a left parenthesis, then there are mismatched parentheses.
             if (stack.isEmpty())
                 return false;
-            // Pop the left parenthesis from the stack, but not onto the output
-            // queue.
-            stack.pop_back();
+            // Pop the left parenthesis from the stack, but not onto the output queue.
+            stack.removeLast();
             break;
         case WhitespaceToken:
         case EOFToken:
@@ -168,14 +162,13 @@ bool SizesCalcParser::calcToReversePolishNotation(CSSParserTokenRange range)
     // When there are no more tokens to read:
     // While there are still operator tokens in the stack:
     while (!stack.isEmpty()) {
-        // If the operator token on the top of the stack is a parenthesis, then
-        // there are mismatched parentheses.
-        CSSParserTokenType type = stack.back().type();
+        // If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses.
+        CSSParserTokenType type = stack.last().type();
         if (type == LeftParenthesisToken || type == FunctionToken)
             return false;
         // Pop the operator onto the output queue.
-        appendOperator(stack.back());
-        stack.pop_back();
+        appendOperator(stack.last());
+        stack.removeLast();
     }
     return true;
 }
@@ -184,38 +177,34 @@ static bool operateOnStack(Vector<SizesCalcValue>& stack, UChar operation)
 {
     if (stack.size() < 2)
         return false;
-    SizesCalcValue rightOperand = stack.back();
-    stack.pop_back();
-    SizesCalcValue leftOperand = stack.back();
-    stack.pop_back();
+    SizesCalcValue rightOperand = stack.last();
+    stack.removeLast();
+    SizesCalcValue leftOperand = stack.last();
+    stack.removeLast();
     bool isLength;
     switch (operation) {
     case '+':
         if (rightOperand.isLength != leftOperand.isLength)
             return false;
         isLength = (rightOperand.isLength && leftOperand.isLength);
-        stack.push_back(
-            SizesCalcValue(leftOperand.value + rightOperand.value, isLength));
+        stack.append(SizesCalcValue(leftOperand.value + rightOperand.value, isLength));
         break;
     case '-':
         if (rightOperand.isLength != leftOperand.isLength)
             return false;
         isLength = (rightOperand.isLength && leftOperand.isLength);
-        stack.push_back(
-            SizesCalcValue(leftOperand.value - rightOperand.value, isLength));
+        stack.append(SizesCalcValue(leftOperand.value - rightOperand.value, isLength));
         break;
     case '*':
         if (rightOperand.isLength && leftOperand.isLength)
             return false;
         isLength = (rightOperand.isLength || leftOperand.isLength);
-        stack.push_back(
-            SizesCalcValue(leftOperand.value * rightOperand.value, isLength));
+        stack.append(SizesCalcValue(leftOperand.value * rightOperand.value, isLength));
         break;
     case '/':
         if (rightOperand.isLength || rightOperand.value == 0)
             return false;
-        stack.push_back(SizesCalcValue(leftOperand.value / rightOperand.value,
-            leftOperand.isLength));
+        stack.append(SizesCalcValue(leftOperand.value / rightOperand.value, leftOperand.isLength));
         break;
     default:
         return false;
@@ -228,14 +217,14 @@ bool SizesCalcParser::calculate()
     Vector<SizesCalcValue> stack;
     for (const auto& value : m_valueList) {
         if (value.operation == 0) {
-            stack.push_back(value);
+            stack.append(value);
         } else {
             if (!operateOnStack(stack, value.operation))
                 return false;
         }
     }
-    if (stack.size() == 1 && stack.back().isLength) {
-        m_result = std::max(clampTo<float>(stack.back().value), (float)0.0);
+    if (stack.size() == 1 && stack.last().isLength) {
+        m_result = std::max(clampTo<float>(stack.last().value), (float)0.0);
         return true;
     }
     return false;

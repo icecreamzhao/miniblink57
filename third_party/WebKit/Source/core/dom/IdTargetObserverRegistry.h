@@ -36,35 +36,31 @@ namespace blink {
 
 class IdTargetObserver;
 
-class IdTargetObserverRegistry final
-    : public GarbageCollected<IdTargetObserverRegistry> {
+class IdTargetObserverRegistry final : public NoBaseWillBeGarbageCollectedFinalized<IdTargetObserverRegistry> {
     WTF_MAKE_NONCOPYABLE(IdTargetObserverRegistry);
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(IdTargetObserverRegistry);
     friend class IdTargetObserver;
-
 public:
-    static IdTargetObserverRegistry* create();
+    static PassOwnPtrWillBeRawPtr<IdTargetObserverRegistry> create();
     DECLARE_TRACE();
     void notifyObservers(const AtomicString& id);
     bool hasObservers(const AtomicString& id) const;
 
 private:
-    IdTargetObserverRegistry()
-        : m_notifyingObserversInSet(nullptr)
-    {
-    }
+    IdTargetObserverRegistry() : m_notifyingObserversInSet(nullptr) { }
     void addObserver(const AtomicString& id, IdTargetObserver*);
     void removeObserver(const AtomicString& id, IdTargetObserver*);
     void notifyObserversInternal(const AtomicString& id);
 
-    typedef HeapHashSet<Member<IdTargetObserver>> ObserverSet;
-    typedef HeapHashMap<StringImpl*, Member<ObserverSet>> IdToObserverSetMap;
+    typedef WillBeHeapHashSet<RawPtrWillBeMember<IdTargetObserver>> ObserverSet;
+    typedef WillBeHeapHashMap<StringImpl*, OwnPtrWillBeMember<ObserverSet>> IdToObserverSetMap;
     IdToObserverSetMap m_registry;
-    Member<ObserverSet> m_notifyingObserversInSet;
+    RawPtrWillBeMember<ObserverSet> m_notifyingObserversInSet;
 };
 
 inline void IdTargetObserverRegistry::notifyObservers(const AtomicString& id)
 {
-    DCHECK(!m_notifyingObserversInSet);
+    ASSERT(!m_notifyingObserversInSet);
     if (id.isEmpty() || m_registry.isEmpty())
         return;
     IdTargetObserverRegistry::notifyObserversInternal(id);

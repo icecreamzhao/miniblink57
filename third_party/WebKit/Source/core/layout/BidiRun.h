@@ -24,35 +24,20 @@
 #ifndef BidiRun_h
 #define BidiRun_h
 
+#include "core/layout/LayoutText.h"
 #include "core/layout/api/LineLayoutItem.h"
 #include "platform/text/BidiResolver.h"
+#include "wtf/StdLibExtras.h"
 
 namespace blink {
 
+class BidiContext;
 class InlineBox;
 
 struct BidiRun : BidiCharacterRun {
-    BidiRun(bool override,
-        unsigned char level,
-        int start,
-        int stop,
-        LineLayoutItem lineLayoutItem,
-        WTF::Unicode::CharDirection dir,
-        WTF::Unicode::CharDirection overrideDir)
-        : BidiCharacterRun(override, level, start, stop, dir, overrideDir)
-        , m_lineLayoutItem(lineLayoutItem)
-        , m_box(nullptr)
-    {
-        // Stored in base class to save space.
-        m_hasHyphen = false;
-    }
-
-    BidiRun(int start,
-        int stop,
-        unsigned char level,
-        LineLayoutItem lineLayoutItem)
-        : BidiCharacterRun(start, stop, level)
-        , m_lineLayoutItem(lineLayoutItem)
+    BidiRun(int start, int stop, LayoutObject* object, BidiContext* context, WTF::Unicode::Direction dir)
+        : BidiCharacterRun(start, stop, context, dir)
+        , m_object(object)
         , m_box(nullptr)
     {
         // Stored in base class to save space.
@@ -60,12 +45,13 @@ struct BidiRun : BidiCharacterRun {
     }
 
     BidiRun* next() { return static_cast<BidiRun*>(m_next); }
+    LayoutObject* object() { return m_object; }
 
 public:
-    LineLayoutItem m_lineLayoutItem;
+    LayoutObject* m_object;
     InlineBox* m_box;
 };
 
-} // namespace blink
+}
 
 #endif // BidiRun_h

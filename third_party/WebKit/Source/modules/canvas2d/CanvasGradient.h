@@ -32,30 +32,48 @@
 #include "platform/graphics/Gradient.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class ExceptionState;
 
+<<<<<<< HEAD
 class MODULES_EXPORT CanvasGradient final
     : public GarbageCollectedFinalized<CanvasGradient>,
       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class MODULES_EXPORT CanvasGradient final : public GarbageCollectedFinalized<CanvasGradient>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static CanvasGradient* create(const FloatPoint& p0, const FloatPoint& p1)
     {
         return new CanvasGradient(p0, p1);
     }
+<<<<<<< HEAD
     static CanvasGradient* create(const FloatPoint& p0,
         float r0,
         const FloatPoint& p1,
         float r1)
+=======
+    static CanvasGradient* create(const FloatPoint& p0, float r0, const FloatPoint& p1, float r1)
+>>>>>>> miniblink49
     {
         return new CanvasGradient(p0, r0, p1, r1);
     }
 
+<<<<<<< HEAD
     Gradient* getGradient() const { return m_gradient.get(); }
+=======
+    Gradient* gradient() const { return m_gradient.get(); }
+>>>>>>> miniblink49
 
     void addColorStop(float value, const String& color, ExceptionState&);
 
@@ -63,10 +81,14 @@ public:
 
 private:
     CanvasGradient(const FloatPoint& p0, const FloatPoint& p1);
+<<<<<<< HEAD
     CanvasGradient(const FloatPoint& p0,
         float r0,
         const FloatPoint& p1,
         float r1);
+=======
+    CanvasGradient(const FloatPoint& p0, float r0, const FloatPoint& p1, float r1);
+>>>>>>> miniblink49
 
     RefPtr<Gradient> m_gradient;
 };

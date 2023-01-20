@@ -34,40 +34,34 @@ namespace blink {
 
 class TransitionEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static TransitionEvent* create() { return new TransitionEvent; }
-    static TransitionEvent* create(const AtomicString& type,
-        const String& propertyName,
-        double elapsedTime,
-        const String& pseudoElement)
+    static PassRefPtrWillBeRawPtr<TransitionEvent> create()
     {
-        return new TransitionEvent(type, propertyName, elapsedTime, pseudoElement);
+        return adoptRefWillBeNoop(new TransitionEvent);
     }
-    static TransitionEvent* create(const AtomicString& type,
-        const TransitionEventInit& initializer)
+    static PassRefPtrWillBeRawPtr<TransitionEvent> create(const AtomicString& type, const String& propertyName, double elapsedTime, const String& pseudoElement)
     {
-        return new TransitionEvent(type, initializer);
+        return adoptRefWillBeNoop(new TransitionEvent(type, propertyName, elapsedTime, pseudoElement));
+    }
+    static PassRefPtrWillBeRawPtr<TransitionEvent> create(const AtomicString& type, const TransitionEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new TransitionEvent(type, initializer));
     }
 
-    ~TransitionEvent() override;
+    virtual ~TransitionEvent();
 
     const String& propertyName() const;
     double elapsedTime() const;
     const String& pseudoElement() const;
 
-    const AtomicString& interfaceName() const override;
+    virtual const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     TransitionEvent();
-    TransitionEvent(const AtomicString& type,
-        const String& propertyName,
-        double elapsedTime,
-        const String& pseudoElement);
-    TransitionEvent(const AtomicString& type,
-        const TransitionEventInit& initializer);
+    TransitionEvent(const AtomicString& type, const String& propertyName, double elapsedTime, const String& pseudoElement);
+    TransitionEvent(const AtomicString& type, const TransitionEventInit& initializer);
 
     String m_propertyName;
     double m_elapsedTime;

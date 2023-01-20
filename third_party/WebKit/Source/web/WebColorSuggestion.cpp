@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebColorSuggestion.h"
 
 #include "platform/ColorSuggestion.h"
@@ -42,8 +46,12 @@ WebColorSuggestion::WebColorSuggestion(const ColorSuggestion& suggestion)
 {
 }
 
+<<<<<<< HEAD
 WebColorSuggestion& WebColorSuggestion::operator=(
     const ColorSuggestion& suggestion)
+=======
+WebColorSuggestion& WebColorSuggestion::operator=(const ColorSuggestion& suggestion)
+>>>>>>> miniblink49
 {
     color = static_cast<WebColor>(suggestion.color.rgb());
     label = suggestion.label;

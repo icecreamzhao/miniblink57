@@ -12,7 +12,6 @@ action
 align
 alink
 allowfullscreen
-allowpaymentrequest
 alt
 archive
 aria-activedescendant
@@ -20,11 +19,7 @@ aria-atomic
 aria-autocomplete
 aria-busy
 aria-checked
-aria-colcount
-aria-colindex
-aria-colspan
 aria-controls
-aria-current
 aria-describedby
 aria-disabled
 aria-dropeffect
@@ -44,15 +39,11 @@ aria-multiline
 aria-multiselectable
 aria-orientation
 aria-owns
-aria-placeholder
 aria-posinset
 aria-pressed
 aria-readonly
 aria-relevant
 aria-required
-aria-rowcount
-aria-rowindex
-aria-rowspan
 aria-selected
 aria-setsize
 aria-sort
@@ -64,7 +55,6 @@ as
 async
 autocapitalize
 autocomplete
-autocorrect
 autofocus
 autoplay
 axis
@@ -98,7 +88,6 @@ contextmenu
 controls
 coords
 crossorigin
-csp
 data
 datetime
 declare
@@ -108,7 +97,6 @@ dir
 direction
 dirname
 disabled
-disableremoteplayback
 download
 draggable
 webkitdropzone
@@ -159,6 +147,7 @@ max
 maxlength
 mayscript
 media
+mediagroup
 method
 min
 minlength
@@ -176,7 +165,8 @@ onabort
 onanimationstart
 onanimationiteration
 onanimationend
-onauxclick
+onautocomplete
+onautocompleteerror
 onbeforecopy
 onbeforecut
 onbeforepaste
@@ -207,7 +197,6 @@ onerror
 onfocus
 onfocusin
 onfocusout
-ongotpointercapture
 onhashchange
 oninput
 oninvalid
@@ -219,7 +208,6 @@ onload
 onloadeddata
 onloadedmetadata
 onloadstart
-onlostpointercapture
 onmessage
 onmousedown
 onmouseenter
@@ -238,14 +226,6 @@ onpaste
 onpause
 onplay
 onplaying
-onpointercancel
-onpointerdown
-onpointerenter
-onpointerleave
-onpointermove
-onpointerout
-onpointerover
-onpointerup
 onpopstate
 onprogress
 onratechange
@@ -283,7 +263,6 @@ onwheel
 open
 optimum
 pattern
-permissions
 placeholder
 ping
 poster
@@ -291,9 +270,9 @@ preload
 pseudo
 radiogroup
 readonly
-referrerpolicy
 rel
 required
+results
 rev
 reversed
 role
@@ -311,7 +290,6 @@ selected
 shape
 size
 sizes
-slot
 span
 spellcheck
 src

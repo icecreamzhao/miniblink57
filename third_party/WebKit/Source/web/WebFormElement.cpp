@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebFormElement.h"
 
 #include "core/HTMLNames.h"
@@ -62,36 +66,82 @@ WebString WebFormElement::method() const
     return constUnwrap<HTMLFormElement>()->method();
 }
 
+<<<<<<< HEAD
 void WebFormElement::getFormControlElements(
     WebVector<WebFormControlElement>& result) const
+=======
+bool WebFormElement::wasUserSubmitted() const
+{
+    return constUnwrap<HTMLFormElement>()->wasUserSubmitted();
+}
+
+void WebFormElement::getNamedElements(const WebString& name,
+                                      WebVector<WebNode>& result)
+{
+    WillBeHeapVector<RefPtrWillBeMember<Element>> tempVector;
+    unwrap<HTMLFormElement>()->getNamedElements(name, tempVector);
+    result.assign(tempVector);
+}
+
+void WebFormElement::getFormControlElements(WebVector<WebFormControlElement>& result) const
+>>>>>>> miniblink49
 {
     const HTMLFormElement* form = constUnwrap<HTMLFormElement>();
     Vector<WebFormControlElement> formControlElements;
 
+<<<<<<< HEAD
     const ListedElement::List& listedElements = form->listedElements();
     for (ListedElement::List::const_iterator it = listedElements.begin();
          it != listedElements.end(); ++it) {
         if ((*it)->isFormControlElement())
             formControlElements.push_back(toHTMLFormControlElement(*it));
+=======
+    const FormAssociatedElement::List& associatedElements = form->associatedElements();
+    for (FormAssociatedElement::List::const_iterator it = associatedElements.begin(); it != associatedElements.end(); ++it) {
+        if ((*it)->isFormControlElement())
+            formControlElements.append(toHTMLFormControlElement(*it));
+>>>>>>> miniblink49
     }
     result.assign(formControlElements);
 }
 
+<<<<<<< HEAD
 WebFormElement::WebFormElement(HTMLFormElement* e)
+=======
+bool WebFormElement::checkValidity()
+{
+    return unwrap<HTMLFormElement>()->checkValidity();
+}
+
+void WebFormElement::finishRequestAutocomplete(WebFormElement::AutocompleteResult result)
+{
+    unwrap<HTMLFormElement>()->finishRequestAutocomplete(static_cast<HTMLFormElement::AutocompleteResult>(result));
+}
+
+WebFormElement::WebFormElement(const PassRefPtrWillBeRawPtr<HTMLFormElement>& e)
+>>>>>>> miniblink49
     : WebElement(e)
 {
 }
 
+<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebFormElement,
     isHTMLFormElement(constUnwrap<Node>()));
 
 WebFormElement& WebFormElement::operator=(HTMLFormElement* e)
+=======
+WebFormElement& WebFormElement::operator=(const PassRefPtrWillBeRawPtr<HTMLFormElement>& e)
+>>>>>>> miniblink49
 {
     m_private = e;
     return *this;
 }
 
+<<<<<<< HEAD
 WebFormElement::operator HTMLFormElement*() const
+=======
+WebFormElement::operator PassRefPtrWillBeRawPtr<HTMLFormElement>() const
+>>>>>>> miniblink49
 {
     return toHTMLFormElement(m_private.get());
 }

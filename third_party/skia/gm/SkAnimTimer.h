@@ -29,12 +29,16 @@ public:
     /**
      *  Class begins in the "stopped" state.
      */
+<<<<<<< HEAD
     SkAnimTimer()
         : fBaseTimeNanos(0)
         , fCurrTimeNanos(0)
         , fState(kStopped_State)
     {
     }
+=======
+    SkAnimTimer() : fBaseTime(0), fCurrTime(0), fState(kStopped_State) {}
+>>>>>>> miniblink49
 
     bool isStopped() const { return kStopped_State == fState; }
     bool isRunning() const { return kRunning_State == fState; }
@@ -44,24 +48,36 @@ public:
      *  Stops the timer, and resets it, such that the next call to run or togglePauseResume
      *  will begin at time 0.
      */
+<<<<<<< HEAD
     void stop()
     {
+=======
+    void stop() {
+>>>>>>> miniblink49
         this->setState(kStopped_State);
     }
 
     /**
      *  If the timer is paused or stopped, it will resume (or start if it was stopped).
      */
+<<<<<<< HEAD
     void run()
     {
+=======
+    void run() {
+>>>>>>> miniblink49
         this->setState(kRunning_State);
     }
 
     /**
      *  If the timer is stopped, this has no effect, else it toggles between paused and running.
      */
+<<<<<<< HEAD
     void togglePauseResume()
     {
+=======
+    void togglePauseResume() {
+>>>>>>> miniblink49
         if (kRunning_State == fState) {
             this->setState(kPaused_State);
         } else {
@@ -76,15 +92,22 @@ public:
      *
      *  This may safely be called with the timer in any state.
      */
+<<<<<<< HEAD
     void updateTime()
     {
         if (kRunning_State == fState) {
             fCurrTimeNanos = SkTime::GetNSecs();
+=======
+    void updateTime() {
+        if (kRunning_State == fState) {
+            fCurrTime = SkTime::GetMSecs();
+>>>>>>> miniblink49
         }
     }
 
     /**
      *  Return the time in milliseconds the timer has been in the running state.
+<<<<<<< HEAD
      *  Returns 0 if the timer is stopped. Behavior is undefined if the timer
      *  has been running longer than SK_MSecMax.
      */
@@ -94,20 +117,35 @@ public:
         SkASSERT(SK_MSecMax >= msec);
         return static_cast<SkMSec>(msec);
     }
+=======
+     *  Returns 0 if the timer is stopped.
+     */
+    SkMSec msec() const { return fCurrTime - fBaseTime; }
+>>>>>>> miniblink49
 
     /**
      *  Return the time in seconds the timer has been in the running state.
      *  Returns 0 if the timer is stopped.
      */
+<<<<<<< HEAD
     double secs() const { return (fCurrTimeNanos - fBaseTimeNanos) * 1e-9; }
+=======
+    double secs() const {
+        return this->msec() * 0.001;
+    }
+>>>>>>> miniblink49
 
     /**
      *  Return the time in seconds the timer has been in the running state,
      *  scaled by "speed" and (if not zero) mod by period.
      *  Returns 0 if the timer is stopped.
      */
+<<<<<<< HEAD
     SkScalar scaled(SkScalar speed, SkScalar period = 0) const
     {
+=======
+    SkScalar scaled(SkScalar speed, SkScalar period = 0) const {
+>>>>>>> miniblink49
         double value = this->secs() * speed;
         if (period) {
             value = ::fmod(value, SkScalarToDouble(period));
@@ -115,6 +153,7 @@ public:
         return SkDoubleToScalar(value);
     }
 
+<<<<<<< HEAD
     /**
      * Transitions from ends->mid->ends linearly over period seconds. The phase specifies a phase
      * shift in seconds.
@@ -166,6 +205,39 @@ private:
             }
             fState = kRunning_State;
             break;
+=======
+private:
+    SkMSec  fBaseTime;
+    SkMSec  fCurrTime;
+    State   fState;
+
+    void setState(State newState) {
+        switch (newState) {
+            case kStopped_State:
+                fBaseTime = fCurrTime = 0;
+                fState = kStopped_State;
+                break;
+            case kPaused_State:
+                if (kRunning_State == fState) {
+                    fState = kPaused_State;
+                } // else stay stopped or paused
+                break;
+            case kRunning_State:
+                switch (fState) {
+                    case kStopped_State:
+                        fBaseTime = fCurrTime = SkTime::GetMSecs();
+                        break;
+                    case kPaused_State: {// they want "resume"
+                        SkMSec now = SkTime::GetMSecs();
+                        fBaseTime += now - fCurrTime;
+                        fCurrTime = now;
+                    } break;
+                    case kRunning_State:
+                        break;
+                }
+                fState = kRunning_State;
+                break;
+>>>>>>> miniblink49
         }
     }
 };

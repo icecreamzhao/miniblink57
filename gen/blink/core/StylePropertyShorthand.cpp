@@ -19,9 +19,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "StylePropertyShorthand.h"
-
 #include "platform/RuntimeEnabledFeatures.h"
+
 #include "wtf/HashMap.h"
 #include "wtf/StdLibExtras.h"
 
@@ -69,17 +70,6 @@ const StylePropertyShorthand& flexFlowShorthand()
     return flexFlowLonghands;
 }
 
-const StylePropertyShorthand& borderRightShorthand()
-{
-    static const CSSPropertyID borderRightProperties[] = {
-        CSSPropertyBorderRightWidth,
-        CSSPropertyBorderRightStyle,
-        CSSPropertyBorderRightColor,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, borderRightLonghands, (CSSPropertyBorderRight, borderRightProperties, WTF_ARRAY_LENGTH(borderRightProperties)));
-    return borderRightLonghands;
-}
-
 const StylePropertyShorthand& outlineShorthand()
 {
     static const CSSPropertyID outlineProperties[] = {
@@ -89,6 +79,16 @@ const StylePropertyShorthand& outlineShorthand()
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, outlineLonghands, (CSSPropertyOutline, outlineProperties, WTF_ARRAY_LENGTH(outlineProperties)));
     return outlineLonghands;
+}
+
+const StylePropertyShorthand& webkitColumnsShorthand()
+{
+    static const CSSPropertyID webkitColumnsProperties[] = {
+        CSSPropertyWebkitColumnWidth,
+        CSSPropertyWebkitColumnCount,
+    };
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitColumnsLonghands, (CSSPropertyWebkitColumns, webkitColumnsProperties, WTF_ARRAY_LENGTH(webkitColumnsProperties)));
+    return webkitColumnsLonghands;
 }
 
 const StylePropertyShorthand& overflowShorthand()
@@ -109,15 +109,6 @@ const StylePropertyShorthand& webkitTextStrokeShorthand()
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitTextStrokeLonghands, (CSSPropertyWebkitTextStroke, webkitTextStrokeProperties, WTF_ARRAY_LENGTH(webkitTextStrokeProperties)));
     return webkitTextStrokeLonghands;
-}
-
-const StylePropertyShorthand& pageBreakInsideShorthand()
-{
-    static const CSSPropertyID pageBreakInsideProperties[] = {
-        CSSPropertyBreakInside,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, pageBreakInsideLonghands, (CSSPropertyPageBreakInside, pageBreakInsideProperties, WTF_ARRAY_LENGTH(pageBreakInsideProperties)));
-    return pageBreakInsideLonghands;
 }
 
 const StylePropertyShorthand& listStyleShorthand()
@@ -165,15 +156,6 @@ const StylePropertyShorthand& marginShorthand()
     return marginLonghands;
 }
 
-const StylePropertyShorthand& pageBreakBeforeShorthand()
-{
-    static const CSSPropertyID pageBreakBeforeProperties[] = {
-        CSSPropertyBreakBefore,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, pageBreakBeforeLonghands, (CSSPropertyPageBreakBefore, pageBreakBeforeProperties, WTF_ARRAY_LENGTH(pageBreakBeforeProperties)));
-    return pageBreakBeforeLonghands;
-}
-
 const StylePropertyShorthand& borderSpacingShorthand()
 {
     static const CSSPropertyID borderSpacingProperties[] = {
@@ -195,14 +177,15 @@ const StylePropertyShorthand& textDecorationShorthand()
     return textDecorationLonghands;
 }
 
-const StylePropertyShorthand& gridGapShorthand()
+const StylePropertyShorthand& borderRightShorthand()
 {
-    static const CSSPropertyID gridGapProperties[] = {
-        CSSPropertyGridRowGap,
-        CSSPropertyGridColumnGap,
+    static const CSSPropertyID borderRightProperties[] = {
+        CSSPropertyBorderRightWidth,
+        CSSPropertyBorderRightStyle,
+        CSSPropertyBorderRightColor,
     };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, gridGapLonghands, (CSSPropertyGridGap, gridGapProperties, WTF_ARRAY_LENGTH(gridGapProperties)));
-    return gridGapLonghands;
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, borderRightLonghands, (CSSPropertyBorderRight, borderRightProperties, WTF_ARRAY_LENGTH(borderRightProperties)));
+    return borderRightLonghands;
 }
 
 const StylePropertyShorthand& backgroundShorthand()
@@ -233,28 +216,15 @@ const StylePropertyShorthand& webkitMaskRepeatShorthand()
     return webkitMaskRepeatLonghands;
 }
 
-const StylePropertyShorthand& columnRuleShorthand()
-{
-    static const CSSPropertyID columnRuleProperties[] = {
-        CSSPropertyColumnRuleWidth,
-        CSSPropertyColumnRuleStyle,
-        CSSPropertyColumnRuleColor,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, columnRuleLonghands, (CSSPropertyColumnRule, columnRuleProperties, WTF_ARRAY_LENGTH(columnRuleProperties)));
-    return columnRuleLonghands;
-}
-
 const StylePropertyShorthand& gridShorthand()
 {
     static const CSSPropertyID gridProperties[] = {
-        CSSPropertyGridTemplateRows,
         CSSPropertyGridTemplateColumns,
+        CSSPropertyGridTemplateRows,
         CSSPropertyGridTemplateAreas,
         CSSPropertyGridAutoFlow,
-        CSSPropertyGridAutoRows,
         CSSPropertyGridAutoColumns,
-        CSSPropertyGridColumnGap,
-        CSSPropertyGridRowGap,
+        CSSPropertyGridAutoRows,
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, gridLonghands, (CSSPropertyGrid, gridProperties, WTF_ARRAY_LENGTH(gridProperties)));
     return gridLonghands;
@@ -282,15 +252,6 @@ const StylePropertyShorthand& borderTopShorthand()
     return borderTopLonghands;
 }
 
-const StylePropertyShorthand& webkitColumnBreakAfterShorthand()
-{
-    static const CSSPropertyID webkitColumnBreakAfterProperties[] = {
-        CSSPropertyBreakAfter,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitColumnBreakAfterLonghands, (CSSPropertyWebkitColumnBreakAfter, webkitColumnBreakAfterProperties, WTF_ARRAY_LENGTH(webkitColumnBreakAfterProperties)));
-    return webkitColumnBreakAfterLonghands;
-}
-
 const StylePropertyShorthand& webkitBorderAfterShorthand()
 {
     static const CSSPropertyID webkitBorderAfterProperties[] = {
@@ -302,25 +263,11 @@ const StylePropertyShorthand& webkitBorderAfterShorthand()
     return webkitBorderAfterLonghands;
 }
 
-const StylePropertyShorthand& gridAreaShorthand()
-{
-    static const CSSPropertyID gridAreaProperties[] = {
-        CSSPropertyGridRowStart,
-        CSSPropertyGridColumnStart,
-        CSSPropertyGridRowEnd,
-        CSSPropertyGridColumnEnd,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, gridAreaLonghands, (CSSPropertyGridArea, gridAreaProperties, WTF_ARRAY_LENGTH(gridAreaProperties)));
-    return gridAreaLonghands;
-}
-
 const StylePropertyShorthand& fontShorthand()
 {
     static const CSSPropertyID fontProperties[] = {
         CSSPropertyFontStyle,
-        CSSPropertyFontVariantLigatures,
-        CSSPropertyFontVariantCaps,
-        CSSPropertyFontVariantNumeric,
+        CSSPropertyFontVariant,
         CSSPropertyFontWeight,
         CSSPropertyFontStretch,
         CSSPropertyFontSize,
@@ -368,27 +315,6 @@ const StylePropertyShorthand& webkitBorderBeforeShorthand()
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitBorderBeforeLonghands, (CSSPropertyWebkitBorderBefore, webkitBorderBeforeProperties, WTF_ARRAY_LENGTH(webkitBorderBeforeProperties)));
     return webkitBorderBeforeLonghands;
-}
-
-const StylePropertyShorthand& columnsShorthand()
-{
-    static const CSSPropertyID columnsProperties[] = {
-        CSSPropertyColumnWidth,
-        CSSPropertyColumnCount,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, columnsLonghands, (CSSPropertyColumns, columnsProperties, WTF_ARRAY_LENGTH(columnsProperties)));
-    return columnsLonghands;
-}
-
-const StylePropertyShorthand& fontVariantShorthand()
-{
-    static const CSSPropertyID fontVariantProperties[] = {
-        CSSPropertyFontVariantLigatures,
-        CSSPropertyFontVariantCaps,
-        CSSPropertyFontVariantNumeric,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, fontVariantLonghands, (CSSPropertyFontVariant, fontVariantProperties, WTF_ARRAY_LENGTH(fontVariantProperties)));
-    return fontVariantLonghands;
 }
 
 const StylePropertyShorthand& paddingShorthand()
@@ -461,15 +387,16 @@ const StylePropertyShorthand& webkitBorderStartShorthand()
     return webkitBorderStartLonghands;
 }
 
-const StylePropertyShorthand& offsetShorthand()
+const StylePropertyShorthand& gridAreaShorthand()
 {
-    static const CSSPropertyID offsetProperties[] = {
-        CSSPropertyOffsetPath,
-        CSSPropertyOffsetDistance,
-        CSSPropertyOffsetRotation,
+    static const CSSPropertyID gridAreaProperties[] = {
+        CSSPropertyGridRowStart,
+        CSSPropertyGridColumnStart,
+        CSSPropertyGridRowEnd,
+        CSSPropertyGridColumnEnd,
     };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, offsetLonghands, (CSSPropertyOffset, offsetProperties, WTF_ARRAY_LENGTH(offsetProperties)));
-    return offsetLonghands;
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, gridAreaLonghands, (CSSPropertyGridArea, gridAreaProperties, WTF_ARRAY_LENGTH(gridAreaProperties)));
+    return gridAreaLonghands;
 }
 
 const StylePropertyShorthand& borderColorShorthand()
@@ -484,22 +411,15 @@ const StylePropertyShorthand& borderColorShorthand()
     return borderColorLonghands;
 }
 
-const StylePropertyShorthand& webkitColumnBreakBeforeShorthand()
+const StylePropertyShorthand& webkitColumnRuleShorthand()
 {
-    static const CSSPropertyID webkitColumnBreakBeforeProperties[] = {
-        CSSPropertyBreakBefore,
+    static const CSSPropertyID webkitColumnRuleProperties[] = {
+        CSSPropertyWebkitColumnRuleWidth,
+        CSSPropertyWebkitColumnRuleStyle,
+        CSSPropertyWebkitColumnRuleColor,
     };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitColumnBreakBeforeLonghands, (CSSPropertyWebkitColumnBreakBefore, webkitColumnBreakBeforeProperties, WTF_ARRAY_LENGTH(webkitColumnBreakBeforeProperties)));
-    return webkitColumnBreakBeforeLonghands;
-}
-
-const StylePropertyShorthand& webkitColumnBreakInsideShorthand()
-{
-    static const CSSPropertyID webkitColumnBreakInsideProperties[] = {
-        CSSPropertyBreakInside,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitColumnBreakInsideLonghands, (CSSPropertyWebkitColumnBreakInside, webkitColumnBreakInsideProperties, WTF_ARRAY_LENGTH(webkitColumnBreakInsideProperties)));
-    return webkitColumnBreakInsideLonghands;
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitColumnRuleLonghands, (CSSPropertyWebkitColumnRule, webkitColumnRuleProperties, WTF_ARRAY_LENGTH(webkitColumnRuleProperties)));
+    return webkitColumnRuleLonghands;
 }
 
 const StylePropertyShorthand& borderWidthShorthand()
@@ -517,8 +437,8 @@ const StylePropertyShorthand& borderWidthShorthand()
 const StylePropertyShorthand& gridTemplateShorthand()
 {
     static const CSSPropertyID gridTemplateProperties[] = {
-        CSSPropertyGridTemplateRows,
         CSSPropertyGridTemplateColumns,
+        CSSPropertyGridTemplateRows,
         CSSPropertyGridTemplateAreas,
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, gridTemplateLonghands, (CSSPropertyGridTemplate, gridTemplateProperties, WTF_ARRAY_LENGTH(gridTemplateProperties)));
@@ -528,9 +448,9 @@ const StylePropertyShorthand& gridTemplateShorthand()
 const StylePropertyShorthand& motionShorthand()
 {
     static const CSSPropertyID motionProperties[] = {
-        CSSPropertyOffsetPath,
-        CSSPropertyOffsetDistance,
-        CSSPropertyOffsetRotation,
+        CSSPropertyMotionPath,
+        CSSPropertyMotionOffset,
+        CSSPropertyMotionRotation,
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, motionLonghands, (CSSPropertyMotion, motionProperties, WTF_ARRAY_LENGTH(motionProperties)));
     return motionLonghands;
@@ -561,11 +481,6 @@ const StylePropertyShorthand& borderShorthand()
         CSSPropertyBorderLeftColor,
         CSSPropertyBorderLeftStyle,
         CSSPropertyBorderLeftWidth,
-        CSSPropertyBorderImageSource,
-        CSSPropertyBorderImageSlice,
-        CSSPropertyBorderImageWidth,
-        CSSPropertyBorderImageOutset,
-        CSSPropertyBorderImageRepeat,
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, borderLonghands, (CSSPropertyBorder, borderProperties, WTF_ARRAY_LENGTH(borderProperties)));
     return borderLonghands;
@@ -590,15 +505,6 @@ const StylePropertyShorthand& gridRowShorthand()
     };
     DEFINE_STATIC_LOCAL(StylePropertyShorthand, gridRowLonghands, (CSSPropertyGridRow, gridRowProperties, WTF_ARRAY_LENGTH(gridRowProperties)));
     return gridRowLonghands;
-}
-
-const StylePropertyShorthand& pageBreakAfterShorthand()
-{
-    static const CSSPropertyID pageBreakAfterProperties[] = {
-        CSSPropertyBreakAfter,
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, pageBreakAfterLonghands, (CSSPropertyPageBreakAfter, pageBreakAfterProperties, WTF_ARRAY_LENGTH(pageBreakAfterProperties)));
-    return pageBreakAfterLonghands;
 }
 
 const StylePropertyShorthand& borderRadiusShorthand()
@@ -656,122 +562,103 @@ const StylePropertyShorthand& shorthandForProperty(CSSPropertyID propertyID)
     if (propertyID == CSSPropertyTextDecoration && !RuntimeEnabledFeatures::css3TextDecorationsEnabled())
         return emptyShorthand;
     switch (propertyID) {
-    case CSSPropertyBackgroundRepeat:
-        return backgroundRepeatShorthand();
-    case CSSPropertyFlex:
-        return flexShorthand();
-    case CSSPropertyMarker:
-        return markerShorthand();
-    case CSSPropertyFlexFlow:
-        return flexFlowShorthand();
-    case CSSPropertyBorderRight:
-        return borderRightShorthand();
-    case CSSPropertyOutline:
-        return outlineShorthand();
-    case CSSPropertyOverflow:
-        return overflowShorthand();
-    case CSSPropertyWebkitTextStroke:
-        return webkitTextStrokeShorthand();
-    case CSSPropertyPageBreakInside:
-        return pageBreakInsideShorthand();
-    case CSSPropertyListStyle:
-        return listStyleShorthand();
-    case CSSPropertyBorderStyle:
-        return borderStyleShorthand();
-    case CSSPropertyWebkitMarginCollapse:
-        return webkitMarginCollapseShorthand();
-    case CSSPropertyMargin:
-        return marginShorthand();
-    case CSSPropertyPageBreakBefore:
-        return pageBreakBeforeShorthand();
-    case CSSPropertyBorderSpacing:
-        return borderSpacingShorthand();
-    case CSSPropertyTextDecoration:
-        return textDecorationShorthand();
-    case CSSPropertyGridGap:
-        return gridGapShorthand();
-    case CSSPropertyBackground:
-        return backgroundShorthand();
-    case CSSPropertyWebkitMaskRepeat:
-        return webkitMaskRepeatShorthand();
-    case CSSPropertyColumnRule:
-        return columnRuleShorthand();
-    case CSSPropertyGrid:
-        return gridShorthand();
-    case CSSPropertyWebkitBorderEnd:
-        return webkitBorderEndShorthand();
-    case CSSPropertyBorderTop:
-        return borderTopShorthand();
-    case CSSPropertyWebkitColumnBreakAfter:
-        return webkitColumnBreakAfterShorthand();
-    case CSSPropertyWebkitBorderAfter:
-        return webkitBorderAfterShorthand();
-    case CSSPropertyGridArea:
-        return gridAreaShorthand();
-    case CSSPropertyFont:
-        return fontShorthand();
-    case CSSPropertyTransition:
-        return transitionShorthand();
-    case CSSPropertyAnimation:
-        return animationShorthand();
-    case CSSPropertyWebkitBorderBefore:
-        return webkitBorderBeforeShorthand();
-    case CSSPropertyColumns:
-        return columnsShorthand();
-    case CSSPropertyFontVariant:
-        return fontVariantShorthand();
-    case CSSPropertyPadding:
-        return paddingShorthand();
-    case CSSPropertyWebkitMaskPosition:
-        return webkitMaskPositionShorthand();
-    case CSSPropertyBorderLeft:
-        return borderLeftShorthand();
-    case CSSPropertyWebkitMask:
-        return webkitMaskShorthand();
-    case CSSPropertyGridColumn:
-        return gridColumnShorthand();
-    case CSSPropertyWebkitBorderStart:
-        return webkitBorderStartShorthand();
-    case CSSPropertyOffset:
-        return offsetShorthand();
-    case CSSPropertyBorderColor:
-        return borderColorShorthand();
-    case CSSPropertyWebkitColumnBreakBefore:
-        return webkitColumnBreakBeforeShorthand();
-    case CSSPropertyWebkitColumnBreakInside:
-        return webkitColumnBreakInsideShorthand();
-    case CSSPropertyBorderWidth:
-        return borderWidthShorthand();
-    case CSSPropertyGridTemplate:
-        return gridTemplateShorthand();
-    case CSSPropertyMotion:
-        return motionShorthand();
-    case CSSPropertyBackgroundPosition:
-        return backgroundPositionShorthand();
-    case CSSPropertyBorder:
-        return borderShorthand();
-    case CSSPropertyBorderBottom:
-        return borderBottomShorthand();
-    case CSSPropertyGridRow:
-        return gridRowShorthand();
-    case CSSPropertyPageBreakAfter:
-        return pageBreakAfterShorthand();
-    case CSSPropertyBorderRadius:
-        return borderRadiusShorthand();
-    case CSSPropertyWebkitTextEmphasis:
-        return webkitTextEmphasisShorthand();
-    case CSSPropertyWebkitMaskBoxImage:
-        return webkitMaskBoxImageShorthand();
-    case CSSPropertyBorderImage:
-        return borderImageShorthand();
+        case CSSPropertyBackgroundRepeat:
+            return backgroundRepeatShorthand();
+        case CSSPropertyFlex:
+            return flexShorthand();
+        case CSSPropertyMarker:
+            return markerShorthand();
+        case CSSPropertyFlexFlow:
+            return flexFlowShorthand();
+        case CSSPropertyOutline:
+            return outlineShorthand();
+        case CSSPropertyWebkitColumns:
+            return webkitColumnsShorthand();
+        case CSSPropertyOverflow:
+            return overflowShorthand();
+        case CSSPropertyWebkitTextStroke:
+            return webkitTextStrokeShorthand();
+        case CSSPropertyListStyle:
+            return listStyleShorthand();
+        case CSSPropertyBorderStyle:
+            return borderStyleShorthand();
+        case CSSPropertyWebkitMarginCollapse:
+            return webkitMarginCollapseShorthand();
+        case CSSPropertyMargin:
+            return marginShorthand();
+        case CSSPropertyBorderSpacing:
+            return borderSpacingShorthand();
+        case CSSPropertyTextDecoration:
+            return textDecorationShorthand();
+        case CSSPropertyBorderRight:
+            return borderRightShorthand();
+        case CSSPropertyBackground:
+            return backgroundShorthand();
+        case CSSPropertyWebkitMaskRepeat:
+            return webkitMaskRepeatShorthand();
+        case CSSPropertyGrid:
+            return gridShorthand();
+        case CSSPropertyWebkitBorderEnd:
+            return webkitBorderEndShorthand();
+        case CSSPropertyBorderTop:
+            return borderTopShorthand();
+        case CSSPropertyWebkitBorderAfter:
+            return webkitBorderAfterShorthand();
+        case CSSPropertyFont:
+            return fontShorthand();
+        case CSSPropertyTransition:
+            return transitionShorthand();
+        case CSSPropertyAnimation:
+            return animationShorthand();
+        case CSSPropertyWebkitBorderBefore:
+            return webkitBorderBeforeShorthand();
+        case CSSPropertyPadding:
+            return paddingShorthand();
+        case CSSPropertyWebkitMaskPosition:
+            return webkitMaskPositionShorthand();
+        case CSSPropertyBorderLeft:
+            return borderLeftShorthand();
+        case CSSPropertyWebkitMask:
+            return webkitMaskShorthand();
+        case CSSPropertyGridColumn:
+            return gridColumnShorthand();
+        case CSSPropertyWebkitBorderStart:
+            return webkitBorderStartShorthand();
+        case CSSPropertyGridArea:
+            return gridAreaShorthand();
+        case CSSPropertyBorderColor:
+            return borderColorShorthand();
+        case CSSPropertyWebkitColumnRule:
+            return webkitColumnRuleShorthand();
+        case CSSPropertyBorderWidth:
+            return borderWidthShorthand();
+        case CSSPropertyGridTemplate:
+            return gridTemplateShorthand();
+        case CSSPropertyMotion:
+            return motionShorthand();
+        case CSSPropertyBackgroundPosition:
+            return backgroundPositionShorthand();
+        case CSSPropertyBorder:
+            return borderShorthand();
+        case CSSPropertyBorderBottom:
+            return borderBottomShorthand();
+        case CSSPropertyGridRow:
+            return gridRowShorthand();
+        case CSSPropertyBorderRadius:
+            return borderRadiusShorthand();
+        case CSSPropertyWebkitTextEmphasis:
+            return webkitTextEmphasisShorthand();
+        case CSSPropertyWebkitMaskBoxImage:
+            return webkitMaskBoxImageShorthand();
+        case CSSPropertyBorderImage:
+            return borderImageShorthand();
     default: {
         return emptyShorthand;
     }
     }
 }
 
-void getMatchingShorthandsForLonghand(
-    CSSPropertyID propertyID, Vector<StylePropertyShorthand, 4>* result)
+void getMatchingShorthandsForLonghand(CSSPropertyID propertyID, Vector<StylePropertyShorthand, 4>* result)
 {
     ASSERT(!result->size());
     switch (propertyID) {
@@ -785,6 +672,10 @@ void getMatchingShorthandsForLonghand(
     }
     case CSSPropertyWebkitBorderEndColor: {
         result->uncheckedAppend(webkitBorderEndShorthand());
+        break;
+    }
+    case CSSPropertyWebkitColumnRuleColor: {
+        result->uncheckedAppend(webkitColumnRuleShorthand());
         break;
     }
     case CSSPropertyFlexWrap: {
@@ -804,13 +695,9 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderLeftColor: {
-        result->uncheckedAppend(borderShorthand());
-        result->uncheckedAppend(borderColorShorthand());
         result->uncheckedAppend(borderLeftShorthand());
-        break;
-    }
-    case CSSPropertyColumnCount: {
-        result->uncheckedAppend(columnsShorthand());
+        result->uncheckedAppend(borderColorShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyWebkitBorderBeforeStyle: {
@@ -850,6 +737,10 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(textDecorationShorthand());
         break;
     }
+    case CSSPropertyMotionRotation: {
+        result->uncheckedAppend(motionShorthand());
+        break;
+    }
     case CSSPropertyAnimationName: {
         result->uncheckedAppend(animationShorthand());
         break;
@@ -872,21 +763,8 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(outlineShorthand());
         break;
     }
-    case CSSPropertyColumnWidth: {
-        result->uncheckedAppend(columnsShorthand());
-        break;
-    }
-    case CSSPropertyColumnRuleWidth: {
-        result->uncheckedAppend(columnRuleShorthand());
-        break;
-    }
     case CSSPropertyWebkitMaskOrigin: {
         result->uncheckedAppend(webkitMaskShorthand());
-        break;
-    }
-    case CSSPropertyBreakAfter: {
-        result->uncheckedAppend(webkitColumnBreakAfterShorthand());
-        result->uncheckedAppend(pageBreakAfterShorthand());
         break;
     }
     case CSSPropertyOutlineStyle: {
@@ -905,10 +783,22 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(backgroundShorthand());
         break;
     }
+    case CSSPropertyMotionPath: {
+        result->uncheckedAppend(motionShorthand());
+        break;
+    }
+    case CSSPropertyWebkitColumnRuleStyle: {
+        result->uncheckedAppend(webkitColumnRuleShorthand());
+        break;
+    }
+    case CSSPropertyWebkitColumnWidth: {
+        result->uncheckedAppend(webkitColumnsShorthand());
+        break;
+    }
     case CSSPropertyBorderRightColor: {
-        result->uncheckedAppend(borderShorthand());
-        result->uncheckedAppend(borderColorShorthand());
         result->uncheckedAppend(borderRightShorthand());
+        result->uncheckedAppend(borderColorShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyAnimationDuration: {
@@ -919,25 +809,15 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(animationShorthand());
         break;
     }
-    case CSSPropertyOffsetRotation: {
-        result->uncheckedAppend(motionShorthand());
-        result->uncheckedAppend(offsetShorthand());
-        break;
-    }
-    case CSSPropertyFontVariantNumeric: {
-        result->uncheckedAppend(fontShorthand());
-        result->uncheckedAppend(fontVariantShorthand());
-        break;
-    }
     case CSSPropertyBorderBottomStyle: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderStyleShorthand());
+        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderBottomShorthand());
         break;
     }
     case CSSPropertyBorderBottomWidth: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderWidthShorthand());
+        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderBottomShorthand());
         break;
     }
@@ -945,9 +825,8 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(borderRadiusShorthand());
         break;
     }
-    case CSSPropertyGridRowGap: {
-        result->uncheckedAppend(gridShorthand());
-        result->uncheckedAppend(gridGapShorthand());
+    case CSSPropertyWebkitColumnCount: {
+        result->uncheckedAppend(webkitColumnsShorthand());
         break;
     }
     case CSSPropertyFontStyle: {
@@ -963,9 +842,9 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderRightWidth: {
-        result->uncheckedAppend(borderShorthand());
-        result->uncheckedAppend(borderWidthShorthand());
         result->uncheckedAppend(borderRightShorthand());
+        result->uncheckedAppend(borderWidthShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyWebkitBorderAfterStyle: {
@@ -973,14 +852,21 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderImageSource: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderImageShorthand());
         break;
     }
     case CSSPropertyBorderRightStyle: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderStyleShorthand());
         result->uncheckedAppend(borderRightShorthand());
+        result->uncheckedAppend(borderShorthand());
+        break;
+    }
+    case CSSPropertyMotionOffset: {
+        result->uncheckedAppend(motionShorthand());
+        break;
+    }
+    case CSSPropertyFontVariant: {
+        result->uncheckedAppend(fontShorthand());
         break;
     }
     case CSSPropertyBorderBottomLeftRadius: {
@@ -1001,9 +887,9 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderLeftWidth: {
-        result->uncheckedAppend(borderShorthand());
-        result->uncheckedAppend(borderWidthShorthand());
         result->uncheckedAppend(borderLeftShorthand());
+        result->uncheckedAppend(borderWidthShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyPaddingBottom: {
@@ -1011,8 +897,8 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyWebkitMaskPositionX: {
-        result->uncheckedAppend(webkitMaskShorthand());
         result->uncheckedAppend(webkitMaskPositionShorthand());
+        result->uncheckedAppend(webkitMaskShorthand());
         break;
     }
     case CSSPropertyMarkerStart: {
@@ -1039,17 +925,7 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(textDecorationShorthand());
         break;
     }
-    case CSSPropertyColumnRuleStyle: {
-        result->uncheckedAppend(columnRuleShorthand());
-        break;
-    }
-    case CSSPropertyOffsetPath: {
-        result->uncheckedAppend(motionShorthand());
-        result->uncheckedAppend(offsetShorthand());
-        break;
-    }
     case CSSPropertyBorderImageSlice: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderImageShorthand());
         break;
     }
@@ -1057,15 +933,10 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(webkitBorderAfterShorthand());
         break;
     }
-    case CSSPropertyBreakInside: {
-        result->uncheckedAppend(webkitColumnBreakInsideShorthand());
-        result->uncheckedAppend(pageBreakInsideShorthand());
-        break;
-    }
     case CSSPropertyBorderTopColor: {
-        result->uncheckedAppend(borderShorthand());
-        result->uncheckedAppend(borderColorShorthand());
         result->uncheckedAppend(borderTopShorthand());
+        result->uncheckedAppend(borderColorShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyBackgroundColor: {
@@ -1081,14 +952,14 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderTopWidth: {
-        result->uncheckedAppend(borderShorthand());
-        result->uncheckedAppend(borderWidthShorthand());
         result->uncheckedAppend(borderTopShorthand());
+        result->uncheckedAppend(borderWidthShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyGridColumnStart: {
-        result->uncheckedAppend(gridAreaShorthand());
         result->uncheckedAppend(gridColumnShorthand());
+        result->uncheckedAppend(gridAreaShorthand());
         break;
     }
     case CSSPropertyMarginBottom: {
@@ -1112,8 +983,8 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyWebkitMaskPositionY: {
-        result->uncheckedAppend(webkitMaskShorthand());
         result->uncheckedAppend(webkitMaskPositionShorthand());
+        result->uncheckedAppend(webkitMaskShorthand());
         break;
     }
     case CSSPropertyWebkitMaskSize: {
@@ -1129,14 +1000,9 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderTopStyle: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderStyleShorthand());
         result->uncheckedAppend(borderTopShorthand());
-        break;
-    }
-    case CSSPropertyBreakBefore: {
-        result->uncheckedAppend(webkitColumnBreakBeforeShorthand());
-        result->uncheckedAppend(pageBreakBeforeShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyWebkitBorderBeforeWidth: {
@@ -1144,7 +1010,6 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderImageOutset: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderImageShorthand());
         break;
     }
@@ -1153,7 +1018,6 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderImageWidth: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderImageShorthand());
         break;
     }
@@ -1185,9 +1049,8 @@ void getMatchingShorthandsForLonghand(
         result->uncheckedAppend(animationShorthand());
         break;
     }
-    case CSSPropertyFontVariantCaps: {
-        result->uncheckedAppend(fontShorthand());
-        result->uncheckedAppend(fontVariantShorthand());
+    case CSSPropertyWebkitColumnRuleWidth: {
+        result->uncheckedAppend(webkitColumnRuleShorthand());
         break;
     }
     case CSSPropertyFlexDirection: {
@@ -1195,13 +1058,13 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyWebkitMaskRepeatY: {
-        result->uncheckedAppend(webkitMaskShorthand());
         result->uncheckedAppend(webkitMaskRepeatShorthand());
+        result->uncheckedAppend(webkitMaskShorthand());
         break;
     }
     case CSSPropertyWebkitMaskRepeatX: {
-        result->uncheckedAppend(webkitMaskShorthand());
         result->uncheckedAppend(webkitMaskRepeatShorthand());
+        result->uncheckedAppend(webkitMaskShorthand());
         break;
     }
     case CSSPropertyGridTemplateAreas: {
@@ -1210,7 +1073,6 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderImageRepeat: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderImageShorthand());
         break;
     }
@@ -1235,17 +1097,13 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBorderLeftStyle: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderStyleShorthand());
         result->uncheckedAppend(borderLeftShorthand());
+        result->uncheckedAppend(borderShorthand());
         break;
     }
     case CSSPropertyOverflowY: {
         result->uncheckedAppend(overflowShorthand());
-        break;
-    }
-    case CSSPropertyColumnRuleColor: {
-        result->uncheckedAppend(columnRuleShorthand());
         break;
     }
     case CSSPropertyMarkerMid: {
@@ -1266,21 +1124,6 @@ void getMatchingShorthandsForLonghand(
     }
     case CSSPropertyAnimationFillMode: {
         result->uncheckedAppend(animationShorthand());
-        break;
-    }
-    case CSSPropertyFontVariantLigatures: {
-        result->uncheckedAppend(fontShorthand());
-        result->uncheckedAppend(fontVariantShorthand());
-        break;
-    }
-    case CSSPropertyGridColumnGap: {
-        result->uncheckedAppend(gridShorthand());
-        result->uncheckedAppend(gridGapShorthand());
-        break;
-    }
-    case CSSPropertyOffsetDistance: {
-        result->uncheckedAppend(motionShorthand());
-        result->uncheckedAppend(offsetShorthand());
         break;
     }
     case CSSPropertyGridTemplateColumns: {
@@ -1309,18 +1152,18 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyBackgroundRepeatY: {
-        result->uncheckedAppend(backgroundShorthand());
         result->uncheckedAppend(backgroundRepeatShorthand());
+        result->uncheckedAppend(backgroundShorthand());
         break;
     }
     case CSSPropertyBackgroundRepeatX: {
-        result->uncheckedAppend(backgroundShorthand());
         result->uncheckedAppend(backgroundRepeatShorthand());
+        result->uncheckedAppend(backgroundShorthand());
         break;
     }
     case CSSPropertyBorderBottomColor: {
-        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderColorShorthand());
+        result->uncheckedAppend(borderShorthand());
         result->uncheckedAppend(borderBottomShorthand());
         break;
     }
@@ -1329,8 +1172,8 @@ void getMatchingShorthandsForLonghand(
         break;
     }
     case CSSPropertyGridColumnEnd: {
-        result->uncheckedAppend(gridAreaShorthand());
         result->uncheckedAppend(gridColumnShorthand());
+        result->uncheckedAppend(gridAreaShorthand());
         break;
     }
     case CSSPropertyBackgroundSize: {

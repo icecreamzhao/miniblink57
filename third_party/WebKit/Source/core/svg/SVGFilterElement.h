@@ -23,9 +23,11 @@
 #ifndef SVGFilterElement_h
 #define SVGFilterElement_h
 
-#include "core/CoreExport.h"
 #include "core/SVGNames.h"
+#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedEnumeration.h"
+#include "core/svg/SVGAnimatedInteger.h"
+#include "core/svg/SVGAnimatedIntegerOptionalInteger.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGElement.h"
 #include "core/svg/SVGURIReference.h"
@@ -34,29 +36,23 @@
 
 namespace blink {
 
-class CORE_EXPORT SVGFilterElement final : public SVGElement,
-                                           public SVGURIReference {
+class SVGFilterElement final : public SVGElement,
+                               public SVGURIReference {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(SVGFilterElement);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGFilterElement);
 public:
     DECLARE_NODE_FACTORY(SVGFilterElement);
     DECLARE_VIRTUAL_TRACE();
 
-    ~SVGFilterElement() override;
+    void addClient(Node*);
+    void removeClient(Node*);
 
     SVGAnimatedLength* x() const { return m_x.get(); }
     SVGAnimatedLength* y() const { return m_y.get(); }
     SVGAnimatedLength* width() const { return m_width.get(); }
     SVGAnimatedLength* height() const { return m_height.get(); }
-    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* filterUnits()
-    {
-        return m_filterUnits.get();
-    }
-    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* primitiveUnits()
-    {
-        return m_primitiveUnits.get();
-    }
+    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* filterUnits() { return m_filterUnits.get(); }
+    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* primitiveUnits() { return m_primitiveUnits.get(); }
 
 private:
     explicit SVGFilterElement(Document&);
@@ -70,12 +66,14 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    Member<SVGAnimatedLength> m_x;
-    Member<SVGAnimatedLength> m_y;
-    Member<SVGAnimatedLength> m_width;
-    Member<SVGAnimatedLength> m_height;
-    Member<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_filterUnits;
-    Member<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_primitiveUnits;
+    RefPtrWillBeMember<SVGAnimatedLength> m_x;
+    RefPtrWillBeMember<SVGAnimatedLength> m_y;
+    RefPtrWillBeMember<SVGAnimatedLength> m_width;
+    RefPtrWillBeMember<SVGAnimatedLength> m_height;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_filterUnits;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_primitiveUnits;
+
+    WillBeHeapHashSet<RefPtrWillBeMember<Node>> m_clientsToAdd;
 };
 
 } // namespace blink

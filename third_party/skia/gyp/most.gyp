@@ -25,6 +25,7 @@
         'tools.gyp:tools',
         'pathops_unittest.gyp:*',
         'pathops_skpclip.gyp:*',
+<<<<<<< HEAD
         'dm.gyp:dm',
         'fuzz.gyp:fuzz',
       ],
@@ -33,25 +34,54 @@
           'dependencies!': [
             'viewer.gyp:viewer',
           ]
+=======
+#       'pdfviewer.gyp:pdfviewer',
+        'dm.gyp:dm',
+        'visualbench.gyp:visualbench',
+      ],
+      'conditions': [
+        [ 'skia_gpu == 0', { 
+          'dependencies!': [ 
+            'visualbench.gyp:visualbench' 
+          ] 
+>>>>>>> miniblink49
         }],
         [ 'skia_gpu == 0 or skia_os == "android"', {
           'dependencies!': [
             'example.gyp:HelloWorld',
           ],
         }],
+<<<<<<< HEAD
         ['skia_os == "android" and skia_vulkan == 1', {
           'dependencies': [
             'android_system.gyp:Viewer_APK',
+=======
+        ['skia_os == "android"', {
+          'dependencies': [ 
+            'android_system.gyp:SampleApp_APK', 
+          ],
+          'conditions': [
+            [ 'skia_gpu == 1', {
+              'dependencies': [
+                'android_system.gyp:VisualBench_APK', 
+              ],
+            }],
+>>>>>>> miniblink49
           ],
         }],
         ['skia_os == "ios"', {
           'dependencies!': [
             'example.gyp:HelloWorld',
             'SampleApp.gyp:SampleApp',
+<<<<<<< HEAD
+=======
+            'visualbench.gyp:visualbench',
+>>>>>>> miniblink49
           ],
           'dependencies': ['iOSShell.gyp:iOSShell' ],
         }],
         ['skia_os == "mac" or skia_os == "linux"', {
+<<<<<<< HEAD
           'dependencies': [ 
             'nanomsg.gyp:*' ,
           ],
@@ -65,15 +95,25 @@
           'dependencies': [
             'viewer.gyp:viewer',
           ],
+=======
+          'dependencies': [ 'nanomsg.gyp:*' ],
+>>>>>>> miniblink49
         }],
         [ 'skia_skip_gui',
           {
             'dependencies!': [
               'example.gyp:HelloWorld',
               'SampleApp.gyp:SampleApp',
+<<<<<<< HEAD
             ]
           }
         ],
+=======
+              'visualbench.gyp:visualbench',
+            ]
+          }
+        ]
+>>>>>>> miniblink49
       ],
     },
   ],

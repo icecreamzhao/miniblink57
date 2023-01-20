@@ -9,6 +9,7 @@
 #include "src/tracing/trace-event.h"
 #include "src/v8.h"
 
+<<<<<<< HEAD
 #include "src/objects-inl.h" // weolar
 
 namespace v8 {
@@ -73,3 +74,63 @@ namespace tracing {
 
 } // namespace tracing
 } // namespace v8
+=======
+namespace v8 {
+namespace tracing {
+
+TracingCategoryObserver* TracingCategoryObserver::instance_ = nullptr;
+
+void TracingCategoryObserver::SetUp() {
+  TracingCategoryObserver::instance_ = new TracingCategoryObserver();
+  i::V8::GetCurrentPlatform()->GetTracingController()->AddTraceStateObserver(
+      TracingCategoryObserver::instance_);
+}
+
+void TracingCategoryObserver::TearDown() {
+  i::V8::GetCurrentPlatform()->GetTracingController()->RemoveTraceStateObserver(
+      TracingCategoryObserver::instance_);
+  delete TracingCategoryObserver::instance_;
+}
+
+void TracingCategoryObserver::OnTraceEnabled() {
+  bool enabled = false;
+  TRACE_EVENT_CATEGORY_GROUP_ENABLED(
+      TRACE_DISABLED_BY_DEFAULT("v8.runtime_stats"), &enabled);
+  if (enabled) {
+    i::TracingFlags::runtime_stats.fetch_or(ENABLED_BY_TRACING,
+                                            std::memory_order_relaxed);
+  }
+  TRACE_EVENT_CATEGORY_GROUP_ENABLED(
+      TRACE_DISABLED_BY_DEFAULT("v8.runtime_stats_sampling"), &enabled);
+  if (enabled) {
+    i::TracingFlags::runtime_stats.fetch_or(ENABLED_BY_SAMPLING,
+                                            std::memory_order_relaxed);
+  }
+  TRACE_EVENT_CATEGORY_GROUP_ENABLED(TRACE_DISABLED_BY_DEFAULT("v8.gc_stats"),
+                                     &enabled);
+  if (enabled) {
+    i::TracingFlags::gc_stats.fetch_or(ENABLED_BY_TRACING,
+                                       std::memory_order_relaxed);
+  }
+  TRACE_EVENT_CATEGORY_GROUP_ENABLED(TRACE_DISABLED_BY_DEFAULT("v8.ic_stats"),
+                                     &enabled);
+  if (enabled) {
+    i::TracingFlags::ic_stats.fetch_or(ENABLED_BY_TRACING,
+                                       std::memory_order_relaxed);
+  }
+}
+
+void TracingCategoryObserver::OnTraceDisabled() {
+  i::TracingFlags::runtime_stats.fetch_and(
+      ~(ENABLED_BY_TRACING | ENABLED_BY_SAMPLING), std::memory_order_relaxed);
+
+  i::TracingFlags::gc_stats.fetch_and(~ENABLED_BY_TRACING,
+                                      std::memory_order_relaxed);
+
+  i::TracingFlags::ic_stats.fetch_and(~ENABLED_BY_TRACING,
+                                      std::memory_order_relaxed);
+}
+
+}  // namespace tracing
+}  // namespace v8
+>>>>>>> miniblink49

@@ -2,9 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://wicg.github.io/BackgroundSync/spec/#sync-event
 
 dictionary SyncEventInit : ExtendableEventInit {
     required DOMString tag;
     boolean lastChance = false;
+=======
+dictionary SyncEventInit : ExtendableEventInit {
+    required SyncRegistration registration;
+>>>>>>> miniblink49
 };

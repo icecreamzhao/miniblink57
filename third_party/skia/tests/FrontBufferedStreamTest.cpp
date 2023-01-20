@@ -6,16 +6,25 @@
  */
 
 #include "SkBitmap.h"
+<<<<<<< HEAD
 #include "SkCodec.h"
 #include "SkFrontBufferedStream.h"
+=======
+#include "SkFrontBufferedStream.h"
+#include "SkImageDecoder.h"
+>>>>>>> miniblink49
 #include "SkRefCnt.h"
 #include "SkStream.h"
 #include "SkTypes.h"
 #include "Test.h"
 
 static void test_read(skiatest::Reporter* reporter, SkStream* bufferedStream,
+<<<<<<< HEAD
     const void* expectations, size_t bytesToRead)
 {
+=======
+                      const void* expectations, size_t bytesToRead) {
+>>>>>>> miniblink49
     // output for reading bufferedStream.
     SkAutoMalloc storage(bytesToRead);
 
@@ -25,8 +34,12 @@ static void test_read(skiatest::Reporter* reporter, SkStream* bufferedStream,
 }
 
 static void test_rewind(skiatest::Reporter* reporter,
+<<<<<<< HEAD
     SkStream* bufferedStream, bool shouldSucceed)
 {
+=======
+                        SkStream* bufferedStream, bool shouldSucceed) {
+>>>>>>> miniblink49
     const bool success = bufferedStream->rewind();
     REPORTER_ASSERT(reporter, success == shouldSucceed);
 }
@@ -36,9 +49,14 @@ static void test_rewind(skiatest::Reporter* reporter,
 // length and it has a position (so its initial position can be taken into
 // account when computing the length).
 static void test_hasLength(skiatest::Reporter* reporter,
+<<<<<<< HEAD
     const SkStream& bufferedStream,
     const SkStream& streamBeingBuffered)
 {
+=======
+                           const SkStream& bufferedStream,
+                           const SkStream& streamBeingBuffered) {
+>>>>>>> miniblink49
     if (streamBeingBuffered.hasLength() && streamBeingBuffered.hasPosition()) {
         REPORTER_ASSERT(reporter, bufferedStream.hasLength());
     } else {
@@ -53,12 +71,20 @@ const char gAbcs[] = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdef
 
 // Tests reading the stream across boundaries of what has been buffered so far and what
 // the total buffer size is.
+<<<<<<< HEAD
 static void test_incremental_buffering(skiatest::Reporter* reporter, size_t bufferSize)
 {
     // NOTE: For this and other tests in this file, we cheat and continue to refer to the
     // wrapped stream, but that's okay because we know the wrapping stream has not been
     // deleted yet (and we only call const methods in it).
     SkMemoryStream* memStream = new SkMemoryStream(gAbcs, strlen(gAbcs), false);
+=======
+static void test_incremental_buffering(skiatest::Reporter* reporter, size_t bufferSize) {
+    // NOTE: For this and other tests in this file, we cheat and continue to refer to the
+    // wrapped stream, but that's okay because we know the wrapping stream has not been
+    // deleted yet (and we only call const methods in it).
+    SkMemoryStream* memStream = SkNEW_ARGS(SkMemoryStream, (gAbcs, strlen(gAbcs), false));
+>>>>>>> miniblink49
 
     SkAutoTDelete<SkStream> bufferedStream(SkFrontBufferedStream::Create(memStream, bufferSize));
     test_hasLength(reporter, *bufferedStream.get(), *memStream);
@@ -72,7 +98,11 @@ static void test_incremental_buffering(skiatest::Reporter* reporter, size_t buff
     test_read(reporter, bufferedStream, gAbcs, bufferSize / 4);
 
     // Now test reading part of what was buffered, and buffering new data.
+<<<<<<< HEAD
     test_read(reporter, bufferedStream, gAbcs + bufferSize / 4, bufferSize / 2);
+=======
+    test_read(reporter, bufferedStream, gAbcs + bufferedStream->getPosition(), bufferSize / 2);
+>>>>>>> miniblink49
 
     // Now test reading what was buffered, buffering new data, and
     // reading directly from the stream.
@@ -85,9 +115,14 @@ static void test_incremental_buffering(skiatest::Reporter* reporter, size_t buff
     test_rewind(reporter, bufferedStream, false);
 }
 
+<<<<<<< HEAD
 static void test_perfectly_sized_buffer(skiatest::Reporter* reporter, size_t bufferSize)
 {
     SkMemoryStream* memStream = new SkMemoryStream(gAbcs, strlen(gAbcs), false);
+=======
+static void test_perfectly_sized_buffer(skiatest::Reporter* reporter, size_t bufferSize) {
+    SkMemoryStream* memStream = SkNEW_ARGS(SkMemoryStream, (gAbcs, strlen(gAbcs), false));
+>>>>>>> miniblink49
     SkAutoTDelete<SkStream> bufferedStream(SkFrontBufferedStream::Create(memStream, bufferSize));
     test_hasLength(reporter, *bufferedStream.get(), *memStream);
 
@@ -101,6 +136,7 @@ static void test_perfectly_sized_buffer(skiatest::Reporter* reporter, size_t buf
     test_read(reporter, bufferedStream, gAbcs, bufferSize);
 
     // Read past the size of the buffer. At this point, we cannot return.
+<<<<<<< HEAD
     test_read(reporter, bufferedStream, gAbcs + memStream->getPosition(), 1);
     test_rewind(reporter, bufferedStream, false);
 }
@@ -108,6 +144,14 @@ static void test_perfectly_sized_buffer(skiatest::Reporter* reporter, size_t buf
 static void test_skipping(skiatest::Reporter* reporter, size_t bufferSize)
 {
     SkMemoryStream* memStream = new SkMemoryStream(gAbcs, strlen(gAbcs), false);
+=======
+    test_read(reporter, bufferedStream, gAbcs + bufferedStream->getPosition(), 1);
+    test_rewind(reporter, bufferedStream, false);
+}
+
+static void test_skipping(skiatest::Reporter* reporter, size_t bufferSize) {
+    SkMemoryStream* memStream = SkNEW_ARGS(SkMemoryStream, (gAbcs, strlen(gAbcs), false));
+>>>>>>> miniblink49
     SkAutoTDelete<SkStream> bufferedStream(SkFrontBufferedStream::Create(memStream, bufferSize));
     test_hasLength(reporter, *bufferedStream.get(), *memStream);
 
@@ -122,7 +166,11 @@ static void test_skipping(skiatest::Reporter* reporter, size_t bufferSize)
     bufferedStream->skip(bufferSize / 2);
 
     // Test that reading will still work.
+<<<<<<< HEAD
     test_read(reporter, bufferedStream, gAbcs + memStream->getPosition(), bufferSize / 4);
+=======
+    test_read(reporter, bufferedStream, gAbcs + bufferedStream->getPosition(), bufferSize / 4);
+>>>>>>> miniblink49
 
     test_rewind(reporter, bufferedStream, true);
     test_read(reporter, bufferedStream, gAbcs, bufferSize);
@@ -135,12 +183,18 @@ class AndroidLikeMemoryStream : public SkMemoryStream {
 public:
     AndroidLikeMemoryStream(void* data, size_t size, bool ownMemory)
         : INHERITED(data, size, ownMemory)
+<<<<<<< HEAD
         , fIsAtEnd(false)
     {
     }
 
     size_t read(void* dst, size_t requested) override
     {
+=======
+        , fIsAtEnd(false) {}
+
+    size_t read(void* dst, size_t requested) override {
+>>>>>>> miniblink49
         size_t bytesRead = this->INHERITED::read(dst, requested);
         if (bytesRead < requested) {
             fIsAtEnd = true;
@@ -148,8 +202,12 @@ public:
         return bytesRead;
     }
 
+<<<<<<< HEAD
     bool isAtEnd() const override
     {
+=======
+    bool isAtEnd() const override {
+>>>>>>> miniblink49
         return fIsAtEnd;
     }
 
@@ -160,10 +218,16 @@ private:
 
 // This test ensures that buffering the exact length of the stream and attempting to read beyond it
 // does not invalidate the buffer.
+<<<<<<< HEAD
 static void test_read_beyond_buffer(skiatest::Reporter* reporter, size_t bufferSize)
 {
     // Use a stream that behaves like Android's stream.
     AndroidLikeMemoryStream* memStream = new AndroidLikeMemoryStream((void*)gAbcs, bufferSize, false);
+=======
+static void test_read_beyond_buffer(skiatest::Reporter* reporter, size_t bufferSize) {
+    // Use a stream that behaves like Android's stream.
+    AndroidLikeMemoryStream* memStream = SkNEW_ARGS(AndroidLikeMemoryStream, ((void*)gAbcs, bufferSize, false));
+>>>>>>> miniblink49
 
     // Create a buffer that matches the length of the stream.
     SkAutoTDelete<SkStream> bufferedStream(SkFrontBufferedStream::Create(memStream, bufferSize));
@@ -184,6 +248,7 @@ public:
     LengthOptionalStream(bool hasLength, bool hasPosition)
         : fHasLength(hasLength)
         , fHasPosition(hasPosition)
+<<<<<<< HEAD
     {
     }
 
@@ -204,6 +269,23 @@ public:
 
     bool isAtEnd() const override
     {
+=======
+    {}
+
+    bool hasLength() const override {
+        return fHasLength;
+    }
+
+    bool hasPosition() const override {
+        return fHasPosition;
+    }
+
+    size_t read(void*, size_t) override {
+        return 0;
+    }
+
+    bool isAtEnd() const override {
+>>>>>>> miniblink49
         return true;
     }
 
@@ -213,11 +295,18 @@ private:
 };
 
 // Test all possible combinations of the wrapped stream having a length and a position.
+<<<<<<< HEAD
 static void test_length_combos(skiatest::Reporter* reporter, size_t bufferSize)
 {
     for (int hasLen = 0; hasLen <= 1; hasLen++) {
         for (int hasPos = 0; hasPos <= 1; hasPos++) {
             LengthOptionalStream* stream = new LengthOptionalStream(SkToBool(hasLen), SkToBool(hasPos));
+=======
+static void test_length_combos(skiatest::Reporter* reporter, size_t bufferSize) {
+    for (int hasLen = 0; hasLen <= 1; hasLen++) {
+        for (int hasPos = 0; hasPos <= 1; hasPos++) {
+            LengthOptionalStream* stream = SkNEW_ARGS(LengthOptionalStream, (SkToBool(hasLen), SkToBool(hasPos)));
+>>>>>>> miniblink49
             SkAutoTDelete<SkStream> buffered(SkFrontBufferedStream::Create(stream, bufferSize));
             test_hasLength(reporter, *buffered.get(), *stream);
         }
@@ -225,9 +314,14 @@ static void test_length_combos(skiatest::Reporter* reporter, size_t bufferSize)
 }
 
 // Test using a stream with an initial offset.
+<<<<<<< HEAD
 static void test_initial_offset(skiatest::Reporter* reporter, size_t bufferSize)
 {
     SkMemoryStream* memStream = new SkMemoryStream(gAbcs, strlen(gAbcs), false);
+=======
+static void test_initial_offset(skiatest::Reporter* reporter, size_t bufferSize) {
+    SkMemoryStream* memStream = SkNEW_ARGS(SkMemoryStream, (gAbcs, strlen(gAbcs), false));
+>>>>>>> miniblink49
 
     // Skip a few characters into the memStream, so that bufferedStream represents an offset into
     // the stream it wraps.
@@ -235,12 +329,21 @@ static void test_initial_offset(skiatest::Reporter* reporter, size_t bufferSize)
     memStream->skip(arbitraryOffset);
     SkAutoTDelete<SkStream> bufferedStream(SkFrontBufferedStream::Create(memStream, bufferSize));
 
+<<<<<<< HEAD
     // Since SkMemoryStream has a length, bufferedStream must also.
+=======
+    // Since SkMemoryStream has a length and a position, bufferedStream must also.
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, bufferedStream->hasLength());
 
     const size_t amountToRead = 10;
     const size_t bufferedLength = bufferedStream->getLength();
+<<<<<<< HEAD
     size_t currentPosition = 0;
+=======
+    size_t currentPosition = bufferedStream->getPosition();
+    REPORTER_ASSERT(reporter, 0 == currentPosition);
+>>>>>>> miniblink49
 
     // Read the stream in chunks. After each read, the position must match currentPosition,
     // which sums the amount attempted to read, unless the end of the stream has been reached.
@@ -248,16 +351,26 @@ static void test_initial_offset(skiatest::Reporter* reporter, size_t bufferSize)
     while (currentPosition < bufferedLength) {
         REPORTER_ASSERT(reporter, !bufferedStream->isAtEnd());
         test_read(reporter, bufferedStream, gAbcs + arbitraryOffset + currentPosition,
+<<<<<<< HEAD
             amountToRead);
         currentPosition = SkTMin(currentPosition + amountToRead, bufferedLength);
         REPORTER_ASSERT(reporter, memStream->getPosition() - arbitraryOffset == currentPosition);
+=======
+                  amountToRead);
+        currentPosition = SkTMin(currentPosition + amountToRead, bufferedLength);
+        REPORTER_ASSERT(reporter, bufferedStream->getPosition() == currentPosition);
+>>>>>>> miniblink49
     }
     REPORTER_ASSERT(reporter, bufferedStream->isAtEnd());
     REPORTER_ASSERT(reporter, bufferedLength == currentPosition);
 }
 
+<<<<<<< HEAD
 static void test_buffers(skiatest::Reporter* reporter, size_t bufferSize)
 {
+=======
+static void test_buffers(skiatest::Reporter* reporter, size_t bufferSize) {
+>>>>>>> miniblink49
     test_incremental_buffering(reporter, bufferSize);
     test_perfectly_sized_buffer(reporter, bufferSize);
     test_skipping(reporter, bufferSize);
@@ -266,8 +379,12 @@ static void test_buffers(skiatest::Reporter* reporter, size_t bufferSize)
     test_initial_offset(reporter, bufferSize);
 }
 
+<<<<<<< HEAD
 DEF_TEST(FrontBufferedStream, reporter)
 {
+=======
+DEF_TEST(FrontBufferedStream, reporter) {
+>>>>>>> miniblink49
     // Test 6 and 64, which are used by Android, as well as another arbitrary length.
     test_buffers(reporter, 6);
     test_buffers(reporter, 15);
@@ -280,6 +397,7 @@ DEF_TEST(FrontBufferedStream, reporter)
 class FailingStream : public SkStream {
 public:
     FailingStream()
+<<<<<<< HEAD
         : fAtEnd(false)
     {
     }
@@ -308,4 +426,40 @@ DEF_TEST(ShortFrontBufferedStream, reporter)
     // This will fail to create a codec.  However, what we really want to test is that we
     // won't read past the end of the stream.
     SkAutoTDelete<SkCodec> codec(SkCodec::NewFromStream(stream.release()));
+=======
+    : fAtEnd(false)
+    , fReadAfterEnd(false)
+    {}
+    size_t read(void* buffer, size_t size) override {
+        if (fAtEnd) {
+            fReadAfterEnd = true;
+        } else {
+            fAtEnd = true;
+        }
+        return 0;
+    }
+
+    bool isAtEnd() const override {
+        return fAtEnd;
+    }
+
+    bool readAfterEnd() const {
+        return fReadAfterEnd;
+    }
+private:
+    bool fAtEnd;
+    bool fReadAfterEnd;
+};
+
+DEF_TEST(ShortFrontBufferedStream, reporter) {
+    FailingStream* failingStream = SkNEW(FailingStream);
+    SkAutoTDelete<SkStreamRewindable> stream(SkFrontBufferedStream::Create(failingStream, 64));
+    SkBitmap bm;
+    // The return value of DecodeStream is not important. We are just using DecodeStream because
+    // it simulates a bug. DecodeStream will read the stream, then rewind, then attempt to read
+    // again. FrontBufferedStream::read should not continue to read its underlying stream beyond
+    // its end.
+    SkImageDecoder::DecodeStream(stream, &bm);
+    REPORTER_ASSERT(reporter, !failingStream->readAfterEnd());
+>>>>>>> miniblink49
 }

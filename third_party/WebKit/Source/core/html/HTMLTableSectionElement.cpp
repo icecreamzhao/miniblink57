@@ -22,6 +22,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLTableSectionElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -37,17 +38,14 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLTableSectionElement::HTMLTableSectionElement(
-    const QualifiedName& tagName,
-    Document& document)
+inline HTMLTableSectionElement::HTMLTableSectionElement(const QualifiedName& tagName, Document& document)
     : HTMLTablePartElement(tagName, document)
 {
 }
 
 DEFINE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLTableSectionElement)
 
-const StylePropertySet*
-HTMLTableSectionElement::additionalPresentationAttributeStyle()
+const StylePropertySet* HTMLTableSectionElement::additionalPresentationAttributeStyle()
 {
     if (HTMLTableElement* table = findParentTable())
         return table->additionalGroupStyle(true);
@@ -56,48 +54,48 @@ HTMLTableSectionElement::additionalPresentationAttributeStyle()
 
 // these functions are rather slow, since we need to get the row at
 // the index... but they aren't used during usual HTML parsing anyway
-HTMLElement* HTMLTableSectionElement::insertRow(
-    int index,
-    ExceptionState& exceptionState)
+PassRefPtrWillBeRawPtr<HTMLElement> HTMLTableSectionElement::insertRow(int index, ExceptionState& exceptionState)
 {
-    HTMLCollection* children = rows();
+    RefPtrWillBeRawPtr<HTMLCollection> children = rows();
     int numRows = children ? static_cast<int>(children->length()) : 0;
     if (index < -1 || index > numRows) {
-        exceptionState.throwDOMException(
-            IndexSizeError, "The provided index (" + String::number(index) + " is outside the range [-1, " + String::number(numRows) + "].");
+        exceptionState.throwDOMException(IndexSizeError, "The provided index (" + String::number(index) + " is outside the range [-1, " + String::number(numRows) + "].");
         return nullptr;
     }
 
-    HTMLTableRowElement* row = HTMLTableRowElement::create(document());
+    RefPtrWillBeRawPtr<HTMLTableRowElement> row = HTMLTableRowElement::create(document());
     if (numRows == index || index == -1)
         appendChild(row, exceptionState);
     else
         insertBefore(row, children->item(index), exceptionState);
-    return row;
+    return row.release();
 }
 
-void HTMLTableSectionElement::deleteRow(int index,
-    ExceptionState& exceptionState)
+void HTMLTableSectionElement::deleteRow(int index, ExceptionState& exceptionState)
 {
-    HTMLCollection* children = rows();
+    RefPtrWillBeRawPtr<HTMLCollection> children = rows();
     int numRows = children ? (int)children->length() : 0;
-    if (index == -1) {
-        if (!numRows)
-            return;
+    if (index == -1)
         index = numRows - 1;
-    }
     if (index >= 0 && index < numRows) {
-        Element* row = children->item(index);
-        HTMLElement::removeChild(row, exceptionState);
+        RefPtrWillBeRawPtr<Element> row = children->item(index);
+        HTMLElement::removeChild(row.get(), exceptionState);
     } else {
-        exceptionState.throwDOMException(
-            IndexSizeError, "The provided index (" + String::number(index) + " is outside the range [-1, " + String::number(numRows) + "].");
+        exceptionState.throwDOMException(IndexSizeError, "The provided index (" + String::number(index) + " is outside the range [-1, " + String::number(numRows) + "].");
     }
 }
 
-HTMLCollection* HTMLTableSectionElement::rows()
+int HTMLTableSectionElement::numRows() const
+{
+    int rowCount = 0;
+    for (const HTMLTableRowElement* row = Traversal<HTMLTableRowElement>::firstChild(*this); row; row = Traversal<HTMLTableRowElement>::nextSibling(*row))
+        ++rowCount;
+    return rowCount;
+}
+
+PassRefPtrWillBeRawPtr<HTMLCollection> HTMLTableSectionElement::rows()
 {
     return ensureCachedCollection<HTMLCollection>(TSectionRows);
 }
 
-} // namespace blink
+}

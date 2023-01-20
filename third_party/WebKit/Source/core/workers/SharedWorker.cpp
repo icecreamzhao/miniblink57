@@ -29,9 +29,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/workers/SharedWorker.h"
 
 #include "bindings/core/v8/ExceptionState.h"
+#include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/dom/MessageChannel.h"
 #include "core/dom/MessagePort.h"
@@ -52,49 +54,42 @@ inline SharedWorker::SharedWorker(ExecutionContext* context)
 {
 }
 
-SharedWorker* SharedWorker::create(ExecutionContext* context,
-    const String& url,
-    const String& name,
-    ExceptionState& exceptionState)
+PassRefPtrWillBeRawPtr<SharedWorker> SharedWorker::create(ExecutionContext* context, const String& url, const String& name, ExceptionState& exceptionState)
 {
-    DCHECK(isMainThread());
-    SECURITY_DCHECK(context->isDocument());
+    ASSERT(isMainThread());
+    ASSERT_WITH_SECURITY_IMPLICATION(context->isDocument());
 
     UseCounter::count(context, UseCounter::SharedWorkerStart);
 
-    SharedWorker* worker = new SharedWorker(context);
+    RefPtrWillBeRawPtr<SharedWorker> worker = adoptRefWillBeNoop(new SharedWorker(context));
 
     MessageChannel* channel = MessageChannel::create(context);
     worker->m_port = channel->port1();
-    WebMessagePortChannelUniquePtr remotePort = channel->port2()->disentangle();
-    DCHECK(remotePort);
+    OwnPtr<WebMessagePortChannel> remotePort = channel->port2()->disentangle();
+    ASSERT(remotePort);
 
-    // We don't currently support nested workers, so workers can only be created
-    // from documents.
+    worker->suspendIfNeeded();
+
+    // We don't currently support nested workers, so workers can only be created from documents.
     Document* document = toDocument(context);
-    if (!document->getSecurityOrigin()->canAccessSharedWorkers()) {
-        exceptionState.throwSecurityError(
-            "Access to shared workers is denied to origin '" + document->getSecurityOrigin()->toString() + "'.");
+    if (!document->securityOrigin()->canAccessSharedWorkers()) {
+        exceptionState.throwSecurityError("Access to shared workers is denied to origin '" + document->securityOrigin()->toString() + "'.");
         return nullptr;
     }
 
-    KURL scriptURL = worker->resolveURL(
-        url, exceptionState, WebURLRequest::RequestContextSharedWorker);
+    KURL scriptURL = worker->resolveURL(url, exceptionState);
     if (scriptURL.isEmpty())
         return nullptr;
 
-    if (document->frame()->loader().client()->sharedWorkerRepositoryClient()) {
-        document->frame()
-            ->loader()
-            .client()
-            ->sharedWorkerRepositoryClient()
-            ->connect(worker, std::move(remotePort), scriptURL, name);
-    }
+    if (document->frame()->loader().client()->sharedWorkerRepositoryClient())
+        document->frame()->loader().client()->sharedWorkerRepositoryClient()->connect(worker.get(), remotePort.release(), scriptURL, name, exceptionState);
 
-    return worker;
+    return worker.release();
 }
 
-SharedWorker::~SharedWorker() { }
+SharedWorker::~SharedWorker()
+{
+}
 
 const AtomicString& SharedWorker::interfaceName() const
 {
@@ -108,9 +103,11 @@ bool SharedWorker::hasPendingActivity() const
 
 DEFINE_TRACE(SharedWorker)
 {
+#if ENABLE(OILPAN)
     visitor->trace(m_port);
+    HeapSupplementable<SharedWorker>::trace(visitor);
+#endif
     AbstractWorker::trace(visitor);
-    Supplementable<SharedWorker>::trace(visitor);
 }
 
 } // namespace blink

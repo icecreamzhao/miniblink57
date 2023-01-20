@@ -8,9 +8,15 @@
 #ifndef Sk2DPathEffect_DEFINED
 #define Sk2DPathEffect_DEFINED
 
+<<<<<<< HEAD
 #include "SkMatrix.h"
 #include "SkPath.h"
 #include "SkPathEffect.h"
+=======
+#include "SkPath.h"
+#include "SkPathEffect.h"
+#include "SkMatrix.h"
+>>>>>>> miniblink49
 
 class SK_API Sk2DPathEffect : public SkPathEffect {
 public:
@@ -42,8 +48,13 @@ protected:
     SK_TO_STRING_OVERRIDE()
 
 private:
+<<<<<<< HEAD
     SkMatrix fMatrix, fInverse;
     bool fMatrixIsInvertible;
+=======
+    SkMatrix    fMatrix, fInverse;
+    bool        fMatrixIsInvertible;
+>>>>>>> miniblink49
 
     // illegal
     Sk2DPathEffect(const Sk2DPathEffect&);
@@ -55,6 +66,7 @@ private:
 
 class SK_API SkLine2DPathEffect : public Sk2DPathEffect {
 public:
+<<<<<<< HEAD
     static sk_sp<SkPathEffect> Make(SkScalar width, const SkMatrix& matrix)
     {
         return sk_sp<SkPathEffect>(new SkLine2DPathEffect(width, matrix));
@@ -62,16 +74,28 @@ public:
 
     virtual bool filterPath(SkPath* dst, const SkPath& src,
         SkStrokeRec*, const SkRect*) const override;
+=======
+    static SkLine2DPathEffect* Create(SkScalar width, const SkMatrix& matrix) {
+        return SkNEW_ARGS(SkLine2DPathEffect, (width, matrix));
+    }
+
+    virtual bool filterPath(SkPath* dst, const SkPath& src,
+                            SkStrokeRec*, const SkRect*) const override;
+>>>>>>> miniblink49
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkLine2DPathEffect)
 
 protected:
     SkLine2DPathEffect(SkScalar width, const SkMatrix& matrix)
+<<<<<<< HEAD
         : Sk2DPathEffect(matrix)
         , fWidth(width)
     {
     }
+=======
+        : Sk2DPathEffect(matrix), fWidth(width) {}
+>>>>>>> miniblink49
     void flatten(SkWriteBuffer&) const override;
 
     void nextSpan(int u, int v, int ucount, SkPath*) const override;
@@ -88,9 +112,14 @@ public:
      *  Stamp the specified path to fill the shape, using the matrix to define
      *  the latice.
      */
+<<<<<<< HEAD
     static sk_sp<SkPathEffect> Make(const SkMatrix& matrix, const SkPath& path)
     {
         return sk_sp<SkPathEffect>(new SkPath2DPathEffect(matrix, path));
+=======
+    static SkPath2DPathEffect* Create(const SkMatrix& matrix, const SkPath& path) {
+        return SkNEW_ARGS(SkPath2DPathEffect, (matrix, path));
+>>>>>>> miniblink49
     }
 
     SK_TO_STRING_OVERRIDE()
@@ -103,7 +132,11 @@ protected:
     void next(const SkPoint&, int u, int v, SkPath*) const override;
 
 private:
+<<<<<<< HEAD
     SkPath fPath;
+=======
+    SkPath  fPath;
+>>>>>>> miniblink49
 
     typedef Sk2DPathEffect INHERITED;
 };

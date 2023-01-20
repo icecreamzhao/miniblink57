@@ -32,12 +32,17 @@
 #define AsyncMethodRunner_h
 
 #include "platform/Timer.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+#include "wtf/FastAllocBase.h"
+>>>>>>> miniblink49
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
 template <typename TargetClass>
+<<<<<<< HEAD
 class AsyncMethodRunner final
     : public GarbageCollectedFinalized<AsyncMethodRunner<TargetClass>> {
     WTF_MAKE_NONCOPYABLE(AsyncMethodRunner);
@@ -52,6 +57,23 @@ public:
 
     ~AsyncMethodRunner() { }
 
+=======
+class AsyncMethodRunner final {
+    WTF_MAKE_NONCOPYABLE(AsyncMethodRunner);
+    WTF_MAKE_FAST_ALLOCATED(AsyncMethodRunner);
+public:
+    typedef void (TargetClass::*TargetMethod)();
+
+    AsyncMethodRunner(TargetClass* object, TargetMethod method)
+        : m_timer(this, &AsyncMethodRunner<TargetClass>::fired)
+        , m_object(object)
+        , m_method(method)
+        , m_suspended(false)
+        , m_runWhenResumed(false)
+    {
+    }
+
+>>>>>>> miniblink49
     // Schedules to run the method asynchronously. Do nothing if it's already
     // scheduled. If it's suspended, remember to schedule to run the method when
     // resume() is called.
@@ -65,12 +87,20 @@ public:
 
         // FIXME: runAsync should take a TraceLocation and pass it to timer here.
         if (!m_timer.isActive())
+<<<<<<< HEAD
             m_timer.startOneShot(0, BLINK_FROM_HERE);
+=======
+            m_timer.startOneShot(0, FROM_HERE);
+>>>>>>> miniblink49
     }
 
     // If it's scheduled to run the method, cancel it and remember to schedule
     // it again when resume() is called. Mainly for implementing
+<<<<<<< HEAD
     // SuspendableObject::suspend().
+=======
+    // ActiveDOMObject::suspend().
+>>>>>>> miniblink49
     void suspend()
     {
         if (m_suspended)
@@ -96,7 +126,11 @@ public:
 
         m_runWhenResumed = false;
         // FIXME: resume should take a TraceLocation and pass it to timer here.
+<<<<<<< HEAD
         m_timer.startOneShot(0, BLINK_FROM_HERE);
+=======
+        m_timer.startOneShot(0, FROM_HERE);
+>>>>>>> miniblink49
     }
 
     void stop()
@@ -109,6 +143,7 @@ public:
         }
 
         ASSERT(!m_runWhenResumed);
+<<<<<<< HEAD
         m_timer.stop();
     }
 
@@ -131,12 +166,44 @@ private:
     Timer<AsyncMethodRunner<TargetClass>> m_timer;
 
     Member<TargetClass> m_object;
+=======
+        if (m_timer.isActive())
+            m_timer.stop();
+    }
+
+    bool isActive() const
+    {
+        return m_timer.isActive();
+    }
+
+private:
+    void fired(Timer<AsyncMethodRunner<TargetClass>>*)
+    {
+        // TODO(Oilpan): when AsyncMethodRunner is on the heap, this check becomes
+        // redundant; handled directly by Timer<> instead.
+        if (!TimerIsObjectAliveTrait<TargetClass>::isHeapObjectAlive(m_object))
+            return;
+        (m_object->*m_method)();
+    }
+
+    Timer<AsyncMethodRunner<TargetClass>> m_timer;
+
+    // TODO(Oilpan): AsyncMethodRunner should be moved to the heap and m_object should be traced.
+    // This raw pointer is safe as long as AsyncMethodRunner<X> is held by the X itself
+    // (That's the case in the current code base).
+    GC_PLUGIN_IGNORE("363031")
+    TargetClass* m_object;
+>>>>>>> miniblink49
     TargetMethod m_method;
 
     bool m_suspended;
     bool m_runWhenResumed;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif

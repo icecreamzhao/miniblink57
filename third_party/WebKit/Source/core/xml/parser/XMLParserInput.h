@@ -31,14 +31,11 @@
 #ifndef XMLParserInput_h
 #define XMLParserInput_h
 
-#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class XMLParserInput {
-    STACK_ALLOCATED();
-
 public:
     explicit XMLParserInput(const String& source)
         : m_source(source)
@@ -74,6 +71,6 @@ private:
     int m_size;
 };
 
-} // namespace blink
+}
 
 #endif

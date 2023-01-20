@@ -31,48 +31,33 @@
 #ifndef SVGAnimatedLength_h
 #define SVGAnimatedLength_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGLengthTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-class SVGAnimatedLength : public SVGAnimatedProperty<SVGLength>,
-                          public ScriptWrappable {
+class SVGAnimatedLength : public SVGAnimatedProperty<SVGLength> {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SVGAnimatedLength* create(
-        SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        SVGLength* initialValue,
-        CSSPropertyID cssPropertyId = CSSPropertyInvalid)
+    static PassRefPtrWillBeRawPtr<SVGAnimatedLength> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGLength> initialValue, SVGLengthNegativeValuesMode negativeValuesMode)
     {
-        return new SVGAnimatedLength(contextElement, attributeName, initialValue,
-            cssPropertyId);
+        return adoptRefWillBeNoop(new SVGAnimatedLength(contextElement, attributeName, initialValue, negativeValuesMode));
     }
 
     void setDefaultValueAsString(const String&);
-    SVGParsingError setBaseValueAsString(const String&) override;
+    void setBaseValueAsString(const String&, SVGParsingError&) override;
 
-    const CSSValue* cssValue() const
-    {
-        return &currentValue()->asCSSPrimitiveValue();
-    }
-
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+    SVGLengthNegativeValuesMode negativeValuesMode() const { return m_negativeValuesMode; }
 
 protected:
-    SVGAnimatedLength(SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        SVGLength* initialValue,
-        CSSPropertyID cssPropertyId = CSSPropertyInvalid)
-        : SVGAnimatedProperty<SVGLength>(contextElement,
-            attributeName,
-            initialValue,
-            cssPropertyId)
+    SVGAnimatedLength(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGLength> initialValue, SVGLengthNegativeValuesMode negativeValuesMode)
+        : SVGAnimatedProperty<SVGLength>(contextElement, attributeName, initialValue)
+        , m_negativeValuesMode(negativeValuesMode)
     {
     }
+
+private:
+    SVGLengthNegativeValuesMode m_negativeValuesMode;
 };
 
 } // namespace blink

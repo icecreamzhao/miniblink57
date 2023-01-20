@@ -10,61 +10,59 @@
 #include "core/animation/Keyframe.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/animation/TimingFunction.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
-// Stores all adjacent pairs of keyframes (represented by Interpolations) in a
-// KeyframeEffectModel with keyframe offset data preprocessed for more efficient
-// active keyframe pair sampling.
-class CORE_EXPORT InterpolationEffect {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
+class CORE_EXPORT InterpolationEffect : public RefCountedWillBeGarbageCollected<InterpolationEffect> {
 public:
-    InterpolationEffect()
-        : m_isPopulated(false)
+    static PassRefPtrWillBeRawPtr<InterpolationEffect> create()
     {
+        return adoptRefWillBeNoop(new InterpolationEffect());
     }
 
-    bool isPopulated() const { return m_isPopulated; }
-    void setPopulated() { m_isPopulated = true; }
+    void getActiveInterpolations(double fraction, double iterationDuration, OwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>>&) const;
 
-    void clear()
+    void addInterpolation(PassRefPtrWillBeRawPtr<Interpolation> interpolation, PassRefPtr<TimingFunction> easing, double start, double end, double applyFrom, double applyTo)
     {
-        m_isPopulated = false;
-        m_interpolations.clear();
+        m_interpolations.append(InterpolationRecord::create(interpolation, easing, start, end, applyFrom, applyTo));
     }
 
-    void getActiveInterpolations(double fraction,
-        double iterationDuration,
-        Vector<RefPtr<Interpolation>>&) const;
+    void addInterpolationsFromKeyframes(PropertyHandle, Element*, const ComputedStyle* baseStyle, Keyframe::PropertySpecificKeyframe& keyframeA, Keyframe::PropertySpecificKeyframe& keyframeB, double applyFrom, double applyTo);
 
-    void addInterpolation(PassRefPtr<Interpolation> interpolation,
-        PassRefPtr<TimingFunction> easing,
-        double start,
-        double end,
-        double applyFrom,
-        double applyTo)
+    template<typename T>
+    inline void forEachInterpolation(const T& callback)
     {
-        m_interpolations.push_back(InterpolationRecord(std::move(interpolation),
-            std::move(easing), start,
-            end, applyFrom, applyTo));
+        for (auto& record : m_interpolations)
+            callback(*record->m_interpolation);
     }
 
-    void addInterpolationsFromKeyframes(
-        PropertyHandle,
-        const Keyframe::PropertySpecificKeyframe& keyframeA,
-        const Keyframe::PropertySpecificKeyframe& keyframeB,
-        double applyFrom,
-        double applyTo);
+    DECLARE_TRACE();
 
 private:
-    struct InterpolationRecord {
-        InterpolationRecord(PassRefPtr<Interpolation> interpolation,
-            PassRefPtr<TimingFunction> easing,
-            double start,
-            double end,
-            double applyFrom,
-            double applyTo)
+    InterpolationEffect()
+    {
+    }
+
+    class InterpolationRecord : public NoBaseWillBeGarbageCollectedFinalized<InterpolationRecord> {
+    public:
+        RefPtrWillBeMember<Interpolation> m_interpolation;
+        RefPtr<TimingFunction> m_easing;
+        double m_start;
+        double m_end;
+        double m_applyFrom;
+        double m_applyTo;
+
+        static PassOwnPtrWillBeRawPtr<InterpolationRecord> create(PassRefPtrWillBeRawPtr<Interpolation> interpolation, PassRefPtr<TimingFunction> easing, double start, double end, double applyFrom, double applyTo)
+        {
+            return adoptPtrWillBeNoop(new InterpolationRecord(interpolation, easing, start, end, applyFrom, applyTo));
+        }
+
+        DECLARE_TRACE();
+
+    private:
+        InterpolationRecord(PassRefPtrWillBeRawPtr<Interpolation> interpolation, PassRefPtr<TimingFunction> easing, double start, double end, double applyFrom, double applyTo)
             : m_interpolation(interpolation)
             , m_easing(easing)
             , m_start(start)
@@ -73,17 +71,9 @@ private:
             , m_applyTo(applyTo)
         {
         }
-
-        RefPtr<Interpolation> m_interpolation;
-        RefPtr<TimingFunction> m_easing;
-        double m_start;
-        double m_end;
-        double m_applyFrom;
-        double m_applyTo;
     };
 
-    bool m_isPopulated;
-    Vector<InterpolationRecord> m_interpolations;
+    WillBeHeapVector<OwnPtrWillBeMember<InterpolationRecord>> m_interpolations;
 };
 
 } // namespace blink

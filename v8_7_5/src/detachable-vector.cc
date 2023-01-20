@@ -7,6 +7,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     const size_t DetachableVectorBase::kMinimumCapacity = 8;
     const size_t DetachableVectorBase::kDataOffset = offsetof(DetachableVectorBase, data_);
     const size_t DetachableVectorBase::kCapacityOffset = offsetof(DetachableVectorBase, capacity_);
@@ -14,3 +15,15 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
+=======
+const size_t DetachableVectorBase::kMinimumCapacity = 8;
+const size_t DetachableVectorBase::kDataOffset =
+    offsetof(DetachableVectorBase, data_);
+const size_t DetachableVectorBase::kCapacityOffset =
+    offsetof(DetachableVectorBase, capacity_);
+const size_t DetachableVectorBase::kSizeOffset =
+    offsetof(DetachableVectorBase, size_);
+
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

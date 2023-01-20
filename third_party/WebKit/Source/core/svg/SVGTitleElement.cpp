@@ -18,29 +18,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGTitleElement.h"
 
 #include "core/SVGNames.h"
-#include "core/dom/ChildListMutationScope.h"
 #include "core/dom/Document.h"
-#include "core/dom/Text.h"
-#include "wtf/AutoReset.h"
 
 namespace blink {
 
 inline SVGTitleElement::SVGTitleElement(Document& document)
     : SVGElement(SVGNames::titleTag, document)
-    , m_ignoreTitleUpdatesWhenChildrenChange(false)
 {
 }
 
 DEFINE_NODE_FACTORY(SVGTitleElement)
 
-Node::InsertionNotificationRequest SVGTitleElement::insertedInto(
-    ContainerNode* rootParent)
+Node::InsertionNotificationRequest SVGTitleElement::insertedInto(ContainerNode* rootParent)
 {
     SVGElement::insertedInto(rootParent);
-    if (!rootParent->isConnected())
+    if (!rootParent->inDocument())
         return InsertionDone;
     if (hasChildren() && document().isSVGDocument())
         document().setTitleElement(this);
@@ -50,32 +46,15 @@ Node::InsertionNotificationRequest SVGTitleElement::insertedInto(
 void SVGTitleElement::removedFrom(ContainerNode* rootParent)
 {
     SVGElement::removedFrom(rootParent);
-    if (rootParent->isConnected() && document().isSVGDocument())
+    if (rootParent->inDocument() && document().isSVGDocument())
         document().removeTitle(this);
 }
 
 void SVGTitleElement::childrenChanged(const ChildrenChange& change)
 {
     SVGElement::childrenChanged(change);
-    if (isConnected() && document().isSVGDocument() && !m_ignoreTitleUpdatesWhenChildrenChange)
+    if (inDocument() && document().isSVGDocument())
         document().setTitleElement(this);
 }
 
-void SVGTitleElement::setText(const String& value)
-{
-    ChildListMutationScope mutation(*this);
-
-    {
-        // Avoid calling Document::setTitleElement() during intermediate steps.
-        AutoReset<bool> inhibitTitleUpdateScope(
-            &m_ignoreTitleUpdatesWhenChildrenChange, !value.isEmpty());
-        removeChildren(OmitSubtreeModifiedEvent);
-    }
-
-    if (!value.isEmpty()) {
-        appendChild(document().createTextNode(value.impl()),
-            IGNORE_EXCEPTION_FOR_TESTING);
-    }
 }
-
-} // namespace blink

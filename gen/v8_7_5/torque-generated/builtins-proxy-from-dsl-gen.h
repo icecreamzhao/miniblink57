@@ -12,9 +12,7 @@ namespace internal {
 class ProxyBuiltinsFromDSLAssembler {
  public:
   explicit ProxyBuiltinsFromDSLAssembler(compiler::CodeAssemblerState* state) : state_(state), ca_(state) { USE(state_, ca_); }
-  compiler::TNode<JSProxy> AllocateProxy(compiler::TNode<Context> p_context, compiler::TNode<JSReceiver> p_target, compiler::TNode<JSReceiver> p_handler);
-  compiler::TNode<BoolT> IsRevokedProxy(compiler::TNode<Context> p_context, compiler::TNode<JSReceiver> p_o);
-  compiler::TNode<JSFunction> AllocateProxyRevokeFunction(compiler::TNode<Context> p_context, compiler::TNode<JSProxy> p_proxy);
+  compiler::TNode<JSProxy> ValidateProxy(compiler::TNode<Context> p_context, compiler::TNode<Object> p_o, compiler::TNode<String> p_method);
  private:
   compiler::CodeAssemblerState* const state_;
   compiler::CodeAssembler ca_;

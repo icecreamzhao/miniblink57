@@ -42,7 +42,11 @@ class Managed : public Foreign {
                             &Managed<CppType>::Delete,
                             v8::WeakCallbackType::kFinalizer);
   }
+<<<<<<< HEAD
   static void V8CALL Delete(const v8::WeakCallbackInfo<void>& data) {
+=======
+  static void Delete(const v8::WeakCallbackInfo<void>& data) {
+>>>>>>> miniblink49
     Managed<CppType>** p =
         reinterpret_cast<Managed<CppType>**>(data.GetParameter());
     delete (*p)->get();

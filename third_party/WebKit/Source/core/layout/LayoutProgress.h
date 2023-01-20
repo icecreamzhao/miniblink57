@@ -30,32 +30,26 @@ class HTMLProgressElement;
 
 class CORE_EXPORT LayoutProgress final : public LayoutBlockFlow {
 public:
-    explicit LayoutProgress(HTMLProgressElement*);
-    ~LayoutProgress() override;
+    explicit LayoutProgress(HTMLElement*);
+    virtual ~LayoutProgress();
 
     double position() const { return m_position; }
     double animationProgress() const;
 
     bool isDeterminate() const;
-    void updateFromElement() override;
+    virtual void updateFromElement() override;
 
     HTMLProgressElement* progressElement() const;
 
-    const char* name() const override { return "LayoutProgress"; }
+    virtual const char* name() const override { return "LayoutProgress"; }
 
 protected:
-    void willBeDestroyed() override;
-
-    bool isAnimating() const;
-    bool isAnimationTimerActive() const;
+    virtual void willBeDestroyed() override;
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectProgress || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectProgress || LayoutBlockFlow::isOfType(type); }
 
-    void animationTimerFired(TimerBase*);
+    void animationTimerFired(Timer<LayoutProgress>*);
     void updateAnimationState();
 
     double m_position;
@@ -64,8 +58,6 @@ private:
     double m_animationDuration;
     bool m_animating;
     Timer<LayoutProgress> m_animationTimer;
-
-    friend class LayoutProgressTest;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutProgress, isProgress());

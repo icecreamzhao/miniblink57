@@ -5,9 +5,12 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkDropShadowImageFilter_DEFINED
 #define SkDropShadowImageFilter_DEFINED
 
+=======
+>>>>>>> miniblink49
 #include "SkColor.h"
 #include "SkImageFilter.h"
 #include "SkScalar.h"
@@ -21,6 +24,7 @@ public:
         kLast_ShadowMode = kDrawShadowOnly_ShadowMode
     };
 
+<<<<<<< HEAD
     static const int kShadowModeCount = kLast_ShadowMode + 1;
 
     static sk_sp<SkImageFilter> Make(SkScalar dx, SkScalar dy, SkScalar sigmaX, SkScalar sigmaY,
@@ -63,3 +67,34 @@ private:
 };
 
 #endif
+=======
+    static const int kShadowModeCount = kLast_ShadowMode+1;
+
+    static SkDropShadowImageFilter* Create(SkScalar dx, SkScalar dy,
+                                           SkScalar sigmaX, SkScalar sigmaY, SkColor color,
+                                           ShadowMode shadowMode,
+                                           SkImageFilter* input = NULL,
+                                           const CropRect* cropRect = NULL) {
+        return SkNEW_ARGS(SkDropShadowImageFilter, (dx, dy, sigmaX, sigmaY, color,
+                                                    shadowMode, input, cropRect));
+    }
+
+    void computeFastBounds(const SkRect&, SkRect*) const override;
+    SK_TO_STRING_OVERRIDE()
+    SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkDropShadowImageFilter)
+
+protected:
+    SkDropShadowImageFilter(SkScalar dx, SkScalar dy, SkScalar sigmaX, SkScalar sigmaY, SkColor,
+                            ShadowMode shadowMode, SkImageFilter* input, const CropRect* cropRect);
+    void flatten(SkWriteBuffer&) const override;
+    bool onFilterImage(Proxy*, const SkBitmap& source, const Context&, SkBitmap* result, SkIPoint* loc) const override;
+    virtual bool onFilterBounds(const SkIRect& src, const SkMatrix&,
+                                SkIRect* dst) const override;
+
+private:
+    SkScalar fDx, fDy, fSigmaX, fSigmaY;
+    SkColor fColor;
+    ShadowMode fShadowMode;
+    typedef SkImageFilter INHERITED;
+};
+>>>>>>> miniblink49

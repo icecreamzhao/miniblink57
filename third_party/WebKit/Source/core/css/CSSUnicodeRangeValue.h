@@ -27,15 +27,15 @@
 #define CSSUnicodeRangeValue_h
 
 #include "core/css/CSSValue.h"
-#include "wtf/text/Unicode.h"
+#include "wtf/PassRefPtr.h"
 
 namespace blink {
 
 class CSSUnicodeRangeValue : public CSSValue {
 public:
-    static CSSUnicodeRangeValue* create(UChar32 from, UChar32 to)
+    static PassRefPtrWillBeRawPtr<CSSUnicodeRangeValue> create(UChar32 from, UChar32 to)
     {
-        return new CSSUnicodeRangeValue(from, to);
+        return adoptRefWillBeNoop(new CSSUnicodeRangeValue(from, to));
     }
 
     UChar32 from() const { return m_from; }
@@ -45,10 +45,7 @@ public:
 
     bool equals(const CSSUnicodeRangeValue&) const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
-    {
-        CSSValue::traceAfterDispatch(visitor);
-    }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
 
 private:
     CSSUnicodeRangeValue(UChar32 from, UChar32 to)

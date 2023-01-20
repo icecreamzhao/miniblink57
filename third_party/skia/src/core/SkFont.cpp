@@ -9,9 +9,19 @@
 #include "SkTypeface.h"
 #include "SkUtils.h"
 
+<<<<<<< HEAD
 SkFont::SkFont(sk_sp<SkTypeface> face, SkScalar size, SkScalar scaleX, SkScalar skewX, MaskType mt,
     uint32_t flags)
     : fTypeface(face ? std::move(face) : SkTypeface::MakeDefault())
+=======
+static SkTypeface* ref_or_default(SkTypeface* face) {
+    return face ? SkRef(face) : SkTypeface::RefDefault();
+}
+
+SkFont::SkFont(SkTypeface* face, SkScalar size, SkScalar scaleX, SkScalar skewX, MaskType mt,
+               uint32_t flags)
+    : fTypeface(ref_or_default(face))
+>>>>>>> miniblink49
     , fSize(size)
     , fScaleX(scaleX)
     , fSkewX(skewX)
@@ -24,6 +34,7 @@ SkFont::SkFont(sk_sp<SkTypeface> face, SkScalar size, SkScalar scaleX, SkScalar 
     SkASSERT(0 == (flags & ~kAllFlags));
 }
 
+<<<<<<< HEAD
 sk_sp<SkFont> SkFont::Make(sk_sp<SkTypeface> face, SkScalar size, SkScalar scaleX, SkScalar skewX,
     MaskType mt, uint32_t flags)
 {
@@ -49,19 +60,53 @@ sk_sp<SkFont> SkFont::makeWithSize(SkScalar newSize) const
 {
     return SkFont::Make(sk_ref_sp(this->getTypeface()), newSize, this->getScaleX(),
         this->getSkewX(), this->getMaskType(), this->getFlags());
+=======
+SkFont* SkFont::Create(SkTypeface* face, SkScalar size, SkScalar scaleX, SkScalar skewX,
+                       MaskType mt, uint32_t flags) {
+    if (size <= 0 || !SkScalarIsFinite(size)) {
+        return NULL;
+    }
+    if (scaleX <= 0 || !SkScalarIsFinite(scaleX)) {
+        return NULL;
+    }
+    if (!SkScalarIsFinite(skewX)) {
+        return NULL;
+    }
+    flags &= kAllFlags;
+    return SkNEW_ARGS(SkFont, (face, size, scaleX, skewX, mt, flags));
+}
+
+SkFont* SkFont::Create(SkTypeface* face, SkScalar size, MaskType mt, uint32_t flags) {
+    return SkFont::Create(face, size, 1, 0, mt, flags);
+}
+
+SkFont* SkFont::cloneWithSize(SkScalar newSize) const {
+    return SkFont::Create(this->getTypeface(), newSize, this->getScaleX(), this->getSkewX(),
+                          this->getMaskType(), this->getFlags());
+>>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 int SkFont::textToGlyphs(const void* text, size_t byteLength, SkTextEncoding encoding,
     uint16_t glyphs[], int maxGlyphCount) const
 {
+=======
+SkFont::~SkFont() {
+    SkSafeUnref(fTypeface);
+}
+
+int SkFont::textToGlyphs(const void* text, size_t byteLength, SkTextEncoding encoding,
+                         uint16_t glyphs[], int maxGlyphCount) const {
+>>>>>>> miniblink49
     if (0 == byteLength) {
         return 0;
     }
 
     SkASSERT(text);
 
+<<<<<<< HEAD
     int count = 0; // fix uninitialized warning (even though the switch is complete!)
 
     switch (encoding) {
@@ -79,12 +124,32 @@ int SkFont::textToGlyphs(const void* text, size_t byteLength, SkTextEncoding enc
         break;
     }
     if (nullptr == glyphs) {
+=======
+    int count = 0;  // fix uninitialized warning (even though the switch is complete!)
+
+    switch (encoding) {
+        case kUTF8_SkTextEncoding:
+            count = SkUTF8_CountUnichars((const char*)text, byteLength);
+            break;
+        case kUTF16_SkTextEncoding:
+            count = SkUTF16_CountUnichars((const uint16_t*)text, SkToInt(byteLength >> 1));
+            break;
+        case kUTF32_SkTextEncoding:
+            count = SkToInt(byteLength >> 2);
+            break;
+        case kGlyphID_SkTextEncoding:
+            count = SkToInt(byteLength >> 1);
+            break;
+    }
+    if (NULL == glyphs) {
+>>>>>>> miniblink49
         return count;
     }
 
     // TODO: unify/eliminate SkTypeface::Encoding with SkTextEncoding
     SkTypeface::Encoding typeface_encoding;
     switch (encoding) {
+<<<<<<< HEAD
     case kUTF8_SkTextEncoding:
         typeface_encoding = SkTypeface::kUTF8_Encoding;
         break;
@@ -99,14 +164,34 @@ int SkFont::textToGlyphs(const void* text, size_t byteLength, SkTextEncoding enc
         // we can early exit, since we already have glyphIDs
         memcpy(glyphs, text, count << 1);
         return count;
+=======
+        case kUTF8_SkTextEncoding:
+            typeface_encoding = SkTypeface::kUTF8_Encoding;
+            break;
+        case kUTF16_SkTextEncoding:
+            typeface_encoding = SkTypeface::kUTF16_Encoding;
+            break;
+        case kUTF32_SkTextEncoding:
+            typeface_encoding = SkTypeface::kUTF32_Encoding;
+            break;
+        default:
+            SkASSERT(kGlyphID_SkTextEncoding == encoding);
+            // we can early exit, since we already have glyphIDs
+            memcpy(glyphs, text, count << 1);
+            return count;
+>>>>>>> miniblink49
     }
 
     (void)fTypeface->charsToGlyphs(text, typeface_encoding, glyphs, count);
     return count;
 }
 
+<<<<<<< HEAD
 SkScalar SkFont::measureText(const void* text, size_t byteLength, SkTextEncoding encoding) const
 {
+=======
+SkScalar SkFont::measureText(const void* text, size_t byteLength, SkTextEncoding encoding) const {
+>>>>>>> miniblink49
     // TODO: need access to the cache
     return -1;
 }
@@ -115,8 +200,12 @@ SkScalar SkFont::measureText(const void* text, size_t byteLength, SkTextEncoding
 
 #include "SkPaint.h"
 
+<<<<<<< HEAD
 sk_sp<SkFont> SkFont::Testing_CreateFromPaint(const SkPaint& paint)
 {
+=======
+SkFont* SkFont::Testing_CreateFromPaint(const SkPaint& paint) {
+>>>>>>> miniblink49
     uint32_t flags = 0;
     if (paint.isVerticalText()) {
         flags |= kVertical_Flag;
@@ -148,6 +237,12 @@ sk_sp<SkFont> SkFont::Testing_CreateFromPaint(const SkPaint& paint)
         maskType = paint.isLCDRenderText() ? kLCD_MaskType : kA8_MaskType;
     }
 
+<<<<<<< HEAD
     return Make(sk_ref_sp(paint.getTypeface()), paint.getTextSize(), paint.getTextScaleX(),
         paint.getTextSkewX(), maskType, flags);
+=======
+    return Create(paint.getTypeface(),
+                  paint.getTextSize(), paint.getTextScaleX(), paint.getTextSkewX(),
+                  maskType, flags);
+>>>>>>> miniblink49
 }

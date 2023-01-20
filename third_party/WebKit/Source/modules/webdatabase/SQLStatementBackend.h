@@ -33,7 +33,10 @@
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -42,6 +45,7 @@ class SQLErrorData;
 class SQLResultSet;
 class SQLStatement;
 
+<<<<<<< HEAD
 class SQLStatementBackend final
     : public GarbageCollectedFinalized<SQLStatementBackend> {
 public:
@@ -49,6 +53,12 @@ public:
         const String& sqlStatement,
         const Vector<SQLValue>& arguments,
         int permissions);
+=======
+class SQLStatementBackend final : public GarbageCollectedFinalized<SQLStatementBackend> {
+public:
+    static SQLStatementBackend* create(SQLStatement*,
+        const String& sqlStatement, const Vector<SQLValue>& arguments, int permissions);
+>>>>>>> miniblink49
     DECLARE_TRACE();
 
     bool execute(Database*);
@@ -64,10 +74,14 @@ public:
     SQLResultSet* sqlResultSet() const;
 
 private:
+<<<<<<< HEAD
     SQLStatementBackend(SQLStatement*,
         const String& statement,
         const Vector<SQLValue>& arguments,
         int permissions);
+=======
+    SQLStatementBackend(SQLStatement*, const String& statement, const Vector<SQLValue>& arguments, int permissions);
+>>>>>>> miniblink49
 
     void setFailureDueToQuota(Database*);
     void clearFailureDueToQuota();
@@ -78,7 +92,11 @@ private:
     bool m_hasCallback;
     bool m_hasErrorCallback;
 
+<<<<<<< HEAD
     std::unique_ptr<SQLErrorData> m_error;
+=======
+    OwnPtr<SQLErrorData> m_error;
+>>>>>>> miniblink49
     Member<SQLResultSet> m_resultSet;
 
     int m_permissions;

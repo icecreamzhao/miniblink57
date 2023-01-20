@@ -60,7 +60,11 @@ U_NAMESPACE_BEGIN
  * @see U_DEFINE_LOCAL_OPEN_POINTER
  * @stable ICU 4.4
  */
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 class LocalPointerBase {
 public:
     /**
@@ -68,30 +72,46 @@ public:
      * @param p simple pointer to an object that is adopted
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     explicit LocalPointerBase(T* p = NULL)
         : ptr(p)
     {
     }
+=======
+    explicit LocalPointerBase(T *p=NULL) : ptr(p) {}
+>>>>>>> miniblink49
     /**
      * Destructor deletes the object it owns.
      * Subclass must override: Base class does nothing.
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     ~LocalPointerBase()
     { /* delete ptr; */
     }
+=======
+    ~LocalPointerBase() { /* delete ptr; */ }
+>>>>>>> miniblink49
     /**
      * NULL check.
      * @return TRUE if ==NULL
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     UBool isNull() const { return ptr == NULL; }
+=======
+    UBool isNull() const { return ptr==NULL; }
+>>>>>>> miniblink49
     /**
      * NULL check.
      * @return TRUE if !=NULL
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     UBool isValid() const { return ptr != NULL; }
+=======
+    UBool isValid() const { return ptr!=NULL; }
+>>>>>>> miniblink49
     /**
      * Comparison with a simple pointer, so that existing code
      * with ==NULL need not be changed.
@@ -99,7 +119,11 @@ public:
      * @return true if this pointer value equals other
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     bool operator==(const T* other) const { return ptr == other; }
+=======
+    bool operator==(const T *other) const { return ptr==other; }
+>>>>>>> miniblink49
     /**
      * Comparison with a simple pointer, so that existing code
      * with !=NULL need not be changed.
@@ -107,35 +131,57 @@ public:
      * @return true if this pointer value differs from other
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     bool operator!=(const T* other) const { return ptr != other; }
+=======
+    bool operator!=(const T *other) const { return ptr!=other; }
+>>>>>>> miniblink49
     /**
      * Access without ownership change.
      * @return the pointer value
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     T* getAlias() const { return ptr; }
+=======
+    T *getAlias() const { return ptr; }
+>>>>>>> miniblink49
     /**
      * Access without ownership change.
      * @return the pointer value as a reference
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     T& operator*() const { return *ptr; }
+=======
+    T &operator*() const { return *ptr; }
+>>>>>>> miniblink49
     /**
      * Access without ownership change.
      * @return the pointer value
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     T* operator->() const { return ptr; }
+=======
+    T *operator->() const { return ptr; }
+>>>>>>> miniblink49
     /**
      * Gives up ownership; the internal pointer becomes NULL.
      * @return the pointer value;
      *         caller becomes responsible for deleting the object
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     T* orphan()
     {
         T* p = ptr;
         ptr = NULL;
+=======
+    T *orphan() {
+        T *p=ptr;
+        ptr=NULL;
+>>>>>>> miniblink49
         return p;
     }
     /**
@@ -145,17 +191,25 @@ public:
      * @param p simple pointer to an object that is adopted
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     void adoptInstead(T* p)
     {
         // delete ptr;
         ptr = p;
     }
 
+=======
+    void adoptInstead(T *p) {
+        // delete ptr;
+        ptr=p;
+    }
+>>>>>>> miniblink49
 protected:
     /**
      * Actual pointer.
      * @internal
      */
+<<<<<<< HEAD
     T* ptr;
 
 private:
@@ -170,6 +224,21 @@ private:
     static void* U_EXPORT2 operator new[](size_t size);
 #if U_HAVE_PLACEMENT_NEW
     static void* U_EXPORT2 operator new(size_t, void* ptr);
+=======
+    T *ptr;
+private:
+    // No comparison operators with other LocalPointerBases.
+    bool operator==(const LocalPointerBase &other);
+    bool operator!=(const LocalPointerBase &other);
+    // No ownership transfer: No copy constructor, no assignment operator.
+    LocalPointerBase(const LocalPointerBase &other);
+    void operator=(const LocalPointerBase &other);
+    // No heap allocation. Use only on the stack.
+    static void * U_EXPORT2 operator new(size_t size);
+    static void * U_EXPORT2 operator new[](size_t size);
+#if U_HAVE_PLACEMENT_NEW
+    static void * U_EXPORT2 operator new(size_t, void *ptr);
+>>>>>>> miniblink49
 #endif
 };
 
@@ -191,7 +260,11 @@ private:
  * @see LocalPointerBase
  * @stable ICU 4.4
  */
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 class LocalPointer : public LocalPointerBase<T> {
 public:
     /**
@@ -199,16 +272,24 @@ public:
      * @param p simple pointer to an object that is adopted
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     explicit LocalPointer(T* p = NULL)
         : LocalPointerBase<T>(p)
     {
     }
+=======
+    explicit LocalPointer(T *p=NULL) : LocalPointerBase<T>(p) {}
+>>>>>>> miniblink49
     /**
      * Destructor deletes the object it owns.
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     ~LocalPointer()
     {
+=======
+    ~LocalPointer() {
+>>>>>>> miniblink49
         delete LocalPointerBase<T>::ptr;
     }
     /**
@@ -217,10 +298,16 @@ public:
      * @param p simple pointer to an object that is adopted
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     void adoptInstead(T* p)
     {
         delete LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr = p;
+=======
+    void adoptInstead(T *p) {
+        delete LocalPointerBase<T>::ptr;
+        LocalPointerBase<T>::ptr=p;
+>>>>>>> miniblink49
     }
 };
 
@@ -242,7 +329,11 @@ public:
  * @see LocalPointerBase
  * @stable ICU 4.4
  */
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 class LocalArray : public LocalPointerBase<T> {
 public:
     /**
@@ -250,16 +341,24 @@ public:
      * @param p simple pointer to an array of T objects that is adopted
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     explicit LocalArray(T* p = NULL)
         : LocalPointerBase<T>(p)
     {
     }
+=======
+    explicit LocalArray(T *p=NULL) : LocalPointerBase<T>(p) {}
+>>>>>>> miniblink49
     /**
      * Destructor deletes the array it owns.
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     ~LocalArray()
     {
+=======
+    ~LocalArray() {
+>>>>>>> miniblink49
         delete[] LocalPointerBase<T>::ptr;
     }
     /**
@@ -268,10 +367,16 @@ public:
      * @param p simple pointer to an array of T objects that is adopted
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     void adoptInstead(T* p)
     {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr = p;
+=======
+    void adoptInstead(T *p) {
+        delete[] LocalPointerBase<T>::ptr;
+        LocalPointerBase<T>::ptr=p;
+>>>>>>> miniblink49
     }
     /**
      * Array item access (writable).
@@ -280,7 +385,11 @@ public:
      * @return reference to the array item
      * @stable ICU 4.4
      */
+<<<<<<< HEAD
     T& operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
+=======
+    T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
+>>>>>>> miniblink49
 };
 
 /**
@@ -307,6 +416,7 @@ public:
  * @stable ICU 4.4
  */
 #define U_DEFINE_LOCAL_OPEN_POINTER(LocalPointerClassName, Type, closeFunction) \
+<<<<<<< HEAD
     class LocalPointerClassName : public LocalPointerBase<Type> {               \
     public:                                                                     \
         explicit LocalPointerClassName(Type* p = NULL)                          \
@@ -319,9 +429,24 @@ public:
             closeFunction(ptr);                                                 \
             ptr = p;                                                            \
         }                                                                       \
+=======
+    class LocalPointerClassName : public LocalPointerBase<Type> { \
+    public: \
+        explicit LocalPointerClassName(Type *p=NULL) : LocalPointerBase<Type>(p) {} \
+        ~LocalPointerClassName() { closeFunction(ptr); } \
+        void adoptInstead(Type *p) { \
+            closeFunction(ptr); \
+            ptr=p; \
+        } \
+>>>>>>> miniblink49
     }
 
 U_NAMESPACE_END
 
+<<<<<<< HEAD
 #endif /* U_SHOW_CPLUSPLUS_API */
 #endif /* __LOCALPOINTER_H__ */
+=======
+#endif  /* U_SHOW_CPLUSPLUS_API */
+#endif  /* __LOCALPOINTER_H__ */
+>>>>>>> miniblink49

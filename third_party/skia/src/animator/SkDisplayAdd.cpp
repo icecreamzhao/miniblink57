@@ -6,11 +6,20 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkDisplayAdd.h"
 #include "SkADrawable.h"
 #include "SkAnimateMaker.h"
 #include "SkDisplayApply.h"
 #include "SkDisplayList.h"
+=======
+
+#include "SkDisplayAdd.h"
+#include "SkAnimateMaker.h"
+#include "SkDisplayApply.h"
+#include "SkDisplayList.h"
+#include "SkADrawable.h"
+>>>>>>> miniblink49
 #include "SkDrawGroup.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -32,6 +41,7 @@ const SkMemberInfo SkAdd::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAdd);
 
+<<<<<<< HEAD
 SkAdd::SkAdd()
     : mode(kMode_indirect)
     , offset(SK_MaxS32)
@@ -47,13 +57,29 @@ SkDisplayable* SkAdd::deepCopy(SkAnimateMaker* maker)
     use = nullptr;
         where = nullptr;
     SkAdd* copy = (SkAdd*)INHERITED::deepCopy(maker);
+=======
+SkAdd::SkAdd() : mode(kMode_indirect),
+    offset(SK_MaxS32), use(NULL), where(NULL) {
+}
+
+SkDisplayable* SkAdd::deepCopy(SkAnimateMaker* maker) {
+    SkADrawable* saveUse = use;
+    SkADrawable* saveWhere = where;
+    use = NULL;
+    where = NULL;
+    SkAdd* copy = (SkAdd*) INHERITED::deepCopy(maker);
+>>>>>>> miniblink49
     copy->use = use = saveUse;
     copy->where = where = saveWhere;
     return copy;
 }
 
+<<<<<<< HEAD
 bool SkAdd::draw(SkAnimateMaker& maker)
 {
+=======
+bool SkAdd::draw(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     SkASSERT(use);
     SkASSERT(use->isDrawable());
     if (mode == kMode_indirect)
@@ -62,8 +88,12 @@ bool SkAdd::draw(SkAnimateMaker& maker)
 }
 
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
 void SkAdd::dump(SkAnimateMaker* maker)
 {
+=======
+void SkAdd::dump(SkAnimateMaker* maker) {
+>>>>>>> miniblink49
     dumpBase(maker);
     dumpAttrs(maker);
     if (where)
@@ -73,7 +103,11 @@ void SkAdd::dump(SkAnimateMaker* maker)
     SkDebugf(">\n");
     SkDisplayList::fIndent += 4;
     int save = SkDisplayList::fDumpIndex;
+<<<<<<< HEAD
     if (use) //just in case
+=======
+    if (use)    //just in case
+>>>>>>> miniblink49
         use->dump(maker);
     SkDisplayList::fIndent -= 4;
     SkDisplayList::fDumpIndex = save;
@@ -81,18 +115,27 @@ void SkAdd::dump(SkAnimateMaker* maker)
 }
 #endif
 
+<<<<<<< HEAD
 bool SkAdd::enable(SkAnimateMaker& maker)
 {
+=======
+bool SkAdd::enable(SkAnimateMaker& maker ) {
+>>>>>>> miniblink49
     SkDisplayTypes type = getType();
     SkDisplayList& displayList = maker.fDisplayList;
     SkTDDrawableArray* parentList = displayList.getDrawList();
     if (type == SkType_Add) {
+<<<<<<< HEAD
         if (use == nullptr) // not set in apply yet
+=======
+        if (use == NULL) // not set in apply yet
+>>>>>>> miniblink49
             return true;
     }
     bool skipAddToParent = true;
     SkASSERT(type != SkType_Replace || where);
     SkTDDrawableArray* grandList SK_INIT_TO_AVOID_WARNING;
+<<<<<<< HEAD
     SkGroup* parentGroup = nullptr;
     SkGroup* thisGroup = nullptr;
     int index = where ? displayList.findGroup(where, &parentList, &parentGroup,
@@ -101,11 +144,22 @@ bool SkAdd::enable(SkAnimateMaker& maker)
         return true;
     int max = parentList->count();
     if (where == nullptr && type == SkType_Move)
+=======
+    SkGroup* parentGroup = NULL;
+    SkGroup* thisGroup = NULL;
+    int index = where ? displayList.findGroup(where, &parentList, &parentGroup,
+        &thisGroup, &grandList) : 0;
+    if (index < 0)
+        return true;
+    int max = parentList->count();
+    if (where == NULL && type == SkType_Move)
+>>>>>>> miniblink49
         index = max;
     if (offset != SK_MaxS32) {
         index += offset;
         if (index > max) {
             maker.setErrorCode(SkDisplayXMLParserError::kIndexOutOfRange);
+<<<<<<< HEAD
             return true; // caller should not add
         }
     }
@@ -118,6 +172,20 @@ bool SkAdd::enable(SkAnimateMaker& maker)
                     skipAddToParent = mode == kMode_immediate;
                     if (skipAddToParent) {
                         if (where == nullptr) {
+=======
+            return true;    // caller should not add
+        }
+    }
+    if (offset < 0 && where == NULL)
+        index += max + 1;
+    switch (type) {
+        case SkType_Add:
+            if (offset == SK_MaxS32 && where == NULL) {
+                if (use->isDrawable()) {
+                    skipAddToParent = mode == kMode_immediate;
+                    if (skipAddToParent) {
+                        if (where == NULL) {
+>>>>>>> miniblink49
                             SkTDDrawableArray* useParentList;
                             index = displayList.findGroup(this, &useParentList, &parentGroup,
                                 &thisGroup, &grandList);
@@ -139,6 +207,7 @@ bool SkAdd::enable(SkAnimateMaker& maker)
                 if (thisGroup)
                     thisGroup->markCopySet(index);
                 if (use->isApply())
+<<<<<<< HEAD
                     ((SkApply*)use)->setEmbedded();
             }
             break;
@@ -182,6 +251,51 @@ bool SkAdd::enable(SkAnimateMaker& maker)
         break;
     default:
         SkASSERT(0);
+=======
+                    ((SkApply*) use)->setEmbedded();
+            }
+            break;
+        case SkType_Move: {
+            int priorLocation = parentList->find(use);
+            if (priorLocation < 0)
+                break;
+            *parentList->insert(index) = use;
+            if (index < priorLocation)
+                priorLocation++;
+            parentList->remove(priorLocation);
+            } break;
+        case SkType_Remove: {
+            SkDisplayable* old = (*parentList)[index];
+            if (((SkRemove*)(this))->fDelete) {
+                delete old;
+                goto noHelperNeeded;
+            }
+            for (int inner = 0; inner < maker.fChildren.count(); inner++) {
+                SkDisplayable* child = maker.fChildren[inner];
+                if (child == old || child->contains(old))
+                    goto noHelperNeeded;
+            }
+            if (maker.fHelpers.find(old) < 0)
+                maker.helperAdd(old);
+noHelperNeeded:
+            parentList->remove(index);
+            } break;
+        case SkType_Replace:
+            if (thisGroup) {
+                thisGroup->markCopySize(index);
+                if (thisGroup->markedForDelete(index)) {
+                    SkDisplayable* old = (*parentList)[index];
+                    if (maker.fHelpers.find(old) < 0)
+                        maker.helperAdd(old);
+                }
+            }
+            (*parentList)[index] = use;
+            if (thisGroup)
+                thisGroup->markCopySet(index);
+            break;
+        default:
+            SkASSERT(0);
+>>>>>>> miniblink49
     }
     if (type == SkType_Remove)
         return true;
@@ -190,6 +304,7 @@ bool SkAdd::enable(SkAnimateMaker& maker)
     return skipAddToParent; // append if indirect: *parentList->append() = this;
 }
 
+<<<<<<< HEAD
 bool SkAdd::hasEnable() const
 {
     return true;
@@ -197,26 +312,48 @@ bool SkAdd::hasEnable() const
 
 void SkAdd::initialize()
 {
+=======
+bool SkAdd::hasEnable() const {
+    return true;
+}
+
+void SkAdd::initialize() {
+>>>>>>> miniblink49
     if (use)
         use->initialize();
 }
 
+<<<<<<< HEAD
 bool SkAdd::isDrawable() const
 {
     return getType() == SkType_Add && mode == kMode_indirect && offset == SK_MaxS32 && where == nullptr && use != nullptr && use->isDrawable();
+=======
+bool SkAdd::isDrawable() const {
+    return getType() == SkType_Add && mode == kMode_indirect && offset == SK_MaxS32 &&
+        where == NULL && use != NULL && use->isDrawable();
+>>>>>>> miniblink49
 }
 
 //SkDisplayable* SkAdd::resolveTarget(SkAnimateMaker& maker) {
 //  return use;
 //}
 
+<<<<<<< HEAD
 bool SkClear::enable(SkAnimateMaker& maker)
 {
+=======
+
+bool SkClear::enable(SkAnimateMaker& maker ) {
+>>>>>>> miniblink49
     SkDisplayList& displayList = maker.fDisplayList;
     displayList.clear();
     return true;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkMove::fInfo[] = {
@@ -239,9 +376,13 @@ const SkMemberInfo SkRemove::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRemove);
 
+<<<<<<< HEAD
 SkRemove::SkRemove()
     : fDelete(false)
 {
+=======
+SkRemove::SkRemove() : fDelete(false) {
+>>>>>>> miniblink49
 }
 
 #if SK_USE_CONDENSED_INFO == 0

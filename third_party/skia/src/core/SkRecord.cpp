@@ -6,6 +6,7 @@
  */
 
 #include "SkRecord.h"
+<<<<<<< HEAD
 #include <algorithm>
 
 SkRecord::~SkRecord()
@@ -18,14 +19,29 @@ SkRecord::~SkRecord()
 
 void SkRecord::grow()
 {
+=======
+
+SkRecord::~SkRecord() {
+    Destroyer destroyer;
+    for (unsigned i = 0; i < this->count(); i++) {
+        this->mutate<void>(i, destroyer);
+    }
+}
+
+void SkRecord::grow() {
+>>>>>>> miniblink49
     SkASSERT(fCount == fReserved);
     SkASSERT(fReserved > 0);
     fReserved *= 2;
     fRecords.realloc(fReserved);
 }
 
+<<<<<<< HEAD
 size_t SkRecord::bytesUsed() const
 {
+=======
+size_t SkRecord::bytesUsed() const {
+>>>>>>> miniblink49
     size_t bytes = fAlloc.approxBytesAllocated() + sizeof(SkRecord);
     // If fReserved <= kInlineRecords, we've already accounted for fRecords with sizeof(SkRecord).
     // When we go over that limit, they're allocated on the heap (and the inline space is wasted).
@@ -34,6 +50,7 @@ size_t SkRecord::bytesUsed() const
     }
     return bytes;
 }
+<<<<<<< HEAD
 
 void SkRecord::defrag()
 {
@@ -44,3 +61,5 @@ void SkRecord::defrag()
         [](Record op) { return op.type() == SkRecords::NoOp_Type; });
     fCount = noops - fRecords.get();
 }
+=======
+>>>>>>> miniblink49

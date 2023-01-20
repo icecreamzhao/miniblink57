@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/HTMLSpanElement.h"
 
 #include "core/HTMLNames.h"
@@ -38,4 +39,4 @@ HTMLSpanElement::HTMLSpanElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLSpanElement)
 
-} // namespace blink
+}

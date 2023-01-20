@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/HTMLSourceElement.h"
 
 #include "core/HTMLNames.h"
@@ -30,23 +31,25 @@
 #include "core/css/MediaQueryList.h"
 #include "core/css/MediaQueryMatcher.h"
 #include "core/dom/Document.h"
-#include "core/dom/TaskRunnerHelper.h"
 #include "core/events/Event.h"
+#include "core/events/EventSender.h"
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/HTMLPictureElement.h"
-
-#define SOURCE_LOG_LEVEL 3
+#include "platform/Logging.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
+static SourceEventSender& sourceErrorEventSender()
+{
+    DEFINE_STATIC_LOCAL(SourceEventSender, sharedErrorEventSender, (EventTypeNames::error));
+    return sharedErrorEventSender;
+}
+
 class HTMLSourceElement::Listener final : public MediaQueryListListener {
 public:
-    explicit Listener(HTMLSourceElement* element)
-        : m_element(element)
-    {
-    }
+    explicit Listener(HTMLSourceElement* element) : m_element(element) { }
     void notifyMediaQueryChanged() override
     {
         if (m_element)
@@ -59,33 +62,37 @@ public:
         visitor->trace(m_element);
         MediaQueryListListener::trace(visitor);
     }
-
 private:
-    Member<HTMLSourceElement> m_element;
+    RawPtrWillBeMember<HTMLSourceElement> m_element;
 };
 
 inline HTMLSourceElement::HTMLSourceElement(Document& document)
     : HTMLElement(sourceTag, document)
-    , m_listener(new Listener(this))
+    , m_listener(adoptRefWillBeNoop(new Listener(this)))
 {
-    DVLOG(SOURCE_LOG_LEVEL) << "HTMLSourceElement - " << (void*)this;
+    WTF_LOG(Media, "HTMLSourceElement::HTMLSourceElement - %p", this);
 }
 
 DEFINE_NODE_FACTORY(HTMLSourceElement)
 
-HTMLSourceElement::~HTMLSourceElement() { }
+HTMLSourceElement::~HTMLSourceElement()
+{
+    sourceErrorEventSender().cancelEvent(this);
+#if !ENABLE(OILPAN)
+    m_listener->clearElement();
+#endif
+}
 
 void HTMLSourceElement::createMediaQueryList(const AtomicString& media)
 {
-    removeMediaQueryListListener();
-    if (media.isEmpty()) {
-        m_mediaQueryList = nullptr;
+    if (media.isEmpty())
         return;
-    }
 
-    MediaQuerySet* set = MediaQuerySet::create(media);
-    m_mediaQueryList = MediaQueryList::create(&document(), &document().mediaQueryMatcher(), set);
-    addMediaQueryListListener();
+    if (m_mediaQueryList)
+        m_mediaQueryList->removeListener(m_listener);
+    RefPtrWillBeRawPtr<MediaQuerySet> set = MediaQuerySet::create(media);
+    m_mediaQueryList = MediaQueryList::create(&document(), &document().mediaQueryMatcher(), set.release());
+    m_mediaQueryList->addListener(m_listener);
 }
 
 void HTMLSourceElement::didMoveToNewDocument(Document& oldDocument)
@@ -94,8 +101,7 @@ void HTMLSourceElement::didMoveToNewDocument(Document& oldDocument)
     HTMLElement::didMoveToNewDocument(oldDocument);
 }
 
-Node::InsertionNotificationRequest HTMLSourceElement::insertedInto(
-    ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLSourceElement::insertedInto(ContainerNode* insertionPoint)
 {
     HTMLElement::insertedInto(insertionPoint);
     Element* parent = parentElement();
@@ -113,23 +119,9 @@ void HTMLSourceElement::removedFrom(ContainerNode* removalRoot)
         parent = toElement(removalRoot);
     if (isHTMLMediaElement(parent))
         toHTMLMediaElement(parent)->sourceWasRemoved(this);
-    if (isHTMLPictureElement(parent)) {
-        removeMediaQueryListListener();
+    if (isHTMLPictureElement(parent))
         toHTMLPictureElement(parent)->sourceOrMediaChanged();
-    }
     HTMLElement::removedFrom(removalRoot);
-}
-
-void HTMLSourceElement::removeMediaQueryListListener()
-{
-    if (m_mediaQueryList)
-        m_mediaQueryList->removeListener(m_listener);
-}
-
-void HTMLSourceElement::addMediaQueryListListener()
-{
-    if (m_mediaQueryList)
-        m_mediaQueryList->addListener(m_listener);
 }
 
 void HTMLSourceElement::setSrc(const String& url)
@@ -149,24 +141,20 @@ void HTMLSourceElement::setType(const AtomicString& type)
 
 void HTMLSourceElement::scheduleErrorEvent()
 {
-    DVLOG(SOURCE_LOG_LEVEL) << "scheduleErrorEvent - " << (void*)this;
-
-    m_pendingErrorEvent = TaskRunnerHelper::get(TaskType::DOMManipulation, &document())
-                              ->postCancellableTask(
-                                  BLINK_FROM_HERE,
-                                  WTF::bind(&HTMLSourceElement::dispatchPendingEvent,
-                                      wrapPersistent(this)));
+    WTF_LOG(Media, "HTMLSourceElement::scheduleErrorEvent - %p", this);
+    sourceErrorEventSender().dispatchEventSoon(this);
 }
 
 void HTMLSourceElement::cancelPendingErrorEvent()
 {
-    DVLOG(SOURCE_LOG_LEVEL) << "cancelPendingErrorEvent - " << (void*)this;
-    m_pendingErrorEvent.cancel();
+    WTF_LOG(Media, "HTMLSourceElement::cancelPendingErrorEvent - %p", this);
+    sourceErrorEventSender().cancelEvent(this);
 }
 
-void HTMLSourceElement::dispatchPendingEvent()
+void HTMLSourceElement::dispatchPendingEvent(SourceEventSender* eventSender)
 {
-    DVLOG(SOURCE_LOG_LEVEL) << "dispatchPendingEvent - " << (void*)this;
+    ASSERT_UNUSED(eventSender, eventSender == &sourceErrorEventSender());
+    WTF_LOG(Media, "HTMLSourceElement::dispatchPendingEvent - %p", this);
     dispatchEvent(Event::createCancelable(EventTypeNames::error));
 }
 
@@ -183,13 +171,11 @@ bool HTMLSourceElement::isURLAttribute(const Attribute& attribute) const
     return attribute.name() == srcAttr || HTMLElement::isURLAttribute(attribute);
 }
 
-void HTMLSourceElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLSourceElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    HTMLElement::parseAttribute(params);
-    const QualifiedName& name = params.name;
+    HTMLElement::parseAttribute(name, value);
     if (name == mediaAttr)
-        createMediaQueryList(params.newValue);
+        createMediaQueryList(value);
     if (name == srcsetAttr || name == sizesAttr || name == mediaAttr || name == typeAttr) {
         Element* parent = parentElement();
         if (isHTMLPictureElement(parent))
@@ -211,4 +197,4 @@ DEFINE_TRACE(HTMLSourceElement)
     HTMLElement::trace(visitor);
 }
 
-} // namespace blink
+}

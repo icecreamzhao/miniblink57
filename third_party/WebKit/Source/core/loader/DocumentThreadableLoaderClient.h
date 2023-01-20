@@ -40,17 +40,11 @@ class ResourceResponse;
 
 class DocumentThreadableLoaderClient : public ThreadableLoaderClient {
     WTF_MAKE_NONCOPYABLE(DocumentThreadableLoaderClient);
-    USING_FAST_MALLOC(DocumentThreadableLoaderClient);
-
+    WTF_MAKE_FAST_ALLOCATED(DocumentThreadableLoaderClient);
 public:
     bool isDocumentThreadableLoaderClient() final { return true; }
 
-    virtual bool willFollowRedirect(
-        const ResourceRequest& /*newRequest*/,
-        const ResourceResponse& /*redirectResponse*/)
-    {
-        return true;
-    }
+    virtual void willFollowRedirect(ResourceRequest& /*newRequest*/, const ResourceResponse& /*redirectResponse*/) { }
 
 protected:
     DocumentThreadableLoaderClient() { }

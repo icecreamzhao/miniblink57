@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/LayoutTestSupport.h"
 
 #include "wtf/Assertions.h"
@@ -36,6 +37,14 @@ namespace blink {
 
 static bool s_isRunningLayoutTest = false;
 static bool s_isMockThemeEnabled = false;
+=======
+#include "config.h"
+#include "platform/LayoutTestSupport.h"
+
+namespace blink {
+
+static bool s_isRunningLayoutTest = false;
+>>>>>>> miniblink49
 static bool s_isFontAntialiasingEnabled = false;
 
 bool LayoutTestSupport::isRunningLayoutTest()
@@ -48,6 +57,7 @@ void LayoutTestSupport::setIsRunningLayoutTest(bool value)
     s_isRunningLayoutTest = value;
 }
 
+<<<<<<< HEAD
 bool LayoutTestSupport::isMockThemeEnabledForTest()
 {
     return s_isMockThemeEnabled;
@@ -59,6 +69,8 @@ void LayoutTestSupport::setMockThemeEnabledForTest(bool value)
     s_isMockThemeEnabled = value;
 }
 
+=======
+>>>>>>> miniblink49
 bool LayoutTestSupport::isFontAntialiasingEnabledForTest()
 {
     return s_isFontAntialiasingEnabled;

@@ -28,10 +28,14 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 enum TextRenderingMode { AutoTextRendering,
     OptimizeSpeed,
     OptimizeLegibility,
     GeometricPrecision };
+=======
+enum TextRenderingMode { AutoTextRendering, OptimizeSpeed, OptimizeLegibility, GeometricPrecision };
+>>>>>>> miniblink49
 
 } // namespace blink
 

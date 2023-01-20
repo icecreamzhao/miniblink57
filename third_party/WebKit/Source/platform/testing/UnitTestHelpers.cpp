@@ -23,6 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/testing/UnitTestHelpers.h"
 
 #include "base/files/file_path.h"
@@ -40,10 +41,20 @@
 #include "public/platform/WebThread.h"
 #include "public/platform/WebTraceLocation.h"
 #include "wtf/text/StringUTF8Adaptor.h"
+=======
+#include "config.h"
+#include "platform/testing/UnitTestHelpers.h"
+
+#include "public/platform/Platform.h"
+#include "public/platform/WebThread.h"
+#include "public/platform/WebTraceLocation.h"
+#include "public/platform/WebUnitTestSupport.h"
+>>>>>>> miniblink49
 
 namespace blink {
 namespace testing {
 
+<<<<<<< HEAD
     void runPendingTasks()
     {
         Platform::current()->currentThread()->getWebTaskRunner()->postTask(
@@ -97,3 +108,21 @@ namespace testing {
 
 } // namespace testing
 } // namespace blink
+=======
+class QuitTask : public WebThread::Task {
+public:
+    virtual void run()
+    {
+        Platform::current()->unitTestSupport()->exitRunLoop();
+    }
+};
+
+void runPendingTasks()
+{
+    Platform::current()->currentThread()->postTask(FROM_HERE, new QuitTask);
+    Platform::current()->unitTestSupport()->enterRunLoop();
+}
+
+}
+}
+>>>>>>> miniblink49

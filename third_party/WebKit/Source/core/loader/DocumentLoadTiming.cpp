@@ -23,16 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/loader/DocumentLoadTiming.h"
 
-#include "core/loader/DocumentLoader.h"
-#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/TraceEvent.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-DocumentLoadTiming::DocumentLoadTiming(DocumentLoader& documentLoader)
+DocumentLoadTiming::DocumentLoadTiming()
     : m_referenceMonotonicTime(0.0)
     , m_referenceWallTime(0.0)
     , m_navigationStart(0.0)
@@ -47,53 +47,24 @@ DocumentLoadTiming::DocumentLoadTiming(DocumentLoader& documentLoader)
     , m_loadEventEnd(0.0)
     , m_hasCrossOriginRedirect(false)
     , m_hasSameOriginAsPreviousDocument(false)
-    , m_documentLoader(documentLoader)
 {
 }
 
-DEFINE_TRACE(DocumentLoadTiming)
+double DocumentLoadTiming::monotonicTimeToZeroBasedDocumentTime(double monotonicTime) const
 {
-    visitor->trace(m_documentLoader);
-}
-
-// TODO(csharrison): Remove the null checking logic in a later patch.
-LocalFrame* DocumentLoadTiming::frame() const
-{
-    return m_documentLoader ? m_documentLoader->frame() : nullptr;
-}
-
-void DocumentLoadTiming::notifyDocumentTimingChanged()
-{
-    if (m_documentLoader)
-        m_documentLoader->didChangePerformanceTiming();
-}
-
-void DocumentLoadTiming::ensureReferenceTimesSet()
-{
-    if (!m_referenceWallTime)
-        m_referenceWallTime = currentTime();
-    if (!m_referenceMonotonicTime)
-        m_referenceMonotonicTime = monotonicallyIncreasingTime();
-}
-
-double DocumentLoadTiming::monotonicTimeToZeroBasedDocumentTime(
-    double monotonicTime) const
-{
-    if (!monotonicTime || !m_referenceMonotonicTime)
+    if (!monotonicTime)
         return 0.0;
     return monotonicTime - m_referenceMonotonicTime;
 }
 
-double DocumentLoadTiming::monotonicTimeToPseudoWallTime(
-    double monotonicTime) const
+double DocumentLoadTiming::monotonicTimeToPseudoWallTime(double monotonicTime) const
 {
-    if (!monotonicTime || !m_referenceMonotonicTime)
+    if (!monotonicTime)
         return 0.0;
     return m_referenceWallTime + monotonicTime - m_referenceMonotonicTime;
 }
 
-double DocumentLoadTiming::pseudoWallTimeToMonotonicTime(
-    double pseudoWallTime) const
+double DocumentLoadTiming::pseudoWallTimeToMonotonicTime(double pseudoWallTime) const
 {
     if (!pseudoWallTime)
         return 0.0;
@@ -102,45 +73,28 @@ double DocumentLoadTiming::pseudoWallTimeToMonotonicTime(
 
 void DocumentLoadTiming::markNavigationStart()
 {
-    // Allow the embedder to override navigationStart before we record it if
-    // they have a more accurate timestamp.
-    if (m_navigationStart) {
-        DCHECK(m_referenceMonotonicTime);
-        DCHECK(m_referenceWallTime);
-        return;
-    }
-    DCHECK(!m_navigationStart);
-    DCHECK(!m_referenceMonotonicTime);
-    DCHECK(!m_referenceWallTime);
-    ensureReferenceTimesSet();
-    m_navigationStart = m_referenceMonotonicTime;
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing", "navigationStart",
-    //       TraceEvent::toTraceTimestamp(m_navigationStart), "frame", frame());
-    notifyDocumentTimingChanged();
+    TRACE_EVENT_MARK("blink.user_timing", "navigationStart");
+    ASSERT(!m_navigationStart && !m_referenceMonotonicTime && !m_referenceWallTime);
+
+    m_navigationStart = m_referenceMonotonicTime = monotonicallyIncreasingTime();
+    m_referenceWallTime = currentTime();
 }
 
 void DocumentLoadTiming::setNavigationStart(double navigationStart)
 {
-    // |m_referenceMonotonicTime| and |m_referenceWallTime| represent
-    // navigationStart. We must set these to the current time if they haven't
-    // been set yet in order to have a valid reference time in both units.
-    ensureReferenceTimesSet();
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "navigationStart", navigationStart);
+    ASSERT(m_referenceMonotonicTime && m_referenceWallTime);
     m_navigationStart = navigationStart;
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing", "navigationStart",
-    //       TraceEvent::toTraceTimestamp(m_navigationStart), "frame", frame());
 
-    // The reference times are adjusted based on the embedder's navigationStart.
-    DCHECK(m_referenceMonotonicTime);
-    DCHECK(m_referenceWallTime);
+    // |m_referenceMonotonicTime| and |m_referenceWallTime| represent
+    // navigationStart. When the embedder sets navigationStart (because the
+    // navigation started earlied on the browser side), we need to adjust these
+    // as well.
     m_referenceWallTime = monotonicTimeToPseudoWallTime(navigationStart);
     m_referenceMonotonicTime = navigationStart;
-    notifyDocumentTimingChanged();
 }
 
-void DocumentLoadTiming::addRedirect(const KURL& redirectingUrl,
-    const KURL& redirectedUrl)
+void DocumentLoadTiming::addRedirect(const KURL& redirectingUrl, const KURL& redirectedUrl)
 {
     m_redirectCount++;
     if (!m_redirectStart) {
@@ -149,96 +103,57 @@ void DocumentLoadTiming::addRedirect(const KURL& redirectingUrl,
     markRedirectEnd();
     markFetchStart();
 
-    // Check if the redirected url is allowed to access the redirecting url's
-    // timing information.
+    // Check if the redirected url is allowed to access the redirecting url's timing information.
     RefPtr<SecurityOrigin> redirectedSecurityOrigin = SecurityOrigin::create(redirectedUrl);
     m_hasCrossOriginRedirect |= !redirectedSecurityOrigin->canRequest(redirectingUrl);
 }
 
-void DocumentLoadTiming::setRedirectStart(double redirectStart)
-{
-    m_redirectStart = redirectStart;
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing", "redirectStart",
-    //       TraceEvent::toTraceTimestamp(m_redirectStart), "frame", frame());
-    notifyDocumentTimingChanged();
-}
-
-void DocumentLoadTiming::setRedirectEnd(double redirectEnd)
-{
-    m_redirectEnd = redirectEnd;
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing", "redirectEnd",
-    //                                    TraceEvent::toTraceTimestamp(m_redirectEnd),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
-}
-
 void DocumentLoadTiming::markUnloadEventStart()
 {
+    TRACE_EVENT_MARK("blink.user_timing", "unloadEventStart");
     m_unloadEventStart = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing", "unloadEventStart",
-    //       TraceEvent::toTraceTimestamp(m_unloadEventStart), "frame", frame());
-    notifyDocumentTimingChanged();
 }
 
 void DocumentLoadTiming::markUnloadEventEnd()
 {
+    TRACE_EVENT_MARK("blink.user_timing", "unloadEventEnd");
     m_unloadEventEnd = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing", "unloadEventEnd",
-    //       TraceEvent::toTraceTimestamp(m_unloadEventEnd), "frame", frame());
-    notifyDocumentTimingChanged();
 }
 
 void DocumentLoadTiming::markFetchStart()
 {
-    setFetchStart(monotonicallyIncreasingTime());
-}
-
-void DocumentLoadTiming::setFetchStart(double fetchStart)
-{
-    m_fetchStart = fetchStart;
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing", "fetchStart",
-    //                                    TraceEvent::toTraceTimestamp(m_fetchStart),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
+    TRACE_EVENT_MARK("blink.user_timing", "fetchStart");
+    m_fetchStart = monotonicallyIncreasingTime();
 }
 
 void DocumentLoadTiming::setResponseEnd(double responseEnd)
 {
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "responseEnd", responseEnd);
     m_responseEnd = responseEnd;
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing", "responseEnd",
-    //                                    TraceEvent::toTraceTimestamp(m_responseEnd),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
 }
 
 void DocumentLoadTiming::markLoadEventStart()
 {
+    TRACE_EVENT_MARK("blink.user_timing", "loadEventStart");
     m_loadEventStart = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing", "loadEventStart",
-    //       TraceEvent::toTraceTimestamp(m_loadEventStart), "frame", frame());
-    notifyDocumentTimingChanged();
 }
 
 void DocumentLoadTiming::markLoadEventEnd()
 {
+    TRACE_EVENT_MARK("blink.user_timing", "loadEventEnd");
     m_loadEventEnd = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing", "loadEventEnd",
-    //                                    TraceEvent::toTraceTimestamp(m_loadEventEnd),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
+}
+
+void DocumentLoadTiming::setRedirectStart(double redirectStart)
+{
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "redirectStart", redirectStart);
+    m_redirectStart = m_fetchStart;
 }
 
 void DocumentLoadTiming::markRedirectEnd()
 {
+    TRACE_EVENT_MARK("blink.user_timing", "redirectEnd");
     m_redirectEnd = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing", "redirectEnd",
-    //                                    TraceEvent::toTraceTimestamp(m_redirectEnd),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
 }
 
 } // namespace blink

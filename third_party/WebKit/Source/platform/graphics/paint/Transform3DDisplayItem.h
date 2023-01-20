@@ -5,6 +5,7 @@
 #ifndef Transform3DDisplayItem_h
 #define Transform3DDisplayItem_h
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatPoint3D.h"
 #include "platform/graphics/paint/DisplayItem.h"
 #include "platform/transforms/TransformationMatrix.h"
@@ -22,10 +23,25 @@ public:
         : PairedBeginDisplayItem(client, type, sizeof(*this))
         , m_transform(transform)
         , m_transformOrigin(transformOrigin)
+=======
+#include "platform/graphics/paint/DisplayItem.h"
+#include "platform/transforms/TransformationMatrix.h"
+#include "wtf/Assertions.h"
+#include "wtf/PassOwnPtr.h"
+
+namespace blink {
+
+class PLATFORM_EXPORT BeginTransform3DDisplayItem : public PairedBeginDisplayItem {
+public:
+    BeginTransform3DDisplayItem(const DisplayItemClientWrapper& client, Type type, const TransformationMatrix& transform)
+        : PairedBeginDisplayItem(client, type)
+        , m_transform(transform)
+>>>>>>> miniblink49
     {
         ASSERT(DisplayItem::isTransform3DType(type));
     }
 
+<<<<<<< HEAD
     void replay(GraphicsContext&) const override;
     void appendToWebDisplayItemList(const IntRect&,
         WebDisplayItemList*) const override;
@@ -51,10 +67,26 @@ class PLATFORM_EXPORT EndTransform3DDisplayItem final
 public:
     EndTransform3DDisplayItem(const DisplayItemClient& client, Type type)
         : PairedEndDisplayItem(client, type, sizeof(*this))
+=======
+    void replay(GraphicsContext&) override;
+    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+
+    const TransformationMatrix& transform() const { return m_transform; }
+
+private:
+    const TransformationMatrix m_transform;
+};
+
+class PLATFORM_EXPORT EndTransform3DDisplayItem : public PairedEndDisplayItem {
+public:
+    EndTransform3DDisplayItem(const DisplayItemClientWrapper& client, Type type)
+        : PairedEndDisplayItem(client, type)
+>>>>>>> miniblink49
     {
         ASSERT(DisplayItem::isEndTransform3DType(type));
     }
 
+<<<<<<< HEAD
     void replay(GraphicsContext&) const override;
     void appendToWebDisplayItemList(const IntRect&,
         WebDisplayItemList*) const override;
@@ -64,6 +96,16 @@ private:
     bool isEndAndPairedWith(DisplayItem::Type otherType) const final
     {
         return DisplayItem::transform3DTypeToEndTransform3DType(otherType) == getType();
+=======
+    void replay(GraphicsContext&) override;
+    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+
+private:
+#if ENABLE(ASSERT)
+    bool isEndAndPairedWith(DisplayItem::Type otherType) const final
+    {
+        return DisplayItem::transform3DTypeToEndTransform3DType(otherType) == type();
+>>>>>>> miniblink49
     }
 #endif
 };

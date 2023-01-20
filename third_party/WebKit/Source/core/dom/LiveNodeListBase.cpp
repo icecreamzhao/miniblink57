@@ -21,6 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/dom/LiveNodeListBase.h"
 
 #include "core/dom/LiveNodeList.h"
@@ -28,8 +29,7 @@
 
 namespace blink {
 
-void LiveNodeListBase::invalidateCacheForAttribute(
-    const QualifiedName* attrName) const
+void LiveNodeListBase::invalidateCacheForAttribute(const QualifiedName* attrName) const
 {
     if (isLiveNodeListType(type()))
         toLiveNodeList(this)->invalidateCacheForAttribute(attrName);
@@ -39,13 +39,12 @@ void LiveNodeListBase::invalidateCacheForAttribute(
 
 ContainerNode& LiveNodeListBase::rootNode() const
 {
-    if (isRootedAtTreeScope() && m_ownerNode->isInTreeScope())
-        return m_ownerNode->containingTreeScope().rootNode();
+    if (isRootedAtDocument() && m_ownerNode->inDocument())
+        return m_ownerNode->document();
     return *m_ownerNode;
 }
 
-void LiveNodeListBase::didMoveToDocument(Document& oldDocument,
-    Document& newDocument)
+void LiveNodeListBase::didMoveToDocument(Document& oldDocument, Document& newDocument)
 {
     invalidateCache(&oldDocument);
     oldDocument.unregisterNodeList(this);

@@ -16,11 +16,19 @@
  ******************************************************************************
  */
 
+<<<<<<< HEAD
 /**
   * \file
   * \brief Configuration constants for the Windows platform
   */
 
+=======
+ /**
+  * \file
+  * \brief Configuration constants for the Windows platform
+  */
+  
+>>>>>>> miniblink49
 /** Define the platform we're on. */
 #ifndef U_WINDOWS
 #define U_WINDOWS
@@ -44,11 +52,19 @@
 
 /** Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
+<<<<<<< HEAD
 #if defined(__BORLANDC__) || defined(__MINGW32__)
 #define U_HAVE_INTTYPES_H 1
 #else
 #define U_HAVE_INTTYPES_H 0
 #endif
+=======
+#   if defined(__BORLANDC__) || defined(__MINGW32__)
+#       define U_HAVE_INTTYPES_H 1
+#   else
+#       define U_HAVE_INTTYPES_H 0
+#   endif
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -107,12 +123,21 @@
 
 /** Define 64 bit limits */
 #if !U_INT64_IS_LONG_LONG
+<<<<<<< HEAD
 #ifndef INT64_C
 #define INT64_C(x) ((int64_t)x)
 #endif
 #ifndef UINT64_C
 #define UINT64_C(x) ((uint64_t)x)
 #endif
+=======
+# ifndef INT64_C
+#  define INT64_C(x) ((int64_t)x)
+# endif
+# ifndef UINT64_C
+#  define UINT64_C(x) ((uint64_t)x)
+# endif
+>>>>>>> miniblink49
 /** else use the umachine.h definition */
 #endif
 
@@ -127,6 +152,7 @@
 #include <inttypes.h>
 #else /* U_HAVE_INTTYPES_H */
 
+<<<<<<< HEAD
 #if !U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
@@ -164,6 +190,45 @@ typedef signed __int64 int64_t;
 typedef unsigned long long uint64_t;
 #else
 typedef unsigned __int64 uint64_t;
+=======
+#if ! U_HAVE_INT8_T
+typedef signed char int8_t;
+#endif
+
+#if ! U_HAVE_UINT8_T
+typedef unsigned char uint8_t;
+#endif
+
+#if ! U_HAVE_INT16_T
+typedef signed short int16_t;
+#endif
+
+#if ! U_HAVE_UINT16_T
+typedef unsigned short uint16_t;
+#endif
+
+#if ! U_HAVE_INT32_T
+typedef signed int int32_t;
+#endif
+
+#if ! U_HAVE_UINT32_T
+typedef unsigned int uint32_t;
+#endif
+
+#if ! U_HAVE_INT64_T
+#if U_INT64_IS_LONG_LONG
+    typedef signed long long int64_t;
+#else
+    typedef signed __int64 int64_t;
+#endif
+#endif
+
+#if ! U_HAVE_UINT64_T
+#if U_INT64_IS_LONG_LONG
+    typedef unsigned long long uint64_t;
+#else
+    typedef unsigned __int64 uint64_t;
+>>>>>>> miniblink49
 #endif
 #endif
 #endif
@@ -280,7 +345,11 @@ Intel can define _M_IX86 or _M_X64
  * @internal
  */
 #if 1
+<<<<<<< HEAD
 #define U_DECLARE_UTF16(string) L##string
+=======
+#define U_DECLARE_UTF16(string) L ## string
+>>>>>>> miniblink49
 #endif
 
 /*===========================================================================*/
@@ -291,25 +360,41 @@ Intel can define _M_IX86 or _M_X64
  * @internal 
  */
 #if 1
+<<<<<<< HEAD
 #define U_TZSET _tzset
+=======
+#define U_TZSET         _tzset
+>>>>>>> miniblink49
 #endif
 /**
  * @internal 
  */
 #if 1
+<<<<<<< HEAD
 #define U_TIMEZONE _timezone
+=======
+#define U_TIMEZONE      _timezone
+>>>>>>> miniblink49
 #endif
 /**
  * @internal 
  */
 #if 1
+<<<<<<< HEAD
 #define U_TZNAME _tzname
+=======
+#define U_TZNAME        _tzname
+>>>>>>> miniblink49
 #endif
 /**
  * @internal 
  */
 #if 1
+<<<<<<< HEAD
 #define U_DAYLIGHT _daylight
+=======
+#define U_DAYLIGHT      _daylight
+>>>>>>> miniblink49
 #endif
 
 #define U_HAVE_MMAP 0
@@ -319,6 +404,10 @@ Intel can define _M_IX86 or _M_X64
 #define U_ENABLE_DYLOAD 1
 #endif
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /** @} */
 
 /*===========================================================================*/
@@ -339,6 +428,7 @@ Intel can define _M_IX86 or _M_X64
 /*===========================================================================*/
 
 #ifndef U_INLINE
+<<<<<<< HEAD
 #ifdef __cplusplus
 #define U_INLINE inline
 #else
@@ -348,6 +438,17 @@ Intel can define _M_IX86 or _M_X64
 
 #if defined(_MSC_VER) && defined(_M_IX86) && !defined(_MANAGED)
 #define U_ALIGN_CODE(val) __asm align val
+=======
+#   ifdef __cplusplus
+#       define U_INLINE inline
+#   else
+#       define U_INLINE __inline
+#   endif
+#endif
+
+#if defined(_MSC_VER) && defined(_M_IX86) && !defined(_MANAGED)
+#define U_ALIGN_CODE(val)    __asm      align val
+>>>>>>> miniblink49
 #else
 #define U_ALIGN_CODE(val)
 #endif
@@ -359,6 +460,10 @@ Intel can define _M_IX86 or _M_X64
 #define U_HAVE_MSVC_2003_OR_EARLIER
 #endif
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /** @} */
 
 /*===========================================================================*/
@@ -366,8 +471,16 @@ Intel can define _M_IX86 or _M_X64
 /*===========================================================================*/
 
 #ifndef U_MAKE
+<<<<<<< HEAD
 #define U_MAKE "nmake"
+=======
+#define U_MAKE  "nmake"
+>>>>>>> miniblink49
 #define U_MAKE_IS_NMAKE 1
 #endif
 
 /** @} */
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkDrawLine.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -24,6 +28,7 @@ const SkMemberInfo SkLine::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkLine);
 
+<<<<<<< HEAD
 SkLine::SkLine()
     : x1(0)
     , x2(0)
@@ -34,6 +39,12 @@ SkLine::SkLine()
 
 bool SkLine::draw(SkAnimateMaker& maker)
 {
+=======
+SkLine::SkLine() : x1(0), x2(0), y1(0), y2(0) {
+}
+
+bool SkLine::draw(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawLine(x1, y1, x2, y2, *maker.fPaint);
     return false;

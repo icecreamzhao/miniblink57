@@ -24,6 +24,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/xml/XPathEvaluator.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -38,13 +39,9 @@ namespace blink {
 
 using namespace XPath;
 
-XPathExpression* XPathEvaluator::createExpression(
-    const String& expression,
-    XPathNSResolver* resolver,
-    ExceptionState& exceptionState)
+XPathExpression* XPathEvaluator::createExpression(const String& expression, XPathNSResolver* resolver, ExceptionState& exceptionState)
 {
-    return XPathExpression::createExpression(expression, resolver,
-        exceptionState);
+    return XPathExpression::createExpression(expression, resolver, exceptionState);
 }
 
 XPathNSResolver* XPathEvaluator::createNSResolver(Node* nodeResolver)
@@ -52,16 +49,10 @@ XPathNSResolver* XPathEvaluator::createNSResolver(Node* nodeResolver)
     return NativeXPathNSResolver::create(nodeResolver);
 }
 
-XPathResult* XPathEvaluator::evaluate(const String& expression,
-    Node* contextNode,
-    XPathNSResolver* resolver,
-    unsigned short type,
-    const ScriptValue&,
-    ExceptionState& exceptionState)
+XPathResult* XPathEvaluator::evaluate(const String& expression, Node* contextNode, XPathNSResolver* resolver, unsigned short type, const ScriptValue&, ExceptionState& exceptionState)
 {
     if (!isValidContextNode(contextNode)) {
-        exceptionState.throwDOMException(
-            NotSupportedError, "The node provided is '" + contextNode->nodeName() + "', which is not a valid context node type.");
+        exceptionState.throwDOMException(NotSupportedError, "The node provided is '" + contextNode->nodeName() + "', which is not a valid context node type.");
         return nullptr;
     }
 

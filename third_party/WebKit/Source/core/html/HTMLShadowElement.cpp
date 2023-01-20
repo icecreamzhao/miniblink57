@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/HTMLShadowElement.h"
 
 #include "core/HTMLNames.h"
@@ -46,7 +47,9 @@ inline HTMLShadowElement::HTMLShadowElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLShadowElement)
 
-HTMLShadowElement::~HTMLShadowElement() { }
+HTMLShadowElement::~HTMLShadowElement()
+{
+}
 
 ShadowRoot* HTMLShadowElement::olderShadowRoot()
 {
@@ -57,24 +60,21 @@ ShadowRoot* HTMLShadowElement::olderShadowRoot()
     updateDistribution();
 
     ShadowRoot* older = containingRoot->olderShadowRoot();
-    if (!older || !older->isOpenOrV0() || older->shadowInsertionPointOfYoungerShadowRoot() != this)
+    if (!older || !older->shouldExposeToBindings() || older->shadowInsertionPointOfYoungerShadowRoot() != this)
         return nullptr;
 
-    DCHECK(older->isOpenOrV0());
+    ASSERT(older->shouldExposeToBindings());
     return older;
 }
 
-Node::InsertionNotificationRequest HTMLShadowElement::insertedInto(
-    ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLShadowElement::insertedInto(ContainerNode* insertionPoint)
 {
-    if (insertionPoint->isConnected()) {
+    if (insertionPoint->inDocument()) {
         // Warn if trying to reproject between user agent and author shadows.
         ShadowRoot* root = containingShadowRoot();
         if (root && root->olderShadowRoot() && root->type() != root->olderShadowRoot()->type()) {
-            String message = String::format("<shadow> doesn't work for %s element host.",
-                root->host().tagName().utf8().data());
-            document().addConsoleMessage(ConsoleMessage::create(
-                RenderingMessageSource, WarningMessageLevel, message));
+            String message = String::format("<shadow> doesn't work for %s element host.", root->host()->tagName().utf8().data());
+            document().addConsoleMessage(ConsoleMessage::create(RenderingMessageSource, WarningMessageLevel, message));
         }
     }
     return InsertionPoint::insertedInto(insertionPoint);

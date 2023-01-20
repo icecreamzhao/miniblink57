@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/platform/WebCrypto.h"
 
 #include "platform/CryptoResult.h"
@@ -48,26 +49,55 @@ void WebCryptoResult::completeWithBuffer(const void* bytes,
 {
     if (!cancelled())
         m_impl->completeWithBuffer(bytes, bytesSize);
+=======
+#include "config.h"
+#include "public/platform/WebCrypto.h"
+
+#include "platform/CryptoResult.h"
+#include "platform/heap/Heap.h"
+#include <string.h>
+
+namespace blink {
+
+void WebCryptoResult::completeWithError(WebCryptoErrorType errorType, const WebString& errorDetails)
+{
+    m_impl->completeWithError(errorType, errorDetails);
+    reset();
+}
+
+void WebCryptoResult::completeWithBuffer(const void* bytes, unsigned bytesSize)
+{
+    m_impl->completeWithBuffer(bytes, bytesSize);
+>>>>>>> miniblink49
     reset();
 }
 
 void WebCryptoResult::completeWithJson(const char* utf8Data, unsigned length)
 {
+<<<<<<< HEAD
     if (!cancelled())
         m_impl->completeWithJson(utf8Data, length);
+=======
+    m_impl->completeWithJson(utf8Data, length);
+>>>>>>> miniblink49
     reset();
 }
 
 void WebCryptoResult::completeWithBoolean(bool b)
 {
+<<<<<<< HEAD
     if (!cancelled())
         m_impl->completeWithBoolean(b);
+=======
+    m_impl->completeWithBoolean(b);
+>>>>>>> miniblink49
     reset();
 }
 
 void WebCryptoResult::completeWithKey(const WebCryptoKey& key)
 {
     ASSERT(!key.isNull());
+<<<<<<< HEAD
     if (!cancelled())
         m_impl->completeWithKey(key);
     reset();
@@ -80,11 +110,23 @@ void WebCryptoResult::completeWithKeyPair(const WebCryptoKey& publicKey,
     ASSERT(!privateKey.isNull());
     if (!cancelled())
         m_impl->completeWithKeyPair(publicKey, privateKey);
+=======
+    m_impl->completeWithKey(key);
+    reset();
+}
+
+void WebCryptoResult::completeWithKeyPair(const WebCryptoKey& publicKey, const WebCryptoKey& privateKey)
+{
+    ASSERT(!publicKey.isNull());
+    ASSERT(!privateKey.isNull());
+    m_impl->completeWithKeyPair(publicKey, privateKey);
+>>>>>>> miniblink49
     reset();
 }
 
 bool WebCryptoResult::cancelled() const
 {
+<<<<<<< HEAD
     return m_cancel->cancelled();
 }
 
@@ -95,18 +137,33 @@ WebCryptoResult::WebCryptoResult(CryptoResult* impl,
 {
     ASSERT(m_impl.get());
     ASSERT(m_cancel.get());
+=======
+    return m_impl->cancelled();
+}
+
+WebCryptoResult::WebCryptoResult(const PassRefPtrWillBeRawPtr<CryptoResult>& impl)
+    : m_impl(impl)
+{
+    ASSERT(m_impl.get());
+>>>>>>> miniblink49
 }
 
 void WebCryptoResult::reset()
 {
     m_impl.reset();
+<<<<<<< HEAD
     m_cancel.reset();
+=======
+>>>>>>> miniblink49
 }
 
 void WebCryptoResult::assign(const WebCryptoResult& o)
 {
     m_impl = o.m_impl;
+<<<<<<< HEAD
     m_cancel = o.m_cancel;
+=======
+>>>>>>> miniblink49
 }
 
 } // namespace blink

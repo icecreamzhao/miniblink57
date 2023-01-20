@@ -14,6 +14,7 @@
 namespace ots {
 
 struct OpenTypePOST {
+<<<<<<< HEAD
     uint32_t version;
     uint32_t italic_angle;
     int16_t underline;
@@ -27,3 +28,18 @@ struct OpenTypePOST {
 } // namespace ots
 
 #endif // OTS_POST_H_
+=======
+  uint32_t version;
+  uint32_t italic_angle;
+  int16_t underline;
+  int16_t underline_thickness;
+  uint32_t is_fixed_pitch;
+
+  std::vector<uint16_t> glyph_name_index;
+  std::vector<std::string> names;
+};
+
+}  // namespace ots
+
+#endif  // OTS_POST_H_
+>>>>>>> miniblink49

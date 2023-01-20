@@ -21,7 +21,6 @@
 #ifndef SVGDocumentExtensions_h
 #define SVGDocumentExtensions_h
 
-#include "core/layout/svg/SVGResourcesCache.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -32,41 +31,36 @@
 namespace blink {
 
 class Document;
-class Element;
 class LayoutSVGResourceContainer;
-class SVGElement;
-class SVGSVGElement;
 class SubtreeLayoutScope;
+class SVGResourcesCache;
+class SVGSVGElement;
+class Element;
 
-class SVGDocumentExtensions
-    : public GarbageCollectedFinalized<SVGDocumentExtensions> {
-    WTF_MAKE_NONCOPYABLE(SVGDocumentExtensions);
-
+class SVGDocumentExtensions : public NoBaseWillBeGarbageCollectedFinalized<SVGDocumentExtensions> {
+    WTF_MAKE_NONCOPYABLE(SVGDocumentExtensions); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(SVGDocumentExtensions);
 public:
-    typedef HeapHashSet<Member<Element>> SVGPendingElements;
+    typedef WillBeHeapHashSet<RawPtrWillBeMember<Element>> SVGPendingElements;
     explicit SVGDocumentExtensions(Document*);
     ~SVGDocumentExtensions();
 
     void addTimeContainer(SVGSVGElement*);
     void removeTimeContainer(SVGSVGElement*);
 
-    // Records the SVG element as having a Web Animation on an SVG attribute that
-    // needs applying.
-    void addWebAnimationsPendingSVGElement(SVGElement&);
-
     void addResource(const AtomicString& id, LayoutSVGResourceContainer*);
     void removeResource(const AtomicString& id);
     LayoutSVGResourceContainer* resourceById(const AtomicString& id) const;
 
-    static void serviceOnAnimationFrame(Document&);
+    static void serviceOnAnimationFrame(Document&, double monotonicAnimationStartTime);
 
     void startAnimations();
     void pauseAnimations();
     void dispatchSVGLoadEventToOutermostSVGElements();
 
+    void reportWarning(const String&);
     void reportError(const String&);
 
-    SVGResourcesCache& resourcesCache() { return m_resourcesCache; }
+    SVGResourcesCache* resourcesCache() const { return m_resourcesCache.get(); }
 
     void addSVGRootWithRelativeLengthDescendents(SVGSVGElement*);
     void removeSVGRootWithRelativeLengthDescendents(SVGSVGElement*);
@@ -84,25 +78,21 @@ public:
     DECLARE_TRACE();
 
 private:
-    Member<Document> m_document;
-    HeapHashSet<Member<SVGSVGElement>> m_timeContainers;
-    using SVGElementSet = HeapHashSet<Member<SVGElement>>;
-    SVGElementSet m_webAnimationsPendingSVGElements;
+    RawPtrWillBeMember<Document> m_document;
+    WillBeHeapHashSet<RawPtrWillBeMember<SVGSVGElement>> m_timeContainers; // For SVG 1.2 support this will need to be made more general.
     HashMap<AtomicString, LayoutSVGResourceContainer*> m_resources;
-    // Resources that are pending.
-    HeapHashMap<AtomicString, Member<SVGPendingElements>> m_pendingResources;
-    SVGResourcesCache m_resourcesCache;
-    // Root SVG elements with relative length descendants.
-    HeapHashSet<Member<SVGSVGElement>> m_relativeLengthSVGRoots;
+    WillBeHeapHashMap<AtomicString, OwnPtrWillBeMember<SVGPendingElements>> m_pendingResources; // Resources that are pending.
+    WillBeHeapHashMap<AtomicString, OwnPtrWillBeMember<SVGPendingElements>> m_pendingResourcesForRemoval; // Resources that are pending and scheduled for removal.
+    OwnPtr<SVGResourcesCache> m_resourcesCache;
+    WillBeHeapHashSet<RawPtrWillBeMember<SVGSVGElement>> m_relativeLengthSVGRoots; // Root SVG elements with relative length descendants.
     FloatPoint m_translate;
-#if DCHECK_IS_ON()
-    bool m_inRelativeLengthSVGRootsInvalidation = false;
+#if ENABLE(ASSERT)
+    bool m_inRelativeLengthSVGRootsInvalidation;
 #endif
 
 public:
-    // This HashMap contains a list of pending resources. Pending resources, are
-    // such which are referenced by any object in the SVG document, but do NOT
-    // exist yet.
+    // This HashMap contains a list of pending resources. Pending resources, are such
+    // which are referenced by any object in the SVG document, but do NOT exist yet.
     // For instance, dynamically build gradients / patterns / clippers...
     void addPendingResource(const AtomicString& id, Element*);
     bool hasPendingResource(const AtomicString& id) const;
@@ -110,11 +100,18 @@ public:
     bool isElementPendingResource(Element*, const AtomicString& id) const;
     void clearHasPendingResourcesIfPossible(Element*);
     void removeElementFromPendingResources(Element*);
-    SVGPendingElements* removePendingResource(const AtomicString& id);
+    PassOwnPtrWillBeRawPtr<SVGPendingElements> removePendingResource(const AtomicString& id);
 
-    void serviceAnimations();
+    void serviceAnimations(double monotonicAnimationStartTime);
+
+    // The following two functions are used for scheduling a pending resource to be removed.
+    void markPendingResourcesForRemoval(const AtomicString&);
+    Element* removeElementFromPendingResourcesForRemoval(const AtomicString&);
+
+private:
+    PassOwnPtrWillBeRawPtr<SVGPendingElements> removePendingResourceForRemoval(const AtomicString&);
 };
 
-} // namespace blink
+}
 
 #endif

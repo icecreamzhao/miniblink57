@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -13,10 +17,17 @@
 #include "SkShader.h"
 #include "SkString.h"
 
+<<<<<<< HEAD
 #define MINI 0.01f
 #define SMALL SkIntToScalar(2)
 #define REAL 1.5f
 #define BIG SkIntToScalar(10)
+=======
+#define MINI   0.01f
+#define SMALL   SkIntToScalar(2)
+#define REAL    1.5f
+#define BIG     SkIntToScalar(10)
+>>>>>>> miniblink49
 #define REALBIG 100.5f
 
 static const char* gStyleName[] = {
@@ -27,6 +38,7 @@ static const char* gStyleName[] = {
 };
 
 class BlurBench : public Benchmark {
+<<<<<<< HEAD
     SkScalar fRadius;
     SkBlurStyle fStyle;
     uint32_t fFlags;
@@ -35,6 +47,15 @@ class BlurBench : public Benchmark {
 public:
     BlurBench(SkScalar rad, SkBlurStyle bs, uint32_t flags = 0)
     {
+=======
+    SkScalar    fRadius;
+    SkBlurStyle fStyle;
+    uint32_t    fFlags;
+    SkString    fName;
+
+public:
+    BlurBench(SkScalar rad, SkBlurStyle bs, uint32_t flags = 0) {
+>>>>>>> miniblink49
         fRadius = rad;
         fStyle = bs;
         fFlags = flags;
@@ -49,6 +70,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     virtual const char* onGetName()
     {
         return fName.c_str();
@@ -56,6 +78,13 @@ protected:
 
     virtual void onDraw(int loops, SkCanvas* canvas)
     {
+=======
+    virtual const char* onGetName() {
+        return fName.c_str();
+    }
+
+    virtual void onDraw(const int loops, SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
         this->setupPaint(&paint);
 
@@ -64,6 +93,7 @@ protected:
         SkRandom rand;
         for (int i = 0; i < loops; i++) {
             SkRect r = SkRect::MakeWH(rand.nextUScalar1() * 400,
+<<<<<<< HEAD
                 rand.nextUScalar1() * 400);
             r.offset(fRadius, fRadius);
 
@@ -71,6 +101,16 @@ protected:
                 paint.setMaskFilter(SkBlurMaskFilter::Make(fStyle,
                     SkBlurMask::ConvertRadiusToSigma(fRadius),
                     fFlags));
+=======
+                                      rand.nextUScalar1() * 400);
+            r.offset(fRadius, fRadius);
+
+            if (fRadius > 0) {
+                SkMaskFilter* mf = SkBlurMaskFilter::Create(fStyle,
+                                            SkBlurMask::ConvertRadiusToSigma(fRadius),
+                                            fFlags);
+                paint.setMaskFilter(mf)->unref();
+>>>>>>> miniblink49
             }
             canvas->drawOval(r, paint);
         }

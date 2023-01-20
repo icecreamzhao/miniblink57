@@ -50,8 +50,13 @@ public:
 	typedef _Ty value_type;
 	pointer address(reference _X) const
 		{return (&_X); }
+<<<<<<< HEAD
 // 	const_pointer address(const_reference _X) const
 // 		{return (&_X); }
+=======
+	const_pointer address(const_reference _X) const
+		{return (&_X); }
+>>>>>>> miniblink49
 	pointer allocate(size_type _N, const void *)
 		{return (_Allocate((difference_type)_N, (pointer)0)); }
 	char _FARQ *_Charalloc(size_type _N)

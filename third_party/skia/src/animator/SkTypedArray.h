@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkTypedArray_DEFINED
 #define SkTypedArray_DEFINED
 
@@ -19,12 +23,19 @@ public:
     bool getIndex(int index, SkOperand* operand);
     SkDisplayTypes getType() { return fType; }
     SkScriptEngine::SkOpType getOpType() { return SkScriptEngine::ToOpType(fType); }
+<<<<<<< HEAD
     void setType(SkDisplayTypes type)
     {
         //  SkASSERT(count() == 0);
         fType = type;
     }
 
+=======
+    void setType(SkDisplayTypes type) {
+    //  SkASSERT(count() == 0);
+        fType = type;
+    }
+>>>>>>> miniblink49
 protected:
     SkDisplayTypes fType;
 };

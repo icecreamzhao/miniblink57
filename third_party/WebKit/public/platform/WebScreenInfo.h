@@ -32,7 +32,10 @@
 #define WebScreenInfo_h
 
 #include "WebRect.h"
+<<<<<<< HEAD
 #include "public/platform/ShapeProperties.h"
+=======
+>>>>>>> miniblink49
 #include "public/platform/modules/screen_orientation/WebScreenOrientationType.h"
 
 namespace blink {
@@ -78,15 +81,19 @@ struct WebScreenInfo {
     // It is the opposite of the physical rotation.
     uint16_t orientationAngle;
 
+<<<<<<< HEAD
     // This is the shape of display.
     DisplayShape displayShape;
 
+=======
+>>>>>>> miniblink49
     WebScreenInfo()
         : deviceScaleFactor(1)
         , depth(0)
         , depthPerComponent(0)
         , isMonochrome(false)
         , orientationType(WebScreenOrientationUndefined)
+<<<<<<< HEAD
         , orientationAngle(0)
         , displayShape(DisplayShapeRect)
     {
@@ -95,6 +102,20 @@ struct WebScreenInfo {
     bool operator==(const WebScreenInfo& other) const
     {
         return this->deviceScaleFactor == other.deviceScaleFactor && this->depth == other.depth && this->depthPerComponent == other.depthPerComponent && this->isMonochrome == other.isMonochrome && this->rect == other.rect && this->availableRect == other.availableRect && this->orientationType == other.orientationType && this->orientationAngle == other.orientationAngle && this->displayShape == other.displayShape;
+=======
+        , orientationAngle(0) { }
+
+    bool operator==(const WebScreenInfo& other) const
+    {
+        return this->deviceScaleFactor == other.deviceScaleFactor
+            && this->depth == other.depth
+            && this->depthPerComponent == other.depthPerComponent
+            && this->isMonochrome == other.isMonochrome
+            && this->rect == other.rect
+            && this->availableRect == other.availableRect
+            && this->orientationType == other.orientationType
+            && this->orientationAngle == other.orientationAngle;
+>>>>>>> miniblink49
     }
 
     bool operator!=(const WebScreenInfo& other) const

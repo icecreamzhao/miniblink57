@@ -36,21 +36,17 @@
 #include "core/frame/PageScaleConstraints.h"
 #include "platform/Length.h"
 #include "platform/geometry/IntSize.h"
-#include "wtf/Allocator.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 // This class harmonizes the viewport (particularly page scale) constraints from
 // the meta viewport tag and other sources.
 class CORE_EXPORT PageScaleConstraintsSet {
-    USING_FAST_MALLOC(PageScaleConstraintsSet);
-
 public:
-    static std::unique_ptr<PageScaleConstraintsSet> create()
+    static PassOwnPtr<PageScaleConstraintsSet> create()
     {
-        return WTF::wrapUnique(new PageScaleConstraintsSet);
+        return adoptPtr(new PageScaleConstraintsSet);
     }
 
     void setDefaultConstraints(const PageScaleConstraints&);
@@ -58,46 +54,24 @@ public:
 
     // Settings defined in the website's viewport tag, if viewport tag support
     // is enabled.
-    const PageScaleConstraints& pageDefinedConstraints() const
-    {
-        return m_pageDefinedConstraints;
-    }
-    void updatePageDefinedConstraints(const ViewportDescription&,
-        Length legacyFallbackWidth);
-    void adjustForAndroidWebViewQuirks(const ViewportDescription&,
-        int layoutFallbackWidth,
-        float deviceScaleFactor,
-        bool supportTargetDensityDPI,
-        bool wideViewportQuirkEnabled,
-        bool useWideViewport,
-        bool loadWithOverviewMode,
-        bool nonUserScalableQuirkEnabled);
+    const PageScaleConstraints& pageDefinedConstraints() const { return m_pageDefinedConstraints; }
+    void updatePageDefinedConstraints(const ViewportDescription&, Length legacyFallbackWidth);
+    void adjustForAndroidWebViewQuirks(const ViewportDescription&, int layoutFallbackWidth, float deviceScaleFactor, bool supportTargetDensityDPI, bool wideViewportQuirkEnabled, bool useWideViewport, bool loadWithOverviewMode, bool nonUserScalableQuirkEnabled);
     void clearPageDefinedConstraints();
 
     // Constraints may also be set from Chromium -- this overrides any
     // page-defined values.
-    const PageScaleConstraints& userAgentConstraints() const
-    {
-        return m_userAgentConstraints;
-    }
+    const PageScaleConstraints& userAgentConstraints() const { return m_userAgentConstraints; }
     void setUserAgentConstraints(const PageScaleConstraints&);
 
-    const PageScaleConstraints& fullscreenConstraints() const
-    {
-        return m_fullscreenConstraints;
-    }
+    const PageScaleConstraints& fullscreenConstraints() const { return m_fullscreenConstraints; }
     void setFullscreenConstraints(const PageScaleConstraints&);
 
     // Actual computed values, taking into account the above plus the current
     // viewport size and document width.
-    const PageScaleConstraints& finalConstraints() const
-    {
-        return m_finalConstraints;
-    }
+    const PageScaleConstraints& finalConstraints() const { return m_finalConstraints; }
     void computeFinalConstraints();
-    void adjustFinalConstraintsToContentsSize(IntSize contentsSize,
-        int nonOverlayScrollbarWidth,
-        bool shrinksViewportContentToFit);
+    void adjustFinalConstraintsToContentsSize(IntSize contentsSize, int nonOverlayScrollbarWidth, bool shrinksViewportContentToFit);
 
     void didChangeContentsSize(IntSize contentsSize, float pageScaleFactor);
 
@@ -109,10 +83,11 @@ public:
     // This is set when one of the inputs to finalConstraints changes.
     bool constraintsDirty() const { return m_constraintsDirty; }
 
-    void didChangeInitialContainingBlockSize(const IntSize&);
+    void didChangeViewSize(const IntSize&);
+
+    IntSize mainFrameSize() const;
 
     IntSize layoutSize() const;
-    IntSize initialViewportSize() const { return m_icbSize; }
 
 private:
     PageScaleConstraintsSet();
@@ -126,7 +101,7 @@ private:
     PageScaleConstraints m_finalConstraints;
 
     int m_lastContentsWidth;
-    IntSize m_icbSize;
+    IntSize m_viewSize;
 
     bool m_needsReset;
     bool m_constraintsDirty;

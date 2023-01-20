@@ -6,11 +6,20 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkEventSink_DEFINED
 #define SkEventSink_DEFINED
 
 #include "SkEvent.h"
 #include "SkRefCnt.h"
+=======
+
+#ifndef SkEventSink_DEFINED
+#define SkEventSink_DEFINED
+
+#include "SkRefCnt.h"
+#include "SkEvent.h"
+>>>>>>> miniblink49
 
 struct SkTagList;
 
@@ -20,7 +29,13 @@ struct SkTagList;
 */
 class SkEventSink : public SkRefCnt {
 public:
+<<<<<<< HEAD
     SkEventSink();
+=======
+    
+
+             SkEventSink();
+>>>>>>> miniblink49
     virtual ~SkEventSink();
 
     /**
@@ -70,9 +85,15 @@ public:
     void postToListeners(const SkEvent& evt, SkMSec delay = 0);
 
     enum EventResult {
+<<<<<<< HEAD
         kHandled_EventResult, //!< the eventsink returned true from its doEvent method
         kNotHandled_EventResult, //!< the eventsink returned false from its doEvent method
         kSinkNotFound_EventResult //!< no matching eventsink was found for the event's getSink().
+=======
+        kHandled_EventResult,       //!< the eventsink returned true from its doEvent method
+        kNotHandled_EventResult,    //!< the eventsink returned false from its doEvent method
+        kSinkNotFound_EventResult   //!< no matching eventsink was found for the event's getSink().
+>>>>>>> miniblink49
     };
 
     /**
@@ -92,6 +113,7 @@ protected:
     virtual bool onEvent(const SkEvent&);
     virtual bool onQuery(SkEvent*);
 
+<<<<<<< HEAD
     SkTagList* findTagList(U8CPU tag) const;
     void addTagList(SkTagList*);
     void removeTagList(U8CPU tag);
@@ -102,6 +124,18 @@ private:
 
     // for our private link-list
     SkEventSink* fNextSink;
+=======
+    SkTagList*  findTagList(U8CPU tag) const;
+    void        addTagList(SkTagList*);
+    void        removeTagList(U8CPU tag);
+
+private:
+    SkEventSinkID   fID;
+    SkTagList*      fTagHead;
+
+    // for our private link-list
+    SkEventSink*    fNextSink;
+>>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };

@@ -30,6 +30,7 @@
 #ifndef FloatBox_h
 #define FloatBox_h
 
+<<<<<<< HEAD
 #include "platform/PlatformExport.h"
 #include "platform/geometry/FloatPoint3D.h"
 #include "wtf/Allocator.h"
@@ -42,6 +43,15 @@ namespace blink {
 class PLATFORM_EXPORT FloatBox {
     DISALLOW_NEW();
 
+=======
+#include "platform/geometry/FloatPoint3D.h"
+#include <algorithm>
+#include <cmath>
+
+namespace blink {
+
+class FloatBox {
+>>>>>>> miniblink49
 public:
     FloatBox()
         : m_x(0)
@@ -127,12 +137,23 @@ public:
         m_depth = maxZ - minZ;
     }
 
+<<<<<<< HEAD
     void expandTo(const FloatPoint3D& point) { expandTo(point, point); }
 
     void expandTo(const FloatBox& box)
     {
         expandTo(FloatPoint3D(box.x(), box.y(), box.z()),
             FloatPoint3D(box.right(), box.bottom(), box.front()));
+=======
+    void expandTo(const FloatPoint3D& point)
+    {
+        expandTo(point, point);
+    }
+
+    void expandTo(const FloatBox& box)
+    {
+        expandTo(FloatPoint3D(box.x(), box.y(), box.z()), FloatPoint3D(box.right(), box.bottom(), box.front()));
+>>>>>>> miniblink49
     }
 
     void unionBounds(const FloatBox& box)
@@ -148,10 +169,14 @@ public:
         expandTo(box);
     }
 
+<<<<<<< HEAD
     bool isEmpty() const
     {
         return (m_width <= 0 && m_height <= 0) || (m_width <= 0 && m_depth <= 0) || (m_height <= 0 && m_depth <= 0);
     }
+=======
+    bool isEmpty() const { return (m_width <= 0 && m_height <= 0) || (m_width <= 0 && m_depth <= 0) || (m_height <= 0 && m_depth <= 0); }
+>>>>>>> miniblink49
 
     float right() const { return m_x + m_width; }
     float bottom() const { return m_y + m_height; }
@@ -162,9 +187,12 @@ public:
     float width() const { return m_width; }
     float height() const { return m_height; }
     float depth() const { return m_depth; }
+<<<<<<< HEAD
 
     String toString() const;
 
+=======
+>>>>>>> miniblink49
 private:
     float m_x;
     float m_y;
@@ -176,7 +204,12 @@ private:
 
 inline bool operator==(const FloatBox& a, const FloatBox& b)
 {
+<<<<<<< HEAD
     return a.x() == b.x() && a.y() == b.y() && a.z() == b.z() && a.width() == b.width() && a.height() == b.height() && a.depth() == b.depth();
+=======
+    return a.x() == b.x() && a.y() == b.y() && a.z() == b.z() && a.width() == b.width()
+        && a.height() == b.height() && a.depth() == b.depth();
+>>>>>>> miniblink49
 }
 
 inline bool operator!=(const FloatBox& a, const FloatBox& b)
@@ -184,10 +217,13 @@ inline bool operator!=(const FloatBox& a, const FloatBox& b)
     return !(a == b);
 }
 
+<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const FloatBox&, std::ostream*);
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif

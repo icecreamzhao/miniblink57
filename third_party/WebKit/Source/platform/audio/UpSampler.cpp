@@ -28,7 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/audio/UpSampler.h"
+=======
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+#include "platform/audio/UpSampler.h"
+
+>>>>>>> miniblink49
 #include "wtf/MathExtras.h"
 
 namespace blink {
@@ -69,9 +78,13 @@ void UpSampler::initializeKernel()
     }
 }
 
+<<<<<<< HEAD
 void UpSampler::process(const float* sourceP,
     float* destP,
     size_t sourceFramesToProcess)
+=======
+void UpSampler::process(const float* sourceP, float* destP, size_t sourceFramesToProcess)
+>>>>>>> miniblink49
 {
     bool isInputBlockSizeGood = sourceFramesToProcess == m_inputBlockSize;
     ASSERT(isInputBlockSizeGood);
@@ -99,8 +112,12 @@ void UpSampler::process(const float* sourceP,
     float* inputP = m_inputBuffer.data() + sourceFramesToProcess;
     memcpy(inputP, sourceP, sizeof(float) * sourceFramesToProcess);
 
+<<<<<<< HEAD
     // Copy even sample-frames 0,2,4,6... (delayed by the linear phase delay)
     // directly into destP.
+=======
+    // Copy even sample-frames 0,2,4,6... (delayed by the linear phase delay) directly into destP.
+>>>>>>> miniblink49
     for (unsigned i = 0; i < sourceFramesToProcess; ++i)
         destP[i * 2] = *((inputP - halfSize) + i);
 
@@ -123,9 +140,18 @@ void UpSampler::reset()
 
 size_t UpSampler::latencyFrames() const
 {
+<<<<<<< HEAD
     // Divide by two since this is a linear phase kernel and the delay is at the
     // center of the kernel.
+=======
+    // Divide by two since this is a linear phase kernel and the delay is at the center of the kernel.
+>>>>>>> miniblink49
     return m_kernel.size() / 2;
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

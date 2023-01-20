@@ -41,6 +41,7 @@ class WebFormControlElement;
 
 // A container for passing around a reference to a form element. Provides some
 // information about the form.
+<<<<<<< HEAD
 class WebFormElement final : public WebElement {
 public:
     ~WebFormElement() { reset(); }
@@ -53,6 +54,14 @@ public:
         : WebElement(element)
     {
     }
+=======
+class WebFormElement : public WebElement {
+public:
+    ~WebFormElement() { reset(); }
+
+    WebFormElement() : WebElement() { }
+    WebFormElement(const WebFormElement& element) : WebElement(element) { }
+>>>>>>> miniblink49
 
     WebFormElement& operator=(const WebFormElement& element)
     {
@@ -65,6 +74,7 @@ public:
     BLINK_EXPORT WebString action() const;
     BLINK_EXPORT WebString name() const;
     BLINK_EXPORT WebString method() const;
+<<<<<<< HEAD
 
     BLINK_EXPORT void getFormControlElements(
         WebVector<WebFormControlElement>&) const;
@@ -78,6 +88,32 @@ public:
 
 DECLARE_WEB_NODE_TYPE_CASTS(WebFormElement);
 
+=======
+    BLINK_EXPORT bool wasUserSubmitted() const;
+    // FIXME: Deprecate and replace with WebVector<WebElement>.
+    BLINK_EXPORT void getNamedElements(const WebString&, WebVector<WebNode>&);
+    BLINK_EXPORT void getFormControlElements(WebVector<WebFormControlElement>&) const;
+
+    // NOTE: This function dispatches "invalid" events. Only call this if
+    // required by a specification (e.g. requestAutocomplete()).
+    BLINK_EXPORT bool checkValidity();
+
+    enum AutocompleteResult {
+        AutocompleteResultSuccess,
+        AutocompleteResultErrorDisabled,
+        AutocompleteResultErrorCancel,
+        AutocompleteResultErrorInvalid,
+    };
+    BLINK_EXPORT void finishRequestAutocomplete(WebFormElement::AutocompleteResult);
+
+#if BLINK_IMPLEMENTATION
+    WebFormElement(const PassRefPtrWillBeRawPtr<HTMLFormElement>&);
+    WebFormElement& operator=(const PassRefPtrWillBeRawPtr<HTMLFormElement>&);
+    operator PassRefPtrWillBeRawPtr<HTMLFormElement>() const;
+#endif
+};
+
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif

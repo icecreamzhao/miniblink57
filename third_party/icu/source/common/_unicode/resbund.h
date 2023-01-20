@@ -46,17 +46,29 @@
 #ifndef RESBUND_H
 #define RESBUND_H
 
+<<<<<<< HEAD
 #include "unicode/locid.h"
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
 #include "unicode/ures.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "unicode/ures.h"
+#include "unicode/unistr.h"
+#include "unicode/locid.h"
+>>>>>>> miniblink49
 
 /**
  * \file 
  * \brief C++ API: Resource Bundle
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 /**
@@ -103,9 +115,15 @@ public:
      * fall back locales could be found.
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     ResourceBundle(const UnicodeString& packageName,
         const Locale& locale,
         UErrorCode& err);
+=======
+    ResourceBundle(const UnicodeString&    packageName,
+                   const Locale&           locale,
+                   UErrorCode&              err);
+>>>>>>> miniblink49
 
     /**
      * Construct a resource bundle for the default bundle in the specified package.
@@ -118,8 +136,13 @@ public:
      * @param err A UErrorCode value
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     ResourceBundle(const UnicodeString& packageName,
         UErrorCode& err);
+=======
+    ResourceBundle(const UnicodeString&    packageName,
+                   UErrorCode&              err);
+>>>>>>> miniblink49
 
     /**
      * Construct a resource bundle for the ICU default bundle.
@@ -127,7 +150,11 @@ public:
      * @param err A UErrorCode value
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     ResourceBundle(UErrorCode& err);
+=======
+    ResourceBundle(UErrorCode &err);
+>>>>>>> miniblink49
 
     /**
      * Standard constructor, onstructs a resource bundle for the locale-specific
@@ -144,8 +171,13 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle(const char* packageName,
+<<<<<<< HEAD
         const Locale& locale,
         UErrorCode& err);
+=======
+                   const Locale& locale,
+                   UErrorCode& err);
+>>>>>>> miniblink49
 
     /**
      * Copy constructor.
@@ -153,7 +185,11 @@ public:
      * @param original The resource bundle to copy.
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     ResourceBundle(const ResourceBundle& original);
+=======
+    ResourceBundle(const ResourceBundle &original);
+>>>>>>> miniblink49
 
     /**
      * Constructor from a C UResourceBundle. The resource bundle is
@@ -164,8 +200,13 @@ public:
      * @param status A UErrorCode value.
      * @stable ICU 2.0
      */
+<<<<<<< HEAD
     ResourceBundle(UResourceBundle* res,
         UErrorCode& status);
+=======
+    ResourceBundle(UResourceBundle *res,
+                   UErrorCode &status);
+>>>>>>> miniblink49
 
     /**
      * Assignment operator.
@@ -174,7 +215,11 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle&
+<<<<<<< HEAD
     operator=(const ResourceBundle& other);
+=======
+      operator=(const ResourceBundle& other);
+>>>>>>> miniblink49
 
     /** Destructor.
      * @stable ICU 2.0
@@ -192,7 +237,11 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.8
      */
+<<<<<<< HEAD
     ResourceBundle* clone() const;
+=======
+    ResourceBundle *clone() const;
+>>>>>>> miniblink49
 
     /**
      * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
@@ -205,7 +254,11 @@ public:
      * @stable ICU 2.0
      */
     int32_t
+<<<<<<< HEAD
     getSize(void) const;
+=======
+      getSize(void) const;
+>>>>>>> miniblink49
 
     /**
      * returns a string from a string resource type
@@ -218,7 +271,11 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
+<<<<<<< HEAD
     getString(UErrorCode& status) const;
+=======
+      getString(UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * returns a binary data from a resource. Can be used at most primitive resource types (binaries,
@@ -233,7 +290,12 @@ public:
      * @stable ICU 2.0
      */
     const uint8_t*
+<<<<<<< HEAD
     getBinary(int32_t& len, UErrorCode& status) const;
+=======
+      getBinary(int32_t& len, UErrorCode& status) const;
+
+>>>>>>> miniblink49
 
     /**
      * returns an integer vector from a resource.
@@ -247,7 +309,11 @@ public:
      * @stable ICU 2.0
      */
     const int32_t*
+<<<<<<< HEAD
     getIntVector(int32_t& len, UErrorCode& status) const;
+=======
+      getIntVector(int32_t& len, UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * returns an unsigned integer from a resource.
@@ -261,7 +327,11 @@ public:
      * @stable ICU 2.0
      */
     uint32_t
+<<<<<<< HEAD
     getUInt(UErrorCode& status) const;
+=======
+      getUInt(UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * returns a signed integer from a resource.
@@ -275,7 +345,11 @@ public:
      * @stable ICU 2.0
      */
     int32_t
+<<<<<<< HEAD
     getInt(UErrorCode& status) const;
+=======
+      getInt(UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * Checks whether the resource has another element to iterate over.
@@ -284,7 +358,11 @@ public:
      * @stable ICU 2.0
      */
     UBool
+<<<<<<< HEAD
     hasNext(void) const;
+=======
+      hasNext(void) const;
+>>>>>>> miniblink49
 
     /**
      * Resets the internal context of a resource so that iteration starts from the first element.
@@ -292,7 +370,11 @@ public:
      * @stable ICU 2.0
      */
     void
+<<<<<<< HEAD
     resetIterator(void);
+=======
+      resetIterator(void);
+>>>>>>> miniblink49
 
     /**
      * Returns the key associated with this resource. Not all the resources have a key - only
@@ -302,7 +384,11 @@ public:
      * @stable ICU 2.0
      */
     const char*
+<<<<<<< HEAD
     getKey(void) const;
+=======
+      getKey(void) const;
+>>>>>>> miniblink49
 
     /**
      * Gets the locale ID of the resource bundle as a string.
@@ -312,7 +398,12 @@ public:
      * @stable ICU 2.0
      */
     const char*
+<<<<<<< HEAD
     getName(void) const;
+=======
+      getName(void) const;
+
+>>>>>>> miniblink49
 
     /**
      * Returns the type of a resource. Available types are defined in enum UResType
@@ -321,7 +412,11 @@ public:
      * @stable ICU 2.0
      */
     UResType
+<<<<<<< HEAD
     getType(void) const;
+=======
+      getType(void) const;
+>>>>>>> miniblink49
 
     /**
      * Returns the next resource in a given resource or NULL if there are no more resources
@@ -331,7 +426,11 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle
+<<<<<<< HEAD
     getNext(UErrorCode& status);
+=======
+      getNext(UErrorCode& status);
+>>>>>>> miniblink49
 
     /**
      * Returns the next string in a resource or NULL if there are no more resources
@@ -342,7 +441,11 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
+<<<<<<< HEAD
     getNextString(UErrorCode& status);
+=======
+      getNextString(UErrorCode& status);
+>>>>>>> miniblink49
 
     /**
      * Returns the next string in a resource or NULL if there are no more resources
@@ -354,8 +457,13 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
+<<<<<<< HEAD
     getNextString(const char** key,
         UErrorCode& status);
+=======
+      getNextString(const char ** key,
+                    UErrorCode& status);
+>>>>>>> miniblink49
 
     /**
      * Returns the resource in a resource at the specified index.
@@ -366,8 +474,13 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle
+<<<<<<< HEAD
     get(int32_t index,
         UErrorCode& status) const;
+=======
+      get(int32_t index,
+          UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * Returns the string in a given resource at the specified index.
@@ -378,8 +491,13 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
+<<<<<<< HEAD
     getStringEx(int32_t index,
         UErrorCode& status) const;
+=======
+      getStringEx(int32_t index,
+                  UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * Returns a resource in a resource that has a given key. This procedure works only with table
@@ -391,8 +509,13 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle
+<<<<<<< HEAD
     get(const char* key,
         UErrorCode& status) const;
+=======
+      get(const char* key,
+          UErrorCode& status) const;
+>>>>>>> miniblink49
 
     /**
      * Returns a string in a resource that has a given key. This procedure works only with table
@@ -404,8 +527,13 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
+<<<<<<< HEAD
     getStringEx(const char* key,
         UErrorCode& status) const;
+=======
+      getStringEx(const char* key,
+                  UErrorCode& status) const;
+>>>>>>> miniblink49
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -418,8 +546,13 @@ public:
      * @deprecated ICU 2.8 Use getVersion instead.
      */
     const char*
+<<<<<<< HEAD
     getVersionNumber(void) const;
 #endif /* U_HIDE_DEPRECATED_API */
+=======
+      getVersionNumber(void) const;
+#endif  /* U_HIDE_DEPRECATED_API */
+>>>>>>> miniblink49
 
     /**
      * Return the version number associated with this ResourceBundle as a UVersionInfo array.
@@ -429,7 +562,11 @@ public:
      * @stable ICU 2.0
      */
     void
+<<<<<<< HEAD
     getVersion(UVersionInfo versionInfo) const;
+=======
+      getVersion(UVersionInfo versionInfo) const;
+>>>>>>> miniblink49
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -439,8 +576,13 @@ public:
      * @deprecated ICU 2.8 Use getLocale(ULocDataLocaleType type, UErrorCode &status) overload instead.
      */
     const Locale&
+<<<<<<< HEAD
     getLocale(void) const;
 #endif /* U_HIDE_DEPRECATED_API */
+=======
+      getLocale(void) const;
+#endif  /* U_HIDE_DEPRECATED_API */
+>>>>>>> miniblink49
 
     /**
      * Return the Locale associated with this ResourceBundle.
@@ -453,15 +595,24 @@ public:
      * @stable ICU 2.8
      */
     const Locale
+<<<<<<< HEAD
     getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+=======
+      getLocale(ULocDataLocaleType type, UErrorCode &status) const;
+>>>>>>> miniblink49
 #ifndef U_HIDE_INTERNAL_API
     /**
      * This API implements multilevel fallback
      * @internal
      */
     ResourceBundle
+<<<<<<< HEAD
     getWithFallback(const char* key, UErrorCode& status);
 #endif /* U_HIDE_INTERNAL_API */
+=======
+        getWithFallback(const char* key, UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -479,9 +630,15 @@ public:
 private:
     ResourceBundle(); // default constructor not implemented
 
+<<<<<<< HEAD
     UResourceBundle* fResource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
     Locale* fLocale;
+=======
+    UResourceBundle *fResource;
+    void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
+    Locale *fLocale;
+>>>>>>> miniblink49
 };
 
 U_NAMESPACE_END

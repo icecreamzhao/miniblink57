@@ -25,6 +25,11 @@
 
 #import <AppKit/AppKit.h>
 
+<<<<<<< HEAD
 @interface NSCell (BlinkFocusRingDrawing)
 - (void)cr_drawFocusRingWithFrame:(NSRect)cellFrame inView:(NSView*)controlView;
+=======
+@interface NSCell (WebCoreFocusRingDrawing)
+- (void)cr_drawFocusRingWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
+>>>>>>> miniblink49
 @end

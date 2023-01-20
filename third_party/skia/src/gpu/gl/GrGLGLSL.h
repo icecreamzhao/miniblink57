@@ -8,11 +8,19 @@
 #ifndef GrGLInitGLSL_DEFINED
 #define GrGLInitGLSL_DEFINED
 
+<<<<<<< HEAD
 #include "GrColor.h"
 #include "GrTypesPriv.h"
 #include "SkString.h"
 #include "gl/GrGLInterface.h"
 #include "glsl/GrGLSL.h"
+=======
+#include "gl/GrGLInterface.h"
+#include "glsl/GrGLSL.h"
+#include "GrColor.h"
+#include "GrTypesPriv.h"
+#include "SkString.h"
+>>>>>>> miniblink49
 
 class GrGLContextInfo;
 
@@ -21,4 +29,19 @@ class GrGLContextInfo;
  */
 bool GrGLGetGLSLGeneration(const GrGLInterface* gl, GrGLSLGeneration* generation);
 
+<<<<<<< HEAD
+=======
+/**
+ * Returns a string to include at the beginning of a shader to declare the GLSL
+ * version.
+ */
+const char* GrGLGetGLSLVersionDecl(const GrGLContextInfo&);
+
+/**
+ * Adds a line of GLSL code to declare the default precision for float types.
+ */
+void GrGLAppendGLSLDefaultFloatPrecisionDeclaration(GrSLPrecision, GrGLStandard, SkString* out);
+
+
+>>>>>>> miniblink49
 #endif

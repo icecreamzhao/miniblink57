@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/AnimationClock.h"
 
 #include "wtf/CurrentTime.h"
@@ -43,28 +44,28 @@ const double approximateFrameTime = 1 / 60.0;
 
 namespace blink {
 
-unsigned AnimationClock::s_currentlyRunningTask = 0;
+unsigned AnimationClock::s_currentTask = 0;
 
 void AnimationClock::updateTime(double time)
 {
     if (time > m_time)
         m_time = time;
-    m_taskForWhichTimeWasCalculated = s_currentlyRunningTask;
+    m_currentTask = s_currentTask;
 }
 
 double AnimationClock::currentTime()
 {
-    if (m_taskForWhichTimeWasCalculated != s_currentlyRunningTask) {
+    if (m_currentTask != s_currentTask) {
         const double currentTime = m_monotonicallyIncreasingTime();
         if (m_time < currentTime) {
             // Advance to the first estimated frame after the current time.
             const double frameShift = fmod(currentTime - m_time, approximateFrameTime);
             const double newTime = currentTime + (approximateFrameTime - frameShift);
-            DCHECK_GE(newTime, currentTime);
-            DCHECK_LE(newTime, currentTime + approximateFrameTime);
+            ASSERT(newTime >= currentTime);
+            ASSERT(newTime <= currentTime + approximateFrameTime);
             updateTime(newTime);
         } else {
-            m_taskForWhichTimeWasCalculated = s_currentlyRunningTask;
+            m_currentTask = s_currentTask;
         }
     }
     return m_time;
@@ -73,8 +74,8 @@ double AnimationClock::currentTime()
 void AnimationClock::resetTimeForTesting(double time)
 {
     m_time = time;
-    m_taskForWhichTimeWasCalculated = 0;
-    s_currentlyRunningTask = 0;
+    m_currentTask = 0;
+    s_currentTask = 0;
 }
 
-} // namespace blink
+}

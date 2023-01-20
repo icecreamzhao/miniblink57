@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/paint/ScrollDisplayItem.h"
 
 #include "platform/graphics/GraphicsContext.h"
@@ -10,21 +14,32 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 void BeginScrollDisplayItem::replay(GraphicsContext& context) const
+=======
+void BeginScrollDisplayItem::replay(GraphicsContext& context)
+>>>>>>> miniblink49
 {
     context.save();
     context.translate(-m_currentOffset.width(), -m_currentOffset.height());
 }
 
+<<<<<<< HEAD
 void BeginScrollDisplayItem::appendToWebDisplayItemList(
     const IntRect& visualRect,
     WebDisplayItemList* list) const
 {
     WebDisplayItemList::ScrollContainerId scrollContainerId = &client();
+=======
+void BeginScrollDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+{
+    WebDisplayItemList::ScrollContainerId scrollContainerId = client();
+>>>>>>> miniblink49
     list->appendScrollItem(m_currentOffset, scrollContainerId);
 }
 
 #ifndef NDEBUG
+<<<<<<< HEAD
 void BeginScrollDisplayItem::dumpPropertiesAsDebugString(
     WTF::StringBuilder& stringBuilder) const
 {
@@ -36,13 +51,27 @@ void BeginScrollDisplayItem::dumpPropertiesAsDebugString(
 #endif
 
 void EndScrollDisplayItem::replay(GraphicsContext& context) const
+=======
+void BeginScrollDisplayItem::dumpPropertiesAsDebugString(WTF::StringBuilder& stringBuilder) const
+{
+    PairedBeginDisplayItem::dumpPropertiesAsDebugString(stringBuilder);
+    stringBuilder.append(WTF::String::format(", currentOffset: [%d,%d]", m_currentOffset.width(), m_currentOffset.height()));
+}
+#endif
+
+void EndScrollDisplayItem::replay(GraphicsContext& context)
+>>>>>>> miniblink49
 {
     context.restore();
 }
 
+<<<<<<< HEAD
 void EndScrollDisplayItem::appendToWebDisplayItemList(
     const IntRect& visualRect,
     WebDisplayItemList* list) const
+=======
+void EndScrollDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+>>>>>>> miniblink49
 {
     list->appendEndScrollItem();
 }

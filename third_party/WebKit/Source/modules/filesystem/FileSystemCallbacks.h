@@ -31,22 +31,35 @@
 #ifndef FileSystemCallbacks_h
 #define FileSystemCallbacks_h
 
+<<<<<<< HEAD
 #include "core/fileapi/FileError.h"
+=======
+>>>>>>> miniblink49
 #include "modules/filesystem/EntriesCallback.h"
 #include "platform/AsyncFileSystemCallbacks.h"
 #include "platform/FileSystemType.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class DOMFileSystemBase;
 class DirectoryReaderBase;
+<<<<<<< HEAD
 class BlobCallback;
 class EntriesCallback;
 class EntryCallback;
 class ErrorCallback;
+=======
+class EntriesCallback;
+class EntryCallback;
+class ErrorCallback;
+class FileCallback;
+>>>>>>> miniblink49
 class FileMetadata;
 class FileSystemCallback;
 class FileWriterBase;
@@ -55,6 +68,7 @@ class MetadataCallback;
 class ExecutionContext;
 class VoidCallback;
 
+<<<<<<< HEAD
 // Passed to DOMFileSystem implementations that may report errors. Subclasses
 // may capture the error for throwing on return to script (for synchronous APIs)
 // or call an actual script callback (for asynchronous APIs).
@@ -65,6 +79,8 @@ public:
     virtual void invoke(FileError::ErrorCode) = 0;
 };
 
+=======
+>>>>>>> miniblink49
 class FileSystemCallbacksBase : public AsyncFileSystemCallbacks {
 public:
     ~FileSystemCallbacksBase() override;
@@ -75,13 +91,18 @@ public:
     // Other callback methods are implemented by each subclass.
 
 protected:
+<<<<<<< HEAD
     FileSystemCallbacksBase(ErrorCallbackBase*,
         DOMFileSystemBase*,
         ExecutionContext*);
+=======
+    FileSystemCallbacksBase(ErrorCallback*, DOMFileSystemBase*, ExecutionContext*);
+>>>>>>> miniblink49
 
     bool shouldScheduleCallback() const;
 
     template <typename CB, typename CBArg>
+<<<<<<< HEAD
     void invokeOrScheduleCallback(CB*, CBArg);
 
     template <typename CB, typename CBArg>
@@ -93,11 +114,22 @@ protected:
     Persistent<ErrorCallbackBase> m_errorCallback;
     Persistent<DOMFileSystemBase> m_fileSystem;
     Persistent<ExecutionContext> m_executionContext;
+=======
+    void handleEventOrScheduleCallback(RawPtr<CB>, CBArg*);
+
+    template <typename CB>
+    void handleEventOrScheduleCallback(RawPtr<CB>);
+
+    Persistent<ErrorCallback> m_errorCallback;
+    Persistent<DOMFileSystemBase> m_fileSystem;
+    RefPtrWillBePersistent<ExecutionContext> m_executionContext;
+>>>>>>> miniblink49
     int m_asyncOperationId;
 };
 
 // Subclasses ----------------------------------------------------------------
 
+<<<<<<< HEAD
 // Wraps a script-provided callback for use in DOMFileSystem operations.
 class ScriptErrorCallback final : public ErrorCallbackBase {
 public:
@@ -130,6 +162,15 @@ private:
         DOMFileSystemBase*,
         const String& expectedPath,
         bool isDirectory);
+=======
+class EntryCallbacks final : public FileSystemCallbacksBase {
+public:
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(EntryCallback*, ErrorCallback*, ExecutionContext*, DOMFileSystemBase*, const String& expectedPath, bool isDirectory);
+    void didSucceed() override;
+
+private:
+    EntryCallbacks(EntryCallback*, ErrorCallback*, ExecutionContext*, DOMFileSystemBase*, const String& expectedPath, bool isDirectory);
+>>>>>>> miniblink49
     Persistent<EntryCallback> m_successCallback;
     String m_expectedPath;
     bool m_isDirectory;
@@ -137,21 +178,29 @@ private:
 
 class EntriesCallbacks final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(
         EntriesCallback*,
         ErrorCallbackBase*,
         ExecutionContext*,
         DirectoryReaderBase*,
         const String& basePath);
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(EntriesCallback*, ErrorCallback*, ExecutionContext*, DirectoryReaderBase*, const String& basePath);
+>>>>>>> miniblink49
     void didReadDirectoryEntry(const String& name, bool isDirectory) override;
     void didReadDirectoryEntries(bool hasMore) override;
 
 private:
+<<<<<<< HEAD
     EntriesCallbacks(EntriesCallback*,
         ErrorCallbackBase*,
         ExecutionContext*,
         DirectoryReaderBase*,
         const String& basePath);
+=======
+    EntriesCallbacks(EntriesCallback*, ErrorCallback*, ExecutionContext*, DirectoryReaderBase*, const String& basePath);
+>>>>>>> miniblink49
     Persistent<EntriesCallback> m_successCallback;
     Persistent<DirectoryReaderBase> m_directoryReader;
     String m_basePath;
@@ -160,6 +209,7 @@ private:
 
 class FileSystemCallbacks final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(FileSystemCallback*,
         ErrorCallbackBase*,
         ExecutionContext*,
@@ -171,12 +221,20 @@ private:
         ErrorCallbackBase*,
         ExecutionContext*,
         FileSystemType);
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(FileSystemCallback*, ErrorCallback*, ExecutionContext*, FileSystemType);
+    void didOpenFileSystem(const String& name, const KURL& rootURL) override;
+
+private:
+    FileSystemCallbacks(FileSystemCallback*, ErrorCallback*, ExecutionContext*, FileSystemType);
+>>>>>>> miniblink49
     Persistent<FileSystemCallback> m_successCallback;
     FileSystemType m_type;
 };
 
 class ResolveURICallbacks final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(EntryCallback*,
         ErrorCallbackBase*,
         ExecutionContext*);
@@ -188,11 +246,19 @@ public:
 
 private:
     ResolveURICallbacks(EntryCallback*, ErrorCallbackBase*, ExecutionContext*);
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(EntryCallback*, ErrorCallback*, ExecutionContext*);
+    void didResolveURL(const String& name, const KURL& rootURL, FileSystemType, const String& filePath, bool isDirectry) override;
+
+private:
+    ResolveURICallbacks(EntryCallback*, ErrorCallback*, ExecutionContext*);
+>>>>>>> miniblink49
     Persistent<EntryCallback> m_successCallback;
 };
 
 class MetadataCallbacks final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(MetadataCallback*,
         ErrorCallbackBase*,
         ExecutionContext*,
@@ -204,11 +270,19 @@ private:
         ErrorCallbackBase*,
         ExecutionContext*,
         DOMFileSystemBase*);
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(MetadataCallback*, ErrorCallback*, ExecutionContext*, DOMFileSystemBase*);
+    void didReadMetadata(const FileMetadata&) override;
+
+private:
+    MetadataCallbacks(MetadataCallback*, ErrorCallback*, ExecutionContext*, DOMFileSystemBase*);
+>>>>>>> miniblink49
     Persistent<MetadataCallback> m_successCallback;
 };
 
 class FileWriterBaseCallbacks final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(
         FileWriterBase*,
         FileWriterBaseCallback*,
@@ -222,12 +296,20 @@ private:
         FileWriterBaseCallback*,
         ErrorCallbackBase*,
         ExecutionContext*);
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(FileWriterBase*, FileWriterBaseCallback*, ErrorCallback*, ExecutionContext*);
+    void didCreateFileWriter(PassOwnPtr<WebFileWriter>, long long length) override;
+
+private:
+    FileWriterBaseCallbacks(FileWriterBase*, FileWriterBaseCallback*, ErrorCallback*, ExecutionContext*);
+>>>>>>> miniblink49
     Persistent<FileWriterBase> m_fileWriter;
     Persistent<FileWriterBaseCallback> m_successCallback;
 };
 
 class SnapshotFileCallback final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(DOMFileSystemBase*,
         const String& name,
         const KURL&,
@@ -247,10 +329,21 @@ private:
     String m_name;
     KURL m_url;
     Persistent<BlobCallback> m_successCallback;
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(DOMFileSystemBase*, const String& name, const KURL&, FileCallback*, ErrorCallback*, ExecutionContext*);
+    virtual void didCreateSnapshotFile(const FileMetadata&, PassRefPtr<BlobDataHandle> snapshot);
+
+private:
+    SnapshotFileCallback(DOMFileSystemBase*, const String& name, const KURL&, FileCallback*, ErrorCallback*, ExecutionContext*);
+    String m_name;
+    KURL m_url;
+    Persistent<FileCallback> m_successCallback;
+>>>>>>> miniblink49
 };
 
 class VoidCallbacks final : public FileSystemCallbacksBase {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<AsyncFileSystemCallbacks> create(VoidCallback*,
         ErrorCallbackBase*,
         ExecutionContext*,
@@ -262,6 +355,13 @@ private:
         ErrorCallbackBase*,
         ExecutionContext*,
         DOMFileSystemBase*);
+=======
+    static PassOwnPtr<AsyncFileSystemCallbacks> create(VoidCallback*, ErrorCallback*, ExecutionContext*, DOMFileSystemBase*);
+    void didSucceed() override;
+
+private:
+    VoidCallbacks(VoidCallback*, ErrorCallback*, ExecutionContext*, DOMFileSystemBase*);
+>>>>>>> miniblink49
     Persistent<VoidCallback> m_successCallback;
 };
 

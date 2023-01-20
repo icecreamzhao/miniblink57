@@ -34,17 +34,24 @@
 #include "platform/network/ResourceLoadInfo.h"
 #include "platform/network/ResourceLoadTiming.h"
 #include "platform/weborigin/KURL.h"
+<<<<<<< HEAD
 #include "public/platform/WebURLResponse.h"
 #include "public/platform/modules/serviceworker/WebServiceWorkerResponseType.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
+=======
+#include "public/platform/WebServiceWorkerResponseType.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefPtr.h"
+>>>>>>> miniblink49
 #include "wtf/text/CString.h"
 
 namespace blink {
 
 struct CrossThreadResourceResponseData;
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT ResourceResponse final {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
@@ -128,12 +135,19 @@ public:
         Vector<AtomicString> certificate;
         SignedCertificateTimestampList sctList;
     };
+=======
+class PLATFORM_EXPORT ResourceResponse {
+    WTF_MAKE_FAST_ALLOCATED(ResourceResponse);
+public:
+    enum HTTPVersion { Unknown, HTTP_0_9, HTTP_1_0, HTTP_1_1 };
+>>>>>>> miniblink49
 
     class ExtraData : public RefCounted<ExtraData> {
     public:
         virtual ~ExtraData() { }
     };
 
+<<<<<<< HEAD
     explicit ResourceResponse(CrossThreadResourceResponseData*);
 
     // Gets a copy of the data suitable for passing to another thread.
@@ -147,10 +161,20 @@ public:
         const String& filename);
     ResourceResponse(const ResourceResponse&);
     ResourceResponse& operator=(const ResourceResponse&);
+=======
+    static PassOwnPtr<ResourceResponse> adopt(PassOwnPtr<CrossThreadResourceResponseData>);
+
+    // Gets a copy of the data suitable for passing to another thread.
+    PassOwnPtr<CrossThreadResourceResponseData> copyData() const;
+
+    ResourceResponse();
+    ResourceResponse(const KURL&, const AtomicString& mimeType, long long expectedLength, const AtomicString& textEncodingName, const String& filename);
+>>>>>>> miniblink49
 
     bool isNull() const { return m_isNull; }
     bool isHTTP() const;
 
+<<<<<<< HEAD
     // The URL of the resource. Note that if a service worker responded to the
     // request for this resource, it may have fetched an entirely different URL
     // and responded with that resource. wasFetchedViaServiceWorker() and
@@ -166,6 +190,8 @@ public:
     // the resulting ResourceResponse, url() is "https://abc.com",
     // wasFetchedViaServiceWorker() is true, and originalURLViaServiceWorker() is
     // "https://def.com".
+=======
+>>>>>>> miniblink49
     const KURL& url() const;
     void setURL(const KURL&);
 
@@ -179,9 +205,13 @@ public:
     void setTextEncodingName(const AtomicString&);
 
     // FIXME: Should compute this on the fly.
+<<<<<<< HEAD
     // There should not be a setter exposed, as suggested file name is determined
     // based on other headers in a manner that WebCore does not necessarily know
     // about.
+=======
+    // There should not be a setter exposed, as suggested file name is determined based on other headers in a manner that WebCore does not necessarily know about.
+>>>>>>> miniblink49
     const String& suggestedFilename() const;
     void setSuggestedFilename(const String&);
 
@@ -192,6 +222,10 @@ public:
     void setHTTPStatusText(const AtomicString&);
 
     const AtomicString& httpHeaderField(const AtomicString& name) const;
+<<<<<<< HEAD
+=======
+    const AtomicString& httpHeaderField(const char* name) const;
+>>>>>>> miniblink49
     void setHTTPHeaderField(const AtomicString& name, const AtomicString& value);
     void addHTTPHeaderField(const AtomicString& name, const AtomicString& value);
     void clearHTTPHeaderField(const AtomicString& name);
@@ -201,20 +235,33 @@ public:
 
     bool isAttachment() const;
 
+<<<<<<< HEAD
     // FIXME: These are used by PluginStream on some platforms. Calculations may
     // differ from just returning plain Last-Modified header.
+=======
+    // FIXME: These are used by PluginStream on some platforms. Calculations may differ from just returning plain Last-Modified header.
+>>>>>>> miniblink49
     // Leaving it for now but this should go away in favor of generic solution.
     void setLastModifiedDate(time_t);
     time_t lastModifiedDate() const;
 
     // These functions return parsed values of the corresponding response headers.
     // NaN means that the header was not present or had invalid value.
+<<<<<<< HEAD
     bool cacheControlContainsNoCache() const;
     bool cacheControlContainsNoStore() const;
     bool cacheControlContainsMustRevalidate() const;
     bool hasCacheValidatorFields() const;
     double cacheControlMaxAge() const;
     double cacheControlStaleWhileRevalidate() const;
+=======
+    bool cacheControlContainsNoCache();
+    bool cacheControlContainsNoStore();
+    bool cacheControlContainsMustRevalidate();
+    bool hasCacheValidatorFields() const;
+    double cacheControlMaxAge();
+    double cacheControlStaleWhileRevalidate();
+>>>>>>> miniblink49
     double date() const;
     double age() const;
     double expires() const;
@@ -238,6 +285,7 @@ public:
     HTTPVersion httpVersion() const { return m_httpVersion; }
     void setHTTPVersion(HTTPVersion version) { m_httpVersion = version; }
 
+<<<<<<< HEAD
     bool hasMajorCertificateErrors() const { return m_hasMajorCertificateErrors; }
     void setHasMajorCertificateErrors(bool hasMajorCertificateErrors)
     {
@@ -266,6 +314,10 @@ public:
         time_t validTo,
         const Vector<AtomicString>& certificate,
         const SignedCertificateTimestampList& sctList);
+=======
+    const CString& getSecurityInfo() const { return m_securityInfo; }
+    void setSecurityInfo(const CString& securityInfo) { m_securityInfo = securityInfo; }
+>>>>>>> miniblink49
 
     long long appCacheID() const { return m_appCacheID; }
     void setAppCacheID(long long id) { m_appCacheID = id; }
@@ -281,6 +333,7 @@ public:
 
     bool wasAlternateProtocolAvailable() const
     {
+<<<<<<< HEAD
         return m_wasAlternateProtocolAvailable;
     }
     void setWasAlternateProtocolAvailable(bool value)
@@ -379,10 +432,43 @@ public:
     {
         m_remoteIPAddress = value;
     }
+=======
+      return m_wasAlternateProtocolAvailable;
+    }
+    void setWasAlternateProtocolAvailable(bool value)
+    {
+      m_wasAlternateProtocolAvailable = value;
+    }
+
+    bool wasFetchedViaProxy() const { return m_wasFetchedViaProxy; }
+    void setWasFetchedViaProxy(bool value) { m_wasFetchedViaProxy = value; }
+
+    bool wasFetchedViaServiceWorker() const { return m_wasFetchedViaServiceWorker; }
+    void setWasFetchedViaServiceWorker(bool value) { m_wasFetchedViaServiceWorker = value; }
+
+    bool wasFallbackRequiredByServiceWorker() const { return m_wasFallbackRequiredByServiceWorker; }
+    void setWasFallbackRequiredByServiceWorker(bool value) { m_wasFallbackRequiredByServiceWorker = value; }
+
+    WebServiceWorkerResponseType serviceWorkerResponseType() const { return m_serviceWorkerResponseType; }
+    void setServiceWorkerResponseType(WebServiceWorkerResponseType value) { m_serviceWorkerResponseType = value; }
+
+    const KURL& originalURLViaServiceWorker() const { return m_originalURLViaServiceWorker; }
+    void setOriginalURLViaServiceWorker(const KURL& url) { m_originalURLViaServiceWorker = url; }
+
+    bool isMultipartPayload() const { return m_isMultipartPayload; }
+    void setIsMultipartPayload(bool value) { m_isMultipartPayload = value; }
+
+    int64 responseTime() const { return m_responseTime; }
+    void setResponseTime(int64 responseTime) { m_responseTime = responseTime; }
+
+    const AtomicString& remoteIPAddress() const { return m_remoteIPAddress; }
+    void setRemoteIPAddress(const AtomicString& value) { m_remoteIPAddress = value; }
+>>>>>>> miniblink49
 
     unsigned short remotePort() const { return m_remotePort; }
     void setRemotePort(unsigned short value) { m_remotePort = value; }
 
+<<<<<<< HEAD
     long long encodedDataLength() const { return m_encodedDataLength; }
     void setEncodedDataLength(long long value);
 
@@ -392,22 +478,32 @@ public:
     long long decodedBodyLength() const { return m_decodedBodyLength; }
     void addToDecodedBodyLength(long long value);
 
+=======
+>>>>>>> miniblink49
     const String& downloadedFilePath() const { return m_downloadedFilePath; }
     void setDownloadedFilePath(const String&);
 
     // Extra data associated with this response.
+<<<<<<< HEAD
     ExtraData* getExtraData() const { return m_extraData.get(); }
     void setExtraData(PassRefPtr<ExtraData> extraData)
     {
         m_extraData = extraData;
     }
 
+=======
+    ExtraData* extraData() const { return m_extraData.get(); }
+    void setExtraData(PassRefPtr<ExtraData> extraData) { m_extraData = extraData; }
+
+    // The ResourceResponse subclass may "shadow" this method to provide platform-specific memory usage information
+>>>>>>> miniblink49
     unsigned memoryUsage() const
     {
         // average size, mostly due to URL and Header Map strings
         return 1280;
     }
 
+<<<<<<< HEAD
     // PlzNavigate: Even if there is redirections, only one
     // ResourceResponse is built: the final response.
     // The redirect response chain can be accessed by this function.
@@ -417,6 +513,8 @@ public:
     }
     void appendRedirectResponse(const ResourceResponse&);
 
+=======
+>>>>>>> miniblink49
     // This method doesn't compare the all members.
     static bool compare(const ResourceResponse&, const ResourceResponse&);
 
@@ -440,7 +538,11 @@ private:
 
     bool m_isNull : 1;
 
+<<<<<<< HEAD
     mutable CacheControlHeader m_cacheControlHeader;
+=======
+    CacheControlHeader m_cacheControlHeader;
+>>>>>>> miniblink49
 
     mutable bool m_haveParsedAgeHeader : 1;
     mutable bool m_haveParsedDateHeader : 1;
@@ -452,6 +554,7 @@ private:
     mutable double m_expires;
     mutable double m_lastModified;
 
+<<<<<<< HEAD
     // True if the resource was retrieved by the embedder in spite of
     // certificate errors.
     bool m_hasMajorCertificateErrors;
@@ -465,6 +568,12 @@ private:
     // If m_securityStyle is Unknown or Unauthenticated, this does not contain
     // valid data.
     SecurityDetails m_securityDetails;
+=======
+    // An opaque value that contains some information regarding the security of
+    // the connection for this request, such as SSL connection info (empty
+    // string if not over HTTPS).
+    CString m_securityInfo;
+>>>>>>> miniblink49
 
     // HTTP version used in the response, if known.
     HTTPVersion m_httpVersion;
@@ -477,18 +586,30 @@ private:
     // Note: only valid for main resource responses.
     KURL m_appCacheManifestURL;
 
+<<<<<<< HEAD
     // The multipart boundary of this response.
     Vector<char> m_multipartBoundary;
+=======
+    // Set to true if this is part of a multipart response.
+    bool m_isMultipartPayload;
+>>>>>>> miniblink49
 
     // Was the resource fetched over SPDY.  See http://dev.chromium.org/spdy
     bool m_wasFetchedViaSPDY;
 
+<<<<<<< HEAD
     // Was the resource fetched over a channel which used
     // TLS/Next-Protocol-Negotiation (also SPDY related).
     bool m_wasNpnNegotiated;
 
     // Was the resource fetched over a channel which specified
     // "Alternate-Protocol"
+=======
+    // Was the resource fetched over a channel which used TLS/Next-Protocol-Negotiation (also SPDY related).
+    bool m_wasNpnNegotiated;
+
+    // Was the resource fetched over a channel which specified "Alternate-Protocol"
+>>>>>>> miniblink49
     // (e.g.: Alternate-Protocol: 443:npn-spdy/1).
     bool m_wasAlternateProtocolAvailable;
 
@@ -498,15 +619,19 @@ private:
     // Was the resource fetched over a ServiceWorker.
     bool m_wasFetchedViaServiceWorker;
 
+<<<<<<< HEAD
     // Was the resource fetched using a foreign fetch service worker.
     bool m_wasFetchedViaForeignFetch;
 
+=======
+>>>>>>> miniblink49
     // Was the fallback request with skip service worker flag required.
     bool m_wasFallbackRequiredByServiceWorker;
 
     // The type of the response which was fetched by the ServiceWorker.
     WebServiceWorkerResponseType m_serviceWorkerResponseType;
 
+<<<<<<< HEAD
     // The URL list of the response which was fetched by the ServiceWorker.
     // This is empty if the response was created inside the ServiceWorker.
     Vector<KURL> m_urlListViaServiceWorker;
@@ -526,6 +651,15 @@ private:
     // The time at which the response headers were received.  For cached
     // responses, this time could be "far" in the past.
     int64_t m_responseTime;
+=======
+    // The original URL of the response which was fetched by the ServiceWorker.
+    // This may be empty if the response was created inside the ServiceWorker.
+    KURL m_originalURLViaServiceWorker;
+
+    // The time at which the response headers were received.  For cached
+    // responses, this time could be "far" in the past.
+    int64 m_responseTime;
+>>>>>>> miniblink49
 
     // Remote IP address of the socket which fetched this resource.
     AtomicString m_remoteIPAddress;
@@ -533,6 +667,7 @@ private:
     // Remote port number of the socket which fetched this resource.
     unsigned short m_remotePort;
 
+<<<<<<< HEAD
     // Size of the response in bytes prior to decompression.
     long long m_encodedDataLength;
 
@@ -543,6 +678,8 @@ private:
     // removed.
     long long m_decodedBodyLength;
 
+=======
+>>>>>>> miniblink49
     // The downloaded file path if the load streamed to a file.
     String m_downloadedFilePath;
 
@@ -552,6 +689,7 @@ private:
 
     // ExtraData associated with the response.
     RefPtr<ExtraData> m_extraData;
+<<<<<<< HEAD
 
     // PlzNavigate: the redirect responses are transmitted
     // inside the final response.
@@ -571,6 +709,15 @@ struct CrossThreadResourceResponseData {
     WTF_MAKE_NONCOPYABLE(CrossThreadResourceResponseData);
     USING_FAST_MALLOC(CrossThreadResourceResponseData);
 
+=======
+};
+
+inline bool operator==(const ResourceResponse& a, const ResourceResponse& b) { return ResourceResponse::compare(a, b); }
+inline bool operator!=(const ResourceResponse& a, const ResourceResponse& b) { return !(a == b); }
+
+struct CrossThreadResourceResponseData {
+    WTF_MAKE_NONCOPYABLE(CrossThreadResourceResponseData); WTF_MAKE_FAST_ALLOCATED(CrossThreadResourceResponseData);
+>>>>>>> miniblink49
 public:
     CrossThreadResourceResponseData() { }
     KURL m_url;
@@ -580,6 +727,7 @@ public:
     String m_suggestedFilename;
     int m_httpStatusCode;
     String m_httpStatusText;
+<<<<<<< HEAD
     std::unique_ptr<CrossThreadHTTPHeaderMapData> m_httpHeaders;
     time_t m_lastModifiedDate;
     RefPtr<ResourceLoadTiming> m_resourceLoadTiming;
@@ -593,11 +741,22 @@ public:
     long long m_appCacheID;
     KURL m_appCacheManifestURL;
     Vector<char> m_multipartBoundary;
+=======
+    OwnPtr<CrossThreadHTTPHeaderMapData> m_httpHeaders;
+    time_t m_lastModifiedDate;
+    RefPtr<ResourceLoadTiming> m_resourceLoadTiming;
+    CString m_securityInfo;
+    ResourceResponse::HTTPVersion m_httpVersion;
+    long long m_appCacheID;
+    KURL m_appCacheManifestURL;
+    bool m_isMultipartPayload;
+>>>>>>> miniblink49
     bool m_wasFetchedViaSPDY;
     bool m_wasNpnNegotiated;
     bool m_wasAlternateProtocolAvailable;
     bool m_wasFetchedViaProxy;
     bool m_wasFetchedViaServiceWorker;
+<<<<<<< HEAD
     bool m_wasFetchedViaForeignFetch;
     bool m_wasFallbackRequiredByServiceWorker;
     WebServiceWorkerResponseType m_serviceWorkerResponseType;
@@ -610,6 +769,14 @@ public:
     long long m_encodedDataLength;
     long long m_encodedBodyLength;
     long long m_decodedBodyLength;
+=======
+    bool m_wasFallbackRequiredByServiceWorker;
+    WebServiceWorkerResponseType m_serviceWorkerResponseType;
+    KURL m_originalURLViaServiceWorker;
+    int64 m_responseTime;
+    String m_remoteIPAddress;
+    unsigned short m_remotePort;
+>>>>>>> miniblink49
     String m_downloadedFilePath;
     RefPtr<BlobDataHandle> m_downloadedFileHandle;
 };

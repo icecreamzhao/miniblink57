@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/ImageBufferSurface.h"
 
 #include "platform/graphics/GraphicsContext.h"
@@ -48,19 +49,43 @@ ImageBufferSurface::ImageBufferSurface(const IntSize& size,
     , m_size(size)
     , m_colorSpace(colorSpace)
     , m_colorType(colorType)
+=======
+#include "config.h"
+
+#include "platform/graphics/ImageBufferSurface.h"
+
+#include "platform/graphics/BitmapImage.h"
+#include "platform/graphics/GraphicsContext.h"
+#include "platform/graphics/ImageBuffer.h"
+#include "third_party/skia/include/core/SkCanvas.h"
+#include "third_party/skia/include/core/SkDevice.h"
+#include "third_party/skia/include/core/SkImage.h"
+#include "third_party/skia/include/core/SkPicture.h"
+
+namespace blink {
+
+ImageBufferSurface::ImageBufferSurface(const IntSize& size, OpacityMode opacityMode)
+    : m_opacityMode(opacityMode)
+    , m_size(size)
+>>>>>>> miniblink49
 {
     setIsHidden(false);
 }
 
 ImageBufferSurface::~ImageBufferSurface() { }
 
+<<<<<<< HEAD
 sk_sp<SkPicture> ImageBufferSurface::getPicture()
+=======
+PassRefPtr<SkPicture> ImageBufferSurface::getPicture()
+>>>>>>> miniblink49
 {
     return nullptr;
 }
 
 void ImageBufferSurface::clear()
 {
+<<<<<<< HEAD
     // Clear the background transparent or opaque, as required. It would be nice
     // if this wasn't required, but the canvas is currently filled with the magic
     // transparency color. Can we have another way to manage this?
@@ -99,6 +124,33 @@ bool ImageBufferSurface::writePixels(const SkImageInfo& origInfo,
     int y)
 {
     return canvas()->writePixels(origInfo, pixels, rowBytes, x, y);
+=======
+    // Clear the background transparent or opaque, as required. It would be nice if this wasn't
+    // required, but the canvas is currently filled with the magic transparency
+    // color. Can we have another way to manage this?
+    if (isValid()) {
+        if (m_opacityMode == Opaque)
+            canvas()->drawARGB(255, 0, 0, 0, SkXfermode::kSrc_Mode);
+        else
+            canvas()->drawARGB(0, 0, 0, 0, SkXfermode::kClear_Mode);
+    }
+}
+
+const SkBitmap& ImageBufferSurface::bitmap()
+{
+    ASSERT(canvas());
+    willAccessPixels();
+    return canvas()->getDevice()->accessBitmap(false);
+}
+
+void ImageBufferSurface::draw(GraphicsContext* context, const FloatRect& destRect, const FloatRect& srcRect, SkXfermode::Mode op)
+{
+    SkBitmap bmp = bitmap();
+
+    RefPtr<Image> image = BitmapImage::create(bmp);
+
+    context->drawImage(image.get(), destRect, srcRect, op, DoNotRespectImageOrientation);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -26,7 +26,6 @@
 #ifndef HTMLEntitySearch_h
 #define HTMLEntitySearch_h
 
-#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -34,8 +33,6 @@ namespace blink {
 struct HTMLEntityTableEntry;
 
 class HTMLEntitySearch {
-    STACK_ALLOCATED();
-
 public:
     HTMLEntitySearch();
 
@@ -44,10 +41,7 @@ public:
     bool isEntityPrefix() const { return !!m_first; }
     int currentLength() const { return m_currentLength; }
 
-    const HTMLEntityTableEntry* mostRecentMatch() const
-    {
-        return m_mostRecentMatch;
-    }
+    const HTMLEntityTableEntry* mostRecentMatch() const { return m_mostRecentMatch; }
 
 private:
     enum CompareResult {
@@ -73,6 +67,6 @@ private:
     const HTMLEntityTableEntry* m_last;
 };
 
-} // namespace blink
+}
 
 #endif

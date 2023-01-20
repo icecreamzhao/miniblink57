@@ -39,29 +39,28 @@ class ExceptionState;
 class Node;
 
 namespace XPath {
-    struct EvaluationContext;
+struct EvaluationContext;
 }
 
-class XPathResult final : public GarbageCollected<XPathResult>,
-                          public ScriptWrappable {
+// TODO(Oilpan): remove Finalized when transition type for m_document is.
+class XPathResult final : public GarbageCollectedFinalized<XPathResult>, public ScriptWrappable {
+    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(XPathResult);
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     enum XPathResultType {
-        kAnyType = 0,
-        kNumberType = 1,
-        kStringType = 2,
-        kBooleanType = 3,
-        kUnorderedNodeIteratorType = 4,
-        kOrderedNodeIteratorType = 5,
-        kUnorderedNodeSnapshotType = 6,
-        kOrderedNodeSnapshotType = 7,
-        kAnyUnorderedNodeType = 8,
-        kFirstOrderedNodeType = 9
+        ANY_TYPE = 0,
+        NUMBER_TYPE = 1,
+        STRING_TYPE = 2,
+        BOOLEAN_TYPE = 3,
+        UNORDERED_NODE_ITERATOR_TYPE = 4,
+        ORDERED_NODE_ITERATOR_TYPE = 5,
+        UNORDERED_NODE_SNAPSHOT_TYPE = 6,
+        ORDERED_NODE_SNAPSHOT_TYPE = 7,
+        ANY_UNORDERED_NODE_TYPE = 8,
+        FIRST_ORDERED_NODE_TYPE = 9
     };
 
-    static XPathResult* create(XPath::EvaluationContext& context,
-        const XPath::Value& value)
+    static XPathResult* create(XPath::EvaluationContext& context, const XPath::Value& value)
     {
         return new XPathResult(context, value);
     }
@@ -90,10 +89,9 @@ private:
 
     XPath::Value m_value;
     unsigned m_nodeSetPosition;
-    Member<XPath::NodeSet>
-        m_nodeSet; // FIXME: why duplicate the node set stored in m_value?
+    Member<XPath::NodeSet> m_nodeSet; // FIXME: why duplicate the node set stored in m_value?
     unsigned short m_resultType;
-    Member<Document> m_document;
+    RefPtrWillBeMember<Document> m_document;
     uint64_t m_domTreeVersion;
 };
 

@@ -31,7 +31,7 @@
 #ifndef SVGTransformList_h
 #define SVGTransformList_h
 
-#include "core/svg/SVGParsingError.h"
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGTransform.h"
 #include "core/svg/properties/SVGListPropertyHelper.h"
 
@@ -39,53 +39,42 @@ namespace blink {
 
 class SVGTransformListTearOff;
 
-class SVGTransformList final
-    : public SVGListPropertyHelper<SVGTransformList, SVGTransform> {
+class SVGTransformList final : public SVGListPropertyHelper<SVGTransformList, SVGTransform> {
 public:
     typedef SVGTransformListTearOff TearOffType;
 
-    static SVGTransformList* create() { return new SVGTransformList(); }
+    static PassRefPtrWillBeRawPtr<SVGTransformList> create()
+    {
+        return adoptRefWillBeNoop(new SVGTransformList());
+    }
 
-    static SVGTransformList* create(SVGTransformType, const String&);
+    static PassRefPtrWillBeRawPtr<SVGTransformList> create(SVGTransformType, const String&);
 
     ~SVGTransformList() override;
 
-    SVGTransform* consolidate();
+    PassRefPtrWillBeRawPtr<SVGTransform> consolidate();
 
     bool concatenate(AffineTransform& result) const;
 
     // SVGPropertyBase:
-    SVGPropertyBase* cloneForAnimation(const String&) const override;
+    PassRefPtrWillBeRawPtr<SVGPropertyBase> cloneForAnimation(const String&) const override;
     String valueAsString() const override;
-    SVGParsingError setValueAsString(const String&);
+    void setValueAsString(const String&, ExceptionState&);
     bool parse(const UChar*& ptr, const UChar* end);
     bool parse(const LChar*& ptr, const LChar* end);
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* fromValue,
-        SVGPropertyBase* toValue,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement*) override;
-    float calculateDistance(SVGPropertyBase* to, SVGElement*) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) override;
 
     static AnimatedPropertyType classType() { return AnimatedTransformList; }
-    AnimatedPropertyType type() const override { return classType(); }
-
-    const CSSValue* cssValue() const;
 
 private:
     SVGTransformList();
 
     template <typename CharType>
-    SVGParsingError parseInternal(const CharType*& ptr, const CharType* end);
+    bool parseInternal(const CharType*& ptr, const CharType* end);
 };
-
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGTransformList);
-
-SVGTransformType parseTransformType(const String&);
 
 } // namespace blink
 

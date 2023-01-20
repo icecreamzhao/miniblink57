@@ -10,6 +10,7 @@
 #include "Test.h"
 
 static const SkRect sectTests[][2] = {
+<<<<<<< HEAD
     { { 2, 0, 4, 1 }, { 4, 0, 6, 1 } },
     { { 2, 0, 4, 1 }, { 3, 0, 5, 1 } },
     { { 2, 0, 4, 1 }, { 3, 0, 5, 0 } },
@@ -18,19 +19,38 @@ static const SkRect sectTests[][2] = {
     { { 2, 1, 5, 3 }, { 3, 1, 4, 2 } },
     { { 2, 0, 4, 1 }, { 3, 0, 3, 0 } }, // intersecting an empty bounds is OK
     { { 2, 0, 4, 1 }, { 4, 1, 5, 2 } }, // touching just on a corner is OK
+=======
+    {{2, 0, 4, 1}, {4, 0, 6, 1}},
+    {{2, 0, 4, 1}, {3, 0, 5, 1}},
+    {{2, 0, 4, 1}, {3, 0, 5, 0}},
+    {{2, 0, 4, 1}, {3, 1, 5, 2}},
+    {{2, 1, 4, 2}, {1, 0, 5, 3}},
+    {{2, 1, 5, 3}, {3, 1, 4, 2}},
+    {{2, 0, 4, 1}, {3, 0, 3, 0}},  // intersecting an empty bounds is OK
+    {{2, 0, 4, 1}, {4, 1, 5, 2}},  // touching just on a corner is OK
+>>>>>>> miniblink49
 };
 
 static const size_t sectTestsCount = SK_ARRAY_COUNT(sectTests);
 
 static const SkRect noSectTests[][2] = {
+<<<<<<< HEAD
     { { 2, 0, 4, 1 }, { 5, 0, 6, 1 } },
     { { 2, 0, 4, 1 }, { 3, 2, 5, 2 } },
+=======
+    {{2, 0, 4, 1}, {5, 0, 6, 1}},
+    {{2, 0, 4, 1}, {3, 2, 5, 2}},
+>>>>>>> miniblink49
 };
 
 static const size_t noSectTestsCount = SK_ARRAY_COUNT(noSectTests);
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsBounds, reporter)
 {
+=======
+DEF_TEST(PathOpsBounds, reporter) {
+>>>>>>> miniblink49
     for (size_t index = 0; index < sectTestsCount; ++index) {
         const SkPathOpsBounds& bounds1 = static_cast<const SkPathOpsBounds&>(sectTests[index][0]);
         SkASSERT(ValidBounds(bounds1));
@@ -59,10 +79,17 @@ DEF_TEST(PathOpsBounds, reporter)
     bounds.add(ordinal);
     REPORTER_ASSERT(reporter, bounds == expected);
     bounds.setEmpty();
+<<<<<<< HEAD
     SkDPoint botRight = { 3, 4 };
     bounds.add(botRight);
     REPORTER_ASSERT(reporter, bounds == expected);
     const SkPoint curvePts[] = { { 0, 0 }, { 1, 2 }, { 3, 4 }, { 5, 6 } };
+=======
+    SkDPoint botRight = {3, 4};
+    bounds.add(botRight);
+    REPORTER_ASSERT(reporter, bounds == expected);
+    const SkPoint curvePts[] = {{0, 0}, {1, 2}, {3, 4}, {5, 6}};
+>>>>>>> miniblink49
     SkDCurve curve;
     curve.fQuad.set(curvePts);
     curve.setQuadBounds(curvePts, 1, 0, 1, &bounds);

@@ -20,12 +20,17 @@
 #ifndef NavigatorGeolocation_h
 #define NavigatorGeolocation_h
 
+<<<<<<< HEAD
 #include "core/frame/Navigator.h"
+=======
+#include "core/frame/DOMWindowProperty.h"
+>>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class Geolocation;
 class Navigator;
 
@@ -36,13 +41,29 @@ class NavigatorGeolocation final
 
 public:
     static NavigatorGeolocation& from(Navigator&);
+=======
+class LocalFrame;
+class Geolocation;
+class Navigator;
+
+class NavigatorGeolocation final : public GarbageCollectedFinalized<NavigatorGeolocation>, public HeapSupplement<Navigator>, public DOMWindowProperty {
+    USING_GARBAGE_COLLECTED_MIXIN(NavigatorGeolocation);
+public:
+    static NavigatorGeolocation& from(Navigator&);
+    virtual ~NavigatorGeolocation();
+
+>>>>>>> miniblink49
     static Geolocation* geolocation(Navigator&);
     Geolocation* geolocation();
 
     DECLARE_TRACE();
 
 private:
+<<<<<<< HEAD
     explicit NavigatorGeolocation(Navigator&);
+=======
+    explicit NavigatorGeolocation(LocalFrame*);
+>>>>>>> miniblink49
 
     static const char* supplementName();
 

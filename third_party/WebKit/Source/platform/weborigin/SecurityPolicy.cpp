@@ -26,11 +26,16 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/weborigin/SecurityPolicy.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/OriginAccessEntry.h"
+<<<<<<< HEAD
 #include "platform/weborigin/SchemeRegistry.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/HashMap.h"
@@ -39,10 +44,21 @@
 #include "wtf/Threading.h"
 #include "wtf/text/StringHash.h"
 #include <memory>
+=======
+#include "platform/weborigin/SecurityOrigin.h"
+#include "wtf/HashMap.h"
+#include "wtf/HashSet.h"
+#include "wtf/MainThread.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/Threading.h"
+#include "wtf/text/StringHash.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 using OriginAccessWhiteList = Vector<OriginAccessEntry>;
+<<<<<<< HEAD
 using OriginAccessMap = HashMap<String, std::unique_ptr<OriginAccessWhiteList>>;
 using OriginSet = HashSet<String>;
 
@@ -51,6 +67,11 @@ enum ReferrerPolicyLegacyKeywordsSupport {
     DoNotSupportReferrerPolicyLegacyKeywords,
 };
 
+=======
+using OriginAccessMap = HashMap<String, OwnPtr<OriginAccessWhiteList>>;
+using OriginSet = HashSet<String>;
+
+>>>>>>> miniblink49
 static OriginAccessMap& originAccessMap()
 {
     DEFINE_STATIC_LOCAL(OriginAccessMap, originAccessMap, ());
@@ -63,6 +84,7 @@ static OriginSet& trustworthyOriginSet()
     return trustworthyOriginSet;
 }
 
+<<<<<<< HEAD
 static bool referrerPolicyFromStringImpl(
     const String& policy,
     ReferrerPolicyLegacyKeywordsSupport legacyKeywordsSupport,
@@ -94,12 +116,15 @@ static bool referrerPolicyFromStringImpl(
     return false;
 }
 
+=======
+>>>>>>> miniblink49
 void SecurityPolicy::init()
 {
     originAccessMap();
     trustworthyOriginSet();
 }
 
+<<<<<<< HEAD
 bool SecurityPolicy::shouldHideReferrer(const KURL& url, const KURL& referrer)
 {
     bool referrerIsSecureURL = referrer.protocolIs("https");
@@ -107,6 +132,14 @@ bool SecurityPolicy::shouldHideReferrer(const KURL& url, const KURL& referrer)
         referrer.protocol());
 
     if (!schemeIsAllowed)
+=======
+bool SecurityPolicy::shouldHideReferrer(const KURL& url, const String& referrer)
+{
+    bool referrerIsSecureURL = protocolIs(referrer, "https");
+    bool referrerIsWebURL = referrerIsSecureURL || protocolIs(referrer, "http");
+
+    if (!referrerIsWebURL)
+>>>>>>> miniblink49
         return true;
 
     if (!referrerIsSecureURL)
@@ -117,6 +150,7 @@ bool SecurityPolicy::shouldHideReferrer(const KURL& url, const KURL& referrer)
     return !URLIsSecureURL;
 }
 
+<<<<<<< HEAD
 Referrer SecurityPolicy::generateReferrer(ReferrerPolicy referrerPolicy,
     const KURL& url,
     const String& referrer)
@@ -172,11 +206,53 @@ Referrer SecurityPolicy::generateReferrer(ReferrerPolicy referrerPolicy,
                     ? Referrer::noReferrer()
                     : origin + "/",
                 referrerPolicyNoDefault);
+=======
+Referrer SecurityPolicy::generateReferrer(ReferrerPolicy referrerPolicy, const KURL& url, const String& referrer)
+{
+    if (referrer.isEmpty())
+        return Referrer(String(), referrerPolicy);
+
+    if (!(protocolIs(referrer, "https") || protocolIs(referrer, "http")))
+        return Referrer(String(), referrerPolicy);
+
+    if (SecurityOrigin::shouldUseInnerURL(url))
+        return Referrer(String(), referrerPolicy);
+
+    switch (referrerPolicy) {
+    case ReferrerPolicyNever:
+        return Referrer(String(), referrerPolicy);
+    case ReferrerPolicyAlways:
+        return Referrer(referrer, referrerPolicy);
+    case ReferrerPolicyOrigin: {
+        String origin = SecurityOrigin::createFromString(referrer)->toString();
+        // A security origin is not a canonical URL as it lacks a path. Add /
+        // to turn it into a canonical URL we can use as referrer.
+        return Referrer(origin + "/", referrerPolicy);
+    }
+    case ReferrerPolicyOriginWhenCrossOrigin: {
+        RefPtr<SecurityOrigin> referrerOrigin = SecurityOrigin::createFromString(referrer);
+        RefPtr<SecurityOrigin> urlOrigin = SecurityOrigin::create(url);
+        if (!urlOrigin->isSameSchemeHostPort(referrerOrigin.get())) {
+            String origin = referrerOrigin->toString();
+            return Referrer(origin + "/", referrerPolicy);
+        }
+        break;
+    }
+    case ReferrerPolicyDefault: {
+        // If the flag is enabled, and we're dealing with a cross-origin request, strip it.
+        // Otherwise fallthrough to NoReferrerWhenDowngrade behavior.
+        RefPtr<SecurityOrigin> referrerOrigin = SecurityOrigin::createFromString(referrer);
+        RefPtr<SecurityOrigin> urlOrigin = SecurityOrigin::create(url);
+        if (RuntimeEnabledFeatures::reducedReferrerGranularityEnabled() && !urlOrigin->isSameSchemeHostPort(referrerOrigin.get())) {
+            String origin = referrerOrigin->toString();
+            return Referrer(shouldHideReferrer(url, referrer) ? String() : origin + "/", referrerPolicy);
+>>>>>>> miniblink49
         }
         break;
     }
     case ReferrerPolicyNoReferrerWhenDowngrade:
         break;
+<<<<<<< HEAD
     case ReferrerPolicyDefault:
         ASSERT_NOT_REACHED();
         break;
@@ -194,21 +270,39 @@ void SecurityPolicy::addOriginTrustworthyWhiteList(
     // Must be called before we start other threads.
     DCHECK(WTF::isBeforeThreadCreated());
 #endif
+=======
+    }
+
+    return Referrer(shouldHideReferrer(url, referrer) ? String() : referrer, referrerPolicy);
+}
+
+void SecurityPolicy::addOriginTrustworthyWhiteList(PassRefPtr<SecurityOrigin> origin)
+{
+    // Must be called before we start other threads.
+    ASSERT(WTF::isBeforeThreadCreated());
+>>>>>>> miniblink49
     if (origin->isUnique())
         return;
     trustworthyOriginSet().add(origin->toRawString());
 }
 
+<<<<<<< HEAD
 bool SecurityPolicy::isOriginWhiteListedTrustworthy(
     const SecurityOrigin& origin)
 {
     // Early return if there are no whitelisted origins to avoid unnecessary
     // allocations, copies, and frees.
     if (origin.isUnique() || trustworthyOriginSet().isEmpty())
+=======
+bool SecurityPolicy::isOriginWhiteListedTrustworthy(const SecurityOrigin& origin)
+{
+    if (origin.isUnique())
+>>>>>>> miniblink49
         return false;
     return trustworthyOriginSet().contains(origin.toRawString());
 }
 
+<<<<<<< HEAD
 bool SecurityPolicy::isUrlWhiteListedTrustworthy(const KURL& url)
 {
     // Early return to avoid initializing the SecurityOrigin.
@@ -233,16 +327,34 @@ bool SecurityPolicy::isAccessWhiteListed(const SecurityOrigin* activeOrigin,
 bool SecurityPolicy::isAccessToURLWhiteListed(
     const SecurityOrigin* activeOrigin,
     const KURL& url)
+=======
+bool SecurityPolicy::isAccessWhiteListed(const SecurityOrigin* activeOrigin, const SecurityOrigin* targetOrigin)
+{
+    if (OriginAccessWhiteList* list = originAccessMap().get(activeOrigin->toString())) {
+        for (size_t i = 0; i < list->size();  ++i) {
+            if (list->at(i).matchesOrigin(*targetOrigin) != OriginAccessEntry::DoesNotMatchOrigin)
+                return true;
+        }
+    }
+    return false;
+}
+
+bool SecurityPolicy::isAccessToURLWhiteListed(const SecurityOrigin* activeOrigin, const KURL& url)
+>>>>>>> miniblink49
 {
     RefPtr<SecurityOrigin> targetOrigin = SecurityOrigin::create(url);
     return isAccessWhiteListed(activeOrigin, targetOrigin.get());
 }
 
+<<<<<<< HEAD
 void SecurityPolicy::addOriginAccessWhitelistEntry(
     const SecurityOrigin& sourceOrigin,
     const String& destinationProtocol,
     const String& destinationDomain,
     bool allowDestinationSubdomains)
+=======
+void SecurityPolicy::addOriginAccessWhitelistEntry(const SecurityOrigin& sourceOrigin, const String& destinationProtocol, const String& destinationDomain, bool allowDestinationSubdomains)
+>>>>>>> miniblink49
 {
     ASSERT(isMainThread());
     ASSERT(!sourceOrigin.isUnique());
@@ -252,6 +364,7 @@ void SecurityPolicy::addOriginAccessWhitelistEntry(
     String sourceString = sourceOrigin.toString();
     OriginAccessMap::AddResult result = originAccessMap().add(sourceString, nullptr);
     if (result.isNewEntry)
+<<<<<<< HEAD
         result.storedValue->value = WTF::wrapUnique(new OriginAccessWhiteList);
 
     OriginAccessWhiteList* list = result.storedValue->value.get();
@@ -266,6 +379,15 @@ void SecurityPolicy::removeOriginAccessWhitelistEntry(
     const String& destinationProtocol,
     const String& destinationDomain,
     bool allowDestinationSubdomains)
+=======
+        result.storedValue->value = adoptPtr(new OriginAccessWhiteList);
+
+    OriginAccessWhiteList* list = result.storedValue->value.get();
+    list->append(OriginAccessEntry(destinationProtocol, destinationDomain, allowDestinationSubdomains ? OriginAccessEntry::AllowSubdomains : OriginAccessEntry::DisallowSubdomains));
+}
+
+void SecurityPolicy::removeOriginAccessWhitelistEntry(const SecurityOrigin& sourceOrigin, const String& destinationProtocol, const String& destinationDomain, bool allowDestinationSubdomains)
+>>>>>>> miniblink49
 {
     ASSERT(isMainThread());
     ASSERT(!sourceOrigin.isUnique());
@@ -279,10 +401,14 @@ void SecurityPolicy::removeOriginAccessWhitelistEntry(
         return;
 
     OriginAccessWhiteList* list = it->value.get();
+<<<<<<< HEAD
     size_t index = list->find(OriginAccessEntry(
         destinationProtocol, destinationDomain,
         allowDestinationSubdomains ? OriginAccessEntry::AllowSubdomains
                                    : OriginAccessEntry::DisallowSubdomains));
+=======
+    size_t index = list->find(OriginAccessEntry(destinationProtocol, destinationDomain, allowDestinationSubdomains ? OriginAccessEntry::AllowSubdomains : OriginAccessEntry::DisallowSubdomains));
+>>>>>>> miniblink49
 
     if (index == kNotFound)
         return;
@@ -299,6 +425,7 @@ void SecurityPolicy::resetOriginAccessWhitelists()
     originAccessMap().clear();
 }
 
+<<<<<<< HEAD
 bool SecurityPolicy::referrerPolicyFromString(const String& policy,
     ReferrerPolicy* result)
 {
@@ -314,4 +441,6 @@ bool SecurityPolicy::referrerPolicyFromStringWithLegacyKeywords(
         policy, SupportReferrerPolicyLegacyKeywords, result);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

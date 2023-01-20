@@ -40,6 +40,9 @@ import template_expander
 # but generate different files.
 class InternalRuntimeFlagsWriter(make_runtime_features.RuntimeFeatureWriter):
     class_name = 'InternalRuntimeFlags'
+    filters = {
+        'enable_conditional': name_utilities.enable_conditional_if_endif,
+    }
 
     def __init__(self, in_file_path):
         super(InternalRuntimeFlagsWriter, self).__init__(in_file_path)
@@ -51,15 +54,13 @@ class InternalRuntimeFlagsWriter(make_runtime_features.RuntimeFeatureWriter):
     def generate_idl(self):
         return {
             'features': self._features,
-            'standard_features': self._standard_features,
         }
 
-    @template_expander.use_jinja(class_name + '.h.tmpl')
+    @template_expander.use_jinja(class_name + '.h.tmpl', filters=filters)
     def generate_header(self):
         return {
             'features': self._features,
             'feature_sets': self._feature_sets(),
-            'standard_features': self._standard_features,
         }
 
 

@@ -53,19 +53,14 @@
  *
  * This product includes cryptographic software written by Eric Young
  * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com). */
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
 #include <stdio.h>
-#include <string.h>
-
+#include "cryptlib.h"
 #include <openssl/conf.h>
-#include <openssl/err.h>
-#include <openssl/mem.h>
-#include <openssl/obj.h>
 #include <openssl/x509v3.h>
-
-#include "internal.h"
-
 
 static GENERAL_NAMES *v2i_subject_alt(X509V3_EXT_METHOD *method,
                                       X509V3_CTX *ctx,
@@ -104,7 +99,7 @@ STACK_OF(CONF_VALUE) *i2v_GENERAL_NAMES(X509V3_EXT_METHOD *method,
                                         GENERAL_NAMES *gens,
                                         STACK_OF(CONF_VALUE) *ret)
 {
-    size_t i;
+    int i;
     GENERAL_NAME *gen;
     for (i = 0; i < sk_GENERAL_NAME_num(gens); i++) {
         gen = sk_GENERAL_NAME_value(gens, i);
@@ -124,39 +119,32 @@ STACK_OF(CONF_VALUE) *i2v_GENERAL_NAME(X509V3_EXT_METHOD *method,
     int i;
     switch (gen->type) {
     case GEN_OTHERNAME:
-        if (!X509V3_add_value("othername", "<unsupported>", &ret))
-            return NULL;
+        X509V3_add_value("othername", "<unsupported>", &ret);
         break;
 
     case GEN_X400:
-        if (!X509V3_add_value("X400Name", "<unsupported>", &ret))
-            return NULL;
+        X509V3_add_value("X400Name", "<unsupported>", &ret);
         break;
 
     case GEN_EDIPARTY:
-        if (!X509V3_add_value("EdiPartyName", "<unsupported>", &ret))
-            return NULL;
+        X509V3_add_value("EdiPartyName", "<unsupported>", &ret);
         break;
 
     case GEN_EMAIL:
-        if (!X509V3_add_value_uchar("email", gen->d.ia5->data, &ret))
-            return NULL;
+        X509V3_add_value_uchar("email", gen->d.ia5->data, &ret);
         break;
 
     case GEN_DNS:
-        if (!X509V3_add_value_uchar("DNS", gen->d.ia5->data, &ret))
-            return NULL;
+        X509V3_add_value_uchar("DNS", gen->d.ia5->data, &ret);
         break;
 
     case GEN_URI:
-        if (!X509V3_add_value_uchar("URI", gen->d.ia5->data, &ret))
-            return NULL;
+        X509V3_add_value_uchar("URI", gen->d.ia5->data, &ret);
         break;
 
     case GEN_DIRNAME:
-        if (X509_NAME_oneline(gen->d.dirn, oline, 256) == NULL
-                || !X509V3_add_value("DirName", oline, &ret))
-            return NULL;
+        X509_NAME_oneline(gen->d.dirn, oline, 256);
+        X509V3_add_value("DirName", oline, &ret);
         break;
 
     case GEN_IPADD:
@@ -169,23 +157,20 @@ STACK_OF(CONF_VALUE) *i2v_GENERAL_NAME(X509V3_EXT_METHOD *method,
             for (i = 0; i < 8; i++) {
                 BIO_snprintf(htmp, sizeof htmp, "%X", p[0] << 8 | p[1]);
                 p += 2;
-                BUF_strlcat(oline, htmp, sizeof(oline));
+                strcat(oline, htmp);
                 if (i != 7)
-                    BUF_strlcat(oline, ":", sizeof(oline));
+                    strcat(oline, ":");
             }
         } else {
-            if (!X509V3_add_value("IP Address", "<invalid>", &ret))
-                return NULL;
+            X509V3_add_value("IP Address", "<invalid>", &ret);
             break;
         }
-        if (!X509V3_add_value("IP Address", oline, &ret))
-            return NULL;
+        X509V3_add_value("IP Address", oline, &ret);
         break;
 
     case GEN_RID:
-        i2t_ASN1_OBJECT(oline, 256, gen->d.rid);
-        if (!X509V3_add_value("Registered ID", oline, &ret))
-            return NULL;
+        openssl_i2t_ASN1_OBJECT(oline, 256, gen->d.rid);
+        X509V3_add_value("Registered ID", oline, &ret);
         break;
     }
     return ret;
@@ -257,14 +242,14 @@ static GENERAL_NAMES *v2i_issuer_alt(X509V3_EXT_METHOD *method,
 {
     GENERAL_NAMES *gens = NULL;
     CONF_VALUE *cnf;
-    size_t i;
+    int i;
     if (!(gens = sk_GENERAL_NAME_new_null())) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_V2I_ISSUER_ALT, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
     for (i = 0; i < sk_CONF_VALUE_num(nval); i++) {
         cnf = sk_CONF_VALUE_value(nval, i);
-        if (!x509v3_name_cmp(cnf->name, "issuer") && cnf->value &&
+        if (!name_cmp(cnf->name, "issuer") && cnf->value &&
             !strcmp(cnf->value, "copy")) {
             if (!copy_issuer(ctx, gens))
                 goto err;
@@ -289,11 +274,10 @@ static int copy_issuer(X509V3_CTX *ctx, GENERAL_NAMES *gens)
     GENERAL_NAME *gen;
     X509_EXTENSION *ext;
     int i;
-    size_t j;
     if (ctx && (ctx->flags == CTX_TEST))
         return 1;
     if (!ctx || !ctx->issuer_cert) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_ISSUER_DETAILS);
+        X509V3err(X509V3_F_COPY_ISSUER, X509V3_R_NO_ISSUER_DETAILS);
         goto err;
     }
     i = X509_get_ext_by_NID(ctx->issuer_cert, NID_subject_alt_name, -1);
@@ -301,14 +285,14 @@ static int copy_issuer(X509V3_CTX *ctx, GENERAL_NAMES *gens)
         return 1;
     if (!(ext = X509_get_ext(ctx->issuer_cert, i)) ||
         !(ialt = X509V3_EXT_d2i(ext))) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_ISSUER_DECODE_ERROR);
+        X509V3err(X509V3_F_COPY_ISSUER, X509V3_R_ISSUER_DECODE_ERROR);
         goto err;
     }
 
-    for (j = 0; j < sk_GENERAL_NAME_num(ialt); j++) {
-        gen = sk_GENERAL_NAME_value(ialt, j);
+    for (i = 0; i < sk_GENERAL_NAME_num(ialt); i++) {
+        gen = sk_GENERAL_NAME_value(ialt, i);
         if (!sk_GENERAL_NAME_push(gens, gen)) {
-            OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+            X509V3err(X509V3_F_COPY_ISSUER, ERR_R_MALLOC_FAILURE);
             goto err;
         }
     }
@@ -327,18 +311,18 @@ static GENERAL_NAMES *v2i_subject_alt(X509V3_EXT_METHOD *method,
 {
     GENERAL_NAMES *gens = NULL;
     CONF_VALUE *cnf;
-    size_t i;
+    int i;
     if (!(gens = sk_GENERAL_NAME_new_null())) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_V2I_SUBJECT_ALT, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
     for (i = 0; i < sk_CONF_VALUE_num(nval); i++) {
         cnf = sk_CONF_VALUE_value(nval, i);
-        if (!x509v3_name_cmp(cnf->name, "email") && cnf->value &&
+        if (!name_cmp(cnf->name, "email") && cnf->value &&
             !strcmp(cnf->value, "copy")) {
             if (!copy_email(ctx, gens, 0))
                 goto err;
-        } else if (!x509v3_name_cmp(cnf->name, "email") && cnf->value &&
+        } else if (!name_cmp(cnf->name, "email") && cnf->value &&
                    !strcmp(cnf->value, "move")) {
             if (!copy_email(ctx, gens, 1))
                 goto err;
@@ -369,7 +353,7 @@ static int copy_email(X509V3_CTX *ctx, GENERAL_NAMES *gens, int move_p)
     if (ctx != NULL && ctx->flags == CTX_TEST)
         return 1;
     if (!ctx || (!ctx->subject_cert && !ctx->subject_req)) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_SUBJECT_DETAILS);
+        X509V3err(X509V3_F_COPY_EMAIL, X509V3_R_NO_SUBJECT_DETAILS);
         goto err;
     }
     /* Find the subject name */
@@ -390,14 +374,14 @@ static int copy_email(X509V3_CTX *ctx, GENERAL_NAMES *gens, int move_p)
             i--;
         }
         if (!email || !(gen = GENERAL_NAME_new())) {
-            OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+            X509V3err(X509V3_F_COPY_EMAIL, ERR_R_MALLOC_FAILURE);
             goto err;
         }
         gen->d.ia5 = email;
         email = NULL;
         gen->type = GEN_EMAIL;
         if (!sk_GENERAL_NAME_push(gens, gen)) {
-            OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+            X509V3err(X509V3_F_COPY_EMAIL, ERR_R_MALLOC_FAILURE);
             goto err;
         }
         gen = NULL;
@@ -418,9 +402,9 @@ GENERAL_NAMES *v2i_GENERAL_NAMES(const X509V3_EXT_METHOD *method,
     GENERAL_NAME *gen;
     GENERAL_NAMES *gens = NULL;
     CONF_VALUE *cnf;
-    size_t i;
+    int i;
     if (!(gens = sk_GENERAL_NAME_new_null())) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_V2I_GENERAL_NAMES, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
     for (i = 0; i < sk_CONF_VALUE_num(nval); i++) {
@@ -450,7 +434,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
     GENERAL_NAME *gen = NULL;
 
     if (!value) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_MISSING_VALUE);
+        X509V3err(X509V3_F_A2I_GENERAL_NAME, X509V3_R_MISSING_VALUE);
         return NULL;
     }
 
@@ -459,7 +443,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
     else {
         gen = GENERAL_NAME_new();
         if (gen == NULL) {
-            OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+            X509V3err(X509V3_F_A2I_GENERAL_NAME, ERR_R_MALLOC_FAILURE);
             return NULL;
         }
     }
@@ -475,7 +459,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
         {
             ASN1_OBJECT *obj;
             if (!(obj = OBJ_txt2obj(value, 0))) {
-                OPENSSL_PUT_ERROR(X509V3, X509V3_R_BAD_OBJECT);
+                X509V3err(X509V3_F_A2I_GENERAL_NAME, X509V3_R_BAD_OBJECT);
                 ERR_add_error_data(2, "value=", value);
                 goto err;
             }
@@ -489,7 +473,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
         else
             gen->d.ip = a2i_IPADDRESS(value);
         if (gen->d.ip == NULL) {
-            OPENSSL_PUT_ERROR(X509V3, X509V3_R_BAD_IP_ADDRESS);
+            X509V3err(X509V3_F_A2I_GENERAL_NAME, X509V3_R_BAD_IP_ADDRESS);
             ERR_add_error_data(2, "value=", value);
             goto err;
         }
@@ -497,19 +481,19 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
 
     case GEN_DIRNAME:
         if (!do_dirname(gen, value, ctx)) {
-            OPENSSL_PUT_ERROR(X509V3, X509V3_R_DIRNAME_ERROR);
+            X509V3err(X509V3_F_A2I_GENERAL_NAME, X509V3_R_DIRNAME_ERROR);
             goto err;
         }
         break;
 
     case GEN_OTHERNAME:
         if (!do_othername(gen, value, ctx)) {
-            OPENSSL_PUT_ERROR(X509V3, X509V3_R_OTHERNAME_ERROR);
+            X509V3err(X509V3_F_A2I_GENERAL_NAME, X509V3_R_OTHERNAME_ERROR);
             goto err;
         }
         break;
     default:
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNSUPPORTED_TYPE);
+        X509V3err(X509V3_F_A2I_GENERAL_NAME, X509V3_R_UNSUPPORTED_TYPE);
         goto err;
     }
 
@@ -517,7 +501,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
         if (!(gen->d.ia5 = M_ASN1_IA5STRING_new()) ||
             !ASN1_STRING_set(gen->d.ia5, (unsigned char *)value,
                              strlen(value))) {
-            OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+            X509V3err(X509V3_F_A2I_GENERAL_NAME, ERR_R_MALLOC_FAILURE);
             goto err;
         }
     }
@@ -544,26 +528,26 @@ GENERAL_NAME *v2i_GENERAL_NAME_ex(GENERAL_NAME *out,
     value = cnf->value;
 
     if (!value) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_MISSING_VALUE);
+        X509V3err(X509V3_F_V2I_GENERAL_NAME_EX, X509V3_R_MISSING_VALUE);
         return NULL;
     }
 
-    if (!x509v3_name_cmp(name, "email"))
+    if (!name_cmp(name, "email"))
         type = GEN_EMAIL;
-    else if (!x509v3_name_cmp(name, "URI"))
+    else if (!name_cmp(name, "URI"))
         type = GEN_URI;
-    else if (!x509v3_name_cmp(name, "DNS"))
+    else if (!name_cmp(name, "DNS"))
         type = GEN_DNS;
-    else if (!x509v3_name_cmp(name, "RID"))
+    else if (!name_cmp(name, "RID"))
         type = GEN_RID;
-    else if (!x509v3_name_cmp(name, "IP"))
+    else if (!name_cmp(name, "IP"))
         type = GEN_IPADD;
-    else if (!x509v3_name_cmp(name, "dirName"))
+    else if (!name_cmp(name, "dirName"))
         type = GEN_DIRNAME;
-    else if (!x509v3_name_cmp(name, "otherName"))
+    else if (!name_cmp(name, "otherName"))
         type = GEN_OTHERNAME;
     else {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNSUPPORTED_OPTION);
+        X509V3err(X509V3_F_V2I_GENERAL_NAME_EX, X509V3_R_UNSUPPORTED_OPTION);
         ERR_add_error_data(2, "name=", name);
         return NULL;
     }
@@ -589,9 +573,8 @@ static int do_othername(GENERAL_NAME *gen, char *value, X509V3_CTX *ctx)
         return 0;
     objlen = p - value;
     objtmp = OPENSSL_malloc(objlen + 1);
-    if (objtmp == NULL)
-        return 0;
-    BUF_strlcpy(objtmp, value, objlen + 1);
+    strncpy(objtmp, value, objlen);
+    objtmp[objlen] = 0;
     gen->d.otherName->type_id = OBJ_txt2obj(objtmp, 0);
     OPENSSL_free(objtmp);
     if (!gen->d.otherName->type_id)
@@ -603,23 +586,23 @@ static int do_dirname(GENERAL_NAME *gen, char *value, X509V3_CTX *ctx)
 {
     int ret = 0;
     STACK_OF(CONF_VALUE) *sk = NULL;
-    X509_NAME *nm = X509_NAME_new();
-    if (nm == NULL)
+    X509_NAME *nm = NULL;
+    if (!(nm = X509_NAME_new()))
         goto err;
     sk = X509V3_get_section(ctx, value);
-    if (sk == NULL) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_SECTION_NOT_FOUND);
+    if (!sk) {
+        X509V3err(X509V3_F_DO_DIRNAME, X509V3_R_SECTION_NOT_FOUND);
         ERR_add_error_data(2, "section=", value);
         goto err;
     }
     /* FIXME: should allow other character types... */
-    if (!X509V3_NAME_from_section(nm, sk, MBSTRING_ASC))
+    ret = X509V3_NAME_from_section(nm, sk, MBSTRING_ASC);
+    if (!ret)
         goto err;
     gen->d.dirn = nm;
-    ret = 1;
 
- err:
-    if (!ret)
+err:
+    if (ret == 0)
         X509_NAME_free(nm);
     X509V3_section_free(ctx, sk);
     return ret;

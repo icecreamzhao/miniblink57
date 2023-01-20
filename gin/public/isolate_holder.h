@@ -6,10 +6,10 @@
 #define GIN_PUBLIC_ISOLATE_HOLDER_H_
 
 #include "base/basictypes.h"
+//#include "base/memory/scoped_ptr.h"
 #include "gin/gin_export.h"
-#include "gin/public/v8_idle_task_runner.h"
+//#include "v8/include/v8.h"
 #include "v8.h"
-#include <memory>
 
 namespace gin {
 
@@ -22,85 +22,85 @@ class V8IsolateMemoryDumpProvider;
 // will execute JavaScript. You might wish to subclass IsolateHolder if you
 // want to tie more state to the lifetime of the isolate.
 class GIN_EXPORT IsolateHolder {
-public:
-    // Controls whether or not V8 should only accept strict mode scripts.
-    enum ScriptMode {
-        kNonStrictMode,
-        kStrictMode
-    };
+ public:
+  // Controls whether or not V8 should only accept strict mode scripts.
+  enum ScriptMode {
+    kNonStrictMode,
+    kStrictMode
+  };
 
-    // Stores whether the client uses v8::Locker to access the isolate.
-    enum AccessMode {
-        kSingleThread,
-        kUseLocker
-    };
+  // Stores whether the client uses v8::Locker to access the isolate.
+  enum AccessMode {
+    kSingleThread,
+    kUseLocker
+  };
 
-    IsolateHolder();
-    explicit IsolateHolder(AccessMode access_mode);
-    ~IsolateHolder();
+  IsolateHolder();
+  explicit IsolateHolder(AccessMode access_mode);
+  ~IsolateHolder();
 
-    // Should be invoked once before creating IsolateHolder instances to
-    // initialize V8 and Gin. In case V8_USE_EXTERNAL_STARTUP_DATA is
-    // defined, V8's initial natives should be loaded (by calling
-    // V8Initializer::LoadV8NativesFromFD or
-    // V8Initializer::LoadV8Natives) before calling this method.  If the
-    // snapshot file is available, it should also be loaded (by calling
-    // V8Initializer::LoadV8SnapshotFromFD or
-    // V8Initializer::LoadV8Snapshot) before calling this method.
-    static void Initialize(ScriptMode mode, v8::ArrayBuffer::Allocator* allocator);
+  // Should be invoked once before creating IsolateHolder instances to
+  // initialize V8 and Gin. In case V8_USE_EXTERNAL_STARTUP_DATA is
+  // defined, V8's initial natives should be loaded (by calling
+  // V8Initializer::LoadV8NativesFromFD or
+  // V8Initializer::LoadV8Natives) before calling this method.  If the
+  // snapshot file is available, it should also be loaded (by calling
+  // V8Initializer::LoadV8SnapshotFromFD or
+  // V8Initializer::LoadV8Snapshot) before calling this method.
+  static void Initialize(ScriptMode mode,
+                         v8::ArrayBuffer::Allocator* allocator);
 
-    struct MemoryHead {
-        size_t magicNum;
-        size_t size;
-    };
-    static const size_t magicNum0 = 0x33333333;
-    static const size_t magicNum1 = 0x44444444;
-    static MemoryHead* GetPointerHead(void* pointer);
-    static size_t GetPointerMemSize(void* pointer);
-    static void* GetHeadToMemBegin(MemoryHead* head);
-    static v8::ArrayBuffer::Allocator* get_allocator();
+  v8::Isolate* isolate() { return isolate_; }
 
-    v8::Isolate* isolate() { return isolate_; }
+  // The implementations of Object.observe() and Promise enqueue v8 Microtasks
+  // that should be executed just before control is returned to the message
+  // loop. This method adds a MessageLoop TaskObserver which runs any pending
+  // Microtasks each time a Task is completed. This method should be called
+  // once, when a MessageLoop is created and it should be called on the
+  // MessageLoop's thread.
+  void AddRunMicrotasksObserver();
 
-    void EnableIdleTasks(std::unique_ptr<V8IdleTaskRunner> runner);
+  // This method should also only be called once, and on the MessageLoop's
+  // thread.
+  void RemoveRunMicrotasksObserver();
 
-    // The implementations of Object.observe() and Promise enqueue v8 Microtasks
-    // that should be executed just before control is returned to the message
-    // loop. This method adds a MessageLoop TaskObserver which runs any pending
-    // Microtasks each time a Task is completed. This method should be called
-    // once, when a MessageLoop is created and it should be called on the
-    // MessageLoop's thread.
-    void AddRunMicrotasksObserver();
+  // This method returns if v8::Locker is needed to access isolate.
+  AccessMode access_mode() const { return access_mode_; }
 
-    // This method should also only be called once, and on the MessageLoop's
-    // thread.
-    void RemoveRunMicrotasksObserver();
-
-    // This method returns if v8::Locker is needed to access isolate.
-    AccessMode access_mode() const { return access_mode_; }
-
-    // This method returns V8IsolateMemoryDumpProvider of this isolate, used for
-    // testing.
+  // This method returns V8IsolateMemoryDumpProvider of this isolate, used for
+  // testing.
 #ifdef MINIBLINK_NOT_IMPLEMENTED
-    V8IsolateMemoryDumpProvider* isolate_memory_dump_provider_for_testing()
-        const
-    {
-        return isolate_memory_dump_provider_.get();
-    }
+  V8IsolateMemoryDumpProvider* isolate_memory_dump_provider_for_testing()
+      const {
+    return isolate_memory_dump_provider_.get();
+  }
 #endif // MINIBLINK_NOT_IMPLEMENTED
 
-private:
-    v8::Isolate* isolate_;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    scoped_ptr<PerIsolateData> isolate_data_;
-    scoped_ptr<RunMicrotasksObserver> task_observer_;
-    scoped_ptr<V8IsolateMemoryDumpProvider> isolate_memory_dump_provider_;
-#endif // MINIBLINK_NOT_IMPLEMENTED
-    AccessMode access_mode_;
+  struct MemoryHead {
+      size_t magicNum;
+      size_t size;
+  };
+  static const size_t magicNum0 = 0x1122dd44;
+  static const size_t magicNum1 = 0x11227788;
 
-    DISALLOW_COPY_AND_ASSIGN(IsolateHolder);
+  static MemoryHead* GetPointerHead(void* pointer);
+  static size_t GetPointerMemSize(void* pointer);
+  static void* GetHeadToMemBegin(MemoryHead* head);
+
+  static v8::ArrayBuffer::Allocator* get_allocator();
+
+ private:
+  v8::Isolate* isolate_;
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+  scoped_ptr<PerIsolateData> isolate_data_;
+  scoped_ptr<RunMicrotasksObserver> task_observer_;
+  scoped_ptr<V8IsolateMemoryDumpProvider> isolate_memory_dump_provider_;
+#endif // MINIBLINK_NOT_IMPLEMENTED
+  AccessMode access_mode_;
+
+  DISALLOW_COPY_AND_ASSIGN(IsolateHolder);
 };
 
-} // namespace gin
+}  // namespace gin
 
-#endif // GIN_PUBLIC_ISOLATE_HOLDER_H_
+#endif  // GIN_PUBLIC_ISOLATE_HOLDER_H_

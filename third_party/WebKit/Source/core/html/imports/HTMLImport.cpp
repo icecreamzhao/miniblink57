@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/imports/HTMLImport.h"
 
 #include "core/dom/Document.h"
@@ -86,8 +87,8 @@ void HTMLImport::stateDidChange()
 
 void HTMLImport::recalcTreeState(HTMLImport* root)
 {
-    HeapHashMap<Member<HTMLImport>, HTMLImportState> snapshot;
-    HeapVector<Member<HTMLImport>> updated;
+    WillBeHeapHashMap<RawPtrWillBeMember<HTMLImport>, HTMLImportState> snapshot;
+    WillBeHeapVector<RawPtrWillBeMember<HTMLImport>> updated;
 
     for (HTMLImport* i = root; i; i = traverseNext(i)) {
         snapshot.add(i, i->state());
@@ -99,21 +100,20 @@ void HTMLImport::recalcTreeState(HTMLImport* root)
     // |m_state| of its children and precedents of ancestors.
     // Accidental cycle dependency of state computation is prevented
     // by invalidateCachedState() and isStateCacheValid() check.
-    for (HTMLImport* i = traverseFirstPostOrder(root); i;
-         i = traverseNextPostOrder(i)) {
-        DCHECK(!i->m_state.isValid());
+    for (HTMLImport* i = traverseFirstPostOrder(root); i; i = traverseNextPostOrder(i)) {
+        ASSERT(!i->m_state.isValid());
         i->m_state = HTMLImportStateResolver(i).resolve();
 
         HTMLImportState newState = i->state();
         HTMLImportState oldState = snapshot.get(i);
         // Once the state reaches Ready, it shouldn't go back.
-        DCHECK(!oldState.isReady() || oldState <= newState);
+        ASSERT(!oldState.isReady() || oldState <= newState);
         if (newState != oldState)
-            updated.push_back(i);
+            updated.append(i);
     }
 
-    for (const auto& import : updated)
-        import->stateDidChange();
+    for (size_t i = 0; i < updated.size(); ++i)
+        updated[i]->stateDidChange();
 }
 
 #if !defined(NDEBUG)
@@ -124,7 +124,7 @@ void HTMLImport::show()
 
 void HTMLImport::showTree(HTMLImport* highlight, unsigned depth)
 {
-    for (unsigned i = 0; i < depth * 4; ++i)
+    for (unsigned i = 0; i < depth*4; ++i)
         fprintf(stderr, " ");
 
     fprintf(stderr, "%s", this == highlight ? "*" : " ");

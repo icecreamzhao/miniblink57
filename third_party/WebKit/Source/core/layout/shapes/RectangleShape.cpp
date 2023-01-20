@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/shapes/RectangleShape.h"
 
 #include "wtf/MathExtras.h"
@@ -52,9 +53,7 @@ FloatRect RectangleShape::shapeMarginBounds() const
     return FloatRect(boundsX, boundsY, boundsWidth, boundsHeight);
 }
 
-LineSegment RectangleShape::getExcludedInterval(
-    LayoutUnit logicalTop,
-    LayoutUnit logicalHeight) const
+LineSegment RectangleShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const
 {
     const FloatRect& bounds = shapeMarginBounds();
     if (bounds.isEmpty())
@@ -79,7 +78,7 @@ LineSegment RectangleShape::getExcludedInterval(
             x1 = bounds.x() + marginRadiusX - xi;
             x2 = bounds.maxX() - marginRadiusX + xi;
         } else if (y1 > bounds.maxY() - marginRadiusY) {
-            float yi = y1 - (bounds.maxY() - marginRadiusY);
+            float yi =  y1 - (bounds.maxY() - marginRadiusY);
             float xi = ellipseXIntercept(yi, marginRadiusX, marginRadiusY);
             x1 = bounds.x() + marginRadiusX - xi;
             x2 = bounds.maxX() - marginRadiusX + xi;
@@ -93,8 +92,7 @@ void RectangleShape::buildDisplayPaths(DisplayPaths& paths) const
 {
     paths.shape.addRoundedRect(m_bounds, m_radii);
     if (shapeMargin())
-        paths.marginShape.addRoundedRect(
-            shapeMarginBounds(), FloatSize(m_radii.width() + shapeMargin(), m_radii.height() + shapeMargin()));
+        paths.marginShape.addRoundedRect(shapeMarginBounds(), FloatSize(m_radii.width() + shapeMargin(), m_radii.height() + shapeMargin()));
 }
 
 } // namespace blink

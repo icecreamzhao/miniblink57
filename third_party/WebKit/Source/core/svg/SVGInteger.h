@@ -31,36 +31,33 @@
 #ifndef SVGInteger_h
 #define SVGInteger_h
 
-#include "core/svg/SVGParsingError.h"
+#include "bindings/core/v8/ExceptionMessages.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 
 namespace blink {
 
-class SVGInteger final : public SVGPropertyHelper<SVGInteger> {
+class SVGInteger : public SVGPropertyHelper<SVGInteger> {
 public:
     typedef void TearOffType;
     typedef int PrimitiveType;
 
-    static SVGInteger* create(int value = 0) { return new SVGInteger(value); }
+    static PassRefPtrWillBeRawPtr<SVGInteger> create(int value = 0)
+    {
+        return adoptRefWillBeNoop(new SVGInteger(value));
+    }
 
-    virtual SVGInteger* clone() const;
+    virtual PassRefPtrWillBeRawPtr<SVGInteger> clone() const;
 
     int value() const { return m_value; }
     void setValue(int value) { m_value = value; }
 
     String valueAsString() const override;
-    SVGParsingError setValueAsString(const String&);
+    virtual void setValueAsString(const String&, ExceptionState&);
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement* contextElement) override;
-    float calculateDistance(SVGPropertyBase* to,
-        SVGElement* contextElement) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement* contextElement) override;
 
     static AnimatedPropertyType classType() { return AnimatedInteger; }
 
@@ -70,7 +67,12 @@ protected:
     int m_value;
 };
 
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGInteger);
+inline PassRefPtrWillBeRawPtr<SVGInteger> toSVGInteger(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGInteger::classType());
+    return static_pointer_cast<SVGInteger>(base.release());
+}
 
 } // namespace blink
 

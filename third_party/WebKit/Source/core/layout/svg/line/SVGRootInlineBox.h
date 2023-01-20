@@ -24,42 +24,37 @@
 #define SVGRootInlineBox_h
 
 #include "core/layout/line/RootInlineBox.h"
+#include "core/layout/svg/SVGTextLayoutEngine.h"
 
 namespace blink {
 
 class SVGRootInlineBox final : public RootInlineBox {
 public:
-    SVGRootInlineBox(LineLayoutItem block)
+    SVGRootInlineBox(LayoutBlockFlow& block)
         : RootInlineBox(block)
+        , m_logicalHeight(0)
     {
     }
 
-    bool isSVGRootInlineBox() const override { return true; }
+    virtual bool isSVGRootInlineBox() const override { return true; }
 
-    LayoutUnit virtualLogicalHeight() const override { return m_logicalHeight; }
+    virtual LayoutUnit virtualLogicalHeight() const override { return m_logicalHeight; }
     void setLogicalHeight(LayoutUnit height) { m_logicalHeight = height; }
 
-    void paint(const PaintInfo&,
-        const LayoutPoint&,
-        LayoutUnit lineTop,
-        LayoutUnit lineBottom) const override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&, LayoutUnit lineTop, LayoutUnit lineBottom) override;
 
-    void markDirty() override;
+    virtual void markDirty() override;
 
     void computePerCharacterLayoutInformation();
 
     InlineBox* closestLeafChildForPosition(const LayoutPoint&);
 
-    bool nodeAtPoint(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        LayoutUnit lineTop,
-        LayoutUnit lineBottom) final;
+private:
+    void reorderValueLists(Vector<SVGTextLayoutAttributes*>&);
+    void layoutChildBoxes(InlineFlowBox*, LayoutRect* = nullptr);
+    void layoutRootBox(const LayoutRect&);
 
 private:
-    void reorderValueLists();
-    LayoutRect layoutInlineBoxes(InlineBox&);
-
     LayoutUnit m_logicalHeight;
 };
 

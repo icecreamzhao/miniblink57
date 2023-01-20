@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/frame/PageScaleConstraints.h"
 
 #include <algorithm>
@@ -35,20 +36,10 @@
 namespace blink {
 
 PageScaleConstraints::PageScaleConstraints()
-    : initialScale(-1)
-    , minimumScale(-1)
-    , maximumScale(-1)
-{
-}
+    : initialScale(-1), minimumScale(-1), maximumScale(-1) { }
 
-PageScaleConstraints::PageScaleConstraints(float initial,
-    float minimum,
-    float maximum)
-    : initialScale(initial)
-    , minimumScale(minimum)
-    , maximumScale(maximum)
-{
-}
+PageScaleConstraints::PageScaleConstraints(float initial, float minimum, float maximum)
+    : initialScale(initial), minimumScale(minimum), maximumScale(maximum) { }
 
 void PageScaleConstraints::overrideWith(const PageScaleConstraints& other)
 {
@@ -84,9 +75,7 @@ void PageScaleConstraints::clampAll()
     initialScale = clampToConstraints(initialScale);
 }
 
-void PageScaleConstraints::fitToContentsWidth(
-    float contentsWidth,
-    int viewWidthNotIncludingScrollbars)
+void PageScaleConstraints::fitToContentsWidth(float contentsWidth, int viewWidthNotIncludingScrollbars)
 {
     if (!contentsWidth || !viewWidthNotIncludingScrollbars)
         return;
@@ -110,7 +99,10 @@ void PageScaleConstraints::resolveAutoInitialScale()
 
 bool PageScaleConstraints::operator==(const PageScaleConstraints& other) const
 {
-    return layoutSize == other.layoutSize && initialScale == other.initialScale && minimumScale == other.minimumScale && maximumScale == other.maximumScale;
+    return layoutSize == other.layoutSize
+        && initialScale == other.initialScale
+        && minimumScale == other.minimumScale
+        && maximumScale == other.maximumScale;
 }
 
 } // namespace blink

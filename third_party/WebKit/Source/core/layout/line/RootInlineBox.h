@@ -21,41 +21,32 @@
 #ifndef RootInlineBox_h
 #define RootInlineBox_h
 
-#include "core/layout/api/LineLayoutItem.h"
-#include "core/layout/api/SelectionState.h"
 #include "core/layout/line/InlineFlowBox.h"
 #include "platform/text/BidiContext.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
 
 namespace blink {
 
 class EllipsisBox;
 class HitTestResult;
-class LineLayoutBlockFlow;
+class LayoutBlockFlow;
 
 struct BidiStatus;
+struct GapRects;
 
 class RootInlineBox : public InlineFlowBox {
 public:
-    explicit RootInlineBox(LineLayoutItem);
+    explicit RootInlineBox(LayoutBlockFlow&);
 
-    void destroy() final;
+    virtual void destroy() override final;
 
-    bool isRootInlineBox() const final { return true; }
+    virtual bool isRootInlineBox() const override final { return true; }
 
     void detachEllipsisBox();
 
-    RootInlineBox* nextRootBox() const
-    {
-        return static_cast<RootInlineBox*>(m_nextLineBox);
-    }
-    RootInlineBox* prevRootBox() const
-    {
-        return static_cast<RootInlineBox*>(m_prevLineBox);
-    }
+    RootInlineBox* nextRootBox() const { return static_cast<RootInlineBox*>(m_nextLineBox); }
+    RootInlineBox* prevRootBox() const { return static_cast<RootInlineBox*>(m_prevLineBox); }
 
-    void move(const LayoutSize&) final;
+    virtual void move(const LayoutSize&) override final;
 
     LayoutUnit lineTop() const { return m_lineTop; }
     LayoutUnit lineBottom() const { return m_lineBottom; }
@@ -68,22 +59,15 @@ public:
 
     LayoutUnit selectionTop() const;
     LayoutUnit selectionBottom() const;
-    LayoutUnit selectionHeight() const
-    {
-        return (selectionBottom() - selectionTop()).clampNegativeToZero();
-    }
+    LayoutUnit selectionHeight() const { return max<LayoutUnit>(0, selectionBottom() - selectionTop()); }
+
+    LayoutUnit selectionTopAdjustedForPrecedingBlock() const;
+    LayoutUnit selectionHeightAdjustedForPrecedingBlock() const { return max<LayoutUnit>(0, selectionBottom() - selectionTopAdjustedForPrecedingBlock()); }
 
     LayoutUnit blockDirectionPointInLine() const;
 
-    LayoutUnit alignBoxesInBlockDirection(LayoutUnit heightOfBlock,
-        GlyphOverflowAndFallbackFontsMap&,
-        VerticalPositionCache&);
-    void setLineTopBottomPositions(
-        LayoutUnit top,
-        LayoutUnit bottom,
-        LayoutUnit topWithLeading,
-        LayoutUnit bottomWithLeading,
-        LayoutUnit selectionBottom = LayoutUnit::min())
+    LayoutUnit alignBoxesInBlockDirection(LayoutUnit heightOfBlock, GlyphOverflowAndFallbackFontsMap&, VerticalPositionCache&);
+    void setLineTopBottomPositions(LayoutUnit top, LayoutUnit bottom, LayoutUnit topWithLeading, LayoutUnit bottomWithLeading, LayoutUnit selectionBottom = LayoutUnit::min())
     {
         m_lineTop = top;
         m_lineBottom = bottom;
@@ -92,11 +76,11 @@ public:
         m_selectionBottom = selectionBottom == LayoutUnit::min() ? bottom : selectionBottom;
     }
 
-    LineBoxList* lineBoxes() const final;
+    virtual LineBoxList* lineBoxes() const override final;
 
-    LineLayoutItem lineBreakObj() const { return m_lineBreakObj; }
+    LayoutObject* lineBreakObj() const { return m_lineBreakObj; }
     BidiStatus lineBreakBidiStatus() const;
-    void setLineBreakInfo(LineLayoutItem, unsigned breakPos, const BidiStatus&);
+    void setLineBreakInfo(LayoutObject*, unsigned breakPos, const BidiStatus&);
 
     unsigned lineBreakPos() const { return m_lineBreakPos; }
     void setLineBreakPos(unsigned p) { m_lineBreakPos = p; }
@@ -106,94 +90,67 @@ public:
 
     void childRemoved(InlineBox*);
 
-    bool lineCanAccommodateEllipsis(bool ltr,
-        int blockEdge,
-        int lineBoxEdge,
-        int ellipsisWidth);
+    bool lineCanAccommodateEllipsis(bool ltr, int blockEdge, int lineBoxEdge, int ellipsisWidth);
     // Return the truncatedWidth, the width of the truncated text + ellipsis.
-    LayoutUnit placeEllipsis(const AtomicString& ellipsisStr,
-        bool ltr,
-        LayoutUnit blockLeftEdge,
-        LayoutUnit blockRightEdge,
-        LayoutUnit ellipsisWidth);
+    LayoutUnit placeEllipsis(const AtomicString& ellipsisStr, bool ltr, LayoutUnit blockLeftEdge, LayoutUnit blockRightEdge, LayoutUnit ellipsisWidth);
     // Return the position of the EllipsisBox or -1.
-    LayoutUnit placeEllipsisBox(bool ltr,
-        LayoutUnit blockLeftEdge,
-        LayoutUnit blockRightEdge,
-        LayoutUnit ellipsisWidth,
-        LayoutUnit& truncatedWidth,
-        bool& foundBox) final;
+    virtual LayoutUnit placeEllipsisBox(bool ltr, LayoutUnit blockLeftEdge, LayoutUnit blockRightEdge, LayoutUnit ellipsisWidth, LayoutUnit &truncatedWidth, bool& foundBox) override final;
 
     using InlineBox::hasEllipsisBox;
     EllipsisBox* ellipsisBox() const;
 
-    void clearTruncation() final;
+    virtual void clearTruncation() override final;
 
-    int baselinePosition(FontBaseline baselineType) const final;
-    LayoutUnit lineHeight() const final;
+    virtual int baselinePosition(FontBaseline baselineType) const override final;
+    virtual LayoutUnit lineHeight() const override final;
 
-    void paint(const PaintInfo&,
-        const LayoutPoint&,
-        LayoutUnit lineTop,
-        LayoutUnit lineBottom) const override;
-    bool nodeAtPoint(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        LayoutUnit lineTop,
-        LayoutUnit lineBottom) override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&, LayoutUnit lineTop, LayoutUnit lineBottom) override;
+    virtual bool nodeAtPoint(HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, LayoutUnit lineTop, LayoutUnit lineBottom) override final;
 
     using InlineBox::hasSelectedChildren;
     using InlineBox::setHasSelectedChildren;
 
-    SelectionState getSelectionState() const final;
+    virtual LayoutObject::SelectionState selectionState() const override final;
     InlineBox* firstSelectedBox() const;
     InlineBox* lastSelectedBox() const;
 
-    LineLayoutBlockFlow block() const;
+    GapRects lineSelectionGap(const LayoutBlock* rootBlock, const LayoutPoint& rootBlockPhysicalPosition, const LayoutSize& offsetFromRootBlock, LayoutUnit selTop, LayoutUnit selHeight, const PaintInfo*) const;
 
-    InlineBox* closestLeafChildForPoint(const LayoutPoint&,
-        bool onlyEditableLeaves);
-    InlineBox* closestLeafChildForLogicalLeftPosition(
-        LayoutUnit,
-        bool onlyEditableLeaves = false);
+    LayoutBlockFlow& block() const;
+
+    InlineBox* closestLeafChildForPoint(const LayoutPoint&, bool onlyEditableLeaves);
+    InlineBox* closestLeafChildForLogicalLeftPosition(LayoutUnit, bool onlyEditableLeaves = false);
 
     void appendFloat(LayoutBox* floatingBox)
     {
         ASSERT(!isDirty());
         if (m_floats)
-            m_floats->push_back(floatingBox);
+            m_floats->append(floatingBox);
         else
-            m_floats = WTF::wrapUnique(new Vector<LayoutBox*>(1, floatingBox));
+            m_floats= adoptPtr(new Vector<LayoutBox*>(1, floatingBox));
     }
 
-    Vector<LayoutBox*>* floatsPtr()
-    {
-        ASSERT(!isDirty());
-        return m_floats.get();
-    }
+    Vector<LayoutBox*>* floatsPtr() { ASSERT(!isDirty()); return m_floats.get(); }
 
-    void extractLineBoxFromLayoutObject() final;
-    void attachLineBoxToLayoutObject() final;
-    void removeLineBoxFromLayoutObject() final;
+    virtual void extractLineBoxFromLayoutObject() override final;
+    virtual void attachLineBoxToLayoutObject() override final;
+    virtual void removeLineBoxFromLayoutObject() override final;
 
-    FontBaseline baselineType() const
-    {
-        return static_cast<FontBaseline>(m_baselineType);
-    }
+    FontBaseline baselineType() const { return static_cast<FontBaseline>(m_baselineType); }
 
     bool hasAnnotationsBefore() const { return m_hasAnnotationsBefore; }
     bool hasAnnotationsAfter() const { return m_hasAnnotationsAfter; }
 
     LayoutRect paddedLayoutOverflowRect(LayoutUnit endPadding) const;
 
-    void ascentAndDescentForBox(InlineBox*,
-        GlyphOverflowAndFallbackFontsMap&,
-        int& ascent,
-        int& descent,
-        bool& affectsAscent,
-        bool& affectsDescent) const;
+    void ascentAndDescentForBox(InlineBox*, GlyphOverflowAndFallbackFontsMap&, int& ascent, int& descent, bool& affectsAscent, bool& affectsDescent) const;
     LayoutUnit verticalPositionForBox(InlineBox*, VerticalPositionCache&);
     bool includeLeadingForBox(InlineBox*) const;
+    bool includeFontForBox(InlineBox*) const;
+    bool includeGlyphsForBox(InlineBox*) const;
+    bool includeMarginForBox(InlineBox*) const;
+    bool fitsToGlyphs() const;
+    bool includesRootLineBoxFontOrLeading() const;
 
     LayoutUnit logicalTopVisualOverflow() const
     {
@@ -218,7 +175,7 @@ public:
     Node* getLogicalStartBoxWithNode(InlineBox*&) const;
     Node* getLogicalEndBoxWithNode(InlineBox*&) const;
 
-    const char* boxName() const override;
+    virtual const char* boxName() const override;
 
 private:
     LayoutUnit beforeAnnotationsAdjustment() const;
@@ -226,15 +183,14 @@ private:
     // This folds into the padding at the end of InlineFlowBox on 64-bit.
     unsigned m_lineBreakPos;
 
-    // Where this line ended.  The exact object and the position within that
-    // object are stored so that we can create an InlineIterator beginning just
-    // after the end of this line.
-    LineLayoutItem m_lineBreakObj;
+    // Where this line ended.  The exact object and the position within that object are stored so that
+    // we can create an InlineIterator beginning just after the end of this line.
+    LayoutObject* m_lineBreakObj;
     RefPtr<BidiContext> m_lineBreakContext;
 
-    // Floats hanging off the line are pushed into this vector during layout. It
-    // is only good for as long as the line has not been marked dirty.
-    std::unique_ptr<Vector<LayoutBox*>> m_floats;
+    // Floats hanging off the line are pushed into this vector during layout. It is only
+    // good for as long as the line has not been marked dirty.
+    OwnPtr<Vector<LayoutBox*>> m_floats;
 
     LayoutUnit m_lineTop;
     LayoutUnit m_lineBottom;

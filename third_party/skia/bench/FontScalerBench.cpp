@@ -15,11 +15,17 @@
 class FontScalerBench : public Benchmark {
     SkString fName;
     SkString fText;
+<<<<<<< HEAD
     bool fDoLCD;
 
 public:
     FontScalerBench(bool doLCD)
     {
+=======
+    bool     fDoLCD;
+public:
+    FontScalerBench(bool doLCD)  {
+>>>>>>> miniblink49
         fName.printf("fontscaler_%s", doLCD ? "lcd" : "aa");
         fText.set("abcdefghijklmnopqrstuvwxyz01234567890");
         fDoLCD = doLCD;
@@ -27,8 +33,12 @@ public:
 
 protected:
     virtual const char* onGetName() { return fName.c_str(); }
+<<<<<<< HEAD
     virtual void onDraw(int loops, SkCanvas* canvas)
     {
+=======
+    virtual void onDraw(const int loops, SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
         this->setupPaint(&paint);
         paint.setLCDRenderText(fDoLCD);
@@ -41,16 +51,28 @@ protected:
             for (int ps = 9; ps <= 24; ps += 2) {
                 paint.setTextSize(SkIntToScalar(ps));
                 canvas->drawText(fText.c_str(), fText.size(),
+<<<<<<< HEAD
                     0, SkIntToScalar(20), paint);
             }
         }
     }
 
+=======
+                        0, SkIntToScalar(20), paint);
+            }
+        }
+    }
+>>>>>>> miniblink49
 private:
     typedef Benchmark INHERITED;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_BENCH(return new FontScalerBench(false);)
 DEF_BENCH(return new FontScalerBench(true);)
+=======
+DEF_BENCH( return SkNEW_ARGS(FontScalerBench, (false)); )
+DEF_BENCH( return SkNEW_ARGS(FontScalerBench, (true)); )
+>>>>>>> miniblink49

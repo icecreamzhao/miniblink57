@@ -71,8 +71,11 @@ longer document with a bunch of other pages.
 PDF Objects and Document Structure
 ----------------------------------
 
+<<<<<<< HEAD
 ![PDF Logical Document Structure](PdfLogicalDocumentStructure.png)
 
+=======
+>>>>>>> miniblink49
 **Background**: The PDF file format has a header, a set of objects and
 then a footer that contains a table of contents for all of the objects
 in the document (the cross-reference table). The table of contents
@@ -259,7 +262,11 @@ unique instances that it consults before returning a new instance of
 the class. If the requested instance already exists, the existing one
 is returned. For obvious reasons, the returned instance should not be
 modified. A mechanism to ensure that interned classes are immutable is
+<<<<<<< HEAD
 needed.  See [issue 2683](https://bug.skia.org/2683).
+=======
+needed.  See [issue 2683](http://skbug.com/2683).
+>>>>>>> miniblink49
 
 <a name="Graphic_States"></a>
 Graphic States
@@ -374,7 +381,11 @@ with. Images, layers (see below), and fonts assume the standard PDF
 coordinate system, so we have to undo any flip to the Skia coordinate
 system before drawing these entities. We don’t currently support
 inverted paths, so filling an inverted path will give the wrong result
+<<<<<<< HEAD
 ([issue 241](https://bug.skia.org/241)). PDF doesn’t draw zero length
+=======
+([issue 241](http://skbug.com/241)). PDF doesn’t draw zero length
+>>>>>>> miniblink49
 lines that have butt of square caps, so that is emulated.
 
 <a name="Layers"></a>
@@ -575,11 +586,16 @@ a mask.
 Known issues
 ------------
 
+<<<<<<< HEAD
 *   [issue 241](https://bug.skia.org/241)
+=======
+*   [issue 241](http://skbug.com/241)
+>>>>>>> miniblink49
     As previously noted, a boolean geometry library
     would improve clip fidelity in some places, add supported for
     inverted fill types, as well as simplify code.
     This is fixed, but behind a flag until path ops is production ready.
+<<<<<<< HEAD
 *   [issue 237](https://bug.skia.org/237)
     SkMaskFilter is not supported.
 *   [issue 238](https://bug.skia.org/238)
@@ -592,6 +608,20 @@ Known issues
     Mostly, only TTF fonts are directly supported.  (User metrics 
     show that almost all fonts are truetype.
 *   [issue 260](https://bug.skia.org/260)
+=======
+*   [issue 237](http://skbug.com/237)
+    SkMaskFilter is not supported.
+*   [issue 238](http://skbug.com/238)
+    SkColorFilter is not supported.
+*   [issue 249](http://skbug.com/249)
+    SrcAtop Xor, and Plus xfer modes are not supported.
+*   [issue 240](http://skbug.com/240)
+    drawVerticies is not implemented.
+*   [issue 244](http://skbug.com/244)
+    Mostly, only TTF fonts are directly supported.  (User metrics 
+    show that almost all fonts are truetype.
+*   [issue 260](http://skbug.com/260)
+>>>>>>> miniblink49
     Page rotation is accomplished by specifying a different
     size page instead of including the appropriate rotation
     annotation.

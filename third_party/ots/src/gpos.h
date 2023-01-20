@@ -10,6 +10,7 @@
 namespace ots {
 
 struct OpenTypeGPOS {
+<<<<<<< HEAD
     OpenTypeGPOS()
         : num_lookups(0)
         , data(NULL)
@@ -27,3 +28,22 @@ struct OpenTypeGPOS {
 } // namespace ots
 
 #endif
+=======
+  OpenTypeGPOS()
+      : num_lookups(0),
+        data(NULL),
+        length(0) {
+  }
+
+  // Number of lookups in GPOS table
+  uint16_t num_lookups;
+
+  const uint8_t *data;
+  size_t length;
+};
+
+}  // namespace ots
+
+#endif
+
+>>>>>>> miniblink49

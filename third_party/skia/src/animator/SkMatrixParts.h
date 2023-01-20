@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkMatrixParts_DEFINED
 #define SkMatrixParts_DEFINED
 
@@ -28,10 +32,14 @@ public:
     virtual SkDisplayable* getParent() const;
     virtual bool setParent(SkDisplayable* parent);
 #ifdef SK_DEBUG
+<<<<<<< HEAD
     virtual bool isMatrixPart() const
     {
         return true;
     }
+=======
+    virtual bool isMatrixPart() const { return true; }
+>>>>>>> miniblink49
 #endif
 protected:
     SkDrawMatrix* fMatrix;
@@ -40,7 +48,10 @@ protected:
 class SkRotate : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Rotate);
     SkRotate();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     bool add() override;
     SkScalar degrees;
@@ -50,7 +61,10 @@ protected:
 class SkScale : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Scale);
     SkScale();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     bool add() override;
     SkScalar x;
@@ -61,7 +75,10 @@ protected:
 class SkSkew : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Skew);
     SkSkew();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     bool add() override;
     SkScalar x;
@@ -72,7 +89,10 @@ protected:
 class SkTranslate : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Translate);
     SkTranslate();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     bool add() override;
     SkScalar x;
@@ -83,7 +103,10 @@ class SkFromPath : public SkMatrixPart {
     DECLARE_MEMBER_INFO(FromPath);
     SkFromPath();
     virtual ~SkFromPath();
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     bool add() override;
     int32_t mode;
@@ -97,10 +120,16 @@ class SkRectToRect : public SkMatrixPart {
     SkRectToRect();
     virtual ~SkRectToRect();
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
     void dump(SkAnimateMaker*) override;
 #endif
     const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
 
+=======
+    void dump(SkAnimateMaker* ) override;
+#endif
+    const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
+>>>>>>> miniblink49
 protected:
     bool add() override;
     SkDrawRect* source;
@@ -112,11 +141,18 @@ class SkPolyToPoly : public SkMatrixPart {
     SkPolyToPoly();
     virtual ~SkPolyToPoly();
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
     void dump(SkAnimateMaker*) override;
 #endif
     void onEndElement(SkAnimateMaker&) override;
     const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
 
+=======
+    void dump(SkAnimateMaker* ) override;
+#endif
+    void onEndElement(SkAnimateMaker& ) override;
+    const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
+>>>>>>> miniblink49
 protected:
     bool add() override;
     SkPolygon* source;

@@ -35,18 +35,24 @@
 #include "WebCryptoAlgorithm.h"
 #include "WebVector.h"
 
+<<<<<<< HEAD
 #if INSIDE_BLINK
 #include "platform/heap/Handle.h"
 #endif
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 // Interface used for serializing WebCryptoKeyAlgorithmParams to a javascript
 // dictionary.
 class WebCryptoKeyAlgorithmDictionary {
+<<<<<<< HEAD
 #if INSIDE_BLINK
     STACK_ALLOCATED();
 #endif
+=======
+>>>>>>> miniblink49
 public:
     virtual ~WebCryptoKeyAlgorithmDictionary() { }
 
@@ -82,7 +88,14 @@ public:
     {
     }
 
+<<<<<<< HEAD
     unsigned short lengthBits() const { return m_lengthBits; }
+=======
+    unsigned short lengthBits() const
+    {
+        return m_lengthBits;
+    }
+>>>>>>> miniblink49
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {
@@ -100,16 +113,32 @@ private:
 
 class WebCryptoHmacKeyAlgorithmParams : public WebCryptoKeyAlgorithmParams {
 public:
+<<<<<<< HEAD
     WebCryptoHmacKeyAlgorithmParams(const WebCryptoAlgorithm& hash,
         unsigned lengthBits)
+=======
+    WebCryptoHmacKeyAlgorithmParams(const WebCryptoAlgorithm& hash, unsigned lengthBits)
+>>>>>>> miniblink49
         : m_hash(hash)
         , m_lengthBits(lengthBits)
     {
     }
 
+<<<<<<< HEAD
     const WebCryptoAlgorithm& hash() const { return m_hash; }
 
     unsigned lengthBits() const { return m_lengthBits; }
+=======
+    const WebCryptoAlgorithm& hash() const
+    {
+        return m_hash;
+    }
+
+    unsigned lengthBits() const
+    {
+        return m_lengthBits;
+    }
+>>>>>>> miniblink49
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {
@@ -127,6 +156,7 @@ private:
     unsigned m_lengthBits;
 };
 
+<<<<<<< HEAD
 class WebCryptoRsaHashedKeyAlgorithmParams
     : public WebCryptoKeyAlgorithmParams {
 public:
@@ -134,20 +164,39 @@ public:
         const unsigned char* publicExponent,
         unsigned publicExponentSize,
         const WebCryptoAlgorithm& hash)
+=======
+class WebCryptoRsaHashedKeyAlgorithmParams : public WebCryptoKeyAlgorithmParams {
+public:
+    WebCryptoRsaHashedKeyAlgorithmParams(unsigned modulusLengthBits, const unsigned char* publicExponent, unsigned publicExponentSize, const WebCryptoAlgorithm& hash)
+>>>>>>> miniblink49
         : m_modulusLengthBits(modulusLengthBits)
         , m_publicExponent(publicExponent, publicExponentSize)
         , m_hash(hash)
     {
     }
 
+<<<<<<< HEAD
     unsigned modulusLengthBits() const { return m_modulusLengthBits; }
+=======
+    unsigned modulusLengthBits() const
+    {
+        return m_modulusLengthBits;
+    }
+>>>>>>> miniblink49
 
     const WebVector<unsigned char>& publicExponent() const
     {
         return m_publicExponent;
     }
 
+<<<<<<< HEAD
     const WebCryptoAlgorithm& hash() const { return m_hash; }
+=======
+    const WebCryptoAlgorithm& hash() const
+    {
+        return m_hash;
+    }
+>>>>>>> miniblink49
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {
@@ -174,7 +223,14 @@ public:
     {
     }
 
+<<<<<<< HEAD
     WebCryptoNamedCurve namedCurve() const { return m_namedCurve; }
+=======
+    WebCryptoNamedCurve namedCurve() const
+    {
+        return m_namedCurve;
+    }
+>>>>>>> miniblink49
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {

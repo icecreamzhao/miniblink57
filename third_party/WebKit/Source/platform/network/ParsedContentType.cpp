@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*
+=======
+ /*
+>>>>>>> miniblink49
  * Copyright (C) 2011 Google Inc. All rights reserved.
  * Copyright (C) 2012 Intel Corporation. All rights reserved.
  *
@@ -29,6 +33,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/network/ParsedContentType.h"
 
 #include "wtf/text/CString.h"
@@ -36,6 +44,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class DummyParsedContentType final {
     STACK_ALLOCATED();
 
@@ -43,6 +52,12 @@ public:
     void setContentType(const SubstringRange&) const { }
     void setContentTypeParameter(const SubstringRange&,
         const SubstringRange&) const { }
+=======
+class DummyParsedContentType {
+public:
+    void setContentType(const SubstringRange&) const { }
+    void setContentTypeParameter(const SubstringRange&, const SubstringRange&) const { }
+>>>>>>> miniblink49
 };
 
 static void skipSpaces(const String& input, unsigned& startIndex)
@@ -51,8 +66,12 @@ static void skipSpaces(const String& input, unsigned& startIndex)
         ++startIndex;
 }
 
+<<<<<<< HEAD
 static SubstringRange parseParameterPart(const String& input,
     unsigned& startIndex)
+=======
+static SubstringRange parseParameterPart(const String& input, unsigned& startIndex)
+>>>>>>> miniblink49
 {
     unsigned inputLength = input.length();
     unsigned tokenStart = startIndex;
@@ -79,8 +98,12 @@ static SubstringRange parseParameterPart(const String& input,
     return SubstringRange(tokenStart, tokenEnd - tokenStart);
 }
 
+<<<<<<< HEAD
 static String substringForRange(const String& string,
     const SubstringRange& range)
+=======
+static String substringForRange(const String& string, const SubstringRange& range)
+>>>>>>> miniblink49
 {
     return string.substring(range.first, range.second);
 }
@@ -137,8 +160,13 @@ bool parseContentType(const String& contentType, ReceiverType& receiver)
     unsigned index = 0;
     unsigned contentTypeLength = contentType.length();
     skipSpaces(contentType, index);
+<<<<<<< HEAD
     if (index >= contentTypeLength) {
         DVLOG(1) << "Invalid Content-Type string '" << contentType << "'";
+=======
+    if (index >= contentTypeLength)  {
+        WTF_LOG_ERROR("Invalid Content-Type string '%s'", contentType.ascii().data());
+>>>>>>> miniblink49
         return false;
     }
 
@@ -155,14 +183,22 @@ bool parseContentType(const String& contentType, ReceiverType& receiver)
         skipSpaces(contentType, index);
         SubstringRange keyRange = parseParameterPart(contentType, index);
         if (!keyRange.second || index >= contentTypeLength) {
+<<<<<<< HEAD
             DVLOG(1) << "Invalid Content-Type parameter name. (at " << index << ")";
+=======
+            WTF_LOG_ERROR("Invalid Content-Type parameter name. (at %i)", index);
+>>>>>>> miniblink49
             return false;
         }
 
         // Should we tolerate spaces here?
         if (contentType[index++] != '=' || index >= contentTypeLength) {
+<<<<<<< HEAD
             DVLOG(1) << "Invalid Content-Type malformed parameter (at " << index
                      << ").";
+=======
+            WTF_LOG_ERROR("Invalid Content-Type malformed parameter (at %i).", index);
+>>>>>>> miniblink49
             return false;
         }
 
@@ -170,18 +206,26 @@ bool parseContentType(const String& contentType, ReceiverType& receiver)
         SubstringRange valueRange = parseParameterPart(contentType, index);
 
         if (!valueRange.second) {
+<<<<<<< HEAD
             DVLOG(1) << "Invalid Content-Type, invalid parameter value (at " << index
                      << ", for '"
                      << substringForRange(contentType, keyRange).stripWhiteSpace()
                      << "').";
+=======
+            WTF_LOG_ERROR("Invalid Content-Type, invalid parameter value (at %i, for '%s').", index, substringForRange(contentType, keyRange).stripWhiteSpace().ascii().data());
+>>>>>>> miniblink49
             return false;
         }
 
         // Should we tolerate spaces here?
         if (index < contentTypeLength && contentType[index++] != ';') {
+<<<<<<< HEAD
             DVLOG(1) << "Invalid Content-Type, invalid character at the end of "
                         "key/value parameter (at "
                      << index << ").";
+=======
+            WTF_LOG_ERROR("Invalid Content-Type, invalid character at the end of key/value parameter (at %i).", index);
+>>>>>>> miniblink49
             return false;
         }
 
@@ -200,8 +244,12 @@ bool isValidContentType(const String& contentType)
         return false;
 
     DummyParsedContentType parsedContentType = DummyParsedContentType();
+<<<<<<< HEAD
     return parseContentType<DummyParsedContentType>(contentType,
         parsedContentType);
+=======
+    return parseContentType<DummyParsedContentType>(contentType, parsedContentType);
+>>>>>>> miniblink49
 }
 
 ParsedContentType::ParsedContentType(const String& contentType)
@@ -230,6 +278,7 @@ void ParsedContentType::setContentType(const SubstringRange& contentRange)
     m_mimeType = substringForRange(m_contentType, contentRange).stripWhiteSpace();
 }
 
+<<<<<<< HEAD
 void ParsedContentType::setContentTypeParameter(const SubstringRange& key,
     const SubstringRange& value)
 {
@@ -238,3 +287,11 @@ void ParsedContentType::setContentTypeParameter(const SubstringRange& key,
 }
 
 } // namespace blink
+=======
+void ParsedContentType::setContentTypeParameter(const SubstringRange& key, const SubstringRange& value)
+{
+    m_parameters.set(substringForRange(m_contentType, key), substringForRange(m_contentType, value));
+}
+
+}
+>>>>>>> miniblink49

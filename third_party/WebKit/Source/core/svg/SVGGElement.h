@@ -27,7 +27,6 @@ namespace blink {
 
 class SVGGElement final : public SVGGraphicsElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGGElement);
 

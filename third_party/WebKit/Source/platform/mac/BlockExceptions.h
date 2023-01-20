@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #import "platform/PlatformExport.h"
 #import "wtf/Assertions.h"
 #import <Foundation/NSException.h>
@@ -36,3 +37,14 @@ PLATFORM_EXPORT void ReportBlockedObjCException(NSException*);
     {                                               \
         ReportBlockedObjCException(localException); \
     }
+=======
+#import <platform/PlatformExport.h>
+#import <Foundation/NSException.h>
+#import <wtf/Assertions.h>
+
+PLATFORM_EXPORT NO_RETURN_DUE_TO_ASSERT void ReportBlockedObjCException(NSException *);
+
+#define BEGIN_BLOCK_OBJC_EXCEPTIONS @try {
+#define END_BLOCK_OBJC_EXCEPTIONS } @catch(NSException *localException) { ReportBlockedObjCException(localException); }
+
+>>>>>>> miniblink49

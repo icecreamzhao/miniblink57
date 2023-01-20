@@ -43,15 +43,23 @@
 #ifndef DateMath_h
 #define DateMath_h
 
+<<<<<<< HEAD
 #include "wtf/WTFExport.h"
 #include "wtf/text/WTFString.h"
 #include <stdint.h>
 #include <string.h>
+=======
+#include <stdint.h>
+#include <string.h>
+#include "wtf/text/WTFString.h"
+#include "wtf/WTFExport.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
 WTF_EXPORT void initializeDates();
 
+<<<<<<< HEAD
 // Not really math related, but this is currently the only shared place to put
 // these.
 WTF_EXPORT double parseDateFromNullTerminatedCharacters(const char* dateString);
@@ -80,6 +88,16 @@ const char* const monthFullName[12] = {
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
 };
+=======
+// Not really math related, but this is currently the only shared place to put these.
+WTF_EXPORT double parseDateFromNullTerminatedCharacters(const char* dateString);
+// dayOfWeek: [0, 6] 0 being Monday, day: [1, 31], month: [0, 11], year: ex: 2011, hours: [0, 23], minutes: [0, 59], seconds: [0, 59], utcOffset: [-720,720].
+WTF_EXPORT String makeRFC2822DateString(unsigned dayOfWeek, unsigned day, unsigned month, unsigned year, unsigned hours, unsigned minutes, unsigned seconds, int utcOffset);
+
+const char weekdayName[7][4] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+const char monthName[12][4] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+const char* const monthFullName[12] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+>>>>>>> miniblink49
 
 const double minutesPerHour = 60.0;
 const double secondsPerMinute = 60.0;
@@ -103,12 +121,19 @@ WTF_EXPORT double convertToLocalTime(double ms);
 
 } // namespace WTF
 
+<<<<<<< HEAD
 using WTF::convertToLocalTime;
 using WTF::dateToDaysFrom1970;
 using WTF::dayInMonthFromDayInYear;
 using WTF::dayInYear;
 using WTF::isLeapYear;
 using WTF::makeRFC2822DateString;
+=======
+using WTF::isLeapYear;
+using WTF::dateToDaysFrom1970;
+using WTF::dayInMonthFromDayInYear;
+using WTF::dayInYear;
+>>>>>>> miniblink49
 using WTF::minutesPerHour;
 using WTF::monthFromDayInYear;
 using WTF::msPerDay;
@@ -116,7 +141,14 @@ using WTF::msPerHour;
 using WTF::msPerMinute;
 using WTF::msPerSecond;
 using WTF::msToYear;
+<<<<<<< HEAD
 using WTF::parseDateFromNullTerminatedCharacters;
 using WTF::secondsPerMinute;
+=======
+using WTF::secondsPerMinute;
+using WTF::parseDateFromNullTerminatedCharacters;
+using WTF::makeRFC2822DateString;
+using WTF::convertToLocalTime;
+>>>>>>> miniblink49
 
 #endif // DateMath_h

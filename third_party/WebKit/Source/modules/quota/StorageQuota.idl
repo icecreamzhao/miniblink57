@@ -28,13 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://w3c.github.io/quota-api/#storagetype-enum
 
+=======
+>>>>>>> miniblink49
 enum StorageType {
     "temporary",
     "persistent"
 };
 
+<<<<<<< HEAD
 // https://w3c.github.io/quota-api/#storagequota-interface
 
 [
@@ -43,6 +47,13 @@ enum StorageType {
 ] interface StorageQuota {
     // TODO(jsbell): |supportedTypes| should be FrozenArray<StorageType>.
     // https://github.com/w3c/quota-api/issues/5
+=======
+[
+    GarbageCollected,
+    NoInterfaceObject,
+    RuntimeEnabled=QuotaPromise
+] interface StorageQuota {
+>>>>>>> miniblink49
     readonly attribute StorageType[] supportedTypes;
     [CallWith=ScriptState] Promise queryInfo(StorageType type);
     [CallWith=ScriptState] Promise requestPersistentQuota([Clamp] unsigned long long newQuota);

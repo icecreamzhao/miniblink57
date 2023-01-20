@@ -24,14 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/compositing/CompositingLayerAssigner.h"
 
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/layout/LayoutView.h"
-#include "core/layout/compositing/CompositedLayerMapping.h"
+#include "core/layout/compositing/CompositedDeprecatedPaintLayerMapping.h"
 #include "core/page/Page.h"
 #include "core/page/scrolling/ScrollingCoordinator.h"
-#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/TraceEvent.h"
 
 namespace blink {
 
@@ -39,50 +40,40 @@ namespace blink {
 // the ratio |gSquashingSparsityTolerance|:1.
 static uint64_t gSquashingSparsityTolerance = 6;
 
-CompositingLayerAssigner::CompositingLayerAssigner(
-    PaintLayerCompositor* compositor)
+CompositingLayerAssigner::CompositingLayerAssigner(DeprecatedPaintLayerCompositor* compositor)
     : m_compositor(compositor)
     , m_layersChanged(false)
 {
 }
 
-CompositingLayerAssigner::~CompositingLayerAssigner() { }
+CompositingLayerAssigner::~CompositingLayerAssigner()
+{
+}
 
-void CompositingLayerAssigner::assign(
-    PaintLayer* updateRoot,
-    Vector<PaintLayer*>& layersNeedingPaintInvalidation)
+void CompositingLayerAssigner::assign(DeprecatedPaintLayer* updateRoot, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation)
 {
     TRACE_EVENT0("blink", "CompositingLayerAssigner::assign");
 
     SquashingState squashingState;
-    assignLayersToBackingsInternal(updateRoot, squashingState,
-        layersNeedingPaintInvalidation);
+    assignLayersToBackingsInternal(updateRoot, squashingState, layersNeedingPaintInvalidation);
     if (squashingState.hasMostRecentMapping)
-        squashingState.mostRecentMapping->finishAccumulatingSquashingLayers(
-            squashingState.nextSquashedLayerIndex, layersNeedingPaintInvalidation);
+        squashingState.mostRecentMapping->finishAccumulatingSquashingLayers(squashingState.nextSquashedLayerIndex);
 }
 
-void CompositingLayerAssigner::SquashingState::
-    updateSquashingStateForNewMapping(
-        CompositedLayerMapping* newCompositedLayerMapping,
-        bool hasNewCompositedLayerMapping,
-        Vector<PaintLayer*>& layersNeedingPaintInvalidation)
+void CompositingLayerAssigner::SquashingState::updateSquashingStateForNewMapping(CompositedDeprecatedPaintLayerMapping* newCompositedDeprecatedPaintLayerMapping, bool hasNewCompositedDeprecatedPaintLayerMapping)
 {
     // The most recent backing is done accumulating any more squashing layers.
     if (hasMostRecentMapping)
-        mostRecentMapping->finishAccumulatingSquashingLayers(
-            nextSquashedLayerIndex, layersNeedingPaintInvalidation);
+        mostRecentMapping->finishAccumulatingSquashingLayers(nextSquashedLayerIndex);
 
     nextSquashedLayerIndex = 0;
     boundingRect = IntRect();
-    mostRecentMapping = newCompositedLayerMapping;
-    hasMostRecentMapping = hasNewCompositedLayerMapping;
+    mostRecentMapping = newCompositedDeprecatedPaintLayerMapping;
+    hasMostRecentMapping = hasNewCompositedDeprecatedPaintLayerMapping;
     haveAssignedBackingsToEntireSquashingLayerSubtree = false;
 }
 
-bool CompositingLayerAssigner::squashingWouldExceedSparsityTolerance(
-    const PaintLayer* candidate,
-    const CompositingLayerAssigner::SquashingState& squashingState)
+bool CompositingLayerAssigner::squashingWouldExceedSparsityTolerance(const DeprecatedPaintLayer* candidate, const CompositingLayerAssigner::SquashingState& squashingState)
 {
     IntRect bounds = candidate->clippedAbsoluteBoundingBox();
     IntRect newBoundingRect = squashingState.boundingRect;
@@ -92,29 +83,28 @@ bool CompositingLayerAssigner::squashingWouldExceedSparsityTolerance(
     return newBoundingRectArea > gSquashingSparsityTolerance * newSquashedArea;
 }
 
-bool CompositingLayerAssigner::needsOwnBacking(const PaintLayer* layer) const
+bool CompositingLayerAssigner::needsOwnBacking(const DeprecatedPaintLayer* layer) const
 {
     if (!m_compositor->canBeComposited(layer))
         return false;
 
-    return requiresCompositing(layer->getCompositingReasons()) || (m_compositor->staleInCompositingMode() && layer->isRootLayer());
+    return requiresCompositing(layer->compositingReasons()) || (m_compositor->staleInCompositingMode() && layer->isRootLayer());
 }
 
-CompositingStateTransitionType
-CompositingLayerAssigner::computeCompositedLayerUpdate(PaintLayer* layer)
+CompositingStateTransitionType CompositingLayerAssigner::computeCompositedLayerUpdate(DeprecatedPaintLayer* layer)
 {
     CompositingStateTransitionType update = NoCompositingStateChange;
     if (needsOwnBacking(layer)) {
-        if (!layer->hasCompositedLayerMapping()) {
-            update = AllocateOwnCompositedLayerMapping;
+        if (!layer->hasCompositedDeprecatedPaintLayerMapping()) {
+            update = AllocateOwnCompositedDeprecatedPaintLayerMapping;
         }
     } else {
-        if (layer->hasCompositedLayerMapping())
-            update = RemoveOwnCompositedLayerMapping;
+        if (layer->hasCompositedDeprecatedPaintLayerMapping())
+            update = RemoveOwnCompositedDeprecatedPaintLayerMapping;
 
-        if (!layer->subtreeIsInvisible() && m_compositor->canBeComposited(layer) && requiresSquashing(layer->getCompositingReasons())) {
-            // We can't compute at this time whether the squashing layer update is a
-            // no-op, since that requires walking the paint layer tree.
+        if (!layer->subtreeIsInvisible() && m_compositor->canBeComposited(layer) && requiresSquashing(layer->compositingReasons())) {
+            // We can't compute at this time whether the squashing layer update is a no-op,
+            // since that requires walking the paint layer tree.
             update = PutInSquashingLayer;
         } else if (layer->groupedMapping() || layer->lostGroupedMapping()) {
             update = RemoveFromSquashingLayer;
@@ -123,181 +113,163 @@ CompositingLayerAssigner::computeCompositedLayerUpdate(PaintLayer* layer)
     return update;
 }
 
-SquashingDisallowedReasons
-CompositingLayerAssigner::getReasonsPreventingSquashing(
-    const PaintLayer* layer,
-    const CompositingLayerAssigner::SquashingState& squashingState)
+CompositingReasons CompositingLayerAssigner::getReasonsPreventingSquashing(const DeprecatedPaintLayer* layer, const CompositingLayerAssigner::SquashingState& squashingState)
 {
     if (!squashingState.haveAssignedBackingsToEntireSquashingLayerSubtree)
-        return SquashingDisallowedReasonWouldBreakPaintOrder;
+        return CompositingReasonSquashingWouldBreakPaintOrder;
 
     ASSERT(squashingState.hasMostRecentMapping);
-    const PaintLayer& squashingLayer = squashingState.mostRecentMapping->owningLayer();
+    const DeprecatedPaintLayer& squashingLayer = squashingState.mostRecentMapping->owningLayer();
 
     // FIXME: this special case for video exists only to deal with corner cases
-    // where a LayoutVideo does not report that it needs to be directly
-    // composited.  Video does not currently support sharing a backing, but this
-    // could be generalized in the future. The following layout tests fail if we
-    // permit the video to share a backing with other layers.
+    // where a LayoutVideo does not report that it needs to be directly composited.
+    // Video does not currently support sharing a backing, but this could be
+    // generalized in the future. The following layout tests fail if we permit the
+    // video to share a backing with other layers.
     //
     // compositing/video/video-controls-layer-creation.html
     if (layer->layoutObject()->isVideo() || squashingLayer.layoutObject()->isVideo())
-        return SquashingDisallowedReasonSquashingVideoIsDisallowed;
+        return CompositingReasonSquashingVideoIsDisallowed;
 
     // Don't squash iframes, frames or plugins.
-    // FIXME: this is only necessary because there is frame code that assumes that
-    // composited frames are not squashed.
+    // FIXME: this is only necessary because there is frame code that assumes that composited frames are not squashed.
     if (layer->layoutObject()->isLayoutPart() || squashingLayer.layoutObject()->isLayoutPart())
-        return SquashingDisallowedReasonSquashingLayoutPartIsDisallowed;
+        return CompositingReasonSquashingLayoutPartIsDisallowed;
+
+    if (layer->reflectionInfo())
+        return CompositingReasonSquashingReflectionIsDisallowed;
 
     if (squashingWouldExceedSparsityTolerance(layer, squashingState))
-        return SquashingDisallowedReasonSquashingSparsityExceeded;
+        return CompositingReasonSquashingSparsityExceeded;
 
-    if (layer->layoutObject()->style()->hasBlendMode() || squashingLayer.layoutObject()->style()->hasBlendMode())
-        return SquashingDisallowedReasonSquashingBlendingIsDisallowed;
+    if (layer->layoutObject()->style()->hasBlendMode())
+        return CompositingReasonSquashingBlendingIsDisallowed;
 
-    // FIXME: this is not efficient, since it walks up the tree. We should store
-    // these values on the CompositingInputsCache.
-    if (layer->clippingContainer() != squashingLayer.clippingContainer() && !squashingLayer.compositedLayerMapping()->containingSquashedLayer(layer->clippingContainer(), squashingState.nextSquashedLayerIndex))
-        return SquashingDisallowedReasonClippingContainerMismatch;
+    // FIXME: this is not efficient, since it walks up the tree. We should store these values on the CompositingInputsCache.
+    if (layer->clippingContainer() != squashingLayer.clippingContainer() && !squashingLayer.compositedDeprecatedPaintLayerMapping()->containingSquashedLayer(layer->clippingContainer(), squashingState.nextSquashedLayerIndex))
+        return CompositingReasonSquashingClippingContainerMismatch;
 
-    // Composited descendants need to be clipped by a child containment graphics
-    // layer, which would not be available if the layer is squashed (and therefore
-    // has no CLM nor a child containment graphics layer).
+    // Composited descendants need to be clipped by a child containment graphics layer, which would not be available if the layer is
+    // squashed (and therefore has no CLM nor a child containment graphics layer).
     if (m_compositor->clipsCompositingDescendants(layer))
-        return SquashingDisallowedReasonSquashedLayerClipsCompositingDescendants;
+        return CompositingReasonSquashedLayerClipsCompositingDescendants;
 
     if (layer->scrollsWithRespectTo(&squashingLayer))
-        return SquashingDisallowedReasonScrollsWithRespectToSquashingLayer;
+        return CompositingReasonScrollsWithRespectToSquashingLayer;
 
     if (layer->scrollParent() && layer->hasCompositingDescendant())
-        return SquashingDisallowedReasonScrollChildWithCompositedDescendants;
+        return CompositingReasonScrollChildWithCompositedDescendants;
 
-    if (layer->opacityAncestor() != squashingLayer.opacityAncestor())
-        return SquashingDisallowedReasonOpacityAncestorMismatch;
+    const DeprecatedPaintLayer::AncestorDependentCompositingInputs& compositingInputs = layer->ancestorDependentCompositingInputs();
+    const DeprecatedPaintLayer::AncestorDependentCompositingInputs& squashingLayerCompositingInputs = squashingLayer.ancestorDependentCompositingInputs();
 
-    if (layer->transformAncestor() != squashingLayer.transformAncestor())
-        return SquashingDisallowedReasonTransformAncestorMismatch;
+    if (compositingInputs.opacityAncestor != squashingLayerCompositingInputs.opacityAncestor)
+        return CompositingReasonSquashingOpacityAncestorMismatch;
 
-    if (layer->transform() && !layer->transform()->isIdentityOrTranslation())
-        return SquashingDisallowedReasonNonTranslationTransform;
+    if (compositingInputs.transformAncestor != squashingLayerCompositingInputs.transformAncestor)
+        return CompositingReasonSquashingTransformAncestorMismatch;
 
-    if (layer->renderingContextRoot() != squashingLayer.renderingContextRoot())
-        return SquashingDisallowedReasonRenderingContextMismatch;
+    if (layer->hasFilter() || compositingInputs.filterAncestor != squashingLayerCompositingInputs.filterAncestor)
+        return CompositingReasonSquashingFilterMismatch;
 
-    if (layer->hasFilterInducingProperty() || layer->filterAncestor() != squashingLayer.filterAncestor())
-        return SquashingDisallowedReasonFilterMismatch;
+    if (layer->layoutObject()->style()->position() == FixedPosition)
+        return CompositingReasonSquashingPositionFixedIsDisallowed;
 
-    if (layer->nearestFixedPositionLayer() != squashingLayer.nearestFixedPositionLayer())
-        return SquashingDisallowedReasonNearestFixedPositionMismatch;
-    ASSERT(layer->layoutObject()->style()->position() != FixedPosition);
-
-    if ((squashingLayer.layoutObject()->style()->subtreeWillChangeContents() && squashingLayer.layoutObject()->style()->isRunningAnimationOnCompositor()) || squashingLayer.layoutObject()->style()->shouldCompositeForCurrentAnimations())
-        return SquashingDisallowedReasonSquashingLayerIsAnimating;
-
-    if (layer->enclosingPaginationLayer())
-        return SquashingDisallowedReasonFragmentedContent;
-
-    return SquashingDisallowedReasonsNone;
+    return CompositingReasonNone;
 }
 
-void CompositingLayerAssigner::updateSquashingAssignment(
-    PaintLayer* layer,
-    SquashingState& squashingState,
-    const CompositingStateTransitionType compositedLayerUpdate,
-    Vector<PaintLayer*>& layersNeedingPaintInvalidation)
+void CompositingLayerAssigner::updateSquashingAssignment(DeprecatedPaintLayer* layer, SquashingState& squashingState, const CompositingStateTransitionType compositedLayerUpdate,
+    Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation)
 {
-    // NOTE: In the future as we generalize this, the background of this layer may
-    // need to be assigned to a different backing than the squashed PaintLayer's
-    // own primary contents. This would happen when we have a composited negative
-    // z-index element that needs to paint on top of the background, but below the
-    // layer's main contents. For now, because we always composite layers when
-    // they have a composited negative z-index child, such layers will never need
-    // squashing so it is not yet an issue.
+    // NOTE: In the future as we generalize this, the background of this layer may need to be assigned to a different backing than
+    // the squashed DeprecatedPaintLayer's own primary contents. This would happen when we have a composited negative z-index element that needs
+    // to paint on top of the background, but below the layer's main contents. For now, because we always composite layers
+    // when they have a composited negative z-index child, such layers will never need squashing so it is not yet an issue.
     if (compositedLayerUpdate == PutInSquashingLayer) {
-        // A layer that is squashed with other layers cannot have its own
-        // CompositedLayerMapping.
-        ASSERT(!layer->hasCompositedLayerMapping());
+        // A layer that is squashed with other layers cannot have its own CompositedDeprecatedPaintLayerMapping.
+        ASSERT(!layer->hasCompositedDeprecatedPaintLayerMapping());
         ASSERT(squashingState.hasMostRecentMapping);
 
-        bool changedSquashingLayer = squashingState.mostRecentMapping->updateSquashingLayerAssignment(
-            layer, squashingState.nextSquashedLayerIndex);
+        bool changedSquashingLayer =
+            squashingState.mostRecentMapping->updateSquashingLayerAssignment(layer, squashingState.nextSquashedLayerIndex);
         if (!changedSquashingLayer)
             return;
 
         // If we've modified the collection of squashed layers, we must update
         // the graphics layer geometry.
-        squashingState.mostRecentMapping->setNeedsGraphicsLayerUpdate(
-            GraphicsLayerUpdateSubtree);
+        squashingState.mostRecentMapping->setNeedsGraphicsLayerUpdate(GraphicsLayerUpdateSubtree);
 
         layer->clipper().clearClipRectsIncludingDescendants();
 
-        // Issue a paint invalidation, since |layer| may have been added to an
-        // already-existing squashing layer.
-        TRACE_LAYER_INVALIDATION(
-            layer, InspectorLayerInvalidationTrackingEvent::AddedToSquashingLayer);
-        layersNeedingPaintInvalidation.push_back(layer);
+        // Issue a paint invalidation, since |layer| may have been added to an already-existing squashing layer.
+        TRACE_LAYER_INVALIDATION(layer, InspectorLayerInvalidationTrackingEvent::AddedToSquashingLayer);
+        layersNeedingPaintInvalidation.append(layer);
         m_layersChanged = true;
     } else if (compositedLayerUpdate == RemoveFromSquashingLayer) {
         if (layer->groupedMapping()) {
-            // Before removing |layer| from an already-existing squashing layer that
-            // may have other content, issue a paint invalidation.
+            // Before removing |layer| from an already-existing squashing layer that may have other content, issue a paint invalidation.
             m_compositor->paintInvalidationOnCompositingChange(layer);
-            layer->groupedMapping()->setNeedsGraphicsLayerUpdate(
-                GraphicsLayerUpdateSubtree);
-            layer->setGroupedMapping(nullptr,
-                PaintLayer::InvalidateLayerAndRemoveFromMapping);
+            layer->groupedMapping()->setNeedsGraphicsLayerUpdate(GraphicsLayerUpdateSubtree);
+            layer->setGroupedMapping(nullptr, DeprecatedPaintLayer::InvalidateLayerAndRemoveFromMapping);
         }
 
-        // If we need to issue paint invalidations, do so now that we've removed it
-        // from a squashed layer.
-        TRACE_LAYER_INVALIDATION(
-            layer,
-            InspectorLayerInvalidationTrackingEvent::RemovedFromSquashingLayer);
-        layersNeedingPaintInvalidation.push_back(layer);
+        // If we need to issue paint invalidations, do so now that we've removed it from a squashed layer.
+        TRACE_LAYER_INVALIDATION(layer, InspectorLayerInvalidationTrackingEvent::RemovedFromSquashingLayer);
+        layersNeedingPaintInvalidation.append(layer);
         m_layersChanged = true;
 
         layer->setLostGroupedMapping(false);
     }
 }
 
-static ScrollingCoordinator* scrollingCoordinatorFromLayer(PaintLayer& layer)
+void CompositingLayerAssigner::assignLayersToBackingsForReflectionLayer(DeprecatedPaintLayer* reflectionLayer, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation)
+{
+    CompositingStateTransitionType compositedLayerUpdate = computeCompositedLayerUpdate(reflectionLayer);
+    if (compositedLayerUpdate != NoCompositingStateChange) {
+        TRACE_LAYER_INVALIDATION(reflectionLayer, InspectorLayerInvalidationTrackingEvent::ReflectionLayerChanged);
+        layersNeedingPaintInvalidation.append(reflectionLayer);
+        m_layersChanged = true;
+        m_compositor->allocateOrClearCompositedDeprecatedPaintLayerMapping(reflectionLayer, compositedLayerUpdate);
+    }
+    m_compositor->updateDirectCompositingReasons(reflectionLayer);
+
+    // FIXME: Why do we updateGraphicsLayerConfiguration here instead of in the GraphicsLayerUpdater?
+    if (reflectionLayer->hasCompositedDeprecatedPaintLayerMapping())
+        reflectionLayer->compositedDeprecatedPaintLayerMapping()->updateGraphicsLayerConfiguration();
+}
+
+static ScrollingCoordinator* scrollingCoordinatorFromLayer(DeprecatedPaintLayer& layer)
 {
     Page* page = layer.layoutObject()->frame()->page();
     return (!page) ? nullptr : page->scrollingCoordinator();
 }
 
-void CompositingLayerAssigner::assignLayersToBackingsInternal(
-    PaintLayer* layer,
-    SquashingState& squashingState,
-    Vector<PaintLayer*>& layersNeedingPaintInvalidation)
+void CompositingLayerAssigner::assignLayersToBackingsInternal(DeprecatedPaintLayer* layer, SquashingState& squashingState, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation)
 {
-    if (requiresSquashing(layer->getCompositingReasons())) {
-        SquashingDisallowedReasons reasonsPreventingSquashing = getReasonsPreventingSquashing(layer, squashingState);
-        if (reasonsPreventingSquashing) {
-            layer->setCompositingReasons(layer->getCompositingReasons() | CompositingReasonSquashingDisallowed);
-            layer->setSquashingDisallowedReasons(reasonsPreventingSquashing);
-        }
+    if (requiresSquashing(layer->compositingReasons())) {
+        CompositingReasons reasonsPreventingSquashing = getReasonsPreventingSquashing(layer, squashingState);
+        if (reasonsPreventingSquashing)
+            layer->setCompositingReasons(layer->compositingReasons() | reasonsPreventingSquashing);
     }
 
     CompositingStateTransitionType compositedLayerUpdate = computeCompositedLayerUpdate(layer);
 
-    if (m_compositor->allocateOrClearCompositedLayerMapping(
-            layer, compositedLayerUpdate)) {
-        TRACE_LAYER_INVALIDATION(
-            layer, InspectorLayerInvalidationTrackingEvent::NewCompositedLayer);
-        layersNeedingPaintInvalidation.push_back(layer);
+    if (m_compositor->allocateOrClearCompositedDeprecatedPaintLayerMapping(layer, compositedLayerUpdate)) {
+        TRACE_LAYER_INVALIDATION(layer, InspectorLayerInvalidationTrackingEvent::NewCompositedLayer);
+        layersNeedingPaintInvalidation.append(layer);
         m_layersChanged = true;
         if (ScrollingCoordinator* scrollingCoordinator = scrollingCoordinatorFromLayer(*layer)) {
             if (layer->layoutObject()->style()->hasViewportConstrainedPosition())
-                scrollingCoordinator->frameViewFixedObjectsDidChange(
-                    layer->layoutObject()->view()->frameView());
+                scrollingCoordinator->frameViewFixedObjectsDidChange(layer->layoutObject()->view()->frameView());
         }
     }
 
+    // FIXME: special-casing reflection layers here is not right.
+    if (layer->reflectionInfo())
+        assignLayersToBackingsForReflectionLayer(layer->reflectionInfo()->reflectionLayer(), layersNeedingPaintInvalidation);
+
     // Add this layer to a squashing backing if needed.
-    updateSquashingAssignment(layer, squashingState, compositedLayerUpdate,
-        layersNeedingPaintInvalidation);
+    updateSquashingAssignment(layer, squashingState, compositedLayerUpdate, layersNeedingPaintInvalidation);
 
     const bool layerIsSquashed = compositedLayerUpdate == PutInSquashingLayer || (compositedLayerUpdate == NoCompositingStateChange && layer->groupedMapping());
     if (layerIsSquashed) {
@@ -308,36 +280,29 @@ void CompositingLayerAssigner::assignLayersToBackingsInternal(
     }
 
     if (layer->stackingNode()->isStackingContext()) {
-        PaintLayerStackingNodeIterator iterator(*layer->stackingNode(),
-            NegativeZOrderChildren);
-        while (PaintLayerStackingNode* curNode = iterator.next())
-            assignLayersToBackingsInternal(curNode->layer(), squashingState,
-                layersNeedingPaintInvalidation);
+        DeprecatedPaintLayerStackingNodeIterator iterator(*layer->stackingNode(), NegativeZOrderChildren);
+        while (DeprecatedPaintLayerStackingNode* curNode = iterator.next())
+            assignLayersToBackingsInternal(curNode->layer(), squashingState, layersNeedingPaintInvalidation);
     }
 
-    // At this point, if the layer is to be separately composited, then its
-    // backing becomes the most recent in paint-order.
+    // At this point, if the layer is to be separately composited, then its backing becomes the most recent in paint-order.
     if (layer->compositingState() == PaintsIntoOwnBacking) {
-        ASSERT(!requiresSquashing(layer->getCompositingReasons()));
-        squashingState.updateSquashingStateForNewMapping(
-            layer->compositedLayerMapping(), layer->hasCompositedLayerMapping(),
-            layersNeedingPaintInvalidation);
+        ASSERT(!requiresSquashing(layer->compositingReasons()));
+        squashingState.updateSquashingStateForNewMapping(layer->compositedDeprecatedPaintLayerMapping(), layer->hasCompositedDeprecatedPaintLayerMapping());
     }
 
     if (layer->scrollParent())
-        layer->scrollParent()->getScrollableArea()->setTopmostScrollChild(layer);
+        layer->scrollParent()->scrollableArea()->setTopmostScrollChild(layer);
 
     if (layer->needsCompositedScrolling())
-        layer->getScrollableArea()->setTopmostScrollChild(nullptr);
+        layer->scrollableArea()->setTopmostScrollChild(nullptr);
 
-    PaintLayerStackingNodeIterator iterator(
-        *layer->stackingNode(), NormalFlowChildren | PositiveZOrderChildren);
-    while (PaintLayerStackingNode* curNode = iterator.next())
-        assignLayersToBackingsInternal(curNode->layer(), squashingState,
-            layersNeedingPaintInvalidation);
+    DeprecatedPaintLayerStackingNodeIterator iterator(*layer->stackingNode(), NormalFlowChildren | PositiveZOrderChildren);
+    while (DeprecatedPaintLayerStackingNode* curNode = iterator.next())
+        assignLayersToBackingsInternal(curNode->layer(), squashingState, layersNeedingPaintInvalidation);
 
     if (squashingState.hasMostRecentMapping && &squashingState.mostRecentMapping->owningLayer() == layer)
         squashingState.haveAssignedBackingsToEntireSquashingLayerSubtree = true;
 }
 
-} // namespace blink
+}

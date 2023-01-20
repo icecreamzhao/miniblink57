@@ -14,14 +14,22 @@
 #include "sk_types.h"
 
 typedef enum {
+<<<<<<< HEAD
     NORMAL_SK_BLUR_STYLE, //!< fuzzy inside and outside
     SOLID_SK_BLUR_STYLE, //!< solid inside, fuzzy outside
     OUTER_SK_BLUR_STYLE, //!< nothing inside, fuzzy outside
     INNER_SK_BLUR_STYLE, //!< fuzzy inside, nothing outside
+=======
+    NORMAL_SK_BLUR_STYLE,   //!< fuzzy inside and outside
+    SOLID_SK_BLUR_STYLE,    //!< solid inside, fuzzy outside
+    OUTER_SK_BLUR_STYLE,    //!< nothing inside, fuzzy outside
+    INNER_SK_BLUR_STYLE,    //!< fuzzy inside, nothing outside
+>>>>>>> miniblink49
 } sk_blurstyle_t;
 
 SK_C_PLUS_PLUS_BEGIN_GUARD
 
+<<<<<<< HEAD
 /**
     Increment the reference count on the given sk_maskfilter_t. Must be
     balanced by a call to sk_maskfilter_unref().
@@ -40,6 +48,11 @@ void sk_maskfilter_unref(sk_maskfilter_t*);
     @param sk_blurstyle_t The SkBlurStyle to use
     @param sigma Standard deviation of the Gaussian blur to apply. Must be > 0.
 */
+=======
+void sk_maskfilter_ref(sk_maskfilter_t*);
+void sk_maskfilter_unref(sk_maskfilter_t*);
+
+>>>>>>> miniblink49
 sk_maskfilter_t* sk_maskfilter_new_blur(sk_blurstyle_t, float sigma);
 
 SK_C_PLUS_PLUS_END_GUARD

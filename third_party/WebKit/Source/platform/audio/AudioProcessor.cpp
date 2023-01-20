@@ -28,10 +28,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/audio/AudioProcessor.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 AudioProcessor::~AudioProcessor() { }
+=======
+AudioProcessor::~AudioProcessor()
+{
+}
+>>>>>>> miniblink49
 
 } // namespace blink

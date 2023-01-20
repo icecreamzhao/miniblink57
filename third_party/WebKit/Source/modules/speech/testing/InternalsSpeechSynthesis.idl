@@ -29,5 +29,9 @@
  */
 
 partial interface Internals {
+<<<<<<< HEAD
     [CallWith=ScriptState] void enableMockSpeechSynthesizer(Window window);
+=======
+    void enableMockSpeechSynthesizer(Document document);
+>>>>>>> miniblink49
 };

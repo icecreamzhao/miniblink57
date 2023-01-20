@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class MathBuiltinsAssembler : public CodeStubAssembler {
     public:
         explicit MathBuiltinsAssembler(compiler::CodeAssemblerState* state)
@@ -36,3 +37,29 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_BUILTINS_BUILTINS_MATH_GEN_H_
+=======
+class MathBuiltinsAssembler : public CodeStubAssembler {
+ public:
+  explicit MathBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : CodeStubAssembler(state) {}
+
+  Node* MathPow(Node* context, Node* base, Node* exponent);
+
+ protected:
+  void MathRoundingOperation(
+      Node* context, Node* x,
+      TNode<Float64T> (CodeStubAssembler::*float64op)(SloppyTNode<Float64T>));
+  void MathUnaryOperation(
+      Node* context, Node* x,
+      TNode<Float64T> (CodeStubAssembler::*float64op)(SloppyTNode<Float64T>));
+  void MathMaxMin(Node* context, Node* argc,
+                  TNode<Float64T> (CodeStubAssembler::*float64op)(
+                      SloppyTNode<Float64T>, SloppyTNode<Float64T>),
+                  double default_val);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_BUILTINS_BUILTINS_MATH_GEN_H_
+>>>>>>> miniblink49

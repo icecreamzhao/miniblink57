@@ -24,6 +24,7 @@
  *
  */
 
+#include "config.h"
 #include "core/dom/SandboxFlags.h"
 
 #include "core/html/parser/HTMLParserIdioms.h"
@@ -32,8 +33,13 @@
 
 namespace blink {
 
-SandboxFlags parseSandboxPolicy(const SpaceSplitString& policy,
-    String& invalidTokensErrorMessage)
+SandboxFlags parseSandboxPolicy(const String& policy, String& invalidTokensErrorMessage)
+{
+    SpaceSplitString policyTokens(AtomicString(policy), SpaceSplitString::ShouldNotFoldCase);
+    return parseSandboxPolicy(policyTokens, invalidTokensErrorMessage);
+}
+
+SandboxFlags parseSandboxPolicy(const SpaceSplitString& policy, String& invalidTokensErrorMessage)
 {
     // http://www.w3.org/TR/html5/the-iframe-element.html#attr-iframe-sandbox
     // Parse the unordered set of unique space-separated tokens.
@@ -60,21 +66,13 @@ SandboxFlags parseSandboxPolicy(const SpaceSplitString& policy,
             flags &= ~SandboxPointerLock;
         } else if (equalIgnoringCase(sandboxToken, "allow-orientation-lock")) {
             flags &= ~SandboxOrientationLock;
-        } else if (equalIgnoringCase(sandboxToken,
-                       "allow-popups-to-escape-sandbox")) {
+        } else if (equalIgnoringCase(sandboxToken, "allow-popups-to-escape-sandbox") && RuntimeEnabledFeatures::unsandboxedAuxiliaryEnabled()) {
             flags &= ~SandboxPropagatesToAuxiliaryBrowsingContexts;
-        } else if (equalIgnoringCase(sandboxToken, "allow-modals")) {
+        } else if (equalIgnoringCase(sandboxToken, "allow-modals") && RuntimeEnabledFeatures::sandboxBlocksModalsEnabled()) {
             flags &= ~SandboxModals;
-        } else if (equalIgnoringCase(sandboxToken, "allow-presentation")) {
-            flags &= ~SandboxPresentation;
-        } else if (equalIgnoringCase(sandboxToken,
-                       "allow-top-navigation-with-user-activation")
-            && RuntimeEnabledFeatures::
-                topNavWithUserActivationInSandboxEnabled()) {
-            flags &= ~SandboxTopNavigationWithUserActivation;
         } else {
             if (numberOfTokenErrors)
-                tokenErrors.append(", '");
+                tokenErrors.appendLiteral(", '");
             else
                 tokenErrors.append('\'');
             tokenErrors.append(sandboxToken);
@@ -85,13 +83,13 @@ SandboxFlags parseSandboxPolicy(const SpaceSplitString& policy,
 
     if (numberOfTokenErrors) {
         if (numberOfTokenErrors > 1)
-            tokenErrors.append(" are invalid sandbox flags.");
+            tokenErrors.appendLiteral(" are invalid sandbox flags.");
         else
-            tokenErrors.append(" is an invalid sandbox flag.");
+            tokenErrors.appendLiteral(" is an invalid sandbox flag.");
         invalidTokensErrorMessage = tokenErrors.toString();
     }
 
     return flags;
 }
 
-} // namespace blink
+}

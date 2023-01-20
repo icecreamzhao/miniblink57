@@ -28,19 +28,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/text/TextCodecUTF8.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+
+#include "wtf/text/TextCodecUTF8.h"
+
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/text/TextCodec.h"
 #include "wtf/text/TextEncoding.h"
 #include "wtf/text/TextEncodingRegistry.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace WTF {
 
 namespace {
 
+<<<<<<< HEAD
     TEST(TextCodecUTF8, DecodeAscii)
     {
         TextEncoding encoding("UTF-8");
@@ -86,6 +99,53 @@ namespace {
         ASSERT_EQ(1u, result.length());
         EXPECT_EQ(0xFFFDU, result[0]);
     }
+=======
+TEST(TextCodecUTF8, DecodeAscii)
+{
+    TextEncoding encoding("UTF-8");
+    OwnPtr<TextCodec> codec(newTextCodec(encoding));
+
+    const char testCase[] = "HelloWorld";
+    size_t testCaseSize = sizeof(testCase) - 1;
+
+    bool sawError = false;
+    const String& result = codec->decode(testCase, testCaseSize, DataEOF, false, sawError);
+    EXPECT_FALSE(sawError);
+    ASSERT_EQ(testCaseSize, result.length());
+    for (size_t i = 0; i < testCaseSize; ++i) {
+        EXPECT_EQ(testCase[i], result[i]);
+    }
+}
+
+TEST(TextCodecUTF8, DecodeChineseCharacters)
+{
+    TextEncoding encoding("UTF-8");
+    OwnPtr<TextCodec> codec(newTextCodec(encoding));
+
+    // "Kanji" in Chinese characters.
+    const char testCase[] = "\xe6\xbc\xa2\xe5\xad\x97";
+    size_t testCaseSize = sizeof(testCase) - 1;
+
+    bool sawError = false;
+    const String& result = codec->decode(testCase, testCaseSize, DataEOF, false, sawError);
+    EXPECT_FALSE(sawError);
+    ASSERT_EQ(2u, result.length());
+    EXPECT_EQ(0x6f22U, result[0]);
+    EXPECT_EQ(0x5b57U, result[1]);
+}
+
+TEST(TextCodecUTF8, Decode0xFF)
+{
+    TextEncoding encoding("UTF-8");
+    OwnPtr<TextCodec> codec(newTextCodec(encoding));
+
+    bool sawError = false;
+    const String& result = codec->decode("\xff", 1, DataEOF, false, sawError);
+    EXPECT_TRUE(sawError);
+    ASSERT_EQ(1u, result.length());
+    EXPECT_EQ(0xFFFDU, result[0]);
+}
+>>>>>>> miniblink49
 
 } // namespace
 

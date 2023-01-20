@@ -27,12 +27,21 @@
 #include "unicode/utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API
+<<<<<<< HEAD
 U_NAMESPACE_BEGIN
 
 class CharacterIterator;
 class Replaceable;
 
 U_NAMESPACE_END
+=======
+    U_NAMESPACE_BEGIN
+
+    class CharacterIterator;
+    class Replaceable;
+
+    U_NAMESPACE_END
+>>>>>>> miniblink49
 #endif
 
 U_CDECL_BEGIN
@@ -47,11 +56,15 @@ typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharItera
  * @stable ICU 2.1
  */
 typedef enum UCharIteratorOrigin {
+<<<<<<< HEAD
     UITER_START,
     UITER_CURRENT,
     UITER_LIMIT,
     UITER_ZERO,
     UITER_LENGTH
+=======
+    UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
+>>>>>>> miniblink49
 } UCharIteratorOrigin;
 
 /** Constants for UCharIterator. @stable ICU 2.6 */
@@ -70,9 +83,16 @@ enum {
      *
      * @stable ICU 2.6
      */
+<<<<<<< HEAD
     UITER_UNKNOWN_INDEX = -2
 };
 
+=======
+    UITER_UNKNOWN_INDEX=-2
+};
+
+
+>>>>>>> miniblink49
 /**
  * Constant for UCharIterator getState() indicating an error or
  * an unknown state.
@@ -105,7 +125,11 @@ enum {
  * @stable ICU 2.1
  */
 typedef int32_t U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorGetIndex(UCharIterator* iter, UCharIteratorOrigin origin);
+=======
+UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.move().
@@ -142,7 +166,11 @@ UCharIteratorGetIndex(UCharIterator* iter, UCharIteratorOrigin origin);
  * @stable ICU 2.1
  */
 typedef int32_t U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorMove(UCharIterator* iter, int32_t delta, UCharIteratorOrigin origin);
+=======
+UCharIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.hasNext().
@@ -157,7 +185,11 @@ UCharIteratorMove(UCharIterator* iter, int32_t delta, UCharIteratorOrigin origin
  * @stable ICU 2.1
  */
 typedef UBool U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorHasNext(UCharIterator* iter);
+=======
+UCharIteratorHasNext(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.hasPrevious().
@@ -171,8 +203,13 @@ UCharIteratorHasNext(UCharIterator* iter);
  * @stable ICU 2.1
  */
 typedef UBool U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorHasPrevious(UCharIterator* iter);
 
+=======
+UCharIteratorHasPrevious(UCharIterator *iter);
+ 
+>>>>>>> miniblink49
 /**
  * Function type declaration for UCharIterator.current().
  *
@@ -186,7 +223,11 @@ UCharIteratorHasPrevious(UCharIterator* iter);
  * @stable ICU 2.1
  */
 typedef UChar32 U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorCurrent(UCharIterator* iter);
+=======
+UCharIteratorCurrent(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.next().
@@ -202,7 +243,11 @@ UCharIteratorCurrent(UCharIterator* iter);
  * @stable ICU 2.1
  */
 typedef UChar32 U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorNext(UCharIterator* iter);
+=======
+UCharIteratorNext(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.previous().
@@ -218,7 +263,11 @@ UCharIteratorNext(UCharIterator* iter);
  * @stable ICU 2.1
  */
 typedef UChar32 U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorPrevious(UCharIterator* iter);
+=======
+UCharIteratorPrevious(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.reservedFn().
@@ -232,7 +281,11 @@ UCharIteratorPrevious(UCharIterator* iter);
  * @stable ICU 2.1
  */
 typedef int32_t U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorReserved(UCharIterator* iter, int32_t something);
+=======
+UCharIteratorReserved(UCharIterator *iter, int32_t something);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.getState().
@@ -279,7 +332,11 @@ UCharIteratorReserved(UCharIterator* iter, int32_t something);
  * @stable ICU 2.6
  */
 typedef uint32_t U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorGetState(const UCharIterator* iter);
+=======
+UCharIteratorGetState(const UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Function type declaration for UCharIterator.setState().
@@ -307,7 +364,12 @@ UCharIteratorGetState(const UCharIterator* iter);
  * @stable ICU 2.6
  */
 typedef void U_CALLCONV
+<<<<<<< HEAD
 UCharIteratorSetState(UCharIterator* iter, uint32_t state, UErrorCode* pErrorCode);
+=======
+UCharIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
+
+>>>>>>> miniblink49
 
 /**
  * C API for code unit iteration.
@@ -344,7 +406,11 @@ struct UCharIterator {
      * Not used by caller.
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     const void* context;
+=======
+    const void *context;
+>>>>>>> miniblink49
 
     /**
      * (protected) Length of string or similar.
@@ -387,7 +453,11 @@ struct UCharIterator {
      * @see UCharIteratorGetIndex
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorGetIndex* getIndex;
+=======
+    UCharIteratorGetIndex *getIndex;
+>>>>>>> miniblink49
 
     /**
      * (public) Moves the current position relative to the start or limit of the
@@ -398,7 +468,11 @@ struct UCharIterator {
      * @see UCharIteratorMove
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorMove* move;
+=======
+    UCharIteratorMove *move;
+>>>>>>> miniblink49
 
     /**
      * (public) Check if current() and next() can still
@@ -407,7 +481,11 @@ struct UCharIterator {
      * @see UCharIteratorHasNext
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorHasNext* hasNext;
+=======
+    UCharIteratorHasNext *hasNext;
+>>>>>>> miniblink49
 
     /**
      * (public) Check if previous() can still return another code unit.
@@ -415,7 +493,11 @@ struct UCharIterator {
      * @see UCharIteratorHasPrevious
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorHasPrevious* hasPrevious;
+=======
+    UCharIteratorHasPrevious *hasPrevious;
+>>>>>>> miniblink49
 
     /**
      * (public) Return the code unit at the current position,
@@ -424,7 +506,11 @@ struct UCharIterator {
      * @see UCharIteratorCurrent
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorCurrent* current;
+=======
+    UCharIteratorCurrent *current;
+>>>>>>> miniblink49
 
     /**
      * (public) Return the code unit at the current index and increment
@@ -434,7 +520,11 @@ struct UCharIterator {
      * @see UCharIteratorNext
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorNext* next;
+=======
+    UCharIteratorNext *next;
+>>>>>>> miniblink49
 
     /**
      * (public) Decrement the index and return the code unit from there
@@ -444,7 +534,11 @@ struct UCharIterator {
      * @see UCharIteratorPrevious
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorPrevious* previous;
+=======
+    UCharIteratorPrevious *previous;
+>>>>>>> miniblink49
 
     /**
      * (public) Reserved for future use. Currently NULL.
@@ -452,7 +546,11 @@ struct UCharIterator {
      * @see UCharIteratorReserved
      * @stable ICU 2.1
      */
+<<<<<<< HEAD
     UCharIteratorReserved* reservedFn;
+=======
+    UCharIteratorReserved *reservedFn;
+>>>>>>> miniblink49
 
     /**
      * (public) Return the state of the iterator, to be restored later with setState().
@@ -461,7 +559,11 @@ struct UCharIterator {
      * @see UCharIteratorGet
      * @stable ICU 2.6
      */
+<<<<<<< HEAD
     UCharIteratorGetState* getState;
+=======
+    UCharIteratorGetState *getState;
+>>>>>>> miniblink49
 
     /**
      * (public) Restore the iterator state from the state word from a call
@@ -471,7 +573,11 @@ struct UCharIterator {
      * @see UCharIteratorSet
      * @stable ICU 2.6
      */
+<<<<<<< HEAD
     UCharIteratorSetState* setState;
+=======
+    UCharIteratorSetState *setState;
+>>>>>>> miniblink49
 };
 
 /**
@@ -493,7 +599,11 @@ struct UCharIterator {
  * @stable ICU 2.1
  */
 U_STABLE UChar32 U_EXPORT2
+<<<<<<< HEAD
 uiter_current32(UCharIterator* iter);
+=======
+uiter_current32(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Helper function for UCharIterator to get the next code point.
@@ -510,7 +620,11 @@ uiter_current32(UCharIterator* iter);
  * @stable ICU 2.1
  */
 U_STABLE UChar32 U_EXPORT2
+<<<<<<< HEAD
 uiter_next32(UCharIterator* iter);
+=======
+uiter_next32(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Helper function for UCharIterator to get the previous code point.
@@ -527,7 +641,11 @@ uiter_next32(UCharIterator* iter);
  * @stable ICU 2.1
  */
 U_STABLE UChar32 U_EXPORT2
+<<<<<<< HEAD
 uiter_previous32(UCharIterator* iter);
+=======
+uiter_previous32(UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Get the "state" of the iterator in the form of a single 32-bit word.
@@ -548,7 +666,11 @@ uiter_previous32(UCharIterator* iter);
  * @stable ICU 2.6
  */
 U_STABLE uint32_t U_EXPORT2
+<<<<<<< HEAD
 uiter_getState(const UCharIterator* iter);
+=======
+uiter_getState(const UCharIterator *iter);
+>>>>>>> miniblink49
 
 /**
  * Restore the "state" of the iterator using a state word from a getState() call.
@@ -566,7 +688,11 @@ uiter_getState(const UCharIterator* iter);
  * @stable ICU 2.6
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 uiter_setState(UCharIterator* iter, uint32_t state, UErrorCode* pErrorCode);
+=======
+uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
+>>>>>>> miniblink49
 
 /**
  * Set up a UCharIterator to iterate over a string.
@@ -591,7 +717,11 @@ uiter_setState(UCharIterator* iter, uint32_t state, UErrorCode* pErrorCode);
  * @stable ICU 2.1
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 uiter_setString(UCharIterator* iter, const UChar* s, int32_t length);
+=======
+uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
+>>>>>>> miniblink49
 
 /**
  * Set up a UCharIterator to iterate over a UTF-16BE string
@@ -614,7 +744,11 @@ uiter_setString(UCharIterator* iter, const UChar* s, int32_t length);
  * @stable ICU 2.6
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 uiter_setUTF16BE(UCharIterator* iter, const char* s, int32_t length);
+=======
+uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
+>>>>>>> miniblink49
 
 /**
  * Set up a UCharIterator to iterate over a UTF-8 string.
@@ -650,7 +784,11 @@ uiter_setUTF16BE(UCharIterator* iter, const char* s, int32_t length);
  * @stable ICU 2.6
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 uiter_setUTF8(UCharIterator* iter, const char* s, int32_t length);
+=======
+uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
+>>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -675,7 +813,11 @@ uiter_setUTF8(UCharIterator* iter, const char* s, int32_t length);
  * @stable ICU 2.1
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 uiter_setCharacterIterator(UCharIterator* iter, icu::CharacterIterator* charIter);
+=======
+uiter_setCharacterIterator(UCharIterator *iter, icu::CharacterIterator *charIter);
+>>>>>>> miniblink49
 
 /**
  * Set up a UCharIterator to iterate over a C++ Replaceable.
@@ -700,7 +842,11 @@ uiter_setCharacterIterator(UCharIterator* iter, icu::CharacterIterator* charIter
  * @stable ICU 2.1
  */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 uiter_setReplaceable(UCharIterator* iter, const icu::Replaceable* rep);
+=======
+uiter_setReplaceable(UCharIterator *iter, const icu::Replaceable *rep);
+>>>>>>> miniblink49
 
 #endif
 

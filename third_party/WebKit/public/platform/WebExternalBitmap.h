@@ -46,7 +46,11 @@ public:
     // Returns the pixels for the bitmap. The buffer that's returned will
     // contain size().width * size().height * 4 bytes and will use Skia's byte
     // order.
+<<<<<<< HEAD
     virtual uint8_t* pixels() = 0;
+=======
+    virtual uint8* pixels() = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

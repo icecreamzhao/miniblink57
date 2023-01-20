@@ -5,37 +5,32 @@
 #ifndef NonInterpolableValue_h
 #define NonInterpolableValue_h
 
-#include "wtf/RefCounted.h"
+#include "platform/heap/Handle.h"
 
 namespace blink {
 
-// Represents components of a PropertySpecificKeyframe's value that either do
-// not change or 50% flip when interpolating with an adjacent value.
-class NonInterpolableValue : public RefCounted<NonInterpolableValue> {
+// Holds components of a keyframe value that do not change when interpolating with another keyframe.
+class NonInterpolableValue : public RefCountedWillBeGarbageCollectedFinalized<NonInterpolableValue> {
 public:
     virtual ~NonInterpolableValue() { }
 
     typedef const void* Type;
-    virtual Type getType() const = 0;
+    virtual Type type() const = 0;
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
-// These macros provide safe downcasts of NonInterpolableValue subclasses with
-// debug assertions.
-// See CSSValueInterpolationType.cpp for example usage.
+// These macros provide safe downcasts of NonInterpolableValue subclasses with debug assertions.
+// See CSSValueAnimationType for example usage.
 #define DECLARE_NON_INTERPOLABLE_VALUE_TYPE() \
-    static Type staticType;                   \
-    Type getType() const final { return staticType; }
+    static Type staticType; \
+    virtual Type type() const { return staticType; }
 
 #define DEFINE_NON_INTERPOLABLE_VALUE_TYPE(T) \
     NonInterpolableValue::Type T::staticType = &T::staticType;
 
-#define DEFINE_NON_INTERPOLABLE_VALUE_TYPE_CASTS(T)                 \
-    inline bool is##T(const NonInterpolableValue* value)            \
-    {                                                               \
-        return !value || value->getType() == T::staticType;         \
-    }                                                               \
-    DEFINE_TYPE_CASTS(T, NonInterpolableValue, value, is##T(value), \
-        is##T(&value));
+#define DEFINE_NON_INTERPOLABLE_VALUE_TYPE_CASTS(T) \
+    DEFINE_TYPE_CASTS(T, NonInterpolableValue, value, value->type() == T::staticType, value.type() == T::staticType);
 
 } // namespace blink
 

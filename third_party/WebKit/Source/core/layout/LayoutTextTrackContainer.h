@@ -41,10 +41,11 @@ public:
     LayoutTextTrackContainer(Element*);
 
 private:
-    void layout() override;
+    virtual void layout() override;
 
     bool updateSizes(const LayoutVideo&);
 
+    IntSize m_videoSize;
     float m_fontSize;
 };
 

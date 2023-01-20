@@ -24,43 +24,35 @@
 #ifndef MutationEvent_h
 #define MutationEvent_h
 
-#include "core/dom/Node.h"
 #include "core/events/Event.h"
+#include "core/dom/Node.h"
 
 namespace blink {
 
 class MutationEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    ~MutationEvent() override;
+    virtual ~MutationEvent();
 
-    enum AttrChangeType { kModification = 1,
-        kAddition = 2,
-        kRemoval = 3 };
+    enum AttrChangeType {
+        MODIFICATION    = 1, // NOLINT
+        ADDITION        = 2, // NOLINT
+        REMOVAL         = 3  // NOLINT
+    };
 
-    static MutationEvent* create() { return new MutationEvent; }
-
-    static MutationEvent* create(const AtomicString& type,
-        bool canBubble,
-        Node* relatedNode = nullptr,
-        const String& prevValue = String(),
-        const String& newValue = String(),
-        const String& attrName = String(),
-        unsigned short attrChange = 0)
+    static PassRefPtrWillBeRawPtr<MutationEvent> create()
     {
-        return new MutationEvent(type, canBubble, false, relatedNode, prevValue,
-            newValue, attrName, attrChange);
+        return adoptRefWillBeNoop(new MutationEvent);
     }
 
-    void initMutationEvent(const AtomicString& type,
-        bool canBubble,
-        bool cancelable,
-        Node* relatedNode,
-        const String& prevValue,
-        const String& newValue,
-        const String& attrName,
-        unsigned short attrChange);
+    static PassRefPtrWillBeRawPtr<MutationEvent> create(
+        const AtomicString& type, bool canBubble, PassRefPtrWillBeRawPtr<Node> relatedNode = nullptr,
+        const String& prevValue = String(), const String& newValue = String(), const String& attrName = String(), unsigned short attrChange = 0)
+    {
+        return adoptRefWillBeNoop(new MutationEvent(type, canBubble, false, relatedNode, prevValue, newValue, attrName, attrChange));
+    }
+
+    void initMutationEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<Node> relatedNode, const String& prevValue, const String& newValue, const String& attrName, unsigned short attrChange);
 
     Node* relatedNode() const { return m_relatedNode.get(); }
     String prevValue() const { return m_prevValue; }
@@ -68,22 +60,15 @@ public:
     String attrName() const { return m_attrName; }
     unsigned short attrChange() const { return m_attrChange; }
 
-    const AtomicString& interfaceName() const override;
+    virtual const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     MutationEvent();
-    MutationEvent(const AtomicString& type,
-        bool canBubble,
-        bool cancelable,
-        Node* relatedNode,
-        const String& prevValue,
-        const String& newValue,
-        const String& attrName,
-        unsigned short attrChange);
+    MutationEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<Node> relatedNode, const String& prevValue, const String& newValue, const String& attrName, unsigned short attrChange);
 
-    Member<Node> m_relatedNode;
+    RefPtrWillBeMember<Node> m_relatedNode;
     String m_prevValue;
     String m_newValue;
     String m_attrName;

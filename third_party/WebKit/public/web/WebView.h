@@ -33,6 +33,7 @@
 
 #include "../platform/WebColor.h"
 #include "../platform/WebDisplayMode.h"
+<<<<<<< HEAD
 #include "../platform/WebDragOperation.h"
 #include "../platform/WebFocusType.h"
 #include "../platform/WebPageVisibilityState.h"
@@ -54,10 +55,31 @@ class WebLocalFrame;
 class WebPageImportanceSignals;
 class WebPrerendererClient;
 class WebRemoteFrame;
+=======
+#include "../platform/WebPageVisibilityState.h"
+#include "../platform/WebString.h"
+#include "../platform/WebVector.h"
+#include "WebDragOperation.h"
+#include "WebHistoryCommitType.h"
+#include "WebHistoryItem.h"
+#include "WebWidget.h"
+
+namespace blink {
+
+class WebAXObject;
+class WebAutofillClient;
+class WebCredentialManagerClient;
+class WebDragData;
+class WebFrame;
+class WebHitTestResult;
+class WebPageOverlay;
+class WebPrerendererClient;
+>>>>>>> miniblink49
 class WebSettings;
 class WebSpellCheckClient;
 class WebString;
 class WebViewClient;
+<<<<<<< HEAD
 class WebViewScheduler;
 struct WebActiveWheelFlingParameters;
 struct WebDeviceEmulationParams;
@@ -68,6 +90,17 @@ struct WebPoint;
 struct WebWindowFeatures;
 
 class WebView : protected WebWidget {
+=======
+struct WebActiveWheelFlingParameters;
+struct WebDeviceEmulationParams;
+struct WebMediaPlayerAction;
+struct WebPluginAction;
+struct WebPoint;
+struct WebFloatPoint;
+struct WebWindowFeatures;
+
+class WebView : public WebWidget {
+>>>>>>> miniblink49
 public:
     BLINK_EXPORT static const double textSizeMultiplierRatio;
     BLINK_EXPORT static const double minTextSizeMultiplier;
@@ -78,6 +111,7 @@ public:
         InjectStyleInTopFrameOnly
     };
 
+<<<<<<< HEAD
     // WebWidget overrides.
     using WebWidget::applyViewportDeltas;
     using WebWidget::backgroundColor;
@@ -114,14 +148,21 @@ public:
     using WebWidget::updateAllLifecyclePhases;
     using WebWidget::updateBrowserControlsState;
     using WebWidget::willCloseLayerTreeView;
+=======
+>>>>>>> miniblink49
 
     // Initialization ------------------------------------------------------
 
     // Creates a WebView that is NOT yet initialized. You will need to
     // call setMainFrame to finish the initialization. It is valid
+<<<<<<< HEAD
     // to pass a null client pointer. The WebPageVisibilityState defines the
     // initial visibility of the page.
     BLINK_EXPORT static WebView* create(WebViewClient*, WebPageVisibilityState);
+=======
+    // to pass a null client pointer.
+    BLINK_EXPORT static WebView* create(WebViewClient*);
+>>>>>>> miniblink49
 
     // After creating a WebView, you should immediately call this method.
     // You can optionally modify the settings before calling this method.
@@ -133,12 +174,16 @@ public:
     virtual void setCredentialManagerClient(WebCredentialManagerClient*) = 0;
     virtual void setPrerendererClient(WebPrerendererClient*) = 0;
     virtual void setSpellCheckClient(WebSpellCheckClient*) = 0;
+<<<<<<< HEAD
     // Initializes extensions.
 #ifdef TENCENT_CHANGES
 //     virtual void setExtensionClient(WebExtensionClient*) { }
 //     virtual WebExtensionClient* extensionClient() { return NULL; }
 //     virtual WebExtension* extension() { return NULL; }
 #endif
+=======
+
+>>>>>>> miniblink49
     // Options -------------------------------------------------------------
 
     // The returned pointer is valid for the lifetime of the WebView.
@@ -147,6 +192,25 @@ public:
     // Corresponds to the encoding of the main frame.  Setting the page
     // encoding may cause the main frame to reload.
     virtual WebString pageEncoding() const = 0;
+<<<<<<< HEAD
+=======
+    virtual void setPageEncoding(const WebString&) = 0;
+
+    // Makes the WebView transparent.  This is useful if you want to have
+    // some custom background rendered behind it.
+    virtual bool isTransparent() const = 0;
+    virtual void setIsTransparent(bool) = 0;
+
+    // Sets the base color used for this WebView's background. This is in effect
+    // the default background color used for pages with no background-color
+    // style in effect, or used as the alpha-blended basis for any pages with
+    // translucent background-color style. (For pages with opaque
+    // background-color style, this property is effectively ignored).
+    // Setting this takes effect for the currently loaded page, if any, and
+    // persists across subsequent navigations. Defaults to white prior to the
+    // first call to this method.
+    virtual void setBaseBackgroundColor(WebColor) = 0;
+>>>>>>> miniblink49
 
     // Controls whether pressing Tab key advances focus to links.
     virtual bool tabsToLinks() const = 0;
@@ -174,6 +238,10 @@ public:
     // for whether window.close() may be called.
     virtual void setOpenedByDOM() = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     // Frames --------------------------------------------------------------
 
     virtual WebFrame* mainFrame() = 0;
@@ -184,6 +252,7 @@ public:
     // matches the given name.  If the optional relativeToFrame parameter
     // is specified, then the search begins with the given frame and its
     // children.
+<<<<<<< HEAD
     virtual WebFrame* findFrameByName(const WebString& name,
         WebFrame* relativeToFrame = 0)
         = 0;
@@ -199,6 +268,17 @@ public:
     // elements.
     virtual void focusDocumentView(WebFrame*) = 0;
 
+=======
+    virtual WebFrame* findFrameByName(
+        const WebString& name, WebFrame* relativeToFrame = 0) = 0;
+
+
+    // Focus ---------------------------------------------------------------
+
+    virtual WebFrame* focusedFrame() = 0;
+    virtual void setFocusedFrame(WebFrame*) = 0;
+
+>>>>>>> miniblink49
     // Focus the first (last if reverse is true) focusable node.
     virtual void setInitialFocus(bool reverse) = 0;
 
@@ -207,6 +287,7 @@ public:
     // send it.
     virtual void clearFocusedElement() = 0;
 
+<<<<<<< HEAD
     // If it is editable, scrolls the element currently in focus into |rect|,
     // where |rect| is in viewport space.
     // Returns false if there is currently no currently focused element.
@@ -217,11 +298,17 @@ public:
 
     // Smooth scroll the root layer to |targetX|, |targetY| in |durationMs|.
     virtual void smoothScroll(int targetX, int targetY, long durationMs) { }
+=======
+    // Scrolls the node currently in focus into |rect|, where |rect| is in
+    // viewport space. Returns true if an animation was started.
+    virtual bool scrollFocusedNodeIntoRect(const WebRect&) { return false; }
+>>>>>>> miniblink49
 
     // Advance the focus of the WebView forward to the next element or to the
     // previous element in the tab sequence (if reverse is true).
     virtual void advanceFocus(bool reverse) { }
 
+<<<<<<< HEAD
     // Advance the focus from the frame |from| to the next in sequence
     // (determined by WebFocusType) focusable element in frame |to|. Used when
     // focus needs to advance to/from a cross-process frame.
@@ -229,11 +316,17 @@ public:
         WebRemoteFrame* from,
         WebLocalFrame* to) { }
 
+=======
+>>>>>>> miniblink49
     // Animate a scale into the specified rect where multiple targets were
     // found from previous tap gesture.
     // Returns false if it doesn't do any zooming.
     virtual bool zoomToMultipleTargetsRect(const WebRect&) = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     // Zoom ----------------------------------------------------------------
 
     // Returns the current zoom level.  0 is "original size", and each increment
@@ -250,8 +343,12 @@ public:
 
     // Updates the zoom limits for this view.
     virtual void zoomLimitsChanged(double minimumZoomLevel,
+<<<<<<< HEAD
         double maximumZoomLevel)
         = 0;
+=======
+                                   double maximumZoomLevel) = 0;
+>>>>>>> miniblink49
 
     // Helper functions to convert between zoom level and zoom factor.  zoom
     // factor is zoom percent / 100, so 300% = 3.0.
@@ -270,6 +367,7 @@ public:
     // is scaled up, < 1.0 is scaled down.
     virtual float pageScaleFactor() const = 0;
 
+<<<<<<< HEAD
     // Scales the page without affecting layout by using the visual viewport.
     virtual void setPageScaleFactor(float) = 0;
 
@@ -298,6 +396,40 @@ public:
     // double-tap or find in page) will have the page scale limited to this value
     // times the font scale factor. Manual pinch zoom will not be affected by this
     // limit.
+=======
+    // TODO: Obsolete, the origin parameter is ambiguous with two viewports. Remove
+    // once Chromium side users are removed.
+    // Scales a page by a factor of scaleFactor and then sets a scroll position to (x, y).
+    // setPageScaleFactor() magnifies and shrinks a page without affecting layout.
+    // On the other hand, zooming affects layout of the page.
+    virtual void setPageScaleFactor(float scaleFactor, const WebPoint& origin) { setPageScaleFactor(scaleFactor); }
+
+    // Scales the page without affecting layout by using the pinch-to-zoom viewport.
+    virtual void setPageScaleFactor(float) = 0;
+
+    // Sets the offset of the pinch-to-zoom viewport within the main frame, in
+    // partial CSS pixels. The offset will be clamped so the pinch viewport
+    // stays within the frame's bounds.
+    virtual void setPinchViewportOffset(const WebFloatPoint&) = 0;
+
+    // Gets the pinch viewport's current offset within the page's main frame,
+    // in partial CSS pixels.
+    virtual WebFloatPoint pinchViewportOffset() const = 0;
+
+    // Sets the default minimum, and maximum page scale. These will be overridden
+    // by the page or by the overrides below if they are set.
+    virtual void setDefaultPageScaleLimits(
+        float minScale,
+        float maxScale) = 0;
+
+    // Sets the initial page scale to the given factor. This scale setting overrides
+    // page scale set in the page's viewport meta tag.
+    virtual void setInitialPageScaleOverride(float) = 0;
+
+    // Sets the maximum page scale considered to be legible. Automatic zooms (e.g, double-tap
+    // or find in page) will have the page scale limited to this value times the font scale
+    // factor. Manual pinch zoom will not be affected by this limit.
+>>>>>>> miniblink49
     virtual void setMaximumLegibleScale(float) = 0;
 
     // Reset any saved values for the scroll and scale state.
@@ -308,15 +440,22 @@ public:
     // pages even if the web page tries to block scaling.
     virtual void setIgnoreViewportTagScaleLimits(bool) = 0;
 
+<<<<<<< HEAD
     // Returns the "preferred" contents size, defined as the preferred minimum
     // width of the main document's contents and the minimum height required to
     // display the main document without scrollbars.  The returned size has the
     // page zoom factor applied.
+=======
+    // Returns the "preferred" contents size, defined as the preferred minimum width of the main document's contents
+    // and the minimum height required to display the main document without scrollbars.
+    // The returned size has the page zoom factor applied.
+>>>>>>> miniblink49
     virtual WebSize contentsPreferredMinimumSize() = 0;
 
     // Sets the display mode of the web app.
     virtual void setDisplayMode(WebDisplayMode) = 0;
 
+<<<<<<< HEAD
     // Sets the ratio as computed by computePageScaleConstraints.
     // TODO(oshima): Remove this once the device scale factor implementation is
     // fully migrated to use zooming mechanism.
@@ -337,20 +476,38 @@ public:
         float browserControlsHeight,
         bool browserControlsShrinkLayout)
         = 0;
+=======
+    // The ratio of the current device's screen DPI to the target device's screen DPI.
+    virtual float deviceScaleFactor() const = 0;
+
+    // Sets the ratio as computed by computePageScaleConstraints.
+    virtual void setDeviceScaleFactor(float) = 0;
+
+    // Set and reset the device color profile.
+    virtual void setDeviceColorProfile(const WebVector<char>&) = 0;
+    virtual void resetDeviceColorProfile() = 0;
+>>>>>>> miniblink49
 
     // Auto-Resize -----------------------------------------------------------
 
     // In auto-resize mode, the view is automatically adjusted to fit the html
     // content within the given bounds.
+<<<<<<< HEAD
     virtual void enableAutoResizeMode(const WebSize& minSize,
         const WebSize& maxSize)
         = 0;
+=======
+    virtual void enableAutoResizeMode(
+        const WebSize& minSize,
+        const WebSize& maxSize) = 0;
+>>>>>>> miniblink49
 
     // Turn off auto-resize.
     virtual void disableAutoResizeMode() = 0;
 
     // Media ---------------------------------------------------------------
 
+<<<<<<< HEAD
     // Performs the specified media player action on the node at the given
     // location.
     virtual void performMediaPlayerAction(const WebMediaPlayerAction&,
@@ -364,6 +521,16 @@ public:
 
     // Notifies WebView when audio is started or stopped.
     virtual void audioStateChanged(bool isAudioPlaying) = 0;
+=======
+    // Performs the specified media player action on the node at the given location.
+    virtual void performMediaPlayerAction(
+        const WebMediaPlayerAction&, const WebPoint& location) = 0;
+
+    // Performs the specified plugin action on the node at the given location.
+    virtual void performPluginAction(
+        const WebPluginAction&, const WebPoint& location) = 0;
+
+>>>>>>> miniblink49
 
     // Data exchange -------------------------------------------------------
 
@@ -373,6 +540,7 @@ public:
     // Do a hit test equivalent to what would be done for a GestureTap event
     // that has width/height corresponding to the supplied |tapArea|.
     virtual WebHitTestResult hitTestResultForTap(const WebPoint& tapPoint,
+<<<<<<< HEAD
         const WebSize& tapArea)
         = 0;
 
@@ -381,6 +549,45 @@ public:
     virtual void removeSpellingMarkersUnderWords(
         const WebVector<WebString>& words)
         = 0;
+=======
+        const WebSize& tapArea) = 0;
+
+    // Copy to the clipboard the image located at a particular point in the
+    // WebView (if there is such an image)
+    virtual void copyImageAt(const WebPoint&) = 0;
+
+    // Save as the image located at a particular point in the
+    // WebView (if there is such an image)
+    virtual void saveImageAt(const WebPoint&) = 0;
+
+    // Notifies the WebView that a drag has terminated.
+    virtual void dragSourceEndedAt(
+        const WebPoint& clientPoint, const WebPoint& screenPoint,
+        WebDragOperation operation) = 0;
+
+    // Notfies the WebView that the system drag and drop operation has ended.
+    virtual void dragSourceSystemDragEnded() = 0;
+
+    // Callback methods when a drag-and-drop operation is trying to drop
+    // something on the WebView.
+    virtual WebDragOperation dragTargetDragEnter(
+        const WebDragData&,
+        const WebPoint& clientPoint, const WebPoint& screenPoint,
+        WebDragOperationsMask operationsAllowed,
+        int modifiers) = 0;
+    virtual WebDragOperation dragTargetDragOver(
+        const WebPoint& clientPoint, const WebPoint& screenPoint,
+        WebDragOperationsMask operationsAllowed,
+        int modifiers) = 0;
+    virtual void dragTargetDragLeave() = 0;
+    virtual void dragTargetDrop(
+        const WebPoint& clientPoint, const WebPoint& screenPoint,
+        int modifiers) = 0;
+
+    // Retrieves a list of spelling markers.
+    virtual void spellingMarkers(WebVector<uint32_t>* markers) = 0;
+    virtual void removeSpellingMarkersUnderWords(const WebVector<WebString>& words) = 0;
+>>>>>>> miniblink49
 
     // Support for resource loading initiated by plugins -------------------
 
@@ -388,6 +595,10 @@ public:
     // parent Page.
     virtual unsigned long createUniqueIdentifierForRequest() = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     // Developer tools -----------------------------------------------------
 
     // Enables device emulation as specified in params.
@@ -396,10 +607,19 @@ public:
     // Cancel emulation started via |enableDeviceEmulation| call.
     virtual void disableDeviceEmulation() = 0;
 
+<<<<<<< HEAD
     // Accessibility -------------------------------------------------------
 
     // Returns the accessibility object for this view.
     //virtual WebAXObject accessibilityObject() = 0;
+=======
+#ifdef IMPLEMENTED_NEWEST_BLINK
+    // Accessibility -------------------------------------------------------
+
+    // Returns the accessibility object for this view.
+    virtual WebAXObject accessibilityObject() = 0;
+#endif // IMPLEMENTED_NEWEST_BLINK
+>>>>>>> miniblink49
 
     // Context menu --------------------------------------------------------
 
@@ -408,6 +628,7 @@ public:
     // Shows a context menu for the currently focused element.
     virtual void showContextMenu() = 0;
 
+<<<<<<< HEAD
     // Notify that context menu has been closed.
     virtual void didCloseContextMenu() = 0;
 
@@ -417,6 +638,12 @@ public:
         WebString& html,
         WebRect& resultRect)
         = 0;
+=======
+
+    // SmartClip support ---------------------------------------------------
+    virtual void extractSmartClipData(WebRect initRect, WebString& text, WebString& html, WebRect& resultRect) = 0;
+
+>>>>>>> miniblink49
 
     // Popup menu ----------------------------------------------------------
 
@@ -426,6 +653,10 @@ public:
     // Hides any popup (suggestions, selects...) that might be showing.
     virtual void hidePopups() = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     // Visited link state --------------------------------------------------
 
     // Tells all WebView instances to update the visited link state for the
@@ -433,19 +664,31 @@ public:
     BLINK_EXPORT static void updateVisitedLinkState(unsigned long long hash);
 
     // Tells all WebView instances to update the visited state for all
+<<<<<<< HEAD
     // their links. Use invalidateVisitedLinkHashes to inform that the visitedlink
     // table was changed and the salt was changed too. And all cached visitedlink
     // hashes need to be recalculated.
     BLINK_EXPORT static void resetVisitedLinkState(
         bool invalidateVisitedLinkHashes);
+=======
+    // their links.
+    BLINK_EXPORT static void resetVisitedLinkState();
+
+>>>>>>> miniblink49
 
     // Custom colors -------------------------------------------------------
 
     virtual void setSelectionColors(unsigned activeBackgroundColor,
+<<<<<<< HEAD
         unsigned activeForegroundColor,
         unsigned inactiveBackgroundColor,
         unsigned inactiveForegroundColor)
         = 0;
+=======
+                                    unsigned activeForegroundColor,
+                                    unsigned inactiveBackgroundColor,
+                                    unsigned inactiveForegroundColor) = 0;
+>>>>>>> miniblink49
 
     // Modal dialog support ------------------------------------------------
 
@@ -454,16 +697,23 @@ public:
     BLINK_EXPORT static void willEnterModalLoop();
     BLINK_EXPORT static void didExitModalLoop();
 
+<<<<<<< HEAD
     // Called to inform the WebView that a wheel fling animation was started
     // externally (for instance by the compositor) but must be completed by the
     // WebView.
     virtual void transferActiveWheelFlingAnimation(
         const WebActiveWheelFlingParameters&)
         = 0;
+=======
+    // Called to inform the WebView that a wheel fling animation was started externally (for instance
+    // by the compositor) but must be completed by the WebView.
+    virtual void transferActiveWheelFlingAnimation(const WebActiveWheelFlingParameters&) = 0;
+>>>>>>> miniblink49
 
     // Cancels an active fling, returning true if a fling was active.
     virtual bool endActiveFlingAnimation() = 0;
 
+<<<<<<< HEAD
     // Returns true if there's an active fling animation.
     virtual bool isFlinging() const = 0;
 
@@ -475,10 +725,18 @@ public:
 
     virtual WebViewScheduler* scheduler() const = 0;
 
+=======
+    virtual void setShowPaintRects(bool) = 0;
+    virtual void setShowFPSCounter(bool) = 0;
+    virtual void setContinuousPaintingEnabled(bool) = 0;
+    virtual void setShowScrollBottleneckRects(bool) = 0;
+
+>>>>>>> miniblink49
     // Visibility -----------------------------------------------------------
 
     // Sets the visibility of the WebView.
     virtual void setVisibilityState(WebPageVisibilityState visibilityState,
+<<<<<<< HEAD
         bool isInitialState) { }
 
     // Graphics -------------------------------------------------------------
@@ -493,6 +751,23 @@ public:
     // Page Importance Signals ----------------------------------------------
 
     virtual WebPageImportanceSignals* pageImportanceSignals() { return nullptr; }
+=======
+                                    bool isInitialState) { }
+
+    // PageOverlay ----------------------------------------------------------
+
+    // Adds/removes page overlay to this WebView. These functions change the
+    // graphical appearance of the WebView. WebPageOverlay paints the
+    // contents of the page overlay. It also provides an z-order number for
+    // the page overlay. The z-order number defines the paint order the page
+    // overlays. Page overlays with larger z-order number will be painted after
+    // page overlays with smaller z-order number. That is, they appear above
+    // the page overlays with smaller z-order number. If two page overlays have
+    // the same z-order number, the later added one will be on top.
+    virtual void addPageOverlay(WebPageOverlay*, int /*z-order*/) = 0;
+    virtual void removePageOverlay(WebPageOverlay*) = 0;
+
+>>>>>>> miniblink49
 
     // i18n -----------------------------------------------------------------
 
@@ -511,12 +786,20 @@ public:
     // context's ability to deal with that failure gracefully can be tested.
     virtual void forceNextDrawingBufferCreationToFail() = 0;
 
+<<<<<<< HEAD
     // TODO(lfg): Remove this once the refactor of WebView/WebWidget is
     // completed.
     WebWidget* widget() { return this; }
 
 protected:
     ~WebView() { }
+=======
+protected:
+    ~WebView() {}
+
+   public:
+    virtual void setMainFrameTopContentInset(int offset) = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -6,15 +6,27 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef GrPaint_DEFINED
 #define GrPaint_DEFINED
 
 #include "GrColor.h"
+<<<<<<< HEAD
 #include "GrFragmentProcessor.h"
 #include "GrXferProcessor.h"
 #include "effects/GrPorterDuffXferProcessor.h"
 
 #include "SkRefCnt.h"
+=======
+#include "GrFragmentStage.h"
+#include "GrProcessorDataManager.h"
+#include "GrXferProcessor.h"
+#include "effects/GrPorterDuffXferProcessor.h"
+
+>>>>>>> miniblink49
 #include "SkRegion.h"
 #include "SkXfermode.h"
 
@@ -42,11 +54,16 @@ public:
 
     GrPaint(const GrPaint& paint) { *this = paint; }
 
+<<<<<<< HEAD
     ~GrPaint() { }
+=======
+    ~GrPaint() {}
+>>>>>>> miniblink49
 
     /**
      * The initial color of the drawn primitive. Defaults to solid white.
      */
+<<<<<<< HEAD
     void setColor4f(const GrColor4f& color) { fColor = color; }
     const GrColor4f& getColor4f() const { return fColor; }
 
@@ -54,6 +71,10 @@ public:
      * Legacy getter, until all code handles 4f directly.
      */
     GrColor getColor() const { return fColor.toGrColor(); }
+=======
+    void setColor(GrColor color) { fColor = color; }
+    GrColor getColor() const { return fColor; }
+>>>>>>> miniblink49
 
     /**
      * Should primitives be anti-aliased or not. Defaults to false.
@@ -62,6 +83,7 @@ public:
     bool isAntiAlias() const { return fAntiAlias; }
 
     /**
+<<<<<<< HEAD
      * Should shader output conversion from linear to sRGB be disabled.
      * Only relevant if the destination is sRGB. Defaults to false.
      */
@@ -96,23 +118,54 @@ public:
     }
 
     void setCoverageSetOpXPFactory(SkRegion::Op regionOp, bool invertCoverage = false);
+=======
+     * Should dithering be applied. Defaults to false.
+     */
+    void setDither(bool dither) { fDither = dither; }
+    bool isDither() const { return fDither; }
+
+    const GrXPFactory* setXPFactory(const GrXPFactory* xpFactory) {
+        fXPFactory.reset(SkRef(xpFactory));
+        return xpFactory;
+    }
+
+    void setPorterDuffXPFactory(SkXfermode::Mode mode) {
+        fXPFactory.reset(GrPorterDuffXPFactory::Create(mode));
+    }
+
+    void setCoverageSetOpXPFactory(SkRegion::Op regionOp, bool invertCoverage = false); 
+>>>>>>> miniblink49
 
     /**
      * Appends an additional color processor to the color computation.
      */
+<<<<<<< HEAD
     void addColorFragmentProcessor(sk_sp<GrFragmentProcessor> fp)
     {
         SkASSERT(fp);
         fColorFragmentProcessors.push_back(std::move(fp));
+=======
+    const GrFragmentProcessor* addColorProcessor(const GrFragmentProcessor* fp) {
+        SkASSERT(fp);
+        SkNEW_APPEND_TO_TARRAY(&fColorStages, GrFragmentStage, (fp));
+        return fp;
+>>>>>>> miniblink49
     }
 
     /**
      * Appends an additional coverage processor to the coverage computation.
      */
+<<<<<<< HEAD
     void addCoverageFragmentProcessor(sk_sp<GrFragmentProcessor> fp)
     {
         SkASSERT(fp);
         fCoverageFragmentProcessors.push_back(std::move(fp));
+=======
+    const GrFragmentProcessor* addCoverageProcessor(const GrFragmentProcessor* fp) {
+        SkASSERT(fp);
+        SkNEW_APPEND_TO_TARRAY(&fCoverageStages, GrFragmentStage, (fp));
+        return fp;
+>>>>>>> miniblink49
     }
 
     /**
@@ -124,6 +177,7 @@ public:
     void addColorTextureProcessor(GrTexture*, const SkMatrix&, const GrTextureParams&);
     void addCoverageTextureProcessor(GrTexture*, const SkMatrix&, const GrTextureParams&);
 
+<<<<<<< HEAD
     int numColorFragmentProcessors() const { return fColorFragmentProcessors.count(); }
     int numCoverageFragmentProcessors() const { return fCoverageFragmentProcessors.count(); }
     int numTotalFragmentProcessors() const { return this->numColorFragmentProcessors() + this->numCoverageFragmentProcessors(); }
@@ -153,6 +207,32 @@ public:
         fCoverageFragmentProcessors = paint.fCoverageFragmentProcessors;
 
         fXPFactory = paint.fXPFactory;
+=======
+    int numColorStages() const { return fColorStages.count(); }
+    int numCoverageStages() const { return fCoverageStages.count(); }
+    int numTotalStages() const { return this->numColorStages() + this->numCoverageStages(); }
+
+    const GrXPFactory* getXPFactory() const {
+        if (!fXPFactory) {
+            fXPFactory.reset(GrPorterDuffXPFactory::Create(SkXfermode::kSrc_Mode));
+        }
+        return fXPFactory.get();
+    }
+
+    const GrFragmentStage& getColorStage(int s) const { return fColorStages[s]; }
+    const GrFragmentStage& getCoverageStage(int s) const { return fCoverageStages[s]; }
+
+    GrPaint& operator=(const GrPaint& paint) {
+        fAntiAlias = paint.fAntiAlias;
+        fDither = paint.fDither;
+
+        fColor = paint.fColor;
+
+        fColorStages = paint.fColorStages;
+        fCoverageStages = paint.fCoverageStages;
+
+        fXPFactory.reset(SkRef(paint.getXPFactory()));
+>>>>>>> miniblink49
 
         return *this;
     }
@@ -165,6 +245,7 @@ public:
      */
     bool isConstantBlendedColor(GrColor* constantColor) const;
 
+<<<<<<< HEAD
 private:
     mutable sk_sp<GrXPFactory> fXPFactory;
     SkSTArray<4, sk_sp<GrFragmentProcessor>> fColorFragmentProcessors;
@@ -175,6 +256,20 @@ private:
     bool fAllowSRGBInputs;
 
     GrColor4f fColor;
+=======
+    GrProcessorDataManager* getProcessorDataManager() { return &fProcDataManager; }
+
+private:
+    mutable SkAutoTUnref<const GrXPFactory> fXPFactory;
+    SkSTArray<4, GrFragmentStage>   fColorStages;
+    SkSTArray<2, GrFragmentStage>   fCoverageStages;
+
+    bool                            fAntiAlias;
+    bool                            fDither;
+
+    GrColor                         fColor;
+    GrProcessorDataManager          fProcDataManager;
+>>>>>>> miniblink49
 };
 
 #endif

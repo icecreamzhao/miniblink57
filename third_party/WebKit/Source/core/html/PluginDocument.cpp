@@ -22,14 +22,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/PluginDocument.h"
 
-#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/HTMLNames.h"
 #include "core/dom/RawDataDocumentParser.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
-#include "core/frame/UseCounter.h"
 #include "core/html/HTMLBodyElement.h"
 #include "core/html/HTMLEmbedElement.h"
 #include "core/html/HTMLHtmlElement.h"
@@ -46,9 +46,9 @@ using namespace HTMLNames;
 // FIXME: Share more code with MediaDocumentParser.
 class PluginDocumentParser : public RawDataDocumentParser {
 public:
-    static PluginDocumentParser* create(PluginDocument* document)
+    static PassRefPtrWillBeRawPtr<PluginDocumentParser> create(PluginDocument* document)
     {
-        return new PluginDocumentParser(document);
+        return adoptRefWillBeNoop(new PluginDocumentParser(document));
     }
 
     DEFINE_INLINE_VIRTUAL_TRACE()
@@ -72,15 +72,14 @@ private:
 
     PluginView* pluginView() const;
 
-    Member<HTMLEmbedElement> m_embedElement;
+    RefPtrWillBeMember<HTMLEmbedElement> m_embedElement;
 };
 
 void PluginDocumentParser::createDocumentStructure()
 {
     // FIXME: Assert we have a loader to figure out why the original null checks
-    // and assert were added for the security bug in
-    // http://trac.webkit.org/changeset/87566
-    DCHECK(document());
+    // and assert were added for the security bug in http://trac.webkit.org/changeset/87566
+    ASSERT(document());
     RELEASE_ASSERT(document()->loader());
 
     LocalFrame* frame = document()->frame();
@@ -91,54 +90,30 @@ void PluginDocumentParser::createDocumentStructure()
     if (!frame->settings() || !frame->loader().allowPlugins(NotAboutToInstantiatePlugin))
         return;
 
-    HTMLHtmlElement* rootElement = HTMLHtmlElement::create(*document());
-    document()->appendChild(rootElement);
+    RefPtrWillBeRawPtr<HTMLHtmlElement> rootElement = HTMLHtmlElement::create(*document());
     rootElement->insertedByParser();
-    if (isStopped())
-        return; // runScriptsAtDocumentElementAvailable can detach the frame.
+    document()->appendChild(rootElement);
+    frame->loader().dispatchDocumentElementAvailable();
 
-    HTMLBodyElement* body = HTMLBodyElement::create(*document());
-    body->setAttribute(styleAttr,
-        "background-color: rgb(38,38,38); height: 100%; width: "
-        "100%; overflow: hidden; margin: 0");
+    RefPtrWillBeRawPtr<HTMLBodyElement> body = HTMLBodyElement::create(*document());
+    body->setAttribute(styleAttr, "background-color: rgb(38,38,38); height: 100%; width: 100%; overflow: hidden; margin: 0");
     rootElement->appendChild(body);
-    if (isStopped()) {
-        // Possibly detached by a mutation event listener installed in
-        // runScriptsAtDocumentElementAvailable.
-        return;
-    }
 
     m_embedElement = HTMLEmbedElement::create(*document());
     m_embedElement->setAttribute(widthAttr, "100%");
     m_embedElement->setAttribute(heightAttr, "100%");
     m_embedElement->setAttribute(nameAttr, "plugin");
-    m_embedElement->setAttribute(idAttr, "plugin");
-    m_embedElement->setAttribute(srcAttr,
-        AtomicString(document()->url().getString()));
+    m_embedElement->setAttribute(srcAttr, AtomicString(document()->url().string()));
     m_embedElement->setAttribute(typeAttr, document()->loader()->mimeType());
     body->appendChild(m_embedElement);
-    if (isStopped()) {
-        // Possibly detached by a mutation event listener installed in
-        // runScriptsAtDocumentElementAvailable.
-        return;
-    }
 
     toPluginDocument(document())->setPluginNode(m_embedElement.get());
 
-    document()->updateStyleAndLayout();
+    document()->updateLayout();
 
     // We need the plugin to load synchronously so we can get the PluginView
     // below so flush the layout tasks now instead of waiting on the timer.
     frame->view()->flushAnyPendingPostLayoutTasks();
-    // Focus the plugin here, as the line above is where the plugin is created.
-    if (frame->isMainFrame()) {
-        m_embedElement->focus();
-        if (isStopped()) {
-            // Possibly detached by a mutation event listener installed in
-            // runScriptsAtDocumentElementAvailable.
-            return;
-        }
-    }
 
     if (PluginView* view = pluginView())
         view->didReceiveResponse(document()->loader()->response());
@@ -146,11 +121,8 @@ void PluginDocumentParser::createDocumentStructure()
 
 void PluginDocumentParser::appendBytes(const char* data, size_t length)
 {
-    if (!m_embedElement) {
+    if (!m_embedElement)
         createDocumentStructure();
-        if (isStopped())
-            return;
-    }
 
     if (!length)
         return;
@@ -160,14 +132,21 @@ void PluginDocumentParser::appendBytes(const char* data, size_t length)
 
 void PluginDocumentParser::finish()
 {
-    m_embedElement = nullptr;
+    if (PluginView* view = pluginView()) {
+        const ResourceError& error = document()->loader()->mainDocumentError();
+        if (error.isNull())
+            view->didFinishLoading();
+        else
+            view->didFailLoading(error);
+        m_embedElement = nullptr;
+    }
     RawDataDocumentParser::finish();
 }
 
 PluginView* PluginDocumentParser::pluginView() const
 {
     if (Widget* widget = toPluginDocument(document())->pluginWidget()) {
-        SECURITY_DCHECK(widget->isPluginContainer());
+        ASSERT_WITH_SECURITY_IMPLICATION(widget->isPluginContainer());
         return toPluginView(widget);
     }
     return 0;
@@ -178,12 +157,9 @@ PluginDocument::PluginDocument(const DocumentInit& initializer)
 {
     setCompatibilityMode(QuirksMode);
     lockCompatibilityMode();
-    UseCounter::count(*this, UseCounter::PluginDocument);
-    if (!isInMainFrame())
-        UseCounter::count(*this, UseCounter::PluginDocumentInFrame);
 }
 
-DocumentParser* PluginDocument::createParser()
+PassRefPtrWillBeRawPtr<DocumentParser> PluginDocument::createParser()
 {
     return PluginDocumentParser::create(this);
 }
@@ -191,11 +167,8 @@ DocumentParser* PluginDocument::createParser()
 Widget* PluginDocument::pluginWidget()
 {
     if (m_pluginNode && m_pluginNode->layoutObject()) {
-        CHECK(m_pluginNode->layoutObject()->isEmbeddedObject());
-        Widget* widget = toLayoutEmbeddedObject(m_pluginNode->layoutObject())->widget();
-        if (!widget || !widget->isPluginContainer())
-            return nullptr;
-        return widget;
+        ASSERT(m_pluginNode->layoutObject()->isEmbeddedObject());
+        return toLayoutEmbeddedObject(m_pluginNode->layoutObject())->widget();
     }
     return 0;
 }
@@ -205,11 +178,11 @@ Node* PluginDocument::pluginNode()
     return m_pluginNode.get();
 }
 
-void PluginDocument::shutdown()
+void PluginDocument::detach(const AttachContext& context)
 {
     // Release the plugin node so that we don't have a circular reference.
     m_pluginNode = nullptr;
-    HTMLDocument::shutdown();
+    HTMLDocument::detach(context);
 }
 
 DEFINE_TRACE(PluginDocument)
@@ -218,4 +191,4 @@ DEFINE_TRACE(PluginDocument)
     HTMLDocument::trace(visitor);
 }
 
-} // namespace blink
+}

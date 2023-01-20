@@ -64,7 +64,10 @@ public:
     // Form submits and link clicks all fall under other.
     BLINK_EXPORT WebNavigationType navigationType() const;
 
+<<<<<<< HEAD
     // These functions return time in seconds (not milliseconds) since the epoch.
+=======
+>>>>>>> miniblink49
     BLINK_EXPORT double navigationStart() const;
     BLINK_EXPORT double unloadEventEnd() const;
     BLINK_EXPORT double redirectStart() const;
@@ -86,6 +89,7 @@ public:
     BLINK_EXPORT double loadEventStart() const;
     BLINK_EXPORT double loadEventEnd() const;
     BLINK_EXPORT double firstLayout() const;
+<<<<<<< HEAD
     BLINK_EXPORT double firstPaint() const;
     BLINK_EXPORT double firstTextPaint() const;
     BLINK_EXPORT double firstImagePaint() const;
@@ -104,6 +108,12 @@ public:
 #if BLINK_IMPLEMENTATION
     WebPerformance(Performance*);
     WebPerformance& operator=(Performance*);
+=======
+
+#if BLINK_IMPLEMENTATION
+    WebPerformance(const PassRefPtrWillBeRawPtr<Performance>&);
+    WebPerformance& operator=(const PassRefPtrWillBeRawPtr<Performance>&);
+>>>>>>> miniblink49
 #endif
 
 private:

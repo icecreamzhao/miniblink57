@@ -23,10 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/speech/SpeechRecognitionEvent.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 SpeechRecognitionEvent* SpeechRecognitionEvent::create(
     const AtomicString& eventName,
     const SpeechRecognitionEventInit& initializer)
@@ -55,6 +61,32 @@ SpeechRecognitionEvent* SpeechRecognitionEvent::createNoMatch(
     }
 
     return new SpeechRecognitionEvent(EventTypeNames::nomatch, 0, nullptr);
+=======
+PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::create()
+{
+    return adoptRefWillBeNoop(new SpeechRecognitionEvent);
+}
+
+PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::create(const AtomicString& eventName, const SpeechRecognitionEventInit& initializer)
+{
+    return adoptRefWillBeNoop(new SpeechRecognitionEvent(eventName, initializer));
+}
+
+PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::createResult(unsigned long resultIndex, const HeapVector<Member<SpeechRecognitionResult>>& results)
+{
+    return adoptRefWillBeNoop(new SpeechRecognitionEvent(EventTypeNames::result, resultIndex, SpeechRecognitionResultList::create(results)));
+}
+
+PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::createNoMatch(SpeechRecognitionResult* result)
+{
+    if (result) {
+        HeapVector<Member<SpeechRecognitionResult>> results;
+        results.append(result);
+        return adoptRefWillBeNoop(new SpeechRecognitionEvent(EventTypeNames::nomatch, 0, SpeechRecognitionResultList::create(results)));
+    }
+
+    return adoptRefWillBeNoop(new SpeechRecognitionEvent(EventTypeNames::nomatch, 0, nullptr));
+>>>>>>> miniblink49
 }
 
 const AtomicString& SpeechRecognitionEvent::interfaceName() const
@@ -62,9 +94,18 @@ const AtomicString& SpeechRecognitionEvent::interfaceName() const
     return EventNames::SpeechRecognitionEvent;
 }
 
+<<<<<<< HEAD
 SpeechRecognitionEvent::SpeechRecognitionEvent(
     const AtomicString& eventName,
     const SpeechRecognitionEventInit& initializer)
+=======
+SpeechRecognitionEvent::SpeechRecognitionEvent()
+    : m_resultIndex(0)
+{
+}
+
+SpeechRecognitionEvent::SpeechRecognitionEvent(const AtomicString& eventName, const SpeechRecognitionEventInit& initializer)
+>>>>>>> miniblink49
     : Event(eventName, initializer)
     , m_resultIndex(0)
 {
@@ -74,17 +115,27 @@ SpeechRecognitionEvent::SpeechRecognitionEvent(
         m_results = initializer.results();
 }
 
+<<<<<<< HEAD
 SpeechRecognitionEvent::SpeechRecognitionEvent(
     const AtomicString& eventName,
     unsigned long resultIndex,
     SpeechRecognitionResultList* results)
+=======
+SpeechRecognitionEvent::SpeechRecognitionEvent(const AtomicString& eventName, unsigned long resultIndex, SpeechRecognitionResultList* results)
+>>>>>>> miniblink49
     : Event(eventName, /*canBubble=*/false, /*cancelable=*/false)
     , m_resultIndex(resultIndex)
     , m_results(results)
 {
 }
 
+<<<<<<< HEAD
 SpeechRecognitionEvent::~SpeechRecognitionEvent() { }
+=======
+SpeechRecognitionEvent::~SpeechRecognitionEvent()
+{
+}
+>>>>>>> miniblink49
 
 DEFINE_TRACE(SpeechRecognitionEvent)
 {

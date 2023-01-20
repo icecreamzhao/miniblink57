@@ -31,6 +31,7 @@
 #ifndef WebGraphicsContext3DProvider_h
 #define WebGraphicsContext3DProvider_h
 
+<<<<<<< HEAD
 #include "base/callback_forward.h"
 
 class GrContext;
@@ -45,10 +46,21 @@ namespace gles2 {
 
 namespace blink {
 
+=======
+#include "WebCommon.h"
+
+class GrContext;
+
+namespace blink {
+
+class WebGraphicsContext3D;
+
+>>>>>>> miniblink49
 class WebGraphicsContext3DProvider {
 public:
     virtual ~WebGraphicsContext3DProvider() { }
 
+<<<<<<< HEAD
     virtual gpu::gles2::GLES2Interface* contextGL() = 0;
     virtual bool bindToCurrentThread() = 0;
     virtual GrContext* grContext() = 0;
@@ -63,6 +75,10 @@ public:
         const base::Callback<void(const char* msg, int32_t id)>&)
         = 0;
     virtual void signalQuery(uint32_t, const base::Closure&) = 0;
+=======
+    virtual WebGraphicsContext3D* context3d() = 0;
+    virtual GrContext* grContext() = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -24,10 +24,9 @@
 #ifndef DocumentParser_h
 #define DocumentParser_h
 
-#include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include <memory>
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
@@ -37,8 +36,7 @@ class SegmentedString;
 class ScriptableDocumentParser;
 class TextResourceDecoder;
 
-class CORE_EXPORT DocumentParser
-    : public GarbageCollectedFinalized<DocumentParser> {
+class DocumentParser : public RefCountedWillBeGarbageCollectedFinalized<DocumentParser> {
 public:
     virtual ~DocumentParser();
     DECLARE_VIRTUAL_TRACE();
@@ -54,30 +52,30 @@ public:
     // The below functions are used by DocumentWriter (the loader).
     virtual void appendBytes(const char* bytes, size_t length) = 0;
     virtual bool needsDecoder() const { return false; }
-    virtual void setDecoder(std::unique_ptr<TextResourceDecoder>);
+    virtual void setDecoder(PassOwnPtr<TextResourceDecoder>);
     virtual TextResourceDecoder* decoder();
     virtual void setHasAppendedData() { }
 
-    // FIXME: append() should be private, but DocumentLoader and DOMPatchSupport
-    // uses it for now.
+    // FIXME: append() should be private, but DocumentLoader and DOMPatchSupport uses it for now.
     virtual void append(const String&) = 0;
 
     virtual void finish() = 0;
 
+    // FIXME: processingData() is only used by DocumentLoader::isLoadingInAPISense
+    // and is very unclear as to what it actually means.  The LegacyHTMLDocumentParser
+    // used to implement it.
+    virtual bool processingData() const { return false; }
+
     // document() will return 0 after detach() is called.
-    Document* document() const
-    {
-        DCHECK(m_document);
-        return m_document;
-    }
+    Document* document() const { ASSERT(m_document); return m_document; }
 
     bool isParsing() const { return m_state == ParsingState; }
     bool isStopping() const { return m_state == StoppingState; }
     bool isStopped() const { return m_state >= StoppedState; }
     bool isDetached() const { return m_state == DetachedState; }
 
-    // prepareToStop() is used when the EOF token is encountered and parsing is to
-    // be stopped normally.
+    // prepareToStop() is used when the EOF token is encountered and parsing is to be
+    // stopped normally.
     virtual void prepareToStopParsing();
 
     // stopParsing() is used when a load is canceled/stopped.
@@ -94,18 +92,8 @@ public:
     // Oilpan: We don't need to call detach when a Document is destructed.
     virtual void detach();
 
-    // Notifies the parser that the document element is available. Used by
-    // HTMLDocumentParser to dispatch preloads.
-    virtual void documentElementAvailable() { }
-
-    void setDocumentWasLoadedAsPartOfNavigation()
-    {
-        m_documentWasLoadedAsPartOfNavigation = true;
-    }
-    bool documentWasLoadedAsPartOfNavigation() const
-    {
-        return m_documentWasLoadedAsPartOfNavigation;
-    }
+    void setDocumentWasLoadedAsPartOfNavigation() { m_documentWasLoadedAsPartOfNavigation = true; }
+    bool documentWasLoadedAsPartOfNavigation() const { return m_documentWasLoadedAsPartOfNavigation; }
 
     // FIXME: The names are not very accurate :(
     virtual void suspendScheduledTasks();
@@ -117,19 +105,23 @@ public:
 protected:
     explicit DocumentParser(Document*);
 
+    virtual void flush() = 0;
+
 private:
-    enum ParserState { ParsingState,
+    enum ParserState {
+        ParsingState,
         StoppingState,
         StoppedState,
-        DetachedState };
+        DetachedState
+    };
     ParserState m_state;
     bool m_documentWasLoadedAsPartOfNavigation;
 
     // Every DocumentParser needs a pointer back to the document.
     // m_document will be 0 after the parser is stopped.
-    Member<Document> m_document;
+    RawPtrWillBeMember<Document> m_document;
 
-    HeapHashSet<WeakMember<DocumentParserClient>> m_clients;
+    WillBeHeapHashSet<RawPtrWillBeWeakMember<DocumentParserClient>> m_clients;
 };
 
 } // namespace blink

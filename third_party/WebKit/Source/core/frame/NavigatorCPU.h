@@ -5,11 +5,9 @@
 #ifndef NavigatorCPU_h
 #define NavigatorCPU_h
 
-#include "core/CoreExport.h"
-
 namespace blink {
 
-class CORE_EXPORT NavigatorCPU {
+class NavigatorCPU {
 public:
     unsigned hardwareConcurrency() const;
 };

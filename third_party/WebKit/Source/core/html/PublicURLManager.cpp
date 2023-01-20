@@ -24,53 +24,46 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/PublicURLManager.h"
 
+#include "core/fetch/MemoryCache.h"
 #include "core/html/URLRegistry.h"
-#include "platform/blob/BlobURL.h"
 #include "platform/weborigin/KURL.h"
 #include "wtf/Vector.h"
 #include "wtf/text/StringHash.h"
 
 namespace blink {
 
-class SecurityOrigin;
-
-PublicURLManager* PublicURLManager::create(ExecutionContext* context)
+PassOwnPtrWillBeRawPtr<PublicURLManager> PublicURLManager::create(ExecutionContext* context)
 {
-    return new PublicURLManager(context);
+    OwnPtrWillBeRawPtr<PublicURLManager> publicURLManager = adoptPtrWillBeNoop(new PublicURLManager(context));
+    publicURLManager->suspendIfNeeded();
+    return publicURLManager.release();
 }
 
 PublicURLManager::PublicURLManager(ExecutionContext* context)
-    : ContextLifecycleObserver(context)
+    : ActiveDOMObject(context)
     , m_isStopped(false)
 {
 }
 
-String PublicURLManager::registerURL(ExecutionContext* context,
-    URLRegistrable* registrable,
-    const String& uuid)
+void PublicURLManager::registerURL(SecurityOrigin* origin, const KURL& url, URLRegistrable* registrable, const String& uuid)
 {
-    SecurityOrigin* origin = context->getSecurityOrigin();
-    const KURL& url = BlobURL::createPublicURL(origin);
-    DCHECK(!url.isEmpty());
-    const String& urlString = url.getString();
+    if (m_isStopped)
+        return;
 
-    if (!m_isStopped) {
-        RegistryURLMap::ValueType* found = m_registryToURL.add(&registrable->registry(), URLMap()).storedValue;
-        found->key->registerURL(origin, url, registrable);
-        found->value.add(urlString, uuid);
-    }
-
-    return urlString;
+    RegistryURLMap::ValueType* found = m_registryToURL.add(&registrable->registry(), URLMap()).storedValue;
+    found->key->registerURL(origin, url, registrable);
+    found->value.add(url.string(), uuid);
 }
 
 void PublicURLManager::revoke(const KURL& url)
 {
     for (auto& registryUrl : m_registryToURL) {
-        if (registryUrl.value.contains(url.getString())) {
+        if (registryUrl.value.contains(url.string())) {
             registryUrl.key->unregisterURL(url);
-            registryUrl.value.remove(url.getString());
+            registryUrl.value.remove(url.string());
             break;
         }
     }
@@ -86,18 +79,18 @@ void PublicURLManager::revoke(const String& uuid)
         for (auto& registeredUrl : registeredURLs) {
             if (uuid == registeredUrl.value) {
                 KURL url(ParsedURLString, registeredUrl.key);
-                getExecutionContext()->removeURLFromMemoryCache(url);
+                executionContext()->removeURLFromMemoryCache(url);
                 registry->unregisterURL(url);
-                urlsToRemove.push_back(registeredUrl.key);
+                urlsToRemove.append(registeredUrl.key);
             }
         }
-        for (const auto& url : urlsToRemove)
-            registeredURLs.remove(url);
+        for (unsigned j = 0; j < urlsToRemove.size(); j++)
+            registeredURLs.remove(urlsToRemove[j]);
         urlsToRemove.clear();
     }
 }
 
-void PublicURLManager::contextDestroyed(ExecutionContext*)
+void PublicURLManager::stop()
 {
     if (m_isStopped)
         return;
@@ -113,7 +106,7 @@ void PublicURLManager::contextDestroyed(ExecutionContext*)
 
 DEFINE_TRACE(PublicURLManager)
 {
-    ContextLifecycleObserver::trace(visitor);
+    ActiveDOMObject::trace(visitor);
 }
 
-} // namespace blink
+}

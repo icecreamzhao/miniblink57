@@ -101,11 +101,19 @@
  * \internal ICU 4.4 Technology Preview
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef ICUPLUG_H
 #define ICUPLUG_H
 
 #include "unicode/utypes.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /* === Basic types === */
 
 #ifndef U_HIDE_INTERNAL_API
@@ -132,7 +140,12 @@ typedef struct UPlugData UPlugData;
  * Max width of names, symbols, and configuration strings
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 #define UPLUG_NAME_MAX 100
+=======
+#define UPLUG_NAME_MAX              100
+
+>>>>>>> miniblink49
 
 /**
  * Return value from a plugin entrypoint. 
@@ -147,12 +160,22 @@ typedef uint32_t UPlugTokenReturn;
  * @internal ICU 4.4 Technology Preview
  */
 typedef enum {
+<<<<<<< HEAD
     UPLUG_REASON_QUERY = 0, /**< The plugin is being queried for info. **/
     UPLUG_REASON_LOAD = 1, /**< The plugin is being loaded. **/
     UPLUG_REASON_UNLOAD = 2, /**< The plugin is being unloaded. **/
     UPLUG_REASON_COUNT /**< count of known reasons **/
 } UPlugReason;
 
+=======
+    UPLUG_REASON_QUERY = 0,     /**< The plugin is being queried for info. **/
+    UPLUG_REASON_LOAD = 1,     /**< The plugin is being loaded. **/
+    UPLUG_REASON_UNLOAD = 2,   /**< The plugin is being unloaded. **/
+    UPLUG_REASON_COUNT         /**< count of known reasons **/
+} UPlugReason;
+
+
+>>>>>>> miniblink49
 /**
  * Level of plugin loading
  *     INITIAL:  UNKNOWN
@@ -161,11 +184,19 @@ typedef enum {
  * @internal ICU 4.4 Technology Preview
  */
 typedef enum {
+<<<<<<< HEAD
     UPLUG_LEVEL_INVALID = 0, /**< The plugin is invalid, hasn't called uplug_setLevel, or can't load. **/
     UPLUG_LEVEL_UNKNOWN = 1, /**< The plugin is waiting to be installed. **/
     UPLUG_LEVEL_LOW = 2, /**< The plugin must be called before u_init completes **/
     UPLUG_LEVEL_HIGH = 3, /**< The plugin can run at any time. **/
     UPLUG_LEVEL_COUNT /**< count of known reasons **/
+=======
+    UPLUG_LEVEL_INVALID = 0,     /**< The plugin is invalid, hasn't called uplug_setLevel, or can't load. **/
+    UPLUG_LEVEL_UNKNOWN = 1,     /**< The plugin is waiting to be installed. **/
+    UPLUG_LEVEL_LOW     = 2,     /**< The plugin must be called before u_init completes **/
+    UPLUG_LEVEL_HIGH    = 3,     /**< The plugin can run at any time. **/
+    UPLUG_LEVEL_COUNT         /**< count of known reasons **/
+>>>>>>> miniblink49
 } UPlugLevel;
 
 /**
@@ -175,10 +206,17 @@ typedef enum {
  * @return A valid plugin must return UPLUG_TOKEN
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 typedef UPlugTokenReturn(U_EXPORT2 UPlugEntrypoint)(
     UPlugData* plug,
     UPlugReason reason,
     UErrorCode* status);
+=======
+typedef UPlugTokenReturn (U_EXPORT2 UPlugEntrypoint) (
+                  UPlugData *plug,
+                  UPlugReason reason,
+                  UErrorCode *status);
+>>>>>>> miniblink49
 
 /* === Needed for Implementing === */
 
@@ -190,8 +228,13 @@ typedef UPlugTokenReturn(U_EXPORT2 UPlugEntrypoint)(
  * @param dontUnload  set true if this plugin can't be unloaded
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL void U_EXPORT2
 uplug_setPlugNoUnload(UPlugData* plug, UBool dontUnload);
+=======
+U_INTERNAL void U_EXPORT2 
+uplug_setPlugNoUnload(UPlugData *plug, UBool dontUnload);
+>>>>>>> miniblink49
 
 /**
  * Set the level of this plugin.
@@ -200,7 +243,11 @@ uplug_setPlugNoUnload(UPlugData* plug, UBool dontUnload);
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL void U_EXPORT2
+<<<<<<< HEAD
 uplug_setPlugLevel(UPlugData* plug, UPlugLevel level);
+=======
+uplug_setPlugLevel(UPlugData *plug, UPlugLevel level);
+>>>>>>> miniblink49
 
 /**
  * Get the level of this plugin.
@@ -209,7 +256,11 @@ uplug_setPlugLevel(UPlugData* plug, UPlugLevel level);
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL UPlugLevel U_EXPORT2
+<<<<<<< HEAD
 uplug_getPlugLevel(UPlugData* plug);
+=======
+uplug_getPlugLevel(UPlugData *plug);
+>>>>>>> miniblink49
 
 /**
  * Get the lowest level of plug which can currently load.
@@ -221,13 +272,21 @@ uplug_getPlugLevel(UPlugData* plug);
 U_INTERNAL UPlugLevel U_EXPORT2
 uplug_getCurrentLevel(void);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /**
  * Get plug load status
  * @return The error code of this plugin's load attempt.
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL UErrorCode U_EXPORT2
+<<<<<<< HEAD
 uplug_getPlugLoadStatus(UPlugData* plug);
+=======
+uplug_getPlugLoadStatus(UPlugData *plug); 
+>>>>>>> miniblink49
 
 /**
  * Set the human-readable name of this plugin.
@@ -236,7 +295,11 @@ uplug_getPlugLoadStatus(UPlugData* plug);
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL void U_EXPORT2
+<<<<<<< HEAD
 uplug_setPlugName(UPlugData* plug, const char* name);
+=======
+uplug_setPlugName(UPlugData *plug, const char *name);
+>>>>>>> miniblink49
 
 /**
  * Get the human-readable name of this plugin.
@@ -244,8 +307,13 @@ uplug_setPlugName(UPlugData* plug, const char* name);
  * @return the name of this plugin
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL const char* U_EXPORT2
 uplug_getPlugName(UPlugData* plug);
+=======
+U_INTERNAL const char * U_EXPORT2
+uplug_getPlugName(UPlugData *plug);
+>>>>>>> miniblink49
 
 /**
  * Return the symbol name for this plugin, if known.
@@ -253,8 +321,13 @@ uplug_getPlugName(UPlugData* plug);
  * @return the symbol name, or NULL
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL const char* U_EXPORT2
 uplug_getSymbolName(UPlugData* plug);
+=======
+U_INTERNAL const char * U_EXPORT2
+uplug_getSymbolName(UPlugData *plug);
+>>>>>>> miniblink49
 
 /**
  * Return the library name for this plugin, if known.
@@ -263,8 +336,13 @@ uplug_getSymbolName(UPlugData* plug);
  * @return the library name, or NULL
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL const char* U_EXPORT2
 uplug_getLibraryName(UPlugData* plug, UErrorCode* status);
+=======
+U_INTERNAL const char * U_EXPORT2
+uplug_getLibraryName(UPlugData *plug, UErrorCode *status);
+>>>>>>> miniblink49
 
 /**
  * Return the library used for this plugin, if known.
@@ -273,8 +351,13 @@ uplug_getLibraryName(UPlugData* plug, UErrorCode* status);
  * @return the library, or NULL
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL void* U_EXPORT2
 uplug_getLibrary(UPlugData* plug);
+=======
+U_INTERNAL void * U_EXPORT2
+uplug_getLibrary(UPlugData *plug);
+>>>>>>> miniblink49
 
 /**
  * Return the plugin-specific context data.
@@ -282,8 +365,13 @@ uplug_getLibrary(UPlugData* plug);
  * @return the context, or NULL if not set
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL void* U_EXPORT2
 uplug_getContext(UPlugData* plug);
+=======
+U_INTERNAL void * U_EXPORT2
+uplug_getContext(UPlugData *plug);
+>>>>>>> miniblink49
 
 /**
  * Set the plugin-specific context data.
@@ -292,7 +380,12 @@ uplug_getContext(UPlugData* plug);
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL void U_EXPORT2
+<<<<<<< HEAD
 uplug_setContext(UPlugData* plug, void* context);
+=======
+uplug_setContext(UPlugData *plug, void *context);
+
+>>>>>>> miniblink49
 
 /**
  * Get the configuration string, if available.
@@ -301,8 +394,13 @@ uplug_setContext(UPlugData* plug, void* context);
  * @return configuration string, or else null.
  * @internal ICU 4.4 Technology Preview
  */
+<<<<<<< HEAD
 U_INTERNAL const char* U_EXPORT2
 uplug_getConfiguration(UPlugData* plug);
+=======
+U_INTERNAL const char * U_EXPORT2
+uplug_getConfiguration(UPlugData *plug);
+>>>>>>> miniblink49
 
 /**
  * Return all currently installed plugins, from newest to oldest
@@ -320,7 +418,11 @@ uplug_getConfiguration(UPlugData* plug);
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL UPlugData* U_EXPORT2
+<<<<<<< HEAD
 uplug_nextPlug(UPlugData* prior);
+=======
+uplug_nextPlug(UPlugData *prior);
+>>>>>>> miniblink49
 
 /**
  * Inject a plugin as if it were loaded from a library.
@@ -335,7 +437,12 @@ uplug_nextPlug(UPlugData* prior);
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL UPlugData* U_EXPORT2
+<<<<<<< HEAD
 uplug_loadPlugFromEntrypoint(UPlugEntrypoint* entrypoint, const char* config, UErrorCode* status);
+=======
+uplug_loadPlugFromEntrypoint(UPlugEntrypoint *entrypoint, const char *config, UErrorCode *status);
+
+>>>>>>> miniblink49
 
 /**
  * Inject a plugin from a library, as if the information came from a config file.
@@ -348,7 +455,11 @@ uplug_loadPlugFromEntrypoint(UPlugEntrypoint* entrypoint, const char* config, UE
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL UPlugData* U_EXPORT2
+<<<<<<< HEAD
 uplug_loadPlugFromLibrary(const char* libName, const char* sym, const char* config, UErrorCode* status);
+=======
+uplug_loadPlugFromLibrary(const char *libName, const char *sym, const char *config, UErrorCode *status);
+>>>>>>> miniblink49
 
 /**
  * Remove a plugin. 
@@ -358,7 +469,12 @@ uplug_loadPlugFromLibrary(const char* libName, const char* sym, const char* conf
  * @internal ICU 4.4 Technology Preview
  */
 U_INTERNAL void U_EXPORT2
+<<<<<<< HEAD
 uplug_removePlug(UPlugData* plug, UErrorCode* status);
 #endif /* U_HIDE_INTERNAL_API */
+=======
+uplug_removePlug(UPlugData *plug, UErrorCode *status);
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
 #endif

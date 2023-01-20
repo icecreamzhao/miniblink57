@@ -19,12 +19,13 @@
  *
  */
 
+#include "config.h"
 #include "core/layout/LayoutBR.h"
 
 #include "core/dom/Document.h"
 #include "core/dom/StyleEngine.h"
 #include "core/editing/PositionWithAffinity.h"
-#include "core/layout/LayoutObjectInlines.h"
+#include "core/layout/LayoutView.h"
 
 namespace blink {
 
@@ -39,7 +40,9 @@ LayoutBR::LayoutBR(Node* node)
 {
 }
 
-LayoutBR::~LayoutBR() { }
+LayoutBR::~LayoutBR()
+{
+}
 
 int LayoutBR::lineHeight(bool firstLine) const
 {
@@ -47,8 +50,7 @@ int LayoutBR::lineHeight(bool firstLine) const
     return style.computedLineHeight();
 }
 
-void LayoutBR::styleDidChange(StyleDifference diff,
-    const ComputedStyle* oldStyle)
+void LayoutBR::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
 {
     LayoutText::styleDidChange(diff, oldStyle);
 }
@@ -65,7 +67,7 @@ int LayoutBR::caretMaxOffset() const
 
 PositionWithAffinity LayoutBR::positionForPoint(const LayoutPoint&)
 {
-    return createPositionWithAffinity(0);
+    return createPositionWithAffinity(0, DOWNSTREAM);
 }
 
 } // namespace blink

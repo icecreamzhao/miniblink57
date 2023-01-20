@@ -22,8 +22,15 @@ struct SkOTTableMaximumProfile_CFF {
 
 #pragma pack(pop)
 
+<<<<<<< HEAD
 #include <stddef.h>
 static_assert(offsetof(SkOTTableMaximumProfile_CFF, numGlyphs) == 4, "SkOTTableMaximumProfile_CFF_numGlyphs_not_at_4");
 static_assert(sizeof(SkOTTableMaximumProfile_CFF) == 6, "sizeof_SkOTTableMaximumProfile_CFF_not_6");
+=======
+
+#include <stddef.h>
+SK_COMPILE_ASSERT(offsetof(SkOTTableMaximumProfile_CFF, numGlyphs) == 4, SkOTTableMaximumProfile_CFF_numGlyphs_not_at_4);
+SK_COMPILE_ASSERT(sizeof(SkOTTableMaximumProfile_CFF) == 6, sizeof_SkOTTableMaximumProfile_CFF_not_6);
+>>>>>>> miniblink49
 
 #endif

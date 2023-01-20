@@ -13,21 +13,30 @@
 
 #include "SkSurface.h"
 
+<<<<<<< HEAD
 // This should be safe to include even in no-gpu builds. Include by relative path so it
 // can be found in non-gpu builds.
 #include "../include/gpu/GrContextOptions.h"
 
+=======
+>>>>>>> miniblink49
 #if SK_SUPPORT_GPU
 
 // Ganesh is available.  Yippee!
 
+<<<<<<< HEAD
 #include "GrContext.h"
 #include "GrContextFactory.h"
+=======
+#  include "GrContext.h"
+#  include "GrContextFactory.h"
+>>>>>>> miniblink49
 
 namespace DM {
 
 static const bool kGPUDisabled = false;
 
+<<<<<<< HEAD
 static inline sk_sp<SkSurface> NewGpuSurface(
     sk_gpu_test::GrContextFactory* grFactory,
     sk_gpu_test::GrContextFactory::ContextType type,
@@ -48,6 +57,23 @@ static inline sk_sp<SkSurface> NewGpuSurface(
 } // namespace DM
 
 #else // !SK_SUPPORT_GPU
+=======
+static inline SkSurface* NewGpuSurface(GrContextFactory* grFactory,
+                                       GrContextFactory::GLContextType type,
+                                       GrGLStandard gpuAPI,
+                                       SkImageInfo info,
+                                       int samples,
+                                       bool useDFText) {
+    uint32_t flags = useDFText ? SkSurfaceProps::kUseDistanceFieldFonts_Flag : 0;
+    SkSurfaceProps props(flags, SkSurfaceProps::kLegacyFontHost_InitType);
+    return SkSurface::NewRenderTarget(grFactory->get(type, gpuAPI), SkSurface::kNo_Budgeted,
+                                      info, samples, &props);
+}
+
+}  // namespace DM
+
+#else// !SK_SUPPORT_GPU
+>>>>>>> miniblink49
 
 // Ganesh is not available.  Fake it.
 
@@ -60,6 +86,7 @@ static const int kGrGLStandardCnt = 3;
 
 class GrContext {
 public:
+<<<<<<< HEAD
     void dumpCacheStats(SkString*) const { }
     void dumpGpuStats(SkString*) const { }
 };
@@ -95,11 +122,38 @@ public:
     void releaseResourcesAndAbandonContexts() { }
 };
 } // namespace sk_gpu_test
+=======
+    void dumpCacheStats(SkString*) const {}
+    void dumpGpuStats(SkString*) const {}
+};
+
+struct GrContextOptions {};
+
+class GrContextFactory {
+public:
+    GrContextFactory() {};
+    explicit GrContextFactory(const GrContextOptions&) {}
+
+    typedef int GLContextType;
+
+    static const GLContextType kANGLE_GLContextType  = 0,
+                               kDebug_GLContextType  = 0,
+                               kMESA_GLContextType   = 0,
+                               kNVPR_GLContextType   = 0,
+                               kNative_GLContextType = 0,
+                               kNull_GLContextType   = 0;
+    static const int kGLContextTypeCnt = 1;
+    void destroyContexts() {}
+
+    void abandonContexts() {}
+};
+>>>>>>> miniblink49
 
 namespace DM {
 
 static const bool kGPUDisabled = true;
 
+<<<<<<< HEAD
 static inline SkSurface* NewGpuSurface(sk_gpu_test::GrContextFactory*,
     sk_gpu_test::GrContextFactory::ContextType,
     sk_gpu_test::GrContextFactory::ContextOptions,
@@ -115,3 +169,19 @@ static inline SkSurface* NewGpuSurface(sk_gpu_test::GrContextFactory*,
 #endif //SK_SUPPORT_GPU
 
 #endif //DMGpuSupport_DEFINED
+=======
+static inline SkSurface* NewGpuSurface(GrContextFactory*,
+                                       GrContextFactory::GLContextType,
+                                       GrGLStandard,
+                                       SkImageInfo,
+                                       int,
+                                       bool) {
+    return NULL;
+}
+
+}  // namespace DM
+
+#endif//SK_SUPPORT_GPU
+
+#endif//DMGpuSupport_DEFINED
+>>>>>>> miniblink49

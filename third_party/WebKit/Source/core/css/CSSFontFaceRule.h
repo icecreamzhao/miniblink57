@@ -33,18 +33,16 @@ class StyleRuleCSSStyleDeclaration;
 
 class CSSFontFaceRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static CSSFontFaceRule* create(StyleRuleFontFace* rule,
-        CSSStyleSheet* sheet)
+    static PassRefPtrWillBeRawPtr<CSSFontFaceRule> create(StyleRuleFontFace* rule, CSSStyleSheet* sheet)
     {
-        return new CSSFontFaceRule(rule, sheet);
+        return adoptRefWillBeNoop(new CSSFontFaceRule(rule, sheet));
     }
 
-    ~CSSFontFaceRule() override;
+    virtual ~CSSFontFaceRule();
 
-    String cssText() const override;
-    void reattach(StyleRuleBase*) override;
+    virtual String cssText() const override;
+    virtual void reattach(StyleRuleBase*) override;
 
     CSSStyleDeclaration* style() const;
 
@@ -55,13 +53,13 @@ public:
 private:
     CSSFontFaceRule(StyleRuleFontFace*, CSSStyleSheet* parent);
 
-    CSSRule::Type type() const override { return kFontFaceRule; }
+    virtual CSSRule::Type type() const override { return FONT_FACE_RULE; }
 
-    Member<StyleRuleFontFace> m_fontFaceRule;
-    mutable Member<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
+    RefPtrWillBeMember<StyleRuleFontFace> m_fontFaceRule;
+    mutable RefPtrWillBeMember<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSFontFaceRule, kFontFaceRule);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSFontFaceRule, FONT_FACE_RULE);
 
 } // namespace blink
 

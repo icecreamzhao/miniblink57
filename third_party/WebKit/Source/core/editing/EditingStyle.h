@@ -34,12 +34,12 @@
 
 #include "core/CSSPropertyNames.h"
 #include "core/CSSValueKeywords.h"
-#include "core/CoreExport.h"
-#include "core/editing/Position.h"
-#include "core/editing/VisibleSelection.h"
+#include "core/dom/Position.h"
 #include "core/editing/WritingDirection.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
 #include "wtf/TriState.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
@@ -57,105 +57,77 @@ class Node;
 class QualifiedName;
 class ComputedStyle;
 class StylePropertySet;
+class VisibleSelection;
 
-class CORE_EXPORT EditingStyle final : public GarbageCollected<EditingStyle> {
+class EditingStyle final : public RefCountedWillBeGarbageCollectedFinalized<EditingStyle> {
 public:
-    enum PropertiesToInclude {
-        AllProperties,
-        OnlyEditingInheritableProperties,
-        EditingPropertiesInEffect
-    };
-    enum ShouldPreserveWritingDirection {
-        PreserveWritingDirection,
-        DoNotPreserveWritingDirection
-    };
-    enum ShouldExtractMatchingStyle {
-        ExtractMatchingStyle,
-        DoNotExtractMatchingStyle
-    };
+
+    enum PropertiesToInclude { AllProperties, OnlyEditingInheritableProperties, EditingPropertiesInEffect };
+    enum ShouldPreserveWritingDirection { PreserveWritingDirection, DoNotPreserveWritingDirection };
+    enum ShouldExtractMatchingStyle { ExtractMatchingStyle, DoNotExtractMatchingStyle };
     static float NoFontDelta;
 
-    static EditingStyle* create() { return new EditingStyle(); }
-
-    static EditingStyle* create(ContainerNode* node,
-        PropertiesToInclude propertiesToInclude = OnlyEditingInheritableProperties)
+    static PassRefPtrWillBeRawPtr<EditingStyle> create()
     {
-        return new EditingStyle(node, propertiesToInclude);
+        return adoptRefWillBeNoop(new EditingStyle());
     }
 
-    static EditingStyle* create(const Position& position,
-        PropertiesToInclude propertiesToInclude = OnlyEditingInheritableProperties)
+    static PassRefPtrWillBeRawPtr<EditingStyle> create(ContainerNode* node, PropertiesToInclude propertiesToInclude = OnlyEditingInheritableProperties)
     {
-        return new EditingStyle(position, propertiesToInclude);
+        return adoptRefWillBeNoop(new EditingStyle(node, propertiesToInclude));
     }
 
-    static EditingStyle* create(const StylePropertySet* style)
+    static PassRefPtrWillBeRawPtr<EditingStyle> create(const Position& position, PropertiesToInclude propertiesToInclude = OnlyEditingInheritableProperties)
     {
-        return new EditingStyle(style);
+        return adoptRefWillBeNoop(new EditingStyle(position, propertiesToInclude));
     }
 
-    static EditingStyle* create(CSSPropertyID propertyID, const String& value)
+    static PassRefPtrWillBeRawPtr<EditingStyle> create(const StylePropertySet* style)
     {
-        return new EditingStyle(propertyID, value);
+        return adoptRefWillBeNoop(new EditingStyle(style));
     }
+
+    static PassRefPtrWillBeRawPtr<EditingStyle> create(CSSPropertyID propertyID, const String& value)
+    {
+        return adoptRefWillBeNoop(new EditingStyle(propertyID, value));
+    }
+
+    ~EditingStyle();
 
     MutableStylePropertySet* style() { return m_mutableStyle.get(); }
     bool textDirection(WritingDirection&) const;
     bool isEmpty() const;
     void overrideWithStyle(const StylePropertySet*);
     void clear();
-    EditingStyle* copy() const;
-    EditingStyle* extractAndRemoveBlockProperties();
-    EditingStyle* extractAndRemoveTextDirection();
+    PassRefPtrWillBeRawPtr<EditingStyle> copy() const;
+    PassRefPtrWillBeRawPtr<EditingStyle> extractAndRemoveBlockProperties();
+    PassRefPtrWillBeRawPtr<EditingStyle> extractAndRemoveTextDirection();
     void removeBlockProperties();
     void removeStyleAddedByElement(Element*);
     void removeStyleConflictingWithStyleOfElement(Element*);
     void collapseTextDecorationProperties();
-    enum ShouldIgnoreTextOnlyProperties {
-        IgnoreTextOnlyProperties,
-        DoNotIgnoreTextOnlyProperties
-    };
+    enum ShouldIgnoreTextOnlyProperties { IgnoreTextOnlyProperties, DoNotIgnoreTextOnlyProperties };
     TriState triStateOfStyle(EditingStyle*) const;
     TriState triStateOfStyle(const VisibleSelection&) const;
-    bool conflictsWithInlineStyleOfElement(HTMLElement* element) const
+    bool conflictsWithInlineStyleOfElement(HTMLElement* element) const { return conflictsWithInlineStyleOfElement(element, 0, 0); }
+    bool conflictsWithInlineStyleOfElement(HTMLElement* element, EditingStyle* extractedStyle, Vector<CSSPropertyID>& conflictingProperties) const
     {
-        return conflictsWithInlineStyleOfElement(element, 0, 0);
+        return conflictsWithInlineStyleOfElement(element, extractedStyle, &conflictingProperties);
     }
-    bool conflictsWithInlineStyleOfElement(
-        HTMLElement* element,
-        EditingStyle* extractedStyle,
-        Vector<CSSPropertyID>& conflictingProperties) const
-    {
-        return conflictsWithInlineStyleOfElement(element, extractedStyle,
-            &conflictingProperties);
-    }
-    bool conflictsWithImplicitStyleOfElement(
-        HTMLElement*,
-        EditingStyle* extractedStyle = nullptr,
-        ShouldExtractMatchingStyle = DoNotExtractMatchingStyle) const;
+    bool conflictsWithImplicitStyleOfElement(HTMLElement*, EditingStyle* extractedStyle = nullptr, ShouldExtractMatchingStyle = DoNotExtractMatchingStyle) const;
     bool conflictsWithImplicitStyleOfAttributes(HTMLElement*) const;
-    bool extractConflictingImplicitStyleOfAttributes(
-        HTMLElement*,
-        ShouldPreserveWritingDirection,
-        EditingStyle* extractedStyle,
-        Vector<QualifiedName>& conflictingAttributes,
-        ShouldExtractMatchingStyle) const;
+    bool extractConflictingImplicitStyleOfAttributes(HTMLElement*, ShouldPreserveWritingDirection, EditingStyle* extractedStyle,
+            Vector<QualifiedName>& conflictingAttributes, ShouldExtractMatchingStyle) const;
     bool styleIsPresentInComputedStyleOfNode(Node*) const;
 
     static bool elementIsStyledSpanOrHTMLEquivalent(const HTMLElement*);
 
-    void prepareToApplyAt(
-        const Position&,
-        ShouldPreserveWritingDirection = DoNotPreserveWritingDirection);
+    void prepareToApplyAt(const Position&, ShouldPreserveWritingDirection = DoNotPreserveWritingDirection);
     void mergeTypingStyle(Document*);
-    enum CSSPropertyOverrideMode { OverrideValues,
-        DoNotOverrideValues };
-    void mergeInlineStyleOfElement(HTMLElement*,
-        CSSPropertyOverrideMode,
-        PropertiesToInclude = AllProperties);
-    static EditingStyle* wrappingStyleForAnnotatedSerialization(
-        ContainerNode* context);
-    static EditingStyle* wrappingStyleForSerialization(ContainerNode* context);
+    enum CSSPropertyOverrideMode { OverrideValues, DoNotOverrideValues };
+    void mergeInlineStyleOfElement(HTMLElement*, CSSPropertyOverrideMode, PropertiesToInclude = AllProperties);
+    static PassRefPtrWillBeRawPtr<EditingStyle> wrappingStyleForAnnotatedSerialization(ContainerNode* context);
+    static PassRefPtrWillBeRawPtr<EditingStyle> wrappingStyleForSerialization(ContainerNode* context);
     void mergeStyleFromRules(Element*);
     void mergeStyleFromRulesForSerialization(Element*);
     void removeStyleFromRulesAndContext(Element*, ContainerNode* context);
@@ -167,56 +139,36 @@ public:
     float fontSizeDelta() const { return m_fontSizeDelta; }
     bool hasFontSizeDelta() const { return m_fontSizeDelta != NoFontDelta; }
 
-    static EditingStyle* styleAtSelectionStart(
-        const VisibleSelection&,
-        bool shouldUseBackgroundColorInEffect = false,
-        MutableStylePropertySet* styleToCheck = nullptr);
-    static WritingDirection textDirectionForSelection(
-        const VisibleSelection&,
-        EditingStyle* typingStyle,
-        bool& hasNestedOrMultipleEmbeddings);
-    static bool isEmbedOrIsolate(CSSValueID unicodeBidi)
-    {
-        return unicodeBidi == CSSValueIsolate || unicodeBidi == CSSValueWebkitIsolate || unicodeBidi == CSSValueEmbed;
-    }
+    static PassRefPtrWillBeRawPtr<EditingStyle> styleAtSelectionStart(const VisibleSelection&, bool shouldUseBackgroundColorInEffect = false);
+    static WritingDirection textDirectionForSelection(const VisibleSelection&, EditingStyle* typingStyle, bool& hasNestedOrMultipleEmbeddings);
 
     DECLARE_TRACE();
 
 private:
-    EditingStyle() = default;
+    EditingStyle();
     EditingStyle(ContainerNode*, PropertiesToInclude);
     EditingStyle(const Position&, PropertiesToInclude);
     explicit EditingStyle(const StylePropertySet*);
     EditingStyle(CSSPropertyID, const String& value);
     void init(Node*, PropertiesToInclude);
-    void removeInheritedColorsIfNeeded(const ComputedStyle*);
+    void removeTextFillAndStrokeColorsIfNeeded(const ComputedStyle*);
     void setProperty(CSSPropertyID, const String& value, bool important = false);
-    void replaceFontSizeByKeywordIfPossible(const ComputedStyle*,
-        CSSComputedStyleDeclaration*);
+    void replaceFontSizeByKeywordIfPossible(const ComputedStyle*, CSSComputedStyleDeclaration*);
     void extractFontSizeDelta();
-    TriState triStateOfStyle(CSSStyleDeclaration* styleToCompare,
-        ShouldIgnoreTextOnlyProperties) const;
-    bool conflictsWithInlineStyleOfElement(
-        HTMLElement*,
-        EditingStyle* extractedStyle,
-        Vector<CSSPropertyID>* conflictingProperties) const;
-    void mergeInlineAndImplicitStyleOfElement(Element*,
-        CSSPropertyOverrideMode,
-        PropertiesToInclude);
+    TriState triStateOfStyle(CSSStyleDeclaration* styleToCompare, ShouldIgnoreTextOnlyProperties) const;
+    bool conflictsWithInlineStyleOfElement(HTMLElement*, EditingStyle* extractedStyle, Vector<CSSPropertyID>* conflictingProperties) const;
+    void mergeInlineAndImplicitStyleOfElement(Element*, CSSPropertyOverrideMode, PropertiesToInclude);
     void mergeStyle(const StylePropertySet*, CSSPropertyOverrideMode);
 
-    Member<MutableStylePropertySet> m_mutableStyle;
-    bool m_isMonospaceFont = false;
-    float m_fontSizeDelta = NoFontDelta;
-    bool m_isVerticalAlign = false;
+    RefPtrWillBeMember<MutableStylePropertySet> m_mutableStyle;
+    bool m_isMonospaceFont;
+    float m_fontSizeDelta;
 
     friend class HTMLElementEquivalent;
     friend class HTMLAttributeEquivalent;
 };
 
 class StyleChange {
-    DISALLOW_NEW();
-
 public:
     StyleChange()
         : m_applyBold(false)
@@ -225,8 +177,7 @@ public:
         , m_applyLineThrough(false)
         , m_applySubscript(false)
         , m_applySuperscript(false)
-    {
-    }
+    { }
 
     StyleChange(EditingStyle*, const Position&);
 
@@ -247,14 +198,23 @@ public:
 
     bool operator==(const StyleChange& other)
     {
-        return m_cssStyle == other.m_cssStyle && m_applyBold == other.m_applyBold && m_applyItalic == other.m_applyItalic && m_applyUnderline == other.m_applyUnderline && m_applyLineThrough == other.m_applyLineThrough && m_applySubscript == other.m_applySubscript && m_applySuperscript == other.m_applySuperscript && m_applyFontColor == other.m_applyFontColor && m_applyFontFace == other.m_applyFontFace && m_applyFontSize == other.m_applyFontSize;
+        return m_cssStyle == other.m_cssStyle
+            && m_applyBold == other.m_applyBold
+            && m_applyItalic == other.m_applyItalic
+            && m_applyUnderline == other.m_applyUnderline
+            && m_applyLineThrough == other.m_applyLineThrough
+            && m_applySubscript == other.m_applySubscript
+            && m_applySuperscript == other.m_applySuperscript
+            && m_applyFontColor == other.m_applyFontColor
+            && m_applyFontFace == other.m_applyFontFace
+            && m_applyFontSize == other.m_applyFontSize;
     }
-    bool operator!=(const StyleChange& other) { return !(*this == other); }
-
+    bool operator!=(const StyleChange& other)
+    {
+        return !(*this == other);
+    }
 private:
-    void extractTextStyles(Document*,
-        MutableStylePropertySet*,
-        bool isMonospaceFont);
+    void extractTextStyles(Document*, MutableStylePropertySet*, bool isMonospaceFont);
 
     String m_cssStyle;
     bool m_applyBold;
@@ -268,8 +228,7 @@ private:
     String m_applyFontSize;
 };
 
-// FIXME: Remove these functions or make them non-global to discourage using
-// CSSStyleDeclaration directly.
+// FIXME: Remove these functions or make them non-global to discourage using CSSStyleDeclaration directly.
 CSSValueID getIdentifierValue(CSSStyleDeclaration*, CSSPropertyID);
 CSSValueID getIdentifierValue(StylePropertySet*, CSSPropertyID);
 

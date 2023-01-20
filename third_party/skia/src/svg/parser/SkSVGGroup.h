@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkSVGGroup_DEFINED
 #define SkSVGGroup_DEFINED
 
@@ -18,8 +26,12 @@ public:
     virtual bool isFlushable();
     virtual bool isGroup();
     virtual bool isNotDef();
+<<<<<<< HEAD
     void translate(SkSVGParser&, bool defState);
 
+=======
+    void translate(SkSVGParser& , bool defState);
+>>>>>>> miniblink49
 private:
     typedef SkSVGElement INHERITED;
 };

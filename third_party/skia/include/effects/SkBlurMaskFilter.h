@@ -9,9 +9,15 @@
 #define SkBlurMaskFilter_DEFINED
 
 // we include this since our callers will need to at least be able to ref/unref
+<<<<<<< HEAD
 #include "SkBlurTypes.h"
 #include "SkMaskFilter.h"
 #include "SkScalar.h"
+=======
+#include "SkMaskFilter.h"
+#include "SkScalar.h"
+#include "SkBlurTypes.h"
+>>>>>>> miniblink49
 
 class SK_API SkBlurMaskFilter {
 public:
@@ -24,9 +30,15 @@ public:
     enum BlurFlags {
         kNone_BlurFlag = 0x00,
         /** The blur layer's radius is not affected by transforms */
+<<<<<<< HEAD
         kIgnoreTransform_BlurFlag = 0x01,
         /** Use a smother, higher qulity blur algorithm */
         kHighQuality_BlurFlag = 0x02,
+=======
+        kIgnoreTransform_BlurFlag   = 0x01,
+        /** Use a smother, higher qulity blur algorithm */
+        kHighQuality_BlurFlag       = 0x02,
+>>>>>>> miniblink49
         /** mask for all blur flags */
         kAll_BlurFlag = 0x03
     };
@@ -37,8 +49,12 @@ public:
      *  @param flags    Flags to use - defaults to none
      *  @return The new blur maskfilter
      */
+<<<<<<< HEAD
     static sk_sp<SkMaskFilter> Make(SkBlurStyle style, SkScalar sigma,
         uint32_t flags = kNone_BlurFlag);
+=======
+    static SkMaskFilter* Create(SkBlurStyle style, SkScalar sigma, uint32_t flags = kNone_BlurFlag);
+>>>>>>> miniblink49
 
     /** Create an emboss maskfilter
         @param blurSigma    standard deviation of the Gaussian blur to apply
@@ -48,6 +64,7 @@ public:
         @param specular     coefficient for specular highlights (e.g. 8)
         @return the emboss maskfilter
     */
+<<<<<<< HEAD
     static sk_sp<SkMaskFilter> MakeEmboss(SkScalar blurSigma, const SkScalar direction[3],
         SkScalar ambient, SkScalar specular);
 
@@ -66,6 +83,15 @@ public:
         SkScalar ambient, SkScalar specular,
         SkScalar blurRadius);
 #endif
+=======
+    static SkMaskFilter* CreateEmboss(SkScalar blurSigma, const SkScalar direction[3],
+                                      SkScalar ambient, SkScalar specular);
+
+    SK_ATTR_DEPRECATED("use sigma version")
+    static SkMaskFilter* CreateEmboss(const SkScalar direction[3],
+                                      SkScalar ambient, SkScalar specular,
+                                      SkScalar blurRadius);
+>>>>>>> miniblink49
 
     SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP()
 

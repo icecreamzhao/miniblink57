@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/text/TextEncodingRegistry.h"
 
 #include "wtf/ASCIICType.h"
@@ -31,6 +32,16 @@
 #include "wtf/CurrentTime.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
+=======
+#include "config.h"
+#include "wtf/text/TextEncodingRegistry.h"
+
+#include "wtf/ASCIICType.h"
+#include "wtf/CurrentTime.h"
+#include "wtf/HashMap.h"
+#include "wtf/HashSet.h"
+#include "wtf/MainThread.h"
+>>>>>>> miniblink49
 #include "wtf/StdLibExtras.h"
 #include "wtf/StringExtras.h"
 #include "wtf/ThreadingPrimitives.h"
@@ -42,7 +53,10 @@
 #include "wtf/text/TextCodecUTF8.h"
 #include "wtf/text/TextCodecUserDefined.h"
 #include "wtf/text/TextEncoding.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -55,10 +69,25 @@ struct TextEncodingNameHash {
         char c1;
         char c2;
         do {
+<<<<<<< HEAD
+=======
+#if defined(_MSC_FULL_VER) && _MSC_FULL_VER == 170051106
+            // Workaround for a bug in the VS2012 Update 1 optimizer, remove once the fix is released.
+            // https://connect.microsoft.com/VisualStudio/feedback/details/777533/vs2012-c-optimizing-bug-when-using-inline-and-char-return-type-x86-target-only
+            c1 = toASCIILower(*s1++);
+            c2 = toASCIILower(*s2++);
+            if (c1 != c2)
+                return false;
+#else
+>>>>>>> miniblink49
             c1 = *s1++;
             c2 = *s2++;
             if (toASCIILower(c1) != toASCIILower(c2))
                 return false;
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> miniblink49
         } while (c1 && c2);
         return !c1 && !c2;
     }
@@ -89,6 +118,7 @@ struct TextEncodingNameHash {
 struct TextCodecFactory {
     NewTextCodecFunction function;
     const void* additionalData;
+<<<<<<< HEAD
     TextCodecFactory(NewTextCodecFunction f = 0, const void* d = 0)
         : function(f)
         , additionalData(d)
@@ -98,6 +128,12 @@ struct TextCodecFactory {
 
 typedef HashMap<const char*, const char*, TextEncodingNameHash>
     TextEncodingNameMap;
+=======
+    TextCodecFactory(NewTextCodecFunction f = 0, const void* d = 0) : function(f), additionalData(d) { }
+};
+
+typedef HashMap<const char*, const char*, TextEncodingNameHash> TextEncodingNameMap;
+>>>>>>> miniblink49
 typedef HashMap<const char*, TextCodecFactory> TextCodecMap;
 
 static Mutex& encodingRegistryMutex()
@@ -113,6 +149,7 @@ static TextEncodingNameMap* textEncodingNameMap;
 static TextCodecMap* textCodecMap;
 
 namespace {
+<<<<<<< HEAD
     static unsigned didExtendTextCodecMaps = 0;
 
     ALWAYS_INLINE unsigned atomicDidExtendTextCodecMaps()
@@ -124,15 +161,32 @@ namespace {
     {
         releaseStore(&didExtendTextCodecMaps, 1);
     }
+=======
+static unsigned didExtendTextCodecMaps = 0;
+
+ALWAYS_INLINE unsigned atomicDidExtendTextCodecMaps()
+{
+    return acquireLoad(&didExtendTextCodecMaps);
+}
+
+ALWAYS_INLINE void atomicSetDidExtendTextCodemMaps()
+{
+    releaseStore(&didExtendTextCodecMaps, 1);
+}
+>>>>>>> miniblink49
 } // namespace
 
 static const char textEncodingNameBlacklist[][6] = { "UTF-7" };
 
 #if ERROR_DISABLED
 
+<<<<<<< HEAD
 static inline void checkExistingName(const char*, const char*)
 {
 }
+=======
+static inline void checkExistingName(const char*, const char*) { }
+>>>>>>> miniblink49
 
 #else
 
@@ -144,25 +198,41 @@ static void checkExistingName(const char* alias, const char* atomicName)
     if (oldAtomicName == atomicName)
         return;
     // Keep the warning silent about one case where we know this will happen.
+<<<<<<< HEAD
     if (strcmp(alias, "ISO-8859-8-I") == 0 && strcmp(oldAtomicName, "ISO-8859-8-I") == 0 && strcasecmp(atomicName, "iso-8859-8") == 0)
         return;
     LOG(ERROR) << "alias " << alias << " maps to " << oldAtomicName
                << " already, but someone is trying to make it map to "
                << atomicName;
+=======
+    if (strcmp(alias, "ISO-8859-8-I") == 0
+            && strcmp(oldAtomicName, "ISO-8859-8-I") == 0
+            && strcasecmp(atomicName, "iso-8859-8") == 0)
+        return;
+    WTF_LOG_ERROR("alias %s maps to %s already, but someone is trying to make it map to %s", alias, oldAtomicName, atomicName);
+>>>>>>> miniblink49
 }
 
 #endif
 
 static bool isUndesiredAlias(const char* alias)
 {
+<<<<<<< HEAD
     // Reject aliases with version numbers that are supported by some back-ends
     // (such as "ISO_2022,locale=ja,version=0" in ICU).
+=======
+    // Reject aliases with version numbers that are supported by some back-ends (such as "ISO_2022,locale=ja,version=0" in ICU).
+>>>>>>> miniblink49
     for (const char* p = alias; *p; ++p) {
         if (*p == ',')
             return true;
     }
+<<<<<<< HEAD
     // 8859_1 is known to (at least) ICU, but other browsers don't support this
     // name - and having it caused a compatibility
+=======
+    // 8859_1 is known to (at least) ICU, but other browsers don't support this name - and having it caused a compatibility
+>>>>>>> miniblink49
     // problem, see bug 43554.
     if (0 == strcmp(alias, "8859_1"))
         return true;
@@ -171,23 +241,39 @@ static bool isUndesiredAlias(const char* alias)
 
 static void addToTextEncodingNameMap(const char* alias, const char* name)
 {
+<<<<<<< HEAD
     DCHECK_LE(strlen(alias), maxEncodingNameLength);
     if (isUndesiredAlias(alias))
         return;
     const char* atomicName = textEncodingNameMap->get(name);
     DCHECK(strcmp(alias, name) == 0 || atomicName);
+=======
+    ASSERT(strlen(alias) <= maxEncodingNameLength);
+    if (isUndesiredAlias(alias))
+        return;
+    const char* atomicName = textEncodingNameMap->get(name);
+    ASSERT(strcmp(alias, name) == 0 || atomicName);
+>>>>>>> miniblink49
     if (!atomicName)
         atomicName = name;
     checkExistingName(alias, atomicName);
     textEncodingNameMap->add(alias, atomicName);
 }
 
+<<<<<<< HEAD
 static void addToTextCodecMap(const char* name,
     NewTextCodecFunction function,
     const void* additionalData)
 {
     const char* atomicName = textEncodingNameMap->get(name);
     DCHECK(atomicName);
+=======
+static void addToTextCodecMap(const char* name, NewTextCodecFunction function, const void* additionalData)
+{
+    const char* atomicName = textEncodingNameMap->get(name);
+    if (atomicName == nullptr)
+      return;
+>>>>>>> miniblink49
     textCodecMap->add(atomicName, TextCodecFactory(function, additionalData));
 }
 
@@ -203,7 +289,11 @@ static void pruneBlacklistedCodecs()
         TextEncodingNameMap::const_iterator end = textEncodingNameMap->end();
         for (; it != end; ++it) {
             if (it->value == atomicName)
+<<<<<<< HEAD
                 names.push_back(it->key);
+=======
+                names.append(it->key);
+>>>>>>> miniblink49
         }
 
         textEncodingNameMap->removeAll(names);
@@ -214,9 +304,15 @@ static void pruneBlacklistedCodecs()
 
 static void buildBaseTextCodecMaps()
 {
+<<<<<<< HEAD
     DCHECK(isMainThread());
     DCHECK(!textCodecMap);
     DCHECK(!textEncodingNameMap);
+=======
+    ASSERT(isMainThread());
+    ASSERT(!textCodecMap);
+    ASSERT(!textEncodingNameMap);
+>>>>>>> miniblink49
 
     textCodecMap = new TextCodecMap;
     textEncodingNameMap = new TextEncodingNameMap;
@@ -255,6 +351,7 @@ static void extendTextCodecMaps()
     pruneBlacklistedCodecs();
 }
 
+<<<<<<< HEAD
 std::unique_ptr<TextCodec> newTextCodec(const TextEncoding& encoding)
 {
     MutexLocker lock(encodingRegistryMutex());
@@ -262,6 +359,16 @@ std::unique_ptr<TextCodec> newTextCodec(const TextEncoding& encoding)
     DCHECK(textCodecMap);
     TextCodecFactory factory = textCodecMap->get(encoding.name());
     DCHECK(factory.function);
+=======
+PassOwnPtr<TextCodec> newTextCodec(const TextEncoding& encoding)
+{
+    MutexLocker lock(encodingRegistryMutex());
+
+
+    ASSERT(textCodecMap);
+    TextCodecFactory factory = textCodecMap->get(encoding.name());
+    ASSERT(factory.function);
+>>>>>>> miniblink49
     return factory.function(encoding, factory.additionalData);
 }
 
@@ -279,13 +386,21 @@ const char* atomicCanonicalTextEncodingName(const char* name)
     if (atomicDidExtendTextCodecMaps())
         return 0;
     extendTextCodecMaps();
+<<<<<<< HEAD
     atomicSetDidExtendTextCodecMaps();
+=======
+    atomicSetDidExtendTextCodemMaps();
+>>>>>>> miniblink49
     return textEncodingNameMap->get(name);
 }
 
 template <typename CharacterType>
+<<<<<<< HEAD
 const char* atomicCanonicalTextEncodingName(const CharacterType* characters,
     size_t length)
+=======
+const char* atomicCanonicalTextEncodingName(const CharacterType* characters, size_t length)
+>>>>>>> miniblink49
 {
     char buffer[maxEncodingNameLength + 1];
     size_t j = 0;
@@ -304,6 +419,7 @@ const char* atomicCanonicalTextEncodingName(const String& alias)
     if (!alias.length())
         return 0;
 
+<<<<<<< HEAD
     if (alias.contains('\0'))
         return 0;
 
@@ -313,6 +429,15 @@ const char* atomicCanonicalTextEncodingName(const String& alias)
 
     return atomicCanonicalTextEncodingName<UChar>(alias.characters16(),
         alias.length());
+=======
+    if (alias.contains(static_cast<UChar>('\0')))
+        return 0;
+
+    if (alias.is8Bit())
+        return atomicCanonicalTextEncodingName<LChar>(alias.characters8(), alias.length());
+
+    return atomicCanonicalTextEncodingName<UChar>(alias.characters16(), alias.length());
+>>>>>>> miniblink49
 }
 
 bool noExtendedTextEncodingNameUsed()

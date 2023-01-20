@@ -31,17 +31,24 @@
 #ifndef BMPImageReader_h
 #define BMPImageReader_h
 
+<<<<<<< HEAD
 #include "platform/image-decoders/FastSharedBufferReader.h"
 #include "platform/image-decoders/ImageDecoder.h"
 #include "wtf/Allocator.h"
 #include "wtf/CPU.h"
 #include "wtf/Noncopyable.h"
 #include <stdint.h>
+=======
+#include <stdint.h>
+#include "platform/image-decoders/ImageDecoder.h"
+#include "wtf/CPU.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 // This class decodes a BMP image.  It is used in the BMP and ICO decoders,
 // which wrap it in the appropriate code to read file headers, etc.
+<<<<<<< HEAD
 class PLATFORM_EXPORT BMPImageReader final {
     USING_FAST_MALLOC(BMPImageReader);
     WTF_MAKE_NONCOPYABLE(BMPImageReader);
@@ -57,12 +64,38 @@ public:
     static inline uint32_t readUint32(const char* buffer)
     {
         return *reinterpret_cast<const uint32_t*>(buffer);
+=======
+class PLATFORM_EXPORT BMPImageReader {
+    WTF_MAKE_FAST_ALLOCATED(BMPImageReader);
+public:
+    // Read a value from |data[offset]|, converting from little to native
+    // endianness.
+    static inline uint16_t readUint16(SharedBuffer* data, int offset)
+    {
+        uint16_t result;
+        memcpy(&result, &data->data()[offset], 2);
+    #if CPU(BIG_ENDIAN)
+        result = ((result & 0xff) << 8) | ((result & 0xff00) >> 8);
+    #endif
+        return result;
+    }
+
+    static inline uint32_t readUint32(SharedBuffer* data, int offset)
+    {
+        uint32_t result;
+        memcpy(&result, &data->data()[offset], 4);
+    #if CPU(BIG_ENDIAN)
+        result = ((result & 0xff) << 24) | ((result & 0xff00) << 8) | ((result & 0xff0000) >> 8) | ((result & 0xff000000) >> 24);
+    #endif
+        return result;
+>>>>>>> miniblink49
     }
 
     // |parent| is the decoder that owns us.
     // |startOffset| points to the start of the BMP within the file.
     // |buffer| points at an empty ImageFrame that we'll initialize and
     // fill with decoded data.
+<<<<<<< HEAD
     BMPImageReader(ImageDecoder* parent,
         size_t decodedAndHeaderOffset,
         size_t imgDataOffset,
@@ -74,21 +107,38 @@ public:
         m_data = data;
         m_fastReader.setData(data);
     }
+=======
+    BMPImageReader(ImageDecoder* parent, size_t decodedAndHeaderOffset, size_t imgDataOffset, bool isInICO);
+
+    void setBuffer(ImageFrame* buffer) { m_buffer = buffer; }
+    void setData(SharedBuffer* data) { m_data = data; }
+>>>>>>> miniblink49
 
     // Does the actual decoding.  If |onlySize| is true, decoding only
     // progresses as far as necessary to get the image size.  Returns
     // whether decoding succeeded.
     bool decodeBMP(bool onlySize);
 
+<<<<<<< HEAD
 private:
     friend class PixelChangedScoper;
 
+=======
+>>>>>>> miniblink49
     // Helper for decodeBMP() which will call either processRLEData() or
     // processNonRLEData(), depending on the value of |nonRLE|, call any
     // appropriate notifications to deal with the result, then return whether
     // decoding succeeded.
     bool decodePixelData(bool nonRLE);
 
+<<<<<<< HEAD
+=======
+    void setForceBitMaskAlpha() { m_forceBitMaskAlpha = true; }
+
+private:
+    friend class PixelChangedScoper;
+
+>>>>>>> miniblink49
     // The various BMP compression types.  We don't currently decode all
     // these.
     enum CompressionType {
@@ -101,8 +151,13 @@ private:
         JPEG = 4,
         PNG = 5,
         // OS/2 2.x-only
+<<<<<<< HEAD
         HUFFMAN1D, // Stored in file as 3
         RLE24, // Stored in file as 4
+=======
+        HUFFMAN1D,  // Stored in file as 3
+        RLE24,      // Stored in file as 4
+>>>>>>> miniblink49
     };
     enum ProcessingResult {
         Success,
@@ -113,7 +168,10 @@ private:
     // These are based on the Windows BITMAPINFOHEADER and RGBTRIPLE
     // structs, but with unnecessary entries removed.
     struct BitmapInfoHeader {
+<<<<<<< HEAD
         DISALLOW_NEW();
+=======
+>>>>>>> miniblink49
         uint32_t biSize;
         int32_t biWidth;
         int32_t biHeight;
@@ -122,12 +180,16 @@ private:
         uint32_t biClrUsed;
     };
     struct RGBTriple {
+<<<<<<< HEAD
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+=======
+>>>>>>> miniblink49
         uint8_t rgbBlue;
         uint8_t rgbGreen;
         uint8_t rgbRed;
     };
 
+<<<<<<< HEAD
     inline uint8_t readUint8(size_t offset) const
     {
         return m_fastReader.getOneByte(m_decodedOffset + offset);
@@ -138,13 +200,22 @@ private:
         char buffer[2];
         const char* data = m_fastReader.getConsecutiveData(m_decodedOffset + offset, 2, buffer);
         return readUint16(data);
+=======
+    inline uint16_t readUint16(int offset) const
+    {
+        return readUint16(m_data.get(), m_decodedOffset + offset);
+>>>>>>> miniblink49
     }
 
     inline uint32_t readUint32(int offset) const
     {
+<<<<<<< HEAD
         char buffer[4];
         const char* data = m_fastReader.getConsecutiveData(m_decodedOffset + offset, 4, buffer);
         return readUint32(data);
+=======
+        return readUint32(m_data.get(), m_decodedOffset + offset);
+>>>>>>> miniblink49
     }
 
     // Determines the size of the BMP info header.  Returns true if the size
@@ -201,8 +272,12 @@ private:
     // image", so downwards for m_isTopDown images and upwards otherwise.
     inline bool pastEndOfImage(int numRows)
     {
+<<<<<<< HEAD
         return m_isTopDown ? ((m_coord.y() + numRows) >= m_parent->size().height())
                            : ((m_coord.y() - numRows) < 0);
+=======
+        return m_isTopDown ? ((m_coord.y() + numRows) >= m_parent->size().height()) : ((m_coord.y() - numRows) < 0);
+>>>>>>> miniblink49
     }
 
     // Returns the pixel data for the current X coordinate in a uint32_t.
@@ -212,6 +287,7 @@ private:
     // the pixel data will actually be set.
     inline uint32_t readCurrentPixel(int bytesPerPixel) const
     {
+<<<<<<< HEAD
         // We need at most 4 bytes, starting at m_decodedOffset + offset.
         char buffer[4];
         const int offset = m_coord.x() * bytesPerPixel;
@@ -226,11 +302,31 @@ private:
             // of the return value, the caller won't read it.
             uint32_t pixel;
             memcpy(&pixel, encodedPixel, 3);
+=======
+        const int offset = m_coord.x() * bytesPerPixel;
+        switch (bytesPerPixel) {
+        case 2:
+            return readUint16(offset);
+
+        case 3: {
+            // It doesn't matter that we never set the most significant byte
+            // of the return value here in little-endian mode, the caller
+            // won't read it.
+            uint32_t pixel;
+            memcpy(&pixel, &m_data->data()[m_decodedOffset + offset], 3);
+    #if CPU(BIG_ENDIAN)
+            pixel = ((pixel & 0xff00) << 8) | ((pixel & 0xff0000) >> 8) | ((pixel & 0xff000000) >> 24);
+    #endif
+>>>>>>> miniblink49
             return pixel;
         }
 
         case 4:
+<<<<<<< HEAD
             return readUint32(encodedPixel);
+=======
+            return readUint32(offset);
+>>>>>>> miniblink49
 
         default:
             ASSERT_NOT_REACHED();
@@ -243,9 +339,13 @@ private:
     inline unsigned getComponent(uint32_t pixel, int component) const
     {
         uint8_t value = (pixel & m_bitMasks[component]) >> m_bitShiftsRight[component];
+<<<<<<< HEAD
         return m_lookupTableAddresses[component]
             ? m_lookupTableAddresses[component][value]
             : value;
+=======
+        return m_lookupTableAddresses[component] ? m_lookupTableAddresses[component][value] : value;
+>>>>>>> miniblink49
     }
 
     inline unsigned getAlpha(uint32_t pixel) const
@@ -259,15 +359,25 @@ private:
     // right by one.
     inline void setI(size_t colorIndex)
     {
+<<<<<<< HEAD
         setRGBA(m_colorTable[colorIndex].rgbRed, m_colorTable[colorIndex].rgbGreen,
             m_colorTable[colorIndex].rgbBlue, 0xff);
+=======
+        setRGBA(m_colorTable[colorIndex].rgbRed, m_colorTable[colorIndex].rgbGreen, m_colorTable[colorIndex].rgbBlue, 0xff);
+>>>>>>> miniblink49
     }
 
     // Like setI(), but with the individual component values specified.
     inline void setRGBA(unsigned red,
+<<<<<<< HEAD
         unsigned green,
         unsigned blue,
         unsigned alpha)
+=======
+                        unsigned green,
+                        unsigned blue,
+                        unsigned alpha)
+>>>>>>> miniblink49
     {
         m_buffer->setRGBA(m_coord.x(), m_coord.y(), red, green, blue, alpha);
         m_coord.move(1, 0);
@@ -278,10 +388,17 @@ private:
     // also increments the relevant local variables to move the current
     // pixel right to |endCoord|.
     inline void fillRGBA(int endCoord,
+<<<<<<< HEAD
         unsigned red,
         unsigned green,
         unsigned blue,
         unsigned alpha)
+=======
+                         unsigned red,
+                         unsigned green,
+                         unsigned blue,
+                         unsigned alpha)
+>>>>>>> miniblink49
     {
         while (m_coord.x() < endCoord)
             setRGBA(red, green, blue, alpha);
@@ -299,8 +416,12 @@ private:
     ImageFrame* m_buffer;
 
     // The file to decode.
+<<<<<<< HEAD
     RefPtr<SegmentReader> m_data;
     FastSharedBufferReader m_fastReader;
+=======
+    RefPtr<SharedBuffer> m_data;
+>>>>>>> miniblink49
 
     // An index into |m_data| representing how much we've already decoded.
     size_t m_decodedOffset;
@@ -373,6 +494,11 @@ private:
     // header, thus doubling it). If |m_isInICO| is true, this variable tracks
     // whether we've begun decoding this mask yet.
     bool m_decodingAndMask;
+<<<<<<< HEAD
+=======
+
+    bool m_forceBitMaskAlpha;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -20,11 +20,11 @@
 // https://html.spec.whatwg.org/#the-param-element
 
 interface HTMLParamElement : HTMLElement {
-    [CEReactions, Reflect] attribute DOMString name;
-    [CEReactions, Reflect] attribute DOMString value;
+    [Reflect] attribute DOMString name;
+    [Reflect] attribute DOMString value;
 
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLParamElement-partial
-    [CEReactions, Reflect] attribute DOMString type;
-    [CEReactions, Reflect] attribute DOMString valueType;
+    [Reflect] attribute DOMString type;
+    [Reflect] attribute DOMString valueType;
 };

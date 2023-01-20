@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,6 +29,27 @@
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
 #include "modules/webaudio/AnalyserOptions.h"
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+#if ENABLE(WEB_AUDIO)
+#include "modules/webaudio/AnalyserNode.h"
+
+#include "bindings/core/v8/ExceptionMessages.h"
+#include "bindings/core/v8/ExceptionState.h"
+#include "core/dom/ExceptionCode.h"
+>>>>>>> miniblink49
 #include "modules/webaudio/AudioNodeInput.h"
 #include "modules/webaudio/AudioNodeOutput.h"
 
@@ -39,8 +61,12 @@ AnalyserHandler::AnalyserHandler(AudioNode& node, float sampleRate)
     initialize();
 }
 
+<<<<<<< HEAD
 PassRefPtr<AnalyserHandler> AnalyserHandler::create(AudioNode& node,
     float sampleRate)
+=======
+PassRefPtr<AnalyserHandler> AnalyserHandler::create(AudioNode& node, float sampleRate)
+>>>>>>> miniblink49
 {
     return adoptRef(new AnalyserHandler(node, sampleRate));
 }
@@ -64,26 +90,40 @@ void AnalyserHandler::process(size_t framesToProcess)
     // Give the analyser the audio which is passing through this AudioNode.
     m_analyser.writeInput(inputBus, framesToProcess);
 
+<<<<<<< HEAD
     // For in-place processing, our override of pullInputs() will just pass the
     // audio data through unchanged if the channel count matches from input to
     // output (resulting in inputBus == outputBus). Otherwise, do an up-mix to
     // stereo.
+=======
+    // For in-place processing, our override of pullInputs() will just pass the audio data through unchanged if the channel count matches from input to output
+    // (resulting in inputBus == outputBus). Otherwise, do an up-mix to stereo.
+>>>>>>> miniblink49
     if (inputBus != outputBus)
         outputBus->copyFrom(*inputBus);
 }
 
+<<<<<<< HEAD
 void AnalyserHandler::setFftSize(unsigned size,
     ExceptionState& exceptionState)
+=======
+void AnalyserHandler::setFftSize(unsigned size, ExceptionState& exceptionState)
+>>>>>>> miniblink49
 {
     if (!m_analyser.setFftSize(size)) {
         exceptionState.throwDOMException(
             IndexSizeError,
+<<<<<<< HEAD
             (size < RealtimeAnalyser::MinFFTSize || size > RealtimeAnalyser::MaxFFTSize)
                 ? ExceptionMessages::indexOutsideRange(
                     "FFT size", size, RealtimeAnalyser::MinFFTSize,
                     ExceptionMessages::InclusiveBound,
                     RealtimeAnalyser::MaxFFTSize,
                     ExceptionMessages::InclusiveBound)
+=======
+            (size < RealtimeAnalyser::MinFFTSize || size > RealtimeAnalyser::MaxFFTSize) ?
+                ExceptionMessages::indexOutsideRange("FFT size", size, RealtimeAnalyser::MinFFTSize, ExceptionMessages::InclusiveBound, RealtimeAnalyser::MaxFFTSize, ExceptionMessages::InclusiveBound)
+>>>>>>> miniblink49
                 : ("The value provided (" + String::number(size) + ") is not a power of two."));
     }
 }
@@ -94,7 +134,12 @@ void AnalyserHandler::setMinDecibels(double k, ExceptionState& exceptionState)
         m_analyser.setMinDecibels(k);
     } else {
         exceptionState.throwDOMException(
+<<<<<<< HEAD
             IndexSizeError, ExceptionMessages::indexExceedsMaximumBound("minDecibels", k, maxDecibels()));
+=======
+            IndexSizeError,
+            ExceptionMessages::indexExceedsMaximumBound("minDecibels", k, maxDecibels()));
+>>>>>>> miniblink49
     }
 }
 
@@ -104,6 +149,7 @@ void AnalyserHandler::setMaxDecibels(double k, ExceptionState& exceptionState)
         m_analyser.setMaxDecibels(k);
     } else {
         exceptionState.throwDOMException(
+<<<<<<< HEAD
             IndexSizeError, ExceptionMessages::indexExceedsMinimumBound("maxDecibels", k, minDecibels()));
     }
 }
@@ -123,20 +169,33 @@ void AnalyserHandler::setMinMaxDecibels(double minDecibels,
 
 void AnalyserHandler::setSmoothingTimeConstant(double k,
     ExceptionState& exceptionState)
+=======
+            IndexSizeError,
+            ExceptionMessages::indexExceedsMinimumBound("maxDecibels", k, minDecibels()));
+    }
+}
+
+void AnalyserHandler::setSmoothingTimeConstant(double k, ExceptionState& exceptionState)
+>>>>>>> miniblink49
 {
     if (k >= 0 && k <= 1) {
         m_analyser.setSmoothingTimeConstant(k);
     } else {
         exceptionState.throwDOMException(
             IndexSizeError,
+<<<<<<< HEAD
             ExceptionMessages::indexOutsideRange(
                 "smoothing value", k, 0.0, ExceptionMessages::InclusiveBound, 1.0,
                 ExceptionMessages::InclusiveBound));
+=======
+            ExceptionMessages::indexOutsideRange("smoothing value", k, 0.0, ExceptionMessages::InclusiveBound, 1.0, ExceptionMessages::InclusiveBound));
+>>>>>>> miniblink49
     }
 }
 
 // ----------------------------------------------------------------
 
+<<<<<<< HEAD
 AnalyserNode::AnalyserNode(BaseAudioContext& context)
     : AudioBasicInspectorNode(context)
 {
@@ -182,6 +241,17 @@ AnalyserNode* AnalyserNode::create(BaseAudioContext* context,
         exceptionState);
 
     return node;
+=======
+AnalyserNode::AnalyserNode(AudioContext& context, float sampleRate)
+    : AudioBasicInspectorNode(context)
+{
+    setHandler(AnalyserHandler::create(*this, sampleRate));
+}
+
+AnalyserNode* AnalyserNode::create(AudioContext& context, float sampleRate)
+{
+    return new AnalyserNode(context, sampleRate);
+>>>>>>> miniblink49
 }
 
 AnalyserHandler& AnalyserNode::analyserHandler() const
@@ -219,6 +289,7 @@ void AnalyserNode::setMaxDecibels(double max, ExceptionState& exceptionState)
     analyserHandler().setMaxDecibels(max, exceptionState);
 }
 
+<<<<<<< HEAD
 void AnalyserNode::setMinMaxDecibels(double min,
     double max,
     ExceptionState& exceptionState)
@@ -226,13 +297,19 @@ void AnalyserNode::setMinMaxDecibels(double min,
     analyserHandler().setMinMaxDecibels(min, max, exceptionState);
 }
 
+=======
+>>>>>>> miniblink49
 double AnalyserNode::maxDecibels() const
 {
     return analyserHandler().maxDecibels();
 }
 
+<<<<<<< HEAD
 void AnalyserNode::setSmoothingTimeConstant(double smoothingTime,
     ExceptionState& exceptionState)
+=======
+void AnalyserNode::setSmoothingTimeConstant(double smoothingTime, ExceptionState& exceptionState)
+>>>>>>> miniblink49
 {
     analyserHandler().setSmoothingTimeConstant(smoothingTime, exceptionState);
 }
@@ -244,12 +321,20 @@ double AnalyserNode::smoothingTimeConstant() const
 
 void AnalyserNode::getFloatFrequencyData(DOMFloat32Array* array)
 {
+<<<<<<< HEAD
     analyserHandler().getFloatFrequencyData(array, context()->currentTime());
+=======
+    analyserHandler().getFloatFrequencyData(array);
+>>>>>>> miniblink49
 }
 
 void AnalyserNode::getByteFrequencyData(DOMUint8Array* array)
 {
+<<<<<<< HEAD
     analyserHandler().getByteFrequencyData(array, context()->currentTime());
+=======
+    analyserHandler().getByteFrequencyData(array);
+>>>>>>> miniblink49
 }
 
 void AnalyserNode::getFloatTimeDomainData(DOMFloat32Array* array)
@@ -263,3 +348,8 @@ void AnalyserNode::getByteTimeDomainData(DOMUint8Array* array)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

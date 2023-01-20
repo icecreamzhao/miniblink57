@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/crypto/WorkerGlobalScopeCrypto.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -35,13 +39,20 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 WorkerGlobalScopeCrypto::WorkerGlobalScopeCrypto() { }
+=======
+WorkerGlobalScopeCrypto::WorkerGlobalScopeCrypto()
+{
+}
+>>>>>>> miniblink49
 
 const char* WorkerGlobalScopeCrypto::supplementName()
 {
     return "WorkerGlobalScopeCrypto";
 }
 
+<<<<<<< HEAD
 WorkerGlobalScopeCrypto& WorkerGlobalScopeCrypto::from(
     Supplementable<WorkerGlobalScope>& context)
 {
@@ -50,12 +61,24 @@ WorkerGlobalScopeCrypto& WorkerGlobalScopeCrypto::from(
     if (!supplement) {
         supplement = new WorkerGlobalScopeCrypto;
         provideTo(context, supplementName(), supplement);
+=======
+WorkerGlobalScopeCrypto& WorkerGlobalScopeCrypto::from(WillBeHeapSupplementable<WorkerGlobalScope>& context)
+{
+    WorkerGlobalScopeCrypto* supplement = static_cast<WorkerGlobalScopeCrypto*>(WillBeHeapSupplement<WorkerGlobalScope>::from(context, supplementName()));
+    if (!supplement) {
+        supplement = new WorkerGlobalScopeCrypto();
+        provideTo(context, supplementName(), adoptPtrWillBeNoop(supplement));
+>>>>>>> miniblink49
     }
     return *supplement;
 }
 
+<<<<<<< HEAD
 Crypto* WorkerGlobalScopeCrypto::crypto(
     Supplementable<WorkerGlobalScope>& context)
+=======
+Crypto* WorkerGlobalScopeCrypto::crypto(WillBeHeapSupplementable<WorkerGlobalScope>& context)
+>>>>>>> miniblink49
 {
     return WorkerGlobalScopeCrypto::from(context).crypto();
 }
@@ -70,7 +93,11 @@ Crypto* WorkerGlobalScopeCrypto::crypto() const
 DEFINE_TRACE(WorkerGlobalScopeCrypto)
 {
     visitor->trace(m_crypto);
+<<<<<<< HEAD
     Supplement<WorkerGlobalScope>::trace(visitor);
+=======
+    WillBeHeapSupplement<WorkerGlobalScope>::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

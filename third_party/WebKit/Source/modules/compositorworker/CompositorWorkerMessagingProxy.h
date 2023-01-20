@@ -5,6 +5,7 @@
 #ifndef CompositorWorkerMessagingProxy_h
 #define CompositorWorkerMessagingProxy_h
 
+<<<<<<< HEAD
 #include "core/workers/InProcessWorkerMessagingProxy.h"
 #include "wtf/Allocator.h"
 #include <memory>
@@ -17,11 +18,24 @@ class CompositorWorkerMessagingProxy final
 
 public:
     CompositorWorkerMessagingProxy(InProcessWorkerBase*, WorkerClients*);
+=======
+#include "core/workers/WorkerMessagingProxy.h"
+
+namespace blink {
+
+class CompositorWorkerMessagingProxy final : public WorkerMessagingProxy {
+public:
+    explicit CompositorWorkerMessagingProxy(InProcessWorkerBase*);
+>>>>>>> miniblink49
 
 protected:
     ~CompositorWorkerMessagingProxy() override;
 
+<<<<<<< HEAD
     std::unique_ptr<WorkerThread> createWorkerThread(double originTime) override;
+=======
+    PassRefPtr<WorkerThread> createWorkerThread(double originTime) override;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

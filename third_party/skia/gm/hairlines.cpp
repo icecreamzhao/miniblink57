@@ -5,24 +5,40 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkTArray.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkCanvas.h"
+#include "SkTArray.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
 class HairlinesGM : public GM {
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
+=======
+
+
+    SkString onShortName() override {
+>>>>>>> miniblink49
         return SkString("hairlines");
     }
 
     SkISize onISize() override { return SkISize::Make(1250, 1250); }
 
+<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
+=======
+    void onOnceBeforeDraw() override {
+>>>>>>> miniblink49
         {
             SkPath* lineAnglesPath = &fPaths.push_back();
             enum {
@@ -80,7 +96,11 @@ protected:
             SkPath* unevenClosedQuad = &fPaths.push_back();
             unevenClosedQuad->moveTo(0, -0);
             unevenClosedQuad->quadTo(SkIntToScalar(100), SkIntToScalar(100),
+<<<<<<< HEAD
                 SkIntToScalar(75), SkIntToScalar(75));
+=======
+                                     SkIntToScalar(75), SkIntToScalar(75));
+>>>>>>> miniblink49
         }
 
         // Two problem cases for gpu hairline renderer found by shapeops testing. These used
@@ -89,8 +109,13 @@ protected:
             SkPath* problem1 = &fPaths.push_back();
             problem1->moveTo(SkIntToScalar(4), SkIntToScalar(6));
             problem1->cubicTo(SkIntToScalar(5), SkIntToScalar(6),
+<<<<<<< HEAD
                 SkIntToScalar(5), SkIntToScalar(4),
                 SkIntToScalar(4), SkIntToScalar(0));
+=======
+                              SkIntToScalar(5), SkIntToScalar(4),
+                              SkIntToScalar(4), SkIntToScalar(0));
+>>>>>>> miniblink49
             problem1->close();
         }
 
@@ -99,11 +124,19 @@ protected:
             problem2->moveTo(SkIntToScalar(5), SkIntToScalar(1));
             problem2->lineTo(4.32787323f, 1.67212653f);
             problem2->cubicTo(2.75223875f, 3.24776125f,
+<<<<<<< HEAD
                 3.00581908f, 4.51236057f,
                 3.7580452f, 4.37367964f);
             problem2->cubicTo(4.66472578f, 3.888381f,
                 5.f, 2.875f,
                 5.f, 1.f);
+=======
+                              3.00581908f, 4.51236057f,
+                              3.7580452f, 4.37367964f);
+            problem2->cubicTo(4.66472578f, 3.888381f,
+                              5.f, 2.875f,
+                              5.f, 1.f);
+>>>>>>> miniblink49
             problem2->close();
         }
 
@@ -111,10 +144,17 @@ protected:
         {
             // A caret (crbug.com/131770)
             SkPath* bug0 = &fPaths.push_back();
+<<<<<<< HEAD
             bug0->moveTo(6.5f, 5.5f);
             bug0->lineTo(3.5f, 0.5f);
             bug0->moveTo(0.5f, 5.5f);
             bug0->lineTo(3.5f, 0.5f);
+=======
+            bug0->moveTo(6.5f,5.5f);
+            bug0->lineTo(3.5f,0.5f);
+            bug0->moveTo(0.5f,5.5f);
+            bug0->lineTo(3.5f,0.5f);
+>>>>>>> miniblink49
         }
 
         {
@@ -162,8 +202,12 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         static const SkAlpha kAlphaValue[] = { 0xFF, 0x40 };
         static const SkScalar kWidths[] = { 0, 0.5f, 1.5f };
 
@@ -219,6 +263,7 @@ private:
     typedef GM INHERITED;
 };
 
+<<<<<<< HEAD
 static void draw_squarehair_tests(SkCanvas* canvas, SkScalar width, SkPaint::Cap cap, bool aa)
 {
     SkPaint paint;
@@ -259,6 +304,8 @@ DEF_SIMPLE_GM(squarehair, canvas, 240, 360)
     }
 }
 
+=======
+>>>>>>> miniblink49
 //////////////////////////////////////////////////////////////////////////////
 
 static GM* MyFactory(void*) { return new HairlinesGM; }

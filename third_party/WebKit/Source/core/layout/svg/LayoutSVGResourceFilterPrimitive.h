@@ -38,29 +38,19 @@ public:
     {
     }
 
-    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override
-    {
-        return false;
-    }
+    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override { return false; }
 
-    void styleDidChange(StyleDifference, const ComputedStyle*) override;
+    virtual void styleDidChange(StyleDifference, const ComputedStyle*) override;
 
-    const char* name() const override
-    {
-        return "LayoutSVGResourceFilterPrimitive";
-    }
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSVGResourceFilterPrimitive || LayoutSVGHiddenContainer::isOfType(type);
-    }
+    virtual const char* name() const override { return "LayoutSVGResourceFilterPrimitive"; }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVGResourceFilterPrimitive || LayoutSVGHiddenContainer::isOfType(type); }
 
     inline void primitiveAttributeChanged(const QualifiedName& attribute)
     {
         LayoutObject* filter = parent();
         if (!filter || !filter->isSVGResourceFilter())
             return;
-        toLayoutSVGResourceFilter(filter)->primitiveAttributeChanged(this,
-            attribute);
+        toLayoutSVGResourceFilter(filter)->primitiveAttributeChanged(this, attribute);
     }
 };
 

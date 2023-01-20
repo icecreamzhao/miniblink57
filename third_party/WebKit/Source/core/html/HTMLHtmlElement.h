@@ -31,7 +31,6 @@ namespace blink {
 
 class CORE_EXPORT HTMLHtmlElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLHtmlElement);
 
@@ -39,8 +38,6 @@ public:
 
 private:
     explicit HTMLHtmlElement(Document&);
-
-    void maybeSetupApplicationCache();
 
     bool isURLAttribute(const Attribute&) const override;
 };

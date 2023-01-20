@@ -26,7 +26,7 @@
 #ifndef CSSBorderImageSliceValue_h
 #define CSSBorderImageSliceValue_h
 
-#include "core/css/CSSQuadValue.h"
+#include "core/css/CSSPrimitiveValue.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
@@ -34,33 +34,29 @@ namespace blink {
 
 class CSSBorderImageSliceValue : public CSSValue {
 public:
-    static CSSBorderImageSliceValue* create(CSSQuadValue* slices, bool fill)
+    static PassRefPtrWillBeRawPtr<CSSBorderImageSliceValue> create(PassRefPtrWillBeRawPtr<CSSPrimitiveValue> slices, bool fill)
     {
-        return new CSSBorderImageSliceValue(slices, fill);
+        return adoptRefWillBeNoop(new CSSBorderImageSliceValue(slices, fill));
     }
 
     String customCSSText() const;
 
-    // TODO(sashab): Change this to a quad of CSSPrimitiveValues, or add separate
-    // methods for topSlice(), leftSlice(), etc.
-    const CSSQuadValue& slices() const { return *m_slices; }
-    bool fill() const { return m_fill; }
+    Quad* slices() const { return m_slices ? m_slices->getQuadValue() : nullptr; }
 
     bool equals(const CSSBorderImageSliceValue&) const;
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
-private:
-    CSSBorderImageSliceValue(CSSQuadValue* slices, bool fill);
-
-    // These four values are used to make "cuts" in the border image. They can be
-    // numbers or percentages.
-    Member<CSSQuadValue> m_slices;
+    // These four values are used to make "cuts" in the border image. They can be numbers
+    // or percentages.
+    RefPtrWillBeMember<CSSPrimitiveValue> m_slices;
     bool m_fill;
+
+private:
+    CSSBorderImageSliceValue(PassRefPtrWillBeRawPtr<CSSPrimitiveValue> slices, bool fill);
 };
 
-DEFINE_CSS_VALUE_TYPE_CASTS(CSSBorderImageSliceValue,
-    isBorderImageSliceValue());
+DEFINE_CSS_VALUE_TYPE_CASTS(CSSBorderImageSliceValue, isBorderImageSliceValue());
 
 } // namespace blink
 

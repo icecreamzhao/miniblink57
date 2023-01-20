@@ -16,6 +16,7 @@ class V8InspectorSessionImpl;
 using protocol::Response;
 
 class V8SchemaAgentImpl : public protocol::Schema::Backend {
+<<<<<<< HEAD
 public:
     V8SchemaAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
         protocol::DictionaryValue* state);
@@ -34,3 +35,23 @@ private:
 } // namespace v8_inspector
 
 #endif // V8_INSPECTOR_V8_SCHEMA_AGENT_IMPL_H_
+=======
+ public:
+  V8SchemaAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
+                    protocol::DictionaryValue* state);
+  ~V8SchemaAgentImpl() override;
+
+  Response getDomains(
+      std::unique_ptr<protocol::Array<protocol::Schema::Domain>>*) override;
+
+ private:
+  V8InspectorSessionImpl* m_session;
+  protocol::Schema::Frontend m_frontend;
+
+  DISALLOW_COPY_AND_ASSIGN(V8SchemaAgentImpl);
+};
+
+}  // namespace v8_inspector
+
+#endif  // V8_INSPECTOR_V8_SCHEMA_AGENT_IMPL_H_
+>>>>>>> miniblink49

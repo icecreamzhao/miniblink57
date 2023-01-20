@@ -35,6 +35,10 @@
       'target_name': 'wtf_unittests',
       'type': 'executable',
       'dependencies': [
+<<<<<<< HEAD
+=======
+        'wtf_unittest_helpers',
+>>>>>>> miniblink49
         'wtf.gyp:wtf',
         '../config.gyp:unittest_config',
         '<(DEPTH)/base/base.gyp:test_support_base',
@@ -46,6 +50,15 @@
       # Disable c4267 warnings until we fix size_t to int truncations.
       'msvs_disabled_warnings': [4127, 4510, 4512, 4610, 4706, 4068, 4267],
       'conditions': [
+<<<<<<< HEAD
+=======
+        ['os_posix==1 and OS!="mac" and OS!="android" and OS!="ios" and use_allocator!="none"', {
+          'dependencies': [
+            '<(DEPTH)/base/base.gyp:base',
+            '<(DEPTH)/base/allocator/allocator.gyp:allocator',
+          ],
+        }],
+>>>>>>> miniblink49
         ['OS=="android"', {
           'type': 'shared_library',
           'dependencies': [
@@ -55,6 +68,25 @@
         }],
       ]
     },
+<<<<<<< HEAD
+=======
+    {
+      'target_name': 'wtf_unittest_helpers',
+      'type': '<(component)',
+      'include_dirs': [
+        '..',
+      ],
+      'dependencies': [
+        'wtf.gyp:wtf',
+      ],
+      'defines': [
+        'WTF_UNITTEST_HELPERS_IMPLEMENTATION=1',
+      ],
+      'sources': [
+        '<@(wtf_unittest_helper_files)',
+      ],
+    },
+>>>>>>> miniblink49
   ],
   'conditions': [
     ['OS=="android" and gtest_target_type=="shared_library"', {
@@ -72,6 +104,7 @@
         'includes': [ '../../../../build/apk_test.gypi' ],
       }],
     }],
+<<<<<<< HEAD
     ['test_isolation_mode != "noop"', {
       'targets': [
         {
@@ -89,5 +122,7 @@
         },
       ],
     }],
+=======
+>>>>>>> miniblink49
   ],
 }

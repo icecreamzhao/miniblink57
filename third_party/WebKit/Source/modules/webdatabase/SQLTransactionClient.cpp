@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/webdatabase/SQLTransactionClient.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -39,11 +40,25 @@
 #include "public/platform/Platform.h"
 #include "public/platform/WebDatabaseObserver.h"
 #include "public/platform/WebSecurityOrigin.h"
+=======
+#include "config.h"
+#include "modules/webdatabase/SQLTransactionClient.h"
+
+#include "core/dom/CrossThreadTask.h"
+#include "core/dom/ExecutionContext.h"
+#include "modules/webdatabase/Database.h"
+#include "modules/webdatabase/DatabaseContext.h"
+#include "platform/weborigin/DatabaseIdentifier.h"
+#include "platform/weborigin/SecurityOrigin.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebDatabaseObserver.h"
+>>>>>>> miniblink49
 #include "public/platform/WebTraceLocation.h"
 #include "wtf/Functional.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 namespace {
 
     void databaseModified(const WebSecurityOrigin& origin,
@@ -75,15 +90,38 @@ void SQLTransactionClient::didCommitWriteTransaction(Database* database)
                 origin->toRawString(), databaseName));
     } else {
         databaseModified(WebSecurityOrigin(origin), databaseName);
+=======
+static void databaseModified(const String& originIdentifier, const String& databaseName)
+{
+    if (Platform::current()->databaseObserver())
+        Platform::current()->databaseObserver()->databaseModified(originIdentifier, databaseName);
+}
+
+void SQLTransactionClient::didCommitWriteTransaction(Database* database)
+{
+    String originIdentifier = createDatabaseIdentifierFromSecurityOrigin(database->securityOrigin());
+    String databaseName = database->stringIdentifier();
+    ExecutionContext* executionContext = database->databaseContext()->executionContext();
+    if (!executionContext->isContextThread()) {
+        executionContext->postTask(FROM_HERE, createCrossThreadTask(&databaseModified, originIdentifier, databaseName));
+    } else {
+        databaseModified(originIdentifier, databaseName);
+>>>>>>> miniblink49
     }
 }
 
 bool SQLTransactionClient::didExceedQuota(Database* database)
 {
+<<<<<<< HEAD
     // Chromium does not allow users to manually change the quota for an origin
     // (for now, at least).  Don't do anything.
     ASSERT(
         database->getDatabaseContext()->getExecutionContext()->isContextThread());
+=======
+    // Chromium does not allow users to manually change the quota for an origin (for now, at least).
+    // Don't do anything.
+    ASSERT(database->databaseContext()->executionContext()->isContextThread());
+>>>>>>> miniblink49
     return false;
 }
 

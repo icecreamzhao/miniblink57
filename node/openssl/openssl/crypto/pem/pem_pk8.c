@@ -1,3 +1,4 @@
+/* crypto/pem/pem_pkey.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -52,18 +53,18 @@
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
- * [including the GNU Public Licence.] */
+ * [including the GNU Public Licence.]
+ */
 
-#include <openssl/pem.h>
-
-#include <openssl/buf.h>
-#include <openssl/err.h>
+#include <stdio.h>
+#include "cryptlib.h"
+#include <openssl/buffer.h>
+#include <openssl/objects.h>
 #include <openssl/evp.h>
-#include <openssl/mem.h>
-#include <openssl/obj.h>
-#include <openssl/pkcs8.h>
 #include <openssl/rand.h>
 #include <openssl/x509.h>
+#include <openssl/pkcs12.h>
+#include <openssl/pem.h>
 
 static int do_pk8pkey(BIO *bp, EVP_PKEY *x, int isder,
                       int nid, const EVP_CIPHER *enc,
@@ -116,17 +117,17 @@ static int do_pk8pkey(BIO *bp, EVP_PKEY *x, int isder, int nid,
     char buf[PEM_BUFSIZE];
     int ret;
     if (!(p8inf = EVP_PKEY2PKCS8(x))) {
-        OPENSSL_PUT_ERROR(PEM, PEM_R_ERROR_CONVERTING_PRIVATE_KEY);
+        PEMerr(PEM_F_DO_PK8PKEY, PEM_R_ERROR_CONVERTING_PRIVATE_KEY);
         return 0;
     }
     if (enc || (nid != -1)) {
         if (!kstr) {
-            klen = 0;
             if (!cb)
-                cb = PEM_def_callback;
-            klen = cb(buf, PEM_BUFSIZE, 1, u);
+                klen = PEM_def_callback(buf, PEM_BUFSIZE, 1, u);
+            else
+                klen = cb(buf, PEM_BUFSIZE, 1, u);
             if (klen <= 0) {
-                OPENSSL_PUT_ERROR(PEM, PEM_R_READ_KEY);
+                PEMerr(PEM_F_DO_PK8PKEY, PEM_R_READ_KEY);
                 PKCS8_PRIV_KEY_INFO_free(p8inf);
                 return 0;
             }
@@ -137,6 +138,8 @@ static int do_pk8pkey(BIO *bp, EVP_PKEY *x, int isder, int nid,
         if (kstr == buf)
             OPENSSL_cleanse(buf, klen);
         PKCS8_PRIV_KEY_INFO_free(p8inf);
+        if (p8 == NULL)
+            return 0;
         if (isder)
             ret = i2d_PKCS8_bio(bp, p8);
         else
@@ -164,19 +167,17 @@ EVP_PKEY *d2i_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY **x, pem_password_cb *cb,
     p8 = d2i_PKCS8_bio(bp, NULL);
     if (!p8)
         return NULL;
-
-    klen = 0;
-    if (!cb)
-        cb = PEM_def_callback;
-    klen = cb(psbuf, PEM_BUFSIZE, 0, u);
+    if (cb)
+        klen = cb(psbuf, PEM_BUFSIZE, 0, u);
+    else
+        klen = PEM_def_callback(psbuf, PEM_BUFSIZE, 0, u);
     if (klen <= 0) {
-        OPENSSL_PUT_ERROR(PEM, PEM_R_BAD_PASSWORD_READ);
+        PEMerr(PEM_F_D2I_PKCS8PRIVATEKEY_BIO, PEM_R_BAD_PASSWORD_READ);
         X509_SIG_free(p8);
         return NULL;
     }
     p8inf = PKCS8_decrypt(p8, psbuf, klen);
     X509_SIG_free(p8);
-    OPENSSL_cleanse(psbuf, klen);
     if (!p8inf)
         return NULL;
     ret = EVP_PKCS82PKEY(p8inf);
@@ -227,7 +228,7 @@ static int do_pk8pkey_fp(FILE *fp, EVP_PKEY *x, int isder, int nid,
     BIO *bp;
     int ret;
     if (!(bp = BIO_new_fp(fp, BIO_NOCLOSE))) {
-        OPENSSL_PUT_ERROR(PEM, ERR_R_BUF_LIB);
+        PEMerr(PEM_F_DO_PK8PKEY_FP, ERR_R_BUF_LIB);
         return (0);
     }
     ret = do_pk8pkey(bp, x, isder, nid, enc, kstr, klen, cb, u);
@@ -241,7 +242,7 @@ EVP_PKEY *d2i_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY **x, pem_password_cb *cb,
     BIO *bp;
     EVP_PKEY *ret;
     if (!(bp = BIO_new_fp(fp, BIO_NOCLOSE))) {
-        OPENSSL_PUT_ERROR(PEM, ERR_R_BUF_LIB);
+        PEMerr(PEM_F_D2I_PKCS8PRIVATEKEY_FP, ERR_R_BUF_LIB);
         return NULL;
     }
     ret = d2i_PKCS8PrivateKey_bio(bp, x, cb, u);

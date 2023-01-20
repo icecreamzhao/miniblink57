@@ -10,7 +10,11 @@
 
 #include "SkCanvas.h"
 
+<<<<<<< HEAD
 #ifdef SK_DEBUG
+=======
+#ifdef SK_DEVELOPER
+>>>>>>> miniblink49
 
 /** This class overrides all the draw methods on SkCanvas, and formats them
     as text, and then sends that to a Dumper helper object.
@@ -48,7 +52,10 @@ public:
         kDrawVertices_Verb,
         kDrawPatch_Verb,
         kDrawData_Verb, // obsolete
+<<<<<<< HEAD
         kDrawAnnotation_Verb,
+=======
+>>>>>>> miniblink49
 
         kCull_Verb
     };
@@ -58,22 +65,37 @@ public:
      */
     class Dumper : public SkRefCnt {
     public:
+<<<<<<< HEAD
         virtual void dump(SkDumpCanvas*, SkDumpCanvas::Verb, const char str[],
             const SkPaint*)
             = 0;
+=======
+        
+
+        virtual void dump(SkDumpCanvas*, SkDumpCanvas::Verb, const char str[],
+                          const SkPaint*) = 0;
+>>>>>>> miniblink49
 
     private:
         typedef SkRefCnt INHERITED;
     };
 
     Dumper* getDumper() const { return fDumper; }
+<<<<<<< HEAD
     void setDumper(Dumper*);
+=======
+    void    setDumper(Dumper*);
+>>>>>>> miniblink49
 
     int getNestLevel() const { return fNestLevel; }
 
 protected:
     void willSave() override;
+<<<<<<< HEAD
     SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec&) override;
+=======
+    SaveLayerStrategy willSaveLayer(const SkRect*, const SkPaint*, SaveFlags) override;
+>>>>>>> miniblink49
     void willRestore() override;
 
     void didConcat(const SkMatrix&) override;
@@ -81,6 +103,7 @@ protected:
 
     void onDrawDRRect(const SkRRect&, const SkRRect&, const SkPaint&) override;
     virtual void onDrawText(const void* text, size_t byteLength, SkScalar x, SkScalar y,
+<<<<<<< HEAD
         const SkPaint&) override;
     virtual void onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[],
         const SkPaint&) override;
@@ -93,6 +116,20 @@ protected:
     virtual void onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
         const SkPoint texCoords[4], SkXfermode* xmode,
         const SkPaint& paint) override;
+=======
+                            const SkPaint&) override;
+    virtual void onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[],
+                               const SkPaint&) override;
+    virtual void onDrawPosTextH(const void* text, size_t byteLength, const SkScalar xpos[],
+                                SkScalar constY, const SkPaint&) override;
+    virtual void onDrawTextOnPath(const void* text, size_t byteLength, const SkPath& path,
+                                  const SkMatrix* matrix, const SkPaint&) override;
+    virtual void onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
+                                const SkPaint& paint) override;
+    virtual void onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
+                             const SkPoint texCoords[4], SkXfermode* xmode,
+                             const SkPaint& paint) override;
+>>>>>>> miniblink49
 
     void onDrawPaint(const SkPaint&) override;
     void onDrawPoints(PointMode, size_t count, const SkPoint pts[], const SkPaint&) override;
@@ -102,6 +139,7 @@ protected:
     void onDrawPath(const SkPath&, const SkPaint&) override;
     void onDrawBitmap(const SkBitmap&, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawBitmapRect(const SkBitmap&, const SkRect* src, const SkRect& dst, const SkPaint*,
+<<<<<<< HEAD
         SrcRectConstraint) override;
     void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
@@ -113,6 +151,20 @@ protected:
         const SkColor colors[], SkXfermode* xmode,
         const uint16_t indices[], int indexCount,
         const SkPaint&) override;
+=======
+                          DrawBitmapRectFlags flags) override;
+    void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
+    void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
+                         const SkPaint*) override;
+    void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst,
+                          const SkPaint*) override;
+    void onDrawSprite(const SkBitmap&, int left, int top, const SkPaint*) override;
+    void onDrawVertices(VertexMode vmode, int vertexCount,
+                        const SkPoint vertices[], const SkPoint texs[],
+                        const SkColor colors[], SkXfermode* xmode,
+                        const uint16_t indices[], int indexCount,
+                        const SkPaint&) override;
+>>>>>>> miniblink49
 
     void onClipRect(const SkRect&, SkRegion::Op, ClipEdgeStyle) override;
     void onClipRRect(const SkRRect&, SkRegion::Op, ClipEdgeStyle) override;
@@ -120,13 +172,20 @@ protected:
     void onClipRegion(const SkRegion&, SkRegion::Op) override;
 
     void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*) override;
+<<<<<<< HEAD
     void onDrawAnnotation(const SkRect&, const char key[], SkData* value) override;
+=======
+>>>>>>> miniblink49
 
     static const char* EdgeStyleToAAString(ClipEdgeStyle edgeStyle);
 
 private:
     Dumper* fDumper;
+<<<<<<< HEAD
     int fNestLevel; // for nesting recursive elements like pictures
+=======
+    int     fNestLevel; // for nesting recursive elements like pictures
+>>>>>>> miniblink49
 
     void dump(Verb, const SkPaint*, const char format[], ...);
 
@@ -143,7 +202,11 @@ public:
     // override from baseclass that does the formatting, and in turn calls
     // the function pointer that was passed to the constructor
     virtual void dump(SkDumpCanvas*, SkDumpCanvas::Verb, const char str[],
+<<<<<<< HEAD
         const SkPaint*) override;
+=======
+                      const SkPaint*) override;
+>>>>>>> miniblink49
 
 private:
     void (*fProc)(const char*, void*);

@@ -36,34 +36,27 @@ class SerializedScriptValue;
 
 class CORE_EXPORT CustomEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    ~CustomEvent() override;
+    virtual ~CustomEvent();
 
-    static CustomEvent* create() { return new CustomEvent; }
-
-    static CustomEvent* create(const AtomicString& type,
-        const CustomEventInit& initializer)
+    static PassRefPtrWillBeRawPtr<CustomEvent> create()
     {
-        return new CustomEvent(type, initializer);
+        return adoptRefWillBeNoop(new CustomEvent);
     }
 
-    void initCustomEvent(const AtomicString& type,
-        bool canBubble,
-        bool cancelable,
-        const ScriptValue& detail);
-    void initCustomEvent(const AtomicString& type,
-        bool canBubble,
-        bool cancelable,
-        PassRefPtr<SerializedScriptValue>);
+    static PassRefPtrWillBeRawPtr<CustomEvent> create(const AtomicString& type, const CustomEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new CustomEvent(type, initializer));
+    }
 
-    const AtomicString& interfaceName() const override;
+    void initCustomEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtr<SerializedScriptValue>);
+
+    virtual const AtomicString& interfaceName() const override;
 
     SerializedScriptValue* serializedDetail() { return m_serializedDetail.get(); }
-    void setSerializedDetail(PassRefPtr<SerializedScriptValue> serializedDetail)
-    {
-        m_serializedDetail = serializedDetail;
-    }
+
+    ScriptValue detail() const { return m_detail; }
+    void setDetail(ScriptValue detail) { m_detail = detail; }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -71,6 +64,7 @@ private:
     CustomEvent();
     CustomEvent(const AtomicString& type, const CustomEventInit& initializer);
 
+    ScriptValue m_detail;
     RefPtr<SerializedScriptValue> m_serializedDetail;
 };
 

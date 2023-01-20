@@ -14,12 +14,17 @@ namespace blink {
 
 class WebGamepads;
 
+<<<<<<< HEAD
 class GamepadDispatcher final
     : public GarbageCollectedFinalized<GamepadDispatcher>,
       public PlatformEventDispatcher,
       public WebGamepadListener {
     USING_GARBAGE_COLLECTED_MIXIN(GamepadDispatcher);
 
+=======
+class GamepadDispatcher final : public GarbageCollectedFinalized<GamepadDispatcher>, public PlatformEventDispatcher, public WebGamepadListener {
+    USING_GARBAGE_COLLECTED_MIXIN(GamepadDispatcher);
+>>>>>>> miniblink49
 public:
     static GamepadDispatcher& instance();
     ~GamepadDispatcher() override;
@@ -27,15 +32,22 @@ public:
     void sampleGamepads(WebGamepads&);
 
     struct ConnectionChange {
+<<<<<<< HEAD
         DISALLOW_NEW();
+=======
+>>>>>>> miniblink49
         WebGamepad pad;
         unsigned index;
     };
 
+<<<<<<< HEAD
     const ConnectionChange& latestConnectionChange() const
     {
         return m_latestChange;
     }
+=======
+    const ConnectionChange& latestConnectionChange() const { return m_latestChange; }
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -50,9 +62,13 @@ private:
     void startListening() override;
     void stopListening() override;
 
+<<<<<<< HEAD
     void dispatchDidConnectOrDisconnectGamepad(unsigned index,
         const WebGamepad&,
         bool connected);
+=======
+    void dispatchDidConnectOrDisconnectGamepad(unsigned index, const WebGamepad&, bool connected);
+>>>>>>> miniblink49
 
     ConnectionChange m_latestChange;
 };

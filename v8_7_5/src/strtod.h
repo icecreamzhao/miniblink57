@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     // The buffer must only contain digits in the range [0-9]. It must not
     // contain a dot or a sign. It must not start with '0', and must not be empty.
     V8_EXPORT_PRIVATE double Strtod(Vector<const char> buffer, int exponent);
@@ -18,3 +19,13 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_STRTOD_H_
+=======
+// The buffer must only contain digits in the range [0-9]. It must not
+// contain a dot or a sign. It must not start with '0', and must not be empty.
+double Strtod(Vector<const char> buffer, int exponent);
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_STRTOD_H_
+>>>>>>> miniblink49

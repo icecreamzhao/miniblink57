@@ -6,8 +6,14 @@
  */
 
 #include "gl/GrGLPathRendering.h"
+<<<<<<< HEAD
 #include "gl/GrGLGpu.h"
 #include "gl/GrGLUtil.h"
+=======
+#include "gl/GrGLNameAllocator.h"
+#include "gl/GrGLUtil.h"
+#include "gl/GrGLGpu.h"
+>>>>>>> miniblink49
 
 #include "GrGLPath.h"
 #include "GrGLPathRange.h"
@@ -19,9 +25,12 @@
 #define GL_CALL(X) GR_GL_CALL(this->gpu()->glInterface(), X)
 #define GL_CALL_RET(RET, X) GR_GL_CALL_RET(this->gpu()->glInterface(), RET, X)
 
+<<<<<<< HEAD
 // Number of paths to allocate per glGenPaths call. The call can be overly slow on command buffer GL
 // implementation. The call has a result value, and thus waiting for the call completion is needed.
 static const GrGLsizei kPathIDPreallocationAmount = 65536;
+=======
+>>>>>>> miniblink49
 
 static const GrGLenum gIndexType2GLType[] = {
     GR_GL_UNSIGNED_BYTE,
@@ -49,6 +58,7 @@ GR_STATIC_ASSERT(3 == GrPathRendering::kTranslate_PathTransformType);
 GR_STATIC_ASSERT(4 == GrPathRendering::kAffine_PathTransformType);
 GR_STATIC_ASSERT(GrPathRendering::kAffine_PathTransformType == GrPathRendering::kLast_PathTransformType);
 
+<<<<<<< HEAD
 #ifdef SK_DEBUG
 static const GrGLenum gXformType2ComponentCount[] = {
     0,
@@ -76,10 +86,22 @@ static GrGLenum gr_stencil_op_to_gl_path_rendering_fill_mode(GrStencilOp op)
         return GR_GL_COUNT_UP;
     case GrStencilOp::kInvert:
         return GR_GL_INVERT;
+=======
+static GrGLenum gr_stencil_op_to_gl_path_rendering_fill_mode(GrStencilOp op) {
+    switch (op) {
+        default:
+            SkFAIL("Unexpected path fill.");
+            /* fallthrough */;
+        case kIncClamp_StencilOp:
+            return GR_GL_COUNT_UP;
+        case kInvert_StencilOp:
+            return GR_GL_INVERT;
+>>>>>>> miniblink49
     }
 }
 
 GrGLPathRendering::GrGLPathRendering(GrGLGpu* gpu)
+<<<<<<< HEAD
     : GrPathRendering(gpu)
     , fPreallocatedPathCount(0)
 {
@@ -104,6 +126,19 @@ void GrGLPathRendering::disconnect(GrGpu::DisconnectType type)
 
 void GrGLPathRendering::resetContext()
 {
+=======
+    : GrPathRendering(gpu) {
+}
+
+GrGLPathRendering::~GrGLPathRendering() {
+}
+
+void GrGLPathRendering::abandonGpuResources() {
+    fPathNameAllocator.reset(NULL);
+}
+
+void GrGLPathRendering::resetContext() {
+>>>>>>> miniblink49
     fHWProjectionMatrixState.invalidate();
     // we don't use the model view matrix.
     GL_CALL(MatrixLoadIdentity(GR_GL_PATH_MODELVIEW));
@@ -111,6 +146,7 @@ void GrGLPathRendering::resetContext()
     fHWPathStencilSettings.invalidate();
 }
 
+<<<<<<< HEAD
 GrPath* GrGLPathRendering::createPath(const SkPath& inPath, const GrStyle& style)
 {
     return new GrGLPath(this->gpu(), inPath, style);
@@ -124,6 +160,18 @@ GrPathRange* GrGLPathRendering::createPathRange(GrPathRange::PathGenerator* path
 
 void GrGLPathRendering::onStencilPath(const StencilPathArgs& args, const GrPath* path)
 {
+=======
+GrPath* GrGLPathRendering::createPath(const SkPath& inPath, const GrStrokeInfo& stroke) {
+    return SkNEW_ARGS(GrGLPath, (this->gpu(), inPath, stroke));
+}
+
+GrPathRange* GrGLPathRendering::createPathRange(GrPathRange::PathGenerator* pathGenerator,
+                                                const GrStrokeInfo& stroke) {
+    return SkNEW_ARGS(GrGLPathRange, (this->gpu(), pathGenerator, stroke));
+}
+
+void GrGLPathRendering::onStencilPath(const StencilPathArgs& args, const GrPath* path) {
+>>>>>>> miniblink49
     GrGLGpu* gpu = this->gpu();
     SkASSERT(gpu->caps()->shaderCaps()->pathRenderingSupport());
     gpu->flushColorWrite(false);
@@ -133,16 +181,27 @@ void GrGLPathRendering::onStencilPath(const StencilPathArgs& args, const GrPath*
     SkISize size = SkISize::Make(rt->width(), rt->height());
     this->setProjectionMatrix(*args.fViewMatrix, size, rt->origin());
     gpu->flushScissor(*args.fScissor, rt->getViewport(), rt->origin());
+<<<<<<< HEAD
     gpu->flushHWAAState(rt, args.fUseHWAA, true);
     gpu->flushRenderTarget(rt, nullptr);
+=======
+    gpu->flushHWAAState(rt, args.fUseHWAA);
+    gpu->flushRenderTarget(rt, NULL);
+>>>>>>> miniblink49
 
     const GrGLPath* glPath = static_cast<const GrGLPath*>(path);
 
     this->flushPathStencilSettings(*args.fStencil);
     SkASSERT(!fHWPathStencilSettings.isTwoSided());
 
+<<<<<<< HEAD
     GrGLenum fillMode = gr_stencil_op_to_gl_path_rendering_fill_mode(fHWPathStencilSettings.front().fPassOp);
     GrGLint writeMask = fHWPathStencilSettings.front().fWriteMask;
+=======
+    GrGLenum fillMode = gr_stencil_op_to_gl_path_rendering_fill_mode(
+        fHWPathStencilSettings.passOp(GrStencilSettings::kFront_Face));
+    GrGLint writeMask = fHWPathStencilSettings.writeMask(GrStencilSettings::kFront_Face);
+>>>>>>> miniblink49
 
     if (glPath->shouldFill()) {
         GL_CALL(StencilFillPath(glPath->pathID(), fillMode, writeMask));
@@ -152,27 +211,42 @@ void GrGLPathRendering::onStencilPath(const StencilPathArgs& args, const GrPath*
     }
 }
 
+<<<<<<< HEAD
 void GrGLPathRendering::onDrawPath(const GrPipeline& pipeline,
     const GrPrimitiveProcessor& primProc,
     const GrStencilSettings& stencilPassSettings,
     const GrPath* path)
 {
     if (!this->gpu()->flushGLState(pipeline, primProc)) {
+=======
+void GrGLPathRendering::onDrawPath(const DrawPathArgs& args, const GrPath* path) {
+    if (!this->gpu()->flushGLState(args)) {
+>>>>>>> miniblink49
         return;
     }
     const GrGLPath* glPath = static_cast<const GrGLPath*>(path);
 
+<<<<<<< HEAD
     this->flushPathStencilSettings(stencilPassSettings);
     SkASSERT(!fHWPathStencilSettings.isTwoSided());
 
     GrGLenum fillMode = gr_stencil_op_to_gl_path_rendering_fill_mode(fHWPathStencilSettings.front().fPassOp);
     GrGLint writeMask = fHWPathStencilSettings.front().fWriteMask;
+=======
+    this->flushPathStencilSettings(*args.fStencil);
+    SkASSERT(!fHWPathStencilSettings.isTwoSided());
+
+    GrGLenum fillMode = gr_stencil_op_to_gl_path_rendering_fill_mode(
+        fHWPathStencilSettings.passOp(GrStencilSettings::kFront_Face));
+    GrGLint writeMask = fHWPathStencilSettings.writeMask(GrStencilSettings::kFront_Face);
+>>>>>>> miniblink49
 
     if (glPath->shouldStroke()) {
         if (glPath->shouldFill()) {
             GL_CALL(StencilFillPath(glPath->pathID(), fillMode, writeMask));
         }
         GL_CALL(StencilThenCoverStrokePath(glPath->pathID(), 0xffff, writeMask,
+<<<<<<< HEAD
             GR_GL_BOUNDING_BOX));
     } else {
         GL_CALL(StencilThenCoverFillPath(glPath->pathID(), fillMode, writeMask,
@@ -199,10 +273,38 @@ void GrGLPathRendering::onDrawPaths(const GrPipeline& pipeline,
 
     GrGLenum fillMode = gr_stencil_op_to_gl_path_rendering_fill_mode(fHWPathStencilSettings.front().fPassOp);
     GrGLint writeMask = fHWPathStencilSettings.front().fWriteMask;
+=======
+                                           GR_GL_BOUNDING_BOX));
+    } else {
+        GL_CALL(StencilThenCoverFillPath(glPath->pathID(), fillMode, writeMask,
+                                         GR_GL_BOUNDING_BOX));
+    }
+}
+
+void GrGLPathRendering::onDrawPaths(const DrawPathArgs& args, const GrPathRange* pathRange,
+                                    const void* indices, PathIndexType indexType,
+                                    const float transformValues[], PathTransformType transformType,
+                                    int count) {
+    if (!this->gpu()->flushGLState(args)) {
+        return;
+    }
+    this->flushPathStencilSettings(*args.fStencil);
+    SkASSERT(!fHWPathStencilSettings.isTwoSided());
+
+
+    const GrGLPathRange* glPathRange = static_cast<const GrGLPathRange*>(pathRange);
+
+    GrGLenum fillMode =
+        gr_stencil_op_to_gl_path_rendering_fill_mode(
+            fHWPathStencilSettings.passOp(GrStencilSettings::kFront_Face));
+    GrGLint writeMask =
+        fHWPathStencilSettings.writeMask(GrStencilSettings::kFront_Face);
+>>>>>>> miniblink49
 
     if (glPathRange->shouldStroke()) {
         if (glPathRange->shouldFill()) {
             GL_CALL(StencilFillPathInstanced(
+<<<<<<< HEAD
                 count, gIndexType2GLType[indexType], indices, glPathRange->basePathID(),
                 fillMode, writeMask, gXformType2GLType[transformType],
                 transformValues));
@@ -216,14 +318,35 @@ void GrGLPathRendering::onDrawPaths(const GrPipeline& pipeline,
             count, gIndexType2GLType[indexType], indices, glPathRange->basePathID(),
             fillMode, writeMask, GR_GL_BOUNDING_BOX_OF_BOUNDING_BOXES,
             gXformType2GLType[transformType], transformValues));
+=======
+                            count, gIndexType2GLType[indexType], indices, glPathRange->basePathID(),
+                            fillMode, writeMask, gXformType2GLType[transformType],
+                            transformValues));
+        }
+        GL_CALL(StencilThenCoverStrokePathInstanced(
+                            count, gIndexType2GLType[indexType], indices, glPathRange->basePathID(),
+                            0xffff, writeMask, GR_GL_BOUNDING_BOX_OF_BOUNDING_BOXES,
+                            gXformType2GLType[transformType], transformValues));
+    } else {
+        GL_CALL(StencilThenCoverFillPathInstanced(
+                            count, gIndexType2GLType[indexType], indices, glPathRange->basePathID(),
+                            fillMode, writeMask, GR_GL_BOUNDING_BOX_OF_BOUNDING_BOXES,
+                            gXformType2GLType[transformType], transformValues));
+>>>>>>> miniblink49
     }
 }
 
 void GrGLPathRendering::setProgramPathFragmentInputTransform(GrGLuint program, GrGLint location,
+<<<<<<< HEAD
     GrGLenum genMode, GrGLint components,
     const SkMatrix& matrix)
 {
     float coefficients[3 * 3];
+=======
+                                                             GrGLenum genMode, GrGLint components,
+                                                             const SkMatrix& matrix) {
+    GrGLfloat coefficients[3 * 3];
+>>>>>>> miniblink49
     SkASSERT(components >= 1 && components <= 3);
 
     coefficients[0] = SkScalarToFloat(matrix[SkMatrix::kMScaleX]);
@@ -241,12 +364,16 @@ void GrGLPathRendering::setProgramPathFragmentInputTransform(GrGLuint program, G
         coefficients[7] = SkScalarToFloat(matrix[SkMatrix::kMPersp1]);
         coefficients[8] = SkScalarToFloat(matrix[SkMatrix::kMPersp2]);
     }
+<<<<<<< HEAD
     SkDEBUGCODE(verify_floats(coefficients, components * 3));
+=======
+>>>>>>> miniblink49
 
     GL_CALL(ProgramPathFragmentInputGen(program, location, genMode, components, coefficients));
 }
 
 void GrGLPathRendering::setProjectionMatrix(const SkMatrix& matrix,
+<<<<<<< HEAD
     const SkISize& renderTargetSize,
     GrSurfaceOrigin renderTargetOrigin)
 {
@@ -254,6 +381,16 @@ void GrGLPathRendering::setProjectionMatrix(const SkMatrix& matrix,
     SkASSERT(this->gpu()->glCaps().shaderCaps()->pathRenderingSupport());
 
     if (renderTargetOrigin == fHWProjectionMatrixState.fRenderTargetOrigin && renderTargetSize == fHWProjectionMatrixState.fRenderTargetSize && matrix.cheapEqualTo(fHWProjectionMatrixState.fViewMatrix)) {
+=======
+                                            const SkISize& renderTargetSize,
+                                            GrSurfaceOrigin renderTargetOrigin) {
+
+    SkASSERT(this->gpu()->glCaps().shaderCaps()->pathRenderingSupport());
+
+    if (renderTargetOrigin == fHWProjectionMatrixState.fRenderTargetOrigin &&
+        renderTargetSize == fHWProjectionMatrixState.fRenderTargetSize &&
+        matrix.cheapEqualTo(fHWProjectionMatrixState.fViewMatrix)) {
+>>>>>>> miniblink49
         return;
     }
 
@@ -261,6 +398,7 @@ void GrGLPathRendering::setProjectionMatrix(const SkMatrix& matrix,
     fHWProjectionMatrixState.fRenderTargetSize = renderTargetSize;
     fHWProjectionMatrixState.fRenderTargetOrigin = renderTargetOrigin;
 
+<<<<<<< HEAD
     float glMatrix[4 * 4];
     fHWProjectionMatrixState.getRTAdjustedGLMatrix<4>(glMatrix);
     SkDEBUGCODE(verify_floats(glMatrix, SK_ARRAY_COUNT(glMatrix)));
@@ -335,11 +473,82 @@ void GrGLPathRendering::flushPathStencilSettings(const GrStencilSettings& stenci
         if (!fHWPathStencilSettings.isValid() || ref != fHWPathStencilSettings.front().fRef || test != fHWPathStencilSettings.front().fTest || testMask != fHWPathStencilSettings.front().fTestMask) {
             GL_CALL(PathStencilFunc(GrToGLStencilFunc(test), ref, testMask));
         }
+=======
+    GrGLfloat glMatrix[4 * 4];
+    fHWProjectionMatrixState.getRTAdjustedGLMatrix<4>(glMatrix);
+    GL_CALL(MatrixLoadf(GR_GL_PATH_PROJECTION, glMatrix));
+}
+
+GrGLuint GrGLPathRendering::genPaths(GrGLsizei range) {
+    if (range > 1) {
+        GrGLuint name;
+        GL_CALL_RET(name, GenPaths(range));
+        return name;
+    }
+
+    if (NULL == fPathNameAllocator.get()) {
+        static const int range = 65536;
+        GrGLuint firstName;
+        GL_CALL_RET(firstName, GenPaths(range));
+        fPathNameAllocator.reset(SkNEW_ARGS(GrGLNameAllocator, (firstName, firstName + range)));
+    }
+
+    // When allocating names one at a time, pull from a client-side pool of
+    // available names in order to save a round trip to the GL server.
+    GrGLuint name = fPathNameAllocator->allocateName();
+
+    if (0 == name) {
+        // Our reserved path names are all in use. Fall back on GenPaths.
+        GL_CALL_RET(name, GenPaths(1));
+    }
+
+    return name;
+}
+
+void GrGLPathRendering::deletePaths(GrGLuint path, GrGLsizei range) {
+    if (range > 1) {
+        // It is not supported to delete names in ranges that were allocated
+        // individually using GrGLPathNameAllocator.
+        SkASSERT(NULL == fPathNameAllocator.get() ||
+                 path + range <= fPathNameAllocator->firstName() ||
+                 path >= fPathNameAllocator->endName());
+        GL_CALL(DeletePaths(path, range));
+        return;
+    }
+
+    if (NULL == fPathNameAllocator.get() ||
+        path < fPathNameAllocator->firstName() ||
+        path >= fPathNameAllocator->endName()) {
+        // If we aren't inside fPathNameAllocator's range then this name was
+        // generated by the GenPaths fallback (or else was never allocated).
+        GL_CALL(DeletePaths(path, 1));
+        return;
+    }
+
+    // Make the path empty to save memory, but don't free the name in the driver.
+    GL_CALL(PathCommands(path, 0, NULL, 0, GR_GL_FLOAT, NULL));
+    fPathNameAllocator->free(path);
+}
+
+void GrGLPathRendering::flushPathStencilSettings(const GrStencilSettings& stencilSettings) {
+    if (fHWPathStencilSettings != stencilSettings) {
+        // Just the func, ref, and mask is set here. The op and write mask are params to the call
+        // that draws the path to the SB (glStencilFillPath)
+        GrGLenum func =
+            GrToGLStencilFunc(stencilSettings.func(GrStencilSettings::kFront_Face));
+        GL_CALL(PathStencilFunc(func, stencilSettings.funcRef(GrStencilSettings::kFront_Face),
+                                stencilSettings.funcMask(GrStencilSettings::kFront_Face)));
+
+>>>>>>> miniblink49
         fHWPathStencilSettings = stencilSettings;
     }
 }
 
+<<<<<<< HEAD
 inline GrGLGpu* GrGLPathRendering::gpu()
 {
+=======
+inline GrGLGpu* GrGLPathRendering::gpu() {
+>>>>>>> miniblink49
     return static_cast<GrGLGpu*>(fGpu);
 }

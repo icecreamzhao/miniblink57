@@ -28,15 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/TelephoneInputType.h"
 
 #include "core/InputTypeNames.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-InputType* TelephoneInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> TelephoneInputType::create(HTMLInputElement& element)
 {
-    return new TelephoneInputType(element);
+    return adoptRefWillBeNoop(new TelephoneInputType(element));
 }
 
 void TelephoneInputType::countUsage()

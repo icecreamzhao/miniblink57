@@ -21,6 +21,7 @@ enum CachedState {
 };
 
 static void check_data(skiatest::Reporter* reporter, SkCachedData* data,
+<<<<<<< HEAD
     int refcnt, CachedState cacheState, LockedState lockedState)
 {
     REPORTER_ASSERT(reporter, data->testing_only_getRefCnt() == refcnt);
@@ -31,6 +32,16 @@ static void check_data(skiatest::Reporter* reporter, SkCachedData* data,
 
 DEF_TEST(RRectMaskCache, reporter)
 {
+=======
+                       int refcnt, CachedState cacheState, LockedState lockedState) {
+    REPORTER_ASSERT(reporter, data->testing_only_getRefCnt() == refcnt);
+    REPORTER_ASSERT(reporter, data->testing_only_isInCache() == (kInCache == cacheState));
+    bool isLocked = (data->data() != NULL);
+    REPORTER_ASSERT(reporter, isLocked == (lockedState == kLocked));
+}
+
+DEF_TEST(RRectMaskCache, reporter) {
+>>>>>>> miniblink49
     SkResourceCache cache(1024);
 
     SkScalar sigma = 0.8f;
@@ -42,7 +53,11 @@ DEF_TEST(RRectMaskCache, reporter)
     SkMask mask;
 
     SkCachedData* data = SkMaskCache::FindAndRef(sigma, style, quality, rrect, &mask, &cache);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, nullptr == data);
+=======
+    REPORTER_ASSERT(reporter, NULL == data);
+>>>>>>> miniblink49
 
     size_t size = 256;
     data = cache.newCachedData(size);
@@ -69,19 +84,31 @@ DEF_TEST(RRectMaskCache, reporter)
     data->unref();
 }
 
+<<<<<<< HEAD
 DEF_TEST(RectsMaskCache, reporter)
 {
+=======
+DEF_TEST(RectsMaskCache, reporter) {
+>>>>>>> miniblink49
     SkResourceCache cache(1024);
 
     SkScalar sigma = 0.8f;
     SkRect rect = SkRect::MakeWH(100, 100);
+<<<<<<< HEAD
     SkRect rects[2] = { rect };
+=======
+    SkRect rects[2] = {rect};
+>>>>>>> miniblink49
     SkBlurStyle style = kNormal_SkBlurStyle;
     SkBlurQuality quality = kLow_SkBlurQuality;
     SkMask mask;
 
     SkCachedData* data = SkMaskCache::FindAndRef(sigma, style, quality, rects, 1, &mask, &cache);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, nullptr == data);
+=======
+    REPORTER_ASSERT(reporter, NULL == data);
+>>>>>>> miniblink49
 
     size_t size = 256;
     data = cache.newCachedData(size);

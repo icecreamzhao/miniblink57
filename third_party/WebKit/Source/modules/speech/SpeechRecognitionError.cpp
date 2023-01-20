@@ -23,6 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/speech/SpeechRecognitionError.h"
 
 namespace blink {
@@ -54,6 +59,7 @@ static String ErrorCodeToString(SpeechRecognitionError::ErrorCode code)
     return String();
 }
 
+<<<<<<< HEAD
 SpeechRecognitionError* SpeechRecognitionError::create(ErrorCode code,
     const String& message)
 {
@@ -69,15 +75,37 @@ SpeechRecognitionError* SpeechRecognitionError::create(
 
 SpeechRecognitionError::SpeechRecognitionError(const String& error,
     const String& message)
+=======
+PassRefPtrWillBeRawPtr<SpeechRecognitionError> SpeechRecognitionError::create(ErrorCode code, const String& message)
+{
+    return adoptRefWillBeNoop(new SpeechRecognitionError(ErrorCodeToString(code), message));
+}
+
+PassRefPtrWillBeRawPtr<SpeechRecognitionError> SpeechRecognitionError::create()
+{
+    return adoptRefWillBeNoop(new SpeechRecognitionError(emptyString(), emptyString()));
+}
+
+PassRefPtrWillBeRawPtr<SpeechRecognitionError> SpeechRecognitionError::create(const AtomicString& eventName, const SpeechRecognitionErrorInit& initializer)
+{
+    return adoptRefWillBeNoop(new SpeechRecognitionError(eventName, initializer));
+}
+
+SpeechRecognitionError::SpeechRecognitionError(const String& error, const String& message)
+>>>>>>> miniblink49
     : Event(EventTypeNames::error, /*canBubble=*/false, /*cancelable=*/false)
     , m_error(error)
     , m_message(message)
 {
 }
 
+<<<<<<< HEAD
 SpeechRecognitionError::SpeechRecognitionError(
     const AtomicString& eventName,
     const SpeechRecognitionErrorInit& initializer)
+=======
+SpeechRecognitionError::SpeechRecognitionError(const AtomicString& eventName, const SpeechRecognitionErrorInit& initializer)
+>>>>>>> miniblink49
     : Event(eventName, initializer)
 {
     if (initializer.hasError())

@@ -45,5 +45,8 @@ LOCAL_MODULE := \
 # subdirectory in the DATA folder that points to the top level skia resources...
 #  i.e. external/skia/DATA/skia_resources --> ../resources
 LOCAL_PICKUP_FILES := $(LOCAL_PATH)/../DATA
+<<<<<<< HEAD
 include $(LOCAL_PATH)/../skia_static_deps.mk
+=======
+>>>>>>> miniblink49
 include $(BUILD_NATIVE_TEST)

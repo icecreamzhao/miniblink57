@@ -37,12 +37,16 @@
 #include "WebString.h"
 #include "WebVector.h"
 
+<<<<<<< HEAD
 #include <vector>
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class WebMediaConstraintsPrivate;
 
+<<<<<<< HEAD
 class BLINK_PLATFORM_EXPORT BaseConstraint {
 public:
     explicit BaseConstraint(const char* name);
@@ -292,6 +296,21 @@ public:
 
 private:
     std::vector<const BaseConstraint*> allConstraints() const;
+=======
+struct WebMediaConstraint {
+    WebMediaConstraint()
+    {
+    }
+
+    WebMediaConstraint(WebString name, WebString value)
+        : m_name(name)
+        , m_value(value)
+    {
+    }
+
+    WebString m_name;
+    WebString m_value;
+>>>>>>> miniblink49
 };
 
 class WebMediaConstraints {
@@ -310,6 +329,7 @@ public:
 
     BLINK_PLATFORM_EXPORT void reset();
     bool isNull() const { return m_private.isNull(); }
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT bool isEmpty() const;
 
     BLINK_PLATFORM_EXPORT void initialize();
@@ -322,6 +342,17 @@ public:
         const;
 
     BLINK_PLATFORM_EXPORT const WebString toString() const;
+=======
+
+    BLINK_PLATFORM_EXPORT void getOptionalConstraints(WebVector<WebMediaConstraint>&) const;
+    BLINK_PLATFORM_EXPORT void getMandatoryConstraints(WebVector<WebMediaConstraint>&) const;
+
+    BLINK_PLATFORM_EXPORT bool getOptionalConstraintValue(const WebString& name, WebString& value) const;
+    BLINK_PLATFORM_EXPORT bool getMandatoryConstraintValue(const WebString& name, WebString& value) const;
+
+    BLINK_PLATFORM_EXPORT void initialize();
+    BLINK_PLATFORM_EXPORT void initialize(const WebVector<WebMediaConstraint>& optional, const WebVector<WebMediaConstraint>& mandatory);
+>>>>>>> miniblink49
 
 private:
     WebPrivatePtr<WebMediaConstraintsPrivate> m_private;

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,6 +10,7 @@
  */
 
 #include "SampleCode.h"
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
 #include "SkColorPriv.h"
@@ -20,17 +25,42 @@
 #include "SkUtils.h"
 #include "SkView.h"
 #include "SkXfermode.h"
+=======
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+#include "SkGraphics.h"
+#include "SkImageDecoder.h"
+#include "SkPath.h"
+#include "SkRegion.h"
+#include "SkShader.h"
+#include "SkUtils.h"
+#include "SkXfermode.h"
+#include "SkColorPriv.h"
+#include "SkColorFilter.h"
+#include "SkParsePath.h"
+#include "SkTime.h"
+#include "SkTypeface.h"
+>>>>>>> miniblink49
 
 #include "SkGeometry.h"
 
 class ConcavePathView : public SampleView {
 public:
+<<<<<<< HEAD
     ConcavePathView() { }
 
 protected:
     // overrides from SkEventSink
     virtual bool onQuery(SkEvent* evt)
     {
+=======
+    ConcavePathView() {}
+
+protected:
+    // overrides from SkEventSink
+    virtual bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ConcavePaths");
             return true;
@@ -38,8 +68,12 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
+=======
+    virtual void onDrawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
 
         paint.setAntiAlias(true);
@@ -138,9 +172,14 @@ protected:
     }
 
     virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y,
+<<<<<<< HEAD
         unsigned modi)
     {
         this->inval(nullptr);
+=======
+                                              unsigned modi) {
+        this->inval(NULL);
+>>>>>>> miniblink49
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 

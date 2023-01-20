@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkDeque_DEFINED
 #define SkDeque_DEFINED
 
@@ -32,6 +36,7 @@ public:
     SkDeque(size_t elemSize, void* storage, size_t storageSize, int allocCount = 1);
     ~SkDeque();
 
+<<<<<<< HEAD
     bool empty() const { return 0 == fCount; }
     int count() const { return fCount; }
     size_t elemSize() const { return fElemSize; }
@@ -46,6 +51,20 @@ public:
 
     void* back()
     {
+=======
+    bool    empty() const { return 0 == fCount; }
+    int     count() const { return fCount; }
+    size_t  elemSize() const { return fElemSize; }
+
+    const void* front() const { return fFront; }
+    const void* back() const  { return fBack; }
+
+    void* front() {
+        return (void*)((const SkDeque*)this)->front();
+    }
+
+    void* back() {
+>>>>>>> miniblink49
         return (void*)((const SkDeque*)this)->back();
     }
 
@@ -83,23 +102,36 @@ public:
 
     private:
         SkDeque::Block* fCurBlock;
+<<<<<<< HEAD
         char* fPos;
         size_t fElemSize;
+=======
+        char*           fPos;
+        size_t          fElemSize;
+>>>>>>> miniblink49
     };
 
     // Inherit privately from Iter to prevent access to reverse iteration
     class F2BIter : private Iter {
     public:
+<<<<<<< HEAD
         F2BIter() { }
+=======
+        F2BIter() {}
+>>>>>>> miniblink49
 
         /**
          * Wrap Iter's 2 parameter ctor to force initialization to the
          * beginning of the deque
          */
+<<<<<<< HEAD
         F2BIter(const SkDeque& d)
             : INHERITED(d, kFront_IterStart)
         {
         }
+=======
+        F2BIter(const SkDeque& d) : INHERITED(d, kFront_IterStart) {}
+>>>>>>> miniblink49
 
         using Iter::next;
 
@@ -107,8 +139,12 @@ public:
          * Wrap Iter::reset to force initialization to the beginning of the
          * deque
          */
+<<<<<<< HEAD
         void reset(const SkDeque& d)
         {
+=======
+        void reset(const SkDeque& d) {
+>>>>>>> miniblink49
             this->INHERITED::reset(d, kFront_IterStart);
         }
 
@@ -120,6 +156,7 @@ private:
     // allow unit test to call numBlocksAllocated
     friend class DequeUnitTestHelper;
 
+<<<<<<< HEAD
     void* fFront;
     void* fBack;
 
@@ -132,12 +169,30 @@ private:
 
     Block* allocateBlock(int allocCount);
     void freeBlock(Block* block);
+=======
+    void*   fFront;
+    void*   fBack;
+
+    Block*  fFrontBlock;
+    Block*  fBackBlock;
+    size_t  fElemSize;
+    void*   fInitialStorage;
+    int     fCount;             // number of elements in the deque
+    int     fAllocCount;        // number of elements to allocate per block
+
+    Block*  allocateBlock(int allocCount);
+    void    freeBlock(Block* block);
+>>>>>>> miniblink49
 
     /**
      * This returns the number of chunk blocks allocated by the deque. It
      * can be used to gauge the effectiveness of the selected allocCount.
      */
+<<<<<<< HEAD
     int numBlocksAllocated() const;
+=======
+    int  numBlocksAllocated() const;
+>>>>>>> miniblink49
 };
 
 #endif

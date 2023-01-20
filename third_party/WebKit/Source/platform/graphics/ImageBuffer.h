@@ -31,6 +31,7 @@
 #include "platform/PlatformExport.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntSize.h"
+<<<<<<< HEAD
 #include "platform/graphics/Canvas2DLayerBridge.h"
 #include "platform/graphics/GraphicsTypes.h"
 #include "platform/graphics/GraphicsTypes3D.h"
@@ -51,6 +52,21 @@ namespace gles2 {
     class GLES2Interface;
 }
 }
+=======
+//#include "platform/graphics/Canvas2DLayerBridge.h"
+#include "third_party/khronos/GLES2/gl2.h"
+#include "platform/graphics/GraphicsTypes.h"
+#include "platform/graphics/GraphicsTypes3D.h"
+#include "platform/graphics/ImageBufferSurface.h"
+#include "platform/graphics/paint/DisplayItemClient.h"
+#include "platform/transforms/AffineTransform.h"
+#include "third_party/skia/include/core/SkPaint.h"
+#include "wtf/Forward.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/Uint8ClampedArray.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -66,6 +82,7 @@ class Image;
 class ImageBufferClient;
 class IntPoint;
 class IntRect;
+<<<<<<< HEAD
 
 enum Multiply { Premultiplied,
     Unmultiplied };
@@ -88,11 +105,41 @@ public:
     void setClient(ImageBufferClient* client) { m_client = client; }
 
     static bool canCreateImageBuffer(const IntSize&);
+=======
+class WebGraphicsContext3D;
+
+enum Multiply {
+    Premultiplied,
+    Unmultiplied
+};
+
+enum BackingStoreCopy {
+    CopyBackingStore, // Guarantee subsequent draws don't affect the copy.
+    DontCopyBackingStore // Subsequent draws may affect the copy.
+};
+
+enum ScaleBehavior {
+    Scaled,
+    Unscaled
+};
+
+class PLATFORM_EXPORT ImageBuffer {
+    WTF_MAKE_NONCOPYABLE(ImageBuffer); WTF_MAKE_FAST_ALLOCATED(ImageBuffer);
+public:
+    static PassOwnPtr<ImageBuffer> create(const IntSize&, OpacityMode = NonOpaque);
+    static PassOwnPtr<ImageBuffer> create(PassOwnPtr<ImageBufferSurface>);
+
+    ~ImageBuffer();
+
+    void setClient(ImageBufferClient* client) { m_client = client; }
+
+>>>>>>> miniblink49
     const IntSize& size() const { return m_surface->size(); }
     bool isAccelerated() const { return m_surface->isAccelerated(); }
     bool isRecording() const { return m_surface->isRecording(); }
     void setHasExpensiveOp() { m_surface->setHasExpensiveOp(); }
     bool isExpensiveToPaint() const { return m_surface->isExpensiveToPaint(); }
+<<<<<<< HEAD
     void prepareSurfaceForPaintingIfNeeded()
     {
         m_surface->prepareSurfaceForPaintingIfNeeded();
@@ -120,10 +167,29 @@ public:
 
     // Called at the end of a task that rendered a whole frame
     void finalizeFrame(const FloatRect& dirtyRect);
+=======
+    bool isSurfaceValid() const;
+    bool restoreSurface() const;
+    void didDraw(const FloatRect& rect) const { m_surface->didDraw(rect); }
+
+    void setFilterQuality(SkFilterQuality filterQuality) { m_surface->setFilterQuality(filterQuality); }
+    void setIsHidden(bool hidden) { m_surface->setIsHidden(hidden); }
+
+    // Called by subclasses of ImageBufferSurface to install a new canvas object
+    void resetCanvas(SkCanvas*);
+
+    void willDrawVideo() { m_surface->willDrawVideo(); }
+
+    SkCanvas* canvas() const;
+
+    // Called at the end of a task that rendered a whole frame
+    void finalizeFrame(const FloatRect &dirtyRect);
+>>>>>>> miniblink49
     void didFinalizeFrame();
 
     bool isDirty();
 
+<<<<<<< HEAD
     bool writePixels(const SkImageInfo&,
         const void* pixels,
         size_t rowBytes,
@@ -227,6 +293,60 @@ struct ImageDataBuffer {
 
     const unsigned char* m_data;
     const IntSize m_size;
+=======
+    const SkBitmap& bitmap() const;
+
+    void willAccessPixels() { m_surface->willAccessPixels(); }
+    void willOverwriteCanvas() { m_surface->willOverwriteCanvas(); }
+
+    PassRefPtr<Image> copyImage(BackingStoreCopy = CopyBackingStore, ScaleBehavior = Scaled) const;
+    // Give hints on the faster copyImage Mode, return DontCopyBackingStore if it supports the DontCopyBackingStore behavior
+    // or return CopyBackingStore if it doesn't.
+    static BackingStoreCopy fastCopyImageMode();
+
+    bool getImageData(Multiply, const IntRect&, WTF::ArrayBufferContents&) const;
+
+    void putByteArray(Multiply, const unsigned char* source, const IntSize& sourceSize, const IntRect& sourceRect, const IntPoint& destPoint);
+
+    String toDataURL(const String& mimeType, const double* quality = 0) const;
+    AffineTransform baseTransform() const { return AffineTransform(); }
+    WebLayer* platformLayer() const;
+
+    // FIXME: current implementations of this method have the restriction that they only work
+    // with textures that are RGB or RGBA format, UNSIGNED_BYTE type and level 0, as specified in
+    // Extensions3D::canUseCopyTextureCHROMIUM().
+    // Destroys the TEXTURE_2D binding for the active texture unit of the passed context
+    bool copyToPlatformTexture(WebGraphicsContext3D*, Platform3DObject, GLenum, GLenum, GLint, bool, bool);
+
+    bool copyRenderingResultsFromDrawingBuffer(DrawingBuffer*, SourceDrawingBuffer);
+
+    void flush();
+
+    void notifySurfaceInvalid();
+
+    PassRefPtr<SkImage> newImageSnapshot() const;
+
+    DisplayItemClient displayItemClient() const { return toDisplayItemClient(this); }
+    String debugName() const { return "ImageBuffer"; }
+
+    void draw(GraphicsContext*, const FloatRect&, const FloatRect*, SkXfermode::Mode);
+
+private:
+    ImageBuffer(PassOwnPtr<ImageBufferSurface>);
+
+    OwnPtr<ImageBufferSurface> m_surface;
+    ImageBufferClient* m_client;
+};
+
+struct ImageDataBuffer {
+    ImageDataBuffer(const IntSize& size, unsigned char* data) : m_data(data), m_size(size) { }
+    String PLATFORM_EXPORT toDataURL(const String& mimeType, const double* quality) const;
+    unsigned char* pixels() const { return m_data; }
+    int height() const { return m_size.height(); }
+    int width() const { return m_size.width(); }
+    unsigned char* m_data;
+    IntSize m_size;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

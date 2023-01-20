@@ -29,6 +29,7 @@
 namespace blink {
 
 enum ColorMatrixType {
+<<<<<<< HEAD
     FECOLORMATRIX_TYPE_UNKNOWN = 0,
     FECOLORMATRIX_TYPE_MATRIX = 1,
     FECOLORMATRIX_TYPE_SATURATE = 2,
@@ -39,6 +40,18 @@ enum ColorMatrixType {
 class PLATFORM_EXPORT FEColorMatrix final : public FilterEffect {
 public:
     static FEColorMatrix* create(Filter*, ColorMatrixType, const Vector<float>&);
+=======
+    FECOLORMATRIX_TYPE_UNKNOWN          = 0,
+    FECOLORMATRIX_TYPE_MATRIX           = 1,
+    FECOLORMATRIX_TYPE_SATURATE         = 2,
+    FECOLORMATRIX_TYPE_HUEROTATE        = 3,
+    FECOLORMATRIX_TYPE_LUMINANCETOALPHA = 4
+};
+
+class PLATFORM_EXPORT FEColorMatrix : public FilterEffect {
+public:
+    static PassRefPtrWillBeRawPtr<FEColorMatrix> create(Filter*, ColorMatrixType, const Vector<float>&);
+>>>>>>> miniblink49
 
     ColorMatrixType type() const;
     bool setType(ColorMatrixType);
@@ -46,16 +59,26 @@ public:
     const Vector<float>& values() const;
     bool setValues(const Vector<float>&);
 
+<<<<<<< HEAD
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
     static inline void calculateSaturateComponents(float* components,
         float value);
     static inline void calculateHueRotateComponents(float* components,
         float value);
+=======
+    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+
+    TextStream& externalRepresentation(TextStream&, int indention) const override;
+
+    static inline void calculateSaturateComponents(float* components, float value);
+    static inline void calculateHueRotateComponents(float* components, float value);
+>>>>>>> miniblink49
 
 private:
     FEColorMatrix(Filter*, ColorMatrixType, const Vector<float>&);
 
+<<<<<<< HEAD
     sk_sp<SkImageFilter> createImageFilter() override;
 
     bool affectsTransparentPixels() const override;
@@ -64,6 +87,14 @@ private:
 
     // The m_values vector may not contain the right number of values. Always
     // check before accessing contents.
+=======
+    bool affectsTransparentPixels() override;
+
+    ColorMatrixType m_type;
+
+    // The m_values vector may not contain the right number of values. Always check
+    // before accessing contents.
+>>>>>>> miniblink49
     Vector<float> m_values;
 };
 

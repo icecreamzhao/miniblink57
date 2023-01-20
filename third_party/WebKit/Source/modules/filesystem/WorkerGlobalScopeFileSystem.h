@@ -40,6 +40,7 @@ class FileSystemCallback;
 class WorkerGlobalScope;
 
 class WorkerGlobalScopeFileSystem {
+<<<<<<< HEAD
     STATIC_ONLY(WorkerGlobalScopeFileSystem);
 
 public:
@@ -64,6 +65,22 @@ public:
     static EntrySync* webkitResolveLocalFileSystemSyncURL(WorkerGlobalScope&,
         const String& url,
         ExceptionState&);
+=======
+public:
+    enum {
+        TEMPORARY,
+        PERSISTENT,
+    };
+
+    static void webkitRequestFileSystem(WorkerGlobalScope&, int type, long long size, FileSystemCallback* successCallback, ErrorCallback*);
+    static DOMFileSystemSync* webkitRequestFileSystemSync(WorkerGlobalScope&, int type, long long size, ExceptionState&);
+    static void webkitResolveLocalFileSystemURL(WorkerGlobalScope&, const String& url, EntryCallback* successCallback, ErrorCallback*);
+    static EntrySync* webkitResolveLocalFileSystemSyncURL(WorkerGlobalScope&, const String& url, ExceptionState&);
+
+private:
+    WorkerGlobalScopeFileSystem();
+    ~WorkerGlobalScopeFileSystem();
+>>>>>>> miniblink49
 };
 
 } // namespace blink

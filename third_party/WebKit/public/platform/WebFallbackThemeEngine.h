@@ -106,8 +106,11 @@ public:
         bool hasBorderRadius;
         int arrowX;
         int arrowY;
+<<<<<<< HEAD
         int arrowSize;
         WebColor arrowColor;
+=======
+>>>>>>> miniblink49
         WebColor backgroundColor;
     };
 
@@ -147,11 +150,15 @@ public:
     // the track while the height will be the minimum height.
     virtual WebSize getSize(Part) { return WebSize(); }
     // Paint the given the given theme part.
+<<<<<<< HEAD
     virtual void paint(WebCanvas*,
         Part,
         State,
         const WebRect&,
         const ExtraParams*) { }
+=======
+    virtual void paint(WebCanvas*, Part, State, const WebRect&, const ExtraParams*) { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

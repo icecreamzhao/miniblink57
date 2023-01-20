@@ -5,129 +5,47 @@
 #ifndef InterpolationType_h
 #define InterpolationType_h
 
-#include "core/animation/InterpolationValue.h"
-#include "core/animation/Keyframe.h"
-#include "core/animation/PairwiseInterpolationValue.h"
+#include "core/animation/InterpolableValue.h"
+#include "core/animation/NonInterpolableValue.h"
 #include "core/animation/PrimitiveInterpolation.h"
-#include "core/animation/PropertyHandle.h"
-#include "core/animation/UnderlyingValueOwner.h"
+#include "core/animation/StringKeyframe.h"
 #include "platform/heap/Handle.h"
-#include "wtf/Allocator.h"
-#include <memory>
 
 namespace blink {
 
-class InterpolationEnvironment;
+class StyleResolverState;
 
-// Subclasses of InterpolationType implement the logic for a specific value type
-// of a specific PropertyHandle to:
-// - Convert PropertySpecificKeyframe values to (Pairwise)?InterpolationValues:
-// maybeConvertPairwise() and maybeConvertSingle()
-// - Convert the target Element's property value to an InterpolationValue:
-// maybeConvertUnderlyingValue()
-// - Apply an InterpolationValue to a target Element's property: apply().
+// A singleton that:
+// - Converts from animation keyframe(s) to interpolation compatible representations: maybeConvertPairwise() and maybeConvertSingle()
+// - Applies interpolation compatible representations of values to a StyleResolverState: apply()
 class InterpolationType {
-    USING_FAST_MALLOC(InterpolationType);
-    WTF_MAKE_NONCOPYABLE(InterpolationType);
-
 public:
-    PropertyHandle getProperty() const { return m_property; }
+    CSSPropertyID property() const { return m_property; }
 
-    // ConversionCheckers are returned from calls to maybeConvertPairwise() and
-    // maybeConvertSingle() to enable the caller to check whether the result is
-    // still valid given changes in the InterpolationEnvironment and underlying
-    // InterpolationValue.
-    class ConversionChecker {
-        USING_FAST_MALLOC(ConversionChecker);
-        WTF_MAKE_NONCOPYABLE(ConversionChecker);
-
+    // Represents logic for determining whether a conversion decision is no longer valid given the current environment.
+    class ConversionChecker : public NoBaseWillBeGarbageCollectedFinalized<ConversionChecker> {
     public:
         virtual ~ConversionChecker() { }
-        void setType(const InterpolationType& type) { m_type = &type; }
-        const InterpolationType& type() const { return *m_type; }
-        virtual bool isValid(const InterpolationEnvironment&,
-            const InterpolationValue& underlying) const = 0;
-
-    protected:
-        ConversionChecker()
-            : m_type(nullptr)
-        {
-        }
-        const InterpolationType* m_type;
+        virtual bool isValid(const StyleResolverState&) const = 0;
+        DEFINE_INLINE_VIRTUAL_TRACE() { }
     };
-    using ConversionCheckers = Vector<std::unique_ptr<ConversionChecker>>;
+    using ConversionCheckers = WillBeHeapVector<OwnPtrWillBeMember<ConversionChecker>>;
 
-    virtual PairwiseInterpolationValue maybeConvertPairwise(
-        const PropertySpecificKeyframe& startKeyframe,
-        const PropertySpecificKeyframe& endKeyframe,
-        const InterpolationEnvironment& environment,
-        const InterpolationValue& underlying,
-        ConversionCheckers& conversionCheckers) const
+    virtual PassOwnPtrWillBeRawPtr<PairwisePrimitiveInterpolation> maybeConvertPairwise(const CSSPropertySpecificKeyframe& startKeyframe, const CSSPropertySpecificKeyframe& endKeyframe, const StyleResolverState*, ConversionCheckers&) const
     {
-        InterpolationValue start = maybeConvertSingle(
-            startKeyframe, environment, underlying, conversionCheckers);
-        if (!start)
-            return nullptr;
-        InterpolationValue end = maybeConvertSingle(endKeyframe, environment,
-            underlying, conversionCheckers);
-        if (!end)
-            return nullptr;
-        return maybeMergeSingles(std::move(start), std::move(end));
+        return nullptr;
     }
 
-    virtual InterpolationValue maybeConvertSingle(
-        const PropertySpecificKeyframe&,
-        const InterpolationEnvironment&,
-        const InterpolationValue& underlying,
-        ConversionCheckers&) const = 0;
+    virtual PassOwnPtrWillBeRawPtr<InterpolationValue> maybeConvertSingle(const CSSPropertySpecificKeyframe&, const StyleResolverState*, ConversionCheckers&) const = 0;
 
-    virtual InterpolationValue maybeConvertUnderlyingValue(
-        const InterpolationEnvironment&) const = 0;
-
-    virtual void composite(UnderlyingValueOwner& underlyingValueOwner,
-        double underlyingFraction,
-        const InterpolationValue& value,
-        double interpolationFraction) const
-    {
-        DCHECK(!underlyingValueOwner.value().nonInterpolableValue);
-        DCHECK(!value.nonInterpolableValue);
-        underlyingValueOwner.mutableValue().interpolableValue->scaleAndAdd(
-            underlyingFraction, *value.interpolableValue);
-    }
-
-    virtual void apply(const InterpolableValue&,
-        const NonInterpolableValue*,
-        InterpolationEnvironment&) const = 0;
-
-    // Implement reference equality checking via pointer equality checking as
-    // these are singletons.
-    bool operator==(const InterpolationType& other) const
-    {
-        return this == &other;
-    }
-    bool operator!=(const InterpolationType& other) const
-    {
-        return this != &other;
-    }
+    virtual void apply(const InterpolableValue&, const NonInterpolableValue*, StyleResolverState&) const = 0;
 
 protected:
-    InterpolationType(PropertyHandle property)
+    InterpolationType(CSSPropertyID property)
         : m_property(property)
-    {
-    }
+    { }
 
-    virtual PairwiseInterpolationValue maybeMergeSingles(
-        InterpolationValue&& start,
-        InterpolationValue&& end) const
-    {
-        DCHECK(!start.nonInterpolableValue);
-        DCHECK(!end.nonInterpolableValue);
-        return PairwiseInterpolationValue(std::move(start.interpolableValue),
-            std::move(end.interpolableValue),
-            nullptr);
-    }
-
-    const PropertyHandle m_property;
+    const CSSPropertyID m_property;
 };
 
 } // namespace blink

@@ -39,11 +39,16 @@ class ScriptValue;
 class ScriptState;
 class ExceptionState;
 
+<<<<<<< HEAD
 class SQLResultSetRowList final
     : public GarbageCollectedFinalized<SQLResultSetRowList>,
       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class SQLResultSetRowList : public GarbageCollectedFinalized<SQLResultSetRowList>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static SQLResultSetRowList* create() { return new SQLResultSetRowList; }
     DEFINE_INLINE_TRACE() { }
@@ -51,8 +56,13 @@ public:
     const Vector<String>& columnNames() const { return m_columns; }
     const Vector<SQLValue>& values() const { return m_result; }
 
+<<<<<<< HEAD
     void addColumn(const String& name) { m_columns.push_back(name); }
     void addResult(const SQLValue& result) { m_result.push_back(result); }
+=======
+    void addColumn(const String& name) { m_columns.append(name); }
+    void addResult(const SQLValue& result) { m_result.append(result); }
+>>>>>>> miniblink49
 
     unsigned length() const;
     ScriptValue item(ScriptState*, unsigned index, ExceptionState&);

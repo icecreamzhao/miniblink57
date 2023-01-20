@@ -8,8 +8,11 @@
 #include "platform/geometry/DoubleSize.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/IntPoint.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
+=======
+>>>>>>> miniblink49
 #include <algorithm>
 
 namespace blink {
@@ -17,8 +20,11 @@ namespace blink {
 class LayoutPoint;
 
 class PLATFORM_EXPORT DoublePoint {
+<<<<<<< HEAD
     DISALLOW_NEW();
 
+=======
+>>>>>>> miniblink49
 public:
     DoublePoint()
         : m_x(0)
@@ -43,16 +49,24 @@ public:
     explicit DoublePoint(const LayoutPoint&);
 
     explicit DoublePoint(const IntSize& size)
+<<<<<<< HEAD
         : m_x(size.width())
         , m_y(size.height())
+=======
+        : m_x(size.width()), m_y(size.height())
+>>>>>>> miniblink49
     {
     }
 
     explicit DoublePoint(const FloatSize&);
 
     explicit DoublePoint(const DoubleSize& size)
+<<<<<<< HEAD
         : m_x(size.width())
         , m_y(size.height())
+=======
+        : m_x(size.width()), m_y(size.height())
+>>>>>>> miniblink49
     {
     }
 
@@ -102,8 +116,11 @@ public:
         return DoublePoint(m_x * scale, m_y * scale);
     }
 
+<<<<<<< HEAD
     String toString() const;
 
+=======
+>>>>>>> miniblink49
 private:
     double m_x, m_y;
 };
@@ -177,10 +194,14 @@ inline DoubleSize toDoubleSize(const DoublePoint& a)
     return DoubleSize(a.x(), a.y());
 }
 
+<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const DoublePoint&, std::ostream*);
 
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif

@@ -6,6 +6,7 @@
  */
 
 #include "effects/GrConstColorProcessor.h"
+<<<<<<< HEAD
 #include "GrInvariantOutput.h"
 #include "glsl/GrGLSLFragmentProcessor.h"
 #include "glsl/GrGLSLFragmentShaderBuilder.h"
@@ -49,13 +50,52 @@ public:
 protected:
     void onSetData(const GrGLSLProgramDataManager& pdm, const GrProcessor& processor) override
     {
+=======
+#include "gl/GrGLProcessor.h"
+#include "gl/builders/GrGLProgramBuilder.h"
+
+class GLConstColorProcessor : public GrGLFragmentProcessor {
+public:
+    GLConstColorProcessor() : fPrevColor(GrColor_ILLEGAL) {}
+
+    void emitCode(GrGLFPBuilder* builder,
+                  const GrFragmentProcessor& fp,
+                  const char* outputColor,
+                  const char* inputColor,
+                  const TransformedCoordsArray& coords,
+                  const TextureSamplerArray& samplers) override {
+        GrGLFragmentBuilder* fsBuilder = builder->getFragmentShaderBuilder();
+        const char* colorUni;
+        fColorUniform = builder->addUniform(GrGLProgramBuilder::kFragment_Visibility,
+                                            kVec4f_GrSLType, kMedium_GrSLPrecision, "constantColor",
+                                            &colorUni);
+        switch (fp.cast<GrConstColorProcessor>().inputMode()) {
+            case GrConstColorProcessor::kIgnore_InputMode:
+                fsBuilder->codeAppendf("%s = %s;", outputColor, colorUni);
+                break;
+            case GrConstColorProcessor::kModulateRGBA_InputMode:
+                fsBuilder->codeAppendf("%s = %s * %s;", outputColor, inputColor, colorUni);
+                break;
+            case GrConstColorProcessor::kModulateA_InputMode:
+                fsBuilder->codeAppendf("%s = %s.a * %s;", outputColor, inputColor, colorUni);
+                break;
+        }
+    }
+
+    void setData(const GrGLProgramDataManager& pdm, const GrProcessor& processor) override {
+>>>>>>> miniblink49
         GrColor color = processor.cast<GrConstColorProcessor>().color();
         // We use the "illegal" color value as an uninit sentinel. However, ut isn't inherently
         // illegal to use this processor with unpremul colors. So we correctly handle the case
         // when the "illegal" color is used but we will always upload it.
         if (GrColor_ILLEGAL == color || fPrevColor != color) {
+<<<<<<< HEAD
             static const float scale = 1.f / 255.f;
             float floatColor[4] = {
+=======
+            static const GrGLfloat scale = 1.f / 255.f;
+            GrGLfloat floatColor[4] = {
+>>>>>>> miniblink49
                 GrColorUnpackR(color) * scale,
                 GrColorUnpackG(color) * scale,
                 GrColorUnpackB(color) * scale,
@@ -67,14 +107,22 @@ protected:
     }
 
 private:
+<<<<<<< HEAD
     GrGLSLProgramDataManager::UniformHandle fColorUniform;
     GrColor fPrevColor;
 
     typedef GrGLSLFragmentProcessor INHERITED;
+=======
+    GrGLProgramDataManager::UniformHandle fColorUniform;
+    GrColor                               fPrevColor;
+
+    typedef GrGLFragmentProcessor INHERITED;
+>>>>>>> miniblink49
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void GrConstColorProcessor::onComputeInvariantOutput(GrInvariantOutput* inout) const
 {
     if (kIgnore_InputMode == fMode) {
@@ -83,6 +131,16 @@ void GrConstColorProcessor::onComputeInvariantOutput(GrInvariantOutput* inout) c
     } else {
         GrColor r = GrColorUnpackR(fColor);
         bool colorIsSingleChannel = r == GrColorUnpackG(fColor) && r == GrColorUnpackB(fColor) && r == GrColorUnpackA(fColor);
+=======
+void GrConstColorProcessor::onComputeInvariantOutput(GrInvariantOutput* inout) const {
+    if (kIgnore_InputMode == fMode) {
+        inout->setToOther(kRGBA_GrColorComponentFlags, fColor,
+                          GrInvariantOutput::kWillNot_ReadInput);
+    } else {
+        GrColor r = GrColorUnpackR(fColor);
+        bool colorIsSingleChannel = r == GrColorUnpackG(fColor) && r == GrColorUnpackB(fColor) &&
+                                    r == GrColorUnpackA(fColor);
+>>>>>>> miniblink49
         if (kModulateRGBA_InputMode == fMode) {
             if (colorIsSingleChannel) {
                 inout->mulByKnownSingleComponent(r);
@@ -99,6 +157,7 @@ void GrConstColorProcessor::onComputeInvariantOutput(GrInvariantOutput* inout) c
     }
 }
 
+<<<<<<< HEAD
 void GrConstColorProcessor::onGetGLSLProcessorKey(const GrGLSLCaps&,
     GrProcessorKeyBuilder* b) const
 {
@@ -112,6 +171,17 @@ GrGLSLFragmentProcessor* GrConstColorProcessor::onCreateGLSLInstance() const
 
 bool GrConstColorProcessor::onIsEqual(const GrFragmentProcessor& other) const
 {
+=======
+void GrConstColorProcessor::getGLProcessorKey(const GrGLSLCaps&, GrProcessorKeyBuilder* b) const {
+    b->add32(fMode);
+}
+
+GrGLFragmentProcessor* GrConstColorProcessor::createGLInstance() const  {
+    return SkNEW(GLConstColorProcessor);
+}
+
+bool GrConstColorProcessor::onIsEqual(const GrFragmentProcessor& other) const {
+>>>>>>> miniblink49
     const GrConstColorProcessor& that = other.cast<GrConstColorProcessor>();
     return fMode == that.fMode && fColor == that.fColor;
 }
@@ -120,6 +190,7 @@ bool GrConstColorProcessor::onIsEqual(const GrFragmentProcessor& other) const
 
 GR_DEFINE_FRAGMENT_PROCESSOR_TEST(GrConstColorProcessor);
 
+<<<<<<< HEAD
 sk_sp<GrFragmentProcessor> GrConstColorProcessor::TestCreate(GrProcessorTestData* d)
 {
     GrColor color SK_INIT_TO_AVOID_WARNING;
@@ -143,4 +214,28 @@ sk_sp<GrFragmentProcessor> GrConstColorProcessor::TestCreate(GrProcessorTestData
     }
     InputMode mode = static_cast<InputMode>(d->fRandom->nextULessThan(kInputModeCnt));
     return GrConstColorProcessor::Make(color, mode);
+=======
+GrFragmentProcessor* GrConstColorProcessor::TestCreate(GrProcessorTestData* d) {
+    GrColor color;
+    int colorPicker = d->fRandom->nextULessThan(3);
+    switch (colorPicker) {
+        case 0: {
+            uint32_t a = d->fRandom->nextULessThan(0x100);
+            uint32_t r = d->fRandom->nextULessThan(a+1);
+            uint32_t g = d->fRandom->nextULessThan(a+1);
+            uint32_t b = d->fRandom->nextULessThan(a+1);
+            color = GrColorPackRGBA(r, g, b, a);
+            break;
+        }
+        case 1:
+            color = 0;
+            break;
+        case 2:
+            color = d->fRandom->nextULessThan(0x100);
+            color = color | (color << 8) | (color << 16) | (color << 24);
+            break;
+    }
+    InputMode mode = static_cast<InputMode>(d->fRandom->nextULessThan(kInputModeCnt));
+    return GrConstColorProcessor::Create(color, mode);
+>>>>>>> miniblink49
 }

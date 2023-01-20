@@ -23,15 +23,26 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/scroll/ScrollbarTheme.h"
 
 #include "platform/scroll/ScrollbarThemeOverlay.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 ScrollbarTheme& ScrollbarTheme::nativeTheme()
 {
     return ScrollbarThemeOverlay::mobileTheme();
+=======
+ScrollbarTheme* ScrollbarTheme::nativeTheme()
+{
+    DEFINE_STATIC_LOCAL(ScrollbarThemeOverlay, theme, (3, 3, ScrollbarThemeOverlay::DisallowHitTest, Color(128, 128, 128, 128)));
+    return &theme;
+>>>>>>> miniblink49
 }
 
 } // namespace blink

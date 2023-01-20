@@ -5,16 +5,22 @@
 #ifndef InternalsNavigatorContentUtils_h
 #define InternalsNavigatorContentUtils_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class Document;
 class Internals;
 
 class InternalsNavigatorContentUtils {
+<<<<<<< HEAD
     STATIC_ONLY(InternalsNavigatorContentUtils);
 
+=======
+>>>>>>> miniblink49
 public:
     static void setNavigatorContentUtilsClientMock(Internals&, Document*);
 };

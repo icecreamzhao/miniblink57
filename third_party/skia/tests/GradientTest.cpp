@@ -6,17 +6,24 @@
  */
 
 #include "SkCanvas.h"
+<<<<<<< HEAD
 #include "SkColorPriv.h"
 #include "SkColorShader.h"
 #include "SkGradientShader.h"
 #include "SkShader.h"
 #include "SkSurface.h"
+=======
+#include "SkColorShader.h"
+#include "SkGradientShader.h"
+#include "SkShader.h"
+>>>>>>> miniblink49
 #include "SkTemplates.h"
 #include "Test.h"
 
 // https://code.google.com/p/chromium/issues/detail?id=448299
 // Giant (inverse) matrix causes overflow when converting/computing using 32.32
 // Before the fix, we would assert (and then crash).
+<<<<<<< HEAD
 static void test_big_grad(skiatest::Reporter* reporter)
 {
     const SkColor colors[] = { SK_ColorRED, SK_ColorBLUE };
@@ -24,6 +31,14 @@ static void test_big_grad(skiatest::Reporter* reporter)
     SkPaint paint;
     paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, 2,
         SkShader::kClamp_TileMode));
+=======
+static void test_big_grad(skiatest::Reporter* reporter) {
+    const SkColor colors[] = { SK_ColorRED, SK_ColorBLUE };
+    const SkPoint pts[] = {{ 15, 14.7112684f }, { 0.709064007f, 12.6108112f }};
+    SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL, 2, SkShader::kClamp_TileMode);
+    SkPaint paint;
+    paint.setShader(s)->unref();
+>>>>>>> miniblink49
 
     SkBitmap bm;
     bm.allocN32Pixels(2000, 1);
@@ -35,11 +50,16 @@ static void test_big_grad(skiatest::Reporter* reporter)
     SkMatrix matrix;
     matrix.setAffine(affine);
     c.concat(matrix);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     c.drawPaint(paint);
 }
 
 struct GradRec {
+<<<<<<< HEAD
     int fColorCount;
     const SkColor* fColors;
     const SkScalar* fPos;
@@ -51,6 +71,18 @@ struct GradRec {
         SkShader::GradientInfo* info,
         SkShader::GradientType gt) const
     {
+=======
+    int             fColorCount;
+    const SkColor*  fColors;
+    const SkScalar* fPos;
+    const SkPoint*  fPoint;   // 2
+    const SkScalar* fRadius; // 2
+    SkShader::TileMode fTileMode;
+
+    void gradCheck(skiatest::Reporter* reporter, SkShader* shader,
+                   SkShader::GradientInfo* info,
+                   SkShader::GradientType gt) const {
+>>>>>>> miniblink49
         SkAutoTMalloc<SkColor> colorStorage(fColorCount);
         SkAutoTMalloc<SkScalar> posStorage(fColorCount);
 
@@ -61,13 +93,20 @@ struct GradRec {
 
         REPORTER_ASSERT(reporter, info->fColorCount == fColorCount);
         REPORTER_ASSERT(reporter,
+<<<<<<< HEAD
             !memcmp(info->fColors, fColors, fColorCount * sizeof(SkColor)));
         REPORTER_ASSERT(reporter,
             !memcmp(info->fColorOffsets, fPos, fColorCount * sizeof(SkScalar)));
+=======
+                        !memcmp(info->fColors, fColors, fColorCount * sizeof(SkColor)));
+        REPORTER_ASSERT(reporter,
+                        !memcmp(info->fColorOffsets, fPos, fColorCount * sizeof(SkScalar)));
+>>>>>>> miniblink49
         REPORTER_ASSERT(reporter, fTileMode == info->fTileMode);
     }
 };
 
+<<<<<<< HEAD
 static void none_gradproc(skiatest::Reporter* reporter, const GradRec&)
 {
     sk_sp<SkShader> s(SkShader::MakeEmptyShader());
@@ -81,25 +120,58 @@ static void color_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
 
     SkShader::GradientInfo info;
     info.fColors = nullptr;
+=======
+
+static void none_gradproc(skiatest::Reporter* reporter, const GradRec&) {
+    SkAutoTUnref<SkShader> s(SkShader::CreateEmptyShader());
+    REPORTER_ASSERT(reporter, SkShader::kNone_GradientType == s->asAGradient(NULL));
+}
+
+static void color_gradproc(skiatest::Reporter* reporter, const GradRec& rec) {
+    SkAutoTUnref<SkShader> s(new SkColorShader(rec.fColors[0]));
+    REPORTER_ASSERT(reporter, SkShader::kColor_GradientType == s->asAGradient(NULL));
+
+    SkShader::GradientInfo info;
+    info.fColors = NULL;
+>>>>>>> miniblink49
     info.fColorCount = 0;
     s->asAGradient(&info);
     REPORTER_ASSERT(reporter, 1 == info.fColorCount);
 }
 
+<<<<<<< HEAD
 static void linear_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
 {
     sk_sp<SkShader> s(SkGradientShader::MakeLinear(rec.fPoint, rec.fColors, rec.fPos,
         rec.fColorCount, rec.fTileMode));
+=======
+static void linear_gradproc(skiatest::Reporter* reporter, const GradRec& rec) {
+    SkAutoTUnref<SkShader> s(SkGradientShader::CreateLinear(rec.fPoint,
+                                                            rec.fColors,
+                                                            rec.fPos,
+                                                            rec.fColorCount,
+                                                            rec.fTileMode));
+>>>>>>> miniblink49
 
     SkShader::GradientInfo info;
     rec.gradCheck(reporter, s, &info, SkShader::kLinear_GradientType);
     REPORTER_ASSERT(reporter, !memcmp(info.fPoint, rec.fPoint, 2 * sizeof(SkPoint)));
 }
 
+<<<<<<< HEAD
 static void radial_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
 {
     sk_sp<SkShader> s(SkGradientShader::MakeRadial(rec.fPoint[0], rec.fRadius[0], rec.fColors,
         rec.fPos, rec.fColorCount, rec.fTileMode));
+=======
+static void radial_gradproc(skiatest::Reporter* reporter, const GradRec& rec) {
+    SkAutoTUnref<SkShader> s(SkGradientShader::CreateRadial(rec.fPoint[0],
+                                                            rec.fRadius[0],
+                                                            rec.fColors,
+                                                            rec.fPos,
+                                                            rec.fColorCount,
+                                                            rec.fTileMode));
+>>>>>>> miniblink49
 
     SkShader::GradientInfo info;
     rec.gradCheck(reporter, s, &info, SkShader::kRadial_GradientType);
@@ -107,16 +179,26 @@ static void radial_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
     REPORTER_ASSERT(reporter, info.fRadius[0] == rec.fRadius[0]);
 }
 
+<<<<<<< HEAD
 static void sweep_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
 {
     sk_sp<SkShader> s(SkGradientShader::MakeSweep(rec.fPoint[0].fX, rec.fPoint[0].fY, rec.fColors,
         rec.fPos, rec.fColorCount));
+=======
+static void sweep_gradproc(skiatest::Reporter* reporter, const GradRec& rec) {
+    SkAutoTUnref<SkShader> s(SkGradientShader::CreateSweep(rec.fPoint[0].fX,
+                                                           rec.fPoint[0].fY,
+                                                           rec.fColors,
+                                                           rec.fPos,
+                                                           rec.fColorCount));
+>>>>>>> miniblink49
 
     SkShader::GradientInfo info;
     rec.gradCheck(reporter, s, &info, SkShader::kSweep_GradientType);
     REPORTER_ASSERT(reporter, info.fPoint[0] == rec.fPoint[0]);
 }
 
+<<<<<<< HEAD
 static void conical_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
 {
     sk_sp<SkShader> s(SkGradientShader::MakeTwoPointConical(rec.fPoint[0],
@@ -127,6 +209,17 @@ static void conical_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
         rec.fPos,
         rec.fColorCount,
         rec.fTileMode));
+=======
+static void conical_gradproc(skiatest::Reporter* reporter, const GradRec& rec) {
+    SkAutoTUnref<SkShader> s(SkGradientShader::CreateTwoPointConical(rec.fPoint[0],
+                                                             rec.fRadius[0],
+                                                             rec.fPoint[1],
+                                                             rec.fRadius[1],
+                                                             rec.fColors,
+                                                             rec.fPos,
+                                                             rec.fColorCount,
+                                                             rec.fTileMode));
+>>>>>>> miniblink49
 
     SkShader::GradientInfo info;
     rec.gradCheck(reporter, s, &info, SkShader::kConical_GradientType);
@@ -135,18 +228,34 @@ static void conical_gradproc(skiatest::Reporter* reporter, const GradRec& rec)
 }
 
 // Ensure that repeated color gradients behave like drawing a single color
+<<<<<<< HEAD
 static void TestConstantGradient(skiatest::Reporter*)
 {
+=======
+static void TestConstantGradient(skiatest::Reporter*) {
+>>>>>>> miniblink49
     const SkPoint pts[] = {
         { 0, 0 },
         { SkIntToScalar(10), 0 }
     };
     SkColor colors[] = { SK_ColorBLUE, SK_ColorBLUE };
     const SkScalar pos[] = { 0, SK_Scalar1 };
+<<<<<<< HEAD
     SkPaint paint;
     paint.setShader(SkGradientShader::MakeLinear(pts, colors, pos, 2, SkShader::kClamp_TileMode));
     SkBitmap outBitmap;
     outBitmap.allocN32Pixels(10, 1);
+=======
+    SkAutoTUnref<SkShader> s(SkGradientShader::CreateLinear(pts,
+                                                            colors,
+                                                            pos,
+                                                            2,
+                                                            SkShader::kClamp_TileMode));
+    SkBitmap outBitmap;
+    outBitmap.allocN32Pixels(10, 1);
+    SkPaint paint;
+    paint.setShader(s.get());
+>>>>>>> miniblink49
     SkCanvas canvas(outBitmap);
     canvas.drawPaint(paint);
     SkAutoLockPixels alp(outBitmap);
@@ -160,8 +269,12 @@ static void TestConstantGradient(skiatest::Reporter*)
 
 typedef void (*GradProc)(skiatest::Reporter* reporter, const GradRec&);
 
+<<<<<<< HEAD
 static void TestGradientShaders(skiatest::Reporter* reporter)
 {
+=======
+static void TestGradientShaders(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     static const SkColor gColors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE };
     static const SkScalar gPos[] = { 0, SK_ScalarHalf, SK_Scalar1 };
     static const SkPoint gPts[] = {
@@ -192,6 +305,7 @@ static void TestGradientShaders(skiatest::Reporter* reporter)
     }
 }
 
+<<<<<<< HEAD
 static void test_nearly_vertical(skiatest::Reporter* reporter)
 {
     auto surface(SkSurface::MakeRasterN32Premul(200, 200));
@@ -275,4 +389,10 @@ DEF_TEST(Gradient, reporter)
     test_linear_fuzz(reporter);
     test_two_point_conical_zero_radius(reporter);
     test_clamping_overflow(reporter);
+=======
+DEF_TEST(Gradient, reporter) {
+    TestGradientShaders(reporter);
+    TestConstantGradient(reporter);
+    test_big_grad(reporter);
+>>>>>>> miniblink49
 }

@@ -4,19 +4,31 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #include "SkBitmap.h"
 #include "SkData.h"
+=======
+#include "skdiff.h"
+#include "skdiff_utils.h"
+#include "SkBitmap.h"
+#include "SkData.h"
+#include "SkImageDecoder.h"
+>>>>>>> miniblink49
 #include "SkImageEncoder.h"
 #include "SkOSFile.h"
 #include "SkTDArray.h"
 #include "SkTemplates.h"
 #include "SkTypes.h"
+<<<<<<< HEAD
 #include "skdiff.h"
 #include "skdiff_utils.h"
+=======
+>>>>>>> miniblink49
 
 #include <stdio.h>
 
 /// If outputDir.isEmpty(), don't write out diff files.
+<<<<<<< HEAD
 static void create_diff_images(DiffMetricProc dmp,
     const int colorThreshold,
     const SkString& baseFile,
@@ -25,6 +37,15 @@ static void create_diff_images(DiffMetricProc dmp,
     const SkString& outputFilename,
     DiffRecord* drp)
 {
+=======
+static void create_diff_images (DiffMetricProc dmp,
+                                const int colorThreshold,
+                                const SkString& baseFile,
+                                const SkString& comparisonFile,
+                                const SkString& outputDir,
+                                const SkString& outputFilename,
+                                DiffRecord* drp) {
+>>>>>>> miniblink49
     SkASSERT(!baseFile.isEmpty());
     SkASSERT(!comparisonFile.isEmpty());
 
@@ -44,11 +65,19 @@ static void create_diff_images(DiffMetricProc dmp,
     if (comparisonFileBits) {
         drp->fComparison.fStatus = DiffResource::kRead_Status;
     }
+<<<<<<< HEAD
     if (nullptr == baseFileBits || nullptr == comparisonFileBits) {
         if (nullptr == baseFileBits) {
             drp->fBase.fStatus = DiffResource::kCouldNotRead_Status;
         }
         if (nullptr == comparisonFileBits) {
+=======
+    if (NULL == baseFileBits || NULL == comparisonFileBits) {
+        if (NULL == baseFileBits) {
+            drp->fBase.fStatus = DiffResource::kCouldNotRead_Status;
+        }
+        if (NULL == comparisonFileBits) {
+>>>>>>> miniblink49
             drp->fComparison.fStatus = DiffResource::kCouldNotRead_Status;
         }
         drp->fResult = DiffRecord::kCouldNotCompare_Result;
@@ -60,9 +89,17 @@ static void create_diff_images(DiffMetricProc dmp,
         return;
     }
 
+<<<<<<< HEAD
     get_bitmap(baseFileBits, drp->fBase, false);
     get_bitmap(comparisonFileBits, drp->fComparison, false);
     if (DiffResource::kDecoded_Status != drp->fBase.fStatus || DiffResource::kDecoded_Status != drp->fComparison.fStatus) {
+=======
+    get_bitmap(baseFileBits, drp->fBase, SkImageDecoder::kDecodePixels_Mode);
+    get_bitmap(comparisonFileBits, drp->fComparison, SkImageDecoder::kDecodePixels_Mode);
+    if (DiffResource::kDecoded_Status != drp->fBase.fStatus ||
+        DiffResource::kDecoded_Status != drp->fComparison.fStatus)
+    {
+>>>>>>> miniblink49
         drp->fResult = DiffRecord::kCouldNotCompare_Result;
         return;
     }
@@ -77,6 +114,7 @@ static void create_diff_images(DiffMetricProc dmp,
     SkASSERT(DiffRecord::kUnknown_Result != drp->fResult);
 }
 
+<<<<<<< HEAD
 static void usage(char* argv0)
 {
     SkDebugf("Skia image diff tool\n");
@@ -109,14 +147,50 @@ static void usage(char* argv0)
         "\n"
         "\nIf no sort is specified, it will sort by fraction of pixels mismatching."
         "\n");
+=======
+static void usage (char * argv0) {
+    SkDebugf("Skia image diff tool\n");
+    SkDebugf("\n"
+"Usage: \n"
+"    %s <baseFile> <comparisonFile>\n" , argv0);
+    SkDebugf(
+"\nArguments:"
+"\n    --failonresult <result>: After comparing all file pairs, exit with nonzero"
+"\n                             return code (number of file pairs yielding this"
+"\n                             result) if any file pairs yielded this result."
+"\n                             This flag may be repeated, in which case the"
+"\n                             return code will be the number of fail pairs"
+"\n                             yielding ANY of these results."
+"\n    --failonstatus <baseStatus> <comparisonStatus>: exit with nonzero return"
+"\n                             code if any file pairs yeilded this status."
+"\n    --help: display this info"
+"\n    --listfilenames: list all filenames for each result type in stdout"
+"\n    --nodiffs: don't write out image diffs, just generate report on stdout"
+"\n    --outputdir: directory to write difference images"
+"\n    --threshold <n>: only report differences > n (per color channel) [default 0]"
+"\n    -u: ignored. Recognized for compatibility with svn diff."
+"\n    -L: first occurrence label for base, second occurrence label for comparison."
+"\n        Labels must be of the form \"<filename>(\t<specifier>)?\"."
+"\n        The base <filename> will be used to create files in outputdir."
+"\n"
+"\n    baseFile: baseline image file."
+"\n    comparisonFile: comparison image file"
+"\n"
+"\nIf no sort is specified, it will sort by fraction of pixels mismatching."
+"\n");
+>>>>>>> miniblink49
 }
 
 const int kNoError = 0;
 const int kGenericError = -1;
 
 int tool_main(int argc, char** argv);
+<<<<<<< HEAD
 int tool_main(int argc, char** argv)
 {
+=======
+int tool_main(int argc, char** argv) {
+>>>>>>> miniblink49
     DiffMetricProc diffProc = compute_diff_pmcolor;
 
     // Maximum error tolerated in any one color channel in any one pixel before
@@ -180,7 +254,12 @@ int tool_main(int argc, char** argv)
 
             for (int base = 0; base < DiffResource::kStatusCount; ++base) {
                 for (int comparison = 0; comparison < DiffResource::kStatusCount; ++comparison) {
+<<<<<<< HEAD
                     failOnStatusType[base][comparison] |= baseStatuses[base] && comparisonStatuses[comparison];
+=======
+                    failOnStatusType[base][comparison] |=
+                        baseStatuses[base] && comparisonStatuses[comparison];
+>>>>>>> miniblink49
                 }
             }
             continue;
@@ -215,6 +294,7 @@ int tool_main(int argc, char** argv)
                 continue;
             }
             switch (numLabelArguments++) {
+<<<<<<< HEAD
             case 0:
                 baseLabel.set(argv[i]);
                 continue;
@@ -225,11 +305,24 @@ int tool_main(int argc, char** argv)
                 SkDebugf("extra label argument <%s>\n", argv[i]);
                 usage(argv[0]);
                 return kGenericError;
+=======
+                case 0:
+                    baseLabel.set(argv[i]);
+                    continue;
+                case 1:
+                    comparisonLabel.set(argv[i]);
+                    continue;
+                default:
+                    SkDebugf("extra label argument <%s>\n", argv[i]);
+                    usage(argv[0]);
+                    return kGenericError;
+>>>>>>> miniblink49
             }
             continue;
         }
         if (argv[i][0] != '-') {
             switch (numUnflaggedArguments++) {
+<<<<<<< HEAD
             case 0:
                 baseFile.set(argv[i]);
                 continue;
@@ -240,6 +333,18 @@ int tool_main(int argc, char** argv)
                 SkDebugf("extra unflagged argument <%s>\n", argv[i]);
                 usage(argv[0]);
                 return kGenericError;
+=======
+                case 0:
+                    baseFile.set(argv[i]);
+                    continue;
+                case 1:
+                    comparisonFile.set(argv[i]);
+                    continue;
+                default:
+                    SkDebugf("extra unflagged argument <%s>\n", argv[i]);
+                    usage(argv[0]);
+                    return kGenericError;
+>>>>>>> miniblink49
             }
         }
 
@@ -314,7 +419,11 @@ int tool_main(int argc, char** argv)
     } else {
         const char* baseLabelCstr = baseLabel.c_str();
         const char* tab = strchr(baseLabelCstr, '\t');
+<<<<<<< HEAD
         if (nullptr == tab) {
+=======
+        if (NULL == tab) {
+>>>>>>> miniblink49
             outputFile = baseLabel;
         } else {
             outputFile.set(baseLabelCstr, tab - baseLabelCstr);
@@ -328,7 +437,11 @@ int tool_main(int argc, char** argv)
 
     DiffRecord dr;
     create_diff_images(diffProc, colorThreshold, baseFile, comparisonFile, outputDir, outputFile,
+<<<<<<< HEAD
         &dr);
+=======
+                       &dr);
+>>>>>>> miniblink49
 
     if (DiffResource::isStatusFailed(dr.fBase.fStatus)) {
         printf("Base %s.\n", DiffResource::getStatusDescription(dr.fBase.fStatus));
@@ -342,6 +455,7 @@ int tool_main(int argc, char** argv)
         printf("%.4f%% of pixels differ", 100 * dr.fFractionDifference);
         printf(" (%.4f%%  weighted)", 100 * dr.fWeightedFraction);
         if (dr.fFractionDifference < 0.01) {
+<<<<<<< HEAD
             printf(" %d pixels", static_cast<int>(dr.fFractionDifference * dr.fBase.fBitmap.width() * dr.fBase.fBitmap.height()));
         }
 
@@ -349,6 +463,21 @@ int tool_main(int argc, char** argv)
         printf("%d", static_cast<int>(MAX3(dr.fAverageMismatchR, dr.fAverageMismatchG, dr.fAverageMismatchB)));
         printf("\nMax color mismatch: ");
         printf("%d", MAX3(dr.fMaxMismatchR, dr.fMaxMismatchG, dr.fMaxMismatchB));
+=======
+            printf(" %d pixels", static_cast<int>(dr.fFractionDifference *
+                                                  dr.fBase.fBitmap.width() *
+                                                  dr.fBase.fBitmap.height()));
+        }
+
+        printf("\nAverage color mismatch: ");
+        printf("%d", static_cast<int>(MAX3(dr.fAverageMismatchR,
+                                           dr.fAverageMismatchG,
+                                           dr.fAverageMismatchB)));
+        printf("\nMax color mismatch: ");
+        printf("%d", MAX3(dr.fMaxMismatchR,
+                          dr.fMaxMismatchG,
+                          dr.fMaxMismatchB));
+>>>>>>> miniblink49
         printf("\n");
     }
     printf("\n");
@@ -365,8 +494,13 @@ int tool_main(int argc, char** argv)
 }
 
 #if !defined SK_BUILD_FOR_IOS
+<<<<<<< HEAD
 int main(int argc, char* const argv[])
 {
     return tool_main(argc, (char**)argv);
+=======
+int main(int argc, char * const argv[]) {
+    return tool_main(argc, (char**) argv);
+>>>>>>> miniblink49
 }
 #endif

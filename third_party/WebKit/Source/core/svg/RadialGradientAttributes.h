@@ -25,8 +25,7 @@
 
 namespace blink {
 struct RadialGradientAttributes final : GradientAttributes {
-    DISALLOW_NEW();
-
+    DISALLOW_ALLOCATION();
 public:
     RadialGradientAttributes()
         : m_cx(SVGLength::create(SVGLengthMode::Width))
@@ -42,9 +41,9 @@ public:
         , m_fySet(false)
         , m_frSet(false)
     {
-        m_cx->setValueAsString("50%");
-        m_cy->setValueAsString("50%");
-        m_r->setValueAsString("50%");
+        m_cx->setValueAsString("50%", IGNORE_EXCEPTION);
+        m_cy->setValueAsString("50%", IGNORE_EXCEPTION);
+        m_r->setValueAsString("50%", IGNORE_EXCEPTION);
     }
 
     SVGLength* cx() const { return m_cx.get(); }
@@ -54,36 +53,12 @@ public:
     SVGLength* fy() const { return m_fy.get(); }
     SVGLength* fr() const { return m_fr.get(); }
 
-    void setCx(SVGLength* value)
-    {
-        m_cx = value;
-        m_cxSet = true;
-    }
-    void setCy(SVGLength* value)
-    {
-        m_cy = value;
-        m_cySet = true;
-    }
-    void setR(SVGLength* value)
-    {
-        m_r = value;
-        m_rSet = true;
-    }
-    void setFx(SVGLength* value)
-    {
-        m_fx = value;
-        m_fxSet = true;
-    }
-    void setFy(SVGLength* value)
-    {
-        m_fy = value;
-        m_fySet = true;
-    }
-    void setFr(SVGLength* value)
-    {
-        m_fr = value;
-        m_frSet = true;
-    }
+    void setCx(PassRefPtrWillBeRawPtr<SVGLength> value) { m_cx = value; m_cxSet = true; }
+    void setCy(PassRefPtrWillBeRawPtr<SVGLength> value) { m_cy = value; m_cySet = true; }
+    void setR(PassRefPtrWillBeRawPtr<SVGLength> value) { m_r = value; m_rSet = true; }
+    void setFx(PassRefPtrWillBeRawPtr<SVGLength> value) { m_fx = value; m_fxSet = true; }
+    void setFy(PassRefPtrWillBeRawPtr<SVGLength> value) { m_fy = value; m_fySet = true; }
+    void setFr(PassRefPtrWillBeRawPtr<SVGLength> value) { m_fr = value; m_frSet = true; }
 
     bool hasCx() const { return m_cxSet; }
     bool hasCy() const { return m_cySet; }
@@ -104,12 +79,12 @@ public:
 
 private:
     // Properties
-    Member<SVGLength> m_cx;
-    Member<SVGLength> m_cy;
-    Member<SVGLength> m_r;
-    Member<SVGLength> m_fx;
-    Member<SVGLength> m_fy;
-    Member<SVGLength> m_fr;
+    RefPtrWillBeMember<SVGLength> m_cx;
+    RefPtrWillBeMember<SVGLength> m_cy;
+    RefPtrWillBeMember<SVGLength> m_r;
+    RefPtrWillBeMember<SVGLength> m_fx;
+    RefPtrWillBeMember<SVGLength> m_fy;
+    RefPtrWillBeMember<SVGLength> m_fr;
 
     // Property states
     bool m_cxSet : 1;
@@ -120,9 +95,9 @@ private:
     bool m_frSet : 1;
 };
 
+#if ENABLE(OILPAN)
 // Wrapper object for the RadialGradientAttributes part object.
-class RadialGradientAttributesWrapper
-    : public GarbageCollectedFinalized<RadialGradientAttributesWrapper> {
+class RadialGradientAttributesWrapper : public GarbageCollectedFinalized<RadialGradientAttributesWrapper> {
 public:
     static RadialGradientAttributesWrapper* create()
     {
@@ -130,17 +105,17 @@ public:
     }
 
     RadialGradientAttributes& attributes() { return m_attributes; }
-    void set(const RadialGradientAttributes& attributes)
-    {
-        m_attributes = attributes;
-    }
+    void set(const RadialGradientAttributes& attributes) { m_attributes = attributes; }
     DEFINE_INLINE_TRACE() { visitor->trace(m_attributes); }
 
 private:
-    RadialGradientAttributesWrapper() { }
+    RadialGradientAttributesWrapper()
+    {
+    }
 
     RadialGradientAttributes m_attributes;
 };
+#endif
 
 } // namespace blink
 

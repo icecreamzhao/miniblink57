@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/paint/CompositingDisplayItem.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
@@ -11,6 +15,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 void BeginCompositingDisplayItem::replay(GraphicsContext& context) const
 {
     context.beginLayer(m_opacity, m_xferMode, m_hasBounds ? &m_bounds : nullptr,
@@ -44,13 +49,41 @@ void BeginCompositingDisplayItem::dumpPropertiesAsDebugString(
 #endif
 
 void EndCompositingDisplayItem::replay(GraphicsContext& context) const
+=======
+void BeginCompositingDisplayItem::replay(GraphicsContext& context)
+{
+    context.beginLayer(m_opacity, m_xferMode, m_hasBounds ? &m_bounds : nullptr, m_colorFilter);
+}
+
+void BeginCompositingDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+{
+    SkRect bounds = WebCoreFloatRectToSKRect(m_bounds);
+    list->appendCompositingItem(m_opacity, m_xferMode, m_hasBounds ? &bounds : nullptr, GraphicsContext::WebCoreColorFilterToSkiaColorFilter(m_colorFilter).get());
+}
+
+#ifndef NDEBUG
+void BeginCompositingDisplayItem::dumpPropertiesAsDebugString(WTF::StringBuilder& stringBuilder) const
+{
+    DisplayItem::dumpPropertiesAsDebugString(stringBuilder);
+    stringBuilder.append(WTF::String::format(", xferMode: %d, opacity: %f", m_xferMode, m_opacity));
+    if (m_hasBounds)
+        stringBuilder.append(WTF::String::format(", bounds: [%f, %f, %f, %f]", m_bounds.location().x(), m_bounds.location().y(), m_bounds.size().width(), m_bounds.size().height()));
+}
+#endif
+
+void EndCompositingDisplayItem::replay(GraphicsContext& context)
+>>>>>>> miniblink49
 {
     context.endLayer();
 }
 
+<<<<<<< HEAD
 void EndCompositingDisplayItem::appendToWebDisplayItemList(
     const IntRect& visualRect,
     WebDisplayItemList* list) const
+=======
+void EndCompositingDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+>>>>>>> miniblink49
 {
     list->appendEndCompositingItem();
 }

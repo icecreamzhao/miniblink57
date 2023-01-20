@@ -33,8 +33,14 @@
 
 #include "platform/Timer.h"
 #include "public/web/WebHelperPlugin.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
+=======
+#include "wtf/FastAllocBase.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 #include "wtf/text/WTFString.h"
 
@@ -44,6 +50,7 @@ class HTMLObjectElement;
 class WebLocalFrameImpl;
 class WebPluginContainerImpl;
 
+<<<<<<< HEAD
 // Utility class to host helper plugins for media. Internally, it creates a
 // detached HTMLPluginElement to host the plugin and uses
 // FrameLoaderClient::createPlugin() to instantiate the requested plugin.
@@ -51,6 +58,14 @@ class WebHelperPluginImpl final : public WebHelperPlugin {
     WTF_MAKE_NONCOPYABLE(WebHelperPluginImpl);
     USING_FAST_MALLOC(WebHelperPluginImpl);
 
+=======
+// Utility class to host helper plugins for media. Internally, it creates a detached
+// HTMLPluginElement to host the plugin and uses FrameLoaderClient::createPlugin() to instantiate
+// the requested plugin.
+class WebHelperPluginImpl final : public WebHelperPlugin {
+    WTF_MAKE_NONCOPYABLE(WebHelperPluginImpl);
+    WTF_MAKE_FAST_ALLOCATED(WebHelperPluginImpl);
+>>>>>>> miniblink49
 public:
     // WebHelperPlugin methods:
     WebPlugin* getPlugin() override;
@@ -60,6 +75,7 @@ private:
     friend class WebHelperPlugin;
 
     WebHelperPluginImpl();
+<<<<<<< HEAD
 
     bool initialize(const String& pluginType, WebLocalFrameImpl*);
     void reallyDestroy(TimerBase*);
@@ -67,6 +83,16 @@ private:
     Timer<WebHelperPluginImpl> m_destructionTimer;
     Persistent<HTMLObjectElement> m_objectElement;
     Persistent<WebPluginContainerImpl> m_pluginContainer;
+=======
+    ~WebHelperPluginImpl() override;
+
+    bool initialize(const String& pluginType, WebLocalFrameImpl*);
+    void reallyDestroy(Timer<WebHelperPluginImpl>*);
+
+    Timer<WebHelperPluginImpl> m_destructionTimer;
+    RefPtrWillBePersistent<HTMLObjectElement> m_objectElement;
+    RefPtrWillBePersistent<WebPluginContainerImpl> m_pluginContainer;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

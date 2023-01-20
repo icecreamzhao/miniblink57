@@ -3,7 +3,7 @@
 #define browser_api_WindowInterface_h
 
 #include <v8.h>
-#include <windows.h>
+typedef struct HWND__ *HWND;
 
 namespace atom {
 
@@ -20,7 +20,7 @@ public:
     static v8::Local<v8::Value> getFocusedWindow(v8::Isolate* isolate);
     static v8::Local<v8::Value> getFocusedContents(v8::Isolate* isolate);
 
-    static const WCHAR kElectronClassName[];
+    static const wchar_t kElectronClassName[];
     static const int kSingleInstanceMessage = 0x410;
 };
 

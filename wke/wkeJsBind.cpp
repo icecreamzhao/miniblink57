@@ -7,7 +7,11 @@
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 #include "third_party/WebKit/Source/bindings/core/v8/V8StringResource.h"
 #include "third_party/WebKit/Source/bindings/core/v8/V8Binding.h"
+<<<<<<< HEAD
 //#include "third_party/WebKit/Source/bindings/core/v8/V8RecursionScope.h"
+=======
+#include "third_party/WebKit/Source/bindings/core/v8/V8RecursionScope.h"
+>>>>>>> miniblink49
 #include "third_party/WebKit/Source/core/frame/LocalDOMWindow.h"
 #include "third_party/WebKit/Source/core/frame/LocalFrame.h"
 #include "third_party/WebKit/Source/core/page/ChromeClient.h"
@@ -22,10 +26,13 @@
 #include "wke/wkeWebView.h"
 #include "wke/wkeUtil.h"
 
+<<<<<<< HEAD
 namespace wke {
 bool g_enableSkipJsError = false;
 }
 
+=======
+>>>>>>> miniblink49
 //////////////////////////////////////////////////////////////////////////
 
 struct JsExecStateInfo {
@@ -41,14 +48,22 @@ public:
     const v8::FunctionCallbackInfo<v8::Value>* args;
     v8::Persistent<v8::Context> context;
 
+<<<<<<< HEAD
     v8::Persistent<v8::Value> accessorSetterArg;
+=======
+    v8::Local<v8::Value> accessorSetterArg;
+>>>>>>> miniblink49
 
 private:
     JsExecStateInfo()
     {
         isolate = nullptr;
         args = nullptr;
+<<<<<<< HEAD
         accessorSetterArg.Reset();
+=======
+        accessorSetterArg.Clear();
+>>>>>>> miniblink49
     }
 };
 
@@ -267,8 +282,12 @@ jsValue WKE_CALL_TYPE jsArg(jsExecState es, int argIdx)
         if (0 != argIdx)
             return jsUndefined();
 
+<<<<<<< HEAD
         v8::Local<v8::Value> accessorSetterArg = v8::Local<v8::Value>::New(es->isolate, es->accessorSetterArg);
         return jsArgImpl(es, accessorSetterArg);
+=======
+        return jsArgImpl(es, es->accessorSetterArg);
+>>>>>>> miniblink49
     }
 
     if (!es || !es->args || argIdx >= es->args->Length() || es->context.IsEmpty())
@@ -330,42 +349,74 @@ jsType WKE_CALL_TYPE jsTypeOf(jsValue v)
     return JSTYPE_UNDEFINED;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsNumber(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsNumber(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_NUMBER ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsString(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsString(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_STRING ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsBoolean(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsBoolean(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_BOOLEAN ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsObject(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsObject(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_OBJECT ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsFunction(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsFunction(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_FUNCTION ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsUndefined(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsUndefined(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_UNDEFINED ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsArray(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsArray(jsValue v)
+>>>>>>> miniblink49
 {
     return jsTypeOf(v) == JSTYPE_ARRAY ? true : false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsNull(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsNull(jsValue v)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     JsValueMap::iterator it = findJsValueMap(v);
@@ -383,7 +434,11 @@ BOOL WKE_CALL_TYPE jsIsNull(jsValue v)
     return value->IsNull();
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsTrue(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsTrue(jsValue v)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     JsValueMap::iterator it = findJsValueMap(v);
@@ -407,7 +462,11 @@ BOOL WKE_CALL_TYPE jsIsTrue(jsValue v)
     return false;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsFalse(jsValue v)
+=======
+bool WKE_CALL_TYPE jsIsFalse(jsValue v)
+>>>>>>> miniblink49
 {
     return !jsIsTrue(v);
 }
@@ -462,6 +521,7 @@ double WKE_CALL_TYPE jsToDouble(jsExecState es, jsValue v)
     return 0.0;
 }
 
+<<<<<<< HEAD
 const char* WKE_CALL_TYPE jsToDoubleString(jsExecState es, jsValue v)
 {
     double d = jsToDouble(es, v);
@@ -473,6 +533,9 @@ const char* WKE_CALL_TYPE jsToDoubleString(jsExecState es, jsValue v)
 }
 
 BOOL WKE_CALL_TYPE jsToBoolean(jsExecState es, jsValue v)
+=======
+bool WKE_CALL_TYPE jsToBoolean(jsExecState es, jsValue v)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es)
@@ -493,9 +556,14 @@ BOOL WKE_CALL_TYPE jsToBoolean(jsExecState es, jsValue v)
     return false;
 }
 
+<<<<<<< HEAD
 const WCHAR* WKE_CALL_TYPE jsToTempStringW(jsExecState es, jsValue v)
 {
 #if defined(OS_WIN)
+=======
+const wchar_t* WKE_CALL_TYPE jsToTempStringW(jsExecState es, jsValue v)
+{
+>>>>>>> miniblink49
     wke::checkThreadCallIsValid(__FUNCTION__);
     const utf8* utf8String = jsToTempString(es, v);
     Vector<UChar> utf16 = WTF::ensureUTF16UChar(String(utf8String), false);
@@ -503,10 +571,13 @@ const WCHAR* WKE_CALL_TYPE jsToTempStringW(jsExecState es, jsValue v)
         return L"";
 
     return wke::createTempWCharString(utf16.data(), utf16.size());
+<<<<<<< HEAD
 #else
     DebugBreak();
     return nullptr;
 #endif
+=======
+>>>>>>> miniblink49
 }
 
 const utf8* WKE_CALL_TYPE jsToTempString(jsExecState es, jsValue v)
@@ -572,7 +643,11 @@ const utf8* WKE_CALL_TYPE jsToString(jsExecState es, jsValue v)
     return jsToTempString(es, v);
 }
 
+<<<<<<< HEAD
 const WCHAR* WKE_CALL_TYPE jsToStringW(jsExecState es, jsValue v)
+=======
+const wchar_t* WKE_CALL_TYPE jsToStringW(jsExecState es, jsValue v)
+>>>>>>> miniblink49
 {
     return jsToTempStringW(es, v);
 }
@@ -618,12 +693,15 @@ jsValue WKE_CALL_TYPE jsDouble(double d)
     return ret;
 }
 
+<<<<<<< HEAD
 jsValue WKE_CALL_TYPE jsDoubleString(const char* str)
 {
     double d = atof(str);
     return jsDouble(d);
 }
 
+=======
+>>>>>>> miniblink49
 jsValue WKE_CALL_TYPE jsBoolean(bool b)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
@@ -681,9 +759,14 @@ jsValue WKE_CALL_TYPE jsString(jsExecState es, const utf8* str)
     return createJsValueByLocalValue(es->isolate, context, value.ToLocalChecked());
 }
 
+<<<<<<< HEAD
 jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const WCHAR* str)
 {
 #if defined(OS_WIN)
+=======
+jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const wchar_t* str)
+{
+>>>>>>> miniblink49
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es || !es->isolate)
         return jsUndefined();
@@ -699,6 +782,7 @@ jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const WCHAR* str)
     if (value.IsEmpty())
         return jsUndefined();
     return createJsValueByLocalValue(es->isolate, context, value.ToLocalChecked());
+<<<<<<< HEAD
 #else
     DebugBreak();
     return 0;
@@ -706,6 +790,11 @@ jsValue WKE_CALL_TYPE jsStringW(jsExecState es, const WCHAR* str)
 }
 
 jsValue WKE_CALL_TYPE jsArrayBuffer(jsExecState es, const char* buffer, size_t size)
+=======
+}
+
+jsValue WKE_CALL_TYPE jsArrayBuffer(jsExecState es, char * buffer, size_t size)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es || !es->isolate)
@@ -811,6 +900,7 @@ jsValue WKE_CALL_TYPE jsGlobalObject(jsExecState es)
 
 jsValue WKE_CALL_TYPE jsEval(jsExecState es, const utf8* str)
 {
+<<<<<<< HEAD
 #if defined(OS_WIN)
     String s = String::fromUTF8(str);
     Vector<UChar> buf = WTF::ensureUTF16UChar(s, true);
@@ -822,13 +912,26 @@ jsValue WKE_CALL_TYPE jsEval(jsExecState es, const utf8* str)
 }
 
 jsValue WKE_CALL_TYPE jsEvalW(jsExecState es, const WCHAR* str)
+=======
+    String s = String::fromUTF8(str);
+    Vector<UChar> buf = WTF::ensureUTF16UChar(s, true);
+    return jsEvalW(es, buf.data());
+}
+
+jsValue WKE_CALL_TYPE jsEvalW(jsExecState es, const wchar_t* str)
+>>>>>>> miniblink49
 {
     return jsEvalExW(es, str, true);
 }
 
+<<<<<<< HEAD
 jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const WCHAR* str, bool isInClosure)
 {
 #if defined(OS_WIN)
+=======
+jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const wchar_t* str, bool isInClosure)
+{
+>>>>>>> miniblink49
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !es || !s_execStates->contains(es) || !es->isolate || es->context.IsEmpty() || !str)
         return jsUndefined();
@@ -836,7 +939,11 @@ jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const WCHAR* str, bool isInClosu
         DebugBreak();
 
     String codeString(str);
+<<<<<<< HEAD
     if (codeString.startsWith("javascript:", WTF::TextCaseASCIIInsensitive))
+=======
+    if (codeString.startsWith("javascript:", WTF::TextCaseInsensitive))
+>>>>>>> miniblink49
         codeString.remove(0, sizeof("javascript:") - 1);
     if (isInClosure) {
         codeString.insert("(function(){", 0);
@@ -844,8 +951,12 @@ jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const WCHAR* str, bool isInClosu
     }
 
     v8::Isolate* isolate = es->isolate;
+<<<<<<< HEAD
     //blink::V8RecursionScope::MicrotaskSuppression microtaskSuppression(isolate);
     v8::MicrotasksScope microtasksScope(isolate, v8::MicrotasksScope::kDoNotRunMicrotasks);
+=======
+    blink::V8RecursionScope::MicrotaskSuppression microtaskSuppression(isolate);
+>>>>>>> miniblink49
 
     v8::HandleScope handleScope(isolate);
     v8::Local<v8::Context> context = v8::Local<v8::Context>::New(es->isolate, es->context);
@@ -864,10 +975,13 @@ jsValue WKE_CALL_TYPE jsEvalExW(jsExecState es, const WCHAR* str, bool isInClosu
     v8::Local<v8::Value> result = script->Run(context).FromMaybe(v8::Local<v8::Value>());
 
     return createJsValueByLocalValue(isolate, context, result);
+<<<<<<< HEAD
 #else
     DebugBreak();
     return 0;
 #endif
+=======
+>>>>>>> miniblink49
 }
 
 jsExceptionInfo* g_jsExceptionInfo = nullptr;
@@ -958,8 +1072,12 @@ jsValue WKE_CALL_TYPE jsCall(jsExecState es, jsValue func, jsValue thisValue, js
     v8::HandleScope handleScope(isolate);
     v8::Local<v8::Context> context = v8::Local<v8::Context>::New(es->isolate, es->context);
     v8::Context::Scope contextScope(context);
+<<<<<<< HEAD
     //blink::UserGestureIndicator gestureIndicator(blink::DefinitelyProcessingUserGesture);
     RefPtr<blink::UserGestureToken> userGestureToken = blink::UserGestureIndicator::currentToken();
+=======
+    blink::UserGestureIndicator gestureIndicator(blink::DefinitelyProcessingUserGesture);
+>>>>>>> miniblink49
 
     v8::Local<v8::Value>* argv = new v8::Local<v8::Value>[argCount];
     for (int i = 0; i < argCount; ++i) {
@@ -976,8 +1094,12 @@ jsValue WKE_CALL_TYPE jsCall(jsExecState es, jsValue func, jsValue thisValue, js
 
     v8::Local<v8::Value> thisValueV8 = getV8Value(thisValue, context);
 
+<<<<<<< HEAD
     //blink::V8RecursionScope::MicrotaskSuppression recursionScope(isolate);
     v8::MicrotasksScope microtasksScope(isolate, v8::MicrotasksScope::kDoNotRunMicrotasks);
+=======
+    blink::V8RecursionScope::MicrotaskSuppression recursionScope(isolate);
+>>>>>>> miniblink49
     
     if (thisValueV8.IsEmpty() || thisValueV8->IsUndefined())
         thisValueV8 = context->Global();
@@ -1132,7 +1254,11 @@ void WKE_CALL_TYPE jsDeleteObjectProp(jsExecState es, jsValue object, const char
     obj->Delete(context, propV8.ToLocalChecked());
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsValidExecState(jsExecState es)
+=======
+bool WKE_CALL_TYPE jsIsValidExecState(jsExecState es)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es || !es->isolate)
@@ -1140,7 +1266,11 @@ BOOL WKE_CALL_TYPE jsIsValidExecState(jsExecState es)
     return true;
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsIsJsValueValid(jsExecState es, jsValue object)
+=======
+bool WKE_CALL_TYPE jsIsJsValueValid(jsExecState es, jsValue object)
+>>>>>>> miniblink49
 {
     if (!jsIsValidExecState(es))
         return false;
@@ -1304,7 +1434,11 @@ void WKE_CALL_TYPE jsGC()
     wkeGC(nullptr, 1);
 }
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsAddRef(jsExecState es, jsValue val)
+=======
+bool WKE_CALL_TYPE jsAddRef(jsExecState es, jsValue val)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es || !es->isolate)
@@ -1336,7 +1470,11 @@ BOOL WKE_CALL_TYPE jsAddRef(jsExecState es, jsValue val)
 
 static void deletePersistentJsValue(jsValue v);
 
+<<<<<<< HEAD
 BOOL WKE_CALL_TYPE jsReleaseRef(jsExecState es, jsValue val)
+=======
+bool WKE_CALL_TYPE jsReleaseRef(jsExecState es, jsValue val)
+>>>>>>> miniblink49
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
     if (!s_execStates || !s_execStates->contains(es) || !es || !es->isolate)
@@ -1386,6 +1524,7 @@ struct AddFunctionInfo {
     void* param;
 };
 
+<<<<<<< HEAD
 static bool isLiveWebview(v8::Isolate* isolate, v8::Local<v8::Context> context)
 {
     v8::HandleScope handleScope(isolate);
@@ -1403,6 +1542,8 @@ static bool isLiveWebview(v8::Isolate* isolate, v8::Local<v8::Context> context)
     return webView->isValid();
 }
 
+=======
+>>>>>>> miniblink49
 static void functionCallbackImpl(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     v8::Isolate* isolate = info.GetIsolate();
@@ -1415,9 +1556,12 @@ static void functionCallbackImpl(const v8::FunctionCallbackInfo<v8::Value>& info
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     execState->context.Reset(isolate, context);
 
+<<<<<<< HEAD
     if (!isLiveWebview(isolate, context))
         return;
 
+=======
+>>>>>>> miniblink49
     wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
     jsValue retVal = func(execState, addFunctionInfo->param);
 
@@ -1464,8 +1608,11 @@ public:
 
     jsData* jsDataObj;
 
+<<<<<<< HEAD
     int webviewId;
 
+=======
+>>>>>>> miniblink49
     void set(wkeJsNativeFunction getter, void* getterParam, wkeJsNativeFunction setter, void* setterParam)
     {
         this->getter = getter;
@@ -1488,7 +1635,10 @@ public:
         this->setter = nullptr;
         this->jsDataObj = nullptr;
         this->m_persistentValue = 0;
+<<<<<<< HEAD
         this->webviewId = 0;
+=======
+>>>>>>> miniblink49
     }
 
     ~NativeGetterSetterWrap() {}
@@ -1501,11 +1651,15 @@ public:
         jsExecState execState = JsExecStateInfo::create();
         execState->args = nullptr;
         execState->isolate = isolate;
+<<<<<<< HEAD
         v8::Local<v8::Context> context = isolate->GetCurrentContext();
         execState->context.Reset(isolate, context);
 
         if (!isLiveWebview(isolate, context))
             return;
+=======
+        execState->context.Reset(isolate, isolate->GetCurrentContext());
+>>>>>>> miniblink49
 
         wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
         jsValue retJsValue = getterSetter->getter(execState, getterSetter->getterParam);
@@ -1521,6 +1675,7 @@ public:
 
         jsExecState execState = JsExecStateInfo::create();
         execState->args = nullptr;
+<<<<<<< HEAD
         execState->accessorSetterArg.Reset(isolate, value);
         execState->isolate = isolate;
 
@@ -1529,6 +1684,11 @@ public:
 
         if (!isLiveWebview(isolate, context))
             return;
+=======
+        execState->accessorSetterArg = value;
+        execState->isolate = isolate;
+        execState->context.Reset(isolate, isolate->GetCurrentContext());
+>>>>>>> miniblink49
 
         wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
         getterSetter->setter(execState, getterSetter->setterParam);
@@ -1563,18 +1723,29 @@ public:
     static void secondJsObjectWeakCallback(const v8::WeakCallbackInfo<NativeGetterSetterWrap>& data)
     {
         NativeGetterSetterWrap* self = data.GetParameter();
+<<<<<<< HEAD
         v8::Isolate* isolate = data.GetIsolate();
         self->gc(isolate);
     }
 
     void gc(v8::Isolate* isolate)
+=======
+        self->gc();
+    }
+
+    void gc()
+>>>>>>> miniblink49
     {
         for (size_t i = 0; i < m_cachedWraps->size(); ++i) {
             NativeGetterSetterWrap* wrap = m_cachedWraps->at(i);
             if (wrap != this)
                 continue;
 
+<<<<<<< HEAD
             if (jsDataObj && jsDataObj->finalize && wkeIsWebviewAlive(webviewId))
+=======
+            if (jsDataObj && jsDataObj->finalize)
+>>>>>>> miniblink49
                 jsDataObj->finalize(jsDataObj);
 
             m_cachedWraps->remove(i);
@@ -1589,8 +1760,12 @@ public:
         NativeGetterSetterWrap* self = data.GetParameter();
         freeJsValue(self->m_persistentValue);
         //data.SetSecondPassCallback(secondJsObjectWeakCallback);
+<<<<<<< HEAD
         v8::Isolate* isolate = data.GetIsolate();
         self->gc(isolate);
+=======
+        self->gc();       
+>>>>>>> miniblink49
     }
 
     void set(jsValue persistentValue) { m_persistentValue = persistentValue; }
@@ -1626,6 +1801,7 @@ static void addAccessor(v8::Local<v8::Context> context, const char* name, wkeJsN
     v8::AccessorNameGetterCallback v8Getter = getter ? &NativeGetterSetterWrap::AccessorGetterCallbackImpl : nullptr;
     v8::AccessorNameSetterCallback v8Setter = setter ? &NativeGetterSetterWrap::AccessorSetterCallbackImpl : nullptr;
 
+<<<<<<< HEAD
     //bool setOk = globalObj->SetAccessor(nameMaybeLocal.ToLocalChecked(), v8Getter, v8Setter, data, (v8::AccessControl)(v8::ALL_CAN_READ | v8::ALL_CAN_WRITE));
 //     Local<Context> context, Local<Name> name,
 //         AccessorNameGetterCallback getter,
@@ -1635,6 +1811,9 @@ static void addAccessor(v8::Local<v8::Context> context, const char* name, wkeJsN
 //         SideEffectType getter_side_effect_type,
 //         SideEffectType setter_side_effect_type
     globalObj->SetAccessor(context, nameMaybeLocal.ToLocalChecked(), v8Getter, v8Setter, data, (v8::AccessControl)(v8::ALL_CAN_READ | v8::ALL_CAN_WRITE));
+=======
+    bool setOk = globalObj->SetAccessor(nameMaybeLocal.ToLocalChecked(), v8Getter, v8Setter, data, (v8::AccessControl)(v8::ALL_CAN_READ | v8::ALL_CAN_WRITE));
+>>>>>>> miniblink49
 }
 
 
@@ -1682,7 +1861,11 @@ static jsValue WKE_CALL_TYPE wkeJsBindFunctionWrap(jsExecState es, void* param)
 
 void WKE_CALL_TYPE jsBindFunction(const char* name, jsNativeFunction fn, unsigned int argCount)
 {
+<<<<<<< HEAD
     wkeJsBindFunction(name, wkeJsBindFunctionWrap, (void *)fn, argCount);
+=======
+    wkeJsBindFunction(name, wkeJsBindFunctionWrap, fn, argCount);
+>>>>>>> miniblink49
 }
 
 static void wkeJsBindSetterGetter(const char* name, wkeJsNativeFunction fn, void* param, unsigned int funcType)
@@ -1716,13 +1899,21 @@ static void wkeJsBindSetterGetter(const char* name, wkeJsNativeFunction fn, void
 void WKE_CALL_TYPE jsBindGetter(const char* name, jsNativeFunction fn)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
+<<<<<<< HEAD
     wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, (void *)fn, JS_GETTER);
+=======
+    wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, fn, JS_GETTER);
+>>>>>>> miniblink49
 }
 
 void WKE_CALL_TYPE jsBindSetter(const char* name, jsNativeFunction fn)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
+<<<<<<< HEAD
     wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, (void *)fn, JS_SETTER);
+=======
+    wkeJsBindSetterGetter(name, wkeJsBindFunctionWrap, fn, JS_SETTER);
+>>>>>>> miniblink49
 }
 
 void WKE_CALL_TYPE wkeJsBindFunction(const char* name, wkeJsNativeFunction fn, void* param, unsigned int argCount)
@@ -1762,7 +1953,11 @@ void WKE_CALL_TYPE wkeJsBindGetter(const char* name, wkeJsNativeFunction fn, voi
 
 void WKE_CALL_TYPE wkeJsBindSetter(const char* name, wkeJsNativeFunction fn, void* param)
 {
+<<<<<<< HEAD
     wkeJsBindSetterGetter(name, fn, param, JS_SETTER);
+=======
+    wkeJsBindSetterGetter(name, fn, param, JS_GETTER);
+>>>>>>> miniblink49
 }
 
 jsValue WKE_CALL_TYPE js_outputMsg(jsExecState es, void* param)
@@ -1791,6 +1986,7 @@ jsValue WKE_CALL_TYPE js_setWebViewName(jsExecState es, void* param)
     return jsUndefined();
 }
 
+<<<<<<< HEAD
 static void namedPropertyGetterCallback(v8::Local<v8::Name> prop, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
     v8::Local<v8::String> propStr;
@@ -1798,11 +1994,16 @@ static void namedPropertyGetterCallback(v8::Local<v8::Name> prop, const v8::Prop
         return;
     propStr = prop->ToString();
 
+=======
+static void namedPropertyGetterCallback(v8::Local<v8::String> property, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+>>>>>>> miniblink49
     NativeGetterSetterWrap* wrap = static_cast<NativeGetterSetterWrap*>(v8::External::Cast(*info.Data())->Value());
 
     v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
     jsExecState execState = JsExecStateInfo::create();
     execState->isolate = info.GetIsolate();
+<<<<<<< HEAD
 
     if (!isLiveWebview(execState->isolate, context))
         return;
@@ -1811,12 +2012,19 @@ static void namedPropertyGetterCallback(v8::Local<v8::Name> prop, const v8::Prop
     jsValue object = createJsValueByLocalValue(info.GetIsolate(), context, info.Data());
 
     String stringWTF = blink::v8StringToWebCoreString<String>(propStr, blink::DoNotExternalize);
+=======
+    execState->context.Reset(execState->isolate, context);
+    jsValue object = createJsValueByLocalValue(info.GetIsolate(), context, info.Data());
+
+    String stringWTF = blink::v8StringToWebCoreString<String>(property, blink::DoNotExternalize);
+>>>>>>> miniblink49
     jsValue retVal = wrap->jsDataObj->propertyGet(execState, object, stringWTF.utf8().data());
 
     v8::Local<v8::Value> rv = getV8Value(retVal, context);
     info.GetReturnValue().Set(rv);
 }
 
+<<<<<<< HEAD
 static void namedPropertySetterCallback(v8::Local<v8::Name> prop, v8::Local<v8::Value> valueV8, const v8::PropertyCallbackInfo<v8::Value>& info)
 {
     v8::Local<v8::String> propStr;
@@ -1824,11 +2032,16 @@ static void namedPropertySetterCallback(v8::Local<v8::Name> prop, v8::Local<v8::
         return;
     propStr = prop->ToString();
 
+=======
+static void namedPropertySetterCallback(v8::Local<v8::String> property, v8::Local<v8::Value> valueV8, const v8::PropertyCallbackInfo<v8::Value>& info)
+{
+>>>>>>> miniblink49
     NativeGetterSetterWrap* wrap = static_cast<NativeGetterSetterWrap*>(v8::External::Cast(*info.Data())->Value());
 
     jsExecState execState = JsExecStateInfo::create();
     v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
     execState->isolate = info.GetIsolate();
+<<<<<<< HEAD
 
     if (!isLiveWebview(execState->isolate, context))
         return;
@@ -1837,11 +2050,22 @@ static void namedPropertySetterCallback(v8::Local<v8::Name> prop, v8::Local<v8::
     jsValue object = createJsValueByLocalValue(info.GetIsolate(), context, info.Data());
 
     String stringWTF = blink::v8StringToWebCoreString<String>(propStr, blink::DoNotExternalize);
+=======
+    execState->context.Reset(execState->isolate, context);
+    jsValue object = createJsValueByLocalValue(info.GetIsolate(), context, info.Data());
+
+    String stringWTF = blink::v8StringToWebCoreString<String>(property, blink::DoNotExternalize);
+>>>>>>> miniblink49
 
     jsValue value = createJsValueByLocalValue(info.GetIsolate(), context, valueV8);
     wrap->jsDataObj->propertySet(execState, object, stringWTF.utf8().data(), value);
 }
 
+<<<<<<< HEAD
+=======
+void* g_testObject = nullptr;
+
+>>>>>>> miniblink49
 jsValue WKE_CALL_TYPE jsObject(jsExecState es, jsData* data)
 {
     wke::checkThreadCallIsValid(__FUNCTION__);
@@ -1858,9 +2082,13 @@ jsValue WKE_CALL_TYPE jsObject(jsExecState es, jsData* data)
     v8::Local<v8::ObjectTemplate> objTemplate = v8::ObjectTemplate::New(isolate);
     
     NativeGetterSetterWrap* wrap = NativeGetterSetterWrap::createWrapAndAddToGlobalObjForRelease(isolate, globalObj);
+<<<<<<< HEAD
     wkeWebView webview = jsGetWebView(es);
 
     wrap->webviewId = wkeGetWebviewId(webview);
+=======
+
+>>>>>>> miniblink49
     wrap->set(data);
 
     v8::Local<v8::External> external = v8::External::New(isolate, wrap);
@@ -1890,9 +2118,12 @@ void jsFunctionConstructCallback(const v8::FunctionCallbackInfo<v8::Value>& args
     execState->isolate = isolate;
     v8::Local<v8::Context> context = execState->isolate->GetCurrentContext();
     execState->context.Reset(isolate, context);
+<<<<<<< HEAD
 
     if (!isLiveWebview(isolate, context))
         return;
+=======
+>>>>>>> miniblink49
     
     jsValue wkeData = createJsValueByLocalValue(isolate, context, data);
 
@@ -1998,7 +2229,12 @@ jsExecState createTempExecStateByV8Context(v8::Local<v8::Context> context)
     return execState;
 }
 
+<<<<<<< HEAD
 void onCreateGlobalObjectInSubFrame(content::WebFrameClientImpl* client, blink::WebLocalFrame* frame,  v8::Local<v8::Context> context, int extensionGroup, int worldId)
+=======
+void onCreateGlobalObjectInSubFrame(content::WebFrameClientImpl* client, blink::WebLocalFrame* frame, 
+    v8::Local<v8::Context> context, int extensionGroup, int worldId)
+>>>>>>> miniblink49
 {
     content::WebPage* webPage = client->webPage();
     CWebView* wkeWebView = webPage->wkeWebView();
@@ -2009,6 +2245,7 @@ void onCreateGlobalObjectInSubFrame(content::WebFrameClientImpl* client, blink::
     setWkeWebViewToV8Context(client, context);
 }
 
+<<<<<<< HEAD
 void namedPropertySetterCustom(v8::Local<v8::Name>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<v8::Value>&)
 {
     OutputDebugStringA("namedPropertySetterCustom\n");
@@ -2048,6 +2285,8 @@ static void namedPropertyGetterCallback(v8::Local<v8::Name> name, const v8::Prop
     OutputDebugStringA(output.c_str());
 }
 
+=======
+>>>>>>> miniblink49
 void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink::WebLocalFrame* frame, v8::Local<v8::Context> context, int extensionGroup, int worldId)
 {
     content::WebPage* webPage = client->webPage();
@@ -2085,6 +2324,7 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
         "window.Intl.DateTimeFormat.supportedLocalesOf = function(locales, options) {\n"
         "    return locales;\n"
         "}\n"
+<<<<<<< HEAD
         "window.indexedDB = {\n"
         "    open: function(a, b) {\n"
         "        var ret = {};\n"
@@ -2100,6 +2340,10 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
         "//window.fixErrObj = { src: 1234567, getChildren: function() {} };\n"
         ;
 
+=======
+        ;
+    
+>>>>>>> miniblink49
     blink::WebScriptSource injectSource(blink::WebString::fromUTF8(injectCode));
     frame->executeScript(injectSource);
 
@@ -2110,16 +2354,26 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
     execState->args = nullptr;
     execState->isolate = isolate;
     execState->context.Reset(isolate, context);
+<<<<<<< HEAD
     //jsSetGlobal(execState, "wke", ::jsString(execState, wkeGetVersionString()));
+=======
+    jsSetGlobal(execState, "wke", ::jsString(execState, wkeGetVersionString()));
+>>>>>>> miniblink49
 
     if (s_jsFunctionsPtr) {
         Vector<jsFunctionInfo>& s_jsFunctions = *s_jsFunctionsPtr;
 
         for (size_t i = 0; i < s_jsFunctions.size(); ++i) {
+<<<<<<< HEAD
             if (s_jsFunctions[i].funcType == JS_FUNC) {
                 if (s_jsFunctions[i].fn)
                     addFunction(context, s_jsFunctions[i].name, s_jsFunctions[i].fn, s_jsFunctions[i].param, s_jsFunctions[i].argCount);
             } else {
+=======
+            if (s_jsFunctions[i].funcType == JS_FUNC)
+                addFunction(context, s_jsFunctions[i].name, s_jsFunctions[i].fn, s_jsFunctions[i].param, s_jsFunctions[i].argCount);
+            else {
+>>>>>>> miniblink49
                 wkeJsNativeFunction getter = s_jsFunctions[i].gettet;
                 void* getterParam = s_jsFunctions[i].getterParam;
                 wkeJsNativeFunction setter = s_jsFunctions[i].settet;
@@ -2128,6 +2382,7 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
             }
         }
     }
+<<<<<<< HEAD
 
     //--
     if (wke::g_enableSkipJsError) {
@@ -2141,6 +2396,8 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
         globalObject->Set(name, obj);
     }
     //--
+=======
+>>>>>>> miniblink49
 }
 
 static void deletePersistentJsValue(jsValue v)

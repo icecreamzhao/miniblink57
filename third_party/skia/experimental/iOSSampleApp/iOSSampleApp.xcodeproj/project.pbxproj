@@ -3428,7 +3428,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					SK_BUILD_FOR_IOS,
+<<<<<<< HEAD
 					SK_BUILD_NO_OPTS,
+=======
+>>>>>>> miniblink49
 					SK_DEBUG,
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3450,7 +3453,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					SK_RELEASE,
 					SK_BUILD_FOR_IOS,
+<<<<<<< HEAD
 					SK_BUILD_NO_OPTS,
+=======
+>>>>>>> miniblink49
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = NO;

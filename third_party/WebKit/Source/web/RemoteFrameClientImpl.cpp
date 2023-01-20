@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/RemoteFrameClientImpl.h"
 
 #include "core/events/KeyboardEvent.h"
@@ -9,18 +13,26 @@
 #include "core/events/WheelEvent.h"
 #include "core/frame/RemoteFrame.h"
 #include "core/frame/RemoteFrameView.h"
+<<<<<<< HEAD
 #include "core/layout/api/LayoutItem.h"
 #include "core/layout/api/LayoutPartItem.h"
 #include "platform/exported/WrappedResourceRequest.h"
 #include "platform/geometry/IntRect.h"
+=======
+#include "core/layout/LayoutPart.h"
+#include "platform/exported/WrappedResourceRequest.h"
+>>>>>>> miniblink49
 #include "platform/weborigin/SecurityOrigin.h"
 #include "platform/weborigin/SecurityPolicy.h"
 #include "public/web/WebRemoteFrameClient.h"
 #include "web/WebInputEventConversion.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebRemoteFrameImpl.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -29,6 +41,7 @@ RemoteFrameClientImpl::RemoteFrameClientImpl(WebRemoteFrameImpl* webFrame)
 {
 }
 
+<<<<<<< HEAD
 RemoteFrameClientImpl* RemoteFrameClientImpl::create(
     WebRemoteFrameImpl* webFrame)
 {
@@ -41,16 +54,29 @@ DEFINE_TRACE(RemoteFrameClientImpl)
     RemoteFrameClient::trace(visitor);
 }
 
+=======
+>>>>>>> miniblink49
 bool RemoteFrameClientImpl::inShadowTree() const
 {
     return m_webFrame->inShadowTree();
 }
 
+<<<<<<< HEAD
 void RemoteFrameClientImpl::willBeDetached() { }
+=======
+void RemoteFrameClientImpl::willBeDetached()
+{
+}
+>>>>>>> miniblink49
 
 void RemoteFrameClientImpl::detached(FrameDetachType type)
 {
     // Alert the client that the frame is being detached.
+<<<<<<< HEAD
+=======
+    RefPtrWillBeRawPtr<WebRemoteFrameImpl> protector(m_webFrame);
+
+>>>>>>> miniblink49
     WebRemoteFrameClient* client = m_webFrame->client();
     if (!client)
         return;
@@ -68,10 +94,14 @@ Frame* RemoteFrameClientImpl::opener() const
 
 void RemoteFrameClientImpl::setOpener(Frame* opener)
 {
+<<<<<<< HEAD
     WebFrame* openerFrame = WebFrame::fromFrame(opener);
     if (m_webFrame->client() && m_webFrame->opener() != openerFrame)
         m_webFrame->client()->didChangeOpener(openerFrame);
     m_webFrame->setOpener(openerFrame);
+=======
+    m_webFrame->setOpener(WebFrame::fromFrame(opener));
+>>>>>>> miniblink49
 }
 
 Frame* RemoteFrameClientImpl::parent() const
@@ -84,6 +114,14 @@ Frame* RemoteFrameClientImpl::top() const
     return toCoreFrame(m_webFrame->top());
 }
 
+<<<<<<< HEAD
+=======
+Frame* RemoteFrameClientImpl::previousSibling() const
+{
+    return toCoreFrame(m_webFrame->previousSibling());
+}
+
+>>>>>>> miniblink49
 Frame* RemoteFrameClientImpl::nextSibling() const
 {
     return toCoreFrame(m_webFrame->nextSibling());
@@ -94,6 +132,7 @@ Frame* RemoteFrameClientImpl::firstChild() const
     return toCoreFrame(m_webFrame->firstChild());
 }
 
+<<<<<<< HEAD
 void RemoteFrameClientImpl::frameFocused() const
 {
     if (m_webFrame->client())
@@ -116,6 +155,31 @@ void RemoteFrameClientImpl::reload(FrameLoadType loadType,
         m_webFrame->client()->reload(
             static_cast<WebFrameLoadType>(loadType),
             static_cast<WebClientRedirectPolicy>(clientRedirectPolicy));
+=======
+Frame* RemoteFrameClientImpl::lastChild() const
+{
+    return toCoreFrame(m_webFrame->lastChild());
+}
+
+bool RemoteFrameClientImpl::willCheckAndDispatchMessageEvent(
+    SecurityOrigin* target, MessageEvent* event, LocalFrame* sourceFrame) const
+{
+    if (m_webFrame->client())
+        m_webFrame->client()->postMessageEvent(WebLocalFrameImpl::fromFrame(sourceFrame), m_webFrame, WebSecurityOrigin(target), WebDOMMessageEvent(event));
+    return true;
+}
+
+void RemoteFrameClientImpl::navigate(const ResourceRequest& request, bool shouldReplaceCurrentEntry)
+{
+    if (m_webFrame->client())
+        m_webFrame->client()->navigate(WrappedResourceRequest(request), shouldReplaceCurrentEntry);
+}
+
+void RemoteFrameClientImpl::reload(FrameLoadType loadType, ClientRedirectPolicy clientRedirectPolicy)
+{
+    if (m_webFrame->client())
+        m_webFrame->client()->reload(loadType == FrameLoadTypeReloadFromOrigin, clientRedirectPolicy == ClientRedirect);
+>>>>>>> miniblink49
 }
 
 unsigned RemoteFrameClientImpl::backForwardLength()
@@ -127,6 +191,7 @@ unsigned RemoteFrameClientImpl::backForwardLength()
     return 2;
 }
 
+<<<<<<< HEAD
 void RemoteFrameClientImpl::forwardPostMessage(
     MessageEvent* event,
     PassRefPtr<SecurityOrigin> target,
@@ -138,10 +203,13 @@ void RemoteFrameClientImpl::forwardPostMessage(
             WebSecurityOrigin(std::move(target)), WebDOMMessageEvent(event));
 }
 
+=======
+>>>>>>> miniblink49
 // FIXME: Remove this code once we have input routing in the browser
 // process. See http://crbug.com/339659.
 void RemoteFrameClientImpl::forwardInputEvent(Event* event)
 {
+<<<<<<< HEAD
     // It is possible for a platform event to cause the remote iframe element
     // to be hidden, which destroys the layout object (for instance, a mouse
     // event that moves between elements will trigger a mouseout on the old
@@ -170,11 +238,27 @@ void RemoteFrameClientImpl::forwardInputEvent(Event* event)
 
     // Other or internal Blink events should not be forwarded.
     if (!webEvent || webEvent->type() == WebInputEvent::Undefined)
+=======
+    // This is only called when we have out-of-process iframes, which
+    // need to forward input events across processes.
+    // FIXME: Add a check for out-of-process iframes enabled.
+    OwnPtr<WebInputEvent> webEvent;
+    if (event->isKeyboardEvent())
+        webEvent = adoptPtr(new WebKeyboardEventBuilder(*static_cast<KeyboardEvent*>(event)));
+    else if (event->isMouseEvent())
+        webEvent = adoptPtr(new WebMouseEventBuilder(m_webFrame->frame()->view(), toCoreFrame(m_webFrame)->ownerLayoutObject(), *static_cast<MouseEvent*>(event)));
+    else if (event->isWheelEvent())
+        webEvent = adoptPtr(new WebMouseWheelEventBuilder(m_webFrame->frame()->view(), toCoreFrame(m_webFrame)->ownerLayoutObject(), *static_cast<WheelEvent*>(event)));
+
+    // Other or internal Blink events should not be forwarded.
+    if (!webEvent || webEvent->type == WebInputEvent::Undefined)
+>>>>>>> miniblink49
         return;
 
     m_webFrame->client()->forwardInputEvent(webEvent.get());
 }
 
+<<<<<<< HEAD
 void RemoteFrameClientImpl::frameRectsChanged(const IntRect& frameRect)
 {
     m_webFrame->client()->frameRectsChanged(frameRect);
@@ -198,4 +282,6 @@ void RemoteFrameClientImpl::visibilityChanged(bool visible)
     m_webFrame->client()->visibilityChanged(visible);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

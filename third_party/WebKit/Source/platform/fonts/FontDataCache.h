@@ -41,6 +41,7 @@ namespace blink {
 class SimpleFontData;
 
 struct FontDataCacheKeyHash {
+<<<<<<< HEAD
     STATIC_ONLY(FontDataCacheKeyHash);
     static unsigned hash(const FontPlatformData* platformData)
     {
@@ -62,11 +63,22 @@ struct FontDataCacheKeyHash {
         CHECK(a && b);
 
         return *a == *b;
+=======
+    static unsigned hash(const FontPlatformData& platformData)
+    {
+        return platformData.hash();
+    }
+
+    static bool equal(const FontPlatformData& a, const FontPlatformData& b)
+    {
+        return a == b;
+>>>>>>> miniblink49
     }
 
     static const bool safeToCompareToEmptyOrDeleted = true;
 };
 
+<<<<<<< HEAD
 class FontDataCache {
     USING_FAST_MALLOC(FontDataCache);
     WTF_MAKE_NONCOPYABLE(FontDataCache);
@@ -74,6 +86,27 @@ class FontDataCache {
 public:
     FontDataCache() { }
 
+=======
+struct FontDataCacheKeyTraits : WTF::GenericHashTraits<FontPlatformData> {
+    static const bool emptyValueIsZero = true;
+    static const FontPlatformData& emptyValue()
+    {
+        DEFINE_STATIC_LOCAL(FontPlatformData, key, (0.f, false, false));
+        return key;
+    }
+    static void constructDeletedValue(FontPlatformData& slot, bool)
+    {
+        new (NotNull, &slot) FontPlatformData(WTF::HashTableDeletedValue);
+    }
+    static bool isDeletedValue(const FontPlatformData& value)
+    {
+        return value.isHashTableDeletedValue();
+    }
+};
+
+class FontDataCache {
+public:
+>>>>>>> miniblink49
     PassRefPtr<SimpleFontData> get(const FontPlatformData*, ShouldRetain = Retain);
     bool contains(const FontPlatformData*) const;
     void release(const SimpleFontData*);
@@ -89,7 +122,11 @@ public:
 private:
     bool purgeLeastRecentlyUsed(int count);
 
+<<<<<<< HEAD
     typedef HashMap<const FontPlatformData*, std::pair<RefPtr<SimpleFontData>, unsigned>, FontDataCacheKeyHash> Cache;
+=======
+    typedef HashMap<FontPlatformData, pair<RefPtr<SimpleFontData>, unsigned>, FontDataCacheKeyHash, FontDataCacheKeyTraits> Cache;
+>>>>>>> miniblink49
     Cache m_cache;
     ListHashSet<RefPtr<SimpleFontData>> m_inactiveFontData;
 };

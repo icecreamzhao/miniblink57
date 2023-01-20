@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/device_orientation/DeviceOrientationDispatcher.h"
 
 #include "modules/device_orientation/DeviceOrientationController.h"
@@ -36,6 +40,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 DeviceOrientationDispatcher& DeviceOrientationDispatcher::instance(
     bool absolute)
 {
@@ -56,6 +61,21 @@ DeviceOrientationDispatcher::DeviceOrientationDispatcher(bool absolute)
 }
 
 DeviceOrientationDispatcher::~DeviceOrientationDispatcher() { }
+=======
+DeviceOrientationDispatcher& DeviceOrientationDispatcher::instance()
+{
+    DEFINE_STATIC_LOCAL(Persistent<DeviceOrientationDispatcher>, deviceOrientationDispatcher, (new DeviceOrientationDispatcher()));
+    return *deviceOrientationDispatcher;
+}
+
+DeviceOrientationDispatcher::DeviceOrientationDispatcher()
+{
+}
+
+DeviceOrientationDispatcher::~DeviceOrientationDispatcher()
+{
+}
+>>>>>>> miniblink49
 
 DEFINE_TRACE(DeviceOrientationDispatcher)
 {
@@ -65,28 +85,45 @@ DEFINE_TRACE(DeviceOrientationDispatcher)
 
 void DeviceOrientationDispatcher::startListening()
 {
+<<<<<<< HEAD
     Platform::current()->startListening(getWebPlatformEventType(), this);
+=======
+    Platform::current()->startListening(WebPlatformEventDeviceOrientation, this);
+>>>>>>> miniblink49
 }
 
 void DeviceOrientationDispatcher::stopListening()
 {
+<<<<<<< HEAD
     Platform::current()->stopListening(getWebPlatformEventType());
     m_lastDeviceOrientationData.clear();
 }
 
 void DeviceOrientationDispatcher::didChangeDeviceOrientation(
     const WebDeviceOrientationData& motion)
+=======
+    Platform::current()->stopListening(WebPlatformEventDeviceOrientation);
+    m_lastDeviceOrientationData.clear();
+}
+
+void DeviceOrientationDispatcher::didChangeDeviceOrientation(const WebDeviceOrientationData& motion)
+>>>>>>> miniblink49
 {
     m_lastDeviceOrientationData = DeviceOrientationData::create(motion);
     notifyControllers();
 }
 
+<<<<<<< HEAD
 DeviceOrientationData*
 DeviceOrientationDispatcher::latestDeviceOrientationData()
+=======
+DeviceOrientationData* DeviceOrientationDispatcher::latestDeviceOrientationData()
+>>>>>>> miniblink49
 {
     return m_lastDeviceOrientationData.get();
 }
 
+<<<<<<< HEAD
 WebPlatformEventType DeviceOrientationDispatcher::getWebPlatformEventType()
     const
 {
@@ -94,4 +131,6 @@ WebPlatformEventType DeviceOrientationDispatcher::getWebPlatformEventType()
                         : WebPlatformEventTypeDeviceOrientation;
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

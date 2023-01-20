@@ -17,6 +17,7 @@ namespace internal {
 
 #ifdef ENABLE_SLOW_DCHECKS
 #define SLOW_DCHECK(condition) \
+<<<<<<< HEAD
     CHECK(!v8::internal::FLAG_enable_slow_asserts || (condition))
     V8_EXPORT_PRIVATE extern bool FLAG_enable_slow_asserts;
 #else
@@ -34,3 +35,22 @@ namespace internal {
     DCHECK((size & ::v8::internal::kHeapObjectTagMask) == 0)
 
 #endif // V8_CHECKS_H_
+=======
+  CHECK(!v8::internal::FLAG_enable_slow_asserts || (condition))
+V8_EXPORT_PRIVATE extern bool FLAG_enable_slow_asserts;
+#else
+#define SLOW_DCHECK(condition) ((void) 0)
+static const bool FLAG_enable_slow_asserts = false;
+#endif
+
+}  // namespace internal
+}  // namespace v8
+
+#define DCHECK_TAG_ALIGNED(address) \
+  DCHECK((address & ::v8::internal::kHeapObjectTagMask) == 0)
+
+#define DCHECK_SIZE_TAG_ALIGNED(size) \
+  DCHECK((size & ::v8::internal::kHeapObjectTagMask) == 0)
+
+#endif  // V8_CHECKS_H_
+>>>>>>> miniblink49

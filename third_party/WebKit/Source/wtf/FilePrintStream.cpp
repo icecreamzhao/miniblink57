@@ -23,10 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/FilePrintStream.h"
 
 #include "wtf/PtrUtil.h"
 #include <memory>
+=======
+#include "config.h"
+#include "FilePrintStream.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -43,6 +48,7 @@ FilePrintStream::~FilePrintStream()
     fclose(m_file);
 }
 
+<<<<<<< HEAD
 std::unique_ptr<FilePrintStream> FilePrintStream::open(const char* filename,
     const char* mode)
 {
@@ -51,6 +57,15 @@ std::unique_ptr<FilePrintStream> FilePrintStream::open(const char* filename,
         return std::unique_ptr<FilePrintStream>();
 
     return WTF::makeUnique<FilePrintStream>(file);
+=======
+PassOwnPtr<FilePrintStream> FilePrintStream::open(const char* filename, const char* mode)
+{
+    FILE* file = fopen(filename, mode);
+    if (!file)
+        return PassOwnPtr<FilePrintStream>();
+
+    return adoptPtr(new FilePrintStream(file));
+>>>>>>> miniblink49
 }
 
 void FilePrintStream::vprintf(const char* format, va_list argList)
@@ -64,3 +79,7 @@ void FilePrintStream::flush()
 }
 
 } // namespace WTF
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

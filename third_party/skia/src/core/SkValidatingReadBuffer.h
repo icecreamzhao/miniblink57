@@ -8,35 +8,54 @@
 #ifndef SkValidatingReadBuffer_DEFINED
 #define SkValidatingReadBuffer_DEFINED
 
+<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkPicture.h"
 #include "SkReadBuffer.h"
 #include "SkReader32.h"
 #include "SkRefCnt.h"
 #include "SkWriteBuffer.h"
+=======
+#include "SkRefCnt.h"
+#include "SkBitmapHeap.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkPath.h"
+#include "SkPicture.h"
+#include "SkReader32.h"
+>>>>>>> miniblink49
 
 class SkBitmap;
 
 class SkValidatingReadBuffer : public SkReadBuffer {
 public:
     SkValidatingReadBuffer(const void* data, size_t size);
+<<<<<<< HEAD
     ~SkValidatingReadBuffer() override;
 
     SkReadBuffer* clone(const void* data, size_t size) const override
     {
         return new SkValidatingReadBuffer(data, size);
     }
+=======
+    virtual ~SkValidatingReadBuffer();
+>>>>>>> miniblink49
 
     const void* skip(size_t size) override;
 
     // primitives
     bool readBool() override;
     SkColor readColor() override;
+<<<<<<< HEAD
+=======
+    SkFixed readFixed() override;
+>>>>>>> miniblink49
     int32_t readInt() override;
     SkScalar readScalar() override;
     uint32_t readUInt() override;
     int32_t read32() override;
 
+<<<<<<< HEAD
     // peek
     uint8_t peekByte() override;
 
@@ -45,11 +64,23 @@ public:
 
     // common data structures
     SkFlattenable* readFlattenable(SkFlattenable::Type type) override;
+=======
+    // strings -- the caller is responsible for freeing the string contents
+    void readString(SkString* string) override;
+    void* readEncodedString(size_t* length, SkPaint::TextEncoding encoding) override;
+
+    // common data structures
+    SkFlattenable* readFlattenable(SkFlattenable::Type type) override;
+    void skipFlattenable() override;
+>>>>>>> miniblink49
     void readPoint(SkPoint* point) override;
     void readMatrix(SkMatrix* matrix) override;
     void readIRect(SkIRect* rect) override;
     void readRect(SkRect* rect) override;
+<<<<<<< HEAD
     void readRRect(SkRRect* rrect) override;
+=======
+>>>>>>> miniblink49
     void readRegion(SkRegion* region) override;
     void readPath(SkPath* path) override;
 
@@ -76,8 +107,12 @@ private:
 
     void setMemory(const void* data, size_t size);
 
+<<<<<<< HEAD
     static bool IsPtrAlign4(const void* ptr)
     {
+=======
+    static bool IsPtrAlign4(const void* ptr) {
+>>>>>>> miniblink49
         return SkIsAlign4((uintptr_t)ptr);
     }
 

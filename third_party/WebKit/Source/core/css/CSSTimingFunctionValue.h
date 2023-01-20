@@ -34,12 +34,9 @@ namespace blink {
 
 class CSSCubicBezierTimingFunctionValue : public CSSValue {
 public:
-    static CSSCubicBezierTimingFunctionValue* create(double x1,
-        double y1,
-        double x2,
-        double y2)
+    static PassRefPtrWillBeRawPtr<CSSCubicBezierTimingFunctionValue> create(double x1, double y1, double x2, double y2)
     {
-        return new CSSCubicBezierTimingFunctionValue(x1, y1, x2, y2);
+        return adoptRefWillBeNoop(new CSSCubicBezierTimingFunctionValue(x1, y1, x2, y2));
     }
 
     String customCSSText() const;
@@ -51,10 +48,7 @@ public:
 
     bool equals(const CSSCubicBezierTimingFunctionValue&) const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
-    {
-        CSSValue::traceAfterDispatch(visitor);
-    }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
 
 private:
     CSSCubicBezierTimingFunctionValue(double x1, double y1, double x2, double y2)
@@ -72,49 +66,38 @@ private:
     double m_y2;
 };
 
-DEFINE_CSS_VALUE_TYPE_CASTS(CSSCubicBezierTimingFunctionValue,
-    isCubicBezierTimingFunctionValue());
+DEFINE_CSS_VALUE_TYPE_CASTS(CSSCubicBezierTimingFunctionValue, isCubicBezierTimingFunctionValue());
 
 class CSSStepsTimingFunctionValue : public CSSValue {
 public:
-    static CSSStepsTimingFunctionValue* create(
-        int steps,
-        StepsTimingFunction::StepPosition stepPosition)
+    static PassRefPtrWillBeRawPtr<CSSStepsTimingFunctionValue> create(int steps, StepsTimingFunction::StepAtPosition stepAtPosition)
     {
-        return new CSSStepsTimingFunctionValue(steps, stepPosition);
+        return adoptRefWillBeNoop(new CSSStepsTimingFunctionValue(steps, stepAtPosition));
     }
 
     int numberOfSteps() const { return m_steps; }
-    StepsTimingFunction::StepPosition getStepPosition() const
-    {
-        return m_stepPosition;
-    }
+    StepsTimingFunction::StepAtPosition stepAtPosition() const { return m_stepAtPosition; }
 
     String customCSSText() const;
 
     bool equals(const CSSStepsTimingFunctionValue&) const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
-    {
-        CSSValue::traceAfterDispatch(visitor);
-    }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
 
 private:
-    CSSStepsTimingFunctionValue(int steps,
-        StepsTimingFunction::StepPosition stepPosition)
+    CSSStepsTimingFunctionValue(int steps, StepsTimingFunction::StepAtPosition stepAtPosition)
         : CSSValue(StepsTimingFunctionClass)
         , m_steps(steps)
-        , m_stepPosition(stepPosition)
+        , m_stepAtPosition(stepAtPosition)
     {
     }
 
     int m_steps;
-    StepsTimingFunction::StepPosition m_stepPosition;
+    StepsTimingFunction::StepAtPosition m_stepAtPosition;
 };
 
-DEFINE_CSS_VALUE_TYPE_CASTS(CSSStepsTimingFunctionValue,
-    isStepsTimingFunctionValue());
+DEFINE_CSS_VALUE_TYPE_CASTS(CSSStepsTimingFunctionValue, isStepsTimingFunctionValue());
 
-} // namespace blink
+} // namespace
 
 #endif

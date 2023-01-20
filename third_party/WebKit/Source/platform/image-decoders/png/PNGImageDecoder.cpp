@@ -19,7 +19,11 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
+<<<<<<< HEAD
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+=======
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+>>>>>>> miniblink49
  *
  * Alternatively, the contents of this file may be used under the terms
  * of either the Mozilla Public License Version 1.1, found at
@@ -36,6 +40,7 @@
  * version of this file under any of the LGPL, the MPL or the GPL.
  */
 
+<<<<<<< HEAD
 #include "platform/image-decoders/png/PNGImageDecoder.h"
 
 #include "platform/image-decoders/png/PNGImageReader.h"
@@ -226,6 +231,223 @@ inline sk_sp<SkColorSpace> readColorSpace(png_structp png, png_infop info)
     return nullptr;
 }
 
+=======
+#include "config.h"
+#include "platform/image-decoders/png/PNGImageDecoder.h"
+
+#include "wtf/PassOwnPtr.h"
+
+#include "libpng/png.h"
+#if !defined(PNG_LIBPNG_VER_MAJOR) || !defined(PNG_LIBPNG_VER_MINOR)
+#error version error: compile against a versioned libpng.
+#endif
+#if USE(QCMSLIB)
+#include "qcms.h"
+#endif
+
+#if PNG_LIBPNG_VER_MAJOR > 1 || (PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 4)
+#define JMPBUF(png_ptr) png_jmpbuf(png_ptr)
+#else
+#define JMPBUF(png_ptr) png_ptr->jmpbuf
+#endif
+
+namespace {
+
+inline blink::PNGImageDecoder* imageDecoder(png_structp png)
+{
+    return static_cast<blink::PNGImageDecoder*>(png_get_progressive_ptr(png));
+}
+
+void PNGAPI pngHeaderAvailable(png_structp png, png_infop)
+{
+    imageDecoder(png)->headerAvailable();
+}
+
+void PNGAPI pngRowAvailable(png_structp png, png_bytep row, png_uint_32 rowIndex, int state)
+{
+    imageDecoder(png)->rowAvailable(row, rowIndex, state);
+}
+
+void PNGAPI pngComplete(png_structp png, png_infop)
+{
+    imageDecoder(png)->complete();
+}
+
+void PNGAPI pngFailed(png_structp png, png_const_charp)
+{
+    longjmp(JMPBUF(png), 1);
+}
+
+} // anonymous
+
+namespace blink {
+
+class PNGImageReader {
+    WTF_MAKE_FAST_ALLOCATED(PNGImageReader);
+public:
+    PNGImageReader(PNGImageDecoder* decoder)
+        : m_decoder(decoder)
+        , m_readOffset(0)
+        , m_currentBufferSize(0)
+        , m_decodingSizeOnly(false)
+        , m_hasAlpha(false)
+#if USE(QCMSLIB)
+        , m_transform(0)
+        , m_rowBuffer()
+#endif
+    {
+        m_png = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, pngFailed, 0);
+        m_info = png_create_info_struct(m_png);
+        png_set_progressive_read_fn(m_png, m_decoder, pngHeaderAvailable, pngRowAvailable, pngComplete);
+    }
+
+    ~PNGImageReader()
+    {
+        close();
+    }
+
+    void close()
+    {
+        if (m_png && m_info)
+            // This will zero the pointers.
+            png_destroy_read_struct(&m_png, &m_info, 0);
+#if USE(QCMSLIB)
+        clearColorTransform();
+#endif
+        m_readOffset = 0;
+    }
+
+    bool decode(const SharedBuffer& data, bool sizeOnly)
+    {
+        m_decodingSizeOnly = sizeOnly;
+
+        // We need to do the setjmp here. Otherwise bad things will happen.
+        if (setjmp(JMPBUF(m_png)))
+            return m_decoder->setFailed();
+
+        const char* segment;
+        while (unsigned segmentLength = data.getSomeData(segment, m_readOffset)) {
+            m_readOffset += segmentLength;
+            m_currentBufferSize = m_readOffset;
+            png_process_data(m_png, m_info, reinterpret_cast<png_bytep>(const_cast<char*>(segment)), segmentLength);
+            if (sizeOnly ? m_decoder->isDecodedSizeAvailable() : m_decoder->frameIsCompleteAtIndex(0))
+                return true;
+        }
+
+        return false;
+    }
+
+    png_structp pngPtr() const { return m_png; }
+    png_infop infoPtr() const { return m_info; }
+
+    void setReadOffset(unsigned offset) { m_readOffset = offset; }
+    unsigned currentBufferSize() const { return m_currentBufferSize; }
+    bool decodingSizeOnly() const { return m_decodingSizeOnly; }
+    void setHasAlpha(bool hasAlpha) { m_hasAlpha = hasAlpha; }
+    bool hasAlpha() const { return m_hasAlpha; }
+
+    png_bytep interlaceBuffer() const { return m_interlaceBuffer.get(); }
+    void createInterlaceBuffer(int size) { m_interlaceBuffer = adoptArrayPtr(new png_byte[size]); }
+#if USE(QCMSLIB)
+    png_bytep rowBuffer() const { return m_rowBuffer.get(); }
+    void createRowBuffer(int size) { m_rowBuffer = adoptArrayPtr(new png_byte[size]); }
+    qcms_transform* colorTransform() const { return m_transform; }
+
+    void clearColorTransform()
+    {
+        if (m_transform)
+            qcms_transform_release(m_transform);
+        m_transform = 0;
+    }
+
+    void createColorTransform(const ColorProfile& colorProfile, bool hasAlpha, bool sRGB)
+    {
+        clearColorTransform();
+
+        if (colorProfile.isEmpty() && !sRGB)
+            return;
+        qcms_profile* deviceProfile = ImageDecoder::qcmsOutputDeviceProfile();
+        if (!deviceProfile)
+            return;
+        qcms_profile* inputProfile = 0;
+        if (!colorProfile.isEmpty())
+            inputProfile = qcms_profile_from_memory(colorProfile.data(), colorProfile.size());
+        else
+            inputProfile = qcms_profile_sRGB();
+        if (!inputProfile)
+            return;
+        // We currently only support color profiles for RGB and RGBA images.
+        ASSERT(rgbData == qcms_profile_get_color_space(inputProfile));
+        qcms_data_type dataFormat = hasAlpha ? QCMS_DATA_RGBA_8 : QCMS_DATA_RGB_8;
+        // FIXME: Don't force perceptual intent if the image profile contains an intent.
+        m_transform = qcms_transform_create(inputProfile, dataFormat, deviceProfile, dataFormat, QCMS_INTENT_PERCEPTUAL);
+        qcms_profile_release(inputProfile);
+    }
+#endif
+
+private:
+    png_structp m_png;
+    png_infop m_info;
+    PNGImageDecoder* m_decoder;
+    unsigned m_readOffset;
+    unsigned m_currentBufferSize;
+    bool m_decodingSizeOnly;
+    bool m_hasAlpha;
+    OwnPtr<png_byte[]> m_interlaceBuffer;
+#if USE(QCMSLIB)
+    qcms_transform* m_transform;
+    OwnPtr<png_byte[]> m_rowBuffer;
+#endif
+};
+
+PNGImageDecoder::PNGImageDecoder(ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption colorOptions, size_t maxDecodedBytes)
+    : ImageDecoder(alphaOption, colorOptions, maxDecodedBytes)
+    , m_hasColorProfile(false)
+{
+}
+
+PNGImageDecoder::~PNGImageDecoder()
+{
+}
+
+#if USE(QCMSLIB)
+static void getColorProfile(png_structp png, png_infop info, ColorProfile& colorProfile, bool& sRGB)
+{
+#ifdef PNG_iCCP_SUPPORTED
+    ASSERT(colorProfile.isEmpty());
+    if (png_get_valid(png, info, PNG_INFO_sRGB)) {
+        sRGB = true;
+        return;
+    }
+
+    char* profileName;
+    int compressionType;
+#if (PNG_LIBPNG_VER < 10500)
+    png_charp profile;
+#else
+    png_bytep profile;
+#endif
+    png_uint_32 profileLength;
+    if (!png_get_iCCP(png, info, &profileName, &compressionType, &profile, &profileLength))
+        return;
+
+    // Only accept RGB color profiles from input class devices.
+    bool ignoreProfile = false;
+    char* profileData = reinterpret_cast<char*>(profile);
+    if (profileLength < ImageDecoder::iccColorProfileHeaderLength)
+        ignoreProfile = true;
+    else if (!ImageDecoder::rgbColorProfile(profileData, profileLength))
+        ignoreProfile = true;
+    else if (!ImageDecoder::inputDeviceColorProfile(profileData, profileLength))
+        ignoreProfile = true;
+
+    if (!ignoreProfile)
+        colorProfile.append(profileData, profileLength);
+#endif
+}
+#endif
+
+>>>>>>> miniblink49
 void PNGImageDecoder::headerAvailable()
 {
     png_structp png = m_reader->pngPtr();
@@ -247,8 +469,12 @@ void PNGImageDecoder::headerAvailable()
     }
 
     int bitDepth, colorType, interlaceType, compressionType, filterType, channels;
+<<<<<<< HEAD
     png_get_IHDR(png, info, &width, &height, &bitDepth, &colorType,
         &interlaceType, &compressionType, &filterType);
+=======
+    png_get_IHDR(png, info, &width, &height, &bitDepth, &colorType, &interlaceType, &compressionType, &filterType);
+>>>>>>> miniblink49
 
     // The options we set here match what Mozilla does.
 
@@ -269,6 +495,7 @@ void PNGImageDecoder::headerAvailable()
     if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
         png_set_gray_to_rgb(png);
 
+<<<<<<< HEAD
     if ((colorType & PNG_COLOR_MASK_COLOR) && !ignoresColorSpace()) {
         // We only support color profiles for color PALETTE and RGB[A] PNG.
         // Supporting color profiles for gray-scale images is slightly tricky, at
@@ -296,6 +523,31 @@ void PNGImageDecoder::headerAvailable()
         const double defaultGamma = 2.2;
         double gamma;
         if (!ignoresColorSpace() && png_get_gAMA(png, info, &gamma)) {
+=======
+#if USE(QCMSLIB)
+    if ((colorType & PNG_COLOR_MASK_COLOR) && !m_ignoreGammaAndColorProfile) {
+        // We only support color profiles for color PALETTE and RGB[A] PNG. Supporting
+        // color profiles for gray-scale images is slightly tricky, at least using the
+        // CoreGraphics ICC library, because we expand gray-scale images to RGB but we
+        // do not similarly transform the color profile. We'd either need to transform
+        // the color profile or we'd need to decode into a gray-scale image buffer and
+        // hand that to CoreGraphics.
+        bool sRGB = false;
+        ColorProfile colorProfile;
+        getColorProfile(png, info, colorProfile, sRGB);
+        bool imageHasAlpha = (colorType & PNG_COLOR_MASK_ALPHA) || trnsCount;
+        m_reader->createColorTransform(colorProfile, imageHasAlpha, sRGB);
+        m_hasColorProfile = !!m_reader->colorTransform();
+    }
+#endif
+
+    if (!m_hasColorProfile) {
+        // Deal with gamma and keep it under our control.
+        const double inverseGamma = 0.45455;
+        const double defaultGamma = 2.2;
+        double gamma;
+        if (!m_ignoreGammaAndColorProfile && png_get_gAMA(png, info, &gamma)) {
+>>>>>>> miniblink49
             const double maxGamma = 21474.83;
             if ((gamma <= 0.0) || (gamma > maxGamma)) {
                 gamma = inverseGamma;
@@ -319,9 +571,15 @@ void PNGImageDecoder::headerAvailable()
     m_reader->setHasAlpha(channels == 4);
 
     if (m_reader->decodingSizeOnly()) {
+<<<<<<< HEAD
 // If we only needed the size, halt the reader.
 #if PNG_LIBPNG_VER_MAJOR > 1 || (PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 5)
         // Passing '0' tells png_process_data_pause() not to cache unprocessed data.
+=======
+        // If we only needed the size, halt the reader.
+#if PNG_LIBPNG_VER_MAJOR > 1 || (PNG_LIBPNG_VER_MAJOR == 1 && PNG_LIBPNG_VER_MINOR >= 5)
+        // '0' argument to png_process_data_pause means: Do not cache unprocessed data.
+>>>>>>> miniblink49
         m_reader->setReadOffset(m_reader->currentBufferSize() - png_process_data_pause(png, 0));
 #else
         m_reader->setReadOffset(m_reader->currentBufferSize() - png->buffer_size);
@@ -337,10 +595,16 @@ void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer, unsigned rowIndex, 
 
     // Initialize the framebuffer if needed.
     ImageFrame& buffer = m_frameBufferCache[0];
+<<<<<<< HEAD
     if (buffer.getStatus() == ImageFrame::FrameEmpty) {
         png_structp png = m_reader->pngPtr();
         if (!buffer.setSizeAndColorSpace(size().width(), size().height(),
                 colorSpaceForSkImages())) {
+=======
+    if (buffer.status() == ImageFrame::FrameEmpty) {
+        png_structp png = m_reader->pngPtr();
+        if (!buffer.setSize(size().width(), size().height())) {
+>>>>>>> miniblink49
             longjmp(JMPBUF(png), 1);
             return;
         }
@@ -354,6 +618,18 @@ void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer, unsigned rowIndex, 
             }
         }
 
+<<<<<<< HEAD
+=======
+#if USE(QCMSLIB)
+        if (m_reader->colorTransform()) {
+            m_reader->createRowBuffer(colorChannels * size().width());
+            if (!m_reader->rowBuffer()) {
+                longjmp(JMPBUF(png), 1);
+                return;
+            }
+        }
+#endif
+>>>>>>> miniblink49
         buffer.setStatus(ImageFrame::FramePartial);
         buffer.setHasAlpha(false);
 
@@ -410,6 +686,7 @@ void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer, unsigned rowIndex, 
         png_progressive_combine_row(m_reader->pngPtr(), row, rowBuffer);
     }
 
+<<<<<<< HEAD
     // Write the decoded row pixels to the frame buffer. The repetitive
     // form of the row write loops is for speed.
     ImageFrame::PixelData* const dstRow = buffer.getAddr(0, y);
@@ -461,6 +738,38 @@ void PNGImageDecoder::rowAvailable(unsigned char* rowBuffer, unsigned rowIndex, 
 //             xform->apply(xformColorFormat(), dstRow, xformColorFormat(), dstRow,
 //                 size().width(), kOpaque_SkAlphaType);
 //         }
+=======
+#if USE(QCMSLIB)
+    if (qcms_transform* transform = m_reader->colorTransform()) {
+        qcms_transform_data(transform, row, m_reader->rowBuffer(), size().width());
+        row = m_reader->rowBuffer();
+    }
+#endif
+
+    // Write the decoded row pixels to the frame buffer. The repetitive
+    // form of the row write loops is for speed.
+    ImageFrame::PixelData* address = buffer.getAddr(0, y);
+    unsigned alphaMask = 255;
+    int width = size().width();
+
+    png_bytep pixel = row;
+    if (hasAlpha) {
+        if (buffer.premultiplyAlpha()) {
+            for (int x = 0; x < width; ++x, pixel += 4) {
+                buffer.setRGBAPremultiply(address++, pixel[0], pixel[1], pixel[2], pixel[3]);
+                alphaMask &= pixel[3];
+            }
+        } else {
+            for (int x = 0; x < width; ++x, pixel += 4) {
+                buffer.setRGBARaw(address++, pixel[0], pixel[1], pixel[2], pixel[3]);
+                alphaMask &= pixel[3];
+            }
+        }
+    } else {
+        for (int x = 0; x < width; ++x, pixel += 3) {
+            buffer.setRGBARaw(address++, pixel[0], pixel[1], pixel[2], 255);
+        }
+>>>>>>> miniblink49
     }
 
     if (alphaMask != 255 && !buffer.hasAlpha())
@@ -488,7 +797,11 @@ void PNGImageDecoder::decode(bool onlySize)
         return;
 
     if (!m_reader)
+<<<<<<< HEAD
         m_reader = WTF::makeUnique<PNGImageReader>(this, m_offset);
+=======
+        m_reader = adoptPtr(new PNGImageReader(this));
+>>>>>>> miniblink49
 
     // If we couldn't decode the image but have received all the data, decoding
     // has failed.
@@ -497,7 +810,11 @@ void PNGImageDecoder::decode(bool onlySize)
 
     // If decoding is done or failed, we don't need the PNGImageReader anymore.
     if (isComplete(this) || failed())
+<<<<<<< HEAD
         m_reader.reset();
+=======
+        m_reader.clear();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

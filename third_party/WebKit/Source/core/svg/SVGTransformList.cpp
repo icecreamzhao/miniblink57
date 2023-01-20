@@ -21,32 +21,44 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGTransformList.h"
 
 #include "core/SVGNames.h"
-#include "core/css/CSSFunctionValue.h"
-#include "core/css/CSSIdentifierValue.h"
-#include "core/css/CSSPrimitiveValue.h"
-#include "core/css/CSSValueList.h"
+#include "core/svg/SVGAnimateTransformElement.h"
+#include "core/svg/SVGAnimatedNumber.h"
 #include "core/svg/SVGParserUtilities.h"
 #include "core/svg/SVGTransformDistance.h"
-#include "wtf/text/ParsingUtilities.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-SVGTransformList::SVGTransformList() { }
+inline PassRefPtrWillBeRawPtr<SVGTransformList> toSVGTransformList(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGTransformList::classType());
+    return static_pointer_cast<SVGTransformList>(base.release());
+}
 
-SVGTransformList::~SVGTransformList() { }
+SVGTransformList::SVGTransformList()
+{
+}
 
-SVGTransform* SVGTransformList::consolidate()
+SVGTransformList::~SVGTransformList()
+{
+}
+
+PassRefPtrWillBeRawPtr<SVGTransform> SVGTransformList::consolidate()
 {
     AffineTransform matrix;
     if (!concatenate(matrix))
         return SVGTransform::create();
 
-    return initialize(SVGTransform::create(matrix));
+    RefPtrWillBeRawPtr<SVGTransform> transform = SVGTransform::create(matrix);
+    clear();
+    return appendItem(transform);
 }
 
 bool SVGTransformList::concatenate(AffineTransform& result) const
@@ -64,311 +76,137 @@ bool SVGTransformList::concatenate(AffineTransform& result) const
 
 namespace {
 
-    CSSValueID mapTransformFunction(const SVGTransform& transform)
-    {
-        switch (transform.transformType()) {
-        case kSvgTransformMatrix:
-            return CSSValueMatrix;
-        case kSvgTransformTranslate:
-            return CSSValueTranslate;
-        case kSvgTransformScale:
-            return CSSValueScale;
-        case kSvgTransformRotate:
-            return CSSValueRotate;
-        case kSvgTransformSkewx:
-            return CSSValueSkewX;
-        case kSvgTransformSkewy:
-            return CSSValueSkewY;
-        case kSvgTransformUnknown:
-        default:
-            NOTREACHED();
-        }
-        return CSSValueInvalid;
-    }
-
-    CSSValue* createTransformCSSValue(const SVGTransform& transform)
-    {
-        CSSValueID functionId = mapTransformFunction(transform);
-        CSSFunctionValue* transformValue = CSSFunctionValue::create(functionId);
-        switch (functionId) {
-        case CSSValueRotate: {
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.angle(), CSSPrimitiveValue::UnitType::Degrees));
-            FloatPoint rotationOrigin = transform.rotationCenter();
-            if (!toFloatSize(rotationOrigin).isZero()) {
-                transformValue->append(*CSSPrimitiveValue::create(
-                    rotationOrigin.x(), CSSPrimitiveValue::UnitType::UserUnits));
-                transformValue->append(*CSSPrimitiveValue::create(
-                    rotationOrigin.y(), CSSPrimitiveValue::UnitType::UserUnits));
-            }
-            break;
-        }
-        case CSSValueSkewX:
-        case CSSValueSkewY:
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.angle(), CSSPrimitiveValue::UnitType::Degrees));
-            break;
-        case CSSValueMatrix:
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().a(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().b(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().c(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().d(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().e(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().f(), CSSPrimitiveValue::UnitType::UserUnits));
-            break;
-        case CSSValueScale:
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().a(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().d(), CSSPrimitiveValue::UnitType::UserUnits));
-            break;
-        case CSSValueTranslate:
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().e(), CSSPrimitiveValue::UnitType::UserUnits));
-            transformValue->append(*CSSPrimitiveValue::create(
-                transform.matrix().f(), CSSPrimitiveValue::UnitType::UserUnits));
-            break;
-        default:
-            NOTREACHED();
-        }
-        return transformValue;
-    }
-
-} // namespace
-
-const CSSValue* SVGTransformList::cssValue() const
+template<typename CharType>
+int parseTransformParamList(const CharType*& ptr, const CharType* end, float* values, int required, int optional)
 {
-    // Build a structure of CSSValues from the list we have, mapping functions as
-    // appropriate.
-    // TODO(fs): Eventually we'd want to support the exact same syntax here as in
-    // the property, but there are some issues (crbug.com/577219 for instance)
-    // that complicates things.
-    size_t length = this->length();
-    if (!length)
-        return CSSIdentifierValue::create(CSSValueNone);
-    CSSValueList* list = CSSValueList::createSpaceSeparated();
-    if (length == 1) {
-        list->append(*createTransformCSSValue(*at(0)));
-        return list;
-    }
-    ConstIterator it = begin();
-    ConstIterator itEnd = end();
-    for (; it != itEnd; ++it)
-        list->append(*createTransformCSSValue(**it));
-    return list;
-}
+    int parsedParams = 0;
+    int maxPossibleParams = required + optional;
 
-namespace {
+    bool trailingDelimiter = false;
 
-    template <typename CharType>
-    SVGTransformType parseAndSkipTransformType(const CharType*& ptr,
-        const CharType* end)
-    {
-        if (ptr >= end)
-            return kSvgTransformUnknown;
-
-        if (*ptr == 's') {
-            if (skipToken(ptr, end, "skewX"))
-                return kSvgTransformSkewx;
-            if (skipToken(ptr, end, "skewY"))
-                return kSvgTransformSkewy;
-            if (skipToken(ptr, end, "scale"))
-                return kSvgTransformScale;
-
-            return kSvgTransformUnknown;
-        }
-        if (skipToken(ptr, end, "translate"))
-            return kSvgTransformTranslate;
-        if (skipToken(ptr, end, "rotate"))
-            return kSvgTransformRotate;
-        if (skipToken(ptr, end, "matrix"))
-            return kSvgTransformMatrix;
-
-        return kSvgTransformUnknown;
-    }
-
-    // These should be kept in sync with enum SVGTransformType
-    const unsigned requiredValuesForType[] = { 0, 6, 1, 1, 1, 1, 1 };
-    const unsigned optionalValuesForType[] = { 0, 0, 1, 1, 2, 0, 0 };
-    static_assert(kSvgTransformUnknown == 0,
-        "index of kSvgTransformUnknown has changed");
-    static_assert(kSvgTransformMatrix == 1,
-        "index of kSvgTransformMatrix has changed");
-    static_assert(kSvgTransformTranslate == 2,
-        "index of kSvgTransformTranslate has changed");
-    static_assert(kSvgTransformScale == 3,
-        "index of kSvgTransformScale has changed");
-    static_assert(kSvgTransformRotate == 4,
-        "index of kSvgTransformRotate has changed");
-    static_assert(kSvgTransformSkewx == 5,
-        "index of kSvgTransformSkewx has changed");
-    static_assert(kSvgTransformSkewy == 6,
-        "index of kSvgTransformSkewy has changed");
-    static_assert(WTF_ARRAY_LENGTH(requiredValuesForType) - 1 == kSvgTransformSkewy,
-        "the number of transform types have changed");
-    static_assert(WTF_ARRAY_LENGTH(requiredValuesForType) == WTF_ARRAY_LENGTH(optionalValuesForType),
-        "the arrays should have the same number of elements");
-
-    const unsigned kMaxTransformArguments = 6;
-
-    using TransformArguments = Vector<float, kMaxTransformArguments>;
-
-    template <typename CharType>
-    SVGParseStatus parseTransformArgumentsForType(SVGTransformType type,
-        const CharType*& ptr,
-        const CharType* end,
-        TransformArguments& arguments)
-    {
-        const size_t required = requiredValuesForType[type];
-        const size_t optional = optionalValuesForType[type];
-        const size_t requiredWithOptional = required + optional;
-        ASSERT(requiredWithOptional <= kMaxTransformArguments);
-        ASSERT(arguments.isEmpty());
-
-        bool trailingDelimiter = false;
-
-        while (arguments.size() < requiredWithOptional) {
-            float argumentValue = 0;
-            if (!parseNumber(ptr, end, argumentValue, AllowLeadingWhitespace))
-                break;
-
-            arguments.push_back(argumentValue);
-            trailingDelimiter = false;
-
-            if (arguments.size() == requiredWithOptional)
-                break;
-
-            if (skipOptionalSVGSpaces(ptr, end) && *ptr == ',') {
-                ++ptr;
-                trailingDelimiter = true;
-            }
-        }
-
-        if (arguments.size() != required && arguments.size() != requiredWithOptional)
-            return SVGParseStatus::ExpectedNumber;
-        if (trailingDelimiter)
-            return SVGParseStatus::TrailingGarbage;
-
-        return SVGParseStatus::NoError;
-    }
-
-    SVGTransform* createTransformFromValues(SVGTransformType type,
-        const TransformArguments& arguments)
-    {
-        SVGTransform* transform = SVGTransform::create();
-        switch (type) {
-        case kSvgTransformSkewx:
-            transform->setSkewX(arguments[0]);
+    skipOptionalSVGSpaces(ptr, end);
+    while (parsedParams < maxPossibleParams) {
+        if (!parseNumber(ptr, end, values[parsedParams], DisallowWhitespace))
             break;
-        case kSvgTransformSkewy:
-            transform->setSkewY(arguments[0]);
-            break;
-        case kSvgTransformScale:
-            // Spec: if only one param given, assume uniform scaling.
-            if (arguments.size() == 1)
-                transform->setScale(arguments[0], arguments[0]);
-            else
-                transform->setScale(arguments[0], arguments[1]);
-            break;
-        case kSvgTransformTranslate:
-            // Spec: if only one param given, assume 2nd param to be 0.
-            if (arguments.size() == 1)
-                transform->setTranslate(arguments[0], 0);
-            else
-                transform->setTranslate(arguments[0], arguments[1]);
-            break;
-        case kSvgTransformRotate:
-            if (arguments.size() == 1)
-                transform->setRotate(arguments[0], 0, 0);
-            else
-                transform->setRotate(arguments[0], arguments[1], arguments[2]);
-            break;
-        case kSvgTransformMatrix:
-            transform->setMatrix(AffineTransform(arguments[0], arguments[1],
-                arguments[2], arguments[3],
-                arguments[4], arguments[5]));
-            break;
-        case kSvgTransformUnknown:
-            ASSERT_NOT_REACHED();
-            break;
-        }
-        return transform;
-    }
 
-} // namespace
-
-template <typename CharType>
-SVGParsingError SVGTransformList::parseInternal(const CharType*& ptr,
-    const CharType* end)
-{
-    clear();
-
-    const CharType* start = ptr;
-    bool delimParsed = false;
-    while (skipOptionalSVGSpaces(ptr, end)) {
-        delimParsed = false;
-
-        SVGTransformType transformType = parseAndSkipTransformType(ptr, end);
-        if (transformType == kSvgTransformUnknown)
-            return SVGParsingError(SVGParseStatus::ExpectedTransformFunction,
-                ptr - start);
-
-        if (!skipOptionalSVGSpaces(ptr, end) || *ptr != '(')
-            return SVGParsingError(SVGParseStatus::ExpectedStartOfArguments,
-                ptr - start);
-        ptr++;
-
-        TransformArguments arguments;
-        SVGParseStatus status = parseTransformArgumentsForType(transformType, ptr, end, arguments);
-        if (status != SVGParseStatus::NoError)
-            return SVGParsingError(status, ptr - start);
-        ASSERT(arguments.size() >= requiredValuesForType[transformType]);
-
-        if (!skipOptionalSVGSpaces(ptr, end) || *ptr != ')')
-            return SVGParsingError(SVGParseStatus::ExpectedEndOfArguments,
-                ptr - start);
-        ptr++;
-
-        append(createTransformFromValues(transformType, arguments));
+        ++parsedParams;
 
         if (skipOptionalSVGSpaces(ptr, end) && *ptr == ',') {
             ++ptr;
-            delimParsed = true;
+            skipOptionalSVGSpaces(ptr, end);
+
+            trailingDelimiter = true;
+        } else {
+            trailingDelimiter = false;
         }
     }
-    if (delimParsed)
-        return SVGParsingError(SVGParseStatus::TrailingGarbage, ptr - start);
-    return SVGParseStatus::NoError;
+
+    if (trailingDelimiter || !(parsedParams == required || parsedParams == maxPossibleParams))
+        return -1;
+
+    return parsedParams;
+}
+
+// These should be kept in sync with enum SVGTransformType
+static const int requiredValuesForType[] =  {0, 6, 1, 1, 1, 1, 1};
+static const int optionalValuesForType[] =  {0, 0, 1, 1, 2, 0, 0};
+
+template<typename CharType>
+PassRefPtrWillBeRawPtr<SVGTransform> parseTransformOfType(unsigned type, const CharType*& ptr, const CharType* end)
+{
+    if (type == SVG_TRANSFORM_UNKNOWN)
+        return nullptr;
+
+    int valueCount = 0;
+    float values[] = {0, 0, 0, 0, 0, 0};
+    if ((valueCount = parseTransformParamList(ptr, end, values, requiredValuesForType[type], optionalValuesForType[type])) < 0) {
+        return nullptr;
+    }
+
+    RefPtrWillBeRawPtr<SVGTransform> transform = SVGTransform::create();
+
+    switch (type) {
+    case SVG_TRANSFORM_SKEWX:
+        transform->setSkewX(values[0]);
+        break;
+    case SVG_TRANSFORM_SKEWY:
+        transform->setSkewY(values[0]);
+        break;
+    case SVG_TRANSFORM_SCALE:
+        if (valueCount == 1) // Spec: if only one param given, assume uniform scaling
+            transform->setScale(values[0], values[0]);
+        else
+            transform->setScale(values[0], values[1]);
+        break;
+    case SVG_TRANSFORM_TRANSLATE:
+        if (valueCount == 1) // Spec: if only one param given, assume 2nd param to be 0
+            transform->setTranslate(values[0], 0);
+        else
+            transform->setTranslate(values[0], values[1]);
+        break;
+    case SVG_TRANSFORM_ROTATE:
+        if (valueCount == 1)
+            transform->setRotate(values[0], 0, 0);
+        else
+            transform->setRotate(values[0], values[1], values[2]);
+        break;
+    case SVG_TRANSFORM_MATRIX:
+        transform->setMatrix(AffineTransform(values[0], values[1], values[2], values[3], values[4], values[5]));
+        break;
+    }
+
+    return transform.release();
+}
+
+}
+
+template<typename CharType>
+bool SVGTransformList::parseInternal(const CharType*& ptr, const CharType* end)
+{
+    clear();
+
+    bool delimParsed = false;
+    while (ptr < end) {
+        delimParsed = false;
+        SVGTransformType transformType = SVG_TRANSFORM_UNKNOWN;
+        skipOptionalSVGSpaces(ptr, end);
+
+        if (!parseAndSkipTransformType(ptr, end, transformType))
+            return false;
+
+        if (!skipOptionalSVGSpaces(ptr, end) || *ptr != '(')
+            return false;
+        ptr++;
+
+        RefPtrWillBeRawPtr<SVGTransform> transform = parseTransformOfType(transformType, ptr, end);
+        if (!transform)
+            return false;
+
+        if (!skipOptionalSVGSpaces(ptr, end) || *ptr != ')')
+            return false;
+        ptr++;
+
+        append(transform.release());
+
+        skipOptionalSVGSpaces(ptr, end);
+        if (ptr < end && *ptr == ',') {
+            delimParsed = true;
+            ++ptr;
+            skipOptionalSVGSpaces(ptr, end);
+        }
+    }
+
+    return !delimParsed;
 }
 
 bool SVGTransformList::parse(const UChar*& ptr, const UChar* end)
 {
-    return parseInternal(ptr, end) == SVGParseStatus::NoError;
+    return parseInternal(ptr, end);
 }
 
 bool SVGTransformList::parse(const LChar*& ptr, const LChar* end)
 {
-    return parseInternal(ptr, end) == SVGParseStatus::NoError;
-}
-
-SVGTransformType parseTransformType(const String& string)
-{
-    if (string.isEmpty())
-        return kSvgTransformUnknown;
-    if (string.is8Bit()) {
-        const LChar* ptr = string.characters8();
-        const LChar* end = ptr + string.length();
-        return parseAndSkipTransformType(ptr, end);
-    }
-    const UChar* ptr = string.characters16();
-    const UChar* end = ptr + string.length();
-    return parseAndSkipTransformType(ptr, end);
+    return parseInternal(ptr, end);
 }
 
 String SVGTransformList::valueAsString() const
@@ -387,147 +225,119 @@ String SVGTransformList::valueAsString() const
     return builder.toString();
 }
 
-SVGParsingError SVGTransformList::setValueAsString(const String& value)
+void SVGTransformList::setValueAsString(const String& value, ExceptionState& exceptionState)
 {
     if (value.isEmpty()) {
         clear();
-        return SVGParseStatus::NoError;
+        return;
     }
 
-    SVGParsingError parseError;
+    bool valid = false;
     if (value.is8Bit()) {
         const LChar* ptr = value.characters8();
         const LChar* end = ptr + value.length();
-        parseError = parseInternal(ptr, end);
+        valid = parse(ptr, end);
     } else {
         const UChar* ptr = value.characters16();
         const UChar* end = ptr + value.length();
-        parseError = parseInternal(ptr, end);
+        valid = parse(ptr, end);
     }
 
-    if (parseError != SVGParseStatus::NoError)
+    if (!valid) {
         clear();
-
-    return parseError;
+        exceptionState.throwDOMException(SyntaxError, "Problem parsing transform list=\""+value+"\"");
+    }
 }
 
-SVGPropertyBase* SVGTransformList::cloneForAnimation(
-    const String& value) const
+PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGTransformList::cloneForAnimation(const String& value) const
 {
     ASSERT(RuntimeEnabledFeatures::webAnimationsSVGEnabled());
     return SVGListPropertyHelper::cloneForAnimation(value);
 }
 
-SVGTransformList* SVGTransformList::create(SVGTransformType transformType,
-    const String& value)
+PassRefPtrWillBeRawPtr<SVGTransformList> SVGTransformList::create(SVGTransformType transformType, const String& value)
 {
-    TransformArguments arguments;
-    bool atEndOfValue = false;
-    SVGParseStatus status = SVGParseStatus::ParsingFailed;
+    RefPtrWillBeRawPtr<SVGTransform> transform = nullptr;
     if (value.isEmpty()) {
     } else if (value.is8Bit()) {
         const LChar* ptr = value.characters8();
         const LChar* end = ptr + value.length();
-        status = parseTransformArgumentsForType(transformType, ptr, end, arguments);
-        atEndOfValue = !skipOptionalSVGSpaces(ptr, end);
+        transform = parseTransformOfType(transformType, ptr, end);
     } else {
         const UChar* ptr = value.characters16();
         const UChar* end = ptr + value.length();
-        status = parseTransformArgumentsForType(transformType, ptr, end, arguments);
-        atEndOfValue = !skipOptionalSVGSpaces(ptr, end);
+        transform = parseTransformOfType(transformType, ptr, end);
     }
 
-    SVGTransformList* svgTransformList = SVGTransformList::create();
-    if (atEndOfValue && status == SVGParseStatus::NoError)
-        svgTransformList->append(
-            createTransformFromValues(transformType, arguments));
-    return svgTransformList;
+    RefPtrWillBeRawPtr<SVGTransformList> svgTransformList = SVGTransformList::create();
+    if (transform)
+        svgTransformList->append(transform);
+    return svgTransformList.release();
 }
 
-void SVGTransformList::add(SVGPropertyBase* other, SVGElement* contextElement)
+void SVGTransformList::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement* contextElement)
 {
     if (isEmpty())
         return;
 
-    SVGTransformList* otherList = toSVGTransformList(other);
+    RefPtrWillBeRawPtr<SVGTransformList> otherList = toSVGTransformList(other);
     if (length() != otherList->length())
         return;
 
     ASSERT(length() == 1);
-    SVGTransform* fromTransform = at(0);
-    SVGTransform* toTransform = otherList->at(0);
+    RefPtrWillBeRawPtr<SVGTransform> fromTransform = at(0);
+    RefPtrWillBeRawPtr<SVGTransform> toTransform = otherList->at(0);
 
     ASSERT(fromTransform->transformType() == toTransform->transformType());
-    initialize(
-        SVGTransformDistance::addSVGTransforms(fromTransform, toTransform));
+    clear();
+    append(SVGTransformDistance::addSVGTransforms(fromTransform, toTransform));
 }
 
-void SVGTransformList::calculateAnimatedValue(
-    SVGAnimationElement* animationElement,
-    float percentage,
-    unsigned repeatCount,
-    SVGPropertyBase* fromValue,
-    SVGPropertyBase* toValue,
-    SVGPropertyBase* toAtEndOfDurationValue,
-    SVGElement* contextElement)
+void SVGTransformList::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement)
 {
     ASSERT(animationElement);
-    bool isToAnimation = animationElement->getAnimationMode() == ToAnimation;
+    bool isToAnimation = animationElement->animationMode() == ToAnimation;
 
-    // Spec: To animations provide specific functionality to get a smooth change
-    // from the underlying value to the 'to' attribute value, which conflicts
-    // mathematically with the requirement for additive transform animations to be
-    // post-multiplied. As a consequence, in SVG 1.1 the behavior of to animations
-    // for 'animateTransform' is undefined.
+    // Spec: To animations provide specific functionality to get a smooth change from the underlying value to the
+    // 'to' attribute value, which conflicts mathematically with the requirement for additive transform animations
+    // to be post-multiplied. As a consequence, in SVG 1.1 the behavior of to animations for 'animateTransform' is undefined
     // FIXME: This is not taken into account yet.
-    SVGTransformList* fromList = isToAnimation ? this : toSVGTransformList(fromValue);
-    SVGTransformList* toList = toSVGTransformList(toValue);
-    SVGTransformList* toAtEndOfDurationList = toSVGTransformList(toAtEndOfDurationValue);
+    RefPtrWillBeRawPtr<SVGTransformList> fromList = isToAnimation ? PassRefPtrWillBeRawPtr<SVGTransformList>(this) : toSVGTransformList(fromValue);
+    RefPtrWillBeRawPtr<SVGTransformList> toList = toSVGTransformList(toValue);
+    RefPtrWillBeRawPtr<SVGTransformList> toAtEndOfDurationList = toSVGTransformList(toAtEndOfDurationValue);
 
     size_t toListSize = toList->length();
     if (!toListSize)
         return;
 
-    // Get a reference to the from value before potentially cleaning it out (in
-    // the case of a To animation.)
-    SVGTransform* toTransform = toList->at(0);
-    SVGTransform* effectiveFrom = nullptr;
-    // If there's an existing 'from'/underlying value of the same type use that,
-    // else use a "zero transform".
+    // Get a reference to the from value before potentially cleaning it out (in the case of a To animation.)
+    RefPtrWillBeRawPtr<SVGTransform> toTransform = toList->at(0);
+    RefPtrWillBeRawPtr<SVGTransform> effectiveFrom = nullptr;
+    // If there's an existing 'from'/underlying value of the same type use that, else use a "zero transform".
     if (fromList->length() && fromList->at(0)->transformType() == toTransform->transformType())
         effectiveFrom = fromList->at(0);
     else
-        effectiveFrom = SVGTransform::create(toTransform->transformType(),
-            SVGTransform::ConstructZeroTransform);
+        effectiveFrom = SVGTransform::create(toTransform->transformType(), SVGTransform::ConstructZeroTransform);
 
-    // Never resize the animatedTransformList to the toList size, instead either
-    // clear the list or append to it.
+    // Never resize the animatedTransformList to the toList size, instead either clear the list or append to it.
     if (!isEmpty() && (!animationElement->isAdditive() || isToAnimation))
         clear();
 
-    SVGTransform* currentTransform = SVGTransformDistance(effectiveFrom, toTransform)
-                                         .scaledDistance(percentage)
-                                         .addToSVGTransform(effectiveFrom);
+    RefPtrWillBeRawPtr<SVGTransform> currentTransform = SVGTransformDistance(effectiveFrom, toTransform).scaledDistance(percentage).addToSVGTransform(effectiveFrom);
     if (animationElement->isAccumulated() && repeatCount) {
-        SVGTransform* effectiveToAtEnd = !toAtEndOfDurationList->isEmpty()
-            ? toAtEndOfDurationList->at(0)
-            : SVGTransform::create(toTransform->transformType(),
-                SVGTransform::ConstructZeroTransform);
-        append(SVGTransformDistance::addSVGTransforms(
-            currentTransform, effectiveToAtEnd, repeatCount));
+        RefPtrWillBeRawPtr<SVGTransform> effectiveToAtEnd = !toAtEndOfDurationList->isEmpty() ? PassRefPtrWillBeRawPtr<SVGTransform>(toAtEndOfDurationList->at(0)) : SVGTransform::create(toTransform->transformType(), SVGTransform::ConstructZeroTransform);
+        append(SVGTransformDistance::addSVGTransforms(currentTransform, effectiveToAtEnd, repeatCount));
     } else {
         append(currentTransform);
     }
 }
 
-float SVGTransformList::calculateDistance(SVGPropertyBase* toValue,
-    SVGElement*)
+float SVGTransformList::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, SVGElement*)
 {
-    // FIXME: This is not correct in all cases. The spec demands that each
-    // component (translate x and y for example) is paced separately. To implement
-    // this we need to treat each component as individual animation everywhere.
+    // FIXME: This is not correct in all cases. The spec demands that each component (translate x and y for example)
+    // is paced separately. To implement this we need to treat each component as individual animation everywhere.
 
-    SVGTransformList* toList = toSVGTransformList(toValue);
+    RefPtrWillBeRawPtr<SVGTransformList> toList = toSVGTransformList(toValue);
     if (isEmpty() || length() != toList->length())
         return -1;
 
@@ -536,11 +346,9 @@ float SVGTransformList::calculateDistance(SVGPropertyBase* toValue,
         return -1;
 
     // Spec: http://www.w3.org/TR/SVG/animate.html#complexDistances
-    // Paced animations assume a notion of distance between the various animation
-    // values defined by the 'to', 'from', 'by' and 'values' attributes.  Distance
-    // is defined only for scalar types (such as <length>), colors and the subset
-    // of transformation types that are supported by 'animateTransform'.
+    // Paced animations assume a notion of distance between the various animation values defined by the 'to', 'from', 'by' and 'values' attributes.
+    // Distance is defined only for scalar types (such as <length>), colors and the subset of transformation types that are supported by 'animateTransform'.
     return SVGTransformDistance(at(0), toList->at(0)).distance();
 }
 
-} // namespace blink
+}

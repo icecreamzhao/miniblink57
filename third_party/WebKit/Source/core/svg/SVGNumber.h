@@ -31,7 +31,7 @@
 #ifndef SVGNumber_h
 #define SVGNumber_h
 
-#include "core/svg/SVGParsingError.h"
+#include "bindings/core/v8/ExceptionMessages.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 
 namespace blink {
@@ -44,39 +44,40 @@ public:
     typedef SVGNumberTearOff TearOffType;
     typedef float PrimitiveType;
 
-    static SVGNumber* create(float value = 0.0f) { return new SVGNumber(value); }
+    static PassRefPtrWillBeRawPtr<SVGNumber> create(float value = 0.0f)
+    {
+        return adoptRefWillBeNoop(new SVGNumber(value));
+    }
 
-    virtual SVGNumber* clone() const;
+    virtual PassRefPtrWillBeRawPtr<SVGNumber> clone() const;
 
     float value() const { return m_value; }
     void setValue(float value) { m_value = value; }
 
     String valueAsString() const override;
-    virtual SVGParsingError setValueAsString(const String&);
+    virtual void setValueAsString(const String&, ExceptionState&);
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement* contextElement) override;
-    float calculateDistance(SVGPropertyBase* to,
-        SVGElement* contextElement) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement* contextElement) override;
 
     static AnimatedPropertyType classType() { return AnimatedNumber; }
 
 protected:
     explicit SVGNumber(float);
 
-    template <typename CharType>
-    SVGParsingError parse(const CharType*& ptr, const CharType* end);
+    template<typename CharType>
+    bool parse(const CharType*& ptr, const CharType* end);
 
     float m_value;
 };
 
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGNumber);
+inline PassRefPtrWillBeRawPtr<SVGNumber> toSVGNumber(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGNumber::classType());
+    return static_pointer_cast<SVGNumber>(base.release());
+}
 
 // SVGNumber which also accepts percentage as its value.
 // This is used for <stop> "offset"
@@ -84,13 +85,13 @@ DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGNumber);
 //   offset = "<number> | <percentage>"
 class SVGNumberAcceptPercentage final : public SVGNumber {
 public:
-    static SVGNumberAcceptPercentage* create(float value = 0)
+    static PassRefPtrWillBeRawPtr<SVGNumberAcceptPercentage> create(float value = 0)
     {
-        return new SVGNumberAcceptPercentage(value);
+        return adoptRefWillBeNoop(new SVGNumberAcceptPercentage(value));
     }
 
-    SVGNumber* clone() const override;
-    SVGParsingError setValueAsString(const String&) override;
+    PassRefPtrWillBeRawPtr<SVGNumber> clone() const override;
+    void setValueAsString(const String&, ExceptionState&) override;
 
 private:
     explicit SVGNumberAcceptPercentage(float);

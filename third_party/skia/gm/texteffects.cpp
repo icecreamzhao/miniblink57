@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
 #include "SkLayerRasterizer.h"
@@ -19,6 +20,21 @@ static void r0(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
     rastBuilder->addLayer(p, SkIntToScalar(3), SkIntToScalar(3));
 
     p.setMaskFilter(nullptr);
+=======
+#include "gm.h"
+#include "SkBlurMask.h"
+#include "SkBlurMaskFilter.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkLayerRasterizer.h"
+
+static void r0(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    p.setMaskFilter(SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
+                              SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(3))))->unref();
+    rastBuilder->addLayer(p, SkIntToScalar(3), SkIntToScalar(3));
+
+    p.setMaskFilter(NULL);
+>>>>>>> miniblink49
     p.setStyle(SkPaint::kStroke_Style);
     p.setStrokeWidth(SK_Scalar1);
     rastBuilder->addLayer(p);
@@ -29,13 +45,18 @@ static void r0(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
     rastBuilder->addLayer(p);
 }
 
+<<<<<<< HEAD
 static void r1(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 {
+=======
+static void r1(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+>>>>>>> miniblink49
     rastBuilder->addLayer(p);
 
     p.setAlpha(0x40);
     p.setXfermodeMode(SkXfermode::kSrc_Mode);
     p.setStyle(SkPaint::kStroke_Style);
+<<<<<<< HEAD
     p.setStrokeWidth(SK_Scalar1 * 2);
     rastBuilder->addLayer(p);
 }
@@ -48,14 +69,33 @@ static void r2(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 
     p.setStyle(SkPaint::kStroke_Style);
     p.setStrokeWidth(SK_Scalar1 * 3 / 2);
+=======
+    p.setStrokeWidth(SK_Scalar1*2);
+    rastBuilder->addLayer(p);
+}
+
+static void r2(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    p.setStyle(SkPaint::kStrokeAndFill_Style);
+    p.setStrokeWidth(SK_Scalar1*4);
+    rastBuilder->addLayer(p);
+
+    p.setStyle(SkPaint::kStroke_Style);
+    p.setStrokeWidth(SK_Scalar1*3/2);
+>>>>>>> miniblink49
     p.setXfermodeMode(SkXfermode::kClear_Mode);
     rastBuilder->addLayer(p);
 }
 
+<<<<<<< HEAD
 static void r3(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 {
     p.setStyle(SkPaint::kStroke_Style);
     p.setStrokeWidth(SK_Scalar1 * 3);
+=======
+static void r3(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    p.setStyle(SkPaint::kStroke_Style);
+    p.setStrokeWidth(SK_Scalar1*3);
+>>>>>>> miniblink49
     rastBuilder->addLayer(p);
 
     p.setAlpha(0x20);
@@ -64,44 +104,70 @@ static void r3(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
     rastBuilder->addLayer(p);
 }
 
+<<<<<<< HEAD
 static void r4(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 {
+=======
+static void r4(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+>>>>>>> miniblink49
     p.setAlpha(0x60);
     rastBuilder->addLayer(p, SkIntToScalar(3), SkIntToScalar(3));
 
     p.setAlpha(0xFF);
     p.setXfermodeMode(SkXfermode::kClear_Mode);
+<<<<<<< HEAD
     rastBuilder->addLayer(p, SK_Scalar1 * 3 / 2, SK_Scalar1 * 3 / 2);
 
     p.setXfermode(nullptr);
+=======
+    rastBuilder->addLayer(p, SK_Scalar1*3/2, SK_Scalar1*3/2);
+
+    p.setXfermode(NULL);
+>>>>>>> miniblink49
     rastBuilder->addLayer(p);
 }
 
 #include "SkDiscretePathEffect.h"
 
+<<<<<<< HEAD
 static void r5(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 {
     rastBuilder->addLayer(p);
 
     p.setPathEffect(SkDiscretePathEffect::Make(SK_Scalar1 * 4, SK_Scalar1 * 3));
+=======
+static void r5(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    rastBuilder->addLayer(p);
+
+    p.setPathEffect(SkDiscretePathEffect::Create(SK_Scalar1*4, SK_Scalar1*3))->unref();
+>>>>>>> miniblink49
     p.setXfermodeMode(SkXfermode::kSrcOut_Mode);
     rastBuilder->addLayer(p);
 }
 
+<<<<<<< HEAD
 static void r6(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 {
+=======
+static void r6(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+>>>>>>> miniblink49
     rastBuilder->addLayer(p);
 
     p.setAntiAlias(false);
     SkLayerRasterizer::Builder rastBuilder2;
     r5(&rastBuilder2, p);
+<<<<<<< HEAD
     p.setRasterizer(rastBuilder2.detach());
+=======
+    p.setRasterizer(rastBuilder2.detachRasterizer())->unref();
+>>>>>>> miniblink49
     p.setXfermodeMode(SkXfermode::kClear_Mode);
     rastBuilder->addLayer(p);
 }
 
 #include "Sk2DPathEffect.h"
 
+<<<<<<< HEAD
 static sk_sp<SkPathEffect> MakeDotEffect(SkScalar radius, const SkMatrix& matrix)
 {
     SkPath path;
@@ -131,11 +197,40 @@ static void r8(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 
     p.setPathEffect(nullptr);
     p.setXfermode(nullptr);
+=======
+static SkPathEffect* MakeDotEffect(SkScalar radius, const SkMatrix& matrix) {
+    SkPath path;
+    path.addCircle(0, 0, radius);
+    return SkPath2DPathEffect::Create(matrix, path);
+}
+
+static void r7(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    SkMatrix    lattice;
+    lattice.setScale(SK_Scalar1*6, SK_Scalar1*6, 0, 0);
+    lattice.postSkew(SK_Scalar1/3, 0, 0, 0);
+    p.setPathEffect(MakeDotEffect(SK_Scalar1*4, lattice))->unref();
+    rastBuilder->addLayer(p);
+}
+
+static void r8(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    rastBuilder->addLayer(p);
+
+    SkMatrix    lattice;
+    lattice.setScale(SK_Scalar1*6, SK_Scalar1*6, 0, 0);
+    lattice.postSkew(SK_Scalar1/3, 0, 0, 0);
+    p.setPathEffect(MakeDotEffect(SK_Scalar1*2, lattice))->unref();
+    p.setXfermodeMode(SkXfermode::kClear_Mode);
+    rastBuilder->addLayer(p);
+
+    p.setPathEffect(NULL);
+    p.setXfermode(NULL);
+>>>>>>> miniblink49
     p.setStyle(SkPaint::kStroke_Style);
     p.setStrokeWidth(SK_Scalar1);
     rastBuilder->addLayer(p);
 }
 
+<<<<<<< HEAD
 static void r9(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 {
     rastBuilder->addLayer(p);
@@ -149,6 +244,20 @@ static void r9(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p)
 
     p.setPathEffect(nullptr);
     p.setXfermode(nullptr);
+=======
+static void r9(SkLayerRasterizer::Builder* rastBuilder, SkPaint& p) {
+    rastBuilder->addLayer(p);
+
+    SkMatrix    lattice;
+    lattice.setScale(SK_Scalar1, SK_Scalar1*6, 0, 0);
+    lattice.postRotate(SkIntToScalar(30), 0, 0);
+    p.setPathEffect(SkLine2DPathEffect::Create(SK_Scalar1*2, lattice))->unref();
+    p.setXfermodeMode(SkXfermode::kClear_Mode);
+    rastBuilder->addLayer(p);
+
+    p.setPathEffect(NULL);
+    p.setXfermode(NULL);
+>>>>>>> miniblink49
     p.setStyle(SkPaint::kStroke_Style);
     p.setStrokeWidth(SK_Scalar1);
     rastBuilder->addLayer(p);
@@ -162,16 +271,27 @@ static const raster_proc gRastProcs[] = {
 
 #include "SkXfermode.h"
 
+<<<<<<< HEAD
 static void apply_shader(SkPaint* paint, int index)
 {
     raster_proc proc = gRastProcs[index];
     if (proc) {
+=======
+static void apply_shader(SkPaint* paint, int index) {
+    raster_proc proc = gRastProcs[index];
+    if (proc)
+    {
+>>>>>>> miniblink49
         SkPaint p;
         SkLayerRasterizer::Builder rastBuilder;
 
         p.setAntiAlias(true);
         proc(&rastBuilder, p);
+<<<<<<< HEAD
         paint->setRasterizer(rastBuilder.detach());
+=======
+        paint->setRasterizer(rastBuilder.detachRasterizer())->unref();
+>>>>>>> miniblink49
     }
 
 #if 0
@@ -181,6 +301,7 @@ static void apply_shader(SkPaint* paint, int index)
     paint->setColor(SK_ColorBLUE);
 }
 
+<<<<<<< HEAD
 DEF_SIMPLE_GM(texteffects, canvas, 460, 680)
 {
     canvas->save();
@@ -408,3 +529,53 @@ DEF_SIMPLE_GM(fancyunderlinebars, canvas, 1500, 460)
         canvas->translate(0, textSize * 1.3f);
     }
 }
+=======
+class TextEffectsGM : public skiagm::GM {
+public:
+    TextEffectsGM() {}
+
+protected:
+    SkString onShortName() override {
+        return SkString("texteffects");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(460, 680);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+        canvas->save();
+
+        SkPaint     paint;
+        paint.setAntiAlias(true);
+        sk_tool_utils::set_portable_typeface(&paint);
+        paint.setTextSize(SkIntToScalar(56));
+
+        SkScalar    x = SkIntToScalar(20);
+        SkScalar    y = paint.getTextSize();
+
+        SkString str("Hamburgefons");
+
+        for (int i = 0; i < static_cast<int>(SK_ARRAY_COUNT(gRastProcs)); i++) {
+            apply_shader(&paint, i);
+
+            //  paint.setMaskFilter(NULL);
+            //  paint.setColor(SK_ColorBLACK);
+
+            canvas->drawText(str.c_str(), str.size(), x, y, paint);
+
+            y += paint.getFontSpacing();
+        }
+
+        canvas->restore();
+    }
+
+private:
+    typedef skiagm::GM INHERITED;
+};
+
+//////////////////////////////////////////////////////////////////////////////
+
+static skiagm::GM* MyFactory(void*) { return new TextEffectsGM; }
+static skiagm::GMRegistry reg(MyFactory);
+>>>>>>> miniblink49

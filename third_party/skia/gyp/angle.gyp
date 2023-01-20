@@ -11,7 +11,11 @@
       'type': 'none',
       'conditions': [
         [ 'skia_angle', {
+<<<<<<< HEAD
           'all_dependent_settings': {
+=======
+          'direct_dependent_settings': {
+>>>>>>> miniblink49
             'include_dirs': [
               '../third_party/externals/angle2/include',
             ],

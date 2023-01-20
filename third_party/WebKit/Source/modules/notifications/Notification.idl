@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://notifications.spec.whatwg.org/#enumdef-notificationpermission
 
 enum NotificationPermission {
@@ -44,16 +45,30 @@ enum NotificationPermission {
     ConstructorCallWith=ExecutionContext,
     Constructor(DOMString title, optional NotificationOptions options),
     DependentLifetime,
+=======
+[
+    GarbageCollected,
+    ActiveDOMObject,
+    Constructor(DOMString title, optional NotificationOptions options),
+    ConstructorCallWith=ExecutionContext,
+>>>>>>> miniblink49
     Exposed=(Window,Worker),
     MeasureAs=NotificationCreated,
     RaisesException=Constructor,
     RuntimeEnabled=Notifications,
 ] interface Notification : EventTarget {
+<<<<<<< HEAD
     [CallWith=ExecutionContext, MeasureAs=NotificationPermission] static readonly attribute NotificationPermission permission;
 
     [CallWith=ScriptState, Exposed=Window, MeasureAs=NotificationPermissionRequested] static Promise<NotificationPermission> requestPermission(optional NotificationPermissionCallback deprecatedCallback);
 
     static readonly attribute unsigned long maxActions;
+=======
+    [CallWith=ExecutionContext, MeasureAs=NotificationPermission] static readonly attribute DOMString permission;
+    [CallWith=ExecutionContext, MeasureAs=NotificationPermissionRequested] static void requestPermission(optional NotificationPermissionCallback callback);
+
+    // FIXME: Implement the Notification.get() method.
+>>>>>>> miniblink49
 
     attribute EventHandler onclick;
     [MeasureAs=NotificationShowEvent] attribute EventHandler onshow;
@@ -65,6 +80,7 @@ enum NotificationPermission {
     readonly attribute DOMString lang;
     readonly attribute DOMString body;
     readonly attribute DOMString tag;
+<<<<<<< HEAD
     [RuntimeEnabled=NotificationContentImage] readonly attribute USVString image;
     readonly attribute USVString icon;
     [RuntimeEnabled=NotificationBadge] readonly attribute USVString badge;
@@ -76,6 +92,13 @@ enum NotificationPermission {
     readonly attribute boolean requireInteraction;
     [CallWith=ScriptState, SameObject, SaveSameObject] readonly attribute any data;
     [CallWith=ScriptState, SameObject, SaveSameObject] readonly attribute FrozenArray<NotificationAction> actions;
+=======
+    readonly attribute DOMString icon;
+
+    [RuntimeEnabled=NotificationExperimental] readonly attribute sequence<unsigned long>? vibrate;
+    readonly attribute boolean silent;
+    [CallWith=ScriptState] readonly attribute any data;
+>>>>>>> miniblink49
 
     [MeasureAs=NotificationClosed] void close();
 };

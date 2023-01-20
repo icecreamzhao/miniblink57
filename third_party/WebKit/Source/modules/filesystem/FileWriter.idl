@@ -30,15 +30,25 @@
  */
 
 [
+<<<<<<< HEAD
     ActiveScriptWrappable,
     DependentLifetime,
     NoInterfaceObject,
+=======
+    NoInterfaceObject,
+    ActiveDOMObject,
+    GarbageCollected,
+>>>>>>> miniblink49
 ] interface FileWriter : EventTarget {
     // ready states
     const unsigned short INIT = 0;
     const unsigned short WRITING = 1;
     const unsigned short DONE = 2;
+<<<<<<< HEAD
     [ImplementedAs=getReadyState] readonly attribute unsigned short readyState;
+=======
+    readonly attribute unsigned short readyState;
+>>>>>>> miniblink49
 
     // async write/modify methods
     [RaisesException] void write(Blob data);
@@ -47,7 +57,11 @@
 
     [RaisesException] void abort();
 
+<<<<<<< HEAD
     readonly attribute DOMException? error;
+=======
+    readonly attribute FileError error;
+>>>>>>> miniblink49
     readonly attribute long long position;
     readonly attribute long long length;
 

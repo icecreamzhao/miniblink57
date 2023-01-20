@@ -35,7 +35,13 @@ typedef DOMString KeyUsage;
 typedef (Dictionary or DOMString) AlgorithmIdentifier;
 
 [
+<<<<<<< HEAD
     Exposed=(Window,Worker),
+=======
+    GarbageCollected,
+    Exposed=(Window,Worker),
+    TypeChecking=Interface,
+>>>>>>> miniblink49
 ] interface SubtleCrypto {
     [CallWith=ScriptState, MeasureAs=SubtleCryptoEncrypt] Promise encrypt(AlgorithmIdentifier algorithm, CryptoKey key, BufferSource data);
     [CallWith=ScriptState, MeasureAs=SubtleCryptoDecrypt] Promise decrypt(AlgorithmIdentifier algorithm, CryptoKey key, BufferSource data);

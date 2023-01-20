@@ -33,11 +33,17 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class MODULES_EXPORT SpeechRecognitionAlternative final
     : public GarbageCollectedFinalized<SpeechRecognitionAlternative>,
       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+
+class MODULES_EXPORT SpeechRecognitionAlternative final : public GarbageCollectedFinalized<SpeechRecognitionAlternative>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static SpeechRecognitionAlternative* create(const String&, double);
 

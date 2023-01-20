@@ -13,6 +13,7 @@
 namespace v8 {
 namespace base {
 
+<<<<<<< HEAD
     class V8_BASE_EXPORT SysInfo final {
     public:
         // Returns the number of logical processors/core on the current machine.
@@ -30,3 +31,22 @@ namespace base {
 } // namespace v8
 
 #endif // V8_BASE_SYS_INFO_H_
+=======
+class V8_BASE_EXPORT SysInfo final {
+ public:
+  // Returns the number of logical processors/core on the current machine.
+  static int NumberOfProcessors();
+
+  // Returns the number of bytes of physical memory on the current machine.
+  static int64_t AmountOfPhysicalMemory();
+
+  // Returns the number of bytes of virtual memory of this process. A return
+  // value of zero means that there is no limit on the available virtual memory.
+  static int64_t AmountOfVirtualMemory();
+};
+
+}  // namespace base
+}  // namespace v8
+
+#endif  // V8_BASE_SYS_INFO_H_
+>>>>>>> miniblink49

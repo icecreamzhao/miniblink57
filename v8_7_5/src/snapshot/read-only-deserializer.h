@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     // Deserializes the read-only blob, creating the read-only roots and the
     // Read-only object cache used by the other deserializers.
     class ReadOnlyDeserializer final : public Deserializer {
@@ -28,3 +29,20 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_SNAPSHOT_READ_ONLY_DESERIALIZER_H_
+=======
+// Deserializes the read-only blob, creating the read-only roots and the
+// Read-only object cache used by the other deserializers.
+class ReadOnlyDeserializer final : public Deserializer {
+ public:
+  explicit ReadOnlyDeserializer(const SnapshotData* data)
+      : Deserializer(data, false) {}
+
+  // Deserialize the snapshot into an empty heap.
+  void DeserializeInto(Isolate* isolate);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_SNAPSHOT_READ_ONLY_DESERIALIZER_H_
+>>>>>>> miniblink49

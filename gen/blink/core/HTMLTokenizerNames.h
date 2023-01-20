@@ -5,24 +5,22 @@
 #ifndef HTMLTokenizerNames_h
 #define HTMLTokenizerNames_h
 
-#include "platform/PlatformExport.h"
 #include "wtf/text/AtomicString.h"
+#include "platform/PlatformExport.h"
 
 // Generated from:
-// - ../../third_party/WebKit/Source/core/html/parser/HTMLTokenizerNames.in
+// - html/parser/HTMLTokenizerNames.in
 
 namespace blink {
 namespace HTMLTokenizerNames {
 
-    extern const WTF::AtomicString& doctype;
-    extern const WTF::AtomicString& system;
-    extern const WTF::AtomicString& cdata;
-    extern const WTF::AtomicString& dashDash;
-    extern const WTF::AtomicString& publicString;
+extern const WTF::AtomicString& doctype;
+extern const WTF::AtomicString& system;
+extern const WTF::AtomicString& cdata;
+extern const WTF::AtomicString& dashDash;
+extern const WTF::AtomicString& publicString;
 
-    const unsigned HTMLTokenizerNamesCount = 5;
-
-    void init();
+void init();
 
 } // HTMLTokenizerNames
 } // namespace blink

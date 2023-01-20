@@ -26,10 +26,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "core/dom/AXObjectCache.h"
+#include "config.h"
 
-#include "wtf/PtrUtil.h"
-#include <memory>
+#include "core/dom/AXObjectCache.h"
 
 namespace blink {
 
@@ -37,24 +36,27 @@ AXObjectCache::AXObjectCacheCreateFunction AXObjectCache::m_createFunction = nul
 
 void AXObjectCache::init(AXObjectCacheCreateFunction function)
 {
-    DCHECK(!m_createFunction);
+    ASSERT(!m_createFunction);
     m_createFunction = function;
 }
 
-AXObjectCache* AXObjectCache::create(Document& document)
+PassOwnPtrWillBeRawPtr<AXObjectCache> AXObjectCache::create(Document& document)
 {
-    DCHECK(m_createFunction);
-    return m_createFunction(document);
+    ASSERT(m_createFunction);
+    return (m_createFunction)(document);
 }
 
-AXObjectCache::AXObjectCache() { }
-
-AXObjectCache::~AXObjectCache() { }
-
-std::unique_ptr<ScopedAXObjectCache> ScopedAXObjectCache::create(
-    Document& document)
+AXObjectCache::AXObjectCache()
 {
-    return WTF::wrapUnique(new ScopedAXObjectCache(document));
+}
+
+AXObjectCache::~AXObjectCache()
+{
+}
+
+PassOwnPtr<ScopedAXObjectCache> ScopedAXObjectCache::create(Document& document)
+{
+    return adoptPtr(new ScopedAXObjectCache(document));
 }
 
 ScopedAXObjectCache::ScopedAXObjectCache(Document& document)
@@ -75,7 +77,7 @@ AXObjectCache* ScopedAXObjectCache::get()
     if (m_cache)
         return m_cache.get();
     AXObjectCache* cache = m_document->axObjectCache();
-    DCHECK(cache);
+    ASSERT(cache);
     return cache;
 }
 

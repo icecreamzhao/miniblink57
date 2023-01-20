@@ -38,7 +38,6 @@ enum V8CacheOptions {
     V8CacheOptionsNone, // V8 caching turned off.
     V8CacheOptionsParse, // Use parser caching.
     V8CacheOptionsCode, // Use code caching.
-    V8CacheOptionsAlways, // Generate the code cache in the first load.
 };
 
 } // namespace blink

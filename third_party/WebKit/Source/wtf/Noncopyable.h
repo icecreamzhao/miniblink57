@@ -21,9 +21,16 @@
 #ifndef WTF_Noncopyable_h
 #define WTF_Noncopyable_h
 
+<<<<<<< HEAD
 #define WTF_MAKE_NONCOPYABLE(ClassName)   \
 private:                                  \
     ClassName(const ClassName&) = delete; \
     ClassName& operator=(const ClassName&) = delete
+=======
+#define WTF_MAKE_NONCOPYABLE(ClassName) \
+    private: \
+        ClassName(const ClassName&) = delete; \
+        ClassName& operator=(const ClassName&) = delete
+>>>>>>> miniblink49
 
 #endif // WTF_Noncopyable_h

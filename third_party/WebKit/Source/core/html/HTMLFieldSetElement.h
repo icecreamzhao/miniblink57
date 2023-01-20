@@ -29,28 +29,30 @@
 
 namespace blink {
 
-class HTMLCollection;
+class HTMLFormControlsCollection;
 
 class CORE_EXPORT HTMLFieldSetElement final : public HTMLFormControlElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static HTMLFieldSetElement* create(Document&);
+    static PassRefPtrWillBeRawPtr<HTMLFieldSetElement> create(Document&, HTMLFormElement*);
+    DECLARE_VIRTUAL_TRACE();
     HTMLLegendElement* legend() const;
-    HTMLCollection* elements();
+
+    PassRefPtrWillBeRawPtr<HTMLFormControlsCollection> elements();
+
+    const FormAssociatedElement::List& associatedElements() const;
 
 protected:
     void disabledAttributeChanged() override;
 
 private:
-    explicit HTMLFieldSetElement(Document&);
+    HTMLFieldSetElement(Document&, HTMLFormElement*);
 
     bool isEnumeratable() const override { return true; }
     bool supportsFocus() const override;
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
     const AtomicString& formControlType() const override;
     bool recalcWillValidate() const override { return false; }
-    int tabIndex() const final;
     bool matchesValidityPseudoClasses() const final;
     bool isValidElement() final;
     void childrenChanged(const ChildrenChange&) override;
@@ -58,7 +60,12 @@ private:
     bool isSubmittableElement() override;
     bool alwaysCreateUserAgentShadowRoot() const override { return false; }
 
-    Element* invalidateDescendantDisabledStateAndFindFocusedOne(Element& base);
+    static void invalidateDisabledStateUnder(Element&);
+    void refreshElementsIfNeeded() const;
+
+    mutable FormAssociatedElement::List m_associatedElements;
+    // When dom tree is modified, we have to refresh the m_associatedElements array.
+    mutable uint64_t m_documentVersion;
 };
 
 } // namespace blink

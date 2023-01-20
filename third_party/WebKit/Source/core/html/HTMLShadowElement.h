@@ -38,7 +38,6 @@ namespace blink {
 
 class HTMLShadowElement final : public InsertionPoint {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLShadowElement);
     ~HTMLShadowElement() override;
@@ -47,8 +46,7 @@ public:
 
 private:
     explicit HTMLShadowElement(Document&);
-    InsertionNotificationRequest insertedInto(
-        ContainerNode* insertionPoint) override;
+    InsertionNotificationRequest insertedInto(ContainerNode* insertionPoint) override;
 };
 
 } // namespace blink

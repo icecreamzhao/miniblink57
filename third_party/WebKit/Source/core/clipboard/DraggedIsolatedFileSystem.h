@@ -15,15 +15,14 @@ class DataObject;
 
 class CORE_EXPORT DraggedIsolatedFileSystem {
     WTF_MAKE_NONCOPYABLE(DraggedIsolatedFileSystem);
-
 public:
     DraggedIsolatedFileSystem() { }
     virtual ~DraggedIsolatedFileSystem() { }
 
-    using FileSystemIdPreparationCallback = void (*)(DataObject*);
+    using FileSystemIdPreparationCallback = void(*)(DataObject*, const String&);
     static void init(FileSystemIdPreparationCallback);
 
-    static void prepareForDataObject(DataObject*);
+    static void prepareForDataObject(DataObject*, const String& filesystemId);
 
 private:
     static FileSystemIdPreparationCallback s_prepareCallback;

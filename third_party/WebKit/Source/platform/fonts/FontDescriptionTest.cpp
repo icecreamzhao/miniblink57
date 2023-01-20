@@ -23,6 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/fonts/FontDescription.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -30,11 +31,26 @@
 
 namespace blink {
 
+=======
+#include "config.h"
+
+#include "platform/fonts/FontDescription.h"
+
+#include <gtest/gtest.h>
+
+namespace blink {
+
+
+>>>>>>> miniblink49
 static inline void assertDescriptionMatchesMask(FontDescription& source, FontTraitsBitfield bitfield)
 {
     FontDescription target;
     target.setTraits(FontTraits(bitfield));
     EXPECT_EQ(source.style(), target.style());
+<<<<<<< HEAD
+=======
+    EXPECT_EQ(source.variant(), target.variant());
+>>>>>>> miniblink49
     EXPECT_EQ(source.weight(), target.weight());
     EXPECT_EQ(source.stretch(), target.stretch());
 }
@@ -43,66 +59,115 @@ TEST(FontDescriptionTest, TestFontTraits)
 {
     FontDescription source;
     source.setStyle(FontStyleNormal);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeightNormal);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleNormal);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeightNormal);
     source.setStretch(FontStretchExtraCondensed);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight900);
     source.setStretch(FontStretchUltraExpanded);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantSmallCaps);
+>>>>>>> miniblink49
     source.setWeight(FontWeight100);
     source.setStretch(FontStretchExtraExpanded);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight900);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight800);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight700);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight600);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight500);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight400);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight300);
     source.setStretch(FontStretchUltraExpanded);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
+<<<<<<< HEAD
+=======
+    source.setVariant(FontVariantNormal);
+>>>>>>> miniblink49
     source.setWeight(FontWeight200);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 }
 
+<<<<<<< HEAD
 TEST(FontDescriptionTest, TestHashCollision)
 {
     FontWeight weights[] = {
@@ -149,4 +214,6 @@ TEST(FontDescriptionTest, TestHashCollision)
     }
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

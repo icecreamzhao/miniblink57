@@ -30,9 +30,18 @@
 
 #include "platform/WebThreadSupportingGC.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "wtf/HashMap.h"
 #include "wtf/ThreadingPrimitives.h"
 #include <memory>
+=======
+#include "wtf/Deque.h"
+#include "wtf/HashMap.h"
+#include "wtf/HashSet.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/ThreadingPrimitives.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -40,7 +49,11 @@ class Database;
 class DatabaseTask;
 class SQLTransactionClient;
 class SQLTransactionCoordinator;
+<<<<<<< HEAD
 class WaitableEvent;
+=======
+class TaskSynchronizer;
+>>>>>>> miniblink49
 
 class DatabaseThread : public GarbageCollectedFinalized<DatabaseThread> {
 public:
@@ -48,6 +61,7 @@ public:
     ~DatabaseThread();
     DECLARE_TRACE();
 
+<<<<<<< HEAD
     // Callable only from the main thread.
     void start();
     void terminate();
@@ -57,10 +71,19 @@ public:
     bool isDatabaseThread() const;
 
     // Callable only from the database thread.
+=======
+    void start();
+    void terminate();
+    bool terminationRequested() const;
+
+    void scheduleTask(PassOwnPtr<DatabaseTask>);
+
+>>>>>>> miniblink49
     void recordDatabaseOpen(Database*);
     void recordDatabaseClosed(Database*);
     bool isDatabaseOpen(Database*);
 
+<<<<<<< HEAD
     SQLTransactionClient* transactionClient()
     {
         return m_transactionClient.get();
@@ -69,6 +92,12 @@ public:
     {
         return m_transactionCoordinator.get();
     }
+=======
+    bool isDatabaseThread() { return m_thread && m_thread->isCurrentThread(); }
+
+    SQLTransactionClient* transactionClient() { return m_transactionClient.get(); }
+    SQLTransactionCoordinator* transactionCoordinator() { return m_transactionCoordinator.get(); }
+>>>>>>> miniblink49
 
 private:
     DatabaseThread();
@@ -77,6 +106,7 @@ private:
     void cleanupDatabaseThread();
     void cleanupDatabaseThreadCompleted();
 
+<<<<<<< HEAD
     std::unique_ptr<WebThreadSupportingGC> m_thread;
 
     // This set keeps track of the open databases that have been used on this
@@ -89,6 +119,20 @@ private:
     WaitableEvent* m_cleanupSync;
 
     Mutex m_terminationRequestedMutex;
+=======
+    OwnPtr<WebThreadSupportingGC> m_thread;
+
+    // This set keeps track of the open databases that have been used on this thread.
+    // This must be updated in the database thread though it is constructed and
+    // destructed in the context thread.
+    HeapHashSet<Member<Database>> m_openDatabaseSet;
+
+    OwnPtr<SQLTransactionClient> m_transactionClient;
+    Member<SQLTransactionCoordinator> m_transactionCoordinator;
+    TaskSynchronizer* m_cleanupSync;
+
+    mutable Mutex m_terminationRequestedMutex;
+>>>>>>> miniblink49
     bool m_terminationRequested;
 };
 

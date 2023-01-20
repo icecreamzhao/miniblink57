@@ -17,6 +17,7 @@
     implemented privately in GrSurface with a inline public method here). */
 class GrSurfacePriv {
 public:
+<<<<<<< HEAD
     /** Helpers used in read/write pixels implementations. The paramters are adjusted so that the
         read/write respects the bounds of a surface. If the input *rowBytes is 0 it will be
         the tight row bytes (based on width and bpp) on output. */
@@ -32,6 +33,8 @@ public:
         int* left, int* top, int* width, int* height,
         const void** data,
         size_t* rowBytes);
+=======
+>>>>>>> miniblink49
     /**
      * Derive a SkImageInfo from the surface's descriptor. The caller must provide the alpha type as
      * GrSurface has no equivalent.
@@ -49,10 +52,14 @@ public:
     bool hasPendingIO() const { return fSurface->hasPendingIO(); }
 
 private:
+<<<<<<< HEAD
     explicit GrSurfacePriv(GrSurface* surface)
         : fSurface(surface)
     {
     }
+=======
+    explicit GrSurfacePriv(GrSurface* surface) : fSurface(surface) {}
+>>>>>>> miniblink49
     GrSurfacePriv(const GrSurfacePriv&); // unimpl
     GrSurfacePriv& operator=(const GrSurfacePriv&); // unimpl
 
@@ -67,8 +74,12 @@ private:
 
 inline GrSurfacePriv GrSurface::surfacePriv() { return GrSurfacePriv(this); }
 
+<<<<<<< HEAD
 inline const GrSurfacePriv GrSurface::surfacePriv() const
 {
+=======
+inline const GrSurfacePriv GrSurface::surfacePriv() const {
+>>>>>>> miniblink49
     return GrSurfacePriv(const_cast<GrSurface*>(this));
 }
 

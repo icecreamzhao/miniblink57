@@ -29,12 +29,17 @@
 
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatRectOutsets.h"
+<<<<<<< HEAD
 #include "platform/geometry/IntRect.h"
 #include "third_party/skia/include/core/SkRect.h"
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
 #include <iosfwd>
+=======
+#include "third_party/skia/include/core/SkRect.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 #if OS(MACOSX)
 typedef struct CGRect CGRect;
@@ -44,16 +49,23 @@ typedef struct CGRect CGRect;
 #endif
 #endif
 
+<<<<<<< HEAD
 namespace gfx {
 class RectF;
 }
 
 namespace blink {
 
+=======
+namespace blink {
+
+class IntRect;
+>>>>>>> miniblink49
 class LayoutRect;
 class LayoutSize;
 
 class PLATFORM_EXPORT FloatRect {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -79,6 +91,24 @@ public:
         double y,
         double width,
         double height);
+=======
+public:
+    enum ContainsMode {
+        InsideOrOnStroke,
+        InsideButNotOnStroke
+    };
+
+    FloatRect() { }
+    FloatRect(const FloatPoint& location, const FloatSize& size)
+        : m_location(location), m_size(size) { }
+    FloatRect(float x, float y, float width, float height)
+        : m_location(FloatPoint(x, y)), m_size(FloatSize(width, height)) { }
+    FloatRect(const IntRect&);
+    FloatRect(const LayoutRect&);
+    FloatRect(const SkRect&);
+
+    static FloatRect narrowPrecision(double x, double y, double width, double height);
+>>>>>>> miniblink49
 
     FloatPoint location() const { return m_location; }
     FloatSize size() const { return m_size; }
@@ -102,18 +132,26 @@ public:
     bool isZero() const { return m_size.isZero(); }
     bool isExpressibleAsIntRect() const;
 
+<<<<<<< HEAD
     FloatPoint center() const
     {
         return FloatPoint(x() + width() / 2, y() + height() / 2);
     }
+=======
+    FloatPoint center() const { return FloatPoint(x() + width() / 2, y() + height() / 2); }
+>>>>>>> miniblink49
 
     void move(const FloatSize& delta) { m_location += delta; }
     void move(const LayoutSize&);
     void move(const IntSize&);
+<<<<<<< HEAD
     void moveBy(const FloatPoint& delta)
     {
         m_location.move(delta.x(), delta.y());
     }
+=======
+    void moveBy(const FloatPoint& delta) { m_location.move(delta.x(), delta.y()); }
+>>>>>>> miniblink49
     void move(float dx, float dy) { m_location.move(dx, dy); }
 
     void expand(const FloatSize& size) { m_size += size; }
@@ -121,8 +159,12 @@ public:
     void expand(const FloatRectOutsets& outsets)
     {
         m_location.move(-outsets.left(), -outsets.top());
+<<<<<<< HEAD
         m_size.expand(outsets.left() + outsets.right(),
             outsets.top() + outsets.bottom());
+=======
+        m_size.expand(outsets.left() + outsets.right(), outsets.top() + outsets.bottom());
+>>>>>>> miniblink49
     }
 
     void contract(const FloatSize& size) { m_size -= size; }
@@ -152,6 +194,7 @@ public:
     }
 
     FloatPoint minXMinYCorner() const { return m_location; } // typically topLeft
+<<<<<<< HEAD
     FloatPoint maxXMinYCorner() const
     {
         return FloatPoint(m_location.x() + m_size.width(), m_location.y());
@@ -165,6 +208,11 @@ public:
         return FloatPoint(m_location.x() + m_size.width(),
             m_location.y() + m_size.height());
     } // typically bottomRight
+=======
+    FloatPoint maxXMinYCorner() const { return FloatPoint(m_location.x() + m_size.width(), m_location.y()); } // typically topRight
+    FloatPoint minXMaxYCorner() const { return FloatPoint(m_location.x(), m_location.y() + m_size.height()); } // typically bottomLeft
+    FloatPoint maxXMaxYCorner() const { return FloatPoint(m_location.x() + m_size.width(), m_location.y() + m_size.height()); } // typically bottomRight
+>>>>>>> miniblink49
 
     bool intersects(const FloatRect&) const;
     bool contains(const FloatRect&) const;
@@ -176,9 +224,14 @@ public:
     void uniteIfNonZero(const FloatRect&);
     void extend(const FloatPoint&);
 
+<<<<<<< HEAD
     // Note, this doesn't match what IntRect::contains(IntPoint&) does; the int
     // version is really checking for containment of 1x1 rect, but that doesn't
     // make sense with floats.
+=======
+    // Note, this doesn't match what IntRect::contains(IntPoint&) does; the int version
+    // is really checking for containment of 1x1 rect, but that doesn't make sense with floats.
+>>>>>>> miniblink49
     bool contains(float px, float py) const
     {
         return px >= x() && px <= maxX() && py >= y() && py <= maxY();
@@ -194,6 +247,7 @@ public:
         m_location.setY(m_location.y() - dy);
         m_size.setHeight(m_size.height() + dy + dy);
     }
+<<<<<<< HEAD
     void inflate(float d)
     {
         inflateX(d);
@@ -208,6 +262,13 @@ public:
     }
 
     float squaredDistanceTo(const FloatPoint&) const;
+=======
+    void inflate(float d) { inflateX(d); inflateY(d); }
+    void scale(float s) { scale(s, s); }
+    void scale(float sx, float sy);
+
+    FloatRect transposedRect() const { return FloatRect(m_location.transposedPoint(), m_size.transposedSize()); }
+>>>>>>> miniblink49
 
 #if OS(MACOSX)
     FloatRect(const CGRect&);
@@ -218,6 +279,7 @@ public:
 #endif
 #endif
 
+<<<<<<< HEAD
     operator SkRect() const
     {
         return SkRect::MakeXYWH(x(), y(), width(), height());
@@ -230,14 +292,27 @@ public:
 
     String toString() const;
 
+=======
+    operator SkRect() const { return SkRect::MakeXYWH(x(), y(), width(), height()); }
+
+#ifndef NDEBUG
+    // Prints the rect to the screen.
+    void show() const;
+#endif
+
+>>>>>>> miniblink49
 private:
     FloatPoint m_location;
     FloatSize m_size;
 
+<<<<<<< HEAD
     void setLocationAndSizeFromEdges(float left,
         float top,
         float right,
         float bottom)
+=======
+    void setLocationAndSizeFromEdges(float left, float top, float right, float bottom)
+>>>>>>> miniblink49
     {
         m_location.set(left, top);
         m_size.setWidth(right - left);
@@ -259,7 +334,11 @@ inline FloatRect unionRect(const FloatRect& a, const FloatRect& b)
     return c;
 }
 
+<<<<<<< HEAD
 PLATFORM_EXPORT FloatRect unionRect(const Vector<FloatRect>&);
+=======
+FloatRect unionRect(const Vector<FloatRect>&);
+>>>>>>> miniblink49
 
 inline FloatRect& operator+=(FloatRect& a, const FloatRect& b)
 {
@@ -286,6 +365,7 @@ inline bool operator!=(const FloatRect& a, const FloatRect& b)
     return a.location() != b.location() || a.size() != b.size();
 }
 
+<<<<<<< HEAD
 inline IntRect enclosingIntRect(const FloatRect& rect)
 {
     IntPoint location = flooredIntPoint(rect.minXMinYCorner());
@@ -293,6 +373,9 @@ inline IntRect enclosingIntRect(const FloatRect& rect)
 
     return IntRect(location, maxPoint - location);
 }
+=======
+PLATFORM_EXPORT IntRect enclosingIntRect(const FloatRect&);
+>>>>>>> miniblink49
 
 // Returns a valid IntRect contained within the given FloatRect.
 PLATFORM_EXPORT IntRect enclosedIntRect(const FloatRect&);
@@ -300,6 +383,7 @@ PLATFORM_EXPORT IntRect enclosedIntRect(const FloatRect&);
 PLATFORM_EXPORT IntRect roundedIntRect(const FloatRect&);
 
 // Map supplied rect from srcRect to an equivalent rect in destRect.
+<<<<<<< HEAD
 PLATFORM_EXPORT FloatRect mapRect(const FloatRect&,
     const FloatRect& srcRect,
     const FloatRect& destRect);
@@ -309,5 +393,10 @@ PLATFORM_EXPORT FloatRect mapRect(const FloatRect&,
 void PrintTo(const FloatRect&, std::ostream*);
 
 } // namespace blink
+=======
+PLATFORM_EXPORT FloatRect mapRect(const FloatRect&, const FloatRect& srcRect, const FloatRect& destRect);
+
+}
+>>>>>>> miniblink49
 
 #endif

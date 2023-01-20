@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkPDFUtils_DEFINED
 #define SkPDFUtils_DEFINED
 
@@ -12,6 +20,10 @@
 #include "SkPath.h"
 
 class SkMatrix;
+<<<<<<< HEAD
+=======
+class SkPath;
+>>>>>>> miniblink49
 class SkPDFArray;
 struct SkRect;
 class SkWStream;
@@ -22,23 +34,38 @@ class SkWStream;
 #define PRINT_NOT_IMPL(str)
 #endif
 
+<<<<<<< HEAD
 #define NOT_IMPLEMENTED(condition, assert)                       \
     do {                                                         \
         if ((bool)(condition)) {                                 \
             PRINT_NOT_IMPL("NOT_IMPLEMENTED: " #condition "\n"); \
             SkDEBUGCODE(SkASSERT(!assert);)                      \
         }                                                        \
+=======
+#define NOT_IMPLEMENTED(condition, assert)                         \
+    do {                                                           \
+        if ((bool)(condition)) {                                   \
+            PRINT_NOT_IMPL("NOT_IMPLEMENTED: " #condition "\n");   \
+            SkDEBUGCODE(SkASSERT(!assert);)                        \
+        }                                                          \
+>>>>>>> miniblink49
     } while (0)
 
 class SkPDFUtils {
 public:
+<<<<<<< HEAD
     static sk_sp<SkPDFArray> RectToArray(const SkRect& rect);
     static sk_sp<SkPDFArray> MatrixToArray(const SkMatrix& matrix);
+=======
+    static SkPDFArray* RectToArray(const SkRect& rect);
+    static SkPDFArray* MatrixToArray(const SkMatrix& matrix);
+>>>>>>> miniblink49
     static void AppendTransform(const SkMatrix& matrix, SkWStream* content);
 
     static void MoveTo(SkScalar x, SkScalar y, SkWStream* content);
     static void AppendLine(SkScalar x, SkScalar y, SkWStream* content);
     static void AppendCubic(SkScalar ctl1X, SkScalar ctl1Y,
+<<<<<<< HEAD
         SkScalar ctl2X, SkScalar ctl2Y,
         SkScalar dstX, SkScalar dstY, SkWStream* content);
     static void AppendRectangle(const SkRect& rect, SkWStream* content);
@@ -52,10 +79,21 @@ public:
     static void ClosePath(SkWStream* content);
     static void PaintPath(SkPaint::Style style, SkPath::FillType fill,
         SkWStream* content);
+=======
+                            SkScalar ctl2X, SkScalar ctl2Y,
+                            SkScalar dstX, SkScalar dstY, SkWStream* content);
+    static void AppendRectangle(const SkRect& rect, SkWStream* content);
+    static void EmitPath(const SkPath& path, SkPaint::Style paintStyle,
+                         SkWStream* content);
+    static void ClosePath(SkWStream* content);
+    static void PaintPath(SkPaint::Style style, SkPath::FillType fill,
+                          SkWStream* content);
+>>>>>>> miniblink49
     static void StrokePath(SkWStream* content);
     static void DrawFormXObject(int objectIndex, SkWStream* content);
     static void ApplyGraphicState(int objectIndex, SkWStream* content);
     static void ApplyPattern(int objectIndex, SkWStream* content);
+<<<<<<< HEAD
 
     // 3 = '-', '.', and '\0' characters.
     // 9 = number of significant digits
@@ -66,6 +104,10 @@ public:
         char output[kMaximumFloatDecimalLength]);
     static void AppendScalar(SkScalar value, SkWStream* stream);
     static void WriteString(SkWStream* wStream, const char* input, size_t len);
+=======
+    static void AppendScalar(SkScalar value, SkWStream* stream);
+    static SkString FormatString(const char* input, size_t len);
+>>>>>>> miniblink49
 };
 
 #endif

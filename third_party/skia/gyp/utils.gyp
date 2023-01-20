@@ -19,6 +19,7 @@
       ],
       'include_dirs': [
         '../include/effects',
+<<<<<<< HEAD
         '../include/gpu',
         '../include/images',
         '../include/pathops',
@@ -31,10 +32,29 @@
         '../src/opts',
         '../src/utils',
         '../src/utils/win',
+=======
+        '../include/images',
+        '../include/pathops',
+        '../include/pipe',
+        '../include/utils',
+        '../include/utils/mac',
+        '../include/utils/unix',
+        '../include/utils/win',
+        '../src/core',
+        '../src/image',
+        '../src/opts',
+        '../src/utils',
+>>>>>>> miniblink49
       ],
       'sources': [
         'utils.gypi', # Makes the gypi appear in IDEs (but does not modify the build).
       ],
+<<<<<<< HEAD
+=======
+      'sources!': [
+          '../src/utils/SDL/SkOSWindow_SDL.cpp',
+      ],
+>>>>>>> miniblink49
       'conditions': [
         [ 'skia_os == "mac"', {
           'link_settings': {
@@ -49,6 +69,12 @@
               '../include/utils/mac',
             ],
           },
+<<<<<<< HEAD
+=======
+          'sources!': [
+            '../src/utils/SkThreadUtils_pthread_other.cpp',
+          ],
+>>>>>>> miniblink49
         },{ #else if 'skia_os != "mac"'
           'include_dirs!': [
             '../include/utils/mac',
@@ -56,17 +82,38 @@
           'sources!': [
             '../include/utils/mac/SkCGUtils.h',
             '../src/utils/mac/SkCreateCGImageRef.cpp',
+<<<<<<< HEAD
+=======
+            '../src/utils/SkThreadUtils_pthread_mach.cpp',
+          ],
+        }],
+        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
+          'sources!': [
+            '../src/utils/SkThreadUtils_pthread_other.cpp',
+          ],
+        },{ #else if 'skia_os not in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]'
+          'include_dirs!': [
+            '../include/utils/unix',
+          ],
+          'sources!': [
+            '../src/utils/SkThreadUtils_pthread_linux.cpp',
+>>>>>>> miniblink49
           ],
         }],
         [ 'skia_os == "win"', {
           'direct_dependent_settings': {
             'include_dirs': [
+<<<<<<< HEAD
               '../src/utils/win',
+=======
+              '../include/utils/win',
+>>>>>>> miniblink49
             ],
           },
           'sources!': [
             '../src/utils/SkThreadUtils_pthread.cpp',
             '../src/utils/SkThreadUtils_pthread.h',
+<<<<<<< HEAD
           ],
         },{ #else if 'skia_os != "win"'
           'include_dirs!': [
@@ -75,6 +122,20 @@
           'sources/': [ ['exclude', '_win.(h|cpp)$'],],
           'sources!': [
             '../src/utils/win/SkAutoCoInitialize.h',
+=======
+            '../src/utils/SkThreadUtils_pthread_other.cpp',
+          ],
+        },{ #else if 'skia_os != "win"'
+          'include_dirs!': [
+            '../include/utils/win',
+          ],
+          'sources/': [ ['exclude', '_win.(h|cpp)$'],],
+          'sources!': [
+            '../include/utils/win/SkAutoCoInitialize.h',
+            '../include/utils/win/SkHRESULT.h',
+            '../include/utils/win/SkIStream.h',
+            '../include/utils/win/SkTScopedComPtr.h',
+>>>>>>> miniblink49
             '../src/utils/win/SkAutoCoInitialize.cpp',
             '../src/utils/win/SkDWrite.h',
             '../src/utils/win/SkDWrite.cpp',
@@ -82,11 +143,21 @@
             '../src/utils/win/SkDWriteFontFileStream.h',
             '../src/utils/win/SkDWriteGeometrySink.cpp',
             '../src/utils/win/SkDWriteGeometrySink.h',
+<<<<<<< HEAD
             '../src/utils/win/SkHRESULT.h',
             '../src/utils/win/SkHRESULT.cpp',
             '../src/utils/win/SkIStream.h',
             '../src/utils/win/SkIStream.cpp',
             '../src/utils/win/SkTScopedComPtr.h',
+=======
+            '../src/utils/win/SkHRESULT.cpp',
+            '../src/utils/win/SkIStream.cpp',
+          ],
+        }],
+        ['skia_run_pdfviewer_in_gm', {
+          'defines': [
+            'SK_BUILD_NATIVE_PDF_RENDERER',
+>>>>>>> miniblink49
           ],
         }],
       ],
@@ -97,5 +168,28 @@
         ],
       },
     },
+<<<<<<< HEAD
+=======
+    {
+      'target_name': 'android_utils',
+      'product_name': 'skia_android_utils',
+      'type': 'static_library',
+      'standalone_static_library': 1,
+      'dependencies': [
+        'core.gyp:*',
+      ],
+      'sources': [
+        '../src/utils/android/SkAndroidSDKCanvas.h',
+        '../src/utils/android/SkAndroidSDKCanvas.cpp',
+        '../src/utils/android/SkHwuiRenderer.h',
+        '../src/utils/android/SkHwuiRenderer.cpp',
+      ],
+      'direct_dependent_settings': {
+        'include_dirs': [
+          '../src/utils/android',
+        ],
+      },
+    },
+>>>>>>> miniblink49
   ],
 }

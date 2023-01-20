@@ -31,11 +31,17 @@
 #ifndef WebURLRequest_h
 #define WebURLRequest_h
 
+<<<<<<< HEAD
 #include "WebAddressSpace.h"
 #include "WebCommon.h"
 #include "WebHTTPBody.h"
 #include "WebReferrerPolicy.h"
 #include <memory>
+=======
+#include "WebCommon.h"
+#include "WebHTTPBody.h"
+#include "WebReferrerPolicy.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -45,10 +51,25 @@ class WebHTTPHeaderVisitor;
 class WebSecurityOrigin;
 class WebString;
 class WebURL;
+<<<<<<< HEAD
 enum class WebCachePolicy;
 
 class WebURLRequest {
 public:
+=======
+class WebURLRequestPrivate;
+
+class WebURLRequest {
+public:
+    enum CachePolicy {
+        UseProtocolCachePolicy, // normal load
+        ReloadIgnoringCacheData, // reload
+        ReturnCacheDataElseLoad, // back/forward or encoding change - allow stale data
+        ReturnCacheDataDontLoad, // results of a post - allow stale data and only use cache
+        ReloadBypassingCache, // end-to-end reload
+    };
+
+>>>>>>> miniblink49
     enum Priority {
         PriorityUnresolved = -1,
         PriorityVeryLow,
@@ -58,8 +79,12 @@ public:
         PriorityVeryHigh,
     };
 
+<<<<<<< HEAD
     // Corresponds to Fetch's "context":
     // http://fetch.spec.whatwg.org/#concept-request-context
+=======
+    // Corresponds to Fetch's "context": http://fetch.spec.whatwg.org/#concept-request-context
+>>>>>>> miniblink49
     enum RequestContext {
         RequestContextUnspecified = 0,
         RequestContextAudio,
@@ -97,8 +122,12 @@ public:
         RequestContextXSLT
     };
 
+<<<<<<< HEAD
     // Corresponds to Fetch's "context frame type":
     // http://fetch.spec.whatwg.org/#concept-request-context-frame-type
+=======
+    // Corresponds to Fetch's "context frame type": http://fetch.spec.whatwg.org/#concept-request-context-frame-type
+>>>>>>> miniblink49
     enum FrameType {
         FrameTypeAuxiliary,
         FrameTypeNested,
@@ -110,13 +139,18 @@ public:
         FetchRequestModeSameOrigin,
         FetchRequestModeNoCORS,
         FetchRequestModeCORS,
+<<<<<<< HEAD
         FetchRequestModeCORSWithForcedPreflight,
         FetchRequestModeNavigate
+=======
+        FetchRequestModeCORSWithForcedPreflight
+>>>>>>> miniblink49
     };
 
     enum FetchCredentialsMode {
         FetchCredentialsModeOmit,
         FetchCredentialsModeSameOrigin,
+<<<<<<< HEAD
         FetchCredentialsModeInclude,
         FetchCredentialsModePassword
     };
@@ -125,6 +159,9 @@ public:
         FetchRedirectModeFollow,
         FetchRedirectModeError,
         FetchRedirectModeManual
+=======
+        FetchCredentialsModeInclude
+>>>>>>> miniblink49
     };
 
     // Used to report performance metrics timed from the UI action that
@@ -136,6 +173,7 @@ public:
         ReportIntent, // Report metrics with UI action displayed intent.
     };
 
+<<<<<<< HEAD
     // The Previews state which determines whether to request a Preview version of
     // the resource.
     enum PreviewsState {
@@ -170,16 +208,40 @@ public:
         Mojo,
     };
 
+=======
+>>>>>>> miniblink49
     class ExtraData {
     public:
         virtual ~ExtraData() { }
     };
 
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT ~WebURLRequest();
     BLINK_PLATFORM_EXPORT WebURLRequest();
     BLINK_PLATFORM_EXPORT WebURLRequest(const WebURLRequest&);
     BLINK_PLATFORM_EXPORT explicit WebURLRequest(const WebURL&);
     BLINK_PLATFORM_EXPORT WebURLRequest& operator=(const WebURLRequest&);
+=======
+    ~WebURLRequest() { reset(); }
+
+    WebURLRequest() : m_private(0) { }
+    WebURLRequest(const WebURLRequest& r) : m_private(0) { assign(r); }
+    WebURLRequest& operator=(const WebURLRequest& r)
+    {
+        assign(r);
+        return *this;
+    }
+
+    explicit WebURLRequest(const WebURL& url) : m_private(0)
+    {
+        initialize();
+        setURL(url);
+    }
+
+    BLINK_PLATFORM_EXPORT void initialize();
+    BLINK_PLATFORM_EXPORT void reset();
+    BLINK_PLATFORM_EXPORT void assign(const WebURLRequest&);
+>>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT bool isNull() const;
 
@@ -200,13 +262,19 @@ public:
     BLINK_PLATFORM_EXPORT bool allowStoredCredentials() const;
     BLINK_PLATFORM_EXPORT void setAllowStoredCredentials(bool);
 
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebCachePolicy getCachePolicy() const;
     BLINK_PLATFORM_EXPORT void setCachePolicy(WebCachePolicy);
+=======
+    BLINK_PLATFORM_EXPORT CachePolicy cachePolicy() const;
+    BLINK_PLATFORM_EXPORT void setCachePolicy(CachePolicy);
+>>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT WebString httpMethod() const;
     BLINK_PLATFORM_EXPORT void setHTTPMethod(const WebString&);
 
     BLINK_PLATFORM_EXPORT WebString httpHeaderField(const WebString& name) const;
+<<<<<<< HEAD
     // It's not possible to set the referrer header using this method. Use
     // setHTTPReferrer instead.
     BLINK_PLATFORM_EXPORT void setHTTPHeaderField(const WebString& name,
@@ -215,15 +283,24 @@ public:
         WebReferrerPolicy);
     BLINK_PLATFORM_EXPORT void addHTTPHeaderField(const WebString& name,
         const WebString& value);
+=======
+    // It's not possible to set the referrer header using this method. Use setHTTPReferrer instead.
+    BLINK_PLATFORM_EXPORT void setHTTPHeaderField(const WebString& name, const WebString& value);
+    BLINK_PLATFORM_EXPORT void setHTTPReferrer(const WebString& referrer, WebReferrerPolicy);
+    BLINK_PLATFORM_EXPORT void addHTTPHeaderField(const WebString& name, const WebString& value);
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT void clearHTTPHeaderField(const WebString& name);
     BLINK_PLATFORM_EXPORT void visitHTTPHeaderFields(WebHTTPHeaderVisitor*) const;
 
     BLINK_PLATFORM_EXPORT WebHTTPBody httpBody() const;
     BLINK_PLATFORM_EXPORT void setHTTPBody(const WebHTTPBody&);
 
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebHTTPBody attachedCredential() const;
     BLINK_PLATFORM_EXPORT void setAttachedCredential(const WebHTTPBody&);
 
+=======
+>>>>>>> miniblink49
     // Controls whether upload progress events are generated when a request
     // has a body.
     BLINK_PLATFORM_EXPORT bool reportUploadProgress() const;
@@ -234,6 +311,7 @@ public:
     BLINK_PLATFORM_EXPORT bool reportRawHeaders() const;
     BLINK_PLATFORM_EXPORT void setReportRawHeaders(bool);
 
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT RequestContext getRequestContext() const;
     BLINK_PLATFORM_EXPORT void setRequestContext(RequestContext);
 
@@ -245,6 +323,19 @@ public:
     // Adds an HTTP origin header if it is empty and the HTTP method of the
     // request requires it.
     BLINK_PLATFORM_EXPORT void addHTTPOriginIfNeeded(const WebSecurityOrigin&);
+=======
+    BLINK_PLATFORM_EXPORT RequestContext requestContext() const;
+    BLINK_PLATFORM_EXPORT void setRequestContext(RequestContext);
+
+    BLINK_PLATFORM_EXPORT FrameType frameType() const;
+    BLINK_PLATFORM_EXPORT void setFrameType(FrameType);
+
+    BLINK_PLATFORM_EXPORT WebReferrerPolicy referrerPolicy() const;
+
+    // Adds an HTTP origin header if it is empty and the HTTP method of the
+    // request requires it.
+    BLINK_PLATFORM_EXPORT void addHTTPOriginIfNeeded(const WebString& origin);
+>>>>>>> miniblink49
 
     // True if the request was user initiated.
     BLINK_PLATFORM_EXPORT bool hasUserGesture() const;
@@ -274,14 +365,20 @@ public:
     BLINK_PLATFORM_EXPORT void setUseStreamOnResponse(bool);
 
     // True if the request should not be handled by the ServiceWorker.
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT SkipServiceWorker skipServiceWorker() const;
     BLINK_PLATFORM_EXPORT void setSkipServiceWorker(SkipServiceWorker);
+=======
+    BLINK_PLATFORM_EXPORT bool skipServiceWorker() const;
+    BLINK_PLATFORM_EXPORT void setSkipServiceWorker(bool);
+>>>>>>> miniblink49
 
     // True if corresponding AppCache group should be resetted.
     BLINK_PLATFORM_EXPORT bool shouldResetAppCache() const;
     BLINK_PLATFORM_EXPORT void setShouldResetAppCache(bool);
 
     // The request mode which will be passed to the ServiceWorker.
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT FetchRequestMode getFetchRequestMode() const;
     BLINK_PLATFORM_EXPORT void setFetchRequestMode(FetchRequestMode);
 
@@ -299,16 +396,32 @@ public:
     BLINK_PLATFORM_EXPORT PreviewsState getPreviewsState() const;
     BLINK_PLATFORM_EXPORT void setPreviewsState(PreviewsState);
 
+=======
+    BLINK_PLATFORM_EXPORT FetchRequestMode fetchRequestMode() const;
+    BLINK_PLATFORM_EXPORT void setFetchRequestMode(FetchRequestMode);
+
+    // The credentials mode which will be passed to the ServiceWorker.
+    BLINK_PLATFORM_EXPORT FetchCredentialsMode fetchCredentialsMode() const;
+    BLINK_PLATFORM_EXPORT void setFetchCredentialsMode(FetchCredentialsMode);
+
+>>>>>>> miniblink49
     // Extra data associated with the underlying resource request. Resource
     // requests can be copied. If non-null, each copy of a resource requests
     // holds a pointer to the extra data, and the extra data pointer will be
     // deleted when the last resource request is destroyed. Setting the extra
     // data pointer will cause the underlying resource request to be
     // dissociated from any existing non-null extra data pointer.
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT ExtraData* getExtraData() const;
     BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
 
     BLINK_PLATFORM_EXPORT Priority getPriority() const;
+=======
+    BLINK_PLATFORM_EXPORT ExtraData* extraData() const;
+    BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
+
+    BLINK_PLATFORM_EXPORT Priority priority() const;
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT void setPriority(Priority);
 
     // PlzNavigate: whether the FrameLoader should try to send the request to
@@ -323,6 +436,7 @@ public:
     // start time used in the Navigation Timing API).
     BLINK_PLATFORM_EXPORT double uiStartTime() const;
     BLINK_PLATFORM_EXPORT void setUiStartTime(double);
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebURLRequest::InputToLoadPerfMetricReportPolicy
     inputPerfMetricReportPolicy() const;
     BLINK_PLATFORM_EXPORT void setInputPerfMetricReportPolicy(
@@ -334,10 +448,20 @@ public:
     BLINK_PLATFORM_EXPORT LoadingIPCType getLoadingIPCType() const;
 
     BLINK_PLATFORM_EXPORT void setNavigationStartTime(double);
+=======
+    BLINK_PLATFORM_EXPORT WebURLRequest::InputToLoadPerfMetricReportPolicy inputPerfMetricReportPolicy() const;
+    BLINK_PLATFORM_EXPORT void setInputPerfMetricReportPolicy(WebURLRequest::InputToLoadPerfMetricReportPolicy);
+
+    // Does the request originate from a SecurityContext hosted in a reserved
+    // (RFC1918) IP range?
+    BLINK_PLATFORM_EXPORT bool originatesFromReservedIPRange() const;
+    BLINK_PLATFORM_EXPORT void setOriginatesFromReservedIPRange(bool);
+>>>>>>> miniblink49
 
 #if INSIDE_BLINK
     BLINK_PLATFORM_EXPORT ResourceRequest& toMutableResourceRequest();
     BLINK_PLATFORM_EXPORT const ResourceRequest& toResourceRequest() const;
+<<<<<<< HEAD
 
 protected:
     // Permit subclasses to set arbitrary ResourceRequest pointer as
@@ -355,6 +479,15 @@ private:
 
     // Should never be null.
     ResourceRequest* m_resourceRequest;
+=======
+#endif
+
+protected:
+    BLINK_PLATFORM_EXPORT void assign(WebURLRequestPrivate*);
+
+private:
+    WebURLRequestPrivate* m_private;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

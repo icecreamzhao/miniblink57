@@ -6,7 +6,6 @@
 #define SVGMaskPainter_h
 
 #include "platform/geometry/FloatRect.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -15,22 +14,14 @@ class LayoutObject;
 class LayoutSVGResourceMasker;
 
 class SVGMaskPainter {
-    STACK_ALLOCATED();
-
 public:
-    SVGMaskPainter(LayoutSVGResourceMasker& mask)
-        : m_mask(mask)
-    {
-    }
+    SVGMaskPainter(LayoutSVGResourceMasker& mask) : m_mask(mask) { }
 
-    bool prepareEffect(const LayoutObject&, GraphicsContext&);
-    void finishEffect(const LayoutObject&, GraphicsContext&);
+    bool prepareEffect(const LayoutObject&, GraphicsContext*);
+    void finishEffect(const LayoutObject&, GraphicsContext*);
 
 private:
-    void drawMaskForLayoutObject(GraphicsContext&,
-        const LayoutObject&,
-        const FloatRect& targetBoundingBox,
-        const FloatRect& targetVisualRect);
+    void drawMaskForLayoutObject(GraphicsContext*, const LayoutObject&, const FloatRect& targetBoundingBox, const FloatRect& targetPaintInvalidationRect);
 
     LayoutSVGResourceMasker& m_mask;
 };

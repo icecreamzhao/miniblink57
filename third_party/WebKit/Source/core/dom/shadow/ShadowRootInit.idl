@@ -7,6 +7,6 @@
 enum ShadowRootMode { "open", "closed" };
 
 dictionary ShadowRootInit {
-    required ShadowRootMode mode;
-    boolean delegatesFocus;
+    ShadowRootMode mode;
+    [RuntimeEnabled=ShadowRootDelegatesFocus] boolean delegatesFocus;
 };

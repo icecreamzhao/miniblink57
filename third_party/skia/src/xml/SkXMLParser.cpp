@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkXMLParser.h"
 
 static char const* const gErrorStrings[] = {
@@ -16,10 +24,15 @@ static char const* const gErrorStrings[] = {
     "unknown error "
 };
 
+<<<<<<< HEAD
 SkXMLParserError::SkXMLParserError()
     : fCode(kNoError)
     , fLineNumber(-1)
     , fNativeCode(-1)
+=======
+SkXMLParserError::SkXMLParserError() : fCode(kNoError), fLineNumber(-1),
+    fNativeCode(-1)
+>>>>>>> miniblink49
 {
     reset();
 }
@@ -42,18 +55,29 @@ void SkXMLParserError::getErrorString(SkString* str) const
     str->append(temp);
 }
 
+<<<<<<< HEAD
 void SkXMLParserError::reset()
 {
+=======
+void SkXMLParserError::reset() {
+>>>>>>> miniblink49
     fCode = kNoError;
     fLineNumber = -1;
     fNativeCode = -1;
 }
 
+<<<<<<< HEAD
 ////////////////
 
 SkXMLParser::SkXMLParser(SkXMLParserError* parserError)
     : fParser(nullptr)
     , fError(parserError)
+=======
+
+////////////////
+
+SkXMLParser::SkXMLParser(SkXMLParserError* parserError) : fParser(NULL), fError(parserError)
+>>>>>>> miniblink49
 {
 }
 
@@ -73,6 +97,10 @@ bool SkXMLParser::parse(const char doc[], size_t len)
 
 void SkXMLParser::GetNativeErrorString(int error, SkString* str)
 {
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 }
 
 bool SkXMLParser::startElement(const char elem[])
@@ -97,7 +125,14 @@ bool SkXMLParser::text(const char text[], int len)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 bool SkXMLParser::onStartElement(const char elem[]) { return false; }
 bool SkXMLParser::onAddAttribute(const char name[], const char value[]) { return false; }
 bool SkXMLParser::onEndElement(const char elem[]) { return false; }
 bool SkXMLParser::onText(const char text[], int len) { return false; }
+=======
+bool SkXMLParser::onStartElement(const char elem[]) {return false; }
+bool SkXMLParser::onAddAttribute(const char name[], const char value[]) {return false; }
+bool SkXMLParser::onEndElement(const char elem[]) { return false; }
+bool SkXMLParser::onText(const char text[], int len) {return false; }
+>>>>>>> miniblink49

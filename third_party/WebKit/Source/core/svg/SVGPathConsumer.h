@@ -24,21 +24,23 @@
 #ifndef SVGPathConsumer_h
 #define SVGPathConsumer_h
 
-#include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
+#include "wtf/FastAllocBase.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
 struct PathSegmentData;
 
-class CORE_EXPORT SVGPathConsumer {
+class SVGPathConsumer {
     WTF_MAKE_NONCOPYABLE(SVGPathConsumer);
     STACK_ALLOCATED();
-
 public:
     SVGPathConsumer() { }
     virtual ~SVGPathConsumer() { }
+
+    virtual void incrementPathSegmentCount() = 0;
+    virtual bool continueConsuming() = 0;
 
     virtual void emitSegment(const PathSegmentData&) = 0;
 };

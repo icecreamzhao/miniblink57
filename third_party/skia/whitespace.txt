@@ -9,6 +9,7 @@ epoger added this line using a pure git checkout
 florin was here
 more whitespace
 whitespace returns yay
+<<<<<<< HEAD
 trigger android build
 
 
@@ -17,3 +18,6 @@ trigger android build
 
 
 
+=======
+   
+>>>>>>> miniblink49

@@ -28,9 +28,7 @@
 #define SelectionController_h
 
 #include "core/CoreExport.h"
-#include "core/dom/SynchronousMutationObserver.h"
 #include "core/editing/TextGranularity.h"
-#include "core/editing/VisibleSelection.h"
 #include "core/page/EventWithHitTestResults.h"
 #include "platform/heap/Handle.h"
 
@@ -39,115 +37,58 @@ namespace blink {
 class FrameSelection;
 class HitTestResult;
 class LocalFrame;
+class VisibleSelection;
 
-class CORE_EXPORT SelectionController final
-    : public GarbageCollectedFinalized<SelectionController>,
-      public SynchronousMutationObserver {
+class SelectionController final : public NoBaseWillBeGarbageCollected<SelectionController> {
     WTF_MAKE_NONCOPYABLE(SelectionController);
-    USING_GARBAGE_COLLECTED_MIXIN(SelectionController);
-
 public:
-    static SelectionController* create(LocalFrame&);
-    virtual ~SelectionController();
+    static PassOwnPtrWillBeRawPtr<SelectionController> create(LocalFrame&);
     DECLARE_TRACE();
 
+    bool updateSelectionForMouseDownDispatchingSelectStart(Node*, const VisibleSelection&, TextGranularity);
     void handleMousePressEvent(const MouseEventWithHitTestResults&);
     bool handleMousePressEventSingleClick(const MouseEventWithHitTestResults&);
     bool handleMousePressEventDoubleClick(const MouseEventWithHitTestResults&);
     bool handleMousePressEventTripleClick(const MouseEventWithHitTestResults&);
-    void handleMouseDraggedEvent(const MouseEventWithHitTestResults&,
-        const IntPoint&,
-        const LayoutPoint&,
-        Node*,
-        const IntPoint&);
-    bool handleMouseReleaseEvent(const MouseEventWithHitTestResults&,
-        const LayoutPoint&);
+    void handleMouseDraggedEvent(const MouseEventWithHitTestResults&, const IntPoint&, const LayoutPoint&, Node*, const IntPoint&);
+    bool handleMouseReleaseEvent(const MouseEventWithHitTestResults&, const LayoutPoint&);
     bool handlePasteGlobalSelection(const PlatformMouseEvent&);
-    bool handleGestureLongPress(const WebGestureEvent&, const HitTestResult&);
-    void handleGestureTwoFingerTap(const GestureEventWithHitTestResults&);
-    void handleGestureLongTap(const GestureEventWithHitTestResults&);
+    bool handleGestureLongPress(const PlatformGestureEvent&, const HitTestResult&);
 
     void updateSelectionForMouseDrag(Node*, const LayoutPoint&, const IntPoint&);
-    void updateSelectionForMouseDrag(const HitTestResult&,
-        Node*,
-        const LayoutPoint&,
-        const IntPoint&);
-    void sendContextMenuEvent(const MouseEventWithHitTestResults&,
-        const LayoutPoint&);
+    void updateSelectionForMouseDrag(const HitTestResult&, Node*, const LayoutPoint&, const IntPoint&);
+    void sendContextMenuEvent(const MouseEventWithHitTestResults&, const LayoutPoint&);
     void passMousePressEventToSubframe(const MouseEventWithHitTestResults&);
 
     void initializeSelectionState();
     void setMouseDownMayStartSelect(bool);
     bool mouseDownMayStartSelect() const;
     bool mouseDownWasSingleClickInSelection() const;
-    void notifySelectionChanged();
-    bool hasExtendedSelection() const
-    {
-        return m_selectionState == SelectionState::ExtendedSelection;
-    }
 
 private:
-    friend class SelectionControllerTest;
-
     explicit SelectionController(LocalFrame&);
 
-    enum class AppendTrailingWhitespace { ShouldAppend,
-        DontAppend };
-    enum class SelectInputEventType { Touch,
-        Mouse };
-    enum EndPointsAdjustmentMode {
-        AdjustEndpointsAtBidiBoundary,
-        DoNotAdjustEndpoints
-    };
+    template <typename Strategy>
+    bool handleMousePressEventSingleClickAlgorithm(const MouseEventWithHitTestResults&);
 
-    Document& document() const;
+    template <typename Strategy>
+    void updateSelectionForMouseDragAlgorithm(const HitTestResult&, Node*, const LayoutPoint&, const IntPoint&);
 
-    // Returns |true| if a word was selected.
-    bool selectClosestWordFromHitTestResult(const HitTestResult&,
-        AppendTrailingWhitespace,
-        SelectInputEventType);
-    void selectClosestMisspellingFromHitTestResult(const HitTestResult&,
-        AppendTrailingWhitespace);
+    enum class AppendTrailingWhitespace { ShouldAppend, DontAppend };
+    void selectClosestWordFromHitTestResult(const HitTestResult&, AppendTrailingWhitespace);
+    void selectClosestMisspellingFromHitTestResult(const HitTestResult&, AppendTrailingWhitespace);
     void selectClosestWordFromMouseEvent(const MouseEventWithHitTestResults&);
-    void selectClosestMisspellingFromMouseEvent(
-        const MouseEventWithHitTestResults&);
-    void selectClosestWordOrLinkFromMouseEvent(
-        const MouseEventWithHitTestResults&);
-    void setNonDirectionalSelectionIfNeeded(const VisibleSelectionInFlatTree&,
-        TextGranularity,
-        EndPointsAdjustmentMode);
-    void setCaretAtHitTestResult(const HitTestResult&);
-    bool updateSelectionForMouseDownDispatchingSelectStart(
-        Node*,
-        const VisibleSelectionInFlatTree&,
-        TextGranularity);
+    void selectClosestMisspellingFromMouseEvent(const MouseEventWithHitTestResults&);
+    void selectClosestWordOrLinkFromMouseEvent(const MouseEventWithHitTestResults&);
 
     FrameSelection& selection() const;
 
-    // Implements |SynchronousMutationObserver|.
-    // TODO(yosin): We should relocate |m_originalBaseInFlatTree| when DOM tree
-    // changed.
-    void contextDestroyed(Document*) final;
-
-    Member<LocalFrame> const m_frame;
-    // TODO(yosin): We should use |PositionWIthAffinityInFlatTree| since we
-    // should reduce usage of |VisibleSelectionInFlatTree|.
-    // Used to store base before the adjustment at bidi boundary
-    VisiblePositionInFlatTree m_originalBaseInFlatTree;
+    RawPtrWillBeMember<LocalFrame> const m_frame;
     bool m_mouseDownMayStartSelect;
     bool m_mouseDownWasSingleClickInSelection;
-    bool m_mouseDownAllowsMultiClick;
-    enum class SelectionState {
-        HaveNotStartedSelection,
-        PlacedCaret,
-        ExtendedSelection
-    };
+    enum class SelectionState { HaveNotStartedSelection, PlacedCaret, ExtendedSelection };
     SelectionState m_selectionState;
 };
 
-bool isLinkSelection(const MouseEventWithHitTestResults&);
-bool isExtendingSelection(const MouseEventWithHitTestResults&);
-
 } // namespace blink
-
 #endif // SelectionController_h

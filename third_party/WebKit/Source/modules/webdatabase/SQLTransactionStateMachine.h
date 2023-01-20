@@ -27,11 +27,19 @@
 #define SQLTransactionStateMachine_h
 
 #include "modules/webdatabase/SQLTransactionState.h"
+<<<<<<< HEAD
 #include "wtf/Assertions.h"
 
 namespace blink {
 
 template <typename T>
+=======
+#include "wtf/ThreadSafeRefCounted.h"
+
+namespace blink {
+
+template<typename T>
+>>>>>>> miniblink49
 class SQLTransactionStateMachine {
 public:
     virtual ~SQLTransactionStateMachine() { }
@@ -39,7 +47,11 @@ public:
 protected:
     SQLTransactionStateMachine();
 
+<<<<<<< HEAD
     typedef SQLTransactionState (T::*StateFunction)();
+=======
+    typedef SQLTransactionState (T::* StateFunction)();
+>>>>>>> miniblink49
     virtual StateFunction stateFunctionFor(SQLTransactionState) = 0;
 
     void setStateToRequestedState();
@@ -48,17 +60,26 @@ protected:
     SQLTransactionState m_nextState;
     SQLTransactionState m_requestedState;
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     // The state audit trail (i.e. bread crumbs) keeps track of up to the last
     // s_sizeOfStateAuditTrail states that the state machine enters. The audit
     // trail is updated before entering each state. This is for debugging use
     // only.
     static const int s_sizeOfStateAuditTrail = 20;
+<<<<<<< HEAD
     int m_nextStateAuditEntry = 0;
+=======
+    int m_nextStateAuditEntry;
+>>>>>>> miniblink49
     SQLTransactionState m_stateAuditTrail[s_sizeOfStateAuditTrail];
 #endif
 };
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
 extern const char* nameForSQLTransactionState(SQLTransactionState);
 #endif
@@ -69,12 +90,31 @@ SQLTransactionStateMachine<T>::SQLTransactionStateMachine()
     , m_requestedState(SQLTransactionState::Idle)
 {
 #if DCHECK_IS_ON()
+=======
+#if !LOG_DISABLED
+extern const char* nameForSQLTransactionState(SQLTransactionState);
+#endif
+
+template<typename T>
+SQLTransactionStateMachine<T>::SQLTransactionStateMachine()
+    : m_nextState(SQLTransactionState::Idle)
+    , m_requestedState(SQLTransactionState::Idle)
+#if ENABLE(ASSERT)
+    , m_nextStateAuditEntry(0)
+#endif
+{
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
     for (int i = 0; i < s_sizeOfStateAuditTrail; i++)
         m_stateAuditTrail[i] = SQLTransactionState::NumberOfStates;
 #endif
 }
 
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 void SQLTransactionStateMachine<T>::setStateToRequestedState()
 {
     ASSERT(m_nextState == SQLTransactionState::Idle);
@@ -83,7 +123,11 @@ void SQLTransactionStateMachine<T>::setStateToRequestedState()
     m_requestedState = SQLTransactionState::Idle;
 }
 
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 void SQLTransactionStateMachine<T>::runStateMachine()
 {
     ASSERT(SQLTransactionState::End < SQLTransactionState::Idle);
@@ -92,7 +136,11 @@ void SQLTransactionStateMachine<T>::runStateMachine()
         StateFunction stateFunction = stateFunctionFor(m_nextState);
         ASSERT(stateFunction);
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
         m_stateAuditTrail[m_nextStateAuditEntry] = m_nextState;
         m_nextStateAuditEntry = (m_nextStateAuditEntry + 1) % s_sizeOfStateAuditTrail;
 #endif

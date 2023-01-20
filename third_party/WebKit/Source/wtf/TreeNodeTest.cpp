@@ -23,12 +23,22 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/TreeNode.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
+=======
+#include "config.h"
+#include "wtf/TreeNode.h"
+
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -86,6 +96,10 @@ TEST(TreeNodeTest, InsertBefore)
     EXPECT_EQ(middleChild->next(), lastChild.get());
     EXPECT_EQ(firstChild->next(), middleChild.get());
     EXPECT_EQ(lastChild->previous(), middleChild.get());
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 }
 
 TEST(TreeNodeTest, RemoveSingle)
@@ -201,6 +215,7 @@ TEST(TreeNodeTest, TraverseNext)
     TrioWithGrandChild trio;
     trio.appendChildren();
 
+<<<<<<< HEAD
     TestTree* order[] = { trio.root.get(), trio.firstChild.get(),
         trio.middleChild.get(), trio.grandChild.get(),
         trio.lastChild.get() };
@@ -208,6 +223,15 @@ TEST(TreeNodeTest, TraverseNext)
     unsigned orderIndex = 0;
     for (TestTree* node = trio.root.get(); node;
          node = traverseNext(node), orderIndex++)
+=======
+    TestTree* order[] = {
+        trio.root.get(), trio.firstChild.get(), trio.middleChild.get(),
+        trio.grandChild.get(), trio.lastChild.get()
+    };
+
+    unsigned orderIndex = 0;
+    for (TestTree* node = trio.root.get(); node; node = traverseNext(node), orderIndex++)
+>>>>>>> miniblink49
         EXPECT_EQ(node, order[orderIndex]);
     EXPECT_EQ(orderIndex, sizeof(order) / sizeof(TestTree*));
 }
@@ -217,6 +241,7 @@ TEST(TreeNodeTest, TraverseNextPostORder)
     TrioWithGrandChild trio;
     trio.appendChildren();
 
+<<<<<<< HEAD
     TestTree* order[] = { trio.firstChild.get(), trio.grandChild.get(),
         trio.middleChild.get(), trio.lastChild.get(),
         trio.root.get() };
@@ -226,6 +251,19 @@ TEST(TreeNodeTest, TraverseNextPostORder)
          node = traverseNextPostOrder(node), orderIndex++)
         EXPECT_EQ(node, order[orderIndex]);
     EXPECT_EQ(orderIndex, sizeof(order) / sizeof(TestTree*));
+=======
+
+    TestTree* order[] = {
+        trio.firstChild.get(),
+        trio.grandChild.get(), trio.middleChild.get(), trio.lastChild.get(), trio.root.get()
+    };
+
+    unsigned orderIndex = 0;
+    for (TestTree* node = traverseFirstPostOrder(trio.root.get()); node; node = traverseNextPostOrder(node), orderIndex++)
+        EXPECT_EQ(node, order[orderIndex]);
+    EXPECT_EQ(orderIndex, sizeof(order) / sizeof(TestTree*));
+
+>>>>>>> miniblink49
 }
 
 } // namespace WTF

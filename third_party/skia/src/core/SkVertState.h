@@ -22,11 +22,18 @@ struct VertState {
 
     /**
      *  Construct a VertState from a vertex count, index array, and index count.
+<<<<<<< HEAD
      *  If the vertices are unindexed pass nullptr for indices.
      */
     VertState(int vCount, const uint16_t indices[], int indexCount)
         : fIndices(indices)
     {
+=======
+     *  If the vertices are unindexed pass NULL for indices.
+     */
+    VertState(int vCount, const uint16_t indices[], int indexCount)
+            : fIndices(indices) {
+>>>>>>> miniblink49
         fCurrIndex = 0;
         if (indices) {
             fCount = indexCount;
@@ -44,8 +51,13 @@ struct VertState {
     Proc chooseProc(SkCanvas::VertexMode mode);
 
 private:
+<<<<<<< HEAD
     int fCount;
     int fCurrIndex;
+=======
+    int             fCount;
+    int             fCurrIndex;
+>>>>>>> miniblink49
     const uint16_t* fIndices;
 
     static bool Triangles(VertState*);

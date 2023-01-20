@@ -7,11 +7,17 @@
 
 #include "SkBitmap.h"
 #include "SkRect.h"
+<<<<<<< HEAD
 #include "SkTemplates.h"
 #include "Test.h"
 
 static const char* boolStr(bool value)
 {
+=======
+#include "Test.h"
+
+static const char* boolStr(bool value) {
+>>>>>>> miniblink49
     return value ? "true" : "false";
 }
 
@@ -21,6 +27,7 @@ static const char* gColorTypeName[] = {
 };
 
 static void report_opaqueness(skiatest::Reporter* reporter, const SkBitmap& src,
+<<<<<<< HEAD
     const SkBitmap& dst)
 {
     ERRORF(reporter, "src %s opaque:%d, dst %s opaque:%d",
@@ -30,14 +37,28 @@ static void report_opaqueness(skiatest::Reporter* reporter, const SkBitmap& src,
 
 static bool canHaveAlpha(SkColorType ct)
 {
+=======
+                              const SkBitmap& dst) {
+    ERRORF(reporter, "src %s opaque:%d, dst %s opaque:%d",
+           gColorTypeName[src.colorType()], src.isOpaque(),
+           gColorTypeName[dst.colorType()], dst.isOpaque());
+}
+
+static bool canHaveAlpha(SkColorType ct) {
+>>>>>>> miniblink49
     return kRGB_565_SkColorType != ct;
 }
 
 // copyTo() should preserve isOpaque when it makes sense
 static void test_isOpaque(skiatest::Reporter* reporter,
+<<<<<<< HEAD
     const SkBitmap& srcOpaque, const SkBitmap& srcPremul,
     SkColorType dstColorType)
 {
+=======
+                          const SkBitmap& srcOpaque, const SkBitmap& srcPremul,
+                          SkColorType dstColorType) {
+>>>>>>> miniblink49
     SkBitmap dst;
 
     if (canHaveAlpha(srcPremul.colorType()) && canHaveAlpha(dstColorType)) {
@@ -55,8 +76,12 @@ static void test_isOpaque(skiatest::Reporter* reporter,
     }
 }
 
+<<<<<<< HEAD
 static void init_src(const SkBitmap& bitmap)
 {
+=======
+static void init_src(const SkBitmap& bitmap) {
+>>>>>>> miniblink49
     SkAutoLockPixels lock(bitmap);
     if (bitmap.getPixels()) {
         if (bitmap.getColorTable()) {
@@ -67,8 +92,12 @@ static void init_src(const SkBitmap& bitmap)
     }
 }
 
+<<<<<<< HEAD
 static SkColorTable* init_ctable()
 {
+=======
+static SkColorTable* init_ctable() {
+>>>>>>> miniblink49
     static const SkColor colors[] = {
         SK_ColorBLACK, SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE, SK_ColorWHITE
     };
@@ -90,12 +119,17 @@ struct Pair {
 
 // Utility function to read the value of a given pixel in bm. All
 // values converted to uint32_t for simplification of comparisons.
+<<<<<<< HEAD
 static uint32_t getPixel(int x, int y, const SkBitmap& bm)
 {
+=======
+static uint32_t getPixel(int x, int y, const SkBitmap& bm) {
+>>>>>>> miniblink49
     uint32_t val = 0;
     uint16_t val16;
     uint8_t val8;
     SkAutoLockPixels lock(bm);
+<<<<<<< HEAD
     const void* rawAddr = bm.getAddr(x, y);
 
     switch (bm.bytesPerPixel()) {
@@ -112,6 +146,24 @@ static uint32_t getPixel(int x, int y, const SkBitmap& bm)
         break;
     default:
         break;
+=======
+    const void* rawAddr = bm.getAddr(x,y);
+
+    switch (bm.bytesPerPixel()) {
+        case 4:
+            memcpy(&val, rawAddr, sizeof(uint32_t));
+            break;
+        case 2:
+            memcpy(&val16, rawAddr, sizeof(uint16_t));
+            val = val16;
+            break;
+        case 1:
+            memcpy(&val8, rawAddr, sizeof(uint8_t));
+            val = val8;
+            break;
+        default:
+            break;
+>>>>>>> miniblink49
     }
     return val;
 }
@@ -119,6 +171,7 @@ static uint32_t getPixel(int x, int y, const SkBitmap& bm)
 // Utility function to set value of any pixel in bm.
 // bm.getConfig() specifies what format 'val' must be
 // converted to, but at present uint32_t can handle all formats.
+<<<<<<< HEAD
 static void setPixel(int x, int y, uint32_t val, SkBitmap& bm)
 {
     uint16_t val16;
@@ -141,6 +194,29 @@ static void setPixel(int x, int y, uint32_t val, SkBitmap& bm)
     default:
         // Ignore.
         break;
+=======
+static void setPixel(int x, int y, uint32_t val, SkBitmap& bm) {
+    uint16_t val16;
+    uint8_t val8;
+    SkAutoLockPixels lock(bm);
+    void* rawAddr = bm.getAddr(x,y);
+
+    switch (bm.bytesPerPixel()) {
+        case 4:
+            memcpy(rawAddr, &val, sizeof(uint32_t));
+            break;
+        case 2:
+            val16 = val & 0xFFFF;
+            memcpy(rawAddr, &val16, sizeof(uint16_t));
+            break;
+        case 1:
+            val8 = val & 0xFF;
+            memcpy(rawAddr, &val8, sizeof(uint8_t));
+            break;
+        default:
+            // Ignore.
+            break;
+>>>>>>> miniblink49
     }
 }
 
@@ -150,6 +226,7 @@ struct Coordinates {
     const int length;
     SkIPoint* const data;
 
+<<<<<<< HEAD
     explicit Coordinates(int _length)
         : length(_length)
         , data(new SkIPoint[length])
@@ -163,6 +240,16 @@ struct Coordinates {
 
     SkIPoint* operator[](int i) const
     {
+=======
+    explicit Coordinates(int _length): length(_length)
+                                     , data(new SkIPoint[length]) { }
+
+    ~Coordinates(){
+        delete [] data;
+    }
+
+    SkIPoint* operator[](int i) const {
+>>>>>>> miniblink49
         // Use with care, no bounds checking.
         return data + i;
     }
@@ -172,15 +259,25 @@ struct Coordinates {
 // at all coordinates indicated by coords. Simplifies verification of
 // copied bitmaps.
 static void reportCopyVerification(const SkBitmap& bm1, const SkBitmap& bm2,
+<<<<<<< HEAD
     Coordinates& coords,
     const char* msg,
     skiatest::Reporter* reporter)
 {
+=======
+                            Coordinates& coords,
+                            const char* msg,
+                            skiatest::Reporter* reporter){
+>>>>>>> miniblink49
     // Confirm all pixels in the list match.
     for (int i = 0; i < coords.length; ++i) {
         uint32_t p1 = getPixel(coords[i]->fX, coords[i]->fY, bm1);
         uint32_t p2 = getPixel(coords[i]->fX, coords[i]->fY, bm2);
+<<<<<<< HEAD
         //        SkDebugf("[%d] (%d %d) p1=%x p2=%x\n", i, coords[i]->fX, coords[i]->fY, p1, p2);
+=======
+//        SkDebugf("[%d] (%d %d) p1=%x p2=%x\n", i, coords[i]->fX, coords[i]->fY, p1, p2);
+>>>>>>> miniblink49
         if (p1 != p2) {
             ERRORF(reporter, "%s [colortype = %s]", msg, gColorTypeName[bm1.colorType()]);
             break;
@@ -189,43 +286,71 @@ static void reportCopyVerification(const SkBitmap& bm1, const SkBitmap& bm2,
 }
 
 // Writes unique pixel values at locations specified by coords.
+<<<<<<< HEAD
 static void writeCoordPixels(SkBitmap& bm, const Coordinates& coords)
 {
+=======
+static void writeCoordPixels(SkBitmap& bm, const Coordinates& coords) {
+>>>>>>> miniblink49
     for (int i = 0; i < coords.length; ++i)
         setPixel(coords[i]->fX, coords[i]->fY, i, bm);
 }
 
 static const Pair gPairs[] = {
+<<<<<<< HEAD
     { kUnknown_SkColorType, "000000" },
     { kAlpha_8_SkColorType, "010101" },
     { kIndex_8_SkColorType, "011111" },
     { kRGB_565_SkColorType, "010101" },
     { kARGB_4444_SkColorType, "010111" },
     { kN32_SkColorType, "010111" },
+=======
+    { kUnknown_SkColorType,     "000000"  },
+    { kAlpha_8_SkColorType,     "010101"  },
+    { kIndex_8_SkColorType,     "011111"  },
+    { kRGB_565_SkColorType,     "010101"  },
+    { kARGB_4444_SkColorType,   "010111"  },
+    { kN32_SkColorType,         "010111"  },
+>>>>>>> miniblink49
 };
 
 static const int W = 20;
 static const int H = 33;
 
 static void setup_src_bitmaps(SkBitmap* srcOpaque, SkBitmap* srcPremul,
+<<<<<<< HEAD
     SkColorType ct)
 {
     SkColorTable* ctable = nullptr;
+=======
+                              SkColorType ct) {
+    SkColorTable* ctable = NULL;
+>>>>>>> miniblink49
     if (kIndex_8_SkColorType == ct) {
         ctable = init_ctable();
     }
 
     srcOpaque->allocPixels(SkImageInfo::Make(W, H, ct, kOpaque_SkAlphaType),
+<<<<<<< HEAD
         nullptr, ctable);
     srcPremul->allocPixels(SkImageInfo::Make(W, H, ct, kPremul_SkAlphaType),
         nullptr, ctable);
+=======
+                           NULL, ctable);
+    srcPremul->allocPixels(SkImageInfo::Make(W, H, ct, kPremul_SkAlphaType),
+                           NULL, ctable);
+>>>>>>> miniblink49
     SkSafeUnref(ctable);
     init_src(*srcOpaque);
     init_src(*srcPremul);
 }
 
+<<<<<<< HEAD
 DEF_TEST(BitmapCopy_extractSubset, reporter)
 {
+=======
+DEF_TEST(BitmapCopy_extractSubset, reporter) {
+>>>>>>> miniblink49
     for (size_t i = 0; i < SK_ARRAY_COUNT(gPairs); i++) {
         SkBitmap srcOpaque, srcPremul;
         setup_src_bitmaps(&srcOpaque, &srcPremul, gPairs[i].fColorType);
@@ -266,8 +391,13 @@ DEF_TEST(BitmapCopy_extractSubset, reporter)
                     SkAutoLockPixels alp0(subset);
                     SkAutoLockPixels alp1(copy);
                     // they should both have, or both not-have, a colortable
+<<<<<<< HEAD
                     bool hasCT = subset.getColorTable() != nullptr;
                     REPORTER_ASSERT(reporter, (copy.getColorTable() != nullptr) == hasCT);
+=======
+                    bool hasCT = subset.getColorTable() != NULL;
+                    REPORTER_ASSERT(reporter, (copy.getColorTable() != NULL) == hasCT);
+>>>>>>> miniblink49
                 }
             }
         }
@@ -281,8 +411,12 @@ DEF_TEST(BitmapCopy_extractSubset, reporter)
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(BitmapCopy, reporter)
 {
+=======
+DEF_TEST(BitmapCopy, reporter) {
+>>>>>>> miniblink49
     static const bool isExtracted[] = {
         false, true
     };
@@ -298,17 +432,27 @@ DEF_TEST(BitmapCopy, reporter)
             bool expected = gPairs[i].fValid[j] != '0';
             if (success != expected) {
                 ERRORF(reporter, "SkBitmap::copyTo from %s to %s. expected %s "
+<<<<<<< HEAD
                                  "returned %s",
                     gColorTypeName[i], gColorTypeName[j],
                     boolStr(expected), boolStr(success));
+=======
+                       "returned %s", gColorTypeName[i], gColorTypeName[j],
+                       boolStr(expected), boolStr(success));
+>>>>>>> miniblink49
             }
 
             bool canSucceed = srcPremul.canCopyTo(gPairs[j].fColorType);
             if (success != canSucceed) {
                 ERRORF(reporter, "SkBitmap::copyTo from %s to %s. returned %s "
+<<<<<<< HEAD
                                  "canCopyTo %s",
                     gColorTypeName[i], gColorTypeName[j],
                     boolStr(success), boolStr(canSucceed));
+=======
+                       "canCopyTo %s", gColorTypeName[i], gColorTypeName[j],
+                       boolStr(success), boolStr(canSucceed));
+>>>>>>> miniblink49
             }
 
             if (success) {
@@ -324,7 +468,12 @@ DEF_TEST(BitmapCopy, reporter)
                     const char* srcP = (const char*)srcPremul.getAddr(0, 0);
                     const char* dstP = (const char*)dst.getAddr(0, 0);
                     REPORTER_ASSERT(reporter, srcP != dstP);
+<<<<<<< HEAD
                     REPORTER_ASSERT(reporter, !memcmp(srcP, dstP, srcPremul.getSize()));
+=======
+                    REPORTER_ASSERT(reporter, !memcmp(srcP, dstP,
+                                                      srcPremul.getSize()));
+>>>>>>> miniblink49
                     REPORTER_ASSERT(reporter, srcPremul.getGenerationID() == dst.getGenerationID());
                 } else {
                     REPORTER_ASSERT(reporter, srcPremul.getGenerationID() != dst.getGenerationID());
@@ -351,15 +500,24 @@ DEF_TEST(BitmapCopy, reporter)
             // attached.
             SkBitmap tstSafeSize;
             tstSafeSize.setInfo(SkImageInfo::Make(100000000U, 100000000U,
+<<<<<<< HEAD
                 gPairs[i].fColorType, kPremul_SkAlphaType));
             int64_t safeSize = tstSafeSize.computeSafeSize64();
             if (safeSize < 0) {
                 ERRORF(reporter, "getSafeSize64() negative: %s",
                     gColorTypeName[tstSafeSize.colorType()]);
+=======
+                                                  gPairs[i].fColorType, kPremul_SkAlphaType));
+            int64_t safeSize = tstSafeSize.computeSafeSize64();
+            if (safeSize < 0) {
+                ERRORF(reporter, "getSafeSize64() negative: %s",
+                       gColorTypeName[tstSafeSize.colorType()]);
+>>>>>>> miniblink49
             }
             bool sizeFail = false;
             // Compare against hand-computed values.
             switch (gPairs[i].fColorType) {
+<<<<<<< HEAD
             case kUnknown_SkColorType:
                 break;
 
@@ -389,6 +547,37 @@ DEF_TEST(BitmapCopy, reporter)
             if (sizeFail) {
                 ERRORF(reporter, "computeSafeSize64() wrong size: %s",
                     gColorTypeName[tstSafeSize.colorType()]);
+=======
+                case kUnknown_SkColorType:
+                    break;
+
+                case kAlpha_8_SkColorType:
+                case kIndex_8_SkColorType:
+                    if (safeSize != 0x2386F26FC10000LL) {
+                        sizeFail = true;
+                    }
+                    break;
+
+                case kRGB_565_SkColorType:
+                case kARGB_4444_SkColorType:
+                    if (safeSize != 0x470DE4DF820000LL) {
+                        sizeFail = true;
+                    }
+                    break;
+
+                case kN32_SkColorType:
+                    if (safeSize != 0x8E1BC9BF040000LL) {
+                        sizeFail = true;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            if (sizeFail) {
+                ERRORF(reporter, "computeSafeSize64() wrong size: %s",
+                       gColorTypeName[tstSafeSize.colorType()]);
+>>>>>>> miniblink49
             }
 
             int subW = 2;
@@ -396,7 +585,11 @@ DEF_TEST(BitmapCopy, reporter)
 
             // Create bitmap to act as source for copies and subsets.
             SkBitmap src, subset;
+<<<<<<< HEAD
             SkColorTable* ct = nullptr;
+=======
+            SkColorTable* ct = NULL;
+>>>>>>> miniblink49
             if (kIndex_8_SkColorType == src.colorType()) {
                 ct = init_ctable();
             }
@@ -409,7 +602,11 @@ DEF_TEST(BitmapCopy, reporter)
             }
             // could fail if we pass kIndex_8 for the colortype
             if (src.tryAllocPixels(SkImageInfo::Make(localSubW, subH, gPairs[i].fColorType,
+<<<<<<< HEAD
                     kPremul_SkAlphaType))) {
+=======
+                                                     kPremul_SkAlphaType))) {
+>>>>>>> miniblink49
                 // failure is fine, as we will notice later on
             }
             SkSafeUnref(ct);
@@ -419,7 +616,12 @@ DEF_TEST(BitmapCopy, reporter)
             bool srcReady = false;
             // Test relies on older behavior that extractSubset will fail on
             // kUnknown_SkColorType
+<<<<<<< HEAD
             if (kUnknown_SkColorType != src.colorType() && isExtracted[copyCase]) {
+=======
+            if (kUnknown_SkColorType != src.colorType() &&
+                isExtracted[copyCase]) {
+>>>>>>> miniblink49
                 // The extractedSubset() test case allows us to test copy-
                 // ing when src and dst mave possibly different strides.
                 SkIRect r;
@@ -437,9 +639,16 @@ DEF_TEST(BitmapCopy, reporter)
                 // To simplify verifying correctness of copies attach
                 // buf to a SkBitmap, but copies are done using the
                 // raw buffer pointer.
+<<<<<<< HEAD
                 const size_t bufSize = subH * SkColorTypeMinRowBytes(src.colorType(), subW) * 2;
                 SkAutoTMalloc<uint8_t> autoBuf(bufSize);
                 uint8_t* buf = autoBuf.get();
+=======
+                const size_t bufSize = subH *
+                    SkColorTypeMinRowBytes(src.colorType(), subW) * 2;
+                SkAutoMalloc autoBuf (bufSize);
+                uint8_t* buf = static_cast<uint8_t*>(autoBuf.get());
+>>>>>>> miniblink49
 
                 SkBitmap bufBm; // Attach buf to this bitmap.
                 bool successExpected;
@@ -447,7 +656,12 @@ DEF_TEST(BitmapCopy, reporter)
                 // Set up values for each pixel being copied.
                 Coordinates coords(subW * subH);
                 for (int x = 0; x < subW; ++x)
+<<<<<<< HEAD
                     for (int y = 0; y < subH; ++y) {
+=======
+                    for (int y = 0; y < subH; ++y)
+                    {
+>>>>>>> miniblink49
                         int index = y * subW + x;
                         SkASSERT(index < coords.length);
                         coords[index]->fX = x;
@@ -459,8 +673,13 @@ DEF_TEST(BitmapCopy, reporter)
                 // Test #1 ////////////////////////////////////////////
 
                 const SkImageInfo info = SkImageInfo::Make(subW, subH,
+<<<<<<< HEAD
                     gPairs[i].fColorType,
                     kPremul_SkAlphaType);
+=======
+                                                           gPairs[i].fColorType,
+                                                           kPremul_SkAlphaType);
+>>>>>>> miniblink49
                 // Before/after comparisons easier if we attach buf
                 // to an appropriately configured SkBitmap.
                 memset(buf, 0xFF, bufSize);
@@ -471,7 +690,11 @@ DEF_TEST(BitmapCopy, reporter)
                 // to fit in the buffer.
                 REPORTER_ASSERT(reporter,
                     subset.copyPixelsTo(buf, bufSize, bufBm.rowBytes() * 3)
+<<<<<<< HEAD
                         == successExpected);
+=======
+                    == successExpected);
+>>>>>>> miniblink49
 
                 if (successExpected)
                     reportCopyVerification(subset, bufBm, coords,
@@ -487,14 +710,23 @@ DEF_TEST(BitmapCopy, reporter)
                 bufBm.installPixels(info, buf, subset.rowBytes());
                 successExpected = subset.getSafeSize() <= bufSize;
                 REPORTER_ASSERT(reporter,
+<<<<<<< HEAD
                     subset.copyPixelsTo(buf, bufSize) == successExpected);
                 if (successExpected)
                     reportCopyVerification(subset, bufBm, coords,
                         "copyPixelsTo(buf, bufSize)", reporter);
+=======
+                    subset.copyPixelsTo(buf, bufSize) ==
+                        successExpected);
+                if (successExpected)
+                    reportCopyVerification(subset, bufBm, coords,
+                    "copyPixelsTo(buf, bufSize)", reporter);
+>>>>>>> miniblink49
 
                 // Test #3 ////////////////////////////////////////////
                 // Copy with different stride between src and dst.
                 memset(buf, 0xFF, bufSize);
+<<<<<<< HEAD
                 bufBm.installPixels(info, buf, subset.rowBytes() + 1);
                 successExpected = true; // Should always work.
                 REPORTER_ASSERT(reporter,
@@ -504,6 +736,16 @@ DEF_TEST(BitmapCopy, reporter)
                 if (successExpected)
                     reportCopyVerification(subset, bufBm, coords,
                         "copyPixelsTo(buf, bufSize, rowBytes+1)", reporter);
+=======
+                bufBm.installPixels(info, buf, subset.rowBytes()+1);
+                successExpected = true; // Should always work.
+                REPORTER_ASSERT(reporter,
+                        subset.copyPixelsTo(buf, bufSize,
+                            subset.rowBytes()+1) == successExpected);
+                if (successExpected)
+                    reportCopyVerification(subset, bufBm, coords,
+                    "copyPixelsTo(buf, bufSize, rowBytes+1)", reporter);
+>>>>>>> miniblink49
 
                 // Test #4 ////////////////////////////////////////////
                 // Test copy with stride too small.
@@ -512,6 +754,7 @@ DEF_TEST(BitmapCopy, reporter)
                 successExpected = false;
                 // Request copy with stride too small.
                 REPORTER_ASSERT(reporter,
+<<<<<<< HEAD
                     subset.copyPixelsTo(buf, bufSize, bufBm.rowBytes() - 1)
                         == successExpected);
                 if (successExpected)
@@ -522,6 +765,18 @@ DEF_TEST(BitmapCopy, reporter)
     // Test #5 //////////////////////////////////////////// \
     // Tests the case where the source stride is too small  \
     // for the source configuration.
+=======
+                    subset.copyPixelsTo(buf, bufSize, bufBm.rowBytes()-1)
+                        == successExpected);
+                if (successExpected)
+                    reportCopyVerification(subset, bufBm, coords,
+                    "copyPixelsTo(buf, bufSize, rowBytes()-1)", reporter);
+
+#if 0   // copyPixelsFrom is gone
+                // Test #5 ////////////////////////////////////////////
+                // Tests the case where the source stride is too small
+                // for the source configuration.
+>>>>>>> miniblink49
                 memset(buf, 0xFF, bufSize);
                 bufBm.installPixels(info, buf, info.minRowBytes());
                 writeCoordPixels(bufBm, coords);
@@ -563,34 +818,58 @@ DEF_TEST(BitmapCopy, reporter)
  *  Construct 4x4 pixels where we can look at a color and determine where it should be in the grid.
  *  alpha = 0xFF, blue = 0x80, red = x, green = y
  */
+<<<<<<< HEAD
 static void fill_4x4_pixels(SkPMColor colors[16])
 {
     for (int y = 0; y < 4; ++y) {
         for (int x = 0; x < 4; ++x) {
             colors[y * 4 + x] = SkPackARGB32(0xFF, x, y, 0x80);
+=======
+static void fill_4x4_pixels(SkPMColor colors[16]) {
+    for (int y = 0; y < 4; ++y) {
+        for (int x = 0; x < 4; ++x) {
+            colors[y*4+x] = SkPackARGB32(0xFF, x, y, 0x80);
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 static bool check_4x4_pixel(SkPMColor color, unsigned x, unsigned y)
 {
     SkASSERT(x < 4 && y < 4);
     return 0xFF == SkGetPackedA32(color) && x == SkGetPackedR32(color) && y == SkGetPackedG32(color) && 0x80 == SkGetPackedB32(color);
+=======
+static bool check_4x4_pixel(SkPMColor color, unsigned x, unsigned y) {
+    SkASSERT(x < 4 && y < 4);
+    return  0xFF == SkGetPackedA32(color) &&
+            x    == SkGetPackedR32(color) &&
+            y    == SkGetPackedG32(color) &&
+            0x80 == SkGetPackedB32(color);
+>>>>>>> miniblink49
 }
 
 /**
  *  Fill with all zeros, which will never match any value from fill_4x4_pixels
  */
+<<<<<<< HEAD
 static void clear_4x4_pixels(SkPMColor colors[16])
 {
+=======
+static void clear_4x4_pixels(SkPMColor colors[16]) {
+>>>>>>> miniblink49
     sk_memset32(colors, 0, 16);
 }
 
 // Much of readPixels is exercised by copyTo testing, since readPixels is the backend for that
 // method. Here we explicitly test subset copies.
 //
+<<<<<<< HEAD
 DEF_TEST(BitmapReadPixels, reporter)
 {
+=======
+DEF_TEST(BitmapReadPixels, reporter) {
+>>>>>>> miniblink49
     const int W = 4;
     const int H = 4;
     const size_t rowBytes = W * sizeof(SkPMColor);
@@ -604,6 +883,7 @@ DEF_TEST(BitmapReadPixels, reporter)
     SkPMColor dstPixels[16];
 
     const struct {
+<<<<<<< HEAD
         bool fExpectedSuccess;
         SkIPoint fRequestedSrcLoc;
         SkISize fRequestedDstSize;
@@ -616,16 +896,37 @@ DEF_TEST(BitmapReadPixels, reporter)
         { true, { 2, 2 }, { 4, 4 }, { 0, 0 }, { 2, 2, 4, 4 } },
         { true, { -1, -1 }, { 2, 2 }, { 1, 1 }, { 0, 0, 1, 1 } },
         { false, { -1, -1 }, { 1, 1 }, { 0, 0 }, { 0, 0, 0, 0 } },
+=======
+        bool     fExpectedSuccess;
+        SkIPoint fRequestedSrcLoc;
+        SkISize  fRequestedDstSize;
+        // If fExpectedSuccess, check these, otherwise ignore
+        SkIPoint fExpectedDstLoc;
+        SkIRect  fExpectedSrcR;
+    } gRec[] = {
+        { true,  { 0, 0 }, { 4, 4 }, { 0, 0 }, { 0, 0, 4, 4 } },
+        { true,  { 1, 1 }, { 2, 2 }, { 0, 0 }, { 1, 1, 3, 3 } },
+        { true,  { 2, 2 }, { 4, 4 }, { 0, 0 }, { 2, 2, 4, 4 } },
+        { true,  {-1,-1 }, { 2, 2 }, { 1, 1 }, { 0, 0, 1, 1 } },
+        { false, {-1,-1 }, { 1, 1 }, { 0, 0 }, { 0, 0, 0, 0 } },
+>>>>>>> miniblink49
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
         clear_4x4_pixels(dstPixels);
 
         dstInfo = dstInfo.makeWH(gRec[i].fRequestedDstSize.width(),
+<<<<<<< HEAD
             gRec[i].fRequestedDstSize.height());
         bool success = srcBM.readPixels(dstInfo, dstPixels, rowBytes,
             gRec[i].fRequestedSrcLoc.x(), gRec[i].fRequestedSrcLoc.y());
 
+=======
+                                 gRec[i].fRequestedDstSize.height());
+        bool success = srcBM.readPixels(dstInfo, dstPixels, rowBytes,
+                                        gRec[i].fRequestedSrcLoc.x(), gRec[i].fRequestedSrcLoc.y());
+        
+>>>>>>> miniblink49
         REPORTER_ASSERT(reporter, gRec[i].fExpectedSuccess == success);
         if (success) {
             const SkIRect srcR = gRec[i].fExpectedSrcR;
@@ -634,7 +935,11 @@ DEF_TEST(BitmapReadPixels, reporter)
             // Walk the dst pixels, and check if we got what we expected
             for (int y = 0; y < H; ++y) {
                 for (int x = 0; x < W; ++x) {
+<<<<<<< HEAD
                     SkPMColor dstC = dstPixels[y * 4 + x];
+=======
+                    SkPMColor dstC = dstPixels[y*4+x];
+>>>>>>> miniblink49
                     // get into src coordinates
                     int sx = x - dstX + srcR.x();
                     int sy = y - dstY + srcR.y();
@@ -649,6 +954,7 @@ DEF_TEST(BitmapReadPixels, reporter)
     }
 }
 
+<<<<<<< HEAD
 #if SK_SUPPORT_GPU
 
 #include "GrContext.h"
@@ -735,3 +1041,5 @@ DEF_GPUTEST_FOR_RENDERING_CONTEXTS(BitmapCopy_Texture, reporter, ctxInfo)
 }
 
 #endif
+=======
+>>>>>>> miniblink49

@@ -23,7 +23,14 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
 } // namespace internal
 } // namespace v8
 
 #endif // V8_TARGET_ARCH_S390
+=======
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_TARGET_ARCH_S390
+>>>>>>> miniblink49

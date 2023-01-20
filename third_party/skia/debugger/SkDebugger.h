@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SKDEBUGGER_H_
 #define SKDEBUGGER_H_
 
@@ -21,12 +25,19 @@ public:
 
     ~SkDebugger();
 
+<<<<<<< HEAD
     void setIndex(int index)
     {
         fIndex = index;
     }
     void draw(SkCanvas* canvas)
     {
+=======
+    void setIndex(int index) {
+        fIndex = index;
+    }
+    void draw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         if (fIndex >= 0) {
             fDebugCanvas->drawTo(canvas, fIndex);
         }
@@ -37,6 +48,7 @@ public:
     void play();
     void rewind();
 
+<<<<<<< HEAD
     bool isCommandVisible(int index)
     {
         return fDebugCanvas->getDrawCommandVisibilityAt(index);
@@ -59,11 +71,31 @@ public:
 
     void highlightCurrentCommand(bool on)
     {
+=======
+    bool isCommandVisible(int index) {
+        return fDebugCanvas->getDrawCommandVisibilityAt(index);
+    }
+
+    void setCommandVisible(int index, bool isVisible) {
+        fDebugCanvas->toggleCommand(index, isVisible);
+    }
+
+    SkDrawCommand* getDrawCommandAt(int index) {
+        return fDebugCanvas->getDrawCommandAt(index);
+    }
+
+    const SkTDArray<SkDrawCommand*>& getDrawCommands() const {
+        return fDebugCanvas->getDrawCommands();
+    }
+
+    void highlightCurrentCommand(bool on) {
+>>>>>>> miniblink49
         fDebugCanvas->toggleFilter(on);
     }
 
     void loadPicture(SkPicture* picture);
 
+<<<<<<< HEAD
     sk_sp<SkPicture> copyPicture();
 
     int getSize() const
@@ -73,10 +105,20 @@ public:
 
     void setUserMatrix(SkMatrix userMatrix)
     {
+=======
+    SkPicture* copyPicture();
+
+    int getSize() const {
+        return fDebugCanvas->getSize();
+    }
+
+    void setUserMatrix(SkMatrix userMatrix) {
+>>>>>>> miniblink49
         // Should this live in debugger instead?
         fDebugCanvas->setUserMatrix(userMatrix);
     }
 
+<<<<<<< HEAD
     int getCommandAtPoint(int x, int y, int index)
     {
         return fDebugCanvas->getCommandAtPoint(x, y, index);
@@ -109,34 +151,77 @@ public:
 
     void setOverdrawViz(bool overDrawViz)
     {
+=======
+    int getCommandAtPoint(int x, int y, int index) {
+        return fDebugCanvas->getCommandAtPoint(x, y, index);
+    }
+
+    const SkTDArray<SkString*>* getCommandInfo(int index) const {
+        return fDebugCanvas->getCommandInfo(index);
+    }
+
+    const SkMatrix& getCurrentMatrix() {
+        return fDebugCanvas->getCurrentMatrix();
+    }
+
+    const SkIRect& getCurrentClip() {
+        return fDebugCanvas->getCurrentClip();
+    }
+
+    SkRect pictureCull() const   { 
+        return NULL == fPicture ? SkRect::MakeEmpty() : fPicture->cullRect();
+    }
+
+    int index() {
+        return fIndex;
+    }
+
+    void setOverdrawViz(bool overDrawViz) {
+>>>>>>> miniblink49
         if (fDebugCanvas) {
             fDebugCanvas->setOverdrawViz(overDrawViz);
         }
     }
 
+<<<<<<< HEAD
     void setPathOps(bool pathOps)
     {
+=======
+    void setPathOps(bool pathOps) {
+>>>>>>> miniblink49
         if (fDebugCanvas) {
             fDebugCanvas->setAllowSimplifyClip(pathOps);
         }
     }
 
+<<<<<<< HEAD
     void setMegaViz(bool megaViz)
     {
+=======
+    void setMegaViz(bool megaViz) {
+>>>>>>> miniblink49
         if (fDebugCanvas) {
             fDebugCanvas->setMegaVizMode(megaViz);
         }
     }
 
+<<<<<<< HEAD
     void setTexFilterOverride(bool texFilterOverride, SkFilterQuality quality)
     {
+=======
+    void setTexFilterOverride(bool texFilterOverride, SkFilterQuality quality) {
+>>>>>>> miniblink49
         if (fDebugCanvas) {
             fDebugCanvas->overrideTexFiltering(texFilterOverride, quality);
         }
     }
 
     void getOverviewText(const SkTDArray<double>* typeTimes, double totTime,
+<<<<<<< HEAD
         SkString* overview, int numRuns);
+=======
+                         SkString* overview, int numRuns);
+>>>>>>> miniblink49
 
     void getClipStackText(SkString* clipStack);
 
@@ -147,4 +232,8 @@ private:
     int fIndex;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #endif /* SKDEBUGGER_H_ */

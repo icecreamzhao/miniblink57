@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 #ifndef IntRectWin_h
 #define IntRectWin_h
@@ -5,6 +6,12 @@
 #include <windows.h>
 #include "third_party/WebKit/Source/platform/geometry/IntRect.h"
 
+=======
+
+#ifndef IntRectWin_h
+#define IntRectWin_h
+
+>>>>>>> miniblink49
 namespace blink {
 
 inline IntRect winRectToIntRect(const RECT& rt)
@@ -18,6 +25,7 @@ inline RECT intRectToWinRect(const IntRect& rt)
     return r;
 }
 
+<<<<<<< HEAD
 inline int intRectArea(const IntRect* r)
 {
     return (r->width()) * (r->height());
@@ -35,6 +43,25 @@ inline int intUnionArea(IntRect* r1, IntRect* r2)
     IntRect area;
     area = intUnionRect(*r1, *r2);
     return intRectArea(&area);
+=======
+inline int intRectArea(const IntRect* r)
+{
+    return (r->width()) * (r->height());
+}
+
+inline IntRect intUnionRect(const IntRect& a, const IntRect& b)
+{
+    IntRect c = a;
+    c.unite(b);
+    return c;
+}
+
+inline int intUnionArea(IntRect* r1, IntRect* r2)
+{
+    IntRect area;
+    area = intUnionRect(*r1, *r2);
+    return intRectArea(&area);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -22,6 +22,7 @@ class SkBitmap;
 class SkCanvas;
 
 struct Config {
+<<<<<<< HEAD
     SkString name;
     Benchmark::Backend backend;
     SkColorType color;
@@ -35,11 +36,24 @@ struct Config {
 #else
     int bogusInt;
     int bogusIntOption;
+=======
+    const char* name;
+    Benchmark::Backend backend;
+    SkColorType color;
+    SkAlphaType alpha;
+    int samples;
+#if SK_SUPPORT_GPU
+    GrContextFactory::GLContextType ctxType;
+    bool useDFText;
+#else
+    int bogusInt;
+>>>>>>> miniblink49
     bool bogusBool;
 #endif
 };
 
 struct Target {
+<<<<<<< HEAD
     explicit Target(const Config& c)
         : config(c)
     {
@@ -48,6 +62,13 @@ struct Target {
 
     const Config config;
     sk_sp<SkSurface> surface;
+=======
+    explicit Target(const Config& c) : config(c) { }
+    virtual ~Target() { }
+
+    const Config config;
+    SkAutoTDelete<SkSurface> surface;
+>>>>>>> miniblink49
 
     /** Called once per target, immediately before any timing or drawing. */
     virtual void setup() { }
@@ -82,13 +103,23 @@ struct Target {
     /** Writes any config-specific data to the log. */
     virtual void fillOptions(ResultsWriter*) { }
 
+<<<<<<< HEAD
     SkCanvas* getCanvas() const
     {
         if (!surface.get()) {
             return nullptr;
+=======
+    SkCanvas* getCanvas() const {
+        if (!surface.get()) {
+            return NULL;
+>>>>>>> miniblink49
         }
         return surface->getCanvas();
     }
 };
 
+<<<<<<< HEAD
 #endif // nanobench_DEFINED
+=======
+#endif  // nanobench_DEFINED
+>>>>>>> miniblink49

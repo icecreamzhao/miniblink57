@@ -13,6 +13,7 @@
 #include "SkShader.h"
 #include "SkString.h"
 
+<<<<<<< HEAD
 #define SMALL SkIntToScalar(2)
 #define REAL 1.5f
 static const SkScalar kMedium = SkIntToScalar(5);
@@ -28,6 +29,22 @@ class BlurRectBench : public Benchmark {
 public:
     BlurRectBench(SkScalar rad)
     {
+=======
+#define SMALL   SkIntToScalar(2)
+#define REAL    1.5f
+static const SkScalar kMedium = SkIntToScalar(5);
+#define BIG     SkIntToScalar(10)
+static const SkScalar kMedBig = SkIntToScalar(20);
+#define REALBIG 30.5f
+
+class BlurRectBench: public Benchmark {
+    int         fLoopCount;
+    SkScalar    fRadius;
+    SkString    fName;
+
+public:
+    BlurRectBench(SkScalar rad) {
+>>>>>>> miniblink49
         fRadius = rad;
 
         if (fRadius > SkIntToScalar(25)) {
@@ -40,6 +57,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     virtual const char* onGetName()
     {
         return fName.c_str();
@@ -57,33 +75,67 @@ protected:
 
     virtual void onDraw(int loops, SkCanvas*)
     {
+=======
+    virtual const char* onGetName() {
+        return fName.c_str();
+    }
+
+    SkScalar radius() const {
+        return fRadius;
+    }
+
+    void setName(const SkString& name) {
+        fName = name;
+    }
+
+    virtual void onDraw(const int loops, SkCanvas*) {
+>>>>>>> miniblink49
         SkPaint paint;
         this->setupPaint(&paint);
 
         paint.setAntiAlias(true);
 
+<<<<<<< HEAD
         SkScalar pad = fRadius * 3 / 2 + SK_Scalar1;
+=======
+        SkScalar pad = fRadius*3/2 + SK_Scalar1;
+>>>>>>> miniblink49
         SkRect r = SkRect::MakeWH(2 * pad + SK_Scalar1, 2 * pad + SK_Scalar1);
 
         preBenchSetup(r);
 
         for (int i = 0; i < loops; i++) {
+<<<<<<< HEAD
             this->makeBlurryRect(r);
+=======
+            makeBlurryRect(r);
+>>>>>>> miniblink49
         }
     }
 
     virtual void makeBlurryRect(const SkRect&) = 0;
+<<<<<<< HEAD
     virtual void preBenchSetup(const SkRect&) { }
 
+=======
+    virtual void preBenchSetup(const SkRect&) {}
+>>>>>>> miniblink49
 private:
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 class BlurRectDirectBench : public BlurRectBench {
 public:
     BlurRectDirectBench(SkScalar rad)
         : INHERITED(rad)
     {
+=======
+
+class BlurRectDirectBench: public BlurRectBench {
+ public:
+    BlurRectDirectBench(SkScalar rad) : INHERITED(rad) {
+>>>>>>> miniblink49
         SkString name;
 
         if (SkScalarFraction(rad) != 0) {
@@ -94,6 +146,7 @@ public:
 
         this->setName(name);
     }
+<<<<<<< HEAD
 
 protected:
     void makeBlurryRect(const SkRect& r) override
@@ -106,10 +159,20 @@ protected:
         SkMask::FreeImage(mask.fImage);
     }
 
+=======
+protected:
+    void makeBlurryRect(const SkRect& r) override {
+        SkMask mask;
+        SkBlurMask::BlurRect(SkBlurMask::ConvertRadiusToSigma(this->radius()),
+                             &mask, r, kNormal_SkBlurStyle);
+        SkMask::FreeImage(mask.fImage);
+    }
+>>>>>>> miniblink49
 private:
     typedef BlurRectBench INHERITED;
 };
 
+<<<<<<< HEAD
 class BlurRectSeparableBench : public BlurRectBench {
 
 public:
@@ -120,12 +183,26 @@ public:
 
     ~BlurRectSeparableBench()
     {
+=======
+class BlurRectSeparableBench: public BlurRectBench {
+
+public:
+    BlurRectSeparableBench(SkScalar rad) : INHERITED(rad) {
+        fSrcMask.fImage = NULL;
+    }
+
+    ~BlurRectSeparableBench() {
+>>>>>>> miniblink49
         SkMask::FreeImage(fSrcMask.fImage);
     }
 
 protected:
+<<<<<<< HEAD
     void preBenchSetup(const SkRect& r) override
     {
+=======
+    void preBenchSetup(const SkRect& r) override {
+>>>>>>> miniblink49
         SkMask::FreeImage(fSrcMask.fImage);
 
         r.roundOut(&fSrcMask.fBounds);
@@ -137,16 +214,25 @@ protected:
     }
 
     SkMask fSrcMask;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     typedef BlurRectBench INHERITED;
 };
 
+<<<<<<< HEAD
 class BlurRectBoxFilterBench : public BlurRectSeparableBench {
 public:
     BlurRectBoxFilterBench(SkScalar rad)
         : INHERITED(rad)
     {
+=======
+class BlurRectBoxFilterBench: public BlurRectSeparableBench {
+public:
+    BlurRectBoxFilterBench(SkScalar rad) : INHERITED(rad) {
+>>>>>>> miniblink49
         SkString name;
 
         if (SkScalarFraction(rad) != 0) {
@@ -159,6 +245,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     void makeBlurryRect(const SkRect&) override
     {
         SkMask mask;
@@ -169,15 +256,31 @@ protected:
         SkMask::FreeImage(mask.fImage);
     }
 
+=======
+
+    void makeBlurryRect(const SkRect&) override {
+        SkMask mask;
+        mask.fImage = NULL;
+        SkBlurMask::BoxBlur(&mask, fSrcMask, SkBlurMask::ConvertRadiusToSigma(this->radius()),
+                            kNormal_SkBlurStyle, kHigh_SkBlurQuality);
+        SkMask::FreeImage(mask.fImage);
+    }
+>>>>>>> miniblink49
 private:
     typedef BlurRectSeparableBench INHERITED;
 };
 
+<<<<<<< HEAD
 class BlurRectGaussianBench : public BlurRectSeparableBench {
 public:
     BlurRectGaussianBench(SkScalar rad)
         : INHERITED(rad)
     {
+=======
+class BlurRectGaussianBench: public BlurRectSeparableBench {
+public:
+    BlurRectGaussianBench(SkScalar rad) : INHERITED(rad) {
+>>>>>>> miniblink49
         SkString name;
 
         if (SkScalarFraction(rad) != 0) {
@@ -190,6 +293,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     void makeBlurryRect(const SkRect&) override
     {
         SkMask mask;
@@ -200,6 +304,16 @@ protected:
         SkMask::FreeImage(mask.fImage);
     }
 
+=======
+
+    void makeBlurryRect(const SkRect&) override {
+        SkMask mask;
+        mask.fImage = NULL;
+        SkBlurMask::BlurGroundTruth(SkBlurMask::ConvertRadiusToSigma(this->radius()),
+                                    &mask, fSrcMask, kNormal_SkBlurStyle);
+        SkMask::FreeImage(mask.fImage);
+    }
+>>>>>>> miniblink49
 private:
     typedef BlurRectSeparableBench INHERITED;
 };

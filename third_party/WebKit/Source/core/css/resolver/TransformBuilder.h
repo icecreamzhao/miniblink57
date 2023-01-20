@@ -39,16 +39,11 @@ namespace blink {
 
 class CSSToLengthConversionData;
 class CSSValue;
-class CSSValueList;
 
 class TransformBuilder {
     STATIC_ONLY(TransformBuilder);
-
 public:
-    static bool hasRelativeLengths(const CSSValueList&);
-    static TransformOperations createTransformOperations(
-        const CSSValue& inValue,
-        const CSSToLengthConversionData&);
+    static void createTransformOperations(CSSValue& inValue, const CSSToLengthConversionData&, TransformOperations& outOperations);
 };
 
 } // namespace blink

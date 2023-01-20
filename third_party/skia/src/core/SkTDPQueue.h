@@ -15,18 +15,30 @@
  * function that compares two Ts and returns true if the first is higher priority than the second.
  *
  * Optionally objects may know their index into the priority queue. The queue will update the index
+<<<<<<< HEAD
  * as the objects move through the queue. This is enabled by using a non-nullptr function for INDEX.
+=======
+ * as the objects move through the queue. This is enabled by using a non-NULL function for INDEX.
+>>>>>>> miniblink49
  * When an INDEX function is provided random deletes from the queue are allowed using remove().
  * Additionally, the * priority is allowed to change as long as priorityDidChange() is called
  * afterwards. In debug builds the index will be set to -1 before an element is removed from the
  * queue.
  */
 template <typename T,
+<<<<<<< HEAD
     bool (*LESS)(const T&, const T&),
     int* (*INDEX)(const T&) = (int* (*)(const T&)) nullptr>
 class SkTDPQueue : public SkNoncopyable {
 public:
     SkTDPQueue() { }
+=======
+          bool (*LESS)(const T&, const T&),
+          int* (*INDEX)(const T&) = (int* (*)(const T&))NULL>
+class SkTDPQueue : public SkNoncopyable {
+public:
+    SkTDPQueue() {}
+>>>>>>> miniblink49
 
     /** Number of items in the queue. */
     int count() const { return fArray.count(); }
@@ -34,6 +46,7 @@ public:
     /** Gets the next item in the queue without popping it. */
     const T& peek() const { return fArray[0]; }
     T& peek() { return fArray[0]; }
+<<<<<<< HEAD
 
     /** Removes the next item. */
     void pop()
@@ -41,6 +54,14 @@ public:
         this->validate();
         SkDEBUGCODE(if (SkToBool(INDEX)) { *INDEX(fArray[0]) = -1; }) if (1 == fArray.count())
         {
+=======
+    
+    /** Removes the next item. */
+    void pop() {
+        this->validate();
+        SkDEBUGCODE(if (SkToBool(INDEX)) { *INDEX(fArray[0]) = -1; })
+        if (1 == fArray.count()) {
+>>>>>>> miniblink49
             fArray.pop();
             return;
         }
@@ -54,8 +75,12 @@ public:
     }
 
     /** Inserts a new item in the queue based on its priority. */
+<<<<<<< HEAD
     void insert(T entry)
     {
+=======
+    void insert(T entry) {
+>>>>>>> miniblink49
         this->validate();
         int index = fArray.count();
         *fArray.append() = entry;
@@ -64,6 +89,7 @@ public:
         this->validate();
     }
 
+<<<<<<< HEAD
     /** Random access removal. This requires that the INDEX function is non-nullptr. */
     void remove(T entry)
     {
@@ -73,6 +99,16 @@ public:
         this->validate();
         SkDEBUGCODE(*INDEX(fArray[index]) = -1;) if (index == fArray.count() - 1)
         {
+=======
+    /** Random access removal. This requires that the INDEX function is non-NULL. */
+    void remove(T entry) {
+        SkASSERT(NULL != INDEX);
+        int index = *INDEX(entry);
+        SkASSERT(index >= 0 && index < fArray.count());
+        this->validate();
+        SkDEBUGCODE(*INDEX(fArray[index]) = -1;)
+        if (index == fArray.count() - 1) {
+>>>>>>> miniblink49
             fArray.pop();
             return;
         }
@@ -86,9 +122,14 @@ public:
     /** Notification that the priority of an entry has changed. This must be called after an
         item's priority is changed to maintain correct ordering. Changing the priority is only
         allowed if an INDEX function is provided. */
+<<<<<<< HEAD
     void priorityDidChange(T entry)
     {
         SkASSERT(nullptr != INDEX);
+=======
+    void priorityDidChange(T entry) {
+        SkASSERT(NULL != INDEX);
+>>>>>>> miniblink49
         int index = *INDEX(entry);
         SkASSERT(index >= 0 && index < fArray.count());
         this->validate(index);
@@ -101,6 +142,7 @@ public:
     T at(int i) const { return fArray[i]; }
 
 private:
+<<<<<<< HEAD
     static int LeftOf(int x)
     {
         SkASSERT(x >= 0);
@@ -114,6 +156,12 @@ private:
 
     void percolateUpOrDown(int index)
     {
+=======
+    static int LeftOf(int x) { SkASSERT(x >= 0); return 2 * x + 1; }
+    static int ParentOf(int x) { SkASSERT(x > 0); return (x - 1) >> 1; }
+
+    void percolateUpOrDown(int index) {
+>>>>>>> miniblink49
         SkASSERT(index >= 0);
         if (!percolateUpIfNecessary(index)) {
             this->validate(index);
@@ -121,8 +169,12 @@ private:
         }
     }
 
+<<<<<<< HEAD
     bool percolateUpIfNecessary(int index)
     {
+=======
+    bool percolateUpIfNecessary(int index) {
+>>>>>>> miniblink49
         SkASSERT(index >= 0);
         bool percolated = false;
         do {
@@ -144,12 +196,20 @@ private:
         } while (true);
     }
 
+<<<<<<< HEAD
     void percolateDownIfNecessary(int index)
     {
         SkASSERT(index >= 0);
         do {
             int child = LeftOf(index);
 
+=======
+    void percolateDownIfNecessary(int index) {
+        SkASSERT(index >= 0);
+        do {
+            int child = LeftOf(index);
+            
+>>>>>>> miniblink49
             if (child >= fArray.count()) {
                 // We're a leaf.
                 this->setIndex(index);
@@ -183,16 +243,24 @@ private:
         } while (true);
     }
 
+<<<<<<< HEAD
     void setIndex(int index)
     {
+=======
+    void setIndex(int index) {
+>>>>>>> miniblink49
         SkASSERT(index < fArray.count());
         if (SkToBool(INDEX)) {
             *INDEX(fArray[index]) = index;
         }
     }
 
+<<<<<<< HEAD
     void validate(int excludedIndex = -1) const
     {
+=======
+    void validate(int excludedIndex = -1) const {
+>>>>>>> miniblink49
 #ifdef SK_DEBUG
         for (int i = 1; i < fArray.count(); ++i) {
             int p = ParentOf(i);
@@ -205,7 +273,11 @@ private:
     }
 
     SkTDArray<T> fArray;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     typedef SkNoncopyable INHERITED;
 };
 

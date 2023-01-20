@@ -20,13 +20,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/graphics/filters/FEMerge.h"
 
 #include "SkMergeImageFilter.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -35,6 +43,7 @@ FEMerge::FEMerge(Filter* filter)
 {
 }
 
+<<<<<<< HEAD
 FEMerge* FEMerge::create(Filter* filter)
 {
     return new FEMerge(filter);
@@ -49,6 +58,25 @@ sk_sp<SkImageFilter> FEMerge::createImageFilter()
         inputRefs[i] = SkiaImageFilterBuilder::build(inputEffect(i), operatingColorSpace());
     SkImageFilter::CropRect rect = getCropRect();
     return SkMergeImageFilter::Make(inputRefs.get(), size, nullptr, &rect);
+=======
+PassRefPtrWillBeRawPtr<FEMerge> FEMerge::create(Filter* filter)
+{
+    return adoptRefWillBeNoop(new FEMerge(filter));
+}
+
+PassRefPtr<SkImageFilter> FEMerge::createImageFilter(SkiaImageFilterBuilder* builder)
+{
+    unsigned size = numberOfEffectInputs();
+
+    OwnPtr<RefPtr<SkImageFilter>[]> inputRefs = adoptArrayPtr(new RefPtr<SkImageFilter>[size]);
+    OwnPtr<SkImageFilter*[]> inputs = adoptArrayPtr(new SkImageFilter*[size]);
+    for (unsigned i = 0; i < size; ++i) {
+        inputRefs[i] = builder->build(inputEffect(i), operatingColorSpace());
+        inputs[i] = inputRefs[i].get();
+    }
+    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
+    return adoptRef(SkMergeImageFilter::Create(inputs.get(), size, 0, &rect));
+>>>>>>> miniblink49
 }
 
 TextStream& FEMerge::externalRepresentation(TextStream& ts, int indent) const
@@ -57,6 +85,10 @@ TextStream& FEMerge::externalRepresentation(TextStream& ts, int indent) const
     ts << "[feMerge";
     FilterEffect::externalRepresentation(ts);
     unsigned size = numberOfEffectInputs();
+<<<<<<< HEAD
+=======
+    ASSERT(size > 0);
+>>>>>>> miniblink49
     ts << " mergeNodes=\"" << size << "\"]\n";
     for (unsigned i = 0; i < size; ++i)
         inputEffect(i)->externalRepresentation(ts, indent + 1);

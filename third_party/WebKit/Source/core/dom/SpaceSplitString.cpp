@@ -18,6 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
 #include "core/dom/SpaceSplitString.h"
 
 #include "core/html/parser/HTMLParserIdioms.h"
@@ -30,8 +31,7 @@ using namespace WTF;
 namespace blink {
 
 template <typename CharacterType>
-static inline bool hasNonASCIIOrUpper(const CharacterType* characters,
-    unsigned length)
+static inline bool hasNonASCIIOrUpper(const CharacterType* characters, unsigned length)
 {
     bool hasUpper = false;
     CharacterType ored = 0;
@@ -53,9 +53,7 @@ static inline bool hasNonASCIIOrUpper(const String& string)
 }
 
 template <typename CharacterType>
-inline void SpaceSplitString::Data::createVector(
-    const CharacterType* characters,
-    unsigned length)
+inline void SpaceSplitString::Data::createVector(const CharacterType* characters, unsigned length)
 {
     unsigned start = 0;
     while (true) {
@@ -67,7 +65,7 @@ inline void SpaceSplitString::Data::createVector(
         while (end < length && isNotHTMLSpace<CharacterType>(characters[end]))
             ++end;
 
-        m_vector.push_back(AtomicString(characters + start, end - start));
+        m_vector.append(AtomicString(characters + start, end - start));
 
         start = end + 1;
     }
@@ -107,14 +105,14 @@ bool SpaceSplitString::Data::containsAll(Data& other)
 
 void SpaceSplitString::Data::add(const AtomicString& string)
 {
-    DCHECK(hasOneRef());
-    DCHECK(!contains(string));
-    m_vector.push_back(string);
+    ASSERT(hasOneRef());
+    ASSERT(!contains(string));
+    m_vector.append(string);
 }
 
 void SpaceSplitString::Data::remove(unsigned index)
 {
-    DCHECK(hasOneRef());
+    ASSERT(hasOneRef());
     m_vector.remove(index);
 }
 
@@ -153,16 +151,15 @@ SpaceSplitString::DataMap& SpaceSplitString::sharedDataMap()
     return map;
 }
 
-void SpaceSplitString::set(const AtomicString& inputString,
-    CaseFolding caseFolding)
+void SpaceSplitString::set(const AtomicString& inputString, CaseFolding caseFolding)
 {
     if (inputString.isNull()) {
         clear();
         return;
     }
 
-    if (caseFolding == ShouldFoldCase && hasNonASCIIOrUpper(inputString.getString())) {
-        String string(inputString.getString());
+    if (caseFolding == ShouldFoldCase && hasNonASCIIOrUpper(inputString.string())) {
+        String string(inputString.string());
         string = string.foldCase();
         m_data = Data::create(AtomicString(string));
     } else {
@@ -176,10 +173,9 @@ SpaceSplitString::Data::~Data()
         sharedDataMap().remove(m_keyString);
 }
 
-PassRefPtr<SpaceSplitString::Data> SpaceSplitString::Data::create(
-    const AtomicString& string)
+PassRefPtr<SpaceSplitString::Data> SpaceSplitString::Data::create(const AtomicString& string)
 {
-    Data*& data = sharedDataMap().add(string, nullptr).storedValue->value;
+    Data*& data = sharedDataMap().add(string, 0).storedValue->value;
     if (!data) {
         data = new Data(string);
         return adoptRef(data);
@@ -187,8 +183,7 @@ PassRefPtr<SpaceSplitString::Data> SpaceSplitString::Data::create(
     return data;
 }
 
-PassRefPtr<SpaceSplitString::Data> SpaceSplitString::Data::createUnique(
-    const Data& other)
+PassRefPtr<SpaceSplitString::Data> SpaceSplitString::Data::createUnique(const Data& other)
 {
     return adoptRef(new SpaceSplitString::Data(other));
 }
@@ -196,7 +191,7 @@ PassRefPtr<SpaceSplitString::Data> SpaceSplitString::Data::createUnique(
 SpaceSplitString::Data::Data(const AtomicString& string)
     : m_keyString(string)
 {
-    DCHECK(!string.isNull());
+    ASSERT(!string.isNull());
     createVector(string);
 }
 
@@ -204,8 +199,8 @@ SpaceSplitString::Data::Data(const SpaceSplitString::Data& other)
     : RefCounted<Data>()
     , m_vector(other.m_vector)
 {
-    // Note that we don't copy m_keyString to indicate to the destructor that
-    // there's nothing to be removed from the sharedDataMap().
+    // Note that we don't copy m_keyString to indicate to the destructor that there's nothing
+    // to be removed from the sharedDataMap().
 }
 
 } // namespace blink

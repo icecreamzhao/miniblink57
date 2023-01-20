@@ -26,18 +26,34 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/audio/DynamicsCompressor.h"
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/AudioUtilities.h"
 #include "wtf/MathExtras.h"
 #include "wtf/PtrUtil.h"
+=======
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+#include "platform/audio/DynamicsCompressor.h"
+
+#include "platform/audio/AudioBus.h"
+#include "platform/audio/AudioUtilities.h"
+#include "wtf/MathExtras.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 using namespace AudioUtilities;
 
+<<<<<<< HEAD
 DynamicsCompressor::DynamicsCompressor(float sampleRate,
     unsigned numberOfChannels)
+=======
+DynamicsCompressor::DynamicsCompressor(float sampleRate, unsigned numberOfChannels)
+>>>>>>> miniblink49
     : m_numberOfChannels(numberOfChannels)
     , m_sampleRate(sampleRate)
     , m_compressor(sampleRate, numberOfChannels)
@@ -92,6 +108,7 @@ float DynamicsCompressor::parameterValue(unsigned parameterID)
     return m_parameters[parameterID];
 }
 
+<<<<<<< HEAD
 void DynamicsCompressor::process(const AudioBus* sourceBus,
     AudioBus* destinationBus,
     unsigned framesToProcess)
@@ -100,6 +117,12 @@ void DynamicsCompressor::process(const AudioBus* sourceBus,
     // numberOfChannels instead of numberOfDestinationChannels.  It's because we
     // internally match sourceChannels's size to destinationBus by channel
     // up/down mix. Thus we need numberOfChannels
+=======
+void DynamicsCompressor::process(const AudioBus* sourceBus, AudioBus* destinationBus, unsigned framesToProcess)
+{
+    // Though numberOfChannels is retrived from destinationBus, we still name it numberOfChannels instead of numberOfDestinationChannels.
+    // It's because we internally match sourceChannels's size to destinationBus by channel up/down mix. Thus we need numberOfChannels
+>>>>>>> miniblink49
     // to do the loop work for both m_sourceChannels and m_destinationChannels.
 
     unsigned numberOfChannels = destinationBus->numberOfChannels();
@@ -119,14 +142,22 @@ void DynamicsCompressor::process(const AudioBus* sourceBus,
         if (numberOfSourceChannels > 1)
             m_sourceChannels[1] = sourceBus->channel(1)->data();
         else
+<<<<<<< HEAD
             // Simply duplicate mono channel input data to right channel for stereo
             // processing.
+=======
+            // Simply duplicate mono channel input data to right channel for stereo processing.
+>>>>>>> miniblink49
             m_sourceChannels[1] = m_sourceChannels[0];
 
         break;
     default:
         // FIXME : support other number of channels.
+<<<<<<< HEAD
         NOTREACHED();
+=======
+        ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
         destinationBus->zero();
         return;
     }
@@ -142,6 +173,10 @@ void DynamicsCompressor::process(const AudioBus* sourceBus,
         m_lastFilterStageGain = filterStageGain;
         m_lastFilterStageRatio = filterStageRatio;
         m_lastAnchor = anchor;
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     }
 
     float dbThreshold = parameterValue(ParamThreshold);
@@ -151,8 +186,12 @@ void DynamicsCompressor::process(const AudioBus* sourceBus,
     float releaseTime = parameterValue(ParamRelease);
     float preDelayTime = parameterValue(ParamPreDelay);
 
+<<<<<<< HEAD
     // This is effectively a master volume on the compressed signal
     // (pre-blending).
+=======
+    // This is effectively a master volume on the compressed signal (pre-blending).
+>>>>>>> miniblink49
     float dbPostGain = parameterValue(ParamPostGain);
 
     // Linear blending value from dry to completely processed (0 -> 1)
@@ -166,6 +205,7 @@ void DynamicsCompressor::process(const AudioBus* sourceBus,
     float releaseZone4 = parameterValue(ParamReleaseZone4);
 
     // Apply compression to the source signal.
+<<<<<<< HEAD
     m_compressor.process(m_sourceChannels.get(), m_destinationChannels.get(),
         numberOfChannels, framesToProcess,
 
@@ -176,6 +216,31 @@ void DynamicsCompressor::process(const AudioBus* sourceBus,
 
     // Update the compression amount.
     setParameterValue(ParamReduction, m_compressor.meteringGain());
+=======
+    m_compressor.process(m_sourceChannels.get(),
+                         m_destinationChannels.get(),
+                         numberOfChannels,
+                         framesToProcess,
+
+                         dbThreshold,
+                         dbKnee,
+                         ratio,
+                         attackTime,
+                         releaseTime,
+                         preDelayTime,
+                         dbPostGain,
+                         effectBlend,
+
+                         releaseZone1,
+                         releaseZone2,
+                         releaseZone3,
+                         releaseZone4
+                         );
+
+    // Update the compression amount.
+    setParameterValue(ParamReduction, m_compressor.meteringGain());
+
+>>>>>>> miniblink49
 }
 
 void DynamicsCompressor::reset()
@@ -189,11 +254,21 @@ void DynamicsCompressor::reset()
 
 void DynamicsCompressor::setNumberOfChannels(unsigned numberOfChannels)
 {
+<<<<<<< HEAD
     m_sourceChannels = wrapArrayUnique(new const float*[numberOfChannels]);
     m_destinationChannels = wrapArrayUnique(new float*[numberOfChannels]);
+=======
+    m_sourceChannels = adoptArrayPtr(new const float* [numberOfChannels]);
+    m_destinationChannels = adoptArrayPtr(new float* [numberOfChannels]);
+>>>>>>> miniblink49
 
     m_compressor.setNumberOfChannels(numberOfChannels);
     m_numberOfChannels = numberOfChannels;
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

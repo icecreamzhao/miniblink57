@@ -1,4 +1,4 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -6,32 +6,45 @@
 #define ConsoleMessageStorage_h
 
 #include "core/CoreExport.h"
+#include "core/inspector/ConsoleMessage.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 
 namespace blink {
 
-class ConsoleMessage;
-class ExecutionContext;
+class FrameHost;
+class LocalDOMWindow;
+class WorkerGlobalScopeProxy;
 
-class CORE_EXPORT ConsoleMessageStorage
-    : public GarbageCollected<ConsoleMessageStorage> {
+class ConsoleMessageStorage final : public NoBaseWillBeGarbageCollected<ConsoleMessageStorage> {
     WTF_MAKE_NONCOPYABLE(ConsoleMessageStorage);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ConsoleMessageStorage);
 public:
-    ConsoleMessageStorage();
+    static PassOwnPtrWillBeRawPtr<ConsoleMessageStorage> create()
+    {
+        return adoptPtrWillBeNoop(new ConsoleMessageStorage());
+    }
 
-    void addConsoleMessage(ExecutionContext*, ConsoleMessage*);
-    void clear();
+    void reportMessage(ExecutionContext*, PassRefPtrWillBeRawPtr<ConsoleMessage>);
+    void clear(ExecutionContext*);
+
+    CORE_EXPORT Vector<unsigned> argumentCounts() const;
+
+    void adoptWorkerMessagesAfterTermination(WorkerGlobalScopeProxy*);
+    void frameWindowDiscarded(LocalDOMWindow*);
+
     size_t size() const;
     ConsoleMessage* at(size_t index) const;
+
     int expiredCount() const;
 
     DECLARE_TRACE();
 
 private:
+    ConsoleMessageStorage();
+
     int m_expiredCount;
-    HeapDeque<Member<ConsoleMessage>> m_messages;
+    WillBeHeapDeque<RefPtrWillBeMember<ConsoleMessage> > m_messages;
 };
 
 } // namespace blink

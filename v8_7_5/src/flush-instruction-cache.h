@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     V8_EXPORT_PRIVATE void FlushInstructionCache(void* start, size_t size);
     V8_EXPORT_PRIVATE V8_INLINE void FlushInstructionCache(Address start,
         size_t size)
@@ -22,3 +23,15 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_FLUSH_INSTRUCTION_CACHE_H_
+=======
+V8_EXPORT_PRIVATE void FlushInstructionCache(void* start, size_t size);
+V8_EXPORT_PRIVATE V8_INLINE void FlushInstructionCache(Address start,
+                                                       size_t size) {
+  return FlushInstructionCache(reinterpret_cast<void*>(start), size);
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_FLUSH_INSTRUCTION_CACHE_H_
+>>>>>>> miniblink49

@@ -39,15 +39,21 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT StorageQuotaCallbacks
     : public GarbageCollectedFinalized<StorageQuotaCallbacks> {
     WTF_MAKE_NONCOPYABLE(StorageQuotaCallbacks);
 
+=======
+class PLATFORM_EXPORT StorageQuotaCallbacks : public GarbageCollectedFinalized<StorageQuotaCallbacks> {
+    WTF_MAKE_NONCOPYABLE(StorageQuotaCallbacks);
+>>>>>>> miniblink49
 public:
     StorageQuotaCallbacks() { }
     virtual ~StorageQuotaCallbacks() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 
+<<<<<<< HEAD
     virtual void didQueryStorageUsageAndQuota(unsigned long long usageInBytes,
         unsigned long long quotaInBytes)
     {
@@ -58,6 +64,10 @@ public:
     {
         ASSERT_NOT_REACHED();
     }
+=======
+    virtual void didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes) { ASSERT_NOT_REACHED(); }
+    virtual void didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes) { ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
     virtual void didFail(WebStorageQuotaError) { ASSERT_NOT_REACHED(); }
 };
 

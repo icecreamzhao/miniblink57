@@ -1,6 +1,10 @@
 /*
+<<<<<<< HEAD
  * Copyright (C) 2003, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights
  * reserved.
+=======
+ * Copyright (C) 2003, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+>>>>>>> miniblink49
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -24,16 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/text/CString.h"
 
 #include "wtf/ASCIICType.h"
 #include "wtf/allocator/Partitions.h"
+=======
+
+#include "config.h"
+#include "CString.h"
+
+#include "wtf/PartitionAlloc.h"
+#include "wtf/Partitions.h"
+>>>>>>> miniblink49
 #include <string.h>
 
 using namespace std;
 
 namespace WTF {
 
+<<<<<<< HEAD
 PassRefPtr<CStringImpl> CStringImpl::createUninitialized(size_t length,
     char*& data)
 {
@@ -63,6 +77,77 @@ CString::CString(const char* chars, size_t length)
     char* data;
     m_buffer = CStringImpl::createUninitialized(length, data);
     memcpy(data, chars, length);
+=======
+PassRefPtr<CStringBuffer> CStringBuffer::createUninitialized(size_t length)
+{
+    RELEASE_ASSERT(length < (numeric_limits<unsigned>::max() - sizeof(CStringBuffer)));
+
+    // The +1 is for the terminating NUL character.
+    size_t size = sizeof(CStringBuffer) + length + 1;
+    CStringBuffer* stringBuffer = static_cast<CStringBuffer*>(partitionAllocGeneric(Partitions::bufferPartition(), size, "CStringBuffer::createUninitialized"));
+    return adoptRef(new (stringBuffer) CStringBuffer(length));
+}
+
+void CStringBuffer::operator delete(void* ptr)
+{
+    partitionFreeGeneric(Partitions::bufferPartition(), ptr);
+}
+
+CString::CString(const char* str)
+{
+    if (!str)
+        return;
+
+    init(str, strlen(str));
+}
+
+CString::CString(const char* str, size_t length)
+{
+    if (!str) {
+        ASSERT(!length);
+        return;
+    }
+
+    init(str, length);
+}
+
+void CString::init(const char* str, size_t length)
+{
+    ASSERT(str);
+
+    m_buffer = CStringBuffer::createUninitialized(length);
+    memcpy(m_buffer->mutableData(), str, length);
+    m_buffer->mutableData()[length] = '\0';
+}
+
+char* CString::mutableData()
+{
+    copyBufferIfNeeded();
+    if (!m_buffer)
+        return 0;
+    return m_buffer->mutableData();
+}
+
+CString CString::newUninitialized(size_t length, char*& characterBuffer)
+{
+    CString result;
+    result.m_buffer = CStringBuffer::createUninitialized(length);
+    char* bytes = result.m_buffer->mutableData();
+    bytes[length] = '\0';
+    characterBuffer = bytes;
+    return result;
+}
+
+void CString::copyBufferIfNeeded()
+{
+    if (!m_buffer || m_buffer->hasOneRef())
+        return;
+
+    RefPtr<CStringBuffer> buffer = m_buffer.release();
+    size_t length = buffer->length();
+    m_buffer = CStringBuffer::createUninitialized(length);
+    memcpy(m_buffer->mutableData(), buffer->data(), length + 1);
+>>>>>>> miniblink49
 }
 
 bool CString::isSafeToSendToAnotherThread() const
@@ -88,6 +173,7 @@ bool operator==(const CString& a, const char* b)
     return !strcmp(a.data(), b);
 }
 
+<<<<<<< HEAD
 std::ostream& operator<<(std::ostream& ostream, const CString& string)
 {
     if (string.isNull())
@@ -131,4 +217,6 @@ std::ostream& operator<<(std::ostream& ostream, const CString& string)
     return ostream << '"';
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace WTF

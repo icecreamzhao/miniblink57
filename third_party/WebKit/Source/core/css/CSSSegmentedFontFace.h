@@ -26,55 +26,47 @@
 #ifndef CSSSegmentedFontFace_h
 #define CSSSegmentedFontFace_h
 
-#include "platform/fonts/FontCacheKey.h"
 #include "platform/fonts/FontTraits.h"
-#include "platform/fonts/SegmentedFontData.h"
 #include "platform/heap/Handle.h"
-#include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/ListHashSet.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+class CSSFontFace;
 class CSSFontSelector;
 class FontData;
 class FontDescription;
 class FontFace;
 class SegmentedFontData;
 
-class CSSSegmentedFontFace final
-    : public GarbageCollectedFinalized<CSSSegmentedFontFace> {
+class CSSSegmentedFontFace final : public RefCountedWillBeGarbageCollectedFinalized<CSSSegmentedFontFace> {
 public:
-    static CSSSegmentedFontFace* create(CSSFontSelector* selector,
-        FontTraits traits)
+    static PassRefPtrWillBeRawPtr<CSSSegmentedFontFace> create(CSSFontSelector* selector, FontTraits traits)
     {
-        return new CSSSegmentedFontFace(selector, traits);
+        return adoptRefWillBeNoop(new CSSSegmentedFontFace(selector, traits));
     }
     ~CSSSegmentedFontFace();
 
     CSSFontSelector* fontSelector() const { return m_fontSelector; }
     FontTraits traits() const { return m_traits; }
 
-    // Called when status of a FontFace has changed (e.g. loaded or timed out)
-    // so cached FontData must be discarded.
-    void fontFaceInvalidated();
+    void fontLoaded(CSSFontFace*);
+    void fontLoadWaitLimitExceeded(CSSFontFace*);
 
-    void addFontFace(FontFace*, bool cssConnected);
-    void removeFontFace(FontFace*);
+    void addFontFace(PassRefPtrWillBeRawPtr<FontFace>, bool cssConnected);
+    void removeFontFace(PassRefPtrWillBeRawPtr<FontFace>);
     bool isEmpty() const { return m_fontFaces.isEmpty(); }
 
     PassRefPtr<FontData> getFontData(const FontDescription&);
 
     bool checkFont(const String&) const;
-    void match(const String&, HeapVector<Member<FontFace>>&) const;
-    void willUseFontData(const FontDescription&, const String& text);
-    void willUseRange(const FontDescription&, const blink::FontDataForRangeSet&);
-    size_t approximateCharacterCount() const
-    {
-        return m_approximateCharacterCount;
-    }
+    void match(const String&, WillBeHeapVector<RefPtrWillBeMember<FontFace>>&) const;
+    void willUseFontData(const FontDescription&, UChar32);
 
     DECLARE_TRACE();
 
@@ -84,26 +76,14 @@ private:
     void pruneTable();
     bool isValid() const;
 
-    using FontFaceList = HeapListHashSet<Member<FontFace>>;
+    typedef WillBeHeapListHashSet<RefPtrWillBeMember<FontFace>> FontFaceList;
 
-    Member<CSSFontSelector> m_fontSelector;
+    RawPtrWillBeMember<CSSFontSelector> m_fontSelector;
     FontTraits m_traits;
-    HashMap<FontCacheKey,
-        RefPtr<SegmentedFontData>,
-        FontCacheKeyHash,
-        FontCacheKeyTraits>
-        m_fontDataTable;
+    HashMap<unsigned, RefPtr<SegmentedFontData>> m_fontDataTable;
     // All non-CSS-connected FontFaces are stored after the CSS-connected ones.
     FontFaceList m_fontFaces;
     FontFaceList::iterator m_firstNonCssConnectedFace;
-
-    // Approximate number of characters styled with this CSSSegmentedFontFace.
-    // LayoutText::styleDidChange() increments this on the first
-    // CSSSegmentedFontFace in the style's font family list, so this is not
-    // counted if this font is used as a fallback font. Also, this may be double
-    // counted by style recalcs.
-    // TODO(ksakamoto): Revisit the necessity of this. crbug.com/613500
-    size_t m_approximateCharacterCount;
 };
 
 } // namespace blink

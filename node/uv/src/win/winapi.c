@@ -46,99 +46,99 @@ sWakeConditionVariable pWakeConditionVariable;
 sCancelSynchronousIo pCancelSynchronousIo;
 sGetFinalPathNameByHandleW pGetFinalPathNameByHandleW;
 
-void uv_winapi_init()
-{
-    HMODULE ntdll_module;
-    HMODULE kernel32_module;
 
-    ntdll_module = GetModuleHandleA("ntdll.dll");
-    if (ntdll_module == NULL) {
-        uv_fatal_error(GetLastError(), "GetModuleHandleA");
-    }
+void uv_winapi_init() {
+  HMODULE ntdll_module;
+  HMODULE kernel32_module;
 
-    pRtlNtStatusToDosError = (sRtlNtStatusToDosError)GetProcAddress(
-        ntdll_module,
-        "RtlNtStatusToDosError");
-    if (pRtlNtStatusToDosError == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  ntdll_module = GetModuleHandleA("ntdll.dll");
+  if (ntdll_module == NULL) {
+    uv_fatal_error(GetLastError(), "GetModuleHandleA");
+  }
 
-    pNtDeviceIoControlFile = (sNtDeviceIoControlFile)GetProcAddress(
-        ntdll_module,
-        "NtDeviceIoControlFile");
-    if (pNtDeviceIoControlFile == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  pRtlNtStatusToDosError = (sRtlNtStatusToDosError) GetProcAddress(
+      ntdll_module,
+      "RtlNtStatusToDosError");
+  if (pRtlNtStatusToDosError == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    pNtQueryInformationFile = (sNtQueryInformationFile)GetProcAddress(
-        ntdll_module,
-        "NtQueryInformationFile");
-    if (pNtQueryInformationFile == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  pNtDeviceIoControlFile = (sNtDeviceIoControlFile) GetProcAddress(
+      ntdll_module,
+      "NtDeviceIoControlFile");
+  if (pNtDeviceIoControlFile == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    pNtSetInformationFile = (sNtSetInformationFile)GetProcAddress(
-        ntdll_module,
-        "NtSetInformationFile");
-    if (pNtSetInformationFile == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  pNtQueryInformationFile = (sNtQueryInformationFile) GetProcAddress(
+      ntdll_module,
+      "NtQueryInformationFile");
+  if (pNtQueryInformationFile == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    pNtQueryVolumeInformationFile = (sNtQueryVolumeInformationFile)
-        GetProcAddress(ntdll_module, "NtQueryVolumeInformationFile");
-    if (pNtQueryVolumeInformationFile == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  pNtSetInformationFile = (sNtSetInformationFile) GetProcAddress(
+      ntdll_module,
+      "NtSetInformationFile");
+  if (pNtSetInformationFile == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    pNtQueryDirectoryFile = (sNtQueryDirectoryFile)
-        GetProcAddress(ntdll_module, "NtQueryDirectoryFile");
-    if (pNtQueryVolumeInformationFile == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  pNtQueryVolumeInformationFile = (sNtQueryVolumeInformationFile)
+      GetProcAddress(ntdll_module, "NtQueryVolumeInformationFile");
+  if (pNtQueryVolumeInformationFile == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    pNtQuerySystemInformation = (sNtQuerySystemInformation)GetProcAddress(
-        ntdll_module,
-        "NtQuerySystemInformation");
-    if (pNtQuerySystemInformation == NULL) {
-        uv_fatal_error(GetLastError(), "GetProcAddress");
-    }
+  pNtQueryDirectoryFile = (sNtQueryDirectoryFile)
+      GetProcAddress(ntdll_module, "NtQueryDirectoryFile");
+  if (pNtQueryVolumeInformationFile == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    kernel32_module = GetModuleHandleA("kernel32.dll");
-    if (kernel32_module == NULL) {
-        uv_fatal_error(GetLastError(), "GetModuleHandleA");
-    }
+  pNtQuerySystemInformation = (sNtQuerySystemInformation) GetProcAddress(
+      ntdll_module,
+      "NtQuerySystemInformation");
+  if (pNtQuerySystemInformation == NULL) {
+    uv_fatal_error(GetLastError(), "GetProcAddress");
+  }
 
-    pGetQueuedCompletionStatusEx = (sGetQueuedCompletionStatusEx)GetProcAddress(
-        kernel32_module,
-        "GetQueuedCompletionStatusEx");
+  kernel32_module = GetModuleHandleA("kernel32.dll");
+  if (kernel32_module == NULL) {
+    uv_fatal_error(GetLastError(), "GetModuleHandleA");
+  }
 
-    pSetFileCompletionNotificationModes = (sSetFileCompletionNotificationModes)
-        GetProcAddress(kernel32_module, "SetFileCompletionNotificationModes");
+  pGetQueuedCompletionStatusEx = (sGetQueuedCompletionStatusEx) GetProcAddress(
+      kernel32_module,
+      "GetQueuedCompletionStatusEx");
 
-    pCreateSymbolicLinkW = (sCreateSymbolicLinkW)
-        GetProcAddress(kernel32_module, "CreateSymbolicLinkW");
+  pSetFileCompletionNotificationModes = (sSetFileCompletionNotificationModes)
+    GetProcAddress(kernel32_module, "SetFileCompletionNotificationModes");
 
-    pCancelIoEx = (sCancelIoEx)
-        GetProcAddress(kernel32_module, "CancelIoEx");
+  pCreateSymbolicLinkW = (sCreateSymbolicLinkW)
+    GetProcAddress(kernel32_module, "CreateSymbolicLinkW");
 
-    pInitializeConditionVariable = (sInitializeConditionVariable)
-        GetProcAddress(kernel32_module, "InitializeConditionVariable");
+  pCancelIoEx = (sCancelIoEx)
+    GetProcAddress(kernel32_module, "CancelIoEx");
 
-    pSleepConditionVariableCS = (sSleepConditionVariableCS)
-        GetProcAddress(kernel32_module, "SleepConditionVariableCS");
+  pInitializeConditionVariable = (sInitializeConditionVariable)
+    GetProcAddress(kernel32_module, "InitializeConditionVariable");
 
-    pSleepConditionVariableSRW = (sSleepConditionVariableSRW)
-        GetProcAddress(kernel32_module, "SleepConditionVariableSRW");
+  pSleepConditionVariableCS = (sSleepConditionVariableCS)
+    GetProcAddress(kernel32_module, "SleepConditionVariableCS");
 
-    pWakeAllConditionVariable = (sWakeAllConditionVariable)
-        GetProcAddress(kernel32_module, "WakeAllConditionVariable");
+  pSleepConditionVariableSRW = (sSleepConditionVariableSRW)
+    GetProcAddress(kernel32_module, "SleepConditionVariableSRW");
 
-    pWakeConditionVariable = (sWakeConditionVariable)
-        GetProcAddress(kernel32_module, "WakeConditionVariable");
+  pWakeAllConditionVariable = (sWakeAllConditionVariable)
+    GetProcAddress(kernel32_module, "WakeAllConditionVariable");
 
-    pCancelSynchronousIo = (sCancelSynchronousIo)
-        GetProcAddress(kernel32_module, "CancelSynchronousIo");
+  pWakeConditionVariable = (sWakeConditionVariable)
+    GetProcAddress(kernel32_module, "WakeConditionVariable");
 
-    pGetFinalPathNameByHandleW = (sGetFinalPathNameByHandleW)
-        GetProcAddress(kernel32_module, "GetFinalPathNameByHandleW");
+  pCancelSynchronousIo = (sCancelSynchronousIo)
+    GetProcAddress(kernel32_module, "CancelSynchronousIo");
+
+  pGetFinalPathNameByHandleW = (sGetFinalPathNameByHandleW)
+    GetProcAddress(kernel32_module, "GetFinalPathNameByHandleW");
 }

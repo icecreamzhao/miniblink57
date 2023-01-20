@@ -210,6 +210,7 @@ public:
 			_CATCH_IO_END }
 		setstate(_St);
 		return (*this); }
+<<<<<<< HEAD
 // 	_Myt& operator<<(const void *_X)
 // 		{iostate _St = goodbit;
 // 		const sentry _Ok(*this);
@@ -222,6 +223,20 @@ public:
 // 			_CATCH_IO_END }
 // 		setstate(_St);
 // 		return (*this); }
+=======
+	_Myt& operator<<(const void *_X)
+		{iostate _St = goodbit;
+		const sentry _Ok(*this);
+		if (_Ok)
+			{const _Nput& _Fac = _USE(getloc(), _Nput);
+			_TRY_IO_BEGIN
+			if (_Fac.put(_Iter(rdbuf()), *this,
+				fill(), _X).failed())
+				_St |= badbit;
+			_CATCH_IO_END }
+		setstate(_St);
+		return (*this); }
+>>>>>>> miniblink49
 	_Myt& operator<<(_Mysb *_Pb)
 		{iostate _St = goodbit;
 		bool _Copied = false;
@@ -435,13 +450,22 @@ _CRTIMP inline basic_ostream<wchar_t, char_traits<wchar_t> >&
 
 // extern template /*_CRTIMP*/ basic_ostream<char, char_traits<char> >& __cdecl operator<<(
 //        basic_ostream<char, char_traits<char> >&, const char *);
+<<<<<<< HEAD
 template<>
 basic_ostream<char, char_traits<char> >& __cdecl operator << <char, char_traits<char> >(
+=======
+template<>
+basic_ostream<char, char_traits<char> >& __cdecl operator << <char, char_traits<char> >(
+>>>>>>> miniblink49
     basic_ostream<char, char_traits<char> > & os, char const * b);
 
 // extern template /*_CRTIMP*/ basic_ostream<char, char_traits<char> >& __cdecl operator<<(
 //        basic_ostream<char, char_traits<char> >&, char);
+<<<<<<< HEAD
 template<>
+=======
+template<>
+>>>>>>> miniblink49
 basic_ostream<char, char_traits<char> > & __cdecl operator<< <char, char_traits<char> >(basic_ostream<char, char_traits<char> > & a, char b);
 
 extern template /*_CRTIMP*/ basic_ostream<char, char_traits<char> >& __cdecl operator<<(
@@ -451,12 +475,20 @@ extern template /*_CRTIMP*/ basic_ostream<char, char_traits<char> >& __cdecl ope
 
 // extern template /*_CRTIMP*/ basic_ostream<char, char_traits<char> >& __cdecl operator<<(
 //        basic_ostream<char, char_traits<char> >&, const unsigned char *);
+<<<<<<< HEAD
 template<>
+=======
+template<>
+>>>>>>> miniblink49
 basic_ostream<char, char_traits<char> > & __cdecl operator<< <char, char_traits<char> >(basic_ostream<char, char_traits<char> > & os, unsigned char const * str);
 
 // extern template /*_CRTIMP*/ basic_ostream<char, char_traits<char> >& __cdecl operator<<(
 //        basic_ostream<char, char_traits<char> >&, const unsigned char);
+<<<<<<< HEAD
 template<>
+=======
+template<>
+>>>>>>> miniblink49
 basic_ostream<char, char_traits<char> > & __cdecl operator<< <char, char_traits<char> >(basic_ostream<char, char_traits<char> > & os, unsigned char c);
 
 extern template /*_CRTIMP*/ basic_ostream<wchar_t, char_traits<wchar_t> >& __cdecl operator<<(

@@ -27,6 +27,7 @@
 ;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;
 
+<<<<<<< HEAD
 %ifndef X64POSIX
 %define X64POSIX 0
 %endif
@@ -104,6 +105,14 @@ mangle(pushAllRegisters):
         ;; There is an 8-byte return address on the stack and we push
         ;; 72 bytes which maintains the required 16-byte stack alignment
         ;; at the call.
+=======
+;; typedef void (*PushAllRegistersCallback)(SafePointBarrier*, ThreadState*, intptr_t*);
+;; extern "C" void pushAllRegisters(SafePointBarrier*, ThreadState*, PushAllRegistersCallback)
+.CODE
+
+
+pushAllRegisters PROC
+>>>>>>> miniblink49
         push 0
         push rsi
         push rdi
@@ -123,6 +132,7 @@ mangle(pushAllRegisters):
         ;; modified so no restoring is needed.
         add rsp, 72
         ret
+<<<<<<< HEAD
 
 %elif IA32
 
@@ -157,3 +167,8 @@ mangle(pushAllRegisters):
 %else
 %error "Unsupported platform."
 %endif
+=======
+pushAllRegisters ENDP
+
+END
+>>>>>>> miniblink49

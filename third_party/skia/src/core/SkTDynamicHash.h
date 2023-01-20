@@ -17,6 +17,7 @@
 //   static uint32_t Hash(const Key&) { ... }
 // We'll look on T for these by default, or you can pass a custom Traits type.
 template <typename T,
+<<<<<<< HEAD
     typename Key,
     typename Traits = T,
     int kGrowPercent = 75> // Larger -> more memory efficient, but slower.
@@ -33,11 +34,24 @@ public:
 
     ~SkTDynamicHash()
     {
+=======
+          typename Key,
+          typename Traits = T,
+          int kGrowPercent = 75>  // Larger -> more memory efficient, but slower.
+class SkTDynamicHash {
+public:
+    SkTDynamicHash() : fCount(0), fDeleted(0), fCapacity(0), fArray(NULL) {
+        SkASSERT(this->validate());
+    }
+
+    ~SkTDynamicHash() {
+>>>>>>> miniblink49
         sk_free(fArray);
     }
 
     class Iter {
     public:
+<<<<<<< HEAD
         explicit Iter(SkTDynamicHash* hash)
             : fHash(hash)
             , fCurrentIndex(-1)
@@ -57,6 +71,21 @@ public:
         }
         void operator++()
         {
+=======
+        explicit Iter(SkTDynamicHash* hash) : fHash(hash), fCurrentIndex(-1) {
+            SkASSERT(hash);
+            ++(*this);
+        }
+        bool done() const {
+            SkASSERT(fCurrentIndex <= fHash->fCapacity);
+            return fCurrentIndex == fHash->fCapacity;
+        }
+        T& operator*() const {
+            SkASSERT(!this->done());
+            return *this->current();
+        }
+        void operator++() {
+>>>>>>> miniblink49
             do {
                 fCurrentIndex++;
             } while (!this->done() && (this->current() == Empty() || this->current() == Deleted()));
@@ -71,6 +100,7 @@ public:
 
     class ConstIter {
     public:
+<<<<<<< HEAD
         explicit ConstIter(const SkTDynamicHash* hash)
             : fHash(hash)
             , fCurrentIndex(-1)
@@ -90,6 +120,21 @@ public:
         }
         void operator++()
         {
+=======
+        explicit ConstIter(const SkTDynamicHash* hash) : fHash(hash), fCurrentIndex(-1) {
+            SkASSERT(hash);
+            ++(*this);
+        }
+        bool done() const {
+            SkASSERT(fCurrentIndex <= fHash->fCapacity);
+            return fCurrentIndex == fHash->fCapacity;
+        }
+        const T& operator*() const {
+            SkASSERT(!this->done());
+            return *this->current();
+        }
+        void operator++() {
+>>>>>>> miniblink49
             do {
                 fCurrentIndex++;
             } while (!this->done() && (this->current() == Empty() || this->current() == Deleted()));
@@ -104,15 +149,24 @@ public:
 
     int count() const { return fCount; }
 
+<<<<<<< HEAD
     // Return the entry with this key if we have it, otherwise nullptr.
     T* find(const Key& key) const
     {
+=======
+    // Return the entry with this key if we have it, otherwise NULL.
+    T* find(const Key& key) const {
+>>>>>>> miniblink49
         int index = this->firstIndex(key);
         for (int round = 0; round < fCapacity; round++) {
             SkASSERT(index >= 0 && index < fCapacity);
             T* candidate = fArray[index];
             if (Empty() == candidate) {
+<<<<<<< HEAD
                 return nullptr;
+=======
+                return NULL;
+>>>>>>> miniblink49
             }
             if (Deleted() != candidate && GetKey(*candidate) == key) {
                 return candidate;
@@ -120,6 +174,7 @@ public:
             index = this->nextIndex(index, round);
         }
         SkASSERT(fCapacity == 0);
+<<<<<<< HEAD
         return nullptr;
     }
 
@@ -127,28 +182,47 @@ public:
     void add(T* newEntry)
     {
         SkASSERT(nullptr == this->find(GetKey(*newEntry)));
+=======
+        return NULL;
+    }
+
+    // Add an entry with this key.  We require that no entry with newEntry's key is already present.
+    void add(T* newEntry) {
+        SkASSERT(NULL == this->find(GetKey(*newEntry)));
+>>>>>>> miniblink49
         this->maybeGrow();
         this->innerAdd(newEntry);
         SkASSERT(this->validate());
     }
 
     // Remove the entry with this key.  We require that an entry with this key is present.
+<<<<<<< HEAD
     void remove(const Key& key)
     {
+=======
+    void remove(const Key& key) {
+>>>>>>> miniblink49
         SkASSERT(this->find(key));
         this->innerRemove(key);
         SkASSERT(this->validate());
     }
 
+<<<<<<< HEAD
     void rewind()
     {
         if (fArray) {
             sk_bzero(fArray, sizeof(T*) * fCapacity);
+=======
+    void rewind() {
+        if (fArray) {
+            sk_bzero(fArray, sizeof(T*)* fCapacity);
+>>>>>>> miniblink49
         }
         fCount = 0;
         fDeleted = 0;
     }
 
+<<<<<<< HEAD
     void reset()
     {
         fCount = 0;
@@ -156,6 +230,14 @@ public:
         fCapacity = 0;
         sk_free(fArray);
         fArray = nullptr;
+=======
+    void reset() { 
+        fCount = 0; 
+        fDeleted = 0; 
+        fCapacity = 0; 
+        sk_free(fArray); 
+        fArray = NULL; 
+>>>>>>> miniblink49
     }
 
 protected:
@@ -164,8 +246,12 @@ protected:
     int capacity() const { return fCapacity; }
 
     // How many collisions do we go through before finding where this entry should be inserted?
+<<<<<<< HEAD
     int countCollisions(const Key& key) const
     {
+=======
+    int countCollisions(const Key& key) const {
+>>>>>>> miniblink49
         int index = this->firstIndex(key);
         for (int round = 0; round < fCapacity; round++) {
             SkASSERT(index >= 0 && index < fCapacity);
@@ -181,6 +267,7 @@ protected:
 
 private:
     // We have two special values to indicate an empty or deleted entry.
+<<<<<<< HEAD
     static T* Empty() { return reinterpret_cast<T*>(0); } // i.e. nullptr
     static T* Deleted() { return reinterpret_cast<T*>(1); } // Also an invalid pointer.
 
@@ -191,6 +278,14 @@ private:
     if (!(x))                   \
     return false
         static const int kLarge = 50; // Arbitrary, tweak to suit your patience.
+=======
+    static T* Empty()   { return reinterpret_cast<T*>(0); }  // i.e. NULL
+    static T* Deleted() { return reinterpret_cast<T*>(1); }  // Also an invalid pointer.
+
+    bool validate() const {
+        #define SKTDYNAMICHASH_CHECK(x) SkASSERT(x); if (!(x)) return false
+        static const int kLarge = 50;  // Arbitrary, tweak to suit your patience.
+>>>>>>> miniblink49
 
         // O(1) checks, always done.
         // Is capacity sane?
@@ -219,7 +314,11 @@ private:
                 if (Empty() == fArray[i] || Deleted() == fArray[i]) {
                     continue;
                 }
+<<<<<<< HEAD
                 for (int j = i + 1; j < fCapacity; j++) {
+=======
+                for (int j = i+1; j < fCapacity; j++) {
+>>>>>>> miniblink49
                     if (Empty() == fArray[j] || Deleted() == fArray[j]) {
                         continue;
                     }
@@ -228,12 +327,20 @@ private:
                 }
             }
         }
+<<<<<<< HEAD
 #undef SKTDYNAMICHASH_CHECK
         return true;
     }
 
     void innerAdd(T* newEntry)
     {
+=======
+        #undef SKTDYNAMICHASH_CHECK
+        return true;
+    }
+
+    void innerAdd(T* newEntry) {
+>>>>>>> miniblink49
         const Key& key = GetKey(*newEntry);
         int index = this->firstIndex(key);
         for (int round = 0; round < fCapacity; round++) {
@@ -252,8 +359,12 @@ private:
         SkASSERT(fCapacity == 0);
     }
 
+<<<<<<< HEAD
     void innerRemove(const Key& key)
     {
+=======
+    void innerRemove(const Key& key) {
+>>>>>>> miniblink49
         const int firstIndex = this->firstIndex(key);
         int index = firstIndex;
         for (int round = 0; round < fCapacity; round++) {
@@ -270,16 +381,26 @@ private:
         SkASSERT(fCapacity == 0);
     }
 
+<<<<<<< HEAD
     void maybeGrow()
     {
+=======
+    void maybeGrow() {
+>>>>>>> miniblink49
         if (100 * (fCount + fDeleted + 1) > fCapacity * kGrowPercent) {
             this->resize(fCapacity > 0 ? fCapacity * 2 : 4);
         }
     }
 
+<<<<<<< HEAD
     void resize(int newCapacity)
     {
         SkDEBUGCODE(int oldCount = fCount;) int oldCapacity = fCapacity;
+=======
+    void resize(int newCapacity) {
+        SkDEBUGCODE(int oldCount = fCount;)
+        int oldCapacity = fCapacity;
+>>>>>>> miniblink49
         SkAutoTMalloc<T*> oldArray(fArray);
 
         fCount = fDeleted = 0;
@@ -298,14 +419,22 @@ private:
     // fCapacity is always a power of 2, so this masks the correct low bits to index into our hash.
     uint32_t hashMask() const { return fCapacity - 1; }
 
+<<<<<<< HEAD
     int firstIndex(const Key& key) const
     {
+=======
+    int firstIndex(const Key& key) const {
+>>>>>>> miniblink49
         return Hash(key) & this->hashMask();
     }
 
     // Given index at round N, what is the index to check at N+1?  round should start at 0.
+<<<<<<< HEAD
     int nextIndex(int index, int round) const
     {
+=======
+    int nextIndex(int index, int round) const {
+>>>>>>> miniblink49
         // This will search a power-of-two array fully without repeating an index.
         return (index + round + 1) & this->hashMask();
     }
@@ -313,9 +442,15 @@ private:
     static const Key& GetKey(const T& t) { return Traits::GetKey(t); }
     static uint32_t Hash(const Key& key) { return Traits::Hash(key); }
 
+<<<<<<< HEAD
     int fCount; // Number of non Empty(), non Deleted() entries in fArray.
     int fDeleted; // Number of Deleted() entries in fArray.
     int fCapacity; // Number of entries in fArray.  Always a power of 2.
+=======
+    int fCount;     // Number of non Empty(), non Deleted() entries in fArray.
+    int fDeleted;   // Number of Deleted() entries in fArray.
+    int fCapacity;  // Number of entries in fArray.  Always a power of 2.
+>>>>>>> miniblink49
     T** fArray;
 };
 

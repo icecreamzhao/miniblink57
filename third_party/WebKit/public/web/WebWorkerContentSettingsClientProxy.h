@@ -18,9 +18,27 @@ class WebWorkerContentSettingsClientProxy {
 public:
     virtual ~WebWorkerContentSettingsClientProxy() { }
 
+<<<<<<< HEAD
     virtual bool requestFileSystemAccessSync() { return true; }
 
     virtual bool allowIndexedDB(const WebString& name) { return true; }
+=======
+    // Deprecated: This function should be removed.
+    virtual bool allowDatabase(const WebString& name, const WebString& displayName, unsigned long estimatedSize)
+    {
+        return true;
+    }
+
+    virtual bool requestFileSystemAccessSync()
+    {
+        return true;
+    }
+
+    virtual bool allowIndexedDB(const WebString& name)
+    {
+        return true;
+    }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

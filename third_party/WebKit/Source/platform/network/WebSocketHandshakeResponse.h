@@ -37,7 +37,11 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT WebSocketHandshakeResponse final {
+=======
+class PLATFORM_EXPORT WebSocketHandshakeResponse {
+>>>>>>> miniblink49
 public:
     WebSocketHandshakeResponse();
     ~WebSocketHandshakeResponse();

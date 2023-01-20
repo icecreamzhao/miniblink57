@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/StyleSheetList.h"
 
 #include "core/HTMLNames.h"
@@ -36,11 +37,24 @@ StyleSheetList::StyleSheetList(TreeScope* treeScope)
 {
 }
 
-inline const HeapVector<TraceWrapperMember<StyleSheet>>&
-StyleSheetList::styleSheets() const
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(StyleSheetList);
+
+inline const WillBeHeapVector<RefPtrWillBeMember<StyleSheet>>& StyleSheetList::styleSheets()
 {
+#if !ENABLE(OILPAN)
+    if (!m_treeScope)
+        return m_detachedStyleSheets;
+#endif
     return document()->styleEngine().styleSheetsForStyleSheetList(*m_treeScope);
 }
+
+#if !ENABLE(OILPAN)
+void StyleSheetList::detachFromDocument()
+{
+    m_detachedStyleSheets = document()->styleEngine().styleSheetsForStyleSheetList(*m_treeScope);
+    m_treeScope = nullptr;
+}
+#endif
 
 unsigned StyleSheetList::length()
 {
@@ -49,30 +63,34 @@ unsigned StyleSheetList::length()
 
 StyleSheet* StyleSheetList::item(unsigned index)
 {
-    const HeapVector<TraceWrapperMember<StyleSheet>>& sheets = styleSheets();
-    return index < sheets.size() ? sheets[index].get() : nullptr;
+    const WillBeHeapVector<RefPtrWillBeMember<StyleSheet>>& sheets = styleSheets();
+    return index < sheets.size() ? sheets[index].get() : 0;
 }
 
 HTMLStyleElement* StyleSheetList::getNamedItem(const AtomicString& name) const
 {
-    // IE also supports retrieving a stylesheet by name, using the name/id of the
-    // <style> tag (this is consistent with all the other collections) ### Bad
-    // implementation because returns a single element (are IDs always unique?)
-    // and doesn't look for name attribute. But unicity of stylesheet ids is good
-    // practice anyway ;)
+#if !ENABLE(OILPAN)
+    if (!m_treeScope)
+        return 0;
+#endif
+
+    // IE also supports retrieving a stylesheet by name, using the name/id of the <style> tag
+    // (this is consistent with all the other collections)
+    // ### Bad implementation because returns a single element (are IDs always unique?)
+    // and doesn't look for name attribute.
+    // But unicity of stylesheet ids is good practice anyway ;)
     // FIXME: We should figure out if we should change this or fix the spec.
     Element* element = m_treeScope->getElementById(name);
-    return isHTMLStyleElement(element) ? toHTMLStyleElement(element) : nullptr;
+    return isHTMLStyleElement(element) ? toHTMLStyleElement(element) : 0;
 }
 
 CSSStyleSheet* StyleSheetList::anonymousNamedGetter(const AtomicString& name)
 {
     if (document())
-        UseCounter::count(*document(),
-            UseCounter::StyleSheetListAnonymousNamedGetter);
+        UseCounter::count(*document(), UseCounter::StyleSheetListAnonymousNamedGetter);
     HTMLStyleElement* item = getNamedItem(name);
     if (!item)
-        return nullptr;
+        return 0;
     return item->sheet();
 }
 

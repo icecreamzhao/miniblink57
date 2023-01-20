@@ -2,10 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Apple Inc.
- * All rights reserved.
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
- * (http://www.torchmobile.com/)
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +22,7 @@
  *
  */
 
+#include "config.h"
 #include "core/dom/NodeTraversal.h"
 
 #include "core/dom/ContainerNode.h"
@@ -31,8 +30,7 @@
 
 namespace blink {
 
-Node* NodeTraversal::previousIncludingPseudo(const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::previousIncludingPseudo(const Node& current, const Node* stayWithin)
 {
     if (current == stayWithin)
         return 0;
@@ -44,8 +42,7 @@ Node* NodeTraversal::previousIncludingPseudo(const Node& current,
     return current.parentNode();
 }
 
-Node* NodeTraversal::nextIncludingPseudo(const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::nextIncludingPseudo(const Node& current, const Node* stayWithin)
 {
     if (Node* next = current.pseudoAwareFirstChild())
         return next;
@@ -53,27 +50,25 @@ Node* NodeTraversal::nextIncludingPseudo(const Node& current,
         return 0;
     if (Node* next = current.pseudoAwareNextSibling())
         return next;
-    for (Node& parent : ancestorsOf(current)) {
+    for (Node* parent = current.parentNode(); parent; parent = parent->parentNode()) {
         if (parent == stayWithin)
             return 0;
-        if (Node* next = parent.pseudoAwareNextSibling())
+        if (Node* next = parent->pseudoAwareNextSibling())
             return next;
     }
     return 0;
 }
 
-Node* NodeTraversal::nextIncludingPseudoSkippingChildren(
-    const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::nextIncludingPseudoSkippingChildren(const Node& current, const Node* stayWithin)
 {
     if (current == stayWithin)
         return 0;
     if (Node* next = current.pseudoAwareNextSibling())
         return next;
-    for (Node& parent : ancestorsOf(current)) {
+    for (Node* parent = current.parentNode(); parent; parent = parent->parentNode()) {
         if (parent == stayWithin)
             return 0;
-        if (Node* next = parent.pseudoAwareNextSibling())
+        if (Node* next = parent->pseudoAwareNextSibling())
             return next;
     }
     return 0;
@@ -81,24 +76,23 @@ Node* NodeTraversal::nextIncludingPseudoSkippingChildren(
 
 Node* NodeTraversal::nextAncestorSibling(const Node& current)
 {
-    DCHECK(!current.nextSibling());
-    for (Node& parent : ancestorsOf(current)) {
-        if (parent.nextSibling())
-            return parent.nextSibling();
+    ASSERT(!current.nextSibling());
+    for (Node* parent = current.parentNode(); parent; parent = parent->parentNode()) {
+        if (parent->nextSibling())
+            return parent->nextSibling();
     }
     return 0;
 }
 
-Node* NodeTraversal::nextAncestorSibling(const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::nextAncestorSibling(const Node& current, const Node* stayWithin)
 {
-    DCHECK(!current.nextSibling());
-    DCHECK_NE(current, stayWithin);
-    for (Node& parent : ancestorsOf(current)) {
+    ASSERT(!current.nextSibling());
+    ASSERT(current != stayWithin);
+    for (Node* parent = current.parentNode(); parent; parent = parent->parentNode()) {
         if (parent == stayWithin)
             return 0;
-        if (parent.nextSibling())
-            return parent.nextSibling();
+        if (parent->nextSibling())
+            return parent->nextSibling();
     }
     return 0;
 }
@@ -113,9 +107,7 @@ Node* NodeTraversal::lastWithin(const ContainerNode& current)
 
 Node& NodeTraversal::lastWithinOrSelf(Node& current)
 {
-    Node* lastDescendant = current.isContainerNode()
-        ? NodeTraversal::lastWithin(toContainerNode(current))
-        : 0;
+    Node* lastDescendant = current.isContainerNode() ? NodeTraversal::lastWithin(toContainerNode(current)) : 0;
     return lastDescendant ? *lastDescendant : current;
 }
 
@@ -132,24 +124,22 @@ Node* NodeTraversal::previous(const Node& current, const Node* stayWithin)
     return current.parentNode();
 }
 
-Node* NodeTraversal::previousSkippingChildren(const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::previousSkippingChildren(const Node& current, const Node* stayWithin)
 {
     if (current == stayWithin)
         return 0;
     if (current.previousSibling())
         return current.previousSibling();
-    for (Node& parent : ancestorsOf(current)) {
+    for (Node* parent = current.parentNode(); parent; parent = parent->parentNode()) {
         if (parent == stayWithin)
             return 0;
-        if (parent.previousSibling())
-            return parent.previousSibling();
+        if (parent->previousSibling())
+            return parent->previousSibling();
     }
     return 0;
 }
 
-Node* NodeTraversal::nextPostOrder(const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::nextPostOrder(const Node& current, const Node* stayWithin)
 {
     if (current == stayWithin)
         return 0;
@@ -161,21 +151,19 @@ Node* NodeTraversal::nextPostOrder(const Node& current,
     return next;
 }
 
-static Node* previousAncestorSiblingPostOrder(const Node& current,
-    const Node* stayWithin)
+static Node* previousAncestorSiblingPostOrder(const Node& current, const Node* stayWithin)
 {
-    DCHECK(!current.previousSibling());
-    for (Node& parent : NodeTraversal::ancestorsOf(current)) {
+    ASSERT(!current.previousSibling());
+    for (Node* parent = current.parentNode(); parent; parent = parent->parentNode()) {
         if (parent == stayWithin)
             return 0;
-        if (parent.previousSibling())
-            return parent.previousSibling();
+        if (parent->previousSibling())
+            return parent->previousSibling();
     }
     return 0;
 }
 
-Node* NodeTraversal::previousPostOrder(const Node& current,
-    const Node* stayWithin)
+Node* NodeTraversal::previousPostOrder(const Node& current, const Node* stayWithin)
 {
     if (Node* lastChild = current.lastChild())
         return lastChild;

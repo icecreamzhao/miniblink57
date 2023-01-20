@@ -19,14 +19,12 @@
  *
  */
 
+#include "config.h"
 #include "core/style/QuotesData.h"
 
 namespace blink {
 
-PassRefPtr<QuotesData> QuotesData::create(UChar open1,
-    UChar close1,
-    UChar open2,
-    UChar close2)
+PassRefPtr<QuotesData> QuotesData::create(UChar open1, UChar close1, UChar open2, UChar close2)
 {
     RefPtr<QuotesData> data = QuotesData::create();
     data->addPair(std::make_pair(String(&open1, 1), String(&close1, 1)));
@@ -36,7 +34,7 @@ PassRefPtr<QuotesData> QuotesData::create(UChar open1,
 
 void QuotesData::addPair(std::pair<String, String> quotePair)
 {
-    m_quotePairs.push_back(quotePair);
+    m_quotePairs.append(quotePair);
 }
 
 const String QuotesData::getOpenQuote(int index) const
@@ -45,7 +43,7 @@ const String QuotesData::getOpenQuote(int index) const
     if (!m_quotePairs.size() || index < 0)
         return emptyString();
     if ((size_t)index >= m_quotePairs.size())
-        return m_quotePairs.back().first;
+        return m_quotePairs.last().first;
     return m_quotePairs.at(index).first;
 }
 
@@ -55,7 +53,7 @@ const String QuotesData::getCloseQuote(int index) const
     if (!m_quotePairs.size() || index < 0)
         return emptyString();
     if ((size_t)index >= m_quotePairs.size())
-        return m_quotePairs.back().second;
+        return m_quotePairs.last().second;
     return m_quotePairs.at(index).second;
 }
 

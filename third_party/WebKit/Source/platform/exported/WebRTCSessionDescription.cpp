@@ -28,6 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "public/platform/WebRTCSessionDescription.h"
 
 #include "public/platform/WebString.h"
@@ -36,12 +41,18 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class WebRTCSessionDescriptionPrivate final
     : public RefCounted<WebRTCSessionDescriptionPrivate> {
 public:
     static PassRefPtr<WebRTCSessionDescriptionPrivate> create(
         const WebString& type,
         const WebString& sdp);
+=======
+class WebRTCSessionDescriptionPrivate final : public RefCounted<WebRTCSessionDescriptionPrivate> {
+public:
+    static PassRefPtr<WebRTCSessionDescriptionPrivate> create(const WebString& type, const WebString& sdp);
+>>>>>>> miniblink49
 
     WebString type() { return m_type; }
     void setType(const WebString& type) { m_type = type; }
@@ -56,16 +67,24 @@ private:
     WebString m_sdp;
 };
 
+<<<<<<< HEAD
 PassRefPtr<WebRTCSessionDescriptionPrivate>
 WebRTCSessionDescriptionPrivate::create(const WebString& type,
     const WebString& sdp)
+=======
+PassRefPtr<WebRTCSessionDescriptionPrivate> WebRTCSessionDescriptionPrivate::create(const WebString& type, const WebString& sdp)
+>>>>>>> miniblink49
 {
     return adoptRef(new WebRTCSessionDescriptionPrivate(type, sdp));
 }
 
+<<<<<<< HEAD
 WebRTCSessionDescriptionPrivate::WebRTCSessionDescriptionPrivate(
     const WebString& type,
     const WebString& sdp)
+=======
+WebRTCSessionDescriptionPrivate::WebRTCSessionDescriptionPrivate(const WebString& type, const WebString& sdp)
+>>>>>>> miniblink49
     : m_type(type)
     , m_sdp(sdp)
 {
@@ -81,8 +100,12 @@ void WebRTCSessionDescription::reset()
     m_private.reset();
 }
 
+<<<<<<< HEAD
 void WebRTCSessionDescription::initialize(const WebString& type,
     const WebString& sdp)
+=======
+void WebRTCSessionDescription::initialize(const WebString& type, const WebString& sdp)
+>>>>>>> miniblink49
 {
     m_private = WebRTCSessionDescriptionPrivate::create(type, sdp);
 }
@@ -112,3 +135,7 @@ void WebRTCSessionDescription::setSDP(const WebString& sdp)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

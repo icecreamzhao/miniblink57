@@ -8,6 +8,7 @@
 #ifndef GrContext_DEFINED
 #define GrContext_DEFINED
 
+<<<<<<< HEAD
 #include "../private/GrAuditTrail.h"
 #include "../private/GrSingleOwner.h"
 #include "../private/SkMutex.h"
@@ -15,12 +16,19 @@
 #include "GrClip.h"
 #include "GrColor.h"
 #include "GrPaint.h"
+=======
+#include "GrClip.h"
+#include "GrColor.h"
+#include "GrPaint.h"
+#include "GrPathRendererChain.h"
+>>>>>>> miniblink49
 #include "GrRenderTarget.h"
 #include "GrTextureProvider.h"
 #include "SkMatrix.h"
 #include "SkPathEffect.h"
 #include "SkTypes.h"
 
+<<<<<<< HEAD
 struct GrBatchAtlasConfig;
 class GrBatchFontCache;
 struct GrContextOptions;
@@ -29,10 +37,25 @@ class GrDrawingManager;
 class GrDrawContext;
 class GrFragmentProcessor;
 class GrGpu;
+=======
+class GrAARectRenderer;
+class GrBatchFontCache;
+class GrCaps;
+struct GrContextOptions;
+class GrDrawContext;
+class GrDrawTarget;
+class GrFragmentProcessor;
+class GrGpu;
+class GrGpuTraceMarker;
+>>>>>>> miniblink49
 class GrIndexBuffer;
 class GrLayerCache;
 class GrOvalRenderer;
 class GrPath;
+<<<<<<< HEAD
+=======
+class GrPathRenderer;
+>>>>>>> miniblink49
 class GrPipelineBuilder;
 class GrResourceEntry;
 class GrResourceCache;
@@ -42,8 +65,13 @@ class GrTextBlobCache;
 class GrTextContext;
 class GrTextureParams;
 class GrVertexBuffer;
+<<<<<<< HEAD
 class GrSwizzle;
 class SkTraceMemoryDump;
+=======
+class GrStrokeInfo;
+class GrSoftwarePathRenderer;
+>>>>>>> miniblink49
 
 class SK_API GrContext : public SkRefCnt {
 public:
@@ -60,8 +88,11 @@ public:
 
     virtual ~GrContext();
 
+<<<<<<< HEAD
     GrContextThreadSafeProxy* threadSafeProxy();
 
+=======
+>>>>>>> miniblink49
     /**
      * The GrContext normally assumes that no outsider is setting state
      * within the underlying 3D API's context/device/whatever. This call informs
@@ -83,8 +114,12 @@ public:
      * This gives classes a chance to free resources held on a per context basis.
      * The 'info' parameter will be stored and passed to the callback function.
      */
+<<<<<<< HEAD
     void addCleanUp(PFCleanUpFunc cleanUp, void* info)
     {
+=======
+    void addCleanUp(PFCleanUpFunc cleanUp, void* info) {
+>>>>>>> miniblink49
         CleanUpData* entry = fCleanUpData.push();
 
         entry->fFunc = cleanUp;
@@ -92,6 +127,7 @@ public:
     }
 
     /**
+<<<<<<< HEAD
      * Abandons all GPU resources and assumes the underlying backend 3D API context is not longer
      * usable. Call this if you have lost the associated GPU context, and thus internal texture,
      * buffer, etc. references/IDs are now invalid. Calling this ensures that the destructors of the
@@ -115,6 +151,23 @@ public:
      */
     void releaseResourcesAndAbandonContext();
 
+=======
+     * Abandons all GPU resources and assumes the underlying backend 3D API
+     * context is not longer usable. Call this if you have lost the associated
+     * GPU context, and thus internal texture, buffer, etc. references/IDs are
+     * now invalid. Should be called even when GrContext is no longer going to
+     * be used for two reasons:
+     *  1) ~GrContext will not try to free the objects in the 3D API.
+     *  2) Any GrGpuResources created by this GrContext that outlive
+     *     will be marked as invalid (GrGpuResource::wasDestroyed()) and
+     *     when they're destroyed no 3D API calls will be made.
+     * Content drawn since the last GrContext::flush() may be lost. After this
+     * function is called the only valid action on the GrContext or
+     * GrGpuResources it created is to destroy them.
+     */
+    void abandonContext();
+
+>>>>>>> miniblink49
     ///////////////////////////////////////////////////////////////////////////
     // Resource Cache
 
@@ -183,14 +236,21 @@ public:
 
     /**
      * Returns a helper object to orchestrate draws.
+<<<<<<< HEAD
      * Callers assume the creation ref of the drawContext
      * NULL will be returned if the context has been abandoned.
      *
      * @param  rt           the render target receiving the draws
+=======
+     * Callers should take a ref if they rely on the GrDrawContext sticking around.
+     * NULL will be returned if the context has been abandoned.
+     *
+>>>>>>> miniblink49
      * @param  surfaceProps the surface properties (mainly defines text drawing)
      *
      * @return a draw context
      */
+<<<<<<< HEAD
     sk_sp<GrDrawContext> drawContext(sk_sp<GrRenderTarget> rt, const SkSurfaceProps* = nullptr);
 
     /**
@@ -205,6 +265,11 @@ public:
         GrSurfaceOrigin origin = kDefault_GrSurfaceOrigin,
         const SkSurfaceProps* surfaceProps = nullptr,
         SkBudgeted = SkBudgeted::kYes);
+=======
+    GrDrawContext* drawContext(const SkSurfaceProps* surfaceProps = NULL) {
+        return fDrawingMgr.drawContext(surfaceProps);
+    }
+>>>>>>> miniblink49
 
     ///////////////////////////////////////////////////////////////////////////
     // Misc.
@@ -219,7 +284,11 @@ public:
          * causes the flush to skip submission of deferred content to the 3D API
          * during the flush.
          */
+<<<<<<< HEAD
         kDiscard_FlushBit = 0x2,
+=======
+        kDiscard_FlushBit                    = 0x2,
+>>>>>>> miniblink49
     };
 
     /**
@@ -230,14 +299,23 @@ public:
      */
     void flush(int flagsBitfield = 0);
 
+<<<<<<< HEAD
     void flushIfNecessary()
     {
         if (fFlushToReduceCacheSize || this->caps()->immediateFlush()) {
+=======
+    void flushIfNecessary() {
+        if (fFlushToReduceCacheSize) {
+>>>>>>> miniblink49
             this->flush();
         }
     }
 
+<<<<<<< HEAD
     /**
+=======
+   /**
+>>>>>>> miniblink49
     * These flags can be used with the read/write pixels functions below.
     */
     enum PixelOpsFlags {
@@ -249,12 +327,21 @@ public:
         kFlushWrites_PixelOp = 0x2,
         /** The src for write or dst read is unpremultiplied. This is only respected if both the
             config src and dst configs are an RGBA/BGRA 8888 format. */
+<<<<<<< HEAD
         kUnpremul_PixelOpsFlag = 0x4,
     };
 
     /**
      * Reads a rectangle of pixels from a surface.
      * @param surface       the surface to read from.
+=======
+        kUnpremul_PixelOpsFlag  = 0x4,
+    };
+
+    /**
+     * Reads a rectangle of pixels from a render target.
+     * @param target        the render target to read from.
+>>>>>>> miniblink49
      * @param left          left edge of the rectangle to read (inclusive)
      * @param top           top edge of the rectangle to read (inclusive)
      * @param width         width of rectangle to read in pixels.
@@ -266,6 +353,7 @@ public:
      * @param pixelOpsFlags see PixelOpsFlags enum above.
      *
      * @return true if the read succeeded, false if not. The read can fail because of an unsupported
+<<<<<<< HEAD
      *         pixel configs
      */
     bool readSurfacePixels(GrSurface* surface,
@@ -273,6 +361,16 @@ public:
         GrPixelConfig config, void* buffer,
         size_t rowBytes = 0,
         uint32_t pixelOpsFlags = 0);
+=======
+     *         pixel config or because no render target is currently set and NULL was passed for
+     *         target.
+     */
+    bool readRenderTargetPixels(GrRenderTarget* target,
+                                int left, int top, int width, int height,
+                                GrPixelConfig config, void* buffer,
+                                size_t rowBytes = 0,
+                                uint32_t pixelOpsFlags = 0);
+>>>>>>> miniblink49
 
     /**
      * Writes a rectangle of pixels to a surface.
@@ -290,6 +388,7 @@ public:
      *         unsupported combination of surface and src configs.
      */
     bool writeSurfacePixels(GrSurface* surface,
+<<<<<<< HEAD
         int left, int top, int width, int height,
         GrPixelConfig config, const void* buffer,
         size_t rowBytes,
@@ -306,10 +405,21 @@ public:
 
     /**
      * Copies a rectangle of texels from src to dst.
+=======
+                            int left, int top, int width, int height,
+                            GrPixelConfig config, const void* buffer,
+                            size_t rowBytes,
+                            uint32_t pixelOpsFlags = 0);
+
+    /**
+     * Copies a rectangle of texels from src to dst.
+     * bounds.
+>>>>>>> miniblink49
      * @param dst           the surface to copy to.
      * @param src           the surface to copy from.
      * @param srcRect       the rectangle of the src that should be copied.
      * @param dstPoint      the translation applied when writing the srcRect's pixels to the dst.
+<<<<<<< HEAD
      */
     bool copySurface(GrSurface* dst,
         GrSurface* src,
@@ -322,6 +432,26 @@ public:
     {
         return this->copySurface(dst, src, SkIRect::MakeWH(dst->width(), dst->height()),
             SkIPoint::Make(0, 0));
+=======
+     * @param pixelOpsFlags see PixelOpsFlags enum above. (kUnpremul_PixelOpsFlag is not allowed).
+     */
+    void copySurface(GrSurface* dst,
+                     GrSurface* src,
+                     const SkIRect& srcRect,
+                     const SkIPoint& dstPoint,
+                     uint32_t pixelOpsFlags = 0);
+
+    /** Helper that copies the whole surface but fails when the two surfaces are not identically
+        sized. */
+    bool copySurface(GrSurface* dst, GrSurface* src) {
+        if (NULL == dst || NULL == src || dst->width() != src->width() ||
+            dst->height() != src->height()) {
+            return false;
+        }
+        this->copySurface(dst, src, SkIRect::MakeWH(dst->width(), dst->height()),
+                          SkIPoint::Make(0,0));
+        return true;
+>>>>>>> miniblink49
     }
 
     /**
@@ -351,11 +481,16 @@ public:
     GrBatchFontCache* getBatchFontCache() { return fBatchFontCache; }
     GrLayerCache* getLayerCache() { return fLayerCache.get(); }
     GrTextBlobCache* getTextBlobCache() { return fTextBlobCache; }
+<<<<<<< HEAD
     bool abandoned() const;
+=======
+    bool abandoned() const { return fDrawingMgr.abandoned(); }
+>>>>>>> miniblink49
     GrResourceProvider* resourceProvider() { return fResourceProvider; }
     const GrResourceProvider* resourceProvider() const { return fResourceProvider; }
     GrResourceCache* getResourceCache() { return fResourceCache; }
 
+<<<<<<< HEAD
     // Called by tests that draw directly to the context via GrDrawContext
     void getTestTarget(GrTestTarget*, sk_sp<GrDrawContext>);
 
@@ -365,10 +500,31 @@ public:
     /** Prints cache stats to the string if GR_CACHE_STATS == 1. */
     void dumpCacheStats(SkString*) const;
     void dumpCacheStatsKeyValuePairs(SkTArray<SkString>* keys, SkTArray<double>* values) const;
+=======
+    // Called by tests that draw directly to the context via GrDrawTarget
+    void getTestTarget(GrTestTarget*);
+
+    void addGpuTraceMarker(const GrGpuTraceMarker* marker);
+    void removeGpuTraceMarker(const GrGpuTraceMarker* marker);
+
+    GrPathRenderer* getPathRenderer(
+                    const GrDrawTarget* target,
+                    const GrPipelineBuilder*,
+                    const SkMatrix& viewMatrix,
+                    const SkPath& path,
+                    const GrStrokeInfo& stroke,
+                    bool allowSW,
+                    GrPathRendererChain::DrawType drawType = GrPathRendererChain::kColor_DrawType,
+                    GrPathRendererChain::StencilSupport* stencilSupport = NULL);
+
+    /** Prints cache stats to the string if GR_CACHE_STATS == 1. */
+    void dumpCacheStats(SkString*) const;
+>>>>>>> miniblink49
     void printCacheStats() const;
 
     /** Prints GPU stats to the string if GR_GPU_STATS == 1. */
     void dumpGpuStats(SkString*) const;
+<<<<<<< HEAD
     void dumpGpuStatsKeyValuePairs(SkTArray<SkString>* keys, SkTArray<double>* values) const;
     void printGpuStats() const;
 
@@ -447,16 +603,102 @@ public:
     friend class GrClipMaskManager; // the CMM is friended just so it can call 'drawingManager'
     friend class GrDrawingManager; // for access to drawingManager for ProgramUnitTest
     GrDrawingManager* drawingManager() { return fDrawingManager; }
+=======
+    void printGpuStats() const;
+
+private:
+    GrGpu*                          fGpu;
+    const GrCaps*                   fCaps;
+    GrResourceCache*                fResourceCache;
+    // this union exists because the inheritance of GrTextureProvider->GrResourceProvider
+    // is in a private header.
+    union {
+        GrResourceProvider*         fResourceProvider;
+        GrTextureProvider*          fTextureProvider;
+    };
+
+    GrBatchFontCache*               fBatchFontCache;
+    SkAutoTDelete<GrLayerCache>     fLayerCache;
+    SkAutoTDelete<GrTextBlobCache>  fTextBlobCache;
+
+    GrPathRendererChain*            fPathRendererChain;
+    GrSoftwarePathRenderer*         fSoftwarePathRenderer;
+
+    // Set by OverbudgetCB() to request that GrContext flush before exiting a draw.
+    bool                            fFlushToReduceCacheSize;
+    bool                            fDidTestPMConversions;
+    int                             fPMToUPMConversion;
+    int                             fUPMToPMConversion;
+
+    struct CleanUpData {
+        PFCleanUpFunc fFunc;
+        void*         fInfo;
+    };
+
+    SkTDArray<CleanUpData>          fCleanUpData;
+
+    const uint32_t                  fUniqueID;
+>>>>>>> miniblink49
 
     GrContext(); // init must be called after the constructor.
     bool init(GrBackend, GrBackendContext, const GrContextOptions& options);
 
+<<<<<<< HEAD
     void initMockContext();
     void initCommon(const GrContextOptions&);
+=======
+    // Currently the DrawingMgr stores a separate GrDrawContext for each
+    // combination of text drawing options (pixel geometry x DFT use)
+    // and hands the appropriate one back given the user's request.
+    // All of the GrDrawContexts still land in the same GrDrawTarget!
+    //
+    // In the future this class will allocate a new GrDrawContext for
+    // each GrRenderTarget/GrDrawTarget and manage the DAG.
+    class DrawingMgr {
+    public:
+        DrawingMgr() : fDrawTarget(NULL) {
+            sk_bzero(fDrawContext, sizeof(fDrawContext));
+        }
+
+        ~DrawingMgr();
+
+        void init(GrContext* context);
+
+        void abandon();
+        bool abandoned() const { return NULL == fDrawTarget; }
+
+        void purgeResources();
+        void reset();
+        void flush();
+
+        // Callers should take a ref if they rely on the GrDrawContext sticking around.
+        // NULL will be returned if the context has been abandoned.
+        GrDrawContext* drawContext(const SkSurfaceProps* surfaceProps);
+
+    private:
+        void cleanup();
+
+        friend class GrContext;  // for access to fDrawTarget for testing
+
+        static const int kNumPixelGeometries = 5; // The different pixel geometries
+        static const int kNumDFTOptions = 2;      // DFT or no DFT
+
+        GrContext*        fContext;
+        GrDrawTarget*     fDrawTarget;
+
+        GrDrawContext*    fDrawContext[kNumPixelGeometries][kNumDFTOptions];
+    };
+
+    DrawingMgr                      fDrawingMgr;
+
+    void initMockContext();
+    void initCommon();
+>>>>>>> miniblink49
 
     /**
      * These functions create premul <-> unpremul effects if it is possible to generate a pair
      * of effects that make a readToUPM->writeToPM->readToUPM cycle invariant. Otherwise, they
+<<<<<<< HEAD
      * return NULL. They also can perform a swizzle as part of the draw.
      */
     sk_sp<GrFragmentProcessor> createPMToUPMEffect(GrTexture*, const GrSwizzle&,
@@ -470,6 +712,14 @@ public:
     /** Returns true if we've already determined that createPMtoUPMEffect and createUPMToPMEffect
         will fail. In such cases fall back to SW conversion. */
     bool didFailPMUPMConversionTest() const;
+=======
+     * return NULL.
+     */
+    const GrFragmentProcessor* createPMToUPMEffect(GrProcessorDataManager*, GrTexture*,
+                                                   bool swapRAndB, const SkMatrix&);
+    const GrFragmentProcessor* createUPMToPMEffect(GrProcessorDataManager*, GrTexture*,
+                                                   bool swapRAndB, const SkMatrix&);
+>>>>>>> miniblink49
 
     /**
      *  This callback allows the resource cache to callback into the GrContext
@@ -486,6 +736,7 @@ public:
     typedef SkRefCnt INHERITED;
 };
 
+<<<<<<< HEAD
 /**
  * Can be used to perform actions related to the generating GrContext in a thread safe manner. The
  * proxy does not access the 3D API (e.g. OpenGL) that backs the generating GrContext.
@@ -507,4 +758,6 @@ private:
     typedef SkRefCnt INHERITED;
 };
 
+=======
+>>>>>>> miniblink49
 #endif

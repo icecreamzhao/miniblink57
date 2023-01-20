@@ -26,6 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/text/Collator.h"
 
 #include "wtf/Assertions.h"
@@ -34,6 +35,15 @@
 #include "wtf/Threading.h"
 #include "wtf/ThreadingPrimitives.h"
 #include <memory>
+=======
+#include "config.h"
+#include "wtf/text/Collator.h"
+
+#include "wtf/Assertions.h"
+#include "wtf/StringExtras.h"
+#include "wtf/Threading.h"
+#include "wtf/ThreadingPrimitives.h"
+>>>>>>> miniblink49
 #include <stdlib.h>
 #include <string.h>
 #include <unicode/ucol.h>
@@ -44,7 +54,11 @@ static UCollator* cachedCollator;
 static char cachedEquivalentLocale[Collator::ulocFullnameCapacity];
 static Mutex& cachedCollatorMutex()
 {
+<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(Mutex, mutex, new Mutex);
+=======
+    AtomicallyInitializedStaticReference(Mutex, mutex, new Mutex);
+>>>>>>> miniblink49
     return mutex;
 }
 
@@ -56,9 +70,15 @@ Collator::Collator(const char* locale)
     setEquivalentLocale(m_locale, m_equivalentLocale);
 }
 
+<<<<<<< HEAD
 std::unique_ptr<Collator> Collator::userDefault()
 {
     return wrapUnique(new Collator(0));
+=======
+PassOwnPtr<Collator> Collator::userDefault()
+{
+    return adoptPtr(new Collator(0));
+>>>>>>> miniblink49
 }
 
 Collator::~Collator()
@@ -123,7 +143,11 @@ void Collator::releaseCollator()
             ucol_close(cachedCollator);
         cachedCollator = m_collator;
         strncpy(cachedEquivalentLocale, m_equivalentLocale, ulocFullnameCapacity);
+<<<<<<< HEAD
         m_collator = 0;
+=======
+        m_collator  = 0;
+>>>>>>> miniblink49
     }
     m_collator = 0;
 }

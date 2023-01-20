@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,18 +22,35 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef OfflineAudioContext_h
 #define OfflineAudioContext_h
 
 #include "modules/ModulesExport.h"
+<<<<<<< HEAD
 #include "modules/webaudio/BaseAudioContext.h"
 #include "wtf/HashMap.h"
+=======
+#include "modules/webaudio/AudioContext.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class ExceptionState;
+<<<<<<< HEAD
 class OfflineAudioDestinationHandler;
 
 class MODULES_EXPORT OfflineAudioContext final : public BaseAudioContext {
@@ -127,6 +145,19 @@ private:
 
     // Total render sample length.
     size_t m_totalRenderFrames;
+=======
+
+class MODULES_EXPORT OfflineAudioContext final : public AudioContext {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static OfflineAudioContext* create(ExecutionContext*, unsigned numberOfChannels, size_t numberOfFrames, float sampleRate, ExceptionState&);
+
+    ~OfflineAudioContext() override;
+
+    ScriptPromise startOfflineRendering(ScriptState*);
+private:
+    OfflineAudioContext(Document*, unsigned numberOfChannels, size_t numberOfFrames, float sampleRate);
+>>>>>>> miniblink49
 };
 
 } // namespace blink

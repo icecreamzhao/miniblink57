@@ -38,40 +38,32 @@
 
 namespace blink {
 
-class SVGPreserveAspectRatioTearOff final
-    : public SVGPropertyTearOff<SVGPreserveAspectRatio>,
-      public ScriptWrappable {
+class SVGPreserveAspectRatioTearOff final : public SVGPropertyTearOff<SVGPreserveAspectRatio>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     enum {
-        kSvgPreserveaspectratioUnknown = SVGPreserveAspectRatio::kSvgPreserveaspectratioUnknown,
-        kSvgPreserveaspectratioNone = SVGPreserveAspectRatio::kSvgPreserveaspectratioNone,
-        kSvgPreserveaspectratioXminymin = SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymin,
-        kSvgPreserveaspectratioXmidymin = SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymin,
-        kSvgPreserveaspectratioXmaxymin = SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymin,
-        kSvgPreserveaspectratioXminymid = SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymid,
-        kSvgPreserveaspectratioXmidymid = SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymid,
-        kSvgPreserveaspectratioXmaxymid = SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymid,
-        kSvgPreserveaspectratioXminymax = SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymax,
-        kSvgPreserveaspectratioXmidymax = SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymax,
-        kSvgPreserveaspectratioXmaxymax = SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymax
+        SVG_PRESERVEASPECTRATIO_UNKNOWN = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_UNKNOWN,
+        SVG_PRESERVEASPECTRATIO_NONE = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_NONE,
+        SVG_PRESERVEASPECTRATIO_XMINYMIN = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMIN,
+        SVG_PRESERVEASPECTRATIO_XMIDYMIN = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMIN,
+        SVG_PRESERVEASPECTRATIO_XMAXYMIN = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMIN,
+        SVG_PRESERVEASPECTRATIO_XMINYMID = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMID,
+        SVG_PRESERVEASPECTRATIO_XMIDYMID = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMID,
+        SVG_PRESERVEASPECTRATIO_XMAXYMID = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMID,
+        SVG_PRESERVEASPECTRATIO_XMINYMAX = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMAX,
+        SVG_PRESERVEASPECTRATIO_XMIDYMAX = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMAX,
+        SVG_PRESERVEASPECTRATIO_XMAXYMAX = SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMAX
     };
 
     enum {
-        kSvgMeetorsliceUnknown = SVGPreserveAspectRatio::kSvgMeetorsliceUnknown,
-        kSvgMeetorsliceMeet = SVGPreserveAspectRatio::kSvgMeetorsliceMeet,
-        kSvgMeetorsliceSlice = SVGPreserveAspectRatio::kSvgMeetorsliceSlice
+        SVG_MEETORSLICE_UNKNOWN = SVGPreserveAspectRatio::SVG_MEETORSLICE_UNKNOWN,
+        SVG_MEETORSLICE_MEET = SVGPreserveAspectRatio::SVG_MEETORSLICE_MEET,
+        SVG_MEETORSLICE_SLICE = SVGPreserveAspectRatio::SVG_MEETORSLICE_SLICE
     };
 
-    static SVGPreserveAspectRatioTearOff* create(
-        SVGPreserveAspectRatio* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    static PassRefPtrWillBeRawPtr<SVGPreserveAspectRatioTearOff> create(PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
     {
-        return new SVGPreserveAspectRatioTearOff(target, contextElement,
-            propertyIsAnimVal, attributeName);
+        return adoptRefWillBeNoop(new SVGPreserveAspectRatioTearOff(target, contextElement, propertyIsAnimVal, attributeName));
     }
 
     void setAlign(unsigned short, ExceptionState&);
@@ -79,14 +71,8 @@ public:
     void setMeetOrSlice(unsigned short, ExceptionState&);
     unsigned short meetOrSlice() { return target()->meetOrSlice(); }
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
-    SVGPreserveAspectRatioTearOff(
-        SVGPreserveAspectRatio*,
-        SVGElement* contextElement,
-        PropertyIsAnimValType,
-        const QualifiedName& attributeName = QualifiedName::null());
+    SVGPreserveAspectRatioTearOff(PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio>, SVGElement* contextElement, PropertyIsAnimValType, const QualifiedName& attributeName = QualifiedName::null());
 };
 
 } // namespace blink

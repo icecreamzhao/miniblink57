@@ -33,7 +33,8 @@
 
 #include "core/html/LinkResource.h"
 #include "core/html/imports/HTMLImportChildClient.h"
-#include "wtf/Allocator.h"
+#include "wtf/FastAllocBase.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
@@ -45,21 +46,21 @@ class HTMLImportChild;
 // A LinkResource subclasss used for @rel=import.
 //
 class LinkImport final : public LinkResource, public HTMLImportChildClient {
-    USING_GARBAGE_COLLECTED_MIXIN(LinkImport);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(LinkImport);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(LinkImport);
 public:
-    static LinkImport* create(HTMLLinkElement* owner);
+
+    static PassOwnPtrWillBeRawPtr<LinkImport> create(HTMLLinkElement* owner);
 
     explicit LinkImport(HTMLLinkElement* owner);
     ~LinkImport() override;
 
     // LinkResource
     void process() override;
-    LinkResourceType type() const override { return Import; }
+    Type type() const override { return Import; }
     bool hasLoaded() const override;
     DECLARE_VIRTUAL_TRACE();
     void ownerInserted() override;
-    void ownerRemoved() override;
 
     // HTMLImportChildClient
     void didFinish() override;
@@ -70,7 +71,7 @@ public:
     Document* importedDocument() const;
 
 private:
-    Member<HTMLImportChild> m_child;
+    RawPtrWillBeMember<HTMLImportChild> m_child;
 };
 
 } // namespace blink

@@ -6,13 +6,18 @@
  */
 
 #include "Resources.h"
+<<<<<<< HEAD
 #include "SkImage.h"
+=======
+#include "SkCanvas.h"
+>>>>>>> miniblink49
 #include "gm.h"
 
 /*
  *  Test decoding grayscale JPEG
  *  http://crbug.com/436079
  */
+<<<<<<< HEAD
 DEF_SIMPLE_GM(grayscalejpg, canvas, 128, 128)
 {
     const char kResource[] = "grayscale.jpg";
@@ -23,5 +28,15 @@ DEF_SIMPLE_GM(grayscalejpg, canvas, 128, 128)
         SkDebugf("\nCould not decode file '%s'. Did you forget"
                  " to set the resourcePath?\n",
             kResource);
+=======
+DEF_SIMPLE_GM(grayscalejpg, canvas, 128, 128) {
+    const char kResource[] = "grayscale.jpg";
+    SkBitmap bitmap;
+    if (GetResourceAsBitmap(kResource, &bitmap)) {
+        canvas->drawBitmap(bitmap, 0.0f, 0.0f);
+    } else {
+        SkDebugf("\nCould not decode file '%s'. Did you forget"
+                 " to set the resourcePath?\n", kResource);
+>>>>>>> miniblink49
     }
 }

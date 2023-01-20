@@ -37,16 +37,10 @@ class LocalFrame;
 struct FrameLoadRequest;
 struct WindowFeatures;
 
-DOMWindow* createWindow(const String& urlString,
-    const AtomicString& frameName,
-    const WindowFeatures&,
-    LocalDOMWindow& callingWindow,
-    LocalFrame& firstFrame,
-    LocalFrame& openerFrame);
+DOMWindow* createWindow(const String& urlString, const AtomicString& frameName, const WindowFeatures&,
+    LocalDOMWindow& callingWindow, LocalFrame& firstFrame, LocalFrame& openerFrame);
 
-void createWindowForRequest(const FrameLoadRequest&,
-    LocalFrame& openerFrame,
-    NavigationPolicy);
+void createWindowForRequest(const FrameLoadRequest&, LocalFrame& openerFrame, NavigationPolicy, ShouldSendReferrer);
 
 } // namespace blink
 

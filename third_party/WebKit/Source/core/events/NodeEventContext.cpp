@@ -24,22 +24,24 @@
  *
  */
 
+#include "config.h"
 #include "core/events/NodeEventContext.h"
 
 #include "core/dom/TouchList.h"
 #include "core/events/Event.h"
 #include "core/events/FocusEvent.h"
 #include "core/events/MouseEvent.h"
-#include "core/events/PointerEvent.h"
 #include "core/events/TouchEventContext.h"
 
 namespace blink {
 
-NodeEventContext::NodeEventContext(Node* node, EventTarget* currentTarget)
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(NodeEventContext)
+
+NodeEventContext::NodeEventContext(PassRefPtrWillBeRawPtr<Node> node, PassRefPtrWillBeRawPtr<EventTarget> currentTarget)
     : m_node(node)
     , m_currentTarget(currentTarget)
 {
-    DCHECK(m_node);
+    ASSERT(m_node);
 }
 
 DEFINE_TRACE(NodeEventContext)
@@ -51,13 +53,11 @@ DEFINE_TRACE(NodeEventContext)
 
 void NodeEventContext::handleLocalEvents(Event& event) const
 {
-    if (TouchEventContext* touchContext = touchEventContext()) {
-        touchContext->handleLocalEvents(event);
+    if (touchEventContext()) {
+        touchEventContext()->handleLocalEvents(event);
     } else if (relatedTarget()) {
         if (event.isMouseEvent()) {
             toMouseEvent(event).setRelatedTarget(relatedTarget());
-        } else if (event.isPointerEvent()) {
-            toPointerEvent(event).setRelatedTarget(relatedTarget());
         } else if (event.isFocusEvent()) {
             toFocusEvent(event).setRelatedTarget(relatedTarget());
         }
@@ -67,4 +67,4 @@ void NodeEventContext::handleLocalEvents(Event& event) const
     m_node->handleLocalEvents(event);
 }
 
-} // namespace blink
+}

@@ -23,16 +23,16 @@
 #define SVGAElement_h
 
 #include "core/CoreExport.h"
+#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGGraphicsElement.h"
 #include "core/svg/SVGURIReference.h"
 
 namespace blink {
 
 class CORE_EXPORT SVGAElement final : public SVGGraphicsElement,
-                                      public SVGURIReference {
+                          public SVGURIReference {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(SVGAElement);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGAElement);
 public:
     DECLARE_NODE_FACTORY(SVGAElement);
     SVGAnimatedString* svgTarget() { return m_svgTarget.get(); }
@@ -54,21 +54,17 @@ private:
 
     bool supportsFocus() const override;
     bool shouldHaveFocusAppearance() const final;
-    void dispatchFocusEvent(Element* oldFocusedElement,
-        WebFocusType,
-        InputDeviceCapabilities* sourceCapabilities) override;
-    void dispatchBlurEvent(Element* newFocusedElement,
-        WebFocusType,
-        InputDeviceCapabilities* sourceCapabilities) override;
+    void dispatchFocusEvent(Element* oldFocusedElement, WebFocusType) override;
+    void dispatchBlurEvent(Element* newFocusedElement, WebFocusType) override;
     bool isMouseFocusable() const override;
     bool isKeyboardFocusable() const override;
     bool isURLAttribute(const Attribute&) const override;
     bool canStartSelection() const override;
-    int tabIndex() const override;
+    short tabIndex() const override;
 
     bool willRespondToMouseClickEvents() override;
 
-    Member<SVGAnimatedString> m_svgTarget;
+    RefPtrWillBeMember<SVGAnimatedString> m_svgTarget;
     bool m_wasFocusedByMouse;
 };
 

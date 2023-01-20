@@ -27,7 +27,6 @@
 #ifndef TextTrack_h
 #define TextTrack_h
 
-#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/CoreExport.h"
 #include "core/events/EventTarget.h"
 #include "core/html/track/TrackBase.h"
@@ -46,24 +45,21 @@ class TextTrackList;
 class VTTRegion;
 class VTTRegionList;
 
-class CORE_EXPORT TextTrack : public EventTargetWithInlineData,
-                              public TrackBase {
+class CORE_EXPORT TextTrack : public EventTargetWithInlineData, public TrackBase {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(TextTrack);
-
+    REFCOUNTED_EVENT_TARGET(TrackBase);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(TextTrack);
 public:
-    static TextTrack* create(const AtomicString& kind,
-        const AtomicString& label,
-        const AtomicString& language)
+    static PassRefPtrWillBeRawPtr<TextTrack> create(const AtomicString& kind, const AtomicString& label, const AtomicString& language)
     {
-        return new TextTrack(kind, label, language, emptyAtom, AddTrack);
+        return adoptRefWillBeNoop(new TextTrack(kind, label, language, emptyAtom, AddTrack));
     }
     ~TextTrack() override;
 
     virtual void setTrackList(TextTrackList*);
     TextTrackList* trackList() { return m_trackList; }
 
-    bool isVisualKind() const;
+    void setKind(const AtomicString&) override;
 
     static const AtomicString& subtitlesKeyword();
     static const AtomicString& captionsKeyword();
@@ -76,21 +72,11 @@ public:
     static const AtomicString& hiddenKeyword();
     static const AtomicString& showingKeyword();
 
-    void setKind(const AtomicString& kind) { m_kind = kind; }
-    void setLabel(const AtomicString& label) { m_label = label; }
-    void setLanguage(const AtomicString& language) { m_language = language; }
-    void setId(const String& id) { m_id = id; }
-
     AtomicString mode() const { return m_mode; }
     virtual void setMode(const AtomicString&);
 
-    enum ReadinessState {
-        NotLoaded = 0,
-        Loading = 1,
-        Loaded = 2,
-        FailedToLoad = 3
-    };
-    ReadinessState getReadinessState() const { return m_readinessState; }
+    enum ReadinessState { NotLoaded = 0, Loading = 1, Loaded = 2, FailedToLoad = 3 };
+    ReadinessState readinessState() const { return m_readinessState; }
     void setReadinessState(ReadinessState state) { m_readinessState = state; }
 
     TextTrackCueList* cues();
@@ -99,11 +85,11 @@ public:
     HTMLMediaElement* mediaElement() const;
     Node* owner() const;
 
-    void addCue(TextTrackCue*);
+    void addCue(PassRefPtrWillBeRawPtr<TextTrackCue>);
     void removeCue(TextTrackCue*, ExceptionState&);
 
     VTTRegionList* regions();
-    void addRegion(VTTRegion*);
+    void addRegion(PassRefPtrWillBeRawPtr<VTTRegion>);
     void removeRegion(VTTRegion*, ExceptionState&);
 
     void cueWillChange(TextTrackCue*);
@@ -111,16 +97,13 @@ public:
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(cuechange);
 
-    enum TextTrackType { TrackElement,
-        AddTrack,
-        InBand };
+    enum TextTrackType { TrackElement, AddTrack, InBand };
     TextTrackType trackType() const { return m_trackType; }
 
     int trackIndex();
     void invalidateTrackIndex();
 
-    bool isRendered() const;
-    bool canBeRendered() const;
+    bool isRendered();
     int trackIndexRelativeToRenderedTracks();
 
     bool hasBeenConfigured() const { return m_hasBeenConfigured; }
@@ -132,32 +115,29 @@ public:
 
     // EventTarget methods
     const AtomicString& interfaceName() const override;
-    ExecutionContext* getExecutionContext() const override;
+    ExecutionContext* executionContext() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 protected:
-    TextTrack(const AtomicString& kind,
-        const AtomicString& label,
-        const AtomicString& language,
-        const AtomicString& id,
-        TextTrackType);
+    TextTrack(const AtomicString& kind, const AtomicString& label, const AtomicString& language, const AtomicString& id, TextTrackType);
 
-    void addListOfCues(HeapVector<Member<TextTrackCue>>&);
+    bool isValidKind(const AtomicString& kind) const override { return isValidKindKeyword(kind); }
+    AtomicString defaultKind() const override { return subtitlesKeyword(); }
+
+    void addListOfCues(WillBeHeapVector<RefPtrWillBeMember<TextTrackCue>>&);
 
 private:
     CueTimeline* cueTimeline() const;
 
     TextTrackCueList* ensureTextTrackCueList();
-    TraceWrapperMember<TextTrackCueList> m_cues;
-    Member<TextTrackCueList> m_activeCues;
+    RefPtrWillBeMember<TextTrackCueList> m_cues;
+    RefPtrWillBeMember<TextTrackCueList> m_activeCues;
 
     VTTRegionList* ensureVTTRegionList();
-    Member<VTTRegionList> m_regions;
+    RefPtrWillBeMember<VTTRegionList> m_regions;
 
-    Member<TextTrackList> m_trackList;
+    RawPtrWillBeMember<TextTrackList> m_trackList;
     AtomicString m_mode;
     TextTrackType m_trackType;
     ReadinessState m_readinessState;
@@ -166,7 +146,7 @@ private:
     bool m_hasBeenConfigured;
 };
 
-DEFINE_TRACK_TYPE_CASTS(TextTrack, WebMediaPlayer::TextTrack);
+DEFINE_TRACK_TYPE_CASTS(TextTrack, TrackBase::TextTrack);
 
 } // namespace blink
 

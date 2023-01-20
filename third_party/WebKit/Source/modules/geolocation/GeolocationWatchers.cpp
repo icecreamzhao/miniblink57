@@ -2,10 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "modules/geolocation/GeolocationWatchers.h"
 
 #include "modules/geolocation/GeoNotifier.h"
 #include "wtf/Assertions.h"
+=======
+#include "config.h"
+#include "modules/geolocation/GeolocationWatchers.h"
+
+#include "modules/geolocation/GeoNotifier.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -17,7 +24,11 @@ DEFINE_TRACE(GeolocationWatchers)
 
 bool GeolocationWatchers::add(int id, GeoNotifier* notifier)
 {
+<<<<<<< HEAD
     DCHECK_GT(id, 0);
+=======
+    ASSERT(id > 0);
+>>>>>>> miniblink49
     if (!m_idToNotifierMap.add(id, notifier).isNewEntry)
         return false;
     m_notifierToIdMap.set(notifier, id);
@@ -26,16 +37,28 @@ bool GeolocationWatchers::add(int id, GeoNotifier* notifier)
 
 GeoNotifier* GeolocationWatchers::find(int id)
 {
+<<<<<<< HEAD
     DCHECK_GT(id, 0);
     IdToNotifierMap::iterator iter = m_idToNotifierMap.find(id);
     if (iter == m_idToNotifierMap.end())
         return 0;
     return iter->value;
+=======
+    ASSERT(id > 0);
+    IdToNotifierMap::iterator iter = m_idToNotifierMap.find(id);
+    if (iter == m_idToNotifierMap.end())
+        return 0;
+    return iter->value.get();
+>>>>>>> miniblink49
 }
 
 void GeolocationWatchers::remove(int id)
 {
+<<<<<<< HEAD
     DCHECK_GT(id, 0);
+=======
+    ASSERT(id > 0);
+>>>>>>> miniblink49
     IdToNotifierMap::iterator iter = m_idToNotifierMap.find(id);
     if (iter == m_idToNotifierMap.end())
         return;
@@ -68,8 +91,12 @@ bool GeolocationWatchers::isEmpty() const
     return m_idToNotifierMap.isEmpty();
 }
 
+<<<<<<< HEAD
 void GeolocationWatchers::getNotifiersVector(
     HeapVector<Member<GeoNotifier>>& copy) const
+=======
+void GeolocationWatchers::getNotifiersVector(HeapVector<Member<GeoNotifier>>& copy) const
+>>>>>>> miniblink49
 {
     copyValuesToVector(m_idToNotifierMap, copy);
 }

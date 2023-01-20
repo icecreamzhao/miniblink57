@@ -11,6 +11,7 @@
 #ifndef sk_types_DEFINED
 #define sk_types_DEFINED
 
+<<<<<<< HEAD
 #include <stddef.h>
 #include <stdint.h>
 
@@ -25,6 +26,18 @@
 
 #ifndef SK_API
 #define SK_API
+=======
+#include <stdint.h>
+#include <stddef.h>
+
+#ifdef __cplusplus
+    #define SK_C_PLUS_PLUS_BEGIN_GUARD    extern "C" {
+    #define SK_C_PLUS_PLUS_END_GUARD      }
+#else
+    #include <stdbool.h>
+    #define SK_C_PLUS_PLUS_BEGIN_GUARD
+    #define SK_C_PLUS_PLUS_END_GUARD
+>>>>>>> miniblink49
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -33,12 +46,20 @@ SK_C_PLUS_PLUS_BEGIN_GUARD
 
 typedef uint32_t sk_color_t;
 
+<<<<<<< HEAD
 /* This macro assumes all arguments are >=0 and <=255. */
 #define sk_color_set_argb(a, r, g, b) (((a) << 24) | ((r) << 16) | ((g) << 8) | (b))
 #define sk_color_get_a(c) (((c) >> 24) & 0xFF)
 #define sk_color_get_r(c) (((c) >> 16) & 0xFF)
 #define sk_color_get_g(c) (((c) >> 8) & 0xFF)
 #define sk_color_get_b(c) (((c) >> 0) & 0xFF)
+=======
+#define sk_color_set_argb(a, r, g, b)   (((a) << 24) | ((r) << 16) | ((g) << 8) | (b))
+#define sk_color_get_a(c)               (((c) >> 24) & 0xFF)
+#define sk_color_get_r(c)               (((c) >> 16) & 0xFF)
+#define sk_color_get_g(c)               (((c) >>  8) & 0xFF)
+#define sk_color_get_b(c)               (((c) >>  0) & 0xFF)
+>>>>>>> miniblink49
 
 typedef enum {
     UNKNOWN_SK_COLORTYPE,
@@ -66,6 +87,7 @@ typedef enum {
     BGR_V_SK_PIXELGEOMETRY,
 } sk_pixelgeometry_t;
 
+<<<<<<< HEAD
 /**
     Return the default sk_colortype_t; this is operating-system dependent.
 */
@@ -76,6 +98,15 @@ typedef struct {
     int32_t height;
     sk_colortype_t colorType;
     sk_alphatype_t alphaType;
+=======
+sk_colortype_t sk_colortype_get_default_8888();
+
+typedef struct {
+    int32_t         width;
+    int32_t         height;
+    sk_colortype_t  colorType;
+    sk_alphatype_t  alphaType;
+>>>>>>> miniblink49
 } sk_imageinfo_t;
 
 typedef struct {
@@ -83,8 +114,13 @@ typedef struct {
 } sk_surfaceprops_t;
 
 typedef struct {
+<<<<<<< HEAD
     float x;
     float y;
+=======
+    float   x;
+    float   y;
+>>>>>>> miniblink49
 } sk_point_t;
 
 typedef struct {
@@ -95,6 +131,7 @@ typedef struct {
 } sk_irect_t;
 
 typedef struct {
+<<<<<<< HEAD
     float left;
     float top;
     float right;
@@ -200,6 +237,36 @@ typedef enum {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
+=======
+    float   left;
+    float   top;
+    float   right;
+    float   bottom;
+} sk_rect_t;
+
+typedef struct {
+    float   mat[9];
+} sk_matrix_t;
+
+typedef struct sk_canvas_t sk_canvas_t;
+typedef struct sk_data_t sk_data_t;
+typedef struct sk_image_t sk_image_t;
+typedef struct sk_maskfilter_t sk_maskfilter_t;
+typedef struct sk_paint_t sk_paint_t;
+typedef struct sk_path_t sk_path_t;
+typedef struct sk_picture_t sk_picture_t;
+typedef struct sk_picture_recorder_t sk_picture_recorder_t;
+typedef struct sk_shader_t sk_shader_t;
+typedef struct sk_surface_t sk_surface_t;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef __cplusplus
+    class SkCanvas;
+    void sk_test_capi(SkCanvas*);
+#endif
+
+>>>>>>> miniblink49
 SK_C_PLUS_PLUS_END_GUARD
 
 #endif

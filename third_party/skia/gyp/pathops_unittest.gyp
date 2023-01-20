@@ -37,6 +37,14 @@
             '-llog',
           ],
         }],
+<<<<<<< HEAD
+=======
+        [ 'skia_gpu == 1', {
+          'include_dirs': [
+            '../src/gpu',
+          ],
+        }],
+>>>>>>> miniblink49
       ],
     },
   ],

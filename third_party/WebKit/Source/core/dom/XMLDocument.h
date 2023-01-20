@@ -31,29 +31,22 @@
 
 namespace blink {
 
-class XMLDocument
-#if ENABLE_WML != 1
-    final
-#endif
-    : public Document {
+class XMLDocument final : public Document {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static XMLDocument* create(const DocumentInit& initializer = DocumentInit())
+    static PassRefPtrWillBeRawPtr<XMLDocument> create(const DocumentInit& initializer = DocumentInit())
     {
-        return new XMLDocument(initializer, XMLDocumentClass);
+        return adoptRefWillBeNoop(new XMLDocument(initializer, XMLDocumentClass));
     }
 
-    static XMLDocument* createXHTML(
-        const DocumentInit& initializer = DocumentInit())
+    static PassRefPtrWillBeRawPtr<XMLDocument> createXHTML(const DocumentInit& initializer = DocumentInit())
     {
-        return new XMLDocument(initializer, XMLDocumentClass | XHTMLDocumentClass);
+        return adoptRefWillBeNoop(new XMLDocument(initializer, XMLDocumentClass | XHTMLDocumentClass));
     }
 
-    static XMLDocument* createSVG(
-        const DocumentInit& initializer = DocumentInit())
+    static PassRefPtrWillBeRawPtr<XMLDocument> createSVG(const DocumentInit& initializer = DocumentInit())
     {
-        return new XMLDocument(initializer, XMLDocumentClass | SVGDocumentClass);
+        return adoptRefWillBeNoop(new XMLDocument(initializer, XMLDocumentClass | SVGDocumentClass));
     }
 
 protected:

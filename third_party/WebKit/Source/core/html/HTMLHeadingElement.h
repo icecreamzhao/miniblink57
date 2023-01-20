@@ -29,7 +29,6 @@ namespace blink {
 
 class HTMLHeadingElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLHeadingElement);
 

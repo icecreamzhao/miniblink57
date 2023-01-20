@@ -17,44 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGFEDisplacementMapElement.h"
 
 #include "core/SVGNames.h"
+#include "platform/graphics/filters/FilterEffect.h"
 #include "core/svg/graphics/filters/SVGFilterBuilder.h"
 
 namespace blink {
 
-template <>
-const SVGEnumerationStringEntries&
-getStaticStringEntries<ChannelSelectorType>()
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<ChannelSelectorType>()
 {
     DEFINE_STATIC_LOCAL(SVGEnumerationStringEntries, entries, ());
     if (entries.isEmpty()) {
-        entries.push_back(std::make_pair(CHANNEL_R, "R"));
-        entries.push_back(std::make_pair(CHANNEL_G, "G"));
-        entries.push_back(std::make_pair(CHANNEL_B, "B"));
-        entries.push_back(std::make_pair(CHANNEL_A, "A"));
+        entries.append(SVGEnumerationBase::StringEntry(CHANNEL_R, "R"));
+        entries.append(SVGEnumerationBase::StringEntry(CHANNEL_G, "G"));
+        entries.append(SVGEnumerationBase::StringEntry(CHANNEL_B, "B"));
+        entries.append(SVGEnumerationBase::StringEntry(CHANNEL_A, "A"));
     }
     return entries;
 }
 
-inline SVGFEDisplacementMapElement::SVGFEDisplacementMapElement(
-    Document& document)
-    : SVGFilterPrimitiveStandardAttributes(SVGNames::feDisplacementMapTag,
-        document)
-    , m_scale(SVGAnimatedNumber::create(this,
-          SVGNames::scaleAttr,
-          SVGNumber::create(0)))
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
-    , m_in2(SVGAnimatedString::create(this, SVGNames::in2Attr))
-    , m_xChannelSelector(SVGAnimatedEnumeration<ChannelSelectorType>::create(
-          this,
-          SVGNames::xChannelSelectorAttr,
-          CHANNEL_A))
-    , m_yChannelSelector(SVGAnimatedEnumeration<ChannelSelectorType>::create(
-          this,
-          SVGNames::yChannelSelectorAttr,
-          CHANNEL_A))
+inline SVGFEDisplacementMapElement::SVGFEDisplacementMapElement(Document& document)
+    : SVGFilterPrimitiveStandardAttributes(SVGNames::feDisplacementMapTag, document)
+    , m_scale(SVGAnimatedNumber::create(this, SVGNames::scaleAttr, SVGNumber::create(0)))
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
+    , m_in2(SVGAnimatedString::create(this, SVGNames::in2Attr, SVGString::create()))
+    , m_xChannelSelector(SVGAnimatedEnumeration<ChannelSelectorType>::create(this, SVGNames::xChannelSelectorAttr, CHANNEL_A))
+    , m_yChannelSelector(SVGAnimatedEnumeration<ChannelSelectorType>::create(this, SVGNames::yChannelSelectorAttr, CHANNEL_A))
 {
     addToPropertyMap(m_scale);
     addToPropertyMap(m_in1);
@@ -75,26 +66,21 @@ DEFINE_TRACE(SVGFEDisplacementMapElement)
 
 DEFINE_NODE_FACTORY(SVGFEDisplacementMapElement)
 
-bool SVGFEDisplacementMapElement::setFilterEffectAttribute(
-    FilterEffect* effect,
-    const QualifiedName& attrName)
+bool SVGFEDisplacementMapElement::setFilterEffectAttribute(FilterEffect* effect, const QualifiedName& attrName)
 {
     FEDisplacementMap* displacementMap = static_cast<FEDisplacementMap*>(effect);
     if (attrName == SVGNames::xChannelSelectorAttr)
-        return displacementMap->setXChannelSelector(
-            m_xChannelSelector->currentValue()->enumValue());
+        return displacementMap->setXChannelSelector(m_xChannelSelector->currentValue()->enumValue());
     if (attrName == SVGNames::yChannelSelectorAttr)
-        return displacementMap->setYChannelSelector(
-            m_yChannelSelector->currentValue()->enumValue());
+        return displacementMap->setYChannelSelector(m_yChannelSelector->currentValue()->enumValue());
     if (attrName == SVGNames::scaleAttr)
         return displacementMap->setScale(m_scale->currentValue()->value());
 
-    return SVGFilterPrimitiveStandardAttributes::setFilterEffectAttribute(
-        effect, attrName);
+    ASSERT_NOT_REACHED();
+    return false;
 }
 
-void SVGFEDisplacementMapElement::svgAttributeChanged(
-    const QualifiedName& attrName)
+void SVGFEDisplacementMapElement::svgAttributeChanged(const QualifiedName& attrName)
 {
     if (attrName == SVGNames::xChannelSelectorAttr || attrName == SVGNames::yChannelSelectorAttr || attrName == SVGNames::scaleAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
@@ -111,25 +97,20 @@ void SVGFEDisplacementMapElement::svgAttributeChanged(
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-FilterEffect* SVGFEDisplacementMapElement::build(
-    SVGFilterBuilder* filterBuilder,
-    Filter* filter)
+PassRefPtrWillBeRawPtr<FilterEffect> SVGFEDisplacementMapElement::build(SVGFilterBuilder* filterBuilder, Filter* filter)
 {
-    FilterEffect* input1 = filterBuilder->getEffectById(
-        AtomicString(m_in1->currentValue()->value()));
-    FilterEffect* input2 = filterBuilder->getEffectById(
-        AtomicString(m_in2->currentValue()->value()));
-    ASSERT(input1 && input2);
+    FilterEffect* input1 = filterBuilder->getEffectById(AtomicString(m_in1->currentValue()->value()));
+    FilterEffect* input2 = filterBuilder->getEffectById(AtomicString(m_in2->currentValue()->value()));
 
-    FilterEffect* effect = FEDisplacementMap::create(
-        filter, m_xChannelSelector->currentValue()->enumValue(),
-        m_yChannelSelector->currentValue()->enumValue(),
-        m_scale->currentValue()->value());
+    if (!input1 || !input2)
+        return nullptr;
+
+    RefPtrWillBeRawPtr<FilterEffect> effect = FEDisplacementMap::create(filter, m_xChannelSelector->currentValue()->enumValue(), m_yChannelSelector->currentValue()->enumValue(), m_scale->currentValue()->value());
     FilterEffectVector& inputEffects = effect->inputEffects();
     inputEffects.reserveCapacity(2);
-    inputEffects.push_back(input1);
-    inputEffects.push_back(input2);
-    return effect;
+    inputEffects.append(input1);
+    inputEffects.append(input2);
+    return effect.release();
 }
 
 } // namespace blink

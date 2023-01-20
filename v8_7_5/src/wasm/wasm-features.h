@@ -14,8 +14,13 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     class Isolate;
     namespace wasm {
+=======
+class Isolate;
+namespace wasm {
+>>>>>>> miniblink49
 
 #define COMMA ,
 #define SPACE
@@ -25,6 +30,7 @@ namespace internal {
 #define DECL_PARAM(feat, desc, val) bool p##feat
 #define DO_INIT(feat, desc, val) feat(p##feat)
 
+<<<<<<< HEAD
         // Enabled or detected features.
         struct WasmFeatures {
             FOREACH_WASM_FEATURE(DECL_FIELD, SPACE)
@@ -44,6 +50,23 @@ namespace internal {
         static constexpr WasmFeatures kNoWasmFeatures {
             FOREACH_WASM_FEATURE(JUST_FALSE, COMMA)
         };
+=======
+// Enabled or detected features.
+struct WasmFeatures {
+  FOREACH_WASM_FEATURE(DECL_FIELD, SPACE)
+
+  constexpr WasmFeatures() = default;
+
+  explicit constexpr WasmFeatures(FOREACH_WASM_FEATURE(DECL_PARAM, COMMA))
+      : FOREACH_WASM_FEATURE(DO_INIT, COMMA) {}
+};
+
+static constexpr WasmFeatures kAllWasmFeatures{
+    FOREACH_WASM_FEATURE(JUST_TRUE, COMMA)};
+
+static constexpr WasmFeatures kNoWasmFeatures{
+    FOREACH_WASM_FEATURE(JUST_FALSE, COMMA)};
+>>>>>>> miniblink49
 
 #undef JUST_TRUE
 #undef JUST_FALSE
@@ -53,6 +76,7 @@ namespace internal {
 #undef COMMA
 #undef SPACE
 
+<<<<<<< HEAD
         static constexpr WasmFeatures kAsmjsWasmFeatures = kNoWasmFeatures;
 
         V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromFlags();
@@ -69,3 +93,21 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_WASM_WASM_FEATURES_H_
+=======
+static constexpr WasmFeatures kAsmjsWasmFeatures = kNoWasmFeatures;
+
+V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromFlags();
+
+// Enables features based on both commandline flags and the isolate.
+// Precondition: A valid context must be set in {isolate->context()}.
+V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromIsolate(Isolate* isolate);
+
+V8_EXPORT_PRIVATE void UnionFeaturesInto(WasmFeatures* dst,
+                                         const WasmFeatures& src);
+
+}  // namespace wasm
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_WASM_WASM_FEATURES_H_
+>>>>>>> miniblink49

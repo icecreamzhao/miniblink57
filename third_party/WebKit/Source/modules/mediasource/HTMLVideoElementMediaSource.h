@@ -32,7 +32,11 @@
 #define HTMLVideoElementMediaSource_h
 
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+#include "wtf/PassRefPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -40,6 +44,7 @@ class HTMLVideoElement;
 class VideoPlaybackQuality;
 
 class HTMLVideoElementMediaSource {
+<<<<<<< HEAD
     STATIC_ONLY(HTMLVideoElementMediaSource);
 
 public:
@@ -47,5 +52,16 @@ public:
 };
 
 } // namespace blink
+=======
+public:
+    static VideoPlaybackQuality* getVideoPlaybackQuality(HTMLVideoElement&);
+
+private:
+    HTMLVideoElementMediaSource();
+    ~HTMLVideoElementMediaSource();
+};
+
+}
+>>>>>>> miniblink49
 
 #endif

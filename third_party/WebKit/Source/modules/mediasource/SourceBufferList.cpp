@@ -28,26 +28,51 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/mediasource/SourceBufferList.h"
 
+=======
+#include "config.h"
+#include "modules/mediasource/SourceBufferList.h"
+
+#include "core/dom/ExecutionContext.h"
+>>>>>>> miniblink49
 #include "core/events/GenericEventQueue.h"
 #include "modules/EventModules.h"
 #include "modules/mediasource/SourceBuffer.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 SourceBufferList::SourceBufferList(ExecutionContext* context,
     GenericEventQueue* asyncEventQueue)
     : ContextClient(context)
+=======
+SourceBufferList::SourceBufferList(ExecutionContext* context, GenericEventQueue* asyncEventQueue)
+    : m_executionContext(context)
+>>>>>>> miniblink49
     , m_asyncEventQueue(asyncEventQueue)
 {
 }
 
+<<<<<<< HEAD
 SourceBufferList::~SourceBufferList() { }
 
 void SourceBufferList::add(SourceBuffer* buffer)
 {
     m_list.push_back(buffer);
+=======
+SourceBufferList::~SourceBufferList()
+{
+#if !ENABLE(OILPAN)
+    ASSERT(m_list.isEmpty());
+#endif
+}
+
+void SourceBufferList::add(SourceBuffer* buffer)
+{
+    m_list.append(buffer);
+>>>>>>> miniblink49
     scheduleEvent(EventTypeNames::addsourcebuffer);
 }
 
@@ -74,12 +99,21 @@ void SourceBufferList::clear()
 
 void SourceBufferList::scheduleEvent(const AtomicString& eventName)
 {
+<<<<<<< HEAD
     DCHECK(m_asyncEventQueue);
 
     Event* event = Event::create(eventName);
     event->setTarget(this);
 
     m_asyncEventQueue->enqueueEvent(event);
+=======
+    ASSERT(m_asyncEventQueue);
+
+    RefPtrWillBeRawPtr<Event> event = Event::create(eventName);
+    event->setTarget(this);
+
+    m_asyncEventQueue->enqueueEvent(event.release());
+>>>>>>> miniblink49
 }
 
 const AtomicString& SourceBufferList::interfaceName() const
@@ -87,12 +121,26 @@ const AtomicString& SourceBufferList::interfaceName() const
     return EventTargetNames::SourceBufferList;
 }
 
+<<<<<<< HEAD
 DEFINE_TRACE(SourceBufferList)
 {
     visitor->trace(m_asyncEventQueue);
     visitor->trace(m_list);
     EventTargetWithInlineData::trace(visitor);
     ContextClient::trace(visitor);
+=======
+ExecutionContext* SourceBufferList::executionContext() const
+{
+    return m_executionContext;
+}
+
+DEFINE_TRACE(SourceBufferList)
+{
+    visitor->trace(m_executionContext);
+    visitor->trace(m_asyncEventQueue);
+    visitor->trace(m_list);
+    RefCountedGarbageCollectedEventTargetWithInlineData<SourceBufferList>::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

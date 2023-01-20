@@ -31,19 +31,18 @@ class CSSStyleDeclaration;
 class StyleRuleCSSStyleDeclaration;
 class StyleRule;
 
-class CORE_EXPORT CSSStyleRule final : public CSSRule {
+class CSSStyleRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static CSSStyleRule* create(StyleRule* rule, CSSStyleSheet* sheet)
+    static PassRefPtrWillBeRawPtr<CSSStyleRule> create(StyleRule* rule, CSSStyleSheet* sheet)
     {
-        return new CSSStyleRule(rule, sheet);
+        return adoptRefWillBeNoop(new CSSStyleRule(rule, sheet));
     }
 
-    ~CSSStyleRule() override;
+    virtual ~CSSStyleRule();
 
-    String cssText() const override;
-    void reattach(StyleRuleBase*) override;
+    virtual String cssText() const override;
+    virtual void reattach(StyleRuleBase*) override;
 
     String selectorText() const;
     void setSelectorText(const String&);
@@ -55,20 +54,18 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
     CSSStyleRule(StyleRule*, CSSStyleSheet*);
 
-    CSSRule::Type type() const override { return kStyleRule; }
+    virtual CSSRule::Type type() const override { return STYLE_RULE; }
 
     String generateSelectorText() const;
 
-    Member<StyleRule> m_styleRule;
-    mutable Member<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
+    RefPtrWillBeMember<StyleRule> m_styleRule;
+    mutable RefPtrWillBeMember<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSStyleRule, kStyleRule);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSStyleRule, STYLE_RULE);
 
 } // namespace blink
 

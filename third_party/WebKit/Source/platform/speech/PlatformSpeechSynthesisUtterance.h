@@ -29,7 +29,10 @@
 #include "platform/PlatformExport.h"
 #include "platform/heap/Handle.h"
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"
+<<<<<<< HEAD
 #include "wtf/MathExtras.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -41,11 +44,17 @@ protected:
     virtual ~PlatformSpeechSynthesisUtteranceClient() { }
 };
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT PlatformSpeechSynthesisUtterance final
     : public GarbageCollectedFinalized<PlatformSpeechSynthesisUtterance> {
 public:
     static PlatformSpeechSynthesisUtterance* create(
         PlatformSpeechSynthesisUtteranceClient*);
+=======
+class PLATFORM_EXPORT PlatformSpeechSynthesisUtterance final : public GarbageCollectedFinalized<PlatformSpeechSynthesisUtterance> {
+public:
+    static PlatformSpeechSynthesisUtterance* create(PlatformSpeechSynthesisUtteranceClient*);
+>>>>>>> miniblink49
 
     const String& text() const { return m_text; }
     void setText(const String& text) { m_text = text; }
@@ -53,11 +62,16 @@ public:
     const String& lang() const { return m_lang; }
     void setLang(const String& lang) { m_lang = lang; }
 
+<<<<<<< HEAD
     PlatformSpeechSynthesisVoice* voice() const { return m_voice.get(); }
+=======
+    PlatformSpeechSynthesisVoice* voice() const { return m_voice; }
+>>>>>>> miniblink49
     void setVoice(PlatformSpeechSynthesisVoice* voice) { m_voice = voice; }
 
     // Range = [0, 1] where 1 is the default.
     float volume() const { return m_volume; }
+<<<<<<< HEAD
     void setVolume(float volume) { m_volume = clampTo(volume, 0.0f, 1.0f); }
 
     // Range = [0.1, 10] where 1 is the default.
@@ -67,6 +81,17 @@ public:
     // Range = [0, 2] where 1 is the default.
     float pitch() const { return m_pitch; }
     void setPitch(float pitch) { m_pitch = clampTo(pitch, 0.0f, 2.0f); }
+=======
+    void setVolume(float volume) { m_volume = std::max(std::min(1.0f, volume), 0.0f); }
+
+    // Range = [0.1, 10] where 1 is the default.
+    float rate() const { return m_rate; }
+    void setRate(float rate) { m_rate = std::max(std::min(10.0f, rate), 0.1f); }
+
+    // Range = [0, 2] where 1 is the default.
+    float pitch() const { return m_pitch; }
+    void setPitch(float pitch) { m_pitch = std::max(std::min(2.0f, pitch), 0.0f); }
+>>>>>>> miniblink49
 
     double startTime() const { return m_startTime; }
     void setStartTime(double startTime) { m_startTime = startTime; }
@@ -76,13 +101,21 @@ public:
     DECLARE_TRACE();
 
 private:
+<<<<<<< HEAD
     explicit PlatformSpeechSynthesisUtterance(
         PlatformSpeechSynthesisUtteranceClient*);
+=======
+    explicit PlatformSpeechSynthesisUtterance(PlatformSpeechSynthesisUtteranceClient*);
+>>>>>>> miniblink49
 
     Member<PlatformSpeechSynthesisUtteranceClient> m_client;
     String m_text;
     String m_lang;
+<<<<<<< HEAD
     RefPtr<PlatformSpeechSynthesisVoice> m_voice;
+=======
+    Member<PlatformSpeechSynthesisVoice> m_voice;
+>>>>>>> miniblink49
     float m_volume;
     float m_rate;
     float m_pitch;

@@ -20,15 +20,14 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLHRElement.h"
 
 #include "core/CSSPropertyNames.h"
 #include "core/CSSValueKeywords.h"
 #include "core/HTMLNames.h"
-#include "core/css/CSSColorValue.h"
+#include "core/css/CSSValuePool.h"
 #include "core/css/StylePropertySet.h"
-#include "core/html/HTMLOptGroupElement.h"
-#include "core/html/HTMLSelectElement.h"
 
 namespace blink {
 
@@ -48,48 +47,35 @@ bool HTMLHRElement::isPresentationAttribute(const QualifiedName& name) const
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLHRElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLHRElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
     if (name == alignAttr) {
         if (equalIgnoringCase(value, "left")) {
-            addPropertyToPresentationAttributeStyle(
-                style, CSSPropertyMarginLeft, 0, CSSPrimitiveValue::UnitType::Pixels);
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginRight,
-                CSSValueAuto);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginLeft, 0, CSSPrimitiveValue::CSS_PX);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginRight, CSSValueAuto);
         } else if (equalIgnoringCase(value, "right")) {
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginLeft,
-                CSSValueAuto);
-            addPropertyToPresentationAttributeStyle(
-                style, CSSPropertyMarginRight, 0,
-                CSSPrimitiveValue::UnitType::Pixels);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginLeft, CSSValueAuto);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginRight, 0, CSSPrimitiveValue::CSS_PX);
         } else {
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginLeft,
-                CSSValueAuto);
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginRight,
-                CSSValueAuto);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginLeft, CSSValueAuto);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyMarginRight, CSSValueAuto);
         }
     } else if (name == widthAttr) {
         bool ok;
         int v = value.toInt(&ok);
         if (ok && !v)
-            addPropertyToPresentationAttributeStyle(
-                style, CSSPropertyWidth, 1, CSSPrimitiveValue::UnitType::Pixels);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyWidth, 1, CSSPrimitiveValue::CSS_PX);
         else
             addHTMLLengthToStyle(style, CSSPropertyWidth, value);
     } else if (name == colorAttr) {
-        addPropertyToPresentationAttributeStyle(style, CSSPropertyBorderStyle,
-            CSSValueSolid);
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyBorderStyle, CSSValueSolid);
         addHTMLColorToStyle(style, CSSPropertyBorderColor, value);
         addHTMLColorToStyle(style, CSSPropertyBackgroundColor, value);
     } else if (name == noshadeAttr) {
         if (!hasAttribute(colorAttr)) {
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyBorderStyle,
-                CSSValueSolid);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyBorderStyle, CSSValueSolid);
 
-            const CSSColorValue& darkGrayValue = *CSSColorValue::create(Color::darkGray);
+            RefPtrWillBeRawPtr<CSSPrimitiveValue> darkGrayValue = cssValuePool().createColorValue(Color::darkGray);
             style->setProperty(CSSPropertyBorderColor, darkGrayValue);
             style->setProperty(CSSPropertyBackgroundColor, darkGrayValue);
         }
@@ -97,53 +83,12 @@ void HTMLHRElement::collectStyleForPresentationAttribute(
         StringImpl* si = value.impl();
         int size = si->toInt();
         if (size <= 1)
-            addPropertyToPresentationAttributeStyle(
-                style, CSSPropertyBorderBottomWidth, 0,
-                CSSPrimitiveValue::UnitType::Pixels);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyBorderBottomWidth, 0, CSSPrimitiveValue::CSS_PX);
         else
-            addPropertyToPresentationAttributeStyle(
-                style, CSSPropertyHeight, size - 2,
-                CSSPrimitiveValue::UnitType::Pixels);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyHeight, size - 2, CSSPrimitiveValue::CSS_PX);
     } else {
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-HTMLSelectElement* HTMLHRElement::ownerSelectElement() const
-{
-    if (!parentNode())
-        return nullptr;
-    if (isHTMLSelectElement(*parentNode()))
-        return toHTMLSelectElement(parentNode());
-    if (!isHTMLOptGroupElement(*parentNode()))
-        return nullptr;
-    Node* grandParent = parentNode()->parentNode();
-    return isHTMLSelectElement(grandParent) ? toHTMLSelectElement(grandParent)
-                                            : nullptr;
 }
-
-Node::InsertionNotificationRequest HTMLHRElement::insertedInto(
-    ContainerNode* insertionPoint)
-{
-    HTMLElement::insertedInto(insertionPoint);
-    if (HTMLSelectElement* select = ownerSelectElement()) {
-        if (insertionPoint == select || (isHTMLOptGroupElement(*insertionPoint) && insertionPoint->parentNode() == select))
-            select->hrInsertedOrRemoved(*this);
-    }
-    return InsertionDone;
-}
-
-void HTMLHRElement::removedFrom(ContainerNode* insertionPoint)
-{
-    if (isHTMLSelectElement(*insertionPoint)) {
-        if (!parentNode() || isHTMLOptGroupElement(*parentNode()))
-            toHTMLSelectElement(insertionPoint)->hrInsertedOrRemoved(*this);
-    } else if (isHTMLOptGroupElement(*insertionPoint)) {
-        Node* parent = insertionPoint->parentNode();
-        if (isHTMLSelectElement(parent))
-            toHTMLSelectElement(parent)->hrInsertedOrRemoved(*this);
-    }
-    HTMLElement::removedFrom(insertionPoint);
-}
-
-} // namespace blink

@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,24 +22,20 @@
 #ifndef PseudoStyleRequest_h
 #define PseudoStyleRequest_h
 
-#include "core/layout/LayoutScrollbar.h"
 #include "core/style/ComputedStyleConstants.h"
 #include "platform/scroll/ScrollTypes.h"
 
 namespace blink {
 
+class LayoutScrollbar;
 class ComputedStyle;
 
 class PseudoStyleRequest {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
 public:
-    enum RequestType { ForRenderer,
-        ForComputedStyle };
 
-    PseudoStyleRequest(PseudoId pseudoId,
-        LayoutScrollbar* scrollbar = 0,
-        ScrollbarPart scrollbarPart = NoPart)
+    enum RequestType { ForRenderer, ForComputedStyle };
+
+    PseudoStyleRequest(PseudoId pseudoId, LayoutScrollbar* scrollbar = 0, ScrollbarPart scrollbarPart = NoPart)
         : pseudoId(pseudoId)
         , type(ForRenderer)
         , scrollbarPart(scrollbarPart)
@@ -52,22 +47,20 @@ public:
         : pseudoId(pseudoId)
         , type(requestType)
         , scrollbarPart(NoPart)
-        , scrollbar(nullptr)
+        , scrollbar(0)
     {
     }
-
-    DEFINE_INLINE_TRACE() { visitor->trace(scrollbar); }
 
     // The spec disallows inheritance for ::backdrop.
     bool allowsInheritance(const ComputedStyle* parentStyle) const
     {
-        return parentStyle && pseudoId != PseudoIdBackdrop;
+        return parentStyle && pseudoId != BACKDROP;
     }
 
     PseudoId pseudoId;
     RequestType type;
     ScrollbarPart scrollbarPart;
-    Member<LayoutScrollbar> scrollbar;
+    LayoutScrollbar* scrollbar;
 };
 
 } // namespace blink

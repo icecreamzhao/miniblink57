@@ -20,15 +20,14 @@
 #ifndef SVGResources_h
 #define SVGResources_h
 
-#include "wtf/Allocator.h"
+#include "wtf/FastAllocBase.h"
 #include "wtf/HashSet.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-class ComputedStyle;
 class LayoutObject;
 class LayoutSVGResourceClipper;
 class LayoutSVGResourceContainer;
@@ -37,42 +36,25 @@ class LayoutSVGResourceMarker;
 class LayoutSVGResourceMasker;
 class LayoutSVGResourcePaintServer;
 class SVGElement;
+class SVGComputedStyle;
 
 // Holds a set of resources associated with a LayoutObject
 class SVGResources {
-    WTF_MAKE_NONCOPYABLE(SVGResources);
-    USING_FAST_MALLOC(SVGResources);
-
+    WTF_MAKE_NONCOPYABLE(SVGResources); WTF_MAKE_FAST_ALLOCATED(SVGResources);
 public:
     SVGResources();
 
-    static std::unique_ptr<SVGResources> buildResources(const LayoutObject*,
-        const ComputedStyle&);
+    static PassOwnPtr<SVGResources> buildResources(const LayoutObject*, const SVGComputedStyle&);
     void layoutIfNeeded();
 
     static bool supportsMarkers(const SVGElement&);
 
     // Ordinary resources
-    LayoutSVGResourceClipper* clipper() const
-    {
-        return m_clipperFilterMaskerData ? m_clipperFilterMaskerData->clipper : 0;
-    }
-    LayoutSVGResourceMarker* markerStart() const
-    {
-        return m_markerData ? m_markerData->markerStart : 0;
-    }
-    LayoutSVGResourceMarker* markerMid() const
-    {
-        return m_markerData ? m_markerData->markerMid : 0;
-    }
-    LayoutSVGResourceMarker* markerEnd() const
-    {
-        return m_markerData ? m_markerData->markerEnd : 0;
-    }
-    LayoutSVGResourceMasker* masker() const
-    {
-        return m_clipperFilterMaskerData ? m_clipperFilterMaskerData->masker : 0;
-    }
+    LayoutSVGResourceClipper* clipper() const { return m_clipperFilterMaskerData ? m_clipperFilterMaskerData->clipper : 0; }
+    LayoutSVGResourceMarker* markerStart() const { return m_markerData ? m_markerData->markerStart : 0; }
+    LayoutSVGResourceMarker* markerMid() const { return m_markerData ? m_markerData->markerMid : 0; }
+    LayoutSVGResourceMarker* markerEnd() const { return m_markerData ? m_markerData->markerEnd : 0; }
+    LayoutSVGResourceMasker* masker() const { return m_clipperFilterMaskerData ? m_clipperFilterMaskerData->masker : 0; }
 
     LayoutSVGResourceFilter* filter() const
     {
@@ -82,29 +64,16 @@ public:
     }
 
     // Paint servers
-    LayoutSVGResourcePaintServer* fill() const
-    {
-        return m_fillStrokeData ? m_fillStrokeData->fill : 0;
-    }
-    LayoutSVGResourcePaintServer* stroke() const
-    {
-        return m_fillStrokeData ? m_fillStrokeData->stroke : 0;
-    }
+    LayoutSVGResourcePaintServer* fill() const { return m_fillStrokeData ? m_fillStrokeData->fill : 0; }
+    LayoutSVGResourcePaintServer* stroke() const { return m_fillStrokeData ? m_fillStrokeData->stroke : 0; }
 
     // Chainable resources - linked through xlink:href
-    LayoutSVGResourceContainer* linkedResource() const
-    {
-        return m_linkedResource;
-    }
+    LayoutSVGResourceContainer* linkedResource() const { return m_linkedResource; }
 
     void buildSetOfResources(HashSet<LayoutSVGResourceContainer*>&);
 
     // Methods operating on all cached resources
-    void removeClientFromCache(LayoutObject*,
-        bool markForInvalidation = true) const;
-    void removeClientFromCacheAffectingObjectBounds(
-        LayoutObject*,
-        bool markForInvalidation = true) const;
+    void removeClientFromCache(LayoutObject*, bool markForInvalidation = true) const;
     void resourceDestroyed(LayoutSVGResourceContainer*);
 
 #ifndef NDEBUG
@@ -141,12 +110,9 @@ private:
     // clipper: 'container elements' and 'graphics elements'
     // filter:  'container elements' and 'graphics elements'
     // masker:  'container elements' and 'graphics elements'
-    // -> a, circle, defs, ellipse, glyph, g, image, line, marker, mask,
-    // missing-glyph, path, pattern, polygon, polyline, rect, svg, switch, symbol,
-    // text, use
+    // -> a, circle, defs, ellipse, glyph, g, image, line, marker, mask, missing-glyph, path, pattern, polygon, polyline, rect, svg, switch, symbol, text, use
     struct ClipperFilterMaskerData {
-        USING_FAST_MALLOC(ClipperFilterMaskerData);
-
+        WTF_MAKE_FAST_ALLOCATED(ClipperFilterMaskerData);
     public:
         ClipperFilterMaskerData()
             : clipper(nullptr)
@@ -155,9 +121,9 @@ private:
         {
         }
 
-        static std::unique_ptr<ClipperFilterMaskerData> create()
+        static PassOwnPtr<ClipperFilterMaskerData> create()
         {
-            return WTF::wrapUnique(new ClipperFilterMaskerData);
+            return adoptPtr(new ClipperFilterMaskerData);
         }
 
         LayoutSVGResourceClipper* clipper;
@@ -168,8 +134,7 @@ private:
     // From SVG 1.1 2nd Edition
     // marker: line, path, polygon, polyline
     struct MarkerData {
-        USING_FAST_MALLOC(MarkerData);
-
+        WTF_MAKE_FAST_ALLOCATED(MarkerData);
     public:
         MarkerData()
             : markerStart(nullptr)
@@ -178,9 +143,9 @@ private:
         {
         }
 
-        static std::unique_ptr<MarkerData> create()
+        static PassOwnPtr<MarkerData> create()
         {
-            return WTF::wrapUnique(new MarkerData);
+            return adoptPtr(new MarkerData);
         }
 
         LayoutSVGResourceMarker* markerStart;
@@ -191,11 +156,9 @@ private:
     // From SVG 1.1 2nd Edition
     // fill:       'shapes' and 'text content elements'
     // stroke:     'shapes' and 'text content elements'
-    // -> circle, ellipse, line, path, polygon, polyline, rect, text, textPath,
-    // tspan
+    // -> circle, ellipse, line, path, polygon, polyline, rect, text, textPath, tspan
     struct FillStrokeData {
-        USING_FAST_MALLOC(FillStrokeData);
-
+        WTF_MAKE_FAST_ALLOCATED(FillStrokeData);
     public:
         FillStrokeData()
             : fill(nullptr)
@@ -203,21 +166,21 @@ private:
         {
         }
 
-        static std::unique_ptr<FillStrokeData> create()
+        static PassOwnPtr<FillStrokeData> create()
         {
-            return WTF::wrapUnique(new FillStrokeData);
+            return adoptPtr(new FillStrokeData);
         }
 
         LayoutSVGResourcePaintServer* fill;
         LayoutSVGResourcePaintServer* stroke;
     };
 
-    std::unique_ptr<ClipperFilterMaskerData> m_clipperFilterMaskerData;
-    std::unique_ptr<MarkerData> m_markerData;
-    std::unique_ptr<FillStrokeData> m_fillStrokeData;
+    OwnPtr<ClipperFilterMaskerData> m_clipperFilterMaskerData;
+    OwnPtr<MarkerData> m_markerData;
+    OwnPtr<FillStrokeData> m_fillStrokeData;
     LayoutSVGResourceContainer* m_linkedResource;
 };
 
-} // namespace blink
+}
 
 #endif

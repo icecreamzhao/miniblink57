@@ -15,6 +15,7 @@ public:
     enum {
         kCount = 20
     };
+<<<<<<< HEAD
     SkScalar fMat[kCount];
 
     enum Elem {
@@ -27,10 +28,25 @@ public:
         kG_Trans = 9,
         kB_Trans = 14,
         kA_Trans = 19,
+=======
+    SkScalar    fMat[kCount];
+
+    enum Elem {
+        kR_Scale    = 0,
+        kG_Scale    = 6,
+        kB_Scale    = 12,
+        kA_Scale    = 18,
+
+        kR_Trans    = 4,
+        kG_Trans    = 9,
+        kB_Trans    = 14,
+        kA_Trans    = 19,
+>>>>>>> miniblink49
     };
 
     void setIdentity();
     void setScale(SkScalar rScale, SkScalar gScale, SkScalar bScale,
+<<<<<<< HEAD
         SkScalar aScale = SK_Scalar1);
     void preScale(SkScalar rScale, SkScalar gScale, SkScalar bScale,
         SkScalar aScale = SK_Scalar1);
@@ -38,6 +54,15 @@ public:
         SkScalar aScale = SK_Scalar1);
     void postTranslate(SkScalar rTrans, SkScalar gTrans, SkScalar bTrans,
         SkScalar aTrans = 0);
+=======
+                  SkScalar aScale = SK_Scalar1);
+    void preScale(SkScalar rScale, SkScalar gScale, SkScalar bScale,
+                  SkScalar aScale = SK_Scalar1);
+    void postScale(SkScalar rScale, SkScalar gScale, SkScalar bScale,
+                   SkScalar aScale = SK_Scalar1);
+    void postTranslate(SkScalar rTrans, SkScalar gTrans, SkScalar bTrans,
+                       SkScalar aTrans = 0);
+>>>>>>> miniblink49
 
     enum Axis {
         kR_Axis = 0,
@@ -57,8 +82,12 @@ public:
     void setRGB2YUV();
     void setYUV2RGB();
 
+<<<<<<< HEAD
     bool operator==(const SkColorMatrix& other) const
     {
+=======
+    bool operator==(const SkColorMatrix& other) const {
+>>>>>>> miniblink49
         return 0 == memcmp(fMat, other.fMat, sizeof(fMat));
     }
 

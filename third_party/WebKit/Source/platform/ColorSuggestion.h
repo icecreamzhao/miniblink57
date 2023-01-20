@@ -32,21 +32,33 @@
 #define ColorSuggestion_h
 
 #include "platform/graphics/Color.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 struct ColorSuggestion {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+=======
+>>>>>>> miniblink49
     Color color;
     String label;
 
     ColorSuggestion(const Color& colorValue, const String& label)
+<<<<<<< HEAD
         : color(colorValue)
         , label(label)
     {
     }
+=======
+    : color(colorValue)
+    , label(label)
+    { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

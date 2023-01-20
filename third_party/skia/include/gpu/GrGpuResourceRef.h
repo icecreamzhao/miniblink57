@@ -77,10 +77,17 @@ private:
 
     friend class GrProgramElement;
 
+<<<<<<< HEAD
     GrGpuResource* fResource;
     mutable bool fOwnRef;
     mutable bool fPendingIO;
     GrIOType fIOType;
+=======
+    GrGpuResource*  fResource;
+    mutable bool    fOwnRef;
+    mutable bool    fPendingIO;
+    GrIOType        fIOType;
+>>>>>>> miniblink49
 
     typedef SkNoncopyable INHERITED;
 };
@@ -88,6 +95,7 @@ private:
 /**
  * Templated version of GrGpuResourceRef to enforce type safety.
  */
+<<<<<<< HEAD
 template <typename T>
 class GrTGpuResourceRef : public GrGpuResourceRef {
 public:
@@ -99,6 +107,15 @@ public:
         : INHERITED(resource, ioType)
     {
     }
+=======
+template <typename T> class GrTGpuResourceRef : public GrGpuResourceRef {
+public:
+    GrTGpuResourceRef() {}
+
+    /** Adopts a ref from the caller. ioType expresses what type of IO operations will be marked as
+        pending on the resource when markPendingIO is called. */
+    GrTGpuResourceRef(T* resource, GrIOType ioType) : INHERITED(resource, ioType) { }
+>>>>>>> miniblink49
 
     T* get() const { return static_cast<T*>(this->getResource()); }
 
@@ -111,6 +128,7 @@ private:
 };
 
 // Specializations for GrTexture and GrRenderTarget because they use virtual inheritance.
+<<<<<<< HEAD
 template <>
 class GrTGpuResourceRef<GrTexture> : public GrGpuResourceRef {
 public:
@@ -123,6 +141,15 @@ public:
 
     GrTexture* get() const
     {
+=======
+template<> class GrTGpuResourceRef<GrTexture> : public GrGpuResourceRef {
+public:
+    GrTGpuResourceRef() {}
+
+    GrTGpuResourceRef(GrTexture* texture, GrIOType ioType) : INHERITED(texture, ioType) { }
+
+    GrTexture* get() const {
+>>>>>>> miniblink49
         GrSurface* surface = static_cast<GrSurface*>(this->getResource());
         if (surface) {
             return surface->asTexture();
@@ -137,6 +164,7 @@ private:
     typedef GrGpuResourceRef INHERITED;
 };
 
+<<<<<<< HEAD
 template <>
 class GrTGpuResourceRef<GrRenderTarget> : public GrGpuResourceRef {
 public:
@@ -149,6 +177,15 @@ public:
 
     GrRenderTarget* get() const
     {
+=======
+template<> class GrTGpuResourceRef<GrRenderTarget> : public GrGpuResourceRef {
+public:
+    GrTGpuResourceRef() {}
+
+    GrTGpuResourceRef(GrRenderTarget* rt, GrIOType ioType) : INHERITED(rt, ioType) { }
+
+    GrRenderTarget* get() const {
+>>>>>>> miniblink49
         GrSurface* surface = static_cast<GrSurface*>(this->getResource());
         if (surface) {
             return surface->asRenderTarget();
@@ -167,6 +204,7 @@ private:
  * This is similar to GrTGpuResourceRef but can only be in the pending IO state. It never owns a
  * ref.
  */
+<<<<<<< HEAD
 template <typename T, GrIOType IO_TYPE>
 class GrPendingIOResource : SkNoncopyable {
 public:
@@ -190,12 +228,34 @@ public:
                 resource->addPendingRead();
                 resource->addPendingWrite();
                 break;
+=======
+template <typename T, GrIOType IO_TYPE> class GrPendingIOResource : SkNoncopyable {
+public:
+    GrPendingIOResource(T* resource = NULL) : fResource(NULL) {
+        this->reset(resource);
+    }
+
+    void reset(T* resource) {
+        if (resource) {
+            switch (IO_TYPE) {
+                case kRead_GrIOType:
+                    resource->addPendingRead();
+                    break;
+                case kWrite_GrIOType:
+                    resource->addPendingWrite();
+                    break;
+                case kRW_GrIOType:
+                    resource->addPendingRead();
+                    resource->addPendingWrite();
+                    break;
+>>>>>>> miniblink49
             }
         }
         this->release();
         fResource = resource;
     }
 
+<<<<<<< HEAD
     ~GrPendingIOResource()
     {
         this->release();
@@ -207,10 +267,18 @@ public:
     {
         return fResource == other.fResource;
     }
+=======
+    ~GrPendingIOResource() {
+        this->release();
+    }
+
+    operator bool() const { return SkToBool(fResource); }
+>>>>>>> miniblink49
 
     T* get() const { return fResource; }
 
 private:
+<<<<<<< HEAD
     void release()
     {
         if (fResource) {
@@ -225,6 +293,21 @@ private:
                 fResource->completedRead();
                 fResource->completedWrite();
                 break;
+=======
+    void release() {
+        if (fResource) {
+            switch (IO_TYPE) {
+                case kRead_GrIOType:
+                    fResource->completedRead();
+                    break;
+                case kWrite_GrIOType:
+                    fResource->completedWrite();
+                    break;
+                case kRW_GrIOType:
+                    fResource->completedRead();
+                    fResource->completedWrite();
+                    break;
+>>>>>>> miniblink49
             }
         }
     }

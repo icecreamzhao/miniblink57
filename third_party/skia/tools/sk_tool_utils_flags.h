@@ -13,4 +13,8 @@
 DECLARE_bool(portableFonts);
 DECLARE_bool(resourceFonts);
 
+<<<<<<< HEAD
 #endif // sk_tool_utils_flags_DEFINED
+=======
+#endif  // sk_tool_utils_flags_DEFINED
+>>>>>>> miniblink49

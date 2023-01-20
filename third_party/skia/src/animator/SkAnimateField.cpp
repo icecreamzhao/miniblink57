@@ -6,9 +6,16 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkADrawable.h"
 #include "SkAnimate.h"
 #include "SkAnimateMaker.h"
+=======
+
+#include "SkAnimate.h"
+#include "SkAnimateMaker.h"
+#include "SkADrawable.h"
+>>>>>>> miniblink49
 #include "SkParse.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -21,6 +28,7 @@ const SkMemberInfo SkAnimate::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAnimate);
 
+<<<<<<< HEAD
 SkAnimate::SkAnimate()
     : fComponents(0)
 {
@@ -32,12 +40,25 @@ SkAnimate::~SkAnimate()
 
 int SkAnimate::components()
 {
+=======
+SkAnimate::SkAnimate() : fComponents(0) {
+}
+
+SkAnimate::~SkAnimate() {
+}
+
+int SkAnimate::components() {
+>>>>>>> miniblink49
     return fComponents;
 }
 
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
 void SkAnimate::dump(SkAnimateMaker* maker)
 {
+=======
+void SkAnimate::dump(SkAnimateMaker* maker) {
+>>>>>>> miniblink49
     INHERITED::dump(maker); //from animateBase
     //SkSet inherits from this class
     if (getType() != SkType_Set) {
@@ -61,19 +82,29 @@ void SkAnimate::dump(SkAnimateMaker* maker)
             }
             SkDebugf("]\" ");
         }
+<<<<<<< HEAD
         SkDebugf("/>\n"); //i assume that if it IS, we will do it separately
+=======
+        SkDebugf("/>\n");//i assume that if it IS, we will do it separately
+>>>>>>> miniblink49
     }
 }
 #endif
 
+<<<<<<< HEAD
 bool SkAnimate::resolveCommon(SkAnimateMaker& maker)
 {
     if (fTarget == nullptr) // if nullptr, recall onEndElement after apply closes and sets target to scope
+=======
+bool SkAnimate::resolveCommon(SkAnimateMaker& maker) {
+    if (fTarget == NULL) // if NULL, recall onEndElement after apply closes and sets target to scope
+>>>>>>> miniblink49
         return false;
     INHERITED::onEndElement(maker);
     return maker.hasError() == false;
 }
 
+<<<<<<< HEAD
 void SkAnimate::onEndElement(SkAnimateMaker& maker)
 {
     bool resolved = resolveCommon(maker);
@@ -82,28 +113,53 @@ void SkAnimate::onEndElement(SkAnimateMaker& maker)
         maker.setErrorCode(SkDisplayXMLParserError::kFieldNotInTarget);
     }
     if (resolved == false || fFieldInfo == nullptr)
+=======
+void SkAnimate::onEndElement(SkAnimateMaker& maker) {
+    bool resolved = resolveCommon(maker);
+    if (resolved && fFieldInfo == NULL) {
+        maker.setErrorNoun(field);
+        maker.setErrorCode(SkDisplayXMLParserError::kFieldNotInTarget);
+    }
+    if (resolved == false || fFieldInfo == NULL)
+>>>>>>> miniblink49
         return;
     SkDisplayTypes outType = fFieldInfo->getType();
     if (fHasValues) {
         SkASSERT(to.size() > 0);
+<<<<<<< HEAD
         fFieldInfo->setValue(maker, &fValues, 0, 0, nullptr, outType, to);
+=======
+        fFieldInfo->setValue(maker, &fValues, 0, 0, NULL, outType, to);
+>>>>>>> miniblink49
         SkASSERT(0);
         // !!! this needs to set fComponents
         return;
     }
     fComponents = fFieldInfo->getCount();
     if (fFieldInfo->fType == SkType_Array) {
+<<<<<<< HEAD
         SkTypedArray* array = (SkTypedArray*)fFieldInfo->memberData(fTarget);
+=======
+        SkTypedArray* array = (SkTypedArray*) fFieldInfo->memberData(fTarget);
+>>>>>>> miniblink49
         int count = array->count();
         if (count > 0)
             fComponents = count;
     }
     if (outType == SkType_ARGB) {
+<<<<<<< HEAD
         fComponents <<= 2; // four color components
         outType = SkType_Float;
     }
     fValues.setType(outType);
     if (formula.size() > 0) {
+=======
+        fComponents <<= 2;  // four color components
+        outType = SkType_Float;
+    }
+    fValues.setType(outType);
+    if (formula.size() > 0){
+>>>>>>> miniblink49
         fComponents = 1;
         from.set("0");
         to.set("dur");

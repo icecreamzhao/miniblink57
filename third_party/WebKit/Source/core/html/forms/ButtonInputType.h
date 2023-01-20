@@ -37,13 +37,10 @@ namespace blink {
 
 class ButtonInputType final : public BaseButtonInputType {
 public:
-    static InputType* create(HTMLInputElement&);
+    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
 
 private:
-    ButtonInputType(HTMLInputElement& element)
-        : BaseButtonInputType(element)
-    {
-    }
+    ButtonInputType(HTMLInputElement& element) : BaseButtonInputType(element) { }
     const AtomicString& formControlType() const override;
     bool supportsValidation() const override;
     bool isTextButton() const override;

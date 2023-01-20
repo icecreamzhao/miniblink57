@@ -8,8 +8,13 @@
 #ifndef GrSingleTextureEffect_DEFINED
 #define GrSingleTextureEffect_DEFINED
 
+<<<<<<< HEAD
 #include "GrCoordTransform.h"
 #include "GrFragmentProcessor.h"
+=======
+#include "GrFragmentProcessor.h"
+#include "GrCoordTransform.h"
+>>>>>>> miniblink49
 #include "GrInvariantOutput.h"
 #include "SkMatrix.h"
 
@@ -21,6 +26,7 @@ class GrTexture;
  */
 class GrSingleTextureEffect : public GrFragmentProcessor {
 public:
+<<<<<<< HEAD
     ~GrSingleTextureEffect() override;
 
     SkString dumpInfo() const override
@@ -40,14 +46,35 @@ protected:
         const SkMatrix&,
         const GrTextureParams&,
         GrCoordSet = kLocal_GrCoordSet);
+=======
+    virtual ~GrSingleTextureEffect();
+
+protected:
+    /** unfiltered, clamp mode */
+    GrSingleTextureEffect(GrProcessorDataManager*, GrTexture*, const SkMatrix&,
+                          GrCoordSet = kLocal_GrCoordSet);
+    /** clamp mode */
+    GrSingleTextureEffect(GrProcessorDataManager*, GrTexture*, const SkMatrix&,
+                          GrTextureParams::FilterMode filterMode,
+                          GrCoordSet = kLocal_GrCoordSet);
+    GrSingleTextureEffect(GrProcessorDataManager*,
+                          GrTexture*,
+                          const SkMatrix&,
+                          const GrTextureParams&,
+                          GrCoordSet = kLocal_GrCoordSet);
+>>>>>>> miniblink49
 
     /**
      * Can be used as a helper to implement subclass onComputeInvariantOutput(). It assumes that
      * the subclass output color will be a modulation of the input color with a value read from the
      * texture.
      */
+<<<<<<< HEAD
     void updateInvariantOutputForModulation(GrInvariantOutput* inout) const
     {
+=======
+    void updateInvariantOutputForModulation(GrInvariantOutput* inout) const {
+>>>>>>> miniblink49
         if (GrPixelConfigIsAlphaOnly(this->texture(0)->config())) {
             inout->mulByUnknownSingleComponent();
         } else if (GrPixelConfigIsOpaque(this->texture(0)->config())) {
@@ -59,7 +86,11 @@ protected:
 
 private:
     GrCoordTransform fCoordTransform;
+<<<<<<< HEAD
     GrTextureAccess fTextureAccess;
+=======
+    GrTextureAccess  fTextureAccess;
+>>>>>>> miniblink49
 
     typedef GrFragmentProcessor INHERITED;
 };

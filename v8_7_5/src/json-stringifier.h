@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     V8_WARN_UNUSED_RESULT MaybeHandle<Object> JsonStringify(Isolate* isolate,
         Handle<Object> object,
         Handle<Object> replacer,
@@ -18,3 +19,13 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_JSON_STRINGIFIER_H_
+=======
+V8_WARN_UNUSED_RESULT MaybeHandle<Object> JsonStringify(Isolate* isolate,
+                                                        Handle<Object> object,
+                                                        Handle<Object> replacer,
+                                                        Handle<Object> gap);
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_JSON_STRINGIFIER_H_
+>>>>>>> miniblink49

@@ -29,7 +29,11 @@
 #define FrameData_h
 
 #include "platform/graphics/ImageOrientation.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+#include "third_party/skia/include/core/SkBitmap.h"
+>>>>>>> miniblink49
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
 #include "wtf/VectorTraits.h"
@@ -37,17 +41,27 @@
 namespace blink {
 
 struct FrameData {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     WTF_MAKE_NONCOPYABLE(FrameData);
 
+=======
+    WTF_MAKE_NONCOPYABLE(FrameData);
+>>>>>>> miniblink49
 public:
     FrameData();
     ~FrameData();
 
     // Clear the cached image data on the frame, and (optionally) the metadata.
     // Returns whether there was cached image data to clear.
+<<<<<<< HEAD
     void clear(bool clearMetadata);
 
+=======
+    bool clear(bool clearMetadata);
+
+    SkBitmap m_frame;
+>>>>>>> miniblink49
     ImageOrientation m_orientation;
     float m_duration;
     bool m_haveMetadata : 1;
@@ -59,10 +73,14 @@ public:
 } // namespace blink
 
 namespace WTF {
+<<<<<<< HEAD
 template <>
 struct VectorTraits<blink::FrameData>
     : public SimpleClassVectorTraits<blink::FrameData> {
     STATIC_ONLY(VectorTraits);
+=======
+template<> struct VectorTraits<blink::FrameData> : public SimpleClassVectorTraits<blink::FrameData> {
+>>>>>>> miniblink49
     static const bool canInitializeWithMemset = false; // Not all FrameData members initialize to 0.
 };
 }

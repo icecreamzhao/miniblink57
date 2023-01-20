@@ -29,21 +29,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/text/LineEnding.h"
 
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
+=======
+#include "config.h"
+#include "platform/text/LineEnding.h"
+
+>>>>>>> miniblink49
 #include "wtf/text/CString.h"
 #include "wtf/text/WTFString.h"
 
 namespace {
 
 class OutputBuffer {
+<<<<<<< HEAD
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(OutputBuffer);
 
 public:
     OutputBuffer() { }
+=======
+public:
+>>>>>>> miniblink49
     virtual char* allocate(size_t) = 0;
     virtual void copy(const CString&) = 0;
     virtual ~OutputBuffer() { }
@@ -55,16 +65,31 @@ public:
         : m_buffer(buffer)
     {
     }
+<<<<<<< HEAD
     ~CStringBuffer() override { }
+=======
+    ~CStringBuffer() override {}
+>>>>>>> miniblink49
 
     char* allocate(size_t size) override
     {
         char* ptr;
+<<<<<<< HEAD
         m_buffer = CString::createUninitialized(size, ptr);
         return ptr;
     }
 
     void copy(const CString& source) override { m_buffer = source; }
+=======
+        m_buffer = CString::newUninitialized(size, ptr);
+        return ptr;
+    }
+
+    void copy(const CString& source) override
+    {
+        m_buffer = source;
+    }
+>>>>>>> miniblink49
 
     const CString& buffer() const { return m_buffer; }
 
@@ -78,7 +103,11 @@ public:
         : m_buffer(buffer)
     {
     }
+<<<<<<< HEAD
     ~VectorCharAppendBuffer() override { }
+=======
+    ~VectorCharAppendBuffer() override {}
+>>>>>>> miniblink49
 
     char* allocate(size_t size) override
     {
@@ -96,8 +125,12 @@ private:
     Vector<char>& m_buffer;
 };
 
+<<<<<<< HEAD
 void internalNormalizeLineEndingsToCRLF(const CString& from,
     OutputBuffer& buffer)
+=======
+void internalNormalizeLineEndingsToCRLF(const CString& from, OutputBuffer& buffer)
+>>>>>>> miniblink49
 {
     // Compute the new length.
     size_t newLen = 0;
@@ -150,18 +183,34 @@ void internalNormalizeLineEndingsToCRLF(const CString& from,
     }
 }
 
+<<<<<<< HEAD
 } // namespace;
 
 namespace blink {
 
 void normalizeLineEndingsToLF(const CString& from, Vector<char>& result)
+=======
+};
+
+namespace blink {
+
+void normalizeToCROrLF(const CString& from, Vector<char>& result, bool toCR);
+
+// Normalize all line-endings to CR or LF.
+void normalizeToCROrLF(const CString& from, Vector<char>& result, bool toCR)
+>>>>>>> miniblink49
 {
     // Compute the new length.
     size_t newLen = 0;
     bool needFix = false;
     const char* p = from.data();
+<<<<<<< HEAD
     char fromEndingChar = '\r';
     char toEndingChar = '\n';
+=======
+    char fromEndingChar = toCR ? '\n' : '\r';
+    char toEndingChar = toCR ? '\r' : '\n';
+>>>>>>> miniblink49
     while (p < from.data() + from.length()) {
         char c = *p++;
         if (c == '\r' && *p == '\n') {
@@ -214,6 +263,19 @@ CString normalizeLineEndingsToCRLF(const CString& from)
     return buffer.buffer();
 }
 
+<<<<<<< HEAD
+=======
+void normalizeLineEndingsToCR(const CString& from, Vector<char>& result)
+{
+    normalizeToCROrLF(from, result, true);
+}
+
+void normalizeLineEndingsToLF(const CString& from, Vector<char>& result)
+{
+    normalizeToCROrLF(from, result, false);
+}
+
+>>>>>>> miniblink49
 void normalizeLineEndingsToNative(const CString& from, Vector<char>& result)
 {
 #if OS(WIN)

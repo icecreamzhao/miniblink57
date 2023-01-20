@@ -5,83 +5,43 @@
 #ifndef LegacyStyleInterpolation_h
 #define LegacyStyleInterpolation_h
 
-#include "core/CSSPropertyNames.h"
-#include "core/CoreExport.h"
-#include "core/animation/Interpolation.h"
-#include "core/animation/PropertyHandle.h"
+#include "core/animation/StyleInterpolation.h"
 #include "core/css/resolver/AnimatedStyleBuilder.h"
-#include <memory>
 
 namespace blink {
 
-class StyleResolverState;
-
-class CORE_EXPORT LegacyStyleInterpolation : public Interpolation {
+class LegacyStyleInterpolation : public StyleInterpolation {
 public:
-    static PassRefPtr<LegacyStyleInterpolation> create(
-        PassRefPtr<AnimatableValue> start,
-        PassRefPtr<AnimatableValue> end,
-        CSSPropertyID id)
+    static PassRefPtrWillBeRawPtr<LegacyStyleInterpolation> create(PassRefPtrWillBeRawPtr<AnimatableValue> start, PassRefPtrWillBeRawPtr<AnimatableValue> end, CSSPropertyID id)
     {
-        return adoptRef(new LegacyStyleInterpolation(
-            InterpolableAnimatableValue::create(std::move(start)),
-            InterpolableAnimatableValue::create(std::move(end)), id));
+        return adoptRefWillBeNoop(new LegacyStyleInterpolation(InterpolableAnimatableValue::create(start), InterpolableAnimatableValue::create(end), id));
     }
 
-    // 1) convert m_cachedValue into an X
-    // 2) shove X into StyleResolverState
-    // X can be:
-    // (1) a CSSValue (and applied via StyleBuilder::applyProperty)
-    // (2) an AnimatableValue (and applied via
-    //     AnimatedStyleBuilder::applyProperty)
-    // (3) a custom value that is inserted directly into the StyleResolverState.
-    void apply(StyleResolverState& state) const
+    virtual void apply(StyleResolverState& state) const override
     {
         AnimatedStyleBuilder::applyProperty(m_id, state, currentValue().get());
     }
 
-    bool isLegacyStyleInterpolation() const final { return true; }
-
-    PassRefPtr<AnimatableValue> currentValue() const
+    virtual bool isLegacyStyleInterpolation() const override final { return true; }
+    PassRefPtrWillBeRawPtr<AnimatableValue> currentValue() const
     {
         return toInterpolableAnimatableValue(m_cachedValue.get())->value();
     }
 
-    CSSPropertyID id() const { return m_id; }
-
-    PropertyHandle getProperty() const final { return PropertyHandle(id()); }
-
-    void interpolate(int iteration, double fraction) final;
-
-protected:
-    LegacyStyleInterpolation(std::unique_ptr<InterpolableValue> start,
-        std::unique_ptr<InterpolableValue> end,
-        CSSPropertyID);
-
-private:
-    const std::unique_ptr<InterpolableValue> m_start;
-    const std::unique_ptr<InterpolableValue> m_end;
-    CSSPropertyID m_id;
-
-    mutable double m_cachedFraction;
-    mutable int m_cachedIteration;
-    mutable std::unique_ptr<InterpolableValue> m_cachedValue;
-
-    InterpolableValue* getCachedValueForTesting() const
+    DEFINE_INLINE_VIRTUAL_TRACE()
     {
-        return m_cachedValue.get();
+        StyleInterpolation::trace(visitor);
     }
 
-    friend class AnimationInterpolableValueTest;
-    friend class AnimationInterpolationEffectTest;
+private:
+    LegacyStyleInterpolation(PassOwnPtrWillBeRawPtr<InterpolableValue> start, PassOwnPtrWillBeRawPtr<InterpolableValue> end, CSSPropertyID id)
+        : StyleInterpolation(start, end, id)
+    {
+    }
 };
 
-DEFINE_TYPE_CASTS(LegacyStyleInterpolation,
-    Interpolation,
-    value,
-    value->isLegacyStyleInterpolation(),
-    value.isLegacyStyleInterpolation());
+DEFINE_TYPE_CASTS(LegacyStyleInterpolation, Interpolation, value, value->isLegacyStyleInterpolation(), value.isLegacyStyleInterpolation());
 
-} // namespace blink
+}
 
 #endif

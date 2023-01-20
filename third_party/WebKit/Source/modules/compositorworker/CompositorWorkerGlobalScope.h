@@ -5,16 +5,23 @@
 #ifndef CompositorWorkerGlobalScope_h
 #define CompositorWorkerGlobalScope_h
 
+<<<<<<< HEAD
 #include "core/dom/CompositorProxyClient.h"
 #include "core/dom/FrameRequestCallbackCollection.h"
 #include "core/dom/MessagePort.h"
 #include "core/workers/WorkerGlobalScope.h"
 #include "modules/ModulesExport.h"
 #include <memory>
+=======
+#include "core/dom/FrameRequestCallbackCollection.h"
+#include "core/dom/MessagePort.h"
+#include "core/workers/WorkerGlobalScope.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class CompositorWorkerThread;
+<<<<<<< HEAD
 class InProcessWorkerObjectProxy;
 class WorkerThreadStartupData;
 
@@ -39,11 +46,29 @@ public:
         const MessagePortArray&,
         ExceptionState&);
     static bool canTransferArrayBuffersAndImageBitmaps() { return true; }
+=======
+class WorkerThreadStartupData;
+
+class CompositorWorkerGlobalScope final : public WorkerGlobalScope {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static PassRefPtrWillBeRawPtr<CompositorWorkerGlobalScope> create(CompositorWorkerThread*, PassOwnPtr<WorkerThreadStartupData>, double timeOrigin);
+    ~CompositorWorkerGlobalScope() override;
+
+    // EventTarget
+    const AtomicString& interfaceName() const override;
+
+    void postMessage(ExecutionContext*, PassRefPtr<SerializedScriptValue>, const MessagePortArray*, ExceptionState&);
+>>>>>>> miniblink49
     DEFINE_ATTRIBUTE_EVENT_LISTENER(message);
 
     int requestAnimationFrame(FrameRequestCallback*);
     void cancelAnimationFrame(int id);
+<<<<<<< HEAD
     bool executeAnimationFrameCallbacks(double highResTimeMs);
+=======
+    void executeAnimationFrameCallbacks(double highResTimeNow);
+>>>>>>> miniblink49
 
     // ExecutionContext:
     bool isCompositorWorkerGlobalScope() const override { return true; }
@@ -51,6 +76,7 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     CompositorWorkerGlobalScope(const KURL&,
         const String& userAgent,
         CompositorWorkerThread*,
@@ -61,6 +87,11 @@ private:
     InProcessWorkerObjectProxy& workerObjectProxy() const;
 
     bool m_executingAnimationFrameCallbacks;
+=======
+    CompositorWorkerGlobalScope(const KURL&, const String& userAgent, CompositorWorkerThread*, double timeOrigin, const SecurityOrigin*, PassOwnPtrWillBeRawPtr<WorkerClients>);
+    CompositorWorkerThread* thread() const;
+
+>>>>>>> miniblink49
     FrameRequestCallbackCollection m_callbackCollection;
 };
 

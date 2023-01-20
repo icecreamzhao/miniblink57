@@ -11,7 +11,11 @@
 #include "src/base/macros.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
+<<<<<<< HEAD
 //#include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
+=======
+#include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
+>>>>>>> miniblink49
 
 namespace v8 {
 
@@ -19,6 +23,7 @@ class Task;
 
 namespace platform {
 
+<<<<<<< HEAD
     class V8_PLATFORM_EXPORT TaskQueue {
     public:
         TaskQueue();
@@ -51,3 +56,38 @@ namespace platform {
 } // namespace v8
 
 #endif // V8_LIBPLATFORM_TASK_QUEUE_H_
+=======
+class V8_PLATFORM_EXPORT TaskQueue {
+ public:
+  TaskQueue();
+  ~TaskQueue();
+
+  // Appends a task to the queue. The queue takes ownership of |task|.
+  void Append(std::unique_ptr<Task> task);
+
+  // Returns the next task to process. Blocks if no task is available. Returns
+  // nullptr if the queue is terminated.
+  std::unique_ptr<Task> GetNext();
+
+  // Terminate the queue.
+  void Terminate();
+
+ private:
+  FRIEND_TEST(WorkerThreadTest, PostSingleTask);
+
+  void BlockUntilQueueEmptyForTesting();
+
+  base::Semaphore process_queue_semaphore_;
+  base::Mutex lock_;
+  std::queue<std::unique_ptr<Task>> task_queue_;
+  bool terminated_;
+
+  DISALLOW_COPY_AND_ASSIGN(TaskQueue);
+};
+
+}  // namespace platform
+}  // namespace v8
+
+
+#endif  // V8_LIBPLATFORM_TASK_QUEUE_H_
+>>>>>>> miniblink49

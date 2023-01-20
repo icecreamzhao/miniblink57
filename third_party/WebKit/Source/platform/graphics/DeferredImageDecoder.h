@@ -26,6 +26,7 @@
 #ifndef DeferredImageDecoder_h
 #define DeferredImageDecoder_h
 
+<<<<<<< HEAD
 #include "platform/PlatformExport.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/image-decoders/ImageDecoder.h"
@@ -37,11 +38,25 @@
 #include <memory>
 
 class SkImage;
+=======
+#include "SkBitmap.h"
+#include "SkPixelRef.h"
+#include "platform/PlatformExport.h"
+#include "platform/geometry/IntSize.h"
+#include "platform/graphics/FrameData.h"
+#include "platform/graphics/ImageFrameGenerator.h"
+#include "platform/graphics/ImageSource.h"
+#include "platform/image-decoders/ImageDecoder.h"
+#include "wtf/Forward.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class ImageFrameGenerator;
 class SharedBuffer;
+<<<<<<< HEAD
 struct DeferredFrameData;
 
 class PLATFORM_EXPORT DeferredImageDecoder final {
@@ -69,18 +84,50 @@ public:
 
     bool isSizeAvailable();
     bool hasEmbeddedColorSpace() const;
+=======
+
+class PLATFORM_EXPORT DeferredImageDecoder {
+    WTF_MAKE_NONCOPYABLE(DeferredImageDecoder);
+public:
+    ~DeferredImageDecoder();
+    static PassOwnPtr<DeferredImageDecoder> create(const SharedBuffer& data, ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption);
+
+    static PassOwnPtr<DeferredImageDecoder> createForTesting(PassOwnPtr<ImageDecoder>);
+
+    static bool isLazyDecoded(const SkBitmap&);
+
+    static void setEnabled(bool);
+    static bool enabled();
+
+    String filenameExtension() const;
+
+    bool createFrameAtIndex(size_t, SkBitmap*);
+
+    void setData(SharedBuffer& data, bool allDataReceived);
+
+    bool isSizeAvailable();
+    bool hasColorProfile() const;
+>>>>>>> miniblink49
     IntSize size() const;
     IntSize frameSizeAtIndex(size_t index) const;
     size_t frameCount();
     int repetitionCount() const;
+<<<<<<< HEAD
     size_t clearCacheExceptFrame(size_t index);
     bool frameHasAlphaAtIndex(size_t index) const;
     bool frameIsCompleteAtIndex(size_t index) const;
     float frameDurationAtIndex(size_t index) const;
+=======
+    size_t clearCacheExceptFrame(size_t);
+    bool frameHasAlphaAtIndex(size_t index) const;
+    bool frameIsCompleteAtIndex(size_t) const;
+    float frameDurationAtIndex(size_t) const;
+>>>>>>> miniblink49
     size_t frameBytesAtIndex(size_t index) const;
     ImageOrientation orientationAtIndex(size_t index) const;
     bool hotSpot(IntPoint&) const;
 
+<<<<<<< HEAD
 private:
     explicit DeferredImageDecoder(std::unique_ptr<ImageDecoder> actualDecoder);
 
@@ -114,6 +161,33 @@ private:
     // Caches frame state information.
     Vector<DeferredFrameData> m_frameData;
     RefPtr<ImageFrameGenerator> m_frameGenerator;
+=======
+    // For testing.
+    ImageFrameGenerator* frameGenerator() { return m_frameGenerator.get(); }
+
+private:
+    explicit DeferredImageDecoder(PassOwnPtr<ImageDecoder> actualDecoder);
+    void prepareLazyDecodedFrames();
+    SkBitmap createBitmap(size_t index);
+    void activateLazyDecoding();
+
+    RefPtr<SharedBuffer> m_data;
+    bool m_allDataReceived;
+    unsigned m_lastDataSize;
+    OwnPtr<ImageDecoder> m_actualDecoder;
+
+    String m_filenameExtension;
+    IntSize m_size;
+    ImageOrientation m_orientation;
+    int m_repetitionCount;
+    bool m_hasColorProfile;
+
+    // Carries only frame state and other information. Does not carry bitmap.
+    Vector<FrameData> m_frameData;
+    RefPtr<ImageFrameGenerator> m_frameGenerator;
+
+    static bool s_enabled;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

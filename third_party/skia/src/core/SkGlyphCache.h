@@ -8,6 +8,7 @@
 #define SkGlyphCache_DEFINED
 
 #include "SkBitmap.h"
+<<<<<<< HEAD
 #include "SkChunkAlloc.h"
 #include "SkDescriptor.h"
 #include "SkGlyph.h"
@@ -21,6 +22,24 @@ class SkTraceMemoryDump;
 
 class SkGlyphCache_Globals;
 
+=======
+#include "SkChecksum.h"
+#include "SkChunkAlloc.h"
+#include "SkDescriptor.h"
+#include "SkGlyph.h"
+#include "SkScalerContext.h"
+#include "SkTemplates.h"
+#include "SkTDArray.h"
+
+class SkPaint;
+
+class SkGlyphCache_Globals;
+
+// Enable this locally to add stats for hash-table hit rates. It also extends the dump() output
+// to show those stats.
+//#define SK_GLYPHCACHE_TRACK_HASH_STATS
+
+>>>>>>> miniblink49
 /** \class SkGlyphCache
 
     This class represents a strike: a specific combination of typeface, size, matrix, etc., and
@@ -67,22 +86,29 @@ public:
 
     /** Returns the number of glyphs for this strike.
     */
+<<<<<<< HEAD
     unsigned getGlyphCount() const;
 
     /** Return the number of glyphs currently cached. */
     int countCachedGlyphs() const;
+=======
+    unsigned getGlyphCount();
+>>>>>>> miniblink49
 
     /** Return the image associated with the glyph. If it has not been generated this will
         trigger that.
     */
     const void* findImage(const SkGlyph&);
 
+<<<<<<< HEAD
     /** If the advance axis intersects the glyph's path, append the positions scaled and offset
         to the array (if non-null), and set the count to the updated array length.
     */
     void findIntercepts(const SkScalar bounds[2], SkScalar scale, SkScalar xPos,
         bool yAxis, SkGlyph*, SkScalar* array, int* count);
 
+=======
+>>>>>>> miniblink49
     /** Return the Path associated with the glyph. If it has not been generated this will trigger
         that.
     */
@@ -90,13 +116,18 @@ public:
 
     /** Return the vertical metrics for this strike.
     */
+<<<<<<< HEAD
     const SkPaint::FontMetrics& getFontMetrics() const
     {
+=======
+    const SkPaint::FontMetrics& getFontMetrics() const {
+>>>>>>> miniblink49
         return fFontMetrics;
     }
 
     const SkDescriptor& getDescriptor() const { return *fDesc; }
 
+<<<<<<< HEAD
     SkMask::Format getMaskFormat() const
     {
         return fScalerContext->getMaskFormat();
@@ -113,6 +144,19 @@ public:
     void dump() const;
 
     /** AuxProc/Data allow a client to associate data with this cache entry. Multiple clients can
+=======
+    SkMask::Format getMaskFormat() const {
+        return fScalerContext->getMaskFormat();
+    }
+
+    bool isSubpixel() const {
+        return fScalerContext->isSubpixel();
+    }
+
+    void dump() const;
+
+    /*  AuxProc/Data allow a client to associate data with this cache entry. Multiple clients can
+>>>>>>> miniblink49
         use this, as their data is keyed with a function pointer. In addition to serving as a
         key, the function pointer is called with the data when the glyphcache object is deleted,
         so the client can cleanup their data as well.
@@ -130,17 +174,28 @@ public:
 
     /** Find a matching cache entry, and call proc() with it. If none is found create a new one.
         If the proc() returns true, detach the cache and return it, otherwise leave it and return
+<<<<<<< HEAD
         nullptr.
     */
     static SkGlyphCache* VisitCache(SkTypeface*, const SkScalerContextEffects&, const SkDescriptor*,
         bool (*proc)(const SkGlyphCache*, void*),
         void* context);
+=======
+        NULL.
+    */
+    static SkGlyphCache* VisitCache(SkTypeface*, const SkDescriptor* desc,
+                                    bool (*proc)(const SkGlyphCache*, void*),
+                                    void* context);
+>>>>>>> miniblink49
 
     /** Given a strike that was returned by either VisitCache() or DetachCache() add it back into
         the global cache list (after which the caller should not reference it anymore.
     */
     static void AttachCache(SkGlyphCache*);
+<<<<<<< HEAD
     using AttachCacheFunctor = SkFunctionWrapper<void, SkGlyphCache, AttachCache>;
+=======
+>>>>>>> miniblink49
 
     /** Detach a strike from the global cache matching the specified descriptor. Once detached,
         it can be queried/modified by the current thread, and when finished, be reattached to the
@@ -149,14 +204,20 @@ public:
         more than 1 strike for the same descriptor, but that will eventually get purged, and the
         win is that different thread will never block each other while a strike is being used.
     */
+<<<<<<< HEAD
     static SkGlyphCache* DetachCache(SkTypeface* typeface, const SkScalerContextEffects& effects,
         const SkDescriptor* desc)
     {
         return VisitCache(typeface, effects, desc, DetachProc, nullptr);
+=======
+    static SkGlyphCache* DetachCache(SkTypeface* typeface, const SkDescriptor* desc) {
+        return VisitCache(typeface, desc, DetachProc, NULL);
+>>>>>>> miniblink49
     }
 
     static void Dump();
 
+<<<<<<< HEAD
     /** Dump memory usage statistics of all the attaches caches in the process using the
         SkTraceMemoryDump interface.
     */
@@ -171,28 +232,48 @@ public:
     void validate() const
     {
     }
+=======
+#ifdef SK_DEBUG
+    void validate() const;
+#else
+    void validate() const {}
+>>>>>>> miniblink49
 #endif
 
     class AutoValidate : SkNoncopyable {
     public:
+<<<<<<< HEAD
         AutoValidate(const SkGlyphCache* cache)
             : fCache(cache)
         {
+=======
+        AutoValidate(const SkGlyphCache* cache) : fCache(cache) {
+>>>>>>> miniblink49
             if (fCache) {
                 fCache->validate();
             }
         }
+<<<<<<< HEAD
         ~AutoValidate()
         {
+=======
+        ~AutoValidate() {
+>>>>>>> miniblink49
             if (fCache) {
                 fCache->validate();
             }
         }
+<<<<<<< HEAD
         void forget()
         {
             fCache = nullptr;
         }
 
+=======
+        void forget() {
+            fCache = NULL;
+        }
+>>>>>>> miniblink49
     private:
         const SkGlyphCache* fCache;
     };
@@ -206,6 +287,7 @@ private:
     };
 
     enum {
+<<<<<<< HEAD
         kHashBits = 8,
         kHashCount = 1 << kHashBits,
         kHashMask = kHashCount - 1
@@ -217,6 +299,16 @@ private:
     struct CharGlyphRec {
         PackedUnicharID fPackedUnicharID;
         PackedGlyphID fPackedGlyphID;
+=======
+        kHashBits           = 8,
+        kHashCount          = 1 << kHashBits,
+        kHashMask           = kHashCount - 1
+    };
+
+    struct CharGlyphRec {
+        uint32_t    fID;    // unichar + subpixel
+        uint16_t    fGlyphIndex;
+>>>>>>> miniblink49
     };
 
     struct AuxProcRec {
@@ -232,11 +324,16 @@ private:
     // Return the SkGlyph* associated with MakeID. The id parameter is the
     // combined glyph/x/y id generated by MakeID. If it is just a glyph id
     // then x and y are assumed to be zero.
+<<<<<<< HEAD
     SkGlyph* lookupByPackedGlyphID(PackedGlyphID packedGlyphID, MetricsType type);
+=======
+    SkGlyph* lookupByCombinedID(uint32_t id, MetricsType type);
+>>>>>>> miniblink49
 
     // Return a SkGlyph* associated with unicode id and position x and y.
     SkGlyph* lookupByChar(SkUnichar id, MetricsType type, SkFixed x = 0, SkFixed y = 0);
 
+<<<<<<< HEAD
     // Return a new SkGlyph for the glyph ID and subpixel position id. Limit the amount
     // of work
     // using type.
@@ -246,11 +343,26 @@ private:
 
     // The id arg is a combined id generated by MakeID.
     CharGlyphRec* getCharGlyphRec(PackedUnicharID id);
+=======
+    // Return the index of id in the fGlyphArray. If it does not exist,
+    // create a new one using MetricsType.
+    uint16_t lookupMetrics(uint32_t id, MetricsType type);
+    static bool DetachProc(const SkGlyphCache*, void*) { return true; }
+
+    // The id arg is a combined id generated by MakeID.
+    CharGlyphRec* getCharGlyphRec(uint32_t id);
+    void adjustCaches(int insertion_index);
+
+    static inline unsigned ID2HashIndex(uint32_t h) {
+        return SkChecksum::CheapMix(h) & kHashMask;
+    }
+>>>>>>> miniblink49
 
     void invokeAndRemoveAuxProcs();
 
     inline static SkGlyphCache* FindTail(SkGlyphCache* head);
 
+<<<<<<< HEAD
     static void OffsetResults(const SkGlyph::Intercept* intercept, SkScalar scale,
         SkScalar xPos, SkScalar* array, int* count);
     static void AddInterval(SkScalar val, SkGlyph::Intercept* intercept);
@@ -280,10 +392,39 @@ private:
 
     // used to track (approx) how much ram is tied-up in this cache
     size_t fMemoryUsed;
+=======
+    SkGlyphCache*        fNext, *fPrev;
+    SkDescriptor*        fDesc;
+    SkScalerContext*     fScalerContext;
+    SkPaint::FontMetrics fFontMetrics;
+
+    // A quick lookup to avoid the binary search looking for glyphs in fGlyphArray.
+    uint16_t             fGlyphHash[kHashCount];
+
+    // Contains the SkGlyphs that are used by fGlyphHash and fCharToGlyphHash. The ~0 element is
+    // reserved for a sentinel SkGlyph that reduces the logic to check for collisions in the hash
+    // arrays. The ~0 element has an fID of SkGlyph::kImpossibleID which never matches any
+    // combined id generated for a char or a glyph.
+    SkTDArray<SkGlyph>   fGlyphArray;
+    SkChunkAlloc         fGlyphAlloc;
+
+    // no reason to use the same kHashCount as fGlyphHash, but we do for now
+    // Dynamically allocated when chars are encountered.
+    SkAutoTArray<CharGlyphRec> fCharToGlyphHash;
+
+    // used to track (approx) how much ram is tied-up in this cache
+    size_t  fMemoryUsed;
+
+#ifdef SK_GLYPHCACHE_TRACK_HASH_STATS
+    int fHashHitCount;
+    int fHashMissCount;
+#endif
+>>>>>>> miniblink49
 
     AuxProcRec* fAuxProcList;
 };
 
+<<<<<<< HEAD
 class SkAutoGlyphCache : public std::unique_ptr<SkGlyphCache, SkGlyphCache::AttachCacheFunctor> {
 public:
     /** deprecated: use get() */
@@ -329,6 +470,76 @@ public:
     }
 };
 #define SkAutoGlyphCache(...) SK_REQUIRE_LOCAL_VAR(SkAutoGlyphCache)
+=======
+class SkAutoGlyphCacheBase {
+public:
+    SkGlyphCache* getCache() const { return fCache; }
+
+    void release() {
+        if (fCache) {
+            SkGlyphCache::AttachCache(fCache);
+            fCache = NULL;
+        }
+    }
+
+protected:
+    // Hide the constructors so we can't create one of these directly. Create SkAutoGlyphCache or
+    // SkAutoGlyphCacheNoCache instead.
+    SkAutoGlyphCacheBase(SkGlyphCache* cache) : fCache(cache) {}
+    SkAutoGlyphCacheBase(SkTypeface* typeface, const SkDescriptor* desc) {
+        fCache = SkGlyphCache::DetachCache(typeface, desc);
+    }
+    SkAutoGlyphCacheBase(const SkPaint& /*paint*/,
+                         const SkSurfaceProps* /*surfaceProps*/,
+                         const SkMatrix* /*matrix*/) {
+        fCache = NULL;
+    }
+    SkAutoGlyphCacheBase() {
+        fCache = NULL;
+    }
+    ~SkAutoGlyphCacheBase() {
+        if (fCache) {
+            SkGlyphCache::AttachCache(fCache);
+        }
+    }
+
+    SkGlyphCache*   fCache;
+
+private:
+    static bool DetachProc(const SkGlyphCache*, void*);
+};
+
+class SkAutoGlyphCache : public SkAutoGlyphCacheBase {
+public:
+    SkAutoGlyphCache(SkGlyphCache* cache) : SkAutoGlyphCacheBase(cache) {}
+    SkAutoGlyphCache(SkTypeface* typeface, const SkDescriptor* desc) :
+        SkAutoGlyphCacheBase(typeface, desc) {}
+    SkAutoGlyphCache(const SkPaint& paint,
+                     const SkSurfaceProps* surfaceProps,
+                     const SkMatrix* matrix) {
+        fCache = paint.detachCache(surfaceProps, matrix, false);
+    }
+
+private:
+    SkAutoGlyphCache() : SkAutoGlyphCacheBase() {}
+};
+#define SkAutoGlyphCache(...) SK_REQUIRE_LOCAL_VAR(SkAutoGlyphCache)
+
+class SkAutoGlyphCacheNoGamma : public SkAutoGlyphCacheBase {
+public:
+    SkAutoGlyphCacheNoGamma(SkGlyphCache* cache) : SkAutoGlyphCacheBase(cache) {}
+    SkAutoGlyphCacheNoGamma(SkTypeface* typeface, const SkDescriptor* desc) :
+        SkAutoGlyphCacheBase(typeface, desc) {}
+    SkAutoGlyphCacheNoGamma(const SkPaint& paint,
+                            const SkSurfaceProps* surfaceProps,
+                            const SkMatrix* matrix) {
+        fCache = paint.detachCache(surfaceProps, matrix, true);
+    }
+
+private:
+    SkAutoGlyphCacheNoGamma() : SkAutoGlyphCacheBase() {}
+};
+>>>>>>> miniblink49
 #define SkAutoGlyphCacheNoGamma(...) SK_REQUIRE_LOCAL_VAR(SkAutoGlyphCacheNoGamma)
 
 #endif

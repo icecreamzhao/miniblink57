@@ -44,7 +44,11 @@
  *
  * Returns the current encoding as flagged in the HTML source
  */
+<<<<<<< HEAD
 const xmlChar * XMLCALL
+=======
+const xmlChar *
+>>>>>>> miniblink49
 htmlGetMetaEncoding(htmlDocPtr doc) {
     htmlNodePtr cur;
     const xmlChar *content;
@@ -158,7 +162,11 @@ found_content:
  *
  * Returns 0 in case of success and -1 in case of error
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlSetMetaEncoding(htmlDocPtr doc, const xmlChar *encoding) {
     htmlNodePtr cur, meta = NULL, head = NULL;
     const xmlChar *content = NULL;
@@ -311,7 +319,11 @@ static const char* htmlBooleanAttrs[] = {
  * 
  * returns: false if the attribute is not boolean, true otherwise.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlIsBooleanAttr(const xmlChar *name)
 {
     int i = 0;
@@ -444,7 +456,11 @@ htmlNodeDumpFormat(xmlBufferPtr buf, xmlDocPtr doc, xmlNodePtr cur,
  *
  * Returns the number of byte written or -1 in case of error
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlNodeDump(xmlBufferPtr buf, xmlDocPtr doc, xmlNodePtr cur) {
     xmlInitParser();
 
@@ -465,7 +481,11 @@ htmlNodeDump(xmlBufferPtr buf, xmlDocPtr doc, xmlNodePtr cur) {
  *
  * returns: the number of byte written or -1 in case of failure.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlNodeDumpFileFormat(FILE *out, xmlDocPtr doc,
 	               xmlNodePtr cur, const char *encoding, int format) {
     xmlOutputBufferPtr buf;
@@ -514,7 +534,11 @@ htmlNodeDumpFileFormat(FILE *out, xmlDocPtr doc,
  * Dump an HTML node, recursive behaviour,children are printed too,
  * and formatting returns are added.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlNodeDumpFile(FILE *out, xmlDocPtr doc, xmlNodePtr cur) {
     htmlNodeDumpFileFormat(out, doc, cur, NULL, 1);
 }
@@ -529,7 +553,11 @@ htmlNodeDumpFile(FILE *out, xmlDocPtr doc, xmlNodePtr cur) {
  * Dump an HTML document in memory and return the xmlChar * and it's size.
  * It's up to the caller to free the memory.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlDocDumpMemoryFormat(xmlDocPtr cur, xmlChar**mem, int *size, int format) {
     xmlOutputBufferPtr buf;
     xmlCharEncodingHandlerPtr handler = NULL;
@@ -609,7 +637,11 @@ htmlDocDumpMemoryFormat(xmlDocPtr cur, xmlChar**mem, int *size, int format) {
  * Dump an HTML document in memory and return the xmlChar * and it's size.
  * It's up to the caller to free the memory.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlDocDumpMemory(xmlDocPtr cur, xmlChar**mem, int *size) {
 	htmlDocDumpMemoryFormat(cur, mem, size, 1);
 }
@@ -774,7 +806,11 @@ htmlNodeListDumpOutput(xmlOutputBufferPtr buf, xmlDocPtr doc,
  *
  * Dump an HTML node, recursive behaviour,children are printed too.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlNodeDumpFormatOutput(xmlOutputBufferPtr buf, xmlDocPtr doc,
 	                 xmlNodePtr cur, const char *encoding, int format) {
     const htmlElemDesc * info;
@@ -963,7 +999,11 @@ htmlNodeDumpFormatOutput(xmlOutputBufferPtr buf, xmlDocPtr doc,
  * Dump an HTML node, recursive behaviour,children are printed too,
  * and formatting returns/spaces are added.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlNodeDumpOutput(xmlOutputBufferPtr buf, xmlDocPtr doc,
 	           xmlNodePtr cur, const char *encoding) {
     htmlNodeDumpFormatOutput(buf, doc, cur, encoding, 1);
@@ -978,7 +1018,11 @@ htmlNodeDumpOutput(xmlOutputBufferPtr buf, xmlDocPtr doc,
  *
  * Dump an HTML document.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlDocContentDumpFormatOutput(xmlOutputBufferPtr buf, xmlDocPtr cur,
 	                       const char *encoding, int format) {
     int type;
@@ -1011,7 +1055,11 @@ htmlDocContentDumpFormatOutput(xmlOutputBufferPtr buf, xmlDocPtr cur,
  *
  * Dump an HTML document. Formating return/spaces are added.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 htmlDocContentDumpOutput(xmlOutputBufferPtr buf, xmlDocPtr cur,
 	                 const char *encoding) {
     htmlDocContentDumpFormatOutput(buf, cur, encoding, 1);
@@ -1032,7 +1080,11 @@ htmlDocContentDumpOutput(xmlOutputBufferPtr buf, xmlDocPtr cur,
  *
  * returns: the number of byte written or -1 in case of failure.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlDocDump(FILE *f, xmlDocPtr cur) {
     xmlOutputBufferPtr buf;
     xmlCharEncodingHandlerPtr handler = NULL;
@@ -1092,7 +1144,11 @@ htmlDocDump(FILE *f, xmlDocPtr cur) {
  * used.
  * returns: the number of byte written or -1 in case of failure.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlSaveFile(const char *filename, xmlDocPtr cur) {
     xmlOutputBufferPtr buf;
     xmlCharEncodingHandlerPtr handler = NULL;
@@ -1155,7 +1211,11 @@ htmlSaveFile(const char *filename, xmlDocPtr cur) {
  * 
  * returns: the number of byte written or -1 in case of failure.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlSaveFileFormat(const char *filename, xmlDocPtr cur,
 	           const char *encoding, int format) {
     xmlOutputBufferPtr buf;
@@ -1219,7 +1279,11 @@ htmlSaveFileFormat(const char *filename, xmlDocPtr cur,
  * 
  * returns: the number of byte written or -1 in case of failure.
  */
+<<<<<<< HEAD
 int XMLCALL
+=======
+int
+>>>>>>> miniblink49
 htmlSaveFileEnc(const char *filename, xmlDocPtr cur, const char *encoding) {
     return(htmlSaveFileFormat(filename, cur, encoding, 1));
 }

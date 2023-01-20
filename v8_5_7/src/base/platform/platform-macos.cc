@@ -100,7 +100,11 @@ void OS::SignalCodeMovingGC() {
 
 
 const char* OS::LocalTimezone(double time, TimezoneCache* cache) {
+<<<<<<< HEAD
   if (std_isnan(time)) return "";
+=======
+  if (std::isnan(time)) return "";
+>>>>>>> miniblink49
   time_t tv = static_cast<time_t>(std::floor(time/msPerSecond));
   struct tm tm;
   struct tm* t = localtime_r(&tv, &tm);

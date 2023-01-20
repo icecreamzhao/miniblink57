@@ -35,7 +35,6 @@
 #include "platform/Length.h"
 #include "platform/LengthSize.h"
 #include "platform/graphics/GraphicsTypes.h"
-#include "wtf/Allocator.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
@@ -50,7 +49,7 @@ class CORE_EXPORT BasicShape : public RefCounted<BasicShape> {
 public:
     virtual ~BasicShape() { }
 
-    enum ShapeType {
+    enum Type {
         BasicShapeEllipseType,
         BasicShapePolygonType,
         BasicShapeCircleType,
@@ -58,65 +57,55 @@ public:
     };
 
     bool canBlend(const BasicShape*) const;
-    bool isSameType(const BasicShape& other) const
-    {
-        return type() == other.type();
-    }
+    bool isSameType(const BasicShape& other) const { return type() == other.type(); }
 
     virtual void path(Path&, const FloatRect&) = 0;
-    virtual WindRule getWindRule() const { return RULE_NONZERO; }
+    virtual WindRule windRule() const { return RULE_NONZERO; }
     virtual PassRefPtr<BasicShape> blend(const BasicShape*, double) const = 0;
     virtual bool operator==(const BasicShape&) const = 0;
 
-    virtual ShapeType type() const = 0;
+    virtual Type type() const = 0;
 
 protected:
-    BasicShape() { }
+    BasicShape()
+    {
+    }
+
 };
 
-#define DEFINE_BASICSHAPE_TYPE_CASTS(thisType)       \
-    DEFINE_TYPE_CASTS(thisType, BasicShape, value,   \
-        value->type() == BasicShape::thisType##Type, \
-        value.type() == BasicShape::thisType##Type)
+#define DEFINE_BASICSHAPE_TYPE_CASTS(thisType) \
+    DEFINE_TYPE_CASTS(thisType, BasicShape, value, value->type() == BasicShape::thisType##Type, value.type() == BasicShape::thisType##Type)
 
 class BasicShapeCenterCoordinate {
-    DISALLOW_NEW();
-
 public:
-    enum Direction { TopLeft,
-        BottomRight };
+    enum Direction {
+        TopLeft,
+        BottomRight
+    };
 
-    BasicShapeCenterCoordinate(Direction direction = TopLeft,
-        const Length& length = Length(0, Fixed))
+    BasicShapeCenterCoordinate(Direction direction = TopLeft, const Length& length = Length(0, Fixed))
         : m_direction(direction)
         , m_length(length)
-        , m_computedLength(direction == TopLeft
-                  ? length
-                  : length.subtractFromOneHundredPercent())
+        , m_computedLength(direction == TopLeft ? length : length.subtractFromOneHundredPercent())
     {
     }
 
     BasicShapeCenterCoordinate(const BasicShapeCenterCoordinate& other)
-        : m_direction(other.getDirection())
+        : m_direction(other.direction())
         , m_length(other.length())
         , m_computedLength(other.m_computedLength)
     {
     }
 
-    bool operator==(const BasicShapeCenterCoordinate& other) const
-    {
-        return m_direction == other.m_direction && m_length == other.m_length && m_computedLength == other.m_computedLength;
-    }
+    bool operator==(const BasicShapeCenterCoordinate& other) const { return m_direction == other.m_direction && m_length == other.m_length && m_computedLength == other.m_computedLength; }
 
-    Direction getDirection() const { return m_direction; }
+    Direction direction() const { return m_direction; }
     const Length& length() const { return m_length; }
     const Length& computedLength() const { return m_computedLength; }
 
-    BasicShapeCenterCoordinate blend(const BasicShapeCenterCoordinate& other,
-        double progress) const
+    BasicShapeCenterCoordinate blend(const BasicShapeCenterCoordinate& other, double progress) const
     {
-        return BasicShapeCenterCoordinate(
-            TopLeft, m_computedLength.blend(other.m_computedLength, progress, ValueRangeAll));
+        return BasicShapeCenterCoordinate(TopLeft, m_computedLength.blend(other.m_computedLength, progress, ValueRangeAll));
     }
 
 private:
@@ -126,37 +115,20 @@ private:
 };
 
 class BasicShapeRadius {
-    DISALLOW_NEW();
-
 public:
-    enum RadiusType { Value,
+    enum Type {
+        Value,
         ClosestSide,
-        FarthestSide };
-    BasicShapeRadius()
-        : m_type(ClosestSide)
-    {
-    }
-    explicit BasicShapeRadius(const Length& v)
-        : m_value(v)
-        , m_type(Value)
-    {
-    }
-    explicit BasicShapeRadius(RadiusType t)
-        : m_type(t)
-    {
-    }
-    BasicShapeRadius(const BasicShapeRadius& other)
-        : m_value(other.value())
-        , m_type(other.type())
-    {
-    }
-    bool operator==(const BasicShapeRadius& other) const
-    {
-        return m_type == other.m_type && m_value == other.m_value;
-    }
+        FarthestSide
+    };
+    BasicShapeRadius() : m_type(ClosestSide) { }
+    explicit BasicShapeRadius(const Length& v) : m_value(v), m_type(Value) { }
+    explicit BasicShapeRadius(Type t) : m_type(t) { }
+    BasicShapeRadius(const BasicShapeRadius& other) : m_value(other.value()), m_type(other.type()) { }
+    bool operator==(const BasicShapeRadius& other) const { return m_type == other.m_type && m_value == other.m_value; }
 
     const Length& value() const { return m_value; }
-    RadiusType type() const { return m_type; }
+    Type type() const { return m_type; }
 
     bool canBlend(const BasicShapeRadius& other) const
     {
@@ -169,21 +141,18 @@ public:
         if (m_type != Value || other.type() != Value)
             return BasicShapeRadius(other);
 
-        return BasicShapeRadius(
-            m_value.blend(other.value(), progress, ValueRangeNonNegative));
+        return BasicShapeRadius(m_value.blend(other.value(), progress, ValueRangeNonNegative));
     }
 
 private:
     Length m_value;
-    RadiusType m_type;
+    Type m_type;
+
 };
 
 class CORE_EXPORT BasicShapeCircle final : public BasicShape {
 public:
-    static PassRefPtr<BasicShapeCircle> create()
-    {
-        return adoptRef(new BasicShapeCircle);
-    }
+    static PassRefPtr<BasicShapeCircle> create() { return adoptRef(new BasicShapeCircle); }
 
     const BasicShapeCenterCoordinate& centerX() const { return m_centerX; }
     const BasicShapeCenterCoordinate& centerY() const { return m_centerY; }
@@ -194,12 +163,11 @@ public:
     void setCenterY(BasicShapeCenterCoordinate centerY) { m_centerY = centerY; }
     void setRadius(BasicShapeRadius radius) { m_radius = radius; }
 
-    void path(Path&, const FloatRect&) override;
-    PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
-    bool operator==(const BasicShape&) const override;
+    virtual void path(Path&, const FloatRect&) override;
+    virtual PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
+    virtual bool operator==(const BasicShape&) const override;
 
-    ShapeType type() const override { return BasicShapeCircleType; }
-
+    virtual Type type() const override { return BasicShapeCircleType; }
 private:
     BasicShapeCircle() { }
 
@@ -212,30 +180,24 @@ DEFINE_BASICSHAPE_TYPE_CASTS(BasicShapeCircle);
 
 class BasicShapeEllipse final : public BasicShape {
 public:
-    static PassRefPtr<BasicShapeEllipse> create()
-    {
-        return adoptRef(new BasicShapeEllipse);
-    }
+    static PassRefPtr<BasicShapeEllipse> create() { return adoptRef(new BasicShapeEllipse); }
 
     const BasicShapeCenterCoordinate& centerX() const { return m_centerX; }
     const BasicShapeCenterCoordinate& centerY() const { return m_centerY; }
     const BasicShapeRadius& radiusX() const { return m_radiusX; }
     const BasicShapeRadius& radiusY() const { return m_radiusY; }
-    float floatValueForRadiusInBox(const BasicShapeRadius&,
-        float center,
-        float boxWidthOrHeight) const;
+    float floatValueForRadiusInBox(const BasicShapeRadius&, float center, float boxWidthOrHeight) const;
 
     void setCenterX(BasicShapeCenterCoordinate centerX) { m_centerX = centerX; }
     void setCenterY(BasicShapeCenterCoordinate centerY) { m_centerY = centerY; }
     void setRadiusX(BasicShapeRadius radiusX) { m_radiusX = radiusX; }
     void setRadiusY(BasicShapeRadius radiusY) { m_radiusY = radiusY; }
 
-    void path(Path&, const FloatRect&) override;
-    PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
-    bool operator==(const BasicShape&) const override;
+    virtual void path(Path&, const FloatRect&) override;
+    virtual PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
+    virtual bool operator==(const BasicShape&) const override;
 
-    ShapeType type() const override { return BasicShapeEllipseType; }
-
+    virtual Type type() const override { return BasicShapeEllipseType; }
 private:
     BasicShapeEllipse() { }
 
@@ -249,35 +211,26 @@ DEFINE_BASICSHAPE_TYPE_CASTS(BasicShapeEllipse);
 
 class BasicShapePolygon final : public BasicShape {
 public:
-    static PassRefPtr<BasicShapePolygon> create()
-    {
-        return adoptRef(new BasicShapePolygon);
-    }
+    static PassRefPtr<BasicShapePolygon> create() { return adoptRef(new BasicShapePolygon); }
 
     const Vector<Length>& values() const { return m_values; }
     Length getXAt(unsigned i) const { return m_values.at(2 * i); }
     Length getYAt(unsigned i) const { return m_values.at(2 * i + 1); }
 
     void setWindRule(WindRule windRule) { m_windRule = windRule; }
-    void appendPoint(const Length& x, const Length& y)
-    {
-        m_values.push_back(x);
-        m_values.push_back(y);
-    }
+    void appendPoint(const Length& x, const Length& y) { m_values.append(x); m_values.append(y); }
 
-    void path(Path&, const FloatRect&) override;
-    PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
-    bool operator==(const BasicShape&) const override;
+    virtual void path(Path&, const FloatRect&) override;
+    virtual PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
+    virtual bool operator==(const BasicShape&) const override;
 
-    WindRule getWindRule() const override { return m_windRule; }
+    virtual WindRule windRule() const override { return m_windRule; }
 
-    ShapeType type() const override { return BasicShapePolygonType; }
-
+    virtual Type type() const override { return BasicShapePolygonType; }
 private:
     BasicShapePolygon()
         : m_windRule(RULE_NONZERO)
-    {
-    }
+    { }
 
     WindRule m_windRule;
     Vector<Length> m_values;
@@ -287,10 +240,7 @@ DEFINE_BASICSHAPE_TYPE_CASTS(BasicShapePolygon);
 
 class BasicShapeInset : public BasicShape {
 public:
-    static PassRefPtr<BasicShapeInset> create()
-    {
-        return adoptRef(new BasicShapeInset);
-    }
+    static PassRefPtr<BasicShapeInset> create() { return adoptRef(new BasicShapeInset); }
 
     const Length& top() const { return m_top; }
     const Length& right() const { return m_right; }
@@ -308,25 +258,15 @@ public:
     void setLeft(const Length& left) { m_left = left; }
 
     void setTopLeftRadius(const LengthSize& radius) { m_topLeftRadius = radius; }
-    void setTopRightRadius(const LengthSize& radius)
-    {
-        m_topRightRadius = radius;
-    }
-    void setBottomRightRadius(const LengthSize& radius)
-    {
-        m_bottomRightRadius = radius;
-    }
-    void setBottomLeftRadius(const LengthSize& radius)
-    {
-        m_bottomLeftRadius = radius;
-    }
+    void setTopRightRadius(const LengthSize& radius) { m_topRightRadius = radius; }
+    void setBottomRightRadius(const LengthSize& radius) { m_bottomRightRadius = radius; }
+    void setBottomLeftRadius(const LengthSize& radius) { m_bottomLeftRadius = radius; }
 
-    void path(Path&, const FloatRect&) override;
-    PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
-    bool operator==(const BasicShape&) const override;
+    virtual void path(Path&, const FloatRect&) override;
+    virtual PassRefPtr<BasicShape> blend(const BasicShape*, double) const override;
+    virtual bool operator==(const BasicShape&) const override;
 
-    ShapeType type() const override { return BasicShapeInsetType; }
-
+    virtual Type type() const override { return BasicShapeInsetType; }
 private:
     BasicShapeInset() { }
 
@@ -343,5 +283,5 @@ private:
 
 DEFINE_BASICSHAPE_TYPE_CASTS(BasicShapeInset);
 
-} // namespace blink
+}
 #endif

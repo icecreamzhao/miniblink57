@@ -23,6 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/speech/SpeechGrammar.h"
 
 #include "core/dom/Document.h"
@@ -39,8 +44,12 @@ SpeechGrammar* SpeechGrammar::create(const KURL& src, double weight)
     return new SpeechGrammar(src, weight);
 }
 
+<<<<<<< HEAD
 void SpeechGrammar::setSrc(ExecutionContext* executionContext,
     const String& src)
+=======
+void SpeechGrammar::setSrc(ExecutionContext* executionContext, const String& src)
+>>>>>>> miniblink49
 {
     Document* document = toDocument(executionContext);
     m_src = document->completeURL(src);

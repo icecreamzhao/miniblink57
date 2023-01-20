@@ -41,29 +41,15 @@ class ErrorEvent;
 
 class V8ErrorHandler final : public V8EventListener {
 public:
-    static V8ErrorHandler* create(v8::Local<v8::Object> listener,
-        bool isInline,
-        ScriptState* scriptState)
+    static PassRefPtr<V8ErrorHandler> create(v8::Local<v8::Object> listener, bool isInline, ScriptState* scriptState)
     {
-        V8ErrorHandler* eventListener = new V8ErrorHandler(isInline, scriptState);
-        eventListener->setListenerObject(listener);
-        return eventListener;
+        return adoptRef(new V8ErrorHandler(listener, isInline, scriptState));
     }
-    static void storeExceptionOnErrorEventWrapper(
-        ScriptState*,
-        ErrorEvent*,
-        v8::Local<v8::Value>,
-        v8::Local<v8::Object> creationContext);
-    static v8::Local<v8::Value> loadExceptionFromErrorEventWrapper(
-        ScriptState*,
-        ErrorEvent*,
-        v8::Local<v8::Object> creationContext);
+    static void storeExceptionOnErrorEventWrapper(v8::Isolate*, ErrorEvent*, v8::Local<v8::Value>, v8::Local<v8::Object> creationContext);
 
 private:
-    V8ErrorHandler(bool isInline, ScriptState*);
-    v8::Local<v8::Value> callListenerFunction(ScriptState*,
-        v8::Local<v8::Value>,
-        Event*) override;
+    V8ErrorHandler(v8::Local<v8::Object> listener, bool isInline, ScriptState*);
+    v8::Local<v8::Value> callListenerFunction(ScriptState*, v8::Local<v8::Value>, Event*) override;
     bool shouldPreventDefault(v8::Local<v8::Value> returnValue) override;
 };
 

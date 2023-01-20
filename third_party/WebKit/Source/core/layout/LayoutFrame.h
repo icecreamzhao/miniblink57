@@ -36,17 +36,12 @@ public:
 
     FrameEdgeInfo edgeInfo() const;
 
-    void imageChanged(WrappedImagePtr, const IntRect* = nullptr) override;
-
-    const char* name() const override { return "LayoutFrame"; }
+    virtual const char* name() const override { return "LayoutFrame"; }
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectFrame || LayoutPart::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectFrame || LayoutPart::isOfType(type); }
 
-    void updateFromElement() override;
+    virtual void updateFromElement() override;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutFrame, isFrame());

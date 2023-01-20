@@ -18,7 +18,11 @@ class IgnitionStatisticsExtension : public v8::Extension {
   v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
       v8::Isolate* isolate, v8::Local<v8::String> name) override;
 
+<<<<<<< HEAD
   static void V8CALL GetIgnitionDispatchCounters(
+=======
+  static void GetIgnitionDispatchCounters(
+>>>>>>> miniblink49
       const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:

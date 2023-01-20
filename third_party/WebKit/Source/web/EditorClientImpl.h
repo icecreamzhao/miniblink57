@@ -48,7 +48,11 @@ public:
     void respondToChangedSelection(LocalFrame*, SelectionType) override;
     bool canCopyCut(LocalFrame*, bool defaultValue) const override;
     bool canPaste(LocalFrame*, bool defaultValue) const override;
+<<<<<<< HEAD
     bool handleKeyboardEvent(LocalFrame*) override;
+=======
+    bool handleKeyboardEvent() override;
+>>>>>>> miniblink49
 
 private:
     WebViewImpl* m_webView;

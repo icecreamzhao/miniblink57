@@ -10,10 +10,13 @@
 #include "src/full-codegen/full-codegen.h"
 #include "src/ia32/frames-ia32.h"
 
+<<<<<<< HEAD
 namespace wke {
 extern bool g_enableSkipJsError;
 }
 
+=======
+>>>>>>> miniblink49
 namespace v8 {
 namespace internal {
 
@@ -1606,15 +1609,23 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
   // 2. Make sure the target is actually a constructor.
   Label target_not_constructor;
   __ JumpIfSmi(edi, &target_not_constructor, Label::kNear);
+<<<<<<< HEAD
   if (!wke::g_enableSkipJsError) {
     __ mov(ecx, FieldOperand(edi, HeapObject::kMapOffset));
     __ test_b(FieldOperand(ecx, Map::kBitFieldOffset), Immediate(1 << Map::kIsConstructor));
     __ j(zero, &target_not_constructor, Label::kNear);
   }
+=======
+  __ mov(ecx, FieldOperand(edi, HeapObject::kMapOffset));
+  __ test_b(FieldOperand(ecx, Map::kBitFieldOffset),
+            Immediate(1 << Map::kIsConstructor));
+  __ j(zero, &target_not_constructor, Label::kNear);
+>>>>>>> miniblink49
 
   // 3. Make sure the target is actually a constructor.
   Label new_target_not_constructor;
   __ JumpIfSmi(edx, &new_target_not_constructor, Label::kNear);
+<<<<<<< HEAD
   if (!wke::g_enableSkipJsError) {
     __ mov(ecx, FieldOperand(edx, HeapObject::kMapOffset));
     __ test_b(FieldOperand(ecx, Map::kBitFieldOffset), Immediate(1 << Map::kIsConstructor));
@@ -1623,6 +1634,16 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
   // 4a. Construct the target with the given new.target and argumentsList.
   __ Jump(masm->isolate()->builtins()->Apply(), RelocInfo::CODE_TARGET);
   
+=======
+  __ mov(ecx, FieldOperand(edx, HeapObject::kMapOffset));
+  __ test_b(FieldOperand(ecx, Map::kBitFieldOffset),
+            Immediate(1 << Map::kIsConstructor));
+  __ j(zero, &new_target_not_constructor, Label::kNear);
+
+  // 4a. Construct the target with the given new.target and argumentsList.
+  __ Jump(masm->isolate()->builtins()->Apply(), RelocInfo::CODE_TARGET);
+
+>>>>>>> miniblink49
   // 4b. The target is not a constructor, throw an appropriate TypeError.
   __ bind(&target_not_constructor);
   {
@@ -1630,12 +1651,20 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
     __ TailCallRuntime(Runtime::kThrowCalledNonCallable);
   }
 
+<<<<<<< HEAD
     // 4c. The new.target is not a constructor, throw an appropriate TypeError.
+=======
+  // 4c. The new.target is not a constructor, throw an appropriate TypeError.
+>>>>>>> miniblink49
   __ bind(&new_target_not_constructor);
   {
     __ mov(Operand(esp, kPointerSize), edx);
     __ TailCallRuntime(Runtime::kThrowCalledNonCallable);
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> miniblink49
 }
 
 void Builtins::Generate_InternalArrayCode(MacroAssembler* masm) {
@@ -2624,6 +2653,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode,
   // -----------------------------------
 
   Label non_callable, non_function, non_smi;
+<<<<<<< HEAD
 
   __ JumpIfSmi(edi, &non_callable);
   __ bind(&non_smi);
@@ -2639,6 +2669,21 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode,
     __ j(zero, &non_function);
   else
     __ j(zero, &non_callable);
+=======
+  __ JumpIfSmi(edi, &non_callable);
+  __ bind(&non_smi);
+  __ CmpObjectType(edi, JS_FUNCTION_TYPE, ecx);
+  __ j(equal, masm->isolate()->builtins()->CallFunction(mode, tail_call_mode),
+       RelocInfo::CODE_TARGET);
+  __ CmpInstanceType(ecx, JS_BOUND_FUNCTION_TYPE);
+  __ j(equal, masm->isolate()->builtins()->CallBoundFunction(tail_call_mode),
+       RelocInfo::CODE_TARGET);
+
+  // Check if target has a [[Call]] internal method.
+  __ test_b(FieldOperand(ecx, Map::kBitFieldOffset),
+            Immediate(1 << Map::kIsCallable));
+  __ j(zero, &non_callable);
+>>>>>>> miniblink49
 
   __ CmpInstanceType(ecx, JS_PROXY_TYPE);
   __ j(not_equal, &non_function);
@@ -2655,20 +2700,35 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode,
   // Increase the arguments size to include the pushed function and the
   // existing receiver on the stack.
   __ add(eax, Immediate(2));
+<<<<<<< HEAD
 
   // Tail-call to the runtime.
   __ JumpToExternalReference(ExternalReference(Runtime::kJSProxyCall, masm->isolate()));
+=======
+  // Tail-call to the runtime.
+  __ JumpToExternalReference(
+      ExternalReference(Runtime::kJSProxyCall, masm->isolate()));
+>>>>>>> miniblink49
 
   // 2. Call to something else, which might have a [[Call]] internal method (if
   // not we raise an exception).
   __ bind(&non_function);
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
   // Overwrite the original receiver with the (original) target.
   __ mov(Operand(esp, eax, times_pointer_size, kPointerSize), edi);
   // Let the "call_as_function_delegate" take care of the rest.
   __ LoadGlobalFunction(Context::CALL_AS_FUNCTION_DELEGATE_INDEX, edi);
+<<<<<<< HEAD
 
   __ Jump(masm->isolate()->builtins()->CallFunction(ConvertReceiverMode::kNotNullOrUndefined, tail_call_mode), RelocInfo::CODE_TARGET);
+=======
+  __ Jump(masm->isolate()->builtins()->CallFunction(
+              ConvertReceiverMode::kNotNullOrUndefined, tail_call_mode),
+          RelocInfo::CODE_TARGET);
+>>>>>>> miniblink49
 
   // 3. Call to something that is not callable.
   __ bind(&non_callable);

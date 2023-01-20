@@ -26,6 +26,7 @@
 #define WebThread_h
 
 #include "WebCommon.h"
+<<<<<<< HEAD
 #include "public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/Source/wtf/Functional.h"
 
@@ -42,6 +43,17 @@ namespace scheduler {
 
 class WebScheduler;
 class WebTaskRunner;
+=======
+#include <stdint.h>
+
+#ifdef INSIDE_BLINK
+#include "wtf/Functional.h"
+#endif
+
+namespace blink {
+class WebScheduler;
+class WebTraceLocation;
+>>>>>>> miniblink49
 
 // Always an integer value.
 typedef uintptr_t PlatformThreadId;
@@ -60,6 +72,15 @@ public:
         virtual void run(double deadlineSeconds) = 0;
     };
 
+<<<<<<< HEAD
+=======
+    class BLINK_PLATFORM_EXPORT Task {
+    public:
+        virtual ~Task() { }
+        virtual void run() = 0;
+    };
+
+>>>>>>> miniblink49
     class BLINK_PLATFORM_EXPORT TaskObserver {
     public:
         virtual ~TaskObserver() { }
@@ -67,6 +88,7 @@ public:
         virtual void didProcessTask() = 0;
     };
 
+<<<<<<< HEAD
     // DEPRECATED: Returns a WebTaskRunner bound to the underlying scheduler's
     // default task queue.
     //
@@ -104,12 +126,15 @@ public:
         virtual void run() = 0;
     };
 
+=======
+>>>>>>> miniblink49
     // postTask() and postDelayedTask() take ownership of the passed Task
     // object. It is safe to invoke postTask() and postDelayedTask() from any
     // thread.
     virtual void postTask(const WebTraceLocation&, Task*) = 0;
     virtual void postDelayedTask(const WebTraceLocation&, Task*, long long delayMs) = 0;
 
+<<<<<<< HEAD
 #ifdef INSIDE_BLINK
     // Helpers for posting bound functions as tasks.
     void postTask(const WebTraceLocation&, std::unique_ptr<Function<void()>>);
@@ -120,6 +145,24 @@ public:
 #endif
 
     virtual ~WebThread() { }
+=======
+    virtual bool isCurrentThread() const = 0;
+    virtual PlatformThreadId threadId() const { return 0; }
+
+    virtual void addTaskObserver(TaskObserver*) { }
+    virtual void removeTaskObserver(TaskObserver*) { }
+
+    // Returns the scheduler associated with the thread.
+    virtual WebScheduler* scheduler() const = 0;
+
+    virtual ~WebThread() { }
+
+#ifdef INSIDE_BLINK
+    // Helpers for posting bound functions as tasks.
+    void postTask(const WebTraceLocation&, PassOwnPtr<Function<void()>>);
+    void postDelayedTask(const WebTraceLocation&, PassOwnPtr<Function<void()>>, long long delayMs);
+#endif
+>>>>>>> miniblink49
 };
 
 } // namespace blink

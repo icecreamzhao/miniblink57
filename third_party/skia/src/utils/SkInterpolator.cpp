@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2008 The Android Open Source Project
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkInterpolator.h"
 #include "SkFixed.h"
 #include "SkMath.h"
@@ -19,22 +24,46 @@ SkInterpolatorBase::SkInterpolatorBase()
 
 SkInterpolatorBase::~SkInterpolatorBase()
 {
+=======
+
+#include "SkInterpolator.h"
+#include "SkMath.h"
+#include "SkTSearch.h"
+
+SkInterpolatorBase::SkInterpolatorBase() {
+    fStorage    = NULL;
+    fTimes      = NULL;
+    SkDEBUGCODE(fTimesArray = NULL;)
+}
+
+SkInterpolatorBase::~SkInterpolatorBase() {
+>>>>>>> miniblink49
     if (fStorage) {
         sk_free(fStorage);
     }
 }
 
+<<<<<<< HEAD
 void SkInterpolatorBase::reset(int elemCount, int frameCount)
 {
+=======
+void SkInterpolatorBase::reset(int elemCount, int frameCount) {
+>>>>>>> miniblink49
     fFlags = 0;
     fElemCount = SkToU8(elemCount);
     fFrameCount = SkToS16(frameCount);
     fRepeat = SK_Scalar1;
     if (fStorage) {
         sk_free(fStorage);
+<<<<<<< HEAD
         fStorage = nullptr;
         fTimes = nullptr;
         SkDEBUGCODE(fTimesArray = nullptr);
+=======
+        fStorage = NULL;
+        fTimes = NULL;
+        SkDEBUGCODE(fTimesArray = NULL);
+>>>>>>> miniblink49
     }
 }
 
@@ -46,8 +75,12 @@ void SkInterpolatorBase::reset(int elemCount, int frameCount)
     Totaling fElemCount+2 entries per keyframe
 */
 
+<<<<<<< HEAD
 bool SkInterpolatorBase::getDuration(SkMSec* startTime, SkMSec* endTime) const
 {
+=======
+bool SkInterpolatorBase::getDuration(SkMSec* startTime, SkMSec* endTime) const {
+>>>>>>> miniblink49
     if (fFrameCount == 0) {
         return false;
     }
@@ -62,6 +95,7 @@ bool SkInterpolatorBase::getDuration(SkMSec* startTime, SkMSec* endTime) const
 }
 
 SkScalar SkInterpolatorBase::ComputeRelativeT(SkMSec time, SkMSec prevTime,
+<<<<<<< HEAD
     SkMSec nextTime, const SkScalar blend[4])
 {
     SkASSERT(time > prevTime && time < nextTime);
@@ -77,13 +111,34 @@ SkInterpolatorBase::Result SkInterpolatorBase::timeToT(SkMSec time, SkScalar* T,
     Result result = kNormal_Result;
     if (fRepeat != SK_Scalar1) {
         SkMSec startTime = 0, endTime = 0; // initialize to avoid warning
+=======
+                                  SkMSec nextTime, const SkScalar blend[4]) {
+    SkASSERT(time > prevTime && time < nextTime);
+
+    SkScalar t = (SkScalar)(time - prevTime) / (SkScalar)(nextTime - prevTime);
+    return blend ?
+            SkUnitCubicInterp(t, blend[0], blend[1], blend[2], blend[3]) : t;
+}
+
+SkInterpolatorBase::Result SkInterpolatorBase::timeToT(SkMSec time, SkScalar* T,
+                                        int* indexPtr, SkBool* exactPtr) const {
+    SkASSERT(fFrameCount > 0);
+    Result  result = kNormal_Result;
+    if (fRepeat != SK_Scalar1) {
+        SkMSec startTime = 0, endTime = 0;  // initialize to avoid warning
+>>>>>>> miniblink49
         this->getDuration(&startTime, &endTime);
         SkMSec totalTime = endTime - startTime;
         SkMSec offsetTime = time - startTime;
         endTime = SkScalarFloorToInt(fRepeat * totalTime);
         if (offsetTime >= endTime) {
             SkScalar fraction = SkScalarFraction(fRepeat);
+<<<<<<< HEAD
             offsetTime = fraction == 0 && fRepeat > 0 ? totalTime : (SkMSec)SkScalarFloorToInt(fraction * totalTime);
+=======
+            offsetTime = fraction == 0 && fRepeat > 0 ? totalTime :
+                (SkMSec) SkScalarFloorToInt(fraction * totalTime);
+>>>>>>> miniblink49
             result = kFreezeEnd_Result;
         } else {
             int mirror = fFlags & kMirror;
@@ -96,9 +151,15 @@ SkInterpolatorBase::Result SkInterpolatorBase::timeToT(SkMSec time, SkScalar* T,
     }
 
     int index = SkTSearch<SkMSec>(&fTimes[0].fTime, fFrameCount, time,
+<<<<<<< HEAD
         sizeof(SkTimeCode));
 
     bool exact = true;
+=======
+                                  sizeof(SkTimeCode));
+
+    bool    exact = true;
+>>>>>>> miniblink49
 
     if (index < 0) {
         index = ~index;
@@ -117,7 +178,11 @@ SkInterpolatorBase::Result SkInterpolatorBase::timeToT(SkMSec time, SkScalar* T,
     }
     SkASSERT(index < fFrameCount);
     const SkTimeCode* nextTime = &fTimes[index];
+<<<<<<< HEAD
     SkMSec nextT = nextTime[0].fTime;
+=======
+    SkMSec   nextT = nextTime[0].fTime;
+>>>>>>> miniblink49
     if (exact) {
         *T = 0;
     } else {
@@ -129,6 +194,7 @@ SkInterpolatorBase::Result SkInterpolatorBase::timeToT(SkMSec time, SkScalar* T,
     return result;
 }
 
+<<<<<<< HEAD
 SkInterpolator::SkInterpolator()
 {
     INHERITED::reset(0, 0);
@@ -138,10 +204,21 @@ SkInterpolator::SkInterpolator()
 
 SkInterpolator::SkInterpolator(int elemCount, int frameCount)
 {
+=======
+
+SkInterpolator::SkInterpolator() {
+    INHERITED::reset(0, 0);
+    fValues = NULL;
+    SkDEBUGCODE(fScalarsArray = NULL;)
+}
+
+SkInterpolator::SkInterpolator(int elemCount, int frameCount) {
+>>>>>>> miniblink49
     SkASSERT(elemCount > 0);
     this->reset(elemCount, frameCount);
 }
 
+<<<<<<< HEAD
 void SkInterpolator::reset(int elemCount, int frameCount)
 {
     INHERITED::reset(elemCount, frameCount);
@@ -156,12 +233,29 @@ void SkInterpolator::reset(int elemCount, int frameCount)
 
 #define SK_Fixed1Third (SK_Fixed1 / 3)
 #define SK_Fixed2Third (SK_Fixed1 * 2 / 3)
+=======
+void SkInterpolator::reset(int elemCount, int frameCount) {
+    INHERITED::reset(elemCount, frameCount);
+    fStorage = sk_malloc_throw((sizeof(SkScalar) * elemCount +
+                                sizeof(SkTimeCode)) * frameCount);
+    fTimes = (SkTimeCode*) fStorage;
+    fValues = (SkScalar*) ((char*) fStorage + sizeof(SkTimeCode) * frameCount);
+#ifdef SK_DEBUG
+    fTimesArray = (SkTimeCode(*)[10]) fTimes;
+    fScalarsArray = (SkScalar(*)[10]) fValues;
+#endif
+}
+
+#define SK_Fixed1Third      (SK_Fixed1/3)
+#define SK_Fixed2Third      (SK_Fixed1*2/3)
+>>>>>>> miniblink49
 
 static const SkScalar gIdentityBlend[4] = {
     0.33333333f, 0.33333333f, 0.66666667f, 0.66666667f
 };
 
 bool SkInterpolator::setKeyFrame(int index, SkMSec time,
+<<<<<<< HEAD
     const SkScalar values[], const SkScalar blend[4])
 {
     SkASSERT(values != nullptr);
@@ -171,6 +265,17 @@ bool SkInterpolator::setKeyFrame(int index, SkMSec time,
     }
 
     bool success = ~index == SkTSearch<SkMSec>(&fTimes->fTime, index, time, sizeof(SkTimeCode));
+=======
+                            const SkScalar values[], const SkScalar blend[4]) {
+    SkASSERT(values != NULL);
+
+    if (blend == NULL) {
+        blend = gIdentityBlend;
+    }
+
+    bool success = ~index == SkTSearch<SkMSec>(&fTimes->fTime, index, time,
+                                               sizeof(SkTimeCode));
+>>>>>>> miniblink49
     SkASSERT(success);
     if (success) {
         SkTimeCode* timeCode = &fTimes[index];
@@ -183,11 +288,18 @@ bool SkInterpolator::setKeyFrame(int index, SkMSec time,
 }
 
 SkInterpolator::Result SkInterpolator::timeToValues(SkMSec time,
+<<<<<<< HEAD
     SkScalar values[]) const
 {
     SkScalar T;
     int index;
     bool exact;
+=======
+                                                    SkScalar values[]) const {
+    SkScalar T;
+    int index;
+    SkBool exact;
+>>>>>>> miniblink49
     Result result = timeToT(time, &T, &index, &exact);
     if (values) {
         const SkScalar* nextSrc = &fValues[index * fElemCount];
@@ -210,6 +322,7 @@ SkInterpolator::Result SkInterpolator::timeToValues(SkMSec time,
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef int Dot14;
+<<<<<<< HEAD
 #define Dot14_ONE (1 << 14)
 #define Dot14_HALF (1 << 13)
 
@@ -227,6 +340,22 @@ static inline Dot14 eval_cubic(Dot14 t, Dot14 A, Dot14 B, Dot14 C)
 
 static inline Dot14 pin_and_convert(SkScalar x)
 {
+=======
+#define Dot14_ONE       (1 << 14)
+#define Dot14_HALF      (1 << 13)
+
+#define Dot14ToFloat(x) ((x) / 16384.f)
+
+static inline Dot14 Dot14Mul(Dot14 a, Dot14 b) {
+    return (a * b + Dot14_HALF) >> 14;
+}
+
+static inline Dot14 eval_cubic(Dot14 t, Dot14 A, Dot14 B, Dot14 C) {
+    return Dot14Mul(Dot14Mul(Dot14Mul(C, t) + B, t) + A, t);
+}
+
+static inline Dot14 pin_and_convert(SkScalar x) {
+>>>>>>> miniblink49
     if (x <= 0) {
         return 0;
     }
@@ -237,6 +366,7 @@ static inline Dot14 pin_and_convert(SkScalar x)
 }
 
 SkScalar SkUnitCubicInterp(SkScalar value, SkScalar bx, SkScalar by,
+<<<<<<< HEAD
     SkScalar cx, SkScalar cy)
 {
     // pin to the unit-square, and convert to 2.14
@@ -246,6 +376,14 @@ SkScalar SkUnitCubicInterp(SkScalar value, SkScalar bx, SkScalar by,
         return 0;
     if (x == Dot14_ONE)
         return SK_Scalar1;
+=======
+                           SkScalar cx, SkScalar cy) {
+    // pin to the unit-square, and convert to 2.14
+    Dot14 x = pin_and_convert(value);
+
+    if (x == 0) return 0;
+    if (x == Dot14_ONE) return SK_Scalar1;
+>>>>>>> miniblink49
 
     Dot14 b = pin_and_convert(bx);
     Dot14 c = pin_and_convert(cx);
@@ -254,6 +392,7 @@ SkScalar SkUnitCubicInterp(SkScalar value, SkScalar bx, SkScalar by,
     //  t   -> 3b
     //  t^2 -> 3c - 6b
     //  t^3 -> 3b - 3c + 1
+<<<<<<< HEAD
     Dot14 A = 3 * b;
     Dot14 B = 3 * (c - 2 * b);
     Dot14 C = 3 * (b - c) + Dot14_ONE;
@@ -261,6 +400,15 @@ SkScalar SkUnitCubicInterp(SkScalar value, SkScalar bx, SkScalar by,
     // Now search for a t value given x
     Dot14 t = Dot14_HALF;
     Dot14 dt = Dot14_HALF;
+=======
+    Dot14 A = 3*b;
+    Dot14 B = 3*(c - 2*b);
+    Dot14 C = 3*(b - c) + Dot14_ONE;
+
+    // Now search for a t value given x
+    Dot14   t = Dot14_HALF;
+    Dot14   dt = Dot14_HALF;
+>>>>>>> miniblink49
     for (int i = 0; i < 13; i++) {
         dt >>= 1;
         Dot14 guess = eval_cubic(t, A, B, C);
@@ -274,8 +422,14 @@ SkScalar SkUnitCubicInterp(SkScalar value, SkScalar bx, SkScalar by,
     // Now we have t, so compute the coeff for Y and evaluate
     b = pin_and_convert(by);
     c = pin_and_convert(cy);
+<<<<<<< HEAD
     A = 3 * b;
     B = 3 * (c - 2 * b);
     C = 3 * (b - c) + Dot14_ONE;
+=======
+    A = 3*b;
+    B = 3*(c - 2*b);
+    C = 3*(b - c) + Dot14_ONE;
+>>>>>>> miniblink49
     return SkFixedToScalar(eval_cubic(t, A, B, C) << 2);
 }

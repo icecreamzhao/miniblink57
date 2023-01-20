@@ -23,11 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://w3c.github.io/touch-events/#touch-interface
+// http://rawgit.com/w3c/touch-events/v1-errata/touchevents.html#touch-interface
 
 [
-    Constructor(TouchInit initDict),
-    ConstructorCallWith=Document,
+    WillBeGarbageCollected,
 ] interface Touch {
     readonly attribute long identifier;
     readonly attribute EventTarget target;
@@ -37,12 +36,17 @@
     readonly attribute double clientY;
     readonly attribute double pageX;
     readonly attribute double pageY;
+
+    // Touch Events Extensions
+    // http://rawgit.com/w3c/touch-events/master/touchevents.html#touch-interface
     readonly attribute float radiusX;
     readonly attribute float radiusY;
     readonly attribute float rotationAngle;
     readonly attribute float force;
 
-    // Canvas Hit Regions
-    // https://html.spec.whatwg.org/multipage/scripting.html#Touch-partial
-    [RuntimeEnabled=ExperimentalCanvasFeatures] readonly attribute DOMString? region;
+    // Non-standard APIs
+    [DeprecateAs=PrefixedTouchRadiusX, ImplementedAs=radiusX] readonly attribute float webkitRadiusX;
+    [DeprecateAs=PrefixedTouchRadiusY, ImplementedAs=radiusY] readonly attribute float webkitRadiusY;
+    [DeprecateAs=PrefixedTouchRotationAngle, ImplementedAs=rotationAngle] readonly attribute float webkitRotationAngle;
+    [DeprecateAs=PrefixedTouchForce, ImplementedAs=force] readonly attribute float webkitForce;
 };

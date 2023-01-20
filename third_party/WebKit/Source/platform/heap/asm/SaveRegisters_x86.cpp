@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿#include "config.h"
 #include "third_party/WebKit/Source/platform/heap/SafePoint.h"
 #if !defined(OS_WIN)
@@ -62,13 +63,24 @@ extern "C" void pushAllRegisters(SafePointBarrier* p1, ThreadState* p2, PushAllR
 
 extern "C" __declspec(naked) void pushAllRegisters(void*, void*, void*)
 {
+=======
+#include "config.h"
+#include "third_party/WebKit/Source/platform/heap/SafePoint.h"
+
+extern "C" __declspec(naked) void pushAllRegisters(void*, void*, void*)
+{
+>>>>>>> miniblink49
     // Push all callee - saves registers to get them
     // on the stack for conservative stack scanning.
     // We maintain 16 - byte alignment at calls(required on
     // Mac).There is a 4 - byte return address on the stack
     // and we push 28 bytes which maintains 16 - byte alignment
     //; at the call.
+<<<<<<< HEAD
     __asm {
+=======
+    __asm {
+>>>>>>> miniblink49
         push ebx;
         push ebp;
         push esi;
@@ -87,6 +99,11 @@ extern "C" __declspec(naked) void pushAllRegisters(void*, void*, void*)
         add esp, 28;
         ret;
     }
+<<<<<<< HEAD
 }
 
 #endif
+=======
+
+}
+>>>>>>> miniblink49

@@ -7,6 +7,7 @@
 
 #include "SkBlitMask.h"
 
+<<<<<<< HEAD
 SkBlitMask::BlitLCD16RowProc SkBlitMask::PlatformBlitRowProcs16(bool isOpaque)
 {
     return nullptr;
@@ -17,4 +18,20 @@ SkBlitMask::RowProc SkBlitMask::PlatformRowProcs(SkColorType dstCT,
     RowFlags flags)
 {
     return nullptr;
+=======
+SkBlitMask::ColorProc SkBlitMask::PlatformColorProcs(SkColorType dstCT,
+                                                     SkMask::Format maskFormat,
+                                                     SkColor color) {
+    return NULL;
+}
+
+SkBlitMask::BlitLCD16RowProc SkBlitMask::PlatformBlitRowProcs16(bool isOpaque) {
+    return NULL;
+}
+
+SkBlitMask::RowProc SkBlitMask::PlatformRowProcs(SkColorType dstCT,
+                                                 SkMask::Format maskFormat,
+                                                 RowFlags flags) {
+    return NULL;
+>>>>>>> miniblink49
 }

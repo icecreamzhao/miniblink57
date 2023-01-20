@@ -8,6 +8,7 @@
 #ifndef GrGLPathRendering_DEFINED
 #define GrGLPathRendering_DEFINED
 
+<<<<<<< HEAD
 #include "GrPathRendering.h"
 #include "SkRefCnt.h"
 #include "gl/GrGLTypes.h"
@@ -17,6 +18,16 @@ class GrGLNameAllocator;
 class GrGLGpu;
 class GrStencilSettings;
 class GrStyle;
+=======
+#include "SkRefCnt.h"
+#include "GrPathRendering.h"
+#include "GrStencil.h"
+#include "gl/GrGLFunctions.h"
+#include "gl/GrGLProgram.h"
+
+class GrGLNameAllocator;
+class GrGLGpu;
+>>>>>>> miniblink49
 
 /**
  * This class wraps the NV_path_rendering extension and manages its various
@@ -34,14 +45,21 @@ public:
     virtual ~GrGLPathRendering();
 
     // GrPathRendering implementations.
+<<<<<<< HEAD
     GrPath* createPath(const SkPath&, const GrStyle&) override;
     virtual GrPathRange* createPathRange(GrPathRange::PathGenerator*,
         const GrStyle&) override;
+=======
+    GrPath* createPath(const SkPath&, const GrStrokeInfo&) override;
+    virtual GrPathRange* createPathRange(GrPathRange::PathGenerator*,
+                                         const GrStrokeInfo&) override;
+>>>>>>> miniblink49
 
     /* Called when the 3D context state is unknown. */
     void resetContext();
 
     /**
+<<<<<<< HEAD
      * Called when the context either is about to be lost or is lost. DisconnectType indicates
      * whether GPU resources should be cleaned up or abandoned when this is called.
      */
@@ -61,12 +79,29 @@ public:
     void setProjectionMatrix(const SkMatrix& matrix,
         const SkISize& renderTargetSize,
         GrSurfaceOrigin renderTargetOrigin);
+=======
+     * Called when the GPU resources have been lost and need to be abandoned
+     * (for example after a context loss).
+     */
+    void abandonGpuResources();
+
+    // Functions for "separable shader" texturing support.
+    void setProgramPathFragmentInputTransform(GrGLuint program, GrGLint location,
+                                              GrGLenum genMode, GrGLint components,
+                                              const SkMatrix&);
+
+    /* Sets the projection matrix for path rendering */
+    void setProjectionMatrix(const SkMatrix& matrix,
+                             const SkISize& renderTargetSize,
+                             GrSurfaceOrigin renderTargetOrigin);
+>>>>>>> miniblink49
 
     GrGLuint genPaths(GrGLsizei range);
     GrGLvoid deletePaths(GrGLuint path, GrGLsizei range);
 
 protected:
     void onStencilPath(const StencilPathArgs&, const GrPath*) override;
+<<<<<<< HEAD
     void onDrawPath(const GrPipeline&,
         const GrPrimitiveProcessor&,
         const GrStencilSettings&,
@@ -103,11 +138,31 @@ private:
             fRenderTargetSize.fWidth = -1;
             fRenderTargetSize.fHeight = -1;
             fRenderTargetOrigin = (GrSurfaceOrigin)-1;
+=======
+    void onDrawPath(const DrawPathArgs&, const GrPath*) override;
+    void onDrawPaths(const DrawPathArgs&, const GrPathRange*, const void* indices, PathIndexType,
+                     const float transformValues[], PathTransformType, int count) override;
+private:
+    void flushPathStencilSettings(const GrStencilSettings&);
+
+    struct MatrixState {
+        SkMatrix        fViewMatrix;
+        SkISize         fRenderTargetSize;
+        GrSurfaceOrigin fRenderTargetOrigin;
+
+        MatrixState() { this->invalidate(); }
+        void invalidate() {
+            fViewMatrix = SkMatrix::InvalidMatrix();
+            fRenderTargetSize.fWidth = -1;
+            fRenderTargetSize.fHeight = -1;
+            fRenderTargetOrigin = (GrSurfaceOrigin) -1;
+>>>>>>> miniblink49
         }
 
         /**
          * Gets a matrix that goes from local coordinates to GL normalized device coords.
          */
+<<<<<<< HEAD
         template <int Size>
         void getRTAdjustedGLMatrix(float* destMatrix)
         {
@@ -123,15 +178,36 @@ private:
             }
             combined.preConcat(fViewMatrix);
             GrGLSLGetMatrix<Size>(destMatrix, combined);
+=======
+        template<int Size> void getRTAdjustedGLMatrix(GrGLfloat* destMatrix) {
+            SkMatrix combined;
+            if (kBottomLeft_GrSurfaceOrigin == fRenderTargetOrigin) {
+                combined.setAll(SkIntToScalar(2) / fRenderTargetSize.fWidth, 0, -SK_Scalar1,
+                                0, -SkIntToScalar(2) / fRenderTargetSize.fHeight, SK_Scalar1,
+                                0, 0, 1);
+            } else {
+                combined.setAll(SkIntToScalar(2) / fRenderTargetSize.fWidth, 0, -SK_Scalar1,
+                                0, SkIntToScalar(2) / fRenderTargetSize.fHeight, -SK_Scalar1,
+                                0, 0, 1);
+            }
+            combined.preConcat(fViewMatrix);
+            GrGLGetMatrix<Size>(destMatrix, combined);
+>>>>>>> miniblink49
         }
     };
     GrGLGpu* gpu();
 
+<<<<<<< HEAD
     GrGLuint fFirstPreallocatedPathID;
     GrGLsizei fPreallocatedPathCount;
     MatrixState fHWProjectionMatrixState;
     GrStencilSettings fHWPathStencilSettings;
     Caps fCaps;
+=======
+    SkAutoTDelete<GrGLNameAllocator> fPathNameAllocator;
+    MatrixState fHWProjectionMatrixState;
+    GrStencilSettings fHWPathStencilSettings;
+>>>>>>> miniblink49
 };
 
 #endif

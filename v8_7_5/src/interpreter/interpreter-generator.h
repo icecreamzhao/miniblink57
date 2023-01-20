@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     struct AssemblerOptions;
 
     namespace interpreter {
@@ -29,3 +30,23 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_INTERPRETER_INTERPRETER_GENERATOR_H_
+=======
+struct AssemblerOptions;
+
+namespace interpreter {
+
+extern Handle<Code> GenerateBytecodeHandler(Isolate* isolate, Bytecode bytecode,
+                                            OperandScale operand_scale,
+                                            int builtin_index,
+                                            const AssemblerOptions& options);
+
+extern Handle<Code> GenerateDeserializeLazyHandler(
+    Isolate* isolate, OperandScale operand_scale, int builtin_index,
+    const AssemblerOptions& options);
+
+}  // namespace interpreter
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_INTERPRETER_INTERPRETER_GENERATOR_H_
+>>>>>>> miniblink49

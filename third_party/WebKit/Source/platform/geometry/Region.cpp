@@ -23,6 +23,10 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/Region.h"
 
 #include <stdio.h>
@@ -35,7 +39,13 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 Region::Region() { }
+=======
+Region::Region()
+{
+}
+>>>>>>> miniblink49
 
 Region::Region(const IntRect& rect)
     : m_bounds(rect)
@@ -47,6 +57,7 @@ Vector<IntRect> Region::rects() const
 {
     Vector<IntRect> rects;
 
+<<<<<<< HEAD
     for (Shape::SpanIterator span = m_shape.spansBegin(),
                              end = m_shape.spansEnd();
          span != end && span + 1 != end; ++span) {
@@ -60,6 +71,17 @@ Vector<IntRect> Region::rects() const
             int width = *(segment + 1) - x;
 
             rects.push_back(IntRect(x, y, width, height));
+=======
+    for (Shape::SpanIterator span = m_shape.spansBegin(), end = m_shape.spansEnd(); span != end && span + 1 != end; ++span) {
+        int y = span->y;
+        int height = (span + 1)->y - y;
+
+        for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span), end = m_shape.segmentsEnd(span); segment != end && segment + 1 != end; segment += 2) {
+            int x = *segment;
+            int width = *(segment + 1) - x;
+
+            rects.append(IntRect(x, y, width, height));
+>>>>>>> miniblink49
         }
     }
 
@@ -71,8 +93,12 @@ bool Region::contains(const Region& region) const
     if (!m_bounds.contains(region.m_bounds))
         return false;
 
+<<<<<<< HEAD
     return Shape::compareShapes<Shape::CompareContainsOperation>(m_shape,
         region.m_shape);
+=======
+    return Shape::compareShapes<Shape::CompareContainsOperation>(m_shape, region.m_shape);
+>>>>>>> miniblink49
 }
 
 bool Region::contains(const IntPoint& point) const
@@ -80,9 +106,13 @@ bool Region::contains(const IntPoint& point) const
     if (!m_bounds.contains(point))
         return false;
 
+<<<<<<< HEAD
     for (Shape::SpanIterator span = m_shape.spansBegin(),
                              end = m_shape.spansEnd();
          span != end && span + 1 != end; ++span) {
+=======
+    for (Shape::SpanIterator span = m_shape.spansBegin(), end = m_shape.spansEnd(); span != end && span + 1 != end; ++span) {
+>>>>>>> miniblink49
         int y = span->y;
         int maxY = (span + 1)->y;
 
@@ -91,9 +121,13 @@ bool Region::contains(const IntPoint& point) const
         if (maxY <= point.y())
             continue;
 
+<<<<<<< HEAD
         for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span),
                                     end = m_shape.segmentsEnd(span);
              segment != end && segment + 1 != end; segment += 2) {
+=======
+        for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span), end = m_shape.segmentsEnd(span); segment != end && segment + 1 != end; segment += 2) {
+>>>>>>> miniblink49
             int x = *segment;
             int maxX = *(segment + 1);
 
@@ -112,11 +146,18 @@ bool Region::intersects(const Region& region) const
     if (!m_bounds.intersects(region.m_bounds))
         return false;
 
+<<<<<<< HEAD
     return Shape::compareShapes<Shape::CompareIntersectsOperation>(
         m_shape, region.m_shape);
 }
 
 template <typename CompareOperation>
+=======
+    return Shape::compareShapes<Shape::CompareIntersectsOperation>(m_shape, region.m_shape);
+}
+
+template<typename CompareOperation>
+>>>>>>> miniblink49
 bool Region::Shape::compareShapes(const Shape& aShape, const Shape& bShape)
 {
     bool result = CompareOperation::defaultResult;
@@ -139,8 +180,12 @@ bool Region::Shape::compareShapes(const Shape& aShape, const Shape& bShape)
         Shape::SegmentIterator bSegment = bShape.segmentsBegin(bSpan);
         Shape::SegmentIterator bSegmentEnd = bShape.segmentsEnd(bSpan);
 
+<<<<<<< HEAD
         // Look for a non-overlapping part of the spans. If B had a segment in its
         // previous span, then we already tested A against B within that span.
+=======
+        // Look for a non-overlapping part of the spans. If B had a segment in its previous span, then we already tested A against B within that span.
+>>>>>>> miniblink49
         bool aHasSegmentInSpan = aSegment != aSegmentEnd;
         bool bHasSegmentInSpan = bSegment != bSegmentEnd;
         if (aY < bY && !bHadSegmentInPreviousSpan && aHasSegmentInSpan && CompareOperation::aOutsideB(result))
@@ -208,6 +253,7 @@ void Region::Shape::trimCapacities()
 }
 
 struct Region::Shape::CompareContainsOperation {
+<<<<<<< HEAD
     STATIC_ONLY(CompareContainsOperation);
     const static bool defaultResult = true;
     inline static bool aOutsideB(bool& /* result */) { return false; }
@@ -216,10 +262,16 @@ struct Region::Shape::CompareContainsOperation {
         result = false;
         return true;
     }
+=======
+    const static bool defaultResult = true;
+    inline static bool aOutsideB(bool& /* result */) { return false; }
+    inline static bool bOutsideA(bool& result) { result = false; return true; }
+>>>>>>> miniblink49
     inline static bool aOverlapsB(bool& /* result */) { return false; }
 };
 
 struct Region::Shape::CompareIntersectsOperation {
+<<<<<<< HEAD
     STATIC_ONLY(CompareIntersectsOperation);
     const static bool defaultResult = false;
     inline static bool aOutsideB(bool& /* result */) { return false; }
@@ -232,6 +284,17 @@ struct Region::Shape::CompareIntersectsOperation {
 };
 
 Region::Shape::Shape() { }
+=======
+    const static bool defaultResult = false;
+    inline static bool aOutsideB(bool& /* result */) { return false; }
+    inline static bool bOutsideA(bool& /* result */) { return false; }
+    inline static bool aOverlapsB(bool& result) { result = true; return true; }
+};
+
+Region::Shape::Shape()
+{
+}
+>>>>>>> miniblink49
 
 Region::Shape::Shape(const IntRect& rect)
 {
@@ -249,7 +312,11 @@ Region::Shape::Shape(size_t segmentsCapacity, size_t spansCapacity)
 
 void Region::Shape::appendSpan(int y)
 {
+<<<<<<< HEAD
     m_spans.push_back(Span(y, m_segments.size()));
+=======
+    m_spans.append(Span(y, m_segments.size()));
+>>>>>>> miniblink49
 }
 
 bool Region::Shape::canCoalesce(SegmentIterator begin, SegmentIterator end)
@@ -257,7 +324,11 @@ bool Region::Shape::canCoalesce(SegmentIterator begin, SegmentIterator end)
     if (m_spans.isEmpty())
         return false;
 
+<<<<<<< HEAD
     SegmentIterator lastSpanBegin = m_segments.data() + m_spans.back().segmentIndex;
+=======
+    SegmentIterator lastSpanBegin = m_segments.data() + m_spans.last().segmentIndex;
+>>>>>>> miniblink49
     SegmentIterator lastSpanEnd = m_segments.data() + m_segments.size();
 
     // Check if both spans have an equal number of segments.
@@ -272,9 +343,13 @@ bool Region::Shape::canCoalesce(SegmentIterator begin, SegmentIterator end)
     return true;
 }
 
+<<<<<<< HEAD
 void Region::Shape::appendSpan(int y,
     SegmentIterator begin,
     SegmentIterator end)
+=======
+void Region::Shape::appendSpan(int y, SegmentIterator begin, SegmentIterator end)
+>>>>>>> miniblink49
 {
     if (canCoalesce(begin, end))
         return;
@@ -283,9 +358,13 @@ void Region::Shape::appendSpan(int y,
     m_segments.appendRange(begin, end);
 }
 
+<<<<<<< HEAD
 void Region::Shape::appendSpans(const Shape& shape,
     SpanIterator begin,
     SpanIterator end)
+=======
+void Region::Shape::appendSpans(const Shape& shape, SpanIterator begin, SpanIterator end)
+>>>>>>> miniblink49
 {
     for (SpanIterator it = begin; it != end; ++it)
         appendSpan(it->y, shape.segmentsBegin(it), shape.segmentsEnd(it));
@@ -293,7 +372,11 @@ void Region::Shape::appendSpans(const Shape& shape,
 
 void Region::Shape::appendSegment(int x)
 {
+<<<<<<< HEAD
     m_segments.push_back(x);
+=======
+    m_segments.append(x);
+>>>>>>> miniblink49
 }
 
 Region::Shape::SpanIterator Region::Shape::spansBegin() const
@@ -306,8 +389,12 @@ Region::Shape::SpanIterator Region::Shape::spansEnd() const
     return m_spans.data() + m_spans.size();
 }
 
+<<<<<<< HEAD
 Region::Shape::SegmentIterator Region::Shape::segmentsBegin(
     SpanIterator it) const
+=======
+Region::Shape::SegmentIterator Region::Shape::segmentsBegin(SpanIterator it) const
+>>>>>>> miniblink49
 {
     ASSERT(it >= m_spans.data());
     ASSERT(it < m_spans.data() + m_spans.size());
@@ -319,8 +406,12 @@ Region::Shape::SegmentIterator Region::Shape::segmentsBegin(
     return &m_segments[it->segmentIndex];
 }
 
+<<<<<<< HEAD
 Region::Shape::SegmentIterator Region::Shape::segmentsEnd(
     SpanIterator it) const
+=======
+Region::Shape::SegmentIterator Region::Shape::segmentsEnd(SpanIterator it) const
+>>>>>>> miniblink49
 {
     ASSERT(it >= m_spans.data());
     ASSERT(it < m_spans.data() + m_spans.size());
@@ -332,13 +423,18 @@ Region::Shape::SegmentIterator Region::Shape::segmentsEnd(
     ASSERT(it + 1 < m_spans.data() + m_spans.size());
     size_t segmentIndex = (it + 1)->segmentIndex;
 
+<<<<<<< HEAD
     SECURITY_DCHECK(segmentIndex <= m_segments.size());
+=======
+    ASSERT_WITH_SECURITY_IMPLICATION(segmentIndex <= m_segments.size());
+>>>>>>> miniblink49
     return m_segments.data() + segmentIndex;
 }
 
 #ifndef NDEBUG
 void Region::Shape::dump() const
 {
+<<<<<<< HEAD
     for (Shape::SpanIterator span = spansBegin(), end = spansEnd(); span != end;
          ++span) {
         printf("%6d: (", span->y);
@@ -346,6 +442,12 @@ void Region::Shape::dump() const
         for (Shape::SegmentIterator segment = segmentsBegin(span),
                                     end = segmentsEnd(span);
              segment != end; ++segment)
+=======
+    for (Shape::SpanIterator span = spansBegin(), end = spansEnd(); span != end; ++span) {
+        printf("%6d: (", span->y);
+
+        for (Shape::SegmentIterator segment = segmentsBegin(span), end = segmentsEnd(span); segment != end; ++segment)
+>>>>>>> miniblink49
             printf("%d ", *segment);
         printf(")\n");
     }
@@ -410,6 +512,7 @@ enum {
     Shape2,
 };
 
+<<<<<<< HEAD
 template <typename Operation>
 Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
     const Shape& shape2)
@@ -418,6 +521,13 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
         "invalid segment combination");
     static_assert(!(!Operation::shouldAddRemainingSpansFromShape1 && Operation::shouldAddRemainingSpansFromShape2),
         "invalid span combination");
+=======
+template<typename Operation>
+Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& shape2)
+{
+    static_assert(!(!Operation::shouldAddRemainingSegmentsFromSpan1 && Operation::shouldAddRemainingSegmentsFromSpan2), "invalid segment combination");
+    static_assert(!(!Operation::shouldAddRemainingSpansFromShape1 && Operation::shouldAddRemainingSpansFromShape2), "invalid span combination");
+>>>>>>> miniblink49
 
     size_t segmentsCapacity = shape1.segmentsSize() + shape2.segmentsSize();
     size_t spansCapacity = shape1.spansSize() + shape2.spansSize();
@@ -438,8 +548,12 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
     SegmentIterator segments2End = 0;
 
     Vector<int, 32> segments;
+<<<<<<< HEAD
     segments.reserveCapacity(
         std::max(shape1.segmentsSize(), shape2.segmentsSize()));
+=======
+    segments.reserveCapacity(std::max(shape1.segmentsSize(), shape2.segmentsSize()));
+>>>>>>> miniblink49
 
     // Iterate over all spans.
     while (spans1 != spans1End && spans2 != spans2End) {
@@ -471,8 +585,12 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
         segments.resize(0);
         ASSERT(segments.capacity());
 
+<<<<<<< HEAD
         // Now iterate over the segments in each span and construct a new vector of
         // segments.
+=======
+        // Now iterate over the segments in each span and construct a new vector of segments.
+>>>>>>> miniblink49
         while (s1 != segments1End && s2 != segments2End) {
             int test = *s1 - *s2;
             int x;
@@ -489,7 +607,11 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
             }
 
             if (flag == Operation::opCode || oldFlag == Operation::opCode)
+<<<<<<< HEAD
                 segments.push_back(x);
+=======
+                segments.append(x);
+>>>>>>> miniblink49
 
             oldFlag = flag;
         }
@@ -517,10 +639,14 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
 }
 
 struct Region::Shape::UnionOperation {
+<<<<<<< HEAD
     STATIC_ONLY(UnionOperation);
     static bool trySimpleOperation(const Shape& shape1,
         const Shape& shape2,
         Shape& result)
+=======
+    static bool trySimpleOperation(const Shape& shape1, const Shape& shape2, Shape& result)
+>>>>>>> miniblink49
     {
         if (shape1.isEmpty()) {
             result = shape2;
@@ -538,14 +664,21 @@ struct Region::Shape::UnionOperation {
     static const bool shouldAddRemainingSpansFromShape2 = true;
 };
 
+<<<<<<< HEAD
 Region::Shape Region::Shape::unionShapes(const Shape& shape1,
     const Shape& shape2)
+=======
+Region::Shape Region::Shape::unionShapes(const Shape& shape1, const Shape& shape2)
+>>>>>>> miniblink49
 {
     return shapeOperation<UnionOperation>(shape1, shape2);
 }
 
 struct Region::Shape::IntersectOperation {
+<<<<<<< HEAD
     STATIC_ONLY(IntersectOperation);
+=======
+>>>>>>> miniblink49
     static bool trySimpleOperation(const Shape&, const Shape&, Shape&)
     {
         return false;
@@ -559,14 +692,21 @@ struct Region::Shape::IntersectOperation {
     static const bool shouldAddRemainingSpansFromShape2 = false;
 };
 
+<<<<<<< HEAD
 Region::Shape Region::Shape::intersectShapes(const Shape& shape1,
     const Shape& shape2)
+=======
+Region::Shape Region::Shape::intersectShapes(const Shape& shape1, const Shape& shape2)
+>>>>>>> miniblink49
 {
     return shapeOperation<IntersectOperation>(shape1, shape2);
 }
 
 struct Region::Shape::SubtractOperation {
+<<<<<<< HEAD
     STATIC_ONLY(SubtractOperation);
+=======
+>>>>>>> miniblink49
     static bool trySimpleOperation(const Shape&, const Shape&, Region::Shape&)
     {
         return false;
@@ -580,8 +720,12 @@ struct Region::Shape::SubtractOperation {
     static const bool shouldAddRemainingSpansFromShape2 = false;
 };
 
+<<<<<<< HEAD
 Region::Shape Region::Shape::subtractShapes(const Shape& shape1,
     const Shape& shape2)
+=======
+Region::Shape Region::Shape::subtractShapes(const Shape& shape1, const Shape& shape2)
+>>>>>>> miniblink49
 {
     return shapeOperation<SubtractOperation>(shape1, shape2);
 }
@@ -589,8 +733,12 @@ Region::Shape Region::Shape::subtractShapes(const Shape& shape1,
 #ifndef NDEBUG
 void Region::dump() const
 {
+<<<<<<< HEAD
     printf("Bounds: (%d, %d, %d, %d)\n", m_bounds.x(), m_bounds.y(),
         m_bounds.width(), m_bounds.height());
+=======
+    printf("Bounds: (%d, %d, %d, %d)\n", m_bounds.x(), m_bounds.y(), m_bounds.width(), m_bounds.height());
+>>>>>>> miniblink49
     m_shape.dump();
 }
 #endif
@@ -622,8 +770,12 @@ void Region::unite(const Region& region)
         m_bounds = region.m_bounds;
         return;
     }
+<<<<<<< HEAD
     // FIXME: We may want another way to construct a Region without doing this
     // test when we expect it to be false.
+=======
+    // FIXME: We may want another way to construct a Region without doing this test when we expect it to be false.
+>>>>>>> miniblink49
     if (!isRect() && contains(region))
         return;
 

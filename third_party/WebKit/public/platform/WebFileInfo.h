@@ -44,9 +44,17 @@ struct WebFileInfo {
     // The value -1 means that the length is not set.
     long long length;
 
+<<<<<<< HEAD
     enum Type { TypeUnknown = 0,
         TypeFile,
         TypeDirectory };
+=======
+    enum Type {
+        TypeUnknown = 0,
+        TypeFile,
+        TypeDirectory
+    };
+>>>>>>> miniblink49
 
     Type type;
 

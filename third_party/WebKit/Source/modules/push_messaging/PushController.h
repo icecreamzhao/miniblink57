@@ -10,11 +10,16 @@
 #include "platform/Supplementable.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WebPushClient;
 
+<<<<<<< HEAD
 class PushController final : public GarbageCollected<PushController>,
                              public Supplement<LocalFrame> {
     USING_GARBAGE_COLLECTED_MIXIN(PushController);
@@ -34,6 +39,23 @@ public:
     DEFINE_INLINE_VIRTUAL_TRACE() { Supplement<LocalFrame>::trace(visitor); }
 
 private:
+=======
+class PushController final : public NoBaseWillBeGarbageCollected<PushController>, public WillBeHeapSupplement<LocalFrame> {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PushController);
+    WTF_MAKE_NONCOPYABLE(PushController);
+
+public:
+    static PassOwnPtrWillBeRawPtr<PushController> create(WebPushClient*);
+    static const char* supplementName();
+    static PushController* from(LocalFrame* frame) { return static_cast<PushController*>(WillBeHeapSupplement<LocalFrame>::from(frame, supplementName())); }
+    static WebPushClient& clientFrom(LocalFrame*);
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { WillBeHeapSupplement<LocalFrame>::trace(visitor); }
+
+private:
+    explicit PushController(WebPushClient*);
+
+>>>>>>> miniblink49
     WebPushClient* client() const { return m_client; }
 
     WebPushClient* m_client;

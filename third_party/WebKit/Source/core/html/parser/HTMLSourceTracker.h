@@ -28,16 +28,13 @@
 
 #include "core/html/parser/HTMLToken.h"
 #include "platform/text/SegmentedString.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 class HTMLTokenizer;
 
 class HTMLSourceTracker {
-    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(HTMLSourceTracker);
-
 public:
     HTMLSourceTracker();
 
@@ -58,6 +55,6 @@ private:
     bool m_isStarted;
 };
 
-} // namespace blink
+}
 
 #endif

@@ -39,12 +39,16 @@ class WebInbandTextTrackClient {
 public:
     virtual ~WebInbandTextTrackClient() { }
 
+<<<<<<< HEAD
     virtual void addWebVTTCue(double start,
         double end,
         const WebString& id,
         const WebString& content,
         const WebString& settings)
         = 0;
+=======
+    virtual void addWebVTTCue(double start, double end, const WebString& id, const WebString& content, const WebString& settings) = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

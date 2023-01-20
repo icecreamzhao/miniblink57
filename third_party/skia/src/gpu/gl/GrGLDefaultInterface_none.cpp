@@ -7,7 +7,12 @@
 
 #include "gl/GrGLInterface.h"
 
+<<<<<<< HEAD
 const GrGLInterface* GrGLDefaultInterface()
 {
     return nullptr;
+=======
+const GrGLInterface* GrGLDefaultInterface() {
+    return NULL;
+>>>>>>> miniblink49
 }

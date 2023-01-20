@@ -28,11 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/WebDevToolsFrontendImpl.h"
 
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/V8DevToolsHost.h"
+<<<<<<< HEAD
 #include "core/frame/FrameHost.h"
+=======
+>>>>>>> miniblink49
 #include "core/frame/LocalFrame.h"
 #include "core/inspector/DevToolsHost.h"
 #include "public/platform/WebSecurityOrigin.h"
@@ -44,8 +51,22 @@
 namespace blink {
 
 WebDevToolsFrontend* WebDevToolsFrontend::create(
+<<<<<<< HEAD
     WebLocalFrame* frame,
     WebDevToolsFrontendClient* client)
+=======
+    WebView* view,
+    WebDevToolsFrontendClient* client,
+    const WebString& applicationLocale)
+{
+    return new WebDevToolsFrontendImpl(toWebLocalFrameImpl(view->mainFrame()), client);
+}
+
+WebDevToolsFrontend* WebDevToolsFrontend::create(
+    WebLocalFrame* frame,
+    WebDevToolsFrontendClient* client,
+    const WebString& applicationLocale)
+>>>>>>> miniblink49
 {
     return new WebDevToolsFrontendImpl(toWebLocalFrameImpl(frame), client);
 }
@@ -57,40 +78,70 @@ WebDevToolsFrontendImpl::WebDevToolsFrontendImpl(
     , m_client(client)
 {
     m_webFrame->setDevToolsFrontend(this);
+<<<<<<< HEAD
     m_webFrame->frame()->host()->setDefaultPageScaleLimits(1.f, 1.f);
+=======
+>>>>>>> miniblink49
 }
 
 WebDevToolsFrontendImpl::~WebDevToolsFrontendImpl()
 {
     if (m_devtoolsHost)
         m_devtoolsHost->disconnectClient();
+<<<<<<< HEAD
+=======
+
+    if (!m_devtoolsHost || !m_webFrame)
+        return;
+
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    ScriptState* scriptState = ScriptState::forMainWorld(m_webFrame->frame());
+    ScriptState::Scope scope(scriptState);
+
+    v8::Local<v8::Object> global = scriptState->context()->Global();
+    global->Delete(v8AtomicString(isolate, "DevToolsHost"));
+    m_devtoolsHost = nullptr;
+>>>>>>> miniblink49
 }
 
 void WebDevToolsFrontendImpl::didClearWindowObject(WebLocalFrameImpl* frame)
 {
     if (m_webFrame == frame) {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
+<<<<<<< HEAD
         // Use higher limit for DevTools isolate so that it does not OOM when
         // profiling large heaps.
         //isolate->IncreaseHeapLimitForDebugging();
 
         ScriptState* scriptState = ScriptState::forMainWorld(m_webFrame->frame());
         DCHECK(scriptState);
+=======
+        ScriptState* scriptState = ScriptState::forMainWorld(m_webFrame->frame());
+>>>>>>> miniblink49
         ScriptState::Scope scope(scriptState);
 
         if (m_devtoolsHost)
             m_devtoolsHost->disconnectClient();
         m_devtoolsHost = DevToolsHost::create(this, m_webFrame->frame());
         v8::Local<v8::Object> global = scriptState->context()->Global();
+<<<<<<< HEAD
         v8::Local<v8::Value> devtoolsHostObj = ToV8(m_devtoolsHost.get(), global, scriptState->isolate());
         DCHECK(!devtoolsHostObj.IsEmpty());
+=======
+        v8::Local<v8::Value> devtoolsHostObj = toV8(m_devtoolsHost.get(), global, scriptState->isolate());
+        ASSERT(!devtoolsHostObj.IsEmpty());
+>>>>>>> miniblink49
         global->Set(v8AtomicString(isolate, "DevToolsHost"), devtoolsHostObj);
     }
 
     if (m_injectedScriptForOrigin.isEmpty())
         return;
 
+<<<<<<< HEAD
     String origin = frame->getSecurityOrigin().toString();
+=======
+    String origin = frame->securityOrigin().toString();
+>>>>>>> miniblink49
     String script = m_injectedScriptForOrigin.get(origin);
     if (script.isEmpty())
         return;
@@ -103,23 +154,36 @@ void WebDevToolsFrontendImpl::didClearWindowObject(WebLocalFrameImpl* frame)
     frame->frame()->script().executeScriptInMainWorld(scriptWithId.toString());
 }
 
+<<<<<<< HEAD
 void WebDevToolsFrontendImpl::sendMessageToEmbedder(const String& message)
 {
     if (m_client)
         m_client->sendMessageToEmbedder(message);
 }
 
+=======
+>>>>>>> miniblink49
 void WebDevToolsFrontendImpl::sendMessageToBackend(const String& message)
 {
     if (m_client)
         m_client->sendMessageToBackend(message);
 }
 
+<<<<<<< HEAD
+=======
+void WebDevToolsFrontendImpl::sendMessageToEmbedder(const String& message)
+{
+    if (m_client)
+        m_client->sendMessageToEmbedder(message);
+}
+
+>>>>>>> miniblink49
 bool WebDevToolsFrontendImpl::isUnderTest()
 {
     return m_client ? m_client->isUnderTest() : false;
 }
 
+<<<<<<< HEAD
 void WebDevToolsFrontendImpl::showContextMenu(
     LocalFrame* targetFrame,
     float x,
@@ -133,6 +197,14 @@ void WebDevToolsFrontendImpl::showContextMenu(
 
 void WebDevToolsFrontendImpl::setInjectedScriptForOrigin(const String& origin,
     const String& source)
+=======
+void WebDevToolsFrontendImpl::showContextMenu(LocalFrame* targetFrame, float x, float y, PassRefPtrWillBeRawPtr<ContextMenuProvider> menuProvider)
+{
+    WebLocalFrameImpl::fromFrame(targetFrame)->viewImpl()->showContextMenuAtPoint(x, y, menuProvider);
+}
+
+void WebDevToolsFrontendImpl::setInjectedScriptForOrigin(const String& origin, const String& source)
+>>>>>>> miniblink49
 {
     m_injectedScriptForOrigin.set(origin, source);
 }

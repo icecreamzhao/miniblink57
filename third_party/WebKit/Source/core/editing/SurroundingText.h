@@ -32,7 +32,7 @@
 #define SurroundingText_h
 
 #include "core/CoreExport.h"
-#include "core/editing/Position.h"
+#include "core/dom/Position.h"
 #include "platform/heap/Handle.h"
 #include "wtf/text/WTFString.h"
 
@@ -41,9 +41,7 @@ namespace blink {
 class Range;
 
 class CORE_EXPORT SurroundingText {
-    USING_FAST_MALLOC(SurroundingText);
     WTF_MAKE_NONCOPYABLE(SurroundingText);
-
 public:
     SurroundingText(const Range&, unsigned maxLength);
     SurroundingText(const Position&, unsigned maxLength);
@@ -52,10 +50,12 @@ public:
     unsigned startOffsetInContent() const;
     unsigned endOffsetInContent() const;
 
+    PassRefPtrWillBeRawPtr<Range> rangeFromContentOffsets(unsigned startOffsetInContent, unsigned endOffsetInContent);
+
 private:
     void initialize(const Position&, const Position&, unsigned maxLength);
 
-    Persistent<Range> m_contentRange;
+    RefPtrWillBePersistent<Range> m_contentRange;
     size_t m_startOffsetInContent;
     size_t m_endOffsetInContent;
 };

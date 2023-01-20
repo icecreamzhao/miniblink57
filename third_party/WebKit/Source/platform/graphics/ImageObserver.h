@@ -27,7 +27,10 @@
 #define ImageObserver_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/heap/Handle.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -36,19 +39,31 @@ class IntRect;
 
 // Interface for notification about changes to an image, including decoding,
 // drawing, and animating.
+<<<<<<< HEAD
 class PLATFORM_EXPORT ImageObserver : public GarbageCollectedMixin {
 protected:
     virtual ~ImageObserver();
 
 public:
     virtual void decodedSizeChangedTo(const Image*, size_t newSize) = 0;
+=======
+class PLATFORM_EXPORT ImageObserver {
+protected:
+    virtual ~ImageObserver();
+public:
+    virtual void decodedSizeChanged(const Image*, int delta) = 0;
+    virtual void didDraw(const Image*) = 0;
+>>>>>>> miniblink49
 
     virtual bool shouldPauseAnimation(const Image*) = 0;
     virtual void animationAdvanced(const Image*) = 0;
 
     virtual void changedInRect(const Image*, const IntRect&) = 0;
+<<<<<<< HEAD
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
+=======
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -36,6 +36,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class MediaDevices;
 class MediaDevicesRequest;
 class UserMediaRequest;
@@ -48,15 +49,33 @@ public:
     {
         return WTF::wrapUnique(new UserMediaClientImpl(client));
     }
+=======
+class MediaDevicesRequest;
+class UserMediaRequest;
+class WebUserMediaClient;
+class WebLocalFrameImpl;
+
+class UserMediaClientImpl final : public UserMediaClient {
+public:
+    explicit UserMediaClientImpl(WebLocalFrameImpl*);
+>>>>>>> miniblink49
 
     // UserMediaClient ----------------------------------------------
     void requestUserMedia(UserMediaRequest*) override;
     void cancelUserMediaRequest(UserMediaRequest*) override;
     void requestMediaDevices(MediaDevicesRequest*) override;
+<<<<<<< HEAD
     void setMediaDeviceChangeObserver(MediaDevices*) override;
 
 private:
     explicit UserMediaClientImpl(WebUserMediaClient*);
+=======
+    void cancelMediaDevicesRequest(MediaDevicesRequest*) override;
+    void requestSources(MediaStreamTrackSourcesRequest*) override;
+
+private:
+    UserMediaClientImpl();
+>>>>>>> miniblink49
 
     WebUserMediaClient* m_client;
 };

@@ -33,7 +33,10 @@
 #include "platform/FileMetadata.h"
 #include "platform/PlatformExport.h"
 #include "platform/weborigin/KURL.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
@@ -43,16 +46,23 @@ namespace blink {
 class FileChooser;
 
 struct FileChooserFileInfo {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+=======
+>>>>>>> miniblink49
     FileChooserFileInfo(const String& path, const String& displayName = String())
         : path(path)
         , displayName(displayName)
     {
     }
 
+<<<<<<< HEAD
     FileChooserFileInfo(const KURL& fileSystemURL, const FileMetadata metadata)
         : fileSystemURL(fileSystemURL)
         , metadata(metadata)
+=======
+    FileChooserFileInfo(const KURL& fileSystemURL, const FileMetadata metadata) : fileSystemURL(fileSystemURL), metadata(metadata)
+>>>>>>> miniblink49
     {
     }
 
@@ -66,7 +76,10 @@ struct FileChooserFileInfo {
 };
 
 struct FileChooserSettings {
+<<<<<<< HEAD
     DISALLOW_NEW();
+=======
+>>>>>>> miniblink49
     bool allowsMultipleFiles;
     bool allowsDirectoryUpload;
     Vector<String> acceptMIMETypes;
@@ -94,14 +107,22 @@ private:
 
 class PLATFORM_EXPORT FileChooser : public RefCounted<FileChooser> {
 public:
+<<<<<<< HEAD
     static PassRefPtr<FileChooser> create(FileChooserClient*,
         const FileChooserSettings&);
+=======
+    static PassRefPtr<FileChooser> create(FileChooserClient*, const FileChooserSettings&);
+>>>>>>> miniblink49
     ~FileChooser();
 
     void disconnectClient() { m_client = 0; }
 
+<<<<<<< HEAD
     // FIXME: We should probably just pass file paths that could be virtual paths
     // with proper display names rather than passing structs.
+=======
+    // FIXME: We should probably just pass file paths that could be virtual paths with proper display names rather than passing structs.
+>>>>>>> miniblink49
     void chooseFiles(const Vector<FileChooserFileInfo>& files);
 
     const FileChooserSettings& settings() const { return m_settings; }

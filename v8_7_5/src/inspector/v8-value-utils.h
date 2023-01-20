@@ -12,6 +12,7 @@
 namespace v8_inspector {
 
 v8::Maybe<bool> createDataProperty(v8::Local<v8::Context>,
+<<<<<<< HEAD
     v8::Local<v8::Object>,
     v8::Local<v8::Name> key,
     v8::Local<v8::Value>);
@@ -21,3 +22,14 @@ v8::Maybe<bool> createDataProperty(v8::Local<v8::Context>, v8::Local<v8::Array>,
 } // namespace v8_inspector
 
 #endif // V8_INSPECTOR_V8_VALUE_UTILS_H_
+=======
+                                   v8::Local<v8::Object>,
+                                   v8::Local<v8::Name> key,
+                                   v8::Local<v8::Value>);
+v8::Maybe<bool> createDataProperty(v8::Local<v8::Context>, v8::Local<v8::Array>,
+                                   int index, v8::Local<v8::Value>);
+
+}  // namespace v8_inspector
+
+#endif  // V8_INSPECTOR_V8_VALUE_UTILS_H_
+>>>>>>> miniblink49

@@ -29,7 +29,10 @@
 #ifndef StringBuffer_h
 #define StringBuffer_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Assertions.h"
 #include "wtf/text/StringImpl.h"
 #include "wtf/text/Unicode.h"
@@ -38,9 +41,13 @@ namespace WTF {
 
 template <typename CharType>
 class StringBuffer {
+<<<<<<< HEAD
     DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(StringBuffer);
 
+=======
+    WTF_MAKE_NONCOPYABLE(StringBuffer);
+>>>>>>> miniblink49
 public:
     StringBuffer() { }
 
@@ -50,11 +57,18 @@ public:
         m_data = StringImpl::createUninitialized(length, characters);
     }
 
+<<<<<<< HEAD
     ~StringBuffer() { }
+=======
+    ~StringBuffer()
+    {
+    }
+>>>>>>> miniblink49
 
     void shrink(unsigned newLength);
 
     unsigned length() const { return m_data ? m_data->length() : 0; }
+<<<<<<< HEAD
     CharType* characters()
     {
         return length() ? const_cast<CharType*>(m_data->getCharacters<CharType>())
@@ -68,6 +82,13 @@ public:
     }
 
     PassRefPtr<StringImpl> release() { return std::move(m_data); }
+=======
+    CharType* characters() { return length() ? const_cast<CharType*>(m_data->getCharacters<CharType>()) : 0; }
+
+    CharType& operator[](unsigned i) { ASSERT_WITH_SECURITY_IMPLICATION(i < length()); return characters()[i]; }
+
+    PassRefPtr<StringImpl> release() { return m_data.release(); }
+>>>>>>> miniblink49
 
 private:
     RefPtr<StringImpl> m_data;
@@ -76,10 +97,17 @@ private:
 template <typename CharType>
 void StringBuffer<CharType>::shrink(unsigned newLength)
 {
+<<<<<<< HEAD
     DCHECK(m_data);
     if (m_data->length() == newLength)
         return;
     m_data = m_data->substring(0, newLength);
+=======
+    ASSERT(m_data);
+    if (m_data->length() == newLength)
+        return;
+    m_data->truncateAssumingIsolated(newLength);
+>>>>>>> miniblink49
 }
 
 } // namespace WTF

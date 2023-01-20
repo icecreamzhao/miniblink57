@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/LayoutSliderContainer.h"
 
 #include "core/dom/shadow/ShadowRoot.h"
@@ -36,6 +37,7 @@
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/html/shadow/ShadowElementNames.h"
 #include "core/html/shadow/SliderThumbElement.h"
+#include "core/layout/LayoutFlexibleBox.h"
 #include "core/layout/LayoutSlider.h"
 #include "core/layout/LayoutTheme.h"
 
@@ -61,39 +63,34 @@ inline static bool hasVerticalAppearance(HTMLInputElement* input)
     return sliderStyle.appearance() == SliderVerticalPart;
 }
 
-void LayoutSliderContainer::computeLogicalHeight(
-    LayoutUnit logicalHeight,
-    LayoutUnit logicalTop,
-    LogicalExtentComputedValues& computedValues) const
+void LayoutSliderContainer::computeLogicalHeight(LayoutUnit logicalHeight, LayoutUnit logicalTop, LogicalExtentComputedValues& computedValues) const
 {
-    HTMLInputElement* input = toHTMLInputElement(node()->ownerShadowHost());
+    HTMLInputElement* input = toHTMLInputElement(node()->shadowHost());
     bool isVertical = hasVerticalAppearance(input);
 
     if (input->layoutObject()->isSlider() && !isVertical && input->list()) {
         int offsetFromCenter = LayoutTheme::theme().sliderTickOffsetFromTrackCenter();
-        LayoutUnit trackHeight;
+        LayoutUnit trackHeight = 0;
         if (offsetFromCenter < 0) {
-            trackHeight = LayoutUnit(-2 * offsetFromCenter);
+            trackHeight = -2 * offsetFromCenter;
         } else {
             int tickLength = LayoutTheme::theme().sliderTickSize().height();
-            trackHeight = LayoutUnit(2 * (offsetFromCenter + tickLength));
+            trackHeight = 2 * (offsetFromCenter + tickLength);
         }
         float zoomFactor = style()->effectiveZoom();
         if (zoomFactor != 1.0)
             trackHeight *= zoomFactor;
 
-        // FIXME: The trackHeight should have been added before updateLogicalHeight
-        // was called to avoid this hack.
+        // FIXME: The trackHeight should have been added before updateLogicalHeight was called to avoid this hack.
         setIntrinsicContentLogicalHeight(trackHeight);
 
         LayoutBox::computeLogicalHeight(trackHeight, logicalTop, computedValues);
         return;
     }
     if (isVertical)
-        logicalHeight = LayoutUnit(LayoutSlider::defaultTrackLength);
+        logicalHeight = LayoutSlider::defaultTrackLength;
 
-    // FIXME: The trackHeight should have been added before updateLogicalHeight
-    // was called to avoid this hack.
+    // FIXME: The trackHeight should have been added before updateLogicalHeight was called to avoid this hack.
     setIntrinsicContentLogicalHeight(logicalHeight);
 
     LayoutBox::computeLogicalHeight(logicalHeight, logicalTop, computedValues);
@@ -101,44 +98,39 @@ void LayoutSliderContainer::computeLogicalHeight(
 
 void LayoutSliderContainer::layout()
 {
-    HTMLInputElement* input = toHTMLInputElement(node()->ownerShadowHost());
+    HTMLInputElement* input = toHTMLInputElement(node()->shadowHost());
     bool isVertical = hasVerticalAppearance(input);
     mutableStyleRef().setFlexDirection(isVertical ? FlowColumn : FlowRow);
     TextDirection oldTextDirection = style()->direction();
     if (isVertical) {
-        // FIXME: Work around rounding issues in RTL vertical sliders. We want them
-        // to render identically to LTR vertical sliders. We can remove this work
-        // around when subpixel rendering is enabled on all ports.
-        mutableStyleRef().setDirection(TextDirection::kLtr);
+        // FIXME: Work around rounding issues in RTL vertical sliders. We want them to
+        // render identically to LTR vertical sliders. We can remove this work around when
+        // subpixel rendering is enabled on all ports.
+        mutableStyleRef().setDirection(LTR);
     }
 
-    Element* thumbElement = input->userAgentShadowRoot()->getElementById(
-        ShadowElementNames::sliderThumb());
-    Element* trackElement = input->userAgentShadowRoot()->getElementById(
-        ShadowElementNames::sliderTrack());
+    Element* thumbElement = input->userAgentShadowRoot()->getElementById(ShadowElementNames::sliderThumb());
+    Element* trackElement = input->userAgentShadowRoot()->getElementById(ShadowElementNames::sliderTrack());
     LayoutBox* thumb = thumbElement ? thumbElement->layoutBox() : 0;
     LayoutBox* track = trackElement ? trackElement->layoutBox() : 0;
 
     SubtreeLayoutScope layoutScope(*this);
-    // Force a layout to reset the position of the thumb so the code below doesn't
-    // move the thumb to the wrong place.
-    // FIXME: Make a custom layout class for the track and move the thumb
-    // positioning code there.
+    // Force a layout to reset the position of the thumb so the code below doesn't move the thumb to the wrong place.
+    // FIXME: Make a custom layout class for the track and move the thumb positioning code there.
     if (track)
         layoutScope.setChildNeedsLayout(track);
 
     LayoutFlexibleBox::layout();
 
     mutableStyleRef().setDirection(oldTextDirection);
-    // These should always exist, unless someone mutates the shadow DOM (e.g., in
-    // the inspector).
+    // These should always exist, unless someone mutates the shadow DOM (e.g., in the inspector).
     if (!thumb || !track)
         return;
 
     double percentageOffset = sliderPosition(input).toDouble();
     LayoutUnit availableExtent = isVertical ? track->contentHeight() : track->contentWidth();
     availableExtent -= isVertical ? thumb->size().height() : thumb->size().width();
-    LayoutUnit offset(percentageOffset * availableExtent);
+    LayoutUnit offset = percentageOffset * availableExtent;
     LayoutPoint thumbLocation = thumb->location();
     if (isVertical)
         thumbLocation.setY(thumbLocation.y() + track->contentHeight() - thumb->size().height() - offset);
@@ -148,11 +140,9 @@ void LayoutSliderContainer::layout()
         thumbLocation.setX(thumbLocation.x() - offset);
     thumb->setLocation(thumbLocation);
 
-    // We need one-off invalidation code here because painting of the timeline
-    // element does not go through style.
+    // We need one-off invalidation code here because painting of the timeline element does not go through style.
     // Instead it has a custom implementation in C++ code.
-    // Therefore the style system cannot understand when it needs to be paint
-    // invalidated.
+    // Therefore the style system cannot understand when it needs to be paint invalidated.
     setShouldDoFullPaintInvalidation();
 }
 

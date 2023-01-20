@@ -31,14 +31,12 @@ namespace blink {
 
 class HTMLBodyElement;
 
-class CORE_EXPORT HTMLDocument : public Document {
+class CORE_EXPORT HTMLDocument : public Document, public ResourceClient {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static HTMLDocument* create(
-        const DocumentInit& initializer = DocumentInit())
+    static PassRefPtrWillBeRawPtr<HTMLDocument> create(const DocumentInit& initializer = DocumentInit())
     {
-        return new HTMLDocument(initializer);
+        return adoptRefWillBeNoop(new HTMLDocument(initializer));
     }
     ~HTMLDocument() override;
 
@@ -68,12 +66,10 @@ public:
 
     static bool isCaseSensitiveAttribute(const QualifiedName&);
 
-    Document* cloneDocumentWithoutChildren() final;
+    PassRefPtrWillBeRawPtr<Document> cloneDocumentWithoutChildren() final;
 
 protected:
-    HTMLDocument(
-        const DocumentInit&,
-        DocumentClassFlags extendedDocumentClasses = DefaultDocumentClass);
+    HTMLDocument(const DocumentInit&, DocumentClassFlags extendedDocumentClasses = DefaultDocumentClass);
 
 private:
     HTMLBodyElement* htmlBodyElement() const;

@@ -28,10 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebSearchableFormData.h"
 
 #include "platform/testing/URLTestHelpers.h"
 #include "public/platform/Platform.h"
+<<<<<<< HEAD
 #include "public/platform/WebURLLoaderMockFactory.h"
 #include "public/web/WebCache.h"
 #include "public/web/WebDocument.h"
@@ -39,11 +44,20 @@
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "web/tests/FrameTestHelpers.h"
+=======
+#include "public/platform/WebUnitTestSupport.h"
+#include "public/web/WebDocument.h"
+#include "public/web/WebFrame.h"
+#include "web/tests/FrameTestHelpers.h"
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WebSearchableFormDataTest : public testing::Test {
 protected:
+<<<<<<< HEAD
     WebSearchableFormDataTest() { }
 
     ~WebSearchableFormDataTest() override
@@ -61,6 +75,27 @@ TEST_F(WebSearchableFormDataTest, HttpSearchString)
     URLTestHelpers::registerMockedURLFromBaseURL(
         WebString::fromUTF8(baseURL.c_str()), "search_form_http.html");
     WebView* webView = m_webViewHelper.initializeAndLoad(baseURL + "search_form_http.html");
+=======
+    WebSearchableFormDataTest()
+        : m_baseURL("http://www.test.com/")
+    {
+    }
+
+    ~WebSearchableFormDataTest() override
+    {
+        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
+    }
+
+    FrameTestHelpers::WebViewHelper m_webViewHelper;
+    std::string m_baseURL;
+};
+
+
+TEST_F(WebSearchableFormDataTest, SearchString)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "search_form.html");
+    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "search_form.html");
+>>>>>>> miniblink49
 
     WebVector<WebFormElement> forms;
     webView->mainFrame()->document().forms(forms);
@@ -68,6 +103,7 @@ TEST_F(WebSearchableFormDataTest, HttpSearchString)
     EXPECT_EQ(forms.size(), 1U);
 
     WebSearchableFormData searchableFormData(forms[0]);
+<<<<<<< HEAD
     EXPECT_EQ("http://www.mock.url/search?hl=en&q={searchTerms}&btnM=Mock+Search",
         searchableFormData.url().string());
 }
@@ -88,6 +124,9 @@ TEST_F(WebSearchableFormDataTest, HttpsSearchString)
     EXPECT_EQ(
         "https://www.mock.url/search?hl=en&q={searchTerms}&btnM=Mock+Search",
         searchableFormData.url().string());
+=======
+    EXPECT_EQ("http://www.mock.url/search?hl=en&q={searchTerms}&btnM=Mock+Search", searchableFormData.url().string());
+>>>>>>> miniblink49
 }
 
 } // namespace blink

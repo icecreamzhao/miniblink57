@@ -29,11 +29,7 @@
 namespace blink {
 
 enum DataTransferAccessPolicy {
-    DataTransferNumb,
-    DataTransferImageWritable,
-    DataTransferWritable,
-    DataTransferTypesReadable,
-    DataTransferReadable
+    DataTransferNumb, DataTransferImageWritable, DataTransferWritable, DataTransferTypesReadable, DataTransferReadable
 };
 
 } // namespace

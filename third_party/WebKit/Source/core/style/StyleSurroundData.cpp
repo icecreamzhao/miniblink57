@@ -19,6 +19,7 @@
  *
  */
 
+#include "config.h"
 #include "core/style/StyleSurroundData.h"
 
 namespace blink {

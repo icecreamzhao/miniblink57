@@ -28,6 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/PageScaleConstraints.h"
@@ -41,18 +46,32 @@
 #include "platform/testing/URLTestHelpers.h"
 #include "platform/testing/UnitTestHelpers.h"
 #include "public/platform/Platform.h"
+<<<<<<< HEAD
 #include "public/platform/WebURLLoaderMockFactory.h"
 #include "public/web/WebCache.h"
+=======
+#include "public/platform/WebUnitTestSupport.h"
+>>>>>>> miniblink49
 #include "public/web/WebConsoleMessage.h"
 #include "public/web/WebFrame.h"
 #include "public/web/WebScriptSource.h"
 #include "public/web/WebSettings.h"
 #include "public/web/WebViewClient.h"
+<<<<<<< HEAD
 #include "testing/gtest/include/gtest/gtest.h"
 #include "web/tests/FrameTestHelpers.h"
 
 namespace blink {
 
+=======
+#include "web/tests/FrameTestHelpers.h"
+#include <gtest/gtest.h>
+#include <vector>
+
+namespace blink {
+
+using blink::FrameTestHelpers::UseMockScrollbarSettings;
+>>>>>>> miniblink49
 using blink::testing::runPendingTasks;
 
 class ViewportTest : public ::testing::Test {
@@ -65,22 +84,34 @@ protected:
 
     ~ViewportTest() override
     {
+<<<<<<< HEAD
         Platform::current()->getURLLoaderMockFactory()->unregisterAllURLs();
         WebCache::clear();
+=======
+        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
+>>>>>>> miniblink49
     }
 
     void registerMockedHttpURLLoad(const std::string& fileName)
     {
+<<<<<<< HEAD
         URLTestHelpers::registerMockedURLFromBaseURL(
             WebString::fromUTF8(m_baseURL.c_str()),
             WebString::fromUTF8(fileName.c_str()));
+=======
+        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(fileName.c_str()));
+>>>>>>> miniblink49
     }
 
     void registerMockedChromeURLLoad(const std::string& fileName)
     {
+<<<<<<< HEAD
         URLTestHelpers::registerMockedURLFromBaseURL(
             WebString::fromUTF8(m_chromeURL.c_str()),
             WebString::fromUTF8(fileName.c_str()));
+=======
+        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_chromeURL.c_str()), WebString::fromUTF8(fileName.c_str()));
+>>>>>>> miniblink49
     }
 
     void executeScript(WebFrame* frame, const WebString& code)
@@ -100,6 +131,7 @@ static void setViewportSettings(WebSettings* settings)
     settings->setMainFrameResizesAreOrientationChanges(true);
 }
 
+<<<<<<< HEAD
 static PageScaleConstraints runViewportTest(Page* page,
     int initialWidth,
     int initialHeight)
@@ -111,6 +143,14 @@ static PageScaleConstraints runViewportTest(Page* page,
     ViewportDescription description = page->viewportDescription();
     PageScaleConstraints constraints = description.resolve(
         FloatSize(initialViewportSize), Length(980, blink::Fixed));
+=======
+static PageScaleConstraints runViewportTest(Page* page, int initialWidth, int initialHeight)
+{
+    IntSize initialViewportSize(initialWidth, initialHeight);
+    toLocalFrame(page->mainFrame())->view()->setFrameRect(IntRect(IntPoint::zero(), initialViewportSize));
+    ViewportDescription description = page->viewportDescription();
+    PageScaleConstraints constraints = description.resolve(initialViewportSize, Length(980, blink::Fixed));
+>>>>>>> miniblink49
 
     constraints.fitToContentsWidth(constraints.layoutSize.width(), initialWidth);
     constraints.resolveAutoInitialScale();
@@ -119,6 +159,7 @@ static PageScaleConstraints runViewportTest(Page* page,
 
 TEST_F(ViewportTest, viewport1)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-1.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -127,6 +168,15 @@ TEST_F(ViewportTest, viewport1)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-1.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-1.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -139,6 +189,7 @@ TEST_F(ViewportTest, viewport1)
 
 TEST_F(ViewportTest, viewport2)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-2.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -147,6 +198,15 @@ TEST_F(ViewportTest, viewport2)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-2.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-2.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -159,6 +219,7 @@ TEST_F(ViewportTest, viewport2)
 
 TEST_F(ViewportTest, viewport3)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-3.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -167,6 +228,15 @@ TEST_F(ViewportTest, viewport3)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-3.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-3.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -179,6 +249,7 @@ TEST_F(ViewportTest, viewport3)
 
 TEST_F(ViewportTest, viewport4)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-4.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -187,6 +258,15 @@ TEST_F(ViewportTest, viewport4)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-4.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-4.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(160, constraints.layoutSize.width());
@@ -199,6 +279,7 @@ TEST_F(ViewportTest, viewport4)
 
 TEST_F(ViewportTest, viewport5)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-5.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -207,6 +288,15 @@ TEST_F(ViewportTest, viewport5)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-5.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-5.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -219,6 +309,7 @@ TEST_F(ViewportTest, viewport5)
 
 TEST_F(ViewportTest, viewport6)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-6.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -227,6 +318,15 @@ TEST_F(ViewportTest, viewport6)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-6.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-6.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(200, constraints.layoutSize.width());
@@ -239,6 +339,7 @@ TEST_F(ViewportTest, viewport6)
 
 TEST_F(ViewportTest, viewport7)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-7.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -247,6 +348,15 @@ TEST_F(ViewportTest, viewport7)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-7.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-7.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -259,6 +369,7 @@ TEST_F(ViewportTest, viewport7)
 
 TEST_F(ViewportTest, viewport8)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-8.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -267,6 +378,15 @@ TEST_F(ViewportTest, viewport8)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-8.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-8.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -279,6 +399,7 @@ TEST_F(ViewportTest, viewport8)
 
 TEST_F(ViewportTest, viewport9)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-9.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -287,6 +408,15 @@ TEST_F(ViewportTest, viewport9)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-9.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-9.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -299,6 +429,7 @@ TEST_F(ViewportTest, viewport9)
 
 TEST_F(ViewportTest, viewport10)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-10.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -307,6 +438,15 @@ TEST_F(ViewportTest, viewport10)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-10.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-10.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -319,6 +459,7 @@ TEST_F(ViewportTest, viewport10)
 
 TEST_F(ViewportTest, viewport11)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-11.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -327,6 +468,15 @@ TEST_F(ViewportTest, viewport11)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-11.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-11.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -339,6 +489,7 @@ TEST_F(ViewportTest, viewport11)
 
 TEST_F(ViewportTest, viewport12)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-12.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -347,6 +498,15 @@ TEST_F(ViewportTest, viewport12)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-12.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-12.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -359,6 +519,7 @@ TEST_F(ViewportTest, viewport12)
 
 TEST_F(ViewportTest, viewport13)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-13.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -367,6 +528,15 @@ TEST_F(ViewportTest, viewport13)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-13.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-13.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -379,6 +549,7 @@ TEST_F(ViewportTest, viewport13)
 
 TEST_F(ViewportTest, viewport14)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-14.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -387,6 +558,15 @@ TEST_F(ViewportTest, viewport14)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-14.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-14.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -399,6 +579,7 @@ TEST_F(ViewportTest, viewport14)
 
 TEST_F(ViewportTest, viewport15)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-15.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -407,6 +588,15 @@ TEST_F(ViewportTest, viewport15)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-15.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-15.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -419,6 +609,7 @@ TEST_F(ViewportTest, viewport15)
 
 TEST_F(ViewportTest, viewport16)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-16.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -427,6 +618,15 @@ TEST_F(ViewportTest, viewport16)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-16.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-16.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -439,6 +639,7 @@ TEST_F(ViewportTest, viewport16)
 
 TEST_F(ViewportTest, viewport17)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-17.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -447,6 +648,15 @@ TEST_F(ViewportTest, viewport17)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-17.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-17.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -459,6 +669,7 @@ TEST_F(ViewportTest, viewport17)
 
 TEST_F(ViewportTest, viewport18)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-18.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -467,6 +678,15 @@ TEST_F(ViewportTest, viewport18)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-18.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-18.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -479,6 +699,7 @@ TEST_F(ViewportTest, viewport18)
 
 TEST_F(ViewportTest, viewport19)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-19.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -487,6 +708,15 @@ TEST_F(ViewportTest, viewport19)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-19.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-19.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(160, constraints.layoutSize.width());
@@ -499,6 +729,7 @@ TEST_F(ViewportTest, viewport19)
 
 TEST_F(ViewportTest, viewport20)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-20.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -507,6 +738,15 @@ TEST_F(ViewportTest, viewport20)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-20.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-20.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -519,6 +759,7 @@ TEST_F(ViewportTest, viewport20)
 
 TEST_F(ViewportTest, viewport21)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-21.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -527,6 +768,15 @@ TEST_F(ViewportTest, viewport21)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-21.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-21.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -539,6 +789,7 @@ TEST_F(ViewportTest, viewport21)
 
 TEST_F(ViewportTest, viewport22)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-22.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -547,6 +798,15 @@ TEST_F(ViewportTest, viewport22)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-22.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-22.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -559,6 +819,7 @@ TEST_F(ViewportTest, viewport22)
 
 TEST_F(ViewportTest, viewport23)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-23.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -567,6 +828,15 @@ TEST_F(ViewportTest, viewport23)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-23.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-23.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -579,6 +849,7 @@ TEST_F(ViewportTest, viewport23)
 
 TEST_F(ViewportTest, viewport24)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-24.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -587,6 +858,15 @@ TEST_F(ViewportTest, viewport24)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-24.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-24.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -599,6 +879,7 @@ TEST_F(ViewportTest, viewport24)
 
 TEST_F(ViewportTest, viewport25)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-25.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -607,6 +888,15 @@ TEST_F(ViewportTest, viewport25)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-25.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-25.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -619,6 +909,7 @@ TEST_F(ViewportTest, viewport25)
 
 TEST_F(ViewportTest, viewport26)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-26.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -627,6 +918,15 @@ TEST_F(ViewportTest, viewport26)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-26.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-26.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -639,6 +939,7 @@ TEST_F(ViewportTest, viewport26)
 
 TEST_F(ViewportTest, viewport27)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-27.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -647,6 +948,15 @@ TEST_F(ViewportTest, viewport27)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-27.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-27.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -659,6 +969,7 @@ TEST_F(ViewportTest, viewport27)
 
 TEST_F(ViewportTest, viewport28)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-28.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -667,6 +978,15 @@ TEST_F(ViewportTest, viewport28)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-28.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-28.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(352, constraints.layoutSize.width());
@@ -679,6 +999,7 @@ TEST_F(ViewportTest, viewport28)
 
 TEST_F(ViewportTest, viewport29)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-29.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -687,6 +1008,15 @@ TEST_F(ViewportTest, viewport29)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-29.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-29.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(700, constraints.layoutSize.width());
@@ -699,6 +1029,7 @@ TEST_F(ViewportTest, viewport29)
 
 TEST_F(ViewportTest, viewport30)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-30.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -707,6 +1038,15 @@ TEST_F(ViewportTest, viewport30)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-30.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-30.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(200, constraints.layoutSize.width());
@@ -719,6 +1059,7 @@ TEST_F(ViewportTest, viewport30)
 
 TEST_F(ViewportTest, viewport31)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-31.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -727,6 +1068,15 @@ TEST_F(ViewportTest, viewport31)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-31.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-31.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -739,6 +1089,7 @@ TEST_F(ViewportTest, viewport31)
 
 TEST_F(ViewportTest, viewport32)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-32.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -747,6 +1098,15 @@ TEST_F(ViewportTest, viewport32)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-32.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-32.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -759,6 +1119,7 @@ TEST_F(ViewportTest, viewport32)
 
 TEST_F(ViewportTest, viewport33)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-33.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -767,6 +1128,15 @@ TEST_F(ViewportTest, viewport33)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-33.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-33.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -779,6 +1149,7 @@ TEST_F(ViewportTest, viewport33)
 
 TEST_F(ViewportTest, viewport34)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-34.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -787,6 +1158,15 @@ TEST_F(ViewportTest, viewport34)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-34.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-34.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -799,6 +1179,7 @@ TEST_F(ViewportTest, viewport34)
 
 TEST_F(ViewportTest, viewport35)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-35.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -807,6 +1188,15 @@ TEST_F(ViewportTest, viewport35)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-35.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-35.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -819,6 +1209,7 @@ TEST_F(ViewportTest, viewport35)
 
 TEST_F(ViewportTest, viewport36)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-36.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -827,6 +1218,15 @@ TEST_F(ViewportTest, viewport36)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-36.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-36.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_NEAR(636.36, constraints.layoutSize.width(), 0.01f);
@@ -839,6 +1239,7 @@ TEST_F(ViewportTest, viewport36)
 
 TEST_F(ViewportTest, viewport37)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-37.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -847,6 +1248,15 @@ TEST_F(ViewportTest, viewport37)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-37.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-37.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -859,6 +1269,7 @@ TEST_F(ViewportTest, viewport37)
 
 TEST_F(ViewportTest, viewport38)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-38.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -867,6 +1278,15 @@ TEST_F(ViewportTest, viewport38)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-38.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-38.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -879,6 +1299,7 @@ TEST_F(ViewportTest, viewport38)
 
 TEST_F(ViewportTest, viewport39)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-39.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -887,6 +1308,15 @@ TEST_F(ViewportTest, viewport39)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-39.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-39.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(200, constraints.layoutSize.width());
@@ -899,6 +1329,7 @@ TEST_F(ViewportTest, viewport39)
 
 TEST_F(ViewportTest, viewport40)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-40.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -907,6 +1338,15 @@ TEST_F(ViewportTest, viewport40)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-40.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-40.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(700, constraints.layoutSize.width());
@@ -919,6 +1359,7 @@ TEST_F(ViewportTest, viewport40)
 
 TEST_F(ViewportTest, viewport41)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-41.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -927,6 +1368,15 @@ TEST_F(ViewportTest, viewport41)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-41.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-41.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1000, constraints.layoutSize.width());
@@ -939,6 +1389,7 @@ TEST_F(ViewportTest, viewport41)
 
 TEST_F(ViewportTest, viewport42)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-42.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -947,6 +1398,15 @@ TEST_F(ViewportTest, viewport42)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-42.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-42.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -959,6 +1419,7 @@ TEST_F(ViewportTest, viewport42)
 
 TEST_F(ViewportTest, viewport43)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-43.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -967,6 +1428,15 @@ TEST_F(ViewportTest, viewport43)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-43.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-43.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -979,6 +1449,7 @@ TEST_F(ViewportTest, viewport43)
 
 TEST_F(ViewportTest, viewport44)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-44.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -987,6 +1458,15 @@ TEST_F(ViewportTest, viewport44)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-44.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-44.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(10000, constraints.layoutSize.width());
@@ -999,6 +1479,7 @@ TEST_F(ViewportTest, viewport44)
 
 TEST_F(ViewportTest, viewport45)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-45.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1007,6 +1488,15 @@ TEST_F(ViewportTest, viewport45)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-45.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-45.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(3200, constraints.layoutSize.width());
@@ -1019,6 +1509,7 @@ TEST_F(ViewportTest, viewport45)
 
 TEST_F(ViewportTest, viewport46)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-46.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1027,6 +1518,15 @@ TEST_F(ViewportTest, viewport46)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-46.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-46.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(32, constraints.layoutSize.width());
@@ -1039,6 +1539,7 @@ TEST_F(ViewportTest, viewport46)
 
 TEST_F(ViewportTest, viewport47)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-47.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1047,6 +1548,15 @@ TEST_F(ViewportTest, viewport47)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-47.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-47.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1059,6 +1569,7 @@ TEST_F(ViewportTest, viewport47)
 
 TEST_F(ViewportTest, viewport48)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-48.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1067,6 +1578,15 @@ TEST_F(ViewportTest, viewport48)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-48.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-48.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(3000, constraints.layoutSize.width());
@@ -1079,6 +1599,7 @@ TEST_F(ViewportTest, viewport48)
 
 TEST_F(ViewportTest, viewport49)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-49.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1087,6 +1608,15 @@ TEST_F(ViewportTest, viewport49)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-49.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-49.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1099,6 +1629,7 @@ TEST_F(ViewportTest, viewport49)
 
 TEST_F(ViewportTest, viewport50)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-50.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1107,6 +1638,15 @@ TEST_F(ViewportTest, viewport50)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-50.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-50.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -1119,6 +1659,7 @@ TEST_F(ViewportTest, viewport50)
 
 TEST_F(ViewportTest, viewport51)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-51.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1127,6 +1668,15 @@ TEST_F(ViewportTest, viewport51)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-51.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-51.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -1139,6 +1689,7 @@ TEST_F(ViewportTest, viewport51)
 
 TEST_F(ViewportTest, viewport52)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-52.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1147,6 +1698,15 @@ TEST_F(ViewportTest, viewport52)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-52.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-52.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1159,6 +1719,7 @@ TEST_F(ViewportTest, viewport52)
 
 TEST_F(ViewportTest, viewport53)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-53.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1167,6 +1728,15 @@ TEST_F(ViewportTest, viewport53)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-53.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-53.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -1179,6 +1749,7 @@ TEST_F(ViewportTest, viewport53)
 
 TEST_F(ViewportTest, viewport54)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-54.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1187,6 +1758,15 @@ TEST_F(ViewportTest, viewport54)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-54.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-54.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1199,6 +1779,7 @@ TEST_F(ViewportTest, viewport54)
 
 TEST_F(ViewportTest, viewport55)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-55.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1207,6 +1788,15 @@ TEST_F(ViewportTest, viewport55)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-55.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-55.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1219,6 +1809,7 @@ TEST_F(ViewportTest, viewport55)
 
 TEST_F(ViewportTest, viewport56)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-56.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1227,6 +1818,15 @@ TEST_F(ViewportTest, viewport56)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-56.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-56.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -1239,6 +1839,7 @@ TEST_F(ViewportTest, viewport56)
 
 TEST_F(ViewportTest, viewport57)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-57.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1247,6 +1848,15 @@ TEST_F(ViewportTest, viewport57)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-57.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-57.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1259,6 +1869,7 @@ TEST_F(ViewportTest, viewport57)
 
 TEST_F(ViewportTest, viewport58)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-58.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1267,6 +1878,15 @@ TEST_F(ViewportTest, viewport58)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-58.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-58.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(3200, constraints.layoutSize.width());
@@ -1279,6 +1899,7 @@ TEST_F(ViewportTest, viewport58)
 
 TEST_F(ViewportTest, viewport59)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-59.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1287,6 +1908,15 @@ TEST_F(ViewportTest, viewport59)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-59.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-59.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1299,6 +1929,7 @@ TEST_F(ViewportTest, viewport59)
 
 TEST_F(ViewportTest, viewport60)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-60.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1307,6 +1938,15 @@ TEST_F(ViewportTest, viewport60)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-60.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-60.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(32, constraints.layoutSize.width());
@@ -1319,6 +1959,7 @@ TEST_F(ViewportTest, viewport60)
 
 TEST_F(ViewportTest, viewport61)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-61.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1327,6 +1968,15 @@ TEST_F(ViewportTest, viewport61)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-61.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-61.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1339,6 +1989,7 @@ TEST_F(ViewportTest, viewport61)
 
 TEST_F(ViewportTest, viewport62)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-62.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1347,6 +1998,15 @@ TEST_F(ViewportTest, viewport62)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-62.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-62.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1359,6 +2019,7 @@ TEST_F(ViewportTest, viewport62)
 
 TEST_F(ViewportTest, viewport63)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-63.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1367,6 +2028,15 @@ TEST_F(ViewportTest, viewport63)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-63.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-63.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1379,6 +2049,7 @@ TEST_F(ViewportTest, viewport63)
 
 TEST_F(ViewportTest, viewport64)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-64.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1387,6 +2058,15 @@ TEST_F(ViewportTest, viewport64)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-64.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-64.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1399,6 +2079,7 @@ TEST_F(ViewportTest, viewport64)
 
 TEST_F(ViewportTest, viewport65)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-65.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1407,6 +2088,15 @@ TEST_F(ViewportTest, viewport65)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-65.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-65.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1419,6 +2109,7 @@ TEST_F(ViewportTest, viewport65)
 
 TEST_F(ViewportTest, viewport66)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-66.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1427,6 +2118,15 @@ TEST_F(ViewportTest, viewport66)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-66.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-66.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1439,6 +2139,7 @@ TEST_F(ViewportTest, viewport66)
 
 TEST_F(ViewportTest, viewport67)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-67.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1447,6 +2148,15 @@ TEST_F(ViewportTest, viewport67)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-67.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-67.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1459,6 +2169,7 @@ TEST_F(ViewportTest, viewport67)
 
 TEST_F(ViewportTest, viewport68)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-68.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1467,6 +2178,15 @@ TEST_F(ViewportTest, viewport68)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-68.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-68.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1479,6 +2199,7 @@ TEST_F(ViewportTest, viewport68)
 
 TEST_F(ViewportTest, viewport69)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-69.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1487,6 +2208,15 @@ TEST_F(ViewportTest, viewport69)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-69.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-69.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1499,6 +2229,7 @@ TEST_F(ViewportTest, viewport69)
 
 TEST_F(ViewportTest, viewport70)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-70.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1507,6 +2238,15 @@ TEST_F(ViewportTest, viewport70)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-70.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-70.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1519,6 +2259,7 @@ TEST_F(ViewportTest, viewport70)
 
 TEST_F(ViewportTest, viewport71)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-71.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1527,6 +2268,15 @@ TEST_F(ViewportTest, viewport71)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-71.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-71.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1539,6 +2289,7 @@ TEST_F(ViewportTest, viewport71)
 
 TEST_F(ViewportTest, viewport72)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-72.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1547,6 +2298,15 @@ TEST_F(ViewportTest, viewport72)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-72.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-72.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1559,6 +2319,7 @@ TEST_F(ViewportTest, viewport72)
 
 TEST_F(ViewportTest, viewport73)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-73.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1567,6 +2328,15 @@ TEST_F(ViewportTest, viewport73)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-73.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-73.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1579,6 +2349,7 @@ TEST_F(ViewportTest, viewport73)
 
 TEST_F(ViewportTest, viewport74)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-74.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1587,6 +2358,15 @@ TEST_F(ViewportTest, viewport74)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-74.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-74.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1599,6 +2379,7 @@ TEST_F(ViewportTest, viewport74)
 
 TEST_F(ViewportTest, viewport75)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-75.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1607,6 +2388,15 @@ TEST_F(ViewportTest, viewport75)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-75.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-75.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1619,6 +2409,7 @@ TEST_F(ViewportTest, viewport75)
 
 TEST_F(ViewportTest, viewport76)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-76.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1627,6 +2418,15 @@ TEST_F(ViewportTest, viewport76)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-76.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-76.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(32, constraints.layoutSize.width());
@@ -1639,6 +2439,7 @@ TEST_F(ViewportTest, viewport76)
 
 TEST_F(ViewportTest, viewport77)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-77.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1647,6 +2448,15 @@ TEST_F(ViewportTest, viewport77)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-77.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-77.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1280, constraints.layoutSize.width());
@@ -1659,6 +2469,7 @@ TEST_F(ViewportTest, viewport77)
 
 TEST_F(ViewportTest, viewport78)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-78.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1667,6 +2478,15 @@ TEST_F(ViewportTest, viewport78)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-78.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-78.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(100, constraints.layoutSize.width());
@@ -1679,6 +2499,7 @@ TEST_F(ViewportTest, viewport78)
 
 TEST_F(ViewportTest, viewport79)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-79.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1687,6 +2508,15 @@ TEST_F(ViewportTest, viewport79)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-79.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-79.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1699,6 +2529,7 @@ TEST_F(ViewportTest, viewport79)
 
 TEST_F(ViewportTest, viewport80)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-80.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1707,6 +2538,15 @@ TEST_F(ViewportTest, viewport80)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-80.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-80.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -1719,6 +2559,7 @@ TEST_F(ViewportTest, viewport80)
 
 TEST_F(ViewportTest, viewport81)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-81.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1727,6 +2568,15 @@ TEST_F(ViewportTest, viewport81)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-81.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-81.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(3000, constraints.layoutSize.width());
@@ -1739,6 +2589,7 @@ TEST_F(ViewportTest, viewport81)
 
 TEST_F(ViewportTest, viewport82)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-82.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1747,6 +2598,15 @@ TEST_F(ViewportTest, viewport82)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-82.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-82.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -1759,6 +2619,7 @@ TEST_F(ViewportTest, viewport82)
 
 TEST_F(ViewportTest, viewport83)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-83.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1767,6 +2628,15 @@ TEST_F(ViewportTest, viewport83)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-83.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-83.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1779,6 +2649,7 @@ TEST_F(ViewportTest, viewport83)
 
 TEST_F(ViewportTest, viewport84)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-84.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1787,6 +2658,15 @@ TEST_F(ViewportTest, viewport84)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-84.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-84.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1799,6 +2679,7 @@ TEST_F(ViewportTest, viewport84)
 
 TEST_F(ViewportTest, viewport85)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-85.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1807,6 +2688,15 @@ TEST_F(ViewportTest, viewport85)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-85.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-85.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(540, constraints.layoutSize.width());
@@ -1819,6 +2709,7 @@ TEST_F(ViewportTest, viewport85)
 
 TEST_F(ViewportTest, viewport86)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-86.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1827,6 +2718,15 @@ TEST_F(ViewportTest, viewport86)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-86.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-86.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_NEAR(457.14, constraints.layoutSize.width(), 0.01f);
@@ -1839,6 +2739,7 @@ TEST_F(ViewportTest, viewport86)
 
 TEST_F(ViewportTest, viewport87)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-87.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1847,6 +2748,15 @@ TEST_F(ViewportTest, viewport87)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-87.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-87.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -1859,6 +2769,7 @@ TEST_F(ViewportTest, viewport87)
 
 TEST_F(ViewportTest, viewport88)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-88.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1867,6 +2778,15 @@ TEST_F(ViewportTest, viewport88)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-88.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-88.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -1879,6 +2799,7 @@ TEST_F(ViewportTest, viewport88)
 
 TEST_F(ViewportTest, viewport90)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-90.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1887,6 +2808,15 @@ TEST_F(ViewportTest, viewport90)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-90.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-90.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(700, constraints.layoutSize.width());
@@ -1899,6 +2829,7 @@ TEST_F(ViewportTest, viewport90)
 
 TEST_F(ViewportTest, viewport100)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-100.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1907,6 +2838,15 @@ TEST_F(ViewportTest, viewport100)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-100.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-100.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -1919,6 +2859,7 @@ TEST_F(ViewportTest, viewport100)
 
 TEST_F(ViewportTest, viewport101)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-101.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1927,6 +2868,15 @@ TEST_F(ViewportTest, viewport101)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-101.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-101.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -1939,6 +2889,7 @@ TEST_F(ViewportTest, viewport101)
 
 TEST_F(ViewportTest, viewport102)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-102.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1947,6 +2898,15 @@ TEST_F(ViewportTest, viewport102)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-102.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-102.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -1959,6 +2919,7 @@ TEST_F(ViewportTest, viewport102)
 
 TEST_F(ViewportTest, viewport103)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-103.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1967,6 +2928,15 @@ TEST_F(ViewportTest, viewport103)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-103.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-103.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -1979,6 +2949,7 @@ TEST_F(ViewportTest, viewport103)
 
 TEST_F(ViewportTest, viewport104)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-104.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -1987,6 +2958,15 @@ TEST_F(ViewportTest, viewport104)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-104.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-104.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -1999,6 +2979,7 @@ TEST_F(ViewportTest, viewport104)
 
 TEST_F(ViewportTest, viewport105)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-105.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2007,6 +2988,15 @@ TEST_F(ViewportTest, viewport105)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-105.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-105.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2019,6 +3009,7 @@ TEST_F(ViewportTest, viewport105)
 
 TEST_F(ViewportTest, viewport106)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-106.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2027,6 +3018,15 @@ TEST_F(ViewportTest, viewport106)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-106.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-106.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2039,6 +3039,7 @@ TEST_F(ViewportTest, viewport106)
 
 TEST_F(ViewportTest, viewport107)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-107.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2047,6 +3048,15 @@ TEST_F(ViewportTest, viewport107)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-107.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-107.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2059,6 +3069,7 @@ TEST_F(ViewportTest, viewport107)
 
 TEST_F(ViewportTest, viewport108)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-108.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2067,6 +3078,15 @@ TEST_F(ViewportTest, viewport108)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-108.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-108.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2079,6 +3099,7 @@ TEST_F(ViewportTest, viewport108)
 
 TEST_F(ViewportTest, viewport109)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-109.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2087,6 +3108,15 @@ TEST_F(ViewportTest, viewport109)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-109.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-109.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2099,6 +3129,7 @@ TEST_F(ViewportTest, viewport109)
 
 TEST_F(ViewportTest, viewport110)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-110.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2107,6 +3138,15 @@ TEST_F(ViewportTest, viewport110)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-110.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-110.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2119,6 +3159,7 @@ TEST_F(ViewportTest, viewport110)
 
 TEST_F(ViewportTest, viewport111)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-111.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2127,6 +3168,15 @@ TEST_F(ViewportTest, viewport111)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-111.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-111.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2139,6 +3189,7 @@ TEST_F(ViewportTest, viewport111)
 
 TEST_F(ViewportTest, viewport112)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-112.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2147,6 +3198,15 @@ TEST_F(ViewportTest, viewport112)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-112.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-112.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -2159,6 +3219,7 @@ TEST_F(ViewportTest, viewport112)
 
 TEST_F(ViewportTest, viewport113)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-113.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2167,6 +3228,15 @@ TEST_F(ViewportTest, viewport113)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-113.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-113.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2179,6 +3249,7 @@ TEST_F(ViewportTest, viewport113)
 
 TEST_F(ViewportTest, viewport114)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-114.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2187,6 +3258,15 @@ TEST_F(ViewportTest, viewport114)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-114.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-114.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2199,6 +3279,7 @@ TEST_F(ViewportTest, viewport114)
 
 TEST_F(ViewportTest, viewport115)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-115.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2207,6 +3288,15 @@ TEST_F(ViewportTest, viewport115)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-115.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-115.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -2219,6 +3309,7 @@ TEST_F(ViewportTest, viewport115)
 
 TEST_F(ViewportTest, viewport116)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-116.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2227,6 +3318,15 @@ TEST_F(ViewportTest, viewport116)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-116.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-116.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(400, constraints.layoutSize.width());
@@ -2239,6 +3339,7 @@ TEST_F(ViewportTest, viewport116)
 
 TEST_F(ViewportTest, viewport117)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-117.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2247,6 +3348,15 @@ TEST_F(ViewportTest, viewport117)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-117.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-117.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2259,6 +3369,7 @@ TEST_F(ViewportTest, viewport117)
 
 TEST_F(ViewportTest, viewport118)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-118.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2267,6 +3378,15 @@ TEST_F(ViewportTest, viewport118)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-118.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-118.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2279,6 +3399,7 @@ TEST_F(ViewportTest, viewport118)
 
 TEST_F(ViewportTest, viewport119)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-119.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2287,6 +3408,15 @@ TEST_F(ViewportTest, viewport119)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-119.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-119.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2299,6 +3429,7 @@ TEST_F(ViewportTest, viewport119)
 
 TEST_F(ViewportTest, viewport120)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-120.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2307,6 +3438,15 @@ TEST_F(ViewportTest, viewport120)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-120.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-120.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2319,6 +3459,7 @@ TEST_F(ViewportTest, viewport120)
 
 TEST_F(ViewportTest, viewport121)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-121.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2327,6 +3468,15 @@ TEST_F(ViewportTest, viewport121)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-121.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-121.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -2339,6 +3489,7 @@ TEST_F(ViewportTest, viewport121)
 
 TEST_F(ViewportTest, viewport122)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-122.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2347,6 +3498,15 @@ TEST_F(ViewportTest, viewport122)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-122.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-122.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -2359,6 +3519,7 @@ TEST_F(ViewportTest, viewport122)
 
 TEST_F(ViewportTest, viewport123)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-123.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2367,6 +3528,15 @@ TEST_F(ViewportTest, viewport123)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-123.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-123.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2379,6 +3549,7 @@ TEST_F(ViewportTest, viewport123)
 
 TEST_F(ViewportTest, viewport124)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-124.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2387,6 +3558,15 @@ TEST_F(ViewportTest, viewport124)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-124.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-124.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2399,6 +3579,7 @@ TEST_F(ViewportTest, viewport124)
 
 TEST_F(ViewportTest, viewport125)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-125.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2407,6 +3588,15 @@ TEST_F(ViewportTest, viewport125)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-125.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-125.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -2419,6 +3609,7 @@ TEST_F(ViewportTest, viewport125)
 
 TEST_F(ViewportTest, viewport126)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-126.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2427,6 +3618,15 @@ TEST_F(ViewportTest, viewport126)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-126.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-126.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -2439,6 +3639,7 @@ TEST_F(ViewportTest, viewport126)
 
 TEST_F(ViewportTest, viewport127)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-127.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2447,6 +3648,15 @@ TEST_F(ViewportTest, viewport127)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-127.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-127.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(64, constraints.layoutSize.width());
@@ -2459,6 +3669,7 @@ TEST_F(ViewportTest, viewport127)
 
 TEST_F(ViewportTest, viewport129)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-129.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2467,6 +3678,15 @@ TEST_F(ViewportTest, viewport129)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-129.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-129.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(123, constraints.layoutSize.width());
@@ -2479,6 +3699,7 @@ TEST_F(ViewportTest, viewport129)
 
 TEST_F(ViewportTest, viewport130)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-130.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2487,6 +3708,15 @@ TEST_F(ViewportTest, viewport130)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-130.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-130.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2499,6 +3729,7 @@ TEST_F(ViewportTest, viewport130)
 
 TEST_F(ViewportTest, viewport131)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-131.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2507,6 +3738,15 @@ TEST_F(ViewportTest, viewport131)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-131.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-131.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2519,6 +3759,7 @@ TEST_F(ViewportTest, viewport131)
 
 TEST_F(ViewportTest, viewport132)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-132.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2527,6 +3768,15 @@ TEST_F(ViewportTest, viewport132)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-132.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-132.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2539,6 +3789,7 @@ TEST_F(ViewportTest, viewport132)
 
 TEST_F(ViewportTest, viewport133)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-133.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2547,6 +3798,15 @@ TEST_F(ViewportTest, viewport133)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-133.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-133.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2559,6 +3819,7 @@ TEST_F(ViewportTest, viewport133)
 
 TEST_F(ViewportTest, viewport134)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-134.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2567,6 +3828,15 @@ TEST_F(ViewportTest, viewport134)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-134.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-134.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(160, constraints.layoutSize.width());
@@ -2579,6 +3849,7 @@ TEST_F(ViewportTest, viewport134)
 
 TEST_F(ViewportTest, viewport135)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-135.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2587,6 +3858,15 @@ TEST_F(ViewportTest, viewport135)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-135.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-135.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2599,6 +3879,7 @@ TEST_F(ViewportTest, viewport135)
 
 TEST_F(ViewportTest, viewport136)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-136.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2607,6 +3888,15 @@ TEST_F(ViewportTest, viewport136)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-136.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-136.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2619,6 +3909,7 @@ TEST_F(ViewportTest, viewport136)
 
 TEST_F(ViewportTest, viewport137)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-137.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2627,6 +3918,15 @@ TEST_F(ViewportTest, viewport137)
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-137.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-137.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(980, constraints.layoutSize.width());
@@ -2642,11 +3942,17 @@ TEST_F(ViewportTest, viewport138)
     registerMockedHttpURLLoad("viewport/viewport-138.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-138.html",
         true, nullptr, nullptr, nullptr,
         setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-138.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_NEAR(123.0f, constraints.layoutSize.width(), 0.01);
@@ -2659,6 +3965,7 @@ TEST_F(ViewportTest, viewport138)
 
 TEST_F(ViewportTest, viewportLegacyHandheldFriendly)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-handheldfriendly.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2667,6 +3974,15 @@ TEST_F(ViewportTest, viewportLegacyHandheldFriendly)
         nullptr, nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-handheldfriendly.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-handheldfriendly.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2687,6 +4003,7 @@ static void setQuirkViewportSettings(WebSettings* settings)
 
 TEST_F(ViewportTest, viewportLegacyMergeQuirk1)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-merge-quirk-1.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2695,6 +4012,15 @@ TEST_F(ViewportTest, viewportLegacyMergeQuirk1)
         nullptr, nullptr, setQuirkViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-merge-quirk-1.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-merge-quirk-1.html", true, 0, 0, setQuirkViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -2707,6 +4033,7 @@ TEST_F(ViewportTest, viewportLegacyMergeQuirk1)
 
 TEST_F(ViewportTest, viewportLegacyMergeQuirk2)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-merge-quirk-2.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2715,6 +4042,15 @@ TEST_F(ViewportTest, viewportLegacyMergeQuirk2)
         nullptr, nullptr, setQuirkViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-merge-quirk-2.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-merge-quirk-2.html", true, 0, 0, setQuirkViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     // This quirk allows content attributes of meta viewport tags to be merged.
     page->settings().setViewportMetaMergeContentQuirk(true);
@@ -2730,6 +4066,7 @@ TEST_F(ViewportTest, viewportLegacyMergeQuirk2)
 
 TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWithoutContent)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-mobileoptimized.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2738,6 +4075,15 @@ TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWithoutContent)
         nullptr, nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-mobileoptimized.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-mobileoptimized.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2751,6 +4097,7 @@ TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWithoutContent)
 
 TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWith0)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-mobileoptimized-2.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2759,6 +4106,15 @@ TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWith0)
         nullptr, nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-mobileoptimized-2.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-mobileoptimized-2.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2772,6 +4128,7 @@ TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWith0)
 
 TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWith400)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-mobileoptimized-2.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2780,6 +4137,15 @@ TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWith400)
         nullptr, nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-mobileoptimized-2.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-mobileoptimized-2.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2793,6 +4159,7 @@ TEST_F(ViewportTest, viewportLegacyMobileOptimizedMetaWith400)
 
 TEST_F(ViewportTest, viewportLegacyOrdering2)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-2.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2801,6 +4168,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering2)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-2.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-2.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2814,6 +4190,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering2)
 
 TEST_F(ViewportTest, viewportLegacyOrdering3)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-3.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2822,6 +4199,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering3)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-3.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-3.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2835,6 +4221,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering3)
 
 TEST_F(ViewportTest, viewportLegacyOrdering4)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-4.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2843,6 +4230,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering4)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-4.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-4.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2856,6 +4252,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering4)
 
 TEST_F(ViewportTest, viewportLegacyOrdering5)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-5.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2864,6 +4261,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering5)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-5.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-5.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2877,6 +4283,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering5)
 
 TEST_F(ViewportTest, viewportLegacyOrdering6)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-6.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2885,6 +4292,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering6)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-6.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-6.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2898,6 +4314,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering6)
 
 TEST_F(ViewportTest, viewportLegacyOrdering7)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-7.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2906,6 +4323,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering7)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-7.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-7.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2919,6 +4345,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering7)
 
 TEST_F(ViewportTest, viewportLegacyOrdering8)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-8.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2927,6 +4354,15 @@ TEST_F(ViewportTest, viewportLegacyOrdering8)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-8.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-8.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
 
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
@@ -2940,6 +4376,7 @@ TEST_F(ViewportTest, viewportLegacyOrdering8)
 
 TEST_F(ViewportTest, viewportLegacyEmptyAtViewportDoesntOverrideViewportMeta)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-10.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2948,6 +4385,15 @@ TEST_F(ViewportTest, viewportLegacyEmptyAtViewportDoesntOverrideViewportMeta)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-ordering-10.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-ordering-10.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 800, 600);
 
     EXPECT_EQ(5000, constraints.layoutSize.width());
@@ -2955,6 +4401,7 @@ TEST_F(ViewportTest, viewportLegacyEmptyAtViewportDoesntOverrideViewportMeta)
 
 TEST_F(ViewportTest, viewportLegacyDefaultValueChangedByXHTMLMP)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-xhtmlmp.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -2963,6 +4410,15 @@ TEST_F(ViewportTest, viewportLegacyDefaultValueChangedByXHTMLMP)
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-xhtmlmp.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-xhtmlmp.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -2973,6 +4429,7 @@ TEST_F(ViewportTest, viewportLegacyDefaultValueChangedByXHTMLMP)
     EXPECT_TRUE(page->viewportDescription().userZoom);
 }
 
+<<<<<<< HEAD
 TEST_F(ViewportTest,
     viewportLegacyDefaultValueChangedByXHTMLMPAndOverriddenByMeta)
 {
@@ -2985,6 +4442,17 @@ TEST_F(ViewportTest,
         true, nullptr, nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+TEST_F(ViewportTest, viewportLegacyDefaultValueChangedByXHTMLMPAndOverriddenByMeta)
+{
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-xhtmlmp-misplaced-doctype.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-xhtmlmp-misplaced-doctype.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -2997,6 +4465,7 @@ TEST_F(ViewportTest,
 
 TEST_F(ViewportTest, viewportLegacyXHTMLMPOrdering)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad("viewport/viewport-legacy-xhtmlmp-ordering.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
@@ -3005,6 +4474,15 @@ TEST_F(ViewportTest, viewportLegacyXHTMLMPOrdering)
         nullptr, nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-legacy-xhtmlmp-ordering.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-xhtmlmp-ordering.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(640, constraints.layoutSize.width());
@@ -3020,11 +4498,17 @@ TEST_F(ViewportTest, viewportLegacyXHTMLMPRemoveAndAdd)
     registerMockedHttpURLLoad("viewport/viewport-legacy-xhtmlmp.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-legacy-xhtmlmp.html", true, nullptr,
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-legacy-xhtmlmp.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(320, constraints.layoutSize.width());
@@ -3034,7 +4518,11 @@ TEST_F(ViewportTest, viewportLegacyXHTMLMPRemoveAndAdd)
     EXPECT_NEAR(5.0f, constraints.maximumScale, 0.01f);
     EXPECT_TRUE(page->viewportDescription().userZoom);
 
+<<<<<<< HEAD
     executeScript(webViewHelper.webView()->mainFrame(),
+=======
+    executeScript(webViewHelper.webViewImpl()->mainFrame(),
+>>>>>>> miniblink49
         "originalDoctype = document.doctype;"
         "document.removeChild(originalDoctype);");
 
@@ -3047,7 +4535,11 @@ TEST_F(ViewportTest, viewportLegacyXHTMLMPRemoveAndAdd)
     EXPECT_NEAR(5.0f, constraints.maximumScale, 0.01f);
     EXPECT_TRUE(page->viewportDescription().userZoom);
 
+<<<<<<< HEAD
     executeScript(webViewHelper.webView()->mainFrame(),
+=======
+    executeScript(webViewHelper.webViewImpl()->mainFrame(),
+>>>>>>> miniblink49
         "document.insertBefore(originalDoctype, document.firstChild);");
 
     constraints = runViewportTest(page, 320, 352);
@@ -3062,6 +4554,7 @@ TEST_F(ViewportTest, viewportLegacyXHTMLMPRemoveAndAdd)
 
 TEST_F(ViewportTest, viewportLimitsAdjustedForNoUserScale)
 {
+<<<<<<< HEAD
     registerMockedHttpURLLoad(
         "viewport/viewport-limits-adjusted-for-no-user-scale.html");
 
@@ -3096,10 +4589,35 @@ TEST_F(ViewportTest, viewportLimitsAdjustedForUserScale)
     EXPECT_TRUE(page->viewportDescription().userZoom);
     EXPECT_NEAR(1.0f, constraints.initialScale, 0.01f);
     EXPECT_NEAR(1.0f, constraints.minimumScale, 0.01f);
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-limits-adjusted-for-no-user-scale.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-limits-adjusted-for-no-user-scale.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+
+    EXPECT_FALSE(page->viewportDescription().userZoom);
+}
+
+TEST_F(ViewportTest, viewportLimitsAdjustedForNoUserScaleControl)
+{
+    UseMockScrollbarSettings mockScrollbarSettings;
+    registerMockedHttpURLLoad("viewport/viewport-limits-adjusted-for-no-user-scale-control.html");
+
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-limits-adjusted-for-no-user-scale-control.html", true, 0, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+
+    EXPECT_TRUE(page->viewportDescription().userZoom);
+>>>>>>> miniblink49
 }
 
 TEST_F(ViewportTest, viewportTriggersGpuRasterization)
 {
+<<<<<<< HEAD
     FrameTestHelpers::WebViewHelper webViewHelper;
 
     registerMockedHttpURLLoad(
@@ -3184,11 +4702,54 @@ public:
         const WebString& sourceName,
         unsigned sourceLine,
         const WebString& stackTrace)
+=======
+    UseMockScrollbarSettings mockScrollbarSettings;
+
+    registerMockedHttpURLLoad("viewport/viewport-gpu-rasterization.html");
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-gpu-rasterization.html", true, 0, 0, setViewportSettings);
+    webViewHelper.webView()->resize(WebSize(640, 480));
+    EXPECT_TRUE(webViewHelper.webViewImpl()->matchesHeuristicsForGpuRasterizationForTesting());
+
+    registerMockedHttpURLLoad("viewport/viewport-gpu-rasterization-expanded-heuristics.html");
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-gpu-rasterization-expanded-heuristics.html", true, 0, 0, setViewportSettings);
+    webViewHelper.webView()->resize(WebSize(640, 480));
+    EXPECT_TRUE(webViewHelper.webViewImpl()->matchesHeuristicsForGpuRasterizationForTesting());
+
+    registerMockedHttpURLLoad("viewport/viewport-inferred-values-do-not-trigger-gpu-rasterization.html");
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-inferred-values-do-not-trigger-gpu-rasterization.html", true, 0, 0, setViewportSettings);
+    webViewHelper.webView()->resize(WebSize(640, 480));
+    EXPECT_FALSE(webViewHelper.webViewImpl()->matchesHeuristicsForGpuRasterizationForTesting());
+
+    registerMockedHttpURLLoad("viewport/viewport-1.html");
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-1.html", true, 0, 0, setViewportSettings);
+    webViewHelper.webView()->resize(WebSize(640, 480));
+    EXPECT_FALSE(webViewHelper.webViewImpl()->matchesHeuristicsForGpuRasterizationForTesting());
+
+    registerMockedHttpURLLoad("viewport/viewport-15.html");
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-15.html", true, 0, 0, setViewportSettings);
+    webViewHelper.webView()->resize(WebSize(640, 480));
+    EXPECT_FALSE(webViewHelper.webViewImpl()->matchesHeuristicsForGpuRasterizationForTesting());
+
+    registerMockedHttpURLLoad("viewport/viewport-130.html");
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-130.html", true, 0, 0, setViewportSettings);
+    webViewHelper.webView()->resize(WebSize(640, 480));
+    EXPECT_FALSE(webViewHelper.webViewImpl()->matchesHeuristicsForGpuRasterizationForTesting());
+}
+
+class ConsoleMessageWebFrameClient : public FrameTestHelpers::TestWebFrameClient {
+public:
+    virtual void didAddMessageToConsole(const WebConsoleMessage& msg, const WebString& sourceName, unsigned sourceLine, const WebString& stackTrace)
+>>>>>>> miniblink49
     {
         messages.push_back(msg);
     }
 
+<<<<<<< HEAD
     Vector<WebConsoleMessage> messages;
+=======
+    std::vector<WebConsoleMessage> messages;
+>>>>>>> miniblink49
 };
 
 TEST_F(ViewportTest, viewportWarnings1)
@@ -3198,6 +4759,7 @@ TEST_F(ViewportTest, viewportWarnings1)
     registerMockedHttpURLLoad("viewport/viewport-warnings-1.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-1.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
@@ -3206,6 +4768,14 @@ TEST_F(ViewportTest, viewportWarnings1)
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_TRUE(webFrameClient.messages.isEmpty());
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-1.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+    PageScaleConstraints constraints = runViewportTest(page, 320, 352);
+
+    EXPECT_TRUE(webFrameClient.messages.empty());
+>>>>>>> miniblink49
 
     EXPECT_EQ(320, constraints.layoutSize.width());
     EXPECT_EQ(352, constraints.layoutSize.height());
@@ -3222,17 +4792,27 @@ TEST_F(ViewportTest, viewportWarnings2)
     registerMockedHttpURLLoad("viewport/viewport-warnings-2.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-2.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-2.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1U, webFrameClient.messages.size());
     EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[0].level);
+<<<<<<< HEAD
     EXPECT_STREQ("The key \"wwidth\" is not recognized and ignored.",
         webFrameClient.messages[0].text.utf8().c_str());
+=======
+    EXPECT_STREQ("The key \"wwidth\" is not recognized and ignored.", webFrameClient.messages[0].text.utf8().c_str());
+>>>>>>> miniblink49
 
     EXPECT_EQ(980, constraints.layoutSize.width());
     EXPECT_EQ(1078, constraints.layoutSize.height());
@@ -3249,18 +4829,28 @@ TEST_F(ViewportTest, viewportWarnings3)
     registerMockedHttpURLLoad("viewport/viewport-warnings-3.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-3.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-3.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1U, webFrameClient.messages.size());
     EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[0].level);
+<<<<<<< HEAD
     EXPECT_STREQ(
         "The value \"unrecognized-width\" for key \"width\" is invalid, and has "
         "been ignored.",
+=======
+    EXPECT_STREQ("The value \"unrecognized-width\" for key \"width\" is invalid, and has been ignored.",
+>>>>>>> miniblink49
         webFrameClient.messages[0].text.utf8().c_str());
 
     EXPECT_NEAR(64.0f, constraints.layoutSize.width(), 0.01);
@@ -3278,18 +4868,28 @@ TEST_F(ViewportTest, viewportWarnings4)
     registerMockedHttpURLLoad("viewport/viewport-warnings-4.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-4.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-4.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1U, webFrameClient.messages.size());
     EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[0].level);
+<<<<<<< HEAD
     EXPECT_STREQ(
         "The value \"123x456\" for key \"width\" was truncated to its numeric "
         "prefix.",
+=======
+    EXPECT_STREQ("The value \"123x456\" for key \"width\" was truncated to its numeric prefix.",
+>>>>>>> miniblink49
         webFrameClient.messages[0].text.utf8().c_str());
 
     EXPECT_NEAR(123.0f, constraints.layoutSize.width(), 0.01);
@@ -3307,6 +4907,7 @@ TEST_F(ViewportTest, viewportWarnings5)
     registerMockedHttpURLLoad("viewport/viewport-warnings-5.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-5.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
@@ -3322,6 +4923,35 @@ TEST_F(ViewportTest, viewportWarnings5)
         "pair separator. Please use ',' instead.",
         webFrameClient.messages[0].text.utf8().c_str());
 
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-5.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+    PageScaleConstraints constraints = runViewportTest(page, 320, 352);
+
+    EXPECT_EQ(5U, webFrameClient.messages.size());
+
+    EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[0].level);
+    EXPECT_STREQ("The value \"device-width;\" for key \"width\" is invalid, and has been ignored.",
+        webFrameClient.messages[0].text.utf8().c_str());
+
+    EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[1].level);
+    EXPECT_STREQ("The value \"1.0;\" for key \"initial-scale\" was truncated to its numeric prefix.",
+        webFrameClient.messages[1].text.utf8().c_str());
+
+    EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[2].level);
+    EXPECT_STREQ("The value \"1.0;\" for key \"maximum-scale\" was truncated to its numeric prefix.",
+        webFrameClient.messages[2].text.utf8().c_str());
+
+    EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[3].level);
+    EXPECT_STREQ("The value \"0;\" for key \"user-scalable\" was truncated to its numeric prefix.",
+        webFrameClient.messages[3].text.utf8().c_str());
+
+    EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[4].level);
+    EXPECT_STREQ("Error parsing a meta element's content: ';' is not a valid key-value pair separator. Please use ',' instead.",
+        webFrameClient.messages[4].text.utf8().c_str());
+
+>>>>>>> miniblink49
     EXPECT_NEAR(320.0f, constraints.layoutSize.width(), 0.01);
     EXPECT_NEAR(352.0f, constraints.layoutSize.height(), 0.01);
     EXPECT_NEAR(1.0f, constraints.initialScale, 0.01f);
@@ -3337,17 +4967,27 @@ TEST_F(ViewportTest, viewportWarnings6)
     registerMockedHttpURLLoad("viewport/viewport-warnings-6.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-6.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-6.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     PageScaleConstraints constraints = runViewportTest(page, 320, 352);
 
     EXPECT_EQ(1U, webFrameClient.messages.size());
     EXPECT_EQ(WebConsoleMessage::LevelWarning, webFrameClient.messages[0].level);
+<<<<<<< HEAD
     EXPECT_STREQ(
         "The value \"\" for key \"width\" is invalid, and has been ignored.",
+=======
+    EXPECT_STREQ("The value \"\" for key \"width\" is invalid, and has been ignored.",
+>>>>>>> miniblink49
         webFrameClient.messages[0].text.utf8().c_str());
 
     EXPECT_NEAR(64.0f, constraints.layoutSize.width(), 0.01);
@@ -3365,11 +5005,17 @@ TEST_F(ViewportTest, viewportWarnings7)
     registerMockedHttpURLLoad("viewport/viewport-warnings-7.html");
 
     FrameTestHelpers::WebViewHelper webViewHelper;
+<<<<<<< HEAD
     webViewHelper.initializeAndLoad(
         m_baseURL + "viewport/viewport-warnings-7.html", true, &webFrameClient,
         nullptr, nullptr, setViewportSettings);
 
     Page* page = webViewHelper.webView()->page();
+=======
+    webViewHelper.initializeAndLoad(m_baseURL + "viewport/viewport-warnings-7.html", true, &webFrameClient, 0, setViewportSettings);
+
+    Page* page = webViewHelper.webViewImpl()->page();
+>>>>>>> miniblink49
     runViewportTest(page, 320, 352);
 
     EXPECT_EQ(0U, webFrameClient.messages.size());

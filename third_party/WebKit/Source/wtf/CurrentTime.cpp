@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/CurrentTime.h"
 
 #include "base/time/time.h"
@@ -41,10 +42,40 @@ double currentTime()
     if (mockTimeFunctionForTesting)
         return mockTimeFunctionForTesting();
     return base::Time::Now().ToDoubleT();
+=======
+#include "config.h"
+#include "wtf/CurrentTime.h"
+
+namespace WTF {
+
+static TimeFunction currentTimeFunction;
+static TimeFunction monotonicallyIncreasingTimeFunction;
+static TimeFunction systemTraceTimeFunction;
+
+void setCurrentTimeFunction(TimeFunction func)
+{
+    currentTimeFunction = func;
+}
+
+void setMonotonicallyIncreasingTimeFunction(TimeFunction func)
+{
+    monotonicallyIncreasingTimeFunction = func;
+}
+
+void setSystemTraceTimeFunction(TimeFunction func)
+{
+    systemTraceTimeFunction = func;
+}
+
+double currentTime()
+{
+    return (*currentTimeFunction)();
+>>>>>>> miniblink49
 }
 
 double monotonicallyIncreasingTime()
 {
+<<<<<<< HEAD
     if (mockTimeFunctionForTesting)
         return mockTimeFunctionForTesting();
     return base::TimeTicks::Now().ToInternalValue() / static_cast<double>(base::Time::kMicrosecondsPerSecond);
@@ -60,6 +91,14 @@ TimeFunction setTimeFunctionsForTesting(TimeFunction newFunction)
 TimeFunction getTimeFunctionForTesting()
 {
     return mockTimeFunctionForTesting;
+=======
+    return (*monotonicallyIncreasingTimeFunction)();
+}
+
+double systemTraceTime()
+{
+    return (*systemTraceTimeFunction)();
+>>>>>>> miniblink49
 }
 
 } // namespace WTF

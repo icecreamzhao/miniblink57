@@ -7,8 +7,12 @@
 
 #include "SkVertState.h"
 
+<<<<<<< HEAD
 bool VertState::Triangles(VertState* state)
 {
+=======
+bool VertState::Triangles(VertState* state) {
+>>>>>>> miniblink49
     int index = state->fCurrIndex;
     if (index + 3 > state->fCount) {
         return false;
@@ -20,8 +24,12 @@ bool VertState::Triangles(VertState* state)
     return true;
 }
 
+<<<<<<< HEAD
 bool VertState::TrianglesX(VertState* state)
 {
+=======
+bool VertState::TrianglesX(VertState* state) {
+>>>>>>> miniblink49
     const uint16_t* indices = state->fIndices;
     int index = state->fCurrIndex;
     if (index + 3 > state->fCount) {
@@ -34,8 +42,12 @@ bool VertState::TrianglesX(VertState* state)
     return true;
 }
 
+<<<<<<< HEAD
 bool VertState::TriangleStrip(VertState* state)
 {
+=======
+bool VertState::TriangleStrip(VertState* state) {
+>>>>>>> miniblink49
     int index = state->fCurrIndex;
     if (index + 3 > state->fCount) {
         return false;
@@ -52,8 +64,12 @@ bool VertState::TriangleStrip(VertState* state)
     return true;
 }
 
+<<<<<<< HEAD
 bool VertState::TriangleStripX(VertState* state)
 {
+=======
+bool VertState::TriangleStripX(VertState* state) {
+>>>>>>> miniblink49
     const uint16_t* indices = state->fIndices;
     int index = state->fCurrIndex;
     if (index + 3 > state->fCount) {
@@ -71,8 +87,12 @@ bool VertState::TriangleStripX(VertState* state)
     return true;
 }
 
+<<<<<<< HEAD
 bool VertState::TriangleFan(VertState* state)
 {
+=======
+bool VertState::TriangleFan(VertState* state) {
+>>>>>>> miniblink49
     int index = state->fCurrIndex;
     if (index + 3 > state->fCount) {
         return false;
@@ -84,8 +104,12 @@ bool VertState::TriangleFan(VertState* state)
     return true;
 }
 
+<<<<<<< HEAD
 bool VertState::TriangleFanX(VertState* state)
 {
+=======
+bool VertState::TriangleFanX(VertState* state) {
+>>>>>>> miniblink49
     const uint16_t* indices = state->fIndices;
     int index = state->fCurrIndex;
     if (index + 3 > state->fCount) {
@@ -98,6 +122,7 @@ bool VertState::TriangleFanX(VertState* state)
     return true;
 }
 
+<<<<<<< HEAD
 VertState::Proc VertState::chooseProc(SkCanvas::VertexMode mode)
 {
     switch (mode) {
@@ -109,5 +134,17 @@ VertState::Proc VertState::chooseProc(SkCanvas::VertexMode mode)
         return fIndices ? TriangleFanX : TriangleFan;
     default:
         return nullptr;
+=======
+VertState::Proc VertState::chooseProc(SkCanvas::VertexMode mode) {
+    switch (mode) {
+        case SkCanvas::kTriangles_VertexMode:
+            return fIndices ? TrianglesX : Triangles;
+        case SkCanvas::kTriangleStrip_VertexMode:
+            return fIndices ? TriangleStripX : TriangleStrip;
+        case SkCanvas::kTriangleFan_VertexMode:
+            return fIndices ? TriangleFanX : TriangleFan;
+        default:
+            return NULL;
+>>>>>>> miniblink49
     }
 }

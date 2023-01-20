@@ -9,12 +9,19 @@
 #include "SkSurface.h"
 #include "gm.h"
 
+<<<<<<< HEAD
 static void make_transparency(SkCanvas* canvas, SkScalar width, SkScalar height)
 {
+=======
+static void make_transparency(SkCanvas* canvas,
+                              SkScalar width,
+                              SkScalar height) {
+>>>>>>> miniblink49
     SkPoint pts[2];
     pts[0] = SkPoint::Make(0, 0);
     pts[1] = SkPoint::Make(width, 0);
     const SkColor kColors[] = {
+<<<<<<< HEAD
         SK_ColorBLACK,
         SK_ColorGRAY,
         SK_ColorWHITE,
@@ -24,27 +31,52 @@ static void make_transparency(SkCanvas* canvas, SkScalar width, SkScalar height)
         SK_ColorCYAN,
         SK_ColorBLUE,
         SK_ColorMAGENTA,
+=======
+            SK_ColorBLACK,
+            SK_ColorGRAY,
+            SK_ColorWHITE,
+            SK_ColorRED,
+            SK_ColorYELLOW,
+            SK_ColorGREEN,
+            SK_ColorCYAN,
+            SK_ColorBLUE,
+            SK_ColorMAGENTA,
+>>>>>>> miniblink49
     };
     const SkScalar kRowHeight = height / SK_ARRAY_COUNT(kColors);
     for (size_t i = 0; i < SK_ARRAY_COUNT(kColors); ++i) {
         SkColor shaderColors[2];
         shaderColors[0] = SK_AlphaTRANSPARENT;
         shaderColors[1] = kColors[i];
+<<<<<<< HEAD
         SkPaint p;
         p.setShader(SkGradientShader::MakeLinear(pts, shaderColors, nullptr, 2,
             SkShader::kClamp_TileMode));
         canvas->drawRect(SkRect::MakeXYWH(0, i * kRowHeight, width, kRowHeight), p);
+=======
+        SkAutoTUnref<SkShader> shader(SkGradientShader::CreateLinear(
+                pts, shaderColors, NULL, 2, SkShader::kClamp_TileMode));
+        SkRect r = SkRect::MakeXYWH(0, i * kRowHeight, width, kRowHeight);
+        SkPaint p;
+        p.setShader(shader);
+        canvas->drawRect(r, p);
+>>>>>>> miniblink49
     }
 }
 
 // http://crrev.com/834303005
+<<<<<<< HEAD
 static sk_sp<SkShader> create_checkerboard_shader(SkColor c1, SkColor c2, int size)
 {
+=======
+static SkShader* create_checkerboard_shader(SkColor c1, SkColor c2, int size) {
+>>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(2 * size, 2 * size);
     bm.eraseColor(c1);
     bm.eraseArea(SkIRect::MakeLTRB(0, 0, size, size), c2);
     bm.eraseArea(SkIRect::MakeLTRB(size, size, 2 * size, 2 * size), c2);
+<<<<<<< HEAD
     return SkShader::MakeBitmapShader(bm, SkShader::kRepeat_TileMode, SkShader::kRepeat_TileMode);
 }
 
@@ -53,6 +85,16 @@ static void checkerboard(SkCanvas* canvas, SkColor c1, SkColor c2, int size)
 {
     SkPaint paint;
     paint.setShader(create_checkerboard_shader(c1, c2, size));
+=======
+    return SkShader::CreateBitmapShader(bm, SkShader::kRepeat_TileMode,
+                                        SkShader::kRepeat_TileMode);
+}
+
+// http://crrev.com/834303005
+static void checkerboard(SkCanvas* canvas, SkColor c1, SkColor c2, int size) {
+    SkPaint paint;
+    paint.setShader(create_checkerboard_shader(c1, c2, size))->unref();
+>>>>>>> miniblink49
     canvas->drawPaint(paint);
 }
 
@@ -60,6 +102,7 @@ static void checkerboard(SkCanvas* canvas, SkColor c1, SkColor c2, int size)
  *  This GM verifies that a transparent bitmap drawn over a
  *  checkerboard pattern looks correct.
  */
+<<<<<<< HEAD
 DEF_SIMPLE_GM(transparency_check, canvas, 1792, 1080)
 {
     checkerboard(canvas, sk_tool_utils::color_to_565(0xFF999999),
@@ -70,5 +113,15 @@ DEF_SIMPLE_GM(transparency_check, canvas, 1792, 1080)
         make_transparency(surface->getCanvas(), 256.0f, 9.0f);
         canvas->scale(7.0f, 120.0f);
         surface->draw(canvas, 0, 0, nullptr);
+=======
+DEF_SIMPLE_GM(transparency_check, canvas, 1792, 1080) {
+    checkerboard(canvas, 0xFF999999, 0xFF666666, 8);
+    {
+        SkAutoCanvasRestore autoCanvasRestore(canvas, true);
+        SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(256, 9));
+        make_transparency(surface->getCanvas(), 256.0f, 9.0f);
+        canvas->scale(7.0f, 120.0f);
+        surface->draw(canvas, 0, 0, NULL);
+>>>>>>> miniblink49
     }
 }

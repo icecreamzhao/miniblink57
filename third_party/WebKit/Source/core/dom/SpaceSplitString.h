@@ -21,7 +21,6 @@
 #ifndef SpaceSplitString_h
 #define SpaceSplitString_h
 
-#include "wtf/Allocator.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/AtomicString.h"
@@ -29,39 +28,24 @@
 namespace blink {
 
 class SpaceSplitString {
-    USING_FAST_MALLOC(SpaceSplitString);
-
 public:
-    enum CaseFolding { ShouldNotFoldCase,
-        ShouldFoldCase };
+    enum CaseFolding { ShouldNotFoldCase, ShouldFoldCase };
     SpaceSplitString() { }
-    SpaceSplitString(const AtomicString& string, CaseFolding caseFolding)
-    {
-        set(string, caseFolding);
-    }
+    SpaceSplitString(const AtomicString& string, CaseFolding caseFolding) { set(string, caseFolding); }
 
-    bool operator!=(const SpaceSplitString& other) const
-    {
-        return m_data != other.m_data;
-    }
+    bool operator!=(const SpaceSplitString& other) const { return m_data != other.m_data; }
 
     void set(const AtomicString&, CaseFolding);
     void clear() { m_data.clear(); }
 
-    bool contains(const AtomicString& string) const
-    {
-        return m_data && m_data->contains(string);
-    }
-    bool containsAll(const SpaceSplitString& names) const
-    {
-        return !names.m_data || (m_data && m_data->containsAll(*names.m_data));
-    }
+    bool contains(const AtomicString& string) const { return m_data && m_data->contains(string); }
+    bool containsAll(const SpaceSplitString& names) const { return !names.m_data || (m_data && m_data->containsAll(*names.m_data)); }
     void add(const AtomicString&);
     bool remove(const AtomicString&);
 
     size_t size() const { return m_data ? m_data->size() : 0; }
     bool isNull() const { return !m_data; }
-    const AtomicString& operator[](size_t i) const { return (*m_data)[i]; }
+    const AtomicString& operator[](size_t i) const { ASSERT_WITH_SECURITY_IMPLICATION(i < size()); return (*m_data)[i]; }
 
 private:
     class Data : public RefCounted<Data> {
@@ -73,8 +57,9 @@ private:
 
         bool contains(const AtomicString& string)
         {
-            for (const auto& item : m_vector) {
-                if (item == string)
+            size_t size = m_vector.size();
+            for (size_t i = 0; i < size; ++i) {
+                if (m_vector[i] == string)
                     return true;
             }
             return false;
@@ -87,7 +72,7 @@ private:
 
         bool isUnique() const { return m_keyString.isNull(); }
         size_t size() const { return m_vector.size(); }
-        const AtomicString& operator[](size_t i) { return m_vector[i]; }
+        const AtomicString& operator[](size_t i) { ASSERT_WITH_SECURITY_IMPLICATION(i < size()); return m_vector[i]; }
 
     private:
         explicit Data(const AtomicString&);

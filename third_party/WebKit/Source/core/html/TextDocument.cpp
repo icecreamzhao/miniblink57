@@ -22,6 +22,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/TextDocument.h"
 
 #include "core/html/parser/TextDocumentParser.h"
@@ -33,14 +34,11 @@ TextDocument::TextDocument(const DocumentInit& initializer)
 {
     setCompatibilityMode(QuirksMode);
     lockCompatibilityMode();
-    UseCounter::count(*this, UseCounter::TextDocument);
-    if (!isInMainFrame())
-        UseCounter::count(*this, UseCounter::TextDocumentInFrame);
 }
 
-DocumentParser* TextDocument::createParser()
+PassRefPtrWillBeRawPtr<DocumentParser> TextDocument::createParser()
 {
-    return TextDocumentParser::create(*this, getParserSynchronizationPolicy());
+    return TextDocumentParser::create(*this, parserSynchronizationPolicy());
 }
 
-} // namespace blink
+}

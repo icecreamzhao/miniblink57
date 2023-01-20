@@ -29,11 +29,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/BaseCheckableInputType.h"
 
 #include "core/HTMLNames.h"
 #include "core/events/KeyboardEvent.h"
-#include "core/html/FormData.h"
+#include "core/html/FormDataList.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/forms/FormController.h"
 
@@ -41,42 +42,31 @@ namespace blink {
 
 using namespace HTMLNames;
 
-DEFINE_TRACE(BaseCheckableInputType)
-{
-    InputTypeView::trace(visitor);
-    InputType::trace(visitor);
-}
-
-InputTypeView* BaseCheckableInputType::createView()
-{
-    return this;
-}
-
 FormControlState BaseCheckableInputType::saveFormControlState() const
 {
     return FormControlState(element().checked() ? "on" : "off");
 }
 
-void BaseCheckableInputType::restoreFormControlState(
-    const FormControlState& state)
+void BaseCheckableInputType::restoreFormControlState(const FormControlState& state)
 {
     element().setChecked(state[0] == "on");
 }
 
-void BaseCheckableInputType::appendToFormData(FormData& formData) const
+bool BaseCheckableInputType::appendFormData(FormDataList& encoding, bool) const
 {
-    if (element().checked())
-        formData.append(element().name(), element().value());
+    if (!element().checked())
+        return false;
+    encoding.appendData(element().name(), element().value());
+    return true;
 }
 
 void BaseCheckableInputType::handleKeydownEvent(KeyboardEvent* event)
 {
-    const String& key = event->key();
-    if (key == " ") {
+    const String& key = event->keyIdentifier();
+    if (key == "U+0020") {
         element().setActive(true);
         // No setDefaultHandled(), because IE dispatches a keypress in this case
-        // and the caller will only dispatch a keypress if we don't call
-        // setDefaultHandled().
+        // and the caller will only dispatch a keypress if we don't call setDefaultHandled().
     }
 }
 
@@ -93,38 +83,27 @@ bool BaseCheckableInputType::canSetStringValue() const
     return false;
 }
 
-// FIXME: Could share this with KeyboardClickableInputTypeView and
-// RangeInputType if we had a common base class.
+// FIXME: Could share this with BaseClickableWithKeyInputType and RangeInputType if we had a common base class.
 void BaseCheckableInputType::accessKeyAction(bool sendMouseEvents)
 {
-    InputTypeView::accessKeyAction(sendMouseEvents);
+    InputType::accessKeyAction(sendMouseEvents);
 
-    element().dispatchSimulatedClick(
-        0, sendMouseEvents ? SendMouseUpDownEvents : SendNoEvents);
+    element().dispatchSimulatedClick(0, sendMouseEvents ? SendMouseUpDownEvents : SendNoEvents);
 }
 
-bool BaseCheckableInputType::matchesDefaultPseudoClass()
+String BaseCheckableInputType::fallbackValue() const
 {
-    return element().fastHasAttribute(checkedAttr);
+    return "on";
 }
 
-InputType::ValueMode BaseCheckableInputType::valueMode() const
+bool BaseCheckableInputType::storesValueSeparateFromAttribute()
 {
-    return ValueMode::kDefaultOn;
+    return false;
 }
 
-void BaseCheckableInputType::setValue(const String& sanitizedValue,
-    bool,
-    TextFieldEventBehavior)
+void BaseCheckableInputType::setValue(const String& sanitizedValue, bool, TextFieldEventBehavior)
 {
     element().setAttribute(valueAttr, AtomicString(sanitizedValue));
-}
-
-void BaseCheckableInputType::readingChecked() const
-{
-    if (m_isInClickHandler)
-        UseCounter::count(element().document(),
-            UseCounter::ReadingCheckedInClickHandler);
 }
 
 bool BaseCheckableInputType::isCheckable()
@@ -132,9 +111,7 @@ bool BaseCheckableInputType::isCheckable()
     return true;
 }
 
-bool BaseCheckableInputType::shouldDispatchFormControlChangeEvent(
-    String& oldValue,
-    String& newValue)
+bool BaseCheckableInputType::shouldDispatchFormControlChangeEvent(String& oldValue, String& newValue)
 {
     return oldValue != newValue;
 }

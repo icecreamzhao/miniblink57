@@ -33,7 +33,11 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 typedef unsigned WebColor; // RGBA quad. Equivalent to SkColor.
+=======
+typedef unsigned WebColor;  // RGBA quad. Equivalent to SkColor.
+>>>>>>> miniblink49
 
 } // namespace blink
 

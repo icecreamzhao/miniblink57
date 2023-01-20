@@ -1,8 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2011, 2012 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2011, 2012 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,15 +20,14 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLNameCollection.h"
 
 #include "core/dom/NodeRareData.h"
 
 namespace blink {
 
-HTMLNameCollection::HTMLNameCollection(ContainerNode& document,
-    CollectionType type,
-    const AtomicString& name)
+HTMLNameCollection::HTMLNameCollection(ContainerNode& document, CollectionType type, const AtomicString& name)
     : HTMLCollection(document, type, DoesNotOverrideItemAfter)
     , m_name(name)
 {
@@ -37,7 +35,11 @@ HTMLNameCollection::HTMLNameCollection(ContainerNode& document,
 
 HTMLNameCollection::~HTMLNameCollection()
 {
-    DCHECK(type() == WindowNamedItems || type() == DocumentNamedItems);
+    ASSERT(type() == WindowNamedItems || type() == DocumentNamedItems);
+#if !ENABLE(OILPAN)
+    ASSERT(ownerNode().isDocumentNode());
+    ownerNode().nodeLists()->removeCache(this, type(), m_name);
+#endif
 }
 
 } // namespace blink

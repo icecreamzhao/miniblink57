@@ -20,12 +20,10 @@ class MediaQuerySet;
 
 class MediaQueryData {
     STACK_ALLOCATED();
-    WTF_MAKE_NONCOPYABLE(MediaQueryData);
-
 private:
-    MediaQuery::RestrictorType m_restrictor;
+    MediaQuery::Restrictor m_restrictor;
     String m_mediaType;
-    ExpressionHeapVector m_expressions;
+    OwnPtrWillBeMember<ExpressionHeapVector> m_expressions;
     String m_mediaFeature;
     Vector<CSSParserToken, 4> m_valueList;
     bool m_mediaTypeSet;
@@ -36,30 +34,25 @@ public:
     bool addExpression();
     bool tryAddParserToken(CSSParserTokenType, const CSSParserToken&);
     void setMediaType(const String&);
-    MediaQuery* takeMediaQuery();
+    PassOwnPtrWillBeRawPtr<MediaQuery> takeMediaQuery();
 
     inline bool currentMediaQueryChanged() const
     {
-        return (m_restrictor != MediaQuery::None || m_mediaTypeSet || m_expressions.size() > 0);
+        return (m_restrictor != MediaQuery::None || m_mediaTypeSet || m_expressions->size() > 0);
     }
-    inline MediaQuery::RestrictorType restrictor() { return m_restrictor; }
+    inline MediaQuery::Restrictor restrictor() { return m_restrictor; }
 
-    inline void setRestrictor(MediaQuery::RestrictorType restrictor)
-    {
-        m_restrictor = restrictor;
-    }
+    inline void setRestrictor(MediaQuery::Restrictor restrictor) { m_restrictor = restrictor; }
 
     inline void setMediaFeature(const String& str) { m_mediaFeature = str; }
 };
 
 class CORE_EXPORT MediaQueryParser {
     STACK_ALLOCATED();
-    WTF_MAKE_NONCOPYABLE(MediaQueryParser);
-
 public:
-    static MediaQuerySet* parseMediaQuerySet(const String&);
-    static MediaQuerySet* parseMediaQuerySet(CSSParserTokenRange);
-    static MediaQuerySet* parseMediaCondition(CSSParserTokenRange);
+    static PassRefPtrWillBeRawPtr<MediaQuerySet> parseMediaQuerySet(const String&);
+    static PassRefPtrWillBeRawPtr<MediaQuerySet> parseMediaQuerySet(CSSParserTokenRange);
+    static PassRefPtrWillBeRawPtr<MediaQuerySet> parseMediaCondition(CSSParserTokenRange);
 
 private:
     enum ParserType {
@@ -70,7 +63,7 @@ private:
     MediaQueryParser(ParserType);
     virtual ~MediaQueryParser();
 
-    MediaQuerySet* parseImpl(CSSParserTokenRange);
+    PassRefPtrWillBeRawPtr<MediaQuerySet> parseImpl(CSSParserTokenRange);
 
     void processToken(const CSSParserToken&);
 
@@ -87,16 +80,15 @@ private:
     void skipUntilBlockEnd(CSSParserTokenType, const CSSParserToken&);
     void done(CSSParserTokenType, const CSSParserToken&);
 
-    using State = void (MediaQueryParser::*)(CSSParserTokenType,
-        const CSSParserToken&);
+    typedef void (MediaQueryParser::*State)(CSSParserTokenType, const CSSParserToken&);
 
-    void setStateAndRestrict(State, MediaQuery::RestrictorType);
+    void setStateAndRestrict(State, MediaQuery::Restrictor);
     void handleBlocks(const CSSParserToken&);
 
     State m_state;
     ParserType m_parserType;
     MediaQueryData m_mediaQueryData;
-    Member<MediaQuerySet> m_querySet;
+    RefPtrWillBeMember<MediaQuerySet> m_querySet;
     MediaQueryBlockWatcher m_blockWatcher;
 
     const static State ReadRestrictor;

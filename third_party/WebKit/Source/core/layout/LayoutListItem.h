@@ -1,8 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2009 Apple Inc.
- *               All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2009 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,8 +36,9 @@ public:
 
     int value() const
     {
-        if (!m_isValueUpToDate)
+        if (!m_isValueUpToDate) {
             updateValueNow();
+        }
         return m_value;
     }
     void updateValue();
@@ -62,31 +62,28 @@ public:
 
     LayoutListMarker* marker() const { return m_marker; }
 
-    const char* name() const override { return "LayoutListItem"; }
+    virtual const char* name() const override { return "LayoutListItem"; }
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectListItem || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectListItem || LayoutBlockFlow::isOfType(type); }
 
-    void willBeDestroyed() override;
+    virtual void willBeDestroyed() override;
 
-    void insertedIntoTree() override;
-    void willBeRemovedFromTree() override;
+    virtual void insertedIntoTree() override;
+    virtual void willBeRemovedFromTree() override;
 
-    void paint(const PaintInfo&, const LayoutPoint&) const override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&) override;
 
-    void subtreeDidChange() final;
+    virtual void subtreeDidChange() final;
 
     // Returns true if we re-attached and updated the location of the marker.
     bool updateMarkerLocation();
 
     void positionListMarker();
 
-    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
+    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
 
-    void addOverflowFromChildren() override;
+    virtual void addOverflowFromChildren() override;
 
     inline int calcValue() const;
     void updateValueNow() const;

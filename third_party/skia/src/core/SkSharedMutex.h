@@ -11,6 +11,7 @@
 #include "SkAtomics.h"
 #include "SkSemaphore.h"
 #include "SkTypes.h"
+<<<<<<< HEAD
 
 #ifdef SK_DEBUG
 #include "SkMutex.h"
@@ -33,6 +34,11 @@ typedef float float32_t;
 // an interface similar to pthread's rwlocks.
 // This is a shared lock implementation similar to pthreads rwlocks. The high performance
 // implementation is cribbed from Preshing's article:
+=======
+    
+// This is a shared lock implementation similar to pthreads rwlocks. This implementation is
+// cribbed from Preshing's article:
+>>>>>>> miniblink49
 // http://preshing.com/20150316/semaphores-are-surprisingly-versatile/
 //
 // This lock does not obey strict queue ordering. It will always alternate between readers and
@@ -47,15 +53,19 @@ public:
     // Release lock for exclusive use.
     void release();
 
+<<<<<<< HEAD
     // Fail if exclusive is not held.
     void assertHeld() const;
 
+=======
+>>>>>>> miniblink49
     // Acquire lock for shared use.
     void acquireShared();
 
     // Release lock for shared use.
     void releaseShared();
 
+<<<<<<< HEAD
     // Fail if shared lock not held.
     void assertHeldShared() const;
 
@@ -96,4 +106,12 @@ private:
 
 #define SkAutoSharedMutexShared(...) SK_REQUIRE_LOCAL_VAR(SkAutoSharedMutexShared)
 
+=======
+private:
+    SkAtomic<int32_t> fQueueCounts;
+    SkSemaphore fSharedQueue;
+    SkSemaphore fExclusiveQueue;
+};
+
+>>>>>>> miniblink49
 #endif // SkSharedLock_DEFINED

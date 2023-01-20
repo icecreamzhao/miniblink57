@@ -23,20 +23,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/loader/ProgressTracker.h"
 
-#include "core/fetch/Resource.h"
 #include "core/fetch/ResourceFetcher.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
-#include "core/frame/Settings.h"
 #include "core/inspector/InspectorInstrumentation.h"
-#include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
+#include "platform/Logging.h"
 #include "platform/network/ResourceResponse.h"
 #include "wtf/CurrentTime.h"
-#include "wtf/PtrUtil.h"
 #include "wtf/text/CString.h"
 
 using namespace std;
@@ -47,41 +45,44 @@ namespace blink {
 // soon as a load starts.
 static const double initialProgressValue = 0.1;
 
-static const int progressItemDefaultEstimatedLength = 1024 * 1024;
+// Similarly, always leave space at the end. This helps show the user that we're not done
+// until we're done.
+static const double finalProgressValue = 0.9; // 1.0 - initialProgressValue
 
-static const double progressNotificationInterval = 0.02;
-static const double progressNotificationTimeInterval = 0.1;
+static const int progressItemDefaultEstimatedLength = 1024 * 16;
 
 struct ProgressItem {
-    WTF_MAKE_NONCOPYABLE(ProgressItem);
-    USING_FAST_MALLOC(ProgressItem);
-
+    WTF_MAKE_NONCOPYABLE(ProgressItem); WTF_MAKE_FAST_ALLOCATED(ProgressItem);
 public:
-    explicit ProgressItem(long long length)
+    ProgressItem(long long length)
         : bytesReceived(0)
-        , estimatedLength(length)
-    {
-    }
+        , estimatedLength(length) { }
 
     long long bytesReceived;
     long long estimatedLength;
 };
 
-ProgressTracker* ProgressTracker::create(LocalFrame* frame)
+PassOwnPtrWillBeRawPtr<ProgressTracker> ProgressTracker::create(LocalFrame* frame)
 {
-    return new ProgressTracker(frame);
+    return adoptPtrWillBeNoop(new ProgressTracker(frame));
 }
 
 ProgressTracker::ProgressTracker(LocalFrame* frame)
     : m_frame(frame)
+    , m_totalPageAndResourceBytesToLoad(0)
+    , m_totalBytesReceived(0)
     , m_lastNotifiedProgressValue(0)
     , m_lastNotifiedProgressTime(0)
-    , m_finishedParsing(false)
+    , m_progressNotificationInterval(0.02)
+    , m_progressNotificationTimeInterval(0.1)
+    , m_finalProgressChangedSent(false)
     , m_progressValue(0)
 {
 }
 
-ProgressTracker::~ProgressTracker() { }
+ProgressTracker::~ProgressTracker()
+{
+}
 
 DEFINE_TRACE(ProgressTracker)
 {
@@ -92,7 +93,7 @@ void ProgressTracker::dispose()
 {
     if (m_frame->isLoading())
         progressCompleted();
-    DCHECK(!m_frame->isLoading());
+    ASSERT(!m_frame->isLoading());
 }
 
 double ProgressTracker::estimatedProgress() const
@@ -103,151 +104,124 @@ double ProgressTracker::estimatedProgress() const
 void ProgressTracker::reset()
 {
     m_progressItems.clear();
+
+    m_totalPageAndResourceBytesToLoad = 0;
+    m_totalBytesReceived = 0;
     m_progressValue = 0;
     m_lastNotifiedProgressValue = 0;
     m_lastNotifiedProgressTime = 0;
-    m_finishedParsing = false;
-}
-
-FrameLoaderClient* ProgressTracker::frameLoaderClient() const
-{
-    return m_frame->client();
+    m_finalProgressChangedSent = false;
 }
 
 void ProgressTracker::progressStarted()
 {
-    if (!m_frame->isLoading())
-        frameLoaderClient()->didStartLoading(NavigationToDifferentDocument);
-    reset();
-    m_progressValue = initialProgressValue;
+    if (!m_frame->isLoading()) {
+        reset();
+        m_progressValue = initialProgressValue;
+        m_frame->loader().client()->didStartLoading(NavigationToDifferentDocument);
+    }
     m_frame->setIsLoading(true);
     InspectorInstrumentation::frameStartedLoading(m_frame);
 }
 
 void ProgressTracker::progressCompleted()
 {
-    DCHECK(m_frame->isLoading());
+    ASSERT(m_frame->isLoading());
     m_frame->setIsLoading(false);
-    sendFinalProgress();
+    if (!m_finalProgressChangedSent) {
+        m_progressValue = 1;
+        m_frame->loader().client()->progressEstimateChanged(m_progressValue);
+    }
     reset();
-    frameLoaderClient()->didStopLoading();
+    m_frame->loader().client()->didStopLoading();
     InspectorInstrumentation::frameStoppedLoading(m_frame);
 }
 
-void ProgressTracker::finishedParsing()
-{
-    m_finishedParsing = true;
-    maybeSendProgress();
-}
-
-void ProgressTracker::sendFinalProgress()
-{
-    if (m_progressValue == 1)
-        return;
-    m_progressValue = 1;
-    frameLoaderClient()->progressEstimateChanged(m_progressValue);
-}
-
-void ProgressTracker::willStartLoading(unsigned long identifier,
-    ResourceLoadPriority priority)
+void ProgressTracker::incrementProgress(unsigned long identifier, const ResourceResponse& response)
 {
     if (!m_frame->isLoading())
-        return;
-    // All of the progress bar completion policies besides LoadEvent instead block
-    // on parsing completion, which corresponds to finishing parsing. For those
-    // policies, don't consider resource load that start after DOMContentLoaded
-    // finishes.
-    if (m_frame->settings()->getProgressBarCompletion() != ProgressBarCompletion::LoadEvent && (m_finishedParsing || priority < ResourceLoadPriorityHigh))
-        return;
-    m_progressItems.set(identifier, WTF::makeUnique<ProgressItem>(progressItemDefaultEstimatedLength));
-}
-
-void ProgressTracker::incrementProgress(unsigned long identifier,
-    const ResourceResponse& response)
-{
-    ProgressItem* item = m_progressItems.get(identifier);
-    if (!item)
         return;
 
     long long estimatedLength = response.expectedContentLength();
     if (estimatedLength < 0)
         estimatedLength = progressItemDefaultEstimatedLength;
-    item->bytesReceived = 0;
-    item->estimatedLength = estimatedLength;
+
+    m_totalPageAndResourceBytesToLoad += estimatedLength;
+
+    if (ProgressItem* item = m_progressItems.get(identifier)) {
+        item->bytesReceived = 0;
+        item->estimatedLength = estimatedLength;
+    } else {
+        m_progressItems.set(identifier, adoptPtr(new ProgressItem(estimatedLength)));
+    }
 }
 
 void ProgressTracker::incrementProgress(unsigned long identifier, int length)
 {
     ProgressItem* item = m_progressItems.get(identifier);
+
+    // FIXME: Can this ever happen?
     if (!item)
         return;
 
-    item->bytesReceived += length;
-    if (item->bytesReceived > item->estimatedLength)
+    unsigned bytesReceived = length;
+    double increment, percentOfRemainingBytes;
+    long long remainingBytes, estimatedBytesForPendingRequests;
+
+    item->bytesReceived += bytesReceived;
+    if (item->bytesReceived > item->estimatedLength) {
+        m_totalPageAndResourceBytesToLoad += ((item->bytesReceived * 2) - item->estimatedLength);
         item->estimatedLength = item->bytesReceived * 2;
-    maybeSendProgress();
-}
-
-void ProgressTracker::maybeSendProgress()
-{
-    if (!m_frame->isLoading())
-        return;
-
-    m_progressValue = initialProgressValue + 0.1; // +0.1 for committing
-    if (m_finishedParsing)
-        m_progressValue += 0.2;
-
-    long long bytesReceived = 0;
-    long long estimatedBytesForPendingRequests = 0;
-    for (const auto& progressItem : m_progressItems) {
-        bytesReceived += progressItem.value->bytesReceived;
-        estimatedBytesForPendingRequests += progressItem.value->estimatedLength;
-    }
-    DCHECK_GE(estimatedBytesForPendingRequests, 0);
-    DCHECK_GE(estimatedBytesForPendingRequests, bytesReceived);
-
-    if (m_finishedParsing) {
-        if (m_frame->settings()->getProgressBarCompletion() == ProgressBarCompletion::DOMContentLoaded) {
-            sendFinalProgress();
-            return;
-        }
-        if (m_frame->settings()->getProgressBarCompletion() != ProgressBarCompletion::LoadEvent && estimatedBytesForPendingRequests == bytesReceived) {
-            sendFinalProgress();
-            return;
-        }
     }
 
-    double percentOfBytesReceived = !estimatedBytesForPendingRequests
-        ? 1.0
-        : (double)bytesReceived / (double)estimatedBytesForPendingRequests;
-    m_progressValue += percentOfBytesReceived / 2;
+    int numPendingOrLoadingRequests = m_frame->document()->fetcher()->requestCount();
+    estimatedBytesForPendingRequests = progressItemDefaultEstimatedLength * numPendingOrLoadingRequests;
+    remainingBytes = ((m_totalPageAndResourceBytesToLoad + estimatedBytesForPendingRequests) - m_totalBytesReceived);
+    if (remainingBytes > 0) // Prevent divide by 0.
+        percentOfRemainingBytes = (double)bytesReceived / (double)remainingBytes;
+    else
+        percentOfRemainingBytes = 1.0;
 
-    DCHECK_GE(m_progressValue, initialProgressValue);
-    // Always leave space at the end. This helps show the user that we're not
-    // done until we're done.
-    DCHECK_LE(m_progressValue, 0.9);
-    if (m_progressValue < m_lastNotifiedProgressValue)
-        return;
+    // For documents that use WebCore's layout system, treat first layout as the half-way point.
+    bool useClampedMaxProgress = !m_frame->view()->didFirstLayout();
+    double maxProgressValue = useClampedMaxProgress ? 0.5 : finalProgressValue;
+    increment = (maxProgressValue - m_progressValue) * percentOfRemainingBytes;
+    m_progressValue += increment;
+    m_progressValue = min(m_progressValue, maxProgressValue);
+    ASSERT(m_progressValue >= initialProgressValue);
+
+    m_totalBytesReceived += bytesReceived;
 
     double now = currentTime();
     double notifiedProgressTimeDelta = now - m_lastNotifiedProgressTime;
 
     double notificationProgressDelta = m_progressValue - m_lastNotifiedProgressValue;
-    if (notificationProgressDelta >= progressNotificationInterval || notifiedProgressTimeDelta >= progressNotificationTimeInterval) {
-        frameLoaderClient()->progressEstimateChanged(m_progressValue);
-        m_lastNotifiedProgressValue = m_progressValue;
-        m_lastNotifiedProgressTime = now;
+    if (notificationProgressDelta >= m_progressNotificationInterval || notifiedProgressTimeDelta >= m_progressNotificationTimeInterval) {
+        if (!m_finalProgressChangedSent) {
+            if (m_progressValue == 1)
+                m_finalProgressChangedSent = true;
+
+            m_frame->loader().client()->progressEstimateChanged(m_progressValue);
+
+            m_lastNotifiedProgressValue = m_progressValue;
+            m_lastNotifiedProgressTime = now;
+        }
     }
 }
 
 void ProgressTracker::completeProgress(unsigned long identifier)
 {
     ProgressItem* item = m_progressItems.get(identifier);
+
+    // This can happen if a load fails without receiving any response data.
     if (!item)
         return;
 
-    item->estimatedLength = item->bytesReceived;
-    maybeSendProgress();
+    // Adjust the total expected bytes to account for any overage/underage.
+    long long delta = item->bytesReceived - item->estimatedLength;
+    m_totalPageAndResourceBytesToLoad += delta;
+
+    m_progressItems.remove(identifier);
 }
 
-} // namespace blink
+}

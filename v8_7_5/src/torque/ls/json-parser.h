@@ -6,6 +6,7 @@
 #define V8_TORQUE_LS_JSON_PARSER_H_
 
 #include "src/base/macros.h"
+<<<<<<< HEAD
 #include "src/base/optional.h"
 #include "src/torque/ls/json.h"
 #include "src/torque/utils.h"
@@ -28,3 +29,20 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_TORQUE_LS_JSON_PARSER_H_
+=======
+#include "src/torque/ls/json.h"
+
+namespace v8 {
+namespace internal {
+namespace torque {
+namespace ls {
+
+V8_EXPORT_PRIVATE JsonValue ParseJson(const std::string& input);
+
+}  // namespace ls
+}  // namespace torque
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_TORQUE_LS_JSON_PARSER_H_
+>>>>>>> miniblink49

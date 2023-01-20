@@ -4,7 +4,10 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #include "SkOSWindow_ios.h"
+=======
+>>>>>>> miniblink49
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
@@ -12,6 +15,10 @@
 #import <OpenGLES/ES2/glext.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+<<<<<<< HEAD
+=======
+#include "SkOSWindow_ios.h"
+>>>>>>> miniblink49
 
 class SkEvent;
 @class SkUIView;
@@ -19,17 +26,29 @@ class SkEvent;
 @protocol SkUIViewOptionsDelegate <NSObject>
 @optional
 // Called when the view needs to handle adding an SkOSMenu
+<<<<<<< HEAD
 - (void)view:(SkUIView*)view didAddMenu:(const SkOSMenu*)menu;
 - (void)view:(SkUIView*)view didUpdateMenu:(SkOSMenu*)menu;
 @end
 
 @interface SkUIView : UIView {
+=======
+- (void) view:(SkUIView*)view didAddMenu:(const SkOSMenu*)menu;
+- (void) view:(SkUIView*)view didUpdateMenu:(SkOSMenu*)menu;
+@end
+
+@interface SkUIView : UIView  {
+>>>>>>> miniblink49
     UINavigationItem* fTitleItem;
     SkOSWindow* fWind;
     id<SkUIViewOptionsDelegate> fOptionsDelegate;
 }
 
+<<<<<<< HEAD
 @property (nonatomic, readonly) SkOSWindow* fWind;
+=======
+@property (nonatomic, readonly) SkOSWindow *fWind;
+>>>>>>> miniblink49
 @property (nonatomic, retain) UINavigationItem* fTitleItem;
 @property (nonatomic, assign) id<SkUIViewOptionsDelegate> fOptionsDelegate;
 

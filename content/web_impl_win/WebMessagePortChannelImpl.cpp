@@ -35,16 +35,9 @@ WebMessagePortChannelImpl::~WebMessagePortChannelImpl()
 
 void WebMessagePortChannelImpl::setClient(blink::WebMessagePortChannelClient* client)
 {
-    //RELEASE_ASSERT (WTF::isMainThread()); // 强制支持多线程, demo:https://mozilla.github.io/pdf.js/
+    //RELEASE_ASSERT (WTF::isMainThread()); // 强锟斤拷支锟街讹拷锟竭筹拷, demo:https://mozilla.github.io/pdf.js/
     // Must lock here since m_client is called on the main thread.
     WTF::MutexLocker lock(m_mutex);
-
-    PlatformMessagePortChannel* remote = m_channel->entangledChannel();
-    if (!client && remote) {
-        m_channel->closeInternal();
-        remote->closeInternal();
-    }
-
     m_channel->setRemotePort(client);
 
 //     String output = String::format("WebMessagePortChannelImpl::setClient: this:%p, MessagePort:%p\n", this, m_channel->m_remotePort);
@@ -53,7 +46,7 @@ void WebMessagePortChannelImpl::setClient(blink::WebMessagePortChannelClient* cl
 
 void WebMessagePortChannelImpl::destroy()
 {
-    //RELEASE_ASSERT(WTF::isMainThread()); // 强制支持多线程, demo:https://prepaid.t-mobile.com/home
+    RELEASE_ASSERT(WTF::isMainThread());
     WTF::MutexLocker lock(m_mutex);
 
     m_keepAlive = nullptr;
@@ -66,7 +59,7 @@ void WebMessagePortChannelImpl::destroy()
 
 void WebMessagePortChannelImpl::postMessage(const blink::WebString& message, blink::WebMessagePortChannelArray* channels)
 {
-    //RELEASE_ASSERT(WTF::isMainThread()); // 强制支持多线程, demo:https://prepaid.t-mobile.com/home
+    RELEASE_ASSERT(WTF::isMainThread());
     blink::WebSerializedScriptValue serializedValue = blink::WebSerializedScriptValue::fromString(message);
 
     WTF::MutexLocker autoLock(m_channel->m_mutex);

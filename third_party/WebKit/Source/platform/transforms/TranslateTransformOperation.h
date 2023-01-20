@@ -31,26 +31,37 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT TranslateTransformOperation final
     : public TransformOperation {
 public:
     static PassRefPtr<TranslateTransformOperation> create(const Length& tx,
         const Length& ty,
         OperationType type)
+=======
+class PLATFORM_EXPORT TranslateTransformOperation : public TransformOperation {
+public:
+    static PassRefPtr<TranslateTransformOperation> create(const Length& tx, const Length& ty, OperationType type)
+>>>>>>> miniblink49
     {
         return adoptRef(new TranslateTransformOperation(tx, ty, 0, type));
     }
 
+<<<<<<< HEAD
     static PassRefPtr<TranslateTransformOperation> create(const Length& tx,
         const Length& ty,
         double tz,
         OperationType type)
+=======
+    static PassRefPtr<TranslateTransformOperation> create(const Length& tx, const Length& ty, double tz, OperationType type)
+>>>>>>> miniblink49
     {
         return adoptRef(new TranslateTransformOperation(tx, ty, tz, type));
     }
 
     virtual bool canBlendWith(const TransformOperation& other) const;
 
+<<<<<<< HEAD
     double x(const FloatSize& borderBoxSize) const
     {
         return floatValueForLength(m_x, borderBoxSize.width());
@@ -59,17 +70,26 @@ public:
     {
         return floatValueForLength(m_y, borderBoxSize.height());
     }
+=======
+    double x(const FloatSize& borderBoxSize) const { return floatValueForLength(m_x, borderBoxSize.width()); }
+    double y(const FloatSize& borderBoxSize) const { return floatValueForLength(m_y, borderBoxSize.height()); }
+>>>>>>> miniblink49
 
     Length x() const { return m_x; }
     Length y() const { return m_y; }
     double z() const { return m_z; }
 
+<<<<<<< HEAD
     void apply(TransformationMatrix& transform,
         const FloatSize& borderBoxSize) const override
+=======
+    void apply(TransformationMatrix& transform, const FloatSize& borderBoxSize) const override
+>>>>>>> miniblink49
     {
         transform.translate3d(x(borderBoxSize), y(borderBoxSize), z());
     }
 
+<<<<<<< HEAD
     static bool isMatchingOperationType(OperationType type)
     {
         return type == Translate || type == TranslateX || type == TranslateY || type == TranslateZ || type == Translate3D;
@@ -80,6 +100,12 @@ public:
 private:
     OperationType type() const override { return m_type; }
     OperationType primitiveType() const final { return Translate3D; }
+=======
+    static bool isMatchingOperationType(OperationType type) { return type == Translate || type == TranslateX || type == TranslateY || type == TranslateZ || type == Translate3D; }
+
+private:
+    OperationType type() const override { return m_type; }
+>>>>>>> miniblink49
 
     bool operator==(const TransformOperation& o) const override
     {
@@ -89,6 +115,7 @@ private:
         return m_x == t->m_x && m_y == t->m_y && m_z == t->m_z;
     }
 
+<<<<<<< HEAD
     PassRefPtr<TransformOperation> blend(const TransformOperation* from,
         double progress,
         bool blendToIdentity = false) override;
@@ -106,6 +133,16 @@ private:
         const Length& ty,
         double tz,
         OperationType type)
+=======
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+
+    bool dependsOnBoxSize() const override
+    {
+        return m_x.hasPercent() || m_y.hasPercent();
+    }
+
+    TranslateTransformOperation(const Length& tx, const Length& ty, double tz, OperationType type)
+>>>>>>> miniblink49
         : m_x(tx)
         , m_y(ty)
         , m_z(tz)

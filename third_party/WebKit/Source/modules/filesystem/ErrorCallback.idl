@@ -29,5 +29,9 @@
  */
 
 callback interface ErrorCallback {
+<<<<<<< HEAD
     void handleEvent(DOMException error);
+=======
+    void handleEvent(FileError error);
+>>>>>>> miniblink49
 };

@@ -26,7 +26,12 @@
 
 #include "src/base/build_config.h"
 
+<<<<<<< HEAD
 #if defined(V8_OS_POSIX) && (defined(_INTTYPES_H) || defined(_INTTYPES_H_)) && !defined(PRId64)
+=======
+#if defined(V8_OS_POSIX) && (defined(_INTTYPES_H) || defined(_INTTYPES_H_)) && \
+    !defined(PRId64)
+>>>>>>> miniblink49
 #error "inttypes.h has already been included before this header file, but "
 #error "without __STDC_FORMAT_MACROS defined."
 #endif
@@ -64,7 +69,11 @@
 #if !defined(PRIxNS)
 #define PRIxNS "lx"
 #endif
+<<<<<<< HEAD
 #else // defined(V8_HOST_ARCH_64_BIT)
+=======
+#else  // defined(V8_HOST_ARCH_64_BIT)
+>>>>>>> miniblink49
 #if !defined(PRIdNS)
 #define PRIdNS "d"
 #endif
@@ -75,9 +84,15 @@
 #define PRIxNS "x"
 #endif
 #endif
+<<<<<<< HEAD
 #endif // defined(V8_OS_MACOSX)
 
 #else // V8_OS_WIN
+=======
+#endif  // defined(V8_OS_MACOSX)
+
+#else  // V8_OS_WIN
+>>>>>>> miniblink49
 
 #if !defined(PRId64) || !defined(PRIu64) || !defined(PRIx64)
 #error "inttypes.h provided by win toolchain should define these."
@@ -93,4 +108,8 @@
 
 #endif
 
+<<<<<<< HEAD
 #endif // V8_BASE_FORMAT_MACROS_H_
+=======
+#endif  // V8_BASE_FORMAT_MACROS_H_
+>>>>>>> miniblink49

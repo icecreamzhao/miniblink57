@@ -14,6 +14,7 @@
 namespace v8 {
 
 template <typename T>
+<<<<<<< HEAD
 inline T ToCData(v8::internal::Object obj)
 {
     STATIC_ASSERT(sizeof(T) == sizeof(v8::internal::Address));
@@ -29,10 +30,24 @@ inline v8::internal::Address ToCData(v8::internal::Object obj)
     if (obj == v8::internal::Smi::kZero)
         return v8::internal::kNullAddress;
     return v8::internal::Foreign::cast(obj)->foreign_address();
+=======
+inline T ToCData(v8::internal::Object obj) {
+  STATIC_ASSERT(sizeof(T) == sizeof(v8::internal::Address));
+  if (obj == v8::internal::Smi::kZero) return nullptr;
+  return reinterpret_cast<T>(
+      v8::internal::Foreign::cast(obj)->foreign_address());
+}
+
+template <>
+inline v8::internal::Address ToCData(v8::internal::Object obj) {
+  if (obj == v8::internal::Smi::kZero) return v8::internal::kNullAddress;
+  return v8::internal::Foreign::cast(obj)->foreign_address();
+>>>>>>> miniblink49
 }
 
 template <typename T>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
+<<<<<<< HEAD
     v8::internal::Isolate* isolate, T obj)
 {
     STATIC_ASSERT(sizeof(T) == sizeof(v8::internal::Address));
@@ -40,10 +55,18 @@ inline v8::internal::Handle<v8::internal::Object> FromCData(
         return handle(v8::internal::Smi::kZero, isolate);
     return isolate->factory()->NewForeign(
         reinterpret_cast<v8::internal::Address>(obj));
+=======
+    v8::internal::Isolate* isolate, T obj) {
+  STATIC_ASSERT(sizeof(T) == sizeof(v8::internal::Address));
+  if (obj == nullptr) return handle(v8::internal::Smi::kZero, isolate);
+  return isolate->factory()->NewForeign(
+      reinterpret_cast<v8::internal::Address>(obj));
+>>>>>>> miniblink49
 }
 
 template <>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
+<<<<<<< HEAD
     v8::internal::Isolate* isolate, v8::internal::Address obj)
 {
     if (obj == v8::internal::kNullAddress) {
@@ -57,11 +80,25 @@ inline Local<To> Utils::Convert(v8::internal::Handle<From> obj)
 {
     DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsTheHole()));
     return Local<To>(reinterpret_cast<To*>(obj.location()));
+=======
+    v8::internal::Isolate* isolate, v8::internal::Address obj) {
+  if (obj == v8::internal::kNullAddress) {
+    return handle(v8::internal::Smi::kZero, isolate);
+  }
+  return isolate->factory()->NewForeign(obj);
+}
+
+template <class From, class To>
+inline Local<To> Utils::Convert(v8::internal::Handle<From> obj) {
+  DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsTheHole()));
+  return Local<To>(reinterpret_cast<To*>(obj.location()));
+>>>>>>> miniblink49
 }
 
 // Implementations of ToLocal
 
 #define MAKE_TO_LOCAL(Name, From, To)                                       \
+<<<<<<< HEAD
     Local<v8::To> Utils::Name(v8::internal::Handle<v8::internal::From> obj) \
     {                                                                       \
         return Convert<v8::internal::From, v8::To>(obj);                    \
@@ -74,6 +111,18 @@ inline Local<To> Utils::Convert(v8::internal::Handle<From> obj)
         DCHECK(obj->type() == v8::internal::kExternal##Type##Array);      \
         return Convert<v8::internal::JSTypedArray, v8::Type##Array>(obj); \
     }
+=======
+  Local<v8::To> Utils::Name(v8::internal::Handle<v8::internal::From> obj) { \
+    return Convert<v8::internal::From, v8::To>(obj);                        \
+  }
+
+#define MAKE_TO_LOCAL_TYPED_ARRAY(Type, typeName, TYPE, ctype)        \
+  Local<v8::Type##Array> Utils::ToLocal##Type##Array(                 \
+      v8::internal::Handle<v8::internal::JSTypedArray> obj) {         \
+    DCHECK(obj->type() == v8::internal::kExternal##Type##Array);      \
+    return Convert<v8::internal::JSTypedArray, v8::Type##Array>(obj); \
+  }
+>>>>>>> miniblink49
 
 MAKE_TO_LOCAL(ToLocal, Context, Context)
 MAKE_TO_LOCAL(ToLocal, Object, Value)
@@ -120,6 +169,7 @@ MAKE_TO_LOCAL(ScriptOrModuleToLocal, Script, ScriptOrModule)
 
 // Implementations of OpenHandle
 
+<<<<<<< HEAD
 #define MAKE_OPEN_HANDLE(From, To)                                                                                        \
     v8::internal::Handle<v8::internal::To> Utils::OpenHandle(                                                             \
         const v8::From* that, bool allow_empty_handle)                                                                    \
@@ -130,6 +180,20 @@ MAKE_TO_LOCAL(ScriptOrModuleToLocal, Script, ScriptOrModule)
             reinterpret_cast<v8::internal::Address*>(                                                                     \
                 const_cast<v8::From*>(that)));                                                                            \
     }
+=======
+#define MAKE_OPEN_HANDLE(From, To)                                    \
+  v8::internal::Handle<v8::internal::To> Utils::OpenHandle(           \
+      const v8::From* that, bool allow_empty_handle) {                \
+    DCHECK(allow_empty_handle || that != nullptr);                    \
+    DCHECK(that == nullptr ||                                         \
+           v8::internal::Object(                                      \
+               *reinterpret_cast<const v8::internal::Address*>(that)) \
+               ->Is##To());                                           \
+    return v8::internal::Handle<v8::internal::To>(                    \
+        reinterpret_cast<v8::internal::Address*>(                     \
+            const_cast<v8::From*>(that)));                            \
+  }
+>>>>>>> miniblink49
 
 OPEN_HANDLE_LIST(MAKE_OPEN_HANDLE)
 
@@ -138,6 +202,7 @@ OPEN_HANDLE_LIST(MAKE_OPEN_HANDLE)
 
 namespace internal {
 
+<<<<<<< HEAD
     Handle<Context> HandleScopeImplementer::LastEnteredContext()
     {
         DCHECK_EQ(entered_contexts_.size(), is_microtask_context_.size());
@@ -163,3 +228,27 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_API_INL_H_
+=======
+Handle<Context> HandleScopeImplementer::LastEnteredContext() {
+  DCHECK_EQ(entered_contexts_.size(), is_microtask_context_.size());
+
+  for (size_t i = 0; i < entered_contexts_.size(); ++i) {
+    size_t j = entered_contexts_.size() - i - 1;
+    if (!is_microtask_context_.at(j)) {
+      return Handle<Context>(entered_contexts_.at(j), isolate_);
+    }
+  }
+
+  return Handle<Context>::null();
+}
+
+Handle<Context> HandleScopeImplementer::LastEnteredOrMicrotaskContext() {
+  if (entered_contexts_.empty()) return Handle<Context>::null();
+  return Handle<Context>(entered_contexts_.back(), isolate_);
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_API_INL_H_
+>>>>>>> miniblink49

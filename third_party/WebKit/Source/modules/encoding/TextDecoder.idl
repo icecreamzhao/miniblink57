@@ -32,6 +32,10 @@
     Exposed=(Window,Worker),
     Constructor(optional DOMString label = "utf-8", optional TextDecoderOptions options),
     RaisesException=Constructor,
+<<<<<<< HEAD
+=======
+    GarbageCollected,
+>>>>>>> miniblink49
     MeasureAs=TextDecoderConstructor
 ] interface TextDecoder {
     readonly attribute DOMString encoding;

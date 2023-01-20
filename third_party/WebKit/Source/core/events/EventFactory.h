@@ -27,22 +27,16 @@
 #define EventFactory_h
 
 #include "platform/heap/Handle.h"
-#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
-#include "wtf/PtrUtil.h"
 #include "wtf/text/AtomicString.h"
-#include <memory>
 
 namespace blink {
 
 class Event;
-class ExecutionContext;
 
 class EventFactoryBase {
-    USING_FAST_MALLOC(EventFactoryBase);
-
 public:
-    virtual Event* create(ExecutionContext*, const String& eventType) = 0;
+    virtual PassRefPtrWillBeRawPtr<Event> create(const String& eventType) = 0;
     virtual ~EventFactoryBase() { }
 
 protected:
@@ -51,14 +45,14 @@ protected:
 
 class EventFactory final : public EventFactoryBase {
 public:
-    static std::unique_ptr<EventFactory> create()
+    static PassOwnPtr<EventFactory> create()
     {
-        return WTF::makeUnique<EventFactory>();
+        return adoptPtr(new EventFactory());
     }
 
-    Event* create(ExecutionContext*, const String& eventType) override;
+    virtual PassRefPtrWillBeRawPtr<Event> create(const String& eventType) override;
 };
 
-} // namespace blink
+}
 
 #endif

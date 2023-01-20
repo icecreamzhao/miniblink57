@@ -21,7 +21,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/events/BeforeUnloadEvent.h"
+
 
 namespace blink {
 
@@ -30,7 +32,9 @@ BeforeUnloadEvent::BeforeUnloadEvent()
 {
 }
 
-BeforeUnloadEvent::~BeforeUnloadEvent() { }
+BeforeUnloadEvent::~BeforeUnloadEvent()
+{
+}
 
 bool BeforeUnloadEvent::isBeforeUnloadEvent() const
 {

@@ -17,13 +17,18 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static SkView* curr_view(SkWindow* wind)
 {
+=======
+static SkView* curr_view(SkWindow* wind) {
+>>>>>>> miniblink49
     SkView::F2BIter iter(wind);
     return iter.next();
 }
 
 ShellWindow::ShellWindow(void* hwnd, int argc, char** argv)
+<<<<<<< HEAD
     : INHERITED(hwnd)
 {
     SkCommandLineFlags::Parse(argc, argv);
@@ -31,26 +36,45 @@ ShellWindow::ShellWindow(void* hwnd, int argc, char** argv)
 
 ShellWindow::~ShellWindow()
 {
+=======
+    : INHERITED(hwnd) {
+    SkCommandLineFlags::Parse(argc, argv);
+}
+
+ShellWindow::~ShellWindow() {
+>>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 bool ShellWindow::onDispatchClick(int x, int y, Click::State state,
+<<<<<<< HEAD
     void* owner, unsigned modi)
 {
+=======
+        void* owner, unsigned modi) {
+>>>>>>> miniblink49
     int w = SkScalarRoundToInt(this->width());
     int h = SkScalarRoundToInt(this->height());
 
     // check for the resize-box
     if (w - x < 16 && h - y < 16) {
+<<<<<<< HEAD
         return false; // let the OS handle the click
+=======
+        return false;   // let the OS handle the click
+>>>>>>> miniblink49
     } else {
         return this->INHERITED::onDispatchClick(x, y, state, owner, modi);
     }
 }
 
+<<<<<<< HEAD
 void ShellWindow::onSizeChange()
 {
+=======
+void ShellWindow::onSizeChange() {
+>>>>>>> miniblink49
     this->INHERITED::onSizeChange();
 
     SkView::F2BIter iter(this);
@@ -64,8 +88,12 @@ DEFINE_bool(nanobench, false, "run nanobench");
 int nanobench_main();
 int dm_main();
 
+<<<<<<< HEAD
 IOS_launch_type set_cmd_line_args(int argc, char* argv[], const char* resourceDir)
 {
+=======
+IOS_launch_type set_cmd_line_args(int argc, char *argv[], const char* resourceDir) {
+>>>>>>> miniblink49
     SkCommandLineFlags::Parse(argc, argv);
     if (FLAGS_nanobench) {
         return nanobench_main() ? kError_iOSLaunchType : kTool_iOSLaunchType;
@@ -78,15 +106,23 @@ IOS_launch_type set_cmd_line_args(int argc, char* argv[], const char* resourceDi
 
 // FIXME: this should be in a header
 SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv);
+<<<<<<< HEAD
 SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv)
 {
+=======
+SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv) {
+>>>>>>> miniblink49
     return new ShellWindow(hwnd, argc, argv);
 }
 
 // FIXME: this should be in a header
 void get_preferred_size(int* x, int* y, int* width, int* height);
+<<<<<<< HEAD
 void get_preferred_size(int* x, int* y, int* width, int* height)
 {
+=======
+void get_preferred_size(int* x, int* y, int* width, int* height) {
+>>>>>>> miniblink49
     *x = 10;
     *y = 50;
     *width = 640;
@@ -95,15 +131,25 @@ void get_preferred_size(int* x, int* y, int* width, int* height)
 
 // FIXME: this should be in a header
 void application_init();
+<<<<<<< HEAD
 void application_init()
 {
+=======
+void application_init() {
+>>>>>>> miniblink49
     SkGraphics::Init();
     SkEvent::Init();
 }
 
 // FIXME: this should be in a header
 void application_term();
+<<<<<<< HEAD
 void application_term()
 {
     SkEvent::Term();
+=======
+void application_term() {
+    SkEvent::Term();
+    SkGraphics::Term();
+>>>>>>> miniblink49
 }

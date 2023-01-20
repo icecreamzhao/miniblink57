@@ -26,8 +26,13 @@
 #ifndef SpeechRecognition_h
 #define SpeechRecognition_h
 
+<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "core/dom/ContextLifecycleObserver.h"
+=======
+#include "core/dom/ActiveDOMObject.h"
+#include "core/page/PageLifecycleObserver.h"
+>>>>>>> miniblink49
 #include "modules/EventTargetModules.h"
 #include "modules/ModulesExport.h"
 #include "modules/speech/SpeechGrammarList.h"
@@ -42,6 +47,7 @@ namespace blink {
 class ExceptionState;
 class ExecutionContext;
 class MediaStreamTrack;
+<<<<<<< HEAD
 class Page;
 class SpeechRecognitionController;
 class SpeechRecognitionError;
@@ -53,6 +59,15 @@ class MODULES_EXPORT SpeechRecognition final
     USING_GARBAGE_COLLECTED_MIXIN(SpeechRecognition);
     DEFINE_WRAPPERTYPEINFO();
 
+=======
+class SpeechRecognitionController;
+class SpeechRecognitionError;
+
+class MODULES_EXPORT SpeechRecognition final : public RefCountedGarbageCollectedEventTargetWithInlineData<SpeechRecognition>, public PageLifecycleObserver, public ActiveDOMObject {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(SpeechRecognition);
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SpeechRecognition);
+    DEFINE_WRAPPERTYPEINFO();
+>>>>>>> miniblink49
 public:
     static SpeechRecognition* create(ExecutionContext*);
     ~SpeechRecognition() override;
@@ -63,6 +78,7 @@ public:
     void setGrammars(SpeechGrammarList* grammars) { m_grammars = grammars; }
     String lang() { return m_lang; }
     void setLang(const String& lang) { m_lang = lang; }
+<<<<<<< HEAD
     bool continuous() { return m_continuous; }
     void setContinuous(bool continuous) { m_continuous = continuous; }
     bool interimResults() { return m_interimResults; }
@@ -80,6 +96,18 @@ public:
     {
         m_audioTrack = audioTrack;
     }
+=======
+    String serviceURI() { return m_serviceURI; }
+    void setServiceURI(const String& serviceURI) { m_serviceURI = serviceURI; }
+    bool continuous() { return m_continuous; }
+    void setContinuous(bool continuous) { m_continuous = continuous; }
+    bool interimResults() { return m_interimResults; }
+    void setInterimResults(bool interimResults) { m_interimResults = interimResults; }
+    unsigned maxAlternatives() { return m_maxAlternatives; }
+    void setMaxAlternatives(unsigned maxAlternatives) { m_maxAlternatives = maxAlternatives; }
+    MediaStreamTrack* audioTrack() { return m_audioTrack; }
+    void setAudioTrack(MediaStreamTrack* audioTrack) { m_audioTrack = audioTrack; }
+>>>>>>> miniblink49
 
     // Callable by the user.
     void start(ExceptionState&);
@@ -93,6 +121,7 @@ public:
     void didEndSpeech();
     void didEndSound();
     void didEndAudio();
+<<<<<<< HEAD
     void didReceiveResults(
         const HeapVector<Member<SpeechRecognitionResult>>& newFinalResults,
         const HeapVector<Member<SpeechRecognitionResult>>& currentInterimResults);
@@ -110,6 +139,21 @@ public:
 
     // ContextLifecycleObserver
     void contextDestroyed(ExecutionContext*) override;
+=======
+    void didReceiveResults(const HeapVector<Member<SpeechRecognitionResult>>& newFinalResults, const HeapVector<Member<SpeechRecognitionResult>>& currentInterimResults);
+    void didReceiveNoMatch(SpeechRecognitionResult*);
+    void didReceiveError(PassRefPtrWillBeRawPtr<SpeechRecognitionError>);
+    void didStart();
+    void didEnd();
+
+    // EventTarget.
+    const AtomicString& interfaceName() const override;
+    ExecutionContext* executionContext() const override;
+
+    // ActiveDOMObject.
+    bool hasPendingActivity() const override;
+    void stop() override;
+>>>>>>> miniblink49
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(audiostart);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(soundstart);
@@ -125,17 +169,32 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
+<<<<<<< HEAD
+=======
+    // PageLifecycleObserver
+    void contextDestroyed() override;
+
+>>>>>>> miniblink49
 private:
     SpeechRecognition(Page*, ExecutionContext*);
 
     Member<SpeechGrammarList> m_grammars;
     Member<MediaStreamTrack> m_audioTrack;
     String m_lang;
+<<<<<<< HEAD
+=======
+    String m_serviceURI;
+>>>>>>> miniblink49
     bool m_continuous;
     bool m_interimResults;
     unsigned long m_maxAlternatives;
 
+<<<<<<< HEAD
     Member<SpeechRecognitionController> m_controller;
+=======
+    RawPtrWillBeMember<SpeechRecognitionController> m_controller;
+    bool m_stoppedByActiveDOMObject;
+>>>>>>> miniblink49
     bool m_started;
     bool m_stopping;
     HeapVector<Member<SpeechRecognitionResult>> m_finalResults;

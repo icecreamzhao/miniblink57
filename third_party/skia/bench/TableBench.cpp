@@ -29,6 +29,7 @@ public:
     static const int kNumCols = 32;
 
 protected:
+<<<<<<< HEAD
     virtual const char* onGetName()
     {
         return "tablebench";
@@ -36,6 +37,13 @@ protected:
 
     virtual void onDraw(int loops, SkCanvas* canvas)
     {
+=======
+    virtual const char* onGetName() {
+        return "tablebench";
+    }
+
+    virtual void onDraw(const int loops, SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint cellPaint;
         cellPaint.setColor(0xFFFFFFF);
 
@@ -46,6 +54,7 @@ protected:
             for (int row = 0; row < kNumRows; ++row) {
                 for (int col = 0; col < kNumCols; ++col) {
                     SkRect cell = SkRect::MakeLTRB(col * kCellWidth,
+<<<<<<< HEAD
                         row * kCellHeight,
                         (col + 1) * kCellWidth,
                         (row + 1) * kCellHeight);
@@ -61,6 +70,23 @@ protected:
                         row * kCellHeight,
                         (col + 1) * kCellWidth,
                         (row + 1) * kCellHeight);
+=======
+                                                   row * kCellHeight,
+                                                   (col+1) * kCellWidth,
+                                                   (row+1) * kCellHeight);
+                    canvas->drawRect(cell, cellPaint);
+
+                    SkRect bottom = SkRect::MakeLTRB(col * kCellWidth,
+                                                     row * kCellHeight + (kCellHeight-SK_Scalar1),
+                                                     (col+1) * kCellWidth,
+                                                     (row+1) * kCellHeight);
+                    canvas->drawRect(bottom, borderPaint);
+
+                    SkRect right = SkRect::MakeLTRB(col * kCellWidth + (kCellWidth-SK_Scalar1),
+                                                    row * kCellHeight,
+                                                    (col+1) * kCellWidth,
+                                                    (row+1) * kCellHeight);
+>>>>>>> miniblink49
                     canvas->drawRect(right, borderPaint);
                 }
             }
@@ -71,4 +97,8 @@ private:
     typedef Benchmark INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_BENCH(return new TableBench();)
+=======
+DEF_BENCH( return new TableBench(); )
+>>>>>>> miniblink49

@@ -29,31 +29,21 @@ class LayoutDetailsMarker final : public LayoutBlockFlow {
 public:
     LayoutDetailsMarker(Element*);
 
-    enum Orientation { Up,
-        Down,
-        Left,
-        Right };
+    enum Orientation { Up, Down, Left, Right };
 
-    Orientation getOrientation() const;
+    Orientation orientation() const;
 
-    const char* name() const override { return "LayoutDetailsMarker"; }
+    virtual const char* name() const override { return "LayoutDetailsMarker"; }
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectDetailsMarker || LayoutBlockFlow::isOfType(type);
-    }
-    void paint(const PaintInfo&, const LayoutPoint&) const override;
-    bool paintedOutputOfObjectHasNoEffectRegardlessOfSize() const override
-    {
-        return false;
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectDetailsMarker || LayoutBlockFlow::isOfType(type); }
+    virtual void paint(const PaintInfo&, const LayoutPoint&) override;
 
     bool isOpen() const;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutDetailsMarker, isDetailsMarker());
 
-} // namespace blink
+}
 
 #endif // LayoutDetailsMarker_h

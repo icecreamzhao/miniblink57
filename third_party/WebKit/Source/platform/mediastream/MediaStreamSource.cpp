@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/mediastream/MediaStreamSource.h"
 
 namespace blink {
@@ -49,10 +50,28 @@ MediaStreamSource::MediaStreamSource(const String& id,
     bool remote,
     ReadyState readyState,
     bool requiresConsumer)
+=======
+#include "config.h"
+#include "platform/mediastream/MediaStreamSource.h"
+
+
+namespace blink {
+
+PassRefPtr<MediaStreamSource> MediaStreamSource::create(const String& id, Type type, const String& name, bool remote, bool readonly, ReadyState readyState, bool requiresConsumer)
+{
+    return adoptRef(new MediaStreamSource(id, type, name, remote, readonly, readyState, requiresConsumer));
+}
+
+MediaStreamSource::MediaStreamSource(const String& id, Type type, const String& name, bool remote, bool readonly, ReadyState readyState, bool requiresConsumer)
+>>>>>>> miniblink49
     : m_id(id)
     , m_type(type)
     , m_name(name)
     , m_remote(remote)
+<<<<<<< HEAD
+=======
+    , m_readonly(readonly)
+>>>>>>> miniblink49
     , m_readyState(readyState)
     , m_requiresConsumer(requiresConsumer)
 {
@@ -62,6 +81,7 @@ void MediaStreamSource::setReadyState(ReadyState readyState)
 {
     if (m_readyState != ReadyStateEnded && m_readyState != readyState) {
         m_readyState = readyState;
+<<<<<<< HEAD
 
         // Observers may dispatch events which create and add new Observers;
         // take a snapshot so as to safely iterate.
@@ -69,12 +89,27 @@ void MediaStreamSource::setReadyState(ReadyState readyState)
         copyToVector(m_observers, observers);
         for (auto observer : observers)
             observer->sourceChangedState();
+=======
+        for (Vector<Observer*>::iterator i = m_observers.begin(); i != m_observers.end(); ++i)
+            (*i)->sourceChangedState();
+>>>>>>> miniblink49
     }
 }
 
 void MediaStreamSource::addObserver(MediaStreamSource::Observer* observer)
 {
+<<<<<<< HEAD
     m_observers.add(observer);
+=======
+    m_observers.append(observer);
+}
+
+void MediaStreamSource::removeObserver(MediaStreamSource::Observer* observer)
+{
+    size_t pos = m_observers.find(observer);
+    if (pos != kNotFound)
+        m_observers.remove(pos);
+>>>>>>> miniblink49
 }
 
 void MediaStreamSource::addAudioConsumer(AudioDestinationConsumer* consumer)
@@ -84,8 +119,12 @@ void MediaStreamSource::addAudioConsumer(AudioDestinationConsumer* consumer)
     m_audioConsumers.add(consumer);
 }
 
+<<<<<<< HEAD
 bool MediaStreamSource::removeAudioConsumer(
     AudioDestinationConsumer* consumer)
+=======
+bool MediaStreamSource::removeAudioConsumer(AudioDestinationConsumer* consumer)
+>>>>>>> miniblink49
 {
     ASSERT(m_requiresConsumer);
     MutexLocker locker(m_audioConsumersLock);
@@ -96,6 +135,7 @@ bool MediaStreamSource::removeAudioConsumer(
     return true;
 }
 
+<<<<<<< HEAD
 void MediaStreamSource::setAudioFormat(size_t numberOfChannels,
     float sampleRate)
 {
@@ -103,6 +143,13 @@ void MediaStreamSource::setAudioFormat(size_t numberOfChannels,
     MutexLocker locker(m_audioConsumersLock);
     for (HeapHashSet<Member<AudioDestinationConsumer>>::iterator it = m_audioConsumers.begin();
          it != m_audioConsumers.end(); ++it)
+=======
+void MediaStreamSource::setAudioFormat(size_t numberOfChannels, float sampleRate)
+{
+    ASSERT(m_requiresConsumer);
+    MutexLocker locker(m_audioConsumersLock);
+    for (HeapHashSet<Member<AudioDestinationConsumer>>::iterator it = m_audioConsumers.begin(); it != m_audioConsumers.end(); ++it)
+>>>>>>> miniblink49
         (*it)->setFormat(numberOfChannels, sampleRate);
 }
 
@@ -110,6 +157,7 @@ void MediaStreamSource::consumeAudio(AudioBus* bus, size_t numberOfFrames)
 {
     ASSERT(m_requiresConsumer);
     MutexLocker locker(m_audioConsumersLock);
+<<<<<<< HEAD
     for (HeapHashSet<Member<AudioDestinationConsumer>>::iterator it = m_audioConsumers.begin();
          it != m_audioConsumers.end(); ++it)
         (*it)->consumeAudio(bus, numberOfFrames);
@@ -121,4 +169,10 @@ DEFINE_TRACE(MediaStreamSource)
     visitor->trace(m_audioConsumers);
 }
 
+=======
+    for (HeapHashSet<Member<AudioDestinationConsumer>>::iterator it = m_audioConsumers.begin(); it != m_audioConsumers.end(); ++it)
+        (*it)->consumeAudio(bus, numberOfFrames);
+}
+
+>>>>>>> miniblink49
 } // namespace blink

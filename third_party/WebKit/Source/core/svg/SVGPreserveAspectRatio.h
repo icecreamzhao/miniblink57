@@ -21,7 +21,6 @@
 #ifndef SVGPreserveAspectRatio_h
 #define SVGPreserveAspectRatio_h
 
-#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 
 namespace blink {
@@ -30,98 +29,80 @@ class AffineTransform;
 class FloatRect;
 class SVGPreserveAspectRatioTearOff;
 
-class SVGPreserveAspectRatio final
-    : public SVGPropertyHelper<SVGPreserveAspectRatio> {
+class SVGPreserveAspectRatio : public SVGPropertyHelper<SVGPreserveAspectRatio> {
 public:
     enum SVGPreserveAspectRatioType {
-        kSvgPreserveaspectratioUnknown = 0,
-        kSvgPreserveaspectratioNone = 1,
-        kSvgPreserveaspectratioXminymin = 2,
-        kSvgPreserveaspectratioXmidymin = 3,
-        kSvgPreserveaspectratioXmaxymin = 4,
-        kSvgPreserveaspectratioXminymid = 5,
-        kSvgPreserveaspectratioXmidymid = 6,
-        kSvgPreserveaspectratioXmaxymid = 7,
-        kSvgPreserveaspectratioXminymax = 8,
-        kSvgPreserveaspectratioXmidymax = 9,
-        kSvgPreserveaspectratioXmaxymax = 10
+        SVG_PRESERVEASPECTRATIO_UNKNOWN = 0,
+        SVG_PRESERVEASPECTRATIO_NONE = 1,
+        SVG_PRESERVEASPECTRATIO_XMINYMIN = 2,
+        SVG_PRESERVEASPECTRATIO_XMIDYMIN = 3,
+        SVG_PRESERVEASPECTRATIO_XMAXYMIN = 4,
+        SVG_PRESERVEASPECTRATIO_XMINYMID = 5,
+        SVG_PRESERVEASPECTRATIO_XMIDYMID = 6,
+        SVG_PRESERVEASPECTRATIO_XMAXYMID = 7,
+        SVG_PRESERVEASPECTRATIO_XMINYMAX = 8,
+        SVG_PRESERVEASPECTRATIO_XMIDYMAX = 9,
+        SVG_PRESERVEASPECTRATIO_XMAXYMAX = 10
     };
 
     enum SVGMeetOrSliceType {
-        kSvgMeetorsliceUnknown = 0,
-        kSvgMeetorsliceMeet = 1,
-        kSvgMeetorsliceSlice = 2
+        SVG_MEETORSLICE_UNKNOWN = 0,
+        SVG_MEETORSLICE_MEET = 1,
+        SVG_MEETORSLICE_SLICE = 2
     };
 
     typedef SVGPreserveAspectRatioTearOff TearOffType;
 
-    static SVGPreserveAspectRatio* create()
+    static PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> create()
     {
-        return new SVGPreserveAspectRatio();
+        return adoptRefWillBeNoop(new SVGPreserveAspectRatio());
     }
 
-    virtual SVGPreserveAspectRatio* clone() const;
+    virtual PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> clone() const;
 
     bool operator==(const SVGPreserveAspectRatio&) const;
-    bool operator!=(const SVGPreserveAspectRatio& other) const
-    {
-        return !operator==(other);
-    }
+    bool operator!=(const SVGPreserveAspectRatio& other) const { return !operator==(other); }
 
     void setAlign(SVGPreserveAspectRatioType align) { m_align = align; }
     SVGPreserveAspectRatioType align() const { return m_align; }
 
-    void setMeetOrSlice(SVGMeetOrSliceType meetOrSlice)
-    {
-        m_meetOrSlice = meetOrSlice;
-    }
+    void setMeetOrSlice(SVGMeetOrSliceType meetOrSlice) { m_meetOrSlice = meetOrSlice; }
     SVGMeetOrSliceType meetOrSlice() const { return m_meetOrSlice; }
 
     void transformRect(FloatRect& destRect, FloatRect& srcRect);
 
-    AffineTransform getCTM(float logicX,
-        float logicY,
-        float logicWidth,
-        float logicHeight,
-        float physWidth,
-        float physHeight) const;
+    AffineTransform getCTM(float logicX, float logicY,
+                           float logicWidth, float logicHeight,
+                           float physWidth, float physHeight) const;
 
     String valueAsString() const override;
-    SVGParsingError setValueAsString(const String&);
+    virtual void setValueAsString(const String&, ExceptionState&);
     bool parse(const UChar*& ptr, const UChar* end, bool validate);
     bool parse(const LChar*& ptr, const LChar* end, bool validate);
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement* contextElement) override;
-    float calculateDistance(SVGPropertyBase* to,
-        SVGElement* contextElement) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement* contextElement) override;
 
-    static AnimatedPropertyType classType()
-    {
-        return AnimatedPreserveAspectRatio;
-    }
-
-    void setDefault();
+    static AnimatedPropertyType classType() { return AnimatedPreserveAspectRatio; }
 
 private:
     SVGPreserveAspectRatio();
 
-    template <typename CharType>
-    SVGParsingError parseInternal(const CharType*& ptr,
-        const CharType* end,
-        bool validate);
+    void setDefault();
+    template<typename CharType>
+    bool parseInternal(const CharType*& ptr, const CharType* end, bool validate);
 
     SVGPreserveAspectRatioType m_align;
     SVGMeetOrSliceType m_meetOrSlice;
 };
 
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGPreserveAspectRatio);
+inline PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> toSVGPreserveAspectRatio(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGPreserveAspectRatio::classType());
+    return static_pointer_cast<SVGPreserveAspectRatio>(base.release());
+}
 
 } // namespace blink
 

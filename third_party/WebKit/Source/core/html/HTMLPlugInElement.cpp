@@ -20,9 +20,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLPlugInElement.h"
 
 #include "bindings/core/v8/ScriptController.h"
+#include "bindings/core/v8/npruntime_impl.h"
 #include "core/CSSPropertyNames.h"
 #include "core/HTMLNames.h"
 #include "core/dom/Document.h"
@@ -37,20 +39,20 @@
 #include "core/html/HTMLImageLoader.h"
 #include "core/html/PluginDocument.h"
 #include "core/input/EventHandler.h"
-#include "core/inspector/ConsoleMessage.h"
+#include "core/layout/LayoutBlockFlow.h"
+#include "core/layout/LayoutEmbeddedObject.h"
 #include "core/layout/LayoutImage.h"
 #include "core/layout/LayoutPart.h"
-#include "core/layout/api/LayoutEmbeddedItem.h"
 #include "core/loader/FrameLoaderClient.h"
 #include "core/loader/MixedContentChecker.h"
 #include "core/page/Page.h"
 #include "core/page/scrolling/ScrollingCoordinator.h"
+#include "core/plugins/PluginPlaceholder.h"
 #include "core/plugins/PluginView.h"
-#include "platform/Histogram.h"
+#include "platform/Logging.h"
+#include "platform/MIMETypeFromURL.h"
+#include "platform/MIMETypeRegistry.h"
 #include "platform/Widget.h"
-#include "platform/network/ResourceRequest.h"
-#include "platform/network/mime/MIMETypeFromURL.h"
-#include "platform/network/mime/MIMETypeRegistry.h"
 #include "platform/plugins/PluginData.h"
 #include "public/platform/WebURLRequest.h"
 
@@ -58,100 +60,80 @@ namespace blink {
 
 using namespace HTMLNames;
 
-namespace {
-
-    // Used for histograms, do not change the order.
-    enum PluginRequestObjectResult {
-        PluginRequestObjectResultFailure = 0,
-        PluginRequestObjectResultSuccess = 1,
-        // Keep at the end.
-        PluginRequestObjectResultMax
-    };
-
-} // anonymous namespace
-
-HTMLPlugInElement::HTMLPlugInElement(
-    const QualifiedName& tagName,
-    Document& doc,
-    bool createdByParser,
-    PreferPlugInsForImagesOption preferPlugInsForImagesOption)
+HTMLPlugInElement::HTMLPlugInElement(const QualifiedName& tagName, Document& doc, bool createdByParser, PreferPlugInsForImagesOption preferPlugInsForImagesOption)
     : HTMLFrameOwnerElement(tagName, doc)
     , m_isDelayingLoadEvent(false)
-    ,
+    , m_NPObject(0)
+    , m_isCapturingMouseEvents(false)
     // m_needsWidgetUpdate(!createdByParser) allows HTMLObjectElement to delay
-    // widget updates until after all children are parsed. For
-    // HTMLEmbedElement this delay is unnecessary, but it is simpler to make
-    // both classes share the same codepath in this class.
-    m_needsWidgetUpdate(!createdByParser)
+    // widget updates until after all children are parsed. For HTMLEmbedElement
+    // this delay is unnecessary, but it is simpler to make both classes share
+    // the same codepath in this class.
+    , m_needsWidgetUpdate(!createdByParser)
     , m_shouldPreferPlugInsForImages(preferPlugInsForImagesOption == ShouldPreferPlugInsForImages)
 {
 }
 
 HTMLPlugInElement::~HTMLPlugInElement()
 {
-    DCHECK(!m_pluginWrapper); // cleared in detachLayoutTree()
-    DCHECK(!m_isDelayingLoadEvent);
+    ASSERT(!m_pluginWrapper); // cleared in detach()
+    ASSERT(!m_isDelayingLoadEvent);
+
+    if (m_NPObject) {
+        _NPN_ReleaseObject(m_NPObject);
+        m_NPObject = 0;
+    }
 }
 
 DEFINE_TRACE(HTMLPlugInElement)
 {
     visitor->trace(m_imageLoader);
+    visitor->trace(m_placeholder);
     visitor->trace(m_persistedPluginWidget);
     HTMLFrameOwnerElement::trace(visitor);
 }
+
+#if ENABLE(OILPAN)
+void HTMLPlugInElement::disconnectContentFrame()
+{
+    if (m_persistedPluginWidget) {
+        m_persistedPluginWidget->dispose();
+        m_persistedPluginWidget = nullptr;
+    }
+    HTMLFrameOwnerElement::disconnectContentFrame();
+}
+
+void HTMLPlugInElement::shouldDisposePlugin()
+{
+    if (m_persistedPluginWidget && m_persistedPluginWidget->isPluginView())
+        toPluginView(m_persistedPluginWidget.get())->shouldDisposePlugin();
+}
+#endif
 
 void HTMLPlugInElement::setPersistedPluginWidget(Widget* widget)
 {
     if (m_persistedPluginWidget == widget)
         return;
-    if (m_persistedPluginWidget) {
-        if (m_persistedPluginWidget->isPluginView()) {
-            m_persistedPluginWidget->hide();
-            disposeWidgetSoon(m_persistedPluginWidget.release());
-        } else {
-            DCHECK(m_persistedPluginWidget->isFrameView() || m_persistedPluginWidget->isRemoteFrameView());
-        }
+#if ENABLE(OILPAN)
+    if (m_persistedPluginWidget && m_persistedPluginWidget->isPluginView()) {
+        LocalFrame* frame = toPluginView(m_persistedPluginWidget.get())->pluginFrame();
+        ASSERT(frame);
+        frame->unregisterPluginElement(this);
     }
+    if (widget && widget->isPluginView()) {
+        LocalFrame* frame = toPluginView(widget)->pluginFrame();
+        ASSERT(frame);
+        frame->registerPluginElement(this);
+    }
+#endif
     m_persistedPluginWidget = widget;
-}
-
-bool HTMLPlugInElement::requestObjectInternal(
-    const String& url,
-    const String& mimeType,
-    const Vector<String>& paramNames,
-    const Vector<String>& paramValues)
-{
-    if (url.isEmpty() && mimeType.isEmpty())
-        return false;
-
-    if (protocolIsJavaScript(url))
-        return false;
-
-    KURL completedURL = url.isEmpty() ? KURL() : document().completeURL(url);
-    if (!allowedToLoadObject(completedURL, mimeType))
-        return false;
-
-    bool useFallback;
-    if (!shouldUsePlugin(completedURL, mimeType, hasFallbackContent(), useFallback)) {
-        // If the plugin element already contains a subframe,
-        // loadOrRedirectSubframe will re-use it. Otherwise, it will create a
-        // new frame and set it as the LayoutPart's widget, causing what was
-        // previously in the widget to be torn down.
-        return loadOrRedirectSubframe(completedURL, getNameAttribute(), true);
-    }
-
-    return loadPlugin(completedURL, mimeType, paramNames, paramValues,
-        useFallback, true);
 }
 
 bool HTMLPlugInElement::canProcessDrag() const
 {
-    return pluginWidget() && pluginWidget()->isPluginView() && toPluginView(pluginWidget())->canProcessDrag();
-}
-
-bool HTMLPlugInElement::canStartSelection() const
-{
-    return useFallbackContent() && Node::canStartSelection();
+    if (Widget* widget = existingPluginWidget())
+        return widget->isPluginView() && toPluginView(widget)->canProcessDrag();
+    return false;
 }
 
 bool HTMLPlugInElement::willRespondToMouseClickEvents()
@@ -178,25 +160,22 @@ void HTMLPlugInElement::didMoveToNewDocument(Document& oldDocument)
     HTMLFrameOwnerElement::didMoveToNewDocument(oldDocument);
 }
 
-void HTMLPlugInElement::attachLayoutTree(const AttachContext& context)
+void HTMLPlugInElement::attach(const AttachContext& context)
 {
-    HTMLFrameOwnerElement::attachLayoutTree(context);
+    HTMLFrameOwnerElement::attach(context);
 
-    if (!layoutObject() || useFallbackContent()) {
-        // If we don't have a layoutObject we have to dispose of any plugins
-        // which we persisted over a reattach.
-        if (m_persistedPluginWidget) {
-            HTMLFrameOwnerElement::UpdateSuspendScope suspendWidgetHierarchyUpdates;
-            setPersistedPluginWidget(nullptr);
-        }
+    if (!layoutObject() || useFallbackContent())
         return;
-    }
 
     if (isImageType()) {
         if (!m_imageLoader)
             m_imageLoader = HTMLImageLoader::create(this);
         m_imageLoader->updateFromElement();
-    } else if (needsWidgetUpdate() && !layoutEmbeddedItem().isNull() && !layoutEmbeddedItem().showsUnavailablePluginIndicator() && !wouldLoadAsNetscapePlugin(m_url, m_serviceType) && !m_isDelayingLoadEvent) {
+    } else if (needsWidgetUpdate()
+        && layoutEmbeddedObject()
+        && !layoutEmbeddedObject()->showsUnavailablePluginIndicator()
+        && !wouldLoadAsNetscapePlugin(m_url, m_serviceType)
+        && !m_isDelayingLoadEvent) {
         m_isDelayingLoadEvent = true;
         document().incrementLoadEventDelayCount();
         document().loadPluginsSoon();
@@ -205,6 +184,7 @@ void HTMLPlugInElement::attachLayoutTree(const AttachContext& context)
 
 void HTMLPlugInElement::updateWidget()
 {
+    RefPtrWillBeRawPtr<HTMLPlugInElement> protector(this);
     updateWidgetInternal();
     if (m_isDelayingLoadEvent) {
         m_isDelayingLoadEvent = false;
@@ -212,25 +192,13 @@ void HTMLPlugInElement::updateWidget()
     }
 }
 
-void HTMLPlugInElement::removedFrom(ContainerNode* insertionPoint)
-{
-    // If we've persisted the plugin and we're removed from the tree then
-    // make sure we cleanup the persistance pointer.
-    if (m_persistedPluginWidget) {
-        // TODO(dcheng): This UpdateSuspendScope doesn't seem to provide much;
-        // investigate removing it.
-        HTMLFrameOwnerElement::UpdateSuspendScope suspendWidgetHierarchyUpdates;
-        setPersistedPluginWidget(nullptr);
-    }
-    HTMLFrameOwnerElement::removedFrom(insertionPoint);
-}
-
 void HTMLPlugInElement::requestPluginCreationWithoutLayoutObjectIfPossible()
 {
     if (m_serviceType.isEmpty())
         return;
 
-    if (!document().frame() || !document().frame()->loader().client()->canCreatePluginWithoutRenderer(m_serviceType))
+    if (!document().frame()
+        || !document().frame()->loader().client()->canCreatePluginWithoutRenderer(m_serviceType))
         return;
 
     if (layoutObject() && layoutObject()->isLayoutPart())
@@ -239,30 +207,16 @@ void HTMLPlugInElement::requestPluginCreationWithoutLayoutObjectIfPossible()
     createPluginWithoutLayoutObject();
 }
 
-NPObject* HTMLPlugInElement::getNPObject()
-{
-    ASSERT(document().frame());
-    if (!m_NPObject)
-        m_NPObject = document().frame()->script().createScriptObjectForPluginElement(this);
-    return m_NPObject;
-}
-
-
 void HTMLPlugInElement::createPluginWithoutLayoutObject()
 {
-    DCHECK(document().frame()->loader().client()->canCreatePluginWithoutRenderer(
-        m_serviceType));
+    ASSERT(document().frame()->loader().client()->canCreatePluginWithoutRenderer(m_serviceType));
 
     KURL url;
-    // CSP can block src-less objects.
-    if (!allowedToLoadObject(url, m_serviceType))
-        return;
-
     Vector<String> paramNames;
     Vector<String> paramValues;
 
-    paramNames.push_back("type");
-    paramValues.push_back(m_serviceType);
+    paramNames.append("type");
+    paramValues.append(m_serviceType);
 
     bool useFallback = false;
     loadPlugin(url, m_serviceType, paramNames, paramValues, useFallback, false);
@@ -275,7 +229,7 @@ bool HTMLPlugInElement::shouldAccelerate() const
     return false;
 }
 
-void HTMLPlugInElement::detachLayoutTree(const AttachContext& context)
+void HTMLPlugInElement::detach(const AttachContext& context)
 {
     // Update the widget the next time we attach (detaching destroys the plugin).
     // FIXME: None of this "needsWidgetUpdate" related code looks right.
@@ -288,20 +242,28 @@ void HTMLPlugInElement::detachLayoutTree(const AttachContext& context)
 
     // Only try to persist a plugin widget we actually own.
     Widget* plugin = ownedWidget();
-    if (plugin && context.performingReattach) {
-        setPersistedPluginWidget(releaseWidget());
-    } else {
-        // Clear the widget; will trigger disposal of it with Oilpan.
-        setWidget(nullptr);
-    }
+    if (plugin && plugin->pluginShouldPersist())
+        setPersistedPluginWidget(plugin);
 
     resetInstance();
+    // Clear the widget; will trigger disposal of it with Oilpan.
+    setWidget(nullptr);
 
-    HTMLFrameOwnerElement::detachLayoutTree(context);
+    if (m_isCapturingMouseEvents) {
+        if (LocalFrame* frame = document().frame())
+            frame->eventHandler().setCapturingMouseEventsNode(nullptr);
+        m_isCapturingMouseEvents = false;
+    }
+
+    if (m_NPObject) {
+        _NPN_ReleaseObject(m_NPObject);
+        m_NPObject = 0;
+    }
+
+    HTMLFrameOwnerElement::detach(context);
 }
 
-LayoutObject* HTMLPlugInElement::createLayoutObject(
-    const ComputedStyle& style)
+LayoutObject* HTMLPlugInElement::createLayoutObject(const ComputedStyle& style)
 {
     // Fallback content breaks the DOM->layoutObject class relationship of this
     // class and all superclasses because createObject won't necessarily return
@@ -315,7 +277,9 @@ LayoutObject* HTMLPlugInElement::createLayoutObject(
         return image;
     }
 
-    m_pluginIsAvailable = true;
+    if (usePlaceholderContent())
+        return new LayoutBlockFlow(this);
+
     return new LayoutEmbeddedObject(this);
 }
 
@@ -326,7 +290,7 @@ void HTMLPlugInElement::finishParsingChildren()
         return;
 
     setNeedsWidgetUpdate(true);
-    if (isConnected())
+    if (inDocument())
         lazyReattachIfNeeded();
 }
 
@@ -350,7 +314,7 @@ SharedPersistent<v8::Object>* HTMLPlugInElement::pluginWrapper()
         if (m_persistedPluginWidget)
             plugin = m_persistedPluginWidget.get();
         else
-            plugin = pluginWidget();
+            plugin = pluginWidgetForJSBindings();
 
         if (plugin)
             m_pluginWrapper = frame->script().createPluginWrapper(plugin);
@@ -358,25 +322,28 @@ SharedPersistent<v8::Object>* HTMLPlugInElement::pluginWrapper()
     return m_pluginWrapper.get();
 }
 
-Widget* HTMLPlugInElement::pluginWidget() const
+Widget* HTMLPlugInElement::existingPluginWidget() const
+{
+    if (LayoutPart* layoutPart = existingLayoutPart())
+        return layoutPart->widget();
+    return nullptr;
+}
+
+Widget* HTMLPlugInElement::pluginWidgetForJSBindings()
 {
     if (LayoutPart* layoutPart = layoutPartForJSBindings())
         return layoutPart->widget();
     return nullptr;
 }
 
-bool HTMLPlugInElement::isPresentationAttribute(
-    const QualifiedName& name) const
+bool HTMLPlugInElement::isPresentationAttribute(const QualifiedName& name) const
 {
     if (name == widthAttr || name == heightAttr || name == vspaceAttr || name == hspaceAttr || name == alignAttr)
         return true;
     return HTMLFrameOwnerElement::isPresentationAttribute(name);
 }
 
-void HTMLPlugInElement::collectStyleForPresentationAttribute(
-    const QualifiedName& name,
-    const AtomicString& value,
-    MutableStylePropertySet* style)
+void HTMLPlugInElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
 {
     if (name == widthAttr) {
         addHTMLLengthToStyle(style, CSSPropertyWidth, value);
@@ -391,8 +358,7 @@ void HTMLPlugInElement::collectStyleForPresentationAttribute(
     } else if (name == alignAttr) {
         applyAlignmentAttributeToStyle(value, style);
     } else {
-        HTMLFrameOwnerElement::collectStyleForPresentationAttribute(name, value,
-            style);
+        HTMLFrameOwnerElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
@@ -412,11 +378,10 @@ void HTMLPlugInElement::defaultEventHandler(Event* event)
     if (!r || !r->isLayoutPart())
         return;
     if (r->isEmbeddedObject()) {
-        if (LayoutEmbeddedItem(toLayoutEmbeddedObject(r))
-                .showsUnavailablePluginIndicator())
+        if (toLayoutEmbeddedObject(r)->showsUnavailablePluginIndicator())
             return;
     }
-    Widget* widget = toLayoutPart(r)->widget();
+    RefPtrWillBeRawPtr<Widget> widget = toLayoutPart(r)->widget();
     if (!widget)
         return;
     widget->handleEvent(event);
@@ -430,21 +395,27 @@ LayoutPart* HTMLPlugInElement::layoutPartForJSBindings() const
     // Needs to load the plugin immediatedly because this function is called
     // when JavaScript code accesses the plugin.
     // FIXME: Check if dispatching events here is safe.
-    document().updateStyleAndLayoutIgnorePendingStylesheets(
-        Document::RunPostLayoutTasksSynchronously);
+    document().updateLayoutIgnorePendingStylesheets(Document::RunPostLayoutTasksSynchronously);
     return existingLayoutPart();
 }
 
 bool HTMLPlugInElement::isKeyboardFocusable() const
 {
-    if (HTMLFrameOwnerElement::isKeyboardFocusable())
-        return true;
-    return document().isActive() && pluginWidget() && pluginWidget()->isPluginView() && toPluginView(pluginWidget())->supportsKeyboardFocus();
+    if (useFallbackContent() || usePlaceholderContent())
+        return HTMLElement::isKeyboardFocusable();
+
+    if (!document().isActive())
+        return false;
+
+    if (Widget* widget = existingPluginWidget())
+        return widget->isPluginView() && toPluginView(widget)->supportsKeyboardFocus();
+
+    return false;
 }
 
 bool HTMLPlugInElement::hasCustomFocusLogic() const
 {
-    return !useFallbackContent();
+    return !useFallbackContent() && !usePlaceholderContent();
 }
 
 bool HTMLPlugInElement::isPluginElement() const
@@ -452,20 +423,30 @@ bool HTMLPlugInElement::isPluginElement() const
     return true;
 }
 
-void HTMLPlugInElement::disconnectContentFrame()
-{
-    HTMLFrameOwnerElement::disconnectContentFrame();
-    setPersistedPluginWidget(nullptr);
-}
-
 bool HTMLPlugInElement::layoutObjectIsFocusable() const
 {
     if (HTMLFrameOwnerElement::supportsFocus() && HTMLFrameOwnerElement::layoutObjectIsFocusable())
         return true;
 
-    if (useFallbackContent() || !HTMLFrameOwnerElement::layoutObjectIsFocusable())
+    if (useFallbackContent() || !layoutObject() || !layoutObject()->isEmbeddedObject())
         return false;
-    return m_pluginIsAvailable;
+    return !toLayoutEmbeddedObject(layoutObject())->showsUnavailablePluginIndicator();
+}
+
+NPObject* HTMLPlugInElement::getNPObject()
+{
+    ASSERT(document().frame());
+    if (!m_NPObject)
+        m_NPObject = document().frame()->script().createScriptObjectForPluginElement(this);
+    return m_NPObject;
+}
+
+void HTMLPlugInElement::setPluginFocus(bool focused)
+{
+    Widget* focusedWidget = existingPluginWidget();
+    // NPAPI flash requires to receive messages when web contents focus changes.
+    if (getNPObject() && focusedWidget)
+        focusedWidget->setFocus(focused, WebFocusTypeNone);
 }
 
 bool HTMLPlugInElement::isImageType()
@@ -475,21 +456,19 @@ bool HTMLPlugInElement::isImageType()
 
     if (LocalFrame* frame = document().frame()) {
         KURL completedURL = document().completeURL(m_url);
-        return frame->loader().client()->getObjectContentType(
-                   completedURL, m_serviceType, shouldPreferPlugInsForImages())
-            == ObjectContentImage;
+        return frame->loader().client()->objectContentType(completedURL, m_serviceType, shouldPreferPlugInsForImages()) == ObjectContentImage;
     }
 
     return Image::supportsType(m_serviceType);
 }
 
-LayoutEmbeddedItem HTMLPlugInElement::layoutEmbeddedItem() const
+LayoutEmbeddedObject* HTMLPlugInElement::layoutEmbeddedObject() const
 {
     // HTMLObjectElement and HTMLEmbedElement may return arbitrary layoutObjects
     // when using fallback content.
     if (!layoutObject() || !layoutObject()->isEmbeddedObject())
-        return LayoutEmbeddedItem(nullptr);
-    return LayoutEmbeddedItem(toLayoutEmbeddedObject(layoutObject()));
+        return nullptr;
+    return toLayoutEmbeddedObject(layoutObject());
 }
 
 // We don't use m_url, as it may not be the final URL that the object loads,
@@ -497,123 +476,146 @@ LayoutEmbeddedItem HTMLPlugInElement::layoutEmbeddedItem() const
 bool HTMLPlugInElement::allowedToLoadFrameURL(const String& url)
 {
     KURL completeURL = document().completeURL(url);
-    if (contentFrame() && protocolIsJavaScript(completeURL) && !document().getSecurityOrigin()->canAccess(contentFrame()->securityContext()->getSecurityOrigin()))
+    if (contentFrame() && protocolIsJavaScript(completeURL)
+        && !document().securityOrigin()->canAccess(contentDocument()->securityOrigin()))
         return false;
     return document().frame()->isURLAllowed(completeURL);
 }
 
 // We don't use m_url, or m_serviceType as they may not be the final values
 // that <object> uses depending on <param> values.
-bool HTMLPlugInElement::wouldLoadAsNetscapePlugin(const String& url,
-    const String& serviceType)
+bool HTMLPlugInElement::wouldLoadAsNetscapePlugin(const String& url, const String& serviceType)
 {
-    DCHECK(document().frame());
+    ASSERT(document().frame());
     KURL completedURL;
     if (!url.isEmpty())
         completedURL = document().completeURL(url);
-    return document().frame()->loader().client()->getObjectContentType(
-               completedURL, serviceType, shouldPreferPlugInsForImages())
-        == ObjectContentNetscapePlugin;
+    return document().frame()->loader().client()->objectContentType(completedURL, serviceType, shouldPreferPlugInsForImages()) == ObjectContentNetscapePlugin;
 }
 
-bool HTMLPlugInElement::requestObject(const String& url,
-    const String& mimeType,
-    const Vector<String>& paramNames,
-    const Vector<String>& paramValues)
+bool HTMLPlugInElement::requestObject(const String& url, const String& mimeType, const Vector<String>& paramNames, const Vector<String>& paramValues)
 {
-    bool result = requestObjectInternal(url, mimeType, paramNames, paramValues);
-
-    DEFINE_STATIC_LOCAL(
-        EnumerationHistogram, resultHistogram,
-        ("Plugin.RequestObjectResult", PluginRequestObjectResultMax));
-    resultHistogram.count(result ? PluginRequestObjectResultSuccess
-                                 : PluginRequestObjectResultFailure);
-
-    return result;
-}
-
-bool HTMLPlugInElement::loadPlugin(const KURL& url,
-    const String& mimeType,
-    const Vector<String>& paramNames,
-    const Vector<String>& paramValues,
-    bool useFallback,
-    bool requireLayoutObject)
-{
-    if (!allowedToLoadPlugin(url, mimeType))
+    if (url.isEmpty() && mimeType.isEmpty())
         return false;
 
+    if (protocolIsJavaScript(url))
+        return false;
+
+    KURL completedURL = url.isEmpty() ? KURL() : document().completeURL(url);
+    if (!pluginIsLoadable(completedURL, mimeType))
+        return false;
+
+    bool useFallback;
+    if (shouldUsePlugin(completedURL, mimeType, hasFallbackContent(), useFallback))
+        return loadPlugin(completedURL, mimeType, paramNames, paramValues, useFallback, true);
+
+    // If the plugin element already contains a subframe,
+    // loadOrRedirectSubframe will re-use it. Otherwise, it will create a new
+    // frame and set it as the LayoutPart's widget, causing what was previously
+    // in the widget to be torn down.
+    return loadOrRedirectSubframe(completedURL, getNameAttribute(), true);
+}
+
+bool HTMLPlugInElement::loadPlugin(const KURL& url, const String& mimeType, const Vector<String>& paramNames, const Vector<String>& paramValues, bool useFallback, bool requireLayoutObject)
+{
     LocalFrame* frame = document().frame();
+
     if (!frame->loader().allowPlugins(AboutToInstantiatePlugin))
         return false;
 
-    LayoutEmbeddedItem layoutItem = layoutEmbeddedItem();
+    LayoutEmbeddedObject* layoutObject = layoutEmbeddedObject();
     // FIXME: This code should not depend on layoutObject!
-    if ((layoutItem.isNull() && requireLayoutObject) || useFallback)
+    if ((!layoutObject && requireLayoutObject) || useFallback)
         return false;
 
-    VLOG(1) << this << " Plugin URL: " << m_url;
-    VLOG(1) << "Loaded URL: " << url.getString();
+    WTF_LOG(Plugins, "%p Plugin URL: %s", this, m_url.utf8().data());
+    WTF_LOG(Plugins, "   Loaded URL: %s", url.string().utf8().data());
     m_loadedUrl = url;
 
-    if (m_persistedPluginWidget) {
-        setWidget(m_persistedPluginWidget.release());
-    } else {
+    OwnPtrWillBeRawPtr<PluginPlaceholder> placeholder = nullptr;
+    RefPtrWillBeRawPtr<Widget> widget = m_persistedPluginWidget;
+    if (!widget) {
         bool loadManually = document().isPluginDocument() && !document().containsPlugins();
-        FrameLoaderClient::DetachedPluginPolicy policy = requireLayoutObject ? FrameLoaderClient::FailOnDetachedPlugin
-                                                                             : FrameLoaderClient::AllowDetachedPlugin;
-        Widget* widget = frame->loader().client()->createPlugin(
-            this, url, paramNames, paramValues, mimeType, loadManually, policy);
-        if (!widget) {
-            if (!layoutItem.isNull() && !layoutItem.showsUnavailablePluginIndicator()) {
-                m_pluginIsAvailable = false;
-                layoutItem.setPluginAvailability(LayoutEmbeddedObject::PluginMissing);
-            }
-            return false;
+        placeholder = frame->loader().client()->createPluginPlaceholder(document(), url, paramNames, paramValues, mimeType, loadManually);
+        if (!placeholder) {
+            FrameLoaderClient::DetachedPluginPolicy policy = requireLayoutObject ? FrameLoaderClient::FailOnDetachedPlugin : FrameLoaderClient::AllowDetachedPlugin;
+            widget = frame->loader().client()->createPlugin(this, url, paramNames, paramValues, mimeType, loadManually, policy);
         }
-
-        if (!layoutItem.isNull())
-            setWidget(widget);
-        else
-            setPersistedPluginWidget(widget);
     }
 
+    if (!placeholder && !widget) {
+        if (layoutObject && !layoutObject->showsUnavailablePluginIndicator())
+            layoutObject->setPluginUnavailabilityReason(LayoutEmbeddedObject::PluginMissing);
+        setPlaceholder(nullptr);
+        return false;
+    }
+
+    if (placeholder) {
+        setPlaceholder(placeholder.release());
+        return true;
+    }
+
+    if (layoutObject) {
+        setWidget(widget);
+        setPersistedPluginWidget(nullptr);
+    } else {
+        setPersistedPluginWidget(widget.get());
+    }
+    setPlaceholder(nullptr);
     document().setContainsPlugins();
-    // TODO(esprehn): WebPluginContainerImpl::setWebLayer also schedules a
-    // compositing update, do we need both?
-    setNeedsCompositingUpdate();
-    // Make sure any input event handlers introduced by the plugin are taken into
-    // account.
+    scheduleSVGFilterLayerUpdateHack();
+    // Make sure any input event handlers introduced by the plugin are taken into account.
     if (Page* page = document().frame()->page()) {
         if (ScrollingCoordinator* scrollingCoordinator = page->scrollingCoordinator())
-            scrollingCoordinator->notifyGeometryChanged();
+            scrollingCoordinator->notifyLayoutUpdated();
     }
     return true;
 }
 
-bool HTMLPlugInElement::shouldUsePlugin(const KURL& url,
-    const String& mimeType,
-    bool hasFallback,
-    bool& useFallback)
+bool HTMLPlugInElement::shouldUsePlugin(const KURL& url, const String& mimeType, bool hasFallback, bool& useFallback)
 {
-    ObjectContentType objectType = document().frame()->loader().client()->getObjectContentType(
-        url, mimeType, shouldPreferPlugInsForImages());
+    // Allow other plugins to win over QuickTime because if the user has
+    // installed a plugin that can handle TIFF (which QuickTime can also
+    // handle) they probably intended to override QT.
+    if (document().frame()->page() && (mimeType == "image/tiff" || mimeType == "image/tif" || mimeType == "image/x-tiff")) {
+        const PluginData* pluginData = document().frame()->page()->pluginData();
+        String pluginName = pluginData ? pluginData->pluginNameForMimeType(mimeType) : String();
+        if (!pluginName.isEmpty() && !pluginName.contains("QuickTime", TextCaseInsensitive))
+            return true;
+    }
+
+    ObjectContentType objectType = document().frame()->loader().client()->objectContentType(url, mimeType, shouldPreferPlugInsForImages());
     // If an object's content can't be handled and it has no fallback, let
     // it be handled as a plugin to show the broken plugin icon.
     useFallback = objectType == ObjectContentNone && hasFallback;
-    return objectType == ObjectContentNone || objectType == ObjectContentNetscapePlugin;
+    return objectType == ObjectContentNone || objectType == ObjectContentNetscapePlugin || objectType == ObjectContentOtherPlugin;
+}
+
+void HTMLPlugInElement::setPlaceholder(PassOwnPtrWillBeRawPtr<PluginPlaceholder> placeholder)
+{
+    bool needsLazyReattach = (!placeholder) != (!m_placeholder);
+    if (placeholder) {
+        placeholder->loadIntoContainer(ensureUserAgentShadowRoot());
+        m_placeholder = placeholder;
+    } else {
+        ShadowRoot& shadowRoot = ensureUserAgentShadowRoot();
+        shadowRoot.removeChildren();
+        shadowRoot.appendChild(HTMLContentElement::create(document()));
+        m_placeholder.clear();
+    }
+    if (needsLazyReattach)
+        lazyReattachIfAttached();
 }
 
 void HTMLPlugInElement::dispatchErrorEvent()
 {
-    if (document().isPluginDocument() && document().localOwner())
-        document().localOwner()->dispatchEvent(
-            Event::create(EventTypeNames::error));
+    if (document().isPluginDocument() && document().ownerElement())
+        document().ownerElement()->dispatchEvent(Event::create(EventTypeNames::error));
     else
         dispatchEvent(Event::create(EventTypeNames::error));
 }
 
-bool HTMLPlugInElement::allowedToLoadObject(const KURL& url,
-    const String& mimeType)
+bool HTMLPlugInElement::pluginIsLoadable(const KURL& url, const String& mimeType)
 {
     if (url.isEmpty() && mimeType.isEmpty())
         return false;
@@ -623,45 +625,37 @@ bool HTMLPlugInElement::allowedToLoadObject(const KURL& url,
     if (!settings)
         return false;
 
-    if (MIMETypeRegistry::isJavaAppletMIMEType(mimeType))
+    if (MIMETypeRegistry::isJavaAppletMIMEType(mimeType) && !settings->javaEnabled())
         return false;
 
-    if (!document().getSecurityOrigin()->canDisplay(url)) {
-        FrameLoader::reportLocalLoadFailed(frame, url.getString());
+    if (document().isSandboxed(SandboxPlugins))
+        return false;
+
+    if (!document().securityOrigin()->canDisplay(url)) {
+        FrameLoader::reportLocalLoadFailed(frame, url.string());
         return false;
     }
 
-    AtomicString declaredMimeType = fastGetAttribute(HTMLNames::typeAttr);
-    if (!document().contentSecurityPolicy()->allowObjectFromSource(url) || !document().contentSecurityPolicy()->allowPluginTypeForDocument(document(), mimeType, declaredMimeType, url)) {
-        if (LayoutEmbeddedItem layoutItem = layoutEmbeddedItem()) {
-            m_pluginIsAvailable = false;
-            layoutItem.setPluginAvailability(
-                LayoutEmbeddedObject::PluginBlockedByContentSecurityPolicy);
-        }
+    AtomicString declaredMimeType = document().isPluginDocument() && document().ownerElement() ?
+        document().ownerElement()->fastGetAttribute(HTMLNames::typeAttr) :
+        fastGetAttribute(HTMLNames::typeAttr);
+    if (!document().contentSecurityPolicy()->allowObjectFromSource(url)
+        || !document().contentSecurityPolicy()->allowPluginTypeForDocument(document(), mimeType, declaredMimeType, url)) {
+        layoutEmbeddedObject()->setPluginUnavailabilityReason(LayoutEmbeddedObject::PluginBlockedByContentSecurityPolicy);
         return false;
     }
-    // If the URL is empty, a plugin could still be instantiated if a MIME-type
-    // is specified.
-    return (!mimeType.isEmpty() && url.isEmpty()) || !MixedContentChecker::shouldBlockFetch(frame, WebURLRequest::RequestContextObject, WebURLRequest::FrameTypeNone, ResourceRequest::RedirectStatus::NoRedirect, url);
-}
 
-bool HTMLPlugInElement::allowedToLoadPlugin(const KURL& url,
-    const String& mimeType)
-{
-    if (document().isSandboxed(SandboxPlugins)) {
-        document().addConsoleMessage(ConsoleMessage::create(
-            SecurityMessageSource, ErrorMessageLevel,
-            "Failed to load '" + url.elidedString() + "' as a plugin, because the "
-                                                      "frame into which the plugin "
-                                                      "is loading is sandboxed."));
-        return false;
-    }
-    return true;
+    return (!mimeType.isEmpty() && url.isEmpty()) || !MixedContentChecker::shouldBlockFetch(frame, WebURLRequest::RequestContextObject, WebURLRequest::FrameTypeNone, url);
 }
 
 void HTMLPlugInElement::didAddUserAgentShadowRoot(ShadowRoot&)
 {
     userAgentShadowRoot()->appendChild(HTMLContentElement::create(document()));
+}
+
+void HTMLPlugInElement::willAddFirstAuthorShadowRoot()
+{
+    lazyReattachIfAttached();
 }
 
 bool HTMLPlugInElement::hasFallbackContent() const
@@ -671,15 +665,13 @@ bool HTMLPlugInElement::hasFallbackContent() const
 
 bool HTMLPlugInElement::useFallbackContent() const
 {
-    return false;
+    return hasOpenShadowRoot();
 }
 
 void HTMLPlugInElement::lazyReattachIfNeeded()
 {
-    if (!useFallbackContent() && needsWidgetUpdate() && layoutObject() && !isImageType()) {
+    if (!useFallbackContent() && !usePlaceholderContent() && needsWidgetUpdate() && layoutObject() && !isImageType())
         lazyReattachIfAttached();
-        setPersistedPluginWidget(nullptr);
-    }
 }
 
-} // namespace blink
+}

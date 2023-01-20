@@ -32,63 +32,56 @@
 #include "core/frame/SuspendableTimer.h"
 #include "platform/UserGestureIndicator.h"
 #include "platform/heap/Handle.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 class ExecutionContext;
 
-class CORE_EXPORT DOMTimer final : public GarbageCollectedFinalized<DOMTimer>,
-                                   public SuspendableTimer {
-    USING_GARBAGE_COLLECTED_MIXIN(DOMTimer);
-
+class CORE_EXPORT DOMTimer final : public RefCountedWillBeGarbageCollectedFinalized<DOMTimer>, public SuspendableTimer {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMTimer);
 public:
-    // Creates a new timer owned by the ExecutionContext, starts it and returns
-    // its ID.
-    static int install(ExecutionContext*,
-        ScheduledAction*,
-        int timeout,
-        bool singleShot);
+    // Creates a new timer owned by the ExecutionContext, starts it and returns its ID.
+    static int install(ExecutionContext*, PassOwnPtrWillBeRawPtr<ScheduledAction>, int timeout, bool singleShot);
     static void removeByID(ExecutionContext*, int timeoutID);
 
-    ~DOMTimer() override;
+    virtual ~DOMTimer();
 
-    // SuspendableObject
-    void contextDestroyed(ExecutionContext*) override;
+    // ActiveDOMObject
+    virtual void stop() override;
+
+    // The following are essentially constants. All intervals are in seconds.
+    static double hiddenPageAlignmentInterval();
+    static double visiblePageAlignmentInterval();
 
     // Eager finalization is needed to promptly stop this Timer object.
-    // Otherwise timer events might fire at an object that's slated for
-    // destruction (when lazily swept), but some of its members (m_action) may
-    // already have been finalized & must not be accessed.
+    // Otherwise timer events might fire at an object that's slated for destruction
+    // (when lazily swept), but some of its members (m_action) may already have
+    // been finalized & must not be accessed.
     EAGERLY_FINALIZE();
     DECLARE_VIRTUAL_TRACE();
 
-    void stop() override;
+    void disposeTimer();
 
 private:
     friend class DOMTimerCoordinator; // For create().
 
-    static DOMTimer* create(ExecutionContext* context,
-        ScheduledAction* action,
-        int timeout,
-        bool singleShot,
-        int timeoutID)
+    static PassRefPtrWillBeRawPtr<DOMTimer> create(ExecutionContext* context, PassOwnPtrWillBeRawPtr<ScheduledAction> action, int timeout, bool singleShot, int timeoutID)
     {
-        return new DOMTimer(context, action, timeout, singleShot, timeoutID);
+        return adoptRefWillBeNoop(new DOMTimer(context, action, timeout, singleShot, timeoutID));
     }
 
-    DOMTimer(ExecutionContext*,
-        ScheduledAction*,
-        int interval,
-        bool singleShot,
-        int timeoutID);
-    void fired() override;
+    DOMTimer(ExecutionContext*, PassOwnPtrWillBeRawPtr<ScheduledAction>, int interval, bool singleShot, int timeoutID);
+    virtual void fired() override;
 
-    RefPtr<WebTaskRunner> timerTaskRunner() const override;
+    // Retuns timer fire time rounded to the next multiple of timer alignment interval.
+    virtual double alignedFireTime(double) const override;
 
     int m_timeoutID;
     int m_nestingLevel;
-    Member<ScheduledAction> m_action;
+    OwnPtrWillBeMember<ScheduledAction> m_action;
     RefPtr<UserGestureToken> m_userGestureToken;
 };
 

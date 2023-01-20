@@ -25,13 +25,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/paint/MediaControlsPainter.h"
 
-#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/TimeRanges.h"
 #include "core/html/shadow/MediaControlElementTypes.h"
-#include "core/layout/LayoutBox.h"
 #include "core/paint/PaintInfo.h"
 #include "core/style/ComputedStyle.h"
 #include "platform/graphics/Gradient.h"
@@ -39,23 +39,10 @@
 
 namespace blink {
 
-static const double kCurrentTimeBufferedDelta = 1.0;
+static double kCurrentTimeBufferedDelta = 1.0;
 
 typedef WTF::HashMap<const char*, Image*> MediaControlImageMap;
 static MediaControlImageMap* gMediaControlImageMap = 0;
-
-// Slider thumb sizes, shard between time and volume.
-static const int mediaSliderThumbTouchWidth = 36; // Touch zone size.
-static const int mediaSliderThumbTouchHeight = 48;
-static const int mediaSliderThumbPaintWidth = 40; // Painted area.
-static const int mediaSliderThumbPaintHeight = 28;
-
-// Overlay play button size.
-static const int mediaOverlayPlayButtonWidth = 48;
-static const int mediaOverlayPlayButtonHeight = 48;
-
-// Alpha for disabled elements.
-static const float kDisabledAlpha = 0.4;
 
 static Image* platformResource(const char* name)
 {
@@ -73,83 +60,22 @@ static Image* platformResource(const char* name)
 
 static bool hasSource(const HTMLMediaElement* mediaElement)
 {
-    return mediaElement->getNetworkState() != HTMLMediaElement::kNetworkEmpty && mediaElement->getNetworkState() != HTMLMediaElement::kNetworkNoSource;
+    return mediaElement->networkState() != HTMLMediaElement::NETWORK_EMPTY
+        && mediaElement->networkState() != HTMLMediaElement::NETWORK_NO_SOURCE;
 }
 
-static FloatRect adjustRectForPadding(IntRect rect,
-    const LayoutObject* object)
+static bool paintMediaButton(GraphicsContext* context, const IntRect& rect, Image* image)
 {
-    FloatRect adjustedRect(rect);
-
-    if (!object)
-        return adjustedRect;
-
-    // TODO(liberato): make this more elegant, crbug.com/598861 .
-    if (const ComputedStyle* style = object->style()) {
-        const float paddingLeft = style->paddingLeft().getFloatValue();
-        const float paddingTop = style->paddingTop().getFloatValue();
-        const float paddingRight = style->paddingRight().getFloatValue();
-        const float paddingBottom = style->paddingBottom().getFloatValue();
-        adjustedRect = FloatRect(rect.x() + paddingLeft, rect.y() + paddingTop,
-            rect.width() - paddingLeft - paddingRight,
-            rect.height() - paddingTop - paddingBottom);
-    }
-
-    return adjustedRect;
-}
-
-static bool paintMediaButton(GraphicsContext& context,
-    const IntRect& rect,
-    Image* image,
-    const LayoutObject* object,
-    bool isEnabled)
-{
-    FloatRect drawRect = adjustRectForPadding(rect, object);
-
-    if (!isEnabled)
-        context.beginLayer(kDisabledAlpha);
-
-    context.drawImage(image, drawRect);
-
-    if (!isEnabled)
-        context.endLayer();
-
+    context->drawImage(image, rect);
     return true;
 }
 
-static bool paintMediaButton(GraphicsContext& context,
-    const IntRect& rect,
-    Image* image,
-    bool isEnabled = true)
+bool MediaControlsPainter::paintMediaMuteButton(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    return paintMediaButton(context, rect, image, 0, isEnabled);
-}
-
-bool MediaControlsPainter::paintMediaMuteButton(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-//     const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-//     if (!mediaElement)
-//         return false;
-// 
-//     static Image* soundNotMuted = platformResource("mediaplayerSoundNotMuted");
-//     static Image* soundMuted = platformResource("mediaplayerSoundMuted");
-// 
-//     if (!hasSource(mediaElement) || !mediaElement->hasAudio())
-//         return paintMediaButton(paintInfo.context, rect, soundMuted, &object, false);
-//     
-// 
-//     if (mediaElement->muted() || mediaElement->volume() <= 0)
-//         return paintMediaButton(paintInfo.context, rect, soundMuted, &object, true);
-// 
-//     return paintMediaButton(paintInfo.context, rect, soundNotMuted, &object, true);
-
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
-    // The new UI uses "muted" and "not muted" only.
     static Image* soundLevel3 = platformResource("mediaplayerSoundLevel3");
     static Image* soundLevel2 = platformResource("mediaplayerSoundLevel2");
     static Image* soundLevel1 = platformResource("mediaplayerSoundLevel1");
@@ -157,7 +83,7 @@ bool MediaControlsPainter::paintMediaMuteButton(const LayoutObject& object,
     static Image* soundDisabled = platformResource("mediaplayerSoundDisabled");
 
     if (!hasSource(mediaElement) || !mediaElement->hasAudio())
-        return paintMediaButton(paintInfo.context, rect, soundDisabled, false);
+        return paintMediaButton(paintInfo.context, rect, soundDisabled);
 
     if (mediaElement->muted() || mediaElement->volume() <= 0)
         return paintMediaButton(paintInfo.context, rect, soundLevel0);
@@ -171,82 +97,56 @@ bool MediaControlsPainter::paintMediaMuteButton(const LayoutObject& object,
     return paintMediaButton(paintInfo.context, rect, soundLevel3);
 }
 
-bool MediaControlsPainter::paintMediaPlayButton(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+bool MediaControlsPainter::paintMediaPlayButton(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
     static Image* mediaPlay = platformResource("mediaplayerPlay");
     static Image* mediaPause = platformResource("mediaplayerPause");
+    static Image* mediaPlayDisabled = platformResource("mediaplayerPlayDisabled");
 
-    // Draw the regular play button grayed out.
     if (!hasSource(mediaElement))
-        return paintMediaButton(paintInfo.context, rect, mediaPlay, &object, false);
+        return paintMediaButton(paintInfo.context, rect, mediaPlayDisabled);
 
-    Image* image = !object.node()->isMediaControlElement() || mediaControlElementType(object.node()) == MediaPlayButton
-        ? mediaPlay
-        : mediaPause;
-    return paintMediaButton(paintInfo.context, rect, image, &object, true);
+    Image * image = !object->node()->isMediaControlElement() || mediaControlElementType(object->node()) == MediaPlayButton ? mediaPlay : mediaPause;
+    return paintMediaButton(paintInfo.context, rect, image);
 }
 
-bool MediaControlsPainter::paintMediaOverlayPlayButton(
-    const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+bool MediaControlsPainter::paintMediaOverlayPlayButton(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
-    if (!hasSource(mediaElement) || !mediaElement->paused())
+    if (!hasSource(mediaElement) || !mediaElement->togglePlayStateWillPlay())
         return false;
 
     static Image* mediaOverlayPlay = platformResource("mediaplayerOverlayPlay");
-
-    IntRect buttonRect(rect);
-
-    // Overlay play button covers the entire player, so center and draw a
-    // smaller button.  Center in the entire element.
-    // TODO(liberato): object.enclosingBox()?
-    const LayoutBox* box = mediaElement->layoutObject()->enclosingBox();
-    if (!box)
-        return false;
-    int mediaHeight = box->pixelSnappedHeight();
-    buttonRect.setX(rect.center().x() - mediaOverlayPlayButtonWidth / 2);
-    buttonRect.setY(rect.center().y() - mediaOverlayPlayButtonHeight / 2 + (mediaHeight - rect.height()) / 2);
-    buttonRect.setWidth(mediaOverlayPlayButtonWidth);
-    buttonRect.setHeight(mediaOverlayPlayButtonHeight);
-
-    return paintMediaButton(paintInfo.context, buttonRect, mediaOverlayPlay);
+    return paintMediaButton(paintInfo.context, rect, mediaOverlayPlay);
 }
 
-static void paintRoundedSliderBackground(const IntRect& rect,
-    const ComputedStyle& style,
-    GraphicsContext& context,
-    Color sliderBackgroundColor)
+static Image* getMediaSliderThumb()
 {
-    float borderRadius = rect.height() / 2;
-    FloatSize radii(borderRadius, borderRadius);
-
-    context.fillRoundedRect(FloatRoundedRect(rect, radii, radii, radii, radii),
-        sliderBackgroundColor);
+    static Image* mediaSliderThumb = platformResource("mediaplayerSliderThumb");
+    return mediaSliderThumb;
 }
 
-static void paintSliderRangeHighlight(const IntRect& rect,
-    const ComputedStyle& style,
-    GraphicsContext& context,
-    int startPosition,
-    int endPosition,
-    Color startColor,
-    Color endColor)
+static void paintRoundedSliderBackground(const IntRect& rect, const ComputedStyle&, GraphicsContext* context)
 {
-    // Calculate border radius; need to avoid being smaller than half the slider
-    // height because of https://bugs.webkit.org/show_bug.cgi?id=30143.
-    float borderRadius = rect.height() / 2.0f;
-    FloatSize radii(borderRadius, borderRadius);
+    int borderRadius = rect.height() / 2;
+    IntSize radii(borderRadius, borderRadius);
+    Color sliderBackgroundColor = Color(11, 11, 11);
+    context->fillRoundedRect(FloatRoundedRect(rect, radii, radii, radii, radii), sliderBackgroundColor);
+}
+
+static void paintSliderRangeHighlight(const IntRect& rect, const ComputedStyle& style, GraphicsContext* context, int startPosition, int endPosition, Color startColor, Color endColor)
+{
+    // Calculate border radius; need to avoid being smaller than half the slider height
+    // because of https://bugs.webkit.org/show_bug.cgi?id=30143.
+    int borderRadius = rect.height() / 2;
+    IntSize radii(borderRadius, borderRadius);
 
     // Calculate highlight rectangle and edge dimensions.
     int startOffset = startPosition;
@@ -256,8 +156,7 @@ static void paintSliderRangeHighlight(const IntRect& rect,
     if (rangeWidth <= 0)
         return;
 
-    // Make sure the range width is bigger than border radius at the edges to
-    // retain rounded corners.
+    // Make sure the range width is bigger than border radius at the edges to retain rounded corners.
     if (startOffset < borderRadius && rangeWidth < borderRadius)
         rangeWidth = borderRadius;
     if (endOffset < borderRadius && rangeWidth < borderRadius)
@@ -273,73 +172,49 @@ static void paintSliderRangeHighlight(const IntRect& rect,
         return;
 
     // Calculate white-grey gradient.
-    FloatPoint sliderTopLeft = highlightRect.location();
-    FloatPoint sliderBottomLeft = sliderTopLeft;
+    IntPoint sliderTopLeft = highlightRect.location();
+    IntPoint sliderBottomLeft = sliderTopLeft;
     sliderBottomLeft.move(0, highlightRect.height());
     RefPtr<Gradient> gradient = Gradient::create(sliderTopLeft, sliderBottomLeft);
     gradient->addColorStop(0.0, startColor);
     gradient->addColorStop(1.0, endColor);
 
-    // Fill highlight rectangle with gradient, potentially rounded if on left or
-    // right edge.
-    SkPaint gradientPaint(context.fillPaint());
-    gradient->applyToPaint(gradientPaint, SkMatrix::I());
+    // Fill highlight rectangle with gradient, potentially rounded if on left or right edge.
+    context->save();
+    context->setFillGradient(gradient);
 
     if (startOffset < borderRadius && endOffset < borderRadius)
-        context.drawRRect(FloatRoundedRect(highlightRect, radii, radii, radii, radii), gradientPaint);
+        context->fillRoundedRect(FloatRoundedRect(highlightRect, radii, radii, radii, radii), startColor);
     else if (startOffset < borderRadius)
-        context.drawRRect(FloatRoundedRect(highlightRect, radii, FloatSize(0, 0), radii, FloatSize(0, 0)), gradientPaint);
+        context->fillRoundedRect(FloatRoundedRect(highlightRect, radii, IntSize(0, 0), radii, IntSize(0, 0)), startColor);
     else if (endOffset < borderRadius)
-        context.drawRRect(FloatRoundedRect(highlightRect, FloatSize(0, 0), radii, FloatSize(0, 0), radii), gradientPaint);
+        context->fillRoundedRect(FloatRoundedRect(highlightRect, IntSize(0, 0), radii, IntSize(0, 0), radii), startColor);
     else
-        context.drawRect(highlightRect, gradientPaint);
+        context->fillRect(highlightRect);
+
+    context->restore();
 }
 
-bool MediaControlsPainter::paintMediaSlider(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+const int mediaSliderThumbWidth = 32;
+
+bool MediaControlsPainter::paintMediaSlider(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
-    GraphicsContext& context = paintInfo.context;
+    const ComputedStyle& style = object->styleRef();
+    GraphicsContext* context = paintInfo.context;
 
-    // Should we paint the slider partially transparent?
-    bool drawUiGrayed = !hasSource(mediaElement);
-    if (drawUiGrayed)
-        context.beginLayer(kDisabledAlpha);
+    paintRoundedSliderBackground(rect, style, context);
 
-    paintMediaSliderInternal(object, paintInfo, rect);
-
-    if (drawUiGrayed)
-        context.endLayer();
-
-    return true;
-}
-
-void MediaControlsPainter::paintMediaSliderInternal(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-    if (!mediaElement)
-        return;
-
-    const ComputedStyle& style = object.styleRef();
-    GraphicsContext& context = paintInfo.context;
-
-    // Paint the slider bar in the "no data buffered" state.
-    paintRoundedSliderBackground(rect, style, context, Color(0xda, 0xda, 0xda));
-
-    // Draw the buffered range. Since the element may have multiple buffered
-    // ranges and it'd be distracting/'busy' to show all of them, show only the
-    // buffered range containing the current play head.
-    TimeRanges* bufferedTimeRanges = mediaElement->buffered();
+    // Draw the buffered range. Since the element may have multiple buffered ranges and it'd be
+    // distracting/'busy' to show all of them, show only the buffered range containing the current play head.
+    RefPtrWillBeRawPtr<TimeRanges> bufferedTimeRanges = mediaElement->buffered();
     float duration = mediaElement->duration();
     float currentTime = mediaElement->currentTime();
-    if (std_isnan(duration) || std_isinf(duration) || !duration || std_isnan(currentTime))
-        return;
+    if (std::isnan(duration) || std::isinf(duration) || !duration || std::isnan(currentTime))
+        return true;
 
     for (unsigned i = 0; i < bufferedTimeRanges->length(); ++i) {
         float start = bufferedTimeRanges->start(i, ASSERT_NO_EXCEPTION);
@@ -351,115 +226,98 @@ void MediaControlsPainter::paintMediaSliderInternal(const LayoutObject& object,
         // This is related to https://www.w3.org/Bugs/Public/show_bug.cgi?id=28125
         // FIXME: Remove this workaround when WebMediaPlayer
         // has an asynchronous pause interface.
-        if (std_isnan(start) || std_isnan(end) || start > currentTime + kCurrentTimeBufferedDelta || end < currentTime)
+        if (std::isnan(start) || std::isnan(end)
+            || start > currentTime + kCurrentTimeBufferedDelta || end < currentTime)
             continue;
         int startPosition = int(start * rect.width() / duration);
         int currentPosition = int(currentTime * rect.width() / duration);
         int endPosition = int(end * rect.width() / duration);
 
-        // Draw highlight before current time.
-        Color startColor = Color(0x42, 0x85, 0xf4);
-        Color endColor = Color(0x42, 0x85, 0xf4);
+        // Add half the thumb width proportionally adjusted to the current painting position.
+        int thumbCenter = mediaSliderThumbWidth / 2;
+        int addWidth = thumbCenter * (1.0 - 2.0 * currentPosition / rect.width());
+        currentPosition += addWidth;
 
-        if (currentPosition > startPosition) {
+        // Draw white-ish highlight before current time.
+        Color startColor = Color(195, 195, 195);
+        Color endColor = Color(217, 217, 217);
+        if (currentPosition > startPosition)
             paintSliderRangeHighlight(rect, style, context, startPosition, currentPosition, startColor, endColor);
-        }
 
-        // Draw dark grey highlight after current time.
-        startColor = endColor = Color(0x5a, 0x5a, 0x5a);
+        // Draw grey-ish highlight after current time.
+        startColor = Color(60, 60, 60);
+        endColor = Color(76, 76, 76);
 
-        if (endPosition > currentPosition) {
+        if (endPosition > currentPosition)
             paintSliderRangeHighlight(rect, style, context, currentPosition, endPosition, startColor, endColor);
-        }
-        return;
+
+        return true;
     }
+
+    return true;
 }
 
-void MediaControlsPainter::adjustMediaSliderThumbPaintSize(
-    const IntRect& rect,
-    const ComputedStyle& style,
-    IntRect& rectOut)
+bool MediaControlsPainter::paintMediaSliderThumb(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    // Adjust the rectangle to be centered, the right size for the image.
-    // We do this because it's quite hard to get the thumb touch target
-    // to match.  So, we provide the touch target size with
-    // adjustMediaSliderThumbSize(), and scale it back when we paint.
-    rectOut = rect;
-
-    const float zoomLevel = style.effectiveZoom();
-    const float zoomedPaintWidth = mediaSliderThumbPaintWidth * zoomLevel;
-    const float zoomedPaintHeight = mediaSliderThumbPaintHeight * zoomLevel;
-
-    rectOut.setX(rect.center().x() - zoomedPaintWidth / 2);
-    rectOut.setY(rect.center().y() - zoomedPaintHeight / 2);
-    rectOut.setWidth(zoomedPaintWidth);
-    rectOut.setHeight(zoomedPaintHeight);
-}
-
-bool MediaControlsPainter::paintMediaSliderThumb(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    if (!object.node())
+    if (!object->node())
         return false;
 
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object.node()->ownerShadowHost());
+    HTMLMediaElement* mediaElement = toParentMediaElement(object->node()->shadowHost());
     if (!mediaElement)
         return false;
 
     if (!hasSource(mediaElement))
         return true;
 
-    static Image* mediaSliderThumb = platformResource("mediaplayerSliderThumb");
-    IntRect paintRect;
-    const ComputedStyle& style = object.styleRef();
-    adjustMediaSliderThumbPaintSize(rect, style, paintRect);
-    return paintMediaButton(paintInfo.context, paintRect, mediaSliderThumb);
-
-    return true;
+    Image* mediaSliderThumb = getMediaSliderThumb();
+    return paintMediaButton(paintInfo.context, rect, mediaSliderThumb);
 }
 
-bool MediaControlsPainter::paintMediaVolumeSlider(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+const int mediaVolumeSliderThumbWidth = 24;
+
+bool MediaControlsPainter::paintMediaVolumeSlider(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
-    GraphicsContext& context = paintInfo.context;
-    const ComputedStyle& style = object.styleRef();
+    GraphicsContext* context = paintInfo.context;
+    const ComputedStyle& style = object->styleRef();
 
-    // Paint the slider bar.
-    paintRoundedSliderBackground(rect, style, context, Color(0x5a, 0x5a, 0x5a));
+    paintRoundedSliderBackground(rect, style, context);
 
     // Calculate volume position for white background rectangle.
     float volume = mediaElement->volume();
-    if (std_isnan(volume) || volume < 0)
+    if (std::isnan(volume) || volume < 0)
         return true;
     if (volume > 1)
         volume = 1;
-    if (!hasSource(mediaElement) || !mediaElement->hasAudio() || mediaElement->muted()) {
+    if (!hasSource(mediaElement) || !mediaElement->hasAudio() || mediaElement->muted())
         volume = 0;
-    }
 
     // Calculate the position relative to the center of the thumb.
-    const float fillWidth = volume * rect.width();
-    static const Color color = Color(0x42, 0x85, 0xf4); // blue
-    paintSliderRangeHighlight(rect, style, context, 0.0, fillWidth, color, color);
+    float fillWidth = 0;
+    if (volume > 0) {
+        float thumbCenter = mediaVolumeSliderThumbWidth / 2;
+        float zoomLevel = style.effectiveZoom();
+        float positionWidth = volume * (rect.width() - (zoomLevel * thumbCenter));
+        fillWidth = positionWidth + (zoomLevel * thumbCenter / 2);
+    }
+
+    Color startColor = Color(195, 195, 195);
+    Color endColor = Color(217, 217, 217);
+
+    paintSliderRangeHighlight(rect, style, context, 0.0, fillWidth, startColor, endColor);
 
     return true;
 }
 
-bool MediaControlsPainter::paintMediaVolumeSliderThumb(
-    const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+bool MediaControlsPainter::paintMediaVolumeSliderThumb(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    if (!object.node())
+    if (!object->node())
         return false;
 
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object.node()->ownerShadowHost());
+    HTMLMediaElement* mediaElement = toParentMediaElement(object->node()->shadowHost());
     if (!mediaElement)
         return false;
 
@@ -467,32 +325,12 @@ bool MediaControlsPainter::paintMediaVolumeSliderThumb(
         return true;
 
     static Image* mediaVolumeSliderThumb = platformResource("mediaplayerVolumeSliderThumb");
-
-    IntRect paintRect;
-    const ComputedStyle& style = object.styleRef();
-    adjustMediaSliderThumbPaintSize(rect, style, paintRect);
-    return paintMediaButton(paintInfo.context, paintRect, mediaVolumeSliderThumb);
+    return paintMediaButton(paintInfo.context, rect, mediaVolumeSliderThumb);
 }
 
-bool MediaControlsPainter::paintMediaFullscreenButton(
-    const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+bool MediaControlsPainter::paintMediaFullscreenButton(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-//     const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-//     if (!mediaElement)
-//         return false;
-// 
-//     static Image* mediaEnterFullscreenButton = platformResource("mediaplayerEnterFullscreen");
-//     static Image* mediaExitFullscreenButton = platformResource("mediaplayerExitFullscreen");
-// 
-//     Image* image = (mediaControlElementType(object.node()) == MediaExitFullscreenButton)
-//         ? mediaExitFullscreenButton
-//         : mediaEnterFullscreenButton;
-//     const bool isEnabled = hasSource(mediaElement);
-//     return paintMediaButton(paintInfo.context, rect, image, &object, isEnabled);
-
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
@@ -500,51 +338,39 @@ bool MediaControlsPainter::paintMediaFullscreenButton(
     return paintMediaButton(paintInfo.context, rect, mediaFullscreenButton);
 }
 
-bool MediaControlsPainter::paintMediaToggleClosedCaptionsButton(
-    const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+bool MediaControlsPainter::paintMediaToggleClosedCaptionsButton(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
     static Image* mediaClosedCaptionButton = platformResource("mediaplayerClosedCaption");
     static Image* mediaClosedCaptionButtonDisabled = platformResource("mediaplayerClosedCaptionDisabled");
 
-    Image* image = mediaElement->textTracksVisible()
-        ? mediaClosedCaptionButton
-        : mediaClosedCaptionButtonDisabled;
-    const bool isEnabled = mediaElement->hasClosedCaptions();
-    return paintMediaButton(paintInfo.context, rect, image, &object, isEnabled);
+    if (mediaElement->closedCaptionsVisible())
+        return paintMediaButton(paintInfo.context, rect, mediaClosedCaptionButton);
+
+    return paintMediaButton(paintInfo.context, rect, mediaClosedCaptionButtonDisabled);
 }
 
-bool MediaControlsPainter::paintMediaCastButton(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
+bool MediaControlsPainter::paintMediaCastButton(LayoutObject* object, const PaintInfo& paintInfo, const IntRect& rect)
 {
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
+    HTMLMediaElement* mediaElement = toParentMediaElement(object);
     if (!mediaElement)
         return false;
 
     static Image* mediaCastOn = platformResource("mediaplayerCastOn");
     static Image* mediaCastOff = platformResource("mediaplayerCastOff");
-    // To ensure that the overlaid cast button is visible when overlaid on pale
-    // videos we use a different version of it for the overlaid case with a
-    // semi-opaque background.
+    // To ensure that the overlaid cast button is visible when overlaid on pale videos we use a
+    // different version of it for the overlaid case with a semi-opaque background.
     static Image* mediaOverlayCastOff = platformResource("mediaplayerOverlayCastOff");
 
-    bool isEnabled = mediaElement->hasRemoteRoutes();
-
-    switch (mediaControlElementType(object.node())) {
+    switch (mediaControlElementType(object->node())) {
     case MediaCastOnButton:
-        return paintMediaButton(paintInfo.context, rect, mediaCastOn, &object,
-            isEnabled);
     case MediaOverlayCastOnButton:
         return paintMediaButton(paintInfo.context, rect, mediaCastOn);
     case MediaCastOffButton:
-        return paintMediaButton(paintInfo.context, rect, mediaCastOff, &object,
-            isEnabled);
+        return paintMediaButton(paintInfo.context, rect, mediaCastOff);
     case MediaOverlayCastOffButton:
         return paintMediaButton(paintInfo.context, rect, mediaOverlayCastOff);
     default:
@@ -553,81 +379,32 @@ bool MediaControlsPainter::paintMediaCastButton(const LayoutObject& object,
     }
 }
 
-bool MediaControlsPainter::paintMediaTrackSelectionCheckmark(
-    const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-    if (!mediaElement)
-        return false;
-
-    static Image* mediaTrackSelectionCheckmark = platformResource("mediaplayerTrackSelectionCheckmark");
-    return paintMediaButton(paintInfo.context, rect,
-        mediaTrackSelectionCheckmark);
-}
-
-bool MediaControlsPainter::paintMediaClosedCaptionsIcon(
-    const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-    if (!mediaElement)
-        return false;
-
-    static Image* mediaClosedCaptionsIcon = platformResource("mediaplayerClosedCaptionsIcon");
-    return paintMediaButton(paintInfo.context, rect, mediaClosedCaptionsIcon);
-}
-
-bool MediaControlsPainter::paintMediaSubtitlesIcon(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-    if (!mediaElement)
-        return false;
-
-    static Image* mediaSubtitlesIcon = platformResource("mediaplayerSubtitlesIcon");
-    return paintMediaButton(paintInfo.context, rect, mediaSubtitlesIcon);
-}
-
-bool MediaControlsPainter::paintMediaOverflowMenu(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-    if (!mediaElement)
-        return false;
-
-    static Image* mediaOverflowButton = platformResource("mediaplayerOverflowMenu");
-    return paintMediaButton(paintInfo.context, rect, mediaOverflowButton, &object,
-        true);
-}
-
-bool MediaControlsPainter::paintMediaDownloadIcon(const LayoutObject& object,
-    const PaintInfo& paintInfo,
-    const IntRect& rect)
-{
-    const HTMLMediaElement* mediaElement = toParentMediaElement(object);
-    if (!mediaElement)
-        return false;
-
-    bool isEnabled = hasSource(mediaElement);
-
-    static Image* mediaDownloadIcon = platformResource("mediaplayerDownloadIcon");
-    return paintMediaButton(paintInfo.context, rect, mediaDownloadIcon, &object,
-        isEnabled);
-}
+const int mediaSliderThumbHeight = 24;
+const int mediaVolumeSliderThumbHeight = 24;
 
 void MediaControlsPainter::adjustMediaSliderThumbSize(ComputedStyle& style)
 {
-    const float zoomLevel = style.effectiveZoom();
+    static Image* mediaSliderThumb = platformResource("mediaplayerSliderThumb");
+    static Image* mediaVolumeSliderThumb = platformResource("mediaplayerVolumeSliderThumb");
+    int width = 0;
+    int height = 0;
 
-    style.setWidth(
-        Length(static_cast<int>(mediaSliderThumbTouchWidth * zoomLevel), Fixed));
-    style.setHeight(
-        Length(static_cast<int>(mediaSliderThumbTouchHeight * zoomLevel), Fixed));
+    Image* thumbImage = 0;
+    if (style.appearance() == MediaSliderThumbPart) {
+        thumbImage = mediaSliderThumb;
+        width = mediaSliderThumbWidth;
+        height = mediaSliderThumbHeight;
+    } else if (style.appearance() == MediaVolumeSliderThumbPart) {
+        thumbImage = mediaVolumeSliderThumb;
+        width = mediaVolumeSliderThumbWidth;
+        height = mediaVolumeSliderThumbHeight;
+    }
+
+    float zoomLevel = style.effectiveZoom();
+    if (thumbImage) {
+        style.setWidth(Length(static_cast<int>(width * zoomLevel), Fixed));
+        style.setHeight(Length(static_cast<int>(height * zoomLevel), Fixed));
+    }
 }
 
 } // namespace blink

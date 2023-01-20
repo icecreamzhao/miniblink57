@@ -5,7 +5,6 @@
 #ifndef HTMLElementFactory_h
 #define HTMLElementFactory_h
 
-#include "core/dom/Document.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/PassRefPtr.h"
@@ -18,10 +17,11 @@ class HTMLFormElement;
 
 class HTMLElementFactory {
 public:
-    static HTMLElement* createHTMLElement(
+    static PassRefPtrWillBeRawPtr<HTMLElement> createHTMLElement(
         const AtomicString& localName,
         Document&,
-        CreateElementFlags flags = CreatedByParser);
+        HTMLFormElement* = 0,
+        bool createdByParser = true);
 };
 
 } // namespace blink

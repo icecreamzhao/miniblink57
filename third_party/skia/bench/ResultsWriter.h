@@ -12,9 +12,15 @@
 
 #include "BenchLogger.h"
 #include "SkJSONCPP.h"
+<<<<<<< HEAD
 #include "SkOSFile.h"
 #include "SkStream.h"
 #include "SkString.h"
+=======
+#include "SkStream.h"
+#include "SkString.h"
+#include "SkTArray.h"
+>>>>>>> miniblink49
 #include "SkTypes.h"
 
 /**
@@ -24,6 +30,7 @@
  */
 class ResultsWriter : SkNoncopyable {
 public:
+<<<<<<< HEAD
     virtual ~ResultsWriter() { }
 
     // Record one key value pair that makes up a unique key for this type of run, e.g.
@@ -48,6 +55,32 @@ public:
 
     // Flush to storage now please.
     virtual void flush() { }
+=======
+    virtual ~ResultsWriter() {}
+
+    // Record one key value pair that makes up a unique key for this type of run, e.g.
+    // builder name, machine type, Debug/Release, etc.
+    virtual void key(const char name[], const char value[]) {}
+
+    // Record one key value pair that describes the run instance, e.g. git hash, build number.
+    virtual void property(const char name[], const char value[]) {}
+
+    // Denote the start of a specific benchmark. Once bench is called,
+    // then config and metric can be called multiple times to record runs.
+    virtual void bench(const char name[], int32_t x, int32_t y) {}
+
+    // Record the specific configuration a bench is run under, such as "8888".
+    virtual void config(const char name[]) {}
+
+    // Record the options for a configuration, such as "GL_RENDERER".
+    virtual void configOption(const char name[], const char* value) {}
+
+    // Record a single test metric.
+    virtual void metric(const char name[], double ms) {}
+
+    // Flush to storage now please.
+    virtual void flush() {}
+>>>>>>> miniblink49
 };
 
 /**
@@ -78,6 +111,7 @@ public:
         : fFilename(filename)
         , fRoot()
         , fResults(fRoot["results"])
+<<<<<<< HEAD
         , fBench(nullptr)
         , fConfig(nullptr)
     {
@@ -85,10 +119,17 @@ public:
 
     ~NanoJSONResultsWriter()
     {
+=======
+        , fBench(NULL)
+        , fConfig(NULL) {}
+
+    ~NanoJSONResultsWriter() {
+>>>>>>> miniblink49
         this->flush();
     }
 
     // Added under "key".
+<<<<<<< HEAD
     void key(const char name[], const char value[]) override
     {
         fRoot["key"][name] = value;
@@ -115,6 +156,28 @@ public:
     }
     void metric(const char name[], double ms) override
     {
+=======
+    virtual void key(const char name[], const char value[]) {
+        fRoot["key"][name] = value;
+    }
+    // Inserted directly into the root.
+    virtual void property(const char name[], const char value[]) {
+        fRoot[name] = value;
+    }
+    virtual void bench(const char name[], int32_t x, int32_t y) {
+        SkString id = SkStringPrintf( "%s_%d_%d", name, x, y);
+        fResults[id.c_str()] = Json::Value(Json::objectValue);
+        fBench = &fResults[id.c_str()];
+    }
+    virtual void config(const char name[]) {
+        SkASSERT(fBench);
+        fConfig = &(*fBench)[name];
+    }
+    virtual void configOption(const char name[], const char* value) {
+        (*fConfig)["options"][name] = value;
+    }
+    virtual void metric(const char name[], double ms) {
+>>>>>>> miniblink49
         // Don't record if nan, or -nan.
         if (sk_double_isnan(ms)) {
             return;
@@ -124,6 +187,7 @@ public:
     }
 
     // Flush to storage now please.
+<<<<<<< HEAD
     void flush() override
     {
         SkString dirname = SkOSPath::Dirname(fFilename.c_str());
@@ -132,6 +196,9 @@ public:
                 SkDebugf("Failed to create directory.");
             }
         }
+=======
+    virtual void flush() {
+>>>>>>> miniblink49
         SkFILEWStream stream(fFilename.c_str());
         stream.writeText(Json::StyledWriter().write(fRoot).c_str());
         stream.flush();
@@ -145,4 +212,8 @@ private:
     Json::Value* fConfig;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #endif

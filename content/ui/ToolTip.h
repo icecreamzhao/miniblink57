@@ -4,13 +4,13 @@
 #include "wke/wkeGlobalVar.h"
 #include "third_party/WebKit/Source/platform/Timer.h"
 #include <windows.h>
-#include "base/strings/string16.h"
+#include <xstring>
 
-typedef void (*TipPaintCallback) (HWND hWnd, HDC hdc, const WCHAR * text, size_t textLength);
+typedef void (*TipPaintCallback) (HWND hWnd, HDC hdc, const wchar_t * text, size_t textLength);
 
 namespace content {
 
-#define kToolTipClassName u16("MbToolTip")
+#define kToolTipClassName L"MbToolTip"
 
 class ToolTip {
 public:
@@ -31,14 +31,12 @@ public:
     void init()
     {
         registerClass();
-        m_hTipWnd = CreateWindowExW(WS_EX_TOOLWINDOW, kToolTipClassName, kToolTipClassName, WS_POPUP | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, 225, 140, HWND_DESKTOP, NULL, nullptr, this);
+        m_hTipWnd = CreateWindowEx(WS_EX_TOOLWINDOW, kToolTipClassName, kToolTipClassName, WS_POPUP | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, 225, 140, HWND_DESKTOP, NULL, nullptr, this);
         ::SetPropW(m_hTipWnd, kToolTipClassName, (HANDLE)this);
 
-        int fontHeight = m_dpi * 18;
-
-        m_hFont = CreateFontW(fontHeight, 0, 0, 0, FW_THIN, FALSE, FALSE, FALSE,
+        m_hFont = CreateFont(18, 0, 0, 0, FW_THIN, FALSE, FALSE, FALSE,
             GB2312_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-            DEFAULT_QUALITY, FIXED_PITCH | FF_MODERN, u16("微软雅黑"));
+            DEFAULT_QUALITY, FIXED_PITCH | FF_MODERN, L"微软雅黑");
     }
 
     ~ToolTip()
@@ -50,27 +48,21 @@ public:
 
     bool registerClass()
     {
-        HDC screen = ::GetDC(nullptr);
-        int dpiX = ::GetDeviceCaps(screen, LOGPIXELSX);
-        m_dpi = dpiX * 100.0 / 96;
-        m_dpi /= 100;
-        ::ReleaseDC(0, screen);
+        WNDCLASSEX wcex;
 
-        WNDCLASSEXW wcex;
-
-        wcex.cbSize = sizeof(WNDCLASSEXW);
+        wcex.cbSize = sizeof(WNDCLASSEX);
         wcex.style = CS_HREDRAW | CS_VREDRAW | CS_DROPSHADOW;
         wcex.lpfnWndProc = wndProc;
         wcex.cbClsExtra = 0;
         wcex.cbWndExtra = 0;
         wcex.hInstance = nullptr;
         wcex.hIcon = nullptr;
-        wcex.hCursor = LoadCursorW(0, IDC_ARROW);
+        wcex.hCursor = LoadCursor(0, IDC_ARROW);
         wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = 0;
         wcex.lpszClassName = kToolTipClassName;
         wcex.hIconSm = nullptr;
-        return !!RegisterClassExW(&wcex);
+        return !!RegisterClassEx(&wcex);
     }
 
     void show(const WCHAR* text, POINT* pos)
@@ -80,7 +72,7 @@ public:
                 hide();
             return;
         }
-        base::string16 textString = text;
+        std::wstring textString = text;
         if (0 == textString.size()) {
             if (m_isToolsTip)
                 hide();
@@ -90,10 +82,10 @@ public:
         bool isSameText = textString == m_text;
         if (!isSameText || !m_isToolsTip) {
             m_text = textString;
-            
+
             HDC hScreenDc = ::GetDC(m_hTipWnd);
             HFONT hOldFont = (HFONT)::SelectObject(hScreenDc, m_hFont);
-            ::GetTextExtentPoint32W(hScreenDc, m_text.c_str(), m_text.size(), &m_size);
+            ::GetTextExtentPoint32(hScreenDc, m_text.c_str(), m_text.size(), &m_size);
             ::SelectObject(hScreenDc, hOldFont);
             ::ReleaseDC(m_hTipWnd, hScreenDc);
 
@@ -127,7 +119,7 @@ public:
             break;
         }
 
-        return ::DefWindowProcW(hWnd, uMsg, wParam, lParam);
+        return ::DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
     void onPaint(HWND hWnd, HDC hdc)
@@ -150,10 +142,10 @@ public:
         ::SelectObject(hdc, m_hFont);
         ::SetTextColor(hdc, RGB(86, 86, 86));
         ::SetBkColor(hdc, RGB(255, 255, 255));
-        ::TextOutW(hdc, 4, 2, m_text.c_str(), m_text.size());
+        ::TextOut(hdc, 4, 2, m_text.c_str(), m_text.size());
     }
 
-    base::string16 getText() const { return m_text; }
+    std::wstring getText() const { return m_text; }
 
 private:
     void resetShowState()
@@ -161,7 +153,7 @@ private:
         if (m_delayShowTimer.isActive())
             m_delayShowTimer.stop();
         m_delayShowCount = 0;
-        m_delayShowTimer.start(0.1, m_repeatInterval, FROM_HERE);
+        m_delayShowTimer.start(0.5, m_repeatInterval, FROM_HERE);
     }
 
     bool isNearPos(const POINT& a, const POINT& b)
@@ -169,7 +161,7 @@ private:
         return std::abs((int)(a.x - b.x)) + std::abs((int)(a.y - b.y)) < 15;
     }
 
-    void delayShowTimerFired(blink::TimerBase*)
+    void delayShowTimerFired(blink::Timer<ToolTip>*)
     {
         ++m_delayShowCount;
 
@@ -181,7 +173,7 @@ private:
         if (!m_isToolsTip)
             point = m_pos;
 
-        if (!m_isShow) {
+        if (/*(15 < m_delayShowCount || !m_isToolsTip) && */!m_isShow) {
             m_isShow = true;
 
             ::SetWindowPos(m_hTipWnd, HWND_TOPMOST, point.x + 15, point.y + 15, m_size.cx + 7, m_size.cy + 5, SWP_NOACTIVATE);
@@ -193,7 +185,7 @@ private:
             hide();
     }
 
-    void delayHideTimerFired(blink::TimerBase*)
+    void delayHideTimerFired(blink::Timer<ToolTip>*)
     {
         ++m_delayHideCount;
 
@@ -205,7 +197,7 @@ private:
 
     void hide()
     {
-        m_text = u16("");
+        m_text = L"";
         m_isShow = false;
         ::ShowWindow(m_hTipWnd, SW_HIDE);
 
@@ -221,7 +213,7 @@ private:
     HWND m_hTipWnd;
     HFONT m_hFont;
     bool m_isShow;
-    base::string16 m_text;
+    std::wstring m_text;
 
     blink::Timer<ToolTip> m_delayShowTimer;
     int m_delayShowCount;
@@ -231,10 +223,7 @@ private:
     SIZE m_size;
     bool m_isToolsTip;
     double m_repeatInterval;
-    static double m_dpi;
 };
-
-double ToolTip::m_dpi = 1;
 
 }
 

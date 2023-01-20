@@ -30,30 +30,76 @@
 #include "core/events/Event.h"
 #include "core/fetch/ResourceLoaderOptions.h"
 #include "core/fetch/SubstituteData.h"
+#include "core/html/HTMLFormElement.h"
 #include "core/loader/FrameLoaderTypes.h"
+#include "platform/network/ResourceRequest.h"
 
 namespace blink {
 
-class HTMLFormElement;
-class ResourceRequest;
-class SubstituteData;
-
-struct CORE_EXPORT FrameLoadRequest {
+struct FrameLoadRequest {
     STACK_ALLOCATED();
-
 public:
-    explicit FrameLoadRequest(Document* originDocument);
-    FrameLoadRequest(Document* originDocument, const ResourceRequest&);
-    FrameLoadRequest(Document* originDocument,
-        const ResourceRequest&,
-        const AtomicString& frameName);
-    FrameLoadRequest(Document* originDocument,
-        const ResourceRequest&,
-        const SubstituteData&);
-    FrameLoadRequest(Document* originDocument,
-        const ResourceRequest&,
-        const AtomicString& frameName,
-        ContentSecurityPolicyDisposition);
+    explicit FrameLoadRequest(Document* originDocument)
+        : m_originDocument(originDocument)
+        , m_lockBackForwardList(false)
+        , m_clientRedirect(NotClientRedirect)
+        , m_shouldSendReferrer(MaybeSendReferrer)
+        , m_shouldCheckMainWorldContentSecurityPolicy(CheckContentSecurityPolicy)
+    {
+        if (originDocument)
+            m_resourceRequest.setRequestorOrigin(SecurityOrigin::create(originDocument->url()));
+    }
+
+    FrameLoadRequest(Document* originDocument, const ResourceRequest& resourceRequest)
+        : m_originDocument(originDocument)
+        , m_resourceRequest(resourceRequest)
+        , m_lockBackForwardList(false)
+        , m_clientRedirect(NotClientRedirect)
+        , m_shouldSendReferrer(MaybeSendReferrer)
+        , m_shouldCheckMainWorldContentSecurityPolicy(CheckContentSecurityPolicy)
+    {
+        if (originDocument)
+            m_resourceRequest.setRequestorOrigin(SecurityOrigin::create(originDocument->url()));
+    }
+
+    FrameLoadRequest(Document* originDocument, const ResourceRequest& resourceRequest, const AtomicString& frameName)
+        : m_originDocument(originDocument)
+        , m_resourceRequest(resourceRequest)
+        , m_frameName(frameName)
+        , m_lockBackForwardList(false)
+        , m_clientRedirect(NotClientRedirect)
+        , m_shouldSendReferrer(MaybeSendReferrer)
+        , m_shouldCheckMainWorldContentSecurityPolicy(CheckContentSecurityPolicy)
+    {
+        if (originDocument)
+            m_resourceRequest.setRequestorOrigin(SecurityOrigin::create(originDocument->url()));
+    }
+
+    FrameLoadRequest(Document* originDocument, const ResourceRequest& resourceRequest, const AtomicString& frameName, ContentSecurityPolicyDisposition shouldCheckMainWorldContentSecurityPolicy)
+        : m_originDocument(originDocument)
+        , m_resourceRequest(resourceRequest)
+        , m_frameName(frameName)
+        , m_lockBackForwardList(false)
+        , m_clientRedirect(NotClientRedirect)
+        , m_shouldSendReferrer(MaybeSendReferrer)
+        , m_shouldCheckMainWorldContentSecurityPolicy(shouldCheckMainWorldContentSecurityPolicy)
+    {
+        if (originDocument)
+            m_resourceRequest.setRequestorOrigin(SecurityOrigin::create(originDocument->url()));
+    }
+
+    FrameLoadRequest(Document* originDocument, const ResourceRequest& resourceRequest, const SubstituteData& substituteData)
+        : m_originDocument(originDocument)
+        , m_resourceRequest(resourceRequest)
+        , m_substituteData(substituteData)
+        , m_lockBackForwardList(false)
+        , m_clientRedirect(NotClientRedirect)
+        , m_shouldSendReferrer(MaybeSendReferrer)
+        , m_shouldCheckMainWorldContentSecurityPolicy(CheckContentSecurityPolicy)
+    {
+        if (originDocument)
+            m_resourceRequest.setRequestorOrigin(SecurityOrigin::create(originDocument->url()));
+    }
 
     Document* originDocument() const { return m_originDocument.get(); }
 
@@ -65,68 +111,36 @@ public:
 
     const SubstituteData& substituteData() const { return m_substituteData; }
 
-    bool replacesCurrentItem() const { return m_replacesCurrentItem; }
-    void setReplacesCurrentItem(bool replacesCurrentItem)
-    {
-        m_replacesCurrentItem = replacesCurrentItem;
-    }
+    bool lockBackForwardList() const { return m_lockBackForwardList; }
+    void setLockBackForwardList(bool lockBackForwardList) { m_lockBackForwardList = lockBackForwardList; }
 
     ClientRedirectPolicy clientRedirect() const { return m_clientRedirect; }
-    void setClientRedirect(ClientRedirectPolicy clientRedirect)
-    {
-        m_clientRedirect = clientRedirect;
-    }
+    void setClientRedirect(ClientRedirectPolicy clientRedirect) { m_clientRedirect = clientRedirect; }
 
     Event* triggeringEvent() const { return m_triggeringEvent.get(); }
-    void setTriggeringEvent(Event* triggeringEvent)
-    {
-        m_triggeringEvent = triggeringEvent;
-    }
+    void setTriggeringEvent(PassRefPtrWillBeRawPtr<Event> triggeringEvent) { m_triggeringEvent = triggeringEvent; }
 
     HTMLFormElement* form() const { return m_form.get(); }
-    void setForm(HTMLFormElement* form) { m_form = form; }
+    void setForm(PassRefPtrWillBeRawPtr<HTMLFormElement> form) { m_form = form; }
 
-    ShouldSendReferrer getShouldSendReferrer() const
-    {
-        return m_shouldSendReferrer;
-    }
-    void setShouldSendReferrer(ShouldSendReferrer shouldSendReferrer)
-    {
-        m_shouldSendReferrer = shouldSendReferrer;
-    }
+    ShouldSendReferrer shouldSendReferrer() const { return m_shouldSendReferrer; }
+    void setShouldSendReferrer(ShouldSendReferrer shouldSendReferrer) { m_shouldSendReferrer = shouldSendReferrer; }
 
-    ShouldSetOpener getShouldSetOpener() const { return m_shouldSetOpener; }
-    void setShouldSetOpener(ShouldSetOpener shouldSetOpener)
-    {
-        m_shouldSetOpener = shouldSetOpener;
-    }
-
-    ContentSecurityPolicyDisposition shouldCheckMainWorldContentSecurityPolicy()
-        const
-    {
-        return m_shouldCheckMainWorldContentSecurityPolicy;
-    }
+    ContentSecurityPolicyDisposition shouldCheckMainWorldContentSecurityPolicy() const { return m_shouldCheckMainWorldContentSecurityPolicy; }
 
 private:
-    FrameLoadRequest(Document* originDocument,
-        const ResourceRequest&,
-        const AtomicString& frameName,
-        const SubstituteData&,
-        ContentSecurityPolicyDisposition);
-
-    Member<Document> m_originDocument;
+    RefPtrWillBeMember<Document> m_originDocument;
     ResourceRequest m_resourceRequest;
     AtomicString m_frameName;
     SubstituteData m_substituteData;
-    bool m_replacesCurrentItem;
+    bool m_lockBackForwardList;
     ClientRedirectPolicy m_clientRedirect;
-    Member<Event> m_triggeringEvent;
-    Member<HTMLFormElement> m_form;
+    RefPtrWillBeMember<Event> m_triggeringEvent;
+    RefPtrWillBeMember<HTMLFormElement> m_form;
     ShouldSendReferrer m_shouldSendReferrer;
-    ShouldSetOpener m_shouldSetOpener;
     ContentSecurityPolicyDisposition m_shouldCheckMainWorldContentSecurityPolicy;
 };
 
-} // namespace blink
+}
 
 #endif // FrameLoadRequest_h

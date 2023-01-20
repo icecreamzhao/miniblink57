@@ -31,6 +31,7 @@
 #ifndef GraphicsLayerDebugInfo_h
 #define GraphicsLayerDebugInfo_h
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/CompositingReasons.h"
 #include "platform/graphics/PaintInvalidationReason.h"
@@ -76,11 +77,36 @@ public:
     {
         m_squashingDisallowedReasons = reasons;
     }
+=======
+#include "platform/JSONValues.h"
+#include "platform/geometry/FloatRect.h"
+#include "platform/graphics/CompositingReasons.h"
+#include "platform/graphics/PaintInvalidationReason.h"
+#include "public/platform/WebGraphicsLayerDebugInfo.h"
+
+#include "wtf/Vector.h"
+
+namespace blink {
+
+class GraphicsLayerDebugInfo final : public WebGraphicsLayerDebugInfo {
+public:
+    GraphicsLayerDebugInfo();
+    ~GraphicsLayerDebugInfo() override;
+
+    void appendAsTraceFormat(WebString* out) const override;
+
+    GraphicsLayerDebugInfo* clone() const;
+
+    void setDebugName(const String& name) { m_debugName = name; }
+    CompositingReasons compositingReasons() const { return m_compositingReasons; }
+    void setCompositingReasons(CompositingReasons reasons) { m_compositingReasons = reasons; }
+>>>>>>> miniblink49
     void setOwnerNodeId(int id) { m_ownerNodeId = id; }
 
     void appendAnnotatedInvalidateRect(const FloatRect&, PaintInvalidationReason);
     void clearAnnotatedInvalidateRects();
 
+<<<<<<< HEAD
     uint32_t getMainThreadScrollingReasons() const
     {
         return m_mainThreadScrollingReasons;
@@ -99,16 +125,33 @@ private:
 
     struct AnnotatedInvalidationRect {
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+=======
+private:
+    void appendAnnotatedInvalidateRects(JSONObject*) const;
+    void appendCompositingReasons(JSONObject*) const;
+    void appendDebugName(JSONObject*) const;
+    void appendOwnerNodeId(JSONObject*) const;
+
+    struct AnnotatedInvalidationRect {
+>>>>>>> miniblink49
         FloatRect rect;
         PaintInvalidationReason reason;
     };
 
+<<<<<<< HEAD
     CompositingReasons m_compositingReasons;
     SquashingDisallowedReasons m_squashingDisallowedReasons;
     int m_ownerNodeId;
     Vector<AnnotatedInvalidationRect> m_invalidations;
     Vector<AnnotatedInvalidationRect> m_previousInvalidations;
     uint32_t m_mainThreadScrollingReasons;
+=======
+    String m_debugName;
+    CompositingReasons m_compositingReasons;
+    int m_ownerNodeId;
+    Vector<AnnotatedInvalidationRect> m_invalidations;
+    Vector<AnnotatedInvalidationRect> m_previousInvalidations;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

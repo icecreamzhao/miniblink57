@@ -31,7 +31,10 @@
 #ifndef SourceBufferList_h
 #define SourceBufferList_h
 
+<<<<<<< HEAD
 #include "core/dom/ExecutionContext.h"
+=======
+>>>>>>> miniblink49
 #include "modules/EventTargetModules.h"
 #include "platform/heap/Handle.h"
 
@@ -40,6 +43,7 @@ namespace blink {
 class SourceBuffer;
 class GenericEventQueue;
 
+<<<<<<< HEAD
 class SourceBufferList final : public EventTargetWithInlineData,
                                public ContextClient {
     DEFINE_WRAPPERTYPEINFO();
@@ -48,12 +52,20 @@ class SourceBufferList final : public EventTargetWithInlineData,
 public:
     static SourceBufferList* create(ExecutionContext* context,
         GenericEventQueue* asyncEventQueue)
+=======
+class SourceBufferList final : public RefCountedGarbageCollectedEventTargetWithInlineData<SourceBufferList> {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(SourceBufferList);
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static SourceBufferList* create(ExecutionContext* context, GenericEventQueue* asyncEventQueue)
+>>>>>>> miniblink49
     {
         return new SourceBufferList(context, asyncEventQueue);
     }
     ~SourceBufferList() override;
 
     unsigned length() const { return m_list.size(); }
+<<<<<<< HEAD
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(addsourcebuffer);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(removesourcebuffer);
@@ -62,23 +74,34 @@ public:
     {
         return (index < m_list.size()) ? m_list[index].get() : 0;
     }
+=======
+    SourceBuffer* item(unsigned index) const { return (index < m_list.size()) ? m_list[index].get() : 0; }
+>>>>>>> miniblink49
 
     void add(SourceBuffer*);
     void insert(size_t position, SourceBuffer*);
     void remove(SourceBuffer*);
     size_t find(SourceBuffer* buffer) { return m_list.find(buffer); }
+<<<<<<< HEAD
     bool contains(SourceBuffer* buffer)
     {
         return m_list.find(buffer) != kNotFound;
     }
+=======
+    bool contains(SourceBuffer* buffer) { return m_list.find(buffer) != kNotFound; }
+>>>>>>> miniblink49
     void clear();
 
     // EventTarget interface
     const AtomicString& interfaceName() const override;
+<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const override
     {
         return ContextClient::getExecutionContext();
     }
+=======
+    ExecutionContext* executionContext() const override;
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -87,7 +110,12 @@ private:
 
     void scheduleEvent(const AtomicString&);
 
+<<<<<<< HEAD
     Member<GenericEventQueue> m_asyncEventQueue;
+=======
+    RawPtrWillBeMember<ExecutionContext> m_executionContext;
+    RawPtrWillBeMember<GenericEventQueue> m_asyncEventQueue;
+>>>>>>> miniblink49
 
     HeapVector<Member<SourceBuffer>> m_list;
 };

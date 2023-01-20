@@ -14,6 +14,7 @@
 #include "sk_tool_utils.h"
 
 #if SK_SUPPORT_GPU
+<<<<<<< HEAD
 #include "GrContext.h"
 #endif
 
@@ -27,6 +28,22 @@ static const U8CPU DEV_PAD = 0xee;
 
 static SkPMColor get_canvas_color(int x, int y)
 {
+=======
+#include "GrContextFactory.h"
+#include "SkGpuDevice.h"
+#else
+class GrContext;
+class GrContextFactory;
+#endif
+
+static const int DEV_W = 100, DEV_H = 100;
+static const SkIRect DEV_RECT = SkIRect::MakeWH(DEV_W, DEV_H);
+static const SkRect DEV_RECT_S = SkRect::MakeWH(DEV_W * SK_Scalar1,
+                                                DEV_H * SK_Scalar1);
+static const U8CPU DEV_PAD = 0xee;
+
+static SkPMColor getCanvasColor(int x, int y) {
+>>>>>>> miniblink49
     SkASSERT(x >= 0 && x < DEV_W);
     SkASSERT(y >= 0 && y < DEV_H);
 
@@ -35,6 +52,7 @@ static SkPMColor get_canvas_color(int x, int y)
     U8CPU b = 0xc;
 
     U8CPU a = 0x0;
+<<<<<<< HEAD
     switch ((x + y) % 5) {
     case 0:
         a = 0xff;
@@ -51,11 +69,30 @@ static SkPMColor get_canvas_color(int x, int y)
     case 4:
         a = 0x01;
         break;
+=======
+    switch ((x+y) % 5) {
+        case 0:
+            a = 0xff;
+            break;
+        case 1:
+            a = 0x80;
+            break;
+        case 2:
+            a = 0xCC;
+            break;
+        case 3:
+            a = 0x00;
+            break;
+        case 4:
+            a = 0x01;
+            break;
+>>>>>>> miniblink49
     }
     return SkPremultiplyARGBInline(a, r, g, b);
 }
 
 // assumes any premu/.unpremul has been applied
+<<<<<<< HEAD
 static uint32_t pack_color_type(SkColorType ct, U8CPU a, U8CPU r, U8CPU g, U8CPU b)
 {
     uint32_t r32;
@@ -76,17 +113,43 @@ static uint32_t pack_color_type(SkColorType ct, U8CPU a, U8CPU r, U8CPU g, U8CPU
     default:
         SkASSERT(0);
         return 0;
+=======
+static uint32_t packColorType(SkColorType ct, U8CPU a, U8CPU r, U8CPU g, U8CPU b) {
+    uint32_t r32;
+    uint8_t* result = reinterpret_cast<uint8_t*>(&r32);
+    switch (ct) {
+        case kBGRA_8888_SkColorType:
+            result[0] = b;
+            result[1] = g;
+            result[2] = r;
+            result[3] = a;
+            break;
+        case kRGBA_8888_SkColorType:
+            result[0] = r;
+            result[1] = g;
+            result[2] = b;
+            result[3] = a;
+            break;
+        default:
+            SkASSERT(0);
+            return 0;
+>>>>>>> miniblink49
     }
     return r32;
 }
 
+<<<<<<< HEAD
 static uint32_t get_bitmap_color(int x, int y, int w, SkColorType ct, SkAlphaType at)
 {
+=======
+static uint32_t getBitmapColor(int x, int y, int w, SkColorType ct, SkAlphaType at) {
+>>>>>>> miniblink49
     int n = y * w + x;
     U8CPU b = n & 0xff;
     U8CPU g = (n >> 8) & 0xff;
     U8CPU r = (n >> 16) & 0xff;
     U8CPU a = 0;
+<<<<<<< HEAD
     switch ((x + y) % 5) {
     case 4:
         a = 0xff;
@@ -103,23 +166,52 @@ static uint32_t get_bitmap_color(int x, int y, int w, SkColorType ct, SkAlphaTyp
     case 0:
         a = 0x00;
         break;
+=======
+    switch ((x+y) % 5) {
+        case 4:
+            a = 0xff;
+            break;
+        case 3:
+            a = 0x80;
+            break;
+        case 2:
+            a = 0xCC;
+            break;
+        case 1:
+            a = 0x01;
+            break;
+        case 0:
+            a = 0x00;
+            break;
+>>>>>>> miniblink49
     }
     if (kPremul_SkAlphaType == at) {
         r = SkMulDiv255Ceiling(r, a);
         g = SkMulDiv255Ceiling(g, a);
         b = SkMulDiv255Ceiling(b, a);
     }
+<<<<<<< HEAD
     return pack_color_type(ct, a, r, g, b);
 }
 
 static void fill_canvas(SkCanvas* canvas)
 {
+=======
+    return packColorType(ct, a, r, g , b);
+}
+
+static void fillCanvas(SkCanvas* canvas) {
+>>>>>>> miniblink49
     SkBitmap bmp;
     if (bmp.isNull()) {
         bmp.allocN32Pixels(DEV_W, DEV_H);
         for (int y = 0; y < DEV_H; ++y) {
             for (int x = 0; x < DEV_W; ++x) {
+<<<<<<< HEAD
                 *bmp.getAddr32(x, y) = get_canvas_color(x, y);
+=======
+                *bmp.getAddr32(x, y) = getCanvasColor(x, y);
+>>>>>>> miniblink49
             }
         }
     }
@@ -136,8 +228,12 @@ static void fill_canvas(SkCanvas* canvas)
  *  Lucky for us, alpha is always in the same spot (SK_A32_SHIFT), for both RGBA and BGRA.
  *  Thus this routine doesn't need to know the exact colortype
  */
+<<<<<<< HEAD
 static uint32_t premul(uint32_t color)
 {
+=======
+static uint32_t premul(uint32_t color) {
+>>>>>>> miniblink49
     unsigned a = SkGetPackedA32(color);
     // these next three are not necessarily r,g,b in that order, but they are r,g,b in some order.
     unsigned c0 = SkGetPackedR32(color);
@@ -149,12 +245,17 @@ static uint32_t premul(uint32_t color)
     return SkPackARGB32NoCheck(a, c0, c1, c2);
 }
 
+<<<<<<< HEAD
 static SkPMColor convert_to_PMColor(SkColorType ct, SkAlphaType at, uint32_t color)
 {
+=======
+static SkPMColor convert_to_PMColor(SkColorType ct, SkAlphaType at, uint32_t color) {
+>>>>>>> miniblink49
     if (kUnpremul_SkAlphaType == at) {
         color = premul(color);
     }
     switch (ct) {
+<<<<<<< HEAD
     case kRGBA_8888_SkColorType:
         color = SkSwizzle_RGBA_to_PMColor(color);
         break;
@@ -164,12 +265,27 @@ static SkPMColor convert_to_PMColor(SkColorType ct, SkAlphaType at, uint32_t col
     default:
         SkASSERT(0);
         break;
+=======
+        case kRGBA_8888_SkColorType:
+            color = SkSwizzle_RGBA_to_PMColor(color);
+            break;
+        case kBGRA_8888_SkColorType:
+            color = SkSwizzle_BGRA_to_PMColor(color);
+            break;
+        default:
+            SkASSERT(0);
+            break;
+>>>>>>> miniblink49
     }
     return color;
 }
 
+<<<<<<< HEAD
 static bool check_pixel(SkPMColor a, SkPMColor b, bool didPremulConversion)
 {
+=======
+static bool checkPixel(SkPMColor a, SkPMColor b, bool didPremulConversion) {
+>>>>>>> miniblink49
     if (!didPremulConversion) {
         return a == b;
     }
@@ -183,12 +299,23 @@ static bool check_pixel(SkPMColor a, SkPMColor b, bool didPremulConversion)
     int32_t bG = static_cast<int32_t>(SkGetPackedG32(b));
     int32_t bB = static_cast<int32_t>(SkGetPackedB32(b));
 
+<<<<<<< HEAD
     return aA == bA && SkAbs32(aR - bR) <= 1 && SkAbs32(aG - bG) <= 1 && SkAbs32(aB - bB) <= 1;
 }
 
 static bool check_write(skiatest::Reporter* reporter, SkCanvas* canvas, const SkBitmap& bitmap,
     int writeX, int writeY)
 {
+=======
+    return aA == bA &&
+           SkAbs32(aR - bR) <= 1 &&
+           SkAbs32(aG - bG) <= 1 &&
+           SkAbs32(aB - bB) <= 1;
+}
+
+static bool check_write(skiatest::Reporter* reporter, SkCanvas* canvas, const SkBitmap& bitmap,
+                       int writeX, int writeY) {
+>>>>>>> miniblink49
     const SkImageInfo canvasInfo = canvas->imageInfo();
     size_t canvasRowBytes;
     const uint32_t* canvasPixels;
@@ -203,11 +330,21 @@ static bool check_write(skiatest::Reporter* reporter, SkCanvas* canvas, const Sk
     canvasRowBytes = secretDevBitmap.rowBytes();
     canvasPixels = static_cast<const uint32_t*>(secretDevBitmap.getPixels());
 
+<<<<<<< HEAD
     if (nullptr == canvasPixels) {
         return false;
     }
 
     if (canvasInfo.width() != DEV_W || canvasInfo.height() != DEV_H || canvasInfo.colorType() != kN32_SkColorType) {
+=======
+    if (NULL == canvasPixels) {
+        return false;
+    }
+
+    if (canvasInfo.width() != DEV_W ||
+        canvasInfo.height() != DEV_H ||
+        canvasInfo.colorType() != kN32_SkColorType) {
+>>>>>>> miniblink49
         return false;
     }
 
@@ -220,6 +357,7 @@ static bool check_write(skiatest::Reporter* reporter, SkCanvas* canvas, const Sk
             if (writeRect.contains(cx, cy)) {
                 int bx = cx - writeX;
                 int by = cy - writeY;
+<<<<<<< HEAD
                 uint32_t bmpColor8888 = get_bitmap_color(bx, by, bitmap.width(),
                     bmInfo.colorType(), bmInfo.alphaType());
                 bool mul = (kUnpremul_SkAlphaType == bmInfo.alphaType());
@@ -237,11 +375,32 @@ static bool check_write(skiatest::Reporter* reporter, SkCanvas* canvas, const Sk
                     ERRORF(reporter, "Canvas pixel outside write rect at %d, %d changed."
                                      " Should be 0x%08x, got 0x%08x. ",
                         cx, cy, testColor, canvasPixel);
+=======
+                uint32_t bmpColor8888 = getBitmapColor(bx, by, bitmap.width(),
+                                                       bmInfo.colorType(), bmInfo.alphaType());
+                bool mul = (kUnpremul_SkAlphaType == bmInfo.alphaType());
+                SkPMColor bmpPMColor = convert_to_PMColor(bmInfo.colorType(), bmInfo.alphaType(),
+                                                          bmpColor8888);
+                bool check = checkPixel(bmpPMColor, canvasPixel, mul);
+                REPORTER_ASSERT(reporter, check);
+                if (!check) {
+                    return false;
+                }
+            } else {
+                bool check;
+                SkPMColor testColor = getCanvasColor(cx, cy);
+                REPORTER_ASSERT(reporter, check = (canvasPixel == testColor));
+                if (!check) {
+>>>>>>> miniblink49
                     return false;
                 }
             }
         }
+<<<<<<< HEAD
         if (cy != DEV_H - 1) {
+=======
+        if (cy != DEV_H -1) {
+>>>>>>> miniblink49
             const char* pad = reinterpret_cast<const char*>(canvasPixels + DEV_W);
             for (size_t px = 0; px < canvasRowBytes - 4 * DEV_W; ++px) {
                 bool check;
@@ -251,28 +410,66 @@ static bool check_write(skiatest::Reporter* reporter, SkCanvas* canvas, const Sk
                 }
             }
         }
+<<<<<<< HEAD
         canvasPixels += canvasRowBytes / 4;
+=======
+        canvasPixels += canvasRowBytes/4;
+>>>>>>> miniblink49
     }
 
     return true;
 }
 
+<<<<<<< HEAD
+=======
+enum DevType {
+    kRaster_DevType,
+#if SK_SUPPORT_GPU
+    kGpu_BottomLeft_DevType,
+    kGpu_TopLeft_DevType,
+#endif
+};
+
+struct CanvasConfig {
+    DevType fDevType;
+    bool fTightRowBytes;
+};
+
+static const CanvasConfig gCanvasConfigs[] = {
+    {kRaster_DevType, true},
+    {kRaster_DevType, false},
+#if SK_SUPPORT_GPU
+    {kGpu_BottomLeft_DevType, true}, // row bytes has no meaning on gpu devices
+    {kGpu_TopLeft_DevType, true}, // row bytes has no meaning on gpu devices
+#endif
+};
+
+>>>>>>> miniblink49
 #include "SkMallocPixelRef.h"
 
 // This is a tricky pattern, because we have to setConfig+rowBytes AND specify
 // a custom pixelRef (which also has to specify its rowBytes), so we have to be
 // sure that the two rowBytes match (and the infos match).
 //
+<<<<<<< HEAD
 static bool alloc_row_bytes(SkBitmap* bm, const SkImageInfo& info, size_t rowBytes)
 {
     if (!bm->setInfo(info, rowBytes)) {
         return false;
     }
     SkPixelRef* pr = SkMallocPixelRef::NewAllocate(info, rowBytes, nullptr);
+=======
+static bool allocRowBytes(SkBitmap* bm, const SkImageInfo& info, size_t rowBytes) {
+    if (!bm->setInfo(info, rowBytes)) {
+        return false;
+    }
+    SkPixelRef* pr = SkMallocPixelRef::NewAllocate(info, rowBytes, NULL);
+>>>>>>> miniblink49
     bm->setPixelRef(pr)->unref();
     return true;
 }
 
+<<<<<<< HEAD
 static void free_pixels(void* pixels, void* ctx)
 {
     sk_free(pixels);
@@ -283,36 +480,98 @@ static bool setup_bitmap(SkBitmap* bm, SkColorType ct, SkAlphaType at, int w, in
     size_t rowBytes = tightRB ? 0 : 4 * w + 60;
     SkImageInfo info = SkImageInfo::Make(w, h, ct, at);
     if (!alloc_row_bytes(bm, info, rowBytes)) {
+=======
+static void free_pixels(void* pixels, void* ctx) {
+    sk_free(pixels);
+}
+
+static SkSurface* create_surface(const CanvasConfig& c, GrContext* grCtx) {
+    SkImageInfo info = SkImageInfo::MakeN32Premul(DEV_W, DEV_H);
+    switch (c.fDevType) {
+        case kRaster_DevType: {
+            const size_t rowBytes = c.fTightRowBytes ? info.minRowBytes() : 4 * DEV_W + 100;
+            const size_t size = info.getSafeSize(rowBytes);
+            void* pixels = sk_malloc_throw(size);
+            // if rowBytes isn't tight then set the padding to a known value
+            if (!c.fTightRowBytes) {
+                memset(pixels, DEV_PAD, size);
+            }
+            return SkSurface::NewRasterDirectReleaseProc(info, pixels, rowBytes, free_pixels, NULL);
+        }
+#if SK_SUPPORT_GPU
+        case kGpu_BottomLeft_DevType:
+        case kGpu_TopLeft_DevType:
+            GrSurfaceDesc desc;
+            desc.fFlags = kRenderTarget_GrSurfaceFlag;
+            desc.fWidth = DEV_W;
+            desc.fHeight = DEV_H;
+            desc.fConfig = kSkia8888_GrPixelConfig;
+            desc.fOrigin = kGpu_TopLeft_DevType == c.fDevType ?
+                kTopLeft_GrSurfaceOrigin : kBottomLeft_GrSurfaceOrigin;
+            SkAutoTUnref<GrTexture> texture(grCtx->textureProvider()->createTexture(desc, false));
+            return SkSurface::NewRenderTargetDirect(texture->asRenderTarget());
+#endif
+    }
+    return NULL;
+}
+
+static bool setup_bitmap(SkBitmap* bm, SkColorType ct, SkAlphaType at, int w, int h, int tightRB) {
+    size_t rowBytes = tightRB ? 0 : 4 * w + 60;
+    SkImageInfo info = SkImageInfo::Make(w, h, ct, at);
+    if (!allocRowBytes(bm, info, rowBytes)) {
+>>>>>>> miniblink49
         return false;
     }
     SkAutoLockPixels alp(*bm);
     for (int y = 0; y < h; ++y) {
         for (int x = 0; x < w; ++x) {
+<<<<<<< HEAD
             *bm->getAddr32(x, y) = get_bitmap_color(x, y, w, ct, at);
+=======
+            *bm->getAddr32(x, y) = getBitmapColor(x, y, w, ct, at);
+>>>>>>> miniblink49
         }
     }
     return true;
 }
 
+<<<<<<< HEAD
 static void call_writepixels(SkCanvas* canvas)
 {
+=======
+static void call_writepixels(SkCanvas* canvas) {
+>>>>>>> miniblink49
     const SkImageInfo info = SkImageInfo::MakeN32Premul(1, 1);
     SkPMColor pixel = 0;
     canvas->writePixels(info, &pixel, sizeof(SkPMColor), 0, 0);
 }
 
+<<<<<<< HEAD
 DEF_TEST(WritePixelsSurfaceGenID, reporter)
 {
     const SkImageInfo info = SkImageInfo::MakeN32Premul(100, 100);
     auto surface(SkSurface::MakeRaster(info));
+=======
+static void test_surface_genid(skiatest::Reporter* reporter) {
+    const SkImageInfo info = SkImageInfo::MakeN32Premul(100, 100);
+    SkAutoTUnref<SkSurface> surface(SkSurface::NewRaster(info));
+>>>>>>> miniblink49
     uint32_t genID1 = surface->generationID();
     call_writepixels(surface->getCanvas());
     uint32_t genID2 = surface->generationID();
     REPORTER_ASSERT(reporter, genID1 != genID2);
 }
 
+<<<<<<< HEAD
 static void test_write_pixels(skiatest::Reporter* reporter, SkSurface* surface)
 {
+=======
+DEF_GPUTEST(WritePixels, reporter, factory) {
+    test_surface_genid(reporter);
+
+    SkCanvas canvas;
+
+>>>>>>> miniblink49
     const SkIRect testRects[] = {
         // entire thing
         DEV_RECT,
@@ -327,6 +586,7 @@ static void test_write_pixels(skiatest::Reporter* reporter, SkSurface* surface)
         // overlapping top left corner
         SkIRect::MakeLTRB(-10, -10, DEV_W / 4, DEV_H / 4),
         // overlapping top left and top right corners
+<<<<<<< HEAD
         SkIRect::MakeLTRB(-10, -10, DEV_W + 10, DEV_H / 4),
         // touching entire top edge
         SkIRect::MakeLTRB(-10, -10, DEV_W + 10, 0),
@@ -334,6 +594,15 @@ static void test_write_pixels(skiatest::Reporter* reporter, SkSurface* surface)
         SkIRect::MakeLTRB(3 * DEV_W / 4, -10, DEV_W + 10, DEV_H / 4),
         // contained in x, overlapping top edge
         SkIRect::MakeLTRB(DEV_W / 4, -10, 3 * DEV_W / 4, DEV_H / 4),
+=======
+        SkIRect::MakeLTRB(-10, -10, DEV_W  + 10, DEV_H / 4),
+        // touching entire top edge
+        SkIRect::MakeLTRB(-10, -10, DEV_W  + 10, 0),
+        // overlapping top right corner
+        SkIRect::MakeLTRB(3 * DEV_W / 4, -10, DEV_W  + 10, DEV_H / 4),
+        // contained in x, overlapping top edge
+        SkIRect::MakeLTRB(DEV_W / 4, -10, 3 * DEV_W  / 4, DEV_H / 4),
+>>>>>>> miniblink49
         // outside top right corner
         SkIRect::MakeLTRB(DEV_W + 1, -10, DEV_W + 10, -1),
         // touching top right corner
@@ -360,6 +629,7 @@ static void test_write_pixels(skiatest::Reporter* reporter, SkSurface* surface)
         SkIRect::MakeLTRB(3 * DEV_W / 4, -10, DEV_W + 10, DEV_H + 10),
     };
 
+<<<<<<< HEAD
     SkCanvas& canvas = *surface->getCanvas();
 
     static const struct {
@@ -395,10 +665,78 @@ static void test_write_pixels(skiatest::Reporter* reporter, SkSurface* surface)
                     bmp.width(), bmp.height());
                 bool intersects = SkIRect::Intersects(canvasRect, writeRect);
                 REPORTER_ASSERT(reporter, intersects == (idBefore != idAfter));
+=======
+    for (size_t i = 0; i < SK_ARRAY_COUNT(gCanvasConfigs); ++i) {
+        int glCtxTypeCnt = 1;
+#if SK_SUPPORT_GPU
+        bool isGPUDevice = kGpu_TopLeft_DevType == gCanvasConfigs[i].fDevType ||
+                           kGpu_BottomLeft_DevType == gCanvasConfigs[i].fDevType;
+        if (isGPUDevice) {
+            glCtxTypeCnt = GrContextFactory::kGLContextTypeCnt;
+        }
+#endif
+        for (int glCtxType = 0; glCtxType < glCtxTypeCnt; ++glCtxType) {
+            GrContext* context = NULL;
+#if SK_SUPPORT_GPU
+            if (isGPUDevice) {
+                GrContextFactory::GLContextType type =
+                    static_cast<GrContextFactory::GLContextType>(glCtxType);
+                if (!GrContextFactory::IsRenderingGLContext(type)) {
+                    continue;
+                }
+                context = factory->get(type);
+                if (NULL == context) {
+                    continue;
+                }
+            }
+#endif
+
+            SkAutoTUnref<SkSurface> surface(create_surface(gCanvasConfigs[i], context));
+            SkCanvas& canvas = *surface->getCanvas();
+
+            static const struct {
+                SkColorType fColorType;
+                SkAlphaType fAlphaType;
+            } gSrcConfigs[] = {
+                { kRGBA_8888_SkColorType, kPremul_SkAlphaType },
+                { kRGBA_8888_SkColorType, kUnpremul_SkAlphaType },
+                { kBGRA_8888_SkColorType, kPremul_SkAlphaType },
+                { kBGRA_8888_SkColorType, kUnpremul_SkAlphaType },
+            };
+            for (size_t r = 0; r < SK_ARRAY_COUNT(testRects); ++r) {
+                const SkIRect& rect = testRects[r];
+                for (int tightBmp = 0; tightBmp < 2; ++tightBmp) {
+                    for (size_t c = 0; c < SK_ARRAY_COUNT(gSrcConfigs); ++c) {
+                        const SkColorType ct = gSrcConfigs[c].fColorType;
+                        const SkAlphaType at = gSrcConfigs[c].fAlphaType;
+
+                        fillCanvas(&canvas);
+                        SkBitmap bmp;
+                        REPORTER_ASSERT(reporter, setup_bitmap(&bmp, ct, at, rect.width(),
+                                                               rect.height(), SkToBool(tightBmp)));
+                        uint32_t idBefore = surface->generationID();
+
+                       // sk_tool_utils::write_pixels(&canvas, bmp, rect.fLeft, rect.fTop, ct, at);
+                        canvas.writePixels(bmp, rect.fLeft, rect.fTop);
+
+                        uint32_t idAfter = surface->generationID();
+                        REPORTER_ASSERT(reporter, check_write(reporter, &canvas, bmp,
+                                                              rect.fLeft, rect.fTop));
+
+                        // we should change the genID iff pixels were actually written.
+                        SkIRect canvasRect = SkIRect::MakeSize(canvas.getDeviceSize());
+                        SkIRect writeRect = SkIRect::MakeXYWH(rect.fLeft, rect.fTop,
+                                                              bmp.width(), bmp.height());
+                        bool intersects = SkIRect::Intersects(canvasRect, writeRect) ;
+                        REPORTER_ASSERT(reporter, intersects == (idBefore != idAfter));
+                    }
+                }
+>>>>>>> miniblink49
             }
         }
     }
 }
+<<<<<<< HEAD
 DEF_TEST(WritePixels, reporter)
 {
     const SkImageInfo info = SkImageInfo::MakeN32Premul(DEV_W, DEV_H);
@@ -432,3 +770,5 @@ DEF_GPUTEST_FOR_RENDERING_CONTEXTS(WritePixels_Gpu, reporter, ctxInfo)
     }
 }
 #endif
+=======
+>>>>>>> miniblink49

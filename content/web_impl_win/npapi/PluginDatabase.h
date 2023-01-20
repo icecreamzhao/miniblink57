@@ -35,7 +35,7 @@
 #include "third_party/WebKit/Source/wtf/text/StringHash.h"
 #include "third_party/WebKit/Source/wtf/text/WTFString.h"
 #include "third_party/WebKit/Source/wtf/Noncopyable.h"
-//#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
 
 namespace blink {
 class Element;
@@ -51,8 +51,7 @@ class PluginPackage;
 typedef HashSet<RefPtr<PluginPackage>, PluginPackageHash, PluginPackageHashTraits> PluginSet;
 
 class PluginDatabase {
-    WTF_MAKE_NONCOPYABLE(PluginDatabase); 
-    //WTF_MAKE_FAST_ALLOCATED(PluginDatabase);
+    WTF_MAKE_NONCOPYABLE(PluginDatabase); WTF_MAKE_FAST_ALLOCATED(PluginDatabase);
 public:
     PluginDatabase();
 
@@ -70,7 +69,7 @@ public:
     void addExtraPluginDirectory(const String&);
 
     static bool isPreferredPluginDirectory(const String& directory);
-    static int __cdecl preferredPluginCompare(const void*, const void*);
+    static int preferredPluginCompare(const void*, const void*);
 
     PluginPackage* findPlugin(const blink::KURL&, String& mimeType);
     PluginPackage* pluginForMIMEType(const String& mimeType);
@@ -95,10 +94,7 @@ public:
     static void setPersistentMetadataCachePath(const String& persistentMetadataCachePath);
 #endif
 
-//     bool addVirtualPlugin(PassRefPtr<PluginPackage> package)
-//     { 
-//         return add(package); 
-//     }
+    bool addVirtualPlugin(PassRefPtr<PluginPackage> package) { return add(package); }
 
 private:
     void getPluginPathsInDirectories(HashSet<String>&) const;

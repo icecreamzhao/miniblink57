@@ -2,8 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 interface GamepadButton {
     readonly attribute boolean pressed;
     [OriginTrialEnabled=GamepadExtensions, MeasureAs=GamepadButtonTouched] readonly attribute boolean touched;
+=======
+[
+    GarbageCollected,
+] interface GamepadButton {
+    readonly attribute boolean pressed;
+>>>>>>> miniblink49
     readonly attribute double value;
 };

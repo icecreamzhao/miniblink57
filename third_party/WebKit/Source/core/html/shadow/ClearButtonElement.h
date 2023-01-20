@@ -33,7 +33,7 @@ namespace blink {
 
 class ClearButtonElement final : public HTMLDivElement {
 public:
-    class ClearButtonOwner : public GarbageCollectedMixin {
+    class ClearButtonOwner : public WillBeGarbageCollectedMixin {
     public:
         virtual ~ClearButtonOwner() { }
         virtual void focusAndSelectClearButtonOwner() = 0;
@@ -41,27 +41,23 @@ public:
         virtual void clearValue() = 0;
     };
 
-    static ClearButtonElement* create(Document&, ClearButtonOwner&);
+    static PassRefPtrWillBeRawPtr<ClearButtonElement> create(Document&, ClearButtonOwner&);
     void removeClearButtonOwner() { m_clearButtonOwner = nullptr; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     ClearButtonElement(Document&, ClearButtonOwner&);
-    void detachLayoutTree(const AttachContext& = AttachContext()) override;
+    void detach(const AttachContext& = AttachContext()) override;
     bool isMouseFocusable() const override { return false; }
     void defaultEventHandler(Event*) override;
     bool isClearButtonElement() const override;
 
-    Member<ClearButtonOwner> m_clearButtonOwner;
+    RawPtrWillBeMember<ClearButtonOwner> m_clearButtonOwner;
 };
 
-DEFINE_TYPE_CASTS(ClearButtonElement,
-    Element,
-    element,
-    element->isClearButtonElement(),
-    element.isClearButtonElement());
+DEFINE_TYPE_CASTS(ClearButtonElement, Element, element, element->isClearButtonElement(), element.isClearButtonElement());
 
-} // namespace blink
+} // namespace
 
 #endif // ClearButtonElement_h

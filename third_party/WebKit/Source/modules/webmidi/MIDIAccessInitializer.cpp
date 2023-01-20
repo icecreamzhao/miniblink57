@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/webmidi/MIDIAccessInitializer.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
@@ -9,6 +13,7 @@
 #include "core/dom/DOMException.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
+<<<<<<< HEAD
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Navigator.h"
 #include "modules/permissions/PermissionUtils.h"
@@ -36,6 +41,56 @@ MIDIAccessInitializer::MIDIAccessInitializer(ScriptState* scriptState,
 void MIDIAccessInitializer::contextDestroyed(ExecutionContext*)
 {
     m_permissionService.reset();
+=======
+#include "core/frame/Navigator.h"
+#include "modules/webmidi/MIDIAccess.h"
+#include "modules/webmidi/MIDIController.h"
+#include "modules/webmidi/MIDIOptions.h"
+#include "modules/webmidi/MIDIPort.h"
+
+namespace blink {
+
+using PortState = WebMIDIAccessorClient::MIDIPortState;
+
+MIDIAccessInitializer::MIDIAccessInitializer(ScriptState* scriptState, const MIDIOptions& options)
+    : ScriptPromiseResolver(scriptState)
+    , m_requestSysex(false)
+    , m_hasBeenDisposed(false)
+    , m_sysexPermissionResolved(false)
+{
+    if (options.hasSysex())
+        m_requestSysex = options.sysex();
+}
+
+MIDIAccessInitializer::~MIDIAccessInitializer()
+{
+    dispose();
+}
+
+void MIDIAccessInitializer::contextDestroyed()
+{
+    dispose();
+    LifecycleObserver::contextDestroyed();
+}
+
+void MIDIAccessInitializer::dispose()
+{
+    if (m_hasBeenDisposed)
+        return;
+
+    if (!executionContext())
+        return;
+
+    if (!m_sysexPermissionResolved) {
+        Document* document = toDocument(executionContext());
+        ASSERT(document);
+        if (MIDIController* controller = MIDIController::from(document->frame()))
+            controller->cancelSysexPermissionRequest(this);
+        m_sysexPermissionResolved = true;
+    }
+
+    m_hasBeenDisposed = true;
+>>>>>>> miniblink49
 }
 
 ScriptPromise MIDIAccessInitializer::start()
@@ -43,6 +98,7 @@ ScriptPromise MIDIAccessInitializer::start()
     ScriptPromise promise = this->promise();
     m_accessor = MIDIAccessor::create(this);
 
+<<<<<<< HEAD
     connectToPermissionService(getExecutionContext(),
         mojo::MakeRequest(&m_permissionService));
     m_permissionService->RequestPermission(
@@ -51,10 +107,23 @@ ScriptPromise MIDIAccessInitializer::start()
         UserGestureIndicator::processingUserGesture(),
         convertToBaseCallback(WTF::bind(
             &MIDIAccessInitializer::onPermissionsUpdated, wrapPersistent(this))));
+=======
+    if (!m_requestSysex) {
+        m_accessor->startSession();
+        return promise;
+    }
+    Document* document = toDocument(executionContext());
+    ASSERT(document);
+    if (MIDIController* controller = MIDIController::from(document->frame()))
+        controller->requestSysexPermission(this);
+    else
+        reject(DOMException::create(SecurityError));
+>>>>>>> miniblink49
 
     return promise;
 }
 
+<<<<<<< HEAD
 void MIDIAccessInitializer::didAddInputPort(const String& id,
     const String& manufacturer,
     const String& name,
@@ -79,10 +148,26 @@ void MIDIAccessInitializer::didAddOutputPort(const String& id,
 
 void MIDIAccessInitializer::didSetInputPortState(unsigned portIndex,
     PortState state)
+=======
+void MIDIAccessInitializer::didAddInputPort(const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
+{
+    ASSERT(m_accessor);
+    m_portDescriptors.append(PortDescriptor(id, manufacturer, name, MIDIPort::TypeInput, version, state));
+}
+
+void MIDIAccessInitializer::didAddOutputPort(const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
+{
+    ASSERT(m_accessor);
+    m_portDescriptors.append(PortDescriptor(id, manufacturer, name, MIDIPort::TypeOutput, version, state));
+}
+
+void MIDIAccessInitializer::didSetInputPortState(unsigned portIndex, PortState state)
+>>>>>>> miniblink49
 {
     // didSetInputPortState() is not allowed to call before didStartSession()
     // is called. Once didStartSession() is called, MIDIAccessorClient methods
     // are delegated to MIDIAccess. See constructor of MIDIAccess.
+<<<<<<< HEAD
     NOTREACHED();
 }
 
@@ -125,11 +210,54 @@ void MIDIAccessInitializer::onPermissionsUpdated(PermissionStatus status)
 {
     m_permissionService.reset();
     if (status == PermissionStatus::GRANTED)
+=======
+    ASSERT_NOT_REACHED();
+}
+
+void MIDIAccessInitializer::didSetOutputPortState(unsigned portIndex, PortState state)
+{
+    // See comments on didSetInputPortState().
+    ASSERT_NOT_REACHED();
+}
+
+void MIDIAccessInitializer::didStartSession(bool success, const String& error, const String& message)
+{
+    ASSERT(m_accessor);
+    if (success) {
+        resolve(MIDIAccess::create(m_accessor.release(), m_requestSysex, m_portDescriptors, executionContext()));
+    } else {
+        // The spec says the name is one of
+        //  - SecurityError
+        //  - AbortError
+        //  - InvalidStateError
+        //  - NotSupportedError
+        // TODO(toyoshim): Do not rely on |error| string. Instead an enum
+        // representing an ExceptionCode should be defined and deliverred.
+        ExceptionCode ec = InvalidStateError;
+        if (error == DOMException::getErrorName(SecurityError)) {
+            ec = SecurityError;
+        } else if (error == DOMException::getErrorName(AbortError)) {
+            ec = AbortError;
+        } else if (error == DOMException::getErrorName(InvalidStateError)) {
+            ec = InvalidStateError;
+        } else if (error == DOMException::getErrorName(NotSupportedError)) {
+            ec = NotSupportedError;
+        }
+        reject(DOMException::create(ec, message));
+    }
+}
+
+void MIDIAccessInitializer::resolveSysexPermission(bool allowed)
+{
+    m_sysexPermissionResolved = true;
+    if (allowed)
+>>>>>>> miniblink49
         m_accessor->startSession();
     else
         reject(DOMException::create(SecurityError));
 }
 
+<<<<<<< HEAD
 void MIDIAccessInitializer::onPermissionUpdated(PermissionStatus status)
 {
     m_permissionService.reset();
@@ -137,6 +265,16 @@ void MIDIAccessInitializer::onPermissionUpdated(PermissionStatus status)
         m_accessor->startSession();
     else
         reject(DOMException::create(SecurityError));
+=======
+SecurityOrigin* MIDIAccessInitializer::securityOrigin() const
+{
+    return executionContext()->securityOrigin();
+}
+
+ExecutionContext* MIDIAccessInitializer::executionContext() const
+{
+    return scriptState()->executionContext();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

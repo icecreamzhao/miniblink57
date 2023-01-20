@@ -2,13 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/netinfo/NetworkInformation.h"
 
 #include "core/dom/ExecutionContext.h"
 #include "core/events/Event.h"
 #include "core/page/NetworkStateNotifier.h"
 #include "modules/EventTargetModules.h"
+<<<<<<< HEAD
 #include "platform/RuntimeEnabledFeatures.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace {
@@ -18,6 +25,7 @@ using namespace blink;
 String connectionTypeToString(WebConnectionType type)
 {
     switch (type) {
+<<<<<<< HEAD
     case WebConnectionTypeCellular2G:
     case WebConnectionTypeCellular3G:
     case WebConnectionTypeCellular4G:
@@ -35,6 +43,21 @@ String connectionTypeToString(WebConnectionType type)
     case WebConnectionTypeNone:
         return "none";
     case WebConnectionTypeUnknown:
+=======
+    case ConnectionTypeCellular:
+        return "cellular";
+    case ConnectionTypeBluetooth:
+        return "bluetooth";
+    case ConnectionTypeEthernet:
+        return "ethernet";
+    case ConnectionTypeWifi:
+        return "wifi";
+    case ConnectionTypeOther:
+        return "other";
+    case ConnectionTypeNone:
+        return "none";
+    case ConnectionTypeUnknown:
+>>>>>>> miniblink49
         return "unknown";
     }
     ASSERT_NOT_REACHED();
@@ -47,7 +70,13 @@ namespace blink {
 
 NetworkInformation* NetworkInformation::create(ExecutionContext* context)
 {
+<<<<<<< HEAD
     return new NetworkInformation(context);
+=======
+    NetworkInformation* connection = new NetworkInformation(context);
+    connection->suspendIfNeeded();
+    return connection;
+>>>>>>> miniblink49
 }
 
 NetworkInformation::~NetworkInformation()
@@ -57,8 +86,13 @@ NetworkInformation::~NetworkInformation()
 
 String NetworkInformation::type() const
 {
+<<<<<<< HEAD
     // m_type is only updated when listening for events, so ask
     // networkStateNotifier if not listening (crbug.com/379841).
+=======
+    // m_type is only updated when listening for events, so ask networkStateNotifier
+    // if not listening (crbug.com/379841).
+>>>>>>> miniblink49
     if (!m_observing)
         return connectionTypeToString(networkStateNotifier().connectionType());
 
@@ -66,6 +100,7 @@ String NetworkInformation::type() const
     return connectionTypeToString(m_type);
 }
 
+<<<<<<< HEAD
 double NetworkInformation::downlinkMax() const
 {
     if (!m_observing)
@@ -90,6 +125,19 @@ void NetworkInformation::connectionChange(WebConnectionType type,
 
     if (RuntimeEnabledFeatures::netInfoDownlinkMaxEnabled())
         dispatchEvent(Event::create(EventTypeNames::change));
+=======
+void NetworkInformation::connectionTypeChange(WebConnectionType type)
+{
+    ASSERT(executionContext()->isContextThread());
+
+    // This can happen if the observer removes and then adds itself again
+    // during notification.
+    if (m_type == type)
+        return;
+
+    m_type = type;
+    dispatchEvent(Event::create(EventTypeNames::typechange));
+>>>>>>> miniblink49
 }
 
 const AtomicString& NetworkInformation::interfaceName() const
@@ -97,6 +145,7 @@ const AtomicString& NetworkInformation::interfaceName() const
     return EventTargetNames::NetworkInformation;
 }
 
+<<<<<<< HEAD
 ExecutionContext* NetworkInformation::getExecutionContext() const
 {
     return ContextLifecycleObserver::getExecutionContext();
@@ -118,6 +167,28 @@ void NetworkInformation::removedEventListener(
         registeredListener);
     if (!hasEventListeners())
         stopObserving();
+=======
+ExecutionContext* NetworkInformation::executionContext() const
+{
+    return ActiveDOMObject::executionContext();
+}
+
+bool NetworkInformation::addEventListener(const AtomicString& eventType, PassRefPtr<EventListener> listener, bool useCapture)
+{
+    if (!EventTargetWithInlineData::addEventListener(eventType, listener, useCapture))
+        return false;
+    startObserving();
+    return true;
+}
+
+bool NetworkInformation::removeEventListener(const AtomicString& eventType, PassRefPtr<EventListener> listener, bool useCapture)
+{
+    if (!EventTargetWithInlineData::removeEventListener(eventType, listener, useCapture))
+        return false;
+    if (!hasEventListeners())
+        stopObserving();
+    return true;
+>>>>>>> miniblink49
 }
 
 void NetworkInformation::removeAllEventListeners()
@@ -135,7 +206,11 @@ bool NetworkInformation::hasPendingActivity() const
     return m_observing;
 }
 
+<<<<<<< HEAD
 void NetworkInformation::contextDestroyed(ExecutionContext*)
+=======
+void NetworkInformation::stop()
+>>>>>>> miniblink49
 {
     m_contextStopped = true;
     stopObserving();
@@ -145,7 +220,11 @@ void NetworkInformation::startObserving()
 {
     if (!m_observing && !m_contextStopped) {
         m_type = networkStateNotifier().connectionType();
+<<<<<<< HEAD
         networkStateNotifier().addObserver(this, getExecutionContext());
+=======
+        networkStateNotifier().addObserver(this, executionContext());
+>>>>>>> miniblink49
         m_observing = true;
     }
 }
@@ -153,15 +232,24 @@ void NetworkInformation::startObserving()
 void NetworkInformation::stopObserving()
 {
     if (m_observing) {
+<<<<<<< HEAD
         networkStateNotifier().removeObserver(this, getExecutionContext());
+=======
+        networkStateNotifier().removeObserver(this, executionContext());
+>>>>>>> miniblink49
         m_observing = false;
     }
 }
 
 NetworkInformation::NetworkInformation(ExecutionContext* context)
+<<<<<<< HEAD
     : ContextLifecycleObserver(context)
     , m_type(networkStateNotifier().connectionType())
     , m_downlinkMaxMbps(networkStateNotifier().maxBandwidth())
+=======
+    : ActiveDOMObject(context)
+    , m_type(networkStateNotifier().connectionType())
+>>>>>>> miniblink49
     , m_observing(false)
     , m_contextStopped(false)
 {
@@ -169,8 +257,13 @@ NetworkInformation::NetworkInformation(ExecutionContext* context)
 
 DEFINE_TRACE(NetworkInformation)
 {
+<<<<<<< HEAD
     EventTargetWithInlineData::trace(visitor);
     ContextLifecycleObserver::trace(visitor);
+=======
+    RefCountedGarbageCollectedEventTargetWithInlineData<NetworkInformation>::trace(visitor);
+    ActiveDOMObject::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

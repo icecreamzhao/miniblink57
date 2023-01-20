@@ -6,6 +6,7 @@
  */
 
 #include "SkColorFilter.h"
+<<<<<<< HEAD
 #include "SkNx.h"
 #include "SkPM4f.h"
 #include "SkReadBuffer.h"
@@ -62,11 +63,31 @@ void SkColorFilter::filterSpan4f(const SkPM4f src[], int count, SkPM4f result[])
 
 SkColor SkColorFilter::filterColor(SkColor c) const
 {
+=======
+#include "SkReadBuffer.h"
+#include "SkString.h"
+#include "SkWriteBuffer.h"
+
+bool SkColorFilter::asColorMode(SkColor* color, SkXfermode::Mode* mode) const {
+    return false;
+}
+
+bool SkColorFilter::asColorMatrix(SkScalar matrix[20]) const {
+    return false;
+}
+
+bool SkColorFilter::asComponentTable(SkBitmap*) const {
+    return false;
+}
+
+SkColor SkColorFilter::filterColor(SkColor c) const {
+>>>>>>> miniblink49
     SkPMColor dst, src = SkPreMultiplyColor(c);
     this->filterSpan(&src, 1, &dst);
     return SkUnPreMultiply::PMColorToColor(dst);
 }
 
+<<<<<<< HEAD
 SkColor4f SkColorFilter::filterColor4f(const SkColor4f& c) const
 {
     SkPM4f dst, src = c.premul();
@@ -74,6 +95,8 @@ SkColor4f SkColorFilter::filterColor4f(const SkColor4f& c) const
     return dst.unpremul();
 }
 
+=======
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -84,6 +107,7 @@ SkColor4f SkColorFilter::filterColor4f(const SkColor4f& c) const
  *  we just set an arbitrary limit during construction. If later we find smarter ways to know what
  *  the limnits are, we can change this constant (or remove it).
  */
+<<<<<<< HEAD
 #define SK_MAX_COMPOSE_COLORFILTER_COUNT 4
 
 class SkComposeColorFilter : public SkColorFilter {
@@ -109,6 +133,24 @@ public:
 #ifndef SK_IGNORE_TO_STRING
     void toString(SkString* str) const override
     {
+=======
+#define SK_MAX_COMPOSE_COLORFILTER_COUNT    4
+
+class SkComposeColorFilter : public SkColorFilter {
+public:
+    uint32_t getFlags() const override {
+        // Can only claim alphaunchanged and 16bit support if both our proxys do.
+        return fOuter->getFlags() & fInner->getFlags();
+    }
+    
+    void filterSpan(const SkPMColor shader[], int count, SkPMColor result[]) const override {
+        fInner->filterSpan(shader, count, result);
+        fOuter->filterSpan(result, count, result);
+    }
+    
+#ifndef SK_IGNORE_TO_STRING
+    void toString(SkString* str) const override {
+>>>>>>> miniblink49
         SkString outerS, innerS;
         fOuter->toString(&outerS);
         fInner->toString(&innerS);
@@ -117,6 +159,7 @@ public:
 #endif
 
 #if SK_SUPPORT_GPU
+<<<<<<< HEAD
     sk_sp<GrFragmentProcessor> asFragmentProcessor(GrContext* context) const override
     {
         sk_sp<GrFragmentProcessor> innerFP(fInner->asFragmentProcessor(context));
@@ -126,10 +169,18 @@ public:
         }
         sk_sp<GrFragmentProcessor> series[] = { std::move(innerFP), std::move(outerFP) };
         return GrFragmentProcessor::RunInSeries(series, 2);
+=======
+    bool asFragmentProcessors(GrContext* context, GrProcessorDataManager* procDataManager,
+                              SkTDArray<GrFragmentProcessor*>* array) const override {
+        bool hasFrags = fInner->asFragmentProcessors(context, procDataManager, array);
+        hasFrags |= fOuter->asFragmentProcessors(context, procDataManager, array);
+        return hasFrags;
+>>>>>>> miniblink49
     }
 #endif
 
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkComposeColorFilter)
+<<<<<<< HEAD
 
 protected:
     void flatten(SkWriteBuffer& buffer) const override
@@ -143,12 +194,26 @@ private:
         int composedFilterCount)
         : fOuter(std::move(outer))
         , fInner(std::move(inner))
+=======
+    
+protected:
+    void flatten(SkWriteBuffer& buffer) const override {
+        buffer.writeFlattenable(fOuter);
+        buffer.writeFlattenable(fInner);
+    }
+    
+private:
+    SkComposeColorFilter(SkColorFilter* outer, SkColorFilter* inner, int composedFilterCount)
+        : fOuter(SkRef(outer))
+        , fInner(SkRef(inner))
+>>>>>>> miniblink49
         , fComposedFilterCount(composedFilterCount)
     {
         SkASSERT(composedFilterCount >= 2);
         SkASSERT(composedFilterCount <= SK_MAX_COMPOSE_COLORFILTER_COUNT);
     }
 
+<<<<<<< HEAD
     int privateComposedFilterCount() const override
     {
         return fComposedFilterCount;
@@ -157,21 +222,38 @@ private:
     sk_sp<SkColorFilter> fOuter;
     sk_sp<SkColorFilter> fInner;
     const int fComposedFilterCount;
+=======
+    int privateComposedFilterCount() const override {
+        return fComposedFilterCount;
+    }
+
+    SkAutoTUnref<SkColorFilter> fOuter;
+    SkAutoTUnref<SkColorFilter> fInner;
+    const int                   fComposedFilterCount;
+>>>>>>> miniblink49
 
     friend class SkColorFilter;
 
     typedef SkColorFilter INHERITED;
 };
 
+<<<<<<< HEAD
 sk_sp<SkFlattenable> SkComposeColorFilter::CreateProc(SkReadBuffer& buffer)
 {
     sk_sp<SkColorFilter> outer(buffer.readColorFilter());
     sk_sp<SkColorFilter> inner(buffer.readColorFilter());
     return MakeComposeFilter(std::move(outer), std::move(inner));
+=======
+SkFlattenable* SkComposeColorFilter::CreateProc(SkReadBuffer& buffer) {
+    SkAutoTUnref<SkColorFilter> outer(buffer.readColorFilter());
+    SkAutoTUnref<SkColorFilter> inner(buffer.readColorFilter());
+    return CreateComposeFilter(outer, inner);
+>>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 sk_sp<SkColorFilter> SkColorFilter::MakeComposeFilter(sk_sp<SkColorFilter> outer,
     sk_sp<SkColorFilter> inner)
 {
@@ -184,12 +266,25 @@ sk_sp<SkColorFilter> SkColorFilter::MakeComposeFilter(sk_sp<SkColorFilter> outer
 
     // Give the subclass a shot at a more optimal composition...
     auto composition = outer->makeComposed(inner);
+=======
+SkColorFilter* SkColorFilter::CreateComposeFilter(SkColorFilter* outer, SkColorFilter* inner) {
+    if (!outer) {
+        return SkSafeRef(inner);
+    }
+    if (!inner) {
+        return SkSafeRef(outer);
+    }
+
+    // Give the subclass a shot at a more optimal composition...
+    SkColorFilter* composition = outer->newComposed(inner);
+>>>>>>> miniblink49
     if (composition) {
         return composition;
     }
 
     int count = inner->privateComposedFilterCount() + outer->privateComposedFilterCount();
     if (count > SK_MAX_COMPOSE_COLORFILTER_COUNT) {
+<<<<<<< HEAD
         return nullptr;
     }
     return sk_sp<SkColorFilter>(new SkComposeColorFilter(std::move(outer), std::move(inner), count));
@@ -201,3 +296,14 @@ SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_START(SkColorFilter)
 SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(SkComposeColorFilter)
 SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(SkModeColorFilter)
 SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_END
+=======
+        return NULL;
+    }
+    return SkNEW_ARGS(SkComposeColorFilter, (outer, inner, count));
+}
+
+SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_START(SkColorFilter)
+SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(SkComposeColorFilter)
+SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_END
+
+>>>>>>> miniblink49

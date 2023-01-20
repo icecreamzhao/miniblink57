@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/events/TransitionEvent.h"
 
 namespace blink {
@@ -33,10 +34,7 @@ TransitionEvent::TransitionEvent()
 {
 }
 
-TransitionEvent::TransitionEvent(const AtomicString& type,
-    const String& propertyName,
-    double elapsedTime,
-    const String& pseudoElement)
+TransitionEvent::TransitionEvent(const AtomicString& type, const String& propertyName, double elapsedTime, const String& pseudoElement)
     : Event(type, true, true)
     , m_propertyName(propertyName)
     , m_elapsedTime(elapsedTime)
@@ -44,8 +42,7 @@ TransitionEvent::TransitionEvent(const AtomicString& type,
 {
 }
 
-TransitionEvent::TransitionEvent(const AtomicString& type,
-    const TransitionEventInit& initializer)
+TransitionEvent::TransitionEvent(const AtomicString& type, const TransitionEventInit& initializer)
     : Event(type, initializer)
     , m_elapsedTime(0)
 {
@@ -57,7 +54,9 @@ TransitionEvent::TransitionEvent(const AtomicString& type,
         m_pseudoElement = initializer.pseudoElement();
 }
 
-TransitionEvent::~TransitionEvent() { }
+TransitionEvent::~TransitionEvent()
+{
+}
 
 const String& TransitionEvent::propertyName() const
 {

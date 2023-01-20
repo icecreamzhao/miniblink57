@@ -30,6 +30,12 @@
 
 [
     NoInterfaceObject,
+<<<<<<< HEAD
 ] interface DirectoryReaderSync {
     [RaisesException] sequence<EntrySync> readEntries();
+=======
+    GarbageCollected,
+] interface DirectoryReaderSync {
+    [RaisesException] EntrySync[] readEntries();
+>>>>>>> miniblink49
 };

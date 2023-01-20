@@ -23,16 +23,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/mediastream/MediaDevicesRequest.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
 #include "core/dom/DOMException.h"
 #include "core/dom/Document.h"
+<<<<<<< HEAD
+=======
+#include "core/dom/ExceptionCode.h"
+>>>>>>> miniblink49
 #include "modules/mediastream/UserMediaController.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 MediaDevicesRequest* MediaDevicesRequest::create(
     ScriptState* state,
     UserMediaController* controller)
@@ -43,16 +53,37 @@ MediaDevicesRequest* MediaDevicesRequest::create(
 MediaDevicesRequest::MediaDevicesRequest(ScriptState* state,
     UserMediaController* controller)
     : ContextLifecycleObserver(state->getExecutionContext())
+=======
+MediaDevicesRequest* MediaDevicesRequest::create(ScriptState* state, UserMediaController* controller)
+{
+    MediaDevicesRequest* request = new MediaDevicesRequest(state, controller);
+    request->suspendIfNeeded();
+    return request;
+}
+
+MediaDevicesRequest::MediaDevicesRequest(ScriptState* state, UserMediaController* controller)
+    : ActiveDOMObject(state->executionContext())
+>>>>>>> miniblink49
     , m_controller(controller)
     , m_resolver(ScriptPromiseResolver::create(state))
 {
 }
 
+<<<<<<< HEAD
 MediaDevicesRequest::~MediaDevicesRequest() { }
 
 Document* MediaDevicesRequest::ownerDocument()
 {
     if (ExecutionContext* context = getExecutionContext()) {
+=======
+MediaDevicesRequest::~MediaDevicesRequest()
+{
+}
+
+Document* MediaDevicesRequest::ownerDocument()
+{
+    if (ExecutionContext* context = executionContext()) {
+>>>>>>> miniblink49
         return toDocument(context);
     }
 
@@ -61,7 +92,11 @@ Document* MediaDevicesRequest::ownerDocument()
 
 ScriptPromise MediaDevicesRequest::start()
 {
+<<<<<<< HEAD
     DCHECK(m_controller);
+=======
+    ASSERT(m_controller);
+>>>>>>> miniblink49
     m_resolver->keepAliveWhilePending();
     m_controller->requestMediaDevices(this);
     return m_resolver->promise();
@@ -69,13 +104,21 @@ ScriptPromise MediaDevicesRequest::start()
 
 void MediaDevicesRequest::succeed(const MediaDeviceInfoVector& mediaDevices)
 {
+<<<<<<< HEAD
     if (!getExecutionContext() || !m_resolver)
+=======
+    if (!executionContext() || !m_resolver)
+>>>>>>> miniblink49
         return;
 
     m_resolver->resolve(mediaDevices);
 }
 
+<<<<<<< HEAD
 void MediaDevicesRequest::contextDestroyed(ExecutionContext*)
+=======
+void MediaDevicesRequest::stop()
+>>>>>>> miniblink49
 {
     m_controller.clear();
     m_resolver.clear();
@@ -85,7 +128,11 @@ DEFINE_TRACE(MediaDevicesRequest)
 {
     visitor->trace(m_controller);
     visitor->trace(m_resolver);
+<<<<<<< HEAD
     ContextLifecycleObserver::trace(visitor);
+=======
+    ActiveDOMObject::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,9 +9,16 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkSVGCircle.h"
 #include "SkParse.h"
 #include "SkSVGParser.h"
+=======
+
+#include "SkSVGCircle.h"
+#include "SkSVGParser.h"
+#include "SkParse.h"
+>>>>>>> miniblink49
 #include <stdio.h>
 
 const SkSVGAttribute SkSVGCircle::gAttributes[] = {
@@ -18,8 +29,12 @@ const SkSVGAttribute SkSVGCircle::gAttributes[] = {
 
 DEFINE_SVG_INFO(Circle)
 
+<<<<<<< HEAD
 void SkSVGCircle::translate(SkSVGParser& parser, bool defState)
 {
+=======
+void SkSVGCircle::translate(SkSVGParser& parser, bool defState) {
+>>>>>>> miniblink49
     parser._startElement("oval");
     INHERITED::translate(parser, defState);
     SkScalar cx, cy, r;

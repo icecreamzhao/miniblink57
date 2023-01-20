@@ -9,13 +9,12 @@
  * Watcom needs a DllMain() in order to initialise the clib startup code.
  */
 BOOL
-    WINAPI
-    DllMain(HINSTANCE hnd, DWORD reason, LPVOID reserved)
+WINAPI DllMain (HINSTANCE hnd, DWORD reason, LPVOID reserved)
 {
-    (void)hnd;
-    (void)reason;
-    (void)reserved;
-    return (TRUE);
+  (void) hnd;
+  (void) reason;
+  (void) reserved;
+  return (TRUE);
 }
 #endif
 

@@ -60,37 +60,19 @@ public:
 
     int m_ref;
     String m_contentType;
-    int webviewId;
-
 private:
     Vector<blink::WebBlobData::Item*> m_items;
 };
 
 struct BlobTempFileInfo {
     String tempUrl;
-    String url;
     Vector<char> data;
-
-    BlobTempFileInfo()
-    {
-        m_refCount = 0;
-    }
-
-    void ref();
-    void deref();
-
-    int getRefCount() const
-    {
-        return m_refCount;
-    }
-
-private:
-    int m_refCount;
+    int refCount;
 };
 
-//class StreamWrap;
+class StreamWrap;
 
-class BlobResourceLoader /*: public FileStreamClient*/ {
+class BlobResourceLoader : public FileStreamClient {
 public:
     static BlobResourceLoader* createAsync(BlobDataWrap*, const blink::WebURLRequest&, blink::WebURLLoaderClient*, blink::WebURLLoader*);
 
@@ -111,23 +93,23 @@ private:
     BlobResourceLoader(BlobDataWrap*, const blink::WebURLRequest&, blink::WebURLLoaderClient*, blink::WebURLLoader* loader, bool async);
     
     // FileStreamClient methods.
-    //virtual void didGetSize(long long) override;
-//     virtual void didOpen(bool) override;
-//     virtual void didRead(int) override;
+    virtual void didGetSize(long long) override;
+    virtual void didOpen(bool) override;
+    virtual void didRead(int) override;
 
     void doNotifyFinish();
     void doStart();
-    //void getSizeForNext();
-    //void seek();
-    //void consumeData(const char* data, int bytesRead);
+    void getSizeForNext();
+    void seek();
+    void consumeData(const char* data, int bytesRead);
     void failed(int errorCode);
 
-//     void readAsync();
-//     void readDataAsync(const blink::WebBlobData::Item&);
-//     void readFileAsync(const blink::WebBlobData::Item&);
-// 
-//     int readDataSync(const blink::WebBlobData::Item&, char*, int);
-//     int readFileSync(const blink::WebBlobData::Item&, char*, int);
+    void readAsync();
+    void readDataAsync(const blink::WebBlobData::Item&);
+    void readFileAsync(const blink::WebBlobData::Item&);
+
+    int readDataSync(const blink::WebBlobData::Item&, char*, int);
+    int readFileSync(const blink::WebBlobData::Item&, char*, int);
 
     void notifyResponse();
     void notifyResponseOnSuccess();
@@ -136,16 +118,13 @@ private:
     void notifyFail(int errorCode);
     void notifyFinish();
 
-    int m_id;
-    int m_webviewId;
-
     blink::WebURLRequest m_request;
     blink::WebURLLoader* m_loader;
     blink::WebURLLoaderClient* m_client;
 
     BlobDataWrap* m_blobData;
     bool m_async;
-    //std::unique_ptr<StreamWrap> m_streamWrap;
+    std::unique_ptr<StreamWrap> m_streamWrap;
     Vector<char> m_buffer;
     Vector<long long> m_itemLengthList;
     int m_errorCode;
@@ -157,18 +136,16 @@ private:
     long long m_currentItemReadSize;
     unsigned m_sizeItemCount;
     unsigned m_readItemCount;
-//     bool m_fileOpened;
-//
-//     friend class LoaderWrap;
-//     enum RunType {
-//         kStart,
-//         kNotifyFinish
-//     };
-//     LoaderWrap* m_doNotifyFinishAsynTaskWeakPtr;
-//     LoaderWrap* m_doStartAsynTaskWeakPtr;
-//     void asynTaskFinish(RunType runType);
-    bool m_isNotifyFinishing;
-    bool m_isNotifyStarting;
+    bool m_fileOpened;
+
+    friend class LoaderWrap;
+    enum RunType {
+        kStart,
+        kNotifyFinish
+    };
+    LoaderWrap* m_doNotifyFinishAsynTaskWeakPtr;
+    LoaderWrap* m_doStartAsynTaskWeakPtr;
+    void asynTaskFinish(RunType runType);
 
     bool* m_isDestroied;
 };

@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/image-decoders/jpeg/JPEGImageDecoder.h"
 
 #include "platform/SharedBuffer.h"
@@ -39,6 +40,20 @@
 #include "wtf/PtrUtil.h"
 #include "wtf/typed_arrays/ArrayBuffer.h"
 #include <memory>
+=======
+#include "config.h"
+#include "platform/image-decoders/jpeg/JPEGImageDecoder.h"
+
+#include "platform/SharedBuffer.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebData.h"
+#include "public/platform/WebSize.h"
+#include "public/platform/WebUnitTestSupport.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/StringHasher.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -46,6 +61,7 @@ static const size_t LargeEnoughSize = 1000 * 1000;
 
 namespace {
 
+<<<<<<< HEAD
     std::unique_ptr<ImageDecoder> createDecoder(size_t maxDecodedBytes)
     {
         return WTF::wrapUnique(new JPEGImageDecoder(
@@ -69,10 +85,34 @@ void downsample(size_t maxDecodedBytes,
     ASSERT_TRUE(data);
 
     std::unique_ptr<ImageDecoder> decoder = createDecoder(maxDecodedBytes);
+=======
+PassRefPtr<SharedBuffer> readFile(const char* fileName)
+{
+    String filePath = Platform::current()->unitTestSupport()->webKitRootDir();
+    filePath.append(fileName);
+
+    return Platform::current()->unitTestSupport()->readFromFile(filePath);
+}
+
+PassOwnPtr<JPEGImageDecoder> createDecoder(size_t maxDecodedBytes)
+{
+    return adoptPtr(new JPEGImageDecoder(ImageSource::AlphaNotPremultiplied, ImageSource::GammaAndColorProfileApplied, maxDecodedBytes));
+}
+
+} // anonymous namespace
+
+void downsample(size_t maxDecodedBytes, unsigned* outputWidth, unsigned* outputHeight, const char* imageFilePath)
+{
+    RefPtr<SharedBuffer> data = readFile(imageFilePath);
+    ASSERT_TRUE(data.get());
+
+    OwnPtr<JPEGImageDecoder> decoder = createDecoder(maxDecodedBytes);
+>>>>>>> miniblink49
     decoder->setData(data.get(), true);
 
     ImageFrame* frame = decoder->frameBufferAtIndex(0);
     ASSERT_TRUE(frame);
+<<<<<<< HEAD
     *outputWidth = frame->bitmap().width();
     *outputHeight = frame->bitmap().height();
     EXPECT_EQ(IntSize(*outputWidth, *outputHeight), decoder->decodedSize());
@@ -96,13 +136,36 @@ void readYUV(size_t maxDecodedBytes,
     std::unique_ptr<ImagePlanes> dummyImagePlanes = WTF::makeUnique<ImagePlanes>();
     decoder->setImagePlanes(std::move(dummyImagePlanes));
 
+=======
+    *outputWidth = frame->getSkBitmap().width();
+    *outputHeight = frame->getSkBitmap().height();
+    EXPECT_EQ(IntSize(*outputWidth, *outputHeight), decoder->decodedSize());
+}
+
+void readYUV(size_t maxDecodedBytes, unsigned* outputYWidth, unsigned* outputYHeight, unsigned* outputUVWidth, unsigned* outputUVHeight, const char* imageFilePath)
+{
+    RefPtr<SharedBuffer> data = readFile(imageFilePath);
+    ASSERT_TRUE(data.get());
+
+    OwnPtr<JPEGImageDecoder> decoder = createDecoder(maxDecodedBytes);
+    decoder->setData(data.get(), true);
+
+    OwnPtr<ImagePlanes> imagePlanes = adoptPtr(new ImagePlanes());
+    decoder->setImagePlanes(imagePlanes.release());
+>>>>>>> miniblink49
     bool sizeIsAvailable = decoder->isSizeAvailable();
     ASSERT_TRUE(sizeIsAvailable);
 
     IntSize size = decoder->decodedSize();
+<<<<<<< HEAD
     IntSize ySize = decoder->decodedYUVSize(0);
     IntSize uSize = decoder->decodedYUVSize(1);
     IntSize vSize = decoder->decodedYUVSize(2);
+=======
+    IntSize ySize = decoder->decodedYUVSize(0, ImageDecoder::ActualSize);
+    IntSize uSize = decoder->decodedYUVSize(1, ImageDecoder::ActualSize);
+    IntSize vSize = decoder->decodedYUVSize(2, ImageDecoder::ActualSize);
+>>>>>>> miniblink49
 
     ASSERT_TRUE(size.width() == ySize.width());
     ASSERT_TRUE(size.height() == ySize.height());
@@ -113,6 +176,7 @@ void readYUV(size_t maxDecodedBytes,
     *outputYHeight = ySize.height();
     *outputUVWidth = uSize.width();
     *outputUVHeight = uSize.height();
+<<<<<<< HEAD
 
     size_t rowBytes[3];
     rowBytes[0] = decoder->decodedYUVWidthBytes(0);
@@ -131,22 +195,37 @@ void readYUV(size_t maxDecodedBytes,
     decoder->setImagePlanes(std::move(imagePlanes));
 
     ASSERT_TRUE(decoder->decodeToYUV());
+=======
+>>>>>>> miniblink49
 }
 
 // Tests failure on a too big image.
 TEST(JPEGImageDecoderTest, tooBig)
 {
+<<<<<<< HEAD
     std::unique_ptr<ImageDecoder> decoder = createDecoder(100);
+=======
+    OwnPtr<JPEGImageDecoder> decoder = createDecoder(100);
+>>>>>>> miniblink49
     EXPECT_FALSE(decoder->setSize(10000, 10000));
     EXPECT_TRUE(decoder->failed());
 }
 
+<<<<<<< HEAD
 // Tests that the JPEG decoder can downsample image whose width and height are
 // multiples of 8, to ensure we compute the correct decodedSize and pass correct
 // parameters to libjpeg to output the image with the expected size.
 TEST(JPEGImageDecoderTest, downsampleImageSizeMultipleOf8)
 {
     const char* jpegFile = "/LayoutTests/images/resources/lenna.jpg"; // 256x256
+=======
+// Tests that JPEG decoder can downsample image whose width and height are multiple of 8,
+// to ensure we compute the correct decodedSize and pass correct parameters to libjpeg to
+// output image with the expected size.
+TEST(JPEGImageDecoderTest, downsampleImageSizeMultipleOf8)
+{
+    const char* jpegFile = "/LayoutTests/fast/images/resources/lenna.jpg"; // 256x256
+>>>>>>> miniblink49
     unsigned outputWidth, outputHeight;
 
     // 1/8 downsample.
@@ -185,11 +264,19 @@ TEST(JPEGImageDecoderTest, downsampleImageSizeMultipleOf8)
     EXPECT_EQ(224u, outputHeight);
 }
 
+<<<<<<< HEAD
 // Tests that JPEG decoder can downsample image whose width and height are not
 // multiple of 8. Ensures that we round using the same algorithm as libjpeg.
 TEST(JPEGImageDecoderTest, downsampleImageSizeNotMultipleOf8)
 {
     const char* jpegFile = "/LayoutTests/images/resources/icc-v2-gbr.jpg"; // 275x207
+=======
+// Tests that JPEG decoder can downsample image whose width and height are not multiple of 8.
+// Ensures that we round decodedSize and scale_num using the same algorithm as that of libjpeg.
+TEST(JPEGImageDecoderTest, downsampleImageSizeNotMultipleOf8)
+{
+    const char* jpegFile = "/LayoutTests/fast/images/resources/icc-v2-gbr.jpg"; // 275x207
+>>>>>>> miniblink49
     unsigned outputWidth, outputHeight;
 
     // 1/8 downsample.
@@ -231,7 +318,11 @@ TEST(JPEGImageDecoderTest, downsampleImageSizeNotMultipleOf8)
 // Tests that upsampling is not allowed.
 TEST(JPEGImageDecoderTest, upsample)
 {
+<<<<<<< HEAD
     const char* jpegFile = "/LayoutTests/images/resources/lenna.jpg"; // 256x256
+=======
+    const char* jpegFile = "/LayoutTests/fast/images/resources/lenna.jpg"; // 256x256
+>>>>>>> miniblink49
     unsigned outputWidth, outputHeight;
     downsample(LargeEnoughSize, &outputWidth, &outputHeight, jpegFile);
     EXPECT_EQ(256u, outputWidth);
@@ -240,15 +331,22 @@ TEST(JPEGImageDecoderTest, upsample)
 
 TEST(JPEGImageDecoderTest, yuv)
 {
+<<<<<<< HEAD
     const char* jpegFile = "/LayoutTests/images/resources/lenna.jpg"; // 256x256, YUV 4:2:0
     unsigned outputYWidth, outputYHeight, outputUVWidth, outputUVHeight;
     readYUV(LargeEnoughSize, &outputYWidth, &outputYHeight, &outputUVWidth,
         &outputUVHeight, jpegFile);
+=======
+    const char* jpegFile = "/LayoutTests/fast/images/resources/lenna.jpg"; // 256x256, YUV 4:2:0
+    unsigned outputYWidth, outputYHeight, outputUVWidth, outputUVHeight;
+    readYUV(LargeEnoughSize, &outputYWidth, &outputYHeight, &outputUVWidth, &outputUVHeight, jpegFile);
+>>>>>>> miniblink49
     EXPECT_EQ(256u, outputYWidth);
     EXPECT_EQ(256u, outputYHeight);
     EXPECT_EQ(128u, outputUVWidth);
     EXPECT_EQ(128u, outputUVHeight);
 
+<<<<<<< HEAD
     const char* jpegFileImageSizeNotMultipleOf8 = "/LayoutTests/images/resources/cropped_mandrill.jpg"; // 439x154
     readYUV(LargeEnoughSize, &outputYWidth, &outputYHeight, &outputUVWidth,
         &outputUVHeight, jpegFileImageSizeNotMultipleOf8);
@@ -267,10 +365,23 @@ TEST(JPEGImageDecoderTest, yuv)
 
     std::unique_ptr<ImagePlanes> imagePlanes = WTF::makeUnique<ImagePlanes>();
     decoder->setImagePlanes(std::move(imagePlanes));
+=======
+    // Make sure we revert to RGBA decoding when we're about to downscale,
+    // which can occur on memory-constrained android devices.
+    RefPtr<SharedBuffer> data = readFile(jpegFile);
+    ASSERT_TRUE(data.get());
+
+    OwnPtr<JPEGImageDecoder> decoder = createDecoder(230 * 230 * 4);
+    decoder->setData(data.get(), true);
+
+    OwnPtr<ImagePlanes> imagePlanes = adoptPtr(new ImagePlanes());
+    decoder->setImagePlanes(imagePlanes.release());
+>>>>>>> miniblink49
     ASSERT_TRUE(decoder->isSizeAvailable());
     ASSERT_FALSE(decoder->canDecodeToYUV());
 }
 
+<<<<<<< HEAD
 TEST(JPEGImageDecoderTest,
     byteByByteBaselineJPEGWithColorProfileAndRestartMarkers)
 {
@@ -319,4 +430,6 @@ TEST(JPEGImageDecoderTest, manyProgressiveScans)
     EXPECT_TRUE(testDecoder->failed());
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

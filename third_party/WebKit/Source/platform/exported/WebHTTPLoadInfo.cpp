@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebHTTPLoadInfo.h"
 
 #include "platform/network/ResourceLoadInfo.h"
@@ -85,6 +89,7 @@ void WebHTTPLoadInfo::setHTTPStatusText(const WebString& statusText)
     m_private->httpStatusText = statusText;
 }
 
+<<<<<<< HEAD
 static void addHeader(HTTPHeaderMap* map,
     const WebString& name,
     const WebString& value)
@@ -92,19 +97,45 @@ static void addHeader(HTTPHeaderMap* map,
     HTTPHeaderMap::AddResult result = map->add(name, value);
     // It is important that values are separated by '\n', not comma, otherwise
     // Set-Cookie header is not parseable.
+=======
+long long WebHTTPLoadInfo::encodedDataLength() const
+{
+    ASSERT(!m_private.isNull());
+    return m_private->encodedDataLength;
+}
+
+void WebHTTPLoadInfo::setEncodedDataLength(long long encodedDataLength)
+{
+    ASSERT(!m_private.isNull());
+    m_private->encodedDataLength = encodedDataLength;
+}
+
+static void addHeader(HTTPHeaderMap* map, const WebString& name, const WebString& value)
+{
+    HTTPHeaderMap::AddResult result = map->add(name, value);
+    // It is important that values are separated by '\n', not comma, otherwise Set-Cookie header is not parseable.
+>>>>>>> miniblink49
     if (!result.isNewEntry)
         result.storedValue->value = result.storedValue->value + "\n" + String(value);
 }
 
+<<<<<<< HEAD
 void WebHTTPLoadInfo::addRequestHeader(const WebString& name,
     const WebString& value)
+=======
+void WebHTTPLoadInfo::addRequestHeader(const WebString& name, const WebString& value)
+>>>>>>> miniblink49
 {
     ASSERT(!m_private.isNull());
     addHeader(&m_private->requestHeaders, name, value);
 }
 
+<<<<<<< HEAD
 void WebHTTPLoadInfo::addResponseHeader(const WebString& name,
     const WebString& value)
+=======
+void WebHTTPLoadInfo::addResponseHeader(const WebString& name, const WebString& value)
+>>>>>>> miniblink49
 {
     ASSERT(!m_private.isNull());
     addHeader(&m_private->responseHeaders, name, value);
@@ -140,8 +171,12 @@ WebString WebHTTPLoadInfo::npnNegotiatedProtocol() const
     return m_private->npnNegotiatedProtocol;
 }
 
+<<<<<<< HEAD
 void WebHTTPLoadInfo::setNPNNegotiatedProtocol(
     const WebString& npnNegotiatedProtocol)
+=======
+void WebHTTPLoadInfo::setNPNNegotiatedProtocol(const WebString& npnNegotiatedProtocol)
+>>>>>>> miniblink49
 {
     ASSERT(!m_private.isNull());
     m_private->npnNegotiatedProtocol = npnNegotiatedProtocol;

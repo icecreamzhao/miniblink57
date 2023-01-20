@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/ElementData.h"
 
 #include "core/css/StylePropertySet.h"
@@ -36,15 +37,12 @@
 
 namespace blink {
 
-struct SameSizeAsElementData
-    : public GarbageCollectedFinalized<SameSizeAsElementData> {
+struct SameSizeAsElementData : public RefCountedWillBeGarbageCollectedFinalized<SameSizeAsElementData> {
     unsigned bitfield;
-    Member<void*> willbeMember;
-    void* pointers[2];
+    void* pointers[3];
 };
 
-static_assert(sizeof(ElementData) == sizeof(SameSizeAsElementData),
-    "ElementData should stay small");
+static_assert(sizeof(ElementData) == sizeof(SameSizeAsElementData), "ElementData should stay small");
 
 static size_t sizeForShareableElementDataWithAttributeCount(unsigned count)
 {
@@ -72,17 +70,16 @@ ElementData::ElementData(unsigned arraySize)
 ElementData::ElementData(const ElementData& other, bool isUnique)
     : m_isUnique(isUnique)
     , m_arraySize(isUnique ? 0 : other.attributes().size())
-    , m_presentationAttributeStyleIsDirty(
-          other.m_presentationAttributeStyleIsDirty)
+    , m_presentationAttributeStyleIsDirty(other.m_presentationAttributeStyleIsDirty)
     , m_styleAttributeIsDirty(other.m_styleAttributeIsDirty)
     , m_animatedSVGAttributesAreDirty(other.m_animatedSVGAttributesAreDirty)
     , m_classNames(other.m_classNames)
     , m_idForStyleResolution(other.m_idForStyleResolution)
 {
-    // NOTE: The inline style is copied by the subclass copy constructor since we
-    // don't know what to do with it here.
+    // NOTE: The inline style is copied by the subclass copy constructor since we don't know what to do with it here.
 }
 
+#if ENABLE(OILPAN)
 void ElementData::finalizeGarbageCollectedObject()
 {
     if (m_isUnique)
@@ -90,12 +87,21 @@ void ElementData::finalizeGarbageCollectedObject()
     else
         toShareableElementData(this)->~ShareableElementData();
 }
+#else
+void ElementData::destroy()
+{
+    if (m_isUnique)
+        delete toUniqueElementData(this);
+    else
+        delete toShareableElementData(this);
+}
+#endif
 
-UniqueElementData* ElementData::makeUniqueCopy() const
+PassRefPtrWillBeRawPtr<UniqueElementData> ElementData::makeUniqueCopy() const
 {
     if (isUnique())
-        return new UniqueElementData(toUniqueElementData(*this));
-    return new UniqueElementData(toShareableElementData(*this));
+        return adoptRefWillBeNoop(new UniqueElementData(toUniqueElementData(*this)));
+    return adoptRefWillBeNoop(new UniqueElementData(toShareableElementData(*this)));
 }
 
 bool ElementData::isEquivalent(const ElementData* other) const
@@ -145,7 +151,7 @@ ShareableElementData::~ShareableElementData()
 ShareableElementData::ShareableElementData(const UniqueElementData& other)
     : ElementData(other, false)
 {
-    DCHECK(!other.m_presentationAttributeStyle);
+    ASSERT(!other.m_presentationAttributeStyle);
 
     if (other.m_inlineStyle) {
         m_inlineStyle = other.m_inlineStyle->immutableCopyIfNeeded();
@@ -155,15 +161,19 @@ ShareableElementData::ShareableElementData(const UniqueElementData& other)
         new (&m_attributeArray[i]) Attribute(other.m_attributeVector.at(i));
 }
 
-ShareableElementData* ShareableElementData::createWithAttributes(
-    const Vector<Attribute>& attributes)
+PassRefPtrWillBeRawPtr<ShareableElementData> ShareableElementData::createWithAttributes(const Vector<Attribute>& attributes)
 {
-    void* slot = ThreadHeap::allocate<ElementData>(
-        sizeForShareableElementDataWithAttributeCount(attributes.size()));
-    return new (slot) ShareableElementData(attributes);
+#if ENABLE(OILPAN)
+    void* slot = Heap::allocate<ElementData>(sizeForShareableElementDataWithAttributeCount(attributes.size()));
+#else
+    void* slot = WTF::fastMalloc(sizeForShareableElementDataWithAttributeCount(attributes.size()));
+#endif
+    return adoptRefWillBeNoop(new (slot) ShareableElementData(attributes));
 }
 
-UniqueElementData::UniqueElementData() { }
+UniqueElementData::UniqueElementData()
+{
+}
 
 UniqueElementData::UniqueElementData(const UniqueElementData& other)
     : ElementData(other, true)
@@ -176,9 +186,8 @@ UniqueElementData::UniqueElementData(const UniqueElementData& other)
 UniqueElementData::UniqueElementData(const ShareableElementData& other)
     : ElementData(other, true)
 {
-    // An ShareableElementData should never have a mutable inline StylePropertySet
-    // attached.
-    DCHECK(!other.m_inlineStyle || !other.m_inlineStyle->isMutable());
+    // An ShareableElementData should never have a mutable inline StylePropertySet attached.
+    ASSERT(!other.m_inlineStyle || !other.m_inlineStyle->isMutable());
     m_inlineStyle = other.m_inlineStyle;
 
     unsigned length = other.attributes().size();
@@ -187,16 +196,19 @@ UniqueElementData::UniqueElementData(const ShareableElementData& other)
         m_attributeVector.uncheckedAppend(other.m_attributeArray[i]);
 }
 
-UniqueElementData* UniqueElementData::create()
+PassRefPtrWillBeRawPtr<UniqueElementData> UniqueElementData::create()
 {
-    return new UniqueElementData;
+    return adoptRefWillBeNoop(new UniqueElementData);
 }
 
-ShareableElementData* UniqueElementData::makeShareableCopy() const
+PassRefPtrWillBeRawPtr<ShareableElementData> UniqueElementData::makeShareableCopy() const
 {
-    void* slot = ThreadHeap::allocate<ElementData>(
-        sizeForShareableElementDataWithAttributeCount(m_attributeVector.size()));
-    return new (slot) ShareableElementData(*this);
+#if ENABLE(OILPAN)
+    void* slot = Heap::allocate<ElementData>(sizeForShareableElementDataWithAttributeCount(m_attributeVector.size()));
+#else
+    void* slot = WTF::fastMalloc(sizeForShareableElementDataWithAttributeCount(m_attributeVector.size()));
+#endif
+    return adoptRefWillBeNoop(new (slot) ShareableElementData(*this));
 }
 
 DEFINE_TRACE_AFTER_DISPATCH(UniqueElementData)

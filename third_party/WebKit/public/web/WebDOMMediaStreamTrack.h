@@ -40,8 +40,12 @@
 
 namespace v8 {
 class Value;
+<<<<<<< HEAD
 template <class T>
 class Local;
+=======
+template <class T> class Local;
+>>>>>>> miniblink49
 }
 
 namespace blink {
@@ -69,7 +73,11 @@ public:
 
 private:
 #if BLINK_IMPLEMENTATION
+<<<<<<< HEAD
     WebDOMMediaStreamTrack(MediaStreamTrack*);
+=======
+    WebDOMMediaStreamTrack(PassRefPtrWillBeRawPtr<MediaStreamTrack>);
+>>>>>>> miniblink49
 #endif
 
     WebPrivatePtr<MediaStreamTrack> m_private;

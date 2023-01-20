@@ -20,6 +20,7 @@ struct SkReadPixelsRec {
         , fInfo(info)
         , fX(x)
         , fY(y)
+<<<<<<< HEAD
     {
     }
 
@@ -28,6 +29,15 @@ struct SkReadPixelsRec {
     SkImageInfo fInfo;
     int fX;
     int fY;
+=======
+    {}
+
+    void*       fPixels;
+    size_t      fRowBytes;
+    SkImageInfo fInfo;
+    int         fX;
+    int         fY;
+>>>>>>> miniblink49
 
     /*
      *  On true, may have modified its fields (except fRowBytes) to make it a legal subset

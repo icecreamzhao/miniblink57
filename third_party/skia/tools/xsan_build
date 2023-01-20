@@ -10,6 +10,7 @@
 #   http://clang.llvm.org/docs/UsersManual.html#controlling-code-generation
 
 set -e
+<<<<<<< HEAD
 set -x
 
 here=$(cd `dirname $0`; echo `pwd`)
@@ -56,3 +57,24 @@ export GYP_DEFINES="skia_sanitizer=$1 ${GYP_DEFINES}"
 
 shift
 make $@
+=======
+
+sanitizer=$1
+shift
+args="$@"
+
+export CC="$(which clang)"
+export CXX="$(which clang++)"
+
+if [[ -z "${CC}" ]] || [[ -z "${CXX}" ]]; then
+  echo "Couldn't find Clang on this machine!"
+  exit 1
+fi
+
+echo "CC=$CC"
+echo "CXX=$CXX"
+$CC --version
+
+export GYP_DEFINES="skia_sanitizer=$sanitizer ${GYP_DEFINES}"
+make ${args}
+>>>>>>> miniblink49

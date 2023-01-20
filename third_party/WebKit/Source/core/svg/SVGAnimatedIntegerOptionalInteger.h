@@ -38,25 +38,18 @@
 namespace blink {
 
 // SVG Spec: http://www.w3.org/TR/SVG11/types.html <number-optional-number>
-// Unlike other SVGAnimated* class, this class is not exposed to Javascript
-// directly, while DOM attribute and SMIL animations operate on this class.
-// From Javascript, the two SVGAnimatedIntegers |firstInteger| and
-// |secondInteger| are used.
+// Unlike other SVGAnimated* class, this class is not exposed to Javascript directly,
+// while DOM attribute and SMIL animations operate on this class.
+// From Javascript, the two SVGAnimatedIntegers |firstInteger| and |secondInteger| are used.
 // For example, see SVGFEDropShadowElement::stdDeviation{X,Y}()
-class SVGAnimatedIntegerOptionalInteger
-    : public SVGAnimatedPropertyCommon<SVGIntegerOptionalInteger> {
+class SVGAnimatedIntegerOptionalInteger : public SVGAnimatedPropertyCommon<SVGIntegerOptionalInteger> {
 public:
-    static SVGAnimatedIntegerOptionalInteger* create(
-        SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        float initialFirstValue = 0,
-        float initialSecondValue = 0)
+    static PassRefPtrWillBeRawPtr<SVGAnimatedIntegerOptionalInteger> create(SVGElement* contextElement, const QualifiedName& attributeName, float initialFirstValue = 0, float initialSecondValue = 0)
     {
-        return new SVGAnimatedIntegerOptionalInteger(
-            contextElement, attributeName, initialFirstValue, initialSecondValue);
+        return adoptRefWillBeNoop(new SVGAnimatedIntegerOptionalInteger(contextElement, attributeName, initialFirstValue, initialSecondValue));
     }
 
-    void setAnimatedValue(SVGPropertyBase*) override;
+    void setAnimatedValue(PassRefPtrWillBeRawPtr<SVGPropertyBase>) override;
     bool needsSynchronizeAttribute() override;
     void animationEnded() override;
 
@@ -66,13 +59,10 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    SVGAnimatedIntegerOptionalInteger(SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        float initialFirstValue,
-        float initialSecondValue);
+    SVGAnimatedIntegerOptionalInteger(SVGElement* contextElement, const QualifiedName& attributeName, float initialFirstValue, float initialSecondValue);
 
-    Member<SVGAnimatedInteger> m_firstInteger;
-    Member<SVGAnimatedInteger> m_secondInteger;
+    RefPtrWillBeMember<SVGAnimatedInteger> m_firstInteger;
+    RefPtrWillBeMember<SVGAnimatedInteger> m_secondInteger;
 };
 
 } // namespace blink

@@ -30,6 +30,12 @@ void setUpDebuggingFromArgs(const char* vargs0);
 
 int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers);
 
+<<<<<<< HEAD
 #endif // SK_BUILD_FOR_WIN32
 
 #endif // win_dbghelp_DEFINED
+=======
+#endif  // SK_BUILD_FOR_WIN32
+
+#endif  // win_dbghelp_DEFINED
+>>>>>>> miniblink49

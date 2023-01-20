@@ -65,6 +65,7 @@
 
 namespace vTune {
 namespace internal {
+<<<<<<< HEAD
     using namespace v8;
     class VTUNEJITInterface {
     public:
@@ -78,3 +79,20 @@ namespace internal {
 } // namespace vTune::internal
 
 #endif // VTUNE_VTUNE_JIT_H_
+=======
+using namespace v8;
+class VTUNEJITInterface {
+ public:
+  static void event_handler(const v8::JitCodeEvent* event);
+
+ private:
+  //static Mutex* vtunemutex_;
+};
+
+
+} }  // namespace vTune::internal
+
+
+#endif  // VTUNE_VTUNE_JIT_H_
+
+>>>>>>> miniblink49

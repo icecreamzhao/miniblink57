@@ -28,6 +28,7 @@
 
 namespace WTF {
 
+<<<<<<< HEAD
 enum TriState { FalseTriState,
     TrueTriState,
     MixedTriState };
@@ -37,5 +38,19 @@ using WTF::FalseTriState;
 using WTF::MixedTriState;
 using WTF::TriState;
 using WTF::TrueTriState;
+=======
+enum TriState {
+    FalseTriState,
+    TrueTriState,
+    MixedTriState
+};
+
+}
+
+using WTF::TriState;
+using WTF::FalseTriState;
+using WTF::TrueTriState;
+using WTF::MixedTriState;
+>>>>>>> miniblink49
 
 #endif // TriState_h

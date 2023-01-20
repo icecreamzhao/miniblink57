@@ -30,8 +30,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT PerspectiveTransformOperation final
     : public TransformOperation {
+=======
+class PLATFORM_EXPORT PerspectiveTransformOperation : public TransformOperation {
+>>>>>>> miniblink49
 public:
     static PassRefPtr<PerspectiveTransformOperation> create(double p)
     {
@@ -40,7 +44,11 @@ public:
 
     double perspective() const { return m_p; }
 
+<<<<<<< HEAD
     virtual bool canBlendWith(const TransformOperation& other) const override
+=======
+    virtual bool canBlendWith(const TransformOperation& other) const
+>>>>>>> miniblink49
     {
         return isSameType(other);
     }
@@ -61,10 +69,14 @@ private:
         transform.applyPerspective(m_p);
     }
 
+<<<<<<< HEAD
     PassRefPtr<TransformOperation> blend(const TransformOperation* from,
         double progress,
         bool blendToIdentity = false) override;
     PassRefPtr<TransformOperation> zoom(double factor) final;
+=======
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+>>>>>>> miniblink49
 
     PerspectiveTransformOperation(double p)
         : m_p(p)

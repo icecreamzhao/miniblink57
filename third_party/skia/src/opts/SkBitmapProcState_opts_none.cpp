@@ -5,8 +5,13 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkBitmapProcState.h"
 #include "SkBitmapScaler.h"
+=======
+#include "SkBitmapScaler.h"
+#include "SkBitmapProcState.h"
+>>>>>>> miniblink49
 
 /*  A platform may optionally overwrite any of these with accelerated
     versions. On input, these will already have valid function pointers,
@@ -21,7 +26,14 @@
  */
 
 // empty implementation just uses default supplied function pointers
+<<<<<<< HEAD
 void SkBitmapProcState::platformProcs() { }
 
 // empty implementation just uses default supplied function pointers
 void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs*) { }
+=======
+void SkBitmapProcState::platformProcs() {}
+
+// empty implementation just uses default supplied function pointers
+void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs*) {}
+>>>>>>> miniblink49

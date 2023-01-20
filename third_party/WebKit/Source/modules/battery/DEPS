@@ -1,10 +1,16 @@
 include_rules = [
     "+bindings",
     "+core",
+<<<<<<< HEAD
     "+device/battery/battery_monitor.mojom-blink.h",
     "-modules",
     "+modules/EventTargetModules.h",
     "+modules/ModulesExport.h",
+=======
+    "+heap",
+    "-modules",
+    "+modules/EventTargetModules.h",
+>>>>>>> miniblink49
     "+modules/battery",
     "+platform",
     "+public/platform",

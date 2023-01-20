@@ -28,12 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebArrayBufferConverter.h"
 
 #include "bindings/core/v8/V8ArrayBuffer.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 v8::Local<v8::Value> WebArrayBufferConverter::toV8Value(
     WebArrayBuffer* buffer,
     v8::Local<v8::Object> creationContext,
@@ -53,6 +58,22 @@ WebArrayBuffer* WebArrayBufferConverter::createFromV8Value(
 {
     if (!value->IsArrayBuffer())
         return nullptr;
+=======
+v8::Local<v8::Value> WebArrayBufferConverter::toV8Value(WebArrayBuffer* buffer, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+{
+    // We no longer use |creationContext| because it's often misused and points
+    // to a context faked by user script.
+    ASSERT(creationContext->CreationContext() == isolate->GetCurrentContext());
+    if (!buffer)
+        return v8::Local<v8::Value>();
+    return toV8(PassRefPtr<DOMArrayBuffer>(*buffer), isolate->GetCurrentContext()->Global(), isolate);
+}
+
+WebArrayBuffer* WebArrayBufferConverter::createFromV8Value(v8::Local<v8::Value> value, v8::Isolate* isolate)
+{
+    if (!V8ArrayBuffer::hasInstance(value, isolate))
+        return 0;
+>>>>>>> miniblink49
     return new WebArrayBuffer(V8ArrayBuffer::toImpl(value.As<v8::Object>()));
 }
 

@@ -29,64 +29,51 @@
 
 namespace blink {
 
-// LayoutObject for frames via LayoutFrame and LayoutIFrame, and plugins via
-// LayoutEmbeddedObject.
+// LayoutObject for frames via LayoutFrame and LayoutIFrame, and plugins via LayoutEmbeddedObject.
 class CORE_EXPORT LayoutPart : public LayoutReplaced {
 public:
     explicit LayoutPart(Element*);
-    ~LayoutPart() override;
+    virtual ~LayoutPart();
 
     bool requiresAcceleratedCompositing() const;
 
-    bool needsPreferredWidthsRecalculation() const final;
+    virtual bool needsPreferredWidthsRecalculation() const override final;
 
-    bool nodeAtPoint(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        HitTestAction) override;
+    virtual bool nodeAtPoint(HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) override;
 
     void ref() { ++m_refCount; }
     void deref();
 
     Widget* widget() const;
 
-    LayoutRect replacedContentRect() const final;
-
     void updateOnWidgetChange();
-    void updateWidgetGeometry();
+    void updateWidgetPosition();
+    void widgetPositionsUpdated();
+    bool updateWidgetGeometry();
 
-    bool isLayoutPart() const final { return true; }
-    virtual void paintContents(const PaintInfo&, const LayoutPoint&) const;
-
-    bool isThrottledFrameView() const;
-
-#ifdef TENCENT_FITSCREEN_FRAEME_FLATTEN
-    void layoutWithFlattening(bool hasFixedWidth, bool hasFixedHeight);
-#endif
+    virtual bool isLayoutPart() const override final { return true; }
+    virtual void paintContents(const PaintInfo&, const LayoutPoint&);
 
 protected:
-    PaintLayerType layerTypeRequired() const override;
+    virtual DeprecatedPaintLayerType layerTypeRequired() const override;
 
-    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) final;
-    void layout() override;
-    void paint(const PaintInfo&, const LayoutPoint&) const override;
-    CursorDirective getCursor(const LayoutPoint&, Cursor&) const final;
+    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override final;
+    virtual void layout() override;
+    virtual void paint(const PaintInfo&, const LayoutPoint&) override;
+    virtual CursorDirective getCursor(const LayoutPoint&, Cursor&) const override final;
 
     // Overridden to invalidate the child frame if any.
-    void invalidatePaintOfSubtreesIfNeeded(
-        const PaintInvalidationState&) override;
+    virtual void invalidatePaintOfSubtreesIfNeeded(PaintInvalidationState&) override;
 
 private:
-    void updateWidgetGeometryInternal();
-    CompositingReasons additionalCompositingReasons() const override;
+    virtual CompositingReasons additionalCompositingReasons() const override;
 
-    void willBeDestroyed() final;
-    void destroy() final;
+    virtual void willBeDestroyed() override final;
+    virtual void destroy() override final;
 
-    bool nodeAtPointOverWidget(HitTestResult&,
-        const HitTestLocation& locationInContainer,
-        const LayoutPoint& accumulatedOffset,
-        HitTestAction);
+    bool setWidgetGeometry(const LayoutRect&);
+
+    bool nodeAtPointOverWidget(HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction);
 
     int m_refCount;
 };

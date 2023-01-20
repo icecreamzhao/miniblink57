@@ -21,61 +21,62 @@
  *
  */
 
+#include "config.h"
 #include "core/style/StyleFetchedImage.h"
 
 #include "core/css/CSSImageValue.h"
+#include "core/fetch/ImageResource.h"
 #include "core/layout/LayoutObject.h"
-#include "core/loader/resource/ImageResourceContent.h"
 #include "core/svg/graphics/SVGImage.h"
-#include "core/svg/graphics/SVGImageForContainer.h"
+#include "wtf/RefCountedLeakCounter.h"
+#ifndef NDEBUG
+#include <set>
+std::set<void*>* g_activatingStyleFetchedImage = nullptr;
+#endif
+
 
 namespace blink {
 
-StyleFetchedImage::StyleFetchedImage(ImageResourceContent* image,
-    const Document& document,
-    const KURL& url)
+#ifndef NDEBUG
+DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, styleFetchedImageCounter, ("StyleFetchedImageCounter"));
+int gStyleFetchedImageCreate = 0;
+int gStyleFetchedImageNotifyFinished = 0;
+#endif
+
+StyleFetchedImage::StyleFetchedImage(ImageResource* image, Document* document)
     : m_image(image)
-    , m_document(&document)
-    , m_url(url)
+    , m_document(document)
 {
     m_isImageResource = true;
-    m_image->addObserver(this);
-    // ResourceFetcher is not determined from StyleFetchedImage and it is
-    // impossible to send a request for refetching.
-    m_image->setNotRefetchableDataFromDiskCache();
+    m_image->addClient(this);
+
+#ifndef NDEBUG
+    styleFetchedImageCounter.increment();
+    ++gStyleFetchedImageCreate;
+    if (!g_activatingStyleFetchedImage)
+        g_activatingStyleFetchedImage = new std::set<void*>();
+    g_activatingStyleFetchedImage->insert(this);
+#endif
 }
 
-StyleFetchedImage::~StyleFetchedImage() { }
-
-void StyleFetchedImage::dispose()
+StyleFetchedImage::~StyleFetchedImage()
 {
-    m_image->removeObserver(this);
-    m_image = nullptr;
+    m_image->removeClient(this);
+
+#ifndef NDEBUG
+    styleFetchedImageCounter.decrement();
+    g_activatingStyleFetchedImage->erase(this);
+#endif
 }
 
-WrappedImagePtr StyleFetchedImage::data() const
+PassRefPtrWillBeRawPtr<CSSValue> StyleFetchedImage::cssValue() const
 {
-    return m_image.get();
+    return CSSImageValue::create(m_image->url(), const_cast<StyleFetchedImage*>(this));
 }
 
-ImageResourceContent* StyleFetchedImage::cachedImage() const
+bool StyleFetchedImage::canRender(const LayoutObject& layoutObject, float multiplier) const
 {
-    return m_image.get();
-}
-
-CSSValue* StyleFetchedImage::cssValue() const
-{
-    return CSSImageValue::create(m_url, const_cast<StyleFetchedImage*>(this));
-}
-
-CSSValue* StyleFetchedImage::computedCSSValue() const
-{
-    return cssValue();
-}
-
-bool StyleFetchedImage::canRender() const
-{
-    return !m_image->errorOccurred() && !m_image->getImage()->isNull();
+    return m_image->canRender(layoutObject, multiplier);
 }
 
 bool StyleFetchedImage::isLoaded() const
@@ -88,26 +89,24 @@ bool StyleFetchedImage::errorOccurred() const
     return m_image->errorOccurred();
 }
 
-LayoutSize StyleFetchedImage::imageSize(
-    const LayoutObject&,
-    float multiplier,
-    const LayoutSize& defaultObjectSize) const
+LayoutSize StyleFetchedImage::imageSize(const LayoutObject* layoutObject, float multiplier) const
 {
-    if (m_image->getImage() && m_image->getImage()->isSVGImage())
-        return imageSizeForSVGImage(toSVGImage(m_image->getImage()), multiplier,
-            defaultObjectSize);
-
-    // Image orientation should only be respected for content images,
-    // not decorative images such as StyleImage (backgrounds,
-    // border-image, etc.)
-    //
-    // https://drafts.csswg.org/css-images-3/#the-image-orientation
-    return m_image->imageSize(DoNotRespectImageOrientation, multiplier);
+    return m_image->imageSizeForLayoutObject(layoutObject, multiplier);
 }
 
-bool StyleFetchedImage::imageHasRelativeSize() const
+bool StyleFetchedImage::imageHasRelativeWidth() const
 {
-    return m_image->imageHasRelativeSize();
+    return m_image->imageHasRelativeWidth();
+}
+
+bool StyleFetchedImage::imageHasRelativeHeight() const
+{
+    return m_image->imageHasRelativeHeight();
+}
+
+void StyleFetchedImage::computeIntrinsicDimensions(const LayoutObject*, Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio)
+{
+    m_image->computeIntrinsicDimensions(intrinsicWidth, intrinsicHeight, intrinsicRatio);
 }
 
 bool StyleFetchedImage::usesImageContainerSize() const
@@ -115,50 +114,40 @@ bool StyleFetchedImage::usesImageContainerSize() const
     return m_image->usesImageContainerSize();
 }
 
+void StyleFetchedImage::setContainerSizeForLayoutObject(const LayoutObject* layoutObject, const IntSize& imageContainerSize, float imageContainerZoomFactor)
+{
+    m_image->setContainerSizeForLayoutObject(layoutObject, imageContainerSize, imageContainerZoomFactor);
+}
+
 void StyleFetchedImage::addClient(LayoutObject* layoutObject)
 {
-    m_image->addObserver(layoutObject);
+    m_image->addClient(layoutObject);
 }
 
 void StyleFetchedImage::removeClient(LayoutObject* layoutObject)
 {
-    m_image->removeObserver(layoutObject);
+    m_image->removeClient(layoutObject);
 }
 
-void StyleFetchedImage::imageNotifyFinished(ImageResourceContent*)
+void StyleFetchedImage::notifyFinished(Resource* resource)
 {
-    if (m_document && m_image && m_image->getImage() && m_image->getImage()->isSVGImage())
-        toSVGImage(m_image->getImage())->updateUseCounters(*m_document);
+    if (m_document && m_image && m_image->image() && m_image->image()->isSVGImage())
+        toSVGImage(m_image->image())->updateUseCounters(*m_document);
     // Oilpan: do not prolong the Document's lifetime.
     m_document.clear();
+#ifndef NDEBUG
+    ++gStyleFetchedImageNotifyFinished;
+#endif
 }
 
-PassRefPtr<Image> StyleFetchedImage::image(const LayoutObject&,
-    const IntSize& containerSize,
-    float zoom) const
+PassRefPtr<Image> StyleFetchedImage::image(LayoutObject* layoutObject, const IntSize&) const
 {
-    if (!m_image->getImage()->isSVGImage())
-        return m_image->getImage();
-
-    return SVGImageForContainer::create(toSVGImage(m_image->getImage()),
-        containerSize, zoom, m_url);
+    return m_image->imageForLayoutObject(layoutObject);
 }
 
-bool StyleFetchedImage::knownToBeOpaque(
-    const LayoutObject& layoutObject) const
+bool StyleFetchedImage::knownToBeOpaque(const LayoutObject* layoutObject) const
 {
-    TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "PaintImage",
-        "data",
-        InspectorPaintImageEvent::data(&layoutObject, *m_image.get()));
-    return m_image->getImage()->currentFrameKnownToBeOpaque(
-        Image::PreCacheMetadata);
+    return m_image->currentFrameKnownToBeOpaque(layoutObject);
 }
 
-DEFINE_TRACE(StyleFetchedImage)
-{
-    visitor->trace(m_image);
-    visitor->trace(m_document);
-    StyleImage::trace(visitor);
 }
-
-} // namespace blink

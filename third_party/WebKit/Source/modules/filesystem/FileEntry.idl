@@ -32,5 +32,9 @@
     NoInterfaceObject
 ] interface FileEntry : Entry {
     void createWriter(FileWriterCallback successCallback, optional ErrorCallback errorCallback);
+<<<<<<< HEAD
     void file(BlobCallback successCallback, optional ErrorCallback errorCallback);
+=======
+    void file(FileCallback successCallback, optional ErrorCallback errorCallback);
+>>>>>>> miniblink49
 };

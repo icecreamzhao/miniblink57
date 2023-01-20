@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/text/StringBuilder.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -36,11 +37,23 @@
 #include "wtf/text/CString.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
+=======
+#include "config.h"
+#include "wtf/text/StringBuilder.h"
+
+#include "wtf/Assertions.h"
+#include "wtf/testing/WTFTestHelpers.h"
+#include "wtf/text/CString.h"
+#include "wtf/text/CharacterNames.h"
+#include "wtf/text/WTFString.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace WTF {
 
 namespace {
 
+<<<<<<< HEAD
     void expectBuilderContent(const String& expected,
         const StringBuilder& builder)
     {
@@ -59,6 +72,25 @@ namespace {
     }
 
 } // namespace
+=======
+void expectBuilderContent(const String& expected, const StringBuilder& builder)
+{
+    // Not using builder.toString() because it changes internal state of builder.
+    if (builder.is8Bit())
+        EXPECT_EQ(expected, String(builder.characters8(), builder.length()));
+    else
+        EXPECT_EQ(expected, String(builder.characters16(), builder.length()));
+}
+
+void expectEmpty(const StringBuilder& builder)
+{
+    EXPECT_EQ(0U, builder.length());
+    EXPECT_TRUE(builder.isEmpty());
+    EXPECT_EQ(0, builder.characters8());
+}
+
+}
+>>>>>>> miniblink49
 
 TEST(StringBuilderTest, DefaultConstructor)
 {
@@ -96,6 +128,7 @@ TEST(StringBuilderTest, Append)
     builder2.append("0123456789");
     EXPECT_EQ(characters, builder2.characters8());
 
+<<<<<<< HEAD
     StringBuilder builder3;
     builder3.append("xyz", 1, 2);
     expectBuilderContent("yz", builder3);
@@ -141,6 +174,17 @@ TEST(StringBuilderTest, AppendSharingImpl)
     builder2.append(string, 0, string.length());
     EXPECT_EQ(string.impl(), builder2.toString().impl());
     EXPECT_EQ(string.impl(), builder2.toAtomicString().impl());
+=======
+    // Test appending UChar32 characters to StringBuilder.
+    StringBuilder builderForUChar32Append;
+    UChar32 frakturAChar = 0x1D504;
+    builderForUChar32Append.append(frakturAChar); // The fraktur A is not in the BMP, so it's two UTF-16 code units long.
+    EXPECT_EQ(2U, builderForUChar32Append.length());
+    builderForUChar32Append.append(static_cast<UChar32>('A'));
+    EXPECT_EQ(3U, builderForUChar32Append.length());
+    const UChar resultArray[] = { U16_LEAD(frakturAChar), U16_TRAIL(frakturAChar), 'A' };
+    expectBuilderContent(String(resultArray, WTF_ARRAY_LENGTH(resultArray)), builderForUChar32Append);
+>>>>>>> miniblink49
 }
 
 TEST(StringBuilderTest, ToString)
@@ -151,6 +195,7 @@ TEST(StringBuilderTest, ToString)
     EXPECT_EQ(String("0123456789"), string);
     EXPECT_EQ(string.impl(), builder.toString().impl());
 
+<<<<<<< HEAD
     // Changing the StringBuilder should not affect the original result of
     // toString().
     builder.append("abcdefghijklmnopqrstuvwxyz");
@@ -158,12 +203,20 @@ TEST(StringBuilderTest, ToString)
 
     // Changing the StringBuilder should not affect the original result of
     // toString() in case the capacity is not changed.
+=======
+    // Changing the StringBuilder should not affect the original result of toString().
+    builder.append("abcdefghijklmnopqrstuvwxyz");
+    EXPECT_EQ(String("0123456789"), string);
+
+    // Changing the StringBuilder should not affect the original result of toString() in case the capacity is not changed.
+>>>>>>> miniblink49
     builder.reserveCapacity(200);
     string = builder.toString();
     EXPECT_EQ(String("0123456789abcdefghijklmnopqrstuvwxyz"), string);
     builder.append("ABC");
     EXPECT_EQ(String("0123456789abcdefghijklmnopqrstuvwxyz"), string);
 
+<<<<<<< HEAD
     // Changing the original result of toString() should not affect the content of
     // the StringBuilder.
     String string1 = builder.toString();
@@ -175,6 +228,16 @@ TEST(StringBuilderTest, ToString)
 
     // Resizing the StringBuilder should not affect the original result of
     // toString().
+=======
+    // Changing the original result of toString() should not affect the content of the StringBuilder.
+    String string1 = builder.toString();
+    EXPECT_EQ(String("0123456789abcdefghijklmnopqrstuvwxyzABC"), string1);
+    string1.append("DEF");
+    EXPECT_EQ(String("0123456789abcdefghijklmnopqrstuvwxyzABC"), builder.toString());
+    EXPECT_EQ(String("0123456789abcdefghijklmnopqrstuvwxyzABCDEF"), string1);
+
+    // Resizing the StringBuilder should not affect the original result of toString().
+>>>>>>> miniblink49
     string1 = builder.toString();
     builder.resize(10);
     builder.append("###");
@@ -252,6 +315,20 @@ TEST(StringBuilderTest, Equal)
     EXPECT_TRUE(builder1 == builder2);
 }
 
+<<<<<<< HEAD
+=======
+TEST(StringBuilderTest, CanShrink)
+{
+    StringBuilder builder;
+    builder.reserveCapacity(256);
+    EXPECT_TRUE(builder.canShrink());
+    for (int i = 0; i < 256; i++)
+        builder.append('x');
+    EXPECT_EQ(builder.length(), builder.capacity());
+    EXPECT_FALSE(builder.canShrink());
+}
+
+>>>>>>> miniblink49
 TEST(StringBuilderTest, ToAtomicString)
 {
     StringBuilder builder;
@@ -260,6 +337,10 @@ TEST(StringBuilderTest, ToAtomicString)
     EXPECT_EQ(String("123"), atomicString);
 
     builder.reserveCapacity(256);
+<<<<<<< HEAD
+=======
+    EXPECT_TRUE(builder.canShrink());
+>>>>>>> miniblink49
     for (int i = builder.length(); i < 128; i++)
         builder.append('x');
     AtomicString atomicString1 = builder.toAtomicString();
@@ -271,6 +352,10 @@ TEST(StringBuilderTest, ToAtomicString)
         builder.append('x');
     EXPECT_EQ(128u, atomicString1.length());
 
+<<<<<<< HEAD
+=======
+    EXPECT_FALSE(builder.canShrink());
+>>>>>>> miniblink49
     String string = builder.toString();
     AtomicString atomicString2 = builder.toAtomicString();
     // They should share the same StringImpl.
@@ -317,7 +402,11 @@ TEST(StringBuilderTest, ToAtomicStringOnEmpty)
     }
     { // Cleared StringBuilder.
         StringBuilder builder;
+<<<<<<< HEAD
         builder.append("WebKit");
+=======
+        builder.appendLiteral("WebKit");
+>>>>>>> miniblink49
         builder.clear();
         AtomicString atomicString = builder.toAtomicString();
         EXPECT_EQ(emptyAtom, atomicString);

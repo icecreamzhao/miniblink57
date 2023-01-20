@@ -31,6 +31,7 @@
 #ifndef LocalFileSystem_h
 #define LocalFileSystem_h
 
+<<<<<<< HEAD
 #include "core/frame/LocalFrame.h"
 #include "core/workers/WorkerClients.h"
 #include "platform/FileSystemType.h"
@@ -39,6 +40,13 @@
 #include "wtf/Forward.h"
 #include "wtf/Functional.h"
 #include <memory>
+=======
+#include "core/workers/WorkerClients.h"
+#include "platform/FileSystemType.h"
+#include "wtf/Forward.h"
+#include "wtf/Functional.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -47,6 +55,7 @@ class CallbackWrapper;
 class FileSystemClient;
 class ExecutionContext;
 class KURL;
+<<<<<<< HEAD
 class WebFileSystem;
 
 class LocalFileSystem final : public GarbageCollectedFinalized<LocalFileSystem>,
@@ -69,10 +78,28 @@ public:
         std::unique_ptr<AsyncFileSystemCallbacks>);
 
     FileSystemClient* client() const { return m_client.get(); }
+=======
+class LocalFrame;
+class WebFileSystem;
+
+class LocalFileSystem final : public NoBaseWillBeGarbageCollectedFinalized<LocalFileSystem>, public WillBeHeapSupplement<LocalFrame>, public WillBeHeapSupplement<WorkerClients> {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(LocalFileSystem);
+    WTF_MAKE_NONCOPYABLE(LocalFileSystem);
+public:
+    static PassOwnPtrWillBeRawPtr<LocalFileSystem> create(PassOwnPtr<FileSystemClient>);
+    virtual ~LocalFileSystem();
+
+    void resolveURL(ExecutionContext*, const KURL&, PassOwnPtr<AsyncFileSystemCallbacks>);
+    void requestFileSystem(ExecutionContext*, FileSystemType, long long size, PassOwnPtr<AsyncFileSystemCallbacks>);
+    void deleteFileSystem(ExecutionContext*, FileSystemType, PassOwnPtr<AsyncFileSystemCallbacks>);
+
+    FileSystemClient* client() { return m_client.get(); }
+>>>>>>> miniblink49
 
     static const char* supplementName();
     static LocalFileSystem* from(ExecutionContext&);
 
+<<<<<<< HEAD
     DECLARE_VIRTUAL_TRACE();
 
 private:
@@ -89,6 +116,26 @@ private:
     void resolveURLInternal(ExecutionContext*, const KURL&, CallbackWrapper*);
 
     std::unique_ptr<FileSystemClient> m_client;
+=======
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        WillBeHeapSupplement<LocalFrame>::trace(visitor);
+        WillBeHeapSupplement<WorkerClients>::trace(visitor);
+    }
+
+protected:
+    explicit LocalFileSystem(PassOwnPtr<FileSystemClient>);
+
+private:
+    WebFileSystem* fileSystem() const;
+    void requestFileSystemAccessInternal(ExecutionContext*, PassOwnPtr<Closure> allowed, PassOwnPtr<Closure> denied);
+    void fileSystemNotAvailable(PassRefPtrWillBeRawPtr<ExecutionContext>, CallbackWrapper*);
+    void fileSystemNotAllowedInternal(PassRefPtrWillBeRawPtr<ExecutionContext>, CallbackWrapper*);
+    void fileSystemAllowedInternal(PassRefPtrWillBeRawPtr<ExecutionContext>, FileSystemType, CallbackWrapper*);
+    void resolveURLInternal(PassRefPtrWillBeRawPtr<ExecutionContext>, const KURL&, CallbackWrapper*);
+    void deleteFileSystemInternal(PassRefPtrWillBeRawPtr<ExecutionContext>, FileSystemType, CallbackWrapper*);
+    OwnPtr<FileSystemClient> m_client;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

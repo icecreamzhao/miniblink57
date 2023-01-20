@@ -13,4 +13,10 @@ race:third_party/externals/libwebp
 race:SkGLContextHelper
 
 # Not threadsafe, should be fixed.
+<<<<<<< HEAD
 race:SkString
+=======
+race:RefFCI
+race:SkString
+race:SkPDF
+>>>>>>> miniblink49

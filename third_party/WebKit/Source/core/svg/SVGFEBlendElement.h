@@ -29,7 +29,6 @@ namespace blink {
 
 class SVGFEBlendElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     enum Mode {
         ModeUnknown = 0,
@@ -64,21 +63,17 @@ public:
 private:
     explicit SVGFEBlendElement(Document&);
 
-    bool setFilterEffectAttribute(FilterEffect*,
-        const QualifiedName& attrName) override;
+    bool setFilterEffectAttribute(FilterEffect*, const QualifiedName& attrName) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
+    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
 
-    Member<SVGAnimatedString> m_in1;
-    Member<SVGAnimatedString> m_in2;
-    Member<SVGAnimatedEnumeration<Mode>> m_mode;
+    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    RefPtrWillBeMember<SVGAnimatedString> m_in2;
+    RefPtrWillBeMember<SVGAnimatedEnumeration<Mode>> m_mode;
 };
 
-template <>
-const SVGEnumerationStringEntries&
-getStaticStringEntries<SVGFEBlendElement::Mode>();
-template <>
-unsigned short getMaxExposedEnumValue<SVGFEBlendElement::Mode>();
+template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGFEBlendElement::Mode>();
+template<> unsigned short getMaxExposedEnumValue<SVGFEBlendElement::Mode>();
 
 } // namespace blink
 

@@ -31,6 +31,7 @@
 #ifndef WrappedResourceResponse_h
 #define WrappedResourceResponse_h
 
+<<<<<<< HEAD
 #include "public/platform/WebURLResponse.h"
 #include "wtf/Noncopyable.h"
 
@@ -54,6 +55,50 @@ public:
             const_cast<ResourceResponse&>(resourceResponse))
     {
     }
+=======
+#include "platform/exported/WebURLResponsePrivate.h"
+#include "public/platform/WebURLResponse.h"
+
+namespace blink {
+
+class WrappedResourceResponse : public WebURLResponse {
+public:
+    ~WrappedResourceResponse()
+    {
+        reset(); // Need to drop reference to m_handle
+    }
+
+    WrappedResourceResponse() { }
+
+    WrappedResourceResponse(ResourceResponse& resourceResponse)
+    {
+        bind(resourceResponse);
+    }
+
+    WrappedResourceResponse(const ResourceResponse& resourceResponse)
+    {
+        bind(resourceResponse);
+    }
+
+    void bind(ResourceResponse& resourceResponse)
+    {
+        m_handle.m_resourceResponse = &resourceResponse;
+        assign(&m_handle);
+    }
+
+    void bind(const ResourceResponse& resourceResponse)
+    {
+        bind(*const_cast<ResourceResponse*>(&resourceResponse));
+    }
+
+private:
+    class Handle : public WebURLResponsePrivate {
+    public:
+        virtual void dispose() { m_resourceResponse = 0; }
+    };
+
+    Handle m_handle;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

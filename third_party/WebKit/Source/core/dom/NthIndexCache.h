@@ -9,25 +9,29 @@
 #include "core/dom/Element.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class Document;
 
-class CORE_EXPORT NthIndexData final : public GarbageCollected<NthIndexData> {
+class CORE_EXPORT NthIndexData final : public NoBaseWillBeGarbageCollected<NthIndexData> {
     WTF_MAKE_NONCOPYABLE(NthIndexData);
-
+    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(NthIndexData);
 public:
-    NthIndexData(ContainerNode&);
-    NthIndexData(ContainerNode&, const QualifiedName& type);
+    NthIndexData() { }
 
-    unsigned nthIndex(Element&) const;
-    unsigned nthLastIndex(Element&) const;
-    unsigned nthOfTypeIndex(Element&) const;
-    unsigned nthLastOfTypeIndex(Element&) const;
+    unsigned nthIndex(Element&);
+    unsigned nthIndexOfType(Element&, const QualifiedName&);
+    unsigned nthLastIndex(Element&);
+    unsigned nthLastIndexOfType(Element&, const QualifiedName&);
 
 private:
-    HeapHashMap<Member<Element>, unsigned> m_elementIndexMap;
+    unsigned cacheNthIndices(Element&);
+    unsigned cacheNthIndicesOfType(Element&, const QualifiedName&);
+
+    WillBeHeapHashMap<RawPtrWillBeMember<Element>, unsigned> m_elementIndexMap;
     unsigned m_count = 0;
 
     DECLARE_TRACE();
@@ -36,31 +40,48 @@ private:
 class CORE_EXPORT NthIndexCache final {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(NthIndexCache);
-
 public:
     explicit NthIndexCache(Document&);
     ~NthIndexCache();
 
-    static unsigned nthChildIndex(Element&);
-    static unsigned nthLastChildIndex(Element&);
-    static unsigned nthOfTypeIndex(Element&);
-    static unsigned nthLastOfTypeIndex(Element&);
+    unsigned nthChildIndex(Element& element)
+    {
+        ASSERT(element.parentNode());
+        return ensureNthIndexDataFor(*element.parentNode()).nthIndex(element);
+    }
+
+    unsigned nthChildIndexOfType(Element& element, const QualifiedName& type)
+    {
+        ASSERT(element.parentNode());
+        return nthIndexDataWithTagName(element).nthIndexOfType(element, type);
+    }
+
+    unsigned nthLastChildIndex(Element& element)
+    {
+        ASSERT(element.parentNode());
+        return ensureNthIndexDataFor(*element.parentNode()).nthLastIndex(element);
+    }
+
+    unsigned nthLastChildIndexOfType(Element& element, const QualifiedName& type)
+    {
+        ASSERT(element.parentNode());
+        return nthIndexDataWithTagName(element).nthLastIndexOfType(element, type);
+    }
 
 private:
-    using IndexByType = HeapHashMap<String, Member<NthIndexData>>;
-    using ParentMap = HeapHashMap<Member<Node>, Member<NthIndexData>>;
-    using ParentMapForType = HeapHashMap<Member<Node>, Member<IndexByType>>;
+    using IndexByType = WillBeHeapHashMap<String, OwnPtrWillBeMember<NthIndexData>>;
+    using ParentMap = WillBeHeapHashMap<RefPtrWillBeMember<Node>, OwnPtrWillBeMember<NthIndexData>>;
+    using ParentMapForType = WillBeHeapHashMap<RefPtrWillBeMember<Node>, OwnPtrWillBeMember<IndexByType>>;
 
-    void cacheNthIndexDataForParent(Element&);
-    void cacheNthOfTypeIndexDataForParent(Element&);
-    IndexByType& ensureTypeIndexMap(ContainerNode&);
-    NthIndexData* nthTypeIndexDataForParent(Element&) const;
+    NthIndexData& ensureNthIndexDataFor(Node&);
+    IndexByType& ensureTypeIndexMap(Node&);
+    NthIndexData& nthIndexDataWithTagName(Element&);
 
-    Member<Document> m_document;
-    Member<ParentMap> m_parentMap;
-    Member<ParentMapForType> m_parentMapForType;
+    RawPtrWillBeMember<Document> m_document;
+    OwnPtrWillBeMember<ParentMap> m_parentMap;
+    OwnPtrWillBeMember<ParentMapForType> m_parentMapForType;
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     uint64_t m_domTreeVersion;
 #endif
 };

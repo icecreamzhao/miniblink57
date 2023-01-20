@@ -6,6 +6,7 @@
  */
 
 #include "GrSurface.h"
+<<<<<<< HEAD
 #include "GrContext.h"
 #include "GrSurfacePriv.h"
 
@@ -129,19 +130,72 @@ SkImageInfo GrSurface::info(SkAlphaType alphaType) const
         sk_throw();
     }
     return SkImageInfo::Make(this->width(), this->height(), colorType, alphaType, colorSpace);
+=======
+#include "GrSurfacePriv.h"
+
+#include "SkBitmap.h"
+#include "SkGr.h"
+#include "SkImageEncoder.h"
+#include <stdio.h>
+
+bool GrSurface::writePixels(int left, int top, int width, int height,
+                            GrPixelConfig config, const void* buffer, size_t rowBytes,
+                            uint32_t pixelOpsFlags) {
+    // go through context so that all necessary flushing occurs
+    GrContext* context = this->getContext();
+    if (NULL == context) {
+        return false;
+    }
+    return context->writeSurfacePixels(this, left, top, width, height, config, buffer, rowBytes,
+                                       pixelOpsFlags);
+}
+
+bool GrSurface::readPixels(int left, int top, int width, int height,
+                           GrPixelConfig config, void* buffer, size_t rowBytes,
+                           uint32_t pixelOpsFlags) {
+    // go through context so that all necessary flushing occurs
+    GrContext* context = this->getContext();
+    if (NULL == context) {
+        return false;
+    }
+    GrRenderTarget* target = this->asRenderTarget();
+    if (target) {
+        return context->readRenderTargetPixels(target, left, top, width, height, config, buffer,
+                                               rowBytes, pixelOpsFlags);
+    }
+    return false;
+}
+
+SkImageInfo GrSurface::info(SkAlphaType alphaType) const {
+    SkColorType colorType;
+    SkColorProfileType profileType;
+    if (!GrPixelConfig2ColorAndProfileType(this->config(), &colorType, &profileType)) {
+        sk_throw();
+    }
+    return SkImageInfo::Make(this->width(), this->height(), colorType, alphaType,
+                             profileType);
+>>>>>>> miniblink49
 }
 
 // TODO: This should probably be a non-member helper function. It might only be needed in
 // debug or developer builds.
+<<<<<<< HEAD
 bool GrSurface::savePixels(const char* filename)
 {
+=======
+bool GrSurface::savePixels(const char* filename) {
+>>>>>>> miniblink49
     SkBitmap bm;
     if (!bm.tryAllocPixels(SkImageInfo::MakeN32Premul(this->width(), this->height()))) {
         return false;
     }
 
     bool result = this->readPixels(0, 0, this->width(), this->height(), kSkia8888_GrPixelConfig,
+<<<<<<< HEAD
         bm.getPixels());
+=======
+                                   bm.getPixels());
+>>>>>>> miniblink49
     if (!result) {
         SkDebugf("------ failed to read pixels for %s\n", filename);
         return false;
@@ -152,29 +206,45 @@ bool GrSurface::savePixels(const char* filename)
 
     if (!SkImageEncoder::EncodeFile(filename, bm, SkImageEncoder::kPNG_Type, 100)) {
         SkDebugf("------ failed to encode %s\n", filename);
+<<<<<<< HEAD
         remove(filename); // remove any partial file
+=======
+        remove(filename);   // remove any partial file
+>>>>>>> miniblink49
         return false;
     }
 
     return true;
 }
 
+<<<<<<< HEAD
 void GrSurface::flushWrites()
 {
+=======
+void GrSurface::flushWrites() {
+>>>>>>> miniblink49
     if (!this->wasDestroyed()) {
         this->getContext()->flushSurfaceWrites(this);
     }
 }
 
+<<<<<<< HEAD
 void GrSurface::prepareForExternalIO()
 {
+=======
+void GrSurface::prepareForExternalIO() {
+>>>>>>> miniblink49
     if (!this->wasDestroyed()) {
         this->getContext()->prepareSurfaceForExternalIO(this);
     }
 }
 
+<<<<<<< HEAD
 bool GrSurface::hasPendingRead() const
 {
+=======
+bool GrSurface::hasPendingRead() const {
+>>>>>>> miniblink49
     const GrTexture* thisTex = this->asTexture();
     if (thisTex && thisTex->internalHasPendingRead()) {
         return true;
@@ -186,8 +256,12 @@ bool GrSurface::hasPendingRead() const
     return false;
 }
 
+<<<<<<< HEAD
 bool GrSurface::hasPendingWrite() const
 {
+=======
+bool GrSurface::hasPendingWrite() const {
+>>>>>>> miniblink49
     const GrTexture* thisTex = this->asTexture();
     if (thisTex && thisTex->internalHasPendingWrite()) {
         return true;
@@ -199,8 +273,12 @@ bool GrSurface::hasPendingWrite() const
     return false;
 }
 
+<<<<<<< HEAD
 bool GrSurface::hasPendingIO() const
 {
+=======
+bool GrSurface::hasPendingIO() const {
+>>>>>>> miniblink49
     const GrTexture* thisTex = this->asTexture();
     if (thisTex && thisTex->internalHasPendingIO()) {
         return true;
@@ -212,14 +290,22 @@ bool GrSurface::hasPendingIO() const
     return false;
 }
 
+<<<<<<< HEAD
 void GrSurface::onRelease()
 {
+=======
+void GrSurface::onRelease() {
+>>>>>>> miniblink49
     this->invokeReleaseProc();
     this->INHERITED::onRelease();
 }
 
+<<<<<<< HEAD
 void GrSurface::onAbandon()
 {
+=======
+void GrSurface::onAbandon() {
+>>>>>>> miniblink49
     this->invokeReleaseProc();
     this->INHERITED::onAbandon();
 }

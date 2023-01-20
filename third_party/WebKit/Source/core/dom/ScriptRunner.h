@@ -27,83 +27,61 @@
 #define ScriptRunner_h
 
 #include "core/CoreExport.h"
+#include "core/fetch/ResourcePtr.h"
 #include "platform/heap/Handle.h"
-#include "public/platform/WebTraceLocation.h"
+#include "platform/scheduler/CancellableTaskFactory.h"
 #include "wtf/Deque.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 class Document;
 class ScriptLoader;
-class WebTaskRunner;
 
-class CORE_EXPORT ScriptRunner final
-    : public GarbageCollectedFinalized<ScriptRunner> {
-    WTF_MAKE_NONCOPYABLE(ScriptRunner);
-
+class CORE_EXPORT ScriptRunner final : public NoBaseWillBeGarbageCollectedFinalized<ScriptRunner> {
+    WTF_MAKE_NONCOPYABLE(ScriptRunner); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ScriptRunner);
 public:
-    static ScriptRunner* create(Document* document)
+    static PassOwnPtrWillBeRawPtr<ScriptRunner> create(Document* document)
     {
-        return new ScriptRunner(document);
+        return adoptPtrWillBeNoop(new ScriptRunner(document));
     }
+    ~ScriptRunner();
 
-    // Async scripts may either execute asynchronously (as their load
-    // completes), or 'in order'. See
-    // http://www.html5rocks.com/en/tutorials/speed/script-loading/ for more
-    // information.
-    enum AsyncExecutionType { None,
-        Async,
-        InOrder };
-    void queueScriptForExecution(ScriptLoader*, AsyncExecutionType);
-    bool hasPendingScripts() const
-    {
-        return !m_pendingInOrderScripts.isEmpty() || !m_pendingAsyncScripts.isEmpty();
-    }
+    enum ExecutionType { ASYNC_EXECUTION, IN_ORDER_EXECUTION };
+    void queueScriptForExecution(ScriptLoader*, ExecutionType);
+    bool hasPendingScripts() const { return !m_scriptsToExecuteSoon.isEmpty() || !m_scriptsToExecuteInOrder.isEmpty() || !m_pendingAsyncScripts.isEmpty(); }
     void suspend();
     void resume();
-    void notifyScriptReady(ScriptLoader*, AsyncExecutionType);
-    void notifyScriptLoadError(ScriptLoader*, AsyncExecutionType);
+    void notifyScriptReady(ScriptLoader*, ExecutionType);
+    void notifyScriptLoadError(ScriptLoader*, ExecutionType);
 
-    static void movePendingScript(Document&, Document&, ScriptLoader*);
+    static void movePendingAsyncScript(Document&, Document&, ScriptLoader*);
 
     DECLARE_TRACE();
 
 private:
-    class Task;
-
     explicit ScriptRunner(Document*);
 
-    void movePendingScript(ScriptRunner*, ScriptLoader*);
-    bool removePendingInOrderScript(ScriptLoader*);
-    void scheduleReadyInOrderScripts();
+    void executeScripts();
 
-    void postTask(const WebTraceLocation&);
+    void addPendingAsyncScript(ScriptLoader*);
 
-    bool executeTaskFromQueue(HeapDeque<Member<ScriptLoader>>*);
+    void movePendingAsyncScript(ScriptRunner*, ScriptLoader*);
 
-    void executeTask();
+    bool yieldForHighPriorityWork();
 
-    Member<Document> m_document;
+    void postTaskIfOneIsNotAlreadyInFlight();
 
-    HeapDeque<Member<ScriptLoader>> m_pendingInOrderScripts;
-    HeapHashSet<Member<ScriptLoader>> m_pendingAsyncScripts;
-
+    RawPtrWillBeMember<Document> m_document;
+    WillBeHeapDeque<RawPtrWillBeMember<ScriptLoader>> m_scriptsToExecuteInOrder;
     // http://www.whatwg.org/specs/web-apps/current-work/#set-of-scripts-that-will-execute-as-soon-as-possible
-    HeapDeque<Member<ScriptLoader>> m_asyncScriptsToExecuteSoon;
-    HeapDeque<Member<ScriptLoader>> m_inOrderScriptsToExecuteSoon;
-
-    RefPtr<WebTaskRunner> m_taskRunner;
-
-    int m_numberOfInOrderScriptsWithPendingNotification;
-
-    bool m_isSuspended;
-#ifndef NDEBUG
-    bool m_hasEverBeenSuspended;
-#endif
+    WillBeHeapDeque<RawPtrWillBeMember<ScriptLoader>> m_scriptsToExecuteSoon;
+    WillBeHeapHashSet<RawPtrWillBeMember<ScriptLoader>> m_pendingAsyncScripts;
+    CancellableTaskFactory m_executeScriptsTaskFactory;
 };
 
-} // namespace blink
+}
 
-#endif // ScriptRunner_h
+#endif

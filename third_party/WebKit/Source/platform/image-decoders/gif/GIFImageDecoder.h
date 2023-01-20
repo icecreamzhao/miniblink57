@@ -28,7 +28,11 @@
 
 #include "platform/image-decoders/ImageDecoder.h"
 #include "wtf/Noncopyable.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 class GIFImageReader;
 
@@ -37,6 +41,7 @@ typedef Vector<unsigned char> GIFRow;
 namespace blink {
 
 // This class decodes the GIF image format.
+<<<<<<< HEAD
 class PLATFORM_EXPORT GIFImageDecoder final : public ImageDecoder {
     WTF_MAKE_NONCOPYABLE(GIFImageDecoder);
 
@@ -53,18 +58,39 @@ public:
     int repetitionCount() const override;
     bool frameIsCompleteAtIndex(size_t) const override;
     float frameDurationAtIndex(size_t) const override;
+=======
+class PLATFORM_EXPORT GIFImageDecoder : public ImageDecoder {
+    WTF_MAKE_NONCOPYABLE(GIFImageDecoder);
+public:
+    GIFImageDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedBytes);
+    ~GIFImageDecoder() override;
+
+    enum GIFParseQuery { GIFSizeQuery, GIFFrameCountQuery };
+
+    // ImageDecoder:
+    String filenameExtension() const override { return "gif"; }
+    void setData(SharedBuffer* data, bool allDataReceived) override;
+    int repetitionCount() const override;
+    bool frameIsCompleteAtIndex(size_t) const override;
+    float frameDurationAtIndex(size_t) const override;
+    size_t clearCacheExceptFrame(size_t) override;
+>>>>>>> miniblink49
     // CAUTION: setFailed() deletes |m_reader|.  Be careful to avoid
     // accessing deleted memory, especially when calling this from inside
     // GIFImageReader!
     bool setFailed() override;
 
     // Callbacks from the GIF reader.
+<<<<<<< HEAD
     bool haveDecodedRow(size_t frameIndex,
         GIFRow::const_iterator rowBegin,
         size_t width,
         size_t rowNumber,
         unsigned repeatCount,
         bool writeTransparentPixels);
+=======
+    bool haveDecodedRow(size_t frameIndex, GIFRow::const_iterator rowBegin, size_t width, size_t rowNumber, unsigned repeatCount, bool writeTransparentPixels);
+>>>>>>> miniblink49
     bool frameComplete(size_t frameIndex);
 
     // For testing.
@@ -82,6 +108,7 @@ private:
     // data. If parsing fails, sets the "decode failure" flag.
     void parse(GIFParseQuery);
 
+<<<<<<< HEAD
     // Reset the alpha tracker for this frame. Before calling this method, the
     // caller must verify that the frame exists.
     void onInitFrameBuffer(size_t) override;
@@ -95,6 +122,16 @@ private:
     bool m_currentBufferSawAlpha;
     mutable int m_repetitionCount;
     std::unique_ptr<GIFImageReader> m_reader;
+=======
+    // Called to initialize the frame buffer with the given index, based on
+    // the previous frame's disposal method. Returns true on success. On
+    // failure, this will mark the image as failed.
+    bool initFrameBuffer(size_t frameIndex);
+
+    bool m_currentBufferSawAlpha;
+    mutable int m_repetitionCount;
+    OwnPtr<GIFImageReader> m_reader;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

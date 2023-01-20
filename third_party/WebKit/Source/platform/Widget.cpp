@@ -24,20 +24,52 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/Widget.h"
 
 #include "wtf/Assertions.h"
 
 namespace blink {
 
+=======
+#include "config.h"
+#include "platform/Widget.h"
+
+#include "wtf/Assertions.h"
+#include "wtf/RefCountedLeakCounter.h"
+
+namespace blink {
+
+#ifndef NDEBUG
+    DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, widgetCounter, ("widgetCounter"));
+#endif
+
+>>>>>>> miniblink49
 Widget::Widget()
     : m_parent(nullptr)
     , m_selfVisible(false)
     , m_parentVisible(false)
 {
+<<<<<<< HEAD
 }
 
 Widget::~Widget() { }
+=======
+#ifndef NDEBUG
+    widgetCounter.increment();
+#endif
+}
+
+Widget::~Widget()
+{
+#if !ENABLE(OILPAN)
+    ASSERT(!parent());
+#endif
+#ifndef NDEBUG
+    widgetCounter.decrement();
+#endif
+}
+>>>>>>> miniblink49
 
 DEFINE_TRACE(Widget)
 {
@@ -64,6 +96,7 @@ Widget* Widget::root() const
     return 0;
 }
 
+<<<<<<< HEAD
 IntRect Widget::convertFromRootFrame(const IntRect& rectInRootFrame) const
 {
     if (const Widget* parentWidget = parent()) {
@@ -78,10 +111,27 @@ IntRect Widget::convertToRootFrame(const IntRect& localRect) const
     if (const Widget* parentWidget = parent()) {
         IntRect parentRect = convertToContainingWidget(localRect);
         return parentWidget->convertToRootFrame(parentRect);
+=======
+IntRect Widget::convertFromContainingWindow(const IntRect& windowRect) const
+{
+    if (const Widget* parentWidget = parent()) {
+        IntRect parentRect = parentWidget->convertFromContainingWindow(windowRect);
+        return convertFromContainingView(parentRect);
+    }
+    return windowRect;
+}
+
+IntRect Widget::convertToContainingWindow(const IntRect& localRect) const
+{
+    if (const Widget* parentWidget = parent()) {
+        IntRect parentRect = convertToContainingView(localRect);
+        return parentWidget->convertToContainingWindow(parentRect);
+>>>>>>> miniblink49
     }
     return localRect;
 }
 
+<<<<<<< HEAD
 IntPoint Widget::convertFromRootFrame(const IntPoint& pointInRootFrame) const
 {
     if (const Widget* parentWidget = parent()) {
@@ -106,45 +156,97 @@ FloatPoint Widget::convertFromRootFrame(
         const int kFactor = 1000;
         IntPoint parentLineEnd = this->convertFromRootFrame(
             flooredPoint + roundedIntSize(windowFraction.scaledBy(kFactor)));
+=======
+IntPoint Widget::convertFromContainingWindow(const IntPoint& windowPoint) const
+{
+    if (const Widget* parentWidget = parent()) {
+        IntPoint parentPoint = parentWidget->convertFromContainingWindow(windowPoint);
+        return convertFromContainingView(parentPoint);
+    }
+    return windowPoint;
+}
+
+FloatPoint Widget::convertFromContainingWindow(const FloatPoint& windowPoint) const
+{
+    // Widgets / windows are required to be IntPoint aligned, but we may need to convert
+    // FloatPoint values within them (eg. for event co-ordinates).
+    IntPoint flooredPoint = flooredIntPoint(windowPoint);
+    FloatPoint parentPoint = this->convertFromContainingWindow(flooredPoint);
+    FloatSize windowFraction = windowPoint - flooredPoint;
+    // Use linear interpolation handle any fractional value (eg. for iframes subject to a transform
+    // beyond just a simple translation).
+    // FIXME: Add FloatPoint variants of all co-ordinate space conversion APIs.
+    if (!windowFraction.isEmpty()) {
+        const int kFactor = 1000;
+        IntPoint parentLineEnd = this->convertFromContainingWindow(flooredPoint + roundedIntSize(windowFraction.scaledBy(kFactor)));
+>>>>>>> miniblink49
         FloatSize parentFraction = (parentLineEnd - parentPoint).scaledBy(1.0f / kFactor);
         parentPoint.move(parentFraction);
     }
     return parentPoint;
 }
 
+<<<<<<< HEAD
 IntPoint Widget::convertToRootFrame(const IntPoint& localPoint) const
 {
     if (const Widget* parentWidget = parent()) {
         IntPoint parentPoint = convertToContainingWidget(localPoint);
         return parentWidget->convertToRootFrame(parentPoint);
+=======
+IntPoint Widget::convertToContainingWindow(const IntPoint& localPoint) const
+{
+    if (const Widget* parentWidget = parent()) {
+        IntPoint parentPoint = convertToContainingView(localPoint);
+        return parentWidget->convertToContainingWindow(parentPoint);
+>>>>>>> miniblink49
     }
     return localPoint;
 }
 
+<<<<<<< HEAD
 IntRect Widget::convertToContainingWidget(const IntRect& localRect) const
 {
     if (const Widget* parentWidget = parent()) {
         IntRect parentRect(localRect);
         parentRect.setLocation(
             parentWidget->convertChildToSelf(this, localRect.location()));
+=======
+IntRect Widget::convertToContainingView(const IntRect& localRect) const
+{
+    if (const Widget* parentWidget = parent()) {
+        IntRect parentRect(localRect);
+        parentRect.setLocation(parentWidget->convertChildToSelf(this, localRect.location()));
+>>>>>>> miniblink49
         return parentRect;
     }
     return localRect;
 }
 
+<<<<<<< HEAD
 IntRect Widget::convertFromContainingWidget(const IntRect& parentRect) const
 {
     if (const Widget* parentWidget = parent()) {
         IntRect localRect = parentRect;
         localRect.setLocation(
             parentWidget->convertSelfToChild(this, localRect.location()));
+=======
+IntRect Widget::convertFromContainingView(const IntRect& parentRect) const
+{
+    if (const Widget* parentWidget = parent()) {
+        IntRect localRect = parentRect;
+        localRect.setLocation(parentWidget->convertSelfToChild(this, localRect.location()));
+>>>>>>> miniblink49
         return localRect;
     }
 
     return parentRect;
 }
 
+<<<<<<< HEAD
 IntPoint Widget::convertToContainingWidget(const IntPoint& localPoint) const
+=======
+IntPoint Widget::convertToContainingView(const IntPoint& localPoint) const
+>>>>>>> miniblink49
 {
     if (const Widget* parentWidget = parent())
         return parentWidget->convertChildToSelf(this, localPoint);
@@ -152,8 +254,12 @@ IntPoint Widget::convertToContainingWidget(const IntPoint& localPoint) const
     return localPoint;
 }
 
+<<<<<<< HEAD
 IntPoint Widget::convertFromContainingWidget(
     const IntPoint& parentPoint) const
+=======
+IntPoint Widget::convertFromContainingView(const IntPoint& parentPoint) const
+>>>>>>> miniblink49
 {
     if (const Widget* parentWidget = parent())
         return parentWidget->convertSelfToChild(this, parentPoint);
@@ -161,14 +267,22 @@ IntPoint Widget::convertFromContainingWidget(
     return parentPoint;
 }
 
+<<<<<<< HEAD
 IntPoint Widget::convertChildToSelf(const Widget*,
     const IntPoint& point) const
+=======
+IntPoint Widget::convertChildToSelf(const Widget*, const IntPoint& point) const
+>>>>>>> miniblink49
 {
     return point;
 }
 
+<<<<<<< HEAD
 IntPoint Widget::convertSelfToChild(const Widget*,
     const IntPoint& point) const
+=======
+IntPoint Widget::convertSelfToChild(const Widget*, const IntPoint& point) const
+>>>>>>> miniblink49
 {
     return point;
 }

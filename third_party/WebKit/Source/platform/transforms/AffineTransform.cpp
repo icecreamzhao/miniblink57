@@ -25,18 +25,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/transforms/AffineTransform.h"
 
+=======
+#include "config.h"
+#include "platform/transforms/AffineTransform.h"
+
+#include "platform/FloatConversion.h"
+>>>>>>> miniblink49
 #include "platform/geometry/FloatQuad.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntRect.h"
 #include "wtf/MathExtras.h"
+<<<<<<< HEAD
 #include "wtf/text/WTFString.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 AffineTransform::AffineTransform()
 {
+<<<<<<< HEAD
     const Transform identity = IDENTITY_TRANSFORM;
     setMatrix(identity);
 }
@@ -47,6 +58,12 @@ AffineTransform::AffineTransform(double a,
     double d,
     double e,
     double f)
+=======
+    setMatrix(1, 0, 0, 1, 0, 0);
+}
+
+AffineTransform::AffineTransform(double a, double b, double c, double d, double e, double f)
+>>>>>>> miniblink49
 {
     setMatrix(a, b, c, d, e, f);
 }
@@ -56,12 +73,16 @@ void AffineTransform::makeIdentity()
     setMatrix(1, 0, 0, 1, 0, 0);
 }
 
+<<<<<<< HEAD
 void AffineTransform::setMatrix(double a,
     double b,
     double c,
     double d,
     double e,
     double f)
+=======
+void AffineTransform::setMatrix(double a, double b, double c, double d, double e, double f)
+>>>>>>> miniblink49
 {
     m_transform[0] = a;
     m_transform[1] = b;
@@ -73,27 +94,41 @@ void AffineTransform::setMatrix(double a,
 
 bool AffineTransform::isIdentity() const
 {
+<<<<<<< HEAD
     return (m_transform[0] == 1 && m_transform[1] == 0 && m_transform[2] == 0 && m_transform[3] == 1 && m_transform[4] == 0 && m_transform[5] == 0);
 }
 
 double AffineTransform::xScaleSquared() const
 {
     return m_transform[0] * m_transform[0] + m_transform[1] * m_transform[1];
+=======
+    return (m_transform[0] == 1 && m_transform[1] == 0
+         && m_transform[2] == 0 && m_transform[3] == 1
+         && m_transform[4] == 0 && m_transform[5] == 0);
+>>>>>>> miniblink49
 }
 
 double AffineTransform::xScale() const
 {
+<<<<<<< HEAD
     return sqrt(xScaleSquared());
 }
 
 double AffineTransform::yScaleSquared() const
 {
     return m_transform[2] * m_transform[2] + m_transform[3] * m_transform[3];
+=======
+    return sqrt(m_transform[0] * m_transform[0] + m_transform[1] * m_transform[1]);
+>>>>>>> miniblink49
 }
 
 double AffineTransform::yScale() const
 {
+<<<<<<< HEAD
     return sqrt(yScaleSquared());
+=======
+    return sqrt(m_transform[2] * m_transform[2] + m_transform[3] * m_transform[3]);
+>>>>>>> miniblink49
 }
 
 double AffineTransform::det() const
@@ -123,12 +158,20 @@ AffineTransform AffineTransform::inverse() const
     result.m_transform[1] = -m_transform[1] / determinant;
     result.m_transform[2] = -m_transform[2] / determinant;
     result.m_transform[3] = m_transform[0] / determinant;
+<<<<<<< HEAD
     result.m_transform[4] = (m_transform[2] * m_transform[5] - m_transform[3] * m_transform[4]) / determinant;
     result.m_transform[5] = (m_transform[1] * m_transform[4] - m_transform[0] * m_transform[5]) / determinant;
+=======
+    result.m_transform[4] = (m_transform[2] * m_transform[5]
+                           - m_transform[3] * m_transform[4]) / determinant;
+    result.m_transform[5] = (m_transform[1] * m_transform[4]
+                           - m_transform[0] * m_transform[5]) / determinant;
+>>>>>>> miniblink49
 
     return result;
 }
 
+<<<<<<< HEAD
 namespace {
 
     // res = t1 * t2
@@ -175,6 +218,23 @@ AffineTransform& AffineTransform::preMultiply(const AffineTransform& other)
     doMultiply(other, *this, &trans);
     setMatrix(trans.m_transform);
 
+=======
+
+// Multiplies this AffineTransform by the provided AffineTransform - i.e.
+// this = this * other;
+AffineTransform& AffineTransform::multiply(const AffineTransform& other)
+{
+    AffineTransform trans;
+
+    trans.m_transform[0] = other.m_transform[0] * m_transform[0] + other.m_transform[1] * m_transform[2];
+    trans.m_transform[1] = other.m_transform[0] * m_transform[1] + other.m_transform[1] * m_transform[3];
+    trans.m_transform[2] = other.m_transform[2] * m_transform[0] + other.m_transform[3] * m_transform[2];
+    trans.m_transform[3] = other.m_transform[2] * m_transform[1] + other.m_transform[3] * m_transform[3];
+    trans.m_transform[4] = other.m_transform[4] * m_transform[0] + other.m_transform[5] * m_transform[2] + m_transform[4];
+    trans.m_transform[5] = other.m_transform[4] * m_transform[1] + other.m_transform[5] * m_transform[3] + m_transform[5];
+
+    setMatrix(trans.m_transform);
+>>>>>>> miniblink49
     return *this;
 }
 
@@ -290,7 +350,11 @@ FloatPoint AffineTransform::mapPoint(const FloatPoint& point) const
     double x2, y2;
     map(point.x(), point.y(), x2, y2);
 
+<<<<<<< HEAD
     return FloatPoint(clampTo<float>(x2), clampTo<float>(y2));
+=======
+    return FloatPoint(narrowPrecisionToFloat(x2), narrowPrecisionToFloat(y2));
+>>>>>>> miniblink49
 }
 
 IntSize AffineTransform::mapSize(const IntSize& size) const
@@ -306,10 +370,17 @@ FloatSize AffineTransform::mapSize(const FloatSize& size) const
     double width2 = size.width() * xScale();
     double height2 = size.height() * yScale();
 
+<<<<<<< HEAD
     return FloatSize(clampTo<float>(width2), clampTo<float>(height2));
 }
 
 IntRect AffineTransform::mapRect(const IntRect& rect) const
+=======
+    return FloatSize(narrowPrecisionToFloat(width2), narrowPrecisionToFloat(height2));
+}
+
+IntRect AffineTransform::mapRect(const IntRect &rect) const
+>>>>>>> miniblink49
 {
     return enclosingIntRect(mapRect(FloatRect(rect)));
 }
@@ -321,8 +392,12 @@ FloatRect AffineTransform::mapRect(const FloatRect& rect) const
             return rect;
 
         FloatRect mappedRect(rect);
+<<<<<<< HEAD
         mappedRect.move(clampTo<float>(m_transform[4]),
             clampTo<float>(m_transform[5]));
+=======
+        mappedRect.move(narrowPrecisionToFloat(m_transform[4]), narrowPrecisionToFloat(m_transform[5]));
+>>>>>>> miniblink49
         return mappedRect;
     }
 
@@ -338,8 +413,12 @@ FloatQuad AffineTransform::mapQuad(const FloatQuad& q) const
 {
     if (isIdentityOrTranslation()) {
         FloatQuad mappedQuad(q);
+<<<<<<< HEAD
         mappedQuad.move(clampTo<float>(m_transform[4]),
             clampTo<float>(m_transform[5]));
+=======
+        mappedQuad.move(narrowPrecisionToFloat(m_transform[4]), narrowPrecisionToFloat(m_transform[5]));
+>>>>>>> miniblink49
         return mappedQuad;
     }
 
@@ -354,7 +433,11 @@ FloatQuad AffineTransform::mapQuad(const FloatQuad& q) const
 TransformationMatrix AffineTransform::toTransformationMatrix() const
 {
     return TransformationMatrix(m_transform[0], m_transform[1], m_transform[2],
+<<<<<<< HEAD
         m_transform[3], m_transform[4], m_transform[5]);
+=======
+                                m_transform[3], m_transform[4], m_transform[5]);
+>>>>>>> miniblink49
 }
 
 bool AffineTransform::decompose(DecomposedType& decomp) const
@@ -410,6 +493,7 @@ void AffineTransform::recompose(const DecomposedType& decomp)
     this->scale(decomp.scaleX, decomp.scaleY);
 }
 
+<<<<<<< HEAD
 String AffineTransform::toString(bool asMatrix) const
 {
     if (asMatrix) {
@@ -438,3 +522,6 @@ String AffineTransform::toString(bool asMatrix) const
 }
 
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

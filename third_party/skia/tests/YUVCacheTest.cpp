@@ -6,8 +6,13 @@
  */
 
 #include "SkCachedData.h"
+<<<<<<< HEAD
 #include "SkResourceCache.h"
 #include "SkYUVPlanesCache.h"
+=======
+#include "SkYUVPlanesCache.h"
+#include "SkResourceCache.h"
+>>>>>>> miniblink49
 #include "Test.h"
 
 enum LockedState {
@@ -21,6 +26,7 @@ enum CachedState {
 };
 
 static void check_data(skiatest::Reporter* reporter, SkCachedData* data,
+<<<<<<< HEAD
     int refcnt, CachedState cacheState, LockedState lockedState)
 {
     REPORTER_ASSERT(reporter, data->testing_only_getRefCnt() == refcnt);
@@ -38,13 +44,35 @@ DEF_TEST(YUVPlanesCache, reporter)
         yuvInfo.fSizeInfo.fSizes[i].fWidth = 20 * i;
         yuvInfo.fSizeInfo.fSizes[i].fHeight = 10 * i;
         yuvInfo.fSizeInfo.fWidthBytes[i] = 80 * i;
+=======
+                       int refcnt, CachedState cacheState, LockedState lockedState) {
+    REPORTER_ASSERT(reporter, data->testing_only_getRefCnt() == refcnt);
+    REPORTER_ASSERT(reporter, data->testing_only_isInCache() == (kInCache == cacheState));
+    bool isLocked = (data->data() != NULL);
+    REPORTER_ASSERT(reporter, isLocked == (lockedState == kLocked));
+}
+
+DEF_TEST(YUVPlanesCache, reporter) {
+    SkResourceCache cache(1024);
+
+    SkYUVPlanesCache::Info yuvInfo;
+    for (int i = 0; i < 3; ++i) {
+        yuvInfo.fSize[i].fWidth = 20 * i;
+        yuvInfo.fSize[i].fHeight = 10 * i;
+        yuvInfo.fSizeInMemory[i] = 800 * i;
+        yuvInfo.fRowBytes[i] = 80 * i;
+>>>>>>> miniblink49
     }
     yuvInfo.fColorSpace = kRec601_SkYUVColorSpace;
 
     const uint32_t genID = 12345678;
 
     SkCachedData* data = SkYUVPlanesCache::FindAndRef(genID, &yuvInfo, &cache);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, nullptr == data);
+=======
+    REPORTER_ASSERT(reporter, NULL == data);
+>>>>>>> miniblink49
 
     size_t size = 256;
     data = cache.newCachedData(size);
@@ -62,9 +90,16 @@ DEF_TEST(YUVPlanesCache, reporter)
     REPORTER_ASSERT(reporter, data);
     REPORTER_ASSERT(reporter, data->size() == size);
     for (int i = 0; i < 3; ++i) {
+<<<<<<< HEAD
         REPORTER_ASSERT(reporter, yuvInfo.fSizeInfo.fSizes[i].fWidth == yuvInfoRead.fSizeInfo.fSizes[i].fWidth);
         REPORTER_ASSERT(reporter, yuvInfo.fSizeInfo.fSizes[i].fHeight == yuvInfoRead.fSizeInfo.fSizes[i].fHeight);
         REPORTER_ASSERT(reporter, yuvInfo.fSizeInfo.fWidthBytes[i] == yuvInfoRead.fSizeInfo.fWidthBytes[i]);
+=======
+        REPORTER_ASSERT(reporter, yuvInfo.fSize[i].fWidth == yuvInfoRead.fSize[i].fWidth);
+        REPORTER_ASSERT(reporter, yuvInfo.fSize[i].fHeight == yuvInfoRead.fSize[i].fHeight);
+        REPORTER_ASSERT(reporter, yuvInfo.fSizeInMemory[i] == yuvInfoRead.fSizeInMemory[i]);
+        REPORTER_ASSERT(reporter, yuvInfo.fRowBytes[i] == yuvInfoRead.fRowBytes[i]);
+>>>>>>> miniblink49
     }
     REPORTER_ASSERT(reporter, yuvInfo.fColorSpace == yuvInfoRead.fColorSpace);
 

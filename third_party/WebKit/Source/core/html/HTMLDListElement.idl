@@ -22,5 +22,5 @@
 interface HTMLDListElement : HTMLElement {
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLDListElement-partial
-    [CEReactions, Reflect] attribute boolean compact;
+    [Reflect] attribute boolean compact;
 };

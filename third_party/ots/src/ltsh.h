@@ -12,6 +12,7 @@
 namespace ots {
 
 struct OpenTypeLTSH {
+<<<<<<< HEAD
     uint16_t version;
     std::vector<uint8_t> ypels;
 };
@@ -19,3 +20,12 @@ struct OpenTypeLTSH {
 } // namespace ots
 
 #endif // OTS_LTSH_H_
+=======
+  uint16_t version;
+  std::vector<uint8_t> ypels;
+};
+
+}  // namespace ots
+
+#endif  // OTS_LTSH_H_
+>>>>>>> miniblink49

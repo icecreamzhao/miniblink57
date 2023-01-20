@@ -32,6 +32,7 @@
 #define WorkerPerformance_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "core/timing/PerformanceBase.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -42,19 +43,16 @@ class ExecutionContext;
 class MemoryInfo;
 class WorkerGlobalScope;
 
-class WorkerPerformance final : public PerformanceBase {
+class WorkerPerformance final : public PerformanceBase, public ContextLifecycleObserver {
     DEFINE_WRAPPERTYPEINFO();
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WorkerPerformance);
 public:
     static WorkerPerformance* create(WorkerGlobalScope* context)
     {
         return new WorkerPerformance(context);
     }
 
-    ExecutionContext* getExecutionContext() const override
-    {
-        return m_executionContext;
-    }
+    virtual ExecutionContext* executionContext() const override;
 
     MemoryInfo* memory();
 
@@ -62,8 +60,6 @@ public:
 
 private:
     explicit WorkerPerformance(WorkerGlobalScope*);
-
-    Member<ExecutionContext> m_executionContext;
 };
 
 } // namespace blink

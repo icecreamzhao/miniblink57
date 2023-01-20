@@ -5,8 +5,6 @@
 #ifndef PartPainter_h
 #define PartPainter_h
 
-#include "wtf/Allocator.h"
-
 namespace blink {
 
 struct PaintInfo;
@@ -14,21 +12,14 @@ class LayoutPoint;
 class LayoutPart;
 
 class PartPainter {
-    STACK_ALLOCATED();
-
 public:
-    PartPainter(const LayoutPart& layoutPart)
-        : m_layoutPart(layoutPart)
-    {
-    }
+    PartPainter(LayoutPart& layoutPart) : m_layoutPart(layoutPart) { }
 
     void paint(const PaintInfo&, const LayoutPoint&);
     void paintContents(const PaintInfo&, const LayoutPoint&);
 
 private:
-    bool isSelected() const;
-
-    const LayoutPart& m_layoutPart;
+    LayoutPart& m_layoutPart;
 };
 
 } // namespace blink

@@ -29,52 +29,44 @@
 #ifndef FrameConsole_h
 #define FrameConsole_h
 
+#include "bindings/core/v8/ScriptState.h"
 #include "core/CoreExport.h"
-#include "core/inspector/ConsoleTypes.h"
+#include "core/frame/ConsoleTypes.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/text/WTFString.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 class ConsoleMessage;
+class ConsoleMessageStorage;
 class DocumentLoader;
-class LocalFrame;
 class ResourceError;
 class ResourceResponse;
-class SourceLocation;
+class ScriptCallStack;
+class WorkerGlobalScopeProxy;
 
-// FrameConsole takes per-frame console messages and routes them up through the
-// FrameHost to the ChromeClient and Inspector.  It's meant as an abstraction
-// around ChromeClient calls and the way that Blink core/ can add messages to
-// the console.
-class CORE_EXPORT FrameConsole final
-    : public GarbageCollectedFinalized<FrameConsole> {
+// FrameConsole takes per-frame console messages and routes them up through the FrameHost to the ChromeClient and Inspector.
+// It's meant as an abstraction around ChromeClient calls and the way that Blink core/ can add messages to the console.
+class CORE_EXPORT FrameConsole final : public NoBaseWillBeGarbageCollected<FrameConsole> {
+    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(FrameConsole);
 public:
-    static FrameConsole* create(LocalFrame& frame)
+    static PassOwnPtrWillBeRawPtr<FrameConsole> create(LocalFrame& frame)
     {
-        return new FrameConsole(frame);
+        return adoptPtrWillBeNoop(new FrameConsole(frame));
     }
 
-    void addMessage(ConsoleMessage*);
-    void addMessageFromWorker(MessageLevel,
-        const String& message,
-        std::unique_ptr<SourceLocation>,
-        const String& workerId);
+    void addMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>);
+    void adoptWorkerMessagesAfterTermination(WorkerGlobalScopeProxy*);
 
-    // Show the specified ConsoleMessage only if the frame haven't shown a message
-    // same as ConsoleMessage::messsage().
-    void addSingletonMessage(ConsoleMessage*);
+    void reportResourceResponseReceived(DocumentLoader*, unsigned long requestIdentifier, const ResourceResponse&);
 
-    bool addMessageToStorage(ConsoleMessage*);
-    void reportMessageToClient(MessageSource,
-        MessageLevel,
-        const String& message,
-        SourceLocation*);
+    static String formatStackTraceString(const String& originalMessage, PassRefPtrWillBeRawPtr<ScriptCallStack>);
 
-    void reportResourceResponseReceived(DocumentLoader*,
-        unsigned long requestIdentifier,
-        const ResourceResponse&);
+    static void mute();
+    static void unmute();
+
+    void clearMessages();
 
     void didFailLoading(unsigned long requestIdentifier, const ResourceError&);
 
@@ -83,8 +75,15 @@ public:
 private:
     explicit FrameConsole(LocalFrame&);
 
-    Member<LocalFrame> m_frame;
-    HashSet<String> m_singletonMessages;
+    LocalFrame& frame() const
+    {
+        ASSERT(m_frame);
+        return *m_frame;
+    }
+
+    ConsoleMessageStorage* messageStorage();
+
+    RawPtrWillBeMember<LocalFrame> m_frame;
 };
 
 } // namespace blink

@@ -9,6 +9,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     void Segment::ZapContents()
     {
 #ifdef DEBUG
@@ -27,3 +28,21 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
+=======
+void Segment::ZapContents() {
+#ifdef DEBUG
+  memset(reinterpret_cast<void*>(start()), kZapDeadByte, capacity());
+#endif
+  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(start(), capacity());
+}
+
+void Segment::ZapHeader() {
+#ifdef DEBUG
+  memset(this, kZapDeadByte, sizeof(Segment));
+#endif
+  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(start(), sizeof(Segment));
+}
+
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

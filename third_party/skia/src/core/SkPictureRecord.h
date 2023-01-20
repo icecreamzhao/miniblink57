@@ -12,24 +12,38 @@
 #include "SkFlattenable.h"
 #include "SkPicture.h"
 #include "SkPictureData.h"
+<<<<<<< HEAD
 #include "SkTArray.h"
 #include "SkTDArray.h"
 #include "SkTHash.h"
+=======
+#include "SkTemplates.h"
+>>>>>>> miniblink49
 #include "SkWriter32.h"
 
 // These macros help with packing and unpacking a single byte value and
 // a 3 byte value into/out of a uint32_t
 #define MASK_24 0x00FFFFFF
+<<<<<<< HEAD
 #define UNPACK_8_24(combined, small, large) \
     small = (combined >> 24) & 0xFF;        \
     large = combined & MASK_24;
 #define PACK_8_24(small, large) ((small << 24) | large)
 
+=======
+#define UNPACK_8_24(combined, small, large)             \
+    small = (combined >> 24) & 0xFF;                    \
+    large = combined & MASK_24;
+#define PACK_8_24(small, large) ((small << 24) | large)
+
+
+>>>>>>> miniblink49
 class SkPictureRecord : public SkCanvas {
 public:
     SkPictureRecord(const SkISize& dimensions, uint32_t recordFlags);
     virtual ~SkPictureRecord();
 
+<<<<<<< HEAD
     const SkTDArray<const SkPicture*>& getPictureRefs() const
     {
         return fPictureRefs;
@@ -72,6 +86,43 @@ public:
 
     const SkWriter32& writeStream() const
     {
+=======
+    const SkTDArray<const SkPicture* >& getPictureRefs() const {
+        return fPictureRefs;
+    }
+
+    const SkTDArray<const SkTextBlob* >& getTextBlobRefs() const {
+        return fTextBlobRefs;
+    }
+
+    const SkTDArray<const SkImage* >& getImageRefs() const {
+        return fImageRefs;
+    }
+    
+    SkData* opData(bool deepCopy) const {
+        this->validate(fWriter.bytesWritten(), 0);
+
+        if (fWriter.bytesWritten() == 0) {
+            return SkData::NewEmpty();
+        }
+
+        if (deepCopy) {
+            return SkData::NewWithCopy(fWriter.contiguousArray(), fWriter.bytesWritten());
+        }
+
+        return fWriter.snapshotAsData();
+    }
+
+    const SkPictureContentInfo& contentInfo() const {
+        return fContentInfo;
+    }
+
+    void setFlags(uint32_t recordFlags) {
+        fRecordFlags = recordFlags;
+    }
+
+    const SkWriter32& writeStream() const {
+>>>>>>> miniblink49
         return fWriter;
     }
 
@@ -102,15 +153,23 @@ private:
      * end of blocks could go unused). Possibly add a second addDraw that
      * operates in this manner.
      */
+<<<<<<< HEAD
     size_t addDraw(DrawType drawType, size_t* size)
     {
+=======
+    size_t addDraw(DrawType drawType, size_t* size) {
+>>>>>>> miniblink49
         size_t offset = fWriter.bytesWritten();
 
         this->predrawNotify();
         fContentInfo.addOperation();
 
         SkASSERT(0 != *size);
+<<<<<<< HEAD
         SkASSERT(((uint8_t)drawType) == drawType);
+=======
+        SkASSERT(((uint8_t) drawType) == drawType);
+>>>>>>> miniblink49
 
         if (0 != (*size & ~MASK_24) || *size == MASK_24) {
             fWriter.writeInt(PACK_8_24(drawType, MASK_24));
@@ -123,12 +182,19 @@ private:
         return offset;
     }
 
+<<<<<<< HEAD
     void addInt(int value)
     {
         fWriter.writeInt(value);
     }
     void addScalar(SkScalar scalar)
     {
+=======
+    void addInt(int value) {
+        fWriter.writeInt(value);
+    }
+    void addScalar(SkScalar scalar) {
+>>>>>>> miniblink49
         fWriter.writeScalar(scalar);
     }
 
@@ -140,7 +206,10 @@ private:
     void addPatch(const SkPoint cubics[12]);
     void addPath(const SkPath& path);
     void addPicture(const SkPicture* picture);
+<<<<<<< HEAD
     void addDrawable(SkDrawable* picture);
+=======
+>>>>>>> miniblink49
     void addPoint(const SkPoint& point);
     void addPoints(const SkPoint pts[], int count);
     void addRect(const SkRect& rect);
@@ -155,6 +224,7 @@ private:
     int find(const SkBitmap& bitmap);
 
 protected:
+<<<<<<< HEAD
     void validate(size_t initialOffset, size_t size) const
     {
         SkASSERT(fWriter.bytesWritten() == initialOffset + size);
@@ -165,6 +235,17 @@ protected:
 
     void willSave() override;
     SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec&) override;
+=======
+    void validate(size_t initialOffset, size_t size) const {
+        SkASSERT(fWriter.bytesWritten() == initialOffset + size);
+    }
+
+    SkSurface* onNewSurface(const SkImageInfo&, const SkSurfaceProps&) override;
+    bool onPeekPixels(SkPixmap*) override { return false; }
+
+    void willSave() override;
+    SaveLayerStrategy willSaveLayer(const SkRect*, const SkPaint*, SaveFlags) override;
+>>>>>>> miniblink49
     void willRestore() override;
 
     void didConcat(const SkMatrix&) override;
@@ -175,6 +256,7 @@ protected:
     void onDrawText(const void* text, size_t, SkScalar x, SkScalar y, const SkPaint&) override;
     void onDrawPosText(const void* text, size_t, const SkPoint pos[], const SkPaint&) override;
     void onDrawPosTextH(const void* text, size_t, const SkScalar xpos[], SkScalar constY,
+<<<<<<< HEAD
         const SkPaint&) override;
     void onDrawTextOnPath(const void* text, size_t byteLength, const SkPath& path,
         const SkMatrix* matrix, const SkPaint&) override;
@@ -186,6 +268,19 @@ protected:
         const SkPaint& paint) override;
     void onDrawAtlas(const SkImage*, const SkRSXform[], const SkRect[], const SkColor[], int,
         SkXfermode::Mode, const SkRect*, const SkPaint*) override;
+=======
+                        const SkPaint&) override;
+    void onDrawTextOnPath(const void* text, size_t byteLength, const SkPath& path,
+                                  const SkMatrix* matrix, const SkPaint&) override;
+    void onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
+                                const SkPaint& paint) override;
+
+    void onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
+                             const SkPoint texCoords[4], SkXfermode* xmode,
+                             const SkPaint& paint) override;
+    void onDrawAtlas(const SkImage*, const SkRSXform[], const SkRect[], const SkColor[], int,
+                     SkXfermode::Mode, const SkRect*, const SkPaint*) override;
+>>>>>>> miniblink49
 
     void onDrawPaint(const SkPaint&) override;
     void onDrawPoints(PointMode, size_t count, const SkPoint pts[], const SkPaint&) override;
@@ -195,6 +290,7 @@ protected:
     void onDrawPath(const SkPath&, const SkPaint&) override;
     void onDrawBitmap(const SkBitmap&, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawBitmapRect(const SkBitmap&, const SkRect* src, const SkRect& dst, const SkPaint*,
+<<<<<<< HEAD
         SrcRectConstraint) override;
     void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
@@ -208,6 +304,22 @@ protected:
         const SkColor colors[], SkXfermode* xmode,
         const uint16_t indices[], int indexCount,
         const SkPaint&) override;
+=======
+                          DrawBitmapRectFlags flags) override;
+    void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
+    void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
+                         const SkPaint*) override;
+    void onDrawImageNine(const SkImage*, const SkIRect& center, const SkRect& dst,
+                         const SkPaint*) override;
+    void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst,
+                          const SkPaint*) override;
+    void onDrawSprite(const SkBitmap&, int left, int top, const SkPaint*) override;
+    void onDrawVertices(VertexMode vmode, int vertexCount,
+                        const SkPoint vertices[], const SkPoint texs[],
+                        const SkColor colors[], SkXfermode* xmode,
+                        const uint16_t indices[], int indexCount,
+                        const SkPaint&) override;
+>>>>>>> miniblink49
 
     void onClipRect(const SkRect&, SkRegion::Op, ClipEdgeStyle) override;
     void onClipRRect(const SkRRect&, SkRegion::Op, ClipEdgeStyle) override;
@@ -215,10 +327,15 @@ protected:
     void onClipRegion(const SkRegion&, SkRegion::Op) override;
 
     void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*) override;
+<<<<<<< HEAD
     void onDrawDrawable(SkDrawable*, const SkMatrix*) override;
     void onDrawAnnotation(const SkRect&, const char[], SkData*) override;
 
     int addPathToHeap(const SkPath& path); // does not write to ops stream
+=======
+
+    int addPathToHeap(const SkPath& path);  // does not write to ops stream
+>>>>>>> miniblink49
 
     // These entry points allow the writing of matrices, clips, saves &
     // restores to be deferred (e.g., if the MC state is being collapsed and
@@ -231,23 +348,33 @@ protected:
     size_t recordClipPath(int pathID, SkRegion::Op op, bool doAA);
     size_t recordClipRegion(const SkRegion& region, SkRegion::Op op);
     void recordSave();
+<<<<<<< HEAD
     void recordSaveLayer(const SaveLayerRec&);
+=======
+    void recordSaveLayer(const SkRect* bounds, const SkPaint* paint, SaveFlags flags);
+>>>>>>> miniblink49
     void recordRestore(bool fillInSkips = true);
 
 private:
     SkPictureContentInfo fContentInfo;
 
     SkTArray<SkBitmap> fBitmaps;
+<<<<<<< HEAD
     SkTArray<SkPaint> fPaints;
 
     struct PathHash {
         uint32_t operator()(const SkPath& p) { return p.getGenerationID(); }
     };
     SkTHashMap<SkPath, int, PathHash> fPaths;
+=======
+    SkTArray<SkPaint>  fPaints;
+    SkTArray<SkPath>   fPaths;
+>>>>>>> miniblink49
 
     SkWriter32 fWriter;
 
     // we ref each item in these arrays
+<<<<<<< HEAD
     SkTDArray<const SkImage*> fImageRefs;
     SkTDArray<const SkPicture*> fPictureRefs;
     SkTDArray<SkDrawable*> fDrawableRefs;
@@ -257,6 +384,16 @@ private:
     int fInitialSaveCount;
 
     friend class SkPictureData; // for SkPictureData's SkPictureRecord-based constructor
+=======
+    SkTDArray<const SkImage*>    fImageRefs;
+    SkTDArray<const SkPicture*>  fPictureRefs;
+    SkTDArray<const SkTextBlob*> fTextBlobRefs;
+
+    uint32_t fRecordFlags;
+    int      fInitialSaveCount;
+
+    friend class SkPictureData;   // for SkPictureData's SkPictureRecord-based constructor
+>>>>>>> miniblink49
 
     typedef SkCanvas INHERITED;
 };

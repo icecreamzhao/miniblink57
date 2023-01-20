@@ -20,34 +20,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/events/UIEvent.h"
 
-#include "core/input/InputDeviceCapabilities.h"
 
 namespace blink {
 
 UIEvent::UIEvent()
     : m_detail(0)
-    , m_sourceCapabilities(nullptr)
+    , m_sourceDevice(nullptr)
 {
 }
 
-UIEvent::UIEvent(const AtomicString& eventType,
-    bool canBubbleArg,
-    bool cancelableArg,
-    ComposedMode composedMode,
-    TimeTicks platformTimeStamp,
-    AbstractView* viewArg,
-    int detailArg,
-    InputDeviceCapabilities* sourceCapabilitiesArg)
-    : Event(eventType,
-        canBubbleArg,
-        cancelableArg,
-        composedMode,
-        platformTimeStamp)
+// TODO(lanwei): Will add sourceDevice to all the subclass of UIEvent later, see https://crbug.com/476530.
+UIEvent::UIEvent(const AtomicString& eventType, bool canBubbleArg, bool cancelableArg, PassRefPtrWillBeRawPtr<AbstractView> viewArg, int detailArg, InputDevice* sourceDeviceArg)
+    : Event(eventType, canBubbleArg, cancelableArg)
     , m_view(viewArg)
     , m_detail(detailArg)
-    , m_sourceCapabilities(sourceCapabilitiesArg)
+    , m_sourceDevice(sourceDeviceArg)
 {
 }
 
@@ -55,39 +45,24 @@ UIEvent::UIEvent(const AtomicString& eventType, const UIEventInit& initializer)
     : Event(eventType, initializer)
     , m_view(initializer.view())
     , m_detail(initializer.detail())
-    , m_sourceCapabilities(initializer.sourceCapabilities())
+    , m_sourceDevice(initializer.sourceDevice())
 {
 }
 
-UIEvent::~UIEvent() { }
-
-void UIEvent::initUIEvent(const AtomicString& typeArg,
-    bool canBubbleArg,
-    bool cancelableArg,
-    AbstractView* viewArg,
-    int detailArg)
+UIEvent::~UIEvent()
 {
-    initUIEventInternal(typeArg, canBubbleArg, cancelableArg, nullptr, viewArg,
-        detailArg, nullptr);
 }
 
-void UIEvent::initUIEventInternal(
-    const AtomicString& typeArg,
-    bool canBubbleArg,
-    bool cancelableArg,
-    EventTarget* relatedTarget,
-    AbstractView* viewArg,
-    int detailArg,
-    InputDeviceCapabilities* sourceCapabilitiesArg)
+void UIEvent::initUIEvent(const AtomicString& typeArg, bool canBubbleArg, bool cancelableArg, PassRefPtrWillBeRawPtr<AbstractView> viewArg, int detailArg)
 {
-    if (isBeingDispatched())
+    if (dispatched())
         return;
 
-    initEvent(typeArg, canBubbleArg, cancelableArg, relatedTarget);
+    initEvent(typeArg, canBubbleArg, cancelableArg);
 
     m_view = viewArg;
     m_detail = detailArg;
-    m_sourceCapabilities = sourceCapabilitiesArg;
+    m_sourceDevice = nullptr;
 }
 
 bool UIEvent::isUIEvent() const
@@ -100,6 +75,16 @@ const AtomicString& UIEvent::interfaceName() const
     return EventNames::UIEvent;
 }
 
+int UIEvent::keyCode() const
+{
+    return 0;
+}
+
+int UIEvent::charCode() const
+{
+    return 0;
+}
+
 int UIEvent::which() const
 {
     return 0;
@@ -108,7 +93,7 @@ int UIEvent::which() const
 DEFINE_TRACE(UIEvent)
 {
     visitor->trace(m_view);
-    visitor->trace(m_sourceCapabilities);
+    visitor->trace(m_sourceDevice);
     Event::trace(visitor);
 }
 

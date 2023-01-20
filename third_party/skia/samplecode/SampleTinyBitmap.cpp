@@ -1,9 +1,14 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 
 #include "SampleCode.h"
 #include "SkCanvas.h"
@@ -14,6 +19,16 @@
 
 static SkBitmap make_bitmap()
 {
+=======
+#include "SampleCode.h"
+#include "SkColorPriv.h"
+#include "SkShader.h"
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkUtils.h"
+
+static SkBitmap make_bitmap() {
+>>>>>>> miniblink49
     const int N = 1;
 
     SkPMColor c[N];
@@ -24,8 +39,13 @@ static SkBitmap make_bitmap()
 
     SkBitmap bm;
     bm.allocPixels(SkImageInfo::Make(1, 1, kIndex_8_SkColorType,
+<<<<<<< HEAD
                        kPremul_SkAlphaType),
         nullptr, ctable);
+=======
+                                     kPremul_SkAlphaType),
+                   NULL, ctable);
+>>>>>>> miniblink49
     ctable->unref();
 
     bm.lockPixels();
@@ -40,18 +60,29 @@ static SkBitmap make_bitmap()
 }
 
 class TinyBitmapView : public SampleView {
+<<<<<<< HEAD
     SkBitmap fBM;
 
 public:
     TinyBitmapView()
     {
+=======
+    SkBitmap    fBM;
+public:
+    TinyBitmapView() {
+>>>>>>> miniblink49
         fBM = make_bitmap();
         this->setBGColor(0xFFDDDDDD);
     }
 
 protected:
+<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
+=======
+    // overrides from SkEventSink
+    virtual bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "TinyBitmap");
             return true;
@@ -59,6 +90,7 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     static void setBitmapOpaque(SkBitmap* bm, bool isOpaque)
     {
         SkAutoLockPixels alp(*bm); // needed for ctable
@@ -70,6 +102,18 @@ protected:
         SkPaint paint;
         paint.setShader(SkShader::MakeBitmapShader(fBM, SkShader::kRepeat_TileMode,
             SkShader::kMirror_TileMode));
+=======
+    static void setBitmapOpaque(SkBitmap* bm, bool isOpaque) {
+        SkAutoLockPixels alp(*bm);  // needed for ctable
+        bm->setAlphaType(isOpaque ? kOpaque_SkAlphaType : kPremul_SkAlphaType);
+    }
+
+    virtual void onDrawContent(SkCanvas* canvas) {
+        SkShader* s = SkShader::CreateBitmapShader(fBM, SkShader::kRepeat_TileMode,
+                                                   SkShader::kMirror_TileMode);
+        SkPaint paint;
+        paint.setShader(s)->unref();
+>>>>>>> miniblink49
         canvas->drawPaint(paint);
     }
 

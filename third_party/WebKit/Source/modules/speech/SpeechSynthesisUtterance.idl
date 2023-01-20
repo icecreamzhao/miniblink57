@@ -23,16 +23,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#tts-section
 
+=======
+>>>>>>> miniblink49
 [
     Constructor(optional DOMString text = null),
     ConstructorCallWith=ExecutionContext,
     RuntimeEnabled=ScriptedSpeech,
+<<<<<<< HEAD
 ] interface SpeechSynthesisUtterance : EventTarget {
     attribute DOMString text;
     attribute DOMString lang;
     attribute SpeechSynthesisVoice? voice;
+=======
+    GarbageCollected,
+] interface SpeechSynthesisUtterance : EventTarget {
+    attribute DOMString text;
+    attribute DOMString lang;
+    attribute SpeechSynthesisVoice voice;
+>>>>>>> miniblink49
     attribute float volume;
     attribute float rate;
     attribute float pitch;

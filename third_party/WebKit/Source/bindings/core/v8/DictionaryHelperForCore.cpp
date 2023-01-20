@@ -23,14 +23,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "bindings/core/v8/ArrayValue.h"
 #include "bindings/core/v8/DictionaryHelperForBindings.h"
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/V8ArrayBufferView.h"
 #include "bindings/core/v8/V8Binding.h"
+#include "bindings/core/v8/V8DOMError.h"
 #include "bindings/core/v8/V8Element.h"
 #include "bindings/core/v8/V8EventTarget.h"
+#include "bindings/core/v8/V8MediaKeyError.h"
 #include "bindings/core/v8/V8MessagePort.h"
 #include "bindings/core/v8/V8TextTrack.h"
 #include "bindings/core/v8/V8Uint8Array.h"
@@ -42,25 +46,19 @@
 namespace blink {
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    v8::Local<v8::Value>& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, v8::Local<v8::Value>& value)
 {
     return dictionary.get(key, value);
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    Dictionary& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, Dictionary& value)
 {
     return dictionary.get(key, value);
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    bool& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, bool& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -70,9 +68,7 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    int32_t& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, int32_t& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -82,10 +78,7 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    double& value,
-    bool& hasValue)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, double& value, bool& hasValue)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value)) {
@@ -98,18 +91,14 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    double& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, double& value)
 {
     bool unused;
     return DictionaryHelper::get(dictionary, key, value, unused);
 }
 
-template <typename StringType>
-bool getStringType(const Dictionary& dictionary,
-    const StringView& key,
-    StringType& value)
+template<typename StringType>
+bool getStringType(const Dictionary& dictionary, const String& key, StringType& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -123,25 +112,30 @@ bool getStringType(const Dictionary& dictionary,
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    String& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, String& value)
 {
     return getStringType(dictionary, key, value);
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    AtomicString& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, AtomicString& value)
 {
     return getStringType(dictionary, key, value);
 }
 
-template <typename NumericType>
-bool getNumericType(const Dictionary& dictionary,
-    const StringView& key,
-    NumericType& value)
+template <>
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, ScriptValue& value)
+{
+    v8::Local<v8::Value> v8Value;
+    if (!dictionary.get(key, v8Value))
+        return false;
+
+    value = ScriptValue(ScriptState::current(dictionary.isolate()), v8Value);
+    return true;
+}
+
+template<typename NumericType>
+bool getNumericType(const Dictionary& dictionary, const String& key, NumericType& value)
 {
     int32_t int32Value;
     if (!DictionaryHelper::get(dictionary, key, int32Value))
@@ -151,33 +145,25 @@ bool getNumericType(const Dictionary& dictionary,
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    short& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, short& value)
 {
     return getNumericType<short>(dictionary, key, value);
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    unsigned short& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, unsigned short& value)
 {
     return getNumericType<unsigned short>(dictionary, key, value);
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    unsigned& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, unsigned& value)
 {
     return getNumericType<unsigned>(dictionary, key, value);
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    unsigned long& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, unsigned long& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -191,9 +177,7 @@ bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    unsigned long long& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, unsigned long long& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -207,9 +191,7 @@ bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    Member<DOMWindow>& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, RefPtrWillBeMember<DOMWindow>& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -222,9 +204,7 @@ bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    Member<TrackBase>& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, RefPtrWillBeMember<TrackBase>& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -234,10 +214,9 @@ bool DictionaryHelper::get(const Dictionary& dictionary,
     if (v8Value->IsObject()) {
         v8::Local<v8::Object> wrapper = v8::Local<v8::Object>::Cast(v8Value);
 
-        // FIXME: this will need to be changed so it can also return an AudioTrack
-        // or a VideoTrack once we add them.
-        v8::Local<v8::Object> track = V8TextTrack::findInstanceInPrototypeChain(
-            wrapper, dictionary.isolate());
+        // FIXME: this will need to be changed so it can also return an AudioTrack or a VideoTrack once
+        // we add them.
+        v8::Local<v8::Object> track = V8TextTrack::findInstanceInPrototypeChain(wrapper, dictionary.isolate());
         if (!track.IsEmpty())
             source = V8TextTrack::toImpl(track);
     }
@@ -246,9 +225,7 @@ bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    Member<EventTarget>& value)
+bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, RefPtrWillBeMember<EventTarget>& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -274,9 +251,7 @@ bool DictionaryHelper::get(const Dictionary& dictionary,
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    Vector<String>& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, Vector<String>& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -288,23 +263,17 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
     v8::Local<v8::Array> v8Array = v8::Local<v8::Array>::Cast(v8Value);
     for (size_t i = 0; i < v8Array->Length(); ++i) {
         v8::Local<v8::Value> indexedValue;
-        if (!v8Array
-                 ->Get(dictionary.v8Context(),
-                     v8::Uint32::New(dictionary.isolate(), i))
-                 .ToLocal(&indexedValue))
+        if (!v8Array->Get(dictionary.v8Context(), v8::Uint32::New(dictionary.isolate(), i)).ToLocal(&indexedValue))
             return false;
         TOSTRING_DEFAULT(V8StringResource<>, stringValue, indexedValue, false);
-        value.push_back(stringValue);
+        value.append(stringValue);
     }
 
     return true;
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    Vector<Vector<String>>& value,
-    ExceptionState& exceptionState)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, Vector<Vector<String>>& value, ExceptionState& exceptionState)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -316,25 +285,19 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
     v8::Local<v8::Array> v8Array = v8::Local<v8::Array>::Cast(v8Value);
     for (size_t i = 0; i < v8Array->Length(); ++i) {
         v8::Local<v8::Value> v8IndexedValue;
-        if (!v8Array
-                 ->Get(dictionary.v8Context(),
-                     v8::Uint32::New(dictionary.isolate(), i))
-                 .ToLocal(&v8IndexedValue))
+        if (!v8Array->Get(dictionary.v8Context(), v8::Uint32::New(dictionary.isolate(), i)).ToLocal(&v8IndexedValue))
             return false;
-        Vector<String> indexedValue = toImplArray<Vector<String>>(
-            v8IndexedValue, i, dictionary.isolate(), exceptionState);
+        Vector<String> indexedValue = toImplArray<Vector<String>>(v8IndexedValue, i, dictionary.isolate(), exceptionState);
         if (exceptionState.hadException())
             return false;
-        value.push_back(indexedValue);
+        value.append(indexedValue);
     }
 
     return true;
 }
 
 template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    ArrayValue& value)
+CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary, const String& key, ArrayValue& value)
 {
     v8::Local<v8::Value> v8Value;
     if (!dictionary.get(key, v8Value))
@@ -349,17 +312,100 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
     return true;
 }
 
-template <>
-CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
-    const StringView& key,
-    DOMUint8Array*& value)
-{
-    v8::Local<v8::Value> v8Value;
-    if (!dictionary.get(key, v8Value))
-        return false;
+template CORE_EXPORT bool DictionaryHelper::get(const Dictionary&, const String& key, RefPtr<DOMUint8Array>& value);
 
-    value = V8Uint8Array::toImplWithTypeCheck(dictionary.isolate(), v8Value);
-    return true;
-}
+template <typename T>
+struct IntegralTypeTraits {
+};
+
+template <>
+struct IntegralTypeTraits<uint8_t> {
+    static inline uint8_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toUInt8(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "UInt8"; }
+};
+
+template <>
+struct IntegralTypeTraits<int8_t> {
+    static inline int8_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toInt8(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "Int8"; }
+};
+
+template <>
+struct IntegralTypeTraits<unsigned short> {
+    static inline uint16_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toUInt16(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "UInt16"; }
+};
+
+template <>
+struct IntegralTypeTraits<short> {
+    static inline int16_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toInt16(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "Int16"; }
+};
+
+template <>
+struct IntegralTypeTraits<unsigned> {
+    static inline uint32_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toUInt32(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "UInt32"; }
+};
+
+template <>
+struct IntegralTypeTraits<unsigned long> {
+    static inline uint32_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toUInt32(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "UInt32"; }
+};
+
+template <>
+struct IntegralTypeTraits<int> {
+    static inline int32_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toInt32(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "Int32"; }
+};
+
+template <>
+struct IntegralTypeTraits<long> {
+    static inline int32_t toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toInt32(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "Int32"; }
+};
+
+template <>
+struct IntegralTypeTraits<unsigned long long> {
+    static inline unsigned long long toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toUInt64(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "UInt64"; }
+};
+
+template <>
+struct IntegralTypeTraits<long long> {
+    static inline long long toIntegral(v8::Isolate* isolate, v8::Local<v8::Value> value, IntegerConversionConfiguration configuration, ExceptionState& exceptionState)
+    {
+        return toInt64(isolate, value, configuration, exceptionState);
+    }
+    static const String typeName() { return "Int64"; }
+};
 
 } // namespace blink

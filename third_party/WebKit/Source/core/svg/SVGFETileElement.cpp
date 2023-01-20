@@ -18,17 +18,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGFETileElement.h"
 
 #include "core/SVGNames.h"
+#include "platform/graphics/filters/FilterEffect.h"
 #include "core/svg/graphics/filters/SVGFilterBuilder.h"
-#include "platform/graphics/filters/FETile.h"
 
 namespace blink {
 
 inline SVGFETileElement::SVGFETileElement(Document& document)
     : SVGFilterPrimitiveStandardAttributes(SVGNames::feTileTag, document)
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
 {
     addToPropertyMap(m_in1);
 }
@@ -52,16 +54,16 @@ void SVGFETileElement::svgAttributeChanged(const QualifiedName& attrName)
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-FilterEffect* SVGFETileElement::build(SVGFilterBuilder* filterBuilder,
-    Filter* filter)
+PassRefPtrWillBeRawPtr<FilterEffect> SVGFETileElement::build(SVGFilterBuilder* filterBuilder, Filter* filter)
 {
-    FilterEffect* input1 = filterBuilder->getEffectById(
-        AtomicString(m_in1->currentValue()->value()));
-    ASSERT(input1);
+    FilterEffect* input1 = filterBuilder->getEffectById(AtomicString(m_in1->currentValue()->value()));
 
-    FilterEffect* effect = FETile::create(filter);
-    effect->inputEffects().push_back(input1);
-    return effect;
+    if (!input1)
+        return nullptr;
+
+    RefPtrWillBeRawPtr<FilterEffect> effect = FETile::create(filter);
+    effect->inputEffects().append(input1);
+    return effect.release();
 }
 
-} // namespace blink
+}

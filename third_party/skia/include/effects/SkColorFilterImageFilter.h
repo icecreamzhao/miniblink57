@@ -14,13 +14,21 @@ class SkColorFilter;
 
 class SK_API SkColorFilterImageFilter : public SkImageFilter {
 public:
+<<<<<<< HEAD
     static sk_sp<SkImageFilter> Make(sk_sp<SkColorFilter> cf,
         sk_sp<SkImageFilter> input,
         const CropRect* cropRect = NULL);
+=======
+    static SkColorFilterImageFilter* Create(SkColorFilter* cf,
+                                            SkImageFilter* input = NULL,
+                                            const CropRect* cropRect = NULL);
+    virtual ~SkColorFilterImageFilter();
+>>>>>>> miniblink49
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkColorFilterImageFilter)
 
+<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_IMAGEFILTER_PTR
     static SkImageFilter* Create(SkColorFilter* cf,
         SkImageFilter* input = NULL,
@@ -47,6 +55,21 @@ private:
         const CropRect* cropRect);
 
     sk_sp<SkColorFilter> fColorFilter;
+=======
+protected:
+    void flatten(SkWriteBuffer&) const override;
+
+    virtual bool onFilterImage(Proxy*, const SkBitmap& src, const Context&,
+                               SkBitmap* result, SkIPoint* loc) const override;
+
+    bool onIsColorFilterNode(SkColorFilter**) const override;
+
+private:
+    SkColorFilterImageFilter(SkColorFilter* cf,
+                             SkImageFilter* input,
+                             const CropRect* cropRect);
+    SkColorFilter*  fColorFilter;
+>>>>>>> miniblink49
 
     typedef SkImageFilter INHERITED;
 };

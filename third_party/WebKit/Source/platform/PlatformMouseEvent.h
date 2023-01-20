@@ -27,6 +27,7 @@
 #define PlatformMouseEvent_h
 
 #include "platform/PlatformEvent.h"
+<<<<<<< HEAD
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/IntPoint.h"
 #include "public/platform/WebGestureEvent.h"
@@ -55,11 +56,33 @@ public:
 
     explicit PlatformMouseEvent(EventType type)
         : PlatformEvent(type)
+=======
+#include "platform/geometry/IntPoint.h"
+
+namespace blink {
+
+// These button numbers match the ones used in the DOM API, 0 through 2, except for NoButton which isn't specified.
+enum MouseButton { NoButton = -1, LeftButton, MiddleButton, RightButton };
+
+class PlatformMouseEvent : public PlatformEvent {
+public:
+    enum SyntheticEventType {
+        // Real mouse input events or synthetic events that behave just like real events
+        RealOrIndistinguishable,
+        // Mouse events derived from touch input
+        FromTouch,
+    };
+
+    PlatformMouseEvent()
+        : PlatformEvent(PlatformEvent::MouseMoved)
+        , m_button(NoButton)
+>>>>>>> miniblink49
         , m_clickCount(0)
         , m_synthesized(RealOrIndistinguishable)
     {
     }
 
+<<<<<<< HEAD
     PlatformMouseEvent(const IntPoint& position,
         const IntPoint& globalPosition,
         WebPointerProperties::Button button,
@@ -121,10 +144,43 @@ public:
     {
         return m_pointerProperties;
     }
+=======
+    PlatformMouseEvent(const IntPoint& position, const IntPoint& globalPosition, MouseButton button, PlatformEvent::Type type, int clickCount, Modifiers modifiers, double timestamp)
+        : PlatformEvent(type, modifiers, timestamp)
+        , m_position(position)
+        , m_globalPosition(globalPosition)
+        , m_button(button)
+        , m_clickCount(clickCount)
+        , m_synthesized(RealOrIndistinguishable)
+    {
+    }
+
+    PlatformMouseEvent(const IntPoint& position, const IntPoint& globalPosition, MouseButton button, PlatformEvent::Type type, int clickCount, Modifiers modifiers, SyntheticEventType synthesized, double timestamp)
+        : PlatformEvent(type, modifiers, timestamp)
+        , m_position(position)
+        , m_globalPosition(globalPosition)
+        , m_button(button)
+        , m_clickCount(clickCount)
+        , m_synthesized(synthesized)
+    {
+    }
+
+    PlatformMouseEvent(const IntPoint& position, const IntPoint& globalPosition, MouseButton button, PlatformEvent::Type type, int clickCount, bool shiftKey, bool ctrlKey, bool altKey, bool metaKey, SyntheticEventType synthesized, double timestamp)
+        : PlatformEvent(type, shiftKey, ctrlKey, altKey, metaKey, timestamp)
+        , m_position(position)
+        , m_globalPosition(globalPosition)
+        , m_button(button)
+        , m_clickCount(clickCount)
+        , m_synthesized(synthesized)
+    {
+    }
+
+>>>>>>> miniblink49
     const IntPoint& position() const { return m_position; }
     const IntPoint& globalPosition() const { return m_globalPosition; }
     const IntPoint& movementDelta() const { return m_movementDelta; }
 
+<<<<<<< HEAD
     int clickCount() const { return m_clickCount; }
     bool fromTouch() const { return m_synthesized == FromTouch; }
     SyntheticEventType getSyntheticEventType() const { return m_synthesized; }
@@ -151,6 +207,20 @@ protected:
     // some other part of MouseEventWithHitTestResults, but for now it's
     // most convenient to stash it here. Please see: http://crbug.com/592947.
     String m_region;
+=======
+    MouseButton button() const { return m_button; }
+    int clickCount() const { return m_clickCount; }
+    bool fromTouch() const { return m_synthesized == FromTouch; }
+    SyntheticEventType syntheticEventType() const { return m_synthesized; }
+
+protected:
+    IntPoint m_position;
+    IntPoint m_globalPosition;
+    IntPoint m_movementDelta;
+    MouseButton m_button;
+    int m_clickCount;
+    SyntheticEventType m_synthesized;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

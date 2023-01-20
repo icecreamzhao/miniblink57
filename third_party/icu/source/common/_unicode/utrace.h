@@ -20,8 +20,13 @@
 #ifndef __UTRACE_H__
 #define __UTRACE_H__
 
+<<<<<<< HEAD
 #include "unicode/utypes.h"
 #include <stdarg.h>
+=======
+#include <stdarg.h>
+#include "unicode/utypes.h"
+>>>>>>> miniblink49
 
 /**
  * \file
@@ -33,7 +38,11 @@
  * By default, tracing is disabled in ICU. If you need to debug ICU with 
  * tracing, please compile ICU with the --enable-tracing configure option.
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 U_CDECL_BEGIN
 
 /**
@@ -43,6 +52,7 @@ U_CDECL_BEGIN
  */
 typedef enum UTraceLevel {
     /** Disable all tracing  @stable ICU 2.8*/
+<<<<<<< HEAD
     UTRACE_OFF = -1,
     /** Trace error conditions only  @stable ICU 2.8*/
     UTRACE_ERROR = 0,
@@ -54,6 +64,19 @@ typedef enum UTraceLevel {
     UTRACE_INFO = 7,
     /** Trace the maximum number of ICU operations  @stable ICU 2.8*/
     UTRACE_VERBOSE = 9
+=======
+    UTRACE_OFF=-1,
+    /** Trace error conditions only  @stable ICU 2.8*/
+    UTRACE_ERROR=0,
+    /** Trace errors and warnings  @stable ICU 2.8*/
+    UTRACE_WARNING=3,
+    /** Trace opens and closes of ICU services  @stable ICU 2.8*/
+    UTRACE_OPEN_CLOSE=5,
+    /** Trace an intermediate number of ICU operations  @stable ICU 2.8*/
+    UTRACE_INFO=7,
+    /** Trace the maximum number of ICU operations  @stable ICU 2.8*/
+    UTRACE_VERBOSE=9
+>>>>>>> miniblink49
 } UTraceLevel;
 
 /**
@@ -61,6 +84,7 @@ typedef enum UTraceLevel {
  *  @stable ICU 2.8
  */
 typedef enum UTraceFunctionNumber {
+<<<<<<< HEAD
     UTRACE_FUNCTION_START = 0,
     UTRACE_U_INIT = UTRACE_FUNCTION_START,
     UTRACE_U_CLEANUP,
@@ -68,6 +92,15 @@ typedef enum UTraceFunctionNumber {
 
     UTRACE_CONVERSION_START = 0x1000,
     UTRACE_UCNV_OPEN = UTRACE_CONVERSION_START,
+=======
+    UTRACE_FUNCTION_START=0,
+    UTRACE_U_INIT=UTRACE_FUNCTION_START,
+    UTRACE_U_CLEANUP,
+    UTRACE_FUNCTION_LIMIT,
+
+    UTRACE_CONVERSION_START=0x1000,
+    UTRACE_UCNV_OPEN=UTRACE_CONVERSION_START,
+>>>>>>> miniblink49
     UTRACE_UCNV_OPEN_PACKAGE,
     UTRACE_UCNV_OPEN_ALGORITHMIC,
     UTRACE_UCNV_CLONE,
@@ -77,8 +110,13 @@ typedef enum UTraceFunctionNumber {
     UTRACE_UCNV_UNLOAD,
     UTRACE_CONVERSION_LIMIT,
 
+<<<<<<< HEAD
     UTRACE_COLLATION_START = 0x2000,
     UTRACE_UCOL_OPEN = UTRACE_COLLATION_START,
+=======
+    UTRACE_COLLATION_START=0x2000,
+    UTRACE_UCOL_OPEN=UTRACE_COLLATION_START,
+>>>>>>> miniblink49
     UTRACE_UCOL_CLOSE,
     UTRACE_UCOL_STRCOLL,
     UTRACE_UCOL_GET_SORTKEY,
@@ -115,7 +153,11 @@ utrace_getLevel(void);
   *  @stable ICU 2.8
   */
 typedef void U_CALLCONV
+<<<<<<< HEAD
 UTraceEntry(const void* context, int32_t fnNumber);
+=======
+UTraceEntry(const void *context, int32_t fnNumber);
+>>>>>>> miniblink49
 
 /**
   *  Type signature for the trace function to be called when exiting from a function.
@@ -131,8 +173,13 @@ UTraceEntry(const void* context, int32_t fnNumber);
   *  @stable ICU 2.8
   */
 typedef void U_CALLCONV
+<<<<<<< HEAD
 UTraceExit(const void* context, int32_t fnNumber,
     const char* fmt, va_list args);
+=======
+UTraceExit(const void *context, int32_t fnNumber, 
+           const char *fmt, va_list args);
+>>>>>>> miniblink49
 
 /**
   *  Type signature for the trace function to be called from within an ICU function
@@ -146,8 +193,13 @@ UTraceExit(const void* context, int32_t fnNumber,
   *  @stable ICU 2.8
   */
 typedef void U_CALLCONV
+<<<<<<< HEAD
 UTraceData(const void* context, int32_t fnNumber, int32_t level,
     const char* fmt, va_list args);
+=======
+UTraceData(const void *context, int32_t fnNumber, int32_t level,
+           const char *fmt, va_list args);
+>>>>>>> miniblink49
 
 /**
   *  Set ICU Tracing functions.  Installs application-provided tracing
@@ -178,8 +230,13 @@ UTraceData(const void* context, int32_t fnNumber, int32_t level,
   *  @stable ICU 2.8
   */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 utrace_setFunctions(const void* context,
     UTraceEntry* e, UTraceExit* x, UTraceData* d);
+=======
+utrace_setFunctions(const void *context,
+                    UTraceEntry *e, UTraceExit *x, UTraceData *d);
+>>>>>>> miniblink49
 
 /**
   * Get the currently installed ICU tracing functions.   Note that a null function
@@ -192,8 +249,15 @@ utrace_setFunctions(const void* context,
   * @stable ICU 2.8
   */
 U_STABLE void U_EXPORT2
+<<<<<<< HEAD
 utrace_getFunctions(const void** context,
     UTraceEntry** e, UTraceExit** x, UTraceData** d);
+=======
+utrace_getFunctions(const void **context,
+                    UTraceEntry **e, UTraceExit **x, UTraceData **d);
+
+
+>>>>>>> miniblink49
 
 /*
  *
@@ -290,6 +354,11 @@ utrace_getFunctions(const void** context,
  *
  */
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> miniblink49
 /**
   *  Trace output Formatter.  An application's UTraceData tracing functions may call
   *                 back to this function to format the trace output in a
@@ -310,8 +379,13 @@ utrace_getFunctions(const void** context,
   *  @stable ICU 2.8
   */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 utrace_vformat(char* outBuf, int32_t capacity,
     int32_t indent, const char* fmt, va_list args);
+=======
+utrace_vformat(char *outBuf, int32_t capacity,
+              int32_t indent, const char *fmt,  va_list args);
+>>>>>>> miniblink49
 
 /**
   *  Trace output Formatter.  An application's UTraceData tracing functions may call
@@ -331,8 +405,15 @@ utrace_vformat(char* outBuf, int32_t capacity,
   *  @stable ICU 2.8
   */
 U_STABLE int32_t U_EXPORT2
+<<<<<<< HEAD
 utrace_format(char* outBuf, int32_t capacity,
     int32_t indent, const char* fmt, ...);
+=======
+utrace_format(char *outBuf, int32_t capacity,
+              int32_t indent, const char *fmt,  ...);
+
+
+>>>>>>> miniblink49
 
 /* Trace function numbers --------------------------------------------------- */
 
@@ -345,7 +426,11 @@ utrace_format(char* outBuf, int32_t capacity,
  * @see UTraceFunctionNumber
  * @stable ICU 2.8
  */
+<<<<<<< HEAD
 U_STABLE const char* U_EXPORT2
+=======
+U_STABLE const char * U_EXPORT2
+>>>>>>> miniblink49
 utrace_functionName(int32_t fnNumber);
 
 U_CDECL_END

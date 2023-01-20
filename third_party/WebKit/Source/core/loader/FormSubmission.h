@@ -31,42 +31,35 @@
 #ifndef FormSubmission_h
 #define FormSubmission_h
 
-#include "core/loader/FrameLoadRequest.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/Referrer.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
-class Document;
-class EncodedFormData;
 class Event;
-class HTMLFormControlElement;
+class FormData;
+struct FrameLoadRequest;
 class HTMLFormElement;
 
-class FormSubmission : public GarbageCollectedFinalized<FormSubmission> {
+class FormSubmission : public RefCountedWillBeGarbageCollectedFinalized<FormSubmission> {
 public:
-    enum SubmitMethod { GetMethod,
-        PostMethod,
-        DialogMethod };
+    enum Method { GetMethod, PostMethod, DialogMethod };
 
     class Attributes {
-        DISALLOW_NEW();
         WTF_MAKE_NONCOPYABLE(Attributes);
-
     public:
         Attributes()
             : m_method(GetMethod)
             , m_isMultiPartForm(false)
-            , m_encodingType("application/x-www-form-urlencoded")
+            , m_encodingType("application/x-www-form-urlencoded", AtomicString::ConstructFromLiteral)
         {
         }
 
-        SubmitMethod method() const { return m_method; }
-        static SubmitMethod parseMethodType(const String&);
+        Method method() const { return m_method; }
+        static Method parseMethodType(const String&);
         void updateMethodType(const String&);
-        static String methodString(SubmitMethod);
+        static String methodString(Method);
 
         const String& action() const { return m_action; }
         void parseAction(const String&);
@@ -85,7 +78,7 @@ public:
         void copyFrom(const Attributes&);
 
     private:
-        SubmitMethod m_method;
+        Method m_method;
         bool m_isMultiPartForm;
 
         String m_action;
@@ -94,49 +87,40 @@ public:
         String m_acceptCharset;
     };
 
-    static FormSubmission* create(HTMLFormElement*,
-        const Attributes&,
-        Event*,
-        HTMLFormControlElement* submitButton);
+    static PassRefPtrWillBeRawPtr<FormSubmission> create(HTMLFormElement*, const Attributes&, PassRefPtrWillBeRawPtr<Event>);
     DECLARE_TRACE();
 
-    FrameLoadRequest createFrameLoadRequest(Document* originDocument);
+    void populateFrameLoadRequest(FrameLoadRequest&);
 
     KURL requestURL() const;
 
-    SubmitMethod method() const { return m_method; }
+    Method method() const { return m_method; }
     const KURL& action() const { return m_action; }
     const AtomicString& target() const { return m_target; }
     void clearTarget() { m_target = nullAtom; }
     HTMLFormElement* form() const { return m_form.get(); }
-    EncodedFormData* data() const { return m_formData.get(); }
+    FormData* data() const { return m_formData.get(); }
+    Event* event() const { return m_event.get(); }
 
     const String& result() const { return m_result; }
 
 private:
-    FormSubmission(SubmitMethod,
-        const KURL& action,
-        const AtomicString& target,
-        const AtomicString& contentType,
-        HTMLFormElement*,
-        PassRefPtr<EncodedFormData>,
-        const String& boundary,
-        Event*);
+    FormSubmission(Method, const KURL& action, const AtomicString& target, const AtomicString& contentType, HTMLFormElement*, PassRefPtr<FormData>, const String& boundary, PassRefPtrWillBeRawPtr<Event>);
     // FormSubmission for DialogMethod
-    explicit FormSubmission(const String& result);
+    FormSubmission(const String& result);
 
     // FIXME: Hold an instance of Attributes instead of individual members.
-    SubmitMethod m_method;
+    Method m_method;
     KURL m_action;
     AtomicString m_target;
     AtomicString m_contentType;
-    Member<HTMLFormElement> m_form;
-    RefPtr<EncodedFormData> m_formData;
+    RefPtrWillBeMember<HTMLFormElement> m_form;
+    RefPtr<FormData> m_formData;
     String m_boundary;
-    Member<Event> m_event;
+    RefPtrWillBeMember<Event> m_event;
     String m_result;
 };
 
-} // namespace blink
+}
 
 #endif // FormSubmission_h

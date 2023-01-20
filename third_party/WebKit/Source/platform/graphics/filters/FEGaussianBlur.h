@@ -27,6 +27,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT FEGaussianBlur final : public FilterEffect {
 public:
     static FEGaussianBlur* create(Filter*, float, float);
@@ -34,15 +35,29 @@ public:
     // Compute which destination area will be affected when applying a gaussian
     // blur effect with |stdDeviation| to an area |rect|.
     static FloatRect mapEffect(const FloatSize& stdDeviation, const FloatRect&);
+=======
+class PLATFORM_EXPORT FEGaussianBlur : public FilterEffect {
+public:
+    static PassRefPtrWillBeRawPtr<FEGaussianBlur> create(Filter*, float, float);
+
+    FloatRect mapRect(const FloatRect&, bool forward = true) final;
+    FloatRect determineAbsolutePaintRect(const FloatRect& requestedRect) override;
+    static IntSize calculateKernelSize(Filter*, const FloatPoint& std);
+    static IntSize calculateUnscaledKernelSize(const FloatPoint& std);
+>>>>>>> miniblink49
 
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
     FEGaussianBlur(Filter*, float, float);
 
+<<<<<<< HEAD
     FloatRect mapEffect(const FloatRect&) const override;
 
     sk_sp<SkImageFilter> createImageFilter() override;
+=======
+    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+>>>>>>> miniblink49
 
     float m_stdX;
     float m_stdY;

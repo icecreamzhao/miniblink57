@@ -29,22 +29,34 @@
 
 #include "wtf/WTFExport.h"
 #include "wtf/text/AtomicString.h"
+<<<<<<< HEAD
 #include "wtf/text/StringView.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace WTF {
 
 class WTF_EXPORT StringBuilder {
+<<<<<<< HEAD
+=======
+    // Disallow copying since it's expensive and we don't want code to do it by accident.
+>>>>>>> miniblink49
     WTF_MAKE_NONCOPYABLE(StringBuilder);
 
 public:
     StringBuilder()
+<<<<<<< HEAD
         : m_buffer(nullptr)
+=======
+        : m_bufferCharacters8(0)
+>>>>>>> miniblink49
         , m_length(0)
         , m_is8Bit(true)
     {
     }
 
+<<<<<<< HEAD
     ~StringBuilder() { clear(); }
 
     void append(const UChar*, unsigned length);
@@ -106,6 +118,24 @@ public:
             m_string = impl;
             m_length = impl->length();
             m_is8Bit = impl->is8Bit();
+=======
+    void append(const UChar*, unsigned);
+    void append(const LChar*, unsigned);
+
+    ALWAYS_INLINE void append(const char* characters, unsigned length) { append(reinterpret_cast<const LChar*>(characters), length); }
+
+    void append(const String& string)
+    {
+        if (!string.length())
+            return;
+
+        // If we're appending to an empty string, and there is not a buffer (reserveCapacity has not been called)
+        // then just retain the string.
+        if (!m_length && !m_buffer) {
+            m_string = string;
+            m_length = string.length();
+            m_is8Bit = m_string.is8Bit();
+>>>>>>> miniblink49
             return;
         }
 
@@ -115,6 +145,7 @@ public:
             append(string.characters16(), string.length());
     }
 
+<<<<<<< HEAD
     void append(UChar c)
     {
         if (m_is8Bit && c <= 0xFF) {
@@ -124,10 +155,78 @@ public:
         ensureBuffer16(1);
         m_buffer16->push_back(c);
         ++m_length;
+=======
+    void append(const StringBuilder& other)
+    {
+        if (!other.m_length)
+            return;
+
+        // If we're appending to an empty string, and there is not a buffer (reserveCapacity has not been called)
+        // then just retain the string.
+        if (!m_length && !m_buffer && !other.m_string.isNull()) {
+            m_string = other.m_string;
+            m_length = other.m_length;
+            return;
+        }
+
+        if (other.is8Bit())
+            append(other.characters8(), other.m_length);
+        else
+            append(other.characters16(), other.m_length);
+    }
+
+    void append(const String& string, unsigned offset, unsigned length)
+    {
+        if (!string.length())
+            return;
+
+        unsigned extent = offset + length;
+        if (extent < offset || extent > string.length())
+            return;
+
+        if (string.is8Bit())
+            append(string.characters8() + offset, length);
+        else
+            append(string.characters16() + offset, length);
+    }
+
+    void append(const StringView& string)
+    {
+        if (!string.length())
+            return;
+
+        if (string.is8Bit())
+            append(string.characters8(), string.length());
+        else
+            append(string.characters16(), string.length());
+    }
+
+    void append(const char* characters)
+    {
+        if (characters)
+            append(characters, strlen(characters));
+    }
+
+    void append(UChar c)
+    {
+        if (m_buffer && m_length < m_buffer->length() && m_string.isNull()) {
+            if (!m_is8Bit) {
+                m_bufferCharacters16[m_length++] = c;
+                return;
+            }
+
+            if (!(c & ~0xff)) {
+                m_bufferCharacters8[m_length++] = static_cast<LChar>(c);
+                return;
+            }
+        }
+        append(&c, 1);
+>>>>>>> miniblink49
     }
 
     void append(LChar c)
     {
+<<<<<<< HEAD
         if (!m_is8Bit) {
             append(static_cast<UChar>(c));
             return;
@@ -138,6 +237,21 @@ public:
     }
 
     void append(char c) { append(static_cast<LChar>(c)); }
+=======
+        if (m_buffer && m_length < m_buffer->length() && m_string.isNull()) {
+            if (m_is8Bit)
+                m_bufferCharacters8[m_length++] = c;
+            else
+                m_bufferCharacters16[m_length++] = c;
+        } else
+            append(&c, 1);
+    }
+
+    void append(char c)
+    {
+        append(static_cast<LChar>(c));
+    }
+>>>>>>> miniblink49
 
     void append(UChar32 c)
     {
@@ -149,12 +263,19 @@ public:
         append(U16_TRAIL(c));
     }
 
+<<<<<<< HEAD
+=======
+    template<unsigned charactersCount>
+    ALWAYS_INLINE void appendLiteral(const char (&characters)[charactersCount]) { append(characters, charactersCount - 1); }
+
+>>>>>>> miniblink49
     void appendNumber(int);
     void appendNumber(unsigned);
     void appendNumber(long);
     void appendNumber(unsigned long);
     void appendNumber(long long);
     void appendNumber(unsigned long long);
+<<<<<<< HEAD
     void appendNumber(double, unsigned precision = 6);
 
     String toString();
@@ -173,6 +294,69 @@ public:
     UChar operator[](unsigned i) const
     {
         SECURITY_DCHECK(i < m_length);
+=======
+    void appendNumber(double, unsigned precision = 6, TrailingZerosTruncatingPolicy = TruncateTrailingZeros);
+
+    String toString()
+    {
+        shrinkToFit();
+        if (m_string.isNull())
+            reifyString();
+        return m_string;
+    }
+
+    String substring(unsigned position, unsigned length) const
+    {
+        if (!m_length)
+            return emptyString();
+        if (!m_string.isNull())
+            return m_string.substring(position, length);
+        return reifySubstring(position, length);
+    }
+
+    AtomicString toAtomicString() const
+    {
+        if (!m_length)
+            return emptyAtom;
+
+        // If the buffer is sufficiently over-allocated, make a new AtomicString from a copy so its buffer is not so large.
+        if (canShrink()) {
+            if (is8Bit())
+                return AtomicString(characters8(), length());
+            return AtomicString(characters16(), length());
+        }
+
+        if (!m_string.isNull())
+            return AtomicString(m_string);
+
+        ASSERT(m_buffer);
+        return AtomicString(m_buffer.get(), 0, m_length);
+    }
+
+    unsigned length() const
+    {
+        return m_length;
+    }
+
+    bool isEmpty() const { return !m_length; }
+
+    void reserveCapacity(unsigned newCapacity);
+
+    unsigned capacity() const
+    {
+        return m_buffer ? m_buffer->length() : m_length;
+    }
+
+    void resize(unsigned newSize);
+
+    bool canShrink() const;
+
+    void shrinkToFit();
+
+    UChar operator[](unsigned i) const
+    {
+        ASSERT_WITH_SECURITY_IMPLICATION(i < m_length);
+>>>>>>> miniblink49
         if (m_is8Bit)
             return characters8()[i];
         return characters16()[i];
@@ -180,6 +364,7 @@ public:
 
     const LChar* characters8() const
     {
+<<<<<<< HEAD
         DCHECK(m_is8Bit);
         if (!length())
             return nullptr;
@@ -187,10 +372,20 @@ public:
             return m_string.characters8();
         DCHECK(m_buffer8);
         return m_buffer8->data();
+=======
+        ASSERT(m_is8Bit);
+        if (!m_length)
+            return 0;
+        if (!m_string.isNull())
+            return m_string.characters8();
+        ASSERT(m_buffer);
+        return m_buffer->characters8();
+>>>>>>> miniblink49
     }
 
     const UChar* characters16() const
     {
+<<<<<<< HEAD
         DCHECK(!m_is8Bit);
         if (!length())
             return nullptr;
@@ -198,10 +393,20 @@ public:
             return m_string.characters16();
         DCHECK(m_buffer16);
         return m_buffer16->data();
+=======
+        ASSERT(!m_is8Bit);
+        if (!m_length)
+            return 0;
+        if (!m_string.isNull())
+            return m_string.characters16();
+        ASSERT(m_buffer);
+        return m_buffer->characters16();
+>>>>>>> miniblink49
     }
 
     bool is8Bit() const { return m_is8Bit; }
 
+<<<<<<< HEAD
     void clear();
     void swap(StringBuilder&);
 
@@ -235,11 +440,68 @@ private:
         Buffer8* m_buffer8;
         Buffer16* m_buffer16;
         void* m_buffer;
+=======
+    void clear()
+    {
+        m_length = 0;
+        m_string = String();
+        m_buffer = nullptr;
+        m_bufferCharacters8 = 0;
+        m_is8Bit = true;
+    }
+
+    void swap(StringBuilder& stringBuilder)
+    {
+        std::swap(m_length, stringBuilder.m_length);
+        m_string.swap(stringBuilder.m_string);
+        m_buffer.swap(stringBuilder.m_buffer);
+        std::swap(m_is8Bit, stringBuilder.m_is8Bit);
+        std::swap(m_bufferCharacters8, stringBuilder.m_bufferCharacters8);
+    }
+
+private:
+    void allocateBuffer(const LChar* currentCharacters, unsigned requiredLength);
+    void allocateBuffer(const UChar* currentCharacters, unsigned requiredLength);
+    void allocateBufferUpConvert(const LChar* currentCharacters, unsigned requiredLength);
+    template <typename CharType>
+    void reallocateBuffer(unsigned requiredLength);
+    template <typename CharType>
+    ALWAYS_INLINE CharType* appendUninitialized(unsigned length);
+    template <typename CharType>
+    CharType* appendUninitializedSlow(unsigned length);
+    template <typename CharType>
+    ALWAYS_INLINE CharType * getBufferCharacters();
+    void reifyString();
+    String reifySubstring(unsigned position, unsigned length) const;
+
+    String m_string; // Pointers first: crbug.com/232031
+    RefPtr<StringImpl> m_buffer;
+    union {
+        LChar* m_bufferCharacters8;
+        UChar* m_bufferCharacters16;
+>>>>>>> miniblink49
     };
     unsigned m_length;
     bool m_is8Bit;
 };
 
+<<<<<<< HEAD
+=======
+template <>
+ALWAYS_INLINE LChar* StringBuilder::getBufferCharacters<LChar>()
+{
+    ASSERT(m_is8Bit);
+    return m_bufferCharacters8;
+}
+
+template <>
+ALWAYS_INLINE UChar* StringBuilder::getBufferCharacters<UChar>()
+{
+    ASSERT(!m_is8Bit);
+    return m_bufferCharacters16;
+}
+
+>>>>>>> miniblink49
 template <typename CharType>
 bool equal(const StringBuilder& s, const CharType* buffer, unsigned length)
 {
@@ -252,10 +514,15 @@ bool equal(const StringBuilder& s, const CharType* buffer, unsigned length)
     return equal(s.characters16(), buffer, length);
 }
 
+<<<<<<< HEAD
 template <typename CharType>
 bool equalIgnoringCase(const StringBuilder& s,
     const CharType* buffer,
     unsigned length)
+=======
+template<typename CharType>
+bool equalIgnoringCase(const StringBuilder& s, const CharType* buffer, unsigned length)
+>>>>>>> miniblink49
 {
     if (s.length() != length)
         return false;
@@ -266,6 +533,7 @@ bool equalIgnoringCase(const StringBuilder& s,
     return equalIgnoringCase(s.characters16(), buffer, length);
 }
 
+<<<<<<< HEAD
 // Unicode aware case insensitive string matching. Non-ASCII characters might
 // match to ASCII characters. This function is rarely used to implement web
 // platform features.
@@ -273,6 +541,11 @@ inline bool equalIgnoringCase(const StringBuilder& s, const char* string)
 {
     return equalIgnoringCase(s, reinterpret_cast<const LChar*>(string),
         strlen(string));
+=======
+inline bool equalIgnoringCase(const StringBuilder& s, const char* string)
+{
+    return equalIgnoringCase(s, reinterpret_cast<const LChar*>(string), strlen(string));
+>>>>>>> miniblink49
 }
 
 template <typename StringType>
@@ -295,6 +568,7 @@ bool equal(const StringBuilder& a, const StringType& b)
     return equal(a.characters16(), b.characters16(), a.length());
 }
 
+<<<<<<< HEAD
 inline bool operator==(const StringBuilder& a, const StringBuilder& b)
 {
     return equal(a, b);
@@ -320,6 +594,35 @@ inline bool operator!=(const String& a, const StringBuilder& b)
     return !equal(b, a);
 }
 
+=======
+template <typename StringType>
+bool equalIgnoringCase(const StringBuilder& a, const StringType& b)
+{
+    if (a.length() != b.length())
+        return false;
+
+    if (!a.length())
+        return true;
+
+    if (a.is8Bit()) {
+        if (b.is8Bit())
+            return equalIgnoringCase(a.characters8(), b.characters8(), a.length());
+        return equalIgnoringCase(a.characters8(), b.characters16(), a.length());
+    }
+
+    if (b.is8Bit())
+        return equalIgnoringCase(a.characters16(), b.characters8(), a.length());
+    return equalIgnoringCase(a.characters16(), b.characters16(), a.length());
+}
+
+inline bool operator==(const StringBuilder& a, const StringBuilder& b) { return equal(a, b); }
+inline bool operator!=(const StringBuilder& a, const StringBuilder& b) { return !equal(a, b); }
+inline bool operator==(const StringBuilder& a, const String& b) { return equal(a, b); }
+inline bool operator!=(const StringBuilder& a, const String& b) { return !equal(a, b); }
+inline bool operator==(const String& a, const StringBuilder& b) { return equal(b, a); }
+inline bool operator!=(const String& a, const StringBuilder& b) { return !equal(b, a); }
+
+>>>>>>> miniblink49
 } // namespace WTF
 
 using WTF::StringBuilder;

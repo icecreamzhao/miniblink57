@@ -22,7 +22,11 @@
 #define DOMPluginArray_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
+=======
+#include "core/frame/DOMWindowProperty.h"
+>>>>>>> miniblink49
 #include "modules/plugins/DOMPlugin.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -32,12 +36,18 @@ namespace blink {
 class LocalFrame;
 class PluginData;
 
+<<<<<<< HEAD
 class DOMPluginArray final : public GarbageCollected<DOMPluginArray>,
                              public ScriptWrappable,
                              public ContextClient {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(DOMPluginArray);
 
+=======
+class DOMPluginArray final : public GarbageCollectedFinalized<DOMPluginArray>, public ScriptWrappable, public DOMWindowProperty {
+    DEFINE_WRAPPERTYPEINFO();
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMPluginArray);
+>>>>>>> miniblink49
 public:
     static DOMPluginArray* create(LocalFrame* frame)
     {

@@ -31,20 +31,21 @@
 #ifndef EffectModel_h
 #define EffectModel_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CSSPropertyNames.h"
 #include "core/CoreExport.h"
 #include "core/animation/PropertyHandle.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
 class Interpolation;
 
-// Time independent representation of an Animation's content.
-// Can be sampled for the active pairs of Keyframes (represented by
-// Interpolations) at a given time fraction.
-class CORE_EXPORT EffectModel : public GarbageCollectedFinalized<EffectModel> {
+class CORE_EXPORT EffectModel : public RefCountedWillBeGarbageCollectedFinalized<EffectModel>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
 public:
     enum CompositeOperation {
         CompositeReplace,
@@ -53,10 +54,7 @@ public:
 
     EffectModel() { }
     virtual ~EffectModel() { }
-    virtual bool sample(int iteration,
-        double fraction,
-        double iterationDuration,
-        Vector<RefPtr<Interpolation>>&) const = 0;
+    virtual void sample(int iteration, double fraction, double iterationDuration, OwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>>&) const = 0;
 
     virtual bool affects(PropertyHandle) const { return false; }
     virtual bool isTransformRelatedEffect() const { return false; }

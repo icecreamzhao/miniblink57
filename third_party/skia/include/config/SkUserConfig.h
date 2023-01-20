@@ -6,14 +6,24 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkUserConfig_DEFINED
 #define SkUserConfig_DEFINED
 
 /*  SkTypes.h, the root of the public header files, does the following trick:
 
+<<<<<<< HEAD
     #include "SkPostConfig.h"
     #include "SkPreConfig.h"
     #include "SkUserConfig.h"
+=======
+    #include "SkPreConfig.h"
+    #include "SkUserConfig.h"
+    #include "SkPostConfig.h"
+>>>>>>> miniblink49
 
     SkPreConfig.h runs first, and it is responsible for initializing certain
     skia defines.
@@ -57,6 +67,16 @@
 //#define SK_DEBUG_GLYPH_CACHE
 //#define SK_DEBUG_PATH
 
+<<<<<<< HEAD
+=======
+/*  If, in debugging mode, Skia needs to stop (presumably to invoke a debugger)
+    it will call SK_CRASH(). If this is not defined it, it is defined in
+    SkPostConfig.h to write to an illegal address
+ */
+//#define SK_CRASH() *(int *)(uintptr_t)0 = 0
+
+
+>>>>>>> miniblink49
 /*  preconfig will have attempted to determine the endianness of the system,
     but you can change these mutually exclusive flags here.
  */
@@ -72,6 +92,10 @@
 //#define SK_UINT8_BITFIELD_BENDIAN
 //#define SK_UINT8_BITFIELD_LENDIAN
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*  To write debug messages to a console, skia will call SkDebugf(...) following
     printf conventions (e.g. const char* format, ...). If you want to redirect
     this to something other than printf, define yours here
@@ -91,6 +115,14 @@
  */
 //#define SK_DEFAULT_IMAGE_CACHE_LIMIT (1024 * 1024)
 
+<<<<<<< HEAD
+=======
+/*  Define this to allow PDF scalars above 32k.  The PDF/A spec doesn't allow
+    them, but modern PDF interpreters should handle them just fine.
+ */
+//#define SK_ALLOW_LARGE_PDF_SCALARS
+
+>>>>>>> miniblink49
 /*  Define this to provide font subsetter in PDF generation.
  */
 //#define SK_SFNTLY_SUBSETTER "sfntly/subsetter/font_subsetter.h"
@@ -113,12 +145,22 @@
 /*  Change the ordering to work in X windows.
  */
 #ifdef SK_SAMPLES_FOR_X
+<<<<<<< HEAD
 #define SK_R32_SHIFT 16
 #define SK_G32_SHIFT 8
 #define SK_B32_SHIFT 0
 #define SK_A32_SHIFT 24
 #endif
 
+=======
+        #define SK_R32_SHIFT    16
+        #define SK_G32_SHIFT    8
+        #define SK_B32_SHIFT    0
+        #define SK_A32_SHIFT    24
+#endif
+
+
+>>>>>>> miniblink49
 /* Determines whether to build code that supports the GPU backend. Some classes
    that are not GPU-specific, such as SkShader subclasses, have optional code
    that is used allows them to interact with the GPU backend. If you'd like to
@@ -128,6 +170,7 @@
  */
 //#define SK_SUPPORT_GPU 1
 
+<<<<<<< HEAD
 /* Skia makes use of histogram logging macros to trace the frequency of
  * events. By default, Skia provides no-op versions of these macros.
  * Skia consumers can provide their own definitions of these macros to
@@ -136,4 +179,23 @@
 //#define SK_HISTOGRAM_BOOLEAN(name, value)
 //#define SK_HISTOGRAM_ENUMERATION(name, value, boundary_value)
 
+=======
+
+/* The PDF generation code uses Path Ops to handle complex clipping paths,
+ * but at this time, Path Ops is not release ready yet. So, the code is
+ * hidden behind this #define guard. If you are feeling adventurous and
+ * want the latest and greatest PDF generation code, uncomment the #define.
+ * When Path Ops is release ready, the define guards and this user config
+ * define should be removed entirely.
+ */
+//#define SK_PDF_USE_PATHOPS_CLIPPING
+
+#define SK_SUPPORT_LEGACY_GETDEVICE 1
+#define SK_SUPPORT_LEGACY_GETTOPDEVICE 1
+
+#ifndef    SK_LEGACY_IMAGE_GENERATOR_ENUMS_AND_OPTIONS
+#   define SK_LEGACY_IMAGE_GENERATOR_ENUMS_AND_OPTIONS
+#endif
+        
+>>>>>>> miniblink49
 #endif

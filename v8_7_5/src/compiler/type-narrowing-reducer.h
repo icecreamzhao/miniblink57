@@ -11,6 +11,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace compiler {
 
         // Forward declarations.
@@ -42,3 +43,36 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_COMPILER_TYPE_NARROWING_REDUCER_H_
+=======
+namespace compiler {
+
+// Forward declarations.
+class JSGraph;
+
+class V8_EXPORT_PRIVATE TypeNarrowingReducer final
+    : public NON_EXPORTED_BASE(AdvancedReducer) {
+ public:
+  TypeNarrowingReducer(Editor* editor, JSGraph* jsgraph, JSHeapBroker* broker);
+  ~TypeNarrowingReducer() final;
+
+  const char* reducer_name() const override { return "TypeNarrowingReducer"; }
+
+  Reduction Reduce(Node* node) final;
+
+ private:
+  JSGraph* jsgraph() const { return jsgraph_; }
+  Graph* graph() const;
+  Zone* zone() const;
+
+  JSGraph* const jsgraph_;
+  OperationTyper op_typer_;
+
+  DISALLOW_COPY_AND_ASSIGN(TypeNarrowingReducer);
+};
+
+}  // namespace compiler
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_COMPILER_TYPE_NARROWING_REDUCER_H_
+>>>>>>> miniblink49

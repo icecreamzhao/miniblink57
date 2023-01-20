@@ -20,15 +20,23 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+<<<<<<< HEAD
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+=======
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ */
+
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/IntPoint.h"
 
 namespace blink {
 
 #ifndef NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES
 
+<<<<<<< HEAD
 IntPoint::IntPoint(const NSPoint& p)
     : m_x(static_cast<int>(p.x)), m_y(static_cast<int>(p.y)) {}
 
@@ -37,4 +45,17 @@ IntPoint::operator NSPoint() const {
 }
 
 #endif
+=======
+IntPoint::IntPoint(const NSPoint& p) : m_x(static_cast<int>(p.x)), m_y(static_cast<int>(p.y))
+{
+}
+
+IntPoint::operator NSPoint() const
+{
+    return NSMakePoint(m_x, m_y);
+}
+
+#endif
+
+>>>>>>> miniblink49
 }

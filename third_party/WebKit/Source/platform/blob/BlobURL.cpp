@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/blob/BlobURL.h"
 
 #include "platform/UUID.h"
@@ -51,7 +55,11 @@ String BlobURL::getOrigin(const KURL& url)
 
     unsigned startIndex = url.pathStart();
     unsigned endIndex = url.pathAfterLastSlash();
+<<<<<<< HEAD
     return url.getString().substring(startIndex, endIndex - startIndex - 1);
+=======
+    return url.string().substring(startIndex, endIndex - startIndex - 1);
+>>>>>>> miniblink49
 }
 
 KURL BlobURL::createInternalStreamURL()
@@ -62,9 +70,14 @@ KURL BlobURL::createInternalStreamURL()
 KURL BlobURL::createBlobURL(const String& originString)
 {
     ASSERT(!originString.isEmpty());
+<<<<<<< HEAD
     String urlString = "blob:" + originString + '/' + createCanonicalUUIDString();
     //return KURL::createIsolated(ParsedURLString, urlString);
     return KURL(ParsedURLString, urlString).copy();
+=======
+    String urlString = "blob:" + encodeWithURLEscapeSequences(originString) + '/' + createCanonicalUUIDString();
+    return KURL::createIsolated(ParsedURLString, urlString);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

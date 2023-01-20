@@ -1,10 +1,16 @@
 include_rules = [
     "+bindings",
     "+core",
+<<<<<<< HEAD
     "-modules",
     "+modules/ModulesExport.h",
     # Can modules/permissions be removed when https://crbug.com/510948 is fixed?
     "+modules/permissions",
+=======
+    "+heap",
+    "-modules",
+    "+modules/ModulesExport.h",
+>>>>>>> miniblink49
     "+modules/quota",
     "+platform",
     "+public/platform",

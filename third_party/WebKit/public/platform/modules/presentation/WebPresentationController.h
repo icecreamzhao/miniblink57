@@ -9,6 +9,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 struct WebPresentationSessionInfo;
 class WebString;
 
@@ -22,6 +23,11 @@ enum class WebPresentationConnectionState {
     Closed,
     Terminated,
 };
+=======
+class WebPresentationSessionClient;
+class WebString;
+enum class WebPresentationSessionState;
+>>>>>>> miniblink49
 
 // The delegate Blink provides to WebPresentationClient in order to get updates.
 class BLINK_PLATFORM_EXPORT WebPresentationController {
@@ -30,6 +36,7 @@ public:
 
     // Called when the presentation session is started by the embedder using
     // the default presentation URL and id.
+<<<<<<< HEAD
     virtual void didStartDefaultSession(const WebPresentationSessionInfo&) = 0;
 
     // Called when the state of a session changes.
@@ -53,6 +60,18 @@ public:
         const uint8_t* data,
         size_t length)
         = 0;
+=======
+    virtual void didStartDefaultSession(WebPresentationSessionClient*) = 0;
+
+    // Called when the state of a session changes.
+    virtual void didChangeSessionState(WebPresentationSessionClient*, WebPresentationSessionState) = 0;
+
+    // Called when a text message of a session is received.
+    virtual void didReceiveSessionTextMessage(WebPresentationSessionClient*, const WebString& message) = 0;
+
+    // Called when a binary message of a session is received.
+    virtual void didReceiveSessionBinaryMessage(WebPresentationSessionClient*, const uint8_t* data, size_t length) = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

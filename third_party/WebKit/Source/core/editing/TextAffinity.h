@@ -26,16 +26,32 @@
 #ifndef TextAffinity_h
 #define TextAffinity_h
 
-#include "core/CoreExport.h"
-#include <iosfwd>
+#ifdef __OBJC__
+#include <AppKit/NSTextView.h>
+#endif
 
 namespace blink {
 
-enum class TextAffinity { Upstream,
-    Downstream };
-
-CORE_EXPORT std::ostream& operator<<(std::ostream&, TextAffinity);
+// These match the AppKit values for these concepts.
+// From NSTextView.h:
+// NSSelectionAffinityUpstream = 0
+// NSSelectionAffinityDownstream = 1
+enum EAffinity { UPSTREAM = 0, DOWNSTREAM = 1 };
 
 } // namespace blink
+
+#ifdef __OBJC__
+
+inline NSSelectionAffinity kit(blink::EAffinity affinity)
+{
+    return static_cast<NSSelectionAffinity>(affinity);
+}
+
+inline blink::EAffinity core(NSSelectionAffinity affinity)
+{
+    return static_cast<blink::EAffinity>(affinity);
+}
+
+#endif
 
 #endif // TextAffinity_h

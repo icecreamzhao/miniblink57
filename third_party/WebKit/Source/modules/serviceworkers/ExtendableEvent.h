@@ -31,7 +31,11 @@
 #ifndef ExtendableEvent_h
 #define ExtendableEvent_h
 
+<<<<<<< HEAD
 #include "bindings/core/v8/ScriptPromise.h"
+=======
+#include "bindings/core/v8/ScriptValue.h"
+>>>>>>> miniblink49
 #include "modules/EventModules.h"
 #include "modules/ModulesExport.h"
 #include "modules/serviceworkers/ExtendableEventInit.h"
@@ -42,6 +46,7 @@ class WaitUntilObserver;
 
 class MODULES_EXPORT ExtendableEvent : public Event {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static ExtendableEvent* create(const AtomicString& type,
@@ -53,17 +58,35 @@ public:
     ~ExtendableEvent() override;
 
     void waitUntil(ScriptState*, ScriptPromise, ExceptionState&);
+=======
+public:
+    static PassRefPtrWillBeRawPtr<ExtendableEvent> create();
+    static PassRefPtrWillBeRawPtr<ExtendableEvent> create(const AtomicString& type, const ExtendableEventInit&);
+    static PassRefPtrWillBeRawPtr<ExtendableEvent> create(const AtomicString& type, const ExtendableEventInit&, WaitUntilObserver*);
+
+    ~ExtendableEvent() override;
+
+    void waitUntil(ScriptState*, const ScriptValue&, ExceptionState&);
+>>>>>>> miniblink49
 
     const AtomicString& interfaceName() const override;
     DECLARE_VIRTUAL_TRACE();
 
 protected:
+<<<<<<< HEAD
     ExtendableEvent(const AtomicString& type, const ExtendableEventInit&);
     ExtendableEvent(const AtomicString& type,
         const ExtendableEventInit&,
         WaitUntilObserver*);
 
     Member<WaitUntilObserver> m_observer;
+=======
+    ExtendableEvent();
+    ExtendableEvent(const AtomicString& type, const ExtendableEventInit&);
+    ExtendableEvent(const AtomicString& type, const ExtendableEventInit&, WaitUntilObserver*);
+
+    PersistentWillBeMember<WaitUntilObserver> m_observer;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

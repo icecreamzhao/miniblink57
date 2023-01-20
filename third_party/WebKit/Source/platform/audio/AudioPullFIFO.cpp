@@ -26,14 +26,25 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+>>>>>>> miniblink49
 #include "platform/audio/AudioPullFIFO.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 AudioPullFIFO::AudioPullFIFO(AudioSourceProvider& audioProvider,
     unsigned numberOfChannels,
     size_t fifoLength,
     size_t providerSize)
+=======
+AudioPullFIFO::AudioPullFIFO(AudioSourceProvider& audioProvider, unsigned numberOfChannels, size_t fifoLength, size_t providerSize)
+>>>>>>> miniblink49
     : m_provider(audioProvider)
     , m_fifo(numberOfChannels, fifoLength)
     , m_providerSize(providerSize)
@@ -47,8 +58,12 @@ void AudioPullFIFO::consume(AudioBus* destination, size_t framesToConsume)
         return;
 
     if (framesToConsume > m_fifo.framesInFifo()) {
+<<<<<<< HEAD
         // We don't have enough data in the FIFO to fulfill the request. Ask for
         // more data.
+=======
+        // We don't have enough data in the FIFO to fulfill the request. Ask for more data.
+>>>>>>> miniblink49
         fillBuffer(framesToConsume - m_fifo.framesInFifo());
     }
 
@@ -57,8 +72,13 @@ void AudioPullFIFO::consume(AudioBus* destination, size_t framesToConsume)
 
 void AudioPullFIFO::fillBuffer(size_t numberOfFrames)
 {
+<<<<<<< HEAD
     // Keep asking the provider to give us data until we have received at least
     // |numberOfFrames| of data. Stuff the data into the FIFO.
+=======
+    // Keep asking the provider to give us data until we have received at least |numberOfFrames| of
+    // data. Stuff the data into the FIFO.
+>>>>>>> miniblink49
     size_t framesProvided = 0;
 
     while (framesProvided < numberOfFrames) {
@@ -71,3 +91,8 @@ void AudioPullFIFO::fillBuffer(size_t numberOfFrames)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

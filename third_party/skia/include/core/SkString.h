@@ -6,25 +6,42 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkString_DEFINED
 #define SkString_DEFINED
 
 #include "../private/SkTArray.h"
 #include "SkScalar.h"
+=======
+
+#ifndef SkString_DEFINED
+#define SkString_DEFINED
+
+#include "SkScalar.h"
+#include "SkTArray.h"
+>>>>>>> miniblink49
 
 #include <stdarg.h>
 
 /*  Some helper functions for C strings
 */
 
+<<<<<<< HEAD
 static bool SkStrStartsWith(const char string[], const char prefixStr[])
 {
+=======
+static bool SkStrStartsWith(const char string[], const char prefixStr[]) {
+>>>>>>> miniblink49
     SkASSERT(string);
     SkASSERT(prefixStr);
     return !strncmp(string, prefixStr, strlen(prefixStr));
 }
+<<<<<<< HEAD
 static bool SkStrStartsWith(const char string[], const char prefixChar)
 {
+=======
+static bool SkStrStartsWith(const char string[], const char prefixChar) {
+>>>>>>> miniblink49
     SkASSERT(string);
     return (prefixChar == *string);
 }
@@ -34,6 +51,7 @@ bool SkStrEndsWith(const char string[], const char suffixChar);
 
 int SkStrStartsWithOneOf(const char string[], const char prefixes[]);
 
+<<<<<<< HEAD
 static int SkStrFind(const char string[], const char substring[])
 {
     const char* first = strstr(string, substring);
@@ -52,12 +70,25 @@ static int SkStrFindLastOf(const char string[], const char subchar)
 
 static bool SkStrContains(const char string[], const char substring[])
 {
+=======
+static int SkStrFind(const char string[], const char substring[]) {
+    const char *first = strstr(string, substring);
+    if (NULL == first) return -1;
+    return SkToS32(first - &string[0]);
+}
+
+static bool SkStrContains(const char string[], const char substring[]) {
+>>>>>>> miniblink49
     SkASSERT(string);
     SkASSERT(substring);
     return (-1 != SkStrFind(string, substring));
 }
+<<<<<<< HEAD
 static bool SkStrContains(const char string[], const char subchar)
 {
+=======
+static bool SkStrContains(const char string[], const char subchar) {
+>>>>>>> miniblink49
     SkASSERT(string);
     char tmp[2];
     tmp[0] = subchar;
@@ -65,10 +96,16 @@ static bool SkStrContains(const char string[], const char subchar)
     return (-1 != SkStrFind(string, tmp));
 }
 
+<<<<<<< HEAD
 static inline char* SkStrDup(const char string[])
 {
     char* ret = (char*)sk_malloc_throw(strlen(string) + 1);
     memcpy(ret, string, strlen(string) + 1);
+=======
+static inline char *SkStrDup(const char string[]) {
+    char *ret = (char *) sk_malloc_throw(strlen(string)+1);
+    memcpy(ret,string,strlen(string)+1);
+>>>>>>> miniblink49
     return ret;
 }
 
@@ -90,6 +127,7 @@ static inline char* SkStrDup(const char string[])
  *  *stop = 0;   // valid, since storage was 1 byte larger than the max.
  */
 
+<<<<<<< HEAD
 #define SkStrAppendU32_MaxSize 10
 char* SkStrAppendU32(char buffer[], uint32_t);
 #define SkStrAppendU64_MaxSize 20
@@ -99,6 +137,17 @@ char* SkStrAppendU64(char buffer[], uint64_t, int minDigits);
 char* SkStrAppendS32(char buffer[], int32_t);
 #define SkStrAppendS64_MaxSize (SkStrAppendU64_MaxSize + 1)
 char* SkStrAppendS64(char buffer[], int64_t, int minDigits);
+=======
+#define SkStrAppendU32_MaxSize  10
+char*   SkStrAppendU32(char buffer[], uint32_t);
+#define SkStrAppendU64_MaxSize  20
+char*   SkStrAppendU64(char buffer[], uint64_t, int minDigits);
+
+#define SkStrAppendS32_MaxSize  (SkStrAppendU32_MaxSize + 1)
+char*   SkStrAppendS32(char buffer[], int32_t);
+#define SkStrAppendS64_MaxSize  (SkStrAppendU64_MaxSize + 1)
+char*   SkStrAppendS64(char buffer[], int64_t, int minDigits);
+>>>>>>> miniblink49
 
 /**
  *  Floats have at most 8 significant digits, so we limit our %g to that.
@@ -107,7 +156,11 @@ char* SkStrAppendS64(char buffer[], int64_t, int minDigits);
  *  In theory we should only expect up to 2 digits for the exponent, but on
  *  some platforms we have seen 3 (as in the example above).
  */
+<<<<<<< HEAD
 #define SkStrAppendScalar_MaxSize 15
+=======
+#define SkStrAppendScalar_MaxSize  15
+>>>>>>> miniblink49
 
 /**
  *  Write the scaler in decimal format into buffer, and return a pointer to
@@ -119,6 +172,10 @@ char* SkStrAppendS64(char buffer[], int64_t, int minDigits);
 #define SkStrAppendScalar SkStrAppendFloat
 
 char* SkStrAppendFloat(char buffer[], float);
+<<<<<<< HEAD
+=======
+char* SkStrAppendFixed(char buffer[], SkFixed);
+>>>>>>> miniblink49
 
 /** \class SkString
 
@@ -128,6 +185,7 @@ char* SkStrAppendFloat(char buffer[], float);
 */
 class SK_API SkString {
 public:
+<<<<<<< HEAD
     SkString();
     explicit SkString(size_t len);
     explicit SkString(const char text[]);
@@ -138,6 +196,17 @@ public:
 
     bool isEmpty() const { return 0 == fRec->fLength; }
     size_t size() const { return (size_t)fRec->fLength; }
+=======
+                SkString();
+    explicit    SkString(size_t len);
+    explicit    SkString(const char text[]);
+                SkString(const char text[], size_t len);
+                SkString(const SkString&);
+                ~SkString();
+
+    bool        isEmpty() const { return 0 == fRec->fLength; }
+    size_t      size() const { return (size_t) fRec->fLength; }
+>>>>>>> miniblink49
     const char* c_str() const { return fRec->data(); }
     char operator[](size_t n) const { return this->c_str()[n]; }
 
@@ -145,6 +214,7 @@ public:
     bool equals(const char text[]) const;
     bool equals(const char text[], size_t len) const;
 
+<<<<<<< HEAD
     bool startsWith(const char prefixStr[]) const
     {
         return SkStrStartsWith(fRec->data(), prefixStr);
@@ -184,20 +254,54 @@ public:
     }
     friend bool operator!=(const SkString& a, const SkString& b)
     {
+=======
+    bool startsWith(const char prefixStr[]) const {
+        return SkStrStartsWith(fRec->data(), prefixStr);
+    }
+    bool startsWith(const char prefixChar) const {
+        return SkStrStartsWith(fRec->data(), prefixChar);
+    }
+    bool endsWith(const char suffixStr[]) const {
+        return SkStrEndsWith(fRec->data(), suffixStr);
+    }
+    bool endsWith(const char suffixChar) const {
+        return SkStrEndsWith(fRec->data(), suffixChar);
+    }
+    bool contains(const char substring[]) const {
+        return SkStrContains(fRec->data(), substring);
+    }
+    bool contains(const char subchar) const {
+        return SkStrContains(fRec->data(), subchar);
+    }
+    int find(const char substring[]) const {
+        return SkStrFind(fRec->data(), substring);
+    }
+
+    friend bool operator==(const SkString& a, const SkString& b) {
+        return a.equals(b);
+    }
+    friend bool operator!=(const SkString& a, const SkString& b) {
+>>>>>>> miniblink49
         return !a.equals(b);
     }
 
     // these methods edit the string
 
     SkString& operator=(const SkString&);
+<<<<<<< HEAD
     SkString& operator=(SkString&&);
+=======
+>>>>>>> miniblink49
     SkString& operator=(const char text[]);
 
     char* writable_str();
     char& operator[](size_t n) { return this->writable_str()[n]; }
 
     void reset();
+<<<<<<< HEAD
     /** Destructive resize, does not preserve contents. */
+=======
+>>>>>>> miniblink49
     void resize(size_t len) { this->set(NULL, len); }
     void set(const SkString& src) { *this = src; }
     void set(const char text[]);
@@ -244,6 +348,7 @@ public:
 
     void remove(size_t offset, size_t length);
 
+<<<<<<< HEAD
     SkString& operator+=(const SkString& s)
     {
         this->append(s);
@@ -259,6 +364,11 @@ public:
         this->append(&c, 1);
         return *this;
     }
+=======
+    SkString& operator+=(const SkString& s) { this->append(s); return *this; }
+    SkString& operator+=(const char text[]) { this->append(text); return *this; }
+    SkString& operator+=(const char c) { this->append(&c, 1); return *this; }
+>>>>>>> miniblink49
 
     /**
      *  Swap contents between this and other. This function is guaranteed
@@ -269,9 +379,15 @@ public:
 private:
     struct Rec {
     public:
+<<<<<<< HEAD
         uint32_t fLength; // logically size_t, but we want it to stay 32bits
         int32_t fRefCnt;
         char fBeginningOfData;
+=======
+        uint32_t    fLength; // logically size_t, but we want it to stay 32bits
+        int32_t     fRefCnt;
+        char        fBeginningOfData;
+>>>>>>> miniblink49
 
         char* data() { return &fBeginningOfData; }
         const char* data() const { return &fBeginningOfData; }
@@ -281,9 +397,13 @@ private:
 #ifdef SK_DEBUG
     void validate() const;
 #else
+<<<<<<< HEAD
     void validate() const
     {
     }
+=======
+    void validate() const {}
+>>>>>>> miniblink49
 #endif
 
     static const Rec gEmptyRec;
@@ -296,6 +416,7 @@ SkString SkStringPrintf(const char* format, ...);
 
 // Specialized to take advantage of SkString's fast swap path. The unspecialized function is
 // declared in SkTypes.h and called by SkTSort.
+<<<<<<< HEAD
 template <>
 inline void SkTSwap(SkString& a, SkString& b)
 {
@@ -320,5 +441,13 @@ inline void SkStrSplit(const char* str, const char* delimiters, SkTArray<SkStrin
 {
     SkStrSplit(str, delimiters, kCoalesce_SkStrSplitMode, out);
 }
+=======
+template <> inline void SkTSwap(SkString& a, SkString& b) {
+    a.swap(b);
+}
+
+// Split str on any characters in delimiters into out.  (Think, strtok with a sane API.)
+void SkStrSplit(const char* str, const char* delimiters, SkTArray<SkString>* out);
+>>>>>>> miniblink49
 
 #endif

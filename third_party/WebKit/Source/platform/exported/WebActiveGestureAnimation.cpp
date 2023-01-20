@@ -23,10 +23,15 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/exported/WebActiveGestureAnimation.h"
 
 #include "public/platform/WebGestureCurve.h"
 #include "public/platform/WebGestureCurveTarget.h"
+<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
 
@@ -61,6 +66,29 @@ WebActiveGestureAnimation::WebActiveGestureAnimation(
     : m_startTime(startTime)
     , m_waitingForFirstTick(waitingForFirstTick)
     , m_curve(std::move(curve))
+=======
+
+namespace blink {
+
+PassOwnPtr<WebActiveGestureAnimation> WebActiveGestureAnimation::createAtAnimationStart(PassOwnPtr<WebGestureCurve> curve, WebGestureCurveTarget* target)
+{
+    return adoptPtr(new WebActiveGestureAnimation(curve, target, 0, true));
+}
+
+PassOwnPtr<WebActiveGestureAnimation> WebActiveGestureAnimation::createWithTimeOffset(PassOwnPtr<WebGestureCurve> curve, WebGestureCurveTarget* target, double startTime)
+{
+    return adoptPtr(new WebActiveGestureAnimation(curve, target, startTime, false));
+}
+
+WebActiveGestureAnimation::~WebActiveGestureAnimation()
+{
+}
+
+WebActiveGestureAnimation::WebActiveGestureAnimation(PassOwnPtr<WebGestureCurve> curve, WebGestureCurveTarget* target, double startTime, bool waitingForFirstTick)
+    : m_startTime(startTime)
+    , m_waitingForFirstTick(waitingForFirstTick)
+    , m_curve(curve)
+>>>>>>> miniblink49
     , m_target(target)
 {
 }

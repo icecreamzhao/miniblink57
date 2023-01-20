@@ -34,9 +34,15 @@
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/GraphicsTypes.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/Vector.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,6 +50,7 @@ class FloatPolygonEdge;
 
 // This class is used by PODIntervalTree for debugging.
 #ifndef NDEBUG
+<<<<<<< HEAD
 template <class>
 struct ValueToString;
 #endif
@@ -59,10 +66,21 @@ public:
     {
         return (*m_vertices)[index];
     }
+=======
+template <class> struct ValueToString;
+#endif
+
+class PLATFORM_EXPORT FloatPolygon {
+public:
+    FloatPolygon(PassOwnPtr<Vector<FloatPoint>> vertices, WindRule fillRule);
+
+    const FloatPoint& vertexAt(unsigned index) const { return (*m_vertices)[index]; }
+>>>>>>> miniblink49
     unsigned numberOfVertices() const { return m_vertices->size(); }
 
     WindRule fillRule() const { return m_fillRule; }
 
+<<<<<<< HEAD
     const FloatPolygonEdge& edgeAt(unsigned index) const
     {
         return m_edges[index];
@@ -73,6 +91,13 @@ public:
     bool overlappingEdges(float minY,
         float maxY,
         Vector<const FloatPolygonEdge*>& result) const;
+=======
+    const FloatPolygonEdge& edgeAt(unsigned index) const { return m_edges[index]; }
+    unsigned numberOfEdges() const { return m_edges.size(); }
+
+    FloatRect boundingBox() const { return m_boundingBox; }
+    bool overlappingEdges(float minY, float maxY, Vector<const FloatPolygonEdge*>& result) const;
+>>>>>>> miniblink49
     bool contains(const FloatPoint&) const;
     bool isEmpty() const { return m_empty; }
 
@@ -83,14 +108,23 @@ private:
     bool containsNonZero(const FloatPoint&) const;
     bool containsEvenOdd(const FloatPoint&) const;
 
+<<<<<<< HEAD
     std::unique_ptr<Vector<FloatPoint>> m_vertices;
+=======
+    OwnPtr<Vector<FloatPoint>> m_vertices;
+>>>>>>> miniblink49
     WindRule m_fillRule;
     FloatRect m_boundingBox;
     bool m_empty;
     Vector<FloatPolygonEdge> m_edges;
+<<<<<<< HEAD
     EdgeIntervalTree m_edgeTree; // Each EdgeIntervalTree node stores minY, maxY,
         // and a ("UserData") pointer to a
         // FloatPolygonEdge.
+=======
+    EdgeIntervalTree m_edgeTree; // Each EdgeIntervalTree node stores minY, maxY, and a ("UserData") pointer to a FloatPolygonEdge.
+
+>>>>>>> miniblink49
 };
 
 class PLATFORM_EXPORT VertexPair {
@@ -108,10 +142,15 @@ public:
     bool intersection(const VertexPair&, FloatPoint&) const;
 };
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT FloatPolygonEdge final : public VertexPair {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     friend class FloatPolygon;
 
+=======
+class PLATFORM_EXPORT FloatPolygonEdge : public VertexPair {
+    friend class FloatPolygon;
+>>>>>>> miniblink49
 public:
     const FloatPoint& vertex1() const override
     {
@@ -143,9 +182,14 @@ public:
     unsigned edgeIndex() const { return m_edgeIndex; }
 
 private:
+<<<<<<< HEAD
     // Edge vertex index1 is less than index2, except the last edge, where index2
     // is 0. When a polygon edge is defined by 3 or more colinear vertices, index2
     // can be the the index of the last colinear vertex.
+=======
+    // Edge vertex index1 is less than index2, except the last edge, where index2 is 0. When a polygon edge
+    // is defined by 3 or more colinear vertices, index2 can be the the index of the last colinear vertex.
+>>>>>>> miniblink49
     unsigned m_vertexIndex1;
     unsigned m_vertexIndex2;
     unsigned m_edgeIndex;
@@ -154,6 +198,7 @@ private:
 
 // These structures are used by PODIntervalTree for debugging.
 #ifndef NDEBUG
+<<<<<<< HEAD
 template <>
 struct ValueToString<float> {
     STATIC_ONLY(ValueToString);
@@ -169,6 +214,14 @@ struct ValueToString<FloatPolygonEdge*> {
             edge->vertex1().y(), edge->vertex2().x(),
             edge->vertex2().y());
     }
+=======
+template <> struct ValueToString<float> {
+    static String string(const float value) { return String::number(value); }
+};
+
+template<> struct ValueToString<FloatPolygonEdge*> {
+    static String string(const FloatPolygonEdge* edge) { return String::format("%p (%f,%f %f,%f)", edge, edge->vertex1().x(), edge->vertex1().y(), edge->vertex2().x(), edge->vertex2().y()); }
+>>>>>>> miniblink49
 };
 #endif
 

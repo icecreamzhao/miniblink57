@@ -11,11 +11,16 @@
 #include "modules/ModulesExport.h"
 #include "modules/fetch/FetchHeaderList.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class Dictionary;
 class ExceptionState;
+<<<<<<< HEAD
 
 // http://fetch.spec.whatwg.org/#headers-class
 class MODULES_EXPORT Headers final : public GarbageCollected<Headers>,
@@ -31,6 +36,15 @@ public:
         ResponseGuard,
         NoneGuard
     };
+=======
+class Iterator;
+
+// http://fetch.spec.whatwg.org/#headers-class
+class MODULES_EXPORT Headers final : public GarbageCollected<Headers>, public ScriptWrappable, public PairIterable<String, String> {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    enum Guard { ImmutableGuard, RequestGuard, RequestNoCORSGuard, ResponseGuard, NoneGuard };
+>>>>>>> miniblink49
 
     static Headers* create();
     static Headers* create(ExceptionState&);
@@ -52,7 +66,11 @@ public:
     void set(const String& key, const String& value, ExceptionState&);
 
     void setGuard(Guard guard) { m_guard = guard; }
+<<<<<<< HEAD
     Guard getGuard() const { return m_guard; }
+=======
+    Guard guard() const { return m_guard; }
+>>>>>>> miniblink49
 
     // These methods should only be called when size() would return 0.
     void fillWith(const Headers*, ExceptionState&);

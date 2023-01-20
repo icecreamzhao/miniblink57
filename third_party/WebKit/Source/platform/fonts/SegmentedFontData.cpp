@@ -23,6 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/fonts/SegmentedFontData.h"
 
 #include "platform/fonts/SimpleFontData.h"
@@ -38,19 +42,34 @@ SegmentedFontData::~SegmentedFontData()
 
 const SimpleFontData* SegmentedFontData::fontDataForCharacter(UChar32 c) const
 {
+<<<<<<< HEAD
     auto end = m_faces.end();
     for (auto it = m_faces.begin(); it != end; ++it) {
         if ((*it)->contains(c))
             return (*it)->fontData();
     }
     return m_faces[0]->fontData();
+=======
+    Vector<FontDataRange>::const_iterator end = m_ranges.end();
+    for (Vector<FontDataRange>::const_iterator it = m_ranges.begin(); it != end; ++it) {
+        if (it->from() <= c && it->to() >= c)
+            return it->fontData().get();
+    }
+    return m_ranges[0].fontData().get();
+>>>>>>> miniblink49
 }
 
 bool SegmentedFontData::containsCharacter(UChar32 c) const
 {
+<<<<<<< HEAD
     auto end = m_faces.end();
     for (auto it = m_faces.begin(); it != end; ++it) {
         if ((*it)->contains(c))
+=======
+    Vector<FontDataRange>::const_iterator end = m_ranges.end();
+    for (Vector<FontDataRange>::const_iterator it = m_ranges.begin(); it != end; ++it) {
+        if (c >= it->from() && c <= it->to())
+>>>>>>> miniblink49
             return true;
     }
     return false;
@@ -64,9 +83,15 @@ bool SegmentedFontData::isCustomFont() const
 
 bool SegmentedFontData::isLoading() const
 {
+<<<<<<< HEAD
     auto end = m_faces.end();
     for (auto it = m_faces.begin(); it != end; ++it) {
         if ((*it)->fontData()->isLoading())
+=======
+    Vector<FontDataRange>::const_iterator end = m_ranges.end();
+    for (Vector<FontDataRange>::const_iterator it = m_ranges.begin(); it != end; ++it) {
+        if (it->fontData()->isLoading())
+>>>>>>> miniblink49
             return true;
     }
     return false;
@@ -75,9 +100,15 @@ bool SegmentedFontData::isLoading() const
 // Returns true if any of the sub fonts are loadingFallback.
 bool SegmentedFontData::isLoadingFallback() const
 {
+<<<<<<< HEAD
     auto end = m_faces.end();
     for (auto it = m_faces.begin(); it != end; ++it) {
         if ((*it)->fontData()->isLoadingFallback())
+=======
+    Vector<FontDataRange>::const_iterator end = m_ranges.end();
+    for (Vector<FontDataRange>::const_iterator it = m_ranges.begin(); it != end; ++it) {
+        if (it->fontData()->isLoadingFallback())
+>>>>>>> miniblink49
             return true;
     }
     return false;
@@ -90,9 +121,15 @@ bool SegmentedFontData::isSegmented() const
 
 bool SegmentedFontData::shouldSkipDrawing() const
 {
+<<<<<<< HEAD
     auto end = m_faces.end();
     for (auto it = m_faces.begin(); it != end; ++it) {
         if ((*it)->fontData()->shouldSkipDrawing())
+=======
+    Vector<FontDataRange>::const_iterator end = m_ranges.end();
+    for (Vector<FontDataRange>::const_iterator it = m_ranges.begin(); it != end; ++it) {
+        if (it->fontData()->shouldSkipDrawing())
+>>>>>>> miniblink49
             return true;
     }
     return false;

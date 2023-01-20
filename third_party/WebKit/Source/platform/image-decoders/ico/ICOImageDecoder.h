@@ -31,29 +31,46 @@
 #ifndef ICOImageDecoder_h
 #define ICOImageDecoder_h
 
+<<<<<<< HEAD
 #include "platform/image-decoders/FastSharedBufferReader.h"
 #include "platform/image-decoders/bmp/BMPImageReader.h"
 #include <memory>
+=======
+#include "platform/image-decoders/bmp/BMPImageReader.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class PNGImageDecoder;
 
 // This class decodes the ICO and CUR image formats.
+<<<<<<< HEAD
 class PLATFORM_EXPORT ICOImageDecoder final : public ImageDecoder {
     WTF_MAKE_NONCOPYABLE(ICOImageDecoder);
 
 public:
     ICOImageDecoder(AlphaOption, const ColorBehavior&, size_t maxDecodedBytes);
+=======
+class PLATFORM_EXPORT ICOImageDecoder : public ImageDecoder {
+public:
+    ICOImageDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedBytes);
+>>>>>>> miniblink49
     ~ICOImageDecoder() override;
 
     // ImageDecoder:
     String filenameExtension() const override { return "ico"; }
+<<<<<<< HEAD
     void onSetData(SegmentReader*) override;
     IntSize size() const override;
     IntSize frameSizeAtIndex(size_t) const override;
     bool setSize(unsigned width, unsigned height) override;
     bool frameIsCompleteAtIndex(size_t) const override;
+=======
+    void setData(SharedBuffer*, bool allDataReceived) override;
+    IntSize size() const override;
+    IntSize frameSizeAtIndex(size_t) const override;
+    bool setSize(unsigned width, unsigned height) override;
+>>>>>>> miniblink49
     // CAUTION: setFailed() deletes all readers and decoders.  Be careful to
     // avoid accessing deleted memory, especially when calling this from
     // inside BMPImageReader!
@@ -73,16 +90,23 @@ private:
     };
 
     struct IconDirectoryEntry {
+<<<<<<< HEAD
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+=======
+>>>>>>> miniblink49
         IntSize m_size;
         uint16_t m_bitCount;
         IntPoint m_hotSpot;
         uint32_t m_imageOffset;
+<<<<<<< HEAD
         uint32_t m_byteSize;
+=======
+>>>>>>> miniblink49
     };
 
     // Returns true if |a| is a preferable icon entry to |b|.
     // Larger sizes, or greater bitdepths at the same size, are preferable.
+<<<<<<< HEAD
     static bool compareEntries(const IconDirectoryEntry& a,
         const IconDirectoryEntry& b);
 
@@ -103,13 +127,29 @@ private:
         char buffer[2];
         const char* data = m_fastReader.getConsecutiveData(m_decodedOffset + offset, 2, buffer);
         return BMPImageReader::readUint16(data);
+=======
+    static bool compareEntries(const IconDirectoryEntry& a, const IconDirectoryEntry& b);
+
+    // ImageDecoder:
+    virtual void decodeSize() { decode(0, true); }
+    size_t decodeFrameCount() override;
+    void decode(size_t index) override { decode(index, false); }
+
+    inline uint16_t readUint16(int offset) const
+    {
+        return BMPImageReader::readUint16(m_data.get(), m_decodedOffset + offset);
+>>>>>>> miniblink49
     }
 
     inline uint32_t readUint32(int offset) const
     {
+<<<<<<< HEAD
         char buffer[4];
         const char* data = m_fastReader.getConsecutiveData(m_decodedOffset + offset, 4, buffer);
         return BMPImageReader::readUint32(data);
+=======
+        return BMPImageReader::readUint32(m_data.get(), m_decodedOffset + offset);
+>>>>>>> miniblink49
     }
 
     // If the desired PNGImageDecoder exists, gives it the appropriate data.
@@ -149,8 +189,11 @@ private:
     // if the type could be determined.
     ImageType imageTypeAtIndex(size_t);
 
+<<<<<<< HEAD
     FastSharedBufferReader m_fastReader;
 
+=======
+>>>>>>> miniblink49
     // An index into |m_data| representing how much we've already decoded.
     // Note that this only tracks data _this_ class decodes; once the
     // BMPImageReader takes over this will not be updated further.
@@ -163,6 +206,7 @@ private:
     typedef Vector<IconDirectoryEntry> IconDirectoryEntries;
     IconDirectoryEntries m_dirEntries;
 
+<<<<<<< HEAD
     // Count of directory entries is parsed from header before initializing
     // m_dirEntries. m_dirEntries is populated only when full header
     // information including directory entries is available.
@@ -172,14 +216,23 @@ private:
     typedef Vector<std::unique_ptr<BMPImageReader>> BMPReaders;
     BMPReaders m_bmpReaders;
     typedef Vector<std::unique_ptr<PNGImageDecoder>> PNGDecoders;
+=======
+    // The image decoders for the various frames.
+    typedef Vector<OwnPtr<BMPImageReader>> BMPReaders;
+    BMPReaders m_bmpReaders;
+    typedef Vector<OwnPtr<PNGImageDecoder>> PNGDecoders;
+>>>>>>> miniblink49
     PNGDecoders m_pngDecoders;
 
     // Valid only while a BMPImageReader is decoding, this holds the size
     // for the particular entry being decoded.
     IntSize m_frameSize;
+<<<<<<< HEAD
 
     // Used to pass on to an internally created PNG decoder.
     const ColorBehavior m_colorBehavior;
+=======
+>>>>>>> miniblink49
 };
 
 } // namespace blink

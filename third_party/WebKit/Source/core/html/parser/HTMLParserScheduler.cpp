@@ -23,34 +23,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLParserScheduler.h"
 
 #include "core/dom/Document.h"
-#include "core/frame/FrameView.h"
 #include "core/html/parser/HTMLDocumentParser.h"
+#include "core/frame/FrameView.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebScheduler.h"
 #include "public/platform/WebThread.h"
 #include "wtf/CurrentTime.h"
-#include "wtf/PtrUtil.h"
 
 namespace blink {
 
-PumpSession::PumpSession(unsigned& nestingLevel)
+ActiveParserSession::ActiveParserSession(unsigned& nestingLevel, Document* document)
     : NestingLevelIncrementer(nestingLevel)
+    , m_document(document)
+{
+    if (!m_document)
+        return;
+    m_document->incrementActiveParserCount();
+}
+
+ActiveParserSession::~ActiveParserSession()
+{
+    if (!m_document)
+        return;
+    m_document->decrementActiveParserCount();
+}
+
+PumpSession::PumpSession(unsigned& nestingLevel, Document* document)
+    : ActiveParserSession(nestingLevel, document)
 {
 }
 
-PumpSession::~PumpSession() { }
+PumpSession::~PumpSession()
+{
+}
 
-SpeculationsPumpSession::SpeculationsPumpSession(unsigned& nestingLevel)
-    : NestingLevelIncrementer(nestingLevel)
+SpeculationsPumpSession::SpeculationsPumpSession(unsigned& nestingLevel, Document* document)
+    : ActiveParserSession(nestingLevel, document)
     , m_startTime(currentTime())
     , m_processedElementTokens(0)
 {
 }
 
-SpeculationsPumpSession::~SpeculationsPumpSession() { }
+SpeculationsPumpSession::~SpeculationsPumpSession()
+{
+}
 
 inline double SpeculationsPumpSession::elapsedTime() const
 {
@@ -62,80 +82,64 @@ void SpeculationsPumpSession::addedElementTokens(size_t count)
     m_processedElementTokens += count;
 }
 
-HTMLParserScheduler::HTMLParserScheduler(
-    HTMLDocumentParser* parser,
-    RefPtr<WebTaskRunner> loadingTaskRunner)
+HTMLParserScheduler::HTMLParserScheduler(HTMLDocumentParser* parser)
     : m_parser(parser)
-    , m_loadingTaskRunner(std::move(loadingTaskRunner))
+    , m_cancellableContinueParse(WTF::bind(&HTMLParserScheduler::continueParsing, this))
     , m_isSuspendedWithActiveTimer(false)
 {
 }
 
-HTMLParserScheduler::~HTMLParserScheduler() { }
-
-DEFINE_TRACE(HTMLParserScheduler)
+HTMLParserScheduler::~HTMLParserScheduler()
 {
-    visitor->trace(m_parser);
-}
-
-bool HTMLParserScheduler::isScheduledForResume() const
-{
-    return m_isSuspendedWithActiveTimer || m_cancellableContinueParseTaskHandle.isActive();
 }
 
 void HTMLParserScheduler::scheduleForResume()
 {
-    DCHECK(!m_isSuspendedWithActiveTimer);
-    m_cancellableContinueParseTaskHandle = m_loadingTaskRunner->postCancellableTask(
-        BLINK_FROM_HERE, WTF::bind(&HTMLParserScheduler::continueParsing, wrapWeakPersistent(this)));
+    ASSERT(!m_isSuspendedWithActiveTimer);
+    Platform::current()->currentThread()->scheduler()->postLoadingTask(
+        FROM_HERE, m_cancellableContinueParse.cancelAndCreate());
 }
 
 void HTMLParserScheduler::suspend()
 {
-    DCHECK(!m_isSuspendedWithActiveTimer);
-    if (!m_cancellableContinueParseTaskHandle.isActive())
+    ASSERT(!m_isSuspendedWithActiveTimer);
+    if (!m_cancellableContinueParse.isPending())
         return;
     m_isSuspendedWithActiveTimer = true;
-    m_cancellableContinueParseTaskHandle.cancel();
+    m_cancellableContinueParse.cancel();
 }
 
 void HTMLParserScheduler::resume()
 {
-    DCHECK(!m_cancellableContinueParseTaskHandle.isActive());
+    ASSERT(!m_cancellableContinueParse.isPending());
     if (!m_isSuspendedWithActiveTimer)
         return;
     m_isSuspendedWithActiveTimer = false;
-    scheduleForResume();
+
+    WTF::String out = WTF::String::format("HTMLParserScheduler::resume: %p\n", this);
+    OutputDebugStringW(out.charactersWithNullTermination().data());
+
+    Platform::current()->currentThread()->scheduler()->postLoadingTask(
+        FROM_HERE, m_cancellableContinueParse.cancelAndCreate());
 }
 
-void HTMLParserScheduler::detach()
+inline bool HTMLParserScheduler::shouldYield(const SpeculationsPumpSession& session, bool startingScript) const
 {
-    m_cancellableContinueParseTaskHandle.cancel();
-    m_isSuspendedWithActiveTimer = false;
-}
-
-inline bool HTMLParserScheduler::shouldYield(
-    const SpeculationsPumpSession& session,
-    bool startingScript) const
-{
-    if (Platform::current()
-            ->currentThread()
-            ->scheduler()
-            ->shouldYieldForHighPriorityWork())
+    if (Platform::current()->currentThread()->scheduler()->shouldYieldForHighPriorityWork())
         return true;
 
     const double parserTimeLimit = 0.5;
     if (session.elapsedTime() > parserTimeLimit)
         return true;
 
-    // Yield if a lot of DOM work has been done in this session and a script tag
-    // is about to be parsed. This significantly improves render performance for
-    // documents that place their scripts at the bottom of the page. Yielding too
-    // often significantly slows down the parsing so a balance needs to be struck
-    // to only yield when enough changes have happened to make it worthwhile.
-    // Emperical testing shows that anything > ~40 and < ~200 gives all of the
-    // benefit without impacting parser performance, only adding a few yields per
-    // page but at just the right times.
+    // Yield if a lot of DOM work has been done in this session and a script tag is
+    // about to be parsed. This significantly improves render performance for documents
+    // that place their scripts at the bottom of the page. Yielding too often
+    // significantly slows down the parsing so a balance needs to be struck to
+    // only yield when enough changes have happened to make it worthwhile.
+    // Emperical testing shows that anything > ~40 and < ~200 gives all of the benefit
+    // without impacting parser performance, only adding a few yields per page but at
+    // just the right times.
     const size_t sufficientWork = 50;
     if (startingScript && session.processedElementTokens() > sufficientWork)
         return true;
@@ -143,8 +147,7 @@ inline bool HTMLParserScheduler::shouldYield(
     return false;
 }
 
-bool HTMLParserScheduler::yieldIfNeeded(const SpeculationsPumpSession& session,
-    bool startingScript)
+bool HTMLParserScheduler::yieldIfNeeded(const SpeculationsPumpSession& session, bool startingScript)
 {
     if (shouldYield(session, startingScript)) {
         scheduleForResume();
@@ -156,7 +159,7 @@ bool HTMLParserScheduler::yieldIfNeeded(const SpeculationsPumpSession& session,
 
 void HTMLParserScheduler::forceResumeAfterYield()
 {
-    DCHECK(!m_cancellableContinueParseTaskHandle.isActive());
+    ASSERT(!m_cancellableContinueParse.isPending());
     m_isSuspendedWithActiveTimer = true;
 }
 
@@ -165,4 +168,4 @@ void HTMLParserScheduler::continueParsing()
     m_parser->resumeParsingAfterYield();
 }
 
-} // namespace blink
+}

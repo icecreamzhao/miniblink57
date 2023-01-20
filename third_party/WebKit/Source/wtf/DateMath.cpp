@@ -25,7 +25,11 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
+<<<<<<< HEAD
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+=======
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+>>>>>>> miniblink49
  *
  * Alternatively, the contents of this file may be used under the terms
  * of either the Mozilla Public License Version 1.1, found at
@@ -69,6 +73,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/DateMath.h"
 
 #include "wtf/ASCIICType.h"
@@ -78,12 +83,25 @@
 #include "wtf/StdLibExtras.h"
 #include "wtf/StringExtras.h"
 #include "wtf/text/StringBuilder.h"
+=======
+#include "config.h"
+#include "DateMath.h"
+
+#include "Assertions.h"
+#include "ASCIICType.h"
+#include "CurrentTime.h"
+#include "MathExtras.h"
+#include "StdLibExtras.h"
+#include "StringExtras.h"
+
+>>>>>>> miniblink49
 #include <algorithm>
 #include <limits.h>
 #include <limits>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+<<<<<<< HEAD
 
 #if OS(WIN)
 #include <windows.h>
@@ -91,6 +109,20 @@
 #include <sys/time.h>
 #endif
 
+=======
+#include "wtf/text/StringBuilder.h"
+
+#if OS(WIN)
+#include <windows.h>
+#endif
+
+#if HAVE(SYS_TIME_H)
+#include <sys/time.h>
+#endif
+
+using namespace WTF;
+
+>>>>>>> miniblink49
 namespace WTF {
 
 /* Constants */
@@ -99,6 +131,7 @@ static const double hoursPerDay = 24.0;
 static const double secondsPerDay = 24.0 * 60.0 * 60.0;
 
 static const double maxUnixTime = 2145859200.0; // 12/31/2037
+<<<<<<< HEAD
 static const double kMinimumECMADateInMs = -8640000000000000.0;
 static const double kMaximumECMADateInMs = 8640000000000000.0;
 
@@ -109,6 +142,25 @@ static const int firstDayOfMonth[2][12] = {
     { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 }
 };
 
+=======
+
+// Day of year for the first day of each month, where index 0 is January, and day 0 is January 1.
+// First for non-leap years, then for leap years.
+static const int firstDayOfMonth[2][12] = {
+    {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334},
+    {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335}
+};
+
+#if USING_VC6RT == 1
+inline int localtime_s(tm* out_tm, const time_t* time) {
+    tm* posix_local_time_struct = localtime(time);
+    if (posix_local_time_struct == NULL) return 1;
+    *out_tm = *posix_local_time_struct;
+    return 0;
+}
+#endif
+
+>>>>>>> miniblink49
 static inline void getLocalTime(const time_t* localTime, struct tm* localTM)
 {
 #if COMPILER(MSVC)
@@ -138,10 +190,15 @@ static inline double daysFrom1970ToYear(int year)
 {
     // The Gregorian Calendar rules for leap years:
     // Every fourth year is a leap year.  2004, 2008, and 2012 are leap years.
+<<<<<<< HEAD
     // However, every hundredth year is not a leap year.  1900 and 2100 are not
     // leap years.
     // Every four hundred years, there's a leap year after all.  2000 and 2400 are
     // leap years.
+=======
+    // However, every hundredth year is not a leap year.  1900 and 2100 are not leap years.
+    // Every four hundred years, there's a leap year after all.  2000 and 2400 are leap years.
+>>>>>>> miniblink49
 
     static const int leapDaysBefore1971By4Rule = 1970 / 4;
     static const int excludedLeapDaysBefore1971By100Rule = 1970 / 100;
@@ -162,8 +219,12 @@ static double msToDays(double ms)
 
 static void appendTwoDigitNumber(StringBuilder& builder, int number)
 {
+<<<<<<< HEAD
     DCHECK_GE(number, 0);
     DCHECK_LT(number, 100);
+=======
+    ASSERT(number >= 0 && number < 100);
+>>>>>>> miniblink49
     if (number <= 9)
         builder.append('0');
     builder.appendNumber(number);
@@ -171,9 +232,12 @@ static void appendTwoDigitNumber(StringBuilder& builder, int number)
 
 int msToYear(double ms)
 {
+<<<<<<< HEAD
     DCHECK(std_isfinite(ms));
     DCHECK_GE(ms, kMinimumECMADateInMs);
     DCHECK_LE(ms, kMaximumECMADateInMs);
+=======
+>>>>>>> miniblink49
     int approxYear = static_cast<int>(floor(ms / (msPerDay * 365.2425)) + 1970);
     double msFromApproxYearTo1970 = msPerDay * daysFrom1970ToYear(approxYear);
     if (msFromApproxYearTo1970 > ms)
@@ -227,10 +291,14 @@ int monthFromDayInYear(int dayInYear, bool leapYear)
     return 11;
 }
 
+<<<<<<< HEAD
 static inline bool checkMonth(int dayInYear,
     int& startDayOfThisMonth,
     int& startDayOfNextMonth,
     int daysInThisMonth)
+=======
+static inline bool checkMonth(int dayInYear, int& startDayOfThisMonth, int& startDayOfNextMonth, int daysInThisMonth)
+>>>>>>> miniblink49
 {
     startDayOfThisMonth = startDayOfNextMonth;
     startDayOfNextMonth += daysInThisMonth;
@@ -286,7 +354,11 @@ double dateToDaysFrom1970(int year, int month, int day)
     }
 
     double yearday = floor(daysFrom1970ToYear(year));
+<<<<<<< HEAD
     DCHECK((year >= 1970 && yearday >= 0) || (year < 1970 && yearday < 0));
+=======
+    ASSERT((year >= 1970 && yearday >= 0) || (year < 1970 && yearday < 0));
+>>>>>>> miniblink49
     return yearday + dayInYear(year, month, day);
 }
 
@@ -309,6 +381,7 @@ static inline int minimumYearForDST()
     // greater than the max year minus 27 (2010), we want to use the max year
     // minus 27 instead, to ensure there is a range of 28 years that all years
     // can map to.
+<<<<<<< HEAD
     return std::min(msToYear(jsCurrentTime()), maximumYearForDST() - 27);
 }
 
@@ -325,6 +398,26 @@ static int equivalentYearForDST(int year)
     // It is ok if the cached year is not the current year as long as the rules
     // for DST did not change between the two years; if they did the app would
     // need to be restarted.
+=======
+    return std::min(msToYear(jsCurrentTime()), maximumYearForDST() - 27) ;
+}
+
+/*
+ * Find an equivalent year for the one given, where equivalence is deterined by
+ * the two years having the same leapness and the first day of the year, falling
+ * on the same day of the week.
+ *
+ * This function returns a year between this current year and 2037, however this
+ * function will potentially return incorrect results if the current year is after
+ * 2010, (rdar://problem/5052975), if the year passed in is before 1900 or after
+ * 2100, (rdar://problem/5055038).
+ */
+static int equivalentYearForDST(int year)
+{
+    // It is ok if the cached year is not the current year as long as the rules
+    // for DST did not change between the two years; if they did the app would need
+    // to be restarted.
+>>>>>>> miniblink49
     static int minYear = minimumYearForDST();
     int maxYear = maximumYearForDST();
 
@@ -337,10 +430,17 @@ static int equivalentYearForDST(int year)
         return year;
 
     int quotient = difference / 28;
+<<<<<<< HEAD
     int product = (quotient)*28;
 
     year += product;
     DCHECK((year >= minYear && year <= maxYear) || (product - year == static_cast<int>(std::numeric_limits<double>::quiet_NaN())));
+=======
+    int product = (quotient) * 28;
+
+    year += product;
+    ASSERT((year >= minYear && year <= maxYear) || (product - year == static_cast<int>(std::numeric_limits<double>::quiet_NaN())));
+>>>>>>> miniblink49
     return year;
 }
 
@@ -364,8 +464,12 @@ static double calculateUTCOffset()
 /*
  * Get the DST offset for the time passed in.
  */
+<<<<<<< HEAD
 static double calculateDSTOffsetSimple(double localTimeSeconds,
     double utcOffset)
+=======
+static double calculateDSTOffsetSimple(double localTimeSeconds, double utcOffset)
+>>>>>>> miniblink49
 {
     if (localTimeSeconds > maxUnixTime)
         localTimeSeconds = maxUnixTime;
@@ -384,12 +488,20 @@ static double calculateDSTOffsetSimple(double localTimeSeconds,
 // Get the DST offset, given a time in UTC
 static double calculateDSTOffset(double ms, double utcOffset)
 {
+<<<<<<< HEAD
     // On macOS, the call to localtime (see calculateDSTOffsetSimple) will return
     // historically accurate DST information (e.g. New Zealand did not have DST
     // from 1946 to 1974) however the JavaScript standard explicitly dictates
     // that historical information should not be considered when determining DST.
     // For this reason we shift away from years that localtime can handle but
     // would return historically accurate information.
+=======
+    // On Mac OS X, the call to localtime (see calculateDSTOffsetSimple) will return historically accurate
+    // DST information (e.g. New Zealand did not have DST from 1946 to 1974) however the JavaScript
+    // standard explicitly dictates that historical information should not be considered when
+    // determining DST. For this reason we shift away from years that localtime can handle but would
+    // return historically accurate information.
+>>>>>>> miniblink49
     int year = msToYear(ms);
     int equivalentYear = equivalentYearForDST(year);
     if (year != equivalentYear) {
@@ -406,6 +518,7 @@ static double calculateDSTOffset(double ms, double utcOffset)
 
 void initializeDates()
 {
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
     static bool alreadyInitialized;
     DCHECK(!alreadyInitialized);
@@ -424,6 +537,24 @@ static inline double ymdhmsToSeconds(int year,
     double second)
 {
     double days = (day - 32075) + floor(1461 * (year + 4800.0 + (mon - 14) / 12) / 4) + 367 * (mon - 2 - (mon - 14) / 12 * 12) / 12 - floor(3 * ((year + 4900.0 + (mon - 14) / 12) / 100) / 4) - 2440588;
+=======
+#if ENABLE(ASSERT)
+    static bool alreadyInitialized;
+    ASSERT(!alreadyInitialized);
+    alreadyInitialized = true;
+#endif
+
+    equivalentYearForDST(2000); // Need to call once to initialize a static used in this function.
+}
+
+static inline double ymdhmsToSeconds(int year, long mon, long day, long hour, long minute, double second)
+{
+    double days = (day - 32075)
+        + floor(1461 * (year + 4800.0 + (mon - 14) / 12) / 4)
+        + 367 * (mon - 2 - (mon - 14) / 12 * 12) / 12
+        - floor(3 * ((year + 4900.0 + (mon - 14) / 12) / 100) / 4)
+        - 2440588;
+>>>>>>> miniblink49
     return ((days * hoursPerDay + hour) * minutesPerHour + minute) * secondsPerMinute + second;
 }
 
@@ -435,9 +566,24 @@ static const struct KnownZone {
 #endif
         char tzName[4];
     int tzOffset;
+<<<<<<< HEAD
 } known_zones[] = { { "UT", 0 }, { "GMT", 0 }, { "EST", -300 }, { "EDT", -240 },
     { "CST", -360 }, { "CDT", -300 }, { "MST", -420 }, { "MDT", -360 },
     { "PST", -480 }, { "PDT", -420 } };
+=======
+} known_zones[] = {
+    { "UT", 0 },
+    { "GMT", 0 },
+    { "EST", -300 },
+    { "EDT", -240 },
+    { "CST", -360 },
+    { "CDT", -300 },
+    { "MST", -420 },
+    { "MDT", -360 },
+    { "PST", -480 },
+    { "PDT", -420 }
+};
+>>>>>>> miniblink49
 
 inline static void skipSpacesAndComments(const char*& s)
 {
@@ -459,7 +605,11 @@ inline static void skipSpacesAndComments(const char*& s)
 // returns 0-11 (Jan-Dec); -1 on failure
 static int findMonth(const char* monthStr)
 {
+<<<<<<< HEAD
     DCHECK(monthStr);
+=======
+    ASSERT(monthStr);
+>>>>>>> miniblink49
     char needle[4];
     for (int i = 0; i < 3; ++i) {
         if (!*monthStr)
@@ -467,8 +617,13 @@ static int findMonth(const char* monthStr)
         needle[i] = static_cast<char>(toASCIILower(*monthStr++));
     }
     needle[3] = '\0';
+<<<<<<< HEAD
     const char* haystack = "janfebmaraprmayjunjulaugsepoctnovdec";
     const char* str = strstr(haystack, needle);
+=======
+    const char *haystack = "janfebmaraprmayjunjulaugsepoctnovdec";
+    const char *str = strstr(haystack, needle);
+>>>>>>> miniblink49
     if (str) {
         int position = static_cast<int>(str - haystack);
         if (position % 3 == 0)
@@ -477,10 +632,14 @@ static int findMonth(const char* monthStr)
     return -1;
 }
 
+<<<<<<< HEAD
 static bool parseInt(const char* string,
     char** stopPosition,
     int base,
     int* result)
+=======
+static bool parseInt(const char* string, char** stopPosition, int base, int* result)
+>>>>>>> miniblink49
 {
     long longResult = strtol(string, stopPosition, base);
     // Avoid the use of errno as it is not available on Windows CE
@@ -490,10 +649,14 @@ static bool parseInt(const char* string,
     return true;
 }
 
+<<<<<<< HEAD
 static bool parseLong(const char* string,
     char** stopPosition,
     int base,
     long* result)
+=======
+static bool parseLong(const char* string, char** stopPosition, int base, long* result)
+>>>>>>> miniblink49
 {
     *result = strtol(string, stopPosition, base);
     // Avoid the use of errno as it is not available on Windows CE
@@ -503,9 +666,13 @@ static bool parseLong(const char* string,
 }
 
 // Odd case where 'exec' is allowed to be 0, to accomodate a caller in WebCore.
+<<<<<<< HEAD
 static double parseDateFromNullTerminatedCharacters(const char* dateString,
     bool& haveTZ,
     int& offset)
+=======
+static double parseDateFromNullTerminatedCharacters(const char* dateString, bool& haveTZ, int& offset)
+>>>>>>> miniblink49
 {
     haveTZ = false;
     offset = 0;
@@ -528,7 +695,11 @@ static double parseDateFromNullTerminatedCharacters(const char* dateString,
     skipSpacesAndComments(dateString);
 
     long month = -1;
+<<<<<<< HEAD
     const char* wordStart = dateString;
+=======
+    const char *wordStart = dateString;
+>>>>>>> miniblink49
     // Check contents of first words if not number
     while (*dateString && !isASCIIDigit(*dateString)) {
         if (isASCIISpace(*dateString) || *dateString == '(') {
@@ -536,9 +707,14 @@ static double parseDateFromNullTerminatedCharacters(const char* dateString,
                 month = findMonth(wordStart);
             skipSpacesAndComments(dateString);
             wordStart = dateString;
+<<<<<<< HEAD
         } else {
             dateString++;
         }
+=======
+        } else
+           dateString++;
+>>>>>>> miniblink49
     }
 
     // Missing delimiter between month and day (like "January29")?
@@ -596,7 +772,11 @@ static double parseDateFromNullTerminatedCharacters(const char* dateString,
             dateString++;
         if (!*dateString)
             return std::numeric_limits<double>::quiet_NaN();
+<<<<<<< HEAD
     } else {
+=======
+     } else {
+>>>>>>> miniblink49
         if (*dateString == '-')
             dateString++;
 
@@ -636,9 +816,15 @@ static double parseDateFromNullTerminatedCharacters(const char* dateString,
     long hour = 0;
     long minute = 0;
     long second = 0;
+<<<<<<< HEAD
     if (!*newPosStr) {
         dateString = newPosStr;
     } else {
+=======
+    if (!*newPosStr)
+        dateString = newPosStr;
+    else {
+>>>>>>> miniblink49
         // ' 23:12:40 GMT'
         if (!(isASCIISpace(*newPosStr) || *newPosStr == ',')) {
             if (*newPosStr != ':')
@@ -682,7 +868,11 @@ static double parseDateFromNullTerminatedCharacters(const char* dateString,
                 return std::numeric_limits<double>::quiet_NaN();
 
             // seconds are optional in rfc822 + rfc2822
+<<<<<<< HEAD
             if (*dateString == ':') {
+=======
+            if (*dateString ==':') {
+>>>>>>> miniblink49
                 dateString++;
 
                 if (!parseLong(dateString, &newPosStr, 10, &second))
@@ -795,7 +985,11 @@ double parseDateFromNullTerminatedCharacters(const char* dateString)
     bool haveTZ;
     int offset;
     double ms = parseDateFromNullTerminatedCharacters(dateString, haveTZ, offset);
+<<<<<<< HEAD
     if (std_isnan(ms))
+=======
+    if (std::isnan(ms))
+>>>>>>> miniblink49
         return std::numeric_limits<double>::quiet_NaN();
 
     // fall back to local timezone
@@ -808,6 +1002,7 @@ double parseDateFromNullTerminatedCharacters(const char* dateString)
 }
 
 // See http://tools.ietf.org/html/rfc2822#section-3.3 for more information.
+<<<<<<< HEAD
 String makeRFC2822DateString(unsigned dayOfWeek,
     unsigned day,
     unsigned month,
@@ -820,6 +1015,13 @@ String makeRFC2822DateString(unsigned dayOfWeek,
     StringBuilder stringBuilder;
     stringBuilder.append(weekdayName[dayOfWeek]);
     stringBuilder.append(", ");
+=======
+String makeRFC2822DateString(unsigned dayOfWeek, unsigned day, unsigned month, unsigned year, unsigned hours, unsigned minutes, unsigned seconds, int utcOffset)
+{
+    StringBuilder stringBuilder;
+    stringBuilder.append(weekdayName[dayOfWeek]);
+    stringBuilder.appendLiteral(", ");
+>>>>>>> miniblink49
     stringBuilder.appendNumber(day);
     stringBuilder.append(' ');
     stringBuilder.append(monthName[month]);

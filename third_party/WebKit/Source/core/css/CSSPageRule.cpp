@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/CSSPageRule.h"
 
 #include "core/css/CSSSelector.h"
@@ -37,51 +38,54 @@ CSSPageRule::CSSPageRule(StyleRulePage* pageRule, CSSStyleSheet* parent)
 {
 }
 
-CSSPageRule::~CSSPageRule() { }
+CSSPageRule::~CSSPageRule()
+{
+#if !ENABLE(OILPAN)
+    if (m_propertiesCSSOMWrapper)
+        m_propertiesCSSOMWrapper->clearParentRule();
+#endif
+}
 
 CSSStyleDeclaration* CSSPageRule::style() const
 {
     if (!m_propertiesCSSOMWrapper)
-        m_propertiesCSSOMWrapper = StyleRuleCSSStyleDeclaration::create(
-            m_pageRule->mutableProperties(), const_cast<CSSPageRule*>(this));
+        m_propertiesCSSOMWrapper = StyleRuleCSSStyleDeclaration::create(m_pageRule->mutableProperties(), const_cast<CSSPageRule*>(this));
     return m_propertiesCSSOMWrapper.get();
 }
 
 String CSSPageRule::selectorText() const
 {
     StringBuilder text;
+    text.appendLiteral("@page");
     const CSSSelector* selector = m_pageRule->selector();
     if (selector) {
         String pageSpecification = selector->selectorText();
-        if (!pageSpecification.isEmpty())
+        if (!pageSpecification.isEmpty() && pageSpecification != starAtom) {
+            text.append(' ');
             text.append(pageSpecification);
+        }
     }
     return text.toString();
 }
 
 void CSSPageRule::setSelectorText(const String& selectorText)
 {
-    CSSParserContext* context = CSSParserContext::create(parserContext(), nullptr);
-    CSSSelectorList selectorList = CSSParser::parsePageSelector(
-        context, parentStyleSheet() ? parentStyleSheet()->contents() : nullptr,
-        selectorText);
+    CSSParserContext context(parserContext(), 0);
+    CSSSelectorList selectorList;
+    CSSParser::parseSelector(context, selectorText, selectorList);
     if (!selectorList.isValid())
         return;
 
     CSSStyleSheet::RuleMutationScope mutationScope(this);
 
-    m_pageRule->wrapperAdoptSelectorList(std::move(selectorList));
+    m_pageRule->wrapperAdoptSelectorList(selectorList);
 }
 
 String CSSPageRule::cssText() const
 {
     StringBuilder result;
-    result.append("@page ");
-    String pageSelectors = selectorText();
-    result.append(pageSelectors);
-    if (!pageSelectors.isEmpty())
-        result.append(' ');
-    result.append("{ ");
+    result.append(selectorText());
+    result.appendLiteral(" { ");
     String decls = m_pageRule->properties().asText();
     result.append(decls);
     if (!decls.isEmpty())

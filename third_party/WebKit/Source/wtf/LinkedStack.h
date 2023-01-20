@@ -31,14 +31,20 @@
 #ifndef LinkedStack_h
 #define LinkedStack_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
+=======
+#include "wtf/FastAllocBase.h"
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
 template <typename T>
 class LinkedStack {
+<<<<<<< HEAD
     USING_FAST_MALLOC(LinkedStack);
 
 public:
@@ -54,6 +60,11 @@ public:
         while (ptr)
             ptr = ptr->m_next.release();
     }
+=======
+    WTF_MAKE_FAST_ALLOCATED(LinkedStack);
+public:
+    LinkedStack() : m_size(0) { }
+>>>>>>> miniblink49
 
     bool isEmpty();
 
@@ -63,6 +74,7 @@ public:
 
     size_t size();
 
+<<<<<<< HEAD
 private:
     class Node {
         USING_FAST_MALLOC(LinkedStack::Node);
@@ -75,11 +87,31 @@ private:
     };
 
     std::unique_ptr<Node> m_head;
+=======
+    // This inner class used to be private but is now public on account of a
+    // possible MSVC bug. It can be made private again if we get rid of
+    // WTF_MAKE_FAST_ALLOCATED ever.
+    class Node {
+        WTF_MAKE_FAST_ALLOCATED(LinkedStack::Node);
+    public:
+        Node(const T&, PassOwnPtr<Node> next);
+
+        T m_data;
+        OwnPtr<Node> m_next;
+    };
+
+private:
+    OwnPtr<Node> m_head;
+>>>>>>> miniblink49
     size_t m_size;
 };
 
 template <typename T>
+<<<<<<< HEAD
 LinkedStack<T>::Node::Node(const T& data, std::unique_ptr<Node> next)
+=======
+LinkedStack<T>::Node::Node(const T& data, PassOwnPtr<Node> next)
+>>>>>>> miniblink49
     : m_data(data)
     , m_next(next)
 {
@@ -94,7 +126,11 @@ inline bool LinkedStack<T>::isEmpty()
 template <typename T>
 inline void LinkedStack<T>::push(const T& data)
 {
+<<<<<<< HEAD
     m_head = WTF::wrapUnique(new Node(data, m_head.release()));
+=======
+    m_head = adoptPtr(new Node(data, m_head.release()));
+>>>>>>> miniblink49
     ++m_size;
 }
 
@@ -107,8 +143,12 @@ inline const T& LinkedStack<T>::peek()
 template <typename T>
 inline void LinkedStack<T>::pop()
 {
+<<<<<<< HEAD
     DCHECK(m_head);
     DCHECK(m_size);
+=======
+    ASSERT(m_head && m_size);
+>>>>>>> miniblink49
     m_head = m_head->m_next.release();
     --m_size;
 }
@@ -119,7 +159,11 @@ inline size_t LinkedStack<T>::size()
     return m_size;
 }
 
+<<<<<<< HEAD
 } // namespace WTF
+=======
+}
+>>>>>>> miniblink49
 
 using WTF::LinkedStack;
 

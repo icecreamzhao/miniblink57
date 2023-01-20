@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/html/HTMLRTElement.h"
 
 #include "core/HTMLNames.h"
@@ -20,9 +21,9 @@ DEFINE_NODE_FACTORY(HTMLRTElement)
 
 LayoutObject* HTMLRTElement::createLayoutObject(const ComputedStyle& style)
 {
-    if (style.display() == EDisplay::Block)
+    if (style.display() == BLOCK)
         return new LayoutRubyText(this);
     return LayoutObject::createObject(this, style);
 }
 
-} // namespace blink
+}

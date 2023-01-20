@@ -63,6 +63,7 @@
             'msvs_disabled_warnings': [4005, 4068, 4244, 4355, 4996, 4267],
             'msvs_settings': {
               'VCCLCompilerTool': {
+<<<<<<< HEAD
                 'AdditionalOptions': [ '/EHsc', ],
               },
             },
@@ -80,6 +81,11 @@
                     'RuntimeTypeInfo': 'true', # /GR
                   },
                 },
+=======
+                'RuntimeTypeInfo': 'true',
+                'AdditionalOptions!': [ '/GR-' ],
+                'AdditionalOptions': [ '/EHsc', '/GR', '/w', ],
+>>>>>>> miniblink49
               },
             },
             'all_dependent_settings': {
@@ -112,7 +118,11 @@
           }
         ],
         [
+<<<<<<< HEAD
           'skia_os == "linux"', {
+=======
+          'skia_os in ["linux", "chromeos"]', {
+>>>>>>> miniblink49
             'sources': [ '<(icu_directory)/linux/icudtl_dat.S', ],
           }
         ],

@@ -11,6 +11,10 @@
 #include "SkSemaphore.h"
 #include "SkTypes.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #if defined(THREAD_SANITIZER)
 
 /* Report that a lock has been created at address "lock". */
@@ -28,6 +32,7 @@
 
 /* Report that the lock at address "lock" is about to be released. */
 #define ANNOTATE_RWLOCK_RELEASED(lock, is_w) \
+<<<<<<< HEAD
     AnnotateRWLockReleased(__FILE__, __LINE__, lock, is_w)
 
 #ifdef DYNAMIC_ANNOTATIONS_WANT_ATTRIBUTE_WEAK
@@ -40,10 +45,25 @@
 #endif
 #else
 #define DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK
+=======
+  AnnotateRWLockReleased(__FILE__, __LINE__, lock, is_w)
+
+#ifdef DYNAMIC_ANNOTATIONS_WANT_ATTRIBUTE_WEAK
+# ifdef __GNUC__
+#  define DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK __attribute__((weak))
+# else
+/* TODO(glider): for Windows support we may want to change this macro in order
+   to prepend __declspec(selectany) to the annotations' declarations. */
+#  error weak annotations are not supported for your compiler
+# endif
+#else
+# define DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK
+>>>>>>> miniblink49
 #endif
 
 extern "C" {
 void AnnotateRWLockCreate(
+<<<<<<< HEAD
     const char* file, int line,
     const volatile void* lock) DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK;
 void AnnotateRWLockDestroy(
@@ -55,6 +75,19 @@ void AnnotateRWLockAcquired(
 void AnnotateRWLockReleased(
     const char* file, int line,
     const volatile void* lock, long is_w) DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK;
+=======
+    const char *file, int line,
+    const volatile void *lock) DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK;
+void AnnotateRWLockDestroy(
+    const char *file, int line,
+    const volatile void *lock) DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK;
+void AnnotateRWLockAcquired(
+    const char *file, int line,
+    const volatile void *lock, long is_w) DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK;
+void AnnotateRWLockReleased(
+    const char *file, int line,
+    const volatile void *lock, long is_w) DYNAMIC_ANNOTATIONS_ATTRIBUTE_WEAK;
+>>>>>>> miniblink49
 }
 
 #else
@@ -66,6 +99,7 @@ void AnnotateRWLockReleased(
 
 #endif
 
+<<<<<<< HEAD
 #ifdef SK_DEBUG
 
 #include "SkTDArray.h"
@@ -249,6 +283,8 @@ void SkSharedMutex::assertHeldShared() const
 
 #else
 
+=======
+>>>>>>> miniblink49
 // The fQueueCounts fields holds many counts in an int32_t in order to make managing them atomic.
 // These three counts must be the same size, so each gets 10 bits. The 10 bits represent
 // the log of the count which is 1024.
@@ -261,6 +297,7 @@ void SkSharedMutex::assertHeldShared() const
 static const int kLogThreadCount = 10;
 
 enum {
+<<<<<<< HEAD
     kSharedOffset = (0 * kLogThreadCount),
     kWaitingExlusiveOffset = (1 * kLogThreadCount),
     kWaitingSharedOffset = (2 * kLogThreadCount),
@@ -280,6 +317,22 @@ void SkSharedMutex::acquire()
     // Increment the count of exclusive queue waiters.
     int32_t oldQueueCounts = fQueueCounts.fetch_add(1 << kWaitingExlusiveOffset,
         sk_memory_order_acquire);
+=======
+    kSharedOffset          = (0 * kLogThreadCount),
+    kWaitingExlusiveOffset = (1 * kLogThreadCount),
+    kWaitingSharedOffset   = (2 * kLogThreadCount),
+    kSharedMask            = ((1 << kLogThreadCount) - 1) << kSharedOffset,
+    kWaitingExclusiveMask  = ((1 << kLogThreadCount) - 1) << kWaitingExlusiveOffset,
+    kWaitingSharedMask     = ((1 << kLogThreadCount) - 1) << kWaitingSharedOffset,
+};
+
+SkSharedMutex::SkSharedMutex() : fQueueCounts(0) { ANNOTATE_RWLOCK_CREATE(this); }
+SkSharedMutex::~SkSharedMutex() {  ANNOTATE_RWLOCK_DESTROY(this); }
+void SkSharedMutex::acquire() {
+    // Increment the count of exclusive queue waiters.
+    int32_t oldQueueCounts = fQueueCounts.fetch_add(1 << kWaitingExlusiveOffset,
+                                                    sk_memory_order_acquire);
+>>>>>>> miniblink49
 
     // If there are no other exclusive waiters and no shared threads are running then run
     // else wait.
@@ -289,8 +342,12 @@ void SkSharedMutex::acquire()
     ANNOTATE_RWLOCK_ACQUIRED(this, 1);
 }
 
+<<<<<<< HEAD
 void SkSharedMutex::release()
 {
+=======
+void SkSharedMutex::release() {
+>>>>>>> miniblink49
     ANNOTATE_RWLOCK_RELEASED(this, 1);
 
     int32_t oldQueueCounts = fQueueCounts.load(sk_memory_order_relaxed);
@@ -319,7 +376,11 @@ void SkSharedMutex::release()
         }
 
     } while (!fQueueCounts.compare_exchange(&oldQueueCounts, newQueueCounts,
+<<<<<<< HEAD
         sk_memory_order_release, sk_memory_order_relaxed));
+=======
+                                            sk_memory_order_release, sk_memory_order_relaxed));
+>>>>>>> miniblink49
 
     if (waitingShared > 0) {
         // Run all the shared.
@@ -330,8 +391,12 @@ void SkSharedMutex::release()
     }
 }
 
+<<<<<<< HEAD
 void SkSharedMutex::acquireShared()
 {
+=======
+void SkSharedMutex::acquireShared() {
+>>>>>>> miniblink49
     int32_t oldQueueCounts = fQueueCounts.load(sk_memory_order_relaxed);
     int32_t newQueueCounts;
     do {
@@ -343,13 +408,18 @@ void SkSharedMutex::acquireShared()
             newQueueCounts += 1 << kSharedOffset;
         }
     } while (!fQueueCounts.compare_exchange(&oldQueueCounts, newQueueCounts,
+<<<<<<< HEAD
         sk_memory_order_acquire, sk_memory_order_relaxed));
+=======
+                                            sk_memory_order_acquire, sk_memory_order_relaxed));
+>>>>>>> miniblink49
 
     // If there are waiting exclusives, then this shared waits until after it runs.
     if ((newQueueCounts & kWaitingExclusiveMask) > 0) {
         fSharedQueue.wait();
     }
     ANNOTATE_RWLOCK_ACQUIRED(this, 0);
+<<<<<<< HEAD
 }
 
 void SkSharedMutex::releaseShared()
@@ -359,6 +429,17 @@ void SkSharedMutex::releaseShared()
     // Decrement the shared count.
     int32_t oldQueueCounts = fQueueCounts.fetch_sub(1 << kSharedOffset,
         sk_memory_order_release);
+=======
+   
+}
+
+void SkSharedMutex::releaseShared() {
+    ANNOTATE_RWLOCK_RELEASED(this, 0);
+
+    // Decrement the shared count.
+    int32_t oldQueueCounts = fQueueCounts.fetch_add(-1 << kSharedOffset,
+                                                    sk_memory_order_release);
+>>>>>>> miniblink49
 
     // If shared count is going to zero (because the old count == 1) and there are exclusive
     // waiters, then run a single exclusive waiter.
@@ -367,5 +448,8 @@ void SkSharedMutex::releaseShared()
         fExclusiveQueue.signal();
     }
 }
+<<<<<<< HEAD
 
 #endif
+=======
+>>>>>>> miniblink49

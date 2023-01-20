@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkDrawEmboss_DEFINED
 #define SkDrawEmboss_DEFINED
 
@@ -15,12 +19,20 @@ class SkDrawEmboss : public SkDrawMaskFilter {
     DECLARE_DRAW_MEMBER_INFO(Emboss);
     SkDrawEmboss();
     SkMaskFilter* getMaskFilter() override;
+<<<<<<< HEAD
 
 protected:
     SkTDScalarArray fDirection;
     SkScalar fSigma;
     SkScalar fAmbient;
     SkScalar fSpecular;
+=======
+protected:
+    SkTDScalarArray fDirection;
+    SkScalar        fSigma;
+    SkScalar        fAmbient;
+    SkScalar        fSpecular;
+>>>>>>> miniblink49
 
     typedef SkDrawMaskFilter INHERITED;
 };

@@ -23,12 +23,14 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLButtonElement.h"
 
+#include "bindings/core/v8/V8DOMActivityLogger.h"
 #include "core/HTMLNames.h"
 #include "core/dom/Attribute.h"
 #include "core/events/KeyboardEvent.h"
-#include "core/html/FormData.h"
+#include "core/html/FormDataList.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/layout/LayoutButton.h"
 #include "wtf/StdLibExtras.h"
@@ -37,16 +39,16 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLButtonElement::HTMLButtonElement(Document& document)
-    : HTMLFormControlElement(buttonTag, document)
+inline HTMLButtonElement::HTMLButtonElement(Document& document, HTMLFormElement* form)
+    : HTMLFormControlElement(buttonTag, document, form)
     , m_type(SUBMIT)
     , m_isActivatedSubmit(false)
 {
 }
 
-HTMLButtonElement* HTMLButtonElement::create(Document& document)
+PassRefPtrWillBeRawPtr<HTMLButtonElement> HTMLButtonElement::create(Document& document, HTMLFormElement* form)
 {
-    return new HTMLButtonElement(document);
+    return adoptRefWillBeNoop(new HTMLButtonElement(document, form));
 }
 
 void HTMLButtonElement::setType(const AtomicString& type)
@@ -63,52 +65,46 @@ const AtomicString& HTMLButtonElement::formControlType() const
 {
     switch (m_type) {
     case SUBMIT: {
-        DEFINE_STATIC_LOCAL(const AtomicString, submit, ("submit"));
+        DEFINE_STATIC_LOCAL(const AtomicString, submit, ("submit", AtomicString::ConstructFromLiteral));
         return submit;
     }
     case BUTTON: {
-        DEFINE_STATIC_LOCAL(const AtomicString, button, ("button"));
+        DEFINE_STATIC_LOCAL(const AtomicString, button, ("button", AtomicString::ConstructFromLiteral));
         return button;
     }
     case RESET: {
-        DEFINE_STATIC_LOCAL(const AtomicString, reset, ("reset"));
+        DEFINE_STATIC_LOCAL(const AtomicString, reset, ("reset", AtomicString::ConstructFromLiteral));
         return reset;
     }
     }
 
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return emptyAtom;
 }
 
-bool HTMLButtonElement::isPresentationAttribute(
-    const QualifiedName& name) const
+bool HTMLButtonElement::isPresentationAttribute(const QualifiedName& name) const
 {
     if (name == alignAttr) {
-        // Don't map 'align' attribute.  This matches what Firefox and IE do, but
-        // not Opera.  See http://bugs.webkit.org/show_bug.cgi?id=12071
+        // Don't map 'align' attribute.  This matches what Firefox and IE do, but not Opera.
+        // See http://bugs.webkit.org/show_bug.cgi?id=12071
         return false;
     }
 
     return HTMLFormControlElement::isPresentationAttribute(name);
 }
 
-void HTMLButtonElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLButtonElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == typeAttr) {
-        if (equalIgnoringCase(params.newValue, "reset"))
+    if (name == typeAttr) {
+        if (equalIgnoringCase(value, "reset"))
             m_type = RESET;
-        else if (equalIgnoringCase(params.newValue, "button"))
+        else if (equalIgnoringCase(value, "button"))
             m_type = BUTTON;
         else
             m_type = SUBMIT;
         setNeedsWillValidateCheck();
-        if (formOwner() && isConnected())
-            formOwner()->invalidateDefaultButtonStyle();
     } else {
-        if (params.name == formactionAttr)
-            logUpdateAttributeIfIsolatedWorldAndInDocument("button", params);
-        HTMLFormControlElement::parseAttribute(params);
+        HTMLFormControlElement::parseAttribute(name, value);
     }
 }
 
@@ -116,8 +112,10 @@ void HTMLButtonElement::defaultEventHandler(Event* event)
 {
     if (event->type() == EventTypeNames::DOMActivate && !isDisabledFormControl()) {
         if (form() && m_type == SUBMIT) {
-            form()->prepareForSubmission(event, this);
+            m_isActivatedSubmit = true;
+            form()->prepareForSubmission(event);
             event->setDefaultHandled();
+            m_isActivatedSubmit = false; // Do this in case submission was canceled.
         }
         if (form() && m_type == RESET) {
             form()->reset();
@@ -126,7 +124,7 @@ void HTMLButtonElement::defaultEventHandler(Event* event)
     }
 
     if (event->isKeyboardEvent()) {
-        if (event->type() == EventTypeNames::keydown && toKeyboardEvent(event)->key() == " ") {
+        if (event->type() == EventTypeNames::keydown && toKeyboardEvent(event)->keyIdentifier() == "U+0020") {
             setActive(true);
             // No setDefaultHandled() - IE dispatches a keypress in this case.
             return;
@@ -143,8 +141,8 @@ void HTMLButtonElement::defaultEventHandler(Event* event)
                 return;
             }
         }
-        if (event->type() == EventTypeNames::keyup && toKeyboardEvent(event)->key() == " ") {
-            if (isActive())
+        if (event->type() == EventTypeNames::keyup && toKeyboardEvent(event)->keyIdentifier() == "U+0020") {
+            if (active())
                 dispatchSimulatedClick(event);
             event->setDefaultHandled();
             return;
@@ -176,18 +174,19 @@ void HTMLButtonElement::setActivatedSubmit(bool flag)
     m_isActivatedSubmit = flag;
 }
 
-void HTMLButtonElement::appendToFormData(FormData& formData)
+bool HTMLButtonElement::appendFormData(FormDataList& formData, bool)
 {
-    if (m_type == SUBMIT && !name().isEmpty() && m_isActivatedSubmit)
-        formData.append(name(), value());
+    if (m_type != SUBMIT || name().isEmpty() || !m_isActivatedSubmit)
+        return false;
+    formData.appendData(name(), value());
+    return true;
 }
 
 void HTMLButtonElement::accessKeyAction(bool sendMouseEvents)
 {
     focus();
 
-    dispatchSimulatedClick(
-        0, sendMouseEvents ? SendMouseUpDownEvents : SendNoEvents);
+    dispatchSimulatedClick(0, sendMouseEvents ? SendMouseUpDownEvents : SendNoEvents);
 }
 
 bool HTMLButtonElement::isURLAttribute(const Attribute& attribute) const
@@ -215,20 +214,36 @@ bool HTMLButtonElement::supportsAutofocus() const
     return true;
 }
 
-bool HTMLButtonElement::matchesDefaultPseudoClass() const
+Node::InsertionNotificationRequest HTMLButtonElement::insertedInto(ContainerNode* insertionPoint)
 {
-    // HTMLFormElement::findDefaultButton() traverses the tree. So we check
-    // canBeSuccessfulSubmitButton() first for early return.
-    return canBeSuccessfulSubmitButton() && form() && form()->findDefaultButton() == this;
+    if (insertionPoint->inDocument()) {
+        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
+        if (activityLogger) {
+            Vector<String> argv;
+            argv.append("button");
+            argv.append(fastGetAttribute(typeAttr));
+            argv.append(fastGetAttribute(formmethodAttr));
+            argv.append(fastGetAttribute(formactionAttr));
+            activityLogger->logEvent("blinkAddElement", argv.size(), argv.data());
+        }
+    }
+    return HTMLFormControlElement::insertedInto(insertionPoint);
 }
 
-Node::InsertionNotificationRequest HTMLButtonElement::insertedInto(
-    ContainerNode* insertionPoint)
+void HTMLButtonElement::attributeWillChange(const QualifiedName& name, const AtomicString& oldValue, const AtomicString& newValue)
 {
-    InsertionNotificationRequest request = HTMLFormControlElement::insertedInto(insertionPoint);
-    logAddElementIfIsolatedWorldAndInDocument("button", typeAttr, formmethodAttr,
-        formactionAttr);
-    return request;
+    if (name == formactionAttr && inDocument()) {
+        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
+        if (activityLogger) {
+            Vector<String> argv;
+            argv.append("button");
+            argv.append(formactionAttr.toString());
+            argv.append(oldValue);
+            argv.append(newValue);
+            activityLogger->logEvent("blinkSetAttribute", argv.size(), argv.data());
+        }
+    }
+    HTMLFormControlElement::attributeWillChange(name, oldValue, newValue);
 }
 
-} // namespace blink
+} // namespace

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -5,15 +9,27 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkKTXFile_DEFINED
 #define SkKTXFile_DEFINED
 
 #include "SkData.h"
+<<<<<<< HEAD
 #include "SkRefCnt.h"
 #include "SkString.h"
 #include "SkTDArray.h"
 #include "SkTextureCompressor.h"
 #include "SkTypes.h"
+=======
+#include "SkTextureCompressor.h"
+#include "SkTypes.h"
+#include "SkTDArray.h"
+#include "SkString.h"
+#include "SkRefCnt.h"
+>>>>>>> miniblink49
 
 class SkBitmap;
 class SkStreamRewindable;
@@ -34,8 +50,12 @@ public:
     // to be used as a logical wrapper around the data in order to properly
     // access the pixels.
     SkKTXFile(SkData* data)
+<<<<<<< HEAD
         : fData(data)
         , fSwapBytes(false)
+=======
+        : fData(data), fSwapBytes(false)
+>>>>>>> miniblink49
     {
         data->ref();
         fValid = this->readKTXFile(fData->bytes(), fData->size());
@@ -46,8 +66,12 @@ public:
     int width() const { return static_cast<int>(fHeader.fPixelWidth); }
     int height() const { return static_cast<int>(fHeader.fPixelHeight); }
 
+<<<<<<< HEAD
     const uint8_t* pixelData(int mipmap = 0) const
     {
+=======
+    const uint8_t *pixelData(int mipmap = 0) const {
+>>>>>>> miniblink49
         SkASSERT(!this->valid() || mipmap < fPixelData.count());
         return this->valid() ? fPixelData[mipmap].data() : NULL;
     }
@@ -63,6 +87,7 @@ public:
     bool isRGBA8() const;
     bool isRGB8() const;
 
+<<<<<<< HEAD
     static bool is_ktx(const uint8_t data[], size_t size);
     static bool is_ktx(SkStreamRewindable* stream);
 
@@ -71,6 +96,16 @@ public:
     static bool WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap);
 
 private:
+=======
+    static bool is_ktx(const uint8_t *data);
+    static bool is_ktx(SkStreamRewindable* stream);
+
+    static bool WriteETC1ToKTX(SkWStream* stream, const uint8_t *etc1Data,
+                               uint32_t width, uint32_t height);
+    static bool WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap);
+private:
+
+>>>>>>> miniblink49
     // The blob holding the file data.
     SkAutoTUnref<SkData> fData;
 
@@ -97,15 +132,21 @@ private:
     // arbitrarily many of these.
     class KeyValue {
     public:
+<<<<<<< HEAD
         KeyValue(size_t size)
             : fDataSz(size)
         {
         }
         bool readKeyAndValue(const uint8_t* data);
+=======
+        KeyValue(size_t size) : fDataSz(size) { }
+        bool readKeyAndValue(const uint8_t *data);
+>>>>>>> miniblink49
         size_t size() const { return fDataSz; }
         const SkString& key() const { return fKey; }
         const SkString& value() const { return fValue; }
         bool writeKeyAndValueForKTX(SkWStream* strm);
+<<<<<<< HEAD
 
     private:
         const size_t fDataSz;
@@ -114,12 +155,22 @@ private:
     };
 
     static KeyValue CreateKeyValue(const char* key, const char* value);
+=======
+    private:
+        const size_t fDataSz;
+        SkString     fKey;
+        SkString     fValue;
+    };
+
+    static KeyValue CreateKeyValue(const char *key, const char *value);
+>>>>>>> miniblink49
 
     // The pixel data for a single mipmap level in an image. Based on how
     // the rest of the data is stored, this may be compressed, a cubemap, etc.
     // The header will describe the format of this data.
     class PixelData {
     public:
+<<<<<<< HEAD
         PixelData(const uint8_t* ptr, size_t sz)
             : fDataSz(sz)
             , fDataPtr(ptr)
@@ -131,12 +182,24 @@ private:
     private:
         const size_t fDataSz;
         const uint8_t* fDataPtr;
+=======
+        PixelData(const uint8_t *ptr, size_t sz) : fDataSz(sz), fDataPtr(ptr) { }
+        const uint8_t *data() const { return fDataPtr; }
+        size_t dataSize() const { return fDataSz; }
+    private:
+        const size_t fDataSz;
+        const uint8_t *fDataPtr;
+>>>>>>> miniblink49
     };
 
     // This function is only called once from the constructor. It loads the data
     // and populates the appropriate fields of this class
     // (fKeyValuePairs, fPixelData, fSwapBytes)
+<<<<<<< HEAD
     bool readKTXFile(const uint8_t* data, size_t dataLen);
+=======
+    bool readKTXFile(const uint8_t *data, size_t dataLen);
+>>>>>>> miniblink49
 
     SkTArray<KeyValue> fKeyValuePairs;
     SkTDArray<PixelData> fPixelData;
@@ -151,4 +214,8 @@ private:
     uint32_t readInt(const uint8_t** buf, size_t* bytesLeft) const;
 };
 
+<<<<<<< HEAD
 #endif // SkKTXFile_DEFINED
+=======
+#endif  // SkKTXFile_DEFINED
+>>>>>>> miniblink49

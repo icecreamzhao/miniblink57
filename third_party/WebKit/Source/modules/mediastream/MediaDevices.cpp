@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/mediastream/MediaDevices.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
@@ -10,10 +14,14 @@
 #include "core/dom/DOMException.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
+<<<<<<< HEAD
 #include "core/events/Event.h"
 #include "modules/mediastream/MediaErrorState.h"
 #include "modules/mediastream/MediaStream.h"
 #include "modules/mediastream/MediaStreamConstraints.h"
+=======
+#include "modules/mediastream/MediaStream.h"
+>>>>>>> miniblink49
 #include "modules/mediastream/NavigatorMediaStream.h"
 #include "modules/mediastream/NavigatorUserMediaErrorCallback.h"
 #include "modules/mediastream/NavigatorUserMediaSuccessCallback.h"
@@ -21,6 +29,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 namespace {
 
     class PromiseSuccessCallback final : public NavigatorUserMediaSuccessCallback {
@@ -99,20 +108,91 @@ ScriptPromise MediaDevices::enumerateDevices(ScriptState* scriptState)
             DOMException::create(NotSupportedError,
                 "No media device controller available; is this a "
                 "detached window?"));
+=======
+ScriptPromise MediaDevices::enumerateDevices(ScriptState* scriptState)
+{
+    Document* document = toDocument(scriptState->executionContext());
+    UserMediaController* userMedia = UserMediaController::from(document->frame());
+    if (!userMedia)
+        return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(NotSupportedError, "No media device controller available; is this a detached window?"));
+>>>>>>> miniblink49
 
     MediaDevicesRequest* request = MediaDevicesRequest::create(scriptState, userMedia);
     return request->start();
 }
 
+<<<<<<< HEAD
 ScriptPromise MediaDevices::getUserMedia(ScriptState* scriptState,
     const MediaStreamConstraints& options,
     ExceptionState& exceptionState)
 {
     ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
+=======
+namespace {
+
+class PromiseSuccessCallback final : public NavigatorUserMediaSuccessCallback {
+public:
+    PromiseSuccessCallback(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+        : m_resolver(resolver)
+    {
+    }
+
+    ~PromiseSuccessCallback()
+    {
+    }
+
+    void handleEvent(MediaStream* stream)
+    {
+        m_resolver->resolve(stream);
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_resolver);
+        NavigatorUserMediaSuccessCallback::trace(visitor);
+    }
+
+private:
+    RefPtrWillBeMember<ScriptPromiseResolver> m_resolver;
+};
+
+class PromiseErrorCallback final : public NavigatorUserMediaErrorCallback {
+public:
+    PromiseErrorCallback(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+        : m_resolver(resolver)
+    {
+    }
+
+    ~PromiseErrorCallback()
+    {
+    }
+
+    void handleEvent(NavigatorUserMediaError* error)
+    {
+        m_resolver->reject(error);
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_resolver);
+        NavigatorUserMediaErrorCallback::trace(visitor);
+    }
+
+private:
+    RefPtrWillBeMember<ScriptPromiseResolver> m_resolver;
+};
+
+} // namespace
+
+ScriptPromise MediaDevices::getUserMedia(ScriptState* scriptState, const Dictionary& options, ExceptionState& exceptionState)
+{
+    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
+>>>>>>> miniblink49
 
     NavigatorUserMediaSuccessCallback* successCallback = new PromiseSuccessCallback(resolver);
     NavigatorUserMediaErrorCallback* errorCallback = new PromiseErrorCallback(resolver);
 
+<<<<<<< HEAD
     Document* document = toDocument(scriptState->getExecutionContext());
     UserMediaController* userMedia = UserMediaController::from(document->frame());
     if (!userMedia)
@@ -140,12 +220,24 @@ ScriptPromise MediaDevices::getUserMedia(ScriptState* scriptState,
     if (!request->isSecureContextUse(errorMessage)) {
         return ScriptPromise::rejectWithDOMException(
             scriptState, DOMException::create(NotSupportedError, errorMessage));
+=======
+    Document* document = toDocument(scriptState->executionContext());
+    UserMediaController* userMedia = UserMediaController::from(document->frame());
+    if (!userMedia)
+        return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(NotSupportedError, "No media device controller available; is this a detached window?"));
+
+    UserMediaRequest* request = UserMediaRequest::create(document, userMedia, options, successCallback, errorCallback, exceptionState);
+    if (!request) {
+        ASSERT(exceptionState.hadException());
+        return exceptionState.reject(scriptState);
+>>>>>>> miniblink49
     }
 
     request->start();
     return resolver->promise();
 }
 
+<<<<<<< HEAD
 void MediaDevices::didChangeMediaDevices()
 {
     Document* document = toDocument(getExecutionContext());
@@ -278,4 +370,6 @@ DEFINE_TRACE(MediaDevices)
     SuspendableObject::trace(visitor);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

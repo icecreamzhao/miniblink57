@@ -25,6 +25,7 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<<<<<<< HEAD
 
 --------------------------------------------------------------------------------
 third_party/etc1 is under the following license:
@@ -243,3 +244,5 @@ We put together a small chart of as many possibilities and questions we have hea
 
 All Clipart are Released into the Public Domain.
 Each artist at Openclipart releases all rights to the images they share at Openclipart. The reason is so that there is no friction in using and sharing images authors make available at this website so that each artist might also receive the same benefit in using other artists clipart totally for any possible reason.
+=======
+>>>>>>> miniblink49

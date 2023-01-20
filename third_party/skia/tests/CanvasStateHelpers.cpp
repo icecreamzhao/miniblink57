@@ -14,8 +14,12 @@
 #include "SkRegion.h"
 
 void complex_layers_draw(SkCanvas* canvas, float left, float top,
+<<<<<<< HEAD
     float right, float bottom, int32_t spacer)
 {
+=======
+                         float right, float bottom, int32_t spacer) {
+>>>>>>> miniblink49
     SkPaint bluePaint;
     bluePaint.setColor(SK_ColorBLUE);
     bluePaint.setStyle(SkPaint::kFill_Style);
@@ -27,8 +31,12 @@ void complex_layers_draw(SkCanvas* canvas, float left, float top,
 }
 
 extern "C" bool complex_layers_draw_from_canvas_state(SkCanvasState* state,
+<<<<<<< HEAD
     float left, float top, float right, float bottom, int32_t spacer)
 {
+=======
+        float left, float top, float right, float bottom, int32_t spacer) {
+>>>>>>> miniblink49
     SkCanvas* canvas = SkCanvasStateUtils::CreateFromCanvasState(state);
     if (!canvas) {
         return false;
@@ -39,6 +47,7 @@ extern "C" bool complex_layers_draw_from_canvas_state(SkCanvasState* state,
 }
 
 void complex_clips_draw(SkCanvas* canvas, int32_t left, int32_t top,
+<<<<<<< HEAD
     int32_t right, int32_t bottom, int32_t clipOp, const SkRegion& localRegion)
 {
     canvas->save();
@@ -49,13 +58,29 @@ void complex_clips_draw(SkCanvas* canvas, int32_t left, int32_t top,
     canvas->restore();
 
     canvas->clipRegion(localRegion, (SkRegion::Op)clipOp);
+=======
+        int32_t right, int32_t bottom, int32_t clipOp, const SkRegion& localRegion) {
+    canvas->save();
+    SkRect clipRect = SkRect::MakeLTRB(SkIntToScalar(left), SkIntToScalar(top),
+                                       SkIntToScalar(right), SkIntToScalar(bottom));
+    canvas->clipRect(clipRect, (SkRegion::Op) clipOp);
+    canvas->drawColor(SK_ColorBLUE);
+    canvas->restore();
+
+    canvas->clipRegion(localRegion, (SkRegion::Op) clipOp);
+>>>>>>> miniblink49
     canvas->drawColor(SK_ColorBLUE);
 }
 
 extern "C" bool complex_clips_draw_from_canvas_state(SkCanvasState* state,
+<<<<<<< HEAD
     int32_t left, int32_t top, int32_t right, int32_t bottom, int32_t clipOp,
     int32_t regionRects, int32_t* rectCoords)
 {
+=======
+        int32_t left, int32_t top, int32_t right, int32_t bottom, int32_t clipOp,
+        int32_t regionRects, int32_t* rectCoords) {
+>>>>>>> miniblink49
     SkCanvas* canvas = SkCanvasStateUtils::CreateFromCanvasState(state);
     if (!canvas) {
         return false;
@@ -64,7 +89,11 @@ extern "C" bool complex_clips_draw_from_canvas_state(SkCanvasState* state,
     SkRegion localRegion;
     for (int32_t i = 0; i < regionRects; ++i) {
         localRegion.op(rectCoords[0], rectCoords[1], rectCoords[2], rectCoords[3],
+<<<<<<< HEAD
             SkRegion::kUnion_Op);
+=======
+                       SkRegion::kUnion_Op);
+>>>>>>> miniblink49
         rectCoords += 4;
     }
 

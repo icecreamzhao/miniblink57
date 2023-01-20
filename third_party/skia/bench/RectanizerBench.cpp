@@ -41,11 +41,18 @@ public:
         kSmallPow2_RectType
     };
 
+<<<<<<< HEAD
     RectanizerBench(RectanizerType rectanizerType, RectType rectType)
         : fName("rectanizer_")
         , fRectanizerType(rectanizerType)
         , fRectType(rectType)
     {
+=======
+    RectanizerBench(RectanizerType rectanizerType, RectType rectType) 
+        : fName("rectanizer_")
+        , fRectanizerType(rectanizerType)
+        , fRectType(rectType) {
+>>>>>>> miniblink49
 
         if (kPow2_RectanizerType == fRectanizerType) {
             fName.append("pow2_");
@@ -65,6 +72,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
         return kNonRendering_Backend == backend;
@@ -89,6 +97,28 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    bool isSuitableFor(Backend backend) override {
+        return kNonRendering_Backend == backend;
+    }
+
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onPreDraw() override {
+        SkASSERT(NULL == fRectanizer.get());
+
+        if (kPow2_RectanizerType == fRectanizerType) {
+            fRectanizer.reset(SkNEW_ARGS(GrRectanizerPow2, (kWidth, kHeight)));
+        } else {
+            SkASSERT(kSkyline_RectanizerType == fRectanizerType);
+            fRectanizer.reset(SkNEW_ARGS(GrRectanizerSkyline, (kWidth, kHeight)));
+        }
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkRandom rand;
         SkIPoint16 loc;
         SkISize size;
@@ -96,10 +126,17 @@ protected:
         for (int i = 0; i < loops; ++i) {
             if (kRand_RectType == fRectType) {
                 size = SkISize::Make(rand.nextRangeU(1, kWidth / 2),
+<<<<<<< HEAD
                     rand.nextRangeU(1, kHeight / 2));
             } else if (kRandPow2_RectType == fRectType) {
                 size = SkISize::Make(GrNextPow2(rand.nextRangeU(1, kWidth / 2)),
                     GrNextPow2(rand.nextRangeU(1, kHeight / 2)));
+=======
+                                     rand.nextRangeU(1, kHeight / 2));
+            } else if (kRandPow2_RectType == fRectType) {
+                size = SkISize::Make(GrNextPow2(rand.nextRangeU(1, kWidth / 2)),
+                                     GrNextPow2(rand.nextRangeU(1, kHeight / 2)));
+>>>>>>> miniblink49
             } else {
                 SkASSERT(kSmallPow2_RectType == fRectType);
                 size = SkISize::Make(128, 128);
@@ -117,9 +154,15 @@ protected:
     }
 
 private:
+<<<<<<< HEAD
     SkString fName;
     RectanizerType fRectanizerType;
     RectType fRectType;
+=======
+    SkString                    fName;
+    RectanizerType              fRectanizerType;
+    RectType                    fRectType;
+>>>>>>> miniblink49
     SkAutoTDelete<GrRectanizer> fRectanizer;
 
     typedef Benchmark INHERITED;
@@ -128,6 +171,7 @@ private:
 //////////////////////////////////////////////////////////////////////////////
 
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
+<<<<<<< HEAD
     RectanizerBench::kRand_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
     RectanizerBench::kRandPow2_RectType);)
@@ -139,5 +183,18 @@ DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
     RectanizerBench::kRandPow2_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
     RectanizerBench::kSmallPow2_RectType);)
+=======
+                                     RectanizerBench::kRand_RectType);)
+DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
+                                     RectanizerBench::kRandPow2_RectType);)
+DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
+                                     RectanizerBench::kSmallPow2_RectType);)
+DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
+                                     RectanizerBench::kRand_RectType);)
+DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
+                                     RectanizerBench::kRandPow2_RectType);)
+DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
+                                     RectanizerBench::kSmallPow2_RectType);)
+>>>>>>> miniblink49
 
 #endif

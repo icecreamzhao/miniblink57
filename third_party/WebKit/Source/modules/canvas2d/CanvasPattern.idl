@@ -23,9 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 [
+<<<<<<< HEAD
     Exposed(Worker ExperimentalCanvasFeatures, Window StableBlinkFeatures),
 ] interface CanvasPattern {
 
     [RuntimeEnabled=ExperimentalCanvasFeatures,Exposed=Window] void setTransform(SVGMatrix transform);
+=======
+    GarbageCollected,
+] interface CanvasPattern {
+
+    [RuntimeEnabled=ExperimentalCanvasFeatures] void setTransform(SVGMatrix transform);
+>>>>>>> miniblink49
 
 };

@@ -10,19 +10,20 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- *  THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ *  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ *  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *  DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ *  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ *  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
+#include "config.h"
 #include "core/dom/ScriptedAnimationController.h"
 
 #include "core/css/MediaQueryListListener.h"
@@ -34,6 +35,7 @@
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/loader/DocumentLoader.h"
+#include "platform/Logging.h"
 
 namespace blink {
 
@@ -49,13 +51,17 @@ ScriptedAnimationController::ScriptedAnimationController(Document* document)
 {
 }
 
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(ScriptedAnimationController);
+
 DEFINE_TRACE(ScriptedAnimationController)
 {
+#if ENABLE(OILPAN)
     visitor->trace(m_document);
     visitor->trace(m_callbackCollection);
     visitor->trace(m_eventQueue);
     visitor->trace(m_mediaQueryListListeners);
     visitor->trace(m_perFrameEvents);
+#endif
 }
 
 void ScriptedAnimationController::suspend()
@@ -65,9 +71,8 @@ void ScriptedAnimationController::suspend()
 
 void ScriptedAnimationController::resume()
 {
-    // It would be nice to put an DCHECK(m_suspendCount > 0) here, but in WK1
-    // resume() can be called even when suspend hasn't (if a tab was created in
-    // the background).
+    // It would be nice to put an ASSERT(m_suspendCount > 0) here, but in WK1 resume() can be called
+    // even when suspend hasn't (if a tab was created in the background).
     if (m_suspendCount > 0)
         --m_suspendCount;
     scheduleAnimationIfNeeded();
@@ -79,8 +84,7 @@ void ScriptedAnimationController::dispatchEventsAndCallbacksForPrinting()
     callMediaQueryListListeners();
 }
 
-ScriptedAnimationController::CallbackId
-ScriptedAnimationController::registerCallback(FrameRequestCallback* callback)
+ScriptedAnimationController::CallbackId ScriptedAnimationController::registerCallback(FrameRequestCallback* callback)
 {
     CallbackId id = m_callbackCollection.registerCallback(callback);
     scheduleAnimationIfNeeded();
@@ -92,46 +96,37 @@ void ScriptedAnimationController::cancelCallback(CallbackId id)
     m_callbackCollection.cancelCallback(id);
 }
 
-void ScriptedAnimationController::runTasks()
+void ScriptedAnimationController::dispatchEvents(const AtomicString& eventInterfaceFilter)
 {
-    Vector<std::unique_ptr<WTF::Closure>> tasks;
-    tasks.swap(m_taskQueue);
-    for (auto& task : tasks)
-        (*task)();
-}
-
-void ScriptedAnimationController::dispatchEvents(
-    const AtomicString& eventInterfaceFilter)
-{
-    HeapVector<Member<Event>> events;
+    WillBeHeapVector<RefPtrWillBeMember<Event>> events;
     if (eventInterfaceFilter.isEmpty()) {
         events.swap(m_eventQueue);
         m_perFrameEvents.clear();
     } else {
-        HeapVector<Member<Event>> remaining;
+        WillBeHeapVector<RefPtrWillBeMember<Event>> remaining;
         for (auto& event : m_eventQueue) {
             if (event && event->interfaceName() == eventInterfaceFilter) {
                 m_perFrameEvents.remove(eventTargetKey(event.get()));
-                events.push_back(event.release());
+                events.append(event.release());
             } else {
-                remaining.push_back(event.release());
+                remaining.append(event.release());
             }
         }
         remaining.swap(m_eventQueue);
     }
 
-    for (const auto& event : events) {
-        EventTarget* eventTarget = event->target();
-        // FIXME: we should figure out how to make dispatchEvent properly virtual to
-        // avoid special casting window.
-        // FIXME: We should not fire events for nodes that are no longer in the
-        // tree.
-        InspectorInstrumentation::AsyncTask asyncTask(
-            eventTarget->getExecutionContext(), event);
-        if (LocalDOMWindow* window = eventTarget->toLocalDOMWindow())
-            window->dispatchEvent(event, nullptr);
+
+    for (size_t i = 0; i < events.size(); ++i) {
+        EventTarget* eventTarget = events[i]->target();
+        // FIXME: we should figure out how to make dispatchEvent properly virtual to avoid
+        // special casting window.
+        // FIXME: We should not fire events for nodes that are no longer in the tree.
+        if (LocalDOMWindow* window = eventTarget->toDOMWindow())
+            window->dispatchEvent(events[i], nullptr);
         else
-            eventTarget->dispatchEvent(event);
+            eventTarget->dispatchEvent(events[i]);
+
+        InspectorInstrumentation::didRemoveEvent(eventTarget, events[i].get());
     }
 }
 
@@ -161,50 +156,41 @@ bool ScriptedAnimationController::hasScheduledItems() const
     if (m_suspendCount)
         return false;
 
-    return !m_callbackCollection.isEmpty() || !m_taskQueue.isEmpty() || !m_eventQueue.isEmpty() || !m_mediaQueryListListeners.isEmpty();
+    return !m_callbackCollection.isEmpty() || !m_eventQueue.isEmpty() || !m_mediaQueryListListeners.isEmpty();
 }
 
-void ScriptedAnimationController::serviceScriptedAnimations(
-    double monotonicTimeNow)
+void ScriptedAnimationController::serviceScriptedAnimations(double monotonicTimeNow)
 {
     if (!hasScheduledItems())
         return;
 
+    RefPtrWillBeRawPtr<ScriptedAnimationController> protect(this);
+
     callMediaQueryListListeners();
     dispatchEvents();
-    runTasks();
     executeCallbacks(monotonicTimeNow);
 
     scheduleAnimationIfNeeded();
 }
 
-void ScriptedAnimationController::enqueueTask(
-    std::unique_ptr<WTF::Closure> task)
+void ScriptedAnimationController::enqueueEvent(PassRefPtrWillBeRawPtr<Event> event)
 {
-    m_taskQueue.push_back(std::move(task));
+    InspectorInstrumentation::didEnqueueEvent(event->target(), event.get());
+    m_eventQueue.append(event);
     scheduleAnimationIfNeeded();
 }
 
-void ScriptedAnimationController::enqueueEvent(Event* event)
+void ScriptedAnimationController::enqueuePerFrameEvent(PassRefPtrWillBeRawPtr<Event> event)
 {
-    InspectorInstrumentation::asyncTaskScheduled(
-        event->target()->getExecutionContext(), event->type(), event);
-    m_eventQueue.push_back(event);
-    scheduleAnimationIfNeeded();
-}
-
-void ScriptedAnimationController::enqueuePerFrameEvent(Event* event)
-{
-    if (!m_perFrameEvents.add(eventTargetKey(event)).isNewEntry)
+    if (!m_perFrameEvents.add(eventTargetKey(event.get())).isNewEntry)
         return;
     enqueueEvent(event);
 }
 
-void ScriptedAnimationController::enqueueMediaQueryChangeListeners(
-    HeapVector<Member<MediaQueryListListener>>& listeners)
+void ScriptedAnimationController::enqueueMediaQueryChangeListeners(WillBeHeapVector<RefPtrWillBeMember<MediaQueryListListener>>& listeners)
 {
-    for (const auto& listener : listeners) {
-        m_mediaQueryListListeners.add(listener);
+    for (size_t i = 0; i < listeners.size(); ++i) {
+        m_mediaQueryListListeners.add(listeners[i]);
     }
     scheduleAnimationIfNeeded();
 }
@@ -221,4 +207,4 @@ void ScriptedAnimationController::scheduleAnimationIfNeeded()
         frameView->scheduleAnimation();
 }
 
-} // namespace blink
+}

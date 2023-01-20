@@ -2,13 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebEncryptedMediaKeyInformation.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebEncryptedMediaKeyInformation::WebEncryptedMediaKeyInformation() { }
 
 WebEncryptedMediaKeyInformation::~WebEncryptedMediaKeyInformation() { }
+=======
+WebEncryptedMediaKeyInformation::WebEncryptedMediaKeyInformation()
+{
+}
+
+WebEncryptedMediaKeyInformation::~WebEncryptedMediaKeyInformation()
+{
+}
+>>>>>>> miniblink49
 
 WebData WebEncryptedMediaKeyInformation::id() const
 {
@@ -20,8 +34,12 @@ void WebEncryptedMediaKeyInformation::setId(const WebData& id)
     m_id.assign(id);
 }
 
+<<<<<<< HEAD
 WebEncryptedMediaKeyInformation::KeyStatus
 WebEncryptedMediaKeyInformation::status() const
+=======
+WebEncryptedMediaKeyInformation::KeyStatus WebEncryptedMediaKeyInformation::status() const
+>>>>>>> miniblink49
 {
     return m_status;
 }

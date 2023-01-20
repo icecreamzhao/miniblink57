@@ -38,21 +38,34 @@
 namespace blink {
 
 class DOMFileSystemBase;
+<<<<<<< HEAD
 class BlobCallback;
+=======
+class FileCallback;
+>>>>>>> miniblink49
 class FileWriterCallback;
 
 class MODULES_EXPORT FileEntry final : public Entry {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static FileEntry* create(DOMFileSystemBase* fileSystem,
         const String& fullPath)
+=======
+public:
+    static FileEntry* create(DOMFileSystemBase* fileSystem, const String& fullPath)
+>>>>>>> miniblink49
     {
         return new FileEntry(fileSystem, fullPath);
     }
 
     void createWriter(FileWriterCallback*, ErrorCallback* = nullptr);
+<<<<<<< HEAD
     void file(BlobCallback*, ErrorCallback* = nullptr);
+=======
+    void file(FileCallback*, ErrorCallback* = nullptr);
+>>>>>>> miniblink49
 
     bool isFile() const override { return true; }
 

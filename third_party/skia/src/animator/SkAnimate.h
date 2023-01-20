@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkAnimate_DEFINED
 #define SkAnimate_DEFINED
 
@@ -20,6 +24,7 @@ class SkAnimate : public SkAnimateBase {
     virtual ~SkAnimate();
     int components() override;
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
     void dump(SkAnimateMaker*) override;
 #endif
     void onEndElement(SkAnimateMaker& maker) override;
@@ -28,6 +33,14 @@ protected:
     bool resolveCommon(SkAnimateMaker&);
     int fComponents;
 
+=======
+    void dump(SkAnimateMaker* ) override;
+#endif
+    void onEndElement(SkAnimateMaker& maker) override;
+protected:
+    bool resolveCommon(SkAnimateMaker& );
+    int fComponents;
+>>>>>>> miniblink49
 private:
     typedef SkAnimateBase INHERITED;
 };

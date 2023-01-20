@@ -18,6 +18,7 @@
  *
  */
 
+<<<<<<< HEAD
 #include "platform/image-decoders/ImageDecoder.h"
 
 #include "platform/PlatformInstrumentation.h"
@@ -40,40 +41,103 @@
 namespace blink {
 
 inline bool matchesJPEGSignature(const char* contents)
+=======
+#include "config.h"
+#include "platform/image-decoders/ImageDecoder.h"
+
+#include "platform/PlatformInstrumentation.h"
+#include "platform/graphics/DeferredImageDecoder.h"
+#include "platform/image-decoders/bmp/BMPImageDecoder.h"
+#include "platform/image-decoders/ico/ICOImageDecoder.h"
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+#include "platform/image-decoders/webp/WEBPImageDecoder.h"
+#endif // MINIBLINK_NOT_IMPLEMENTED
+#include "platform/image-decoders/png/PNGImageDecoder.h"
+#include "platform/image-decoders/jpeg/JPEGImageDecoder.h"
+#include "platform/image-decoders/GDIPlus/ImageGDIPlusDecoder.h"
+#include "platform/image-decoders/gif/GIFImageDecoder.h"
+
+#include "wtf/PassOwnPtr.h"
+
+namespace blink {
+
+static unsigned copyFromSharedBuffer(char* buffer, unsigned bufferLength, const SharedBuffer& sharedBuffer, unsigned offset)
+{
+    unsigned bytesExtracted = 0;
+    const char* moreData;
+    while (unsigned moreDataLength = sharedBuffer.getSomeData(moreData, offset)) {
+        unsigned bytesToCopy = std::min(bufferLength - bytesExtracted, moreDataLength);
+        memcpy(buffer + bytesExtracted, moreData, bytesToCopy);
+        bytesExtracted += bytesToCopy;
+        if (bytesExtracted == bufferLength)
+            break;
+        offset += bytesToCopy;
+    }
+    return bytesExtracted;
+}
+
+inline bool matchesJPEGSignature(char* contents)
+>>>>>>> miniblink49
 {
     return !memcmp(contents, "\xFF\xD8\xFF", 3);
 }
 
+<<<<<<< HEAD
 inline bool matchesPNGSignature(const char* contents)
 {
     return !memcmp(contents, "\x89PNG\r\n\x1A\n", 8);
 }
 
 inline bool matchesGIFSignature(const char* contents)
+=======
+inline bool matchesPNGSignature(char* contents)
+{
+    return !memcmp(contents, "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 8);
+}
+
+inline bool matchesGIFSignature(char* contents)
+>>>>>>> miniblink49
 {
     return !memcmp(contents, "GIF87a", 6) || !memcmp(contents, "GIF89a", 6);
 }
 
+<<<<<<< HEAD
 inline bool matchesWebPSignature(const char* contents)
+=======
+inline bool matchesWebPSignature(char* contents)
+>>>>>>> miniblink49
 {
     return !memcmp(contents, "RIFF", 4) && !memcmp(contents + 8, "WEBPVP", 6);
 }
 
+<<<<<<< HEAD
 inline bool matchesICOSignature(const char* contents)
+=======
+inline bool matchesICOSignature(char* contents)
+>>>>>>> miniblink49
 {
     return !memcmp(contents, "\x00\x00\x01\x00", 4);
 }
 
+<<<<<<< HEAD
 inline bool matchesCURSignature(const char* contents)
+=======
+inline bool matchesCURSignature(char* contents)
+>>>>>>> miniblink49
 {
     return !memcmp(contents, "\x00\x00\x02\x00", 4);
 }
 
+<<<<<<< HEAD
 inline bool matchesBMPSignature(const char* contents)
+=======
+inline bool matchesBMPSignature(char* contents)
+>>>>>>> miniblink49
 {
     return !memcmp(contents, "BM", 2);
 }
 
+<<<<<<< HEAD
 // This needs to be updated if we ever add a matches*Signature() which requires
 // more characters.
 static const size_t kLongestSignatureLength = sizeof("RIFF????WEBPVP") - 1;
@@ -161,6 +225,43 @@ ImageDecoder::SniffResult ImageDecoder::determineImageType(const char* contents,
     if (matchesBMPSignature(contents))
         return SniffResult::BMP;
     return SniffResult::Invalid;
+=======
+PassOwnPtr<ImageDecoder> ImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption gammaAndColorProfileOption)
+{
+    const unsigned longestSignatureLength = sizeof("RIFF????WEBPVP") - 1;
+    ASSERT(longestSignatureLength == 14);
+
+    size_t maxDecodedBytes = Platform::current() ? Platform::current()->maxDecodedImageBytes() : noDecodedImageByteLimit;
+
+    char contents[longestSignatureLength];
+    if (copyFromSharedBuffer(contents, longestSignatureLength, data, 0) < longestSignatureLength)
+        return nullptr;
+
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    if (matchesWebPSignature(contents))
+        return adoptPtr(new WEBPImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes));
+#else
+    if (matchesICOSignature(contents) || matchesCURSignature(contents))
+        return adoptPtr(new ICOImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes));
+
+    if (matchesPNGSignature(contents))
+        return adoptPtr(new PNGImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes));
+
+    if (matchesJPEGSignature(contents))
+        return adoptPtr(new JPEGImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes));
+
+    //if (matchesPNGSignature(contents))
+    //    return adoptPtr(new ImageGDIPlusDecoder(alphaOption, gammaAndColorProfileOption, ImageGDIPlusDecoder::GDIPlusDecoderPNG, maxDecodedBytes));
+
+    if (matchesGIFSignature(contents))
+        return adoptPtr(new GIFImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes));
+#endif // MINIBLINK_NOT_IMPLEMENTED
+
+    if (matchesBMPSignature(contents))
+        return adoptPtr(new BMPImageDecoder(alphaOption, gammaAndColorProfileOption, maxDecodedBytes));
+
+    return nullptr;
+>>>>>>> miniblink49
 }
 
 size_t ImageDecoder::frameCount()
@@ -183,17 +284,24 @@ ImageFrame* ImageDecoder::frameBufferAtIndex(size_t index)
         return 0;
 
     ImageFrame* frame = &m_frameBufferCache[index];
+<<<<<<< HEAD
     if (frame->getStatus() != ImageFrame::FrameComplete) {
+=======
+    if (frame->status() != ImageFrame::FrameComplete) {
+>>>>>>> miniblink49
         PlatformInstrumentation::willDecodeImage(filenameExtension());
         decode(index);
         PlatformInstrumentation::didDecodeImage();
     }
 
+<<<<<<< HEAD
     if (!m_hasHistogrammedColorSpace) {
         BitmapImageMetrics::countImageGammaAndGamut(m_embeddedColorSpace.get());
         m_hasHistogrammedColorSpace = true;
     }
 
+=======
+>>>>>>> miniblink49
     frame->notifyBitmapIfPixelsChanged();
     return frame;
 }
@@ -205,11 +313,17 @@ bool ImageDecoder::frameHasAlphaAtIndex(size_t index) const
 
 bool ImageDecoder::frameIsCompleteAtIndex(size_t index) const
 {
+<<<<<<< HEAD
     return (index < m_frameBufferCache.size()) && (m_frameBufferCache[index].getStatus() == ImageFrame::FrameComplete);
+=======
+    return (index < m_frameBufferCache.size()) &&
+        (m_frameBufferCache[index].status() == ImageFrame::FrameComplete);
+>>>>>>> miniblink49
 }
 
 size_t ImageDecoder::frameBytesAtIndex(size_t index) const
 {
+<<<<<<< HEAD
     if (index >= m_frameBufferCache.size() || m_frameBufferCache[index].getStatus() == ImageFrame::FrameEmpty)
         return 0;
 
@@ -223,6 +337,16 @@ size_t ImageDecoder::frameBytesAtIndex(size_t index) const
     };
 
     return ImageSize(frameSizeAtIndex(index)).area * sizeof(ImageFrame::PixelData);
+=======
+    if (index >= m_frameBufferCache.size() || m_frameBufferCache[index].status() == ImageFrame::FrameEmpty)
+        return 0;
+    return frameSizeAtIndex(index).area() * sizeof(ImageFrame::PixelData);
+}
+
+bool ImageDecoder::deferredImageDecodingEnabled()
+{
+    return DeferredImageDecoder::enabled();
+>>>>>>> miniblink49
 }
 
 size_t ImageDecoder::clearCacheExceptFrame(size_t clearExceptFrame)
@@ -231,6 +355,7 @@ size_t ImageDecoder::clearCacheExceptFrame(size_t clearExceptFrame)
     if (m_frameBufferCache.size() <= 1)
         return 0;
 
+<<<<<<< HEAD
     // We expect that after this call, we'll be asked to decode frames after this
     // one. So we want to avoid clearing frames such that those requests would
     // force re-decoding from the beginning of the image. There are two cases in
@@ -270,6 +395,11 @@ size_t ImageDecoder::clearCacheExceptTwoFrames(size_t clearExceptFrame1,
     size_t frameBytesCleared = 0;
     for (size_t i = 0; i < m_frameBufferCache.size(); ++i) {
         if (m_frameBufferCache[i].getStatus() != ImageFrame::FrameEmpty && i != clearExceptFrame1 && i != clearExceptFrame2) {
+=======
+    size_t frameBytesCleared = 0;
+    for (size_t i = 0; i < m_frameBufferCache.size(); ++i) {
+        if (i != clearExceptFrame) {
+>>>>>>> miniblink49
             frameBytesCleared += frameBytesAtIndex(i);
             clearFrameBuffer(i);
         }
@@ -282,6 +412,7 @@ void ImageDecoder::clearFrameBuffer(size_t frameIndex)
     m_frameBufferCache[frameIndex].clearPixelData();
 }
 
+<<<<<<< HEAD
 Vector<size_t> ImageDecoder::findFramesToDecode(size_t index) const
 {
     DCHECK(index < m_frameBufferCache.size());
@@ -435,6 +566,9 @@ void ImageDecoder::updateAggressivePurging(size_t index)
 
 size_t ImageDecoder::findRequiredPreviousFrame(size_t frameIndex,
     bool frameRectIsOpaque)
+=======
+size_t ImageDecoder::findRequiredPreviousFrame(size_t frameIndex, bool frameRectIsOpaque)
+>>>>>>> miniblink49
 {
     ASSERT(frameIndex <= m_frameBufferCache.size());
     if (!frameIndex) {
@@ -443,7 +577,12 @@ size_t ImageDecoder::findRequiredPreviousFrame(size_t frameIndex,
     }
 
     const ImageFrame* currBuffer = &m_frameBufferCache[frameIndex];
+<<<<<<< HEAD
     if ((frameRectIsOpaque || currBuffer->getAlphaBlendSource() == ImageFrame::BlendAtopBgcolor) && currBuffer->originalFrameRect().contains(IntRect(IntPoint(), size())))
+=======
+    if ((frameRectIsOpaque || currBuffer->alphaBlendSource() == ImageFrame::BlendAtopBgcolor)
+        && currBuffer->originalFrameRect().contains(IntRect(IntPoint(), size())))
+>>>>>>> miniblink49
         return kNotFound;
 
     // The starting state for this frame depends on the previous frame's
@@ -451,12 +590,20 @@ size_t ImageDecoder::findRequiredPreviousFrame(size_t frameIndex,
     size_t prevFrame = frameIndex - 1;
     const ImageFrame* prevBuffer = &m_frameBufferCache[prevFrame];
 
+<<<<<<< HEAD
     switch (prevBuffer->getDisposalMethod()) {
     case ImageFrame::DisposeNotSpecified:
     case ImageFrame::DisposeKeep:
         // prevFrame will be used as the starting state for this frame.
         // FIXME: Be even smarter by checking the frame sizes and/or
         // alpha-containing regions.
+=======
+    switch (prevBuffer->disposalMethod()) {
+    case ImageFrame::DisposeNotSpecified:
+    case ImageFrame::DisposeKeep:
+        // prevFrame will be used as the starting state for this frame.
+        // FIXME: Be even smarter by checking the frame sizes and/or alpha-containing regions.
+>>>>>>> miniblink49
         return prevFrame;
     case ImageFrame::DisposeOverwritePrevious:
         // Frames that use the DisposeOverwritePrevious method are effectively
@@ -470,11 +617,16 @@ size_t ImageDecoder::findRequiredPreviousFrame(size_t frameIndex,
         // decoded without reference to any prior frame, the starting state for
         // this frame is a blank frame, so it can again be decoded alone.
         // Otherwise, the previous frame contributes to this frame.
+<<<<<<< HEAD
         return (prevBuffer->originalFrameRect().contains(
                     IntRect(IntPoint(), size()))
                    || (prevBuffer->requiredPreviousFrameIndex() == kNotFound))
             ? kNotFound
             : prevFrame;
+=======
+        return (prevBuffer->originalFrameRect().contains(IntRect(IntPoint(), size()))
+            || (prevBuffer->requiredPreviousFrameIndex() == kNotFound)) ? kNotFound : prevFrame;
+>>>>>>> miniblink49
     default:
         ASSERT_NOT_REACHED();
         return kNotFound;
@@ -489,7 +641,11 @@ ImagePlanes::ImagePlanes()
     }
 }
 
+<<<<<<< HEAD
 ImagePlanes::ImagePlanes(void* planes[3], const size_t rowBytes[3])
+=======
+ImagePlanes::ImagePlanes(void* planes[3], size_t rowBytes[3])
+>>>>>>> miniblink49
 {
     for (int i = 0; i < 3; ++i) {
         m_planes[i] = planes[i];
@@ -509,6 +665,7 @@ size_t ImagePlanes::rowBytes(int i) const
     return m_rowBytes[i];
 }
 
+<<<<<<< HEAD
 void ImageDecoder::setEmbeddedColorProfile(const char* iccData, unsigned iccLength)
 {
     sk_sp<SkColorSpace> colorSpace = SkColorSpace::NewICC(iccData, iccLength);
@@ -563,4 +720,6 @@ sk_sp<SkColorSpace> ImageDecoder::colorSpaceForSkImages() const
     return SkColorSpace::MakeNamed(SkColorSpace::kSRGB_Named);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

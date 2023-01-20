@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/LayoutThemeFontProvider.h"
 
 #include "wtf/StdLibExtras.h"
@@ -47,7 +48,7 @@ float LayoutThemeFontProvider::s_defaultFontSize = 16.0;
 // sizes (e.g. 15px). So, for now we just use Arial.
 const AtomicString& LayoutThemeFontProvider::defaultGUIFont()
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, fontFace, ("Arial"));
+    DEFINE_STATIC_LOCAL(const AtomicString, fontFace, ("Arial", AtomicString::ConstructFromLiteral));
     return fontFace;
 }
 

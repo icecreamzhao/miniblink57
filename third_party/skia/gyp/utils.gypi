@@ -15,10 +15,21 @@
         '<(skia_include_path)/utils/SkFrontBufferedStream.h',
         '<(skia_include_path)/utils/SkCamera.h',
         '<(skia_include_path)/utils/SkCanvasStateUtils.h',
+<<<<<<< HEAD
+=======
+        '<(skia_include_path)/utils/SkCubicInterval.h',
+        '<(skia_include_path)/utils/SkCullPoints.h',
+        '<(skia_include_path)/utils/SkDebugUtils.h',
+        '<(skia_include_path)/utils/SkDeferredCanvas.h',
+>>>>>>> miniblink49
         '<(skia_include_path)/utils/SkDumpCanvas.h',
         '<(skia_include_path)/utils/SkEventTracer.h',
         '<(skia_include_path)/utils/SkInterpolator.h',
         '<(skia_include_path)/utils/SkLayer.h',
+<<<<<<< HEAD
+=======
+        '<(skia_include_path)/utils/SkMatrix44.h',
+>>>>>>> miniblink49
         '<(skia_include_path)/utils/SkMeshUtils.h',
         '<(skia_include_path)/utils/SkNinePatch.h',
         '<(skia_include_path)/utils/SkNoSaveLayerCanvas.h',
@@ -26,6 +37,10 @@
         '<(skia_include_path)/utils/SkNullCanvas.h',
         '<(skia_include_path)/utils/SkPaintFilterCanvas.h',
         '<(skia_include_path)/utils/SkParse.h',
+<<<<<<< HEAD
+=======
+        '<(skia_include_path)/utils/SkParsePaint.h',
+>>>>>>> miniblink49
         '<(skia_include_path)/utils/SkParsePath.h',
         '<(skia_include_path)/utils/SkPictureUtils.h',
         '<(skia_include_path)/utils/SkRandom.h',
@@ -34,8 +49,13 @@
 
         '<(skia_src_path)/utils/SkBase64.cpp',
         '<(skia_src_path)/utils/SkBase64.h',
+<<<<<<< HEAD
         '<(skia_src_path)/utils/SkBitmapSourceDeserializer.cpp',
         '<(skia_src_path)/utils/SkBitmapSourceDeserializer.h',
+=======
+        '<(skia_src_path)/utils/SkBitmapHasher.cpp',
+        '<(skia_src_path)/utils/SkBitmapHasher.h',
+>>>>>>> miniblink49
         '<(skia_src_path)/utils/SkBitSet.cpp',
         '<(skia_src_path)/utils/SkBitSet.h',
         '<(skia_src_path)/utils/SkBoundaryPatch.cpp',
@@ -44,8 +64,16 @@
         '<(skia_src_path)/utils/SkCanvasStack.h',
         '<(skia_src_path)/utils/SkCanvasStack.cpp',
         '<(skia_src_path)/utils/SkCanvasStateUtils.cpp',
+<<<<<<< HEAD
         '<(skia_src_path)/utils/SkDashPath.cpp',
         '<(skia_src_path)/utils/SkDashPathPriv.h',
+=======
+        '<(skia_src_path)/utils/SkCubicInterval.cpp',
+        '<(skia_src_path)/utils/SkCullPoints.cpp',
+        '<(skia_src_path)/utils/SkDashPath.cpp',
+        '<(skia_src_path)/utils/SkDashPathPriv.h',
+        '<(skia_src_path)/utils/SkDeferredCanvas.cpp',
+>>>>>>> miniblink49
         '<(skia_src_path)/utils/SkDumpCanvas.cpp',
         '<(skia_src_path)/utils/SkEventTracer.cpp',
         '<(skia_src_path)/utils/SkFloatUtils.h',
@@ -53,8 +81,15 @@
         '<(skia_src_path)/utils/SkLayer.cpp',
         '<(skia_src_path)/utils/SkMatrix22.cpp',
         '<(skia_src_path)/utils/SkMatrix22.h',
+<<<<<<< HEAD
         '<(skia_src_path)/utils/SkMeshUtils.cpp',
         '<(skia_src_path)/utils/SkMultiPictureDocument.cpp',
+=======
+        '<(skia_src_path)/utils/SkMatrix44.cpp',
+        '<(skia_src_path)/utils/SkMD5.cpp',
+        '<(skia_src_path)/utils/SkMD5.h',
+        '<(skia_src_path)/utils/SkMeshUtils.cpp',
+>>>>>>> miniblink49
         '<(skia_src_path)/utils/SkNinePatch.cpp',
         '<(skia_src_path)/utils/SkNWayCanvas.cpp',
         '<(skia_src_path)/utils/SkNullCanvas.cpp',
@@ -67,8 +102,13 @@
         '<(skia_src_path)/utils/SkPatchGrid.h',
         '<(skia_src_path)/utils/SkPatchUtils.cpp',
         '<(skia_src_path)/utils/SkPatchUtils.h',
+<<<<<<< HEAD
         '<(skia_src_path)/utils/SkRGBAToYUV.cpp',
         '<(skia_src_path)/utils/SkRGBAToYUV.h',
+=======
+        '<(skia_src_path)/utils/SkSHA1.cpp',
+        '<(skia_src_path)/utils/SkSHA1.h',
+>>>>>>> miniblink49
         '<(skia_src_path)/utils/SkRTConf.cpp',
         '<(skia_src_path)/utils/SkTextBox.cpp',
         '<(skia_src_path)/utils/SkTextureCompressor.cpp',
@@ -84,16 +124,33 @@
         '<(skia_src_path)/utils/SkThreadUtils.h',
         '<(skia_src_path)/utils/SkThreadUtils_pthread.cpp',
         '<(skia_src_path)/utils/SkThreadUtils_pthread.h',
+<<<<<<< HEAD
         '<(skia_src_path)/utils/SkThreadUtils_win.cpp',
         '<(skia_src_path)/utils/SkThreadUtils_win.h',
         '<(skia_src_path)/utils/SkWhitelistTypefaces.cpp',
+=======
+        '<(skia_src_path)/utils/SkThreadUtils_pthread_linux.cpp',
+        '<(skia_src_path)/utils/SkThreadUtils_pthread_mach.cpp',
+        '<(skia_src_path)/utils/SkThreadUtils_pthread_other.cpp',
+        '<(skia_src_path)/utils/SkThreadUtils_win.cpp',
+        '<(skia_src_path)/utils/SkThreadUtils_win.h',
+        '<(skia_src_path)/utils/SkTFitsIn.h',
+        '<(skia_src_path)/utils/SkTLogic.h',
+>>>>>>> miniblink49
 
         #mac
         '<(skia_include_path)/utils/mac/SkCGUtils.h',
         '<(skia_src_path)/utils/mac/SkCreateCGImageRef.cpp',
 
         #windows
+<<<<<<< HEAD
         '<(skia_src_path)/utils/win/SkAutoCoInitialize.h',
+=======
+        '<(skia_include_path)/utils/win/SkAutoCoInitialize.h',
+        '<(skia_include_path)/utils/win/SkHRESULT.h',
+        '<(skia_include_path)/utils/win/SkIStream.h',
+        '<(skia_include_path)/utils/win/SkTScopedComPtr.h',
+>>>>>>> miniblink49
         '<(skia_src_path)/utils/win/SkAutoCoInitialize.cpp',
         '<(skia_src_path)/utils/win/SkDWrite.h',
         '<(skia_src_path)/utils/win/SkDWrite.cpp',
@@ -101,11 +158,16 @@
         '<(skia_src_path)/utils/win/SkDWriteFontFileStream.h',
         '<(skia_src_path)/utils/win/SkDWriteGeometrySink.cpp',
         '<(skia_src_path)/utils/win/SkDWriteGeometrySink.h',
+<<<<<<< HEAD
         '<(skia_src_path)/utils/win/SkHRESULT.h',
         '<(skia_src_path)/utils/win/SkHRESULT.cpp',
         '<(skia_src_path)/utils/win/SkIStream.h',
         '<(skia_src_path)/utils/win/SkIStream.cpp',
         '<(skia_src_path)/utils/win/SkTScopedComPtr.h',
+=======
+        '<(skia_src_path)/utils/win/SkHRESULT.cpp',
+        '<(skia_src_path)/utils/win/SkIStream.cpp',
+>>>>>>> miniblink49
         '<(skia_src_path)/utils/win/SkWGL.h',
         '<(skia_src_path)/utils/win/SkWGL_win.cpp',
 
@@ -113,7 +175,11 @@
         '<(skia_src_path)/fonts/SkGScalerContext.cpp',
         '<(skia_src_path)/fonts/SkGScalerContext.h',
         '<(skia_src_path)/fonts/SkRandomScalerContext.cpp',
+<<<<<<< HEAD
         '<(skia_src_path)/fonts/SkRandomScalerContext.h',
+=======
+        '<(skia_src_path)/fonts/SkRandomScalerContext.cpp',
+>>>>>>> miniblink49
         '<(skia_src_path)/fonts/SkTestScalerContext.cpp',
         '<(skia_src_path)/fonts/SkTestScalerContext.h',
     ],

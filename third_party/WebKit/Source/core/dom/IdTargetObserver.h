@@ -33,7 +33,7 @@ namespace blink {
 
 class IdTargetObserverRegistry;
 
-class IdTargetObserver : public GarbageCollectedFinalized<IdTargetObserver> {
+class IdTargetObserver : public NoBaseWillBeGarbageCollectedFinalized<IdTargetObserver> {
 public:
     virtual ~IdTargetObserver();
     DECLARE_VIRTUAL_TRACE();
@@ -46,7 +46,7 @@ protected:
 private:
     IdTargetObserverRegistry& registry() { return *m_registry; }
 
-    Member<IdTargetObserverRegistry> m_registry;
+    RawPtrWillBeMember<IdTargetObserverRegistry> m_registry;
     AtomicString m_id;
 };
 

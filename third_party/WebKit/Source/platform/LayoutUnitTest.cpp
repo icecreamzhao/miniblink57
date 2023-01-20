@@ -28,9 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/LayoutUnit.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+#include "platform/LayoutUnit.h"
+
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 #include <limits.h>
 
 namespace blink {
@@ -41,10 +48,15 @@ TEST(LayoutUnitTest, LayoutUnitInt)
     EXPECT_EQ(intMinForLayoutUnit, LayoutUnit(INT_MIN / 2).toInt());
     EXPECT_EQ(intMinForLayoutUnit, LayoutUnit(intMinForLayoutUnit - 1).toInt());
     EXPECT_EQ(intMinForLayoutUnit, LayoutUnit(intMinForLayoutUnit).toInt());
+<<<<<<< HEAD
     EXPECT_EQ(intMinForLayoutUnit + 1,
         LayoutUnit(intMinForLayoutUnit + 1).toInt());
     EXPECT_EQ(intMinForLayoutUnit / 2,
         LayoutUnit(intMinForLayoutUnit / 2).toInt());
+=======
+    EXPECT_EQ(intMinForLayoutUnit + 1, LayoutUnit(intMinForLayoutUnit + 1).toInt());
+    EXPECT_EQ(intMinForLayoutUnit / 2, LayoutUnit(intMinForLayoutUnit / 2).toInt());
+>>>>>>> miniblink49
     EXPECT_EQ(-10000, LayoutUnit(-10000).toInt());
     EXPECT_EQ(-1000, LayoutUnit(-1000).toInt());
     EXPECT_EQ(-100, LayoutUnit(-100).toInt());
@@ -55,10 +67,15 @@ TEST(LayoutUnitTest, LayoutUnitInt)
     EXPECT_EQ(100, LayoutUnit(100).toInt());
     EXPECT_EQ(1000, LayoutUnit(1000).toInt());
     EXPECT_EQ(10000, LayoutUnit(10000).toInt());
+<<<<<<< HEAD
     EXPECT_EQ(intMaxForLayoutUnit / 2,
         LayoutUnit(intMaxForLayoutUnit / 2).toInt());
     EXPECT_EQ(intMaxForLayoutUnit - 1,
         LayoutUnit(intMaxForLayoutUnit - 1).toInt());
+=======
+    EXPECT_EQ(intMaxForLayoutUnit / 2, LayoutUnit(intMaxForLayoutUnit / 2).toInt());
+    EXPECT_EQ(intMaxForLayoutUnit - 1, LayoutUnit(intMaxForLayoutUnit - 1).toInt());
+>>>>>>> miniblink49
     EXPECT_EQ(intMaxForLayoutUnit, LayoutUnit(intMaxForLayoutUnit).toInt());
     EXPECT_EQ(intMaxForLayoutUnit, LayoutUnit(intMaxForLayoutUnit + 1).toInt());
     EXPECT_EQ(intMaxForLayoutUnit, LayoutUnit(INT_MAX / 2).toInt());
@@ -123,10 +140,15 @@ TEST(LayoutUnitTest, LayoutUnitSnapSizeToPixel)
     EXPECT_EQ(1, snapSizeToPixel(LayoutUnit(1.5), LayoutUnit(1.5)));
 
     EXPECT_EQ(101, snapSizeToPixel(LayoutUnit(100.5), LayoutUnit(100)));
+<<<<<<< HEAD
     EXPECT_EQ(intMaxForLayoutUnit,
         snapSizeToPixel(LayoutUnit(intMaxForLayoutUnit), LayoutUnit(0.3)));
     EXPECT_EQ(intMinForLayoutUnit,
         snapSizeToPixel(LayoutUnit(intMinForLayoutUnit), LayoutUnit(-0.3)));
+=======
+    EXPECT_EQ(intMaxForLayoutUnit, snapSizeToPixel(LayoutUnit(intMaxForLayoutUnit), LayoutUnit(0.3)));
+    EXPECT_EQ(intMinForLayoutUnit, snapSizeToPixel(LayoutUnit(intMinForLayoutUnit), LayoutUnit(-0.3)));
+>>>>>>> miniblink49
 }
 
 TEST(LayoutUnitTest, LayoutUnitMultiplication)
@@ -165,12 +187,19 @@ TEST(LayoutUnitTest, LayoutUnitMultiplication)
     EXPECT_EQ(quarterMax * 2, (LayoutUnit(quarterMax) * LayoutUnit(2)).toInt());
     EXPECT_EQ(quarterMax * 3, (LayoutUnit(quarterMax) * LayoutUnit(3)).toInt());
     EXPECT_EQ(quarterMax * 4, (LayoutUnit(quarterMax) * LayoutUnit(4)).toInt());
+<<<<<<< HEAD
     EXPECT_EQ(intMaxForLayoutUnit,
         (LayoutUnit(quarterMax) * LayoutUnit(5)).toInt());
 
     size_t overflowIntSizeT = intMaxForLayoutUnit * 4;
     EXPECT_EQ(intMaxForLayoutUnit,
         (LayoutUnit(overflowIntSizeT) * LayoutUnit(2)).toInt());
+=======
+    EXPECT_EQ(intMaxForLayoutUnit, (LayoutUnit(quarterMax) * LayoutUnit(5)).toInt());
+
+    size_t overflowIntSizeT = intMaxForLayoutUnit * 4;
+    EXPECT_EQ(intMaxForLayoutUnit, (LayoutUnit(overflowIntSizeT) * LayoutUnit(2)).toInt());
+>>>>>>> miniblink49
     EXPECT_EQ(intMaxForLayoutUnit, (overflowIntSizeT * LayoutUnit(4)).toInt());
     EXPECT_EQ(intMaxForLayoutUnit, (LayoutUnit(4) * overflowIntSizeT).toInt());
 }
@@ -209,10 +238,15 @@ TEST(LayoutUnitTest, LayoutUnitDivision)
     EXPECT_EQ(25, (aHundredSizeT / LayoutUnit(4)).toInt());
     EXPECT_EQ(4, (LayoutUnit(400) / aHundredSizeT).toInt());
 
+<<<<<<< HEAD
     EXPECT_EQ(intMaxForLayoutUnit / 2,
         (LayoutUnit(intMaxForLayoutUnit) / LayoutUnit(2)).toInt());
     EXPECT_EQ(intMaxForLayoutUnit,
         (LayoutUnit(intMaxForLayoutUnit) / LayoutUnit(0.5)).toInt());
+=======
+    EXPECT_EQ(intMaxForLayoutUnit / 2, (LayoutUnit(intMaxForLayoutUnit) / LayoutUnit(2)).toInt());
+    EXPECT_EQ(intMaxForLayoutUnit, (LayoutUnit(intMaxForLayoutUnit) / LayoutUnit(0.5)).toInt());
+>>>>>>> miniblink49
 }
 
 TEST(LayoutUnitTest, LayoutUnitCeil)
@@ -230,10 +264,15 @@ TEST(LayoutUnitTest, LayoutUnitCeil)
     EXPECT_EQ(-1, LayoutUnit(-1.0).ceil());
 
     EXPECT_EQ(intMaxForLayoutUnit, LayoutUnit(intMaxForLayoutUnit).ceil());
+<<<<<<< HEAD
     EXPECT_EQ(intMaxForLayoutUnit,
         (LayoutUnit(intMaxForLayoutUnit) - LayoutUnit(0.5)).ceil());
     EXPECT_EQ(intMaxForLayoutUnit - 1,
         (LayoutUnit(intMaxForLayoutUnit) - LayoutUnit(1)).ceil());
+=======
+    EXPECT_EQ(intMaxForLayoutUnit, (LayoutUnit(intMaxForLayoutUnit) - LayoutUnit(0.5)).ceil());
+    EXPECT_EQ(intMaxForLayoutUnit - 1, (LayoutUnit(intMaxForLayoutUnit) - LayoutUnit(1)).ceil());
+>>>>>>> miniblink49
 
     EXPECT_EQ(intMinForLayoutUnit, LayoutUnit(intMinForLayoutUnit).ceil());
 }
@@ -255,10 +294,15 @@ TEST(LayoutUnitTest, LayoutUnitFloor)
     EXPECT_EQ(intMaxForLayoutUnit, LayoutUnit(intMaxForLayoutUnit).floor());
 
     EXPECT_EQ(intMinForLayoutUnit, LayoutUnit(intMinForLayoutUnit).floor());
+<<<<<<< HEAD
     EXPECT_EQ(intMinForLayoutUnit,
         (LayoutUnit(intMinForLayoutUnit) + LayoutUnit(0.5)).floor());
     EXPECT_EQ(intMinForLayoutUnit + 1,
         (LayoutUnit(intMinForLayoutUnit) + LayoutUnit(1)).floor());
+=======
+    EXPECT_EQ(intMinForLayoutUnit, (LayoutUnit(intMinForLayoutUnit) + LayoutUnit(0.5)).floor());
+    EXPECT_EQ(intMinForLayoutUnit + 1, (LayoutUnit(intMinForLayoutUnit) + LayoutUnit(1)).floor());
+>>>>>>> miniblink49
 }
 
 TEST(LayoutUnitTest, LayoutUnitFloatOverflow)
@@ -270,6 +314,7 @@ TEST(LayoutUnitTest, LayoutUnitFloatOverflow)
     EXPECT_EQ(intMinForLayoutUnit, LayoutUnit(-176972000.0).toInt());
 }
 
+<<<<<<< HEAD
 TEST(LayoutUnitTest, UnaryMinus)
 {
     EXPECT_EQ(LayoutUnit(), -LayoutUnit());
@@ -285,4 +330,6 @@ TEST(LayoutUnitTest, UnaryMinus)
     EXPECT_EQ(LayoutUnit::max(), -LayoutUnit::min());
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

@@ -33,6 +33,7 @@
 #include "modules/webdatabase/DatabaseBasicTypes.h"
 #include "modules/webdatabase/DatabaseError.h"
 #include "modules/webdatabase/SQLTransactionBackend.h"
+<<<<<<< HEAD
 #include "platform/WaitableEvent.h"
 #include "platform/heap/Handle.h"
 #include "wtf/PtrUtil.h"
@@ -40,31 +41,60 @@
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "platform/Task.h"
+#include "platform/TaskSynchronizer.h"
+#include "platform/heap/Handle.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/Threading.h"
+#include "wtf/Vector.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class DatabaseTask {
+<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(DatabaseTask);
     USING_FAST_MALLOC(DatabaseTask);
 
+=======
+    WTF_MAKE_NONCOPYABLE(DatabaseTask); WTF_MAKE_FAST_ALLOCATED(DatabaseTask);
+>>>>>>> miniblink49
 public:
     virtual ~DatabaseTask();
 
     void run();
 
     Database* database() const { return m_database.get(); }
+<<<<<<< HEAD
 
 protected:
     DatabaseTask(Database*, WaitableEvent* completeEvent);
+=======
+#if ENABLE(ASSERT)
+    bool hasSynchronizer() const { return m_synchronizer; }
+#endif
+
+protected:
+    DatabaseTask(Database*, TaskSynchronizer*);
+>>>>>>> miniblink49
 
 private:
     virtual void doPerformTask() = 0;
     virtual void taskCancelled() { }
 
     CrossThreadPersistent<Database> m_database;
+<<<<<<< HEAD
     WaitableEvent* m_completeEvent;
 
 #if DCHECK_IS_ON()
+=======
+    TaskSynchronizer* m_synchronizer;
+
+#if !LOG_DISABLED
+>>>>>>> miniblink49
     virtual const char* debugTaskName() const = 0;
     bool m_complete;
 #endif
@@ -72,6 +102,7 @@ private:
 
 class Database::DatabaseOpenTask final : public DatabaseTask {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<DatabaseOpenTask> create(Database* db,
         bool setVersionInNewDatabase,
         WaitableEvent* completeEvent,
@@ -94,6 +125,18 @@ private:
 
     void doPerformTask() override;
 #if DCHECK_IS_ON()
+=======
+    static PassOwnPtr<DatabaseOpenTask> create(Database* db, bool setVersionInNewDatabase, TaskSynchronizer* synchronizer, DatabaseError& error, String& errorMessage, bool& success)
+    {
+        return adoptPtr(new DatabaseOpenTask(db, setVersionInNewDatabase, synchronizer, error, errorMessage, success));
+    }
+
+private:
+    DatabaseOpenTask(Database*, bool setVersionInNewDatabase, TaskSynchronizer*, DatabaseError&, String& errorMessage, bool& success);
+
+    void doPerformTask() override;
+#if !LOG_DISABLED
+>>>>>>> miniblink49
     const char* debugTaskName() const override;
 #endif
 
@@ -105,6 +148,7 @@ private:
 
 class Database::DatabaseCloseTask final : public DatabaseTask {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<DatabaseCloseTask> create(
         Database* db,
         WaitableEvent* synchronizer)
@@ -117,6 +161,18 @@ private:
 
     void doPerformTask() override;
 #if DCHECK_IS_ON()
+=======
+    static PassOwnPtr<DatabaseCloseTask> create(Database* db, TaskSynchronizer* synchronizer)
+    {
+        return adoptPtr(new DatabaseCloseTask(db, synchronizer));
+    }
+
+private:
+    DatabaseCloseTask(Database*, TaskSynchronizer*);
+
+    void doPerformTask() override;
+#if !LOG_DISABLED
+>>>>>>> miniblink49
     const char* debugTaskName() const override;
 #endif
 };
@@ -126,10 +182,16 @@ public:
     ~DatabaseTransactionTask() override;
 
     // Transaction task is never synchronous, so no 'synchronizer' parameter.
+<<<<<<< HEAD
     static std::unique_ptr<DatabaseTransactionTask> create(
         SQLTransactionBackend* transaction)
     {
         return WTF::wrapUnique(new DatabaseTransactionTask(transaction));
+=======
+    static PassOwnPtr<DatabaseTransactionTask> create(SQLTransactionBackend* transaction)
+    {
+        return adoptPtr(new DatabaseTransactionTask(transaction));
+>>>>>>> miniblink49
     }
 
     SQLTransactionBackend* transaction() const { return m_transaction.get(); }
@@ -139,7 +201,11 @@ private:
 
     void doPerformTask() override;
     void taskCancelled() override;
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if !LOG_DISABLED
+>>>>>>> miniblink49
     const char* debugTaskName() const override;
 #endif
 
@@ -148,6 +214,7 @@ private:
 
 class Database::DatabaseTableNamesTask final : public DatabaseTask {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<DatabaseTableNamesTask>
     create(Database* db, WaitableEvent* synchronizer, Vector<String>& names)
     {
@@ -159,6 +226,18 @@ private:
 
     void doPerformTask() override;
 #if DCHECK_IS_ON()
+=======
+    static PassOwnPtr<DatabaseTableNamesTask> create(Database* db, TaskSynchronizer* synchronizer, Vector<String>& names)
+    {
+        return adoptPtr(new DatabaseTableNamesTask(db, synchronizer, names));
+    }
+
+private:
+    DatabaseTableNamesTask(Database*, TaskSynchronizer*, Vector<String>& names);
+
+    void doPerformTask() override;
+#if !LOG_DISABLED
+>>>>>>> miniblink49
     const char* debugTaskName() const override;
 #endif
 

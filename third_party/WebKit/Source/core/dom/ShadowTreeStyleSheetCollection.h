@@ -3,10 +3,8 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  *           (C) 2006 Alexey Proskuryakov (ap@webkit.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
- * rights reserved.
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
- * (http://www.torchmobile.com/)
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
@@ -35,17 +33,16 @@
 namespace blink {
 
 class ShadowRoot;
-class StyleEngine;
 class StyleSheetCollection;
+class StyleEngine;
 
-class ShadowTreeStyleSheetCollection final
-    : public TreeScopeStyleSheetCollection {
+class ShadowTreeStyleSheetCollection final : public TreeScopeStyleSheetCollection {
     WTF_MAKE_NONCOPYABLE(ShadowTreeStyleSheetCollection);
-
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ShadowTreeStyleSheetCollection);
 public:
     explicit ShadowTreeStyleSheetCollection(ShadowRoot&);
-    void updateActiveStyleSheets(StyleEngine& masterEngine);
-    bool isShadowTreeStyleSheetCollection() const final { return true; }
+
+    void updateActiveStyleSheets(StyleEngine&, StyleResolverUpdateMode);
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
@@ -53,15 +50,10 @@ public:
     }
 
 private:
-    void collectStyleSheets(StyleEngine& masterEngine, StyleSheetCollection&);
+    void collectStyleSheets(StyleEngine&, StyleSheetCollection&);
 };
 
-DEFINE_TYPE_CASTS(ShadowTreeStyleSheetCollection,
-    TreeScopeStyleSheetCollection,
-    value,
-    value->isShadowTreeStyleSheetCollection(),
-    value.isShadowTreeStyleSheetCollection());
-
-} // namespace blink
+}
 
 #endif
+

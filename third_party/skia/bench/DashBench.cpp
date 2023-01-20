@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -12,9 +16,15 @@
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkString.h"
+<<<<<<< HEAD
 #include "SkStrokeRec.h"
 #include "SkTDArray.h"
 
+=======
+#include "SkTDArray.h"
+
+
+>>>>>>> miniblink49
 /*
  *  Cases to consider:
  *
@@ -23,14 +33,19 @@
  *  3. hline, vline, diagonal, rect, oval
  *  4. dots [1,1] ([N,N] where N=strokeWidth?) or arbitrary (e.g. [2,1] or [1,2,3,2])
  */
+<<<<<<< HEAD
 static void path_hline(SkPath* path)
 {
+=======
+static void path_hline(SkPath* path) {
+>>>>>>> miniblink49
     path->moveTo(SkIntToScalar(10), SkIntToScalar(10));
     path->lineTo(SkIntToScalar(600), SkIntToScalar(10));
 }
 
 class DashBench : public Benchmark {
 protected:
+<<<<<<< HEAD
     SkString fName;
     SkTDArray<SkScalar> fIntervals;
     int fWidth;
@@ -41,6 +56,17 @@ public:
     DashBench(const SkScalar intervals[], int count, int width,
         bool doClip = false)
     {
+=======
+    SkString            fName;
+    SkTDArray<SkScalar> fIntervals;
+    int                 fWidth;
+    SkPoint             fPts[2];
+    bool                fDoClip;
+
+public:
+    DashBench(const SkScalar intervals[], int count, int width,
+              bool doClip = false)  {
+>>>>>>> miniblink49
         fIntervals.append(count, intervals);
         for (int i = 0; i < count; ++i) {
             fIntervals[i] *= width;
@@ -53,12 +79,17 @@ public:
         fPts[1].set(SkIntToScalar(600), SkIntToScalar(10));
     }
 
+<<<<<<< HEAD
     virtual void makePath(SkPath* path)
     {
+=======
+    virtual void makePath(SkPath* path) {
+>>>>>>> miniblink49
         path_hline(path);
     }
 
 protected:
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -66,6 +97,13 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         this->setupPaint(&paint);
         paint.setStyle(SkPaint::kStroke_Style);
@@ -75,7 +113,12 @@ protected:
         SkPath path;
         this->makePath(&path);
 
+<<<<<<< HEAD
         paint.setPathEffect(SkDashPathEffect::Make(fIntervals.begin(), fIntervals.count(), 0));
+=======
+        paint.setPathEffect(SkDashPathEffect::Create(fIntervals.begin(),
+                                                     fIntervals.count(), 0))->unref();
+>>>>>>> miniblink49
 
         if (fDoClip) {
             SkRect r = path.getBounds();
@@ -89,10 +132,16 @@ protected:
     }
 
     virtual void handlePath(SkCanvas* canvas, const SkPath& path,
+<<<<<<< HEAD
         const SkPaint& paint, int N)
     {
         for (int i = 0; i < N; ++i) {
             //            canvas->drawPoints(SkCanvas::kLines_PointMode, 2, fPts, paint);
+=======
+                            const SkPaint& paint, int N) {
+        for (int i = 0; i < N; ++i) {
+//            canvas->drawPoints(SkCanvas::kLines_PointMode, 2, fPts, paint);
+>>>>>>> miniblink49
             canvas->drawPath(path, paint);
         }
     }
@@ -104,15 +153,23 @@ private:
 class RectDashBench : public DashBench {
 public:
     RectDashBench(const SkScalar intervals[], int count, int width)
+<<<<<<< HEAD
         : INHERITED(intervals, count, width)
     {
+=======
+    : INHERITED(intervals, count, width) {
+>>>>>>> miniblink49
         fName.append("_rect");
     }
 
 protected:
     virtual void handlePath(SkCanvas* canvas, const SkPath& path,
+<<<<<<< HEAD
         const SkPaint& paint, int N) override
     {
+=======
+                            const SkPaint& paint, int N) override {
+>>>>>>> miniblink49
         SkPoint pts[2];
         if (!path.isLine(pts) || pts[0].fY != pts[1].fY) {
             this->INHERITED::handlePath(canvas, path, paint, N);
@@ -125,12 +182,21 @@ protected:
 
             SkPaint p(paint);
             p.setStyle(SkPaint::kFill_Style);
+<<<<<<< HEAD
             p.setPathEffect(nullptr);
 
             int count = SkScalarRoundToInt((pts[1].fX - pts[0].fX) / (2 * fWidth));
             SkScalar dx = SkIntToScalar(2 * fWidth);
 
             for (int i = 0; i < N * 10; ++i) {
+=======
+            p.setPathEffect(NULL);
+
+            int count = SkScalarRoundToInt((pts[1].fX - pts[0].fX) / (2*fWidth));
+            SkScalar dx = SkIntToScalar(2 * fWidth);
+
+            for (int i = 0; i < N*10; ++i) {
+>>>>>>> miniblink49
                 SkRect r = rect;
                 for (int j = 0; j < count; ++j) {
                     canvas->drawRect(r, p);
@@ -144,8 +210,12 @@ private:
     typedef DashBench INHERITED;
 };
 
+<<<<<<< HEAD
 static void make_unit_star(SkPath* path, int n)
 {
+=======
+static void make_unit_star(SkPath* path, int n) {
+>>>>>>> miniblink49
     SkScalar rad = -SK_ScalarPI / 2;
     const SkScalar drad = (n >> 1) * SK_ScalarPI * 2 / n;
 
@@ -158,13 +228,18 @@ static void make_unit_star(SkPath* path, int n)
     path->close();
 }
 
+<<<<<<< HEAD
 static void make_poly(SkPath* path)
 {
+=======
+static void make_poly(SkPath* path) {
+>>>>>>> miniblink49
     make_unit_star(path, 9);
     const SkMatrix matrix = SkMatrix::MakeScale(SkIntToScalar(100), SkIntToScalar(100));
     path->transform(matrix);
 }
 
+<<<<<<< HEAD
 static void make_quad(SkPath* path)
 {
     SkScalar x0 = SkIntToScalar(10);
@@ -182,20 +257,46 @@ static void make_cubic(SkPath* path)
     path->cubicTo(x0, y0 + 400 * SK_Scalar1,
         x0 + 600 * SK_Scalar1, y0 + 400 * SK_Scalar1,
         x0 + 600 * SK_Scalar1, y0);
+=======
+static void make_quad(SkPath* path) {
+    SkScalar x0 = SkIntToScalar(10);
+    SkScalar y0 = SkIntToScalar(10);
+    path->moveTo(x0, y0);
+    path->quadTo(x0,                    y0 + 400 * SK_Scalar1,
+                 x0 + 600 * SK_Scalar1, y0 + 400 * SK_Scalar1);
+}
+
+static void make_cubic(SkPath* path) {
+    SkScalar x0 = SkIntToScalar(10);
+    SkScalar y0 = SkIntToScalar(10);
+    path->moveTo(x0, y0);
+    path->cubicTo(x0,                    y0 + 400 * SK_Scalar1,
+                  x0 + 600 * SK_Scalar1, y0 + 400 * SK_Scalar1,
+                  x0 + 600 * SK_Scalar1, y0);
+>>>>>>> miniblink49
 }
 
 class MakeDashBench : public Benchmark {
     SkString fName;
+<<<<<<< HEAD
     SkPath fPath;
     sk_sp<SkPathEffect> fPE;
 
 public:
     MakeDashBench(void (*proc)(SkPath*), const char name[])
     {
+=======
+    SkPath   fPath;
+    SkAutoTUnref<SkPathEffect> fPE;
+
+public:
+    MakeDashBench(void (*proc)(SkPath*), const char name[])  {
+>>>>>>> miniblink49
         fName.printf("makedash_%s", name);
         proc(&fPath);
 
         SkScalar vals[] = { SkIntToScalar(4), SkIntToScalar(4) };
+<<<<<<< HEAD
         fPE = SkDashPathEffect::Make(vals, 2, 0);
     }
 
@@ -207,11 +308,26 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
+=======
+        fPE.reset(SkDashPathEffect::Create(vals, 2, 0));
+    }
+
+protected:
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas*) override {
+>>>>>>> miniblink49
         SkPath dst;
         for (int i = 0; i < loops; ++i) {
             SkStrokeRec rec(SkStrokeRec::kHairline_InitStyle);
 
+<<<<<<< HEAD
             fPE->filterPath(&dst, fPath, &rec, nullptr);
+=======
+            fPE->filterPath(&dst, fPath, &rec, NULL);
+>>>>>>> miniblink49
             dst.rewind();
         }
     }
@@ -226,17 +342,26 @@ private:
 class DashLineBench : public Benchmark {
     SkString fName;
     SkScalar fStrokeWidth;
+<<<<<<< HEAD
     bool fIsRound;
     sk_sp<SkPathEffect> fPE;
 
 public:
     DashLineBench(SkScalar width, bool isRound)
     {
+=======
+    bool     fIsRound;
+    SkAutoTUnref<SkPathEffect> fPE;
+
+public:
+    DashLineBench(SkScalar width, bool isRound)  {
+>>>>>>> miniblink49
         fName.printf("dashline_%g_%s", SkScalarToFloat(width), isRound ? "circle" : "square");
         fStrokeWidth = width;
         fIsRound = isRound;
 
         SkScalar vals[] = { SK_Scalar1, SK_Scalar1 };
+<<<<<<< HEAD
         fPE = SkDashPathEffect::Make(vals, 2, 0);
     }
 
@@ -248,6 +373,17 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+        fPE.reset(SkDashPathEffect::Create(vals, 2, 0));
+    }
+
+protected:
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint paint;
         this->setupPaint(&paint);
         paint.setStrokeWidth(fStrokeWidth);
@@ -255,7 +391,11 @@ protected:
         paint.setPathEffect(fPE);
         for (int i = 0; i < loops; ++i) {
             canvas->drawLine(10 * SK_Scalar1, 10 * SK_Scalar1,
+<<<<<<< HEAD
                 640 * SK_Scalar1, 10 * SK_Scalar1, paint);
+=======
+                             640 * SK_Scalar1, 10 * SK_Scalar1, paint);
+>>>>>>> miniblink49
         }
     }
 
@@ -265,6 +405,7 @@ private:
 
 class DrawPointsDashingBench : public Benchmark {
     SkString fName;
+<<<<<<< HEAD
     int fStrokeWidth;
     bool fDoAA;
 
@@ -273,11 +414,22 @@ class DrawPointsDashingBench : public Benchmark {
 public:
     DrawPointsDashingBench(int dashLength, int strokeWidth, bool doAA)
     {
+=======
+    int      fStrokeWidth;
+    bool     fDoAA;
+
+    SkAutoTUnref<SkPathEffect> fPathEffect;
+
+public:
+    DrawPointsDashingBench(int dashLength, int strokeWidth, bool doAA)
+         {
+>>>>>>> miniblink49
         fName.printf("drawpointsdash_%d_%d%s", dashLength, strokeWidth, doAA ? "_aa" : "_bw");
         fStrokeWidth = strokeWidth;
         fDoAA = doAA;
 
         SkScalar vals[] = { SkIntToScalar(dashLength), SkIntToScalar(dashLength) };
+<<<<<<< HEAD
         fPathEffect = SkDashPathEffect::Make(vals, 2, SK_Scalar1);
     }
 
@@ -289,6 +441,17 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+        fPathEffect.reset(SkDashPathEffect::Create(vals, 2, SK_Scalar1));
+    }
+
+protected:
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint p;
         this->setupPaint(&p);
         p.setColor(SK_ColorBLACK);
@@ -316,8 +479,13 @@ private:
 class GiantDashBench : public Benchmark {
     SkString fName;
     SkScalar fStrokeWidth;
+<<<<<<< HEAD
     SkPoint fPts[2];
     sk_sp<SkPathEffect> fPathEffect;
+=======
+    SkPoint  fPts[2];
+    SkAutoTUnref<SkPathEffect> fPathEffect;
+>>>>>>> miniblink49
 
 public:
     enum LineType {
@@ -327,6 +495,7 @@ public:
         kLineTypeCount
     };
 
+<<<<<<< HEAD
     static const char* LineTypeName(LineType lt)
     {
         static const char* gNames[] = { "hori", "vert", "diag" };
@@ -336,12 +505,22 @@ public:
 
     GiantDashBench(LineType lt, SkScalar width)
     {
+=======
+    static const char* LineTypeName(LineType lt) {
+        static const char* gNames[] = { "hori", "vert", "diag" };
+        SK_COMPILE_ASSERT(kLineTypeCount == SK_ARRAY_COUNT(gNames), names_wrong_size);
+        return gNames[lt];
+    }
+
+    GiantDashBench(LineType lt, SkScalar width)  {
+>>>>>>> miniblink49
         fName.printf("giantdashline_%s_%g", LineTypeName(lt), width);
         fStrokeWidth = width;
 
         // deliberately pick intervals that won't be caught by asPoints(), so
         // we can test the filterPath code-path.
         const SkScalar intervals[] = { 20, 10, 10, 10 };
+<<<<<<< HEAD
         fPathEffect = SkDashPathEffect::Make(intervals, SK_ARRAY_COUNT(intervals), 0);
 
         SkScalar cx = 640 / 2; // center X
@@ -364,6 +543,31 @@ public:
         }
 
         const SkScalar overshoot = 100 * 1000;
+=======
+        fPathEffect.reset(SkDashPathEffect::Create(intervals,
+                                                   SK_ARRAY_COUNT(intervals), 0));
+
+        SkScalar cx = 640 / 2;  // center X
+        SkScalar cy = 480 / 2;  // center Y
+        SkMatrix matrix;
+
+        switch (lt) {
+            case kHori_LineType:
+                matrix.setIdentity();
+                break;
+            case kVert_LineType:
+                matrix.setRotate(90, cx, cy);
+                break;
+            case kDiag_LineType:
+                matrix.setRotate(45, cx, cy);
+                break;
+            case kLineTypeCount:
+                // Not a real enum value.
+                break;
+        }
+
+        const SkScalar overshoot = 100*1000;
+>>>>>>> miniblink49
         const SkPoint pts[2] = {
             { -overshoot, cy }, { 640 + overshoot, cy }
         };
@@ -371,6 +575,7 @@ public:
     }
 
 protected:
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -378,6 +583,13 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint p;
         this->setupPaint(&p);
         p.setStyle(SkPaint::kStroke_Style);
@@ -397,6 +609,7 @@ private:
 // small dashed lines switching back and forth between horizontal and vertical
 class DashGridBench : public Benchmark {
     SkString fName;
+<<<<<<< HEAD
     int fStrokeWidth;
     bool fDoAA;
 
@@ -405,11 +618,21 @@ class DashGridBench : public Benchmark {
 public:
     DashGridBench(int dashLength, int strokeWidth, bool doAA)
     {
+=======
+    int      fStrokeWidth;
+    bool     fDoAA;
+
+    SkAutoTUnref<SkPathEffect> fPathEffect;
+
+public:
+    DashGridBench(int dashLength, int strokeWidth, bool doAA) {
+>>>>>>> miniblink49
         fName.printf("dashgrid_%d_%d%s", dashLength, strokeWidth, doAA ? "_aa" : "_bw");
         fStrokeWidth = strokeWidth;
         fDoAA = doAA;
 
         SkScalar vals[] = { SkIntToScalar(dashLength), SkIntToScalar(dashLength) };
+<<<<<<< HEAD
         fPathEffect = SkDashPathEffect::Make(vals, 2, SK_Scalar1);
     }
 
@@ -421,6 +644,17 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+        fPathEffect.reset(SkDashPathEffect::Create(vals, 2, SK_Scalar1));
+    }
+
+protected:
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPaint p;
         this->setupPaint(&p);
         p.setColor(SK_ColorBLACK);
@@ -467,6 +701,7 @@ private:
 
 static const SkScalar gDots[] = { SK_Scalar1, SK_Scalar1 };
 
+<<<<<<< HEAD
 #define PARAM(array) array, SK_ARRAY_COUNT(array)
 
 DEF_BENCH(return new DashBench(PARAM(gDots), 0);)
@@ -489,18 +724,49 @@ DEF_BENCH(return new DrawPointsDashingBench(3, 1, false);)
 DEF_BENCH(return new DrawPointsDashingBench(3, 1, true);)
 DEF_BENCH(return new DrawPointsDashingBench(5, 5, false);)
 DEF_BENCH(return new DrawPointsDashingBench(5, 5, true);)
+=======
+#define PARAM(array)    array, SK_ARRAY_COUNT(array)
+
+DEF_BENCH( return new DashBench(PARAM(gDots), 0); )
+DEF_BENCH( return new DashBench(PARAM(gDots), 1); )
+DEF_BENCH( return new DashBench(PARAM(gDots), 1, true); )
+DEF_BENCH( return new DashBench(PARAM(gDots), 4); )
+DEF_BENCH( return new MakeDashBench(make_poly, "poly"); )
+DEF_BENCH( return new MakeDashBench(make_quad, "quad"); )
+DEF_BENCH( return new MakeDashBench(make_cubic, "cubic"); )
+DEF_BENCH( return new DashLineBench(0, false); )
+DEF_BENCH( return new DashLineBench(SK_Scalar1, false); )
+DEF_BENCH( return new DashLineBench(2 * SK_Scalar1, false); )
+DEF_BENCH( return new DashLineBench(0, true); )
+DEF_BENCH( return new DashLineBench(SK_Scalar1, true); )
+DEF_BENCH( return new DashLineBench(2 * SK_Scalar1, true); )
+
+DEF_BENCH( return new DrawPointsDashingBench(1, 1, false); )
+DEF_BENCH( return new DrawPointsDashingBench(1, 1, true); )
+DEF_BENCH( return new DrawPointsDashingBench(3, 1, false); )
+DEF_BENCH( return new DrawPointsDashingBench(3, 1, true); )
+DEF_BENCH( return new DrawPointsDashingBench(5, 5, false); )
+DEF_BENCH( return new DrawPointsDashingBench(5, 5, true); )
+>>>>>>> miniblink49
 
 /* Disable the GiantDashBench for Android devices until we can better control
  * the memory usage. (https://code.google.com/p/skia/issues/detail?id=1430)
  */
 #ifndef SK_BUILD_FOR_ANDROID
+<<<<<<< HEAD
 DEF_BENCH(return new GiantDashBench(GiantDashBench::kHori_LineType, 0);)
 DEF_BENCH(return new GiantDashBench(GiantDashBench::kVert_LineType, 0);)
 DEF_BENCH(return new GiantDashBench(GiantDashBench::kDiag_LineType, 0);)
+=======
+DEF_BENCH( return new GiantDashBench(GiantDashBench::kHori_LineType, 0); )
+DEF_BENCH( return new GiantDashBench(GiantDashBench::kVert_LineType, 0); )
+DEF_BENCH( return new GiantDashBench(GiantDashBench::kDiag_LineType, 0); )
+>>>>>>> miniblink49
 
 // pass 2 to explicitly avoid any 1-is-the-same-as-hairline special casing
 
 // hori_2 is just too slow to enable at the moment
+<<<<<<< HEAD
 DEF_BENCH(return new GiantDashBench(GiantDashBench::kHori_LineType, 2);)
 DEF_BENCH(return new GiantDashBench(GiantDashBench::kVert_LineType, 2);)
 DEF_BENCH(return new GiantDashBench(GiantDashBench::kDiag_LineType, 2);)
@@ -509,4 +775,14 @@ DEF_BENCH(return new DashGridBench(1, 1, true);)
 DEF_BENCH(return new DashGridBench(1, 1, false);)
 DEF_BENCH(return new DashGridBench(3, 1, true);)
 DEF_BENCH(return new DashGridBench(3, 1, false);)
+=======
+DEF_BENCH( return new GiantDashBench(GiantDashBench::kHori_LineType, 2); )
+DEF_BENCH( return new GiantDashBench(GiantDashBench::kVert_LineType, 2); )
+DEF_BENCH( return new GiantDashBench(GiantDashBench::kDiag_LineType, 2); )
+
+DEF_BENCH( return new DashGridBench(1, 1, true); )
+DEF_BENCH( return new DashGridBench(1, 1, false); )
+DEF_BENCH( return new DashGridBench(3, 1, true); )
+DEF_BENCH( return new DashGridBench(3, 1, false); )
+>>>>>>> miniblink49
 #endif

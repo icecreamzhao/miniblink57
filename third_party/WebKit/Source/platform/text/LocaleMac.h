@@ -36,7 +36,10 @@
 #include "wtf/RetainPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 OBJC_CLASS NSCalendar;
 OBJC_CLASS NSDateFormatter;
@@ -46,8 +49,13 @@ namespace blink {
 
 class PLATFORM_EXPORT LocaleMac : public Locale {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<LocaleMac> create(const String&);
     static std::unique_ptr<LocaleMac> create(NSLocale*);
+=======
+    static PassOwnPtr<LocaleMac> create(const String&);
+    static PassOwnPtr<LocaleMac> create(NSLocale*);
+>>>>>>> miniblink49
     ~LocaleMac();
 
     const Vector<String>& weekDayShortLabels() override;

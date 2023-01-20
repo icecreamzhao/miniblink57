@@ -43,6 +43,7 @@ namespace double_conversion {
     public:
         static const int kSignificandSize = 64;
 
+<<<<<<< HEAD
         DiyFp()
             : f_(0)
             , e_(0)
@@ -53,13 +54,21 @@ namespace double_conversion {
             , e_(e)
         {
         }
+=======
+        DiyFp() : f_(0), e_(0) {}
+        DiyFp(uint64_t f, int e) : f_(f), e_(e) {}
+>>>>>>> miniblink49
 
         // this = this - other.
         // The exponents of both numbers must be the same and the significand of this
         // must be bigger than the significand of other.
         // The result will not be normalized.
+<<<<<<< HEAD
         void Subtract(const DiyFp& other)
         {
+=======
+        void Subtract(const DiyFp& other) {
+>>>>>>> miniblink49
             ASSERT(e_ == other.e_);
             ASSERT(f_ >= other.f_);
             f_ -= other.f_;
@@ -68,26 +77,42 @@ namespace double_conversion {
         // Returns a - b.
         // The exponents of both numbers must be the same and this must be bigger
         // than other. The result will not be normalized.
+<<<<<<< HEAD
         static DiyFp Minus(const DiyFp& a, const DiyFp& b)
         {
+=======
+        static DiyFp Minus(const DiyFp& a, const DiyFp& b) {
+>>>>>>> miniblink49
             DiyFp result = a;
             result.Subtract(b);
             return result;
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
         // this = this * other.
         void Multiply(const DiyFp& other);
 
         // returns a * b;
+<<<<<<< HEAD
         static DiyFp Times(const DiyFp& a, const DiyFp& b)
         {
+=======
+        static DiyFp Times(const DiyFp& a, const DiyFp& b) {
+>>>>>>> miniblink49
             DiyFp result = a;
             result.Multiply(b);
             return result;
         }
 
+<<<<<<< HEAD
         void Normalize()
         {
+=======
+        void Normalize() {
+>>>>>>> miniblink49
             ASSERT(f_ != 0);
             uint64_t f = f_;
             int e = e_;
@@ -107,8 +132,12 @@ namespace double_conversion {
             e_ = e;
         }
 
+<<<<<<< HEAD
         static DiyFp Normalize(const DiyFp& a)
         {
+=======
+        static DiyFp Normalize(const DiyFp& a) {
+>>>>>>> miniblink49
             DiyFp result = a;
             result.Normalize();
             return result;
@@ -127,8 +156,16 @@ namespace double_conversion {
         int e_;
     };
 
+<<<<<<< HEAD
 } // namespace double_conversion
 
 } // namespace WTF
 
 #endif // DOUBLE_CONVERSION_DIY_FP_H_
+=======
+}  // namespace double_conversion
+
+} // namespace WTF
+
+#endif  // DOUBLE_CONVERSION_DIY_FP_H_
+>>>>>>> miniblink49

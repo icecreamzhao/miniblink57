@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "platform/heap/CallbackStack.h"
 #include "wtf/PtrUtil.h"
 #include "wtf/allocator/Partitions.h"
@@ -95,6 +96,21 @@ void CallbackStack::Block::clear()
         m_buffer[i] = Item(0, 0);
 }
 #endif
+=======
+#include "config.h"
+#include "platform/heap/CallbackStack.h"
+
+#include "platform/heap/Heap.h"
+
+namespace blink {
+
+void CallbackStack::Block::clear()
+{
+    m_current = &m_buffer[0];
+    m_next = 0;
+    clearUnused();
+}
+>>>>>>> miniblink49
 
 void CallbackStack::Block::invokeEphemeronCallbacks(Visitor* visitor)
 {
@@ -106,7 +122,11 @@ void CallbackStack::Block::invokeEphemeronCallbacks(Visitor* visitor)
     }
 }
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
 bool CallbackStack::Block::hasCallbackForObject(const void* object)
 {
     for (unsigned i = 0; m_buffer + i < m_current; i++) {
@@ -118,6 +138,7 @@ bool CallbackStack::Block::hasCallbackForObject(const void* object)
 }
 #endif
 
+<<<<<<< HEAD
 std::unique_ptr<CallbackStack> CallbackStack::create()
 {
     return WTF::wrapUnique(new CallbackStack());
@@ -126,11 +147,23 @@ std::unique_ptr<CallbackStack> CallbackStack::create()
 CallbackStack::CallbackStack()
     : m_first(nullptr)
     , m_last(nullptr)
+=======
+void CallbackStack::Block::clearUnused()
+{
+#if ENABLE(ASSERT)
+    for (size_t i = 0; i < blockSize; i++)
+        m_buffer[i] = Item(0, 0);
+#endif
+}
+
+CallbackStack::CallbackStack() : m_first(new Block(0)), m_last(m_first)
+>>>>>>> miniblink49
 {
 }
 
 CallbackStack::~CallbackStack()
 {
+<<<<<<< HEAD
     CHECK(isEmpty());
     m_first = nullptr;
     m_last = nullptr;
@@ -147,30 +180,54 @@ void CallbackStack::decommit()
 {
     if (!m_first)
         return;
+=======
+    clear();
+    delete m_first;
+    m_first = 0;
+    m_last = 0;
+}
+
+void CallbackStack::clear()
+{
+>>>>>>> miniblink49
     Block* next;
     for (Block* current = m_first->next(); current; current = next) {
         next = current->next();
         delete current;
     }
+<<<<<<< HEAD
     delete m_first;
     m_last = m_first = nullptr;
+=======
+    m_first->clear();
+    m_last = m_first;
+>>>>>>> miniblink49
 }
 
 bool CallbackStack::isEmpty() const
 {
+<<<<<<< HEAD
     return !m_first || (hasJustOneBlock() && m_first->isEmptyBlock());
+=======
+    return hasJustOneBlock() && m_first->isEmptyBlock();
+>>>>>>> miniblink49
 }
 
 CallbackStack::Item* CallbackStack::allocateEntrySlow()
 {
+<<<<<<< HEAD
     DCHECK(m_first);
     DCHECK(!m_first->allocateEntry());
+=======
+    ASSERT(!m_first->allocateEntry());
+>>>>>>> miniblink49
     m_first = new Block(m_first);
     return m_first->allocateEntry();
 }
 
 CallbackStack::Item* CallbackStack::popSlow()
 {
+<<<<<<< HEAD
     DCHECK(m_first);
     DCHECK(m_first->isEmptyBlock());
 
@@ -182,6 +239,18 @@ CallbackStack::Item* CallbackStack::popSlow()
 #endif
             return nullptr;
         }
+=======
+    ASSERT(m_first->isEmptyBlock());
+
+    for (;;) {
+        if (hasJustOneBlock()) {
+#if ENABLE(ASSERT)
+            m_first->clear();
+#endif
+            return 0;
+        }
+        Block* next = m_first->next();
+>>>>>>> miniblink49
         delete m_first;
         m_first = next;
         if (Item* item = m_first->pop())
@@ -198,8 +267,13 @@ void CallbackStack::invokeEphemeronCallbacks(Visitor* visitor)
     // has been prepended to the chain. This will be very rare, but we can
     // handle the situation by starting again and calling all the callbacks
     // on the prepended blocks.
+<<<<<<< HEAD
     Block* from = nullptr;
     Block* upto = nullptr;
+=======
+    Block* from = 0;
+    Block* upto = 0;
+>>>>>>> miniblink49
     while (from != m_first) {
         upto = from;
         from = m_first;
@@ -207,6 +281,7 @@ void CallbackStack::invokeEphemeronCallbacks(Visitor* visitor)
     }
 }
 
+<<<<<<< HEAD
 void CallbackStack::invokeOldestCallbacks(Block* from,
     Block* upto,
     Visitor* visitor)
@@ -215,17 +290,42 @@ void CallbackStack::invokeOldestCallbacks(Block* from,
         return;
     DCHECK(from);
     // Recurse first so we get to the newly added entries last.
+=======
+void CallbackStack::invokeOldestCallbacks(Block* from, Block* upto, Visitor* visitor)
+{
+    if (from == upto)
+        return;
+    ASSERT(from);
+    // Recurse first (blockSize at a time) so we get to the newly added entries last.
+>>>>>>> miniblink49
     invokeOldestCallbacks(from->next(), upto, visitor);
     from->invokeEphemeronCallbacks(visitor);
 }
 
 bool CallbackStack::hasJustOneBlock() const
 {
+<<<<<<< HEAD
     DCHECK(m_first);
     return !m_first->next();
 }
 
 #if DCHECK_IS_ON()
+=======
+    return !m_first->next();
+}
+
+void CallbackStack::swap(CallbackStack* other)
+{
+    Block* tmp = m_first;
+    m_first = other->m_first;
+    other->m_first = tmp;
+    tmp = m_last;
+    m_last = other->m_last;
+    other->m_last = tmp;
+}
+
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
 bool CallbackStack::hasCallbackForObject(const void* object)
 {
     for (Block* current = m_first; current; current = current->next()) {
@@ -236,4 +336,8 @@ bool CallbackStack::hasCallbackForObject(const void* object)
 }
 #endif
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

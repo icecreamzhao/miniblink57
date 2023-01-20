@@ -28,15 +28,19 @@
 #define TouchEventContext_h
 
 #include "platform/heap/Handle.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class Event;
 class TouchList;
 
-class TouchEventContext : public GarbageCollected<TouchEventContext> {
+class TouchEventContext : public RefCountedWillBeGarbageCollected<TouchEventContext> {
+    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(TouchEventContext);
 public:
-    static TouchEventContext* create();
+    static PassRefPtrWillBeRawPtr<TouchEventContext> create();
     void handleLocalEvents(Event&) const;
     TouchList& touches() { return *m_touches; }
     TouchList& targetTouches() { return *m_targetTouches; }
@@ -47,11 +51,11 @@ public:
 private:
     TouchEventContext();
 
-    Member<TouchList> m_touches;
-    Member<TouchList> m_targetTouches;
-    Member<TouchList> m_changedTouches;
+    RefPtrWillBeMember<TouchList> m_touches;
+    RefPtrWillBeMember<TouchList> m_targetTouches;
+    RefPtrWillBeMember<TouchList> m_changedTouches;
 };
 
-} // namespace blink
+}
 
 #endif // TouchEventContext_h

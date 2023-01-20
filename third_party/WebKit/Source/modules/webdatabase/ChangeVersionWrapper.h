@@ -31,7 +31,10 @@
 #include "modules/webdatabase/SQLTransactionBackend.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -39,11 +42,15 @@ class SQLErrorData;
 
 class ChangeVersionWrapper final : public SQLTransactionWrapper {
 public:
+<<<<<<< HEAD
     static ChangeVersionWrapper* create(const String& oldVersion,
         const String& newVersion)
     {
         return new ChangeVersionWrapper(oldVersion, newVersion);
     }
+=======
+    static ChangeVersionWrapper* create(const String& oldVersion, const String& newVersion) { return new ChangeVersionWrapper(oldVersion, newVersion); }
+>>>>>>> miniblink49
 
     bool performPreflight(SQLTransactionBackend*) override;
     bool performPostflight(SQLTransactionBackend*) override;
@@ -55,7 +62,11 @@ private:
 
     String m_oldVersion;
     String m_newVersion;
+<<<<<<< HEAD
     std::unique_ptr<SQLErrorData> m_sqlError;
+=======
+    OwnPtr<SQLErrorData> m_sqlError;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

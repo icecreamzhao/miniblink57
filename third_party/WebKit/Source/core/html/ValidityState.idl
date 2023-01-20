@@ -22,7 +22,9 @@
 
 // https://html.spec.whatwg.org/#validitystate
 
-interface ValidityState {
+[
+    WillBeGarbageCollected
+] interface ValidityState {
     readonly attribute boolean valueMissing;
     readonly attribute boolean typeMismatch;
     readonly attribute boolean patternMismatch;

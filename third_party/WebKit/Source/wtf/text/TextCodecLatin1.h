@@ -36,6 +36,7 @@ public:
     static void registerCodecs(TextCodecRegistrar);
 
 private:
+<<<<<<< HEAD
     String decode(const char*,
         size_t length,
         FlushBehavior,
@@ -45,6 +46,13 @@ private:
     CString encode(const LChar*, size_t length, UnencodableHandling) override;
 
     template <typename CharType>
+=======
+    String decode(const char*, size_t length, FlushBehavior, bool stopOnError, bool& sawError) override;
+    CString encode(const UChar*, size_t length, UnencodableHandling) override;
+    CString encode(const LChar*, size_t length, UnencodableHandling) override;
+
+    template<typename CharType>
+>>>>>>> miniblink49
     CString encodeCommon(const CharType*, size_t length, UnencodableHandling);
 };
 

@@ -7,7 +7,11 @@
 #ifndef PathOpsTestCommon_DEFINED
 #define PathOpsTestCommon_DEFINED
 
+<<<<<<< HEAD
 #include "SkPathOpsQuad.h"
+=======
+#include "SkPathOpsConic.h"
+>>>>>>> miniblink49
 #include "SkTArray.h"
 
 struct SkPathOpsBounds;
@@ -15,7 +19,11 @@ struct SkPathOpsBounds;
 void CubicPathToQuads(const SkPath& cubicPath, SkPath* quadPath);
 void CubicPathToSimple(const SkPath& cubicPath, SkPath* simplePath);
 void CubicToQuads(const SkDCubic& cubic, double precision, SkTArray<SkDQuad, true>& quads);
+<<<<<<< HEAD
 bool ValidBounds(const SkPathOpsBounds&);
+=======
+bool ValidBounds(const SkPathOpsBounds& );
+>>>>>>> miniblink49
 bool ValidConic(const SkDConic& cubic);
 bool ValidCubic(const SkDCubic& cubic);
 bool ValidLine(const SkDLine& line);

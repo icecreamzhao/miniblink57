@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/filesystem/FileEntry.h"
 
 #include "core/fileapi/BlobCallback.h"
@@ -35,6 +36,15 @@
 #include "modules/filesystem/DOMFileSystem.h"
 #include "modules/filesystem/ErrorCallback.h"
 #include "modules/filesystem/FileSystemCallbacks.h"
+=======
+#include "config.h"
+#include "modules/filesystem/FileEntry.h"
+
+#include "core/fileapi/File.h"
+#include "modules/filesystem/DOMFileSystem.h"
+#include "modules/filesystem/ErrorCallback.h"
+#include "modules/filesystem/FileCallback.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/FileWriterCallback.h"
 
 namespace blink {
@@ -44,6 +54,7 @@ FileEntry::FileEntry(DOMFileSystemBase* fileSystem, const String& fullPath)
 {
 }
 
+<<<<<<< HEAD
 void FileEntry::createWriter(FileWriterCallback* successCallback,
     ErrorCallback* errorCallback)
 {
@@ -56,6 +67,16 @@ void FileEntry::file(BlobCallback* successCallback,
 {
     filesystem()->createFile(this, successCallback,
         ScriptErrorCallback::wrap(errorCallback));
+=======
+void FileEntry::createWriter(FileWriterCallback* successCallback, ErrorCallback* errorCallback)
+{
+    filesystem()->createWriter(this, successCallback, errorCallback);
+}
+
+void FileEntry::file(FileCallback* successCallback, ErrorCallback* errorCallback)
+{
+    filesystem()->createFile(this, successCallback, errorCallback);
+>>>>>>> miniblink49
 }
 
 DEFINE_TRACE(FileEntry)
@@ -63,4 +84,8 @@ DEFINE_TRACE(FileEntry)
     Entry::trace(visitor);
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+} // namespace
+>>>>>>> miniblink49

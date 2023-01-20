@@ -34,35 +34,57 @@
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "modules/ModulesExport.h"
 #include "platform/StorageQuotaCallbacks.h"
+<<<<<<< HEAD
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class MODULES_EXPORT StorageQuotaCallbacksImpl final
     : public StorageQuotaCallbacks {
     WTF_MAKE_NONCOPYABLE(StorageQuotaCallbacksImpl);
 
 public:
     static StorageQuotaCallbacksImpl* create(ScriptPromiseResolver* resolver)
+=======
+class MODULES_EXPORT StorageQuotaCallbacksImpl final : public StorageQuotaCallbacks {
+    WTF_MAKE_NONCOPYABLE(StorageQuotaCallbacksImpl);
+public:
+    static StorageQuotaCallbacksImpl* create(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+>>>>>>> miniblink49
     {
         return new StorageQuotaCallbacksImpl(resolver);
     }
 
     ~StorageQuotaCallbacksImpl() override;
 
+<<<<<<< HEAD
     void didQueryStorageUsageAndQuota(unsigned long long usageInBytes,
         unsigned long long quotaInBytes) override;
     void didGrantStorageQuota(unsigned long long usageInBytes,
         unsigned long long grantedQuotaInBytes) override;
+=======
+    void didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes) override;
+    void didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes) override;
+>>>>>>> miniblink49
     void didFail(WebStorageQuotaError) override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     explicit StorageQuotaCallbacksImpl(ScriptPromiseResolver*);
 
     Member<ScriptPromiseResolver> m_resolver;
+=======
+    explicit StorageQuotaCallbacksImpl(PassRefPtrWillBeRawPtr<ScriptPromiseResolver>);
+
+    RefPtrWillBeMember<ScriptPromiseResolver> m_resolver;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

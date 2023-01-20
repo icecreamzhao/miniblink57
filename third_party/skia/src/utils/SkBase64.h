@@ -26,7 +26,11 @@ public:
        encode[64] will be used as the pad character. Encodings other than the
        default encoding cannot be decoded.
     */
+<<<<<<< HEAD
     static size_t Encode(const void* src, size_t length, void* dest, const char* encode = nullptr);
+=======
+    static size_t Encode(const void* src, size_t length, void* dest, const char* encode = NULL);
+>>>>>>> miniblink49
 
 private:
     Error decode(const void* srcPtr, size_t length, bool writeDestination);

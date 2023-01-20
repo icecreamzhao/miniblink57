@@ -8,6 +8,7 @@
 #ifndef GrResourceProvider_DEFINED
 #define GrResourceProvider_DEFINED
 
+<<<<<<< HEAD
 #include "GrBatchAtlas.h"
 #include "GrBuffer.h"
 #include "GrPathRange.h"
@@ -19,6 +20,16 @@ class GrRenderTarget;
 class GrSingleOwner;
 class GrStencilAttachment;
 class GrStyle;
+=======
+#include "GrIndexBuffer.h"
+#include "GrTextureProvider.h"
+#include "GrPathRange.h"
+
+class GrIndexBuffer;
+class GrPath;
+class GrStrokeInfo;
+class GrVertexBuffer;
+>>>>>>> miniblink49
 class SkDescriptor;
 class SkPath;
 class SkTypeface;
@@ -27,6 +38,7 @@ class SkTypeface;
  * An extension of the texture provider for arbitrary resource types. This class is intended for
  * use within the Gr code base, not by clients or extensions (e.g. third party GrProcessor
  * derivatives).
+<<<<<<< HEAD
  *
  * This currently inherits from GrTextureProvider non-publically to force callers to provider
  * make a flags (pendingIO) decision and not use the GrTP methods that don't take flags. This
@@ -39,13 +51,26 @@ public:
     template <typename T>
     T* findAndRefTByUniqueKey(const GrUniqueKey& key)
     {
+=======
+ */
+class GrResourceProvider : public GrTextureProvider {
+public:
+
+    GrResourceProvider(GrGpu* gpu, GrResourceCache* cache);
+
+    template <typename T> T* findAndRefTByUniqueKey(const GrUniqueKey& key) {
+>>>>>>> miniblink49
         return static_cast<T*>(this->findAndRefResourceByUniqueKey(key));
     }
 
     /**
      * Either finds and refs, or creates an index buffer for instanced drawing with a specific
      * pattern if the index buffer is not found. If the return is non-null, the caller owns
+<<<<<<< HEAD
      * a ref on the returned GrBuffer.
+=======
+     * a ref on the returned GrIndexBuffer.
+>>>>>>> miniblink49
      *
      * @param pattern     the pattern of indices to repeat
      * @param patternSize size in bytes of the pattern
@@ -53,6 +78,7 @@ public:
      * @param vertCount   number of vertices the pattern references
      * @param key         Key to be assigned to the index buffer.
      *
+<<<<<<< HEAD
      * @return The index buffer if successful, otherwise nullptr.
      */
     const GrBuffer* findOrCreateInstancedIndexBuffer(const uint16_t* pattern,
@@ -62,6 +88,16 @@ public:
         const GrUniqueKey& key)
     {
         if (GrBuffer* buffer = this->findAndRefTByUniqueKey<GrBuffer>(key)) {
+=======
+     * @return The index buffer if successful, otherwise NULL.
+     */
+    const GrIndexBuffer* refOrCreateInstancedIndexBuffer(const uint16_t* pattern,
+                                                         int patternSize,
+                                                         int reps,
+                                                         int vertCount,
+                                                         const GrUniqueKey& key) {
+        if (GrIndexBuffer* buffer = this->findAndRefTByUniqueKey<GrIndexBuffer>(key)) {
+>>>>>>> miniblink49
             return buffer;
         }
         return this->createInstancedIndexBuffer(pattern, patternSize, reps, vertCount, key);
@@ -70,6 +106,7 @@ public:
     /**
      * Returns an index buffer that can be used to render quads.
      * Six indices per quad: 0, 1, 2, 0, 2, 3, etc.
+<<<<<<< HEAD
      * The max number of quads is the buffer's index capacity divided by 6.
      * Draw with kTriangles_GrPrimitiveType
      * @ return the quad index buffer
@@ -77,6 +114,15 @@ public:
     const GrBuffer* refQuadIndexBuffer()
     {
         if (GrBuffer* buffer = this->findAndRefTByUniqueKey<GrBuffer>(fQuadIndexBufferKey)) {
+=======
+     * The max number of quads can be queried using GrIndexBuffer::maxQuads().
+     * Draw with kTriangles_GrPrimitiveType
+     * @ return the quad index buffer
+     */
+    const GrIndexBuffer* refQuadIndexBuffer() {
+        if (GrIndexBuffer* buffer =
+            this->findAndRefTByUniqueKey<GrIndexBuffer>(fQuadIndexBufferKey)) {
+>>>>>>> miniblink49
             return buffer;
         }
         return this->createQuadIndexBuffer();
@@ -86,6 +132,7 @@ public:
      * Factories for GrPath and GrPathRange objects. It's an error to call these if path rendering
      * is not supported.
      */
+<<<<<<< HEAD
     GrPath* createPath(const SkPath&, const GrStyle&);
     GrPathRange* createPathRange(GrPathRange::PathGenerator*, const GrStyle&);
     GrPathRange* createGlyphs(const SkTypeface*, const SkScalerContextEffects&,
@@ -172,6 +219,28 @@ private:
         const GrUniqueKey& key);
 
     const GrBuffer* createQuadIndexBuffer();
+=======
+    GrPath* createPath(const SkPath&, const GrStrokeInfo&);
+    GrPathRange* createPathRange(GrPathRange::PathGenerator*, const GrStrokeInfo&);
+    GrPathRange* createGlyphs(const SkTypeface*, const SkDescriptor*, const GrStrokeInfo&);
+
+
+    using GrTextureProvider::assignUniqueKeyToResource;
+    using GrTextureProvider::findAndRefResourceByUniqueKey;
+    using GrTextureProvider::abandon;
+
+    GrIndexBuffer* getIndexBuffer(size_t size, bool dynamic, bool calledDuringFlush);
+    GrVertexBuffer* getVertexBuffer(size_t size, bool dynamic, bool calledDuringFlush);
+
+private:
+    const GrIndexBuffer* createInstancedIndexBuffer(const uint16_t* pattern,
+                                                    int patternSize,
+                                                    int reps,
+                                                    int vertCount,
+                                                    const GrUniqueKey& key);
+
+    const GrIndexBuffer* createQuadIndexBuffer();
+>>>>>>> miniblink49
 
     GrUniqueKey fQuadIndexBufferKey;
 

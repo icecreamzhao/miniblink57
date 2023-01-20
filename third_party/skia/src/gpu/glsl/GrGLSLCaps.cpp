@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "GrGLSLCaps.h"
 
 #include "GrContextOptions.h"
@@ -13,12 +14,21 @@
 
 GrGLSLCaps::GrGLSLCaps(const GrContextOptions& options)
 {
+=======
+
+#include "GrGLSLCaps.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+GrGLSLCaps::GrGLSLCaps(const GrContextOptions& options) {
+>>>>>>> miniblink49
     fGLSLGeneration = k330_GrGLSLGeneration;
 
     fDropsTileOnZeroDivide = false;
     fFBFetchSupport = false;
     fFBFetchNeedsCustomOutput = false;
     fBindlessTextureSupport = false;
+<<<<<<< HEAD
     fUsesPrecisionModifiers = false;
     fCanUseAnyFunctionInShader = true;
     fCanUseMinAndAbsTogether = true;
@@ -50,6 +60,14 @@ GrGLSLCaps::GrGLSLCaps(const GrContextOptions& options)
 
 SkString GrGLSLCaps::dump() const
 {
+=======
+    fFBFetchColorName = NULL;
+    fFBFetchExtensionString = NULL;
+    fAdvBlendEqInteraction = kNotSupported_AdvBlendEqInteraction;
+}
+
+SkString GrGLSLCaps::dump() const {
+>>>>>>> miniblink49
     SkString r = INHERITED::dump();
 
     static const char* kAdvBlendEqInteractionStr[] = {
@@ -69,6 +87,7 @@ SkString GrGLSLCaps::dump() const
     r.appendf("FB Fetch Support: %s\n", (fFBFetchSupport ? "YES" : "NO"));
     r.appendf("Drops tile on zero divide: %s\n", (fDropsTileOnZeroDivide ? "YES" : "NO"));
     r.appendf("Bindless texture support: %s\n", (fBindlessTextureSupport ? "YES" : "NO"));
+<<<<<<< HEAD
     r.appendf("Uses precision modifiers: %s\n", (fUsesPrecisionModifiers ? "YES" : "NO"));
     r.appendf("Can use any() function: %s\n", (fCanUseAnyFunctionInShader ? "YES" : "NO"));
     r.appendf("Can use min() and abs() together: %s\n", (fCanUseMinAndAbsTogether ? "YES" : "NO"));
@@ -146,3 +165,10 @@ void GrGLSLCaps::initSamplerPrecisionTable()
 void GrGLSLCaps::onApplyOptionsOverrides(const GrContextOptions& options)
 {
 }
+=======
+    r.appendf("Advanced blend equation interaction: %s\n",
+              kAdvBlendEqInteractionStr[fAdvBlendEqInteraction]);
+    return r;
+}
+
+>>>>>>> miniblink49

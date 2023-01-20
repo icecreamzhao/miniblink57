@@ -1,6 +1,10 @@
 include_rules = [
     "+bindings",
     "+core",
+<<<<<<< HEAD
+=======
+    "+heap",
+>>>>>>> miniblink49
     "-modules",
     "+modules/encoding",
     "+platform",

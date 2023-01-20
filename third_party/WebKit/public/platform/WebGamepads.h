@@ -26,7 +26,15 @@
 
 #include "WebGamepad.h"
 
+<<<<<<< HEAD
 #pragma pack(push, 4)
+=======
+#if BLINK_IMPLEMENTATION
+#include "wtf/Assertions.h"
+#endif
+
+#pragma pack(push, 1)
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -35,13 +43,33 @@ namespace blink {
 // browser.
 class WebGamepads {
 public:
+<<<<<<< HEAD
     static const size_t itemsLengthCap = 4;
 
+=======
+    WebGamepads()
+        : length(0) { }
+
+    static const size_t itemsLengthCap = 4;
+
+    // Number of valid entries in the items array.
+    unsigned length;
+
+>>>>>>> miniblink49
     // Gamepad data for N separate gamepad devices.
     WebGamepad items[itemsLengthCap];
 };
 
+<<<<<<< HEAD
 #pragma pack(pop)
+=======
+#if BLINK_IMPLEMENTATION
+static_assert(sizeof(WebGamepads) == 2888, "WebGamepads has wrong size");
+#endif
+
+#pragma pack(pop)
+
+>>>>>>> miniblink49
 }
 
 #endif // WebGamepads_h

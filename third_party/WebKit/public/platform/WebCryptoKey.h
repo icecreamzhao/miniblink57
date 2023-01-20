@@ -104,11 +104,15 @@ public:
     // https://dvcs.w3.org/hg/webcrypto-api/raw-file/tip/spec/Overview.html#key-interface-members
     //
     // Note that the caller is passing ownership of the WebCryptoKeyHandle*.
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT static WebCryptoKey create(WebCryptoKeyHandle*,
         WebCryptoKeyType,
         bool extractable,
         const WebCryptoKeyAlgorithm&,
         WebCryptoKeyUsageMask);
+=======
+    BLINK_PLATFORM_EXPORT static WebCryptoKey create(WebCryptoKeyHandle*, WebCryptoKeyType, bool extractable, const WebCryptoKeyAlgorithm&, WebCryptoKeyUsageMask);
+>>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT static WebCryptoKey createNull();
 
@@ -124,9 +128,12 @@ public:
 
     BLINK_PLATFORM_EXPORT bool isNull() const;
 
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT bool keyUsageAllows(
         const blink::WebCryptoKeyUsage) const;
 
+=======
+>>>>>>> miniblink49
 private:
     BLINK_PLATFORM_EXPORT void assign(const WebCryptoKey& other);
     BLINK_PLATFORM_EXPORT void reset();

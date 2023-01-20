@@ -8,28 +8,41 @@
 #ifndef GrProcessorUnitTest_DEFINED
 #define GrProcessorUnitTest_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkTArray.h"
 #include "GrTestUtils.h"
+=======
+#include "GrTestUtils.h"
+#include "SkTArray.h"
+>>>>>>> miniblink49
 #include "SkTypes.h"
 
 class SkMatrix;
 class GrCaps;
 class GrContext;
+<<<<<<< HEAD
 class GrDrawContext;
 struct GrProcessorTestData;
 
 namespace GrProcessorUnitTest {
 
+=======
+
+namespace GrProcessorUnitTest {
+>>>>>>> miniblink49
 // Used to access the dummy textures in TestCreate procs.
 enum {
     kSkiaPMTextureIdx = 0,
     kAlphaTextureIdx = 1,
 };
 
+<<<<<<< HEAD
 /** This allows parent FPs to implement a test create with known leaf children in order to avoid
 creating an unbounded FP tree which may overflow various shader limits. */
 sk_sp<GrFragmentProcessor> MakeChildFP(GrProcessorTestData*);
 
+=======
+>>>>>>> miniblink49
 }
 
 /*
@@ -41,6 +54,7 @@ sk_sp<GrFragmentProcessor> MakeChildFP(GrProcessorTestData*);
  */
 struct GrProcessorTestData {
     GrProcessorTestData(SkRandom* random,
+<<<<<<< HEAD
         GrContext* context,
         const GrCaps* caps,
         const GrDrawContext* drawContext,
@@ -50,13 +64,28 @@ struct GrProcessorTestData {
         , fCaps(caps)
         , fDrawContext(drawContext)
     {
+=======
+                        GrContext* context,
+                        GrProcessorDataManager* procDataManager,
+                        const GrCaps* caps,
+                        GrTexture* textures[2])
+        : fRandom(random)
+        , fContext(context)
+        , fProcDataManager(procDataManager)
+        , fCaps(caps) {
+>>>>>>> miniblink49
         fTextures[0] = textures[0];
         fTextures[1] = textures[1];
     }
     SkRandom* fRandom;
     GrContext* fContext;
+<<<<<<< HEAD
     const GrCaps* fCaps;
     const GrDrawContext* fDrawContext;
+=======
+    GrProcessorDataManager* fProcDataManager;
+    const GrCaps* fCaps;
+>>>>>>> miniblink49
     GrTexture* fTextures[2];
 };
 
@@ -68,6 +97,7 @@ class GrTexture;
 template <class Processor>
 class GrProcessorTestFactory : SkNoncopyable {
 public:
+<<<<<<< HEAD
     typedef sk_sp<Processor> (*MakeProc)(GrProcessorTestData*);
 
     GrProcessorTestFactory(MakeProc makeProc)
@@ -93,6 +123,22 @@ public:
     {
         GrProcessorTestFactory<Processor>* factory = (*GetFactories())[idx];
         return factory->fMakeProc(data);
+=======
+
+    typedef Processor* (*CreateProc)(GrProcessorTestData*);
+
+    GrProcessorTestFactory(CreateProc createProc) {
+        fCreateProc = createProc;
+        GetFactories()->push_back(this);
+    }
+
+    static Processor* CreateStage(GrProcessorTestData* data) {
+        VerifyFactoryCount();
+        SkASSERT(GetFactories()->count());
+        uint32_t idx = data->fRandom->nextRangeU(0, GetFactories()->count() - 1);
+        GrProcessorTestFactory<Processor>* factory = (*GetFactories())[idx];
+        return factory->fCreateProc(data);
+>>>>>>> miniblink49
     }
 
     /*
@@ -101,7 +147,11 @@ public:
     static void VerifyFactoryCount();
 
 private:
+<<<<<<< HEAD
     MakeProc fMakeProc;
+=======
+    CreateProc fCreateProc;
+>>>>>>> miniblink49
 
     static SkTArray<GrProcessorTestFactory<Processor>*, true>* GetFactories();
 };
@@ -109,6 +159,7 @@ private:
 /** GrProcessor subclasses should insert this macro in their declaration to be included in the
  *  program generation unit test.
  */
+<<<<<<< HEAD
 #define GR_DECLARE_GEOMETRY_PROCESSOR_TEST                                     \
     static GrProcessorTestFactory<GrGeometryProcessor> gTestFactory SK_UNUSED; \
     static sk_sp<GrGeometryProcessor> TestCreate(GrProcessorTestData*)
@@ -120,11 +171,26 @@ private:
 #define GR_DECLARE_XP_FACTORY_TEST                                     \
     static GrProcessorTestFactory<GrXPFactory> gTestFactory SK_UNUSED; \
     static sk_sp<GrXPFactory> TestCreate(GrProcessorTestData*)
+=======
+#define GR_DECLARE_GEOMETRY_PROCESSOR_TEST                                                         \
+    static GrProcessorTestFactory<GrGeometryProcessor> gTestFactory SK_UNUSED;                     \
+    static GrGeometryProcessor* TestCreate(GrProcessorTestData*)
+
+#define GR_DECLARE_FRAGMENT_PROCESSOR_TEST                                                         \
+    static GrProcessorTestFactory<GrFragmentProcessor> gTestFactory SK_UNUSED;                     \
+    static GrFragmentProcessor* TestCreate(GrProcessorTestData*)
+
+#define GR_DECLARE_XP_FACTORY_TEST                                                                 \
+    static GrProcessorTestFactory<GrXPFactory> gTestFactory SK_UNUSED;                             \
+    static GrXPFactory* TestCreate(GrProcessorTestData*)
+
+>>>>>>> miniblink49
 
 /** GrProcessor subclasses should insert this macro in their implementation file. They must then
  *  also implement this static function:
  *      GrProcessor* TestCreate(GrProcessorTestData*);
  */
+<<<<<<< HEAD
 #define GR_DEFINE_FRAGMENT_PROCESSOR_TEST(Effect) \
     GrProcessorTestFactory<GrFragmentProcessor> Effect ::gTestFactory(Effect ::TestCreate)
 
@@ -133,25 +199,50 @@ private:
 
 #define GR_DEFINE_GEOMETRY_PROCESSOR_TEST(Effect) \
     GrProcessorTestFactory<GrGeometryProcessor> Effect ::gTestFactory(Effect ::TestCreate)
+=======
+#define GR_DEFINE_FRAGMENT_PROCESSOR_TEST(Effect)                                                  \
+    GrProcessorTestFactory<GrFragmentProcessor> Effect :: gTestFactory(Effect :: TestCreate)
+
+#define GR_DEFINE_XP_FACTORY_TEST(Factory)                                                         \
+    GrProcessorTestFactory<GrXPFactory> Factory :: gTestFactory(Factory :: TestCreate)
+
+#define GR_DEFINE_GEOMETRY_PROCESSOR_TEST(Effect)                                                  \
+    GrProcessorTestFactory<GrGeometryProcessor> Effect :: gTestFactory(Effect :: TestCreate)
+>>>>>>> miniblink49
 
 #else // !SK_ALLOW_STATIC_GLOBAL_INITIALIZERS
 
 // The unit test relies on static initializers. Just declare the TestCreate function so that
 // its definitions will compile.
+<<<<<<< HEAD
 #define GR_DECLARE_FRAGMENT_PROCESSOR_TEST \
     static sk_sp<GrFragmentProcessor> TestCreate(GrProcessorTestData*)
+=======
+#define GR_DECLARE_FRAGMENT_PROCESSOR_TEST                                                         \
+    static GrFragmentProcessor* TestCreate(GrProcessorTestData*)
+>>>>>>> miniblink49
 #define GR_DEFINE_FRAGMENT_PROCESSOR_TEST(X)
 
 // The unit test relies on static initializers. Just declare the TestCreate function so that
 // its definitions will compile.
+<<<<<<< HEAD
 #define GR_DECLARE_XP_FACTORY_TEST \
     static sk_sp<GrXPFactory> TestCreate(GrProcessorTestData*)
+=======
+#define GR_DECLARE_XP_FACTORY_TEST                                                                 \
+    static GrXPFactory* TestCreate(GrProcessorTestData*)
+>>>>>>> miniblink49
 #define GR_DEFINE_XP_FACTORY_TEST(X)
 
 // The unit test relies on static initializers. Just declare the TestCreate function so that
 // its definitions will compile.
+<<<<<<< HEAD
 #define GR_DECLARE_GEOMETRY_PROCESSOR_TEST \
     static sk_sp<GrGeometryProcessor> TestCreate(GrProcessorTestData*)
+=======
+#define GR_DECLARE_GEOMETRY_PROCESSOR_TEST                                                         \
+    static GrGeometryProcessor* TestCreate(GrProcessorTestData*)
+>>>>>>> miniblink49
 #define GR_DEFINE_GEOMETRY_PROCESSOR_TEST(X)
 
 #endif // !SK_ALLOW_STATIC_GLOBAL_INITIALIZERS

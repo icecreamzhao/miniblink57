@@ -17,30 +17,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGFEDiffuseLightingElement.h"
 
 #include "core/layout/LayoutObject.h"
 #include "core/style/ComputedStyle.h"
+#include "core/svg/SVGParserUtilities.h"
 #include "core/svg/graphics/filters/SVGFilterBuilder.h"
 #include "platform/graphics/filters/FEDiffuseLighting.h"
-#include "platform/graphics/filters/Filter.h"
+#include "platform/graphics/filters/FilterEffect.h"
 
 namespace blink {
 
-inline SVGFEDiffuseLightingElement::SVGFEDiffuseLightingElement(
-    Document& document)
-    : SVGFilterPrimitiveStandardAttributes(SVGNames::feDiffuseLightingTag,
-        document)
-    , m_diffuseConstant(SVGAnimatedNumber::create(this,
-          SVGNames::diffuseConstantAttr,
-          SVGNumber::create(1)))
-    , m_surfaceScale(SVGAnimatedNumber::create(this,
-          SVGNames::surfaceScaleAttr,
-          SVGNumber::create(1)))
-    , m_kernelUnitLength(SVGAnimatedNumberOptionalNumber::create(
-          this,
-          SVGNames::kernelUnitLengthAttr))
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
+inline SVGFEDiffuseLightingElement::SVGFEDiffuseLightingElement(Document& document)
+    : SVGFilterPrimitiveStandardAttributes(SVGNames::feDiffuseLightingTag, document)
+    , m_diffuseConstant(SVGAnimatedNumber::create(this, SVGNames::diffuseConstantAttr, SVGNumber::create(1)))
+    , m_surfaceScale(SVGAnimatedNumber::create(this, SVGNames::surfaceScaleAttr, SVGNumber::create(1)))
+    , m_kernelUnitLength(SVGAnimatedNumberOptionalNumber::create(this, SVGNames::kernelUnitLengthAttr))
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
 {
     addToPropertyMap(m_diffuseConstant);
     addToPropertyMap(m_surfaceScale);
@@ -59,9 +53,7 @@ DEFINE_TRACE(SVGFEDiffuseLightingElement)
 
 DEFINE_NODE_FACTORY(SVGFEDiffuseLightingElement)
 
-bool SVGFEDiffuseLightingElement::setFilterEffectAttribute(
-    FilterEffect* effect,
-    const QualifiedName& attrName)
+bool SVGFEDiffuseLightingElement::setFilterEffectAttribute(FilterEffect* effect, const QualifiedName& attrName)
 {
     FEDiffuseLighting* diffuseLighting = static_cast<FEDiffuseLighting*>(effect);
 
@@ -69,49 +61,47 @@ bool SVGFEDiffuseLightingElement::setFilterEffectAttribute(
         LayoutObject* layoutObject = this->layoutObject();
         ASSERT(layoutObject);
         ASSERT(layoutObject->style());
-        return diffuseLighting->setLightingColor(
-            layoutObject->style()->svgStyle().lightingColor());
+        return diffuseLighting->setLightingColor(layoutObject->style()->svgStyle().lightingColor());
     }
     if (attrName == SVGNames::surfaceScaleAttr)
-        return diffuseLighting->setSurfaceScale(
-            m_surfaceScale->currentValue()->value());
+        return diffuseLighting->setSurfaceScale(m_surfaceScale->currentValue()->value());
     if (attrName == SVGNames::diffuseConstantAttr)
-        return diffuseLighting->setDiffuseConstant(
-            m_diffuseConstant->currentValue()->value());
+        return diffuseLighting->setDiffuseConstant(m_diffuseConstant->currentValue()->value());
+    if (attrName == SVGNames::kernelUnitLengthAttr) {
+        bool changedX = diffuseLighting->setKernelUnitLengthX(m_kernelUnitLength->firstNumber()->currentValue()->value());
+        bool changedY = diffuseLighting->setKernelUnitLengthY(m_kernelUnitLength->secondNumber()->currentValue()->value());
+        return changedX || changedY;
+    }
 
     LightSource* lightSource = const_cast<LightSource*>(diffuseLighting->lightSource());
     const SVGFELightElement* lightElement = SVGFELightElement::findLightElement(*this);
     ASSERT(lightSource);
     ASSERT(lightElement);
-    ASSERT(effect->getFilter());
+    ASSERT(effect->filter());
 
     if (attrName == SVGNames::azimuthAttr)
-        return lightSource->setAzimuth(
-            lightElement->azimuth()->currentValue()->value());
+        return lightSource->setAzimuth(lightElement->azimuth()->currentValue()->value());
     if (attrName == SVGNames::elevationAttr)
-        return lightSource->setElevation(
-            lightElement->elevation()->currentValue()->value());
+        return lightSource->setElevation(lightElement->elevation()->currentValue()->value());
     if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr || attrName == SVGNames::zAttr)
-        return lightSource->setPosition(
-            effect->getFilter()->resolve3dPoint(lightElement->position()));
+        return lightSource->setPosition(effect->filter()->resolve3dPoint(lightElement->position()));
     if (attrName == SVGNames::pointsAtXAttr || attrName == SVGNames::pointsAtYAttr || attrName == SVGNames::pointsAtZAttr)
-        return lightSource->setPointsAt(
-            effect->getFilter()->resolve3dPoint(lightElement->pointsAt()));
+        return lightSource->setPointsAt(effect->filter()->resolve3dPoint(lightElement->pointsAt()));
     if (attrName == SVGNames::specularExponentAttr)
-        return lightSource->setSpecularExponent(
-            lightElement->specularExponent()->currentValue()->value());
+        return lightSource->setSpecularExponent(lightElement->specularExponent()->currentValue()->value());
     if (attrName == SVGNames::limitingConeAngleAttr)
-        return lightSource->setLimitingConeAngle(
-            lightElement->limitingConeAngle()->currentValue()->value());
+        return lightSource->setLimitingConeAngle(lightElement->limitingConeAngle()->currentValue()->value());
 
-    return SVGFilterPrimitiveStandardAttributes::setFilterEffectAttribute(
-        effect, attrName);
+    ASSERT_NOT_REACHED();
+    return false;
 }
 
-void SVGFEDiffuseLightingElement::svgAttributeChanged(
-    const QualifiedName& attrName)
+void SVGFEDiffuseLightingElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    if (attrName == SVGNames::surfaceScaleAttr || attrName == SVGNames::diffuseConstantAttr || attrName == SVGNames::lighting_colorAttr) {
+    if (attrName == SVGNames::surfaceScaleAttr
+        || attrName == SVGNames::diffuseConstantAttr
+        || attrName == SVGNames::kernelUnitLengthAttr
+        || attrName == SVGNames::lighting_colorAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
         primitiveAttributeChanged(attrName);
         return;
@@ -126,9 +116,7 @@ void SVGFEDiffuseLightingElement::svgAttributeChanged(
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-void SVGFEDiffuseLightingElement::lightElementAttributeChanged(
-    const SVGFELightElement* lightElement,
-    const QualifiedName& attrName)
+void SVGFEDiffuseLightingElement::lightElementAttributeChanged(const SVGFELightElement* lightElement, const QualifiedName& attrName)
 {
     if (SVGFELightElement::findLightElement(*this) != lightElement)
         return;
@@ -137,13 +125,16 @@ void SVGFEDiffuseLightingElement::lightElementAttributeChanged(
     primitiveAttributeChanged(attrName);
 }
 
-FilterEffect* SVGFEDiffuseLightingElement::build(
-    SVGFilterBuilder* filterBuilder,
-    Filter* filter)
+PassRefPtrWillBeRawPtr<FilterEffect> SVGFEDiffuseLightingElement::build(SVGFilterBuilder* filterBuilder, Filter* filter)
 {
-    FilterEffect* input1 = filterBuilder->getEffectById(
-        AtomicString(m_in1->currentValue()->value()));
-    ASSERT(input1);
+    FilterEffect* input1 = filterBuilder->getEffectById(AtomicString(m_in1->currentValue()->value()));
+
+    if (!input1)
+        return nullptr;
+
+    SVGFELightElement* lightNode = SVGFELightElement::findLightElement(*this);
+    if (!lightNode)
+        return nullptr;
 
     LayoutObject* layoutObject = this->layoutObject();
     if (!layoutObject)
@@ -152,14 +143,11 @@ FilterEffect* SVGFEDiffuseLightingElement::build(
     ASSERT(layoutObject->style());
     Color color = layoutObject->style()->svgStyle().lightingColor();
 
-    const SVGFELightElement* lightNode = SVGFELightElement::findLightElement(*this);
-    RefPtr<LightSource> lightSource = lightNode ? lightNode->lightSource(filter) : nullptr;
-
-    FilterEffect* effect = FEDiffuseLighting::create(
-        filter, color, m_surfaceScale->currentValue()->value(),
-        m_diffuseConstant->currentValue()->value(), std::move(lightSource));
-    effect->inputEffects().push_back(input1);
-    return effect;
+    RefPtr<LightSource> lightSource = lightNode->lightSource(filter);
+    RefPtrWillBeRawPtr<FilterEffect> effect = FEDiffuseLighting::create(filter, color, m_surfaceScale->currentValue()->value(), m_diffuseConstant->currentValue()->value(),
+        kernelUnitLengthX()->currentValue()->value(), kernelUnitLengthY()->currentValue()->value(), lightSource.release());
+    effect->inputEffects().append(input1);
+    return effect.release();
 }
 
 } // namespace blink

@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkDisplayInput.h"
 
 enum SkInput_Properties {
@@ -26,6 +30,7 @@ const SkMemberInfo SkInput::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkInput);
 
+<<<<<<< HEAD
 SkInput::SkInput()
     : fInt((int)SK_NaN32)
     , fFloat(SK_ScalarNaN)
@@ -51,11 +56,36 @@ bool SkInput::getProperty(int index, SkScriptValue* value) const
         break;
     default:
         return false;
+=======
+SkInput::SkInput() : fInt((int) SK_NaN32), fFloat(SK_ScalarNaN) {}
+
+SkDisplayable* SkInput::contains(const SkString& string) {
+    return string.equals(name) ? this : NULL;
+}
+
+bool SkInput::enable(SkAnimateMaker & ) {
+    return true;
+}
+
+bool SkInput::getProperty(int index, SkScriptValue* value) const {
+    switch (index) {
+        case SK_PROPERTY(initialized):
+            value->fType = SkType_Boolean;
+            value->fOperand.fS32 = fInt != (int) SK_NaN32 ||
+                SkScalarIsNaN(fFloat) == false || string.size() > 0;
+            break;
+        default:
+            return false;
+>>>>>>> miniblink49
     }
     return true;
 }
 
+<<<<<<< HEAD
 bool SkInput::hasEnable() const
 {
+=======
+bool SkInput::hasEnable() const {
+>>>>>>> miniblink49
     return true;
 }

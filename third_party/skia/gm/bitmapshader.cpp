@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
@@ -12,8 +16,12 @@
 
 namespace skiagm {
 
+<<<<<<< HEAD
 static void draw_bm(SkBitmap* bm)
 {
+=======
+static void draw_bm(SkBitmap* bm) {
+>>>>>>> miniblink49
     SkPaint bluePaint;
     bluePaint.setColor(SK_ColorBLUE);
 
@@ -24,8 +32,12 @@ static void draw_bm(SkBitmap* bm)
     canvas.drawCircle(10, 10, 5, bluePaint);
 }
 
+<<<<<<< HEAD
 static void draw_mask(SkBitmap* bm)
 {
+=======
+static void draw_mask(SkBitmap* bm) {
+>>>>>>> miniblink49
     SkPaint circlePaint;
     circlePaint.setColor(SK_ColorBLACK);
 
@@ -36,16 +48,30 @@ static void draw_mask(SkBitmap* bm)
     canvas.drawCircle(10, 10, 10, circlePaint);
 }
 
+<<<<<<< HEAD
 class BitmapShaderGM : public GM {
 
 protected:
     void onOnceBeforeDraw() override
     {
         this->setBGColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
+=======
+static void adopt_shader(SkPaint* paint, SkShader* shader) {
+    paint->setShader(shader);
+    SkSafeUnref(shader);
+}
+
+class BitmapShaderGM : public GM {
+
+protected:
+    void onOnceBeforeDraw() override {
+        this->setBGColor(SK_ColorGRAY);
+>>>>>>> miniblink49
         draw_bm(&fBitmap);
         draw_mask(&fMask);
     }
 
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("bitmapshaders");
@@ -58,6 +84,17 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    virtual SkString onShortName() {
+        return SkString("bitmapshaders");
+    }
+
+    virtual SkISize onISize() {
+        return SkISize::Make(150, 100);
+    }
+
+    virtual void onDraw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
 
         for (int i = 0; i < 2; i++) {
@@ -69,8 +106,13 @@ protected:
             }
 
             canvas->save();
+<<<<<<< HEAD
             paint.setShader(SkShader::MakeBitmapShader(fBitmap, SkShader::kClamp_TileMode,
                 SkShader::kClamp_TileMode, &s));
+=======
+            adopt_shader(&paint, SkShader::CreateBitmapShader(fBitmap, SkShader::kClamp_TileMode,
+                                                              SkShader::kClamp_TileMode, &s));
+>>>>>>> miniblink49
 
             // draw the shader with a bitmap mask
             canvas->drawBitmap(fMask, 0, 0, &paint);
@@ -84,15 +126,24 @@ protected:
             canvas->translate(0, 25);
 
             // clear the shader, colorized by a solid color with a bitmap mask
+<<<<<<< HEAD
             paint.setShader(nullptr);
+=======
+            paint.setShader(NULL);
+>>>>>>> miniblink49
             paint.setColor(SK_ColorGREEN);
             canvas->drawBitmap(fMask, 0, 0, &paint);
             canvas->drawBitmap(fMask, 30, 0, &paint);
 
             canvas->translate(0, 25);
 
+<<<<<<< HEAD
             paint.setShader(SkShader::MakeBitmapShader(fMask, SkShader::kRepeat_TileMode,
                 SkShader::kRepeat_TileMode, &s));
+=======
+            adopt_shader(&paint, SkShader::CreateBitmapShader(fMask, SkShader::kRepeat_TileMode,
+                                                              SkShader::kRepeat_TileMode, &s));
+>>>>>>> miniblink49
             paint.setColor(SK_ColorRED);
 
             // draw the mask using the shader and a color

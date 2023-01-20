@@ -7,8 +7,11 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 // GENERATED_JAVA_ENUM_PACKAGE: org.chromium.blink_public.platform
 // GENERATED_JAVA_PREFIX_TO_STRIP: WebDisplayMode
+=======
+>>>>>>> miniblink49
 enum WebDisplayMode {
     WebDisplayModeUndefined, // User for override setting (ie. not set).
     WebDisplayModeBrowser,

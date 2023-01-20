@@ -26,6 +26,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace trap_handler {
 
 #if V8_TRAP_HANDLER_SUPPORTED
@@ -52,12 +53,40 @@ namespace internal {
             if (sigaction(kOobSignal, &action, &g_old_handler) != 0) {
                 return false;
             }
+=======
+namespace trap_handler {
+
+#if V8_TRAP_HANDLER_SUPPORTED
+namespace {
+struct sigaction g_old_handler;
+
+// When using the default signal handler, we save the old one to restore in case
+// V8 chooses not to handle the signal.
+bool g_is_default_signal_handler_registered;
+
+}  // namespace
+
+bool RegisterDefaultTrapHandler() {
+  CHECK(!g_is_default_signal_handler_registered);
+
+  struct sigaction action;
+  action.sa_sigaction = HandleSignal;
+  action.sa_flags = SA_SIGINFO;
+  sigemptyset(&action.sa_mask);
+  // {sigaction} installs a new custom segfault handler. On success, it returns
+  // 0. If we get a nonzero value, we report an error to the caller by returning
+  // false.
+  if (sigaction(kOobSignal, &action, &g_old_handler) != 0) {
+    return false;
+  }
+>>>>>>> miniblink49
 
 // Sanitizers often prevent us from installing our own signal handler. Attempt
 // to detect this and if so, refuse to enable trap handling.
 //
 // TODO(chromium:830894): Remove this once all bots support custom signal
 // handlers.
+<<<<<<< HEAD
 #if defined(ADDRESS_SANITIZER) || defined(MEMORY_SANITIZER) || defined(THREAD_SANITIZER) || defined(LEAK_SANITIZER) || defined(UNDEFINED_SANITIZER)
             struct sigaction installed_handler;
             CHECK_EQ(sigaction(kOobSignal, NULL, &installed_handler), 0);
@@ -88,3 +117,36 @@ namespace internal {
     } // namespace trap_handler
 } // namespace internal
 } // namespace v8
+=======
+#if defined(ADDRESS_SANITIZER) || defined(MEMORY_SANITIZER) || \
+    defined(THREAD_SANITIZER) || defined(LEAK_SANITIZER) ||    \
+    defined(UNDEFINED_SANITIZER)
+  struct sigaction installed_handler;
+  CHECK_EQ(sigaction(kOobSignal, NULL, &installed_handler), 0);
+  // If the installed handler does not point to HandleSignal, then
+  // allow_user_segv_handler is 0.
+  if (installed_handler.sa_sigaction != HandleSignal) {
+    printf(
+        "WARNING: sanitizers are preventing signal handler installation. "
+        "Trap handlers are disabled.\n");
+    return false;
+  }
+#endif
+
+  g_is_default_signal_handler_registered = true;
+  return true;
+}
+
+void RemoveTrapHandler() {
+  if (g_is_default_signal_handler_registered) {
+    if (sigaction(kOobSignal, &g_old_handler, nullptr) == 0) {
+      g_is_default_signal_handler_registered = false;
+    }
+  }
+}
+#endif  // V8_TRAP_HANDLER_SUPPORTED
+
+}  // namespace trap_handler
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

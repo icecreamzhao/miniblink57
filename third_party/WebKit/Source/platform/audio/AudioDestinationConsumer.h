@@ -38,8 +38,12 @@ namespace blink {
 
 class AudioBus;
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT AudioDestinationConsumer
     : public GarbageCollected<AudioDestinationConsumer> {
+=======
+class PLATFORM_EXPORT AudioDestinationConsumer : public GarbageCollected<AudioDestinationConsumer> {
+>>>>>>> miniblink49
 public:
     virtual void setFormat(size_t numberOfChannels, float sampleRate) = 0;
     virtual void consumeAudio(AudioBus*, size_t numberOfFrames) = 0;

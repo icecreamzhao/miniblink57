@@ -45,7 +45,11 @@
 // enabled. This requires the template specialization to be available:
 //
 //   template<> struct ValueToString<T> {
+<<<<<<< HEAD
 //       static String toString(const T& t);
+=======
+//       static String string(const T& t);
+>>>>>>> miniblink49
 //   };
 //
 // Note that when complex types are stored in this red/black tree, it
@@ -73,7 +77,10 @@
 #define PODRedBlackTree_h
 
 #include "platform/PODFreeListArena.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Assertions.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
@@ -86,6 +93,7 @@
 namespace blink {
 
 #ifndef NDEBUG
+<<<<<<< HEAD
 template <class T>
 struct ValueToString;
 #endif
@@ -96,6 +104,18 @@ template <class T>
 class PODRedBlackTree {
     DISALLOW_NEW();
 
+=======
+template<class T>
+struct ValueToString;
+#endif
+
+enum UninitializedTreeEnum {
+    UninitializedTree
+};
+
+template<class T>
+class PODRedBlackTree {
+>>>>>>> miniblink49
 public:
     class Node;
 
@@ -103,7 +123,10 @@ public:
     class Visitor {
     public:
         virtual void visit(const T& data) = 0;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
     protected:
         virtual ~Visitor() { }
     };
@@ -156,7 +179,14 @@ public:
         m_root = 0;
     }
 
+<<<<<<< HEAD
     bool isInitialized() const { return m_arena.get(); }
+=======
+    bool isInitialized() const
+    {
+        return m_arena;
+    }
+>>>>>>> miniblink49
 
     void initIfNeeded()
     {
@@ -242,16 +272,27 @@ public:
     }
 #endif
 
+<<<<<<< HEAD
     enum NodeColor { Red = 1,
         Black };
+=======
+    enum Color {
+        Red = 1,
+        Black
+    };
+>>>>>>> miniblink49
 
     // The base Node class which is stored in the tree. Nodes are only
     // an internal concept; users of the tree deal only with the data
     // they store in it.
     class Node {
+<<<<<<< HEAD
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         WTF_MAKE_NONCOPYABLE(Node);
 
+=======
+        WTF_MAKE_NONCOPYABLE(Node);
+>>>>>>> miniblink49
     public:
         // Constructor. Newly-created nodes are colored red.
         explicit Node(const T& data)
@@ -265,8 +306,13 @@ public:
 
         virtual ~Node() { }
 
+<<<<<<< HEAD
         NodeColor color() const { return m_color; }
         void setColor(NodeColor color) { m_color = color; }
+=======
+        Color color() const { return m_color; }
+        void setColor(Color color) { m_color = color; }
+>>>>>>> miniblink49
 
         // Fetches the user data.
         T& data() { return m_data; }
@@ -292,7 +338,11 @@ public:
         Node* m_left;
         Node* m_right;
         Node* m_parent;
+<<<<<<< HEAD
         NodeColor m_color;
+=======
+        Color m_color;
+>>>>>>> miniblink49
         T m_data;
     };
 
@@ -579,7 +629,12 @@ private:
                     leftRotate(xParent);
                     w = xParent->right();
                 }
+<<<<<<< HEAD
                 if ((!w->left() || w->left()->color() == Black) && (!w->right() || w->right()->color() == Black)) {
+=======
+                if ((!w->left() || w->left()->color() == Black)
+                    && (!w->right() || w->right()->color() == Black)) {
+>>>>>>> miniblink49
                     // Case 2
                     w->setColor(Red);
                     x = xParent;
@@ -618,7 +673,12 @@ private:
                     rightRotate(xParent);
                     w = xParent->left();
                 }
+<<<<<<< HEAD
                 if ((!w->right() || w->right()->color() == Black) && (!w->left() || w->left()->color() == Black)) {
+=======
+                if ((!w->right() || w->right()->color() == Black)
+                    && (!w->left() || w->left()->color() == Black)) {
+>>>>>>> miniblink49
                     // Case 2
                     w->setColor(Red);
                     x = xParent;
@@ -710,7 +770,11 @@ private:
             visitInorderImpl(node->right(), visitor);
     }
 
+<<<<<<< HEAD
     void markFree(Node* node)
+=======
+    void markFree(Node *node)
+>>>>>>> miniblink49
     {
         if (!node)
             return;
@@ -726,6 +790,7 @@ private:
     // Helper class for size()
 
     // A Visitor which simply counts the number of visited elements.
+<<<<<<< HEAD
     class Counter final : public Visitor {
         DISALLOW_NEW();
         WTF_MAKE_NONCOPYABLE(Counter);
@@ -735,6 +800,13 @@ private:
             : m_count(0)
         {
         }
+=======
+    class Counter : public Visitor {
+        WTF_MAKE_NONCOPYABLE(Counter);
+    public:
+        Counter()
+            : m_count(0) { }
+>>>>>>> miniblink49
 
         virtual void visit(const T&) { ++m_count; }
         int count() const { return m_count; }
@@ -783,14 +855,22 @@ private:
     }
 
 #ifdef NDEBUG
+<<<<<<< HEAD
     void logIfVerbose(const char*) const
     {
     }
+=======
+    void logIfVerbose(const char*) const { }
+>>>>>>> miniblink49
 #else
     void logIfVerbose(const char* output) const
     {
         if (m_verboseDebugging)
+<<<<<<< HEAD
             DLOG(ERROR) << output;
+=======
+            WTF_LOG_ERROR("%s", output);
+>>>>>>> miniblink49
     }
 #endif
 
@@ -807,7 +887,11 @@ private:
             builder.append(ValueToString<T>::string(node->data()));
             builder.append((node->color() == Black) ? " (black)" : " (red)");
         }
+<<<<<<< HEAD
         DLOG(ERROR) << builder.toString();
+=======
+        WTF_LOG_ERROR("%s", builder.toString().ascii().data());
+>>>>>>> miniblink49
         if (node) {
             dumpFromNode(node->left(), indentation + 2);
             dumpFromNode(node->right(), indentation + 2);

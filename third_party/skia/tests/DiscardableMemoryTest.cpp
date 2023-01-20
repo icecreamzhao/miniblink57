@@ -9,6 +9,7 @@
 
 #include "Test.h"
 
+<<<<<<< HEAD
 DEF_TEST(DiscardableMemory, reporter)
 {
     const char testString[] = "HELLO, WORLD!";
@@ -20,6 +21,18 @@ DEF_TEST(DiscardableMemory, reporter)
     }
     void* ptr = dm->data();
     REPORTER_ASSERT(reporter, ptr != nullptr);
+=======
+DEF_TEST(DiscardableMemory, reporter) {
+    const char testString[] = "HELLO, WORLD!";
+    const size_t len = sizeof(testString);
+    SkAutoTDelete<SkDiscardableMemory> dm(SkDiscardableMemory::Create(len));
+    REPORTER_ASSERT(reporter, dm.get() != NULL);
+    if (NULL == dm.get()) {
+        return;
+    }
+    void* ptr = dm->data();
+    REPORTER_ASSERT(reporter, ptr != NULL);
+>>>>>>> miniblink49
     memcpy(ptr, testString, sizeof(testString));
     dm->unlock();
     bool success = dm->lock();

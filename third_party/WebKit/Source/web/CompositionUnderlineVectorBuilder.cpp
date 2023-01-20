@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/CompositionUnderlineVectorBuilder.h"
 
 #include "web/CompositionUnderlineBuilder.h"
@@ -40,7 +44,11 @@ CompositionUnderlineVectorBuilder::CompositionUnderlineVectorBuilder(
     size_t size = underlines.size();
     reserveCapacity(size);
     for (size_t i = 0; i < size; ++i)
+<<<<<<< HEAD
         push_back(CompositionUnderlineBuilder(underlines[i]));
+=======
+        append(CompositionUnderlineBuilder(underlines[i]));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

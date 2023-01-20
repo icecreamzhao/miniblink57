@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "gm.h"
@@ -21,6 +22,22 @@ static void rnd_quad(SkPath* p, SkPaint* paint, SkRandom& rand)
     for (int x = 0; x < 2; ++x) {
         p->quadTo(rand.nextRangeScalar(W / 4, W), rand.nextRangeScalar(0, H),
             rand.nextRangeScalar(0, W), rand.nextRangeScalar(H / 4, H));
+=======
+#include "gm.h"
+#include "SkRandom.h"
+
+#define W   400
+#define H   400
+#define N   10
+
+static const SkScalar SH = SkIntToScalar(H);
+
+static void rnd_quad(SkPath* p, SkPaint* paint, SkRandom& rand) {
+    p->moveTo(rand.nextRangeScalar(0,  W), rand.nextRangeScalar(0,  H));
+    for (int x = 0; x < 2; ++x) {
+        p->quadTo(rand.nextRangeScalar(W / 4,  W), rand.nextRangeScalar(0,  H),
+                rand.nextRangeScalar(0,  W), rand.nextRangeScalar(H / 4,  H));
+>>>>>>> miniblink49
     }
     paint->setColor(rand.nextU());
     SkScalar width = rand.nextRangeScalar(1, 5);
@@ -29,6 +46,7 @@ static void rnd_quad(SkPath* p, SkPaint* paint, SkRandom& rand)
     paint->setAlpha(0xFF);
 }
 
+<<<<<<< HEAD
 static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand)
 {
     p->moveTo(rand.nextRangeScalar(0, W), rand.nextRangeScalar(0, H));
@@ -36,6 +54,14 @@ static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand)
         p->cubicTo(rand.nextRangeScalar(W / 4, W), rand.nextRangeScalar(0, H),
             rand.nextRangeScalar(0, W), rand.nextRangeScalar(H / 4, H),
             rand.nextRangeScalar(W / 4, W), rand.nextRangeScalar(H / 4, H));
+=======
+static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand) {
+    p->moveTo(rand.nextRangeScalar(0,  W), rand.nextRangeScalar(0,  H));
+    for (int x = 0; x < 2; ++x) {
+        p->cubicTo(rand.nextRangeScalar(W / 4,  W), rand.nextRangeScalar(0,  H),
+                rand.nextRangeScalar(0,  W), rand.nextRangeScalar(H / 4,  H),
+                rand.nextRangeScalar(W / 4,  W), rand.nextRangeScalar(H / 4,  H));
+>>>>>>> miniblink49
     }
     paint->setColor(rand.nextU());
     SkScalar width = rand.nextRangeScalar(1, 5);
@@ -46,6 +72,7 @@ static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand)
 
 class BeziersGM : public skiagm::GM {
 public:
+<<<<<<< HEAD
     BeziersGM() { }
 
 protected:
@@ -64,6 +91,24 @@ protected:
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setStrokeWidth(SkIntToScalar(9) / 2);
+=======
+    BeziersGM() {}
+
+protected:
+
+    SkString onShortName() override {
+        return SkString("beziers");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(W, H*2);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+        SkPaint paint;
+        paint.setStyle(SkPaint::kStroke_Style);
+        paint.setStrokeWidth(SkIntToScalar(9)/2);
+>>>>>>> miniblink49
         paint.setAntiAlias(true);
 
         SkRandom rand;
@@ -84,4 +129,9 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_GM(return new BeziersGM;)
+=======
+static skiagm::GM* F0(void*) { return new BeziersGM; }
+static skiagm::GMRegistry R0(F0);
+>>>>>>> miniblink49

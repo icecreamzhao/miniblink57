@@ -6,12 +6,19 @@
 #define FilterDisplayItem_h
 
 #include "platform/geometry/FloatRect.h"
+<<<<<<< HEAD
 #include "platform/graphics/CompositorFilterOperations.h"
 #include "platform/graphics/paint/DisplayItem.h"
+=======
+#include "platform/graphics/paint/DisplayItem.h"
+#include "public/platform/WebFilterOperations.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #ifndef NDEBUG
 #include "wtf/text/WTFString.h"
 #endif
+<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -35,12 +42,28 @@ public:
     void replay(GraphicsContext&) const override;
     void appendToWebDisplayItemList(const IntRect&,
         WebDisplayItemList*) const override;
+=======
+
+namespace blink {
+
+class PLATFORM_EXPORT BeginFilterDisplayItem : public PairedBeginDisplayItem {
+public:
+    BeginFilterDisplayItem(const DisplayItemClientWrapper& client, PassRefPtr<SkImageFilter> imageFilter, const FloatRect& bounds, PassOwnPtr<WebFilterOperations> filterOperations = nullptr)
+        : PairedBeginDisplayItem(client, BeginFilter)
+        , m_imageFilter(imageFilter)
+        , m_webFilterOperations(filterOperations)
+        , m_bounds(bounds) { }
+
+    void replay(GraphicsContext&) override;
+    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+>>>>>>> miniblink49
     bool drawsContent() const override;
 
 private:
 #ifndef NDEBUG
     void dumpPropertiesAsDebugString(WTF::StringBuilder&) const override;
 #endif
+<<<<<<< HEAD
     bool equals(const DisplayItem& other) const final
     {
         if (!DisplayItem::equals(other))
@@ -80,5 +103,29 @@ private:
 };
 
 } // namespace blink
+=======
+
+    // FIXME: m_imageFilter should be replaced with m_webFilterOperations when copying data to the compositor.
+    RefPtr<SkImageFilter> m_imageFilter;
+    OwnPtr<WebFilterOperations> m_webFilterOperations;
+    const FloatRect m_bounds;
+};
+
+class PLATFORM_EXPORT EndFilterDisplayItem : public PairedEndDisplayItem {
+public:
+    EndFilterDisplayItem(const DisplayItemClientWrapper& client)
+        : PairedEndDisplayItem(client, EndFilter) { }
+
+    void replay(GraphicsContext&) override;
+    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+
+private:
+#if ENABLE(ASSERT)
+    bool isEndAndPairedWith(DisplayItem::Type otherType) const final { return otherType == BeginFilter; }
+#endif
+};
+
+}
+>>>>>>> miniblink49
 
 #endif // FilterDisplayItem_h

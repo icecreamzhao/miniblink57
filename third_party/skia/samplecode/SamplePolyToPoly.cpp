@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,17 +9,25 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
+<<<<<<< HEAD
+=======
+#include "SkView.h"
+>>>>>>> miniblink49
 #include "SkCanvas.h"
 #include "SkGraphics.h"
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkTime.h"
+<<<<<<< HEAD
 #include "SkView.h"
+=======
+>>>>>>> miniblink49
 
 extern bool SkSetPoly3To3(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3]);
 
 class PolyToPolyView : public SampleView {
 public:
+<<<<<<< HEAD
     PolyToPolyView()
     {
         // tests
@@ -35,6 +47,26 @@ public:
             m2.set(SkMatrix::kMSkewX, dst[2].fX - dst[0].fX);
             m2.set(SkMatrix::kMTransX, dst[0].fX);
             m2.set(SkMatrix::kMSkewY, dst[1].fY - dst[0].fY);
+=======
+    PolyToPolyView() {
+        // tests
+        {
+            SkPoint src[] = { { 0, 0 },
+                              { SK_Scalar1, 0 },
+                              { 0, SK_Scalar1 } };
+            SkPoint dst[] = { { 0, 0 },
+                              { 2*SK_Scalar1, 0 },
+                              { 0, 2*SK_Scalar1 } };
+            SkMatrix m1, m2;
+
+            (void) m1.setPolyToPoly(src, dst, 3);
+
+            m2.reset();
+            m2.set(SkMatrix::kMScaleX, dst[1].fX - dst[0].fX);
+            m2.set(SkMatrix::kMSkewX,  dst[2].fX - dst[0].fX);
+            m2.set(SkMatrix::kMTransX, dst[0].fX);
+            m2.set(SkMatrix::kMSkewY,  dst[1].fY - dst[0].fY);
+>>>>>>> miniblink49
             m2.set(SkMatrix::kMScaleY, dst[2].fY - dst[0].fY);
             m2.set(SkMatrix::kMTransY, dst[0].fY);
 
@@ -48,7 +80,11 @@ public:
                 158, 604.5f, 158, -177.5f
             };
 
+<<<<<<< HEAD
             (void)m2.setPolyToPoly((const SkPoint*)src1, (SkPoint*)dst1, 4);
+=======
+            (void) m2.setPolyToPoly((const SkPoint*)src1, (SkPoint*)dst1, 4);
+>>>>>>> miniblink49
 
             {
                 const SkPoint src[] = {
@@ -64,18 +100,29 @@ public:
 
                 SkMatrix m0;
                 m0.setPolyToPoly(src, dst, 3);
+<<<<<<< HEAD
                 //  SkMatrix m1;
                 //  SkSetPoly3To3(&m1, src, dst);
                 //  m0.dump();
                 //  m1.dump();
+=======
+              //  SkMatrix m1;
+              //  SkSetPoly3To3(&m1, src, dst);
+              //  m0.dump();
+              //  m1.dump();
+>>>>>>> miniblink49
             }
         }
     }
 
 protected:
     // overrides from SkEventSink
+<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
+=======
+    virtual bool onQuery(SkEvent* evt)  {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "PolyToPolyView");
             return true;
@@ -84,14 +131,23 @@ protected:
     }
 
     static void doDraw(SkCanvas* canvas, SkPaint* paint, const int isrc[],
+<<<<<<< HEAD
         const int idst[], int count)
     {
+=======
+                       const int idst[], int count) {
+>>>>>>> miniblink49
         SkMatrix matrix;
         SkPoint src[4], dst[4];
 
         for (int i = 0; i < count; i++) {
+<<<<<<< HEAD
             src[i].set(SkIntToScalar(isrc[2 * i + 0]), SkIntToScalar(isrc[2 * i + 1]));
             dst[i].set(SkIntToScalar(idst[2 * i + 0]), SkIntToScalar(idst[2 * i + 1]));
+=======
+            src[i].set(SkIntToScalar(isrc[2*i+0]), SkIntToScalar(isrc[2*i+1]));
+            dst[i].set(SkIntToScalar(idst[2*i+0]), SkIntToScalar(idst[2*i+1]));
+>>>>>>> miniblink49
         }
 
         canvas->save();
@@ -109,6 +165,7 @@ protected:
         paint->getFontMetrics(&fm);
         paint->setColor(SK_ColorRED);
         paint->setStyle(SkPaint::kFill_Style);
+<<<<<<< HEAD
         SkScalar x = D / 2;
         float y = D / 2 - (fm.fAscent + fm.fDescent) / 2;
         SkString str;
@@ -116,12 +173,25 @@ protected:
         canvas->drawText(str.c_str(), str.size(),
             x, y,
             *paint);
+=======
+        SkScalar x = D/2;
+        float y = D/2 - (fm.fAscent + fm.fDescent)/2;
+        SkString str;
+        str.appendS32(count);
+        canvas->drawText(str.c_str(), str.size(),
+                         x, y,
+                         *paint);
+>>>>>>> miniblink49
 
         canvas->restore();
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
+=======
+    virtual void onDrawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStrokeWidth(SkIntToScalar(4));

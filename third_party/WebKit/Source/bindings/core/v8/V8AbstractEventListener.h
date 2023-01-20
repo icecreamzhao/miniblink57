@@ -32,17 +32,16 @@
 #define V8AbstractEventListener_h
 
 #include "bindings/core/v8/DOMWrapperWorld.h"
-#include "bindings/core/v8/ScriptWrappable.h"
-#include "bindings/core/v8/TraceWrapperV8Reference.h"
+#include "bindings/core/v8/ScopedPersistent.h"
 #include "core/CoreExport.h"
 #include "core/events/EventListener.h"
-#include "platform/heap/SelfKeepAlive.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
 #include <v8.h>
 
 namespace blink {
 
 class Event;
-class WorkerGlobalScope;
 
 // There are two kinds of event listeners: HTML or non-HMTL. onload,
 // onfocus, etc (attributes) are always HTML event handler type; Event
@@ -52,8 +51,7 @@ class WorkerGlobalScope;
 // Why does this matter?
 // WebKit does not allow duplicated HTML event handlers of the same type,
 // but ALLOWs duplicated non-HTML event handlers.
-class CORE_EXPORT V8AbstractEventListener : public EventListener,
-                                            public TraceWrapperBase {
+class CORE_EXPORT V8AbstractEventListener : public EventListener {
 public:
     ~V8AbstractEventListener() override;
 
@@ -66,34 +64,26 @@ public:
 
     static V8AbstractEventListener* cast(EventListener* listener)
     {
-        return const_cast<V8AbstractEventListener*>(
-            cast(const_cast<const EventListener*>(listener)));
+        return const_cast<V8AbstractEventListener*>(cast(const_cast<const EventListener*>(listener)));
     }
 
     // Implementation of EventListener interface.
 
-    bool operator==(const EventListener& other) const override
-    {
-        return this == &other;
-    }
+    bool operator==(const EventListener& other) override { return this == &other; }
 
     void handleEvent(ExecutionContext*, Event*) final;
     virtual void handleEvent(ScriptState*, Event*);
 
-    v8::Local<v8::Value> getListenerOrNull(v8::Isolate* isolate,
-        ExecutionContext* executionContext)
-    {
-        v8::Local<v8::Object> listener = getListenerObject(executionContext);
-        return listener.IsEmpty() ? v8::Null(isolate).As<v8::Value>()
-                                  : listener.As<v8::Value>();
-    }
-
-    // Returns the listener object, either a function or an object, or the empty
-    // handle if the user script is not compilable.  No exception will be thrown
-    // even if the user script is not compilable.
+    // Returns the listener object, either a function or an object.
     v8::Local<v8::Object> getListenerObject(ExecutionContext* executionContext)
     {
-        return getListenerObjectInternal(executionContext);
+        // prepareListenerObject can potentially deref this event listener
+        // as it may attempt to compile a function (lazy event listener), get an error
+        // and invoke onerror callback which can execute arbitrary JS code.
+        // Protect this event listener to keep it alive.
+        RefPtr<V8AbstractEventListener> guard(this);
+        prepareListenerObject(executionContext);
+        return m_listener.newLocal(m_isolate);
     }
 
     v8::Local<v8::Object> getExistingListenerObject()
@@ -105,28 +95,27 @@ public:
     // value is a weak handle and so not guaranteed to stay alive.
     v8::Persistent<v8::Object>& existingListenerObjectPersistentHandle()
     {
-        return m_listener.get();
+        return m_listener.getUnsafe();
     }
 
-    bool hasExistingListenerObject() { return !m_listener.isEmpty(); }
+    bool hasExistingListenerObject()
+    {
+        return !m_listener.isEmpty();
+    }
 
-    void clearListenerObject();
+    void clearListenerObject()
+    {
+        m_listener.clear();
+    }
 
-    bool belongsToTheCurrentWorld(ExecutionContext*) const final;
+    bool belongsToTheCurrentWorld() const final;
     v8::Isolate* isolate() const { return m_isolate; }
     DOMWrapperWorld& world() const { return *m_world; }
-
-    DECLARE_VIRTUAL_TRACE();
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
 protected:
     V8AbstractEventListener(bool isAttribute, DOMWrapperWorld&, v8::Isolate*);
 
-    virtual v8::Local<v8::Object> getListenerObjectInternal(
-        ExecutionContext* executionContext)
-    {
-        return getExistingListenerObject();
-    }
+    virtual void prepareListenerObject(ExecutionContext*) { }
 
     void setListenerObject(v8::Local<v8::Object>);
 
@@ -141,26 +130,19 @@ private:
 
     // This could return an empty handle and callers need to check return value.
     // We don't use v8::MaybeLocal because it can fail without exception.
-    virtual v8::Local<v8::Value>
-    callListenerFunction(ScriptState*, v8::Local<v8::Value> jsevent, Event*) = 0;
+    virtual v8::Local<v8::Value> callListenerFunction(ScriptState*, v8::Local<v8::Value> jsevent, Event*) = 0;
 
     virtual bool shouldPreventDefault(v8::Local<v8::Value> returnValue);
 
-    static void wrapperCleared(
-        const v8::WeakCallbackInfo<V8AbstractEventListener>&);
+    static void setWeakCallback(const v8::WeakCallbackInfo<V8AbstractEventListener>&);
 
-    TraceWrapperV8Reference<v8::Object> m_listener;
+    ScopedPersistent<v8::Object> m_listener;
 
     // Indicates if this is an HTML type listener.
     bool m_isAttribute;
 
     RefPtr<DOMWrapperWorld> m_world;
     v8::Isolate* m_isolate;
-
-    // nullptr unless this listener belongs to a worker.
-    Member<WorkerGlobalScope> m_workerGlobalScope;
-
-    SelfKeepAlive<V8AbstractEventListener> m_keepAlive;
 };
 
 } // namespace blink

@@ -29,6 +29,10 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/Prerender.h"
 
 #include "platform/PrerenderClient.h"
@@ -37,10 +41,19 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 Prerender::Prerender(PrerenderClient* client,
     const KURL& url,
     const unsigned relTypes,
     const Referrer& referrer)
+=======
+PassRefPtr<Prerender> Prerender::create(PrerenderClient* client, const KURL& url, unsigned relTypes, const Referrer& referrer)
+{
+    return adoptRef(new Prerender(client, url, relTypes, referrer));
+}
+
+Prerender::Prerender(PrerenderClient* client, const KURL& url, const unsigned relTypes, const Referrer& referrer)
+>>>>>>> miniblink49
     : m_client(client)
     , m_url(url)
     , m_relTypes(relTypes)
@@ -48,6 +61,7 @@ Prerender::Prerender(PrerenderClient* client,
 {
 }
 
+<<<<<<< HEAD
 Prerender::~Prerender() { }
 
 DEFINE_TRACE(Prerender)
@@ -59,6 +73,15 @@ void Prerender::dispose()
 {
     m_client = nullptr;
     m_extraData.clear();
+=======
+Prerender::~Prerender()
+{
+}
+
+void Prerender::removeClient()
+{
+    m_client = 0;
+>>>>>>> miniblink49
 }
 
 void Prerender::add()

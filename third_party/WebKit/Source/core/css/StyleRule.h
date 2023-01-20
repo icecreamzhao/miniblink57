@@ -34,10 +34,10 @@ namespace blink {
 class CSSRule;
 class CSSStyleSheet;
 
-class CORE_EXPORT StyleRuleBase
-    : public GarbageCollectedFinalized<StyleRuleBase> {
+class CORE_EXPORT StyleRuleBase : public RefCountedWillBeGarbageCollectedFinalized<StyleRuleBase> {
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(StyleRuleBase);
 public:
-    enum RuleType {
+    enum Type {
         Charset,
         Style,
         Import,
@@ -51,7 +51,7 @@ public:
         Viewport,
     };
 
-    RuleType type() const { return static_cast<RuleType>(m_type); }
+    Type type() const { return static_cast<Type>(m_type); }
 
     bool isCharsetRule() const { return type() == Charset; }
     bool isFontFaceRule() const { return type() == FontFace; }
@@ -65,11 +65,19 @@ public:
     bool isViewportRule() const { return type() == Viewport; }
     bool isImportRule() const { return type() == Import; }
 
-    StyleRuleBase* copy() const;
+    PassRefPtrWillBeRawPtr<StyleRuleBase> copy() const;
+
+#if !ENABLE(OILPAN)
+    void deref()
+    {
+        if (derefBase())
+            destroy();
+    }
+#endif // !ENABLE(OILPAN)
 
     // FIXME: There shouldn't be any need for the null parent version.
-    CSSRule* createCSSOMWrapper(CSSStyleSheet* parentSheet = 0) const;
-    CSSRule* createCSSOMWrapper(CSSRule* parentRule) const;
+    PassRefPtrWillBeRawPtr<CSSRule> createCSSOMWrapper(CSSStyleSheet* parentSheet = 0) const;
+    PassRefPtrWillBeRawPtr<CSSRule> createCSSOMWrapper(CSSRule* parentRule) const;
 
     DECLARE_TRACE();
     DEFINE_INLINE_TRACE_AFTER_DISPATCH() { }
@@ -82,86 +90,53 @@ public:
     ~StyleRuleBase() { }
 
 protected:
-    StyleRuleBase(RuleType type)
-        : m_type(type)
-    {
-    }
-    StyleRuleBase(const StyleRuleBase& rule)
-        : m_type(rule.m_type)
-    {
-    }
+    StyleRuleBase(Type type) : m_type(type) { }
+    StyleRuleBase(const StyleRuleBase& o) : m_type(o.m_type) { }
 
 private:
-    CSSRule* createCSSOMWrapper(CSSStyleSheet* parentSheet,
-        CSSRule* parentRule) const;
+    void destroy();
+
+    PassRefPtrWillBeRawPtr<CSSRule> createCSSOMWrapper(CSSStyleSheet* parentSheet, CSSRule* parentRule) const;
 
     unsigned m_type : 5;
 };
 
-class CORE_EXPORT StyleRule : public StyleRuleBase {
+class StyleRule : public StyleRuleBase {
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(StyleRule);
 public:
     // Adopts the selector list
-    static StyleRule* create(CSSSelectorList selectorList,
-        StylePropertySet* properties)
+    static PassRefPtrWillBeRawPtr<StyleRule> create(CSSSelectorList& selectorList, PassRefPtrWillBeRawPtr<StylePropertySet> properties)
     {
-        return new StyleRule(std::move(selectorList), properties);
-    }
-    static StyleRule* createLazy(CSSSelectorList selectorList,
-        CSSLazyPropertyParser* lazyPropertyParser)
-    {
-        return new StyleRule(std::move(selectorList), lazyPropertyParser);
+        return adoptRefWillBeNoop(new StyleRule(selectorList, properties));
     }
 
     ~StyleRule();
 
     const CSSSelectorList& selectorList() const { return m_selectorList; }
-    const StylePropertySet& properties() const;
+    const StylePropertySet& properties() const { return *m_properties; }
     MutableStylePropertySet& mutableProperties();
 
-    void wrapperAdoptSelectorList(CSSSelectorList selectors)
-    {
-        m_selectorList = std::move(selectors);
-    }
+    void wrapperAdoptSelectorList(CSSSelectorList& selectors) { m_selectorList.adopt(selectors); }
 
-    StyleRule* copy() const { return new StyleRule(*this); }
+    PassRefPtrWillBeRawPtr<StyleRule> copy() const { return adoptRefWillBeNoop(new StyleRule(*this)); }
 
     static unsigned averageSizeInBytes();
-
-    // Helper methods to avoid parsing lazy properties when not needed.
-    bool propertiesHaveFailedOrCanceledSubresources() const;
-    bool shouldConsiderForMatchingRules(bool includeEmptyRules) const;
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    friend class CSSLazyParsingTest;
-    bool hasParsedProperties() const;
-
-    StyleRule(CSSSelectorList, StylePropertySet*);
-    StyleRule(CSSSelectorList, CSSLazyPropertyParser*);
+    StyleRule(CSSSelectorList&, PassRefPtrWillBeRawPtr<StylePropertySet>);
     StyleRule(const StyleRule&);
 
+    RefPtrWillBeMember<StylePropertySet> m_properties; // Cannot be null.
     CSSSelectorList m_selectorList;
-    mutable Member<StylePropertySet> m_properties;
-    mutable Member<CSSLazyPropertyParser> m_lazyPropertyParser;
-
-    // Whether or not we should consider this for matching rules. Usually we try
-    // to avoid considering empty property sets, as an optimization. This is
-    // not possible for lazy properties, which always need to be considered. The
-    // lazy parser does its best to avoid lazy parsing for properties that look
-    // empty due to lack of tokens.
-    enum ConsiderForMatching {
-        AlwaysConsider,
-        ConsiderIfNonEmpty,
-    };
-    mutable ConsiderForMatching m_shouldConsiderForMatchingRules;
 };
 
 class StyleRuleFontFace : public StyleRuleBase {
 public:
-    static StyleRuleFontFace* create(StylePropertySet* properties)
+    static PassRefPtrWillBeRawPtr<StyleRuleFontFace> create(PassRefPtrWillBeRawPtr<StylePropertySet> properties)
     {
-        return new StyleRuleFontFace(properties);
+        return adoptRefWillBeNoop(new StyleRuleFontFace(properties));
     }
 
     ~StyleRuleFontFace();
@@ -169,24 +144,23 @@ public:
     const StylePropertySet& properties() const { return *m_properties; }
     MutableStylePropertySet& mutableProperties();
 
-    StyleRuleFontFace* copy() const { return new StyleRuleFontFace(*this); }
+    PassRefPtrWillBeRawPtr<StyleRuleFontFace> copy() const { return adoptRefWillBeNoop(new StyleRuleFontFace(*this)); }
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    StyleRuleFontFace(StylePropertySet*);
+    StyleRuleFontFace(PassRefPtrWillBeRawPtr<StylePropertySet>);
     StyleRuleFontFace(const StyleRuleFontFace&);
 
-    Member<StylePropertySet> m_properties; // Cannot be null.
+    RefPtrWillBeMember<StylePropertySet> m_properties; // Cannot be null.
 };
 
 class StyleRulePage : public StyleRuleBase {
 public:
     // Adopts the selector list
-    static StyleRulePage* create(CSSSelectorList selectorList,
-        StylePropertySet* properties)
+    static PassRefPtrWillBeRawPtr<StyleRulePage> create(CSSSelectorList& selectorList, PassRefPtrWillBeRawPtr<StylePropertySet> properties)
     {
-        return new StyleRulePage(std::move(selectorList), properties);
+        return adoptRefWillBeNoop(new StyleRulePage(selectorList, properties));
     }
 
     ~StyleRulePage();
@@ -195,105 +169,72 @@ public:
     const StylePropertySet& properties() const { return *m_properties; }
     MutableStylePropertySet& mutableProperties();
 
-    void wrapperAdoptSelectorList(CSSSelectorList selectors)
-    {
-        m_selectorList = std::move(selectors);
-    }
+    void wrapperAdoptSelectorList(CSSSelectorList& selectors) { m_selectorList.adopt(selectors); }
 
-    StyleRulePage* copy() const { return new StyleRulePage(*this); }
+    PassRefPtrWillBeRawPtr<StyleRulePage> copy() const { return adoptRefWillBeNoop(new StyleRulePage(*this)); }
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    StyleRulePage(CSSSelectorList, StylePropertySet*);
+    StyleRulePage(CSSSelectorList&, PassRefPtrWillBeRawPtr<StylePropertySet>);
     StyleRulePage(const StyleRulePage&);
 
-    Member<StylePropertySet> m_properties; // Cannot be null.
+    RefPtrWillBeMember<StylePropertySet> m_properties; // Cannot be null.
     CSSSelectorList m_selectorList;
 };
 
-class CORE_EXPORT StyleRuleGroup : public StyleRuleBase {
+class StyleRuleGroup : public StyleRuleBase {
 public:
-    const HeapVector<Member<StyleRuleBase>>& childRules() const
-    {
-        return m_childRules;
-    }
+    const WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& childRules() const { return m_childRules; }
 
-    void wrapperInsertRule(unsigned, StyleRuleBase*);
+    void wrapperInsertRule(unsigned, PassRefPtrWillBeRawPtr<StyleRuleBase>);
     void wrapperRemoveRule(unsigned);
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 protected:
-    StyleRuleGroup(RuleType, HeapVector<Member<StyleRuleBase>>& adoptRule);
+    StyleRuleGroup(Type, WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& adoptRule);
     StyleRuleGroup(const StyleRuleGroup&);
 
 private:
-    HeapVector<Member<StyleRuleBase>> m_childRules;
+    WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>> m_childRules;
 };
 
-class CORE_EXPORT StyleRuleCondition : public StyleRuleGroup {
+class StyleRuleMedia : public StyleRuleGroup {
 public:
-    String conditionText() const { return m_conditionText; }
-
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    static PassRefPtrWillBeRawPtr<StyleRuleMedia> create(PassRefPtrWillBeRawPtr<MediaQuerySet> media, WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& adoptRules)
     {
-        StyleRuleGroup::traceAfterDispatch(visitor);
-    }
-
-protected:
-    StyleRuleCondition(RuleType, HeapVector<Member<StyleRuleBase>>& adoptRule);
-    StyleRuleCondition(RuleType,
-        const String& conditionText,
-        HeapVector<Member<StyleRuleBase>>& adoptRule);
-    StyleRuleCondition(const StyleRuleCondition&);
-    String m_conditionText;
-};
-
-class CORE_EXPORT StyleRuleMedia : public StyleRuleCondition {
-public:
-    static StyleRuleMedia* create(MediaQuerySet* media,
-        HeapVector<Member<StyleRuleBase>>& adoptRules)
-    {
-        return new StyleRuleMedia(media, adoptRules);
+        return adoptRefWillBeNoop(new StyleRuleMedia(media, adoptRules));
     }
 
     MediaQuerySet* mediaQueries() const { return m_mediaQueries.get(); }
 
-    StyleRuleMedia* copy() const { return new StyleRuleMedia(*this); }
+    PassRefPtrWillBeRawPtr<StyleRuleMedia> copy() const { return adoptRefWillBeNoop(new StyleRuleMedia(*this)); }
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    StyleRuleMedia(MediaQuerySet*, HeapVector<Member<StyleRuleBase>>& adoptRules);
+    StyleRuleMedia(PassRefPtrWillBeRawPtr<MediaQuerySet>, WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& adoptRules);
     StyleRuleMedia(const StyleRuleMedia&);
 
-    Member<MediaQuerySet> m_mediaQueries;
+    RefPtrWillBeMember<MediaQuerySet> m_mediaQueries;
 };
 
-class StyleRuleSupports : public StyleRuleCondition {
+class StyleRuleSupports : public StyleRuleGroup {
 public:
-    static StyleRuleSupports* create(
-        const String& conditionText,
-        bool conditionIsSupported,
-        HeapVector<Member<StyleRuleBase>>& adoptRules)
+    static PassRefPtrWillBeRawPtr<StyleRuleSupports> create(const String& conditionText, bool conditionIsSupported, WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& adoptRules)
     {
-        return new StyleRuleSupports(conditionText, conditionIsSupported,
-            adoptRules);
+        return adoptRefWillBeNoop(new StyleRuleSupports(conditionText, conditionIsSupported, adoptRules));
     }
 
+    String conditionText() const { return m_conditionText; }
     bool conditionIsSupported() const { return m_conditionIsSupported; }
-    StyleRuleSupports* copy() const { return new StyleRuleSupports(*this); }
+    PassRefPtrWillBeRawPtr<StyleRuleSupports> copy() const { return adoptRefWillBeNoop(new StyleRuleSupports(*this)); }
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
-    {
-        StyleRuleCondition::traceAfterDispatch(visitor);
-    }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { StyleRuleGroup::traceAfterDispatch(visitor); }
 
 private:
-    StyleRuleSupports(const String& conditionText,
-        bool conditionIsSupported,
-        HeapVector<Member<StyleRuleBase>>& adoptRules);
+    StyleRuleSupports(const String& conditionText, bool conditionIsSupported, WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& adoptRules);
     StyleRuleSupports(const StyleRuleSupports&);
 
     String m_conditionText;
@@ -302,9 +243,9 @@ private:
 
 class StyleRuleViewport : public StyleRuleBase {
 public:
-    static StyleRuleViewport* create(StylePropertySet* properties)
+    static PassRefPtrWillBeRawPtr<StyleRuleViewport> create(PassRefPtrWillBeRawPtr<StylePropertySet> properties)
     {
-        return new StyleRuleViewport(properties);
+        return adoptRefWillBeNoop(new StyleRuleViewport(properties));
     }
 
     ~StyleRuleViewport();
@@ -312,42 +253,33 @@ public:
     const StylePropertySet& properties() const { return *m_properties; }
     MutableStylePropertySet& mutableProperties();
 
-    StyleRuleViewport* copy() const { return new StyleRuleViewport(*this); }
+    PassRefPtrWillBeRawPtr<StyleRuleViewport> copy() const { return adoptRefWillBeNoop(new StyleRuleViewport(*this)); }
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    StyleRuleViewport(StylePropertySet*);
+    StyleRuleViewport(PassRefPtrWillBeRawPtr<StylePropertySet>);
     StyleRuleViewport(const StyleRuleViewport&);
 
-    Member<StylePropertySet> m_properties; // Cannot be null
+    RefPtrWillBeMember<StylePropertySet> m_properties; // Cannot be null
 };
 
 // This should only be used within the CSS Parser
 class StyleRuleCharset : public StyleRuleBase {
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(StyleRuleCharset);
 public:
-    static StyleRuleCharset* create() { return new StyleRuleCharset(); }
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
-    {
-        StyleRuleBase::traceAfterDispatch(visitor);
-    }
+    static PassRefPtrWillBeRawPtr<StyleRuleCharset> create() { return adoptRefWillBeNoop(new StyleRuleCharset()); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { StyleRuleBase::traceAfterDispatch(visitor); }
 
 private:
-    StyleRuleCharset()
-        : StyleRuleBase(Charset)
-    {
-    }
+    StyleRuleCharset() : StyleRuleBase(Charset) { }
 };
 
-#define DEFINE_STYLE_RULE_TYPE_CASTS(Type)                  \
-    DEFINE_TYPE_CASTS(StyleRule##Type, StyleRuleBase, rule, \
-        rule->is##Type##Rule(), rule.is##Type##Rule())
 
-DEFINE_TYPE_CASTS(StyleRule,
-    StyleRuleBase,
-    rule,
-    rule->isStyleRule(),
-    rule.isStyleRule());
+#define DEFINE_STYLE_RULE_TYPE_CASTS(Type) \
+    DEFINE_TYPE_CASTS(StyleRule##Type, StyleRuleBase, rule, rule->is##Type##Rule(), rule.is##Type##Rule())
+
+DEFINE_TYPE_CASTS(StyleRule, StyleRuleBase, rule, rule->isStyleRule(), rule.isStyleRule());
 DEFINE_STYLE_RULE_TYPE_CASTS(FontFace);
 DEFINE_STYLE_RULE_TYPE_CASTS(Page);
 DEFINE_STYLE_RULE_TYPE_CASTS(Media);

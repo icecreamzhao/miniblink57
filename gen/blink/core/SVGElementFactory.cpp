@@ -2,19 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "SVGElementFactory.h"
 
 #include "SVGNames.h"
-#include "core/dom/Document.h"
-#include "core/dom/custom/V0CustomElement.h"
-#include "core/dom/custom/V0CustomElementRegistrationContext.h"
-#include "core/frame/Settings.h"
 #include "core/svg/SVGAElement.h"
 #include "core/svg/SVGAnimateElement.h"
 #include "core/svg/SVGAnimateMotionElement.h"
 #include "core/svg/SVGAnimateTransformElement.h"
 #include "core/svg/SVGCircleElement.h"
 #include "core/svg/SVGClipPathElement.h"
+#include "core/svg/SVGCursorElement.h"
 #include "core/svg/SVGDefsElement.h"
 #include "core/svg/SVGDescElement.h"
 #include "core/svg/SVGDiscardElement.h"
@@ -74,6 +72,11 @@
 #include "core/svg/SVGUnknownElement.h"
 #include "core/svg/SVGUseElement.h"
 #include "core/svg/SVGViewElement.h"
+#include "core/svg/SVGUnknownElement.h"
+#include "core/dom/custom/CustomElement.h"
+#include "core/dom/custom/CustomElementRegistrationContext.h"
+#include "core/dom/Document.h"
+#include "core/frame/Settings.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/HashMap.h"
 
@@ -81,414 +84,408 @@ namespace blink {
 
 using namespace SVGNames;
 
-typedef SVGElement* (*ConstructorFunction)(
+typedef PassRefPtrWillBeRawPtr<SVGElement> (*ConstructorFunction)(
     Document&,
-    CreateElementFlags);
+    bool createdByParser);
 
 typedef HashMap<AtomicString, ConstructorFunction> FunctionMap;
 
 static FunctionMap* g_constructors = 0;
 
-static SVGElement* aConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> aConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGAElement::create(document);
 }
-static SVGElement* animateConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> animateConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    if (!RuntimeEnabledFeatures::smilEnabled())
-        return SVGUnknownElement::create(animateTag, document);
     return SVGAnimateElement::create(document);
 }
-static SVGElement* animateMotionConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> animateMotionConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    if (!RuntimeEnabledFeatures::smilEnabled())
-        return SVGUnknownElement::create(animateMotionTag, document);
     return SVGAnimateMotionElement::create(document);
 }
-static SVGElement* animateTransformConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> animateTransformConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    if (!RuntimeEnabledFeatures::smilEnabled())
-        return SVGUnknownElement::create(animateTransformTag, document);
     return SVGAnimateTransformElement::create(document);
 }
-static SVGElement* circleConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> circleConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGCircleElement::create(document);
 }
-static SVGElement* clipPathConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> clipPathConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGClipPathElement::create(document);
 }
-static SVGElement* defsConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> cursorConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
+{
+    return SVGCursorElement::create(document);
+}
+static PassRefPtrWillBeRawPtr<SVGElement> defsConstructor(
+    Document& document,
+    bool createdByParser)
 {
     return SVGDefsElement::create(document);
 }
-static SVGElement* descConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> descConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGDescElement::create(document);
 }
-static SVGElement* discardConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> discardConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    if (!RuntimeEnabledFeatures::smilEnabled())
-        return SVGUnknownElement::create(discardTag, document);
     return SVGDiscardElement::create(document);
 }
-static SVGElement* ellipseConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> ellipseConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGEllipseElement::create(document);
 }
-static SVGElement* feBlendConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feBlendConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEBlendElement::create(document);
 }
-static SVGElement* feColorMatrixConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feColorMatrixConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEColorMatrixElement::create(document);
 }
-static SVGElement* feComponentTransferConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feComponentTransferConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEComponentTransferElement::create(document);
 }
-static SVGElement* feCompositeConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feCompositeConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFECompositeElement::create(document);
 }
-static SVGElement* feConvolveMatrixConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feConvolveMatrixConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEConvolveMatrixElement::create(document);
 }
-static SVGElement* feDiffuseLightingConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feDiffuseLightingConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEDiffuseLightingElement::create(document);
 }
-static SVGElement* feDisplacementMapConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feDisplacementMapConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEDisplacementMapElement::create(document);
 }
-static SVGElement* feDistantLightConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feDistantLightConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEDistantLightElement::create(document);
 }
-static SVGElement* feDropShadowConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feDropShadowConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEDropShadowElement::create(document);
 }
-static SVGElement* feFloodConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feFloodConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEFloodElement::create(document);
 }
-static SVGElement* feFuncAConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feFuncAConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEFuncAElement::create(document);
 }
-static SVGElement* feFuncBConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feFuncBConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEFuncBElement::create(document);
 }
-static SVGElement* feFuncGConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feFuncGConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEFuncGElement::create(document);
 }
-static SVGElement* feFuncRConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feFuncRConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEFuncRElement::create(document);
 }
-static SVGElement* feGaussianBlurConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feGaussianBlurConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEGaussianBlurElement::create(document);
 }
-static SVGElement* feImageConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feImageConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEImageElement::create(document);
 }
-static SVGElement* feMergeConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feMergeConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEMergeElement::create(document);
 }
-static SVGElement* feMergeNodeConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feMergeNodeConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEMergeNodeElement::create(document);
 }
-static SVGElement* feMorphologyConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feMorphologyConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEMorphologyElement::create(document);
 }
-static SVGElement* feOffsetConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feOffsetConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEOffsetElement::create(document);
 }
-static SVGElement* fePointLightConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> fePointLightConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFEPointLightElement::create(document);
 }
-static SVGElement* feSpecularLightingConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feSpecularLightingConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFESpecularLightingElement::create(document);
 }
-static SVGElement* feSpotLightConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feSpotLightConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFESpotLightElement::create(document);
 }
-static SVGElement* feTileConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feTileConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFETileElement::create(document);
 }
-static SVGElement* feTurbulenceConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> feTurbulenceConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFETurbulenceElement::create(document);
 }
-static SVGElement* filterConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> filterConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGFilterElement::create(document);
 }
-static SVGElement* foreignObjectConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> foreignObjectConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGForeignObjectElement::create(document);
 }
-static SVGElement* gConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> gConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGGElement::create(document);
 }
-static SVGElement* imageConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> imageConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGImageElement::create(document);
 }
-static SVGElement* lineConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> lineConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGLineElement::create(document);
 }
-static SVGElement* linearGradientConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> linearGradientConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGLinearGradientElement::create(document);
 }
-static SVGElement* mpathConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> mpathConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    if (!RuntimeEnabledFeatures::smilEnabled())
-        return SVGUnknownElement::create(mpathTag, document);
     return SVGMPathElement::create(document);
 }
-static SVGElement* markerConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> markerConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGMarkerElement::create(document);
 }
-static SVGElement* maskConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> maskConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGMaskElement::create(document);
 }
-static SVGElement* metadataConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> metadataConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGMetadataElement::create(document);
 }
-static SVGElement* pathConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> pathConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGPathElement::create(document);
 }
-static SVGElement* patternConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> patternConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGPatternElement::create(document);
 }
-static SVGElement* polygonConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> polygonConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGPolygonElement::create(document);
 }
-static SVGElement* polylineConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> polylineConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGPolylineElement::create(document);
 }
-static SVGElement* radialGradientConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> radialGradientConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGRadialGradientElement::create(document);
 }
-static SVGElement* rectConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> rectConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGRectElement::create(document);
 }
-static SVGElement* svgConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> svgConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGSVGElement::create(document);
 }
-static SVGElement* setConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> setConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    if (!RuntimeEnabledFeatures::smilEnabled())
-        return SVGUnknownElement::create(setTag, document);
     return SVGSetElement::create(document);
 }
-static SVGElement* stopConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> stopConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGStopElement::create(document);
 }
-static SVGElement* switchConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> switchConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGSwitchElement::create(document);
 }
-static SVGElement* symbolConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> symbolConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGSymbolElement::create(document);
 }
-static SVGElement* tspanConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> tspanConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGTSpanElement::create(document);
 }
-static SVGElement* textConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> textConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGTextElement::create(document);
 }
-static SVGElement* textPathConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> textPathConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGTextPathElement::create(document);
 }
-static SVGElement* titleConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> titleConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGTitleElement::create(document);
 }
-static SVGElement* useConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> useConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGUseElement::create(document);
 }
-static SVGElement* viewConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> viewConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     return SVGViewElement::create(document);
 }
-static SVGElement* scriptConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> scriptConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    return SVGScriptElement::create(document, flags & CreatedByParser);
+    return SVGScriptElement::create(document, createdByParser);
 }
-static SVGElement* styleConstructor(
+static PassRefPtrWillBeRawPtr<SVGElement> styleConstructor(
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
-    return SVGStyleElement::create(document, flags & CreatedByParser);
+    return SVGStyleElement::create(document, createdByParser);
 }
 
 struct CreateSVGFunctionMapData {
-    const QualifiedName& tag;
-    ConstructorFunction func;
+  const QualifiedName& tag;
+  ConstructorFunction func;
 };
 
 static void createSVGFunctionMap()
@@ -504,6 +501,7 @@ static void createSVGFunctionMap()
         { animateTransformTag, animateTransformConstructor },
         { circleTag, circleConstructor },
         { clipPathTag, clipPathConstructor },
+        { cursorTag, cursorConstructor },
         { defsTag, defsConstructor },
         { descTag, descConstructor },
         { discardTag, discardConstructor },
@@ -567,22 +565,23 @@ static void createSVGFunctionMap()
         g_constructors->set(data[i].tag.localName(), data[i].func);
 }
 
-SVGElement* SVGElementFactory::createSVGElement(
+PassRefPtrWillBeRawPtr<SVGElement> SVGElementFactory::createSVGElement(
     const AtomicString& localName,
     Document& document,
-    CreateElementFlags flags)
+    bool createdByParser)
 {
     if (!g_constructors)
         createSVGFunctionMap();
     if (ConstructorFunction function = g_constructors->get(localName))
-        return function(document, flags);
+        return function(document, createdByParser);
 
-    if (document.registrationContext() && V0CustomElement::isValidName(localName)) {
-        Element* element = document.registrationContext()->createCustomTagElement(
-            document, QualifiedName(nullAtom, localName, svgNamespaceURI));
-        SECURITY_DCHECK(element->isSVGElement());
-        return toSVGElement(element);
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    if (document.registrationContext() && CustomElement::isValidName(localName)) {
+        RefPtrWillBeRawPtr<Element> element = document.registrationContext()->createCustomTagElement(document, QualifiedName(nullAtom, localName, svgNamespaceURI));
+        ASSERT_WITH_SECURITY_IMPLICATION(element->isSVGElement());
+        return static_pointer_cast<SVGElement>(element.release());
     }
+#endif // MINIBLINK_NOT_IMPLEMENTED
 
     return SVGUnknownElement::create(QualifiedName(nullAtom, localName, svgNamespaceURI), document);
 }

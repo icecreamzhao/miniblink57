@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/dom/NameNodeList.h"
 
 #include "core/dom/Element.h"
@@ -36,7 +37,12 @@ NameNodeList::NameNodeList(ContainerNode& rootNode, const AtomicString& name)
 {
 }
 
-NameNodeList::~NameNodeList() { }
+NameNodeList::~NameNodeList()
+{
+#if !ENABLE(OILPAN)
+    ownerNode().nodeLists()->removeCache(this, NameNodeListType, m_name);
+#endif
+}
 
 bool NameNodeList::elementMatches(const Element& element) const
 {

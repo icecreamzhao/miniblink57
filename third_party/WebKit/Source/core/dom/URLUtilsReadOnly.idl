@@ -29,7 +29,10 @@
     NoInterfaceObject, // Always used on target of 'implements'
     Exposed=(Window,Worker),
 ] interface URLUtilsReadOnly {
-    stringifier readonly attribute USVString href;
+    // FIXME: should be stringifier: http://crbug.com/306606
+    // stringifier readonly attribute USVString href;
+    readonly attribute USVString href;
+    [NotEnumerable, ImplementedAs=href] USVString toString();
     readonly attribute USVString origin;
 
     readonly attribute USVString protocol;

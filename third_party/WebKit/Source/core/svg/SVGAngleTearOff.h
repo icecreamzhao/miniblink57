@@ -37,36 +37,25 @@
 
 namespace blink {
 
-class SVGAngleTearOff final : public SVGPropertyTearOff<SVGAngle>,
-                              public ScriptWrappable {
+class SVGAngleTearOff final : public SVGPropertyTearOff<SVGAngle>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SVGAngleTearOff* create(
-        SVGAngle* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    static PassRefPtrWillBeRawPtr<SVGAngleTearOff> create(PassRefPtrWillBeRawPtr<SVGAngle> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
     {
-        return new SVGAngleTearOff(target, contextElement, propertyIsAnimVal,
-            attributeName);
+        return adoptRefWillBeNoop(new SVGAngleTearOff(target, contextElement, propertyIsAnimVal, attributeName));
     }
 
     enum {
-        kSvgAngletypeUnknown = SVGAngle::kSvgAngletypeUnknown,
-        kSvgAngletypeUnspecified = SVGAngle::kSvgAngletypeUnspecified,
-        kSvgAngletypeDeg = SVGAngle::kSvgAngletypeDeg,
-        kSvgAngletypeRad = SVGAngle::kSvgAngletypeRad,
-        kSvgAngletypeGrad = SVGAngle::kSvgAngletypeGrad
+        SVG_ANGLETYPE_UNKNOWN = SVGAngle::SVG_ANGLETYPE_UNKNOWN,
+        SVG_ANGLETYPE_UNSPECIFIED = SVGAngle::SVG_ANGLETYPE_UNSPECIFIED,
+        SVG_ANGLETYPE_DEG = SVGAngle::SVG_ANGLETYPE_DEG,
+        SVG_ANGLETYPE_RAD = SVGAngle::SVG_ANGLETYPE_RAD,
+        SVG_ANGLETYPE_GRAD = SVGAngle::SVG_ANGLETYPE_GRAD
     };
 
     ~SVGAngleTearOff() override;
 
-    unsigned short unitType()
-    {
-        return hasExposedAngleUnit() ? target()->unitType()
-                                     : SVGAngle::kSvgAngletypeUnknown;
-    }
+    unsigned short unitType() { return hasExposedAngleUnit() ? target()->unitType() : SVGAngle::SVG_ANGLETYPE_UNKNOWN; }
 
     void setValue(float, ExceptionState&);
     float value() { return target()->value(); }
@@ -74,30 +63,16 @@ public:
     void setValueInSpecifiedUnits(float, ExceptionState&);
     float valueInSpecifiedUnits() { return target()->valueInSpecifiedUnits(); }
 
-    void newValueSpecifiedUnits(unsigned short unitType,
-        float valueInSpecifiedUnits,
-        ExceptionState&);
+    void newValueSpecifiedUnits(unsigned short unitType, float valueInSpecifiedUnits, ExceptionState&);
     void convertToSpecifiedUnits(unsigned short unitType, ExceptionState&);
 
-    String valueAsString()
-    {
-        return hasExposedAngleUnit() ? target()->valueAsString()
-                                     : String::number(0);
-    }
+    String valueAsString() { return hasExposedAngleUnit() ? target()->valueAsString() : String::number(0); }
     void setValueAsString(const String&, ExceptionState&);
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
-    SVGAngleTearOff(SVGAngle*,
-        SVGElement*,
-        PropertyIsAnimValType,
-        const QualifiedName&);
+    SVGAngleTearOff(PassRefPtrWillBeRawPtr<SVGAngle>, SVGElement*, PropertyIsAnimValType, const QualifiedName&);
 
-    bool hasExposedAngleUnit()
-    {
-        return target()->unitType() <= SVGAngle::kSvgAngletypeGrad;
-    }
+    bool hasExposedAngleUnit() { return target()->unitType() <= SVGAngle::SVG_ANGLETYPE_GRAD; }
 };
 
 } // namespace blink

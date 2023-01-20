@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2010 Google Inc.
  *
@@ -7,9 +11,15 @@
 
 #include "GrRectanizer_pow2.h"
 
+<<<<<<< HEAD
 bool GrRectanizerPow2::addRect(int width, int height, SkIPoint16* loc)
 {
     if ((unsigned)width > (unsigned)this->width() || (unsigned)height > (unsigned)this->height()) {
+=======
+bool GrRectanizerPow2::addRect(int width, int height, SkIPoint16* loc) {
+    if ((unsigned)width > (unsigned)this->width() ||
+        (unsigned)height > (unsigned)this->height()) {
+>>>>>>> miniblink49
         return false;
     }
 
@@ -55,5 +65,9 @@ bool GrRectanizerPow2::addRect(int width, int height, SkIPoint16* loc)
 
 // factory is now in GrRectanizer_skyline.cpp
 //GrRectanizer* GrRectanizer::Factory(int width, int height) {
+<<<<<<< HEAD
 //    return new GrRectanizerPow2  (width, height);
+=======
+//    return SkNEW_ARGS(GrRectanizerPow2, (width, height));
+>>>>>>> miniblink49
 //}

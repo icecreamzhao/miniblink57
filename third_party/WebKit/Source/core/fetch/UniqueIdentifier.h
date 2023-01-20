@@ -36,6 +36,8 @@
 namespace blink {
 
 CORE_EXPORT unsigned long createUniqueIdentifier();
+
 }
 
 #endif // UniqueIdentifier_h
+

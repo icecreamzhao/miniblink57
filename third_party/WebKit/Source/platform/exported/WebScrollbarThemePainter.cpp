@@ -23,6 +23,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "public/platform/WebScrollbarThemePainter.h"
 
 #include "platform/graphics/GraphicsContext.h"
@@ -39,6 +44,7 @@ void WebScrollbarThemePainter::assign(const WebScrollbarThemePainter& painter)
     // This is a pointer to a static object, so no ownership transferral.
     m_theme = painter.m_theme;
     m_scrollbar = painter.m_scrollbar;
+<<<<<<< HEAD
     m_deviceScaleFactor = painter.m_deviceScaleFactor;
 }
 
@@ -49,12 +55,18 @@ void WebScrollbarThemePainter::reset()
 
 void WebScrollbarThemePainter::paintScrollbarBackground(WebCanvas* canvas,
     const WebRect& rect)
+=======
+}
+
+void WebScrollbarThemePainter::paintScrollbarBackground(WebCanvas* canvas, const WebRect& rect)
+>>>>>>> miniblink49
 {
     SkRect clip = SkRect::MakeXYWH(rect.x, rect.y, rect.width, rect.height);
     canvas->clipRect(clip);
 
     IntRect intRect(rect);
     SkPictureBuilder pictureBuilder(intRect);
+<<<<<<< HEAD
     pictureBuilder.context().setDeviceScaleFactor(m_deviceScaleFactor);
     m_theme->paintScrollbarBackground(pictureBuilder.context(), *m_scrollbar);
     pictureBuilder.endRecording()->playback(canvas);
@@ -185,4 +197,88 @@ bool WebScrollbarThemePainter::thumbNeedsRepaint() const
     return m_scrollbar->thumbNeedsRepaint();
 }
 
+=======
+    m_theme->paintScrollbarBackground(&pictureBuilder.context(), m_scrollbar);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintTrackBackground(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintTrackBackground(&pictureBuilder.context(), m_scrollbar, intRect);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintBackTrackPart(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintTrackPiece(&pictureBuilder.context(), m_scrollbar, intRect, BackTrackPart);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintForwardTrackPart(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintTrackPiece(&pictureBuilder.context(), m_scrollbar, intRect, ForwardTrackPart);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintBackButtonStart(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintButton(&pictureBuilder.context(), m_scrollbar, intRect, BackButtonStartPart);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintBackButtonEnd(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintButton(&pictureBuilder.context(), m_scrollbar, intRect, BackButtonEndPart);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintForwardButtonStart(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintButton(&pictureBuilder.context(), m_scrollbar, intRect, ForwardButtonStartPart);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintForwardButtonEnd(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintButton(&pictureBuilder.context(), m_scrollbar, intRect, ForwardButtonEndPart);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintTickmarks(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintTickmarks(&pictureBuilder.context(), m_scrollbar, intRect);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+void WebScrollbarThemePainter::paintThumb(WebCanvas* canvas, const WebRect& rect)
+{
+    IntRect intRect(rect);
+    SkPictureBuilder pictureBuilder(intRect);
+    m_theme->paintThumb(&pictureBuilder.context(), m_scrollbar, intRect);
+    pictureBuilder.endRecording()->playback(canvas);
+}
+
+WebScrollbarThemePainter::WebScrollbarThemePainter(ScrollbarTheme* theme, Scrollbar* scrollbar)
+    : m_theme(theme)
+    , m_scrollbar(scrollbar)
+{
+}
+
+>>>>>>> miniblink49
 } // namespace blink

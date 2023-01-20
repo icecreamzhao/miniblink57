@@ -32,39 +32,30 @@
 #define SVGTransformTearOff_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+#include "core/svg/SVGMatrixTearOff.h"
 #include "core/svg/SVGTransform.h"
 #include "core/svg/properties/SVGPropertyTearOff.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class SVGMatrixTearOff;
-
-class SVGTransformTearOff final : public SVGPropertyTearOff<SVGTransform>,
-                                  public ScriptWrappable {
+class SVGTransformTearOff final : public SVGPropertyTearOff<SVGTransform>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     enum SVGTransformType {
-        kSvgTransformUnknown = blink::kSvgTransformUnknown,
-        kSvgTransformMatrix = blink::kSvgTransformMatrix,
-        kSvgTransformTranslate = blink::kSvgTransformTranslate,
-        kSvgTransformScale = blink::kSvgTransformScale,
-        kSvgTransformRotate = blink::kSvgTransformRotate,
-        kSvgTransformSkewx = blink::kSvgTransformSkewx,
-        kSvgTransformSkewy = blink::kSvgTransformSkewy,
+        SVG_TRANSFORM_UNKNOWN = blink::SVG_TRANSFORM_UNKNOWN,
+        SVG_TRANSFORM_MATRIX = blink::SVG_TRANSFORM_MATRIX,
+        SVG_TRANSFORM_TRANSLATE = blink::SVG_TRANSFORM_TRANSLATE,
+        SVG_TRANSFORM_SCALE = blink::SVG_TRANSFORM_SCALE,
+        SVG_TRANSFORM_ROTATE = blink::SVG_TRANSFORM_ROTATE,
+        SVG_TRANSFORM_SKEWX = blink::SVG_TRANSFORM_SKEWX,
+        SVG_TRANSFORM_SKEWY = blink::SVG_TRANSFORM_SKEWY,
     };
 
-    static SVGTransformTearOff* create(
-        SVGTransform* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    static PassRefPtrWillBeRawPtr<SVGTransformTearOff> create(PassRefPtrWillBeRawPtr<SVGTransform> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
     {
-        return new SVGTransformTearOff(target, contextElement, propertyIsAnimVal,
-            attributeName);
+        return adoptRefWillBeNoop(new SVGTransformTearOff(target, contextElement, propertyIsAnimVal, attributeName));
     }
-    static SVGTransformTearOff* create(SVGMatrixTearOff*);
 
     ~SVGTransformTearOff() override;
 
@@ -72,7 +63,7 @@ public:
     SVGMatrixTearOff* matrix();
     float angle() { return target()->angle(); }
 
-    void setMatrix(SVGMatrixTearOff*, ExceptionState&);
+    void setMatrix(PassRefPtrWillBeRawPtr<SVGMatrixTearOff>, ExceptionState&);
     void setTranslate(float tx, float ty, ExceptionState&);
     void setScale(float sx, float sy, ExceptionState&);
     void setRotate(float angle, float cx, float cy, ExceptionState&);
@@ -81,15 +72,10 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
-    DECLARE_VIRTUAL_TRACE_WRAPPERS();
-
 private:
-    SVGTransformTearOff(SVGTransform*,
-        SVGElement* contextElement,
-        PropertyIsAnimValType,
-        const QualifiedName& attributeName);
+    SVGTransformTearOff(PassRefPtrWillBeRawPtr<SVGTransform>, SVGElement* contextElement, PropertyIsAnimValType, const QualifiedName& attributeName);
 
-    Member<SVGMatrixTearOff> m_matrixTearoff;
+    RefPtrWillBeMember<SVGMatrixTearOff> m_matrixTearoff;
 };
 
 } // namespace blink

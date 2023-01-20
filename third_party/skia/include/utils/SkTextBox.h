@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkTextBox_DEFINED
 #define SkTextBox_DEFINED
 
@@ -32,8 +36,13 @@ public:
 
         kModeCount
     };
+<<<<<<< HEAD
     Mode getMode() const { return (Mode)fMode; }
     void setMode(Mode);
+=======
+    Mode    getMode() const { return (Mode)fMode; }
+    void    setMode(Mode);
+>>>>>>> miniblink49
 
     enum SpacingAlign {
         kStart_SpacingAlign,
@@ -42,6 +51,7 @@ public:
 
         kSpacingAlignCount
     };
+<<<<<<< HEAD
     SpacingAlign getSpacingAlign() const { return (SpacingAlign)fSpacingAlign; }
     void setSpacingAlign(SpacingAlign);
 
@@ -57,12 +67,30 @@ public:
     void setText(const char text[], size_t len, const SkPaint&);
     void draw(SkCanvas*);
     int countLines() const;
+=======
+    SpacingAlign    getSpacingAlign() const { return (SpacingAlign)fSpacingAlign; }
+    void            setSpacingAlign(SpacingAlign);
+
+    void    getBox(SkRect*) const;
+    void    setBox(const SkRect&);
+    void    setBox(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom);
+
+    void    getSpacing(SkScalar* mul, SkScalar* add) const;
+    void    setSpacing(SkScalar mul, SkScalar add);
+
+    void    draw(SkCanvas*, const char text[], size_t len, const SkPaint&);
+
+    void    setText(const char text[], size_t len, const SkPaint&);
+    void    draw(SkCanvas*);
+    int     countLines() const;
+>>>>>>> miniblink49
     SkScalar getTextHeight() const;
 
     SkTextBlob* snapshotTextBlob(SkScalar* computedBottom) const;
 
     class Visitor {
     public:
+<<<<<<< HEAD
         virtual ~Visitor() { }
         virtual void operator()(const char*, size_t, SkScalar x, SkScalar y, const SkPaint&) = 0;
     };
@@ -73,6 +101,18 @@ private:
     uint8_t fMode, fSpacingAlign;
     const char* fText;
     size_t fLen;
+=======
+        virtual ~Visitor() {}
+        virtual void operator()(const char*, size_t, SkScalar x, SkScalar y, const SkPaint&) = 0;
+    };
+    
+private:
+    SkRect      fBox;
+    SkScalar    fSpacingMul, fSpacingAdd;
+    uint8_t     fMode, fSpacingAlign;
+    const char* fText;
+    size_t      fLen;
+>>>>>>> miniblink49
     const SkPaint* fPaint;
 
     SkScalar visit(Visitor&, const char text[], size_t len, const SkPaint&) const;

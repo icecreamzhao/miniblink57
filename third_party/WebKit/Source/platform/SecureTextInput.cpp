@@ -23,9 +23,17 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/SecureTextInput.h"
 
 #if OS(MACOSX)
+=======
+#include "config.h"
+
+#if OS(MACOSX)
+#include "platform/SecureTextInput.h"
+
+>>>>>>> miniblink49
 #import <Carbon/Carbon.h>
 
 namespace blink {

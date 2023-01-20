@@ -30,6 +30,11 @@
 
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
+=======
+#include "wtf/HashSet.h"
+#include "wtf/text/StringHash.h"
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -37,9 +42,15 @@ namespace blink {
 extern const int SQLAuthAllow;
 extern const int SQLAuthDeny;
 
+<<<<<<< HEAD
 class DatabaseAuthorizer
     : public GarbageCollectedFinalized<DatabaseAuthorizer> {
 public:
+=======
+class DatabaseAuthorizer : public GarbageCollectedFinalized<DatabaseAuthorizer> {
+public:
+
+>>>>>>> miniblink49
     enum Permissions {
         ReadWriteMask = 0,
         ReadOnlyMask = 1 << 1,
@@ -114,6 +125,11 @@ private:
     bool m_hadDeletes : 1;
 
     const String m_databaseInfoTableName;
+<<<<<<< HEAD
+=======
+
+    HashSet<String, CaseFoldingHash> m_whitelistedFunctions;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -21,7 +21,11 @@
 #define DOMMimeType_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
+=======
+#include "core/frame/LocalFrameLifecycleObserver.h"
+>>>>>>> miniblink49
 #include "platform/heap/Handle.h"
 #include "platform/plugins/PluginData.h"
 #include "wtf/Forward.h"
@@ -32,6 +36,7 @@ namespace blink {
 class DOMPlugin;
 class LocalFrame;
 
+<<<<<<< HEAD
 class DOMMimeType final : public GarbageCollectedFinalized<DOMMimeType>,
                           public ScriptWrappable,
                           public ContextClient {
@@ -44,6 +49,15 @@ public:
         unsigned index)
     {
         return new DOMMimeType(std::move(pluginData), frame, index);
+=======
+class DOMMimeType final : public GarbageCollectedFinalized<DOMMimeType>, public ScriptWrappable, public LocalFrameLifecycleObserver {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMMimeType);
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static DOMMimeType* create(PassRefPtr<PluginData> pluginData, LocalFrame* frame, unsigned index)
+    {
+        return new DOMMimeType(pluginData, frame, index);
+>>>>>>> miniblink49
     }
     virtual ~DOMMimeType();
 
@@ -57,10 +71,14 @@ public:
 private:
     DOMMimeType(PassRefPtr<PluginData>, LocalFrame*, unsigned index);
 
+<<<<<<< HEAD
     const MimeClassInfo& mimeClassInfo() const
     {
         return m_pluginData->mimes()[m_index];
     }
+=======
+    const MimeClassInfo& mimeClassInfo() const { return m_pluginData->mimes()[m_index]; }
+>>>>>>> miniblink49
 
     RefPtr<PluginData> m_pluginData;
     unsigned m_index;

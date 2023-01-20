@@ -14,13 +14,17 @@ class SkColorPalette : public SkView {
 public:
     SkColorPalette();
     SkColor getColor() { return fCurrColor; }
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 protected:
     virtual bool onEvent(const SkEvent& evt);
     virtual void onDraw(SkCanvas* canvas);
     virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y);
     virtual bool onClick(SkView::Click* click);
     virtual void onSizeChange();
+<<<<<<< HEAD
 
 private:
     int selectSlot(SkPoint& cursorPosition);
@@ -28,6 +32,14 @@ private:
     int fSelected;
     SkRect fGradientRect;
     SkRect fSlotRect;
+=======
+private:
+    int selectSlot(SkPoint& cursorPosition);
+    SkColor selectColorFromGradient(SkPoint& cursorPosition);
+    int     fSelected;
+    SkRect  fGradientRect;
+    SkRect  fSlotRect;
+>>>>>>> miniblink49
     SkColor fCurrColor;
     SkColor fColors[PaletteSlots];
     typedef SkView INHERITED;

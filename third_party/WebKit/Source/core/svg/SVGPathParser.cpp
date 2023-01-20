@@ -21,72 +21,128 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGPathParser.h"
 
 #include "core/svg/SVGPathConsumer.h"
+#include "core/svg/SVGPathSource.h"
 #include "platform/transforms/AffineTransform.h"
 #include "wtf/MathExtras.h"
 
 namespace blink {
 
-static FloatPoint reflectedPoint(const FloatPoint& reflectIn,
-    const FloatPoint& pointToReflect)
+bool SVGPathParser::initialCommandIsMoveTo()
 {
-    return FloatPoint(2 * reflectIn.x() - pointToReflect.x(),
-        2 * reflectIn.y() - pointToReflect.y());
+    // If the path is empty it is still valid, so return true.
+    if (!m_source->hasMoreData())
+        return true;
+
+    SVGPathSegType command = m_source->peekSegmentType();
+    // Path must start with moveTo.
+    return command == PathSegMoveToAbs || command == PathSegMoveToRel;
+}
+
+bool SVGPathParser::parsePath()
+{
+    while (m_source->hasMoreData()) {
+        PathSegmentData segment = m_source->parseSegment();
+        if (segment.command == PathSegUnknown)
+            return false;
+
+        m_consumer->emitSegment(segment);
+
+        if (!m_consumer->continueConsuming())
+            return true;
+
+        if (m_source->hasMoreData())
+            m_consumer->incrementPathSegmentCount();
+    }
+    return true;
+}
+
+class NormalizingConsumer {
+    STACK_ALLOCATED();
+public:
+    NormalizingConsumer(SVGPathConsumer* consumer)
+        : m_consumer(consumer)
+        , m_lastCommand(PathSegUnknown)
+    {
+        ASSERT(m_consumer);
+    }
+
+    void emitSegment(PathSegmentData&);
+
+private:
+    bool decomposeArcToCubic(const FloatPoint& currentPoint, const PathSegmentData&);
+
+    SVGPathConsumer* m_consumer;
+    FloatPoint m_controlPoint;
+    FloatPoint m_currentPoint;
+    FloatPoint m_subPathPoint;
+    SVGPathSegType m_lastCommand;
+};
+
+static FloatPoint reflectedPoint(const FloatPoint& reflectIn, const FloatPoint& pointToReflect)
+{
+    return FloatPoint(2 * reflectIn.x() - pointToReflect.x(), 2 * reflectIn.y() - pointToReflect.y());
 }
 
 // Blend the points with a ratio (1/3):(2/3).
 static FloatPoint blendPoints(const FloatPoint& p1, const FloatPoint& p2)
 {
     const float oneOverThree = 1 / 3.f;
-    return FloatPoint((p1.x() + 2 * p2.x()) * oneOverThree,
-        (p1.y() + 2 * p2.y()) * oneOverThree);
+    return FloatPoint((p1.x() + 2 * p2.x()) * oneOverThree, (p1.y() + 2 * p2.y()) * oneOverThree);
 }
 
 static inline bool isCubicCommand(SVGPathSegType command)
 {
-    return command == PathSegCurveToCubicAbs || command == PathSegCurveToCubicRel || command == PathSegCurveToCubicSmoothAbs || command == PathSegCurveToCubicSmoothRel;
+    return command == PathSegCurveToCubicAbs
+        || command == PathSegCurveToCubicRel
+        || command == PathSegCurveToCubicSmoothAbs
+        || command == PathSegCurveToCubicSmoothRel;
 }
 
 static inline bool isQuadraticCommand(SVGPathSegType command)
 {
-    return command == PathSegCurveToQuadraticAbs || command == PathSegCurveToQuadraticRel || command == PathSegCurveToQuadraticSmoothAbs || command == PathSegCurveToQuadraticSmoothRel;
+    return command == PathSegCurveToQuadraticAbs
+        || command == PathSegCurveToQuadraticRel
+        || command == PathSegCurveToQuadraticSmoothAbs
+        || command == PathSegCurveToQuadraticSmoothRel;
 }
 
-void SVGPathNormalizer::emitSegment(const PathSegmentData& segment)
+void NormalizingConsumer::emitSegment(PathSegmentData& segment)
 {
-    PathSegmentData normSeg = segment;
+    SVGPathSegType originalCommand = segment.command;
 
     // Convert relative points to absolute points.
     switch (segment.command) {
     case PathSegCurveToQuadraticRel:
-        normSeg.point1 += m_currentPoint;
-        normSeg.targetPoint += m_currentPoint;
+        segment.point1 += m_currentPoint;
+        segment.targetPoint += m_currentPoint;
         break;
     case PathSegCurveToCubicRel:
-        normSeg.point1 += m_currentPoint;
-    /* fall through */
+        segment.point1 += m_currentPoint;
+        /* fall through */
     case PathSegCurveToCubicSmoothRel:
-        normSeg.point2 += m_currentPoint;
-    /* fall through */
+        segment.point2 += m_currentPoint;
+        /* fall through */
     case PathSegMoveToRel:
     case PathSegLineToRel:
     case PathSegLineToHorizontalRel:
     case PathSegLineToVerticalRel:
     case PathSegCurveToQuadraticSmoothRel:
     case PathSegArcRel:
-        normSeg.targetPoint += m_currentPoint;
+        segment.targetPoint += m_currentPoint;
         break;
     case PathSegLineToHorizontalAbs:
-        normSeg.targetPoint.setY(m_currentPoint.y());
+        segment.targetPoint.setY(m_currentPoint.y());
         break;
     case PathSegLineToVerticalAbs:
-        normSeg.targetPoint.setX(m_currentPoint.x());
+        segment.targetPoint.setX(m_currentPoint.x());
         break;
     case PathSegClosePath:
         // Reset m_currentPoint for the next path.
-        normSeg.targetPoint = m_subPathPoint;
+        segment.targetPoint = m_subPathPoint;
         break;
     default:
         break;
@@ -97,8 +153,8 @@ void SVGPathNormalizer::emitSegment(const PathSegmentData& segment)
     switch (segment.command) {
     case PathSegMoveToRel:
     case PathSegMoveToAbs:
-        m_subPathPoint = normSeg.targetPoint;
-        normSeg.command = PathSegMoveToAbs;
+        m_subPathPoint = segment.targetPoint;
+        segment.command = PathSegMoveToAbs;
         break;
     case PathSegLineToRel:
     case PathSegLineToAbs:
@@ -106,82 +162,78 @@ void SVGPathNormalizer::emitSegment(const PathSegmentData& segment)
     case PathSegLineToHorizontalAbs:
     case PathSegLineToVerticalRel:
     case PathSegLineToVerticalAbs:
-        normSeg.command = PathSegLineToAbs;
+        segment.command = PathSegLineToAbs;
         break;
     case PathSegClosePath:
-        normSeg.command = PathSegClosePath;
         break;
     case PathSegCurveToCubicSmoothRel:
     case PathSegCurveToCubicSmoothAbs:
         if (!isCubicCommand(m_lastCommand))
-            normSeg.point1 = m_currentPoint;
+            segment.point1 = m_currentPoint;
         else
-            normSeg.point1 = reflectedPoint(m_currentPoint, m_controlPoint);
-    /* fall through */
+            segment.point1 = reflectedPoint(m_currentPoint, m_controlPoint);
+        /* fall through */
     case PathSegCurveToCubicRel:
     case PathSegCurveToCubicAbs:
-        m_controlPoint = normSeg.point2;
-        normSeg.command = PathSegCurveToCubicAbs;
+        m_controlPoint = segment.point2;
+        segment.command = PathSegCurveToCubicAbs;
         break;
     case PathSegCurveToQuadraticSmoothRel:
     case PathSegCurveToQuadraticSmoothAbs:
         if (!isQuadraticCommand(m_lastCommand))
-            normSeg.point1 = m_currentPoint;
+            segment.point1 = m_currentPoint;
         else
-            normSeg.point1 = reflectedPoint(m_currentPoint, m_controlPoint);
-    /* fall through */
+            segment.point1 = reflectedPoint(m_currentPoint, m_controlPoint);
+        /* fall through */
     case PathSegCurveToQuadraticRel:
     case PathSegCurveToQuadraticAbs:
         // Save the unmodified control point.
-        m_controlPoint = normSeg.point1;
-        normSeg.point1 = blendPoints(m_currentPoint, m_controlPoint);
-        normSeg.point2 = blendPoints(normSeg.targetPoint, m_controlPoint);
-        normSeg.command = PathSegCurveToCubicAbs;
+        m_controlPoint = segment.point1;
+        segment.point1 = blendPoints(m_currentPoint, m_controlPoint);
+        segment.point2 = blendPoints(segment.targetPoint, m_controlPoint);
+        segment.command = PathSegCurveToCubicAbs;
         break;
     case PathSegArcRel:
     case PathSegArcAbs:
-        if (!decomposeArcToCubic(m_currentPoint, normSeg)) {
+        if (!decomposeArcToCubic(m_currentPoint, segment)) {
             // On failure, emit a line segment to the target point.
-            normSeg.command = PathSegLineToAbs;
+            segment.command = PathSegLineToAbs;
         } else {
             // decomposeArcToCubic() has already emitted the normalized
             // segments, so set command to PathSegArcAbs, to skip any further
             // emit.
-            normSeg.command = PathSegArcAbs;
+            segment.command = PathSegArcAbs;
         }
         break;
     default:
         ASSERT_NOT_REACHED();
     }
 
-    if (normSeg.command != PathSegArcAbs)
-        m_consumer->emitSegment(normSeg);
+    if (segment.command != PathSegArcAbs)
+        m_consumer->emitSegment(segment);
 
-    m_currentPoint = normSeg.targetPoint;
+    m_currentPoint = segment.targetPoint;
 
-    if (!isCubicCommand(segment.command) && !isQuadraticCommand(segment.command))
+    if (!isCubicCommand(originalCommand) && !isQuadraticCommand(originalCommand))
         m_controlPoint = m_currentPoint;
 
-    m_lastCommand = segment.command;
+    m_lastCommand = originalCommand;
 }
 
 // This works by converting the SVG arc to "simple" beziers.
 // Partly adapted from Niko's code in kdelibs/kdecore/svgicons.
-// See also SVG implementation notes:
-// http://www.w3.org/TR/SVG/implnote.html#ArcConversionEndpointToCenter
-bool SVGPathNormalizer::decomposeArcToCubic(const FloatPoint& currentPoint,
-    const PathSegmentData& arcSegment)
+// See also SVG implementation notes: http://www.w3.org/TR/SVG/implnote.html#ArcConversionEndpointToCenter
+bool NormalizingConsumer::decomposeArcToCubic(const FloatPoint& currentPoint, const PathSegmentData& arcSegment)
 {
-    // If rx = 0 or ry = 0 then this arc is treated as a straight line segment (a
-    // "lineto") joining the endpoints.
+    // If rx = 0 or ry = 0 then this arc is treated as a straight line segment (a "lineto") joining the endpoints.
     // http://www.w3.org/TR/SVG/implnote.html#ArcOutOfRangeParameters
     float rx = fabsf(arcSegment.arcRadii().x());
     float ry = fabsf(arcSegment.arcRadii().y());
     if (!rx || !ry)
         return false;
 
-    // If the current point and target point for the arc are identical, it should
-    // be treated as a zero length path. This ensures continuity in animations.
+    // If the current point and target point for the arc are identical, it should be treated as a zero length
+    // path. This ensures continuity in animations.
     if (arcSegment.targetPoint == currentPoint)
         return false;
 
@@ -193,8 +245,7 @@ bool SVGPathNormalizer::decomposeArcToCubic(const FloatPoint& currentPoint,
     AffineTransform pointTransform;
     pointTransform.rotate(-angle);
 
-    FloatPoint transformedMidPoint = pointTransform.mapPoint(
-        FloatPoint(midPointDistance.width(), midPointDistance.height()));
+    FloatPoint transformedMidPoint = pointTransform.mapPoint(FloatPoint(midPointDistance.width(), midPointDistance.height()));
     float squareRx = rx * rx;
     float squareRy = ry * ry;
     float squareX = transformedMidPoint.x() * transformedMidPoint.x();
@@ -241,24 +292,22 @@ bool SVGPathNormalizer::decomposeArcToCubic(const FloatPoint& currentPoint,
     pointTransform.rotate(angle);
     pointTransform.scale(rx, ry);
 
-    // Some results of atan2 on some platform implementations are not exact
-    // enough. So that we get more cubic curves than expected here. Adding 0.001f
-    // reduces the count of sgements to the correct count.
+    // Some results of atan2 on some platform implementations are not exact enough. So that we get more
+    // cubic curves than expected here. Adding 0.001f reduces the count of sgements to the correct count.
     int segments = ceilf(fabsf(thetaArc / (piOverTwoFloat + 0.001f)));
     for (int i = 0; i < segments; ++i) {
         float startTheta = theta1 + i * thetaArc / segments;
         float endTheta = theta1 + (i + 1) * thetaArc / segments;
 
         float t = (8 / 6.f) * tanf(0.25f * (endTheta - startTheta));
-        if (!std_isfinite(t))
+        if (!std::isfinite(t))
             return false;
         float sinStartTheta = sinf(startTheta);
         float cosStartTheta = cosf(startTheta);
         float sinEndTheta = sinf(endTheta);
         float cosEndTheta = cosf(endTheta);
 
-        point1 = FloatPoint(cosStartTheta - t * sinStartTheta,
-            sinStartTheta + t * cosStartTheta);
+        point1 = FloatPoint(cosStartTheta - t * sinStartTheta, sinStartTheta + t * cosStartTheta);
         point1.move(centerPoint.x(), centerPoint.y());
         FloatPoint targetPoint = FloatPoint(cosEndTheta, sinEndTheta);
         targetPoint.move(centerPoint.x(), centerPoint.y());
@@ -276,4 +325,24 @@ bool SVGPathNormalizer::decomposeArcToCubic(const FloatPoint& currentPoint,
     return true;
 }
 
-} // namespace blink
+bool SVGPathParser::parseAndNormalizePath()
+{
+    NormalizingConsumer normalizer(m_consumer);
+
+    while (m_source->hasMoreData()) {
+        PathSegmentData segment = m_source->parseSegment();
+        if (segment.command == PathSegUnknown)
+            return false;
+
+        normalizer.emitSegment(segment);
+
+        if (!m_consumer->continueConsuming())
+            return true;
+
+        if (m_source->hasMoreData())
+            m_consumer->incrementPathSegmentCount();
+    }
+    return true;
+}
+
+}

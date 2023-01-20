@@ -29,11 +29,15 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"
+<<<<<<< HEAD
 #include "wtf/Forward.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class SpeechSynthesisVoice final
     : public GarbageCollectedFinalized<SpeechSynthesisVoice>,
       public ScriptWrappable {
@@ -42,6 +46,12 @@ class SpeechSynthesisVoice final
 public:
     static SpeechSynthesisVoice* create(PassRefPtr<PlatformSpeechSynthesisVoice>);
     ~SpeechSynthesisVoice();
+=======
+class SpeechSynthesisVoice final : public GarbageCollected<SpeechSynthesisVoice>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static SpeechSynthesisVoice* create(PlatformSpeechSynthesisVoice*);
+>>>>>>> miniblink49
 
     const String& voiceURI() const { return m_platformVoice->voiceURI(); }
     const String& name() const { return m_platformVoice->name(); }
@@ -49,6 +59,7 @@ public:
     bool localService() const { return m_platformVoice->localService(); }
     bool isDefault() const { return m_platformVoice->isDefault(); }
 
+<<<<<<< HEAD
     PlatformSpeechSynthesisVoice* platformVoice() const
     {
         return m_platformVoice.get();
@@ -60,6 +71,16 @@ private:
     explicit SpeechSynthesisVoice(PassRefPtr<PlatformSpeechSynthesisVoice>);
 
     RefPtr<PlatformSpeechSynthesisVoice> m_platformVoice;
+=======
+    PlatformSpeechSynthesisVoice* platformVoice() const { return m_platformVoice; }
+
+    DECLARE_TRACE();
+
+private:
+    explicit SpeechSynthesisVoice(PlatformSpeechSynthesisVoice*);
+
+    Member<PlatformSpeechSynthesisVoice> m_platformVoice;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

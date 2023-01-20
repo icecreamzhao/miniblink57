@@ -39,6 +39,7 @@ class WebDevToolsFrontendClient {
 public:
     WebDevToolsFrontendClient() { }
 
+<<<<<<< HEAD
     virtual void sendMessageToEmbedder(const WebString&) { }
     virtual void sendMessageToBackend(const WebString&) { }
     
@@ -46,6 +47,16 @@ public:
 
 protected:
     virtual ~WebDevToolsFrontendClient() { }
+=======
+    virtual void sendMessageToBackend(const WebString&) { }
+
+    virtual void sendMessageToEmbedder(const WebString&) { }
+
+    virtual bool isUnderTest() { return false; }
+
+protected:
+    virtual ~WebDevToolsFrontendClient() {}
+>>>>>>> miniblink49
 };
 
 } // namespace blink

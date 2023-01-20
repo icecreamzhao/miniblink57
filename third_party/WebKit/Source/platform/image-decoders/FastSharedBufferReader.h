@@ -32,9 +32,13 @@
 #define FastSharedBufferReader_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "platform/image-decoders/SegmentReader.h"
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
+=======
+#include "platform/SharedBuffer.h"
+>>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
@@ -44,6 +48,7 @@ namespace blink {
 // therefore minimizes the cost of memory copying when the decoders
 // repeatedly read from a buffer that is continually growing due to network
 // traffic.
+<<<<<<< HEAD
 class PLATFORM_EXPORT FastSharedBufferReader final {
     DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(FastSharedBufferReader);
@@ -52,6 +57,11 @@ public:
     FastSharedBufferReader(PassRefPtr<SegmentReader> data);
 
     void setData(PassRefPtr<SegmentReader>);
+=======
+class PLATFORM_EXPORT FastSharedBufferReader {
+public:
+    FastSharedBufferReader(PassRefPtr<SharedBuffer> data);
+>>>>>>> miniblink49
 
     // Returns a consecutive buffer that carries the data starting
     // at |dataPosition| with |length| bytes.
@@ -59,6 +69,7 @@ public:
     // |m_data| if such a consecutive buffer can be found.
     // Otherwise copies into |buffer| and returns it.
     // Caller must ensure there are enough bytes in |m_data| and |buffer|.
+<<<<<<< HEAD
     const char* getConsecutiveData(size_t dataPosition,
         size_t length,
         char* buffer) const;
@@ -69,10 +80,21 @@ public:
     // Returns a byte at |dataPosition|.
     // Caller must ensure there are enough bytes in |m_data|.
     inline char getOneByte(size_t dataPosition) const
+=======
+    const char* getConsecutiveData(size_t dataPosition, size_t length, char* buffer);
+
+    // Wraps SharedBuffer::getSomeData().
+    size_t getSomeData(const char*& someData, size_t dataPosition);
+
+    // Returns a byte at |dataPosition|.
+    // Caller must ensure there are enough bytes in |m_data|.
+    inline char getOneByte(size_t dataPosition)
+>>>>>>> miniblink49
     {
         return *getConsecutiveData(dataPosition, 1, 0);
     }
 
+<<<<<<< HEAD
     size_t size() const { return m_data->size(); }
 
     // This class caches the last access for faster subsequent reads. This
@@ -92,6 +114,25 @@ private:
 
     // Data position in |m_data| pointed to by |m_segment|.
     mutable size_t m_dataPosition;
+=======
+    size_t size() const
+    {
+        return m_data->size();
+    }
+
+private:
+    void getSomeDataInternal(unsigned dataPosition);
+
+    RefPtr<SharedBuffer> m_data;
+
+    // Caches the last segment of |m_data| accessed, since subsequent reads are
+    // likely to re-access it.
+    const char* m_segment;
+    size_t m_segmentLength;
+
+    // Data position in |m_data| pointed to by |m_segment|.
+    size_t m_dataPosition;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -28,28 +28,49 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT FEFlood final : public FilterEffect {
 public:
     static FEFlood* create(Filter*, const Color&, float);
 
     Color floodColor() const;
     bool setFloodColor(const Color&);
+=======
+class PLATFORM_EXPORT FEFlood : public FilterEffect {
+public:
+    static PassRefPtrWillBeRawPtr<FEFlood> create(Filter*, const Color&, float);
+
+    Color floodColor() const;
+    bool setFloodColor(const Color &);
+>>>>>>> miniblink49
 
     float floodOpacity() const;
     bool setFloodOpacity(float);
 
+<<<<<<< HEAD
     // feFlood does not perform color interpolation of any kind, so the result is
     // always in the current color space regardless of the value of
     // color-interpolation-filters.
     void setOperatingColorSpace(ColorSpace) override { }
 
+=======
+    // feFlood does not perform color interpolation of any kind, so the result is always in the current
+    // color space regardless of the value of color-interpolation-filters.
+    void setOperatingColorSpace(ColorSpace) override { }
+
+    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+
+>>>>>>> miniblink49
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
     FEFlood(Filter*, const Color&, float);
 
+<<<<<<< HEAD
     sk_sp<SkImageFilter> createImageFilter() override;
 
+=======
+>>>>>>> miniblink49
     Color m_floodColor;
     float m_floodOpacity;
 };

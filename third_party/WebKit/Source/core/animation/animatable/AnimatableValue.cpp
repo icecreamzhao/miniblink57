@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableValue.h"
 
 #include "core/animation/animatable/AnimatableNeutral.h"
@@ -36,22 +37,18 @@
 
 namespace blink {
 
-PassRefPtr<AnimatableValue> AnimatableValue::neutralValue()
+const AnimatableValue* AnimatableValue::neutralValue()
 {
-    DEFINE_STATIC_REF(AnimatableNeutral, neutralSentinelValue,
-        (AnimatableNeutral::create()));
+    DEFINE_STATIC_REF_WILL_BE_PERSISTENT(AnimatableNeutral, neutralSentinelValue, (AnimatableNeutral::create()));
     return neutralSentinelValue;
 }
 
-PassRefPtr<AnimatableValue> AnimatableValue::interpolate(
-    const AnimatableValue* left,
-    const AnimatableValue* right,
-    double fraction)
+PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableValue::interpolate(const AnimatableValue* left, const AnimatableValue* right, double fraction)
 {
-    DCHECK(left);
-    DCHECK(right);
-    DCHECK(!left->isNeutral());
-    DCHECK(!right->isNeutral());
+    ASSERT(left);
+    ASSERT(right);
+    ASSERT(!left->isNeutral());
+    ASSERT(!right->isNeutral());
 
     if (fraction && fraction != 1 && left->isSameType(right))
         return left->interpolateTo(right, fraction);

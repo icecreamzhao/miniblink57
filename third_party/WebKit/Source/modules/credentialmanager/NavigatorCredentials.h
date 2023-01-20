@@ -5,6 +5,10 @@
 #ifndef NavigatorCredentials_h
 #define NavigatorCredentials_h
 
+<<<<<<< HEAD
+=======
+#include "core/frame/DOMWindowProperty.h"
+>>>>>>> miniblink49
 #include "core/frame/Navigator.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
@@ -14,6 +18,7 @@ namespace blink {
 class CredentialsContainer;
 class Navigator;
 
+<<<<<<< HEAD
 class NavigatorCredentials final
     : public GarbageCollected<NavigatorCredentials>,
       public Supplement<Navigator> {
@@ -21,6 +26,14 @@ class NavigatorCredentials final
 
 public:
     static NavigatorCredentials& from(Navigator&);
+=======
+class NavigatorCredentials final : public GarbageCollectedFinalized<NavigatorCredentials>, public HeapSupplement<Navigator>, public DOMWindowProperty {
+    USING_GARBAGE_COLLECTED_MIXIN(NavigatorCredentials);
+public:
+    static NavigatorCredentials& from(Navigator&);
+    virtual ~NavigatorCredentials();
+
+>>>>>>> miniblink49
     // NavigatorCredentials.idl
     static CredentialsContainer* credentials(Navigator&);
 

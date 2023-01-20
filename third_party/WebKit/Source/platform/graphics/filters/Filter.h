@@ -26,6 +26,7 @@
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/heap/Handle.h"
+<<<<<<< HEAD
 #include "wtf/Noncopyable.h"
 
 namespace blink {
@@ -83,6 +84,47 @@ private:
 
     Member<SourceGraphic> m_sourceGraphic;
     Member<FilterEffect> m_lastEffect;
+=======
+#include "wtf/RefCounted.h"
+
+namespace blink {
+
+class PLATFORM_EXPORT Filter : public RefCountedWillBeGarbageCollectedFinalized<Filter> {
+public:
+    virtual ~Filter() { }
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
+
+    float scale() const { return m_scale; }
+    FloatRect mapLocalRectToAbsoluteRect(const FloatRect& rect) const { FloatRect result(rect); result.scale(m_scale); return result; }
+    FloatRect mapAbsoluteRectToLocalRect(const FloatRect& rect) const { FloatRect result(rect); result.scale(1.0f / m_scale); return result; }
+    virtual float applyHorizontalScale(float value) const { return m_scale * value; }
+    virtual float applyVerticalScale(float value) const { return m_scale * value; }
+
+    virtual FloatPoint3D resolve3dPoint(const FloatPoint3D& point) const { return point; }
+
+    virtual IntRect sourceImageRect() const = 0;
+
+    FloatRect absoluteFilterRegion() const { return m_absoluteFilterRegion; }
+
+    FloatRect filterRegion() const { return m_filterRegion; }
+    void setFilterRegion(const FloatRect& rect)
+    {
+        m_filterRegion = rect;
+        m_absoluteFilterRegion = rect;
+        m_absoluteFilterRegion.scale(m_scale);
+    }
+
+protected:
+    explicit Filter(float scale)
+        : m_scale(scale)
+    {
+    }
+
+private:
+    float m_scale;
+    FloatRect m_absoluteFilterRegion;
+    FloatRect m_filterRegion;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -11,6 +11,10 @@
 #include "SkRect.h"
 #include "SkRefCnt.h"
 #include "SkTDArray.h"
+<<<<<<< HEAD
+=======
+#include "SkTemplates.h"
+>>>>>>> miniblink49
 
 /**
  * Interface for a spatial data structure that stores axis-aligned bounding
@@ -18,8 +22,13 @@
  */
 class SkBBoxHierarchy : public SkRefCnt {
 public:
+<<<<<<< HEAD
     SkBBoxHierarchy() { }
     virtual ~SkBBoxHierarchy() { }
+=======
+    SkBBoxHierarchy() {}
+    virtual ~SkBBoxHierarchy() {}
+>>>>>>> miniblink49
 
     /**
      * Insert N bounding boxes into the hierarchy.
@@ -29,13 +38,21 @@ public:
     /**
      * Populate results with the indices of bounding boxes interesecting that query.
      */
+<<<<<<< HEAD
     virtual void search(const SkRect& query, SkTDArray<int>* results) const = 0;
+=======
+    virtual void search(const SkRect& query, SkTDArray<unsigned>* results) const = 0;
+>>>>>>> miniblink49
 
     virtual size_t bytesUsed() const = 0;
 
     // Get the root bound.
     virtual SkRect getRootBound() const = 0;
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> miniblink49
 private:
     typedef SkRefCnt INHERITED;
 };

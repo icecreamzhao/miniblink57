@@ -5,6 +5,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "DecodeFile.h"
 #include "SampleCode.h"
 #include "SkCanvas.h"
@@ -13,6 +14,15 @@
 #include "SkDumpCanvas.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
+=======
+#include "SampleCode.h"
+#include "SkDumpCanvas.h"
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+#include "SkGraphics.h"
+#include "SkImageDecoder.h"
+>>>>>>> miniblink49
 #include "SkOSFile.h"
 #include "SkPath.h"
 #include "SkPicture.h"
@@ -20,14 +30,23 @@
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
+<<<<<<< HEAD
 #include "SkTime.h"
 #include "SkTypeface.h"
 #include "SkUtils.h"
 #include "SkView.h"
+=======
+#include "SkUtils.h"
+#include "SkColorPriv.h"
+#include "SkColorFilter.h"
+#include "SkTime.h"
+#include "SkTypeface.h"
+>>>>>>> miniblink49
 #include "SkXfermode.h"
 
 #include "SkStream.h"
 #include "SkSurface.h"
+<<<<<<< HEAD
 
 #include "SkGlyphCache.h"
 
@@ -62,13 +81,35 @@ public:
 
     virtual ~PictFileView()
     {
+=======
+#include "SkXMLParser.h"
+
+#include "SkGlyphCache.h"
+
+class PictFileView : public SampleView {
+public:
+    PictFileView(const char name[] = NULL)
+        : fFilename(name)
+        , fBBox(kNo_BBoxType)
+        , fTileSize(SkSize::Make(0, 0)) {
+        for (int i = 0; i < kBBoxTypeCount; ++i) {
+            fPictures[i] = NULL;
+        }
+    }
+
+    virtual ~PictFileView() {
+>>>>>>> miniblink49
         for (int i = 0; i < kBBoxTypeCount; ++i) {
             SkSafeUnref(fPictures[i]);
         }
     }
 
+<<<<<<< HEAD
     void onTileSizeChanged(const SkSize& tileSize) override
     {
+=======
+    void onTileSizeChanged(const SkSize &tileSize) override {
+>>>>>>> miniblink49
         if (tileSize != fTileSize) {
             fTileSize = tileSize;
         }
@@ -76,12 +117,20 @@ public:
 
 protected:
     // overrides from SkEventSink
+<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
         if (SampleCode::TitleQ(*evt)) {
             SkString name("P:");
             const char* basename = strrchr(fFilename.c_str(), SkPATH_SEPARATOR);
             name.append(basename ? basename + 1 : fFilename.c_str());
+=======
+    bool onQuery(SkEvent* evt) override {
+        if (SampleCode::TitleQ(*evt)) {
+            SkString name("P:");
+            const char* basename = strrchr(fFilename.c_str(), SkPATH_SEPARATOR);
+            name.append(basename ? basename+1: fFilename.c_str());
+>>>>>>> miniblink49
             switch (fBBox) {
             case kNo_BBoxType:
                 // No name appended
@@ -96,6 +145,7 @@ protected:
             SampleCode::TitleR(evt, name.c_str());
             return true;
         }
+<<<<<<< HEAD
         SkUnichar uni;
         if (SampleCode::CharQ(*evt, &uni)) {
             switch (uni) {
@@ -120,6 +170,12 @@ protected:
 
     bool onEvent(const SkEvent& evt) override
     {
+=======
+        return this->INHERITED::onQuery(evt);
+    }
+
+    bool onEvent(const SkEvent& evt) override {
+>>>>>>> miniblink49
         if (evt.isType("PictFileView::toggleBBox")) {
             fBBox = (BBoxType)((fBBox + 1) % kBBoxTypeCount);
             return true;
@@ -127,8 +183,12 @@ protected:
         return this->INHERITED::onEvent(evt);
     }
 
+<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
+=======
+    void onDrawContent(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkASSERT(static_cast<int>(fBBox) < kBBoxTypeCount);
         SkPicture** picture = fPictures + fBBox;
 
@@ -137,6 +197,7 @@ protected:
 #endif
 
         if (!*picture) {
+<<<<<<< HEAD
             *picture = LoadPicture(fFilename.c_str(), fBBox).release();
         }
         if (*picture) {
@@ -146,6 +207,12 @@ protected:
             }
             canvas->drawPicture(*picture);
             canvas->setDrawFilter(nullptr);
+=======
+            *picture = LoadPicture(fFilename.c_str(), fBBox);
+        }
+        if (*picture) {
+            canvas->drawPicture(*picture);
+>>>>>>> miniblink49
         }
 
 #ifdef SK_GLYPHCACHE_TRACK_HASH_STATS
@@ -163,6 +230,7 @@ private:
     };
     static const int kBBoxTypeCount = kLast_BBoxType + 1;
 
+<<<<<<< HEAD
     SkString fFilename;
     SkPicture* fPictures[kBBoxTypeCount];
     BBoxType fBBox;
@@ -186,6 +254,29 @@ private:
             SkFILEStream stream(path);
             if (stream.isValid()) {
                 pic = SkPicture::MakeFromStream(&stream);
+=======
+    SkString    fFilename;
+    SkPicture*  fPictures[kBBoxTypeCount];
+    BBoxType    fBBox;
+    SkSize      fTileSize;
+
+    SkPicture* LoadPicture(const char path[], BBoxType bbox) {
+        SkAutoTUnref<SkPicture> pic;
+
+        SkBitmap bm;
+        if (SkImageDecoder::DecodeFile(path, &bm)) {
+            bm.setImmutable();
+            SkPictureRecorder recorder;
+            SkCanvas* can = recorder.beginRecording(SkIntToScalar(bm.width()),
+                                                    SkIntToScalar(bm.height()),
+                                                    NULL, 0);
+            can->drawBitmap(bm, 0, 0, NULL);
+            pic.reset(recorder.endRecording());
+        } else {
+            SkFILEStream stream(path);
+            if (stream.isValid()) {
+                pic.reset(SkPicture::CreateFromStream(&stream));
+>>>>>>> miniblink49
             } else {
                 SkDebugf("coun't load picture at \"path\"\n", path);
             }
@@ -193,9 +284,15 @@ private:
             if (false) { // re-record
                 SkPictureRecorder recorder;
                 pic->playback(recorder.beginRecording(pic->cullRect().width(),
+<<<<<<< HEAD
                     pic->cullRect().height(),
                     nullptr, 0));
                 sk_sp<SkPicture> p2(recorder.finishRecordingAsPicture());
+=======
+                                                      pic->cullRect().height(),
+                                                      NULL, 0));
+                SkAutoTUnref<SkPicture> p2(recorder.endRecording());
+>>>>>>> miniblink49
 
                 SkString path2(path);
                 path2.append(".new.skp");
@@ -204,17 +301,28 @@ private:
             }
         }
 
+<<<<<<< HEAD
         if (nullptr == pic) {
             return nullptr;
+=======
+        if (NULL == pic) {
+            return NULL;
+>>>>>>> miniblink49
         }
 
         SkAutoTDelete<SkBBHFactory> factory;
         switch (bbox) {
         case kNo_BBoxType:
             // no bbox playback necessary
+<<<<<<< HEAD
             return pic;
         case kRTree_BBoxType:
             factory.reset(new SkRTreeFactory);
+=======
+            return pic.detach();
+        case kRTree_BBoxType:
+            factory.reset(SkNEW(SkRTreeFactory));
+>>>>>>> miniblink49
             break;
         default:
             SkASSERT(false);
@@ -222,17 +330,27 @@ private:
 
         SkPictureRecorder recorder;
         pic->playback(recorder.beginRecording(pic->cullRect().width(),
+<<<<<<< HEAD
             pic->cullRect().height(),
             factory.get(), 0));
         return recorder.finishRecordingAsPicture();
+=======
+                                              pic->cullRect().height(),
+                                              factory.get(), 0));
+        return recorder.endRecording();
+>>>>>>> miniblink49
     }
 
     typedef SampleView INHERITED;
 };
 
 SampleView* CreateSamplePictFileView(const char filename[]);
+<<<<<<< HEAD
 SampleView* CreateSamplePictFileView(const char filename[])
 {
+=======
+SampleView* CreateSamplePictFileView(const char filename[]) {
+>>>>>>> miniblink49
     return new PictFileView(filename);
 }
 

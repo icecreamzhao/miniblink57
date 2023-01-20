@@ -11,6 +11,7 @@
 class GrClip;
 class GrContext;
 class GrDrawContext;
+<<<<<<< HEAD
 class GrPaint;
 class GrRenderTarget;
 class GrStyle;
@@ -20,11 +21,20 @@ class SkMatrix;
 class SkPaint;
 class SkPath;
 class SkPathEffect;
+=======
+class GrRenderTarget;
+struct SkIRect;
+class SkMatrix;
+class SkPaint;
+class SkPath;
+
+>>>>>>> miniblink49
 
 /**
  *  Blur utilities.
  */
 namespace GrBlurUtils {
+<<<<<<< HEAD
 /**
      * Draw a path handling the mask filter if present.
      */
@@ -52,6 +62,21 @@ void drawPathWithMaskFilter(GrContext*,
     const GrStyle&,
     bool pathIsMutable);
 
+=======
+    /**
+     * Draw a path handling the mask filter if present.
+     */
+    void drawPathWithMaskFilter(GrContext* context,
+                                GrDrawContext* drawContext,
+                                GrRenderTarget* rt,
+                                const GrClip& clip,
+                                const SkPath& origSrcPath,
+                                const SkPaint& paint,
+                                const SkMatrix& origViewMatrix,
+                                const SkMatrix* prePathMatrix,
+                                const SkIRect& clipBounds,
+                                bool pathIsMutable);
+>>>>>>> miniblink49
 };
 
 #endif

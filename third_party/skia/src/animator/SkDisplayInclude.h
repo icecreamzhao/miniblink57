@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkDisplayInclude_DEFINED
 #define SkDisplayInclude_DEFINED
 
@@ -14,10 +18,16 @@
 
 class SkInclude : public SkDisplayable {
     DECLARE_MEMBER_INFO(Include);
+<<<<<<< HEAD
     void onEndElement(SkAnimateMaker&) override;
     bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
 
+=======
+    void onEndElement(SkAnimateMaker & ) override;
+    bool enable(SkAnimateMaker & ) override;
+    bool hasEnable() const override;
+>>>>>>> miniblink49
 protected:
     SkString src;
 };

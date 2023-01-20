@@ -12,7 +12,11 @@ enum WebLockOrientationError {
     WebLockOrientationErrorNotAvailable,
 
     // If fullscreen is required to lock.
+<<<<<<< HEAD
     WebLockOrientationErrorFullscreenRequired,
+=======
+    WebLockOrientationErrorFullScreenRequired,
+>>>>>>> miniblink49
 
     // If another lock/unlock got called before that one ended.
     WebLockOrientationErrorCanceled,

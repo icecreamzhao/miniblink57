@@ -6,13 +6,17 @@
  */
 
 #include "SkDataTable.h"
+<<<<<<< HEAD
 #include "SkFixed.h"
+=======
+>>>>>>> miniblink49
 #include "SkFontDescriptor.h"
 #include "SkFontHost_FreeType_common.h"
 #include "SkFontMgr.h"
 #include "SkFontStyle.h"
 #include "SkMath.h"
 #include "SkMutex.h"
+<<<<<<< HEAD
 #include "SkOSFile.h"
 #include "SkRefCnt.h"
 #include "SkStream.h"
@@ -27,6 +31,15 @@
 #include <string.h>
 
 class SkData;
+=======
+#include "SkString.h"
+#include "SkStream.h"
+#include "SkTDArray.h"
+#include "SkTypefaceCache.h"
+#include "SkOSFile.h"
+
+#include <fontconfig/fontconfig.h>
+>>>>>>> miniblink49
 
 // FC_POSTSCRIPT_NAME was added with b561ff20 which ended up in 2.10.92
 // Ubuntu 12.04 is on 2.8.0, 13.10 is on 2.10.93
@@ -34,11 +47,19 @@ class SkData;
 // OpenSUSE 12.2 is on 2.9.0, 12.3 is on 2.10.2, 13.1 2.11.0
 // Fedora 19 is on 2.10.93
 #ifndef FC_POSTSCRIPT_NAME
+<<<<<<< HEAD
 #define FC_POSTSCRIPT_NAME "postscriptname"
 #endif
 
 #ifdef SK_DEBUG
 #include "SkTLS.h"
+=======
+#    define FC_POSTSCRIPT_NAME  "postscriptname"
+#endif
+
+#ifdef SK_DEBUG
+#    include "SkTLS.h"
+>>>>>>> miniblink49
 #endif
 
 /** Since FontConfig is poorly documented, this gives a high level overview:
@@ -61,6 +82,7 @@ class SkData;
 namespace {
 
 // Fontconfig is not threadsafe before 2.10.91. Before that, we lock with a global mutex.
+<<<<<<< HEAD
 // See https://bug.skia.org/1497 for background.
 SK_DECLARE_STATIC_MUTEX(gFCMutex);
 
@@ -72,13 +94,27 @@ void* CreateThreadFcLocked()
 void DeleteThreadFcLocked(void* v) { delete static_cast<bool*>(v); }
 #define THREAD_FC_LOCKED \
     static_cast<bool*>(SkTLS::Get(CreateThreadFcLocked, DeleteThreadFcLocked))
+=======
+// See http://skbug.com/1497 for background.
+SK_DECLARE_STATIC_MUTEX(gFCMutex);
+
+#ifdef SK_DEBUG
+    void *CreateThreadFcLocked() { return SkNEW_ARGS(bool, (false)); }
+    void DeleteThreadFcLocked(void* v) { SkDELETE(static_cast<bool*>(v)); }
+#   define THREAD_FC_LOCKED \
+        static_cast<bool*>(SkTLS::Get(CreateThreadFcLocked, DeleteThreadFcLocked))
+>>>>>>> miniblink49
 #endif
 
 struct FCLocker {
     // Assume FcGetVersion() has always been thread safe.
 
+<<<<<<< HEAD
     FCLocker()
     {
+=======
+    FCLocker() {
+>>>>>>> miniblink49
         if (FcGetVersion() < 21091) {
             gFCMutex.acquire();
         } else {
@@ -88,8 +124,12 @@ struct FCLocker {
         }
     }
 
+<<<<<<< HEAD
     ~FCLocker()
     {
+=======
+    ~FCLocker() {
+>>>>>>> miniblink49
         AssertHeld();
         if (FcGetVersion() < 21091) {
             gFCMutex.release();
@@ -98,6 +138,7 @@ struct FCLocker {
         }
     }
 
+<<<<<<< HEAD
     static void AssertHeld()
     {
         SkDEBUGCODE(
@@ -107,10 +148,20 @@ struct FCLocker {
                 SkASSERT(true == *THREAD_FC_LOCKED);
             })
     }
+=======
+    static void AssertHeld() { SkDEBUGCODE(
+        if (FcGetVersion() < 21091) {
+            gFCMutex.assertHeld();
+        } else {
+            SkASSERT(true == *THREAD_FC_LOCKED);
+        }
+    ) }
+>>>>>>> miniblink49
 };
 
 } // namespace
 
+<<<<<<< HEAD
 template <typename T, void (*D)(T*)>
 void FcTDestroy(T* t)
 {
@@ -131,6 +182,20 @@ public:
         : SkAutoTCallVProc<T, FcTDestroy<T, D>>(obj)
     {
     }
+=======
+template<typename T, void (*D)(T*)> void FcTDestroy(T* t) {
+    FCLocker::AssertHeld();
+    D(t);
+}
+template <typename T, T* (*C)(), void (*D)(T*)> class SkAutoFc
+    : public SkAutoTCallVProc<T, FcTDestroy<T, D> > {
+public:
+    SkAutoFc() : SkAutoTCallVProc<T, FcTDestroy<T, D> >(C()) {
+        T* obj = this->operator T*();
+        SK_ALWAYSBREAK(NULL != obj);
+    }
+    explicit SkAutoFc(T* obj) : SkAutoTCallVProc<T, FcTDestroy<T, D> >(obj) {}
+>>>>>>> miniblink49
 };
 
 typedef SkAutoFc<FcCharSet, FcCharSetCreate, FcCharSetDestroy> SkAutoFcCharSet;
@@ -140,6 +205,7 @@ typedef SkAutoFc<FcLangSet, FcLangSetCreate, FcLangSetDestroy> SkAutoFcLangSet;
 typedef SkAutoFc<FcObjectSet, FcObjectSetCreate, FcObjectSetDestroy> SkAutoFcObjectSet;
 typedef SkAutoFc<FcPattern, FcPatternCreate, FcPatternDestroy> SkAutoFcPattern;
 
+<<<<<<< HEAD
 static bool get_bool(FcPattern* pattern, const char object[], bool missing = false)
 {
     FcBool value;
@@ -151,6 +217,9 @@ static bool get_bool(FcPattern* pattern, const char object[], bool missing = fal
 
 static int get_int(FcPattern* pattern, const char object[], int missing)
 {
+=======
+static int get_int(FcPattern* pattern, const char object[], int missing) {
+>>>>>>> miniblink49
     int value;
     if (FcPatternGetInteger(pattern, object, 0, &value) != FcResultMatch) {
         return missing;
@@ -158,8 +227,12 @@ static int get_int(FcPattern* pattern, const char object[], int missing)
     return value;
 }
 
+<<<<<<< HEAD
 static const char* get_string(FcPattern* pattern, const char object[], const char* missing = "")
 {
+=======
+static const char* get_string(FcPattern* pattern, const char object[], const char* missing = "") {
+>>>>>>> miniblink49
     FcChar8* value;
     if (FcPatternGetString(pattern, object, 0, &value) != FcResultMatch) {
         return missing;
@@ -167,6 +240,7 @@ static const char* get_string(FcPattern* pattern, const char object[], const cha
     return (const char*)value;
 }
 
+<<<<<<< HEAD
 static const FcMatrix* get_matrix(FcPattern* pattern, const char object[])
 {
     FcMatrix* matrix;
@@ -176,6 +250,8 @@ static const FcMatrix* get_matrix(FcPattern* pattern, const char object[])
     return matrix;
 }
 
+=======
+>>>>>>> miniblink49
 enum SkWeakReturn {
     kIsWeak_WeakReturn,
     kIsStrong_WeakReturn,
@@ -190,15 +266,23 @@ enum SkWeakReturn {
  *  A element with the weak bit is scored after FC_LANG, without the weak bit is scored before.
  *  Note that the weak bit is stored on the element, not on the value it holds.
  */
+<<<<<<< HEAD
 static SkWeakReturn is_weak(FcPattern* pattern, const char object[], int id)
 {
+=======
+static SkWeakReturn is_weak(FcPattern* pattern, const char object[], int id) {
+>>>>>>> miniblink49
     FCLocker::AssertHeld();
 
     FcResult result;
 
     // Create a copy of the pattern with only the value 'pattern'['object'['id']] in it.
     // Internally, FontConfig pattern objects are linked lists, so faster to remove from head.
+<<<<<<< HEAD
     SkAutoFcObjectSet requestedObjectOnly(FcObjectSetBuild(object, nullptr));
+=======
+    SkAutoFcObjectSet requestedObjectOnly(FcObjectSetBuild(object, NULL));
+>>>>>>> miniblink49
     SkAutoFcPattern minimal(FcPatternFilter(pattern, requestedObjectOnly));
     FcBool hasId = true;
     for (int i = 0; hasId && i < id; ++i) {
@@ -232,8 +316,13 @@ static SkWeakReturn is_weak(FcPattern* pattern, const char object[], int id)
     FcPatternAddString(weak, object, (const FcChar8*)"nomatchstring");
     FcPatternAddLangSet(weak, FC_LANG, weakLangSet);
 
+<<<<<<< HEAD
     FcFontSetAdd(fontSet, strong.release());
     FcFontSetAdd(fontSet, weak.release());
+=======
+    FcFontSetAdd(fontSet, strong.detach());
+    FcFontSetAdd(fontSet, weak.detach());
+>>>>>>> miniblink49
 
     // Add 'matchlang' to the copy of the pattern.
     FcPatternAddLangSet(minimal, FC_LANG, weakLangSet);
@@ -247,30 +336,49 @@ static SkWeakReturn is_weak(FcPattern* pattern, const char object[], int id)
     SkAutoFcConfig config;
     FcFontSet* fontSets[1] = { fontSet };
     SkAutoFcPattern match(FcFontSetMatch(config, fontSets, SK_ARRAY_COUNT(fontSets),
+<<<<<<< HEAD
         minimal, &result));
+=======
+                                         minimal, &result));
+>>>>>>> miniblink49
 
     FcLangSet* matchLangSet;
     FcPatternGetLangSet(match, FC_LANG, 0, &matchLangSet);
     return FcLangEqual == FcLangSetHasLang(matchLangSet, (const FcChar8*)"matchlang")
+<<<<<<< HEAD
         ? kIsWeak_WeakReturn
         : kIsStrong_WeakReturn;
+=======
+                        ? kIsWeak_WeakReturn : kIsStrong_WeakReturn;
+>>>>>>> miniblink49
 }
 
 /** Removes weak elements from either FC_FAMILY or FC_POSTSCRIPT_NAME objects in the property.
  *  This can be quite expensive, and should not be used more than once per font lookup.
  *  This removes all of the weak elements after the last strong element.
  */
+<<<<<<< HEAD
 static void remove_weak(FcPattern* pattern, const char object[])
 {
     FCLocker::AssertHeld();
 
     SkAutoFcObjectSet requestedObjectOnly(FcObjectSetBuild(object, nullptr));
+=======
+static void remove_weak(FcPattern* pattern, const char object[]) {
+    FCLocker::AssertHeld();
+
+    SkAutoFcObjectSet requestedObjectOnly(FcObjectSetBuild(object, NULL));
+>>>>>>> miniblink49
     SkAutoFcPattern minimal(FcPatternFilter(pattern, requestedObjectOnly));
 
     int lastStrongId = -1;
     int numIds;
     SkWeakReturn result;
+<<<<<<< HEAD
     for (int id = 0;; ++id) {
+=======
+    for (int id = 0; ; ++id) {
+>>>>>>> miniblink49
         result = is_weak(minimal, object, 0);
         if (kNoId_WeakReturn == result) {
             numIds = id;
@@ -294,36 +402,65 @@ static void remove_weak(FcPattern* pattern, const char object[])
 }
 
 static int map_range(SkFixed value,
+<<<<<<< HEAD
     SkFixed old_min, SkFixed old_max,
     SkFixed new_min, SkFixed new_max)
+=======
+                     SkFixed old_min, SkFixed old_max,
+                     SkFixed new_min, SkFixed new_max)
+>>>>>>> miniblink49
 {
     SkASSERT(old_min < old_max);
     SkASSERT(new_min <= new_max);
     return new_min + SkMulDiv(value - old_min, new_max - new_min, old_max - old_min);
 }
 
+<<<<<<< HEAD
+=======
+static int ave(SkFixed a, SkFixed b) {
+    return SkFixedAve(a, b);
+}
+
+>>>>>>> miniblink49
 struct MapRanges {
     SkFixed old_val;
     SkFixed new_val;
 };
 
+<<<<<<< HEAD
 static SkFixed map_ranges_fixed(SkFixed val, MapRanges const ranges[], int rangesCount)
 {
+=======
+static SkFixed map_ranges_fixed(SkFixed val, MapRanges const ranges[], int rangesCount) {
+>>>>>>> miniblink49
     // -Inf to [0]
     if (val < ranges[0].old_val) {
         return ranges[0].new_val;
     }
 
+<<<<<<< HEAD
     // Linear from [i] to [i+1]
     for (int i = 0; i < rangesCount - 1; ++i) {
         if (val < ranges[i + 1].old_val) {
             return map_range(val, ranges[i].old_val, ranges[i + 1].old_val,
                 ranges[i].new_val, ranges[i + 1].new_val);
+=======
+    // Linear from [i] to ave([i], [i+1]), then from ave([i], [i+1]) to [i+1]
+    for (int i = 0; i < rangesCount - 1; ++i) {
+        if (val < ave(ranges[i].old_val, ranges[i+1].old_val)) {
+            return map_range(val, ranges[i].old_val, ave(ranges[i].old_val, ranges[i+1].old_val),
+                                  ranges[i].new_val, ave(ranges[i].new_val, ranges[i+1].new_val));
+        }
+        if (val < ranges[i+1].old_val) {
+            return map_range(val, ave(ranges[i].old_val, ranges[i+1].old_val), ranges[i+1].old_val,
+                                  ave(ranges[i].new_val, ranges[i+1].new_val), ranges[i+1].new_val);
+>>>>>>> miniblink49
         }
     }
 
     // From [n] to +Inf
     // if (fcweight < Inf)
+<<<<<<< HEAD
     return ranges[rangesCount - 1].new_val;
 }
 
@@ -356,10 +493,42 @@ static SkFontStyle skfontstyle_from_fcpattern(FcPattern* pattern)
     };
     int weight = map_ranges(get_int(pattern, FC_WEIGHT, FC_WEIGHT_REGULAR),
         weightRanges, SK_ARRAY_COUNT(weightRanges));
+=======
+    return ranges[rangesCount-1].new_val;
+}
+
+static int map_ranges(int val, MapRanges const ranges[], int rangesCount) {
+    return SkFixedRoundToInt(map_ranges_fixed(SkIntToFixed(val), ranges, rangesCount));
+}
+
+template<int n> struct SkTFixed {
+    SK_COMPILE_ASSERT(-32768 <= n && n <= 32767, SkTFixed_n_not_in_range);
+    static const SkFixed value = static_cast<SkFixed>(n << 16);
+};
+
+static SkFontStyle skfontstyle_from_fcpattern(FcPattern* pattern) {
+    typedef SkFontStyle SkFS;
+
+    static const MapRanges weightRanges[] = {
+        { SkTFixed<FC_WEIGHT_THIN>::value,       SkTFixed<SkFS::kThin_Weight>::value },
+        { SkTFixed<FC_WEIGHT_EXTRALIGHT>::value, SkTFixed<SkFS::kExtraLight_Weight>::value },
+        { SkTFixed<FC_WEIGHT_LIGHT>::value,      SkTFixed<SkFS::kLight_Weight>::value },
+        { SkTFixed<FC_WEIGHT_REGULAR>::value,    SkTFixed<SkFS::kNormal_Weight>::value },
+        { SkTFixed<FC_WEIGHT_MEDIUM>::value,     SkTFixed<SkFS::kMedium_Weight>::value },
+        { SkTFixed<FC_WEIGHT_DEMIBOLD>::value,   SkTFixed<SkFS::kSemiBold_Weight>::value },
+        { SkTFixed<FC_WEIGHT_BOLD>::value,       SkTFixed<SkFS::kBold_Weight>::value },
+        { SkTFixed<FC_WEIGHT_EXTRABOLD>::value,  SkTFixed<SkFS::kExtraBold_Weight>::value },
+        { SkTFixed<FC_WEIGHT_BLACK>::value,      SkTFixed<SkFS::kBlack_Weight>::value },
+        { SkTFixed<FC_WEIGHT_EXTRABLACK>::value, SkTFixed<1000>::value },
+    };
+    int weight = map_ranges(get_int(pattern, FC_WEIGHT, FC_WEIGHT_REGULAR),
+                            weightRanges, SK_ARRAY_COUNT(weightRanges));
+>>>>>>> miniblink49
 
     static const MapRanges widthRanges[] = {
         { SkTFixed<FC_WIDTH_ULTRACONDENSED>::value, SkTFixed<SkFS::kUltraCondensed_Width>::value },
         { SkTFixed<FC_WIDTH_EXTRACONDENSED>::value, SkTFixed<SkFS::kExtraCondensed_Width>::value },
+<<<<<<< HEAD
         { SkTFixed<FC_WIDTH_CONDENSED>::value, SkTFixed<SkFS::kCondensed_Width>::value },
         { SkTFixed<FC_WIDTH_SEMICONDENSED>::value, SkTFixed<SkFS::kSemiCondensed_Width>::value },
         { SkTFixed<FC_WIDTH_NORMAL>::value, SkTFixed<SkFS::kNormal_Width>::value },
@@ -386,17 +555,38 @@ static SkFontStyle skfontstyle_from_fcpattern(FcPattern* pattern)
         SkASSERT(false);
         break;
     }
+=======
+        { SkTFixed<FC_WIDTH_CONDENSED>::value,      SkTFixed<SkFS::kCondensed_Width>::value },
+        { SkTFixed<FC_WIDTH_SEMICONDENSED>::value,  SkTFixed<SkFS::kSemiCondensed_Width>::value },
+        { SkTFixed<FC_WIDTH_NORMAL>::value,         SkTFixed<SkFS::kNormal_Width>::value },
+        { SkTFixed<FC_WIDTH_SEMIEXPANDED>::value,   SkTFixed<SkFS::kSemiExpanded_Width>::value },
+        { SkTFixed<FC_WIDTH_EXPANDED>::value,       SkTFixed<SkFS::kExpanded_Width>::value },
+        { SkTFixed<FC_WIDTH_EXTRAEXPANDED>::value,  SkTFixed<SkFS::kExtraExpanded_Width>::value },
+        { SkTFixed<FC_WIDTH_ULTRAEXPANDED>::value,  SkTFixed<SkFS::kUltaExpanded_Width>::value },
+    };
+    int width = map_ranges(get_int(pattern, FC_WIDTH, FC_WIDTH_NORMAL),
+                           widthRanges, SK_ARRAY_COUNT(widthRanges));
+
+    SkFS::Slant slant = get_int(pattern, FC_SLANT, FC_SLANT_ROMAN) > 0
+                             ? SkFS::kItalic_Slant
+                             : SkFS::kUpright_Slant;
+>>>>>>> miniblink49
 
     return SkFontStyle(weight, width, slant);
 }
 
+<<<<<<< HEAD
 static void fcpattern_from_skfontstyle(SkFontStyle style, FcPattern* pattern)
 {
+=======
+static void fcpattern_from_skfontstyle(SkFontStyle style, FcPattern* pattern) {
+>>>>>>> miniblink49
     FCLocker::AssertHeld();
 
     typedef SkFontStyle SkFS;
 
     static const MapRanges weightRanges[] = {
+<<<<<<< HEAD
         { SkTFixed<SkFS::kThin_Weight>::value, SkTFixed<FC_WEIGHT_THIN>::value },
         { SkTFixed<SkFS::kExtraLight_Weight>::value, SkTFixed<FC_WEIGHT_EXTRALIGHT>::value },
         { SkTFixed<SkFS::kLight_Weight>::value, SkTFixed<FC_WEIGHT_LIGHT>::value },
@@ -407,12 +597,25 @@ static void fcpattern_from_skfontstyle(SkFontStyle style, FcPattern* pattern)
         { SkTFixed<SkFS::kExtraBold_Weight>::value, SkTFixed<FC_WEIGHT_EXTRABOLD>::value },
         { SkTFixed<SkFS::kBlack_Weight>::value, SkTFixed<FC_WEIGHT_BLACK>::value },
         { SkTFixed<1000>::value, SkTFixed<FC_WEIGHT_EXTRABLACK>::value },
+=======
+        { SkTFixed<SkFS::kThin_Weight>::value,       SkTFixed<FC_WEIGHT_THIN>::value },
+        { SkTFixed<SkFS::kExtraLight_Weight>::value, SkTFixed<FC_WEIGHT_EXTRALIGHT>::value },
+        { SkTFixed<SkFS::kLight_Weight>::value,      SkTFixed<FC_WEIGHT_LIGHT>::value },
+        { SkTFixed<SkFS::kNormal_Weight>::value,     SkTFixed<FC_WEIGHT_REGULAR>::value },
+        { SkTFixed<SkFS::kMedium_Weight>::value,     SkTFixed<FC_WEIGHT_MEDIUM>::value },
+        { SkTFixed<SkFS::kSemiBold_Weight>::value,   SkTFixed<FC_WEIGHT_DEMIBOLD>::value },
+        { SkTFixed<SkFS::kBold_Weight>::value,       SkTFixed<FC_WEIGHT_BOLD>::value },
+        { SkTFixed<SkFS::kExtraBold_Weight>::value,  SkTFixed<FC_WEIGHT_EXTRABOLD>::value },
+        { SkTFixed<SkFS::kBlack_Weight>::value,      SkTFixed<FC_WEIGHT_BLACK>::value },
+        { SkTFixed<1000>::value,                     SkTFixed<FC_WEIGHT_EXTRABLACK>::value },
+>>>>>>> miniblink49
     };
     int weight = map_ranges(style.weight(), weightRanges, SK_ARRAY_COUNT(weightRanges));
 
     static const MapRanges widthRanges[] = {
         { SkTFixed<SkFS::kUltraCondensed_Width>::value, SkTFixed<FC_WIDTH_ULTRACONDENSED>::value },
         { SkTFixed<SkFS::kExtraCondensed_Width>::value, SkTFixed<FC_WIDTH_EXTRACONDENSED>::value },
+<<<<<<< HEAD
         { SkTFixed<SkFS::kCondensed_Width>::value, SkTFixed<FC_WIDTH_CONDENSED>::value },
         { SkTFixed<SkFS::kSemiCondensed_Width>::value, SkTFixed<FC_WIDTH_SEMICONDENSED>::value },
         { SkTFixed<SkFS::kNormal_Width>::value, SkTFixed<FC_WIDTH_NORMAL>::value },
@@ -442,6 +645,21 @@ static void fcpattern_from_skfontstyle(SkFontStyle style, FcPattern* pattern)
     FcPatternAddInteger(pattern, FC_WEIGHT, weight);
     FcPatternAddInteger(pattern, FC_WIDTH, width);
     FcPatternAddInteger(pattern, FC_SLANT, slant);
+=======
+        { SkTFixed<SkFS::kCondensed_Width>::value,      SkTFixed<FC_WIDTH_CONDENSED>::value },
+        { SkTFixed<SkFS::kSemiCondensed_Width>::value,  SkTFixed<FC_WIDTH_SEMICONDENSED>::value },
+        { SkTFixed<SkFS::kNormal_Width>::value,         SkTFixed<FC_WIDTH_NORMAL>::value },
+        { SkTFixed<SkFS::kSemiExpanded_Width>::value,   SkTFixed<FC_WIDTH_SEMIEXPANDED>::value },
+        { SkTFixed<SkFS::kExpanded_Width>::value,       SkTFixed<FC_WIDTH_EXPANDED>::value },
+        { SkTFixed<SkFS::kExtraExpanded_Width>::value,  SkTFixed<FC_WIDTH_EXTRAEXPANDED>::value },
+        { SkTFixed<SkFS::kUltaExpanded_Width>::value,   SkTFixed<FC_WIDTH_ULTRAEXPANDED>::value },
+    };
+    int width = map_ranges(style.width(), widthRanges, SK_ARRAY_COUNT(widthRanges));
+
+    FcPatternAddInteger(pattern, FC_WEIGHT, weight);
+    FcPatternAddInteger(pattern, FC_WIDTH, width);
+    FcPatternAddInteger(pattern, FC_SLANT, style.isItalic() ? FC_SLANT_ITALIC : FC_SLANT_ROMAN);
+>>>>>>> miniblink49
 }
 
 class SkTypeface_stream : public SkTypeface_FreeType {
@@ -449,6 +667,7 @@ public:
     /** @param data takes ownership of the font data.*/
     SkTypeface_stream(SkFontData* data, const SkFontStyle& style, bool fixedWidth)
         : INHERITED(style, SkTypefaceCache::NewFontID(), fixedWidth)
+<<<<<<< HEAD
         , fData(data) {};
 
     void onGetFamilyName(SkString* familyName) const override
@@ -463,12 +682,30 @@ public:
 
     SkStreamAsset* onOpenStream(int* ttcIndex) const override
     {
+=======
+        , fData(data)
+    { };
+
+    void onGetFamilyName(SkString* familyName) const override {
+        familyName->reset();
+    }
+
+    void onGetFontDescriptor(SkFontDescriptor* desc, bool* serialize) const override {
+        *serialize = true;
+    }
+
+    SkStreamAsset* onOpenStream(int* ttcIndex) const override {
+>>>>>>> miniblink49
         *ttcIndex = fData->getIndex();
         return fData->duplicateStream();
     }
 
+<<<<<<< HEAD
     SkFontData* onCreateFontData() const override
     {
+=======
+    SkFontData* onCreateFontData() const override {
+>>>>>>> miniblink49
         return new SkFontData(*fData.get());
     }
 
@@ -481,6 +718,7 @@ private:
 class SkTypeface_fontconfig : public SkTypeface_FreeType {
 public:
     /** @param pattern takes ownership of the reference. */
+<<<<<<< HEAD
     static SkTypeface_fontconfig* Create(FcPattern* pattern)
     {
         return new SkTypeface_fontconfig(pattern);
@@ -494,6 +732,18 @@ public:
 
     void onGetFontDescriptor(SkFontDescriptor* desc, bool* serialize) const override
     {
+=======
+    static SkTypeface_fontconfig* Create(FcPattern* pattern) {
+        return SkNEW_ARGS(SkTypeface_fontconfig, (pattern));
+    }
+    mutable SkAutoFcPattern fPattern;
+
+    void onGetFamilyName(SkString* familyName) const override {
+        *familyName = get_string(fPattern, FC_FAMILY);
+    }
+
+    void onGetFontDescriptor(SkFontDescriptor* desc, bool* serialize) const override {
+>>>>>>> miniblink49
         FCLocker lock;
         desc->setFamilyName(get_string(fPattern, FC_FAMILY));
         desc->setFullName(get_string(fPattern, FC_FULLNAME));
@@ -501,13 +751,18 @@ public:
         *serialize = false;
     }
 
+<<<<<<< HEAD
     SkStreamAsset* onOpenStream(int* ttcIndex) const override
     {
+=======
+    SkStreamAsset* onOpenStream(int* ttcIndex) const override {
+>>>>>>> miniblink49
         FCLocker lock;
         *ttcIndex = get_int(fPattern, FC_INDEX, 0);
         return SkStream::NewFromFile(get_string(fPattern, FC_FILE));
     }
 
+<<<<<<< HEAD
     void onFilterRec(SkScalerContextRec* rec) const override
     {
         const FcMatrix* fcMatrix = get_matrix(fPattern, FC_MATRIX);
@@ -536,6 +791,9 @@ public:
 
     virtual ~SkTypeface_fontconfig()
     {
+=======
+    virtual ~SkTypeface_fontconfig() {
+>>>>>>> miniblink49
         // Hold the lock while unrefing the pattern.
         FCLocker lock;
         fPattern.reset();
@@ -545,9 +803,16 @@ private:
     /** @param pattern takes ownership of the reference. */
     SkTypeface_fontconfig(FcPattern* pattern)
         : INHERITED(skfontstyle_from_fcpattern(pattern),
+<<<<<<< HEAD
             SkTypefaceCache::NewFontID(),
             FC_PROPORTIONAL != get_int(pattern, FC_SPACING, FC_PROPORTIONAL))
         , fPattern(pattern) {};
+=======
+                    SkTypefaceCache::NewFontID(),
+                    FC_PROPORTIONAL != get_int(pattern, FC_SPACING, FC_PROPORTIONAL))
+        , fPattern(pattern)
+    { };
+>>>>>>> miniblink49
 
     typedef SkTypeface_FreeType INHERITED;
 };
@@ -563,6 +828,7 @@ class SkFontMgr_fontconfig : public SkFontMgr {
          *  @param fontSet takes ownership of the reference.
          */
         StyleSet(const SkFontMgr_fontconfig* parent, FcFontSet* fontSet)
+<<<<<<< HEAD
             : fFontMgr(SkRef(parent))
             , fFontSet(fontSet)
         {
@@ -570,6 +836,12 @@ class SkFontMgr_fontconfig : public SkFontMgr {
 
         virtual ~StyleSet()
         {
+=======
+            : fFontMgr(SkRef(parent)), fFontSet(fontSet)
+        { }
+
+        virtual ~StyleSet() {
+>>>>>>> miniblink49
             // Hold the lock while unrefing the font set.
             FCLocker lock;
             fFontSet.reset();
@@ -577,8 +849,12 @@ class SkFontMgr_fontconfig : public SkFontMgr {
 
         int count() override { return fFontSet->nfont; }
 
+<<<<<<< HEAD
         void getStyle(int index, SkFontStyle* style, SkString* styleName) override
         {
+=======
+        void getStyle(int index, SkFontStyle* style, SkString* styleName) override {
+>>>>>>> miniblink49
             if (index < 0 || fFontSet->nfont <= index) {
                 return;
             }
@@ -592,16 +868,24 @@ class SkFontMgr_fontconfig : public SkFontMgr {
             }
         }
 
+<<<<<<< HEAD
         SkTypeface* createTypeface(int index) override
         {
+=======
+        SkTypeface* createTypeface(int index) override {
+>>>>>>> miniblink49
             FCLocker lock;
 
             FcPattern* match = fFontSet->fonts[index];
             return fFontMgr->createTypefaceFromFcPattern(match);
         }
 
+<<<<<<< HEAD
         SkTypeface* matchStyle(const SkFontStyle& style) override
         {
+=======
+        SkTypeface* matchStyle(const SkFontStyle& style) override {
+>>>>>>> miniblink49
             FCLocker lock;
 
             SkAutoFcPattern pattern;
@@ -612,10 +896,17 @@ class SkFontMgr_fontconfig : public SkFontMgr {
             FcResult result;
             FcFontSet* fontSets[1] = { fFontSet };
             SkAutoFcPattern match(FcFontSetMatch(fFontMgr->fFC,
+<<<<<<< HEAD
                 fontSets, SK_ARRAY_COUNT(fontSets),
                 pattern, &result));
             if (nullptr == match) {
                 return nullptr;
+=======
+                                                 fontSets, SK_ARRAY_COUNT(fontSets),
+                                                 pattern, &result));
+            if (NULL == match) {
+                return NULL;
+>>>>>>> miniblink49
             }
 
             return fFontMgr->createTypefaceFromFcPattern(match);
@@ -626,8 +917,12 @@ class SkFontMgr_fontconfig : public SkFontMgr {
         SkAutoFcFontSet fFontSet;
     };
 
+<<<<<<< HEAD
     static bool FindName(const SkTDArray<const char*>& list, const char* str)
     {
+=======
+    static bool FindName(const SkTDArray<const char*>& list, const char* str) {
+>>>>>>> miniblink49
         int count = list.count();
         for (int i = 0; i < count; ++i) {
             if (!strcmp(list[i], str)) {
@@ -637,8 +932,12 @@ class SkFontMgr_fontconfig : public SkFontMgr {
         return false;
     }
 
+<<<<<<< HEAD
     static SkDataTable* GetFamilyNames(FcConfig* fcconfig)
     {
+=======
+    static SkDataTable* GetFamilyNames(FcConfig* fcconfig) {
+>>>>>>> miniblink49
         FCLocker lock;
 
         SkTDArray<const char*> names;
@@ -648,13 +947,21 @@ class SkFontMgr_fontconfig : public SkFontMgr {
         for (int setIndex = 0; setIndex < (int)SK_ARRAY_COUNT(fcNameSet); ++setIndex) {
             // Return value of FcConfigGetFonts must not be destroyed.
             FcFontSet* allFonts(FcConfigGetFonts(fcconfig, fcNameSet[setIndex]));
+<<<<<<< HEAD
             if (nullptr == allFonts) {
+=======
+            if (NULL == allFonts) {
+>>>>>>> miniblink49
                 continue;
             }
 
             for (int fontIndex = 0; fontIndex < allFonts->nfont; ++fontIndex) {
                 FcPattern* current = allFonts->fonts[fontIndex];
+<<<<<<< HEAD
                 for (int id = 0;; ++id) {
+=======
+                for (int id = 0; ; ++id) {
+>>>>>>> miniblink49
                     FcChar8* fcFamilyName;
                     FcResult result = FcPatternGetString(current, FC_FAMILY, id, &fcFamilyName);
                     if (FcResultNoId == result) {
@@ -672,12 +979,20 @@ class SkFontMgr_fontconfig : public SkFontMgr {
             }
         }
 
+<<<<<<< HEAD
         return SkDataTable::NewCopyArrays((void const* const*)names.begin(),
             sizes.begin(), names.count());
     }
 
     static bool FindByFcPattern(SkTypeface* cached, void* ctx)
     {
+=======
+        return SkDataTable::NewCopyArrays((void const *const *)names.begin(),
+                                          sizes.begin(), names.count());
+    }
+
+    static bool FindByFcPattern(SkTypeface* cached, const SkFontStyle&, void* ctx) {
+>>>>>>> miniblink49
         SkTypeface_fontconfig* cshFace = static_cast<SkTypeface_fontconfig*>(cached);
         FcPattern* ctxPattern = static_cast<FcPattern*>(ctx);
         return FcTrue == FcPatternEqual(cshFace->fPattern, ctxPattern);
@@ -688,6 +1003,7 @@ class SkFontMgr_fontconfig : public SkFontMgr {
     /** Creates a typeface using a typeface cache.
      *  @param pattern a complete pattern from FcFontRenderPrepare.
      */
+<<<<<<< HEAD
     SkTypeface* createTypefaceFromFcPattern(FcPattern* pattern) const
     {
         FCLocker::AssertHeld();
@@ -698,6 +1014,17 @@ class SkFontMgr_fontconfig : public SkFontMgr {
             face = SkTypeface_fontconfig::Create(pattern);
             if (face) {
                 fTFCache.add(face);
+=======
+    SkTypeface* createTypefaceFromFcPattern(FcPattern* pattern) const {
+        FCLocker::AssertHeld();
+        SkAutoMutexAcquire ama(fTFCacheMutex);
+        SkTypeface* face = fTFCache.findByProcAndRef(FindByFcPattern, pattern);
+        if (NULL == face) {
+            FcPatternReference(pattern);
+            face = SkTypeface_fontconfig::Create(pattern);
+            if (face) {
+                fTFCache.add(face, SkFontStyle());
+>>>>>>> miniblink49
             }
         }
         return face;
@@ -707,6 +1034,7 @@ public:
     /** Takes control of the reference to 'config'. */
     explicit SkFontMgr_fontconfig(FcConfig* config)
         : fFC(config ? config : FcInitLoadConfigAndFonts())
+<<<<<<< HEAD
         , fFamilyNames(GetFamilyNames(fFC))
     {
         
@@ -714,12 +1042,18 @@ public:
 
     virtual ~SkFontMgr_fontconfig()
     {
+=======
+        , fFamilyNames(GetFamilyNames(fFC)) { }
+
+    virtual ~SkFontMgr_fontconfig() {
+>>>>>>> miniblink49
         // Hold the lock while unrefing the config.
         FCLocker lock;
         fFC.reset();
     }
 
 protected:
+<<<<<<< HEAD
     int onCountFamilies() const override
     {
         return fFamilyNames->count();
@@ -732,14 +1066,29 @@ protected:
 
     SkFontStyleSet* onCreateStyleSet(int index) const override
     {
+=======
+    int onCountFamilies() const override {
+        return fFamilyNames->count();
+    }
+
+    void onGetFamilyName(int index, SkString* familyName) const override {
+        familyName->set(fFamilyNames->atStr(index));
+    }
+
+    SkFontStyleSet* onCreateStyleSet(int index) const override {
+>>>>>>> miniblink49
         return this->onMatchFamily(fFamilyNames->atStr(index));
     }
 
     /** True if any string object value in the font is the same
      *         as a string object value in the pattern.
      */
+<<<<<<< HEAD
     static bool AnyMatching(FcPattern* font, FcPattern* pattern, const char* object)
     {
+=======
+    static bool AnyMatching(FcPattern* font, FcPattern* pattern, const char* object) {
+>>>>>>> miniblink49
         FcChar8* fontString;
         FcChar8* patternString;
         FcResult result;
@@ -770,16 +1119,24 @@ protected:
         return false;
     }
 
+<<<<<<< HEAD
     static bool FontAccessible(FcPattern* font)
     {
         // FontConfig can return fonts which are unreadable.
         const char* filename = get_string(font, FC_FILE, nullptr);
         if (nullptr == filename) {
+=======
+    static bool FontAccessible(FcPattern* font) {
+        // FontConfig can return fonts which are unreadable.
+        const char* filename = get_string(font, FC_FILE, NULL);
+        if (NULL == filename) {
+>>>>>>> miniblink49
             return false;
         }
         return sk_exists(filename, kRead_SkFILE_Flag);
     }
 
+<<<<<<< HEAD
     static bool FontFamilyNameMatches(FcPattern* font, FcPattern* pattern)
     {
         return AnyMatching(font, pattern, FC_FAMILY);
@@ -790,6 +1147,16 @@ protected:
         FcResult result;
         FcCharSet* matchCharSet;
         for (int charSetId = 0;; ++charSetId) {
+=======
+    static bool FontFamilyNameMatches(FcPattern* font, FcPattern* pattern) {
+        return AnyMatching(font, pattern, FC_FAMILY);
+    }
+
+    static bool FontContainsCharacter(FcPattern* font, uint32_t character) {
+        FcResult result;
+        FcCharSet* matchCharSet;
+        for (int charSetId = 0; ; ++charSetId) {
+>>>>>>> miniblink49
             result = FcPatternGetCharSet(font, FC_CHARSET, charSetId, &matchCharSet);
             if (FcResultNoId == result) {
                 break;
@@ -804,8 +1171,12 @@ protected:
         return false;
     }
 
+<<<<<<< HEAD
     SkFontStyleSet* onMatchFamily(const char familyName[]) const override
     {
+=======
+    SkFontStyleSet* onMatchFamily(const char familyName[]) const override {
+>>>>>>> miniblink49
         FCLocker lock;
 
         SkAutoFcPattern pattern;
@@ -814,7 +1185,11 @@ protected:
         FcDefaultSubstitute(pattern);
 
         FcPattern* matchPattern;
+<<<<<<< HEAD
         SkAutoFcPattern strongPattern(nullptr);
+=======
+        SkAutoFcPattern strongPattern(NULL);
+>>>>>>> miniblink49
         if (familyName) {
             strongPattern.reset(FcPatternDuplicate(pattern));
             remove_weak(strongPattern, FC_FAMILY);
@@ -831,7 +1206,11 @@ protected:
         for (int setIndex = 0; setIndex < (int)SK_ARRAY_COUNT(fcNameSet); ++setIndex) {
             // Return value of FcConfigGetFonts must not be destroyed.
             FcFontSet* allFonts(FcConfigGetFonts(fFC, fcNameSet[setIndex]));
+<<<<<<< HEAD
             if (nullptr == allFonts) {
+=======
+            if (NULL == allFonts) {
+>>>>>>> miniblink49
                 continue;
             }
 
@@ -843,11 +1222,19 @@ protected:
             }
         }
 
+<<<<<<< HEAD
         return new StyleSet(this, matches.release());
     }
 
     virtual SkTypeface* onMatchFamilyStyle(const char familyName[],
         const SkFontStyle& style) const override
+=======
+        return SkNEW_ARGS(StyleSet, (this, matches.detach()));
+    }
+
+    virtual SkTypeface* onMatchFamilyStyle(const char familyName[],
+                                           const SkFontStyle& style) const override
+>>>>>>> miniblink49
     {
         FCLocker lock;
 
@@ -866,7 +1253,11 @@ protected:
         // In aliases, bindings are weak by default, so this is easy and common.
         // If no family name was specified, we'll probably only get weak matches, but that's ok.
         FcPattern* matchPattern;
+<<<<<<< HEAD
         SkAutoFcPattern strongPattern(nullptr);
+=======
+        SkAutoFcPattern strongPattern(NULL);
+>>>>>>> miniblink49
         if (familyName) {
             strongPattern.reset(FcPatternDuplicate(pattern));
             remove_weak(strongPattern, FC_FAMILY);
@@ -877,18 +1268,30 @@ protected:
 
         FcResult result;
         SkAutoFcPattern font(FcFontMatch(fFC, pattern, &result));
+<<<<<<< HEAD
         if (nullptr == font || !FontAccessible(font) || !FontFamilyNameMatches(font, matchPattern)) {
             return nullptr;
+=======
+        if (NULL == font || !FontAccessible(font) || !FontFamilyNameMatches(font, matchPattern)) {
+            return NULL;
+>>>>>>> miniblink49
         }
 
         return createTypefaceFromFcPattern(font);
     }
 
     virtual SkTypeface* onMatchFamilyStyleCharacter(const char familyName[],
+<<<<<<< HEAD
         const SkFontStyle& style,
         const char* bcp47[],
         int bcp47Count,
         SkUnichar character) const override
+=======
+                                                    const SkFontStyle& style,
+                                                    const char* bcp47[],
+                                                    int bcp47Count,
+                                                    SkUnichar character) const override
+>>>>>>> miniblink49
     {
         FCLocker lock;
 
@@ -908,7 +1311,11 @@ protected:
         if (bcp47Count > 0) {
             SkASSERT(bcp47);
             SkAutoFcLangSet langSet;
+<<<<<<< HEAD
             for (int i = bcp47Count; i-- > 0;) {
+=======
+            for (int i = bcp47Count; i --> 0;) {
+>>>>>>> miniblink49
                 FcLangSetAdd(langSet, (const FcChar8*)bcp47[i]);
             }
             FcPatternAddLangSet(pattern, FC_LANG, langSet);
@@ -919,14 +1326,20 @@ protected:
 
         FcResult result;
         SkAutoFcPattern font(FcFontMatch(fFC, pattern, &result));
+<<<<<<< HEAD
         if (nullptr == font || !FontAccessible(font) || !FontContainsCharacter(font, character)) {
             return nullptr;
+=======
+        if (NULL == font || !FontAccessible(font) || !FontContainsCharacter(font, character)) {
+            return NULL;
+>>>>>>> miniblink49
         }
 
         return createTypefaceFromFcPattern(font);
     }
 
     virtual SkTypeface* onMatchFaceStyle(const SkTypeface* typeface,
+<<<<<<< HEAD
         const SkFontStyle& style) const override
     {
         //TODO: should the SkTypeface_fontconfig know its family?
@@ -940,10 +1353,26 @@ protected:
         const size_t length = stream->getLength();
         if (length <= 0 || (1u << 30) < length) {
             return nullptr;
+=======
+                                         const SkFontStyle& style) const override
+    {
+        //TODO: should the SkTypeface_fontconfig know its family?
+        const SkTypeface_fontconfig* fcTypeface =
+                static_cast<const SkTypeface_fontconfig*>(typeface);
+        return this->matchFamilyStyle(get_string(fcTypeface->fPattern, FC_FAMILY), style);
+    }
+
+    SkTypeface* onCreateFromStream(SkStreamAsset* bareStream, int ttcIndex) const override {
+        SkAutoTDelete<SkStreamAsset> stream(bareStream);
+        const size_t length = stream->getLength();
+        if (length <= 0 || (1u << 30) < length) {
+            return NULL;
+>>>>>>> miniblink49
         }
 
         SkFontStyle style;
         bool isFixedWidth = false;
+<<<<<<< HEAD
         if (!fScanner.scanFont(stream, ttcIndex, nullptr, &style, &isFixedWidth, nullptr)) {
             return nullptr;
         }
@@ -991,11 +1420,35 @@ protected:
         const size_t length = stream->getLength();
         if (length <= 0 || (1u << 30) < length) {
             return nullptr;
+=======
+        if (!fScanner.scanFont(stream, ttcIndex, NULL, &style, &isFixedWidth, NULL)) {
+            return NULL;
+        }
+
+        return SkNEW_ARGS(SkTypeface_stream, (new SkFontData(stream.detach(), ttcIndex, NULL, 0),
+                                              style, isFixedWidth));
+    }
+
+    SkTypeface* onCreateFromData(SkData* data, int ttcIndex) const override {
+        return this->createFromStream(SkNEW_ARGS(SkMemoryStream, (data)), ttcIndex);
+    }
+
+    SkTypeface* onCreateFromFile(const char path[], int ttcIndex) const override {
+        return this->createFromStream(SkStream::NewFromFile(path), ttcIndex);
+    }
+
+    SkTypeface* onCreateFromFontData(SkFontData* fontData) const override {
+        SkStreamAsset* stream(fontData->getStream());
+        const size_t length = stream->getLength();
+        if (length <= 0 || (1u << 30) < length) {
+            return NULL;
+>>>>>>> miniblink49
         }
 
         const int ttcIndex = fontData->getIndex();
         SkFontStyle style;
         bool isFixedWidth = false;
+<<<<<<< HEAD
         if (!fScanner.scanFont(stream, ttcIndex, nullptr, &style, &isFixedWidth, nullptr)) {
             return nullptr;
         }
@@ -1016,5 +1469,33 @@ protected:
 
 SK_API SkFontMgr* SkFontMgr_New_FontConfig(FcConfig* fc)
 {
+=======
+        if (!fScanner.scanFont(stream, ttcIndex, NULL, &style, &isFixedWidth, NULL)) {
+            return NULL;
+        }
+
+        return SkNEW_ARGS(SkTypeface_stream, (fontData, style, isFixedWidth));
+    }
+
+    virtual SkTypeface* onLegacyCreateTypeface(const char familyName[],
+                                               unsigned styleBits) const override {
+        bool bold = styleBits & SkTypeface::kBold;
+        bool italic = styleBits & SkTypeface::kItalic;
+        SkFontStyle style = SkFontStyle(bold ? SkFontStyle::kBold_Weight
+                                             : SkFontStyle::kNormal_Weight,
+                                        SkFontStyle::kNormal_Width,
+                                        italic ? SkFontStyle::kItalic_Slant
+                                               : SkFontStyle::kUpright_Slant);
+        SkAutoTUnref<SkTypeface> typeface(this->matchFamilyStyle(familyName, style));
+        if (typeface.get()) {
+            return typeface.detach();
+        }
+
+        return this->matchFamilyStyle(NULL, style);
+    }
+};
+
+SK_API SkFontMgr* SkFontMgr_New_FontConfig(FcConfig* fc) {
+>>>>>>> miniblink49
     return new SkFontMgr_fontconfig(fc);
 }

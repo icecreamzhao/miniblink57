@@ -5,33 +5,26 @@
 #ifndef BoxBorderPainter_h
 #define BoxBorderPainter_h
 
-#include "core/layout/BackgroundBleedAvoidance.h"
+#include "core/layout/LayoutBoxModelObject.h"
 #include "core/style/BorderEdge.h"
 #include "platform/geometry/FloatRoundedRect.h"
+#include "platform/heap/Heap.h"
 
 namespace blink {
 
 class ComputedStyle;
-class GraphicsContext;
+class IntRect;
+class LayoutBox;
 class LayoutRect;
 struct PaintInfo;
-class Path;
-
-typedef unsigned BorderEdgeFlags;
 
 class BoxBorderPainter {
     STACK_ALLOCATED();
-
 public:
-    BoxBorderPainter(const LayoutRect& borderRect,
-        const ComputedStyle&,
-        BackgroundBleedAvoidance,
-        bool includeLogicalLeftEdge,
-        bool includeLogicalRightEdge);
+    BoxBorderPainter(const LayoutRect& borderRect, const ComputedStyle&, const IntRect& clipRect,
+        BackgroundBleedAvoidance, bool includeLogicalLeftEdge, bool includeLogicalRightEdge);
 
-    BoxBorderPainter(const ComputedStyle&,
-        const LayoutRect& outer,
-        const LayoutRect& inner,
+    BoxBorderPainter(const ComputedStyle&, const LayoutRect& outer, const LayoutRect& inner,
         const BorderEdge& uniformEdgeInfo);
 
     void paintBorder(const PaintInfo&, const LayoutRect& borderRect) const;
@@ -46,54 +39,25 @@ private:
 
     void computeBorderProperties();
 
-    BorderEdgeFlags paintOpacityGroup(GraphicsContext&,
-        const ComplexBorderInfo&,
-        unsigned index,
+    BorderEdgeFlags paintOpacityGroup(GraphicsContext*, const ComplexBorderInfo&, unsigned index,
         float accumulatedOpacity) const;
-    void paintSide(GraphicsContext&,
-        const ComplexBorderInfo&,
-        BoxSide,
-        unsigned alpha,
-        BorderEdgeFlags) const;
-    void paintOneBorderSide(GraphicsContext&,
-        const FloatRect& sideRect,
-        BoxSide,
-        BoxSide adjacentSide1,
-        BoxSide adjacentSide2,
-        const Path*,
-        bool antialias,
-        Color,
-        BorderEdgeFlags) const;
-    bool paintBorderFastPath(GraphicsContext&,
-        const LayoutRect& borderRect) const;
-    void drawDoubleBorder(GraphicsContext&, const LayoutRect& borderRect) const;
+    void paintSide(GraphicsContext*, const ComplexBorderInfo&, BoxSide, unsigned alpha, BorderEdgeFlags) const;
+    void paintOneBorderSide(GraphicsContext*, const FloatRect& sideRect, BoxSide, BoxSide adjacentSide1,
+        BoxSide adjacentSide2, const Path*, bool antialias, Color, BorderEdgeFlags) const;
+    bool paintBorderFastPath(GraphicsContext*, const LayoutRect& borderRect) const;
+    void drawDoubleBorder(GraphicsContext*, const LayoutRect& borderRect) const;
 
-    void drawBoxSideFromPath(GraphicsContext&,
-        const LayoutRect&,
-        const Path&,
-        float thickness,
-        float drawThickness,
-        BoxSide,
-        Color,
-        EBorderStyle) const;
-    void clipBorderSidePolygon(GraphicsContext&,
-        BoxSide,
-        MiterType miter1,
-        MiterType miter2) const;
-    void clipBorderSideForComplexInnerPath(GraphicsContext&, BoxSide) const;
+    void drawBoxSideFromPath(GraphicsContext*, const LayoutRect&, const Path&, float thickness,
+        float drawThickness, BoxSide, Color, EBorderStyle) const;
+    void clipBorderSidePolygon(GraphicsContext*, BoxSide, MiterType miter1, MiterType miter2) const;
+    void clipBorderSideForComplexInnerPath(GraphicsContext*, BoxSide) const;
 
-    MiterType computeMiter(BoxSide,
-        BoxSide adjacentSide,
-        BorderEdgeFlags,
-        bool antialias) const;
-    static bool mitersRequireClipping(MiterType miter1,
-        MiterType miter2,
-        EBorderStyle,
-        bool antialias);
+    MiterType computeMiter(BoxSide, BoxSide adjacentSide, BorderEdgeFlags, bool antialias) const;
+    static bool mitersRequireClipping(MiterType miter1, MiterType miter2, EBorderStyle, bool antialias);
 
     const BorderEdge& firstEdge() const
     {
-        DCHECK(m_visibleEdgeSet);
+        ASSERT(m_visibleEdgeSet);
         return m_edges[m_firstVisibleEdge];
     }
 

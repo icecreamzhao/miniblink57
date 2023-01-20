@@ -2,11 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/DoubleRect.h"
 
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutRect.h"
+<<<<<<< HEAD
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -26,6 +31,20 @@ DoubleRect::DoubleRect(const FloatRect& r)
 DoubleRect::DoubleRect(const LayoutRect& r)
     : m_location(r.location())
     , m_size(r.size())
+=======
+
+namespace blink {
+
+DoubleRect::DoubleRect(const IntRect& r) : m_location(r.location()), m_size(r.size())
+{
+}
+
+DoubleRect::DoubleRect(const FloatRect& r) : m_location(r.location()), m_size(r.size())
+{
+}
+
+DoubleRect::DoubleRect(const LayoutRect& r) : m_location(r.location()), m_size(r.size())
+>>>>>>> miniblink49
 {
 }
 
@@ -60,10 +79,13 @@ void DoubleRect::scale(float sx, float sy)
     m_size.setHeight(height() * sy);
 }
 
+<<<<<<< HEAD
 String DoubleRect::toString() const
 {
     return String::format("%s %s", location().toString().ascii().data(),
         size().toString().ascii().data());
 }
+=======
+>>>>>>> miniblink49
 
 } // namespace blink

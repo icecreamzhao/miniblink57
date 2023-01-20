@@ -31,13 +31,18 @@
 #ifndef UserMediaRequest_h
 #define UserMediaRequest_h
 
+<<<<<<< HEAD
 #include "core/dom/SuspendableObject.h"
+=======
+#include "core/dom/ActiveDOMObject.h"
+>>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "modules/mediastream/NavigatorUserMediaErrorCallback.h"
 #include "modules/mediastream/NavigatorUserMediaSuccessCallback.h"
 #include "platform/mediastream/MediaStreamSource.h"
 #include "public/platform/WebMediaConstraints.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
 
 namespace blink {
 
@@ -71,43 +76,83 @@ public:
     {
         return m_errorCallback.get();
     }
+=======
+#include "wtf/PassRefPtr.h"
+
+namespace blink {
+
+class Dictionary;
+class Document;
+class ExceptionState;
+class MediaStreamDescriptor;
+class UserMediaController;
+
+class MODULES_EXPORT UserMediaRequest final : public GarbageCollectedFinalized<UserMediaRequest>, public ContextLifecycleObserver {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(UserMediaRequest);
+public:
+    static UserMediaRequest* create(ExecutionContext*, UserMediaController*, const Dictionary& options, NavigatorUserMediaSuccessCallback*, NavigatorUserMediaErrorCallback*, ExceptionState&);
+    virtual ~UserMediaRequest();
+
+    NavigatorUserMediaSuccessCallback* successCallback() const { return m_successCallback.get(); }
+    NavigatorUserMediaErrorCallback* errorCallback() const { return m_errorCallback.get(); }
+>>>>>>> miniblink49
     Document* ownerDocument();
 
     void start();
 
+<<<<<<< HEAD
     void succeed(MediaStreamDescriptor*);
     void failPermissionDenied(const String& message);
     void failConstraint(const String& constraintName, const String& message);
     void failUASpecific(const String& name,
         const String& message,
         const String& constraintName);
+=======
+    void succeed(PassRefPtr<MediaStreamDescriptor>);
+    void failPermissionDenied(const String& message);
+    void failConstraint(const String& constraintName, const String& message);
+    void failUASpecific(const String& name, const String& message, const String& constraintName);
+>>>>>>> miniblink49
 
     bool audio() const;
     bool video() const;
     WebMediaConstraints audioConstraints() const;
     WebMediaConstraints videoConstraints() const;
 
+<<<<<<< HEAD
     // errorMessage is only set if requestIsPrivilegedContext() returns |false|.
     // Caller is responsible for properly setting errors and canceling request.
     bool isSecureContextUse(String& errorMessage);
 
     // ContextLifecycleObserver
     void contextDestroyed(ExecutionContext*) override;
+=======
+    // ContextLifecycleObserver
+    void contextDestroyed() override;
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     UserMediaRequest(ExecutionContext*,
         UserMediaController*,
         WebMediaConstraints audio,
         WebMediaConstraints video,
         NavigatorUserMediaSuccessCallback*,
         NavigatorUserMediaErrorCallback*);
+=======
+    UserMediaRequest(ExecutionContext*, UserMediaController*, WebMediaConstraints audio, WebMediaConstraints video, NavigatorUserMediaSuccessCallback*, NavigatorUserMediaErrorCallback*);
+>>>>>>> miniblink49
 
     WebMediaConstraints m_audio;
     WebMediaConstraints m_video;
 
+<<<<<<< HEAD
     Member<UserMediaController> m_controller;
+=======
+    RawPtrWillBeMember<UserMediaController> m_controller;
+>>>>>>> miniblink49
 
     Member<NavigatorUserMediaSuccessCallback> m_successCallback;
     Member<NavigatorUserMediaErrorCallback> m_errorCallback;

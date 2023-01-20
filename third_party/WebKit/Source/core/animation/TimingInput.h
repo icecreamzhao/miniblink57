@@ -7,43 +7,26 @@
 
 #include "core/CoreExport.h"
 #include "core/animation/Timing.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
-class Document;
-class ExceptionState;
+class Dictionary;
 class KeyframeEffectOptions;
-class UnrestrictedDoubleOrString;
 
 class CORE_EXPORT TimingInput {
-    STATIC_ONLY(TimingInput);
-
 public:
-    static bool convert(const KeyframeEffectOptions& timingInput,
-        Timing& timingOutput,
-        Document*,
-        ExceptionState&);
-    static bool convert(double duration, Timing& timingOutput, ExceptionState&);
+    static Timing convert(const KeyframeEffectOptions& timingInput);
+    static Timing convert(double duration);
 
     static void setStartDelay(Timing&, double startDelay);
     static void setEndDelay(Timing&, double endDelay);
     static void setFillMode(Timing&, const String& fillMode);
-    static bool setIterationStart(Timing&,
-        double iterationStart,
-        ExceptionState&);
-    static bool setIterationCount(Timing&,
-        double iterationCount,
-        ExceptionState&);
-    static bool setIterationDuration(Timing&,
-        const UnrestrictedDoubleOrString&,
-        ExceptionState&);
+    static void setIterationStart(Timing&, double iterationStart);
+    static void setIterationCount(Timing&, double iterationCount);
+    static void setIterationDuration(Timing&, double iterationDuration);
     static void setPlaybackRate(Timing&, double playbackRate);
     static void setPlaybackDirection(Timing&, const String& direction);
-    static bool setTimingFunction(Timing&,
-        const String& timingFunctionString,
-        Document*,
-        ExceptionState&);
+    static void setTimingFunction(Timing&, const String& timingFunctionString);
 };
 
 } // namespace blink

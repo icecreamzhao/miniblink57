@@ -20,7 +20,6 @@
 #include "base/values.h"
 #include "base/json/json_writer.h"
 #include "base/json/json_reader.h"
-#include "base/json/string_escape.h"
 
 namespace content {
 
@@ -31,7 +30,7 @@ DevToolsClient::DevToolsClient(WebPage* page, blink::WebLocalFrame* frame)
 
     m_page = page;
     m_frame = frame;
-    m_webToolsFrontend = blink::WebDevToolsFrontend::create(frame, this);
+    m_webToolsFrontend = blink::WebDevToolsFrontend::create(frame, this, blink::WebString::fromLatin1("zh-cn"));
     m_preferences = new base::DictionaryValue();
     m_devToolsProtocolDispatcher = new DevToolsProtocolDispatcher(this);
 }
@@ -53,11 +52,7 @@ void DevToolsClient::setDevToolsAgent(DevToolsAgent* devToolsAgent)
 
 void DevToolsClient::onMessageReceivedFromEmbedder(int callId, const std::string* response, const std::string* state)
 {
-    //std::string javascript = "DevToolsAPI.dispatchMessage(" + *response + ");";
-    std::string param;
-    base::EscapeJSONString(*response, true, &param);
-    std::string javascript = "window['InspectorFrontendAPI']['dispatchMessage'].apply(window['InspectorFrontendAPI'], [" + *response + "]);";
-
+    std::string javascript = "DevToolsAPI.dispatchMessage(" + *response + ");";
     blink::WebScriptSource source(blink::WebString::fromUTF8(javascript.c_str()));
     m_frame->executeScript(source);
 }
@@ -249,24 +244,22 @@ void DevToolsClient::sendMessageAck(int requestId, const base::Value* arg)
 
 void DevToolsClient::closeDefersLoading()
 {
-//     for (blink::Frame* frame = blink::toCoreFrame(m_page->mainFrame()); frame; frame = frame->tree().traverseNext()) {
-//         if (!frame->isLocalFrame())
-//             continue;
-// 
-//         blink::LocalFrame* localFrame = blink::toLocalFrame(frame);
-//         m_defersLoadingframes.append(localFrame);
-//         localFrame->loader().setDefersLoading(false);
-//     }
-    DebugBreak();
+    for (blink::Frame* frame = blink::toCoreFrame(m_page->mainFrame()); frame; frame = frame->tree().traverseNext()) {
+        if (!frame->isLocalFrame())
+            continue;
+
+        blink::LocalFrame* localFrame = blink::toLocalFrame(frame);
+        m_defersLoadingframes.append(localFrame);
+        localFrame->loader().setDefersLoading(false);
+    }
 }
 
 void DevToolsClient::openDefersLoading()
 {
-//     for (size_t i = 0; i < m_defersLoadingframes.size(); ++i) {
-//         blink::LocalFrame* localFrame = m_defersLoadingframes[i];
-//         localFrame->loader().setDefersLoading(true);
-//     }
-    DebugBreak();
+    for (size_t i = 0; i < m_defersLoadingframes.size(); ++i) {
+        blink::LocalFrame* localFrame = m_defersLoadingframes[i];
+        localFrame->loader().setDefersLoading(true);
+    }
 }
 
 void DevToolsClient::willEnterDebugLoop()

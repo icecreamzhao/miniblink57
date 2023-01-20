@@ -9,19 +9,13 @@
 #include "content/browser/SharedTimerWin.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
-#include "third_party/WebKit/Source/wtf/CurrentTime.h"
-#include "base/synchronization/waitable_event.h"
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
 #include "wke/wkeUtil.h"
 #endif
 
-#ifndef NO_USE_ORIG_CHROME
-#include "content/OrigChromeMgr.h"
-#endif
-
 #include "base/compiler_specific.h"
-//#include "base/thread.h"
+#include "base/thread.h"
 
 #include <windows.h>
 #include <process.h>
@@ -31,11 +25,11 @@ namespace content {
 
 // 100ms is about a perceptable delay in UI, so use a half of that as a threshold.
 // This is to prevent UI freeze when there are too many timers or machine performance is low.
-static const double kMaxDurationOfFiringTimers = 0.100;
+static const double maxDurationOfFiringTimers = 0.050;
 
 unsigned WebThreadImpl::m_currentHeapInsertionOrder = 0;
 
-DWORD __stdcall WebThreadImpl::WebThreadImplThreadEntryPoint(void* param)
+unsigned __stdcall WebThreadImpl::WebThreadImplThreadEntryPoint(void* param)
 {
     WebThreadImpl* impl = (WebThreadImpl*)param;
     impl->threadEntryPoint();
@@ -47,7 +41,7 @@ unsigned WebThreadImpl::getNewCurrentHeapInsertionOrder()
     return atomicIncrement((volatile int *)&m_currentHeapInsertionOrder);
 }
 
-#ifndef NDEBUG
+#ifdef _DEBUG
 ActivatingTimerCheck* gActivatingTimerCheck = nullptr;
 #endif
 
@@ -81,20 +75,20 @@ WebThreadImpl::WebThreadImpl(const char* name)
         return;
     }
 
-    //m_hEvent = ::CreateEventW(NULL, FALSE, FALSE, NULL);
-    m_hEvent = new base::WaitableEvent(base::WaitableEvent::ResetPolicy::AUTOMATIC, base::WaitableEvent::InitialState::NOT_SIGNALED);
+    m_hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    DWORD threadIdentifier = 0;
-    m_threadHandle = ::CreateThread(0, 0, WebThreadImplThreadEntryPoint, this, 0, &threadIdentifier);
+    unsigned threadIdentifier = 0;
+    m_threadHandle = reinterpret_cast<HANDLE>(_beginthreadex(0, 0, WebThreadImplThreadEntryPoint, this, 0, &threadIdentifier));
  
     while (!m_hadThreadInit) {
-        Sleep(1);
+        Sleep(20);
     };
 }
 
 WebThreadImpl::~WebThreadImpl()
 {
-    shutdown();
+    //if (0 != strcmp("MainThread", m_name))
+        shutdown();
 
     if (m_threadHandle) {
         ::WaitForSingleObject(m_threadHandle, INFINITE);
@@ -132,10 +126,11 @@ void WebThreadImpl::waitForExit()
 void WebThreadImpl::willExit()
 {
     m_willExit = true;
-    if (m_hEvent) {
-        //::SetEvent(m_hEvent);
-        m_hEvent->Signal();
-    }
+    if (m_hEvent)
+        ::SetEvent(m_hEvent);
+
+//     if (0 == strcmp("MainThread", m_name))
+//         return;
 
     if (m_threadId == WTF::currentThread())
         fireOnExit();
@@ -143,31 +138,22 @@ void WebThreadImpl::willExit()
 
 void WebThreadImpl::threadEntryPoint()
 {
-    //base::SetThreadName(m_name);
-
-    printf("WebThreadImpl::threadEntryPoint begin: %s\n", m_name);
+    base::SetThreadName(m_name);
 
     m_threadId = WTF::currentThread();
     BlinkPlatformImpl::onCurrentThreadWhenWebThreadImplCreated(this);
     m_hadThreadInit = true;
 
     while (!m_willExit) {
-        //DWORD dReturn = ::WaitForSingleObject(m_hEvent, INFINITE);
-        m_hEvent->Wait();
+        DWORD dReturn = ::WaitForSingleObject(m_hEvent, INFINITE);
 
         startTriggerTasks();
 
         while (!m_timerHeap.empty()) {
             schedulerTasks();
-            ::Sleep(1);
+            ::Sleep(10);
         }
     }
-
-    printf("WebThreadImpl::threadEntryPoint exit: %s\n", m_name);
-
-    //::CloseHandle(m_hEvent);
-    delete m_hEvent;
-    m_hEvent = nullptr;
 
     fireOnExit();
     m_threadClosed = true;
@@ -175,10 +161,6 @@ void WebThreadImpl::threadEntryPoint()
 
 void WebThreadImpl::postTask(const blink::WebTraceLocation& location, blink::WebThread::Task* task)
 {
-#ifndef NO_USE_ORIG_CHROME
-    if (OrigChromeMgr::getInst() && m_isMainThread)
-        return OrigChromeMgr::postWebTask(location, task);
-#endif
     postDelayedTask(location, task, 0);
 }
 
@@ -197,18 +179,9 @@ void WebThreadImpl::postDelayedTaskWithPriorityCrossThread(
     long long delayMs,
     int priority)
 {
-    if (!task) // ioÏß³ÌÍË³öµÄÊ±ºò£¬¿ÉÄÜÎªnull
-        return;
-
-#ifndef NO_USE_ORIG_CHROME
-    RELEASE_ASSERT(!OrigChromeMgr::getInst() || !m_isMainThread);
-#endif
-
     if (m_willExit) {
-        if (m_hEvent) {
-            //::SetEvent(m_hEvent);
-            m_hEvent->Signal();
-        }
+        if (m_hEvent)
+            ::SetEvent(m_hEvent);
         delete task;
         return;
     }
@@ -221,22 +194,13 @@ void WebThreadImpl::postDelayedTaskWithPriorityCrossThread(
     ::EnterCriticalSection(&m_taskPairsMutex);
     m_taskPairsToPost.push_back(new TaskPair(location, task, delayMs, priority));
 
-    if (m_taskPairsToPost.size() > 500)
-        OutputDebugStringA("WebThreadImpl::postDelayedTaskWithPriorityCrossThread too much\n");
-
-    if (m_hEvent) {
-        //::SetEvent(m_hEvent);
-        m_hEvent->Signal();
-    }
+    if (m_hEvent)
+        ::SetEvent(m_hEvent);
     ::LeaveCriticalSection(&m_taskPairsMutex);
 }
 
 void WebThreadImpl::postDelayedTask(const blink::WebTraceLocation& location, blink::WebThread::Task* task, long long delayMs)
 {
-#ifndef NO_USE_ORIG_CHROME
-    if (OrigChromeMgr::getInst() && m_isMainThread)
-        return OrigChromeMgr::postWebDelayedTask(location, task, delayMs);
-#endif
     postDelayedTaskWithPriorityCrossThread(location, task, delayMs, kLoadingPriority);
 }
 
@@ -321,17 +285,10 @@ public:
 
 void WebThreadImpl::addTaskObserver(TaskObserver* observer)
 {
-#ifndef NO_USE_ORIG_CHROME
-    if (OrigChromeMgr::getInst() && m_isMainThread)
-        return OrigChromeMgr::addTaskObserver(observer);
-#endif
-
     ::EnterCriticalSection(&m_observersMutex);
     if (m_observers.end() != findObserver(m_observers, observer)) {
-        if (m_hEvent) {
-            //::SetEvent(m_hEvent);
-            m_hEvent->Signal();
-        }
+        if (m_hEvent)
+            ::SetEvent(m_hEvent);
         ::LeaveCriticalSection(&m_observersMutex);
         return;
     }
@@ -341,10 +298,8 @@ void WebThreadImpl::addTaskObserver(TaskObserver* observer)
 
     double fireTime = currentTime();
     if (!m_timerHeap.empty() && (m_timerHeap[0]->m_nextFireTime <= fireTime)) {
-        if (m_hEvent) {
-            //::SetEvent(m_hEvent);
-            m_hEvent->Signal();
-        }
+        if (m_hEvent)
+            ::SetEvent(m_hEvent);
     } else
         postTask(FROM_HERE, new EmptyTask());
 
@@ -353,11 +308,6 @@ void WebThreadImpl::addTaskObserver(TaskObserver* observer)
 
 void WebThreadImpl::removeTaskObserver(TaskObserver* observer)
 {
-#ifndef NO_USE_ORIG_CHROME
-    if (OrigChromeMgr::getInst() && m_isMainThread)
-        return OrigChromeMgr::removeTaskObserver(observer);
-#endif
-
     ::EnterCriticalSection(&m_observersMutex);
     for (size_t i = 0; i < m_observers.size(); ++i) {
         if (observer == m_observers[i])
@@ -369,7 +319,7 @@ void WebThreadImpl::removeTaskObserver(TaskObserver* observer)
 
 void WebThreadImpl::willProcessTasks()
 {
-    // ÓÐÐ©»Øµ÷£¬±ÈÈçMicrotask::enqueueMicrotask£¬»áÔÚÍË³öµÄÊ±ºòappend½øÀ´£¬ÐèÒªÔÚ×îºóÖ´ÐÐ£¬·ñÔòÒ»Ð©ImageLoadÃ»·¨ÊÍ·Å
+    // ï¿½ï¿½Ð©ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Microtask::enqueueMicrotaskï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½appendï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ð©ImageLoadÃ»ï¿½ï¿½ï¿½Í·ï¿½
     for (size_t i = 0; ; ++i) {
         ::EnterCriticalSection(&m_observersMutex);
         if (i >= m_observers.size()) {
@@ -423,11 +373,6 @@ void WebThreadImpl::clearEmptyObservers()
 blink::WebScheduler* WebThreadImpl::scheduler() const
 {
     return m_webSchedulerImpl;
-}
-
-blink::WebTaskRunner* WebThreadImpl::getWebTaskRunner()
-{
-    return m_webSchedulerImpl->timerTaskRunner();
 }
 
 void WebThreadImpl::deleteUnusedTimers()
@@ -501,7 +446,7 @@ void WebThreadImpl::fireTimeOnExit()
         timer->heapDeleteMin();
 
         willProcessTasks();
-        timer->fired(); // ¿ÉÄÜ»áappend m_timerHeap
+        timer->fired(); // ï¿½ï¿½ï¿½Ü»ï¿½append m_timerHeap
         didProcessTasks();
     }
 }
@@ -517,12 +462,6 @@ void WebThreadImpl::fireOnExit()
     deleteTaskPairsToPostOnExit();
 }
 
-bool WebThreadImpl::hasImmediatelyTimer()
-{
-    double fireTime = currentTime();
-    return !m_timerHeap.empty() && (m_timerHeap[0]->m_nextFireTime <= fireTime);
-}
-
 void WebThreadImpl::schedulerTasks()
 {
     // Do a re-entrancy check.
@@ -535,9 +474,9 @@ void WebThreadImpl::schedulerTasks()
     deleteUnusedTimers();
 
     double fireTime = currentTime();
-    double timeToQuit = fireTime + kMaxDurationOfFiringTimers;
+    double timeToQuit = fireTime + maxDurationOfFiringTimers;
 
-#if 0 // def _DEBUG
+#ifdef _DEBUG
     std::vector<WebTimerBase*> dumpTimerHeap = m_timerHeap;
     for (size_t i = 0; i < dumpTimerHeap.size(); ++i) {
         if (!gActivatingTimerCheck->isActivating(dumpTimerHeap[i]))
@@ -545,14 +484,7 @@ void WebThreadImpl::schedulerTasks()
     }
 #endif
 
-    startTriggerTasks(); // Èç¹û²»¼ÓÕâ¾ä£¬ÇÒÏÂÃæµÄÑ­»·ÔÚ±¾Ïß³Ì²»Í£Ìí¼Ó¶¨Ê±Æ÷£¬ÔòstartTriggerTasksÀïµÄ¾ÍÃ»»ú»áÖ´ÐÐÁË¡£
-
-    if (m_timerHeap.size() > 500) {
-        char* output = (char*)malloc(0x100);
-        sprintf(output, "WebThreadImpl::scheduler Tasks is too much: %d\n", (int)m_timerHeap.size());
-        OutputDebugStringA(output);
-        free(output);
-    }
+    startTriggerTasks(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ß³Ì²ï¿½Í£ï¿½ï¿½ï¿½Ó¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½startTriggerTasksï¿½ï¿½Ä¾ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½Ë¡ï¿½
     
     bool hasFire = false;
     while (!m_timerHeap.empty() && (m_timerHeap[0]->m_nextFireTime <= fireTime || m_willExit)) {
@@ -563,17 +495,12 @@ void WebThreadImpl::schedulerTasks()
 
         double interval = timer->repeatInterval();
         timer->setNextFireTime(interval ? fireTime + interval : 0, nullptr);
-#if 0 // def _DEBUG
+#ifdef _DEBUG
         size_t count = gActivatingTimerCheck->count();
         WebTimerBase* timerDump = timer;
         if (!gActivatingTimerCheck->isActivating(timer))
             DebugBreak();
 #endif
-//         std::string name = m_name;
-//         if (name == "ioThread") {            
-//             printf("WebThreadImpl::schedulerTasks, ioThread: m_timerHeap.size():%zu %s\n", m_timerHeap.size(), timer->getTraceLocation().function_name());
-//         }
-
         // Once the timer has been fired, it may be deleted, so do nothing else with it after this point.
         willProcessTasks();
         timer->fired();
@@ -582,7 +509,7 @@ void WebThreadImpl::schedulerTasks()
         startTriggerTasks();
 
         // Catch the case where the timer asked timers to fire in a nested event loop, or we are over time limit.
-        if (!m_firingTimers || timeToQuit < currentTime()) // weolar
+        if (!m_firingTimers || timeToQuit < currentTime())
             break;
     }
     if (!hasFire) {
@@ -593,20 +520,6 @@ void WebThreadImpl::schedulerTasks()
     --m_firingTimers;
 
     updateSharedTimer();
-}
-
-void WebThreadImpl::cancelTimerTask(WebThread::Task* task)
-{
-    bool find = false;
-    for (size_t i = 0; i < m_timerHeap.size(); ++i) {
-        WebTimerBase* timer = m_timerHeap[i];
-        if (timer->getTask() == task) {
-            if (find)
-                DebugBreak();
-            timer->setNextFireTime(0, nullptr);
-            find = true;
-        }
-    }
 }
 
 void WebThreadImpl::updateSharedTimer()

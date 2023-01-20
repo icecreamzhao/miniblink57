@@ -11,6 +11,7 @@
 #include "Test.h"
 
 // Tests use of const foreach().  map.count() is of course the better way to do this.
+<<<<<<< HEAD
 static int count(const SkTHashMap<int, double>& map)
 {
     int n = 0;
@@ -20,18 +21,34 @@ static int count(const SkTHashMap<int, double>& map)
 
 DEF_TEST(HashMap, r)
 {
+=======
+static int count(const SkTHashMap<int, double>& map) {
+    int n = 0;
+    map.foreach([&n](int, double) { n++; });
+    return n;
+}
+
+DEF_TEST(HashMap, r) {
+>>>>>>> miniblink49
     SkTHashMap<int, double> map;
 
     map.set(3, 4.0);
     REPORTER_ASSERT(r, map.count() == 1);
 
+<<<<<<< HEAD
     REPORTER_ASSERT(r, map.approxBytesUsed() > 0);
 
+=======
+>>>>>>> miniblink49
     double* found = map.find(3);
     REPORTER_ASSERT(r, found);
     REPORTER_ASSERT(r, *found == 4.0);
 
+<<<<<<< HEAD
     map.foreach ([](int key, double* d) { *d = -key; });
+=======
+    map.foreach([](int key, double* d){ *d = -key; });
+>>>>>>> miniblink49
     REPORTER_ASSERT(r, count(map) == 1);
 
     found = map.find(3);
@@ -43,34 +60,58 @@ DEF_TEST(HashMap, r)
     const int N = 20;
 
     for (int i = 0; i < N; i++) {
+<<<<<<< HEAD
         map.set(i, 2.0 * i);
+=======
+        map.set(i, 2.0*i);
+>>>>>>> miniblink49
     }
     for (int i = 0; i < N; i++) {
         double* found = map.find(i);
         REPORTER_ASSERT(r, found);
+<<<<<<< HEAD
         REPORTER_ASSERT(r, *found == i * 2.0);
     }
     for (int i = N; i < 2 * N; i++) {
+=======
+        REPORTER_ASSERT(r, *found == i*2.0);
+    }
+    for (int i = N; i < 2*N; i++) {
+>>>>>>> miniblink49
         REPORTER_ASSERT(r, !map.find(i));
     }
 
     REPORTER_ASSERT(r, map.count() == N);
 
+<<<<<<< HEAD
     for (int i = 0; i < N / 2; i++) {
+=======
+    for (int i = 0; i < N/2; i++) {
+>>>>>>> miniblink49
         map.remove(i);
     }
     for (int i = 0; i < N; i++) {
         double* found = map.find(i);
+<<<<<<< HEAD
         REPORTER_ASSERT(r, (found == nullptr) == (i < N / 2));
     }
     REPORTER_ASSERT(r, map.count() == N / 2);
+=======
+        REPORTER_ASSERT(r, (found == nullptr) ==  (i < N/2));
+    }
+    REPORTER_ASSERT(r, map.count() == N/2);
+>>>>>>> miniblink49
 
     map.reset();
     REPORTER_ASSERT(r, map.count() == 0);
 }
 
+<<<<<<< HEAD
 DEF_TEST(HashSet, r)
 {
+=======
+DEF_TEST(HashSet, r) {
+>>>>>>> miniblink49
     SkTHashSet<SkString> set;
 
     set.add(SkString("Hello"));
@@ -97,6 +138,7 @@ namespace {
 
 class CopyCounter {
 public:
+<<<<<<< HEAD
     CopyCounter()
         : fID(0)
         , fCounter(nullptr)
@@ -113,23 +155,41 @@ public:
         : fID(other.fID)
         , fCounter(other.fCounter)
     {
+=======
+    CopyCounter() : fID(0), fCounter(NULL) {}
+
+    CopyCounter(uint32_t id, uint32_t* counter) : fID(id), fCounter(counter) {}
+
+    CopyCounter(const CopyCounter& other)
+        : fID(other.fID)
+        , fCounter(other.fCounter) {
+>>>>>>> miniblink49
         SkASSERT(fCounter);
         *fCounter += 1;
     }
 
+<<<<<<< HEAD
     void operator=(const CopyCounter& other)
     {
+=======
+    void operator=(const CopyCounter& other) {
+>>>>>>> miniblink49
         fID = other.fID;
         fCounter = other.fCounter;
         *fCounter += 1;
     }
 
+<<<<<<< HEAD
     bool operator==(const CopyCounter& other) const
     {
+=======
+    bool operator==(const CopyCounter& other) const {
+>>>>>>> miniblink49
         return fID == other.fID;
     }
 
 private:
+<<<<<<< HEAD
     uint32_t fID;
     uint32_t* fCounter;
 };
@@ -146,6 +206,20 @@ struct HashCopyCounter {
 DEF_TEST(HashSetCopyCounter, r)
 {
     SkTHashSet<CopyCounter, HashCopyCounter> set;
+=======
+    uint32_t  fID;
+    uint32_t* fCounter;
+};
+
+uint32_t hash_copy_counter(const CopyCounter&) {
+    return 0; // let them collide, what do we care?
+}
+
+}
+
+DEF_TEST(HashSetCopyCounter, r) {
+    SkTHashSet<CopyCounter, hash_copy_counter> set;
+>>>>>>> miniblink49
 
     uint32_t globalCounter = 0;
     CopyCounter copyCounter1(1, &globalCounter);

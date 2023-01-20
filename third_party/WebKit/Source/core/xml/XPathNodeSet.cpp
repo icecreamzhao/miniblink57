@@ -23,6 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/xml/XPathNodeSet.h"
 
 #include "core/dom/Attr.h"
@@ -33,255 +34,250 @@
 namespace blink {
 namespace XPath {
 
-    // When a node set is large, sorting it by traversing the whole document is
-    // better (we can assume that we aren't dealing with documents that we cannot
-    // even traverse in reasonable time).
-    const unsigned traversalSortCutoff = 10000;
+// When a node set is large, sorting it by traversing the whole document is
+// better (we can assume that we aren't dealing with documents that we cannot
+// even traverse in reasonable time).
+const unsigned traversalSortCutoff = 10000;
 
-    typedef HeapVector<Member<Node>> NodeSetVector;
+typedef WillBeHeapVector<RawPtrWillBeMember<Node>> NodeSetVector;
 
-    NodeSet* NodeSet::create(const NodeSet& other)
-    {
-        NodeSet* nodeSet = NodeSet::create();
-        nodeSet->m_isSorted = other.m_isSorted;
-        nodeSet->m_subtreesAreDisjoint = other.m_subtreesAreDisjoint;
-        nodeSet->m_nodes.appendVector(other.m_nodes);
-        return nodeSet;
+NodeSet* NodeSet::create(const NodeSet& other)
+{
+    NodeSet* nodeSet = NodeSet::create();
+    nodeSet->m_isSorted = other.m_isSorted;
+    nodeSet->m_subtreesAreDisjoint = other.m_subtreesAreDisjoint;
+    nodeSet->m_nodes.appendVector(other.m_nodes);
+    return nodeSet;
+}
+
+static inline Node* parentWithDepth(unsigned depth, const NodeSetVector& parents)
+{
+    ASSERT(parents.size() >= depth + 1);
+    return parents[parents.size() - 1 - depth];
+}
+
+static void sortBlock(unsigned from, unsigned to, WillBeHeapVector<NodeSetVector>& parentMatrix, bool mayContainAttributeNodes)
+{
+    // Should not call this function with less that two nodes to sort.
+    ASSERT(from + 1 < to);
+    unsigned minDepth = UINT_MAX;
+    for (unsigned i = from; i < to; ++i) {
+        unsigned depth = parentMatrix[i].size() - 1;
+        if (minDepth > depth)
+            minDepth = depth;
     }
 
-    static inline Node* parentWithDepth(unsigned depth,
-        const NodeSetVector& parents)
-    {
-        DCHECK_GE(parents.size(), depth + 1);
-        return parents[parents.size() - 1 - depth];
+    // Find the common ancestor.
+    unsigned commonAncestorDepth = minDepth;
+    Node* commonAncestor;
+    while (true) {
+        commonAncestor = parentWithDepth(commonAncestorDepth, parentMatrix[from]);
+        if (commonAncestorDepth == 0)
+            break;
+
+        bool allEqual = true;
+        for (unsigned i = from + 1; i < to; ++i) {
+            if (commonAncestor != parentWithDepth(commonAncestorDepth, parentMatrix[i])) {
+                allEqual = false;
+                break;
+            }
+        }
+        if (allEqual)
+            break;
+
+        --commonAncestorDepth;
     }
 
-    static void sortBlock(unsigned from,
-        unsigned to,
-        HeapVector<NodeSetVector>& parentMatrix,
-        bool mayContainAttributeNodes)
-    {
-        // Should not call this function with less that two nodes to sort.
-        DCHECK_LT(from + 1, to);
-        unsigned minDepth = UINT_MAX;
+    if (commonAncestorDepth == minDepth) {
+        // One of the nodes is the common ancestor => it is the first in
+        // document order. Find it and move it to the beginning.
         for (unsigned i = from; i < to; ++i) {
-            unsigned depth = parentMatrix[i].size() - 1;
-            if (minDepth > depth)
-                minDepth = depth;
-        }
-
-        // Find the common ancestor.
-        unsigned commonAncestorDepth = minDepth;
-        Node* commonAncestor;
-        while (true) {
-            commonAncestor = parentWithDepth(commonAncestorDepth, parentMatrix[from]);
-            if (commonAncestorDepth == 0)
-                break;
-
-            bool allEqual = true;
-            for (unsigned i = from + 1; i < to; ++i) {
-                if (commonAncestor != parentWithDepth(commonAncestorDepth, parentMatrix[i])) {
-                    allEqual = false;
-                    break;
-                }
-            }
-            if (allEqual)
-                break;
-
-            --commonAncestorDepth;
-        }
-
-        if (commonAncestorDepth == minDepth) {
-            // One of the nodes is the common ancestor => it is the first in
-            // document order. Find it and move it to the beginning.
-            for (unsigned i = from; i < to; ++i) {
-                if (commonAncestor == parentMatrix[i][0]) {
-                    parentMatrix[i].swap(parentMatrix[from]);
-                    if (from + 2 < to)
-                        sortBlock(from + 1, to, parentMatrix, mayContainAttributeNodes);
-                    return;
-                }
-            }
-        }
-
-        if (mayContainAttributeNodes && commonAncestor->isElementNode()) {
-            // The attribute nodes and namespace nodes of an element occur before
-            // the children of the element. The namespace nodes are defined to occur
-            // before the attribute nodes. The relative order of namespace nodes is
-            // implementation-dependent. The relative order of attribute nodes is
-            // implementation-dependent.
-            unsigned sortedEnd = from;
-            // FIXME: namespace nodes are not implemented.
-            for (unsigned i = sortedEnd; i < to; ++i) {
-                Node* n = parentMatrix[i][0];
-                if (n->isAttributeNode() && toAttr(n)->ownerElement() == commonAncestor)
-                    parentMatrix[i].swap(parentMatrix[sortedEnd++]);
-            }
-            if (sortedEnd != from) {
-                if (to - sortedEnd > 1)
-                    sortBlock(sortedEnd, to, parentMatrix, mayContainAttributeNodes);
+            if (commonAncestor == parentMatrix[i][0]) {
+                parentMatrix[i].swap(parentMatrix[from]);
+                if (from + 2 < to)
+                    sortBlock(from + 1, to, parentMatrix, mayContainAttributeNodes);
                 return;
             }
         }
+    }
 
-        // Children nodes of the common ancestor induce a subdivision of our
-        // node-set. Sort it according to this subdivision, and recursively sort
-        // each group.
-        HeapHashSet<Member<Node>> parentNodes;
-        for (unsigned i = from; i < to; ++i)
-            parentNodes.add(parentWithDepth(commonAncestorDepth + 1, parentMatrix[i]));
+    if (mayContainAttributeNodes && commonAncestor->isElementNode()) {
+        // The attribute nodes and namespace nodes of an element occur before
+        // the children of the element. The namespace nodes are defined to occur
+        // before the attribute nodes. The relative order of namespace nodes is
+        // implementation-dependent. The relative order of attribute nodes is
+        // implementation-dependent.
+        unsigned sortedEnd = from;
+        // FIXME: namespace nodes are not implemented.
+        for (unsigned i = sortedEnd; i < to; ++i) {
+            Node* n = parentMatrix[i][0];
+            if (n->isAttributeNode() && toAttr(n)->ownerElement() == commonAncestor)
+                parentMatrix[i].swap(parentMatrix[sortedEnd++]);
+        }
+        if (sortedEnd != from) {
+            if (to - sortedEnd > 1)
+                sortBlock(sortedEnd, to, parentMatrix, mayContainAttributeNodes);
+            return;
+        }
+    }
 
-        unsigned previousGroupEnd = from;
-        unsigned groupEnd = from;
-        for (Node* n = commonAncestor->firstChild(); n; n = n->nextSibling()) {
-            // If parentNodes contains the node, perform a linear search to move its
-            // children in the node-set to the beginning.
-            if (parentNodes.contains(n)) {
-                for (unsigned i = groupEnd; i < to; ++i) {
-                    if (parentWithDepth(commonAncestorDepth + 1, parentMatrix[i]) == n)
-                        parentMatrix[i].swap(parentMatrix[groupEnd++]);
-                }
+    // Children nodes of the common ancestor induce a subdivision of our
+    // node-set. Sort it according to this subdivision, and recursively sort
+    // each group.
+    WillBeHeapHashSet<RawPtrWillBeMember<Node>> parentNodes;
+    for (unsigned i = from; i < to; ++i)
+        parentNodes.add(parentWithDepth(commonAncestorDepth + 1, parentMatrix[i]));
 
-                if (groupEnd - previousGroupEnd > 1)
-                    sortBlock(previousGroupEnd, groupEnd, parentMatrix,
-                        mayContainAttributeNodes);
+    unsigned previousGroupEnd = from;
+    unsigned groupEnd = from;
+    for (Node* n = commonAncestor->firstChild(); n; n = n->nextSibling()) {
+        // If parentNodes contains the node, perform a linear search to move its
+        // children in the node-set to the beginning.
+        if (parentNodes.contains(n)) {
+            for (unsigned i = groupEnd; i < to; ++i) {
+                if (parentWithDepth(commonAncestorDepth + 1, parentMatrix[i]) == n)
+                    parentMatrix[i].swap(parentMatrix[groupEnd++]);
+            }
 
-                DCHECK_NE(previousGroupEnd, groupEnd);
-                previousGroupEnd = groupEnd;
-#if DCHECK_IS_ON()
-                parentNodes.remove(n);
+            if (groupEnd - previousGroupEnd > 1)
+                sortBlock(previousGroupEnd, groupEnd, parentMatrix, mayContainAttributeNodes);
+
+            ASSERT(previousGroupEnd != groupEnd);
+            previousGroupEnd = groupEnd;
+#if ENABLE(ASSERT)
+            parentNodes.remove(n);
 #endif
-            }
         }
-
-        DCHECK(parentNodes.isEmpty());
     }
 
-    void NodeSet::sort() const
-    {
-        if (m_isSorted)
-            return;
+    ASSERT(parentNodes.isEmpty());
+}
 
-        unsigned nodeCount = m_nodes.size();
-        if (nodeCount < 2) {
-            const_cast<bool&>(m_isSorted) = true;
-            return;
-        }
+void NodeSet::sort() const
+{
+    if (m_isSorted)
+        return;
 
-        if (nodeCount > traversalSortCutoff) {
-            traversalSort();
-            return;
-        }
-
-        bool containsAttributeNodes = false;
-
-        HeapVector<NodeSetVector> parentMatrix(nodeCount);
-        for (unsigned i = 0; i < nodeCount; ++i) {
-            NodeSetVector& parentsVector = parentMatrix[i];
-            Node* n = m_nodes[i].get();
-            parentsVector.push_back(n);
-            if (n->isAttributeNode()) {
-                n = toAttr(n)->ownerElement();
-                parentsVector.push_back(n);
-                containsAttributeNodes = true;
-            }
-            for (n = n->parentNode(); n; n = n->parentNode())
-                parentsVector.push_back(n);
-        }
-        sortBlock(0, nodeCount, parentMatrix, containsAttributeNodes);
-
-        // It is not possible to just assign the result to m_nodes, because some
-        // nodes may get dereferenced and destroyed.
-        HeapVector<Member<Node>> sortedNodes;
-        sortedNodes.reserveInitialCapacity(nodeCount);
-        for (unsigned i = 0; i < nodeCount; ++i)
-            sortedNodes.push_back(parentMatrix[i][0]);
-
-        const_cast<HeapVector<Member<Node>>&>(m_nodes).swap(sortedNodes);
+    unsigned nodeCount = m_nodes.size();
+    if (nodeCount < 2) {
+        const_cast<bool&>(m_isSorted) = true;
+        return;
     }
 
-    static Node* findRootNode(Node* node)
-    {
+    if (nodeCount > traversalSortCutoff) {
+        traversalSort();
+        return;
+    }
+
+    bool containsAttributeNodes = false;
+
+    WillBeHeapVector<NodeSetVector> parentMatrix(nodeCount);
+    for (unsigned i = 0; i < nodeCount; ++i) {
+        NodeSetVector& parentsVector = parentMatrix[i];
+        Node* n = m_nodes[i].get();
+        parentsVector.append(n);
+        if (n->isAttributeNode()) {
+            n = toAttr(n)->ownerElement();
+            parentsVector.append(n);
+            containsAttributeNodes = true;
+        }
+        for (n = n->parentNode(); n; n = n->parentNode())
+            parentsVector.append(n);
+    }
+    sortBlock(0, nodeCount, parentMatrix, containsAttributeNodes);
+
+    // It is not possible to just assign the result to m_nodes, because some
+    // nodes may get dereferenced and destroyed.
+    WillBeHeapVector<RefPtrWillBeMember<Node>> sortedNodes;
+    sortedNodes.reserveInitialCapacity(nodeCount);
+    for (unsigned i = 0; i < nodeCount; ++i)
+        sortedNodes.append(parentMatrix[i][0]);
+
+    const_cast<WillBeHeapVector<RefPtrWillBeMember<Node>>&>(m_nodes).swap(sortedNodes);
+}
+
+static Node* findRootNode(Node* node)
+{
+    if (node->isAttributeNode())
+        node = toAttr(node)->ownerElement();
+    if (node->inDocument()) {
+        node = &node->document();
+    } else {
+        while (Node* parent = node->parentNode())
+            node = parent;
+    }
+    return node;
+}
+
+void NodeSet::traversalSort() const
+{
+    WillBeHeapHashSet<RawPtrWillBeMember<Node>> nodes;
+    bool containsAttributeNodes = false;
+
+    unsigned nodeCount = m_nodes.size();
+    ASSERT(nodeCount > 1);
+    for (unsigned i = 0; i < nodeCount; ++i) {
+        Node* node = m_nodes[i].get();
+        nodes.add(node);
         if (node->isAttributeNode())
-            node = toAttr(node)->ownerElement();
-        if (node->isConnected()) {
-            node = &node->document();
-        } else {
-            while (Node* parent = node->parentNode())
-                node = parent;
-        }
-        return node;
+            containsAttributeNodes = true;
     }
 
-    void NodeSet::traversalSort() const
-    {
-        HeapHashSet<Member<Node>> nodes;
-        bool containsAttributeNodes = false;
+    WillBeHeapVector<RefPtrWillBeMember<Node>> sortedNodes;
+    sortedNodes.reserveInitialCapacity(nodeCount);
 
-        unsigned nodeCount = m_nodes.size();
-        DCHECK_GT(nodeCount, 1u);
-        for (unsigned i = 0; i < nodeCount; ++i) {
-            Node* node = m_nodes[i].get();
-            nodes.add(node);
-            if (node->isAttributeNode())
-                containsAttributeNodes = true;
-        }
+    for (Node& n : NodeTraversal::startsAt(findRootNode(m_nodes.first().get()))) {
+        if (nodes.contains(&n))
+            sortedNodes.append(&n);
 
-        HeapVector<Member<Node>> sortedNodes;
-        sortedNodes.reserveInitialCapacity(nodeCount);
+        if (!containsAttributeNodes || !n.isElementNode())
+            continue;
 
-        for (Node& n : NodeTraversal::startsAt(*findRootNode(m_nodes.front()))) {
-            if (nodes.contains(&n))
-                sortedNodes.push_back(&n);
-
-            if (!containsAttributeNodes || !n.isElementNode())
-                continue;
-
-            Element* element = toElement(&n);
-            AttributeCollection attributes = element->attributes();
-            for (auto& attribute : attributes) {
-                Attr* attr = element->attrIfExists(attribute.name());
-                if (attr && nodes.contains(attr))
-                    sortedNodes.push_back(attr);
-            }
-        }
-
-        DCHECK_EQ(sortedNodes.size(), nodeCount);
-        const_cast<HeapVector<Member<Node>>&>(m_nodes).swap(sortedNodes);
-    }
-
-    void NodeSet::reverse()
-    {
-        if (m_nodes.isEmpty())
-            return;
-
-        unsigned from = 0;
-        unsigned to = m_nodes.size() - 1;
-        while (from < to) {
-            m_nodes[from].swap(m_nodes[to]);
-            ++from;
-            --to;
+        Element* element = toElement(&n);
+        AttributeCollection attributes = element->attributes();
+        for (auto& attribute : attributes) {
+            RefPtrWillBeRawPtr<Attr> attr = element->attrIfExists(attribute.name());
+            if (attr && nodes.contains(attr.get()))
+                sortedNodes.append(attr);
         }
     }
 
-    Node* NodeSet::firstNode() const
-    {
-        if (isEmpty())
-            return nullptr;
+    ASSERT(sortedNodes.size() == nodeCount);
+    const_cast<WillBeHeapVector<RefPtrWillBeMember<Node>>&>(m_nodes).swap(sortedNodes);
+}
 
-        // FIXME: fully sorting the node-set just to find its first node is
-        // wasteful.
-        sort();
-        return m_nodes.at(0).get();
+void NodeSet::reverse()
+{
+    if (m_nodes.isEmpty())
+        return;
+
+    unsigned from = 0;
+    unsigned to = m_nodes.size() - 1;
+    while (from < to) {
+        m_nodes[from].swap(m_nodes[to]);
+        ++from;
+        --to;
     }
+}
 
-    Node* NodeSet::anyNode() const
-    {
-        if (isEmpty())
-            return nullptr;
+Node* NodeSet::firstNode() const
+{
+    if (isEmpty())
+        return nullptr;
 
-        return m_nodes.at(0).get();
-    }
+    // FIXME: fully sorting the node-set just to find its first node is
+    // wasteful.
+    sort();
+    return m_nodes.at(0).get();
+}
 
-} // namespace XPath
-} // namespace blink
+Node* NodeSet::anyNode() const
+{
+    if (isEmpty())
+        return nullptr;
+
+    return m_nodes.at(0).get();
+}
+
+}
+}

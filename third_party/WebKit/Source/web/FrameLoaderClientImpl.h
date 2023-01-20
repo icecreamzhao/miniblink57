@@ -35,6 +35,7 @@
 #include "core/loader/FrameLoaderClient.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
+<<<<<<< HEAD
 #include "public/platform/WebInsecureRequestPolicy.h"
 #include "wtf/RefPtr.h"
 #include <memory>
@@ -53,6 +54,22 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
     WebLocalFrameImpl* webFrame() const { return m_webFrame.get(); }
+=======
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefPtr.h"
+
+namespace blink {
+
+class WebLocalFrameImpl;
+class WebPluginLoadObserver;
+
+class FrameLoaderClientImpl final : public FrameLoaderClient {
+public:
+    explicit FrameLoaderClientImpl(WebLocalFrameImpl* webFrame);
+    ~FrameLoaderClientImpl() override;
+
+    WebLocalFrameImpl* webFrame() const { return m_webFrame; }
+>>>>>>> miniblink49
 
     // FrameLoaderClient ----------------------------------------------
 
@@ -62,6 +79,7 @@ public:
     // parsing begins.
     void dispatchDidClearWindowObjectInMainWorld() override;
     void documentElementAvailable() override;
+<<<<<<< HEAD
     void runScriptsAtDocumentElementAvailable() override;
     void runScriptsAtDocumentReady(bool documentIsEmpty) override;
 
@@ -71,6 +89,15 @@ public:
 
     // Returns true if we should allow register V8 extensions to be added.
     bool allowScriptExtensions() override;
+=======
+
+    void didCreateScriptContext(v8::Local<v8::Context>, int extensionGroup, int worldId) override;
+    void willReleaseScriptContext(v8::Local<v8::Context>, int worldId) override;
+
+    // Returns true if we should allow the given V8 extension to be added to
+    // the script context at the currently loading page and given extension group.
+    bool allowScriptExtension(const String& extensionName, int extensionGroup, int worldId) override;
+>>>>>>> miniblink49
 
     bool hasWebView() const override;
     bool inShadowTree() const override;
@@ -78,6 +105,7 @@ public:
     void setOpener(Frame*) override;
     Frame* parent() const override;
     Frame* top() const override;
+<<<<<<< HEAD
     Frame* nextSibling() const override;
     Frame* firstChild() const override;
     void willBeDetached() override;
@@ -110,22 +138,57 @@ public:
         bool shouldReplaceCurrentEntry,
         bool isClientRedirect,
         HTMLFormElement*) override;
+=======
+    Frame* previousSibling() const override;
+    Frame* nextSibling() const override;
+    Frame* firstChild() const override;
+    Frame* lastChild() const override;
+    void willBeDetached() override;
+    void detached(FrameDetachType) override;
+    void dispatchWillSendRequest(DocumentLoader*, unsigned long identifier, ResourceRequest&, const ResourceResponse& redirectResponse) override;
+    void dispatchDidReceiveResponse(DocumentLoader*, unsigned long identifier, const ResourceResponse&) override;
+    void dispatchDidChangeResourcePriority(unsigned long identifier, ResourceLoadPriority, int intraPriorityValue) override;
+    void dispatchDidFinishLoading(DocumentLoader*, unsigned long identifier) override;
+    void dispatchDidLoadResourceFromMemoryCache(const ResourceRequest&, const ResourceResponse&) override;
+    void dispatchDidHandleOnloadEvents() override;
+    void dispatchDidReceiveServerRedirectForProvisionalLoad() override;
+    void dispatchDidNavigateWithinPage(HistoryItem*, HistoryCommitType) override;
+    void dispatchWillClose() override;
+    void dispatchDidStartProvisionalLoad(double triggeringEventTime) override;
+    void dispatchDidReceiveTitle(const String&) override;
+    void dispatchDidChangeIcons(IconType) override;
+    void dispatchDidCommitLoad(HistoryItem*, HistoryCommitType) override;
+    void dispatchDidFailProvisionalLoad(const ResourceError&, HistoryCommitType) override;
+    void dispatchDidFailLoad(const ResourceError&, HistoryCommitType) override;
+    void dispatchDidFinishDocumentLoad() override;
+    void dispatchDidFinishLoad() override;
+    void dispatchDidFirstVisuallyNonEmptyLayout() override;
+
+    void dispatchDidChangeThemeColor() override;
+    NavigationPolicy decidePolicyForNavigation(const ResourceRequest&, DocumentLoader*, NavigationPolicy) override;
+    void dispatchWillRequestResource(FetchRequest*) override;
+>>>>>>> miniblink49
     void dispatchWillSendSubmitEvent(HTMLFormElement*) override;
     void dispatchWillSubmitForm(HTMLFormElement*) override;
     void didStartLoading(LoadStartType) override;
     void didStopLoading() override;
     void progressEstimateChanged(double progressEstimate) override;
+<<<<<<< HEAD
     void loadURLExternally(const ResourceRequest&,
         NavigationPolicy,
         const String& suggestedName,
         bool shouldReplaceCurrentEntry) override;
     void loadErrorPage(int reason) override;
+=======
+    void loadURLExternally(const ResourceRequest&, NavigationPolicy, const String& suggestedName = String()) override;
+>>>>>>> miniblink49
     bool navigateBackForward(int offset) const override;
     void didAccessInitialDocument() override;
     void didDisplayInsecureContent() override;
     void didRunInsecureContent(SecurityOrigin*, const KURL& insecureURL) override;
     void didDetectXSS(const KURL&, bool didBlockEntirePage) override;
     void didDispatchPingLoader(const KURL&) override;
+<<<<<<< HEAD
     void didDisplayContentWithCertificateErrors(const KURL&) override;
     void didRunContentWithCertificateErrors(const KURL&) override;
     void didChangePerformanceTiming() override;
@@ -172,10 +235,45 @@ public:
         const KURL&) override;
     bool allowAutoplay(bool defaultValue) override;
     void passiveInsecureContentFound(const KURL&) override;
+=======
+    void selectorMatchChanged(const Vector<String>& addedSelectors, const Vector<String>& removedSelectors) override;
+    PassRefPtrWillBeRawPtr<DocumentLoader> createDocumentLoader(LocalFrame*, const ResourceRequest&, const SubstituteData&) override;
+    WTF::String userAgent(const KURL&) override;
+    WTF::String doNotTrackValue() override;
+    void transitionToCommittedForNewPage() override;
+    PassRefPtrWillBeRawPtr<LocalFrame> createFrame(const FrameLoadRequest&, const WTF::AtomicString& name, HTMLFrameOwnerElement*) override;
+    virtual bool canCreatePluginWithoutRenderer(const String& mimeType) const;
+    PassOwnPtrWillBeRawPtr<PluginPlaceholder> createPluginPlaceholder(
+        Document&, const KURL&,
+        const Vector<String>& paramNames, const Vector<String>& paramValues,
+        const String& mimeType, bool loadManually) override;
+    PassRefPtrWillBeRawPtr<Widget> createPlugin(
+        HTMLPlugInElement*, const KURL&,
+        const Vector<WTF::String>&, const Vector<WTF::String>&,
+        const WTF::String&, bool loadManually, DetachedPluginPolicy) override;
+    PassRefPtrWillBeRawPtr<Widget> createJavaAppletWidget(
+        HTMLAppletElement*,
+        const KURL& /* base_url */,
+        const Vector<WTF::String>& paramNames,
+        const Vector<WTF::String>& paramValues) override;
+    ObjectContentType objectContentType(
+        const KURL&, const WTF::String& mimeType, bool shouldPreferPlugInsForImages) override;
+    void didChangeScrollOffset() override;
+    void didUpdateCurrentHistoryItem() override;
+    void didRemoveAllPendingStylesheet() override;
+    bool allowScript(bool enabledPerSettings) override;
+    bool allowScriptFromSource(bool enabledPerSettings, const KURL& scriptURL) override;
+    bool allowPlugins(bool enabledPerSettings) override;
+    bool allowImage(bool enabledPerSettings, const KURL& imageURL) override;
+    bool allowMedia(const KURL& mediaURL) override;
+    bool allowDisplayingInsecureContent(bool enabledPerSettings, SecurityOrigin*, const KURL&) override;
+    bool allowRunningInsecureContent(bool enabledPerSettings, SecurityOrigin*, const KURL&) override;
+>>>>>>> miniblink49
     void didNotAllowScript() override;
     void didNotAllowPlugins() override;
 
     WebCookieJar* cookieJar() const override;
+<<<<<<< HEAD
     void frameFocused() const override;
     void didChangeName(const String& name, const String& uniqueName) override;
     void didEnforceInsecureRequestPolicy(WebInsecureRequestPolicy) override;
@@ -197,10 +295,31 @@ public:
 
     std::unique_ptr<WebServiceWorkerProvider> createServiceWorkerProvider()
         override;
+=======
+    bool willCheckAndDispatchMessageEvent(SecurityOrigin* target, MessageEvent*, LocalFrame* sourceFrame) const override;
+    void didChangeName(const String&) override;
+    void didChangeSandboxFlags(Frame* childFrame, SandboxFlags) override;
+
+    void dispatchWillOpenWebSocket(WebSocketHandle*) override;
+
+    void dispatchWillStartUsingPeerConnectionHandler(WebRTCPeerConnectionHandler*) override;
+
+    void didRequestAutocomplete(HTMLFormElement*) override;
+
+    bool allowWebGL(bool enabledPerSettings) override;
+    void didLoseWebGLContext(int arbRobustnessContextLostReason) override;
+
+    void dispatchWillInsertBody() override;
+
+    v8::Local<v8::Value> createTestInterface(const AtomicString& name) override;
+
+    PassOwnPtr<WebServiceWorkerProvider> createServiceWorkerProvider() override;
+>>>>>>> miniblink49
     bool isControlledByServiceWorker(DocumentLoader&) override;
     int64_t serviceWorkerID(DocumentLoader&) override;
     SharedWorkerRepositoryClient* sharedWorkerRepositoryClient() override;
 
+<<<<<<< HEAD
     std::unique_ptr<WebApplicationCacheHost> createApplicationCacheHost(
         WebApplicationCacheHostClient*) override;
 
@@ -239,6 +358,30 @@ DEFINE_TYPE_CASTS(FrameLoaderClientImpl,
     client,
     client->isFrameLoaderClientImpl(),
     client.isFrameLoaderClientImpl());
+=======
+    PassOwnPtr<WebApplicationCacheHost> createApplicationCacheHost(WebApplicationCacheHostClient*) override;
+
+    void didStopAllLoaders() override;
+
+    void dispatchDidChangeManifest() override;
+
+    void dispatchDidChangeDefaultPresentation() override;
+
+    unsigned backForwardLength() override;
+
+    void suddenTerminationDisablerChanged(bool present, SuddenTerminationDisablerType) override;
+private:
+    bool isFrameLoaderClientImpl() const override { return true; }
+
+    PassOwnPtr<WebPluginLoadObserver> pluginLoadObserver(DocumentLoader*);
+
+    // The WebFrame that owns this object and manages its lifetime. Therefore,
+    // the web frame object is guaranteed to exist.
+    WebLocalFrameImpl* m_webFrame;
+};
+
+DEFINE_TYPE_CASTS(FrameLoaderClientImpl, FrameLoaderClient, client, client->isFrameLoaderClientImpl(), client.isFrameLoaderClientImpl());
+>>>>>>> miniblink49
 
 } // namespace blink
 

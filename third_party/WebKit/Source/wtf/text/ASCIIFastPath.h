@@ -44,12 +44,17 @@ inline bool isAlignedToMachineWord(const void* pointer)
     return !(reinterpret_cast<uintptr_t>(pointer) & machineWordAlignmentMask);
 }
 
+<<<<<<< HEAD
 template <typename T>
 inline T* alignToMachineWord(T* pointer)
+=======
+template<typename T> inline T* alignToMachineWord(T* pointer)
+>>>>>>> miniblink49
 {
     return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(pointer) & ~machineWordAlignmentMask);
 }
 
+<<<<<<< HEAD
 template <size_t size, typename CharacterType>
 struct NonASCIIMask;
 template <>
@@ -70,6 +75,24 @@ struct NonASCIIMask<8, LChar> {
 };
 
 template <typename CharacterType>
+=======
+template<size_t size, typename CharacterType> struct NonASCIIMask;
+template<> struct NonASCIIMask<4, UChar> {
+    static inline uint32_t value() { return 0xFF80FF80U; }
+};
+template<> struct NonASCIIMask<4, LChar> {
+    static inline uint32_t value() { return 0x80808080U; }
+};
+template<> struct NonASCIIMask<8, UChar> {
+    static inline uint64_t value() { return 0xFF80FF80FF80FF80ULL; }
+};
+template<> struct NonASCIIMask<8, LChar> {
+    static inline uint64_t value() { return 0x8080808080808080ULL; }
+};
+
+
+template<typename CharacterType>
+>>>>>>> miniblink49
 inline bool isAllASCII(MachineWord word)
 {
     return !(word & NonASCIIMask<sizeof(MachineWord), CharacterType>::value());
@@ -77,11 +100,17 @@ inline bool isAllASCII(MachineWord word)
 
 // Note: This function assume the input is likely all ASCII, and
 // does not leave early if it is not the case.
+<<<<<<< HEAD
 template <typename CharacterType>
 inline bool charactersAreAllASCII(const CharacterType* characters,
     size_t length)
 {
     DCHECK_GT(length, 0u);
+=======
+template<typename CharacterType>
+inline bool charactersAreAllASCII(const CharacterType* characters, size_t length)
+{
+>>>>>>> miniblink49
     MachineWord allCharBits = 0;
     const CharacterType* end = characters + length;
 
@@ -109,17 +138,26 @@ inline bool charactersAreAllASCII(const CharacterType* characters,
     return !(allCharBits & nonASCIIBitMask);
 }
 
+<<<<<<< HEAD
 inline void copyLCharsFromUCharSource(LChar* destination,
     const UChar* source,
     size_t length)
+=======
+inline void copyLCharsFromUCharSource(LChar* destination, const UChar* source, size_t length)
+>>>>>>> miniblink49
 {
 #if OS(MACOSX) && (CPU(X86) || CPU(X86_64))
     const uintptr_t memoryAccessSize = 16; // Memory accesses on 16 byte (128 bit) alignment
     const uintptr_t memoryAccessMask = memoryAccessSize - 1;
 
     size_t i = 0;
+<<<<<<< HEAD
     for (; i < length && !isAlignedTo<memoryAccessMask>(&source[i]); ++i) {
         DCHECK(!(source[i] & 0xff00));
+=======
+    for (;i < length && !isAlignedTo<memoryAccessMask>(&source[i]); ++i) {
+        ASSERT(!(source[i] & 0xff00));
+>>>>>>> miniblink49
         destination[i] = static_cast<LChar>(source[i]);
     }
 
@@ -128,6 +166,7 @@ inline void copyLCharsFromUCharSource(LChar* destination,
     if (length > ucharsPerLoop) {
         const size_t endLength = length - ucharsPerLoop + 1;
         for (; i < endLength; i += ucharsPerLoop) {
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
             for (unsigned checkIndex = 0; checkIndex < ucharsPerLoop; ++checkIndex)
                 DCHECK(!(source[i + checkIndex] & 0xff00));
@@ -137,11 +176,25 @@ inline void copyLCharsFromUCharSource(LChar* destination,
             __m128i packedChars = _mm_packus_epi16(first8UChars, second8UChars);
             _mm_storeu_si128(reinterpret_cast<__m128i*>(&destination[i]),
                 packedChars);
+=======
+#if ENABLE(ASSERT)
+            for (unsigned checkIndex = 0; checkIndex < ucharsPerLoop; ++checkIndex)
+                ASSERT(!(source[i+checkIndex] & 0xff00));
+#endif
+            __m128i first8UChars = _mm_load_si128(reinterpret_cast<const __m128i*>(&source[i]));
+            __m128i second8UChars = _mm_load_si128(reinterpret_cast<const __m128i*>(&source[i+8]));
+            __m128i packedChars = _mm_packus_epi16(first8UChars, second8UChars);
+            _mm_storeu_si128(reinterpret_cast<__m128i*>(&destination[i]), packedChars);
+>>>>>>> miniblink49
         }
     }
 
     for (; i < length; ++i) {
+<<<<<<< HEAD
         DCHECK(!(source[i] & 0xff00));
+=======
+        ASSERT(!(source[i] & 0xff00));
+>>>>>>> miniblink49
         destination[i] = static_cast<LChar>(source[i]);
     }
 #elif COMPILER(GCC) && CPU(ARM_NEON) && !(CPU(BIG_ENDIAN) || CPU(MIDDLE_ENDIAN)) && defined(NDEBUG)
@@ -160,7 +213,11 @@ inline void copyLCharsFromUCharSource(LChar* destination,
         do {
             asm("vld2.8   { d0-d1 }, [%[SOURCE]] !\n\t"
                 "vst1.8   { d0 }, [%[DESTINATION],:64] !\n\t"
+<<<<<<< HEAD
                 : [SOURCE] "+r"(source), [DESTINATION] "+r"(destination)
+=======
+                : [SOURCE]"+r" (source), [DESTINATION]"+r" (destination)
+>>>>>>> miniblink49
                 :
                 : "memory", "d0", "d1");
         } while (destination != simdEnd);
@@ -170,7 +227,11 @@ inline void copyLCharsFromUCharSource(LChar* destination,
         *destination++ = static_cast<LChar>(*source++);
 #else
     for (size_t i = 0; i < length; ++i) {
+<<<<<<< HEAD
         DCHECK(!(source[i] & 0xff00));
+=======
+        ASSERT(!(source[i] & 0xff00));
+>>>>>>> miniblink49
         destination[i] = static_cast<LChar>(source[i]);
     }
 #endif

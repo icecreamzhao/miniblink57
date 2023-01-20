@@ -1,4 +1,5 @@
 #include "SampleCode.h"
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkCornerPathEffect.h"
 #include "SkGPipe.h"
@@ -6,6 +7,15 @@
 #include "SkOSMenu.h"
 #include "SkSockets.h"
 #include "SkView.h"
+=======
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkGPipe.h"
+#include "SkSockets.h"
+#include "SkNetPipeController.h"
+#include "SkCornerPathEffect.h"
+#include "SkOSMenu.h"
+>>>>>>> miniblink49
 #include <map>
 
 /**
@@ -28,23 +38,35 @@
 
 class DrawingServerView : public SampleView {
 public:
+<<<<<<< HEAD
     DrawingServerView()
     {
+=======
+    DrawingServerView(){
+>>>>>>> miniblink49
         fServer = new SkTCPServer(40000);
         fServer->suspendWrite();
         fTotalBytesRead = fTotalBytesWritten = 0;
         fVector = true;
     }
+<<<<<<< HEAD
     ~DrawingServerView()
     {
+=======
+    ~DrawingServerView() {
+>>>>>>> miniblink49
         delete fServer;
         fData.reset();
         fBuffer.reset();
         fClientMap.clear();
     }
 
+<<<<<<< HEAD
     virtual void requestMenu(SkOSMenu* menu)
     {
+=======
+    virtual void requestMenu(SkOSMenu* menu) {
+>>>>>>> miniblink49
         menu->setTitle("Drawing Server");
         menu->appendAction("Clear", this->getSinkID());
         menu->appendSwitch("Vector", "Vector", this->getSinkID(), fVector);
@@ -52,14 +74,22 @@ public:
 
 protected:
     static void readData(int cid, const void* data, size_t size,
+<<<<<<< HEAD
         SkSocket::DataType type, void* context)
     {
+=======
+                         SkSocket::DataType type, void* context) {
+>>>>>>> miniblink49
         DrawingServerView* view = (DrawingServerView*)context;
         view->onRead(cid, data, size, type);
     }
 
+<<<<<<< HEAD
     void onRead(int cid, const void* data, size_t size, SkSocket::DataType type)
     {
+=======
+    void onRead(int cid, const void* data, size_t size, SkSocket::DataType type) {
+>>>>>>> miniblink49
         if (NULL == data && size <= 0)
             return;
 
@@ -70,7 +100,12 @@ protected:
             cs->bufferBase = 0;
             cs->bufferSize = 0;
             fClientMap[cid] = cs;
+<<<<<<< HEAD
         } else {
+=======
+        }
+        else {
+>>>>>>> miniblink49
             cs = it->second;
         }
 
@@ -91,6 +126,7 @@ protected:
             cs->bufferBase = fBuffer.count();
             cs->bufferSize = size;
             fBuffer.append(size, (const char*)data);
+<<<<<<< HEAD
         } else if (type == SkSocket::kPipeAppend_type) {
             fData.append(size, (const char*)data);
             fServer->resumeWrite();
@@ -100,12 +136,29 @@ protected:
             fTotalBytesWritten = fData.count();
             fServer->suspendWrite();
         } else {
+=======
+        }
+        else if (type == SkSocket::kPipeAppend_type) {
+            fData.append(size, (const char*)data);
+            fServer->resumeWrite();
+            fServer->writePacket(fData.begin() + fTotalBytesWritten,
+                                 fData.count() - fTotalBytesWritten,
+                                 SkSocket::kPipeAppend_type);
+            fTotalBytesWritten = fData.count();
+            fServer->suspendWrite();
+        }
+        else {
+>>>>>>> miniblink49
             //other types of data
         }
     }
 
+<<<<<<< HEAD
     bool onQuery(SkEvent* evt)
     {
+=======
+    bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Drawing Server");
             return true;
@@ -113,8 +166,12 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     bool onEvent(const SkEvent& evt)
     {
+=======
+    bool onEvent(const SkEvent& evt) {
+>>>>>>> miniblink49
         if (SkOSMenu::FindAction(evt, "Clear")) {
             this->clear();
             return true;
@@ -126,8 +183,13 @@ protected:
         return this->INHERITED::onEvent(evt);
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
+=======
+
+    virtual void onDrawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         if (fCurrMatrix != canvas->getTotalMatrix()) {
             fTotalBytesRead = 0;
             fCurrMatrix = canvas->getTotalMatrix();
@@ -136,7 +198,12 @@ protected:
         fServer->acceptConnections();
         if (fServer->readPacket(readData, this) > 0) {
             fServer->resumeWrite();
+<<<<<<< HEAD
         } else {
+=======
+        }
+        else {
+>>>>>>> miniblink49
             fServer->suspendWrite();
         }
 
@@ -152,8 +219,13 @@ protected:
             }
             SkGPipeReader reader(tempCanvas);
             stat = reader.playback(fData.begin() + fTotalBytesRead,
+<<<<<<< HEAD
                 fData.count() - fTotalBytesRead,
                 &bytesRead);
+=======
+                                   fData.count() - fTotalBytesRead,
+                                   &bytesRead);
+>>>>>>> miniblink49
             SkASSERT(SkGPipeReader::kError_Status != stat);
             fTotalBytesRead += bytesRead;
         }
@@ -167,39 +239,64 @@ protected:
         while (totalBytesRead < fBuffer.count()) {
             SkGPipeReader reader(canvas);
             stat = reader.playback(fBuffer.begin() + totalBytesRead,
+<<<<<<< HEAD
                 fBuffer.count() - totalBytesRead,
                 &bytesRead);
+=======
+                                   fBuffer.count() - totalBytesRead,
+                                   &bytesRead);
+>>>>>>> miniblink49
             SkASSERT(SkGPipeReader::kError_Status != stat);
             totalBytesRead += bytesRead;
         }
 
         fServer->writePacket(fBuffer.begin(), fBuffer.count(),
+<<<<<<< HEAD
             SkSocket::kPipeReplace_type);
+=======
+                             SkSocket::kPipeReplace_type);
+>>>>>>> miniblink49
 
         this->inval(NULL);
     }
 
+<<<<<<< HEAD
     virtual void onSizeChange()
     {
         this->INHERITED::onSizeChange();
         fBase.setConfig(SkBitmap::kARGB_8888_Config,
             this->width(),
             this->height());
+=======
+    virtual void onSizeChange() {
+        this->INHERITED::onSizeChange();
+        fBase.setConfig(SkBitmap::kARGB_8888_Config,
+                        this->width(),
+                        this->height());
+>>>>>>> miniblink49
         fBase.allocPixels(NULL);
         this->clearBitmap();
     }
 
 private:
+<<<<<<< HEAD
     void clear()
     {
+=======
+    void clear() {
+>>>>>>> miniblink49
         fData.reset();
         fBuffer.reset();
         fTotalBytesRead = fTotalBytesWritten = 0;
         fClientMap.clear();
         this->clearBitmap();
     }
+<<<<<<< HEAD
     void clearBitmap()
     {
+=======
+    void clearBitmap() {
+>>>>>>> miniblink49
         fTotalBytesRead = 0;
         fBase.eraseColor(fBGColor);
     }
@@ -210,6 +307,7 @@ private:
     };
 
     std::map<int, ClientState*> fClientMap;
+<<<<<<< HEAD
     SkTDArray<char> fData;
     SkTDArray<char> fBuffer;
     size_t fTotalBytesRead;
@@ -221,6 +319,20 @@ private:
     typedef SampleView INHERITED;
 };
 
+=======
+    SkTDArray<char>             fData;
+    SkTDArray<char>             fBuffer;
+    size_t                      fTotalBytesRead;
+    size_t                      fTotalBytesWritten;
+    SkMatrix                    fCurrMatrix;
+    SkBitmap                    fBase;
+    bool                        fVector;
+    SkTCPServer*                fServer;
+    typedef SampleView INHERITED;
+};
+
+
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////
 
 static SkView* MyFactory() { return new DrawingServerView; }

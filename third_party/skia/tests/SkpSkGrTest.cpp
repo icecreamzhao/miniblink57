@@ -14,11 +14,21 @@
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkColor.h"
+<<<<<<< HEAD
 #include "SkGraphics.h"
+=======
+#include "SkDevice.h"
+#include "SkGraphics.h"
+#include "SkImageDecoder.h"
+>>>>>>> miniblink49
 #include "SkImageEncoder.h"
 #include "SkOSFile.h"
 #include "SkPicture.h"
 #include "SkRTConf.h"
+<<<<<<< HEAD
+=======
+#include "SkRunnable.h"
+>>>>>>> miniblink49
 #include "SkStream.h"
 #include "SkString.h"
 #include "SkTArray.h"
@@ -32,6 +42,7 @@
 #endif
 
 #ifdef SK_BUILD_FOR_WIN
+<<<<<<< HEAD
 #define PATH_SLASH "\\"
 #define IN_DIR "D:\\9-30-13\\"
 #define OUT_DIR "D:\\skpSkGr\\11\\"
@@ -41,6 +52,17 @@
 #define IN_DIR "/usr/local/google/home/caryclark" PATH_SLASH "9-30-13-skp"
 #define OUT_DIR "/media/01CD75512A7F9EE0/4" PATH_SLASH
 #define LINE_FEED "\n"
+=======
+    #define PATH_SLASH "\\"
+    #define IN_DIR "D:\\9-30-13\\"
+    #define OUT_DIR "D:\\skpSkGr\\11\\"
+    #define LINE_FEED "\r\n"
+#else
+    #define PATH_SLASH "/"
+    #define IN_DIR "/usr/local/google/home/caryclark" PATH_SLASH "9-30-13-skp"
+    #define OUT_DIR "/media/01CD75512A7F9EE0/4" PATH_SLASH
+    #define LINE_FEED "\n"
+>>>>>>> miniblink49
 #endif
 
 #define PATH_STR_SIZE 512
@@ -49,7 +71,11 @@ static const struct {
     int directory;
     const char* filename;
 } skipOverSkGr[] = {
+<<<<<<< HEAD
     { 1, "http___accuweather_com_.skp" }, // Couldn't convert bitmap to texture.http___absoku072_com_
+=======
+    {1, "http___accuweather_com_.skp"},  // Couldn't convert bitmap to texture.http___absoku072_com_
+>>>>>>> miniblink49
 };
 
 static const size_t skipOverSkGrCount = SK_ARRAY_COUNT(skipOverSkGr);
@@ -69,23 +95,35 @@ enum {
 };
 
 struct TestResult {
+<<<<<<< HEAD
     void init(int dirNo)
     {
+=======
+    void init(int dirNo) {
+>>>>>>> miniblink49
         fDirNo = dirNo;
         sk_bzero(fFilename, sizeof(fFilename));
         fTestStep = kCompareBits;
         fScaleOversized = true;
     }
 
+<<<<<<< HEAD
     SkString status()
     {
+=======
+    SkString status() {
+>>>>>>> miniblink49
         SkString outStr;
         outStr.printf("%s %d %d%s", fFilename, fPixelError, fTime, LINE_FEED);
         return outStr;
     }
 
+<<<<<<< HEAD
     static void Test(int dirNo, const char* filename, TestStep testStep, bool verbose)
     {
+=======
+    static void Test(int dirNo, const char* filename, TestStep testStep, bool verbose) {
+>>>>>>> miniblink49
         TestResult test;
         test.init(dirNo);
         test.fTestStep = testStep;
@@ -96,8 +134,12 @@ struct TestResult {
         }
     }
 
+<<<<<<< HEAD
     void test(int dirNo, const SkString& filename)
     {
+=======
+    void test(int dirNo, const SkString& filename) {
+>>>>>>> miniblink49
         init(dirNo);
         strcpy(fFilename, filename.c_str());
         testOne();
@@ -109,13 +151,21 @@ struct TestResult {
     TestStep fTestStep;
     int fDirNo;
     int fPixelError;
+<<<<<<< HEAD
     SkMSec fTime;
+=======
+    int fTime;
+>>>>>>> miniblink49
     bool fScaleOversized;
 };
 
 struct SkpSkGrThreadState {
+<<<<<<< HEAD
     void init(int dirNo)
     {
+=======
+    void init(int dirNo) {
+>>>>>>> miniblink49
         fResult.init(dirNo);
         fFoundCount = 0;
         fSmallestError = 0;
@@ -135,8 +185,12 @@ struct SkpSkGrThreadState {
 
 struct SkpSkGrThreadedTestRunner {
     SkpSkGrThreadedTestRunner(skiatest::Reporter* reporter)
+<<<<<<< HEAD
         : fReporter(reporter)
     {
+=======
+        : fReporter(reporter) {
+>>>>>>> miniblink49
     }
 
     ~SkpSkGrThreadedTestRunner();
@@ -145,11 +199,18 @@ struct SkpSkGrThreadedTestRunner {
     skiatest::Reporter* fReporter;
 };
 
+<<<<<<< HEAD
 class SkpSkGrThreadedRunnable {
 public:
     SkpSkGrThreadedRunnable(void (*testFun)(SkpSkGrThreadState*), int dirNo, const char* str,
         SkpSkGrThreadedTestRunner* runner)
     {
+=======
+class SkpSkGrThreadedRunnable : public SkRunnable {
+public:
+    SkpSkGrThreadedRunnable(void (*testFun)(SkpSkGrThreadState*), int dirNo, const char* str,
+            SkpSkGrThreadedTestRunner* runner) {
+>>>>>>> miniblink49
         SkASSERT(strlen(str) < sizeof(fState.fResult.fFilename) - 1);
         fState.init(dirNo);
         strcpy(fState.fResult.fFilename, str);
@@ -157,8 +218,12 @@ public:
         fTestFun = testFun;
     }
 
+<<<<<<< HEAD
     void operator()()
     {
+=======
+    void run() override {
+>>>>>>> miniblink49
         SkGraphics::SetTLSFontCacheLimit(1 * 1024 * 1024);
         (*fTestFun)(&fState);
     }
@@ -167,6 +232,7 @@ public:
     void (*fTestFun)(SkpSkGrThreadState*);
 };
 
+<<<<<<< HEAD
 SkpSkGrThreadedTestRunner::~SkpSkGrThreadedTestRunner()
 {
     for (int index = 0; index < fRunnables.count(); index++) {
@@ -178,6 +244,19 @@ void SkpSkGrThreadedTestRunner::render()
 {
     SkTaskGroup().batch(fRunnables.count(), [&](int i) {
         fRunnables[i]();
+=======
+SkpSkGrThreadedTestRunner::~SkpSkGrThreadedTestRunner() {
+    for (int index = 0; index < fRunnables.count(); index++) {
+        SkDELETE(fRunnables[index]);
+    }
+}
+
+void SkpSkGrThreadedTestRunner::render() {
+    // TODO: we don't really need to be using SkRunnables here anymore.
+    // We can just write the code we'd run right in the for loop.
+    sk_parallel_for(fRunnables.count(), [&](int i) {
+        fRunnables[i]->run();
+>>>>>>> miniblink49
     });
 }
 
@@ -189,8 +268,12 @@ static const char outSkpDir[] = OUT_DIR "skpTest";
 static const char outDiffDir[] = OUT_DIR "outTest";
 static const char outStatusDir[] = OUT_DIR "statusTest";
 
+<<<<<<< HEAD
 static SkString make_filepath(int dirIndex, const char* dir, const char* name)
 {
+=======
+static SkString make_filepath(int dirIndex, const char* dir, const char* name) {
+>>>>>>> miniblink49
     SkString path(dir);
     if (dirIndex) {
         path.appendf("%d", dirIndex);
@@ -200,8 +283,12 @@ static SkString make_filepath(int dirIndex, const char* dir, const char* name)
     return path;
 }
 
+<<<<<<< HEAD
 static SkString make_in_dir_name(int dirIndex)
 {
+=======
+static SkString make_in_dir_name(int dirIndex) {
+>>>>>>> miniblink49
     SkString dirName(IN_DIR);
     dirName.appendf("%d", dirIndex);
     if (!sk_exists(dirName.c_str())) {
@@ -211,8 +298,12 @@ static SkString make_in_dir_name(int dirIndex)
     return dirName;
 }
 
+<<<<<<< HEAD
 static bool make_out_dirs()
 {
+=======
+static bool make_out_dirs() {
+>>>>>>> miniblink49
     SkString outDir = make_filepath(0, OUT_DIR, "");
     if (!sk_exists(outDir.c_str())) {
         if (!sk_mkdir(outDir.c_str())) {
@@ -258,14 +349,19 @@ static bool make_out_dirs()
     return true;
 }
 
+<<<<<<< HEAD
 static SkString make_png_name(const char* filename)
 {
+=======
+static SkString make_png_name(const char* filename) {
+>>>>>>> miniblink49
     SkString pngName = SkString(filename);
     pngName.remove(pngName.size() - 3, 3);
     pngName.append("png");
     return pngName;
 }
 
+<<<<<<< HEAD
 typedef GrContextFactory::ContextType ContextType;
 #ifdef SK_BUILD_FOR_WIN
 static const ContextType kAngle = GrContextFactory::kANGLE_ContextType;
@@ -275,6 +371,16 @@ static const ContextType kNative = GrContextFactory::kNativeGL_ContextType;
 
 static int similarBits(const SkBitmap& gr, const SkBitmap& sk)
 {
+=======
+typedef GrContextFactory::GLContextType GLContextType;
+#ifdef SK_BUILD_FOR_WIN
+static const GLContextType kAngle = GrContextFactory::kANGLE_GLContextType;
+#else
+static const GLContextType kNative = GrContextFactory::kNative_GLContextType;
+#endif
+
+static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
+>>>>>>> miniblink49
     const int kRowCount = 3;
     const int kThreshold = 3;
     int width = SkTMin(gr.width(), sk.width());
@@ -303,9 +409,15 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk)
             int db = SkGetPackedB32(grColor) - SkGetPackedB32(skColor);
             int error = SkTMax(SkAbs32(dr), SkTMax(SkAbs32(dg), SkAbs32(db)));
             if ((cOut[x] = error >= kThreshold) && x >= 2
+<<<<<<< HEAD
                 && base[x - 2] && base[width + x - 2] && base[width * 2 + x - 2]
                 && base[x - 1] && base[width + x - 1] && base[width * 2 + x - 1]
                 && base[x - 0] && base[width + x - 0] && base[width * 2 + x - 0]) {
+=======
+                    && base[x - 2] && base[width + x - 2] && base[width * 2 + x - 2]
+                    && base[x - 1] && base[width + x - 1] && base[width * 2 + x - 1]
+                    && base[x - 0] && base[width + x - 0] && base[width * 2 + x - 0]) {
+>>>>>>> miniblink49
                 errorTotal += error;
             }
         }
@@ -313,8 +425,12 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk)
     return errorTotal;
 }
 
+<<<<<<< HEAD
 static bool addError(SkpSkGrThreadState* data)
 {
+=======
+static bool addError(SkpSkGrThreadState* data) {
+>>>>>>> miniblink49
     bool foundSmaller = false;
     int dCount = data->fFoundCount;
     int pixelError = data->fResult.fPixelError;
@@ -347,8 +463,12 @@ static bool addError(SkpSkGrThreadState* data)
     return foundSmaller;
 }
 
+<<<<<<< HEAD
 static SkMSec timePict(SkPicture* pic, SkCanvas* canvas)
 {
+=======
+static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
+>>>>>>> miniblink49
     canvas->save();
     int pWidth = pic->width();
     int pHeight = pic->height();
@@ -356,10 +476,17 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas)
     const int slices = 3;
     int xInterval = SkTMax(pWidth - maxDimension, 0) / (slices - 1);
     int yInterval = SkTMax(pHeight - maxDimension, 0) / (slices - 1);
+<<<<<<< HEAD
     SkRect rect = { 0, 0, SkIntToScalar(SkTMin(maxDimension, pWidth)),
         SkIntToScalar(SkTMin(maxDimension, pHeight)) };
     canvas->clipRect(rect);
     skiatest::Timer timer;
+=======
+    SkRect rect = {0, 0, SkIntToScalar(SkTMin(maxDimension, pWidth)),
+            SkIntToScalar(SkTMin(maxDimension, pHeight))};
+    canvas->clipRect(rect);
+    SkMSec start = SkTime::GetMSecs();
+>>>>>>> miniblink49
     for (int x = 0; x < slices; ++x) {
         for (int y = 0; y < slices; ++y) {
             pic->draw(canvas);
@@ -367,6 +494,7 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas)
         }
         canvas->translate(SkIntToScalar(xInterval), SkIntToScalar(-yInterval * slices));
     }
+<<<<<<< HEAD
     SkMSec elapsed = timer.elapsedMsInt();
     canvas->restore();
     return elapsed;
@@ -374,6 +502,14 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas)
 
 static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale)
 {
+=======
+    SkMSec end = SkTime::GetMSecs();
+    canvas->restore();
+    return end - start;
+}
+
+static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale) {
+>>>>>>> miniblink49
     canvas->clear(SK_ColorWHITE);
     if (scale != 1) {
         canvas->save();
@@ -385,12 +521,17 @@ static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale)
     }
 }
 
+<<<<<<< HEAD
 static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pngName)
 {
+=======
+static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pngName) {
+>>>>>>> miniblink49
     SkString outFile = make_filepath(0, outDir, pngName);
     if (!SkImageEncoder::EncodeFile(outFile.c_str(), bitmap,
             SkImageEncoder::kPNG_Type, 100)) {
         SkDebugf("unable to encode gr %s (width=%d height=%d)br \n", pngName,
+<<<<<<< HEAD
             bitmap.width(), bitmap.height());
     }
 }
@@ -398,6 +539,14 @@ static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pn
 void TestResult::testOne()
 {
     sk_sp<SkPicture> pic;
+=======
+                    bitmap.width(), bitmap.height());
+    }
+}
+
+void TestResult::testOne() {
+    SkPicture* pic = NULL;
+>>>>>>> miniblink49
     {
         SkString d;
         d.printf("    {%d, \"%s\"},", fDirNo, fFilename);
@@ -418,7 +567,11 @@ void TestResult::testOne()
             wStream.write(&bytes[0], length);
             wStream.flush();
         }
+<<<<<<< HEAD
         pic = SkPicture::MakeFromStream(&stream);
+=======
+        pic = SkPicture::CreateFromStream(&stream, &SkImageDecoder::DecodeMemory);
+>>>>>>> miniblink49
         if (!pic) {
             SkDebugf("unable to decode %s\n", fFilename);
             goto finish;
@@ -432,7 +585,11 @@ void TestResult::testOne()
 #else
         GrContext* context = contextFactory.get(kNative);
 #endif
+<<<<<<< HEAD
         if (nullptr == context) {
+=======
+        if (NULL == context) {
+>>>>>>> miniblink49
             SkDebugf("unable to allocate context for %s\n", fFilename);
             goto finish;
         }
@@ -454,8 +611,13 @@ void TestResult::testOne()
         } while ((scale *= 2) < 256);
         if (scale >= 256) {
             SkDebugf("unable to allocate bitmap for %s (w=%d h=%d) (sw=%d sh=%d)\n",
+<<<<<<< HEAD
                 fFilename, pWidth, pHeight, dim.fX, dim.fY);
             return;
+=======
+                    fFilename, pWidth, pHeight, dim.fX, dim.fY);
+            goto finish;
+>>>>>>> miniblink49
         }
         SkCanvas skCanvas(bitmap);
         drawPict(pic, &skCanvas, fScaleOversized ? scale : 1);
@@ -465,6 +627,7 @@ void TestResult::testOne()
         desc.fWidth = dim.fX;
         desc.fHeight = dim.fY;
         desc.fSampleCnt = 0;
+<<<<<<< HEAD
         SkAutoTUnref<GrTexture> texture(context->createUncachedTexture(desc, nullptr, 0));
         if (!texture) {
             SkDebugf("unable to allocate texture for %s (w=%d h=%d)\n", fFilename,
@@ -474,6 +637,17 @@ void TestResult::testOne()
         SkGpuDevice grDevice(context, texture.get());
         SkCanvas grCanvas(&grDevice);
         drawPict(pic.get(), &grCanvas, fScaleOversized ? scale : 1);
+=======
+        SkAutoTUnref<GrTexture> texture(context->createUncachedTexture(desc, NULL, 0));
+        if (!texture) {
+            SkDebugf("unable to allocate texture for %s (w=%d h=%d)\n", fFilename,
+                dim.fX, dim.fY);
+            goto finish;
+        }
+        SkGpuDevice grDevice(context, texture.get());
+        SkCanvas grCanvas(&grDevice);
+        drawPict(pic, &grCanvas, fScaleOversized ? scale : 1);
+>>>>>>> miniblink49
 
         SkBitmap grBitmap;
         grBitmap.allocPixels(grCanvas.imageInfo());
@@ -481,8 +655,13 @@ void TestResult::testOne()
 
         if (fTestStep == kCompareBits) {
             fPixelError = similarBits(grBitmap, bitmap);
+<<<<<<< HEAD
             SkMSec skTime = timePict(pic, &skCanvas);
             SkMSec grTime = timePict(pic, &grCanvas);
+=======
+            int skTime = timePict(pic, &skCanvas);
+            int grTime = timePict(pic, &grCanvas);
+>>>>>>> miniblink49
             fTime = skTime - grTime;
         } else if (fTestStep == kEncodeFiles) {
             SkString pngStr = make_png_name(fFilename);
@@ -491,10 +670,18 @@ void TestResult::testOne()
             writePict(bitmap, outSkDir, pngName);
         }
     }
+<<<<<<< HEAD
 }
 
 static SkString makeStatusString(int dirNo)
 {
+=======
+finish:
+    SkDELETE(pic);
+}
+
+static SkString makeStatusString(int dirNo) {
+>>>>>>> miniblink49
     SkString statName;
     statName.printf("stats%d.txt", dirNo);
     SkString statusFile = make_filepath(0, outStatusDir, statName.c_str());
@@ -506,8 +693,12 @@ public:
     PreParser(int dirNo)
         : fDirNo(dirNo)
         , fIndex(0)
+<<<<<<< HEAD
         , fStatusPath(makeStatusString(dirNo))
     {
+=======
+        , fStatusPath(makeStatusString(dirNo)) {
+>>>>>>> miniblink49
         if (!sk_exists(fStatusPath.c_str())) {
             return;
         }
@@ -518,8 +709,12 @@ public:
         fResults.pop_back();
     }
 
+<<<<<<< HEAD
     bool fetch(SkFILEStream& reader, TestResult* result)
     {
+=======
+    bool fetch(SkFILEStream& reader, TestResult* result) {
+>>>>>>> miniblink49
         char c;
         int i = 0;
         result->init(fDirNo);
@@ -570,8 +765,12 @@ public:
         return true;
     }
 
+<<<<<<< HEAD
     bool match(const SkString& filename, SkFILEWStream* stream, TestResult* result)
     {
+=======
+    bool match(const SkString& filename, SkFILEWStream* stream, TestResult* result) {
+>>>>>>> miniblink49
         if (fIndex < fResults.count()) {
             *result = fResults[fIndex++];
             SkASSERT(filename.equals(result->fFilename));
@@ -590,8 +789,12 @@ private:
     SkString fStatusPath;
 };
 
+<<<<<<< HEAD
 static bool initTest()
 {
+=======
+static bool initTest() {
+>>>>>>> miniblink49
 #if !defined SK_BUILD_FOR_WIN && !defined SK_BUILD_FOR_MAC
     SK_CONF_SET("images.jpeg.suppressDecoderWarnings", true);
     SK_CONF_SET("images.png.suppressDecoderWarnings", true);
@@ -599,8 +802,12 @@ static bool initTest()
     return make_out_dirs();
 }
 
+<<<<<<< HEAD
 DEF_TEST(SkpSkGr, reporter)
 {
+=======
+DEF_TEST(SkpSkGr, reporter) {
+>>>>>>> miniblink49
     SkTArray<TestResult, true> errors;
     if (!initTest()) {
         return;
@@ -622,7 +829,11 @@ DEF_TEST(SkpSkGr, reporter)
         while (iter.next(&filename)) {
             for (size_t index = 0; index < skipOverSkGrCount; ++index) {
                 if (skipOverSkGr[index].directory == dirNo
+<<<<<<< HEAD
                     && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
+=======
+                        && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
+>>>>>>> miniblink49
                     goto skipOver;
                 }
             }
@@ -656,9 +867,15 @@ DEF_TEST(SkpSkGr, reporter)
                     SkDebugf("#%d\n", testCount);
                 }
             }
+<<<<<<< HEAD
         skipOver:
             reporter->bumpTestCount();
         checkEarlyExit:
+=======
+     skipOver:
+             reporter->bumpTestCount();
+    checkEarlyExit:
+>>>>>>> miniblink49
             if (1 && testCount == 20) {
                 break;
             }
@@ -668,11 +885,16 @@ breakOut:
     if (reporter->verbose()) {
         for (int index = 0; index < state.fFoundCount; ++index) {
             SkDebugf("%d %s %d\n", state.fDirsFound[index], state.fFilesFound[index],
+<<<<<<< HEAD
                 state.fError[index]);
+=======
+                     state.fError[index]);
+>>>>>>> miniblink49
         }
     }
     for (int index = 0; index < state.fFoundCount; ++index) {
         TestResult::Test(state.fDirsFound[index], state.fFilesFound[index], kEncodeFiles,
+<<<<<<< HEAD
             reporter->verbose());
         if (reporter->verbose())
             SkDebugf("+");
@@ -681,6 +903,14 @@ breakOut:
 
 static void bumpCount(skiatest::Reporter* reporter, bool skipping)
 {
+=======
+                reporter->verbose());
+        if (reporter->verbose()) SkDebugf("+");
+    }
+}
+
+static void bumpCount(skiatest::Reporter* reporter, bool skipping) {
+>>>>>>> miniblink49
     if (reporter->verbose()) {
         static int threadTestCount;
         sk_atomic_inc(&threadTestCount);
@@ -693,15 +923,23 @@ static void bumpCount(skiatest::Reporter* reporter, bool skipping)
     }
 }
 
+<<<<<<< HEAD
 static void testSkGrMain(SkpSkGrThreadState* data)
 {
+=======
+static void testSkGrMain(SkpSkGrThreadState* data) {
+>>>>>>> miniblink49
     data->fResult.testOne();
     bumpCount(data->fReporter, false);
     data->fReporter->bumpTestCount();
 }
 
+<<<<<<< HEAD
 DEF_TEST(SkpSkGrThreaded, reporter)
 {
+=======
+DEF_TEST(SkpSkGrThreaded, reporter) {
+>>>>>>> miniblink49
     if (!initTest()) {
         return;
     }
@@ -723,14 +961,25 @@ DEF_TEST(SkpSkGrThreaded, reporter)
             }
             for (size_t index = 0; index < skipOverSkGrCount; ++index) {
                 if (skipOverSkGr[index].directory == dirIndex
+<<<<<<< HEAD
                     && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
+=======
+                        && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
+>>>>>>> miniblink49
                     bumpCount(reporter, true);
                     goto skipOver;
                 }
             }
+<<<<<<< HEAD
             *testRunner.fRunnables.append() = new SkpSkGrThreadedRunnable(
                 &testSkGrMain, dirIndex, filename.c_str(), &testRunner);
         skipOver:;
+=======
+            *testRunner.fRunnables.append() = SkNEW_ARGS(SkpSkGrThreadedRunnable,
+                    (&testSkGrMain, dirIndex, filename.c_str(), &testRunner));
+    skipOver:
+            ;
+>>>>>>> miniblink49
         }
     }
     testRunner.render();
@@ -766,8 +1015,12 @@ DEF_TEST(SkpSkGrThreaded, reporter)
     }
 }
 
+<<<<<<< HEAD
 DEF_TEST(SkpSkGrOneOff, reporter)
 {
+=======
+DEF_TEST(SkpSkGrOneOff, reporter) {
+>>>>>>> miniblink49
     if (!initTest()) {
         return;
     }

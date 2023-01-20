@@ -18,6 +18,7 @@ public:
     static void registerCodecs(TextCodecRegistrar);
 
 private:
+<<<<<<< HEAD
     String decode(const char*,
         size_t length,
         FlushBehavior,
@@ -25,6 +26,11 @@ private:
         bool& sawError) override;
 
     bool m_replacementErrorReturned;
+=======
+    String decode(const char*, size_t length, FlushBehavior, bool stopOnError, bool& sawError) override;
+
+    bool m_sentEOF;
+>>>>>>> miniblink49
 };
 
 } // namespace WTF

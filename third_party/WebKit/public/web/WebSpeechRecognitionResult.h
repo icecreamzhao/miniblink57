@@ -38,6 +38,7 @@ class SpeechRecognitionResult;
 class WebSpeechRecognitionResult {
 public:
     WebSpeechRecognitionResult() { }
+<<<<<<< HEAD
     WebSpeechRecognitionResult(const WebSpeechRecognitionResult& result)
     {
         assign(result);
@@ -47,6 +48,12 @@ public:
     BLINK_EXPORT void assign(const WebVector<WebString>& transcripts,
         const WebVector<float>& confidences,
         bool final);
+=======
+    WebSpeechRecognitionResult(const WebSpeechRecognitionResult& result) { assign(result); }
+    ~WebSpeechRecognitionResult() { reset(); }
+
+    BLINK_EXPORT void assign(const WebVector<WebString>& transcripts, const WebVector<float>& confidences, bool final);
+>>>>>>> miniblink49
     BLINK_EXPORT void assign(const WebSpeechRecognitionResult&);
     BLINK_EXPORT void reset();
 

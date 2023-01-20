@@ -33,10 +33,15 @@
 #include "platform/scroll/ScrollTypes.h"
 #include "platform/scroll/ScrollbarThemeClient.h"
 #include "wtf/MathExtras.h"
+<<<<<<< HEAD
+=======
+#include "wtf/PassRefPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class GraphicsContext;
+<<<<<<< HEAD
 class HostWindow;
 class IntRect;
 class PlatformMouseEvent;
@@ -65,6 +70,18 @@ public:
     {
         return new Scrollbar(scrollableArea, orientation, size, nullptr, theme);
     }
+=======
+class IntRect;
+class PlatformGestureEvent;
+class PlatformMouseEvent;
+class ScrollAnimator;
+class ScrollableArea;
+class ScrollbarTheme;
+
+class PLATFORM_EXPORT Scrollbar : public Widget, public ScrollbarThemeClient {
+public:
+    static PassRefPtrWillBeRawPtr<Scrollbar> create(ScrollableArea*, ScrollbarOrientation, ScrollbarControlSize);
+>>>>>>> miniblink49
 
     ~Scrollbar() override;
 
@@ -82,6 +99,7 @@ public:
     void setFrameRect(const IntRect&) override;
     IntRect frameRect() const override { return Widget::frameRect(); }
 
+<<<<<<< HEAD
     ScrollbarOverlayColorTheme getScrollbarOverlayColorTheme() const override;
     void getTickmarks(Vector<IntRect>&) const override;
     bool isScrollableAreaActive() const override;
@@ -91,6 +109,16 @@ public:
     {
         return Widget::convertFromRootFrame(pointInRootFrame);
     }
+=======
+    void invalidate() override { Widget::invalidate(); }
+    void invalidateRect(const IntRect&) override;
+
+    ScrollbarOverlayStyle scrollbarOverlayStyle() const override;
+    void getTickmarks(Vector<IntRect>&) const override;
+    bool isScrollableAreaActive() const override;
+
+    IntPoint convertFromContainingWindow(const IntPoint& windowPoint) override { return Widget::convertFromContainingWindow(windowPoint); }
+>>>>>>> miniblink49
 
     bool isCustomScrollbar() const override { return false; }
     ScrollbarOrientation orientation() const override { return m_orientation; }
@@ -107,6 +135,7 @@ public:
     ScrollbarPart hoveredPart() const override { return m_hoveredPart; }
 
     void styleChanged() override { }
+<<<<<<< HEAD
     void setScrollbarsHidden(bool) override;
     bool enabled() const override { return m_enabled; }
     void setEnabled(bool) override;
@@ -123,6 +152,17 @@ public:
 
     void disconnectFromScrollableArea();
     ScrollableArea* getScrollableArea() const { return m_scrollableArea; }
+=======
+
+    bool enabled() const override { return m_enabled; }
+    void setEnabled(bool) override;
+
+    // Called by the ScrollableArea when the scroll offset changes.
+    void offsetDidChange();
+
+    void disconnectFromScrollableArea();
+    ScrollableArea* scrollableArea() const { return m_scrollableArea; }
+>>>>>>> miniblink49
 
     int pressedPos() const { return m_pressedPos; }
 
@@ -132,13 +172,18 @@ public:
     void setProportion(int visibleSize, int totalSize);
     void setPressedPos(int p) { m_pressedPos = p; }
 
+<<<<<<< HEAD
     void paint(GraphicsContext&, const CullRect&) const final;
+=======
+    void paint(GraphicsContext*, const IntRect& damageRect) final;
+>>>>>>> miniblink49
 
     bool isOverlayScrollbar() const override;
     bool shouldParticipateInHitTesting();
 
     bool isWindowActive() const;
 
+<<<<<<< HEAD
     // Return if the gesture event was handled. |shouldUpdateCapture|
     // will be set to true if the handler should update the capture
     // state for this scrollbar.
@@ -147,11 +192,18 @@ public:
     // These methods are used for platform scrollbars to give :hover feedback.
     // They will not get called when the mouse went down in a scrollbar, since it
     // is assumed the scrollbar will start
+=======
+    bool gestureEvent(const PlatformGestureEvent&);
+
+    // These methods are used for platform scrollbars to give :hover feedback.  They will not get called
+    // when the mouse went down in a scrollbar, since it is assumed the scrollbar will start
+>>>>>>> miniblink49
     // grabbing all events in that case anyway.
     void mouseMoved(const PlatformMouseEvent&);
     void mouseEntered();
     void mouseExited();
 
+<<<<<<< HEAD
     // Used by some platform scrollbars to know when they've been released from
     // capture.
     void mouseUp(const PlatformMouseEvent&);
@@ -215,17 +267,70 @@ protected:
         ScrollbarTheme* = 0);
 
     void autoscrollTimerFired(TimerBase*);
+=======
+    // Used by some platform scrollbars to know when they've been released from capture.
+    void mouseUp(const PlatformMouseEvent&);
+    void mouseDown(const PlatformMouseEvent&);
+
+    ScrollbarTheme* theme() const { return m_theme; }
+
+    bool suppressInvalidation() const { return m_suppressInvalidation; }
+    void setSuppressInvalidation(bool s) { m_suppressInvalidation = s; }
+
+    IntRect convertToContainingView(const IntRect&) const override;
+    IntRect convertFromContainingView(const IntRect&) const override;
+
+    IntPoint convertToContainingView(const IntPoint&) const override;
+    IntPoint convertFromContainingView(const IntPoint&) const override;
+
+    void moveThumb(int pos, bool draggingDocument = false);
+
+    bool isAlphaLocked() const override { return m_isAlphaLocked; }
+    void setIsAlphaLocked(bool flag) override { m_isAlphaLocked = flag; }
+
+    float elasticOverscroll() const override { return m_elasticOverscroll; }
+    void setElasticOverscroll(float elasticOverscroll) override { m_elasticOverscroll = elasticOverscroll; }
+
+    bool overlapsResizer() const { return m_overlapsResizer; }
+    void setOverlapsResizer(bool overlapsResizer) { m_overlapsResizer = overlapsResizer; }
+
+    DisplayItemClient displayItemClient() const override { return toDisplayItemClient(this); }
+    String debugName() const override { return m_orientation == HorizontalScrollbar ? "HorizontalScrollbar" : "VerticalScrollbar"; }
+
+    // Promptly unregister from the theme manager + run finalizers of derived Scrollbars.
+    EAGERLY_FINALIZE();
+#if ENABLE(OILPAN)
+    DECLARE_EAGER_FINALIZATION_OPERATOR_NEW();
+#endif
+    DECLARE_VIRTUAL_TRACE();
+
+protected:
+    Scrollbar(ScrollableArea*, ScrollbarOrientation, ScrollbarControlSize, ScrollbarTheme* = 0);
+
+    void updateThumb();
+    virtual void updateThumbPosition();
+    virtual void updateThumbProportion();
+
+    void autoscrollTimerFired(Timer<Scrollbar>*);
+>>>>>>> miniblink49
     void startTimerIfNeeded(double delay);
     void stopTimerIfNeeded();
     void autoscrollPressedPart(double delay);
     ScrollDirectionPhysical pressedPartScrollDirectionPhysical();
     ScrollGranularity pressedPartScrollGranularity();
 
+<<<<<<< HEAD
     Member<ScrollableArea> m_scrollableArea;
     ScrollbarOrientation m_orientation;
     ScrollbarControlSize m_controlSize;
     ScrollbarTheme& m_theme;
     Member<HostWindow> m_hostWindow;
+=======
+    RawPtrWillBeMember<ScrollableArea> m_scrollableArea;
+    ScrollbarOrientation m_orientation;
+    ScrollbarControlSize m_controlSize;
+    ScrollbarTheme* m_theme;
+>>>>>>> miniblink49
 
     int m_visibleSize;
     int m_totalSize;
@@ -242,12 +347,21 @@ protected:
     bool m_enabled;
 
     Timer<Scrollbar> m_scrollTimer;
+<<<<<<< HEAD
+=======
+    bool m_overlapsResizer;
+
+    bool m_suppressInvalidation;
+
+    bool m_isAlphaLocked;
+>>>>>>> miniblink49
 
     float m_elasticOverscroll;
 
 private:
     bool isScrollbar() const override { return true; }
 
+<<<<<<< HEAD
     void invalidate() override { setNeedsPaintInvalidation(AllParts); }
     void invalidateRect(const IntRect&) override
     {
@@ -268,6 +382,12 @@ DEFINE_TYPE_CASTS(Scrollbar,
     widget,
     widget->isScrollbar(),
     widget.isScrollbar());
+=======
+    float scrollableAreaCurrentPos() const;
+};
+
+DEFINE_TYPE_CASTS(Scrollbar, Widget, widget, widget->isScrollbar(), widget.isScrollbar());
+>>>>>>> miniblink49
 
 } // namespace blink
 

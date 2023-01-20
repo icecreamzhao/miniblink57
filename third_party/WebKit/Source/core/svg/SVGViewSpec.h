@@ -20,63 +20,73 @@
 #ifndef SVGViewSpec_h
 #define SVGViewSpec_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
+#include "core/svg/SVGFitToViewBox.h"
+#include "core/svg/SVGSVGElement.h"
 #include "core/svg/SVGZoomAndPan.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class FloatRect;
-class SVGPreserveAspectRatio;
-class SVGRect;
-class SVGSVGElement;
-class SVGTransformList;
-
-class SVGViewSpec final : public GarbageCollectedFinalized<SVGViewSpec>,
-                          public SVGZoomAndPan {
+class SVGViewSpec final : public RefCountedWillBeGarbageCollectedFinalized<SVGViewSpec>, public ScriptWrappable, public SVGZoomAndPan, public SVGFitToViewBox {
+    DEFINE_WRAPPERTYPEINFO();
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGViewSpec);
 public:
-    static SVGViewSpec* createForElement(SVGSVGElement&);
+#if !ENABLE(OILPAN)
+    using RefCounted<SVGViewSpec>::ref;
+    using RefCounted<SVGViewSpec>::deref;
+#endif
+
+    static PassRefPtrWillBeRawPtr<SVGViewSpec> create(SVGSVGElement* contextElement)
+    {
+        return adoptRefWillBeNoop(new SVGViewSpec(contextElement));
+    }
 
     bool parseViewSpec(const String&);
     void reset();
-    template <typename T>
-    void inheritViewAttributesFromElement(T&);
+    void detachContextElement();
+    template<typename T> void inheritViewAttributesFromElement(T*);
 
-    SVGRect* viewBox() { return m_viewBox; }
-    SVGPreserveAspectRatio* preserveAspectRatio()
-    {
-        return m_preserveAspectRatio;
-    }
-    SVGTransformList* transform() { return m_transform; }
+    // JS API
+    SVGTransformList* transform() { return m_transform ? m_transform->baseValue() : 0; }
+    PassRefPtrWillBeRawPtr<SVGTransformListTearOff> transformFromJavascript() { return m_transform ? m_transform->baseVal() : 0; }
+    SVGElement* viewTarget() const;
+    String viewBoxString() const;
+    String preserveAspectRatioString() const;
+    String transformString() const;
+    String viewTargetString() const { return m_viewTargetString; }
+    // override SVGZoomAndPan.setZoomAndPan so can throw exception on write
+    void setZoomAndPan(unsigned short value) { } // read only
+    void setZoomAndPan(unsigned short value, ExceptionState&);
 
     DECLARE_VIRTUAL_TRACE();
 
-private:
-    SVGViewSpec();
+    SVGSVGElement* contextElement() { return m_contextElement.get(); }
 
-    template <typename CharType>
+private:
+    explicit SVGViewSpec(SVGSVGElement*);
+
+    template<typename CharType>
     bool parseViewSpecInternal(const CharType* ptr, const CharType* end);
 
-    void setViewBox(const FloatRect&);
-    void setPreserveAspectRatio(const SVGPreserveAspectRatio&);
-
-    Member<SVGRect> m_viewBox;
-    Member<SVGPreserveAspectRatio> m_preserveAspectRatio;
-    Member<SVGTransformList> m_transform;
+    RawPtrWillBeMember<SVGSVGElement> m_contextElement;
+    RefPtrWillBeMember<SVGAnimatedTransformList> m_transform;
+    String m_viewTargetString;
 };
 
 template <typename T>
-void SVGViewSpec::inheritViewAttributesFromElement(T& inheritFromElement)
+void SVGViewSpec::inheritViewAttributesFromElement(T* inheritFromElement)
 {
-    if (!inheritFromElement.hasEmptyViewBox())
-        setViewBox(inheritFromElement.viewBox()->currentValue()->value());
+    if (!inheritFromElement->hasEmptyViewBox())
+        viewBox()->baseValue()->setValue(inheritFromElement->viewBox()->currentValue()->value());
 
-    if (inheritFromElement.preserveAspectRatio()->isSpecified()) {
-        setPreserveAspectRatio(
-            *inheritFromElement.preserveAspectRatio()->currentValue());
+    if (inheritFromElement->preserveAspectRatio()->isSpecified()) {
+        preserveAspectRatio()->baseValue()->setAlign(inheritFromElement->preserveAspectRatio()->currentValue()->align());
+        preserveAspectRatio()->baseValue()->setMeetOrSlice(inheritFromElement->preserveAspectRatio()->currentValue()->meetOrSlice());
     }
 
-    if (inheritFromElement.hasAttribute(SVGNames::zoomAndPanAttr))
-        setZoomAndPan(inheritFromElement.zoomAndPan());
+    if (inheritFromElement->hasAttribute(SVGNames::zoomAndPanAttr))
+        setZoomAndPan(inheritFromElement->zoomAndPan());
 }
 
 } // namespace blink

@@ -30,8 +30,11 @@
 #define Distance_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/build_config.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -39,6 +42,7 @@ namespace blink {
 // http://connect.creativelabs.com/openal/Documentation/OpenAL%201.1%20Specification.htm.
 
 class PLATFORM_EXPORT DistanceEffect {
+<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
@@ -50,19 +54,43 @@ public:
 
     // Returns scalar gain for the given distance the current distance model is
     // used
+=======
+public:
+    enum ModelType {
+        ModelLinear = 0,
+        ModelInverse = 1,
+        ModelExponential = 2
+    };
+
+    DistanceEffect();
+
+    // Returns scalar gain for the given distance the current distance model is used
+>>>>>>> miniblink49
     double gain(double distance);
 
     ModelType model() { return m_model; }
 
+<<<<<<< HEAD
     void setModel(ModelType model) { m_model = model; }
+=======
+    void setModel(ModelType model, bool clamped)
+    {
+        m_model = model;
+        m_isClamped = clamped;
+    }
+>>>>>>> miniblink49
 
     // Distance params
     void setRefDistance(double refDistance) { m_refDistance = refDistance; }
     void setMaxDistance(double maxDistance) { m_maxDistance = maxDistance; }
+<<<<<<< HEAD
     void setRolloffFactor(double rolloffFactor)
     {
         m_rolloffFactor = rolloffFactor;
     }
+=======
+    void setRolloffFactor(double rolloffFactor) { m_rolloffFactor = rolloffFactor; }
+>>>>>>> miniblink49
 
     double refDistance() const { return m_refDistance; }
     double maxDistance() const { return m_maxDistance; }
@@ -74,6 +102,10 @@ protected:
     double exponentialGain(double distance);
 
     ModelType m_model;
+<<<<<<< HEAD
+=======
+    bool m_isClamped;
+>>>>>>> miniblink49
     double m_refDistance;
     double m_maxDistance;
     double m_rolloffFactor;

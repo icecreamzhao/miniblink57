@@ -48,6 +48,7 @@ dx
 dy
 edgeMode
 elevation
+enable-background
 end
 exponent
 fill
@@ -72,6 +73,8 @@ fr
 g1
 g2
 glyph-name
+glyph-orientation-horizontal
+glyph-orientation-vertical
 glyphRef
 gradientTransform
 gradientUnits
@@ -80,7 +83,6 @@ height
 horiz-adv-x
 horiz-origin-x
 horiz-origin-y
-href
 ideographic
 image-rendering
 in
@@ -127,6 +129,7 @@ onend
 onfocusin
 onfocusout
 onrepeat
+onzoom
 opacity
 operator
 order
@@ -225,6 +228,7 @@ vert-adv-y
 vert-origin-x
 vert-origin-y
 viewBox
+viewTarget
 visibility
 width
 widths

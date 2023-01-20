@@ -27,28 +27,42 @@
 #ifndef ShapeCache_h
 #define ShapeCache_h
 
+<<<<<<< HEAD
 #include "platform/fonts/shaping/ShapeResult.h"
 #include "platform/fonts/shaping/ShapeResultInlineHeaders.h"
+=======
+//#include "platform/fonts/shaping/HarfBuzzShaper.h"
+>>>>>>> miniblink49
 #include "platform/text/TextRun.h"
 #include "wtf/Forward.h"
 #include "wtf/HashFunctions.h"
 #include "wtf/HashSet.h"
 #include "wtf/HashTableDeletedValueType.h"
 #include "wtf/StringHasher.h"
+<<<<<<< HEAD
 #include "wtf/WeakPtr.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class Font;
 class GlyphBuffer;
 class SimpleFontData;
+<<<<<<< HEAD
 
 struct ShapeCacheEntry {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+=======
+class HarfBuzzShaper;
+
+struct ShapeCacheEntry {
+>>>>>>> miniblink49
     ShapeCacheEntry()
     {
         m_shapeResult = nullptr;
     }
+<<<<<<< HEAD
     RefPtr<const ShapeResult> m_shapeResult;
 };
 
@@ -61,16 +75,30 @@ private:
     class SmallStringKey {
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
+=======
+    RefPtr<ShapeResult> m_shapeResult;
+};
+
+class ShapeCache {
+private:
+    // Used to optimize small strings as hash table keys. Avoids malloc'ing an out-of-line StringImpl.
+    class SmallStringKey {
+>>>>>>> miniblink49
     public:
         static unsigned capacity() { return s_capacity; }
 
         SmallStringKey()
+<<<<<<< HEAD
             : m_length(s_emptyValueLength)
             , m_direction((unsigned)TextDirection::kLtr)
+=======
+            : m_length(s_emptyValueLength), m_direction(LTR)
+>>>>>>> miniblink49
         {
         }
 
         SmallStringKey(WTF::HashTableDeletedValueType)
+<<<<<<< HEAD
             : m_length(s_deletedValueLength)
             , m_direction((unsigned)TextDirection::kLtr)
         {
@@ -80,6 +108,14 @@ private:
         SmallStringKey(CharacterType* characters, unsigned short length, TextDirection direction)
             : m_length(length)
             , m_direction((unsigned)direction)
+=======
+            : m_length(s_deletedValueLength), m_direction(LTR)
+        {
+        }
+
+        template<typename CharacterType> SmallStringKey(CharacterType* characters, unsigned short length, TextDirection direction)
+            : m_length(length), m_direction(direction)
+>>>>>>> miniblink49
         {
             ASSERT(length <= s_capacity);
 
@@ -124,14 +160,20 @@ private:
     };
 
     struct SmallStringKeyHash {
+<<<<<<< HEAD
         STATIC_ONLY(SmallStringKeyHash);
+=======
+>>>>>>> miniblink49
         static unsigned hash(const SmallStringKey& key) { return key.hash(); }
         static bool equal(const SmallStringKey& a, const SmallStringKey& b) { return a == b; }
         static const bool safeToCompareToEmptyOrDeleted = true; // Empty and deleted values have lengths that are not equal to any valid length.
     };
 
     struct SmallStringKeyHashTraits : WTF::SimpleClassHashTraits<SmallStringKey> {
+<<<<<<< HEAD
         STATIC_ONLY(SmallStringKeyHashTraits);
+=======
+>>>>>>> miniblink49
         static const bool hasIsEmptyValueFunction = true;
         static bool isEmptyValue(const SmallStringKey& key) { return key.isHashTableEmptyValue(); }
         static const unsigned minimumTableSize = 16;
@@ -140,6 +182,7 @@ private:
     friend bool operator==(const SmallStringKey&, const SmallStringKey&);
 
 public:
+<<<<<<< HEAD
     ShapeCache()
         : m_weakFactory(this)
         , m_version(0)
@@ -149,11 +192,19 @@ public:
     ShapeCacheEntry* add(const TextRun& run, ShapeCacheEntry entry)
     {
         if (run.length() > SmallStringKey::capacity())
+=======
+    ShapeCache() { }
+
+    ShapeCacheEntry* add(const TextRun& run, ShapeCacheEntry entry)
+    {
+        if (static_cast<unsigned>(run.length()) > SmallStringKey::capacity())
+>>>>>>> miniblink49
             return 0;
 
         return addSlowCase(run, entry);
     }
 
+<<<<<<< HEAD
     void clearIfVersionChanged(unsigned version)
     {
         if (version != m_version) {
@@ -162,12 +213,15 @@ public:
         }
     }
 
+=======
+>>>>>>> miniblink49
     void clear()
     {
         m_singleCharMap.clear();
         m_shortStringMap.clear();
     }
 
+<<<<<<< HEAD
     unsigned size() const
     {
         return m_singleCharMap.size() + m_shortStringMap.size();
@@ -196,11 +250,23 @@ private:
         unsigned length = run.length();
         bool isNewEntry;
         ShapeCacheEntry* value;
+=======
+private:
+    ShapeCacheEntry* addSlowCase(const TextRun& run, ShapeCacheEntry entry)
+    {
+        int length = run.length();
+        bool isNewEntry;
+        ShapeCacheEntry *value;
+>>>>>>> miniblink49
         if (length == 1) {
             uint32_t key = run[0];
             // All current codepointsin UTF-32 are bewteen 0x0 and 0x10FFFF,
             // as such use bit 32 to indicate direction.
+<<<<<<< HEAD
             if (run.direction() == TextDirection::kRtl)
+=======
+            if (run.direction() == RTL)
+>>>>>>> miniblink49
                 key |= (1u << 31);
             SingleCharMap::AddResult addResult = m_singleCharMap.add(key, entry);
             isNewEntry = addResult.isNewEntry;
@@ -217,11 +283,22 @@ private:
             value = &addResult.storedValue->value;
         }
 
+<<<<<<< HEAD
         if (!isNewEntry)
             return value;
 
         if (size() < s_maxSize)
             return value;
+=======
+        // Cache hit: ramp up by sampling the next few words.
+        if (!isNewEntry) {
+            return value;
+        }
+
+        if (m_singleCharMap.size() + m_shortStringMap.size() < s_maxSize) {
+            return value;
+        }
+>>>>>>> miniblink49
 
         // No need to be fancy: we're just trying to avoid pathological growth.
         m_singleCharMap.clear();
@@ -237,6 +314,7 @@ private:
     // cache entries is a lot lower given the average word count for a web page
     // is well below 1,000 and even full length books rarely have over 10,000
     // unique words [1]. 1: http://www.mine-control.com/zack/guttenberg/
+<<<<<<< HEAD
     // Our definition of a word is somewhat different from the norm in that we
     // only segment on space. Thus "foo", "foo-", and "foo)" would count as
     // three separate words. Given that 10,000 seems like a reasonable maximum.
@@ -246,6 +324,13 @@ private:
     SmallStringMap m_shortStringMap;
     WeakPtrFactory<ShapeCache> m_weakFactory;
     unsigned m_version;
+=======
+    // 2,500 seems like a resonable number.
+    static const unsigned s_maxSize = 2500;
+
+    SingleCharMap m_singleCharMap;
+    SmallStringMap m_shortStringMap;
+>>>>>>> miniblink49
 };
 
 inline bool operator==(const ShapeCache::SmallStringKey& a, const ShapeCache::SmallStringKey& b)

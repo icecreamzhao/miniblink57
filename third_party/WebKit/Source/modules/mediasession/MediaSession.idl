@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://wicg.github.io/mediasession/#enumdef-mediasessionplaybackstate
 
 enum MediaSessionPlaybackState {
@@ -32,4 +33,15 @@ callback MediaSessionActionHandler = void ();
 
     [Measure] void setActionHandler(MediaSessionAction action,
                                     MediaSessionActionHandler? handler);
+=======
+// https://mediasession.spec.whatwg.org/#the-mediasession-interface
+
+[
+    Constructor(),
+    GarbageCollected,
+    RuntimeEnabled=MediaSession,
+] interface MediaSession {
+    void activate();
+    void deactivate();
+>>>>>>> miniblink49
 };

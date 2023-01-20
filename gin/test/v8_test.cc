@@ -9,44 +9,40 @@
 #include "gin/v8_initializer.h"
 
 using v8::Context;
-using v8::HandleScope;
 using v8::Local;
+using v8::HandleScope;
 
 namespace gin {
 
-V8Test::V8Test()
-{
+V8Test::V8Test() {
 }
 
-V8Test::~V8Test()
-{
+V8Test::~V8Test() {
 }
 
-void V8Test::SetUp()
-{
+void V8Test::SetUp() {
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA
-    gin::V8Initializer::LoadV8Snapshot();
-    gin::V8Initializer::LoadV8Natives();
+  gin::V8Initializer::LoadV8Snapshot();
+  gin::V8Initializer::LoadV8Natives();
 #endif
-    gin::IsolateHolder::Initialize(gin::IsolateHolder::kStrictMode,
-        gin::ArrayBufferAllocator::SharedInstance());
+  gin::IsolateHolder::Initialize(gin::IsolateHolder::kStrictMode,
+                                 gin::ArrayBufferAllocator::SharedInstance());
 
-    instance_.reset(new gin::IsolateHolder);
-    instance_->isolate()->Enter();
+  instance_.reset(new gin::IsolateHolder);
+  instance_->isolate()->Enter();
+  HandleScope handle_scope(instance_->isolate());
+  context_.Reset(instance_->isolate(), Context::New(instance_->isolate()));
+  Local<Context>::New(instance_->isolate(), context_)->Enter();
+}
+
+void V8Test::TearDown() {
+  {
     HandleScope handle_scope(instance_->isolate());
-    context_.Reset(instance_->isolate(), Context::New(instance_->isolate()));
-    Local<Context>::New(instance_->isolate(), context_)->Enter();
+    Local<Context>::New(instance_->isolate(), context_)->Exit();
+    context_.Reset();
+  }
+  instance_->isolate()->Exit();
+  instance_.reset();
 }
 
-void V8Test::TearDown()
-{
-    {
-        HandleScope handle_scope(instance_->isolate());
-        Local<Context>::New(instance_->isolate(), context_)->Exit();
-        context_.Reset();
-    }
-    instance_->isolate()->Exit();
-    instance_.reset();
-}
-
-} // namespace gin
+}  // namespace gin

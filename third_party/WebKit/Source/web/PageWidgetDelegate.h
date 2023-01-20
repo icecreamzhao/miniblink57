@@ -32,14 +32,23 @@
 #define PageWidgetDelegate_h
 
 #include "public/platform/WebCanvas.h"
+<<<<<<< HEAD
 #include "public/platform/WebCoalescedInputEvent.h"
 #include "public/web/WebWidget.h"
 #include "web/WebExport.h"
+=======
+#include "public/web/WebWidget.h"
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class LocalFrame;
 class Page;
+<<<<<<< HEAD
+=======
+class PageOverlayList;
+>>>>>>> miniblink49
 class WebGestureEvent;
 class WebInputEvent;
 class WebKeyboardEvent;
@@ -47,6 +56,7 @@ class WebMouseEvent;
 class WebMouseWheelEvent;
 class WebTouchEvent;
 
+<<<<<<< HEAD
 class WEB_EXPORT PageWidgetEventHandler {
 public:
     virtual void handleMouseMove(LocalFrame& mainFrame,
@@ -89,10 +99,41 @@ public:
         PageWidgetEventHandler&,
         const WebCoalescedInputEvent& coalescedEvent,
         LocalFrame* root);
+=======
+class PageWidgetEventHandler {
+public:
+    virtual void handleMouseMove(LocalFrame& mainFrame, const WebMouseEvent&);
+    virtual void handleMouseLeave(LocalFrame& mainFrame, const WebMouseEvent&);
+    virtual void handleMouseDown(LocalFrame& mainFrame, const WebMouseEvent&);
+    virtual void handleMouseUp(LocalFrame& mainFrame, const WebMouseEvent&);
+    virtual bool handleMouseWheel(LocalFrame& mainFrame, const WebMouseWheelEvent&);
+    virtual bool handleKeyEvent(const WebKeyboardEvent&) = 0;
+    virtual bool handleCharEvent(const WebKeyboardEvent&) = 0;
+    virtual bool handleGestureEvent(const WebGestureEvent&) = 0;
+    virtual bool handleTouchEvent(LocalFrame& mainFrame, const WebTouchEvent&);
+    virtual ~PageWidgetEventHandler() { }
+};
+
+
+// Common implementation of WebViewImpl and WebPagePopupImpl.
+class PageWidgetDelegate {
+public:
+    // rootFrame arguments indicate a root localFrame from which to start performing the
+    // specified operation. If rootFrame is 0, these methods will attempt to use the
+    // Page's mainFrame(), if it is a LocalFrame.
+    static void animate(Page&, double monotonicFrameBeginTime, LocalFrame& root);
+    static void layout(Page&, LocalFrame& root);
+    static void paint(Page&, PageOverlayList*, WebCanvas*, const WebRect&, LocalFrame& root);
+    static bool handleInputEvent(PageWidgetEventHandler&, const WebInputEvent&, LocalFrame* root);
+>>>>>>> miniblink49
 
 private:
     PageWidgetDelegate() { }
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 #endif

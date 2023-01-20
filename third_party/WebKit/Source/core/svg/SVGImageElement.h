@@ -22,6 +22,7 @@
 #define SVGImageElement_h
 
 #include "core/SVGNames.h"
+#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGAnimatedPreserveAspectRatio.h"
 #include "core/svg/SVGGraphicsElement.h"
@@ -34,8 +35,7 @@ namespace blink {
 class SVGImageElement final : public SVGGraphicsElement,
                               public SVGURIReference {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(SVGImageElement);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGImageElement);
 public:
     DECLARE_NODE_FACTORY(SVGImageElement);
     DECLARE_VIRTUAL_TRACE();
@@ -46,29 +46,23 @@ public:
     SVGAnimatedLength* y() const { return m_y.get(); }
     SVGAnimatedLength* width() const { return m_width.get(); }
     SVGAnimatedLength* height() const { return m_height.get(); }
-    SVGAnimatedPreserveAspectRatio* preserveAspectRatio()
-    {
-        return m_preserveAspectRatio.get();
-    }
+    SVGAnimatedPreserveAspectRatio* preserveAspectRatio() { return m_preserveAspectRatio.get(); }
 
     // Exposed for testing.
-    ImageResourceContent* cachedImage() const { return imageLoader().image(); }
+    ImageResource* cachedImage() const { return imageLoader().image(); }
 
 private:
     explicit SVGImageElement(Document&);
 
-    bool isStructurallyExternal() const override
-    {
-        return !hrefString().isNull();
-    }
+    bool isStructurallyExternal() const override { return !hrefString().isNull(); }
 
-    void collectStyleForPresentationAttribute(const QualifiedName&,
-        const AtomicString&,
-        MutableStylePropertySet*) override;
+    bool isPresentationAttribute(const QualifiedName&) const override;
+    bool isPresentationAttributeWithSVGDOM(const QualifiedName&) const override;
+    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
 
     void svgAttributeChanged(const QualifiedName&) override;
 
-    void attachLayoutTree(const AttachContext& = AttachContext()) override;
+    void attach(const AttachContext& = AttachContext()) override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
 
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
@@ -81,13 +75,13 @@ private:
     void didMoveToNewDocument(Document& oldDocument) override;
     SVGImageLoader& imageLoader() const { return *m_imageLoader; }
 
-    Member<SVGAnimatedLength> m_x;
-    Member<SVGAnimatedLength> m_y;
-    Member<SVGAnimatedLength> m_width;
-    Member<SVGAnimatedLength> m_height;
-    Member<SVGAnimatedPreserveAspectRatio> m_preserveAspectRatio;
+    RefPtrWillBeMember<SVGAnimatedLength> m_x;
+    RefPtrWillBeMember<SVGAnimatedLength> m_y;
+    RefPtrWillBeMember<SVGAnimatedLength> m_width;
+    RefPtrWillBeMember<SVGAnimatedLength> m_height;
+    RefPtrWillBeMember<SVGAnimatedPreserveAspectRatio> m_preserveAspectRatio;
 
-    Member<SVGImageLoader> m_imageLoader;
+    OwnPtrWillBeMember<SVGImageLoader> m_imageLoader;
     bool m_needsLoaderURIUpdate : 1;
 };
 

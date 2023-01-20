@@ -26,8 +26,12 @@
 #ifndef WebScrollbarThemePainter_h
 #define WebScrollbarThemePainter_h
 
+<<<<<<< HEAD
 #include "public/platform/WebCanvas.h"
 #include "public/platform/WebPrivatePtr.h"
+=======
+#include "WebCanvas.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -38,6 +42,7 @@ struct WebRect;
 
 class WebScrollbarThemePainter {
 public:
+<<<<<<< HEAD
     WebScrollbarThemePainter()
         : m_theme(0)
         , m_deviceScaleFactor(1.0)
@@ -48,6 +53,11 @@ public:
         assign(painter);
     }
     virtual ~WebScrollbarThemePainter() { reset(); }
+=======
+    WebScrollbarThemePainter() : m_theme(0), m_scrollbar(0){}
+    WebScrollbarThemePainter(const WebScrollbarThemePainter& painter) { assign(painter); }
+    virtual ~WebScrollbarThemePainter() { }
+>>>>>>> miniblink49
     WebScrollbarThemePainter& operator=(const WebScrollbarThemePainter& painter)
     {
         assign(painter);
@@ -55,21 +65,31 @@ public:
     }
 
     BLINK_PLATFORM_EXPORT void assign(const WebScrollbarThemePainter&);
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void reset();
 
     BLINK_PLATFORM_EXPORT void paintScrollbarBackground(WebCanvas*,
         const WebRect&);
+=======
+
+    BLINK_PLATFORM_EXPORT void paintScrollbarBackground(WebCanvas*, const WebRect&);
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT void paintTrackBackground(WebCanvas*, const WebRect&);
     BLINK_PLATFORM_EXPORT void paintBackTrackPart(WebCanvas*, const WebRect&);
     BLINK_PLATFORM_EXPORT void paintForwardTrackPart(WebCanvas*, const WebRect&);
     BLINK_PLATFORM_EXPORT void paintBackButtonStart(WebCanvas*, const WebRect&);
     BLINK_PLATFORM_EXPORT void paintBackButtonEnd(WebCanvas*, const WebRect&);
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void paintForwardButtonStart(WebCanvas*,
         const WebRect&);
+=======
+    BLINK_PLATFORM_EXPORT void paintForwardButtonStart(WebCanvas*, const WebRect&);
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT void paintForwardButtonEnd(WebCanvas*, const WebRect&);
     BLINK_PLATFORM_EXPORT void paintTickmarks(WebCanvas*, const WebRect&);
     BLINK_PLATFORM_EXPORT void paintThumb(WebCanvas*, const WebRect&);
 
+<<<<<<< HEAD
     // This opacity is applied on top of the content that is painted for the
     // thumb.
     BLINK_PLATFORM_EXPORT float thumbOpacity() const;
@@ -81,6 +101,17 @@ public:
     BLINK_PLATFORM_EXPORT WebScrollbarThemePainter(ScrollbarTheme&,
         Scrollbar&,
         float deviceScaleFactor);
+=======
+#if INSIDE_BLINK
+    BLINK_PLATFORM_EXPORT WebScrollbarThemePainter(ScrollbarTheme*, Scrollbar*);
+    
+#ifndef MINIBLINK_NOT_IMPLEMENTED
+    // blink的方式是自己实现滚动条的各种绘制，这里我们改走blink原生的
+    ScrollbarTheme* theme() { return m_theme; }
+    Scrollbar* scrollbar() { return m_scrollbar; }
+#endif // MINIBLINK_NOT_IMPLEMENTED
+
+>>>>>>> miniblink49
 #endif
 
 private:
@@ -94,9 +125,13 @@ private:
     // for the lifetime of this scrollbar. The painter has to use the real
     // scrollbar (and not a WebScrollbar wrapper) due to static_casts for
     // LayoutScrollbar and pointer-based HashMap lookups for Lion scrollbars.
+<<<<<<< HEAD
     WebPrivatePtr<Scrollbar> m_scrollbar;
 
     float m_deviceScaleFactor;
+=======
+    Scrollbar* m_scrollbar;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

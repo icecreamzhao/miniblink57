@@ -16,13 +16,27 @@ public:
     /**
      *  Refs the passed-in picture.
      */
+<<<<<<< HEAD
     static sk_sp<SkImageFilter> Make(sk_sp<SkPicture> picture);
+=======
+    static SkPictureImageFilter* Create(const SkPicture* picture) {
+        return SkNEW_ARGS(SkPictureImageFilter, (picture));
+    }
+>>>>>>> miniblink49
 
     /**
      *  Refs the passed-in picture. cropRect can be used to crop or expand the destination rect when
      *  the picture is drawn. (No scaling is implied by the dest rect; only the CTM is applied.)
      */
+<<<<<<< HEAD
     static sk_sp<SkImageFilter> Make(sk_sp<SkPicture> picture, const SkRect& cropRect);
+=======
+    static SkPictureImageFilter* Create(const SkPicture* picture, const SkRect& cropRect) {
+        return SkNEW_ARGS(SkPictureImageFilter, (picture, cropRect,
+                                                 kDeviceSpace_PictureResolution,
+                                                 kLow_SkFilterQuality));
+    }
+>>>>>>> miniblink49
 
     /**
      *  Refs the passed-in picture. The picture is rasterized at a resolution that matches the
@@ -31,6 +45,7 @@ public:
      *  expand the destination rect when the picture is drawn. (No scaling is implied by the
      *  dest rect; only the CTM is applied.)
      */
+<<<<<<< HEAD
     static sk_sp<SkImageFilter> MakeForLocalSpace(sk_sp<SkPicture> picture,
         const SkRect& cropRect,
         SkFilterQuality filterQuality);
@@ -55,6 +70,14 @@ public:
     }
 #endif
 
+=======
+    static SkPictureImageFilter* CreateForLocalSpace(const SkPicture* picture,
+                                                     const SkRect& cropRect,
+                                                     SkFilterQuality filterQuality) {
+        return SkNEW_ARGS(SkPictureImageFilter, (picture, cropRect,
+                                                 kLocalSpace_PictureResolution, filterQuality));
+    }
+>>>>>>> miniblink49
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkPictureImageFilter)
 
@@ -64,6 +87,13 @@ protected:
         kLocalSpace_PictureResolution
     };
 
+<<<<<<< HEAD
+=======
+    explicit SkPictureImageFilter(const SkPicture* picture);
+    SkPictureImageFilter(const SkPicture* picture, const SkRect& cropRect,
+                         PictureResolution, SkFilterQuality);
+    virtual ~SkPictureImageFilter();
+>>>>>>> miniblink49
     /*  Constructs an SkPictureImageFilter object from an SkReadBuffer.
      *  Note: If the SkPictureImageFilter object construction requires bitmap
      *  decoding, the decoder must be set on the SkReadBuffer parameter by calling
@@ -71,6 +101,7 @@ protected:
      *  @param SkReadBuffer Serialized picture data.
      */
     void flatten(SkWriteBuffer&) const override;
+<<<<<<< HEAD
     sk_sp<SkSpecialImage> onFilterImage(SkSpecialImage* source, const Context&,
         SkIPoint* offset) const override;
 
@@ -92,6 +123,23 @@ private:
     PictureResolution fPictureResolution;
     SkFilterQuality fFilterQuality;
 
+=======
+    virtual bool onFilterImage(Proxy*, const SkBitmap& src, const Context&,
+                               SkBitmap* result, SkIPoint* offset) const override;
+
+private:
+
+
+    void drawPictureAtDeviceResolution(SkBaseDevice*, const SkIRect& deviceBounds,
+                                       const Context&) const;
+    void drawPictureAtLocalResolution(Proxy*, SkBaseDevice*, const SkIRect& deviceBounds,
+                                      const Context&) const;
+
+    const SkPicture*      fPicture;
+    SkRect                fCropRect;
+    PictureResolution     fPictureResolution;
+    SkFilterQuality       fFilterQuality;
+>>>>>>> miniblink49
     typedef SkImageFilter INHERITED;
 };
 

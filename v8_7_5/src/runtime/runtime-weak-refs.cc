@@ -15,6 +15,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     RUNTIME_FUNCTION(Runtime_FinalizationGroupCleanupJob)
     {
         HandleScope scope(isolate);
@@ -27,3 +28,16 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
+=======
+RUNTIME_FUNCTION(Runtime_FinalizationGroupCleanupJob) {
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSFinalizationGroup, finalization_group, 0);
+  finalization_group->set_scheduled_for_cleanup(false);
+
+  JSFinalizationGroup::Cleanup(finalization_group, isolate);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

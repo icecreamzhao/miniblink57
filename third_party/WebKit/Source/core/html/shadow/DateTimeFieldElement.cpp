@@ -23,15 +23,14 @@
  * SUCH DAMAGE.
  */
 
+#include "config.h"
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/shadow/DateTimeFieldElement.h"
 
 #include "core/HTMLNames.h"
 #include "core/dom/Document.h"
-#include "core/dom/StyleChangeReason.h"
 #include "core/dom/Text.h"
 #include "core/events/KeyboardEvent.h"
-#include "core/layout/TextRunConstructor.h"
-#include "core/style/ComputedStyle.h"
 #include "platform/text/PlatformLocale.h"
 #include "wtf/text/WTFString.h"
 
@@ -39,10 +38,16 @@ namespace blink {
 
 using namespace HTMLNames;
 
-DateTimeFieldElement::FieldOwner::~FieldOwner() { }
+static String emptyValueAXText()
+{
+    return Locale::defaultLocale().queryString(WebLocalizedString::AXDateTimeFieldEmptyValueText);
+}
 
-DateTimeFieldElement::DateTimeFieldElement(Document& document,
-    FieldOwner& fieldOwner)
+DateTimeFieldElement::FieldOwner::~FieldOwner()
+{
+}
+
+DateTimeFieldElement::DateTimeFieldElement(Document& document, FieldOwner& fieldOwner)
     : HTMLSpanElement(document)
     , m_fieldOwner(&fieldOwner)
 {
@@ -52,12 +57,6 @@ DEFINE_TRACE(DateTimeFieldElement)
 {
     visitor->trace(m_fieldOwner);
     HTMLSpanElement::trace(visitor);
-}
-
-float DateTimeFieldElement::computeTextWidth(const ComputedStyle& style,
-    const String& text)
-{
-    return style.font().width(constructTextRun(style.font(), text, style));
 }
 
 void DateTimeFieldElement::defaultEventHandler(Event* event)
@@ -82,8 +81,7 @@ void DateTimeFieldElement::defaultEventHandler(Event* event)
     HTMLElement::defaultEventHandler(event);
 }
 
-void DateTimeFieldElement::defaultKeyboardEventHandler(
-    KeyboardEvent* keyboardEvent)
+void DateTimeFieldElement::defaultKeyboardEventHandler(KeyboardEvent* keyboardEvent)
 {
     if (keyboardEvent->type() != EventTypeNames::keydown)
         return;
@@ -91,23 +89,22 @@ void DateTimeFieldElement::defaultKeyboardEventHandler(
     if (isDisabled() || isFieldOwnerDisabled())
         return;
 
-    const String& key = keyboardEvent->key();
+    const String& keyIdentifier = keyboardEvent->keyIdentifier();
 
-    if (key == "ArrowLeft") {
+    if (keyIdentifier == "Left") {
         if (!m_fieldOwner)
             return;
-        // FIXME: We'd like to use FocusController::advanceFocus(FocusDirectionLeft,
-        // ...) but it doesn't work for shadow nodes. webkit.org/b/104650
+        // FIXME: We'd like to use FocusController::advanceFocus(FocusDirectionLeft, ...)
+        // but it doesn't work for shadow nodes. webkit.org/b/104650
         if (!localeForOwner().isRTL() && m_fieldOwner->focusOnPreviousField(*this))
             keyboardEvent->setDefaultHandled();
         return;
     }
 
-    if (key == "ArrowRight") {
+    if (keyIdentifier == "Right") {
         if (!m_fieldOwner)
             return;
-        // FIXME: We'd like to use
-        // FocusController::advanceFocus(FocusDirectionRight, ...)
+        // FIXME: We'd like to use FocusController::advanceFocus(FocusDirectionRight, ...)
         // but it doesn't work for shadow nodes. webkit.org/b/104650
         if (!localeForOwner().isRTL() && m_fieldOwner->focusOnNextField(*this))
             keyboardEvent->setDefaultHandled();
@@ -117,7 +114,7 @@ void DateTimeFieldElement::defaultKeyboardEventHandler(
     if (isFieldOwnerReadOnly())
         return;
 
-    if (key == "ArrowDown") {
+    if (keyIdentifier == "Down") {
         if (keyboardEvent->getModifierState("Alt"))
             return;
         keyboardEvent->setDefaultHandled();
@@ -125,24 +122,24 @@ void DateTimeFieldElement::defaultKeyboardEventHandler(
         return;
     }
 
-    if (key == "ArrowUp") {
+    if (keyIdentifier == "Up") {
         keyboardEvent->setDefaultHandled();
         stepUp();
         return;
     }
 
-    if (key == "Backspace" || key == "Delete") {
+    if (keyIdentifier == "U+0008" || keyIdentifier == "U+007F") {
         keyboardEvent->setDefaultHandled();
         setEmptyValue(DispatchEvent);
         return;
     }
 }
 
-void DateTimeFieldElement::setFocused(bool value)
+void DateTimeFieldElement::setFocus(bool value)
 {
     if (m_fieldOwner)
         value ? m_fieldOwner->didFocusOnField() : m_fieldOwner->didBlurFromField();
-    ContainerNode::setFocused(value);
+    ContainerNode::setFocus(value);
 }
 
 void DateTimeFieldElement::focusOnNextField()
@@ -152,14 +149,11 @@ void DateTimeFieldElement::focusOnNextField()
     m_fieldOwner->focusOnNextField(*this);
 }
 
-void DateTimeFieldElement::initialize(const AtomicString& pseudo,
-    const String& axHelpText,
-    int axMinimum,
-    int axMaximum)
+void DateTimeFieldElement::initialize(const AtomicString& pseudo, const String& axHelpText, int axMinimum, int axMaximum)
 {
     // On accessibility, DateTimeFieldElement acts like spin button.
-    setAttribute(roleAttr, AtomicString("spinbutton"));
-    setAttribute(aria_valuetextAttr, AtomicString(visibleValue()));
+    setAttribute(roleAttr, AtomicString("spinbutton", AtomicString::ConstructFromLiteral));
+    setAttribute(aria_valuetextAttr, AtomicString(emptyValueAXText()));
     setAttribute(aria_valueminAttr, AtomicString::number(axMinimum));
     setAttribute(aria_valuemaxAttr, AtomicString::number(axMaximum));
 
@@ -198,7 +192,7 @@ AtomicString DateTimeFieldElement::localeIdentifier() const
     return m_fieldOwner ? m_fieldOwner->localeIdentifier() : nullAtom;
 }
 
-float DateTimeFieldElement::maximumWidth(const ComputedStyle&)
+float DateTimeFieldElement::maximumWidth(const Font&)
 {
     const float paddingLeftAndRight = 2; // This should match to html.css.
     return paddingLeftAndRight;
@@ -208,10 +202,7 @@ void DateTimeFieldElement::setDisabled()
 {
     // Set HTML attribute disabled to change apperance.
     setBooleanAttribute(disabledAttr, true);
-    setNeedsStyleRecalc(
-        SubtreeStyleChange,
-        StyleChangeReasonForTracing::createWithExtraData(
-            StyleChangeReason::PseudoClass, StyleChangeExtraData::Disabled));
+    setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::createWithExtraData(StyleChangeReason::PseudoClass, StyleChangeExtraData::Disabled));
 }
 
 bool DateTimeFieldElement::supportsFocus() const
@@ -223,19 +214,19 @@ void DateTimeFieldElement::updateVisibleValue(EventBehavior eventBehavior)
 {
     Text* const textNode = toText(firstChild());
     const String newVisibleValue = visibleValue();
-    DCHECK_GT(newVisibleValue.length(), 0u);
+    ASSERT(newVisibleValue.length() > 0);
 
     if (textNode->wholeText() == newVisibleValue)
         return;
 
     textNode->replaceWholeText(newVisibleValue);
     if (hasValue()) {
-        setAttribute(aria_valuenowAttr,
-            AtomicString::number(valueForARIAValueNow()));
+        setAttribute(aria_valuetextAttr, AtomicString(newVisibleValue));
+        setAttribute(aria_valuenowAttr, AtomicString::number(valueForARIAValueNow()));
     } else {
+        setAttribute(aria_valuetextAttr, AtomicString(emptyValueAXText()));
         removeAttribute(aria_valuenowAttr);
     }
-    setAttribute(aria_valuetextAttr, AtomicString(newVisibleValue));
 
     if (eventBehavior == DispatchEvent && m_fieldOwner)
         m_fieldOwner->fieldValueChanged();
@@ -247,3 +238,5 @@ int DateTimeFieldElement::valueForARIAValueNow() const
 }
 
 } // namespace blink
+
+#endif

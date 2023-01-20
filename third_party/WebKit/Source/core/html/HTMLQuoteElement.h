@@ -31,7 +31,6 @@ namespace blink {
 
 class HTMLQuoteElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLQuoteElement);
 

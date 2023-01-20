@@ -20,6 +20,7 @@
 class GrGeometryProcessor : public GrPrimitiveProcessor {
 public:
     GrGeometryProcessor()
+<<<<<<< HEAD
         : fWillUseGeoShader(false)
         , fLocalCoordsType(kUnused_LocalCoordsType)
         , fSampleShading(0.0)
@@ -46,6 +47,31 @@ public:
     float getSampleShading() const override
     {
         return fSampleShading;
+=======
+        : INHERITED(false)
+        , fWillUseGeoShader(false)
+        , fHasLocalCoords(false) {}
+
+    bool willUseGeoShader() const override { return fWillUseGeoShader; }
+
+    // TODO delete when paths are in batch
+    void initBatchTracker(GrBatchTracker*, const GrPipelineInfo&) const override {}
+
+    // TODO delete this when paths are in batch
+    bool canMakeEqual(const GrBatchTracker& mine,
+                      const GrPrimitiveProcessor& that,
+                      const GrBatchTracker& theirs) const override {
+        SkFAIL("Unsupported\n");
+        return false;
+    }
+
+    // TODO Delete when paths are in batch
+    void getInvariantOutputColor(GrInitInvariantOutput* out) const override {
+        SkFAIL("Unsupported\n");
+    }
+    void getInvariantOutputCoverage(GrInitInvariantOutput* out) const override {
+        SkFAIL("Unsupported\n");
+>>>>>>> miniblink49
     }
 
 protected:
@@ -58,15 +84,24 @@ protected:
      * The processor key should reflect the vertex attributes, or there lack thereof in the
      * GrGeometryProcessor.
      */
+<<<<<<< HEAD
     const Attribute& addVertexAttrib(const Attribute& attribute)
     {
         fVertexStride += attribute.fOffset;
         fAttribs.push_back(attribute);
         return fAttribs.back();
+=======
+    const Attribute& addVertexAttrib(const Attribute& attribute) {
+        SkASSERT(fNumAttribs < kMaxVertexAttribs);
+        fVertexStride += attribute.fOffset;
+        fAttribs[fNumAttribs] = attribute;
+        return fAttribs[fNumAttribs++];
+>>>>>>> miniblink49
     }
 
     void setWillUseGeoShader() { fWillUseGeoShader = true; }
 
+<<<<<<< HEAD
     /**
      * If a GrFragmentProcessor in the GrPipeline needs localCoods, we will provide them in one of
      * three ways
@@ -101,6 +136,16 @@ private:
     bool fWillUseGeoShader;
     LocalCoordsType fLocalCoordsType;
     float fSampleShading;
+=======
+    // TODO hack see above
+    void setHasLocalCoords() { fHasLocalCoords = true; }
+
+private:
+    bool hasExplicitLocalCoords() const override { return fHasLocalCoords; }
+
+    bool fWillUseGeoShader;
+    bool fHasLocalCoords;
+>>>>>>> miniblink49
 
     typedef GrPrimitiveProcessor INHERITED;
 };

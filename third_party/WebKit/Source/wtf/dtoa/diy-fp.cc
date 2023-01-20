@@ -25,16 +25,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+<<<<<<< HEAD
 #include "diy-fp.h"
 
+=======
+#include "config.h"
+
+#include "diy-fp.h"
+>>>>>>> miniblink49
 #include "utils.h"
 
 namespace WTF {
 
 namespace double_conversion {
 
+<<<<<<< HEAD
     void DiyFp::Multiply(const DiyFp& other)
     {
+=======
+    void DiyFp::Multiply(const DiyFp& other) {
+>>>>>>> miniblink49
         // Simply "emulates" a 128 bit multiplication.
         // However: the resulting number only contains 64 bits. The least
         // significant 64 bits are only used for rounding the most significant 64
@@ -57,6 +67,10 @@ namespace double_conversion {
         f_ = result_f;
     }
 
+<<<<<<< HEAD
 } // namespace double_conversion
+=======
+}  // namespace double_conversion
+>>>>>>> miniblink49
 
 } // namespace WTF

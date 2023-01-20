@@ -2,8 +2,7 @@
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
  *           (C) 2000 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
  * Copyright (C) 2006 Graham Dennis (graham.dennis@gmail.com)
  *
  * This library is free software; you can redistribute it and/or
@@ -29,24 +28,16 @@
 #include "core/css/StyleColor.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatRectOutsets.h"
-#include "platform/graphics/skia/SkiaUtils.h"
 
 namespace blink {
 
-enum ShadowStyle { Normal,
-    Inset };
+enum ShadowStyle { Normal, Inset };
 
-// This class holds information about shadows for the text-shadow and box-shadow
-// properties, as well as the drop-shadow(...) filter operation.
+// This class holds information about shadows for the text-shadow and box-shadow properties.
 class ShadowData {
-    USING_FAST_MALLOC(ShadowData);
-
+    WTF_MAKE_FAST_ALLOCATED(ShadowData);
 public:
-    ShadowData(const FloatPoint& location,
-        float blur,
-        float spread,
-        ShadowStyle style,
-        StyleColor color)
+    ShadowData(const FloatPoint& location, float blur, float spread, ShadowStyle style, StyleColor color)
         : m_location(location)
         , m_blur(blur)
         , m_spread(spread)
@@ -58,10 +49,7 @@ public:
     bool operator==(const ShadowData&) const;
     bool operator!=(const ShadowData& o) const { return !(*this == o); }
 
-    ShadowData blend(const ShadowData& from,
-        double progress,
-        const Color& currentColor) const;
-    static ShadowData neutralValue();
+    ShadowData blend(const ShadowData& from, double progress, const Color& currentColor) const;
 
     float x() const { return m_location.x(); }
     float y() const { return m_location.y(); }
@@ -71,18 +59,16 @@ public:
     ShadowStyle style() const { return m_style; }
     StyleColor color() const { return m_color; }
 
-    void overrideColor(Color color) { m_color = StyleColor(color); }
-
     // Outsets needed to adjust a source rectangle to the one cast by this
     // shadow.
     FloatRectOutsets rectOutsets() const
     {
-        // 3 * skBlurRadiusToSigma(blur()) is how Skia implements the radius of a
-        // blur. See also https://crbug.com/624175.
-        float blurAndSpread = ceil(3 * skBlurRadiusToSigma(blur())) + spread();
+        float blurAndSpread = blur() + spread();
         return FloatRectOutsets(
-            blurAndSpread - y() /* top */, blurAndSpread + x() /* right */,
-            blurAndSpread + y() /* bottom */, blurAndSpread - x() /* left */);
+            blurAndSpread - y() /* top */,
+            blurAndSpread + x() /* right */,
+            blurAndSpread + y() /* bottom */,
+            blurAndSpread - x() /* left */);
     }
 
 private:

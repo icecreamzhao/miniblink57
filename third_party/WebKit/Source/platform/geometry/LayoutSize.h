@@ -36,6 +36,7 @@
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatSize.h"
 #include "platform/geometry/IntSize.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 
@@ -80,6 +81,24 @@ public:
         , m_height(size.height())
     {
     }
+=======
+
+namespace blink {
+
+enum AspectRatioFit {
+    AspectRatioFitShrink,
+    AspectRatioFitGrow
+};
+
+class LayoutSize {
+public:
+    LayoutSize() { }
+    explicit LayoutSize(const IntSize& size) : m_width(size.width()), m_height(size.height()) { }
+    LayoutSize(LayoutUnit width, LayoutUnit height) : m_width(width), m_height(height) { }
+
+    explicit LayoutSize(const FloatSize& size) : m_width(size.width()), m_height(size.height()) { }
+    explicit LayoutSize(const DoubleSize& size) : m_width(size.width()), m_height(size.height()) { }
+>>>>>>> miniblink49
 
     LayoutUnit width() const { return m_width; }
     LayoutUnit height() const { return m_height; }
@@ -87,10 +106,14 @@ public:
     void setWidth(LayoutUnit width) { m_width = width; }
     void setHeight(LayoutUnit height) { m_height = height; }
 
+<<<<<<< HEAD
     bool isEmpty() const
     {
         return m_width.rawValue() <= 0 || m_height.rawValue() <= 0;
     }
+=======
+    bool isEmpty() const { return m_width.rawValue() <= 0 || m_height.rawValue() <= 0; }
+>>>>>>> miniblink49
     bool isZero() const { return !m_width && !m_height; }
 
     float aspectRatio() const { return m_width.toFloat() / m_height.toFloat(); }
@@ -101,6 +124,7 @@ public:
         m_height += height;
     }
 
+<<<<<<< HEAD
     void expand(int width, int height)
     {
         expand(LayoutUnit(width), LayoutUnit(height));
@@ -111,6 +135,8 @@ public:
         shrink(LayoutUnit(width), LayoutUnit(height));
     }
 
+=======
+>>>>>>> miniblink49
     void shrink(LayoutUnit width, LayoutUnit height)
     {
         m_width -= width;
@@ -148,7 +174,14 @@ public:
             m_height < other.m_height ? m_height : other.m_height);
     }
 
+<<<<<<< HEAD
     void clampNegativeToZero() { *this = expandedTo(LayoutSize()); }
+=======
+    void clampNegativeToZero()
+    {
+        *this = expandedTo(LayoutSize());
+    }
+>>>>>>> miniblink49
 
     void clampToMinimumSize(const LayoutSize& minimumSize)
     {
@@ -158,18 +191,32 @@ public:
             m_height = minimumSize.height();
     }
 
+<<<<<<< HEAD
     LayoutSize transposedSize() const { return LayoutSize(m_height, m_width); }
 
     LayoutSize fitToAspectRatio(const LayoutSize& aspectRatio,
         AspectRatioFit fit) const
+=======
+    LayoutSize transposedSize() const
+    {
+        return LayoutSize(m_height, m_width);
+    }
+
+    LayoutSize fitToAspectRatio(const LayoutSize& aspectRatio, AspectRatioFit fit) const
+>>>>>>> miniblink49
     {
         float heightScale = height().toFloat() / aspectRatio.height().toFloat();
         float widthScale = width().toFloat() / aspectRatio.width().toFloat();
         if ((widthScale > heightScale) != (fit == AspectRatioFitGrow))
+<<<<<<< HEAD
             return LayoutSize(height() * aspectRatio.width() / aspectRatio.height(),
                 height());
         return LayoutSize(width(),
             width() * aspectRatio.height() / aspectRatio.width());
+=======
+            return LayoutSize(height() * aspectRatio.width() / aspectRatio.height(), height());
+        return LayoutSize(width(), width() * aspectRatio.height() / aspectRatio.width());
+>>>>>>> miniblink49
     }
 
     LayoutSize fraction() const
@@ -177,8 +224,11 @@ public:
         return LayoutSize(m_width.fraction(), m_height.fraction());
     }
 
+<<<<<<< HEAD
     String toString() const;
 
+=======
+>>>>>>> miniblink49
 private:
     LayoutUnit m_width, m_height;
 };
@@ -259,10 +309,13 @@ inline LayoutSize roundedLayoutSize(const FloatSize& s)
     return LayoutSize(s);
 }
 
+<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const LayoutSize&, std::ostream*);
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif // LayoutSize_h

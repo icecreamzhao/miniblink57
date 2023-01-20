@@ -45,16 +45,22 @@ public:
 
     // Stream functionality.
     virtual void didCreateMediaStream(WebMediaStream&) = 0;
+<<<<<<< HEAD
     virtual bool didAddMediaStreamTrack(const WebMediaStream&,
         const WebMediaStreamTrack&)
         = 0;
     virtual bool didRemoveMediaStreamTrack(const WebMediaStream&,
         const WebMediaStreamTrack&)
         = 0;
+=======
+    virtual bool didAddMediaStreamTrack(const WebMediaStream&, const WebMediaStreamTrack&) = 0;
+    virtual bool didRemoveMediaStreamTrack(const WebMediaStream&, const WebMediaStreamTrack&) = 0;
+>>>>>>> miniblink49
     virtual void didStopLocalMediaStream(const WebMediaStream&) = 0;
 
     // Track functionality.
     virtual void didCreateMediaStreamTrack(const WebMediaStreamTrack&) { }
+<<<<<<< HEAD
     virtual void didSetContentHint(const WebMediaStreamTrack&) { }
     virtual void didEnableMediaStreamTrack(const WebMediaStreamTrack&) { }
     virtual void didDisableMediaStreamTrack(const WebMediaStreamTrack&) { }
@@ -70,8 +76,20 @@ public:
     {
         return nullptr;
     }
+=======
+    virtual void didEnableMediaStreamTrack(const WebMediaStreamTrack&) { }
+    virtual void didDisableMediaStreamTrack(const WebMediaStreamTrack&) { }
+    virtual bool didStopMediaStreamTrack(const WebMediaStreamTrack&) { return false; }
+
+    // Caller must take the ownership of the returned |WebAudioSourceProvider| object.
+    virtual WebAudioSourceProvider* createWebAudioSourceFromMediaStreamTrack(const WebMediaStreamTrack&) { return nullptr; }
+>>>>>>> miniblink49
 };
 
 } // namespace blink
 
 #endif // WebMediaStreamCenter_h
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

@@ -20,10 +20,17 @@
  * \brief C++ API: Trie for mapping byte sequences to integer values.
  */
 
+<<<<<<< HEAD
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
 #include "unicode/ustringtrie.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
+#include "unicode/ustringtrie.h"
+>>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -61,6 +68,7 @@ public:
      * @param trieBytes The byte array that contains the serialized trie.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     BytesTrie(const void* trieBytes)
         : ownedArray_(NULL)
         , bytes_(static_cast<const uint8_t*>(trieBytes))
@@ -68,6 +76,11 @@ public:
         , remainingMatchLength_(-1)
     {
     }
+=======
+    BytesTrie(const void *trieBytes)
+            : ownedArray_(NULL), bytes_(static_cast<const uint8_t *>(trieBytes)),
+              pos_(bytes_), remainingMatchLength_(-1) {}
+>>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -81,6 +94,7 @@ public:
      * @param other Another BytesTrie object.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     BytesTrie(const BytesTrie& other)
         : ownedArray_(NULL)
         , bytes_(other.bytes_)
@@ -88,16 +102,27 @@ public:
         , remainingMatchLength_(other.remainingMatchLength_)
     {
     }
+=======
+    BytesTrie(const BytesTrie &other)
+            : ownedArray_(NULL), bytes_(other.bytes_),
+              pos_(other.pos_), remainingMatchLength_(other.remainingMatchLength_) {}
+>>>>>>> miniblink49
 
     /**
      * Resets this trie to its initial state.
      * @return *this
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     BytesTrie& reset()
     {
         pos_ = bytes_;
         remainingMatchLength_ = -1;
+=======
+    BytesTrie &reset() {
+        pos_=bytes_;
+        remainingMatchLength_=-1;
+>>>>>>> miniblink49
         return *this;
     }
 
@@ -112,6 +137,7 @@ public:
          * Constructs an empty State.
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         State() { bytes = NULL; }
 
     private:
@@ -119,6 +145,14 @@ public:
 
         const uint8_t* bytes;
         const uint8_t* pos;
+=======
+        State() { bytes=NULL; }
+    private:
+        friend class BytesTrie;
+
+        const uint8_t *bytes;
+        const uint8_t *pos;
+>>>>>>> miniblink49
         int32_t remainingMatchLength;
     };
 
@@ -129,11 +163,18 @@ public:
      * @see resetToState
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     const BytesTrie& saveState(State& state) const
     {
         state.bytes = bytes_;
         state.pos = pos_;
         state.remainingMatchLength = remainingMatchLength_;
+=======
+    const BytesTrie &saveState(State &state) const {
+        state.bytes=bytes_;
+        state.pos=pos_;
+        state.remainingMatchLength=remainingMatchLength_;
+>>>>>>> miniblink49
         return *this;
     }
 
@@ -147,11 +188,18 @@ public:
      * @see reset
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     BytesTrie& resetToState(const State& state)
     {
         if (bytes_ == state.bytes && bytes_ != NULL) {
             pos_ = state.pos;
             remainingMatchLength_ = state.remainingMatchLength;
+=======
+    BytesTrie &resetToState(const State &state) {
+        if(bytes_==state.bytes && bytes_!=NULL) {
+            pos_=state.pos;
+            remainingMatchLength_=state.remainingMatchLength;
+>>>>>>> miniblink49
         }
         return *this;
     }
@@ -172,11 +220,18 @@ public:
      * @return The match/value Result.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     inline UStringTrieResult first(int32_t inByte)
     {
         remainingMatchLength_ = -1;
         if (inByte < 0) {
             inByte += 0x100;
+=======
+    inline UStringTrieResult first(int32_t inByte) {
+        remainingMatchLength_=-1;
+        if(inByte<0) {
+            inByte+=0x100;
+>>>>>>> miniblink49
         }
         return nextImpl(bytes_, inByte);
     }
@@ -205,7 +260,11 @@ public:
      * @return The match/value Result.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     UStringTrieResult next(const char* s, int32_t length);
+=======
+    UStringTrieResult next(const char *s, int32_t length);
+>>>>>>> miniblink49
 
     /**
      * Returns a matching byte sequence's value if called immediately after
@@ -216,12 +275,20 @@ public:
      * @return The value for the byte sequence so far.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     inline int32_t getValue() const
     {
         const uint8_t* pos = pos_;
         int32_t leadByte = *pos++;
         // U_ASSERT(leadByte>=kMinValueLead);
         return readValue(pos, leadByte >> 1);
+=======
+    inline int32_t getValue() const {
+        const uint8_t *pos=pos_;
+        int32_t leadByte=*pos++;
+        // U_ASSERT(leadByte>=kMinValueLead);
+        return readValue(pos, leadByte>>1);
+>>>>>>> miniblink49
     }
 
     /**
@@ -233,11 +300,18 @@ public:
      *         map to the same value.
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     inline UBool hasUniqueValue(int32_t& uniqueValue) const
     {
         const uint8_t* pos = pos_;
         // Skip the rest of a pending linear-match node.
         return pos != NULL && findUniqueValue(pos + remainingMatchLength_ + 1, FALSE, uniqueValue);
+=======
+    inline UBool hasUniqueValue(int32_t &uniqueValue) const {
+        const uint8_t *pos=pos_;
+        // Skip the rest of a pending linear-match node.
+        return pos!=NULL && findUniqueValue(pos+remainingMatchLength_+1, FALSE, uniqueValue);
+>>>>>>> miniblink49
     }
 
     /**
@@ -248,7 +322,11 @@ public:
      * @return the number of bytes which continue the byte sequence from here
      * @stable ICU 4.8
      */
+<<<<<<< HEAD
     int32_t getNextBytes(ByteSink& out) const;
+=======
+    int32_t getNextBytes(ByteSink &out) const;
+>>>>>>> miniblink49
 
     /**
      * Iterator for all of the (byte sequence, value) pairs in a BytesTrie.
@@ -267,7 +345,11 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         Iterator(const void* trieBytes, int32_t maxStringLength, UErrorCode& errorCode);
+=======
+        Iterator(const void *trieBytes, int32_t maxStringLength, UErrorCode &errorCode);
+>>>>>>> miniblink49
 
         /**
          * Iterates from the current state of the specified BytesTrie.
@@ -280,7 +362,11 @@ public:
          *                  function chaining. (See User Guide for details.)
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         Iterator(const BytesTrie& trie, int32_t maxStringLength, UErrorCode& errorCode);
+=======
+        Iterator(const BytesTrie &trie, int32_t maxStringLength, UErrorCode &errorCode);
+>>>>>>> miniblink49
 
         /**
          * Destructor.
@@ -293,7 +379,11 @@ public:
          * @return *this
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         Iterator& reset();
+=======
+        Iterator &reset();
+>>>>>>> miniblink49
 
         /**
          * @return TRUE if there are more elements.
@@ -315,13 +405,21 @@ public:
          * @return TRUE if there is another element.
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         UBool next(UErrorCode& errorCode);
+=======
+        UBool next(UErrorCode &errorCode);
+>>>>>>> miniblink49
 
         /**
          * @return The NUL-terminated byte sequence for the last successful next().
          * @stable ICU 4.8
          */
+<<<<<<< HEAD
         const StringPiece& getString() const { return sp_; }
+=======
+        const StringPiece &getString() const { return sp_; }
+>>>>>>> miniblink49
         /**
          * @return The value for the last successful next().
          * @stable ICU 4.8
@@ -331,6 +429,7 @@ public:
     private:
         UBool truncateAndStop();
 
+<<<<<<< HEAD
         const uint8_t* branchNext(const uint8_t* pos, int32_t length, UErrorCode& errorCode);
 
         const uint8_t* bytes_;
@@ -340,6 +439,17 @@ public:
         int32_t initialRemainingMatchLength_;
 
         CharString* str_;
+=======
+        const uint8_t *branchNext(const uint8_t *pos, int32_t length, UErrorCode &errorCode);
+
+        const uint8_t *bytes_;
+        const uint8_t *pos_;
+        const uint8_t *initialPos_;
+        int32_t remainingMatchLength_;
+        int32_t initialRemainingMatchLength_;
+
+        CharString *str_;
+>>>>>>> miniblink49
         StringPiece sp_;
         int32_t maxLength_;
         int32_t value_;
@@ -351,7 +461,11 @@ public:
         // and the remaining branch length in bits 24..16. (Bits 31..25 are unused.)
         // (We could store the remaining branch length minus 1 in bits 23..16 and not use bits 31..24,
         // but the code looks more confusing that way.)
+<<<<<<< HEAD
         UVector32* stack_;
+=======
+        UVector32 *stack_;
+>>>>>>> miniblink49
     };
 
 private:
@@ -363,6 +477,7 @@ private:
      * this constructor adopts the builder's array.
      * This constructor is only called by the builder.
      */
+<<<<<<< HEAD
     BytesTrie(void* adoptBytes, const void* trieBytes)
         : ownedArray_(static_cast<uint8_t*>(adoptBytes))
         , bytes_(static_cast<const uint8_t*>(trieBytes))
@@ -377,10 +492,23 @@ private:
     inline void stop()
     {
         pos_ = NULL;
+=======
+    BytesTrie(void *adoptBytes, const void *trieBytes)
+            : ownedArray_(static_cast<uint8_t *>(adoptBytes)),
+              bytes_(static_cast<const uint8_t *>(trieBytes)),
+              pos_(bytes_), remainingMatchLength_(-1) {}
+
+    // No assignment operator.
+    BytesTrie &operator=(const BytesTrie &other);
+
+    inline void stop() {
+        pos_=NULL;
+>>>>>>> miniblink49
     }
 
     // Reads a compact 32-bit integer.
     // pos is already after the leadByte, and the lead byte is already shifted right by 1.
+<<<<<<< HEAD
     static int32_t readValue(const uint8_t* pos, int32_t leadByte);
     static inline const uint8_t* skipValue(const uint8_t* pos, int32_t leadByte)
     {
@@ -392,17 +520,35 @@ private:
                 pos += 2;
             } else {
                 pos += 3 + ((leadByte >> 1) & 1);
+=======
+    static int32_t readValue(const uint8_t *pos, int32_t leadByte);
+    static inline const uint8_t *skipValue(const uint8_t *pos, int32_t leadByte) {
+        // U_ASSERT(leadByte>=kMinValueLead);
+        if(leadByte>=(kMinTwoByteValueLead<<1)) {
+            if(leadByte<(kMinThreeByteValueLead<<1)) {
+                ++pos;
+            } else if(leadByte<(kFourByteValueLead<<1)) {
+                pos+=2;
+            } else {
+                pos+=3+((leadByte>>1)&1);
+>>>>>>> miniblink49
             }
         }
         return pos;
     }
+<<<<<<< HEAD
     static inline const uint8_t* skipValue(const uint8_t* pos)
     {
         int32_t leadByte = *pos++;
+=======
+    static inline const uint8_t *skipValue(const uint8_t *pos) {
+        int32_t leadByte=*pos++;
+>>>>>>> miniblink49
         return skipValue(pos, leadByte);
     }
 
     // Reads a jump delta and jumps.
+<<<<<<< HEAD
     static const uint8_t* jumpByDelta(const uint8_t* pos);
 
     static inline const uint8_t* skipDelta(const uint8_t* pos)
@@ -415,11 +561,25 @@ private:
                 pos += 2;
             } else {
                 pos += 3 + (delta & 1);
+=======
+    static const uint8_t *jumpByDelta(const uint8_t *pos);
+
+    static inline const uint8_t *skipDelta(const uint8_t *pos) {
+        int32_t delta=*pos++;
+        if(delta>=kMinTwoByteDeltaLead) {
+            if(delta<kMinThreeByteDeltaLead) {
+                ++pos;
+            } else if(delta<kFourByteDeltaLead) {
+                pos+=2;
+            } else {
+                pos+=3+(delta&1);
+>>>>>>> miniblink49
             }
         }
         return pos;
     }
 
+<<<<<<< HEAD
     static inline UStringTrieResult valueResult(int32_t node)
     {
         return (UStringTrieResult)(USTRINGTRIE_INTERMEDIATE_VALUE - (node & kValueIsFinal));
@@ -430,10 +590,22 @@ private:
 
     // Requires remainingLength_<0.
     UStringTrieResult nextImpl(const uint8_t* pos, int32_t inByte);
+=======
+    static inline UStringTrieResult valueResult(int32_t node) {
+        return (UStringTrieResult)(USTRINGTRIE_INTERMEDIATE_VALUE-(node&kValueIsFinal));
+    }
+
+    // Handles a branch node for both next(byte) and next(string).
+    UStringTrieResult branchNext(const uint8_t *pos, int32_t length, int32_t inByte);
+
+    // Requires remainingLength_<0.
+    UStringTrieResult nextImpl(const uint8_t *pos, int32_t inByte);
+>>>>>>> miniblink49
 
     // Helper functions for hasUniqueValue().
     // Recursively finds a unique value (or whether there is not a unique one)
     // from a branch.
+<<<<<<< HEAD
     static const uint8_t* findUniqueValueFromBranch(const uint8_t* pos, int32_t length,
         UBool haveUniqueValue, int32_t& uniqueValue);
     // Recursively finds a unique value (or whether there is not a unique one)
@@ -444,6 +616,18 @@ private:
     // getNextBytes() when pos is on a branch node.
     static void getNextBranchBytes(const uint8_t* pos, int32_t length, ByteSink& out);
     static void append(ByteSink& out, int c);
+=======
+    static const uint8_t *findUniqueValueFromBranch(const uint8_t *pos, int32_t length,
+                                                    UBool haveUniqueValue, int32_t &uniqueValue);
+    // Recursively finds a unique value (or whether there is not a unique one)
+    // starting from a position on a node lead byte.
+    static UBool findUniqueValue(const uint8_t *pos, UBool haveUniqueValue, int32_t &uniqueValue);
+
+    // Helper functions for getNextBytes().
+    // getNextBytes() when pos is on a branch node.
+    static void getNextBranchBytes(const uint8_t *pos, int32_t length, ByteSink &out);
+    static void append(ByteSink &out, int c);
+>>>>>>> miniblink49
 
     // BytesTrie data structure
     //
@@ -484,17 +668,26 @@ private:
 
     // For a branch sub-node with at most this many entries, we drop down
     // to a linear search.
+<<<<<<< HEAD
     static const int32_t kMaxBranchLinearSubNodeLength = 5;
 
     // 10..1f: Linear-match node, match 1..16 bytes and continue reading the next node.
     static const int32_t kMinLinearMatch = 0x10;
     static const int32_t kMaxLinearMatchLength = 0x10;
+=======
+    static const int32_t kMaxBranchLinearSubNodeLength=5;
+
+    // 10..1f: Linear-match node, match 1..16 bytes and continue reading the next node.
+    static const int32_t kMinLinearMatch=0x10;
+    static const int32_t kMaxLinearMatchLength=0x10;
+>>>>>>> miniblink49
 
     // 20..ff: Variable-length value node.
     // If odd, the value is final. (Otherwise, intermediate value or jump delta.)
     // Then shift-right by 1 bit.
     // The remaining lead byte value indicates the number of following bytes (0..4)
     // and contains the value's top bits.
+<<<<<<< HEAD
     static const int32_t kMinValueLead = kMinLinearMatch + kMaxLinearMatchLength; // 0x20
     // It is a final value if bit 0 is set.
     static const int32_t kValueIsFinal = 1;
@@ -528,15 +721,58 @@ private:
 
     // Fixed value referencing the BytesTrie bytes.
     const uint8_t* bytes_;
+=======
+    static const int32_t kMinValueLead=kMinLinearMatch+kMaxLinearMatchLength;  // 0x20
+    // It is a final value if bit 0 is set.
+    static const int32_t kValueIsFinal=1;
+
+    // Compact value: After testing bit 0, shift right by 1 and then use the following thresholds.
+    static const int32_t kMinOneByteValueLead=kMinValueLead/2;  // 0x10
+    static const int32_t kMaxOneByteValue=0x40;  // At least 6 bits in the first byte.
+
+    static const int32_t kMinTwoByteValueLead=kMinOneByteValueLead+kMaxOneByteValue+1;  // 0x51
+    static const int32_t kMaxTwoByteValue=0x1aff;
+
+    static const int32_t kMinThreeByteValueLead=kMinTwoByteValueLead+(kMaxTwoByteValue>>8)+1;  // 0x6c
+    static const int32_t kFourByteValueLead=0x7e;
+
+    // A little more than Unicode code points. (0x11ffff)
+    static const int32_t kMaxThreeByteValue=((kFourByteValueLead-kMinThreeByteValueLead)<<16)-1;
+
+    static const int32_t kFiveByteValueLead=0x7f;
+
+    // Compact delta integers.
+    static const int32_t kMaxOneByteDelta=0xbf;
+    static const int32_t kMinTwoByteDeltaLead=kMaxOneByteDelta+1;  // 0xc0
+    static const int32_t kMinThreeByteDeltaLead=0xf0;
+    static const int32_t kFourByteDeltaLead=0xfe;
+    static const int32_t kFiveByteDeltaLead=0xff;
+
+    static const int32_t kMaxTwoByteDelta=((kMinThreeByteDeltaLead-kMinTwoByteDeltaLead)<<8)-1;  // 0x2fff
+    static const int32_t kMaxThreeByteDelta=((kFourByteDeltaLead-kMinThreeByteDeltaLead)<<16)-1;  // 0xdffff
+
+    uint8_t *ownedArray_;
+
+    // Fixed value referencing the BytesTrie bytes.
+    const uint8_t *bytes_;
+>>>>>>> miniblink49
 
     // Iterator variables.
 
     // Pointer to next trie byte to read. NULL if no more matches.
+<<<<<<< HEAD
     const uint8_t* pos_;
+=======
+    const uint8_t *pos_;
+>>>>>>> miniblink49
     // Remaining length of a linear-match node, minus 1. Negative if not in such a node.
     int32_t remainingMatchLength_;
 };
 
 U_NAMESPACE_END
 
+<<<<<<< HEAD
 #endif // __BYTESTRIE_H__
+=======
+#endif  // __BYTESTRIE_H__
+>>>>>>> miniblink49

@@ -6,10 +6,10 @@
 #define ScriptStreamerThread_h
 
 #include "core/CoreExport.h"
+#include "platform/TaskSynchronizer.h"
 #include "public/platform/WebThread.h"
-#include "wtf/Functional.h"
-#include "wtf/ThreadingPrimitives.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
+
 #include <v8.h>
 
 namespace blink {
@@ -18,15 +18,13 @@ class ScriptStreamer;
 
 // A singleton thread for running background tasks for script streaming.
 class CORE_EXPORT ScriptStreamerThread {
-    USING_FAST_MALLOC(ScriptStreamerThread);
     WTF_MAKE_NONCOPYABLE(ScriptStreamerThread);
-
 public:
     static void init();
     static void shutdown();
     static ScriptStreamerThread* shared();
 
-    void postTask(std::unique_ptr<CrossThreadClosure>);
+    void postTask(WebThread::Task*);
 
     bool isRunningTask() const
     {
@@ -36,23 +34,22 @@ public:
 
     void taskDone();
 
-    static void runScriptStreamingTask(
-        std::unique_ptr<v8::ScriptCompiler::ScriptStreamingTask>,
-        ScriptStreamer*);
+    static void runScriptStreamingTask(WTF::PassOwnPtr<v8::ScriptCompiler::ScriptStreamingTask>, ScriptStreamer*);
 
 private:
     ScriptStreamerThread()
-        : m_runningTask(false)
-    {
-    }
+        : m_runningTask(false) { }
 
-    bool isRunning() const { return !!m_thread; }
+    bool isRunning() const
+    {
+        return !!m_thread;
+    }
 
     WebThread& platformThread();
 
     // At the moment, we only use one thread, so we can only stream one script
     // at a time. FIXME: Use a thread pool and stream multiple scripts.
-    std::unique_ptr<WebThread> m_thread;
+    WTF::OwnPtr<WebThread> m_thread;
     bool m_runningTask;
     mutable Mutex m_mutex; // Guards m_runningTask.
 };

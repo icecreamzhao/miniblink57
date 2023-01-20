@@ -42,10 +42,14 @@ public:
     virtual WebString currentToneBuffer() = 0;
 
     virtual bool canInsertDTMF() = 0;
+<<<<<<< HEAD
     virtual bool insertDTMF(const WebString& tones,
         long duration,
         long interToneGap)
         = 0;
+=======
+    virtual bool insertDTMF(const WebString& tones, long duration, long interToneGap) = 0;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

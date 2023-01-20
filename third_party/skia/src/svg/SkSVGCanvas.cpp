@@ -8,11 +8,19 @@
 #include "SkSVGCanvas.h"
 #include "SkSVGDevice.h"
 
+<<<<<<< HEAD
 SkCanvas* SkSVGCanvas::Create(const SkRect& bounds, SkXMLWriter* writer)
 {
+=======
+SkCanvas* SkSVGCanvas::Create(const SkRect& bounds, SkXMLWriter* writer) {
+>>>>>>> miniblink49
     // TODO: pass full bounds to the device
     SkISize size = bounds.roundOut().size();
     SkAutoTUnref<SkBaseDevice> device(SkSVGDevice::Create(size, writer));
 
+<<<<<<< HEAD
     return new SkCanvas(device);
+=======
+    return SkNEW_ARGS(SkCanvas, (device));
+>>>>>>> miniblink49
 }

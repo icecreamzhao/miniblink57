@@ -6,17 +6,25 @@
  */
 
 #include "SkTypes.h"
+<<<<<<< HEAD
 #if defined(SK_BUILD_FOR_WIN32)
 
 #include "SkHRESULT.h"
 
 void SkTraceHR(const char* file, unsigned long line, HRESULT hr, const char* msg)
 {
+=======
+
+#include "SkHRESULT.h"
+
+void SkTraceHR(const char* file, unsigned long line, HRESULT hr, const char* msg) {
+>>>>>>> miniblink49
     if (msg) {
         SkDebugf("%s\n", msg);
     }
     SkDebugf("%s(%lu) : error 0x%x: ", file, line, hr);
 
+<<<<<<< HEAD
     LPSTR errorText = nullptr;
     FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         nullptr,
@@ -27,12 +35,33 @@ void SkTraceHR(const char* file, unsigned long line, HRESULT hr, const char* msg
         nullptr);
 
     if (nullptr == errorText) {
+=======
+    LPSTR errorText = NULL;
+    FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                   FORMAT_MESSAGE_FROM_SYSTEM |
+                   FORMAT_MESSAGE_IGNORE_INSERTS,
+                   NULL,
+                   hr,
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                   (LPSTR) &errorText,
+                   0,
+                   NULL
+    );
+
+    if (NULL == errorText) {
+>>>>>>> miniblink49
         SkDebugf("<unknown>\n");
     } else {
         SkDebugf("%s", errorText);
         LocalFree(errorText);
+<<<<<<< HEAD
         errorText = nullptr;
     }
 }
 
 #endif //defined(SK_BUILD_FOR_WIN32)
+=======
+        errorText = NULL;
+    }
+}
+>>>>>>> miniblink49

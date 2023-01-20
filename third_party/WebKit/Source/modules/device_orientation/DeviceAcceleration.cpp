@@ -23,12 +23,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/device_orientation/DeviceAcceleration.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 DeviceAcceleration::DeviceAcceleration(
     DeviceMotionData::Acceleration* acceleration)
+=======
+DeviceAcceleration::DeviceAcceleration(DeviceMotionData::Acceleration* acceleration)
+>>>>>>> miniblink49
     : m_acceleration(acceleration)
 {
 }

@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,6 +28,28 @@
 #include "wtf/MathExtras.h"
 #include "wtf/PtrUtil.h"
 #include <algorithm>
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+#include "platform/audio/AudioResampler.h"
+
+#include <algorithm>
+#include "wtf/MathExtras.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -35,7 +58,11 @@ const double AudioResampler::MaxRate = 8.0;
 AudioResampler::AudioResampler()
     : m_rate(1.0)
 {
+<<<<<<< HEAD
     m_kernels.push_back(WTF::makeUnique<AudioResamplerKernel>(this));
+=======
+    m_kernels.append(adoptPtr(new AudioResamplerKernel(this)));
+>>>>>>> miniblink49
     m_sourceBus = AudioBus::create(1, 0, false);
 }
 
@@ -43,7 +70,11 @@ AudioResampler::AudioResampler(unsigned numberOfChannels)
     : m_rate(1.0)
 {
     for (unsigned i = 0; i < numberOfChannels; ++i)
+<<<<<<< HEAD
         m_kernels.push_back(WTF::makeUnique<AudioResamplerKernel>(this));
+=======
+        m_kernels.append(adoptPtr(new AudioResamplerKernel(this)));
+>>>>>>> miniblink49
 
     m_sourceBus = AudioBus::create(numberOfChannels, 0, false);
 }
@@ -57,7 +88,11 @@ void AudioResampler::configureChannels(unsigned numberOfChannels)
     // First deal with adding or removing kernels.
     if (numberOfChannels > currentSize) {
         for (unsigned i = currentSize; i < numberOfChannels; ++i)
+<<<<<<< HEAD
             m_kernels.push_back(WTF::makeUnique<AudioResamplerKernel>(this));
+=======
+            m_kernels.append(adoptPtr(new AudioResamplerKernel(this)));
+>>>>>>> miniblink49
     } else
         m_kernels.resize(numberOfChannels);
 
@@ -65,9 +100,13 @@ void AudioResampler::configureChannels(unsigned numberOfChannels)
     m_sourceBus = AudioBus::create(numberOfChannels, 0, false);
 }
 
+<<<<<<< HEAD
 void AudioResampler::process(AudioSourceProvider* provider,
     AudioBus* destinationBus,
     size_t framesToProcess)
+=======
+void AudioResampler::process(AudioSourceProvider* provider, AudioBus* destinationBus, size_t framesToProcess)
+>>>>>>> miniblink49
 {
     ASSERT(provider);
     if (!provider)
@@ -83,8 +122,12 @@ void AudioResampler::process(AudioSourceProvider* provider,
 
     // Setup the source bus.
     for (unsigned i = 0; i < numberOfChannels; ++i) {
+<<<<<<< HEAD
         // Figure out how many frames we need to get from the provider, and a
         // pointer to the buffer.
+=======
+        // Figure out how many frames we need to get from the provider, and a pointer to the buffer.
+>>>>>>> miniblink49
         size_t framesNeeded;
         float* fillPointer = m_kernels[i]->getSourcePointer(framesToProcess, &framesNeeded);
         ASSERT(fillPointer);
@@ -97,10 +140,15 @@ void AudioResampler::process(AudioSourceProvider* provider,
     // Ask the provider to supply the desired number of source frames.
     provider->provideInput(m_sourceBus.get(), m_sourceBus->length());
 
+<<<<<<< HEAD
     // Now that we have the source data, resample each channel into the
     // destination bus.
     // FIXME: optimize for the common stereo case where it's faster to process
     // both left/right channels in the same inner loop.
+=======
+    // Now that we have the source data, resample each channel into the destination bus.
+    // FIXME: optimize for the common stereo case where it's faster to process both left/right channels in the same inner loop.
+>>>>>>> miniblink49
     for (unsigned i = 0; i < numberOfChannels; ++i) {
         float* destination = destinationBus->channel(i)->mutableData();
         m_kernels[i]->process(destination, framesToProcess);
@@ -109,7 +157,11 @@ void AudioResampler::process(AudioSourceProvider* provider,
 
 void AudioResampler::setRate(double rate)
 {
+<<<<<<< HEAD
     if (std_isnan(rate) || std_isinf(rate) || rate <= 0.0)
+=======
+    if (std::isnan(rate) || std::isinf(rate) || rate <= 0.0)
+>>>>>>> miniblink49
         return;
 
     m_rate = std::min(AudioResampler::MaxRate, rate);
@@ -123,3 +175,8 @@ void AudioResampler::reset()
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

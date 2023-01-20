@@ -5,8 +5,13 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkRandom.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkRandom.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
@@ -15,12 +20,17 @@ namespace skiagm {
 // edge of one of its underlying quads).
 class ArcOfZorroGM : public GM {
 public:
+<<<<<<< HEAD
     ArcOfZorroGM()
     {
+=======
+    ArcOfZorroGM() {
+>>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFCCCCCC));
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("arcofzorro");
@@ -33,6 +43,18 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+
+    SkString onShortName() override {
+        return SkString("arcofzorro");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(1000, 1000);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkRandom rand;
 
         SkRect rect = SkRect::MakeXYWH(10, 10, 200, 200);
@@ -73,6 +95,10 @@ protected:
                 break;
             }
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     }
 
 private:
@@ -81,5 +107,10 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new ArcOfZorroGM;)
+=======
+DEF_GM( return SkNEW(ArcOfZorroGM); )
+
+>>>>>>> miniblink49
 }

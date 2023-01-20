@@ -7,17 +7,16 @@
 
 #include "core/layout/ClipRects.h"
 
-#if DCHECK_IS_ON()
-#include "platform/scroll/ScrollTypes.h" // For OverlayScrollbarClipBehavior.
+#if ENABLE(ASSERT)
+#include "core/layout/LayoutBox.h" // For OverlayScrollbarSizeRelevancy.
 #endif
 
 namespace blink {
 
-class PaintLayer;
+class DeprecatedPaintLayer;
 
 enum ClipRectsCacheSlot {
-    // Relative to the ancestor treated as the root (e.g. transformed layer).
-    // Used for hit testing.
+    // Relative to the ancestor treated as the root (e.g. transformed layer). Used for hit testing.
     RootRelativeClipRects,
     RootRelativeClipRectsIgnoringViewportClip,
 
@@ -33,31 +32,33 @@ enum ClipRectsCacheSlot {
 };
 
 class ClipRectsCache {
-    USING_FAST_MALLOC(ClipRectsCache);
-
+    WTF_MAKE_FAST_ALLOCATED(ClipRectsCache);
 public:
     struct Entry {
         Entry()
             : root(nullptr)
-#if DCHECK_IS_ON()
-            , overlayScrollbarClipBehavior(IgnoreOverlayScrollbarSize)
+#if ENABLE(ASSERT)
+            , scrollbarRelevancy(IgnoreOverlayScrollbarSize)
 #endif
         {
         }
-        const PaintLayer* root;
+
+        const DeprecatedPaintLayer* root;
         RefPtr<ClipRects> clipRects;
-#if DCHECK_IS_ON()
-        OverlayScrollbarClipBehavior overlayScrollbarClipBehavior;
+#if ENABLE(ASSERT)
+        OverlayScrollbarSizeRelevancy scrollbarRelevancy;
 #endif
     };
+
     Entry& get(ClipRectsCacheSlot slot)
     {
-        DCHECK(slot < NumberOfClipRectsCacheSlots);
+        ASSERT(slot < NumberOfClipRectsCacheSlots);
         return m_entries[slot];
     }
+
     void clear(ClipRectsCacheSlot slot)
     {
-        DCHECK(slot < NumberOfClipRectsCacheSlots);
+        ASSERT(slot < NumberOfClipRectsCacheSlots);
         m_entries[slot] = Entry();
     }
 

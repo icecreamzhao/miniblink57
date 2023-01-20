@@ -5,8 +5,6 @@
 #ifndef ImagePainter_h
 #define ImagePainter_h
 
-#include "wtf/Allocator.h"
-
 namespace blink {
 
 class GraphicsContext;
@@ -16,29 +14,17 @@ class LayoutRect;
 class LayoutImage;
 
 class ImagePainter {
-    STACK_ALLOCATED();
-
 public:
-    ImagePainter(const LayoutImage& layoutImage)
-        : m_layoutImage(layoutImage)
-    {
-    }
+    ImagePainter(LayoutImage& layoutImage) : m_layoutImage(layoutImage) { }
 
     void paint(const PaintInfo&, const LayoutPoint& paintOffset);
     void paintReplaced(const PaintInfo&, const LayoutPoint& paintOffset);
-
-    // Paint the image into |destRect|, after clipping by |contentRect|. Both
-    // |destRect| and |contentRect| should be in local coordinates plus the paint
-    // offset.
-    void paintIntoRect(GraphicsContext&,
-        const LayoutRect& destRect,
-        const LayoutRect& contentRect);
+    void paintIntoRect(GraphicsContext*, const LayoutRect& paintOffset);
 
 private:
-    void paintAreaElementFocusRing(const PaintInfo&,
-        const LayoutPoint& paintOffset);
+    void paintAreaElementFocusRing(const PaintInfo&);
 
-    const LayoutImage& m_layoutImage;
+    LayoutImage& m_layoutImage;
 };
 
 } // namespace blink

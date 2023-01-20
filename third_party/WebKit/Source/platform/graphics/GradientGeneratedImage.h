@@ -26,12 +26,21 @@
 #ifndef GradientGeneratedImage_h
 #define GradientGeneratedImage_h
 
+<<<<<<< HEAD
 #include "platform/graphics/GeneratedImage.h"
 #include "platform/graphics/Gradient.h"
+=======
+#include "platform/geometry/IntSize.h"
+#include "platform/graphics/GeneratedImage.h"
+#include "platform/graphics/Gradient.h"
+#include "platform/graphics/Image.h"
+#include "platform/graphics/ImageBuffer.h"
+>>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class IntSize;
 
 class PLATFORM_EXPORT GradientGeneratedImage final : public GeneratedImage {
@@ -56,6 +65,20 @@ protected:
         ImageClampingMode,
         const ColorBehavior&) override;
     void drawTile(GraphicsContext&, const FloatRect&) override;
+=======
+class PLATFORM_EXPORT GradientGeneratedImage : public GeneratedImage {
+public:
+    static PassRefPtr<GradientGeneratedImage> create(PassRefPtr<Gradient> generator, const IntSize& size)
+    {
+        return adoptRef(new GradientGeneratedImage(generator, size));
+    }
+
+    ~GradientGeneratedImage() override {}
+
+protected:
+    void draw(SkCanvas*, const SkPaint&, const FloatRect&, const FloatRect&, RespectImageOrientationEnum, ImageClampingMode) override;
+    void drawTile(GraphicsContext*, const FloatRect&) final;
+>>>>>>> miniblink49
 
     GradientGeneratedImage(PassRefPtr<Gradient> generator, const IntSize& size)
         : GeneratedImage(size)

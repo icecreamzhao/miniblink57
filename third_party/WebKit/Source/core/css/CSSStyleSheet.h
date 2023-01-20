@@ -1,7 +1,6 @@
 /*
  * (C) 1999-2003 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2004, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +23,6 @@
 
 #include "core/CoreExport.h"
 #include "core/css/CSSRule.h"
-#include "core/css/MediaQueryEvaluator.h"
 #include "core/css/StyleSheet.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
@@ -42,95 +40,75 @@ class MediaQuerySet;
 class SecurityOrigin;
 class StyleSheetContents;
 
+enum StyleSheetUpdateType {
+    PartialRuleUpdate,
+    EntireStyleSheetUpdate
+};
+
 class CORE_EXPORT CSSStyleSheet final : public StyleSheet {
     DEFINE_WRAPPERTYPEINFO();
-    WTF_MAKE_NONCOPYABLE(CSSStyleSheet);
-
 public:
-    static CSSStyleSheet* create(StyleSheetContents*,
-        CSSImportRule* ownerRule = nullptr);
-    static CSSStyleSheet* create(StyleSheetContents*, Node& ownerNode);
-    static CSSStyleSheet* createInline(
-        Node&,
-        const KURL&,
-        const TextPosition& startPosition = TextPosition::minimumPosition(),
-        const String& encoding = String());
-    static CSSStyleSheet* createInline(
-        StyleSheetContents*,
-        Node& ownerNode,
-        const TextPosition& startPosition = TextPosition::minimumPosition());
+    static PassRefPtrWillBeRawPtr<CSSStyleSheet> create(PassRefPtrWillBeRawPtr<StyleSheetContents>, CSSImportRule* ownerRule = 0);
+    static PassRefPtrWillBeRawPtr<CSSStyleSheet> create(PassRefPtrWillBeRawPtr<StyleSheetContents>, Node* ownerNode);
+    static PassRefPtrWillBeRawPtr<CSSStyleSheet> createInline(Node*, const KURL&, const TextPosition& startPosition = TextPosition::minimumPosition(), const String& encoding = String());
+    static PassRefPtrWillBeRawPtr<CSSStyleSheet> createInline(PassRefPtrWillBeRawPtr<StyleSheetContents>, Node* ownerNode, const TextPosition& startPosition = TextPosition::minimumPosition());
 
-    ~CSSStyleSheet() override;
+    virtual ~CSSStyleSheet();
 
-    CSSStyleSheet* parentStyleSheet() const override;
-    Node* ownerNode() const override { return m_ownerNode; }
-    MediaList* media() const override;
-    String href() const override;
-    String title() const override { return m_title; }
-    bool disabled() const override { return m_isDisabled; }
-    void setDisabled(bool) override;
+    virtual CSSStyleSheet* parentStyleSheet() const override;
+    virtual Node* ownerNode() const override { return m_ownerNode; }
+    virtual MediaList* media() const override;
+    virtual String href() const override;
+    virtual String title() const override { return m_title; }
+    virtual bool disabled() const override { return m_isDisabled; }
+    virtual void setDisabled(bool) override;
 
-    CSSRuleList* cssRules();
+    PassRefPtrWillBeRawPtr<CSSRuleList> cssRules();
     unsigned insertRule(const String& rule, unsigned index, ExceptionState&);
     unsigned insertRule(const String& rule, ExceptionState&); // Deprecated.
     void deleteRule(unsigned index, ExceptionState&);
 
     // IE Extensions
-    CSSRuleList* rules();
-    int addRule(const String& selector,
-        const String& style,
-        int index,
-        ExceptionState&);
+    PassRefPtrWillBeRawPtr<CSSRuleList> rules();
+    int addRule(const String& selector, const String& style, int index, ExceptionState&);
     int addRule(const String& selector, const String& style, ExceptionState&);
-    void removeRule(unsigned index, ExceptionState& exceptionState)
-    {
-        deleteRule(index, exceptionState);
-    }
+    void removeRule(unsigned index, ExceptionState& exceptionState) { deleteRule(index, exceptionState); }
 
     // For CSSRuleList.
     unsigned length() const;
     CSSRule* item(unsigned index);
 
-    void clearOwnerNode() override;
+    virtual void clearOwnerNode() override;
 
-    CSSRule* ownerRule() const override { return m_ownerRule; }
-    KURL baseURL() const override;
-    bool isLoading() const override;
+    virtual CSSRule* ownerRule() const override { return m_ownerRule; }
+    virtual KURL baseURL() const override;
+    virtual bool isLoading() const override;
 
     void clearOwnerRule() { m_ownerRule = nullptr; }
     Document* ownerDocument() const;
-    const MediaQuerySet* mediaQueries() const { return m_mediaQueries; }
-    void setMediaQueries(MediaQuerySet*);
-    bool matchesMediaQueries(const MediaQueryEvaluator&);
-    const MediaQueryResultList& viewportDependentMediaQueryResults() const
-    {
-        return m_viewportDependentMediaQueryResults;
-    }
-    const MediaQueryResultList& deviceDependentMediaQueryResults() const
-    {
-        return m_deviceDependentMediaQueryResults;
-    }
+    MediaQuerySet* mediaQueries() const { return m_mediaQueries.get(); }
+    void setMediaQueries(PassRefPtrWillBeRawPtr<MediaQuerySet>);
     void setTitle(const String& title) { m_title = title; }
-    // Set by LinkStyle iff CORS-enabled fetch of stylesheet succeeded from this
-    // origin.
+    // Set by LinkStyle iff CORS-enabled fetch of stylesheet succeeded from this origin.
     void setAllowRuleAccessFromOrigin(PassRefPtr<SecurityOrigin> allowedOrigin);
 
     class RuleMutationScope {
         WTF_MAKE_NONCOPYABLE(RuleMutationScope);
         STACK_ALLOCATED();
-
     public:
         explicit RuleMutationScope(CSSStyleSheet*);
         explicit RuleMutationScope(CSSRule*);
         ~RuleMutationScope();
 
     private:
-        Member<CSSStyleSheet> m_styleSheet;
+        RawPtrWillBeMember<CSSStyleSheet> m_styleSheet;
     };
 
     void willMutateRules();
     void didMutateRules();
-    void didMutate();
+    void didMutate(StyleSheetUpdateType = PartialRuleUpdate);
+
+    void clearChildRuleCSSOMWrappers();
 
     StyleSheetContents* contents() const { return m_contents.get(); }
 
@@ -140,19 +118,15 @@ public:
     bool sheetLoaded();
     bool loadCompleted() const { return m_loadCompleted; }
     void startLoadingDynamicSheet();
-    void setText(const String&);
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    CSSStyleSheet(StyleSheetContents*, CSSImportRule* ownerRule);
-    CSSStyleSheet(StyleSheetContents*,
-        Node& ownerNode,
-        bool isInlineStylesheet,
-        const TextPosition& startPosition);
+    CSSStyleSheet(PassRefPtrWillBeRawPtr<StyleSheetContents>, CSSImportRule* ownerRule);
+    CSSStyleSheet(PassRefPtrWillBeRawPtr<StyleSheetContents>, Node* ownerNode, bool isInlineStylesheet, const TextPosition& startPosition);
 
-    bool isCSSStyleSheet() const override { return true; }
-    String type() const override { return "text/css"; }
+    virtual bool isCSSStyleSheet() const override { return true; }
+    virtual String type() const override { return "text/css"; }
 
     void reattachChildRuleCSSOMWrappers();
 
@@ -160,24 +134,22 @@ private:
 
     void setLoadCompleted(bool);
 
-    Member<StyleSheetContents> m_contents;
-    bool m_isInlineStylesheet = false;
-    bool m_isDisabled = false;
-    bool m_loadCompleted = false;
+    RefPtrWillBeMember<StyleSheetContents> m_contents;
+    bool m_isInlineStylesheet;
+    bool m_isDisabled;
     String m_title;
-    Member<MediaQuerySet> m_mediaQueries;
-    MediaQueryResultList m_viewportDependentMediaQueryResults;
-    MediaQueryResultList m_deviceDependentMediaQueryResults;
+    RefPtrWillBeMember<MediaQuerySet> m_mediaQueries;
 
     RefPtr<SecurityOrigin> m_allowRuleAccessFromOrigin;
 
-    Member<Node> m_ownerNode;
-    Member<CSSRule> m_ownerRule;
+    RawPtrWillBeMember<Node> m_ownerNode;
+    RawPtrWillBeMember<CSSRule> m_ownerRule;
 
     TextPosition m_startPosition;
-    mutable Member<MediaList> m_mediaCSSOMWrapper;
-    mutable HeapVector<Member<CSSRule>> m_childRuleCSSOMWrappers;
-    mutable Member<CSSRuleList> m_ruleListCSSOMWrapper;
+    bool m_loadCompleted;
+    mutable RefPtrWillBeMember<MediaList> m_mediaCSSOMWrapper;
+    mutable WillBeHeapVector<RefPtrWillBeMember<CSSRule>> m_childRuleCSSOMWrappers;
+    mutable OwnPtrWillBeMember<CSSRuleList> m_ruleListCSSOMWrapper;
 };
 
 inline CSSStyleSheet::RuleMutationScope::RuleMutationScope(CSSStyleSheet* sheet)
@@ -188,7 +160,7 @@ inline CSSStyleSheet::RuleMutationScope::RuleMutationScope(CSSStyleSheet* sheet)
 }
 
 inline CSSStyleSheet::RuleMutationScope::RuleMutationScope(CSSRule* rule)
-    : m_styleSheet(rule ? rule->parentStyleSheet() : nullptr)
+    : m_styleSheet(rule ? rule->parentStyleSheet() : 0)
 {
     if (m_styleSheet)
         m_styleSheet->willMutateRules();
@@ -200,11 +172,7 @@ inline CSSStyleSheet::RuleMutationScope::~RuleMutationScope()
         m_styleSheet->didMutateRules();
 }
 
-DEFINE_TYPE_CASTS(CSSStyleSheet,
-    StyleSheet,
-    sheet,
-    sheet->isCSSStyleSheet(),
-    sheet.isCSSStyleSheet());
+DEFINE_TYPE_CASTS(CSSStyleSheet, StyleSheet, sheet, sheet->isCSSStyleSheet(), sheet.isCSSStyleSheet());
 
 } // namespace blink
 

@@ -28,31 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableVisibility.h"
 
 namespace blink {
 
-bool AnimatableVisibility::usesDefaultInterpolationWith(
-    const AnimatableValue* value) const
+bool AnimatableVisibility::usesDefaultInterpolationWith(const AnimatableValue* value) const
 {
     EVisibility from = m_visibility;
     EVisibility to = toAnimatableVisibility(value)->m_visibility;
-    return from != EVisibility::kVisible && to != EVisibility::kVisible;
+    return from != VISIBLE && to != VISIBLE;
 }
 
-PassRefPtr<AnimatableValue> AnimatableVisibility::interpolateTo(
-    const AnimatableValue* value,
-    double fraction) const
+PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableVisibility::interpolateTo(const AnimatableValue* value, double fraction) const
 {
     EVisibility from = m_visibility;
     EVisibility to = toAnimatableVisibility(value)->m_visibility;
-    if (from != EVisibility::kVisible && to != EVisibility::kVisible)
+    if (from != VISIBLE && to != VISIBLE)
         return defaultInterpolateTo(this, value, fraction);
     if (fraction <= 0)
         return takeConstRef(this);
     if (fraction >= 1)
         return takeConstRef(value);
-    return takeConstRef(from == EVisibility::kVisible ? this : value);
+    return takeConstRef(from == VISIBLE ? this : value);
 }
 
 bool AnimatableVisibility::equalTo(const AnimatableValue* value) const

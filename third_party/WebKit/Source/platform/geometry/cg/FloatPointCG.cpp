@@ -24,15 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/FloatPoint.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace blink {
 
+<<<<<<< HEAD
 FloatPoint::FloatPoint(const CGPoint& p)
     : m_x(p.x)
     , m_y(p.y)
+=======
+FloatPoint::FloatPoint(const CGPoint& p) : m_x(p.x), m_y(p.y)
+>>>>>>> miniblink49
 {
 }
 
@@ -41,4 +49,8 @@ FloatPoint::operator CGPoint() const
     return CGPointMake(m_x, m_y);
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

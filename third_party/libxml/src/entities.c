@@ -254,7 +254,11 @@ xmlAddEntity(xmlDtdPtr dtd, const xmlChar *name, int type,
  *
  * Returns NULL if not, otherwise the entity
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlGetPredefinedEntity(const xmlChar *name) {
     if (name == NULL) return(NULL);
     switch (name[0]) {
@@ -295,7 +299,11 @@ xmlGetPredefinedEntity(const xmlChar *name) {
  *
  * Returns a pointer to the entity or NULL in case of error
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlAddDtdEntity(xmlDocPtr doc, const xmlChar *name, int type,
 	        const xmlChar *ExternalID, const xmlChar *SystemID,
 		const xmlChar *content) {
@@ -344,7 +352,11 @@ xmlAddDtdEntity(xmlDocPtr doc, const xmlChar *name, int type,
  *
  * Returns a pointer to the entity or NULL in case of error
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlAddDocEntity(xmlDocPtr doc, const xmlChar *name, int type,
 	        const xmlChar *ExternalID, const xmlChar *SystemID,
 	        const xmlChar *content) {
@@ -397,7 +409,11 @@ xmlAddDocEntity(xmlDocPtr doc, const xmlChar *name, int type,
  *
  * Returns a pointer to the entity or NULL in case of error
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlNewEntity(xmlDocPtr doc, const xmlChar *name, int type,
 	     const xmlChar *ExternalID, const xmlChar *SystemID,
 	     const xmlChar *content) {
@@ -444,7 +460,11 @@ xmlGetEntityFromTable(xmlEntitiesTablePtr table, const xmlChar *name) {
  * 
  * Returns A pointer to the entity structure or NULL if not found.
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlGetParameterEntity(xmlDocPtr doc, const xmlChar *name) {
     xmlEntitiesTablePtr table;
     xmlEntityPtr ret;
@@ -475,7 +495,11 @@ xmlGetParameterEntity(xmlDocPtr doc, const xmlChar *name) {
  * 
  * Returns A pointer to the entity structure or NULL if not found.
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlGetDtdEntity(xmlDocPtr doc, const xmlChar *name) {
     xmlEntitiesTablePtr table;
 
@@ -499,7 +523,11 @@ xmlGetDtdEntity(xmlDocPtr doc, const xmlChar *name) {
  * 
  * Returns A pointer to the entity structure or NULL if not found.
  */
+<<<<<<< HEAD
 xmlEntityPtr XMLCALL
+=======
+xmlEntityPtr
+>>>>>>> miniblink49
 xmlGetDocEntity(xmlDocPtr doc, const xmlChar *name) {
     xmlEntityPtr cur;
     xmlEntitiesTablePtr table;
@@ -550,7 +578,11 @@ xmlGetDocEntity(xmlDocPtr doc, const xmlChar *name) {
  *
  * Returns A newly allocated string with the substitution done.
  */
+<<<<<<< HEAD
 xmlChar * XMLCALL
+=======
+xmlChar *
+>>>>>>> miniblink49
 xmlEncodeEntitiesReentrant(xmlDocPtr doc, const xmlChar *input) {
     const xmlChar *cur = input;
     xmlChar *buffer = NULL;
@@ -704,7 +736,11 @@ xmlEncodeEntitiesReentrant(xmlDocPtr doc, const xmlChar *input) {
  *
  * Returns A newly allocated string with the substitution done.
  */
+<<<<<<< HEAD
 xmlChar * XMLCALL
+=======
+xmlChar *
+>>>>>>> miniblink49
 xmlEncodeSpecialChars(xmlDocPtr doc ATTRIBUTE_UNUSED, const xmlChar *input) {
     const xmlChar *cur = input;
     xmlChar *buffer = NULL;
@@ -784,7 +820,11 @@ xmlEncodeSpecialChars(xmlDocPtr doc ATTRIBUTE_UNUSED, const xmlChar *input) {
  *
  * Returns the xmlEntitiesTablePtr just created or NULL in case of error.
  */
+<<<<<<< HEAD
 xmlEntitiesTablePtr XMLCALL
+=======
+xmlEntitiesTablePtr
+>>>>>>> miniblink49
 xmlCreateEntitiesTable(void) {
     return((xmlEntitiesTablePtr) xmlHashCreate(0));
 }
@@ -809,7 +849,11 @@ xmlFreeEntityWrapper(xmlEntityPtr entity,
  *
  * Deallocate the memory used by an entities hash table.
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlFreeEntitiesTable(xmlEntitiesTablePtr table) {
     xmlHashFree(table, (xmlHashDeallocator) xmlFreeEntityWrapper);
 }
@@ -859,7 +903,11 @@ xmlCopyEntity(xmlEntityPtr ent) {
  * 
  * Returns the new xmlEntitiesTablePtr or NULL in case of error.
  */
+<<<<<<< HEAD
 xmlEntitiesTablePtr XMLCALL
+=======
+xmlEntitiesTablePtr
+>>>>>>> miniblink49
 xmlCopyEntitiesTable(xmlEntitiesTablePtr table) {
     return(xmlHashCopy(table, (xmlHashCopier) xmlCopyEntity));
 }
@@ -915,7 +963,11 @@ xmlDumpEntityContent(xmlBufferPtr buf, const xmlChar *content) {
  *
  * This will dump the content of the entity table as an XML DTD definition
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlDumpEntityDecl(xmlBufferPtr buf, xmlEntityPtr ent) {
     if ((buf == NULL) || (ent == NULL)) return;
     switch (ent->etype) {
@@ -1013,7 +1065,11 @@ xmlDumpEntityDeclScan(xmlEntityPtr ent, xmlBufferPtr buf) {
  *
  * This will dump the content of the entity table as an XML DTD definition
  */
+<<<<<<< HEAD
 void XMLCALL
+=======
+void
+>>>>>>> miniblink49
 xmlDumpEntitiesTable(xmlBufferPtr buf, xmlEntitiesTablePtr table) {
     xmlHashScan(table, (xmlHashScanner)xmlDumpEntityDeclScan, buf);
 }

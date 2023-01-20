@@ -33,7 +33,11 @@
           }, { # (not skia_freetype_static)
             # dynamic linking depends on the OS:
             'conditions': [
+<<<<<<< HEAD
               [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris"]',
+=======
+              [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]',
+>>>>>>> miniblink49
                 {
                   'direct_dependent_settings': {
                     'include_dirs' : [
@@ -88,6 +92,17 @@
         # TODO: merge this back in here?
         'freetype.gypi',
       ],
+<<<<<<< HEAD
+=======
+      'include_dirs': [
+        '../third_party/freetype/include_overrides',
+      ],
+      'direct_dependent_settings': {
+        'include_dirs': [
+          '../third_party/freetype/include_overrides',
+        ],
+      },
+>>>>>>> miniblink49
       'conditions': [
         [ 'skia_os == "android"', {
           # These flags are used by the Android OS.  They are probably overkill
@@ -102,11 +117,14 @@
             '-O2',
           ],
         }],
+<<<<<<< HEAD
         [ 'skia_clang_build == 1', {
           'cflags':[
             '-w',
           ],
         }],
+=======
+>>>>>>> miniblink49
       ],
     },
   ],

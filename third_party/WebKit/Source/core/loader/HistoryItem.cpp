@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/loader/HistoryItem.h"
 
 #include "core/dom/Document.h"
@@ -51,7 +52,9 @@ HistoryItem::HistoryItem()
 {
 }
 
-HistoryItem::~HistoryItem() { }
+HistoryItem::~HistoryItem()
+{
+}
 
 const String& HistoryItem::urlString() const
 {
@@ -81,14 +84,13 @@ void HistoryItem::setURLString(const String& urlString)
 
 void HistoryItem::setURL(const KURL& url)
 {
-    setURLString(url.getString());
+    setURLString(url.string());
 }
 
 void HistoryItem::setReferrer(const Referrer& referrer)
 {
     // This should be a RELEASE_ASSERT.
-    m_referrer = SecurityPolicy::generateReferrer(referrer.referrerPolicy, url(),
-        referrer.referrer);
+    m_referrer = SecurityPolicy::generateReferrer(referrer.referrerPolicy, url(), referrer.referrer);
 }
 
 void HistoryItem::setTarget(const String& target)
@@ -96,24 +98,24 @@ void HistoryItem::setTarget(const String& target)
     m_target = target;
 }
 
-const ScrollOffset& HistoryItem::visualViewportScrollOffset() const
+const FloatPoint& HistoryItem::pinchViewportScrollPoint() const
 {
-    return m_visualViewportScrollOffset;
+    return m_pinchViewportScrollPoint;
 }
 
-void HistoryItem::setVisualViewportScrollOffset(const ScrollOffset& offset)
+void HistoryItem::setPinchViewportScrollPoint(const FloatPoint& point)
 {
-    m_visualViewportScrollOffset = offset;
+    m_pinchViewportScrollPoint = point;
 }
 
-const ScrollOffset& HistoryItem::getScrollOffset() const
+const IntPoint& HistoryItem::scrollPoint() const
 {
-    return m_scrollOffset;
+    return m_scrollPoint;
 }
 
-void HistoryItem::setScrollOffset(const ScrollOffset& offset)
+void HistoryItem::setScrollPoint(const IntPoint& point)
 {
-    m_scrollOffset = offset;
+    m_scrollPoint = point;
 }
 
 float HistoryItem::pageScaleFactor() const
@@ -128,7 +130,7 @@ void HistoryItem::setPageScaleFactor(float scaleFactor)
 
 void HistoryItem::setDocumentState(const Vector<String>& state)
 {
-    DCHECK(!m_documentState);
+    ASSERT(!m_documentState);
     m_documentStateVector = state;
 }
 
@@ -137,7 +139,7 @@ void HistoryItem::setDocumentState(DocumentState* state)
     m_documentState = state;
 }
 
-const Vector<String>& HistoryItem::getDocumentState()
+const Vector<String>& HistoryItem::documentState()
 {
     if (m_documentState)
         m_documentStateVector = m_documentState->toStateVector();
@@ -146,7 +148,7 @@ const Vector<String>& HistoryItem::getDocumentState()
 
 Vector<String> HistoryItem::getReferencedFilePaths()
 {
-    return FormController::getReferencedFilePaths(getDocumentState());
+    return FormController::getReferencedFilePaths(documentState());
 }
 
 void HistoryItem::clearDocumentState()
@@ -168,9 +170,8 @@ const AtomicString& HistoryItem::formContentType() const
 void HistoryItem::setFormInfoFromRequest(const ResourceRequest& request)
 {
     if (equalIgnoringCase(request.httpMethod(), "POST")) {
-        // FIXME: Eventually we have to make this smart enough to handle the case
-        // where we have a stream for the body to handle the "data interspersed with
-        // files" feature.
+        // FIXME: Eventually we have to make this smart enough to handle the case where
+        // we have a stream for the body to handle the "data interspersed with files" feature.
         m_formData = request.httpBody();
         m_formContentType = request.httpContentType();
     } else {
@@ -179,7 +180,7 @@ void HistoryItem::setFormInfoFromRequest(const ResourceRequest& request)
     }
 }
 
-void HistoryItem::setFormData(PassRefPtr<EncodedFormData> formData)
+void HistoryItem::setFormData(PassRefPtr<FormData> formData)
 {
     m_formData = formData;
 }
@@ -189,15 +190,14 @@ void HistoryItem::setFormContentType(const AtomicString& formContentType)
     m_formContentType = formContentType;
 }
 
-EncodedFormData* HistoryItem::formData()
+FormData* HistoryItem::formData()
 {
     return m_formData.get();
 }
 
 bool HistoryItem::isCurrentDocument(Document* doc) const
 {
-    // FIXME: We should find a better way to check if this is the current
-    // document.
+    // FIXME: We should find a better way to check if this is the current document.
     return equalIgnoringFragmentIdentifier(url(), doc->url());
 }
 

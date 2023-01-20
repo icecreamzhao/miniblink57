@@ -17,19 +17,32 @@ public:
     BmpFilterQualityRepeat() { this->setBGColor(sk_tool_utils::color_to_565(0xFFCCBBAA)); }
 
 protected:
+<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
+=======
+
+    void onOnceBeforeDraw() override {
+>>>>>>> miniblink49
         fBmp.allocN32Pixels(40, 40, true);
         SkCanvas canvas(fBmp);
         SkBitmap colorBmp;
         colorBmp.allocN32Pixels(20, 20, true);
         colorBmp.eraseColor(0xFFFF0000);
         canvas.drawBitmap(colorBmp, 0, 0);
+<<<<<<< HEAD
         colorBmp.eraseColor(sk_tool_utils::color_to_565(0xFF008200));
         canvas.drawBitmap(colorBmp, 20, 0);
         colorBmp.eraseColor(sk_tool_utils::color_to_565(0xFFFF9000));
         canvas.drawBitmap(colorBmp, 0, 20);
         colorBmp.eraseColor(sk_tool_utils::color_to_565(0xFF2000FF));
+=======
+        colorBmp.eraseColor(0xFF008200);
+        canvas.drawBitmap(colorBmp, 20, 0);
+        colorBmp.eraseColor(0xFFFF9000);
+        canvas.drawBitmap(colorBmp, 0, 20);
+        colorBmp.eraseColor(0xFF2000FF);
+>>>>>>> miniblink49
         canvas.drawBitmap(colorBmp, 20, 20);
     }
 
@@ -37,6 +50,7 @@ protected:
 
     SkISize onISize() override { return SkISize::Make(1000, 235); }
 
+<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
 
@@ -48,11 +62,27 @@ protected:
             { kLow_SkFilterQuality, "low" },
             { kMedium_SkFilterQuality, "medium" },
             { kHigh_SkFilterQuality, "high" },
+=======
+    void onDraw(SkCanvas* canvas) override {
+
+        static const struct { 
+            SkFilterQuality fQuality;
+            const char* fName;
+        } kQualities[] = {
+            {kNone_SkFilterQuality, "none"},
+            {kLow_SkFilterQuality, "low"},
+            {kMedium_SkFilterQuality, "medium"},
+            {kHigh_SkFilterQuality, "high"},
+>>>>>>> miniblink49
         };
 
         for (size_t q = 0; q < SK_ARRAY_COUNT(kQualities); ++q) {
             SkPaint paint;
+<<<<<<< HEAD
             sk_tool_utils::set_portable_typeface(&paint);
+=======
+            sk_tool_utils::set_portable_typeface_always(&paint);
+>>>>>>> miniblink49
             paint.setFilterQuality(kQualities[q].fQuality);
             SkPaint bmpPaint(paint);
             SkMatrix lm = SkMatrix::I();
@@ -61,7 +91,11 @@ protected:
             lm.setTranslateY(330);
 
             static const SkShader::TileMode kTM = SkShader::kRepeat_TileMode;
+<<<<<<< HEAD
             bmpPaint.setShader(SkShader::MakeBitmapShader(fBmp, kTM, kTM, &lm));
+=======
+            bmpPaint.setShader(SkShader::CreateBitmapShader(fBmp, kTM, kTM, &lm))->unref();
+>>>>>>> miniblink49
             SkRect rect = SkRect::MakeLTRB(20, 60, 220, 210);
             canvas->drawRect(rect, bmpPaint);
             paint.setAntiAlias(true);
@@ -71,11 +105,19 @@ protected:
     }
 
 private:
+<<<<<<< HEAD
     SkBitmap fBmp;
+=======
+    SkBitmap    fBmp;
+>>>>>>> miniblink49
 
     typedef skiagm::GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new BmpFilterQualityRepeat;)
+=======
+DEF_GM( return SkNEW(BmpFilterQualityRepeat); )
+>>>>>>> miniblink49

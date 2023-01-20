@@ -2,22 +2,34 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/credentialmanager/FederatedCredential.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "modules/credentialmanager/FederatedCredentialData.h"
 #include "platform/credentialmanager/PlatformFederatedCredential.h"
+<<<<<<< HEAD
 #include "platform/weborigin/SecurityOrigin.h"
+=======
+>>>>>>> miniblink49
 #include "public/platform/WebFederatedCredential.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 FederatedCredential* FederatedCredential::create(
     WebFederatedCredential* webFederatedCredential)
+=======
+FederatedCredential* FederatedCredential::create(WebFederatedCredential* webFederatedCredential)
+>>>>>>> miniblink49
 {
     return new FederatedCredential(webFederatedCredential);
 }
 
+<<<<<<< HEAD
 FederatedCredential* FederatedCredential::create(
     const FederatedCredentialData& data,
     ExceptionState& exceptionState)
@@ -31,6 +43,10 @@ FederatedCredential* FederatedCredential::create(
         return nullptr;
     }
 
+=======
+FederatedCredential* FederatedCredential::create(const FederatedCredentialData& data, ExceptionState& exceptionState)
+{
+>>>>>>> miniblink49
     KURL iconURL = parseStringAsURL(data.iconURL(), exceptionState);
     KURL providerURL = parseStringAsURL(data.provider(), exceptionState);
     if (exceptionState.hadException())
@@ -38,6 +54,7 @@ FederatedCredential* FederatedCredential::create(
     return new FederatedCredential(data.id(), providerURL, data.name(), iconURL);
 }
 
+<<<<<<< HEAD
 FederatedCredential::FederatedCredential(
     WebFederatedCredential* webFederatedCredential)
     : SiteBoundCredential(webFederatedCredential->getPlatformCredential())
@@ -61,6 +78,21 @@ const String FederatedCredential::provider() const
     return static_cast<PlatformFederatedCredential*>(m_platformCredential.get())
         ->provider()
         ->toString();
+=======
+FederatedCredential::FederatedCredential(WebFederatedCredential* webFederatedCredential)
+    : Credential(webFederatedCredential->platformCredential())
+{
+}
+
+FederatedCredential::FederatedCredential(const String& id, const KURL& provider, const String& name, const KURL& icon)
+    : Credential(PlatformFederatedCredential::create(id, provider, name, icon))
+{
+}
+
+const KURL& FederatedCredential::provider() const
+{
+    return static_cast<PlatformFederatedCredential*>(m_platformCredential.get())->provider();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebData.h"
 
 #include "platform/SharedBuffer.h"
@@ -63,12 +67,20 @@ const char* WebData::data() const
     return m_private->data();
 }
 
+<<<<<<< HEAD
 WebData::WebData(PassRefPtr<SharedBuffer> buffer)
+=======
+WebData::WebData(const PassRefPtr<SharedBuffer>& buffer)
+>>>>>>> miniblink49
     : m_private(buffer)
 {
 }
 
+<<<<<<< HEAD
 WebData& WebData::operator=(PassRefPtr<SharedBuffer> buffer)
+=======
+WebData& WebData::operator=(const PassRefPtr<SharedBuffer>& buffer)
+>>>>>>> miniblink49
 {
     m_private = buffer;
     return *this;

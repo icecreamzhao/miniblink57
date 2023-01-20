@@ -37,32 +37,23 @@ namespace blink {
 
 class EmailInputType final : public BaseTextInputType {
 public:
-    static InputType* create(HTMLInputElement&);
-
-    // They are public for unit testing.
-    CORE_EXPORT static String convertEmailAddressToASCII(const ScriptRegexp&,
-        const String&);
-    CORE_EXPORT static bool isValidEmailAddress(const ScriptRegexp&,
-        const String&);
-    CORE_EXPORT static std::unique_ptr<ScriptRegexp> createEmailRegexp();
+    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
 
 private:
-    explicit EmailInputType(HTMLInputElement&);
+    EmailInputType(HTMLInputElement& element) : BaseTextInputType(element) { }
     void countUsage() override;
     const AtomicString& formControlType() const override;
     bool typeMismatchFor(const String&) const override;
     bool typeMismatch() const override;
     String typeMismatchText() const override;
+    void warnIfValueIsInvalid(const String&) const override;
     bool supportsSelectionAPI() const override;
     String sanitizeValue(const String&) const override;
     String convertFromVisibleValue(const String&) const override;
     String visibleValue() const override;
 
-    ScriptRegexp& ensureEmailRegexp() const;
     String convertEmailAddressToUnicode(const String&) const;
     String findInvalidAddress(const String&) const;
-
-    mutable std::unique_ptr<ScriptRegexp> m_emailRegexp;
 };
 
 } // namespace blink

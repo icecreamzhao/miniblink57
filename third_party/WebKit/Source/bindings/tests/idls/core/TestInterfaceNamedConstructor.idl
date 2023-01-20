@@ -27,8 +27,7 @@
  */
 
 [
-    ActiveScriptWrappable,
-    DependentLifetime,
+    ActiveDOMObject,
     NamedConstructor=Audio(
         DOMString stringArg,
         [Default=Undefined] optional boolean defaultUndefinedOptionalBooleanArg,

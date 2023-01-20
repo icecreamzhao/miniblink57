@@ -16,6 +16,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(Cell, HeapObject)
 
     CAST_ACCESSOR(Cell)
@@ -33,3 +34,21 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_CELL_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(Cell, HeapObject)
+
+CAST_ACCESSOR(Cell)
+
+ACCESSORS(Cell, value, Object, kValueOffset)
+
+Cell Cell::FromValueAddress(Address value) {
+  return Cell::cast(HeapObject::FromAddress(value - kValueOffset));
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_CELL_INL_H_
+>>>>>>> miniblink49

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "modules/canvas2d/CanvasRenderingContext2D.h"
 
 #include "core/dom/Document.h"
@@ -21,6 +22,23 @@
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include <memory>
+=======
+#include "config.h"
+#include "modules/canvas2d/CanvasRenderingContext2D.h"
+
+#include "core/frame/FrameView.h"
+#include "core/html/HTMLCanvasElement.h"
+#include "core/html/HTMLDocument.h"
+#include "core/html/ImageData.h"
+#include "core/loader/EmptyClients.h"
+#include "core/testing/DummyPageHolder.h"
+#include "modules/canvas2d/CanvasGradient.h"
+#include "modules/canvas2d/CanvasPattern.h"
+#include "modules/webgl/WebGLRenderingContext.h"
+#include "platform/graphics/UnacceleratedImageBufferSurface.h"
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 using ::testing::Mock;
 
@@ -32,19 +50,34 @@ protected:
     void SetUp() override;
 
     DummyPageHolder& page() const { return *m_dummyPageHolder; }
+<<<<<<< HEAD
     Document& document() const { return *m_document; }
+=======
+    HTMLDocument& document() const { return *m_document; }
+>>>>>>> miniblink49
     HTMLCanvasElement& canvasElement() const { return *m_canvasElement; }
     CanvasRenderingContext2D* context2d() const;
 
     void createContext(OpacityMode);
 
 private:
+<<<<<<< HEAD
     std::unique_ptr<DummyPageHolder> m_dummyPageHolder;
     Persistent<Document> m_document;
     Persistent<HTMLCanvasElement> m_canvasElement;
 };
 
 CanvasRenderingContext2DAPITest::CanvasRenderingContext2DAPITest() { }
+=======
+    OwnPtr<DummyPageHolder> m_dummyPageHolder;
+    RefPtrWillBePersistent<HTMLDocument> m_document;
+    RefPtrWillBePersistent<HTMLCanvasElement> m_canvasElement;
+
+};
+
+CanvasRenderingContext2DAPITest::CanvasRenderingContext2DAPITest()
+{ }
+>>>>>>> miniblink49
 
 CanvasRenderingContext2D* CanvasRenderingContext2DAPITest::context2d() const
 {
@@ -52,8 +85,12 @@ CanvasRenderingContext2D* CanvasRenderingContext2DAPITest::context2d() const
     // in your test?
     EXPECT_NE(nullptr, canvasElement().renderingContext());
     EXPECT_TRUE(canvasElement().renderingContext()->is2d());
+<<<<<<< HEAD
     return static_cast<CanvasRenderingContext2D*>(
         canvasElement().renderingContext());
+=======
+    return static_cast<CanvasRenderingContext2D*>(canvasElement().renderingContext());
+>>>>>>> miniblink49
 }
 
 void CanvasRenderingContext2DAPITest::createContext(OpacityMode opacityMode)
@@ -70,9 +107,14 @@ void CanvasRenderingContext2DAPITest::SetUp()
     Page::PageClients pageClients;
     fillWithEmptyClients(pageClients);
     m_dummyPageHolder = DummyPageHolder::create(IntSize(800, 600), &pageClients);
+<<<<<<< HEAD
     m_document = &m_dummyPageHolder->document();
     m_document->documentElement()->setInnerHTML(
         "<body><canvas id='c'></canvas></body>");
+=======
+    m_document = toHTMLDocument(&m_dummyPageHolder->document());
+    m_document->documentElement()->setInnerHTML("<body><canvas id='c'></canvas></body>", ASSERT_NO_EXCEPTION);
+>>>>>>> miniblink49
     m_document->view()->updateAllLifecyclePhases();
     m_canvasElement = toHTMLCanvasElement(m_document->getElementById("c"));
 }
@@ -87,6 +129,7 @@ TEST_F(CanvasRenderingContext2DAPITest, SetShadowColor_Clamping)
     EXPECT_EQ(String("#000000"), context2d()->shadowColor());
     context2d()->setShadowColor("rgb(0,999,0)");
     EXPECT_EQ(String("#00ff00"), context2d()->shadowColor());
+<<<<<<< HEAD
     context2d()->setShadowColor(
         "rgb(0,"
         "999999999999999999999999999999999999999999999999999999999999999999999999"
@@ -138,13 +181,32 @@ TEST_F(CanvasRenderingContext2DAPITest, SetShadowColor_Clamping)
         "999999999999999999999999999999999999999999999999999999999999999999999999"
         "999999999999999999999999999999999999999999999999999999999999999999999999"
         "99999999999999999)");
+=======
+    context2d()->setShadowColor("rgb(0,999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999,0)");
+    EXPECT_EQ(String("#00ff00"), context2d()->shadowColor());
+    context2d()->setShadowColor("rgb(0,0,256)");
+    EXPECT_EQ(String("#0000ff"), context2d()->shadowColor());
+    context2d()->setShadowColor("rgb(999999999999999999999999,0,-9999999999999999999999999999)");
+    EXPECT_EQ(String("#ff0000"), context2d()->shadowColor());
+    context2d()->setShadowColor("rgba(9999999999999999999999999999999999999999999999999999999999999999999999999999999999,9,0,1)");
+    EXPECT_EQ(String("#ff0900"), context2d()->shadowColor());
+    context2d()->setShadowColor("rgba(9999999999999999999999999999999999999999999999999999999999999999999999999999999999,9,0,-99999999999999999999999999999999999999)");
+    EXPECT_EQ(String("rgba(255, 9, 0, 0)"), context2d()->shadowColor());
+    context2d()->setShadowColor("rgba(7,9999999999999999999999999999999999999999999999999999999999999999999999999999999999,0,99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999)");
+    EXPECT_EQ(String("#07ff00"), context2d()->shadowColor());
+    context2d()->setShadowColor("rgba(-7,9999999999999999999999999999999999999999999999999999999999999999999999999999999999,0,99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999)");
+>>>>>>> miniblink49
     EXPECT_EQ(String("#00ff00"), context2d()->shadowColor());
     context2d()->setShadowColor("rgba(0%,100%,0%,0.4)");
     EXPECT_EQ(String("rgba(0, 255, 0, 0.4)"), context2d()->shadowColor());
 }
 
+<<<<<<< HEAD
 String trySettingStrokeStyle(CanvasRenderingContext2D* ctx,
     const String& value)
+=======
+String trySettingStrokeStyle(CanvasRenderingContext2D* ctx, const String& value)
+>>>>>>> miniblink49
 {
     StringOrCanvasGradientOrCanvasPattern arg1, arg2, arg3;
     arg1.setString("#666");
@@ -168,17 +230,25 @@ String trySettingFillStyle(CanvasRenderingContext2D* ctx, const String& value)
     return arg3.getAsString();
 }
 
+<<<<<<< HEAD
 String trySettingShadowColor(CanvasRenderingContext2D* ctx,
     const String& value)
+=======
+String trySettingShadowColor(CanvasRenderingContext2D* ctx, const String& value)
+>>>>>>> miniblink49
 {
     ctx->setShadowColor("#666");
     ctx->setShadowColor(value);
     return ctx->shadowColor();
 }
 
+<<<<<<< HEAD
 void trySettingColor(CanvasRenderingContext2D* ctx,
     const String& value,
     const String& expected)
+=======
+void trySettingColor(CanvasRenderingContext2D* ctx, const String& value, const String& expected)
+>>>>>>> miniblink49
 {
     EXPECT_EQ(expected, trySettingStrokeStyle(ctx, value));
     EXPECT_EQ(expected, trySettingFillStyle(ctx, value));
@@ -225,9 +295,15 @@ TEST_F(CanvasRenderingContext2DAPITest, LineDashStateSave)
 {
     createContext(NonOpaque);
 
+<<<<<<< HEAD
     Vector<double> simpleDash;
     simpleDash.push_back(4);
     simpleDash.push_back(2);
+=======
+    Vector<float> simpleDash;
+    simpleDash.append(4);
+    simpleDash.append(2);
+>>>>>>> miniblink49
 
     context2d()->setLineDash(simpleDash);
     EXPECT_EQ(simpleDash, context2d()->getLineDash());
@@ -256,17 +332,28 @@ TEST_F(CanvasRenderingContext2DAPITest, CreateImageData)
 
     EXPECT_EQ(255, imageData->data()->data()[32]);
 
+<<<<<<< HEAD
     // createImageData(imageData) should create a new ImageData of the same size
     // as 'imageData' but filled with transparent black
 
     ImageData* sameSizeImageData = context2d()->createImageData(imageData, exceptionState);
     EXPECT_FALSE(exceptionState.hadException());
+=======
+    // createImageData(imageData) should create a new ImageData of the same size as 'imageData'
+    // but filled with transparent black
+
+    ImageData* sameSizeImageData = context2d()->createImageData(imageData);
+>>>>>>> miniblink49
     EXPECT_EQ(100, sameSizeImageData->width());
     EXPECT_EQ(50, sameSizeImageData->height());
     EXPECT_EQ(0, sameSizeImageData->data()->data()[32]);
 
+<<<<<<< HEAD
     // createImageData(width, height) takes the absolute magnitude of the size
     // arguments
+=======
+    // createImageData(width, height) takes the absolute magnitude of the size arguments
+>>>>>>> miniblink49
 
     ImageData* imgdata1 = context2d()->createImageData(10, 20, exceptionState);
     EXPECT_FALSE(exceptionState.hadException());
@@ -283,6 +370,7 @@ TEST_F(CanvasRenderingContext2DAPITest, CreateImageData)
     EXPECT_EQ((unsigned)800, imgdata4->data()->length());
 }
 
+<<<<<<< HEAD
 TEST_F(CanvasRenderingContext2DAPITest, CreateImageDataTooBig)
 {
     createContext(NonOpaque);
@@ -372,4 +460,6 @@ TEST_F(CanvasRenderingContext2DAPITest,
     EXPECT_EQ(40, axBounds.height().toInt());
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

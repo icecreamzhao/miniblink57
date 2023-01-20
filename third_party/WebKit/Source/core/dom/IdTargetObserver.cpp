@@ -23,21 +23,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/IdTargetObserver.h"
 
 #include "core/dom/IdTargetObserverRegistry.h"
 
 namespace blink {
 
-IdTargetObserver::IdTargetObserver(IdTargetObserverRegistry& observerRegistry,
-    const AtomicString& id)
+IdTargetObserver::IdTargetObserver(IdTargetObserverRegistry& observerRegistry, const AtomicString& id)
     : m_registry(&observerRegistry)
     , m_id(id)
 {
     registry().addObserver(m_id, this);
 }
 
-IdTargetObserver::~IdTargetObserver() { }
+IdTargetObserver::~IdTargetObserver()
+{
+#if !ENABLE(OILPAN)
+    registry().removeObserver(m_id, this);
+#endif
+}
 
 DEFINE_TRACE(IdTargetObserver)
 {
@@ -46,7 +51,9 @@ DEFINE_TRACE(IdTargetObserver)
 
 void IdTargetObserver::unregister()
 {
+#if ENABLE(OILPAN)
     registry().removeObserver(m_id, this);
+#endif
 }
 
 } // namespace blink

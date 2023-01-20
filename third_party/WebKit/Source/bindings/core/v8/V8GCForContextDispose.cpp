@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "bindings/core/v8/V8GCForContextDispose.h"
 
 #include "bindings/core/v8/V8PerIsolateData.h"
@@ -48,16 +49,16 @@ void V8GCForContextDispose::notifyContextDisposed(bool isMainFrame)
 {
     m_didDisposeContextForMainFrame = isMainFrame;
     m_lastContextDisposalTime = WTF::currentTime();
-    V8PerIsolateData::mainThreadIsolate()->ContextDisposedNotification(
-        !isMainFrame);
-    m_pseudoIdleTimer.stop();
+    V8PerIsolateData::mainThreadIsolate()->ContextDisposedNotification(!isMainFrame);
+    if (m_pseudoIdleTimer.isActive())
+        m_pseudoIdleTimer.stop();
 }
 
 void V8GCForContextDispose::notifyIdle()
 {
     double maxTimeSinceLastContextDisposal = .2;
     if (!m_didDisposeContextForMainFrame && !m_pseudoIdleTimer.isActive() && m_lastContextDisposalTime + maxTimeSinceLastContextDisposal >= WTF::currentTime()) {
-        m_pseudoIdleTimer.startOneShot(0, BLINK_FROM_HERE);
+        m_pseudoIdleTimer.startOneShot(0, FROM_HERE);
     }
 }
 
@@ -67,10 +68,9 @@ V8GCForContextDispose& V8GCForContextDispose::instance()
     return staticInstance;
 }
 
-void V8GCForContextDispose::pseudoIdleTimerFired(TimerBase*)
+void V8GCForContextDispose::pseudoIdleTimerFired(Timer<V8GCForContextDispose>*)
 {
-    V8PerIsolateData::mainThreadIsolate()->IdleNotificationDeadline(
-        monotonicallyIncreasingTime());
+    V8PerIsolateData::mainThreadIsolate()->IdleNotificationDeadline(Platform::current()->monotonicallyIncreasingTime());
     reset();
 }
 

@@ -2,11 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/platform/WebDragData.h"
 
 #include "core/clipboard/DataObject.h"
 #include "public/platform/WebVector.h"
+<<<<<<< HEAD
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -25,38 +33,56 @@ TEST(WebDragDataTest, items)
     {
         FileMetadata metadata;
         metadata.platformPath = "/native/visible/snapshot";
+<<<<<<< HEAD
         dataObject->add(
             File::createForFileSystemFile("name", metadata, File::IsUserVisible));
+=======
+        dataObject->add(File::createForFileSystemFile("name", metadata, File::IsUserVisible));
+>>>>>>> miniblink49
     }
 
     // Not user visible snapshot file.
     {
         FileMetadata metadata;
         metadata.platformPath = "/native/not-visible/snapshot";
+<<<<<<< HEAD
         dataObject->add(File::createForFileSystemFile("name", metadata,
             File::IsNotUserVisible));
+=======
+        dataObject->add(File::createForFileSystemFile("name", metadata, File::IsNotUserVisible));
+>>>>>>> miniblink49
     }
 
     // User visible file system URL file.
     {
         FileMetadata metadata;
         metadata.length = 1234;
+<<<<<<< HEAD
         KURL url(
             ParsedURLStringTag(),
             "filesystem:http://example.com/isolated/hash/visible-non-native-file");
         dataObject->add(
             File::createForFileSystemFile(url, metadata, File::IsUserVisible));
+=======
+        KURL url(ParsedURLStringTag(), "filesystem:http://example.com/isolated/hash/visible-non-native-file");
+        dataObject->add(File::createForFileSystemFile(url, metadata, File::IsUserVisible));
+>>>>>>> miniblink49
     }
 
     // Not user visible file system URL file.
     {
         FileMetadata metadata;
         metadata.length = 1234;
+<<<<<<< HEAD
         KURL url(ParsedURLStringTag(),
             "filesystem:http://example.com/isolated/hash/"
             "not-visible-non-native-file");
         dataObject->add(
             File::createForFileSystemFile(url, metadata, File::IsNotUserVisible));
+=======
+        KURL url(ParsedURLStringTag(), "filesystem:http://example.com/isolated/hash/not-visible-non-native-file");
+        dataObject->add(File::createForFileSystemFile(url, metadata, File::IsNotUserVisible));
+>>>>>>> miniblink49
     }
 
     WebDragData data = dataObject->toWebDragData();
@@ -80,6 +106,7 @@ TEST(WebDragDataTest, items)
     EXPECT_EQ("name", items[3].displayNameData);
 
     EXPECT_EQ(WebDragData::Item::StorageTypeFileSystemFile, items[4].storageType);
+<<<<<<< HEAD
     EXPECT_EQ(
         "filesystem:http://example.com/isolated/hash/visible-non-native-file",
         items[4].fileSystemURL);
@@ -89,6 +116,13 @@ TEST(WebDragDataTest, items)
     EXPECT_EQ(
         "filesystem:http://example.com/isolated/hash/not-visible-non-native-file",
         items[5].fileSystemURL);
+=======
+    EXPECT_EQ("filesystem:http://example.com/isolated/hash/visible-non-native-file", items[4].fileSystemURL);
+    EXPECT_EQ(1234, items[4].fileSystemFileSize);
+
+    EXPECT_EQ(WebDragData::Item::StorageTypeFileSystemFile, items[5].storageType);
+    EXPECT_EQ("filesystem:http://example.com/isolated/hash/not-visible-non-native-file", items[5].fileSystemURL);
+>>>>>>> miniblink49
     EXPECT_EQ(1234, items[5].fileSystemFileSize);
 }
 

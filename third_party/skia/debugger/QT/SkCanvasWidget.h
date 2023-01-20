@@ -6,6 +6,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SKCANVASWIDGET_H_
 #define SKCANVASWIDGET_H_
 
@@ -15,6 +16,18 @@
 #include "SkStream.h"
 #include <QHBoxLayout>
 #include <QWidget>
+=======
+
+#ifndef SKCANVASWIDGET_H_
+#define SKCANVASWIDGET_H_
+
+#include <QWidget>
+#include <QHBoxLayout>
+#include "SkStream.h"
+#include "SkRasterWidget.h"
+#include "SkGLWidget.h"
+#include "SkDebugger.h"
+>>>>>>> miniblink49
 
 class SkCanvasWidget : public QWidget {
     Q_OBJECT
@@ -27,7 +40,11 @@ public:
     enum WidgetType {
         kRaster_8888_WidgetType = 1 << 0,
 #if SK_SUPPORT_GPU
+<<<<<<< HEAD
         kGPU_WidgetType = 1 << 1,
+=======
+        kGPU_WidgetType         = 1 << 1,
+>>>>>>> miniblink49
 #endif
     };
 
@@ -48,14 +65,22 @@ public:
         kIn_ZoomCommand,
         kOut_ZoomCommand,
     };
+<<<<<<< HEAD
 public Q_SLOTS:
+=======
+public slots:
+>>>>>>> miniblink49
     /**
      *  Zooms in or out (see ZoomCommandTypes) by the standard zoom factor
      *  with the transformation centered in the middle of the widget.
      */
     void zoom(int zoomCommand);
 
+<<<<<<< HEAD
 Q_SIGNALS:
+=======
+signals:
+>>>>>>> miniblink49
     void scaleFactorChanged(float newScaleFactor);
     void commandChanged(int newCommand);
     void hitChanged(int hit);
@@ -81,4 +106,8 @@ private:
     void snapWidgetTransform();
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #endif /* SKCANVASWIDGET_H_ */

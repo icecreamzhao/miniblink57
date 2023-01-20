@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/LengthBox.h"
 
 namespace blink {
@@ -45,11 +49,21 @@ const Length& LengthBox::logicalRight(WritingMode writingMode) const
 const Length& LengthBox::before(WritingMode writingMode) const
 {
     switch (writingMode) {
+<<<<<<< HEAD
     case WritingMode::kHorizontalTb:
         return m_top;
     case WritingMode::kVerticalLr:
         return m_left;
     case WritingMode::kVerticalRl:
+=======
+    case TopToBottomWritingMode:
+        return m_top;
+    case BottomToTopWritingMode:
+        return m_bottom;
+    case LeftToRightWritingMode:
+        return m_left;
+    case RightToLeftWritingMode:
+>>>>>>> miniblink49
         return m_right;
     }
     ASSERT_NOT_REACHED();
@@ -59,33 +73,52 @@ const Length& LengthBox::before(WritingMode writingMode) const
 const Length& LengthBox::after(WritingMode writingMode) const
 {
     switch (writingMode) {
+<<<<<<< HEAD
     case WritingMode::kHorizontalTb:
         return m_bottom;
     case WritingMode::kVerticalLr:
         return m_right;
     case WritingMode::kVerticalRl:
+=======
+    case TopToBottomWritingMode:
+        return m_bottom;
+    case BottomToTopWritingMode:
+        return m_top;
+    case LeftToRightWritingMode:
+        return m_right;
+    case RightToLeftWritingMode:
+>>>>>>> miniblink49
         return m_left;
     }
     ASSERT_NOT_REACHED();
     return m_bottom;
 }
 
+<<<<<<< HEAD
 const Length& LengthBox::start(WritingMode writingMode,
     TextDirection direction) const
+=======
+const Length& LengthBox::start(WritingMode writingMode, TextDirection direction) const
+>>>>>>> miniblink49
 {
     if (isHorizontalWritingMode(writingMode))
         return isLeftToRightDirection(direction) ? m_left : m_right;
     return isLeftToRightDirection(direction) ? m_top : m_bottom;
 }
 
+<<<<<<< HEAD
 const Length& LengthBox::end(WritingMode writingMode,
     TextDirection direction) const
+=======
+const Length& LengthBox::end(WritingMode writingMode, TextDirection direction) const
+>>>>>>> miniblink49
 {
     if (isHorizontalWritingMode(writingMode))
         return isLeftToRightDirection(direction) ? m_right : m_left;
     return isLeftToRightDirection(direction) ? m_bottom : m_top;
 }
 
+<<<<<<< HEAD
 const Length& LengthBox::over(WritingMode writingMode) const
 {
     return isHorizontalWritingMode(writingMode) ? m_top : m_right;
@@ -96,4 +129,6 @@ const Length& LengthBox::under(WritingMode writingMode) const
     return isHorizontalWritingMode(writingMode) ? m_bottom : m_left;
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

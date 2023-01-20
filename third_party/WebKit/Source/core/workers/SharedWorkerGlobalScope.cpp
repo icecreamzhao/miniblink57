@@ -28,83 +28,64 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
+
 #include "core/workers/SharedWorkerGlobalScope.h"
 
-#include "bindings/core/v8/SourceLocation.h"
 #include "core/events/MessageEvent.h"
-#include "core/frame/LocalDOMWindow.h"
 #include "core/inspector/ConsoleMessage.h"
-#include "core/inspector/WorkerThreadDebugger.h"
-#include "core/origin_trials/OriginTrialContext.h"
+#include "core/inspector/ScriptCallStack.h"
+#include "core/frame/LocalDOMWindow.h"
 #include "core/workers/SharedWorkerThread.h"
 #include "core/workers/WorkerClients.h"
 #include "wtf/CurrentTime.h"
-#include <memory>
 
 namespace blink {
 
-MessageEvent* createConnectEvent(MessagePort* port)
+PassRefPtrWillBeRawPtr<MessageEvent> createConnectEvent(MessagePort* port)
 {
-    MessageEvent* event = MessageEvent::create(new MessagePortArray(1, port),
-        String(), String(), port);
+    RefPtrWillBeRawPtr<MessageEvent> event = MessageEvent::create(new MessagePortArray(1, port), String(), String(), port);
     event->initEvent(EventTypeNames::connect, false, false);
-    return event;
+    return event.release();
 }
 
 // static
-SharedWorkerGlobalScope* SharedWorkerGlobalScope::create(
-    const String& name,
-    SharedWorkerThread* thread,
-    std::unique_ptr<WorkerThreadStartupData> startupData)
+PassRefPtrWillBeRawPtr<SharedWorkerGlobalScope> SharedWorkerGlobalScope::create(const String& name, SharedWorkerThread* thread, PassOwnPtr<WorkerThreadStartupData> startupData)
 {
     // Note: startupData is finalized on return. After the relevant parts has been
     // passed along to the created 'context'.
-    SharedWorkerGlobalScope* context = new SharedWorkerGlobalScope(
-        name, startupData->m_scriptURL, startupData->m_userAgent, thread,
-        std::move(startupData->m_starterOriginPrivilegeData),
-        startupData->m_workerClients);
-    context->applyContentSecurityPolicyFromVector(
-        *startupData->m_contentSecurityPolicyHeaders);
-    context->setWorkerSettings(std::move(startupData->m_workerSettings));
-    if (!startupData->m_referrerPolicy.isNull())
-        context->parseAndSetReferrerPolicy(startupData->m_referrerPolicy);
-    context->setAddressSpace(startupData->m_addressSpace);
-    OriginTrialContext::addTokens(context,
-        startupData->m_originTrialTokens.get());
-    return context;
+    RefPtrWillBeRawPtr<SharedWorkerGlobalScope> context = adoptRefWillBeNoop(new SharedWorkerGlobalScope(name, startupData->m_scriptURL, startupData->m_userAgent, thread, startupData->m_starterOrigin, startupData->m_workerClients.release()));
+    context->applyContentSecurityPolicyFromVector(*startupData->m_contentSecurityPolicyHeaders);
+    return context.release();
 }
 
-SharedWorkerGlobalScope::SharedWorkerGlobalScope(
-    const String& name,
-    const KURL& url,
-    const String& userAgent,
-    SharedWorkerThread* thread,
-    std::unique_ptr<SecurityOrigin::PrivilegeData> starterOriginPrivilegeData,
-    WorkerClients* workerClients)
-    : WorkerGlobalScope(url,
-        userAgent,
-        thread,
-        monotonicallyIncreasingTime(),
-        std::move(starterOriginPrivilegeData),
-        workerClients)
+SharedWorkerGlobalScope::SharedWorkerGlobalScope(const String& name, const KURL& url, const String& userAgent, SharedWorkerThread* thread, const SecurityOrigin* starterOrigin, PassOwnPtrWillBeRawPtr<WorkerClients> workerClients)
+    : WorkerGlobalScope(url, userAgent, thread, monotonicallyIncreasingTime(), starterOrigin, workerClients)
     , m_name(name)
 {
 }
 
-SharedWorkerGlobalScope::~SharedWorkerGlobalScope() { }
+SharedWorkerGlobalScope::~SharedWorkerGlobalScope()
+{
+}
 
 const AtomicString& SharedWorkerGlobalScope::interfaceName() const
 {
     return EventTargetNames::SharedWorkerGlobalScope;
 }
 
-void SharedWorkerGlobalScope::exceptionThrown(ErrorEvent* event)
+SharedWorkerThread* SharedWorkerGlobalScope::thread()
 {
-    //   WorkerGlobalScope::exceptionThrown(event);
-    //   if (WorkerThreadDebugger* debugger =
-    //           WorkerThreadDebugger::from(thread()->isolate()))
-    //     debugger->exceptionThrown(thread(), event);
-    DebugBreak();
+    return static_cast<SharedWorkerThread*>(Base::thread());
+}
+
+void SharedWorkerGlobalScope::logExceptionToConsole(const String& errorMessage, int scriptId, const String& sourceURL, int lineNumber, int columnNumber, PassRefPtrWillBeRawPtr<ScriptCallStack> callStack)
+{
+    WorkerGlobalScope::logExceptionToConsole(errorMessage, scriptId, sourceURL, lineNumber, columnNumber, callStack);
+    RefPtrWillBeRawPtr<ConsoleMessage> consoleMessage = ConsoleMessage::create(JSMessageSource, ErrorMessageLevel, errorMessage, sourceURL, lineNumber);
+    consoleMessage->setScriptId(scriptId);
+    consoleMessage->setCallStack(callStack);
+    addMessageToWorkerConsole(consoleMessage.release());
 }
 
 DEFINE_TRACE(SharedWorkerGlobalScope)

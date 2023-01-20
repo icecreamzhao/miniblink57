@@ -53,21 +53,16 @@
  *
  * This product includes cryptographic software written by Eric Young
  * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com). */
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
 #include <stdio.h>
-#include <string.h>
-
+#include "cryptlib.h"
+#include <openssl/conf.h>
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
-#include <openssl/conf.h>
-#include <openssl/err.h>
-#include <openssl/mem.h>
-#include <openssl/obj.h>
 #include <openssl/x509v3.h>
-
-#include "internal.h"
-
 
 static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                                                  AUTHORITY_KEYID *akeyid,
@@ -95,26 +90,27 @@ static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
 {
     char *tmp;
     if (akeyid->keyid) {
-        tmp = x509v3_bytes_to_hex(akeyid->keyid->data, akeyid->keyid->length);
+        tmp = hex_to_string(akeyid->keyid->data, akeyid->keyid->length);
         X509V3_add_value("keyid", tmp, &extlist);
         OPENSSL_free(tmp);
     }
     if (akeyid->issuer)
         extlist = i2v_GENERAL_NAMES(NULL, akeyid->issuer, extlist);
     if (akeyid->serial) {
-        tmp = x509v3_bytes_to_hex(akeyid->serial->data, akeyid->serial->length);
+        tmp = hex_to_string(akeyid->serial->data, akeyid->serial->length);
         X509V3_add_value("serial", tmp, &extlist);
         OPENSSL_free(tmp);
     }
     return extlist;
 }
 
-/*
- * Currently two options: keyid: use the issuers subject keyid, the value
- * 'always' means its is an error if the issuer certificate doesn't have a
- * key id. issuer: use the issuers cert issuer and serial number. The default
- * is to only use this if keyid is not present. With the option 'always' this
- * is always included.
+/*-
+ * Currently two options:
+ * keyid: use the issuers subject keyid, the value 'always' means its is
+ * an error if the issuer certificate doesn't have a key id.
+ * issuer: use the issuers cert issuer and serial number. The default is
+ * to only use this if keyid is not present. With the option 'always'
+ * this is always included.
  */
 
 static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
@@ -122,8 +118,7 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                                             STACK_OF(CONF_VALUE) *values)
 {
     char keyid = 0, issuer = 0;
-    size_t i;
-    int j;
+    int i;
     CONF_VALUE *cnf;
     ASN1_OCTET_STRING *ikeyid = NULL;
     X509_NAME *isname = NULL;
@@ -145,7 +140,7 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
             if (cnf->value && !strcmp(cnf->value, "always"))
                 issuer = 2;
         } else {
-            OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNKNOWN_OPTION);
+            X509V3err(X509V3_F_V2I_AUTHORITY_KEYID, X509V3_R_UNKNOWN_OPTION);
             ERR_add_error_data(2, "name=", cnf->name);
             return NULL;
         }
@@ -154,18 +149,20 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
     if (!ctx || !ctx->issuer_cert) {
         if (ctx && (ctx->flags == CTX_TEST))
             return AUTHORITY_KEYID_new();
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_ISSUER_CERTIFICATE);
+        X509V3err(X509V3_F_V2I_AUTHORITY_KEYID,
+                  X509V3_R_NO_ISSUER_CERTIFICATE);
         return NULL;
     }
 
     cert = ctx->issuer_cert;
 
     if (keyid) {
-        j = X509_get_ext_by_NID(cert, NID_subject_key_identifier, -1);
-        if ((j >= 0) && (ext = X509_get_ext(cert, j)))
+        i = X509_get_ext_by_NID(cert, NID_subject_key_identifier, -1);
+        if ((i >= 0) && (ext = X509_get_ext(cert, i)))
             ikeyid = X509V3_EXT_d2i(ext);
         if (keyid == 2 && !ikeyid) {
-            OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNABLE_TO_GET_ISSUER_KEYID);
+            X509V3err(X509V3_F_V2I_AUTHORITY_KEYID,
+                      X509V3_R_UNABLE_TO_GET_ISSUER_KEYID);
             return NULL;
         }
     }
@@ -174,7 +171,8 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
         isname = X509_NAME_dup(X509_get_issuer_name(cert));
         serial = M_ASN1_INTEGER_dup(X509_get_serialNumber(cert));
         if (!isname || !serial) {
-            OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNABLE_TO_GET_ISSUER_DETAILS);
+            X509V3err(X509V3_F_V2I_AUTHORITY_KEYID,
+                      X509V3_R_UNABLE_TO_GET_ISSUER_DETAILS);
             goto err;
         }
     }
@@ -186,7 +184,7 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
         if (!(gens = sk_GENERAL_NAME_new_null())
             || !(gen = GENERAL_NAME_new())
             || !sk_GENERAL_NAME_push(gens, gen)) {
-            OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+            X509V3err(X509V3_F_V2I_AUTHORITY_KEYID, ERR_R_MALLOC_FAILURE);
             goto err;
         }
         gen->type = GEN_DIRNAME;

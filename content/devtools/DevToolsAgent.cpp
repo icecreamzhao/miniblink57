@@ -15,7 +15,7 @@
 #include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/public/platform/Platform.h"
-//#include "third_party/WebKit/Source/bindings/core/v8/V8RecursionScope.h"
+#include "third_party/WebKit/Source/bindings/core/v8/V8RecursionScope.h"
 #include "gen/blink/platform/RuntimeEnabledFeatures.h"
 #include <v8.h>
 
@@ -25,9 +25,6 @@ DevToolsAgent::DevToolsAgent(WebPage* page, blink::WebLocalFrame* frame)
 {
     m_isAttached = false;
     m_devToolsClient = nullptr;
-
-    static int s_sessionIdGen = 1;
-    m_sessionId = ++s_sessionIdGen;
     m_id = DevToolsMgr::getInst()->getNewestId();
     DevToolsMgr::getInst()->addLivedId(m_id);
 
@@ -47,7 +44,7 @@ void DevToolsAgent::onAttach(const std::string& hostId)
 {
     blink::WebDevToolsAgent* webAgent = getWebAgent();
     if (webAgent) {
-        webAgent->attach(blink::WebString::fromUTF8(hostId.c_str()), m_sessionId);
+        webAgent->attach(blink::WebString::fromUTF8(hostId.c_str()));
         m_isAttached = true;
     }
 }
@@ -70,7 +67,7 @@ void DevToolsAgent::inspectElementAt(int x, int y)
 {
     blink::WebDevToolsAgent* webAgent = getWebAgent();
     if (webAgent)
-        webAgent->inspectElementAt(0, blink::WebPoint(x, y));
+        webAgent->inspectElementAt(blink::WebPoint(x, y));
 }
 
 blink::WebDevToolsAgent* DevToolsAgent::getWebAgent()
@@ -102,12 +99,6 @@ public:
 
     blink::WebString message() override { return blink::WebString::fromUTF8(m_msg); }
 
-    blink::WebString method() override
-    {
-        DebugBreak();
-        return blink::WebString::fromUTF8(m_msg);
-    }
-
 private:
     std::string m_msg;
     DevToolsAgent* m_agent;
@@ -121,12 +112,12 @@ void DevToolsAgent::onMessageReceivedFromFronEnd(const std::string* message)
     if (!webAgent)
         return;
 
-    if (blink::WebDevToolsAgent::shouldInterruptForMethod(blink::WebString::fromUTF8(message->c_str()))) {
-        blink::WebDevToolsAgent::interruptAndDispatch(m_sessionId, new InterruptMessageImpl(*message, this));
+    if (blink::WebDevToolsAgent::shouldInterruptForMessage(blink::WebString::fromUTF8(message->c_str()))) {
+        blink::WebDevToolsAgent::interruptAndDispatch(new InterruptMessageImpl(*message, this));
         return;
     }
     
-    webAgent->dispatchOnInspectorBackend(m_sessionId, m_sessionId, blink::WebString::fromUTF8(message->c_str()), blink::WebString::fromUTF8(message->c_str()));
+    webAgent->dispatchOnInspectorBackend(blink::WebString::fromUTF8(message->c_str()));
 }
 
 class MessageToClientTask : public blink::WebThread::Task {
@@ -160,12 +151,13 @@ private:
     int m_devToolsClientId;
 };
 
-void DevToolsAgent::sendProtocolMessage(int sessionId, int callId, const blink::WebString& response, const blink::WebString& state)
+void DevToolsAgent::sendProtocolMessage(int callId, const blink::WebString& response, const blink::WebString& state)
 {
     if (!m_devToolsClient)
         return;
 
-    blink::Platform::current()->currentThread()->postTask(FROM_HERE, new MessageToClientTask(m_devToolsClient, callId, response, state));
+    blink::Platform::current()->currentThread()->postTask(FROM_HERE,
+        new MessageToClientTask(m_devToolsClient, callId, response, state));
 }
 
 class WebKitClientMessageLoopImpl : public blink::WebDevToolsAgentClient::WebKitClientMessageLoop{
@@ -185,10 +177,10 @@ public:
         MSG msg;
         while (::GetMessageW(&msg, NULL, 0, 0)) {
 
-            // ÎªÁËÈ·±£jsµÄPromiseÄÜÖ´ÐÐ£¬Ç¿ÐÐÖ´ÐÐMicrotasks¡£±¾À´ÒòÎªisolateData->recursionLevel()µÄ´æÔÚ£¬Ö´ÐÐ²»ÁË¡£
-            // ¼ûthird_party\WebKit\Source\core\dom\Microtask.cpp
+            // Îªï¿½ï¿½È·ï¿½ï¿½jsï¿½ï¿½Promiseï¿½ï¿½Ö´ï¿½Ð£ï¿½Ç¿ï¿½ï¿½Ö´ï¿½ï¿½Microtasksï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªisolateData->recursionLevel()ï¿½Ä´ï¿½ï¿½Ú£ï¿½Ö´ï¿½Ð²ï¿½ï¿½Ë¡ï¿½
+            // ï¿½ï¿½third_party\WebKit\Source\core\dom\Microtask.cpp
             v8::Isolate* isolate = v8::Isolate::GetCurrent();
-            //blink::V8RecursionScope recursionScope(isolate);
+            blink::V8RecursionScope recursionScope(isolate);
             isolate->RunMicrotasks();
 
             ::TranslateMessage(&msg);
@@ -225,14 +217,14 @@ static bool g_noSetCheckReEnter = false;
 
 void DevToolsAgent::willEnterDebugLoopInRun()
 {
-//     if (blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()) {
-//         RELEASE_ASSERT(0 == CheckReEnter::getEnterCount());
-//     } else {
-//         if (0 < CheckReEnter::getEnterCount())
-//             CheckReEnter::decrementEnterCount();
-//         else
-//             g_noSetCheckReEnter = true; // ´ÓnetµÄload finishÀïµ÷ÓÃ¹ýÀ´µÄÊ±ºò£¬¿ÉÄÜ¼ÆÊýÊÇ0
-//     }
+    if (blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()) {
+        RELEASE_ASSERT(0 == CheckReEnter::getEnterCount());
+    } else {
+        if (0 < CheckReEnter::getEnterCount())
+            CheckReEnter::decrementEnterCount();
+        else
+            g_noSetCheckReEnter = true; // ï¿½ï¿½netï¿½ï¿½load finishï¿½ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ò£¬¿ï¿½ï¿½Ü¼ï¿½ï¿½ï¿½ï¿½ï¿½0
+    }
     blink::ThreadState* threadState = blink::ThreadState::current();
     threadState->enterGCForbiddenScope();
 
@@ -245,17 +237,17 @@ void DevToolsAgent::didExitDebugLoopInRun()
     blink::ThreadState* threadState = blink::ThreadState::current();
     threadState->leaveGCForbiddenScope();
     
-    // ·Åµ½Õâ£¬ÊÇÒòÎªClientMessageLoopAdapterµÄË³ÐòÊÇÏÈÖ´ÐÐsetIgnoreInputEvents(false)£¬»áÒý·¢¶ÏÑÔ
+    // ï¿½Åµï¿½ï¿½â£¬ï¿½ï¿½ï¿½ï¿½ÎªClientMessageLoopAdapterï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½setIgnoreInputEvents(false)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     m_page->didExitDebugLoop();
     m_devToolsClient->didExitDebugLoop();
 
-//     if (blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()) {
-//         RELEASE_ASSERT(0 == CheckReEnter::getEnterCount());
-//     } else {
-//         if (!g_noSetCheckReEnter)
-//             CheckReEnter::incrementEnterCount();
-//         g_noSetCheckReEnter = false;
-//     }
+    if (blink::RuntimeEnabledFeatures::updataInOtherThreadEnabled()) {
+        RELEASE_ASSERT(0 == CheckReEnter::getEnterCount());
+    } else {
+        if (!g_noSetCheckReEnter)
+            CheckReEnter::incrementEnterCount();
+        g_noSetCheckReEnter = false;
+    }
 }
 
 void DevToolsAgent::willEnterDebugLoop()

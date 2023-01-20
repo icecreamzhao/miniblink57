@@ -26,7 +26,6 @@ namespace blink {
 
 class SVGFEDistantLightElement final : public SVGFELightElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGFEDistantLightElement);
 

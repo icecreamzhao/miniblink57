@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "platform/heap/BlinkGCMemoryDumpProvider.h"
 
 #include "base/trace_event/heap_profiler_allocation_context_tracker.h"
@@ -12,10 +13,20 @@
 #include "platform/heap/Handle.h"
 #include "platform/instrumentation/tracing/web_memory_allocator_dump.h"
 #include "public/platform/Platform.h"
+=======
+#include "config.h"
+#include "Source/platform/heap/BlinkGCMemoryDumpProvider.h"
+
+#include "platform/heap/Handle.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebMemoryAllocatorDump.h"
+#include "public/platform/WebProcessMemoryDump.h"
+>>>>>>> miniblink49
 #include "wtf/StdLibExtras.h"
 #include "wtf/Threading.h"
 
 namespace blink {
+<<<<<<< HEAD
 namespace {
 
     void dumpMemoryTotals(base::trace_event::ProcessMemoryDump* memoryDump)
@@ -42,6 +53,8 @@ namespace {
     }
 
 } // namespace
+=======
+>>>>>>> miniblink49
 
 BlinkGCMemoryDumpProvider* BlinkGCMemoryDumpProvider::instance()
 {
@@ -49,6 +62,7 @@ BlinkGCMemoryDumpProvider* BlinkGCMemoryDumpProvider::instance()
     return &instance;
 }
 
+<<<<<<< HEAD
 BlinkGCMemoryDumpProvider::~BlinkGCMemoryDumpProvider() { }
 
 bool BlinkGCMemoryDumpProvider::OnMemoryDump(
@@ -115,10 +129,37 @@ BlinkGCMemoryDumpProvider::createMemoryAllocatorDumpForCurrentGC(
     // TODO(bashi): Change type name of |absoluteName|.
     return m_currentProcessMemoryDump->CreateAllocatorDump(
         absoluteName.utf8().data());
+=======
+BlinkGCMemoryDumpProvider::~BlinkGCMemoryDumpProvider()
+{
+}
+
+bool BlinkGCMemoryDumpProvider::onMemoryDump(blink::WebProcessMemoryDump* memoryDump)
+{
+    Heap::collectGarbage(ThreadState::NoHeapPointersOnStack, ThreadState::TakeSnapshot, Heap::ForcedGC);
+    String dumpName = String::format("blink_gc/thread_%lu", static_cast<unsigned long>(WTF::currentThread()));
+    WebMemoryAllocatorDump* allocatorDump = memoryDump->createMemoryAllocatorDump(dumpName);
+    allocatorDump->AddScalar("size", "bytes", Heap::allocatedSpace());
+
+    dumpName.append("/allocated_objects");
+    WebMemoryAllocatorDump* objectsDump = memoryDump->createMemoryAllocatorDump(dumpName);
+    objectsDump->AddScalar("size", "bytes", Heap::allocatedObjectSize() + Heap::markedObjectSize());
+    objectsDump->AddScalar("estimated_live_object_size", "bytes", Heap::estimatedLiveObjectSize());
+
+    // Merge all dumps collected by Heap::collectGarbage.
+    memoryDump->takeAllDumpsFrom(m_currentProcessMemoryDump.get());
+    return true;
+}
+
+WebMemoryAllocatorDump* BlinkGCMemoryDumpProvider::createMemoryAllocatorDumpForCurrentGC(const String& absoluteName)
+{
+    return m_currentProcessMemoryDump->createMemoryAllocatorDump(absoluteName);
+>>>>>>> miniblink49
 }
 
 void BlinkGCMemoryDumpProvider::clearProcessDumpForCurrentGC()
 {
+<<<<<<< HEAD
     m_currentProcessMemoryDump->Clear();
 }
 
@@ -153,4 +194,14 @@ void BlinkGCMemoryDumpProvider::remove(Address address)
         m_allocationRegister->Remove(address);
 }
 
+=======
+    m_currentProcessMemoryDump->clear();
+}
+
+BlinkGCMemoryDumpProvider::BlinkGCMemoryDumpProvider()
+    : m_currentProcessMemoryDump(adoptPtr(Platform::current()->createProcessMemoryDump()))
+{
+}
+
+>>>>>>> miniblink49
 } // namespace blink

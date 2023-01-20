@@ -31,7 +31,10 @@
 #ifndef MIDIInput_h
 #define MIDIInput_h
 
+<<<<<<< HEAD
 #include "media/midi/midi_service.mojom-blink.h"
+=======
+>>>>>>> miniblink49
 #include "modules/EventTargetModules.h"
 #include "modules/webmidi/MIDIAccessor.h"
 #include "modules/webmidi/MIDIPort.h"
@@ -42,6 +45,7 @@ class MIDIAccess;
 
 class MIDIInput final : public MIDIPort {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static MIDIInput* create(MIDIAccess*,
@@ -81,6 +85,25 @@ private:
         const String& name,
         const String& version,
         midi::mojom::PortState);
+=======
+public:
+    static MIDIInput* create(MIDIAccess*, const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState);
+    ~MIDIInput() override { }
+
+    EventListener* onmidimessage();
+    void setOnmidimessage(PassRefPtr<EventListener>);
+
+    // EventTarget
+    const AtomicString& interfaceName() const override { return EventTargetNames::MIDIInput; }
+
+    // |timeStamp| is a DOMHighResTimeStamp in the time coordinate system of performance.now().
+    void didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp);
+
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+    MIDIInput(MIDIAccess*, const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState);
+>>>>>>> miniblink49
 };
 
 } // namespace blink

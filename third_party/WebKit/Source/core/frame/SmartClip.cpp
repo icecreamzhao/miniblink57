@@ -28,13 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/frame/SmartClip.h"
 
 #include "core/dom/ContainerNode.h"
 #include "core/dom/Document.h"
 #include "core/dom/NodeTraversal.h"
-#include "core/frame/FrameView.h"
 #include "core/frame/LocalDOMWindow.h"
+#include "core/frame/FrameView.h"
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/layout/LayoutObject.h"
 #include "core/page/Page.h"
@@ -42,9 +43,7 @@
 
 namespace blink {
 
-static IntRect convertToContentCoordinatesWithoutCollapsingToZero(
-    const IntRect& rectInViewport,
-    const FrameView* view)
+static IntRect convertToContentCoordinatesWithoutCollapsingToZero(const IntRect& rectInViewport, const FrameView* view)
 {
     IntRect rectInContents = view->viewportToContents(rectInViewport);
     if (rectInViewport.width() > 0 && !rectInContents.width())
@@ -71,7 +70,7 @@ const String& SmartClipData::clipData() const
     return m_string;
 }
 
-SmartClip::SmartClip(LocalFrame* frame)
+SmartClip::SmartClip(PassRefPtrWillBeRawPtr<LocalFrame> frame)
     : m_frame(frame)
 {
 }
@@ -83,18 +82,17 @@ SmartClipData SmartClip::dataForRect(const IntRect& cropRectInViewport)
         return SmartClipData();
 
     if (Node* nodeFromFrame = nodeInsideFrame(bestNode)) {
-        // FIXME: This code only hit-tests a single iframe. It seems like we ought
-        // support nested frames.
+        // FIXME: This code only hit-tests a single iframe. It seems like we ought support nested frames.
         if (Node* bestNodeInFrame = findBestOverlappingNode(nodeFromFrame, cropRectInViewport))
             bestNode = bestNodeInFrame;
     }
 
-    HeapVector<Member<Node>> hitNodes;
+    WillBeHeapVector<RawPtrWillBeMember<Node>> hitNodes;
     collectOverlappingChildNodes(bestNode, cropRectInViewport, hitNodes);
 
     if (hitNodes.isEmpty() || hitNodes.size() == bestNode->countChildren()) {
         hitNodes.clear();
-        hitNodes.push_back(bestNode);
+        hitNodes.append(bestNode);
     }
 
     // Unite won't work with the empty rect, so we initialize to the first rect.
@@ -105,9 +103,7 @@ SmartClipData SmartClip::dataForRect(const IntRect& cropRectInViewport)
         unitedRects.unite(hitNodes[i]->pixelSnappedBoundingBox());
     }
 
-    return SmartClipData(
-        bestNode, m_frame->document()->view()->contentsToViewport(unitedRects),
-        collectedText.toString());
+    return SmartClipData(bestNode, m_frame->document()->view()->contentsToViewport(unitedRects), collectedText.toString());
 }
 
 float SmartClip::pageScaleFactor()
@@ -160,14 +156,12 @@ Node* SmartClip::minNodeContainsNodes(Node* minNode, Node* newNode)
     return nullptr;
 }
 
-Node* SmartClip::findBestOverlappingNode(Node* rootNode,
-    const IntRect& cropRectInViewport)
+Node* SmartClip::findBestOverlappingNode(Node* rootNode, const IntRect& cropRectInViewport)
 {
     if (!rootNode)
         return nullptr;
 
-    IntRect resizedCropRect = convertToContentCoordinatesWithoutCollapsingToZero(
-        cropRectInViewport, rootNode->document().view());
+    IntRect resizedCropRect = convertToContentCoordinatesWithoutCollapsingToZero(cropRectInViewport, rootNode->document().view());
 
     Node* node = rootNode;
     Node* minNode = nullptr;
@@ -182,7 +176,10 @@ Node* SmartClip::findBestOverlappingNode(Node* rootNode,
 
         LayoutObject* layoutObject = node->layoutObject();
         if (layoutObject && !nodeRect.isEmpty()) {
-            if (layoutObject->isText() || layoutObject->isLayoutImage() || node->isFrameOwnerElement() || (layoutObject->style()->hasBackgroundImage() && !shouldSkipBackgroundImage(node))) {
+            if (layoutObject->isText()
+                || layoutObject->isLayoutImage()
+                || node->isFrameOwnerElement()
+                || (layoutObject->style()->hasBackgroundImage() && !shouldSkipBackgroundImage(node))) {
                 if (resizedCropRect.intersects(nodeRect)) {
                     minNode = minNodeContainsNodes(minNode, node);
                 } else {
@@ -218,20 +215,15 @@ bool SmartClip::shouldSkipBackgroundImage(Node* node)
     return false;
 }
 
-void SmartClip::collectOverlappingChildNodes(
-    Node* parentNode,
-    const IntRect& cropRectInViewport,
-    HeapVector<Member<Node>>& hitNodes)
+void SmartClip::collectOverlappingChildNodes(Node* parentNode, const IntRect& cropRectInViewport, WillBeHeapVector<RawPtrWillBeMember<Node>>& hitNodes)
 {
     if (!parentNode)
         return;
-    IntRect resizedCropRect = convertToContentCoordinatesWithoutCollapsingToZero(
-        cropRectInViewport, parentNode->document().view());
-    for (Node* child = parentNode->firstChild(); child;
-         child = child->nextSibling()) {
+    IntRect resizedCropRect = convertToContentCoordinatesWithoutCollapsingToZero(cropRectInViewport, parentNode->document().view());
+    for (Node* child = parentNode->firstChild(); child; child = child->nextSibling()) {
         IntRect childRect = child->pixelSnappedBoundingBox();
         if (resizedCropRect.intersects(childRect))
-            hitNodes.push_back(child);
+            hitNodes.append(child);
     }
 }
 

@@ -32,17 +32,14 @@
 #define HTMLParserThread_h
 
 #include "core/CoreExport.h"
-#include "platform/WaitableEvent.h"
 #include "platform/WebThreadSupportingGC.h"
-#include "wtf/Allocator.h"
 #include "wtf/Functional.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 class CORE_EXPORT HTMLParserThread {
-    USING_FAST_MALLOC(HTMLParserThread);
-
 public:
     static void init();
     static void shutdown();
@@ -50,15 +47,17 @@ public:
     // It is an error to call shared() before init() or after shutdown();
     static HTMLParserThread* shared();
 
-    void postTask(std::unique_ptr<CrossThreadClosure>);
+    void postTask(PassOwnPtr<Closure>);
+    WebThread& platformThread();
+    bool isRunning();
 
 private:
     HTMLParserThread();
     ~HTMLParserThread();
     void setupHTMLParserThread();
-    void cleanupHTMLParserThread(WaitableEvent*);
+    void cleanupHTMLParserThread();
 
-    std::unique_ptr<WebThreadSupportingGC> m_thread;
+    OwnPtr<WebThreadSupportingGC> m_thread;
 };
 
 } // namespace blink

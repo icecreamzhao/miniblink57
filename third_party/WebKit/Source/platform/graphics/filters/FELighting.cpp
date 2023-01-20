@@ -25,10 +25,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/filters/FELighting.h"
 
 #include "SkLightingImageFilter.h"
 #include "SkPoint3.h"
+=======
+#include "config.h"
+#include "platform/graphics/filters/FELighting.h"
+
+#include "SkLightingImageFilter.h"
+>>>>>>> miniblink49
 #include "platform/graphics/filters/DistantLightSource.h"
 #include "platform/graphics/filters/PointLightSource.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
@@ -36,6 +43,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 FELighting::FELighting(Filter* filter,
     LightingType lightingType,
     const Color& lightingColor,
@@ -44,6 +52,11 @@ FELighting::FELighting(Filter* filter,
     float specularConstant,
     float specularExponent,
     PassRefPtr<LightSource> lightSource)
+=======
+FELighting::FELighting(Filter* filter, LightingType lightingType, const Color& lightingColor, float surfaceScale,
+    float diffuseConstant, float specularConstant, float specularExponent,
+    float kernelUnitLengthX, float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
+>>>>>>> miniblink49
     : FilterEffect(filter)
     , m_lightingType(lightingType)
     , m_lightSource(lightSource)
@@ -51,6 +64,7 @@ FELighting::FELighting(Filter* filter,
     , m_surfaceScale(surfaceScale)
     , m_diffuseConstant(std::max(diffuseConstant, 0.0f))
     , m_specularConstant(std::max(specularConstant, 0.0f))
+<<<<<<< HEAD
     , m_specularExponent(clampTo(specularExponent, 1.0f, 128.0f))
 {
 }
@@ -64,11 +78,33 @@ sk_sp<SkImageFilter> FELighting::createImageFilter()
     Color lightColor = adaptColorToOperatingColorSpace(m_lightingColor);
     sk_sp<SkImageFilter> input(
         SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
+=======
+    , m_specularExponent(std::min(std::max(specularExponent, 1.0f), 128.0f))
+    , m_kernelUnitLengthX(kernelUnitLengthX)
+    , m_kernelUnitLengthY(kernelUnitLengthY)
+{
+}
+
+FloatRect FELighting::mapPaintRect(const FloatRect& rect, bool)
+{
+    FloatRect result = rect;
+    // The areas affected need to be a pixel bigger to accommodate the Sobel kernel.
+    result.inflate(1);
+    return result;
+}
+
+PassRefPtr<SkImageFilter> FELighting::createImageFilter(SkiaImageFilterBuilder* builder)
+{
+    SkImageFilter::CropRect rect = getCropRect(builder ? builder->cropOffset() : FloatSize());
+    Color lightColor = adaptColorToOperatingColorSpace(m_lightingColor);
+    RefPtr<SkImageFilter> input(builder ? builder->build(inputEffect(0), operatingColorSpace()) : nullptr);
+>>>>>>> miniblink49
     switch (m_lightSource->type()) {
     case LS_DISTANT: {
         DistantLightSource* distantLightSource = static_cast<DistantLightSource*>(m_lightSource.get());
         float azimuthRad = deg2rad(distantLightSource->azimuth());
         float elevationRad = deg2rad(distantLightSource->elevation());
+<<<<<<< HEAD
         const SkPoint3 direction = SkPoint3::Make(
             cosf(azimuthRad) * cosf(elevationRad),
             sinf(azimuthRad) * cosf(elevationRad), sinf(elevationRad));
@@ -100,11 +136,33 @@ sk_sp<SkImageFilter> FELighting::createImageFilter()
         const SkPoint3 target = SkPoint3::Make(spotLightSource->direction().x(),
             spotLightSource->direction().y(),
             spotLightSource->direction().z());
+=======
+        SkPoint3 direction(cosf(azimuthRad) * cosf(elevationRad),
+                           sinf(azimuthRad) * cosf(elevationRad),
+                           sinf(elevationRad));
+        if (m_specularConstant > 0)
+            return adoptRef(SkLightingImageFilter::CreateDistantLitSpecular(direction, lightColor.rgb(), m_surfaceScale, m_specularConstant, m_specularExponent, input.get(), &rect));
+        return adoptRef(SkLightingImageFilter::CreateDistantLitDiffuse(direction, lightColor.rgb(), m_surfaceScale, m_diffuseConstant, input.get(), &rect));
+    }
+    case LS_POINT: {
+        PointLightSource* pointLightSource = static_cast<PointLightSource*>(m_lightSource.get());
+        FloatPoint3D position = pointLightSource->position();
+        SkPoint3 skPosition(position.x(), position.y(), position.z());
+        if (m_specularConstant > 0)
+            return adoptRef(SkLightingImageFilter::CreatePointLitSpecular(skPosition, lightColor.rgb(), m_surfaceScale, m_specularConstant, m_specularExponent, input.get(), &rect));
+        return adoptRef(SkLightingImageFilter::CreatePointLitDiffuse(skPosition, lightColor.rgb(), m_surfaceScale, m_diffuseConstant, input.get(), &rect));
+    }
+    case LS_SPOT: {
+        SpotLightSource* spotLightSource = static_cast<SpotLightSource*>(m_lightSource.get());
+        SkPoint3 location(spotLightSource->position().x(), spotLightSource->position().y(), spotLightSource->position().z());
+        SkPoint3 target(spotLightSource->direction().x(), spotLightSource->direction().y(), spotLightSource->direction().z());
+>>>>>>> miniblink49
         float specularExponent = spotLightSource->specularExponent();
         float limitingConeAngle = spotLightSource->limitingConeAngle();
         if (!limitingConeAngle || limitingConeAngle > 90 || limitingConeAngle < -90)
             limitingConeAngle = 90;
         if (m_specularConstant > 0)
+<<<<<<< HEAD
             return SkLightingImageFilter::MakeSpotLitSpecular(
                 location, target, specularExponent, limitingConeAngle,
                 lightColor.rgb(), m_surfaceScale, m_specularConstant,
@@ -113,6 +171,10 @@ sk_sp<SkImageFilter> FELighting::createImageFilter()
             location, target, specularExponent, limitingConeAngle,
             lightColor.rgb(), m_surfaceScale, m_diffuseConstant, std::move(input),
             &rect);
+=======
+            return adoptRef(SkLightingImageFilter::CreateSpotLitSpecular(location, target, specularExponent, limitingConeAngle, lightColor.rgb(), m_surfaceScale, m_specularConstant, m_specularExponent, input.get(), &rect));
+        return adoptRef(SkLightingImageFilter::CreateSpotLitDiffuse(location, target, specularExponent, limitingConeAngle, lightColor.rgb(), m_surfaceScale, m_diffuseConstant, input.get(), &rect));
+>>>>>>> miniblink49
     }
     default:
         ASSERT_NOT_REACHED();

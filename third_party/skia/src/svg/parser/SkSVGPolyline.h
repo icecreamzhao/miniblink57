@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkSVGPolyline_DEFINED
 #define SkSVGPolyline_DEFINED
 
@@ -13,9 +21,14 @@
 
 class SkSVGPolyline : public SkSVGElement {
     DECLARE_SVG_INFO(Polyline);
+<<<<<<< HEAD
     virtual void addAttribute(SkSVGParser&, int attrIndex,
         const char* attrValue, size_t attrLength);
 
+=======
+    virtual void addAttribute(SkSVGParser& , int attrIndex,
+        const char* attrValue, size_t attrLength);
+>>>>>>> miniblink49
 protected:
     SkString f_clipRule;
     SkString f_fillRule;

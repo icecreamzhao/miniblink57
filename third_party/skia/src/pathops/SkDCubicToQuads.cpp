@@ -32,12 +32,20 @@ P1 = -1/4 Q0 + 3/4 Q1 + 3/4 Q2 - 1/4 Q3
 #include "SkPathOpsQuad.h"
 
 // used for testing only
+<<<<<<< HEAD
 SkDQuad SkDCubic::toQuad() const
 {
     SkDQuad quad;
     quad[0] = fPts[0];
     const SkDPoint fromC1 = { (3 * fPts[1].fX - fPts[0].fX) / 2, (3 * fPts[1].fY - fPts[0].fY) / 2 };
     const SkDPoint fromC2 = { (3 * fPts[2].fX - fPts[3].fX) / 2, (3 * fPts[2].fY - fPts[3].fY) / 2 };
+=======
+SkDQuad SkDCubic::toQuad() const {
+    SkDQuad quad;
+    quad[0] = fPts[0];
+    const SkDPoint fromC1 = {(3 * fPts[1].fX - fPts[0].fX) / 2, (3 * fPts[1].fY - fPts[0].fY) / 2};
+    const SkDPoint fromC2 = {(3 * fPts[2].fX - fPts[3].fX) / 2, (3 * fPts[2].fY - fPts[3].fY) / 2};
+>>>>>>> miniblink49
     quad[1].fX = (fromC1.fX + fromC2.fX) / 2;
     quad[1].fY = (fromC1.fY + fromC2.fY) / 2;
     quad[2] = fPts[3];

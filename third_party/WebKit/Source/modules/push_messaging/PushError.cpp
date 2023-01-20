@@ -2,10 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/push_messaging/PushError.h"
 
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
+<<<<<<< HEAD
 #include "wtf/Assertions.h"
 
 namespace blink {
@@ -30,6 +35,26 @@ DOMException* PushError::take(ScriptPromiseResolver*,
         return DOMException::create(UnknownError, webError.message);
     }
     NOTREACHED();
+=======
+
+namespace blink {
+
+DOMException* PushError::take(ScriptPromiseResolver*, PassOwnPtr<WebType> webError)
+{
+    switch (webError->errorType) {
+    case WebPushError::ErrorTypeAbort:
+        return DOMException::create(AbortError, webError->message);
+    case WebPushError::ErrorTypeNetwork:
+        return DOMException::create(NetworkError, webError->message);
+    case WebPushError::ErrorTypeNotFound:
+        return DOMException::create(NotFoundError, webError->message);
+    case WebPushError::ErrorTypeNotSupported:
+        return DOMException::create(NotSupportedError, webError->message);
+    case WebPushError::ErrorTypeUnknown:
+        return DOMException::create(UnknownError, webError->message);
+    }
+    ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
     return DOMException::create(UnknownError);
 }
 

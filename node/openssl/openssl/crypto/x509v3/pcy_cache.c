@@ -1,3 +1,4 @@
+/* pcy_cache.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2004.
@@ -52,19 +53,18 @@
  *
  * This product includes cryptographic software written by Eric Young
  * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com). */
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
-#include <openssl/mem.h>
-#include <openssl/obj.h>
-#include <openssl/thread.h>
+#include "cryptlib.h"
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 
 #include "pcy_int.h"
-#include "../internal.h"
 
-static int policy_data_cmp(const X509_POLICY_DATA **a,
-                           const X509_POLICY_DATA **b);
+static int policy_data_cmp(const X509_POLICY_DATA *const *a,
+                           const X509_POLICY_DATA *const *b);
 static int policy_cache_set_int(long *out, ASN1_INTEGER *value);
 
 /*
@@ -75,7 +75,7 @@ static int policy_cache_set_int(long *out, ASN1_INTEGER *value);
 static int policy_cache_create(X509 *x,
                                CERTIFICATEPOLICIES *policies, int crit)
 {
-    size_t i;
+    int i;
     int ret = 0;
     X509_POLICY_CACHE *cache = x->policy_cache;
     X509_POLICY_DATA *data = NULL;
@@ -93,14 +93,13 @@ static int policy_cache_create(X509 *x,
         /*
          * Duplicate policy OIDs are illegal: reject if matches found.
          */
-        sk_X509_POLICY_DATA_sort(cache->data);
         if (OBJ_obj2nid(data->valid_policy) == NID_any_policy) {
             if (cache->anyPolicy) {
                 ret = -1;
                 goto bad_policy;
             }
             cache->anyPolicy = data;
-        } else if (sk_X509_POLICY_DATA_find(cache->data, NULL, data)) {
+        } else if (sk_X509_POLICY_DATA_find(cache->data, data) != -1) {
             ret = -1;
             goto bad_policy;
         } else if (!sk_X509_POLICY_DATA_push(cache->data, data))
@@ -228,49 +227,33 @@ void policy_cache_free(X509_POLICY_CACHE *cache)
     OPENSSL_free(cache);
 }
 
-/*
- * g_x509_policy_cache_lock is used to protect against concurrent calls to
- * |policy_cache_new|. Ideally this would be done with a |CRYPTO_once_t| in
- * the |X509| structure, but |CRYPTO_once_t| isn't public.
- */
-static struct CRYPTO_STATIC_MUTEX g_x509_policy_cache_lock =
-    CRYPTO_STATIC_MUTEX_INIT;
-
 const X509_POLICY_CACHE *policy_cache_set(X509 *x)
 {
-    X509_POLICY_CACHE *cache;
 
-    CRYPTO_STATIC_MUTEX_lock_read(&g_x509_policy_cache_lock);
-    cache = x->policy_cache;
-    CRYPTO_STATIC_MUTEX_unlock_read(&g_x509_policy_cache_lock);
-
-    if (cache != NULL)
-        return cache;
-
-    CRYPTO_STATIC_MUTEX_lock_write(&g_x509_policy_cache_lock);
-    if (x->policy_cache == NULL)
+    if (x->policy_cache == NULL) {
+        CRYPTO_w_lock(CRYPTO_LOCK_X509);
         policy_cache_new(x);
-    cache = x->policy_cache;
-    CRYPTO_STATIC_MUTEX_unlock_write(&g_x509_policy_cache_lock);
+        CRYPTO_w_unlock(CRYPTO_LOCK_X509);
+    }
 
-    return cache;
+    return x->policy_cache;
+
 }
 
 X509_POLICY_DATA *policy_cache_find_data(const X509_POLICY_CACHE *cache,
                                          const ASN1_OBJECT *id)
 {
-    size_t idx;
+    int idx;
     X509_POLICY_DATA tmp;
-
     tmp.valid_policy = (ASN1_OBJECT *)id;
-    sk_X509_POLICY_DATA_sort(cache->data);
-    if (!sk_X509_POLICY_DATA_find(cache->data, &idx, &tmp))
+    idx = sk_X509_POLICY_DATA_find(cache->data, &tmp);
+    if (idx == -1)
         return NULL;
     return sk_X509_POLICY_DATA_value(cache->data, idx);
 }
 
-static int policy_data_cmp(const X509_POLICY_DATA **a,
-                           const X509_POLICY_DATA **b)
+static int policy_data_cmp(const X509_POLICY_DATA *const *a,
+                           const X509_POLICY_DATA *const *b)
 {
     return OBJ_cmp((*a)->valid_policy, (*b)->valid_policy);
 }

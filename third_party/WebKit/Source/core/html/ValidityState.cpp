@@ -21,6 +21,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/ValidityState.h"
 
 namespace blink {
@@ -85,4 +86,4 @@ bool ValidityState::valid() const
     return m_control->valid();
 }
 
-} // namespace blink
+} // namespace

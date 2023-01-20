@@ -10,17 +10,24 @@
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 
+<<<<<<< HEAD
 #include <memory>
 
+=======
+>>>>>>> miniblink49
 namespace blink {
 
 class PlatformCredential;
 
 class WebCredential {
 public:
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebCredential(const WebString& id,
         const WebString& name,
         const WebURL& iconURL);
+=======
+    BLINK_PLATFORM_EXPORT WebCredential(const WebString& id, const WebString& name, const WebURL& iconURL);
+>>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT WebCredential(const WebCredential&);
     virtual ~WebCredential() { reset(); }
 
@@ -36,6 +43,7 @@ public:
     BLINK_PLATFORM_EXPORT bool isFederatedCredential() const;
 
     // TODO(mkwst): Drop this once Chromium is updated. https://crbug.com/494880
+<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT bool isLocalCredential() const
     {
         return isPasswordCredential();
@@ -49,6 +57,14 @@ public:
     {
         return m_platformCredential.get();
     }
+=======
+    BLINK_PLATFORM_EXPORT bool isLocalCredential() const { return isPasswordCredential(); }
+
+#if INSIDE_BLINK
+    BLINK_PLATFORM_EXPORT static WebCredential create(PlatformCredential*);
+    BLINK_PLATFORM_EXPORT WebCredential& operator=(PlatformCredential*);
+    BLINK_PLATFORM_EXPORT PlatformCredential* platformCredential() const { return m_platformCredential.get(); }
+>>>>>>> miniblink49
 #endif
 
 protected:

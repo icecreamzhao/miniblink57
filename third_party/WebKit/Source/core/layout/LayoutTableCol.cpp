@@ -23,6 +23,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/layout/LayoutTableCol.h"
 
 #include "core/HTMLNames.h"
@@ -35,7 +36,7 @@ namespace blink {
 using namespace HTMLNames;
 
 LayoutTableCol::LayoutTableCol(Element* element)
-    : LayoutTableBoxComponent(element)
+    : LayoutBox(element)
     , m_span(1)
 {
     // init LayoutObject attributes
@@ -43,34 +44,29 @@ LayoutTableCol::LayoutTableCol(Element* element)
     updateFromElement();
 }
 
-void LayoutTableCol::styleDidChange(StyleDifference diff,
-    const ComputedStyle* oldStyle)
+void LayoutTableCol::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
 {
-    DCHECK(style()->display() == EDisplay::TableColumn || style()->display() == EDisplay::TableColumnGroup);
+    LayoutBox::styleDidChange(diff, oldStyle);
 
-    LayoutTableBoxComponent::styleDidChange(diff, oldStyle);
-
-    if (!oldStyle)
-        return;
-
-    LayoutTable* table = this->table();
-    if (!table)
-        return;
-
-    // TODO(dgrogan): Is the "else" necessary for correctness or just a brittle
-    // optimization? The optimization would be: if the first branch is taken then
-    // the next one can't be, so don't even check its condition.
-    if (!table->selfNeedsLayout() && !table->normalChildNeedsLayout() && oldStyle->border() != style()->border()) {
-        table->invalidateCollapsedBorders();
-    } else if ((oldStyle->logicalWidth() != style()->logicalWidth()) || LayoutTableBoxComponent::doCellsHaveDirtyWidth(*this, *table, diff, *oldStyle)) {
-        // TODO(dgrogan): Optimization opportunities:
-        // (1) Only mark cells which are affected by this col, not every cell in the
-        //     table.
-        // (2) If only the col width changes and its border width doesn't, do the
-        //     cells need to be marked as needing layout or just given dirty
-        //     widths?
-        table->markAllCellsWidthsDirtyAndOrNeedsLayout(
-            LayoutTable::MarkDirtyAndNeedsLayout);
+    // If border was changed, notify table.
+    if (parent()) {
+        LayoutTable* table = this->table();
+        if (table && !table->selfNeedsLayout() && !table->normalChildNeedsLayout() && oldStyle && oldStyle->border() != style()->border()) {
+            table->invalidateCollapsedBorders();
+        } else if (oldStyle && oldStyle->logicalWidth() != style()->logicalWidth()) {
+            // FIXME : setPreferredLogicalWidthsDirty is done for all cells as of now.
+            // Need to find a better way so that only the cells which are changed by
+            // the col width should have preferred logical widths recomputed.
+            for (LayoutObject* child = table->children()->firstChild(); child; child = child->nextSibling()) {
+                if (!child->isTableSection())
+                    continue;
+                LayoutTableSection* section = toLayoutTableSection(child);
+                for (LayoutTableRow* row = section->firstRow(); row; row = row->nextRow()) {
+                    for (LayoutTableCell* cell = row->firstCell(); cell; cell = cell->nextCell())
+                        cell->setPreferredLogicalWidthsDirty();
+                }
+            }
+        }
     }
 }
 
@@ -85,27 +81,25 @@ void LayoutTableCol::updateFromElement()
         m_span = 1;
     }
     if (m_span != oldSpan && style() && parent())
-        setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
-            LayoutInvalidationReason::AttributeChanged);
+        setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AttributeChanged);
 }
 
 void LayoutTableCol::insertedIntoTree()
 {
-    LayoutTableBoxComponent::insertedIntoTree();
+    LayoutBox::insertedIntoTree();
     table()->addColumn(this);
 }
 
 void LayoutTableCol::willBeRemovedFromTree()
 {
-    LayoutTableBoxComponent::willBeRemovedFromTree();
+    LayoutBox::willBeRemovedFromTree();
     table()->removeColumn(this);
 }
 
-bool LayoutTableCol::isChildAllowed(LayoutObject* child,
-    const ComputedStyle& style) const
+bool LayoutTableCol::isChildAllowed(LayoutObject* child, const ComputedStyle& style) const
 {
     // We cannot use isTableColumn here as style() may return 0.
-    return child->isLayoutTableCol() && style.display() == EDisplay::TableColumn;
+    return child->isLayoutTableCol() && style.display() == TABLE_COLUMN;
 }
 
 bool LayoutTableCol::canHaveChildren() const
@@ -115,20 +109,23 @@ bool LayoutTableCol::canHaveChildren() const
     return isTableColumnGroup();
 }
 
-LayoutRect LayoutTableCol::localVisualRect() const
+LayoutRect LayoutTableCol::clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* paintInvalidationState) const
 {
-    // Entire table gets invalidated, instead of invalidating
-    // every cell in the column. This is simpler, but suboptimal.
+    // For now, just paint invalidate the whole table.
+    // FIXME: Find a better way to do this, e.g., need to paint invalidate all the cells that we
+    // might have propagated a background color or borders into.
+    // FIXME: check for paintInvalidationContainer each time here?
 
-    LayoutTable* table = this->table();
-    if (!table)
+    LayoutTable* parentTable = table();
+    if (!parentTable)
         return LayoutRect();
+    return parentTable->clippedOverflowRectForPaintInvalidation(paintInvalidationContainer, paintInvalidationState);
+}
 
-    // The correctness of this method depends on the fact that LayoutTableCol's
-    // location is always zero.
-    ASSERT(this->location() == LayoutPoint());
-
-    return table->localVisualRect();
+void LayoutTableCol::imageChanged(WrappedImagePtr, const IntRect*)
+{
+    // FIXME: Issue paint invalidation of only the rect the image paints in.
+    setShouldDoFullPaintInvalidation();
 }
 
 void LayoutTableCol::clearPreferredLogicalWidthsDirtyBits()
@@ -160,55 +157,42 @@ LayoutTableCol* LayoutTableCol::enclosingColumnGroup() const
 
 LayoutTableCol* LayoutTableCol::nextColumn() const
 {
-    // If |this| is a column-group, the next column is the colgroup's first child
-    // column.
+    // If |this| is a column-group, the next column is the colgroup's first child column.
     if (LayoutObject* firstChild = this->firstChild())
         return toLayoutTableCol(firstChild);
 
     // Otherwise it's the next column along.
     LayoutObject* next = nextSibling();
 
-    // Failing that, the child is the last column in a column-group, so the next
-    // column is the next column/column-group after its column-group.
+    // Failing that, the child is the last column in a column-group, so the next column is the next column/column-group after its column-group.
     if (!next && parent()->isLayoutTableCol())
         next = parent()->nextSibling();
 
-    for (; next && !next->isLayoutTableCol(); next = next->nextSibling()) {
-    }
+    for (; next && !next->isLayoutTableCol(); next = next->nextSibling()) { }
 
     return toLayoutTableCol(next);
 }
 
-const BorderValue& LayoutTableCol::borderAdjoiningCellStartBorder(
-    const LayoutTableCell*) const
+const BorderValue& LayoutTableCol::borderAdjoiningCellStartBorder(const LayoutTableCell*) const
 {
     return style()->borderStart();
 }
 
-const BorderValue& LayoutTableCol::borderAdjoiningCellEndBorder(
-    const LayoutTableCell*) const
+const BorderValue& LayoutTableCol::borderAdjoiningCellEndBorder(const LayoutTableCell*) const
 {
     return style()->borderEnd();
 }
 
-const BorderValue& LayoutTableCol::borderAdjoiningCellBefore(
-    const LayoutTableCell* cell) const
+const BorderValue& LayoutTableCol::borderAdjoiningCellBefore(const LayoutTableCell* cell) const
 {
-    DCHECK_EQ(table()
-                  ->colElementAtAbsoluteColumn(cell->absoluteColumnIndex() + cell->colSpan())
-                  .innermostColOrColGroup(),
-        this);
+    ASSERT_UNUSED(cell, table()->colElement(cell->col() + cell->colSpan()) == this);
     return style()->borderStart();
 }
 
-const BorderValue& LayoutTableCol::borderAdjoiningCellAfter(
-    const LayoutTableCell* cell) const
+const BorderValue& LayoutTableCol::borderAdjoiningCellAfter(const LayoutTableCell* cell) const
 {
-    DCHECK_EQ(table()
-                  ->colElementAtAbsoluteColumn(cell->absoluteColumnIndex() - 1)
-                  .innermostColOrColGroup(),
-        this);
+    ASSERT_UNUSED(cell, table()->colElement(cell->col() - 1) == this);
     return style()->borderEnd();
 }
 
-} // namespace blink
+}

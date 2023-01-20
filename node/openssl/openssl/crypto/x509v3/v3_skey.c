@@ -53,18 +53,13 @@
  *
  * This product includes cryptographic software written by Eric Young
  * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com). */
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
 #include <stdio.h>
-#include <string.h>
-
-#include <openssl/digest.h>
-#include <openssl/err.h>
-#include <openssl/obj.h>
+#include "cryptlib.h"
 #include <openssl/x509v3.h>
-
-#include "internal.h"
-
 
 static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
                                       X509V3_CTX *ctx, char *str);
@@ -79,7 +74,7 @@ const X509V3_EXT_METHOD v3_skey_id = {
 
 char *i2s_ASN1_OCTET_STRING(X509V3_EXT_METHOD *method, ASN1_OCTET_STRING *oct)
 {
-    return x509v3_bytes_to_hex(oct->data, oct->length);
+    return hex_to_string(oct->data, oct->length);
 }
 
 ASN1_OCTET_STRING *s2i_ASN1_OCTET_STRING(X509V3_EXT_METHOD *method,
@@ -89,11 +84,11 @@ ASN1_OCTET_STRING *s2i_ASN1_OCTET_STRING(X509V3_EXT_METHOD *method,
     long length;
 
     if (!(oct = M_ASN1_OCTET_STRING_new())) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_S2I_ASN1_OCTET_STRING, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
 
-    if (!(oct->data = x509v3_hex_to_bytes(str, &length))) {
+    if (!(oct->data = string_to_hex(str, &length))) {
         M_ASN1_OCTET_STRING_free(oct);
         return NULL;
     }
@@ -116,7 +111,7 @@ static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
         return s2i_ASN1_OCTET_STRING(method, ctx, str);
 
     if (!(oct = M_ASN1_OCTET_STRING_new())) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_S2I_SKEY_ID, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
 
@@ -124,7 +119,7 @@ static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
         return oct;
 
     if (!ctx || (!ctx->subject_req && !ctx->subject_cert)) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_PUBLIC_KEY);
+        X509V3err(X509V3_F_S2I_SKEY_ID, X509V3_R_NO_PUBLIC_KEY);
         goto err;
     }
 
@@ -134,7 +129,7 @@ static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
         pk = ctx->subject_cert->cert_info->key->public_key;
 
     if (!pk) {
-        OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_PUBLIC_KEY);
+        X509V3err(X509V3_F_S2I_SKEY_ID, X509V3_R_NO_PUBLIC_KEY);
         goto err;
     }
 
@@ -143,7 +138,7 @@ static ASN1_OCTET_STRING *s2i_skey_id(X509V3_EXT_METHOD *method,
         goto err;
 
     if (!M_ASN1_OCTET_STRING_set(oct, pkey_dig, diglen)) {
-        OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
+        X509V3err(X509V3_F_S2I_SKEY_ID, ERR_R_MALLOC_FAILURE);
         goto err;
     }
 

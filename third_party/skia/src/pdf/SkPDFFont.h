@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,6 +9,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkPDFFont_DEFINED
 #define SkPDFFont_DEFINED
 
@@ -14,7 +22,13 @@
 #include "SkTDArray.h"
 #include "SkTypeface.h"
 
+<<<<<<< HEAD
 class SkPDFCanon;
+=======
+class SkPaint;
+class SkPDFCanon;
+class SkPDFObjNumMap;
+>>>>>>> miniblink49
 class SkPDFFont;
 
 class SkPDFGlyphSet : SkNoncopyable {
@@ -42,14 +56,31 @@ public:
     SkPDFGlyphSetMap();
     ~SkPDFGlyphSetMap();
 
+<<<<<<< HEAD
     const FontGlyphSetPair* begin() const { return fMap.begin(); }
     const FontGlyphSetPair* end() const { return fMap.end(); }
+=======
+    class F2BIter {
+    public:
+        explicit F2BIter(const SkPDFGlyphSetMap& map);
+        const FontGlyphSetPair* next() const;
+        void reset(const SkPDFGlyphSetMap& map);
+
+    private:
+        const SkTDArray<FontGlyphSetPair>* fMap;
+        mutable int fIndex;
+    };
+>>>>>>> miniblink49
 
     void merge(const SkPDFGlyphSetMap& usage);
     void reset();
 
     void noteGlyphUsage(SkPDFFont* font, const uint16_t* glyphIDs,
+<<<<<<< HEAD
         int numGlyphs);
+=======
+                        int numGlyphs);
+>>>>>>> miniblink49
 
 private:
     SkPDFGlyphSet* getGlyphSetForFont(SkPDFFont* font);
@@ -57,6 +88,10 @@ private:
     SkTDArray<FontGlyphSetPair> fMap;
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /** \class SkPDFFont
     A PDF Object class representing a font.  The font may have resources
     attached to it in order to embed the font.  SkPDFFonts are canonicalized
@@ -65,11 +100,19 @@ private:
     reference to each instantiated class.
 */
 class SkPDFFont : public SkPDFDict {
+<<<<<<< HEAD
 
 public:
     virtual ~SkPDFFont();
 
     /** Returns the typeface represented by this class. Returns nullptr for the
+=======
+    
+public:
+    virtual ~SkPDFFont();
+
+    /** Returns the typeface represented by this class. Returns NULL for the
+>>>>>>> miniblink49
      *  default typeface.
      */
     SkTypeface* typeface();
@@ -114,13 +157,22 @@ public:
      *  @param glyphID   Specify which section of a large font is of interest.
      */
     static SkPDFFont* GetFontResource(SkPDFCanon* canon,
+<<<<<<< HEAD
         SkTypeface* typeface,
         uint16_t glyphID);
+=======
+                                      SkTypeface* typeface,
+                                      uint16_t glyphID);
+>>>>>>> miniblink49
 
     /** Subset the font based on usage set. Returns a SkPDFFont instance with
      *  subset.
      *  @param usage  Glyph subset requested.
+<<<<<<< HEAD
      *  @return       nullptr if font does not support subsetting, a new instance
+=======
+     *  @return       NULL if font does not support subsetting, a new instance
+>>>>>>> miniblink49
      *                of SkPDFFont otherwise.
      */
     virtual SkPDFFont* getFontSubset(const SkPDFGlyphSet* usage);
@@ -131,6 +183,7 @@ public:
         kNot_Match,
     };
     static Match IsMatch(SkPDFFont* existingFont,
+<<<<<<< HEAD
         uint32_t existingFontID,
         uint16_t existingGlyphID,
         uint32_t searchFontID,
@@ -141,12 +194,23 @@ public:
      *  If typeface is NULL, the default typeface is checked.
      */
     static bool CanEmbedTypeface(SkTypeface*, SkPDFCanon*);
+=======
+                         uint32_t existingFontID,
+                         uint16_t existingGlyphID,
+                         uint32_t searchFontID,
+                         uint16_t searchGlyphID);
+>>>>>>> miniblink49
 
 protected:
     // Common constructor to handle common members.
     SkPDFFont(const SkAdvancedTypefaceMetrics* fontInfo,
+<<<<<<< HEAD
         SkTypeface* typeface,
         SkPDFDict* relatedFontDescriptor);
+=======
+              SkTypeface* typeface,
+              SkPDFDict* relatedFontDescriptor);
+>>>>>>> miniblink49
 
     // Accessors for subclass.
     const SkAdvancedTypefaceMetrics* fontInfo();
@@ -168,11 +232,16 @@ protected:
     void adjustGlyphRangeForSingleByteEncoding(uint16_t glyphID);
 
     // Generate ToUnicode table according to glyph usage subset.
+<<<<<<< HEAD
     // If subset is nullptr, all available glyph ids will be used.
+=======
+    // If subset is NULL, all available glyph ids will be used.
+>>>>>>> miniblink49
     void populateToUnicodeTable(const SkPDFGlyphSet* subset);
 
     // Create instances of derived types based on fontInfo.
     static SkPDFFont* Create(SkPDFCanon* canon,
+<<<<<<< HEAD
         const SkAdvancedTypefaceMetrics* fontInfo,
         SkTypeface* typeface,
         uint16_t glyphID,
@@ -184,13 +253,29 @@ protected:
 
 private:
     sk_sp<SkTypeface> fTypeface;
+=======
+                             const SkAdvancedTypefaceMetrics* fontInfo,
+                             SkTypeface* typeface,
+                             uint16_t glyphID,
+                             SkPDFDict* relatedFontDescriptor);
+
+    static bool Find(uint32_t fontID, uint16_t glyphID, int* index);
+
+private:
+    SkAutoTUnref<SkTypeface> fTypeface;
+>>>>>>> miniblink49
 
     // The glyph IDs accessible with this font.  For Type1 (non CID) fonts,
     // this will be a subset if the font has more than 255 glyphs.
     uint16_t fFirstGlyphID;
     uint16_t fLastGlyphID;
+<<<<<<< HEAD
     sk_sp<const SkAdvancedTypefaceMetrics> fFontInfo;
     sk_sp<SkPDFDict> fDescriptor;
+=======
+    SkAutoTUnref<const SkAdvancedTypefaceMetrics> fFontInfo;
+    SkAutoTUnref<SkPDFDict> fDescriptor;
+>>>>>>> miniblink49
 
     SkAdvancedTypefaceMetrics::FontType fFontType;
 

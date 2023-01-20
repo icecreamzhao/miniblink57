@@ -8,8 +8,13 @@
 #ifndef SkRRect_DEFINED
 #define SkRRect_DEFINED
 
+<<<<<<< HEAD
 #include "SkPoint.h"
 #include "SkRect.h"
+=======
+#include "SkRect.h"
+#include "SkPoint.h"
+>>>>>>> miniblink49
 
 class SkPath;
 class SkMatrix;
@@ -85,9 +90,15 @@ public:
     /**
      * Returns the RR's sub type.
      */
+<<<<<<< HEAD
     Type getType() const
     {
         SkDEBUGCODE(this->validate();) return static_cast<Type>(fType);
+=======
+    Type getType() const {
+        SkDEBUGCODE(this->validate();)
+        return static_cast<Type>(fType);
+>>>>>>> miniblink49
     }
 
     Type type() const { return this->getType(); }
@@ -96,6 +107,7 @@ public:
     inline bool isRect() const { return kRect_Type == this->getType(); }
     inline bool isOval() const { return kOval_Type == this->getType(); }
     inline bool isSimple() const { return kSimple_Type == this->getType(); }
+<<<<<<< HEAD
     // TODO: should isSimpleCircular & isCircle take a tolerance? This could help
     // instances where the mapping to device space is noisy.
     inline bool isSimpleCircular() const
@@ -105,6 +117,10 @@ public:
     inline bool isCircle() const
     {
         return this->isOval() && SkScalarNearlyEqual(fRadii[0].fX, fRadii[0].fY);
+=======
+    inline bool isSimpleCircular() const {
+        return this->isSimple() && fRadii[0].fX == fRadii[0].fY;
+>>>>>>> miniblink49
     }
     inline bool isNinePatch() const { return kNinePatch_Type == this->getType(); }
     inline bool isComplex() const { return kComplex_Type == this->getType(); }
@@ -117,8 +133,12 @@ public:
     /**
      * Set this RR to the empty rectangle (0,0,0,0) with 0 x & y radii.
      */
+<<<<<<< HEAD
     void setEmpty()
     {
+=======
+    void setEmpty() {
+>>>>>>> miniblink49
         fRect.setEmpty();
         memset(fRadii, 0, sizeof(fRadii));
         fType = kEmpty_Type;
@@ -129,22 +149,32 @@ public:
     /**
      * Set this RR to match the supplied rect. All radii will be 0.
      */
+<<<<<<< HEAD
     void setRect(const SkRect& rect)
     {
         fRect = rect;
         fRect.sort();
 
         if (fRect.isEmpty()) {
+=======
+    void setRect(const SkRect& rect) {
+        if (rect.isEmpty()) {
+>>>>>>> miniblink49
             this->setEmpty();
             return;
         }
 
+<<<<<<< HEAD
+=======
+        fRect = rect;
+>>>>>>> miniblink49
         memset(fRadii, 0, sizeof(fRadii));
         fType = kRect_Type;
 
         SkDEBUGCODE(this->validate();)
     }
 
+<<<<<<< HEAD
     static SkRRect MakeEmpty()
     {
         SkRRect rr;
@@ -173,23 +203,37 @@ public:
         return rr;
     }
 
+=======
+>>>>>>> miniblink49
     /**
      * Set this RR to match the supplied oval. All x radii will equal half the
      * width and all y radii will equal half the height.
      */
+<<<<<<< HEAD
     void setOval(const SkRect& oval)
     {
         fRect = oval;
         fRect.sort();
 
         if (fRect.isEmpty()) {
+=======
+    void setOval(const SkRect& oval) {
+        if (oval.isEmpty()) {
+>>>>>>> miniblink49
             this->setEmpty();
             return;
         }
 
+<<<<<<< HEAD
         SkScalar xRad = SkScalarHalf(fRect.width());
         SkScalar yRad = SkScalarHalf(fRect.height());
 
+=======
+        SkScalar xRad = SkScalarHalf(oval.width());
+        SkScalar yRad = SkScalarHalf(oval.height());
+
+        fRect = oval;
+>>>>>>> miniblink49
         for (int i = 0; i < 4; ++i) {
             fRadii[i].set(xRad, yRad);
         }
@@ -207,7 +251,11 @@ public:
      * Initialize the rr with one radius per-side.
      */
     void setNinePatch(const SkRect& rect, SkScalar leftRad, SkScalar topRad,
+<<<<<<< HEAD
         SkScalar rightRad, SkScalar bottomRad);
+=======
+                      SkScalar rightRad, SkScalar bottomRad);
+>>>>>>> miniblink49
 
     /**
      * Initialize the RR with potentially different radii for all four corners.
@@ -230,12 +278,17 @@ public:
      *  When a rrect is simple, all of its radii are equal. This returns one
      *  of those radii. This call requires the rrect to be non-complex.
      */
+<<<<<<< HEAD
     const SkVector& getSimpleRadii() const
     {
+=======
+    const SkVector& getSimpleRadii() const {
+>>>>>>> miniblink49
         SkASSERT(!this->isComplex());
         return fRadii[0];
     }
 
+<<<<<<< HEAD
     friend bool operator==(const SkRRect& a, const SkRRect& b)
     {
         return a.fRect == b.fRect && SkScalarsEqual(a.fRadii[0].asScalars(), b.fRadii[0].asScalars(), 8);
@@ -244,6 +297,18 @@ public:
     friend bool operator!=(const SkRRect& a, const SkRRect& b)
     {
         return a.fRect != b.fRect || !SkScalarsEqual(a.fRadii[0].asScalars(), b.fRadii[0].asScalars(), 8);
+=======
+    friend bool operator==(const SkRRect& a, const SkRRect& b) {
+        return a.fRect == b.fRect &&
+               SkScalarsEqual(a.fRadii[0].asScalars(),
+                              b.fRadii[0].asScalars(), 8);
+    }
+
+    friend bool operator!=(const SkRRect& a, const SkRRect& b) {
+        return a.fRect != b.fRect ||
+               !SkScalarsEqual(a.fRadii[0].asScalars(),
+                               b.fRadii[0].asScalars(), 8);
+>>>>>>> miniblink49
     }
 
     /**
@@ -256,8 +321,12 @@ public:
      */
     void inset(SkScalar dx, SkScalar dy, SkRRect* dst) const;
 
+<<<<<<< HEAD
     void inset(SkScalar dx, SkScalar dy)
     {
+=======
+    void inset(SkScalar dx, SkScalar dy) {
+>>>>>>> miniblink49
         this->inset(dx, dy, this);
     }
 
@@ -269,20 +338,31 @@ public:
      *
      *  It is valid for dst == this.
      */
+<<<<<<< HEAD
     void outset(SkScalar dx, SkScalar dy, SkRRect* dst) const
     {
         this->inset(-dx, -dy, dst);
     }
     void outset(SkScalar dx, SkScalar dy)
     {
+=======
+    void outset(SkScalar dx, SkScalar dy, SkRRect* dst) const {
+        this->inset(-dx, -dy, dst);
+    }
+    void outset(SkScalar dx, SkScalar dy) {
+>>>>>>> miniblink49
         this->inset(-dx, -dy, this);
     }
 
     /**
      * Translate the rrect by (dx, dy).
      */
+<<<<<<< HEAD
     void offset(SkScalar dx, SkScalar dy)
     {
+=======
+    void offset(SkScalar dx, SkScalar dy) {
+>>>>>>> miniblink49
         fRect.offset(dx, dy);
     }
 
@@ -344,7 +424,10 @@ private:
 
     void computeType();
     bool checkCornerContainment(SkScalar x, SkScalar y) const;
+<<<<<<< HEAD
     void scaleRadii();
+=======
+>>>>>>> miniblink49
 
     // to access fRadii directly
     friend class SkPath;

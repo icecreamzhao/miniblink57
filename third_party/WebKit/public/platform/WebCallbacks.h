@@ -33,6 +33,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 // A WebCallbacks<S, T> represents a callback object. Typically it is created
 // in Blink and passed to Chromium, and onSuccess or onError will be called
 // from Chromium.
@@ -50,10 +51,22 @@ public:
 };
 
 template <typename T>
+=======
+template<typename S, typename T>
+class WebCallbacks {
+public:
+    virtual ~WebCallbacks() { }
+    virtual void onSuccess(S*) { }
+    virtual void onError(T*) { }
+};
+
+template<typename T>
+>>>>>>> miniblink49
 class WebCallbacks<void, T> {
 public:
     virtual ~WebCallbacks() { }
     virtual void onSuccess() { }
+<<<<<<< HEAD
     virtual void onError(T) { }
 };
 
@@ -66,6 +79,20 @@ public:
 };
 
 template <>
+=======
+    virtual void onError(T*) { }
+};
+
+template<typename S>
+class WebCallbacks<S, void> {
+public:
+    virtual ~WebCallbacks() { }
+    virtual void onSuccess(S*) { }
+    virtual void onError() { }
+};
+
+template<>
+>>>>>>> miniblink49
 class WebCallbacks<void, void> {
 public:
     virtual ~WebCallbacks() { }

@@ -8,10 +8,18 @@
 #ifndef SkGrPixelRef_DEFINED
 #define SkGrPixelRef_DEFINED
 
+<<<<<<< HEAD
 #include "GrRenderTarget.h"
 #include "GrTexture.h"
 #include "SkBitmap.h"
 #include "SkPixelRef.h"
+=======
+#include "SkBitmap.h"
+#include "SkPixelRef.h"
+#include "GrTexture.h"
+#include "GrRenderTarget.h"
+
+>>>>>>> miniblink49
 
 /**
  *  Common baseclass that implements onLockPixels() by calling onReadPixels().
@@ -25,10 +33,17 @@ public:
 protected:
     bool onNewLockPixels(LockRec*) override;
     void onUnlockPixels() override;
+<<<<<<< HEAD
     bool onLockPixelsAreWritable() const override; // return false;
 
 private:
     SkBitmap fBitmap;
+=======
+    bool onLockPixelsAreWritable() const override;   // return false;
+
+private:
+    SkBitmap    fBitmap;
+>>>>>>> miniblink49
     typedef SkPixelRef INHERITED;
 };
 
@@ -48,12 +63,22 @@ public:
 
 protected:
     // overrides from SkPixelRef
+<<<<<<< HEAD
     bool onReadPixels(SkBitmap* dst, SkColorType, const SkIRect* subset) override;
     SkPixelRef* deepCopy(SkColorType, SkColorSpace*, const SkIRect* subset) override;
     void onNotifyPixelsChanged() override;
 
 private:
     GrSurface* fSurface;
+=======
+    bool onReadPixels(SkBitmap* dst, const SkIRect* subset) override;
+    SkPixelRef* deepCopy(SkColorType, SkColorProfileType,
+                         const SkIRect* subset) override;
+    void onNotifyPixelsChanged() override;
+
+private:
+    GrSurface*  fSurface;
+>>>>>>> miniblink49
     typedef SkROLockPixelsPixelRef INHERITED;
 };
 

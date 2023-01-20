@@ -18,18 +18,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// https://dev.w3.org/csswg/cssom/#the-stylesheet-interface
+// http://dev.w3.org/csswg/cssom/#the-stylesheet-interface
 
 [
     SetWrapperReferenceFrom=ownerNode,
+    WillBeGarbageCollected
 ] interface StyleSheet {
     readonly attribute DOMString type;
     readonly attribute DOMString? href;
-    // TODO(foolip): ownerNode should be (Element or ProcessingInstruction).
+    // TODO(philipj): ownerNode should be (Element or ProcessingInstruction).
     readonly attribute Node? ownerNode;
     readonly attribute StyleSheet? parentStyleSheet;
     readonly attribute DOMString? title;
-    // TODO(foolip): media should have [PutForwards=mediaText].
+    // TODO(philipj): media should have [PutForwards=mediaText].
     [SameObject] readonly attribute MediaList media;
     attribute boolean disabled;
 };

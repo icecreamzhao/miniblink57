@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,10 +9,17 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkPerspIter_DEFINED
 #define SkPerspIter_DEFINED
 
 #include "SkFixed.h"
+=======
+
+#ifndef SkPerspIter_DEFINED
+#define SkPerspIter_DEFINED
+
+>>>>>>> miniblink49
 #include "SkMatrix.h"
 
 class SkPerspIter {
@@ -34,6 +45,7 @@ public:
 
 private:
     enum {
+<<<<<<< HEAD
         kShift = 4,
         kCount = (1 << kShift)
     };
@@ -42,6 +54,16 @@ private:
     SkFixed fX, fY;
     SkScalar fSX, fSY;
     int fCount;
+=======
+        kShift  = 4,
+        kCount  = (1 << kShift)
+    };
+    const SkMatrix& fMatrix;
+    SkFixed         fStorage[kCount * 2];
+    SkFixed         fX, fY;
+    SkScalar        fSX, fSY;
+    int             fCount;
+>>>>>>> miniblink49
 };
 
 #endif

@@ -9,9 +9,14 @@
 
 #include "Test.h"
 
+<<<<<<< HEAD
 DEF_TEST(ISize, reporter)
 {
     SkISize a, b;
+=======
+DEF_TEST(ISize, reporter) {
+    SkISize  a, b;
+>>>>>>> miniblink49
 
     a.set(0, 0);
     REPORTER_ASSERT(reporter, a.isEmpty());
@@ -29,11 +34,18 @@ DEF_TEST(ISize, reporter)
     REPORTER_ASSERT(reporter, a == b);
     REPORTER_ASSERT(reporter, !(a != b));
     REPORTER_ASSERT(reporter,
+<<<<<<< HEAD
         a.fWidth == b.fWidth && a.fHeight == b.fHeight);
 }
 
 DEF_TEST(Size, reporter)
 {
+=======
+                    a.fWidth == b.fWidth && a.fHeight == b.fHeight);
+}
+
+DEF_TEST(Size, reporter) {
+>>>>>>> miniblink49
     SkSize a, b;
     int ix = 5;
     int iy = 3;
@@ -56,7 +68,11 @@ DEF_TEST(Size, reporter)
     REPORTER_ASSERT(reporter, a == b);
     REPORTER_ASSERT(reporter, !(a != b));
     REPORTER_ASSERT(reporter,
+<<<<<<< HEAD
         a.fWidth == b.fWidth && a.fHeight == b.fHeight);
+=======
+                    a.fWidth == b.fWidth && a.fHeight == b.fHeight);
+>>>>>>> miniblink49
 
     SkISize ia;
     ia.set(ix, iy);

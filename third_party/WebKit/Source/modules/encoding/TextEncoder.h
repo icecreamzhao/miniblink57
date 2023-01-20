@@ -37,6 +37,7 @@
 #include "wtf/text/TextCodec.h"
 #include "wtf/text/TextEncoding.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -50,11 +51,26 @@ class TextEncoder final : public GarbageCollectedFinalized<TextEncoder>,
 
 public:
     static TextEncoder* create(ExecutionContext*, ExceptionState&);
+=======
+
+namespace blink {
+
+class ExceptionState;
+
+class TextEncoder final : public GarbageCollectedFinalized<TextEncoder>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static TextEncoder* create(const String& utfLabel, ExceptionState&);
+>>>>>>> miniblink49
     ~TextEncoder();
 
     // Implement the IDL
     String encoding() const;
+<<<<<<< HEAD
     DOMUint8Array* encode(const String&);
+=======
+    PassRefPtr<DOMUint8Array> encode(const String&);
+>>>>>>> miniblink49
 
     DEFINE_INLINE_TRACE() { }
 
@@ -62,7 +78,11 @@ private:
     TextEncoder(const WTF::TextEncoding&);
 
     WTF::TextEncoding m_encoding;
+<<<<<<< HEAD
     std::unique_ptr<WTF::TextCodec> m_codec;
+=======
+    OwnPtr<WTF::TextCodec> m_codec;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

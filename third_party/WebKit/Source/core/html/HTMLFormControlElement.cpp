@@ -22,6 +22,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLFormControlElement.h"
 
 #include "core/dom/ElementTraversal.h"
@@ -33,13 +34,11 @@
 #include "core/html/HTMLInputElement.h"
 #include "core/html/HTMLLegendElement.h"
 #include "core/html/ValidityState.h"
-#include "core/html/parser/HTMLParserIdioms.h"
 #include "core/inspector/ConsoleMessage.h"
-#include "core/layout/LayoutObject.h"
+#include "core/layout/LayoutBox.h"
 #include "core/layout/LayoutTheme.h"
 #include "core/page/Page.h"
 #include "core/page/ValidationMessageClient.h"
-#include "platform/EventDispatchForbiddenScope.h"
 #include "platform/text/BidiTextRun.h"
 #include "wtf/Vector.h"
 
@@ -47,42 +46,43 @@ namespace blink {
 
 using namespace HTMLNames;
 
-HTMLFormControlElement::HTMLFormControlElement(const QualifiedName& tagName,
-    Document& document)
+HTMLFormControlElement::HTMLFormControlElement(const QualifiedName& tagName, Document& document, HTMLFormElement* form)
     : LabelableElement(tagName, document)
+    , m_disabled(false)
+    , m_isAutofilled(false)
+    , m_isReadOnly(false)
+    , m_isRequired(false)
+    , m_hasValidationMessage(false)
     , m_ancestorDisabledState(AncestorDisabledStateUnknown)
     , m_dataListAncestorState(Unknown)
-    , m_isAutofilled(false)
-    , m_hasValidationMessage(false)
     , m_willValidateInitialized(false)
     , m_willValidate(true)
     , m_isValid(true)
     , m_validityIsDirty(false)
+    , m_wasChangedSinceLastFormControlChangeEvent(false)
     , m_wasFocusedByMouse(false)
-    , m_blocksFormSubmission(false)
 {
     setHasCustomStyleCallbacks();
+    associateByParser(form);
 }
 
-HTMLFormControlElement::~HTMLFormControlElement() { }
+HTMLFormControlElement::~HTMLFormControlElement()
+{
+#if !ENABLE(OILPAN)
+#if ENABLE(ASSERT)
+    // Recalculate m_willValidate and m_isValid for the vtbl change in order to
+    // avoid assertion failures in isValidElement() called in setForm(0).
+    setNeedsWillValidateCheck();
+    setNeedsValidityCheck();
+#endif
+    setForm(0);
+#endif
+}
 
 DEFINE_TRACE(HTMLFormControlElement)
 {
-    ListedElement::trace(visitor);
+    FormAssociatedElement::trace(visitor);
     LabelableElement::trace(visitor);
-}
-
-String HTMLFormControlElement::formAction() const
-{
-    const AtomicString& action = fastGetAttribute(formactionAttr);
-    if (action.isEmpty())
-        return document().url();
-    return document().completeURL(stripLeadingAndTrailingHTMLSpaces(action));
-}
-
-void HTMLFormControlElement::setFormAction(const AtomicString& value)
-{
-    setAttribute(formactionAttr, value);
 }
 
 String HTMLFormControlElement::formEnctype() const
@@ -103,8 +103,7 @@ String HTMLFormControlElement::formMethod() const
     const AtomicString& formMethodAttr = fastGetAttribute(formmethodAttr);
     if (formMethodAttr.isNull())
         return emptyString();
-    return FormSubmission::Attributes::methodString(
-        FormSubmission::Attributes::parseMethodType(formMethodAttr));
+    return FormSubmission::Attributes::methodString(FormSubmission::Attributes::parseMethodType(formMethodAttr));
 }
 
 void HTMLFormControlElement::setFormMethod(const AtomicString& value)
@@ -121,8 +120,7 @@ void HTMLFormControlElement::updateAncestorDisabledState() const
 {
     HTMLFieldSetElement* fieldSetAncestor = 0;
     ContainerNode* legendAncestor = 0;
-    for (HTMLElement* ancestor = Traversal<HTMLElement>::firstAncestor(*this);
-         ancestor; ancestor = Traversal<HTMLElement>::firstAncestor(*ancestor)) {
+    for (HTMLElement* ancestor = Traversal<HTMLElement>::firstAncestor(*this); ancestor; ancestor = Traversal<HTMLElement>::firstAncestor(*ancestor)) {
         if (!legendAncestor && isHTMLLegendElement(*ancestor))
             legendAncestor = ancestor;
         if (isHTMLFieldSetElement(*ancestor)) {
@@ -130,9 +128,7 @@ void HTMLFormControlElement::updateAncestorDisabledState() const
             break;
         }
     }
-    m_ancestorDisabledState = (fieldSetAncestor && fieldSetAncestor->isDisabledFormControl() && !(legendAncestor && legendAncestor == fieldSetAncestor->legend()))
-        ? AncestorDisabledStateDisabled
-        : AncestorDisabledStateEnabled;
+    m_ancestorDisabledState = (fieldSetAncestor && fieldSetAncestor->isDisabledFormControl() && !(legendAncestor && legendAncestor == fieldSetAncestor->legend())) ? AncestorDisabledStateDisabled : AncestorDisabledStateEnabled;
 }
 
 void HTMLFormControlElement::ancestorDisabledStateWasChanged()
@@ -147,57 +143,51 @@ void HTMLFormControlElement::reset()
     resetImpl();
 }
 
-void HTMLFormControlElement::attributeChanged(
-    const AttributeModificationParams& params)
+void HTMLFormControlElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    HTMLElement::attributeChanged(params);
-    if (params.name == disabledAttr && params.oldValue.isNull() != params.newValue.isNull()) {
-        disabledAttributeChanged();
-        if (params.reason == AttributeModificationReason::kDirectly && isDisabledFormControl() && adjustedFocusedElementInTreeScope() == this)
-            blur();
-    }
-}
-
-void HTMLFormControlElement::parseAttribute(
-    const AttributeModificationParams& params)
-{
-    const QualifiedName& name = params.name;
     if (name == formAttr) {
         formAttributeChanged();
         UseCounter::count(document(), UseCounter::FormAttribute);
+    } else if (name == disabledAttr) {
+        bool oldDisabled = m_disabled;
+        m_disabled = !value.isNull();
+        if (oldDisabled != m_disabled)
+            disabledAttributeChanged();
     } else if (name == readonlyAttr) {
-        if (params.oldValue.isNull() != params.newValue.isNull()) {
+        bool wasReadOnly = m_isReadOnly;
+        m_isReadOnly = !value.isNull();
+        if (wasReadOnly != m_isReadOnly) {
             setNeedsWillValidateCheck();
-            pseudoStateChanged(CSSSelector::PseudoReadOnly);
-            pseudoStateChanged(CSSSelector::PseudoReadWrite);
+            setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::fromAttribute(name));
             if (layoutObject())
-                LayoutTheme::theme().controlStateChanged(*layoutObject(),
-                    ReadOnlyControlState);
+                LayoutTheme::theme().controlStateChanged(*layoutObject(), ReadOnlyControlState);
         }
     } else if (name == requiredAttr) {
-        if (params.oldValue.isNull() != params.newValue.isNull())
+        bool wasRequired = m_isRequired;
+        m_isRequired = !value.isNull();
+        if (wasRequired != m_isRequired)
             requiredAttributeChanged();
         UseCounter::count(document(), UseCounter::RequiredAttribute);
     } else if (name == autofocusAttr) {
-        HTMLElement::parseAttribute(params);
+        HTMLElement::parseAttribute(name, value);
         UseCounter::count(document(), UseCounter::AutoFocusAttribute);
     } else {
-        HTMLElement::parseAttribute(params);
+        HTMLElement::parseAttribute(name, value);
     }
 }
 
 void HTMLFormControlElement::disabledAttributeChanged()
 {
-    // Don't blur in this function because this is called for descendants of
-    // <fieldset> while tree traversal.
-    EventDispatchForbiddenScope eventForbidden;
-
     setNeedsWillValidateCheck();
     pseudoStateChanged(CSSSelector::PseudoDisabled);
     pseudoStateChanged(CSSSelector::PseudoEnabled);
     if (layoutObject())
-        LayoutTheme::theme().controlStateChanged(*layoutObject(),
-            EnabledControlState);
+        LayoutTheme::theme().controlStateChanged(*layoutObject(), EnabledControlState);
+    if (isDisabledFormControl() && treeScope().adjustedFocusedElement() == this) {
+        // We might want to call blur(), but it's dangerous to dispatch events
+        // here.
+        document().setNeedsFocusedElementCheck();
+    }
 }
 
 void HTMLFormControlElement::requiredAttributeChanged()
@@ -205,16 +195,6 @@ void HTMLFormControlElement::requiredAttributeChanged()
     setNeedsValidityCheck();
     pseudoStateChanged(CSSSelector::PseudoRequired);
     pseudoStateChanged(CSSSelector::PseudoOptional);
-}
-
-bool HTMLFormControlElement::isReadOnly() const
-{
-    return fastHasAttribute(HTMLNames::readonlyAttr);
-}
-
-bool HTMLFormControlElement::isDisabledOrReadOnly() const
-{
-    return isDisabledFormControl() || isReadOnly();
 }
 
 bool HTMLFormControlElement::supportsAutofocus() const
@@ -241,28 +221,24 @@ static bool shouldAutofocusOnAttach(const HTMLFormControlElement* element)
     if (!element->isAutofocusable())
         return false;
     if (element->document().isSandboxed(SandboxAutomaticFeatures)) {
-        // FIXME: This message should be moved off the console once a solution to
-        // https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
-        element->document().addConsoleMessage(ConsoleMessage::create(
-            SecurityMessageSource, ErrorMessageLevel,
-            "Blocked autofocusing on a form control because the form's frame is "
-            "sandboxed and the 'allow-scripts' permission is not set."));
+        // FIXME: This message should be moved off the console once a solution to https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
+        element->document().addConsoleMessage(ConsoleMessage::create(SecurityMessageSource, ErrorMessageLevel, "Blocked autofocusing on a form control because the form's frame is sandboxed and the 'allow-scripts' permission is not set."));
         return false;
     }
 
     return true;
 }
 
-void HTMLFormControlElement::attachLayoutTree(const AttachContext& context)
+void HTMLFormControlElement::attach(const AttachContext& context)
 {
-    HTMLElement::attachLayoutTree(context);
+    HTMLElement::attach(context);
 
     if (!layoutObject())
         return;
 
     // The call to updateFromElement() needs to go after the call through
-    // to the base class's attachLayoutTree() because that can sometimes do a
-    // close on the layoutObject.
+    // to the base class's attach() because that can sometimes do a close
+    // on the layoutObject.
     layoutObject()->updateFromElement();
 
     // FIXME: Autofocus handling should be moved to insertedInto according to
@@ -273,22 +249,21 @@ void HTMLFormControlElement::attachLayoutTree(const AttachContext& context)
 
 void HTMLFormControlElement::didMoveToNewDocument(Document& oldDocument)
 {
-    ListedElement::didMoveToNewDocument(oldDocument);
+    FormAssociatedElement::didMoveToNewDocument(oldDocument);
     HTMLElement::didMoveToNewDocument(oldDocument);
 }
 
-Node::InsertionNotificationRequest HTMLFormControlElement::insertedInto(
-    ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLFormControlElement::insertedInto(ContainerNode* insertionPoint)
 {
     m_ancestorDisabledState = AncestorDisabledStateUnknown;
     m_dataListAncestorState = Unknown;
     setNeedsWillValidateCheck();
     HTMLElement::insertedInto(insertionPoint);
-    ListedElement::insertedInto(insertionPoint);
+    FormAssociatedElement::insertedInto(insertionPoint);
     fieldSetAncestorsSetNeedsValidityCheck(insertionPoint);
 
     // Trigger for elements outside of forms.
-    if (!formOwner() && insertionPoint->isConnected())
+    if (!formOwner() && insertionPoint->inDocument())
         document().didAssociateFormControl(this);
 
     return InsertionDone;
@@ -303,23 +278,20 @@ void HTMLFormControlElement::removedFrom(ContainerNode* insertionPoint)
     m_dataListAncestorState = Unknown;
     setNeedsWillValidateCheck();
     HTMLElement::removedFrom(insertionPoint);
-    ListedElement::removedFrom(insertionPoint);
+    FormAssociatedElement::removedFrom(insertionPoint);
+    document().removeFormAssociation(this);
 }
 
 void HTMLFormControlElement::willChangeForm()
 {
-    ListedElement::willChangeForm();
+    FormAssociatedElement::willChangeForm();
     formOwnerSetNeedsValidityCheck();
-    if (formOwner() && canBeSuccessfulSubmitButton())
-        formOwner()->invalidateDefaultButtonStyle();
 }
 
 void HTMLFormControlElement::didChangeForm()
 {
-    ListedElement::didChangeForm();
+    FormAssociatedElement::didChangeForm();
     formOwnerSetNeedsValidityCheck();
-    if (formOwner() && isConnected() && canBeSuccessfulSubmitButton())
-        formOwner()->invalidateDefaultButtonStyle();
 }
 
 void HTMLFormControlElement::formOwnerSetNeedsValidityCheck()
@@ -330,17 +302,19 @@ void HTMLFormControlElement::formOwnerSetNeedsValidityCheck()
     }
 }
 
-void HTMLFormControlElement::fieldSetAncestorsSetNeedsValidityCheck(
-    Node* node)
+void HTMLFormControlElement::fieldSetAncestorsSetNeedsValidityCheck(Node* node)
 {
     if (!node)
         return;
-    for (HTMLFieldSetElement* fieldSet = Traversal<HTMLFieldSetElement>::firstAncestorOrSelf(*node);
-         fieldSet;
-         fieldSet = Traversal<HTMLFieldSetElement>::firstAncestor(*fieldSet)) {
+    for (HTMLFieldSetElement* fieldSet = Traversal<HTMLFieldSetElement>::firstAncestorOrSelf(*node); fieldSet; fieldSet = Traversal<HTMLFieldSetElement>::firstAncestor(*fieldSet)) {
         fieldSet->pseudoStateChanged(CSSSelector::PseudoValid);
         fieldSet->pseudoStateChanged(CSSSelector::PseudoInvalid);
     }
+}
+
+void HTMLFormControlElement::setChangedSinceLastFormControlChangeEvent(bool changed)
+{
+    m_wasChangedSinceLastFormControlChangeEvent = changed;
 }
 
 void HTMLFormControlElement::dispatchChangeEvent()
@@ -348,14 +322,26 @@ void HTMLFormControlElement::dispatchChangeEvent()
     dispatchScopedEvent(Event::createBubble(EventTypeNames::change));
 }
 
+void HTMLFormControlElement::dispatchFormControlChangeEvent()
+{
+    dispatchChangeEvent();
+    setChangedSinceLastFormControlChangeEvent(false);
+}
+
+void HTMLFormControlElement::dispatchFormControlInputEvent()
+{
+    setChangedSinceLastFormControlChangeEvent(true);
+    HTMLElement::dispatchInputEvent();
+}
+
 HTMLFormElement* HTMLFormControlElement::formOwner() const
 {
-    return ListedElement::form();
+    return FormAssociatedElement::form();
 }
 
 bool HTMLFormControlElement::isDisabledFormControl() const
 {
-    if (fastHasAttribute(disabledAttr))
+    if (m_disabled)
         return true;
 
     if (m_ancestorDisabledState == AncestorDisabledStateUnknown)
@@ -363,14 +349,9 @@ bool HTMLFormControlElement::isDisabledFormControl() const
     return m_ancestorDisabledState == AncestorDisabledStateDisabled;
 }
 
-bool HTMLFormControlElement::matchesEnabledPseudoClass() const
-{
-    return !isDisabledFormControl();
-}
-
 bool HTMLFormControlElement::isRequired() const
 {
-    return fastHasAttribute(requiredAttr);
+    return m_isRequired;
 }
 
 String HTMLFormControlElement::resultForDialogSubmit()
@@ -405,16 +386,12 @@ bool HTMLFormControlElement::shouldHaveFocusAppearance() const
     return !m_wasFocusedByMouse || shouldShowFocusRingOnMouseFocus();
 }
 
-void HTMLFormControlElement::dispatchFocusEvent(
-    Element* oldFocusedElement,
-    WebFocusType type,
-    InputDeviceCapabilities* sourceCapabilities)
+void HTMLFormControlElement::dispatchFocusEvent(Element* oldFocusedElement, WebFocusType type)
 {
     if (type != WebFocusTypePage)
         m_wasFocusedByMouse = type == WebFocusTypeMouse;
-    // ContainerNode::handleStyleChangeOnFocusStateChange() will inform
-    // LayoutTheme about the focus state change.
-    HTMLElement::dispatchFocusEvent(oldFocusedElement, type, sourceCapabilities);
+    // ContainerNode::handleStyleChangeOnFocusStateChange() will inform LayoutTheme about the focus state change.
+    HTMLElement::dispatchFocusEvent(oldFocusedElement, type);
 }
 
 void HTMLFormControlElement::willCallDefaultEventHandler(const Event& event)
@@ -427,15 +404,13 @@ void HTMLFormControlElement::willCallDefaultEventHandler(const Event& event)
     bool oldShouldHaveFocusAppearance = shouldHaveFocusAppearance();
     m_wasFocusedByMouse = false;
 
-    // Change of m_wasFocusByMouse may affect shouldHaveFocusAppearance() and
-    // LayoutTheme::isFocused().  Inform LayoutTheme if
-    // shouldHaveFocusAppearance() changes.
+    // Change of m_wasFocusByMouse may affect shouldHaveFocusAppearance() and LayoutTheme::isFocused().
+    // Inform LayoutTheme if shouldHaveFocusAppearance() changes.
     if (oldShouldHaveFocusAppearance != shouldHaveFocusAppearance() && layoutObject())
-        LayoutTheme::theme().controlStateChanged(*layoutObject(),
-            FocusControlState);
+        LayoutTheme::theme().controlStateChanged(*layoutObject(), FocusControlState);
 }
 
-int HTMLFormControlElement::tabIndex() const
+short HTMLFormControlElement::tabIndex() const
 {
     // Skip the supportsFocus check in HTMLElement.
     return Element::tabIndex();
@@ -460,27 +435,19 @@ bool HTMLFormControlElement::willValidate() const
         // If the following assertion fails, setNeedsWillValidateCheck() is not
         // called correctly when something which changes recalcWillValidate() result
         // is updated.
-        DCHECK_EQ(m_willValidate, recalcWillValidate());
+        ASSERT(m_willValidate == recalcWillValidate());
     }
     return m_willValidate;
 }
 
 void HTMLFormControlElement::setNeedsWillValidateCheck()
 {
-    // We need to recalculate willValidate immediately because willValidate change
-    // can causes style change.
+    // We need to recalculate willValidate immediately because willValidate change can causes style change.
     bool newWillValidate = recalcWillValidate();
     if (m_willValidateInitialized && m_willValidate == newWillValidate)
         return;
     m_willValidateInitialized = true;
     m_willValidate = newWillValidate;
-    // Needs to force setNeedsValidityCheck() to invalidate validity state of
-    // FORM/FIELDSET. If this element updates willValidate twice and
-    // isValidElement() is not called between them, the second call of this
-    // function still has m_validityIsDirty==true, which means
-    // setNeedsValidityCheck() doesn't invalidate validity state of
-    // FORM/FIELDSET.
-    m_validityIsDirty = false;
     setNeedsValidityCheck();
     // No need to trigger style recalculation here because
     // setNeedsValidityCheck() does it in the right away. This relies on
@@ -490,12 +457,9 @@ void HTMLFormControlElement::setNeedsWillValidateCheck()
         hideVisibleValidationMessage();
 }
 
-void HTMLFormControlElement::findCustomValidationMessageTextDirection(
-    const String& message,
-    TextDirection& messageDir,
-    String& subMessage,
-    TextDirection& subMessageDir)
+void HTMLFormControlElement::findCustomValidationMessageTextDirection(const String& message, TextDirection &messageDir, String& subMessage, TextDirection &subMessageDir)
 {
+    subMessage = fastGetAttribute(titleAttr);
     messageDir = determineDirectionality(message);
     if (!subMessage.isEmpty())
         subMessageDir = layoutObject()->style()->direction();
@@ -504,7 +468,7 @@ void HTMLFormControlElement::findCustomValidationMessageTextDirection(
 void HTMLFormControlElement::updateVisibleValidationMessage()
 {
     Page* page = document().page();
-    if (!page || !page->isPageVisible())
+    if (!page)
         return;
     String message;
     if (layoutObject() && willValidate())
@@ -512,16 +476,14 @@ void HTMLFormControlElement::updateVisibleValidationMessage()
 
     m_hasValidationMessage = true;
     ValidationMessageClient* client = &page->validationMessageClient();
-    TextDirection messageDir = TextDirection::kLtr;
-    TextDirection subMessageDir = TextDirection::kLtr;
-    String subMessage = validationSubMessage().stripWhiteSpace();
+    TextDirection messageDir = LTR;
+    TextDirection subMessageDir = LTR;
+    String subMessage = String();
     if (message.isEmpty())
         client->hideValidationMessage(*this);
     else
-        findCustomValidationMessageTextDirection(message, messageDir, subMessage,
-            subMessageDir);
-    client->showValidationMessage(*this, message, messageDir, subMessage,
-        subMessageDir);
+        findCustomValidationMessageTextDirection(message, messageDir, subMessage, subMessageDir);
+    client->showValidationMessage(*this, message, messageDir, subMessage, subMessageDir);
 }
 
 void HTMLFormControlElement::hideVisibleValidationMessage()
@@ -545,8 +507,7 @@ bool HTMLFormControlElement::isValidationMessageVisible() const
     return client->isValidationMessageVisible(*this);
 }
 
-ValidationMessageClient* HTMLFormControlElement::validationMessageClient()
-    const
+ValidationMessageClient* HTMLFormControlElement::validationMessageClient() const
 {
     Page* page = document().page();
     if (!page)
@@ -555,52 +516,48 @@ ValidationMessageClient* HTMLFormControlElement::validationMessageClient()
     return &page->validationMessageClient();
 }
 
-bool HTMLFormControlElement::checkValidity(
-    HeapVector<Member<HTMLFormControlElement>>* unhandledInvalidControls,
-    CheckValidityEventBehavior eventBehavior)
+bool HTMLFormControlElement::checkValidity(WillBeHeapVector<RefPtrWillBeMember<HTMLFormControlElement>>* unhandledInvalidControls, CheckValidityEventBehavior eventBehavior)
 {
-    if (!willValidate())
-        return true;
     if (isValidElement())
         return true;
     if (eventBehavior != CheckValidityDispatchInvalidEvent)
         return false;
-    Document* originalDocument = &document();
-    DispatchEventResult dispatchResult = dispatchEvent(Event::createCancelable(EventTypeNames::invalid));
-    if (dispatchResult == DispatchEventResult::NotCanceled && unhandledInvalidControls && isConnected() && originalDocument == document())
-        unhandledInvalidControls->push_back(this);
+    // An event handler can deref this object.
+    RefPtrWillBeRawPtr<HTMLFormControlElement> protector(this);
+    RefPtrWillBeRawPtr<Document> originalDocument(document());
+    bool needsDefaultAction = dispatchEvent(Event::createCancelable(EventTypeNames::invalid));
+    if (needsDefaultAction && unhandledInvalidControls && inDocument() && originalDocument == document())
+        unhandledInvalidControls->append(this);
     return false;
 }
 
 void HTMLFormControlElement::showValidationMessage()
 {
     scrollIntoViewIfNeeded(false);
+    RefPtrWillBeRawPtr<HTMLFormControlElement> protector(this);
     focus();
     updateVisibleValidationMessage();
 }
 
 bool HTMLFormControlElement::reportValidity()
 {
-    HeapVector<Member<HTMLFormControlElement>> unhandledInvalidControls;
-    bool isValid = checkValidity(&unhandledInvalidControls,
-        CheckValidityDispatchInvalidEvent);
+    WillBeHeapVector<RefPtrWillBeMember<HTMLFormControlElement>> unhandledInvalidControls;
+    bool isValid = checkValidity(&unhandledInvalidControls, CheckValidityDispatchInvalidEvent);
     if (isValid || unhandledInvalidControls.isEmpty())
         return isValid;
-    DCHECK_EQ(unhandledInvalidControls.size(), 1u);
-    DCHECK_EQ(unhandledInvalidControls[0].get(), this);
+    ASSERT(unhandledInvalidControls.size() == 1);
+    ASSERT(unhandledInvalidControls[0].get() == this);
     // Update layout now before calling isFocusable(), which has
     // !layoutObject()->needsLayout() assertion.
-    document().updateStyleAndLayoutIgnorePendingStylesheets();
+    document().updateLayoutIgnorePendingStylesheets();
     if (isFocusable()) {
         showValidationMessage();
         return false;
     }
     if (document().frame()) {
-        String message(
-            "An invalid form control with name='%name' is not focusable.");
+        String message("An invalid form control with name='%name' is not focusable.");
         message.replace("%name", name());
-        document().addConsoleMessage(ConsoleMessage::create(
-            RenderingMessageSource, ErrorMessageLevel, message));
+        document().addConsoleMessage(ConsoleMessage::create(RenderingMessageSource, ErrorMessageLevel, message));
     }
     return false;
 }
@@ -618,7 +575,7 @@ bool HTMLFormControlElement::isValidElement()
     } else {
         // If the following assertion fails, setNeedsValidityCheck() is not
         // called correctly when something which changes validity is updated.
-        DCHECK_EQ(m_isValid, (!willValidate() || valid()));
+        ASSERT(m_isValid == (!willValidate() || valid()));
     }
     return m_isValid;
 }
@@ -631,8 +588,6 @@ void HTMLFormControlElement::setNeedsValidityCheck()
         fieldSetAncestorsSetNeedsValidityCheck(parentNode());
         pseudoStateChanged(CSSSelector::PseudoValid);
         pseudoStateChanged(CSSSelector::PseudoInvalid);
-        pseudoStateChanged(CSSSelector::PseudoInRange);
-        pseudoStateChanged(CSSSelector::PseudoOutOfRange);
     }
 
     // Updates only if this control already has a validation message.
@@ -645,18 +600,15 @@ void HTMLFormControlElement::setNeedsValidityCheck()
 
 void HTMLFormControlElement::setCustomValidity(const String& error)
 {
-    ListedElement::setCustomValidity(error);
+    FormAssociatedElement::setCustomValidity(error);
     setNeedsValidityCheck();
 }
 
-void HTMLFormControlElement::dispatchBlurEvent(
-    Element* newFocusedElement,
-    WebFocusType type,
-    InputDeviceCapabilities* sourceCapabilities)
+void HTMLFormControlElement::dispatchBlurEvent(Element* newFocusedElement, WebFocusType type)
 {
     if (type != WebFocusTypePage)
         m_wasFocusedByMouse = false;
-    HTMLElement::dispatchBlurEvent(newFocusedElement, type, sourceCapabilities);
+    HTMLElement::dispatchBlurEvent(newFocusedElement, type);
     hideVisibleValidationMessage();
 }
 
@@ -665,8 +617,12 @@ bool HTMLFormControlElement::isSuccessfulSubmitButton() const
     return canBeSuccessfulSubmitButton() && !isDisabledFormControl();
 }
 
-HTMLFormControlElement* HTMLFormControlElement::enclosingFormControlElement(
-    Node* node)
+bool HTMLFormControlElement::isDefaultButtonForForm() const
+{
+    return isSuccessfulSubmitButton() && form() && form()->defaultButton() == this;
+}
+
+HTMLFormControlElement* HTMLFormControlElement::enclosingFormControlElement(Node* node)
 {
     if (!node)
         return nullptr;
@@ -684,16 +640,18 @@ String HTMLFormControlElement::nameForAutofill() const
     return trimmedName;
 }
 
-void HTMLFormControlElement::copyNonAttributePropertiesFromElement(
-    const Element& source)
+void HTMLFormControlElement::setFocus(bool flag)
+{
+    LabelableElement::setFocus(flag);
+
+    if (!flag && wasChangedSinceLastFormControlChangeEvent())
+        dispatchFormControlChangeEvent();
+}
+
+void HTMLFormControlElement::copyNonAttributePropertiesFromElement(const Element& source)
 {
     HTMLElement::copyNonAttributePropertiesFromElement(source);
     setNeedsValidityCheck();
 }
-
-void HTMLFormControlElement::associateWith(HTMLFormElement* form)
-{
-    associateByParser(form);
-};
 
 } // namespace blink

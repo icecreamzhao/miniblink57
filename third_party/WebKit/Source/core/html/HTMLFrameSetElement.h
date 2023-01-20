@@ -25,7 +25,6 @@
 #define HTMLFrameSetElement_h
 
 #include "core/dom/Document.h"
-#include "core/frame/LocalDOMWindow.h"
 #include "core/html/HTMLDimension.h"
 #include "core/html/HTMLElement.h"
 
@@ -33,7 +32,6 @@ namespace blink {
 
 class HTMLFrameSetElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLFrameSetElement);
 
@@ -62,13 +60,11 @@ public:
 private:
     explicit HTMLFrameSetElement(Document&);
 
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&,
-        const AtomicString&,
-        MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
 
-    void attachLayoutTree(const AttachContext& = AttachContext()) override;
+    void attach(const AttachContext& = AttachContext()) override;
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 

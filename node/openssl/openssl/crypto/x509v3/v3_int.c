@@ -53,11 +53,12 @@
  *
  * This product includes cryptographic software written by Eric Young
  * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com). */
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
 #include <stdio.h>
-
-#include <openssl/obj.h>
+#include "cryptlib.h"
 #include <openssl/x509v3.h>
 
 const X509V3_EXT_METHOD v3_crl_num = {

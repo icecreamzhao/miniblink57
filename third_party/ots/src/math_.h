@@ -10,6 +10,7 @@
 namespace ots {
 
 struct OpenTypeMATH {
+<<<<<<< HEAD
     OpenTypeMATH()
         : data(NULL)
         , length(0)
@@ -23,3 +24,18 @@ struct OpenTypeMATH {
 } // namespace ots
 
 #endif
+=======
+  OpenTypeMATH()
+      : data(NULL),
+        length(0) {
+  }
+
+  const uint8_t *data;
+  size_t length;
+};
+
+}  // namespace ots
+
+#endif
+
+>>>>>>> miniblink49

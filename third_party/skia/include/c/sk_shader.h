@@ -24,6 +24,7 @@ typedef enum {
     MIRROR_SK_SHADER_TILEMODE,
 } sk_shader_tilemode_t;
 
+<<<<<<< HEAD
 /**
     Returns a shader that generates a linear gradient between the two
     specified points.
@@ -136,6 +137,15 @@ sk_shader_t* sk_shader_new_two_point_conical_gradient(
     int colorCount,
     sk_shader_tilemode_t tileMode,
     const sk_matrix_t* localMatrix);
+=======
+sk_shader_t* sk_shader_new_linear_gradient(const sk_point_t pts[2],
+                                           const sk_color_t colors[],
+                                           const float colorPos[],
+                                           int colorCount,
+                                           sk_shader_tilemode_t tileMode,
+                                           const sk_matrix_t* localMatrix);
+
+>>>>>>> miniblink49
 
 SK_C_PLUS_PLUS_END_GUARD
 

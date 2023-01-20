@@ -14,6 +14,7 @@ namespace blink {
 
 class LayoutBlockFlow;
 class FloatingObject;
+class LineInfo;
 class LineWidth;
 
 class LineLayoutBlockFlow : public LineLayoutBox {
@@ -23,15 +24,10 @@ public:
     {
     }
 
-    explicit LineLayoutBlockFlow(const LineLayoutItem& item)
+    LineLayoutBlockFlow(const LineLayoutItem& item)
         : LineLayoutBox(item)
     {
-        SECURITY_DCHECK(!item || item.isLayoutBlockFlow());
-    }
-
-    explicit LineLayoutBlockFlow(std::nullptr_t)
-        : LineLayoutBox(nullptr)
-    {
+        ASSERT(!item || item.isLayoutBlockFlow());
     }
 
     LineLayoutBlockFlow() { }
@@ -45,10 +41,9 @@ public:
         return LineLayoutItem(toBlockFlow()->lastChild());
     }
 
-    LayoutUnit startAlignedOffsetForLine(LayoutUnit position,
-        IndentTextOrNot indentText)
+    LayoutUnit startAlignedOffsetForLine(LayoutUnit position, bool shouldIndentText)
     {
-        return toBlockFlow()->startAlignedOffsetForLine(position, indentText);
+        return toBlockFlow()->startAlignedOffsetForLine(position, shouldIndentText);
     }
 
     LayoutUnit textIndentOffset() const
@@ -56,17 +51,9 @@ public:
         return toBlockFlow()->textIndentOffset();
     }
 
-    // TODO(dgrogan/eae): *ForChild methods: callers should call
-    // child.logicalWidth etc, and the API should access the parent BlockFlow.
     LayoutUnit logicalWidthForChild(const LayoutBox& child) const
     {
         return toBlockFlow()->logicalWidthForChild(child);
-    }
-
-    LayoutUnit logicalWidthForChild(LineLayoutBox child) const
-    {
-        return toBlockFlow()->logicalWidthForChild(
-            *toLayoutBox(child.layoutObject()));
     }
 
     LayoutUnit marginStartForChild(const LayoutBoxModelObject& child) const
@@ -74,21 +61,9 @@ public:
         return toBlockFlow()->marginStartForChild(child);
     }
 
-    LayoutUnit marginStartForChild(LineLayoutBox child) const
-    {
-        return toBlockFlow()->marginStartForChild(
-            *toLayoutBoxModelObject(child.layoutObject()));
-    }
-
     LayoutUnit marginEndForChild(const LayoutBoxModelObject& child) const
     {
         return toBlockFlow()->marginEndForChild(child);
-    }
-
-    LayoutUnit marginEndForChild(LineLayoutBox child) const
-    {
-        return toBlockFlow()->marginEndForChild(
-            *toLayoutBoxModelObject(child.layoutObject()));
     }
 
     LayoutUnit marginBeforeForChild(const LayoutBoxModelObject& child) const
@@ -101,34 +76,24 @@ public:
         return toBlockFlow()->startOffsetForContent();
     }
 
-    LayoutUnit lineHeight(bool firstLine,
-        LineDirectionMode direction,
-        LinePositionMode linePositionMode) const
+    LayoutUnit lineHeight(bool firstLine, LineDirectionMode direction, LinePositionMode linePositionMode) const
     {
         return toBlockFlow()->lineHeight(firstLine, direction, linePositionMode);
     }
 
-    LayoutUnit minLineHeightForReplacedObject(bool isFirstLine,
-        LayoutUnit replacedHeight) const
+    LayoutUnit minLineHeightForReplacedObject(bool isFirstLine, LayoutUnit replacedHeight) const
     {
-        return toBlockFlow()->minLineHeightForReplacedObject(isFirstLine,
-            replacedHeight);
+        return toBlockFlow()->minLineHeightForReplacedObject(isFirstLine, replacedHeight);
     }
 
-    void setStaticInlinePositionForChild(LineLayoutBox box,
-        LayoutUnit inlinePosition)
+    void setStaticInlinePositionForChild(LayoutBox& box, LayoutUnit inlinePosition)
     {
-        toBlockFlow()->setStaticInlinePositionForChild(
-            *toLayoutBox(box.layoutObject()), inlinePosition);
+        toBlockFlow()->setStaticInlinePositionForChild(box, inlinePosition);
     }
 
-    void updateStaticInlinePositionForChild(
-        LineLayoutBox box,
-        LayoutUnit logicalTop,
-        IndentTextOrNot indentText = DoNotIndentText)
+    void updateStaticInlinePositionForChild(LayoutBox& box, LayoutUnit logicalTop)
     {
-        toBlockFlow()->updateStaticInlinePositionForChild(
-            *toLayoutBox(box.layoutObject()), logicalTop, indentText);
+        toBlockFlow()->updateStaticInlinePositionForChild(box, logicalTop);
     }
 
     FloatingObject* insertFloatingObject(LayoutBox& box)
@@ -136,26 +101,19 @@ public:
         return toBlockFlow()->insertFloatingObject(box);
     }
 
-    FloatingObject* insertFloatingObject(LineLayoutBox box)
+    bool positionNewFloats(LineWidth* width)
     {
-        return toBlockFlow()->insertFloatingObject(
-            *toLayoutBox(box.layoutObject()));
+        return toBlockFlow()->positionNewFloats(width);
     }
 
-    bool placeNewFloats(LayoutUnit logicalTopMarginEdge, LineWidth* width)
+    bool positionNewFloatOnLine(FloatingObject& newFloat, FloatingObject* lastFloatFromPreviousLine, LineInfo& lineInfo, LineWidth& lineWidth)
     {
-        return toBlockFlow()->placeNewFloats(logicalTopMarginEdge, width);
+        return toBlockFlow()->positionNewFloatOnLine(newFloat, lastFloatFromPreviousLine, lineInfo, lineWidth);
     }
 
-    void positionAndLayoutFloat(FloatingObject& floatingObject,
-        LayoutUnit logicalTopMarginEdge)
+    LayoutUnit nextFloatLogicalBottomBelow(LayoutUnit logicalHeight, ShapeOutsideFloatOffsetMode offsetMode = ShapeOutsideFloatMarginBoxOffset) const
     {
-        toBlockFlow()->positionAndLayoutFloat(floatingObject, logicalTopMarginEdge);
-    }
-
-    LayoutUnit nextFloatLogicalBottomBelow(LayoutUnit logicalHeight) const
-    {
-        return toBlockFlow()->nextFloatLogicalBottomBelow(logicalHeight);
+        return toBlockFlow()->nextFloatLogicalBottomBelow(logicalHeight, offsetMode);
     }
 
     FloatingObject* lastFloatFromPreviousLine() const
@@ -163,9 +121,6 @@ public:
         return toBlockFlow()->lastFloatFromPreviousLine();
     }
 
-    // TODO(dgrogan/eae): *ForFloat: add these methods to the FloatingObject
-    // class. Be consistent with use of start/end/before/after instead of
-    // logicalTop/Left etc.
     LayoutUnit logicalTopForFloat(const FloatingObject& floatingObject) const
     {
         return toBlockFlow()->logicalTopForFloat(floatingObject);
@@ -191,59 +146,19 @@ public:
         return toBlockFlow()->logicalWidthForFloat(floatingObject);
     }
 
-    LayoutUnit logicalRightOffsetForLine(
-        LayoutUnit position,
-        IndentTextOrNot indentText,
-        LayoutUnit logicalHeight = LayoutUnit()) const
+    LayoutUnit logicalRightOffsetForLine(LayoutUnit position, bool shouldIndentText, LayoutUnit logicalHeight = 0) const
     {
-        return toBlockFlow()->logicalRightOffsetForLine(position, indentText,
-            logicalHeight);
+        return toBlockFlow()->logicalRightOffsetForLine(position, shouldIndentText, logicalHeight);
     }
 
-    LayoutUnit logicalLeftOffsetForLine(
-        LayoutUnit position,
-        IndentTextOrNot indentText,
-        LayoutUnit logicalHeight = LayoutUnit()) const
+    LayoutUnit logicalLeftOffsetForLine(LayoutUnit position, bool shouldIndentText, LayoutUnit logicalHeight = 0) const
     {
-        return toBlockFlow()->logicalLeftOffsetForLine(position, indentText,
-            logicalHeight);
+        return toBlockFlow()->logicalLeftOffsetForLine(position, shouldIndentText, logicalHeight);
     }
-
-    void setHasMarkupTruncation(bool b)
-    {
-        toBlockFlow()->setHasMarkupTruncation(b);
-    }
-
-    LayoutUnit logicalWidth() { return toBlockFlow()->logicalWidth(); }
-
-    LineBoxList* lineBoxes() { return toBlockFlow()->lineBoxes(); }
-
-    bool containsFloats() const { return toBlockFlow()->containsFloats(); }
-
-    LayoutBlock* blockBeforeWithinSelectionRoot(LayoutSize& offset) const
-    {
-        return toBlockFlow()->blockBeforeWithinSelectionRoot(offset);
-    }
-
-    InlineBox* createAndAppendRootInlineBox()
-    {
-        return toBlockFlow()->createAndAppendRootInlineBox();
-    }
-
-    InlineFlowBox* lastLineBox() { return toBlockFlow()->lastLineBox(); }
-
-    InlineFlowBox* firstLineBox() { return toBlockFlow()->firstLineBox(); }
-
-    RootInlineBox* firstRootBox() const { return toBlockFlow()->firstRootBox(); }
-
-    RootInlineBox* lastRootBox() const { return toBlockFlow()->lastRootBox(); }
 
 private:
     LayoutBlockFlow* toBlockFlow() { return toLayoutBlockFlow(layoutObject()); };
-    const LayoutBlockFlow* toBlockFlow() const
-    {
-        return toLayoutBlockFlow(layoutObject());
-    };
+    const LayoutBlockFlow* toBlockFlow() const { return toLayoutBlockFlow(layoutObject()); };
 };
 
 } // namespace blink

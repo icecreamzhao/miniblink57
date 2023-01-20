@@ -6,6 +6,7 @@
 #define ScriptForbiddenScope_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/AutoReset.h"
 #include "wtf/Optional.h"
@@ -84,6 +85,29 @@ public:
             ScriptForbiddenScope::exit();
     }
     bool m_IsMainThread;
+=======
+#include "wtf/Assertions.h"
+#include "wtf/TemporaryChange.h"
+
+namespace blink {
+
+class PLATFORM_EXPORT ScriptForbiddenScope {
+public:
+    ScriptForbiddenScope();
+    ~ScriptForbiddenScope();
+
+    class PLATFORM_EXPORT AllowUserAgentScript {
+    public:
+        AllowUserAgentScript();
+        ~AllowUserAgentScript();
+    private:
+        TemporaryChange<unsigned> m_change;
+    };
+
+    static void enter();
+    static void exit();
+    static bool isScriptForbidden();
+>>>>>>> miniblink49
 };
 
 } // namespace blink

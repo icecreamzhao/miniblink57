@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,6 +22,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef OscillatorNode_h
@@ -28,17 +41,27 @@
 
 #include "modules/webaudio/AudioParam.h"
 #include "modules/webaudio/AudioScheduledSourceNode.h"
+<<<<<<< HEAD
 #include "modules/webaudio/OscillatorOptions.h"
 #include "platform/audio/AudioBus.h"
+=======
+#include "platform/audio/AudioBus.h"
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Threading.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class BaseAudioContext;
 class ExceptionState;
 class OscillatorOptions;
+=======
+class AudioContext;
+class ExceptionState;
+>>>>>>> miniblink49
 class PeriodicWave;
 
 // OscillatorNode is an audio generator of periodic waveforms.
@@ -47,6 +70,7 @@ class OscillatorHandler final : public AudioScheduledSourceHandler {
 public:
     // The waveform type.
     // These must be defined as in the .idl file.
+<<<<<<< HEAD
     enum { SINE = 0,
         SQUARE = 1,
         SAWTOOTH = 2,
@@ -57,6 +81,17 @@ public:
         float sampleRate,
         AudioParamHandler& frequency,
         AudioParamHandler& detune);
+=======
+    enum {
+        SINE = 0,
+        SQUARE = 1,
+        SAWTOOTH = 2,
+        TRIANGLE = 3,
+        CUSTOM = 4
+    };
+
+    static PassRefPtr<OscillatorHandler> create(AudioNode&, float sampleRate, AudioParamHandler& frequency, AudioParamHandler& detune);
+>>>>>>> miniblink49
     ~OscillatorHandler() override;
 
     // AudioHandler
@@ -68,10 +103,14 @@ public:
     void setPeriodicWave(PeriodicWave*);
 
 private:
+<<<<<<< HEAD
     OscillatorHandler(AudioNode&,
         float sampleRate,
         AudioParamHandler& frequency,
         AudioParamHandler& detune);
+=======
+    OscillatorHandler(AudioNode&, float sampleRate, AudioParamHandler& frequency, AudioParamHandler& detune);
+>>>>>>> miniblink49
     bool setType(unsigned); // Returns true on success.
 
     // Returns true if there are sample-accurate timeline parameter changes.
@@ -90,11 +129,21 @@ private:
 
     bool m_firstRender;
 
+<<<<<<< HEAD
     // m_virtualReadIndex is a sample-frame index into our buffer representing the
     // current playback position.  Since it's floating-point, it has sub-sample
     // accuracy.
     double m_virtualReadIndex;
 
+=======
+    // m_virtualReadIndex is a sample-frame index into our buffer representing the current playback position.
+    // Since it's floating-point, it has sub-sample accuracy.
+    double m_virtualReadIndex;
+
+    // This synchronizes process().
+    mutable Mutex m_processLock;
+
+>>>>>>> miniblink49
     // Stores sample-accurate values calculated according to frequency and detune.
     AudioFloatArray m_phaseIncrements;
     AudioFloatArray m_detuneValues;
@@ -106,12 +155,17 @@ private:
 
 class OscillatorNode final : public AudioScheduledSourceNode {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static OscillatorNode* create(BaseAudioContext&, ExceptionState&);
     static OscillatorNode* create(BaseAudioContext*,
         const OscillatorOptions&,
         ExceptionState&);
+=======
+public:
+    static OscillatorNode* create(AudioContext&, float sampleRate);
+>>>>>>> miniblink49
     DECLARE_VIRTUAL_TRACE();
 
     String type() const;
@@ -121,7 +175,11 @@ public:
     void setPeriodicWave(PeriodicWave*);
 
 private:
+<<<<<<< HEAD
     OscillatorNode(BaseAudioContext&);
+=======
+    OscillatorNode(AudioContext&, float sampleRate);
+>>>>>>> miniblink49
     OscillatorHandler& oscillatorHandler() const;
 
     Member<AudioParam> m_frequency;

@@ -10,6 +10,7 @@
 namespace ots {
 
 struct OpenTypeFPGM {
+<<<<<<< HEAD
     const uint8_t* data;
     uint32_t length;
 };
@@ -17,3 +18,12 @@ struct OpenTypeFPGM {
 } // namespace ots
 
 #endif // OTS_FPGM_H_
+=======
+  const uint8_t *data;
+  uint32_t length;
+};
+
+}  // namespace ots
+
+#endif  // OTS_FPGM_H_
+>>>>>>> miniblink49

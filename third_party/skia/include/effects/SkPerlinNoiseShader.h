@@ -55,6 +55,7 @@ public:
      *  the frequencies so that the noise will be tileable for the given tile size. If tileSize
      *  is NULL or an empty size, the frequencies will be used as is without modification.
      */
+<<<<<<< HEAD
     static sk_sp<SkShader> MakeFractalNoise(SkScalar baseFrequencyX, SkScalar baseFrequencyY,
         int numOctaves, SkScalar seed,
         const SkISize* tileSize = nullptr);
@@ -82,6 +83,26 @@ public:
         return CreateTurbulence(baseFrequencyX, baseFrequencyY, numOctaves, seed, tileSize);
     }
 #endif
+=======
+    static SkShader* CreateFractalNoise(SkScalar baseFrequencyX, SkScalar baseFrequencyY,
+                                        int numOctaves, SkScalar seed,
+                                        const SkISize* tileSize = NULL);
+    static SkShader* CreateTurbulence(SkScalar baseFrequencyX, SkScalar baseFrequencyY,
+                                     int numOctaves, SkScalar seed,
+                                     const SkISize* tileSize = NULL);
+    /**
+     * Create alias for CreateTurbulunce until all Skia users changed
+     * its code to use the new naming
+     */
+    static SkShader* CreateTubulence(SkScalar baseFrequencyX, SkScalar baseFrequencyY,
+                                     int numOctaves, SkScalar seed,
+                                     const SkISize* tileSize = NULL) {
+    return CreateTurbulence(baseFrequencyX, baseFrequencyY, numOctaves, seed, tileSize);
+    }
+
+
+    size_t contextSize() const override;
+>>>>>>> miniblink49
 
     class PerlinNoiseShaderContext : public SkShader::Context {
     public:
@@ -89,6 +110,10 @@ public:
         virtual ~PerlinNoiseShaderContext();
 
         void shadeSpan(int x, int y, SkPMColor[], int count) override;
+<<<<<<< HEAD
+=======
+        void shadeSpan16(int x, int y, uint16_t[], int count) override;
+>>>>>>> miniblink49
 
     private:
         SkPMColor shade(const SkPoint& point, StitchData& stitchData) const;
@@ -96,7 +121,11 @@ public:
             int channel,
             StitchData& stitchData, const SkPoint& point) const;
         SkScalar noise2D(int channel,
+<<<<<<< HEAD
             const StitchData& stitchData, const SkPoint& noiseVector) const;
+=======
+                         const StitchData& stitchData, const SkPoint& noiseVector) const;
+>>>>>>> miniblink49
 
         SkMatrix fMatrix;
         PaintingData* fPaintingData;
@@ -104,11 +133,17 @@ public:
         typedef SkShader::Context INHERITED;
     };
 
+<<<<<<< HEAD
 #if SK_SUPPORT_GPU
     sk_sp<GrFragmentProcessor> asFragmentProcessor(GrContext* context, const SkMatrix& viewM,
         const SkMatrix*, SkFilterQuality,
         SkSourceGammaTreatment) const override;
 #endif
+=======
+    virtual bool asFragmentProcessor(GrContext* context, const SkPaint&, const SkMatrix& viewM,
+                                     const SkMatrix*, GrColor*, GrProcessorDataManager*,
+                                     GrFragmentProcessor**) const override;
+>>>>>>> miniblink49
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkPerlinNoiseShader)
@@ -116,6 +151,7 @@ public:
 protected:
     void flatten(SkWriteBuffer&) const override;
     Context* onCreateContext(const ContextRec&, void* storage) const override;
+<<<<<<< HEAD
     size_t onContextSize(const ContextRec&) const override;
 
 private:
@@ -131,6 +167,22 @@ private:
     const SkScalar fSeed;
     const SkISize fTileSize;
     const bool fStitchTiles;
+=======
+
+private:
+    SkPerlinNoiseShader(SkPerlinNoiseShader::Type type, SkScalar baseFrequencyX,
+                        SkScalar baseFrequencyY, int numOctaves, SkScalar seed,
+                        const SkISize* tileSize);
+    virtual ~SkPerlinNoiseShader();
+
+    const SkPerlinNoiseShader::Type fType;
+    const SkScalar                  fBaseFrequencyX;
+    const SkScalar                  fBaseFrequencyY;
+    const int                       fNumOctaves;
+    const SkScalar                  fSeed;
+    const SkISize                   fTileSize;
+    const bool                      fStitchTiles;
+>>>>>>> miniblink49
 
     typedef SkShader INHERITED;
 };

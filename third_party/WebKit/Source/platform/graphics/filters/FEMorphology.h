@@ -33,12 +33,18 @@ enum MorphologyOperatorType {
     FEMORPHOLOGY_OPERATOR_DILATE = 2
 };
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT FEMorphology final : public FilterEffect {
 public:
     static FEMorphology* create(Filter*,
         MorphologyOperatorType,
         float radiusX,
         float radiusY);
+=======
+class PLATFORM_EXPORT FEMorphology : public FilterEffect {
+public:
+    static PassRefPtrWillBeRawPtr<FEMorphology> create(Filter*, MorphologyOperatorType, float radiusX, float radiusY);
+>>>>>>> miniblink49
     MorphologyOperatorType morphologyOperator() const;
     bool setMorphologyOperator(MorphologyOperatorType);
 
@@ -48,15 +54,25 @@ public:
     float radiusY() const;
     bool setRadiusY(float);
 
+<<<<<<< HEAD
+=======
+    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+
+    FloatRect mapRect(const FloatRect&, bool forward = true) final;
+
+>>>>>>> miniblink49
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
     FEMorphology(Filter*, MorphologyOperatorType, float radiusX, float radiusY);
 
+<<<<<<< HEAD
     FloatRect mapEffect(const FloatRect&) const override;
 
     sk_sp<SkImageFilter> createImageFilter() override;
 
+=======
+>>>>>>> miniblink49
     MorphologyOperatorType m_type;
     float m_radiusX;
     float m_radiusY;

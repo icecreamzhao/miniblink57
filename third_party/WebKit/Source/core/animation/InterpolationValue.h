@@ -8,55 +8,48 @@
 #include "core/animation/InterpolableValue.h"
 #include "core/animation/NonInterpolableValue.h"
 #include "platform/heap/Handle.h"
-#include <memory>
 
 namespace blink {
 
-// Represents a (non-strict) subset of a PropertySpecificKeyframe's value broken
-// down into interpolable and non-interpolable parts. InterpolationValues can be
-// composed together to represent a whole PropertySpecificKeyframe value.
-struct InterpolationValue {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+class InterpolationType;
 
-    explicit InterpolationValue(
-        std::unique_ptr<InterpolableValue> interpolableValue,
-        PassRefPtr<NonInterpolableValue> nonInterpolableValue = nullptr)
-        : interpolableValue(std::move(interpolableValue))
-        , nonInterpolableValue(nonInterpolableValue)
+class InterpolationValue : public NoBaseWillBeGarbageCollectedFinalized<InterpolationValue> {
+public:
+    static PassOwnPtrWillBeRawPtr<InterpolationValue> create(const InterpolationType& type, PassOwnPtrWillBeRawPtr<InterpolableValue> interpolableValue, PassRefPtrWillBeRawPtr<NonInterpolableValue> nonInterpolableValue = nullptr)
     {
+        return adoptPtrWillBeNoop(new InterpolationValue(type, interpolableValue, nonInterpolableValue));
     }
 
-    InterpolationValue(std::nullptr_t) { }
-
-    InterpolationValue(InterpolationValue&& other)
-        : interpolableValue(std::move(other.interpolableValue))
-        , nonInterpolableValue(std::move(other.nonInterpolableValue))
+    PassOwnPtrWillBeRawPtr<InterpolationValue> clone() const
     {
+        return create(m_type, m_interpolableValue->clone(), m_nonInterpolableValue);
     }
 
-    void operator=(InterpolationValue&& other)
+    const InterpolationType& type() const { return m_type; }
+    const InterpolableValue& interpolableValue() const { return *m_interpolableValue; }
+    InterpolableValue& interpolableValue() { return *m_interpolableValue; }
+    const NonInterpolableValue* nonInterpolableValue() const { return m_nonInterpolableValue.get(); }
+
+    DEFINE_INLINE_TRACE()
     {
-        interpolableValue = std::move(other.interpolableValue);
-        nonInterpolableValue = std::move(other.nonInterpolableValue);
+        visitor->trace(m_interpolableValue);
+        visitor->trace(m_nonInterpolableValue);
     }
 
-    operator bool() const { return interpolableValue.get(); }
-
-    InterpolationValue clone() const
+private:
+    InterpolationValue(const InterpolationType& type, PassOwnPtrWillBeRawPtr<InterpolableValue> interpolableValue, PassRefPtrWillBeRawPtr<NonInterpolableValue> nonInterpolableValue = nullptr)
+        : m_type(type)
+        , m_interpolableValue(interpolableValue)
+        , m_nonInterpolableValue(nonInterpolableValue)
     {
-        return InterpolationValue(
-            interpolableValue ? interpolableValue->clone() : nullptr,
-            nonInterpolableValue);
+        ASSERT(this->m_interpolableValue);
     }
 
-    void clear()
-    {
-        interpolableValue.reset();
-        nonInterpolableValue.clear();
-    }
+    const InterpolationType& m_type;
+    OwnPtrWillBeMember<InterpolableValue> m_interpolableValue;
+    RefPtrWillBeMember<NonInterpolableValue> m_nonInterpolableValue;
 
-    std::unique_ptr<InterpolableValue> interpolableValue;
-    RefPtr<NonInterpolableValue> nonInterpolableValue;
+    friend class InterpolationType;
 };
 
 } // namespace blink

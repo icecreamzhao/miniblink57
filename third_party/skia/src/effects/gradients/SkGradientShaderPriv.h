@@ -8,6 +8,7 @@
 #ifndef SkGradientShaderPriv_DEFINED
 #define SkGradientShaderPriv_DEFINED
 
+<<<<<<< HEAD
 #include "SkClampRange.h"
 #include "SkColorPriv.h"
 #include "SkGradientBitmapCache.h"
@@ -22,6 +23,22 @@
 static inline void sk_memset32_dither(uint32_t dst[], uint32_t v0, uint32_t v1,
     int count)
 {
+=======
+#include "SkGradientBitmapCache.h"
+#include "SkGradientShader.h"
+#include "SkClampRange.h"
+#include "SkColorPriv.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkMallocPixelRef.h"
+#include "SkUtils.h"
+#include "SkTemplates.h"
+#include "SkShader.h"
+#include "SkOnce.h"
+
+static inline void sk_memset32_dither(uint32_t dst[], uint32_t v0, uint32_t v1,
+                               int count) {
+>>>>>>> miniblink49
     if (count > 0) {
         if (v0 == v1) {
             sk_memset32(dst, v0, count);
@@ -40,26 +57,52 @@ static inline void sk_memset32_dither(uint32_t dst[], uint32_t v0, uint32_t v1,
 
 //  Clamp
 
+<<<<<<< HEAD
 static inline SkFixed clamp_tileproc(SkFixed x)
 {
+=======
+static inline SkFixed clamp_tileproc(SkFixed x) {
+>>>>>>> miniblink49
     return SkClampMax(x, 0xFFFF);
 }
 
 // Repeat
 
+<<<<<<< HEAD
 static inline SkFixed repeat_tileproc(SkFixed x)
 {
+=======
+static inline SkFixed repeat_tileproc(SkFixed x) {
+>>>>>>> miniblink49
     return x & 0xFFFF;
 }
 
 // Mirror
 
+<<<<<<< HEAD
 static inline SkFixed mirror_tileproc(SkFixed x)
 {
     int s = SkLeftShift(x, 15) >> 31;
     return (x ^ s) & 0xFFFF;
 }
 
+=======
+// Visual Studio 2010 (MSC_VER=1600) optimizes bit-shift code incorrectly.
+// See http://code.google.com/p/skia/issues/detail?id=472
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#pragma optimize("", off)
+#endif
+
+static inline SkFixed mirror_tileproc(SkFixed x) {
+    int s = x << 15 >> 31;
+    return (x ^ s) & 0xFFFF;
+}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#pragma optimize("", on)
+#endif
+
+>>>>>>> miniblink49
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef SkFixed (*TileProc)(SkFixed);
@@ -77,25 +120,42 @@ static const TileProc gTileProcs[] = {
 class SkGradientShaderBase : public SkShader {
 public:
     struct Descriptor {
+<<<<<<< HEAD
         Descriptor()
         {
+=======
+        Descriptor() {
+>>>>>>> miniblink49
             sk_bzero(this, sizeof(*this));
             fTileMode = SkShader::kClamp_TileMode;
         }
 
+<<<<<<< HEAD
         const SkMatrix* fLocalMatrix;
         const SkColor* fColors;
         const SkScalar* fPos;
         int fCount;
         SkShader::TileMode fTileMode;
         uint32_t fGradFlags;
+=======
+        const SkMatrix*     fLocalMatrix;
+        const SkColor*      fColors;
+        const SkScalar*     fPos;
+        int                 fCount;
+        SkShader::TileMode  fTileMode;
+        uint32_t            fGradFlags;
+>>>>>>> miniblink49
 
         void flatten(SkWriteBuffer&) const;
     };
 
     class DescriptorScope : public Descriptor {
     public:
+<<<<<<< HEAD
         DescriptorScope() { }
+=======
+        DescriptorScope() {}
+>>>>>>> miniblink49
 
         bool unflatten(SkReadBuffer&);
 
@@ -121,15 +181,24 @@ public:
     // The cache is initialized on-demand when getCache16/32 is called.
     class GradientShaderCache : public SkRefCnt {
     public:
+<<<<<<< HEAD
         GradientShaderCache(U8CPU alpha, bool dither, const SkGradientShaderBase& shader);
         ~GradientShaderCache();
 
         const uint16_t* getCache16();
         const SkPMColor* getCache32();
+=======
+        GradientShaderCache(U8CPU alpha, const SkGradientShaderBase& shader);
+        ~GradientShaderCache();
+
+        const uint16_t*     getCache16();
+        const SkPMColor*    getCache32();
+>>>>>>> miniblink49
 
         SkMallocPixelRef* getCache32PixelRef() const { return fCache32PixelRef; }
 
         unsigned getAlpha() const { return fCacheAlpha; }
+<<<<<<< HEAD
         bool getDither() const { return fCacheDither; }
 
     private:
@@ -143,19 +212,43 @@ public:
             // Larger than 8bits so we can store uninitialized
             // value.
         const bool fCacheDither; // The dither flag used when we computed the cache.
+=======
+
+    private:
+        // Working pointers. If either is NULL, we need to recompute the corresponding cache values.
+        uint16_t*   fCache16;
+        SkPMColor*  fCache32;
+
+        uint16_t*         fCache16Storage;    // Storage for fCache16, allocated on demand.
+        SkMallocPixelRef* fCache32PixelRef;
+        const unsigned    fCacheAlpha;        // The alpha value we used when we computed the cache.
+                                              // Larger than 8bits so we can store uninitialized
+                                              // value.
+>>>>>>> miniblink49
 
         const SkGradientShaderBase& fShader;
 
         // Make sure we only initialize the caches once.
+<<<<<<< HEAD
         SkOnce fCache16InitOnce,
             fCache32InitOnce;
+=======
+        bool    fCache16Inited, fCache32Inited;
+        SkMutex fCache16Mutex, fCache32Mutex;
+>>>>>>> miniblink49
 
         static void initCache16(GradientShaderCache* cache);
         static void initCache32(GradientShaderCache* cache);
 
+<<<<<<< HEAD
         static void Build16bitCache(uint16_t[], SkColor c0, SkColor c1, int count, bool dither);
         static void Build32bitCache(SkPMColor[], SkColor c0, SkColor c1, int count,
             U8CPU alpha, uint32_t gradFlags, bool dither);
+=======
+        static void Build16bitCache(uint16_t[], SkColor c0, SkColor c1, int count);
+        static void Build32bitCache(SkPMColor[], SkColor c0, SkColor c1, int count,
+                                    U8CPU alpha, uint32_t gradFlags);
+>>>>>>> miniblink49
     };
 
     class GradientShaderBaseContext : public SkShader::Context {
@@ -165,11 +258,18 @@ public:
         uint32_t getFlags() const override { return fFlags; }
 
     protected:
+<<<<<<< HEAD
         SkMatrix fDstToIndex;
         SkMatrix::MapXYProc fDstToIndexProc;
         uint8_t fDstToIndexClass;
         uint8_t fFlags;
         bool fDither;
+=======
+        SkMatrix    fDstToIndex;
+        SkMatrix::MapXYProc fDstToIndexProc;
+        uint8_t     fDstToIndexClass;
+        uint8_t     fFlags;
+>>>>>>> miniblink49
 
         SkAutoTUnref<GradientShaderCache> fCache;
 
@@ -184,6 +284,7 @@ public:
     enum {
         /// Seems like enough for visual accuracy. TODO: if pos[] deserves
         /// it, use a larger cache.
+<<<<<<< HEAD
         kCache16Bits = 8,
         kCache16Count = (1 << kCache16Bits),
         kCache16Shift = 16 - kCache16Bits,
@@ -195,6 +296,19 @@ public:
         kCache32Count = (1 << kCache32Bits),
         kCache32Shift = 16 - kCache32Bits,
         kSqrt32Shift = 8 - kCache32Bits,
+=======
+        kCache16Bits    = 8,
+        kCache16Count = (1 << kCache16Bits),
+        kCache16Shift   = 16 - kCache16Bits,
+        kSqrt16Shift    = 8 - kCache16Bits,
+
+        /// Seems like enough for visual accuracy. TODO: if pos[] deserves
+        /// it, use a larger cache.
+        kCache32Bits    = 8,
+        kCache32Count   = (1 << kCache32Bits),
+        kCache32Shift   = 16 - kCache32Bits,
+        kSqrt32Shift    = 8 - kCache32Bits,
+>>>>>>> miniblink49
 
         /// This value is used to *read* the dither cache; it may be 0
         /// if dithering is disabled.
@@ -216,13 +330,18 @@ public:
     uint32_t getGradFlags() const { return fGradFlags; }
 
 protected:
+<<<<<<< HEAD
     class GradientShaderBase4fContext;
 
     SkGradientShaderBase(SkReadBuffer&);
+=======
+    SkGradientShaderBase(SkReadBuffer& );
+>>>>>>> miniblink49
     void flatten(SkWriteBuffer&) const override;
     SK_TO_STRING_OVERRIDE()
 
     const SkMatrix fPtsToUnit;
+<<<<<<< HEAD
     TileMode fTileMode;
     TileProc fTileProc;
     int fColorCount;
@@ -233,6 +352,18 @@ protected:
         uint32_t fScale; // (1 << 24) / range
     };
     Rec* fRecs;
+=======
+    TileMode    fTileMode;
+    TileProc    fTileProc;
+    int         fColorCount;
+    uint8_t     fGradFlags;
+
+    struct Rec {
+        SkFixed     fPos;   // 0...1
+        uint32_t    fScale; // (1 << 24) / range
+    };
+    Rec*        fRecs;
+>>>>>>> miniblink49
 
     void commonAsAGradient(GradientInfo*, bool flipGrad = false) const;
 
@@ -246,8 +377,13 @@ protected:
      * The rec src and dst are only assumed to be valid if count > 2
      */
     static void FlipGradientColors(SkColor* colorDst, Rec* recDst,
+<<<<<<< HEAD
         SkColor* colorSrc, Rec* recSrc,
         int count);
+=======
+                                   SkColor* colorSrc, Rec* recSrc,
+                                   int count);
+>>>>>>> miniblink49
 
 private:
     enum {
@@ -255,6 +391,7 @@ private:
 
         kStorageSize = kColorStorageCount * (sizeof(SkColor) + sizeof(SkScalar) + sizeof(Rec))
     };
+<<<<<<< HEAD
     SkColor fStorage[(kStorageSize + 3) >> 2];
 
 public:
@@ -268,6 +405,15 @@ private:
 
     GradientShaderCache* refCache(U8CPU alpha, bool dither) const;
     mutable SkMutex fCacheMutex;
+=======
+    SkColor     fStorage[(kStorageSize + 3) >> 2];
+    SkColor*    fOrigColors; // original colors, before modulation by paint in context.
+    SkScalar*   fOrigPos;   // original positions
+    bool        fColorsAreOpaque;
+
+    GradientShaderCache* refCache(U8CPU alpha) const;
+    mutable SkMutex                           fCacheMutex;
+>>>>>>> miniblink49
     mutable SkAutoTUnref<GradientShaderCache> fCache;
 
     void initCommon();
@@ -275,13 +421,18 @@ private:
     typedef SkShader INHERITED;
 };
 
+<<<<<<< HEAD
 static inline int init_dither_toggle(int x, int y)
 {
+=======
+static inline int init_dither_toggle(int x, int y) {
+>>>>>>> miniblink49
     x &= 1;
     y = (y & 1) << 1;
     return (x | y) * SkGradientShaderBase::kDitherStride32;
 }
 
+<<<<<<< HEAD
 static inline int next_dither_toggle(int toggle)
 {
     return toggle ^ SkGradientShaderBase::kDitherStride32;
@@ -294,6 +445,17 @@ static inline int init_dither_toggle16(int x, int y)
 
 static inline int next_dither_toggle16(int toggle)
 {
+=======
+static inline int next_dither_toggle(int toggle) {
+    return toggle ^ SkGradientShaderBase::kDitherStride32;
+}
+
+static inline int init_dither_toggle16(int x, int y) {
+    return ((x ^ y) & 1) * SkGradientShaderBase::kDitherStride16;
+}
+
+static inline int next_dither_toggle16(int toggle) {
+>>>>>>> miniblink49
     return toggle ^ SkGradientShaderBase::kDitherStride16;
 }
 
@@ -303,9 +465,15 @@ static inline int next_dither_toggle16(int toggle)
 
 #include "GrCoordTransform.h"
 #include "GrFragmentProcessor.h"
+<<<<<<< HEAD
 #include "glsl/GrGLSLFragmentProcessor.h"
 #include "glsl/GrGLSLProgramDataManager.h"
 
+=======
+#include "gl/GrGLProcessor.h"
+
+class GrFragmentStage;
+>>>>>>> miniblink49
 class GrInvariantOutput;
 
 /*
@@ -331,15 +499,28 @@ class GrInvariantOutput;
  *  determines the gradient value.
  */
 
+<<<<<<< HEAD
 class GrTextureStripAtlas;
+=======
+ class GrTextureStripAtlas;
+>>>>>>> miniblink49
 
 // Base class for Gr gradient effects
 class GrGradientEffect : public GrFragmentProcessor {
 public:
+<<<<<<< HEAD
     GrGradientEffect(GrContext* ctx,
         const SkGradientShaderBase& shader,
         const SkMatrix& matrix,
         SkShader::TileMode tileMode);
+=======
+
+    GrGradientEffect(GrContext* ctx,
+                     GrProcessorDataManager*,
+                     const SkGradientShaderBase& shader,
+                     const SkMatrix& matrix,
+                     SkShader::TileMode tileMode);
+>>>>>>> miniblink49
 
     virtual ~GrGradientEffect();
 
@@ -355,26 +536,46 @@ public:
 
     PremulType getPremulType() const { return fPremulType; }
 
+<<<<<<< HEAD
     const SkColor* getColors(int pos) const
     {
         SkASSERT(fColorType != SkGradientShaderBase::kTexture_GpuColorType);
         SkASSERT((pos - 1) <= fColorType);
+=======
+    const SkColor* getColors(int pos) const {
+        SkASSERT(fColorType != SkGradientShaderBase::kTexture_GpuColorType);
+        SkASSERT((pos-1) <= fColorType);
+>>>>>>> miniblink49
         return &fColors[pos];
     }
 
 protected:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /** Populates a pair of arrays with colors and stop info to construct a random gradient.
         The function decides whether stop values should be used or not. The return value indicates
         the number of colors, which will be capped by kMaxRandomGradientColors. colors should be
         sized to be at least kMaxRandomGradientColors. stops is a pointer to an array of at least
+<<<<<<< HEAD
         size kMaxRandomGradientColors. It may be updated to nullptr, indicating that nullptr should be
+=======
+        size kMaxRandomGradientColors. It may be updated to NULL, indicating that NULL should be
+>>>>>>> miniblink49
         passed to the gradient factory rather than the array.
     */
     static const int kMaxRandomGradientColors = 4;
     static int RandomGradientParams(SkRandom* r,
+<<<<<<< HEAD
         SkColor colors[kMaxRandomGradientColors],
         SkScalar** stops,
         SkShader::TileMode* tm);
+=======
+                                    SkColor colors[kMaxRandomGradientColors],
+                                    SkScalar** stops,
+                                    SkShader::TileMode* tm);
+>>>>>>> miniblink49
 
     bool onIsEqual(const GrFragmentProcessor&) const override;
 
@@ -394,19 +595,34 @@ private:
     SkGradientShaderBase::GpuColorType fColorType;
     SkColor fColors[3]; // More than 3 colors we use texture
     PremulType fPremulType; // This only changes behavior for two and three color special cases.
+<<<<<<< HEAD
         // It is already baked into to the table for texture gradients.
     typedef GrFragmentProcessor INHERITED;
+=======
+                            // It is already baked into to the table for texture gradients.
+    typedef GrFragmentProcessor INHERITED;
+
+>>>>>>> miniblink49
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
 // Base class for GL gradient effects
+<<<<<<< HEAD
 class GrGLGradientEffect : public GrGLSLFragmentProcessor {
 public:
     GrGLGradientEffect();
 
 protected:
     void onSetData(const GrGLSLProgramDataManager&, const GrProcessor&) override;
+=======
+class GrGLGradientEffect : public GrGLFragmentProcessor {
+public:
+    GrGLGradientEffect();
+    virtual ~GrGLGradientEffect();
+
+    void setData(const GrGLProgramDataManager&, const GrProcessor&) override;
+>>>>>>> miniblink49
 
 protected:
     /**
@@ -418,11 +634,17 @@ protected:
 
     // Emits the uniform used as the y-coord to texture samples in derived classes. Subclasses
     // should call this method from their emitCode().
+<<<<<<< HEAD
     void emitUniforms(GrGLSLUniformHandler*, const GrGradientEffect&);
+=======
+    void emitUniforms(GrGLFPBuilder* builder, const GrGradientEffect&);
+
+>>>>>>> miniblink49
 
     // emit code that gets a fragment's color from an expression for t; Has branches for 3 separate
     // control flows inside -- 2 color gradients, 3 color symmetric gradients (both using
     // native GLSL mix), and 4+ color gradients that use the traditional texture lookup.
+<<<<<<< HEAD
     void emitColor(GrGLSLFPFragmentBuilder* fragBuilder,
         GrGLSLUniformHandler* uniformHandler,
         const GrGLSLCaps* caps,
@@ -431,6 +653,14 @@ protected:
         const char* outputColor,
         const char* inputColor,
         const SamplerHandle* texSamplers);
+=======
+    void emitColor(GrGLFPBuilder* builder,
+                   const GrGradientEffect&,
+                   const char* gradientTValue,
+                   const char* outputColor,
+                   const char* inputColor,
+                   const TextureSamplerArray& samplers);
+>>>>>>> miniblink49
 
 private:
     enum {
@@ -450,12 +680,21 @@ private:
     GR_STATIC_ASSERT(kBaseKeyBitCnt <= 32);
 
     SkScalar fCachedYCoord;
+<<<<<<< HEAD
     GrGLSLProgramDataManager::UniformHandle fFSYUni;
     GrGLSLProgramDataManager::UniformHandle fColorStartUni;
     GrGLSLProgramDataManager::UniformHandle fColorMidUni;
     GrGLSLProgramDataManager::UniformHandle fColorEndUni;
 
     typedef GrGLSLFragmentProcessor INHERITED;
+=======
+    GrGLProgramDataManager::UniformHandle fFSYUni;
+    GrGLProgramDataManager::UniformHandle fColorStartUni;
+    GrGLProgramDataManager::UniformHandle fColorMidUni;
+    GrGLProgramDataManager::UniformHandle fColorEndUni;
+
+    typedef GrGLFragmentProcessor INHERITED;
+>>>>>>> miniblink49
 };
 
 #endif

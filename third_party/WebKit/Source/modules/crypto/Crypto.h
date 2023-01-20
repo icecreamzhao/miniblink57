@@ -40,6 +40,7 @@ class ExceptionState;
 
 class Crypto final : public GarbageCollected<Crypto>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static Crypto* create() { return new Crypto(); }
@@ -47,13 +48,28 @@ public:
     DOMArrayBufferView* getRandomValues(DOMArrayBufferView*, ExceptionState&);
 
     SubtleCrypto* subtle();
+=======
+public:
+    static Crypto* create()
+    {
+        return new Crypto();
+    }
+
+    DOMArrayBufferView* getRandomValues(DOMArrayBufferView*, ExceptionState&);
+
+    //SubtleCrypto* subtle();
+>>>>>>> miniblink49
 
     DECLARE_TRACE();
 
 private:
     Crypto() { }
 
+<<<<<<< HEAD
     Member<SubtleCrypto> m_subtleCrypto;
+=======
+    //Member<SubtleCrypto> m_subtleCrypto;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

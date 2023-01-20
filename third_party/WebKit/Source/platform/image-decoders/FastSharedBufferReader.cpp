@@ -28,11 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/image-decoders/FastSharedBufferReader.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 FastSharedBufferReader::FastSharedBufferReader(PassRefPtr<SegmentReader> data)
+=======
+FastSharedBufferReader::FastSharedBufferReader(PassRefPtr<SharedBuffer> data)
+>>>>>>> miniblink49
     : m_data(data)
     , m_segment(0)
     , m_segmentLength(0)
@@ -40,6 +48,7 @@ FastSharedBufferReader::FastSharedBufferReader(PassRefPtr<SegmentReader> data)
 {
 }
 
+<<<<<<< HEAD
 void FastSharedBufferReader::setData(PassRefPtr<SegmentReader> data)
 {
     if (data == m_data)
@@ -58,6 +67,9 @@ void FastSharedBufferReader::clearCache()
 const char* FastSharedBufferReader::getConsecutiveData(size_t dataPosition,
     size_t length,
     char* buffer) const
+=======
+const char* FastSharedBufferReader::getConsecutiveData(size_t dataPosition, size_t length, char* buffer)
+>>>>>>> miniblink49
 {
     RELEASE_ASSERT(dataPosition + length <= m_data->size());
 
@@ -70,7 +82,11 @@ const char* FastSharedBufferReader::getConsecutiveData(size_t dataPosition,
     if (length <= m_segmentLength)
         return m_segment;
 
+<<<<<<< HEAD
     for (char* dest = buffer;;) {
+=======
+    for (char* dest = buffer; ; ) {
+>>>>>>> miniblink49
         size_t copy = std::min(length, m_segmentLength);
         memcpy(dest, m_segment, copy);
         length -= copy;
@@ -83,15 +99,23 @@ const char* FastSharedBufferReader::getConsecutiveData(size_t dataPosition,
     }
 }
 
+<<<<<<< HEAD
 size_t FastSharedBufferReader::getSomeData(const char*& someData,
     size_t dataPosition) const
+=======
+size_t FastSharedBufferReader::getSomeData(const char*& someData, size_t dataPosition)
+>>>>>>> miniblink49
 {
     getSomeDataInternal(dataPosition);
     someData = m_segment;
     return m_segmentLength;
 }
 
+<<<<<<< HEAD
 void FastSharedBufferReader::getSomeDataInternal(size_t dataPosition) const
+=======
+void FastSharedBufferReader::getSomeDataInternal(unsigned dataPosition)
+>>>>>>> miniblink49
 {
     m_dataPosition = dataPosition;
     m_segmentLength = m_data->getSomeData(m_segment, dataPosition);

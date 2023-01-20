@@ -34,16 +34,17 @@
 #include "core/html/imports/HTMLImport.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
+#include "wtf/WeakPtr.h"
 
 namespace blink {
 
-class V0CustomElementMicrotaskImportStep;
+class CustomElementMicrotaskImportStep;
 class HTMLImportLoader;
 class HTMLImportChildClient;
 class HTMLLinkElement;
 
 //
-// An import tree node subclass to encapsulate imported document
+// An import tree node subclas to encapsulate imported document
 // lifecycle. This class is owned by HTMLImportsController. The actual loading
 // is done by HTMLImportLoader, which can be shared among multiple
 // HTMLImportChild of same link URL.
@@ -60,6 +61,9 @@ public:
     void ownerInserted();
     void didShareLoader();
     void didStartLoading();
+#if !ENABLE(OILPAN)
+    WeakPtr<HTMLImportChild> weakPtr() { return m_weakFactory.createWeakPtr(); }
+#endif
 
     // HTMLImport
     Document* document() const override;
@@ -74,6 +78,9 @@ public:
 #endif
 
     void setClient(HTMLImportChildClient*);
+#if !ENABLE(OILPAN)
+    void clearClient();
+#endif
 
     void didFinishLoading();
     void didFinishUpgradingCustomElements();
@@ -86,14 +93,17 @@ private:
     void invalidateCustomElementMicrotaskStep();
 
     KURL m_url;
-    WeakMember<V0CustomElementMicrotaskImportStep> m_customElementMicrotaskStep;
-    Member<HTMLImportLoader> m_loader;
-    Member<HTMLImportChildClient> m_client;
+    WeakPtrWillBeWeakMember<CustomElementMicrotaskImportStep> m_customElementMicrotaskStep;
+#if !ENABLE(OILPAN)
+    WeakPtrFactory<HTMLImportChild> m_weakFactory;
+#endif
+    RawPtrWillBeMember<HTMLImportLoader> m_loader;
+    RawPtrWillBeMember<HTMLImportChildClient> m_client;
 };
 
 inline HTMLImportChild* toHTMLImportChild(HTMLImport* import)
 {
-    DCHECK(!import || !import->isRoot());
+    ASSERT(!import || !import->isRoot());
     return static_cast<HTMLImportChild*>(import);
 }
 

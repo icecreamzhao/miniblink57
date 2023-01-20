@@ -8,16 +8,26 @@
 #ifndef GrPathRendering_DEFINED
 #define GrPathRendering_DEFINED
 
+<<<<<<< HEAD
 #include "GrGpu.h"
 #include "GrPathRange.h"
 #include "GrPipeline.h"
 #include "SkPath.h"
+=======
+#include "SkPath.h"
+#include "GrGpu.h"
+#include "GrPathRange.h"
+>>>>>>> miniblink49
 
 class SkDescriptor;
 class SkTypeface;
 class GrPath;
 class GrStencilSettings;
+<<<<<<< HEAD
 class GrStyle;
+=======
+class GrStrokeInfo;
+>>>>>>> miniblink49
 
 /**
  * Abstract class wrapping HW path rendering API.
@@ -38,15 +48,24 @@ public:
     typedef GrPathRange::PathIndexType PathIndexType;
 
     enum PathTransformType {
+<<<<<<< HEAD
         kNone_PathTransformType, //!< []
         kTranslateX_PathTransformType, //!< [kMTransX]
         kTranslateY_PathTransformType, //!< [kMTransY]
         kTranslate_PathTransformType, //!< [kMTransX, kMTransY]
         kAffine_PathTransformType, //!< [kMScaleX, kMSkewX, kMTransX, kMSkewY, kMScaleY, kMTransY]
+=======
+        kNone_PathTransformType,        //!< []
+        kTranslateX_PathTransformType,  //!< [kMTransX]
+        kTranslateY_PathTransformType,  //!< [kMTransY]
+        kTranslate_PathTransformType,   //!< [kMTransX, kMTransY]
+        kAffine_PathTransformType,      //!< [kMScaleX, kMSkewX, kMTransX, kMSkewY, kMScaleY, kMTransY]
+>>>>>>> miniblink49
 
         kLast_PathTransformType = kAffine_PathTransformType
     };
 
+<<<<<<< HEAD
     static inline int PathTransformSize(PathTransformType type)
     {
         switch (type) {
@@ -63,6 +82,23 @@ public:
         default:
             SkFAIL("Unknown path transform type");
             return 0;
+=======
+    static inline int PathTransformSize(PathTransformType type) {
+        switch (type) {
+            case kNone_PathTransformType:
+                return 0;
+            case kTranslateX_PathTransformType:
+            case kTranslateY_PathTransformType:
+                return 1;
+            case kTranslate_PathTransformType:
+                return 2;
+            case kAffine_PathTransformType:
+                return 6;
+
+            default:
+                SkFAIL("Unknown path transform type");
+                return 0;
+>>>>>>> miniblink49
         }
     }
 
@@ -78,12 +114,16 @@ public:
         kEvenOdd_FillType,
     };
 
+<<<<<<< HEAD
     static const GrUserStencilSettings& GetStencilPassSettings(FillType);
 
+=======
+>>>>>>> miniblink49
     /**
      * Creates a new gpu path, based on the specified path and stroke and returns it.
      * The caller owns a ref on the returned path which must be balanced by a call to unref.
      *
+<<<<<<< HEAD
      * @param SkPath    the geometry.
      * @param GrStyle   the style applied to the path. Styles with non-dash path effects are not
      *                  allowed.
@@ -101,6 +141,23 @@ public:
      * @return a new path range.
      */
     virtual GrPathRange* createPathRange(GrPathRange::PathGenerator*, const GrStyle&) = 0;
+=======
+     * @param skPath the path geometry.
+     * @param stroke the path stroke.
+     * @return a new path.
+     */
+    virtual GrPath* createPath(const SkPath&, const GrStrokeInfo&) = 0;
+
+    /**
+     * Creates a range of gpu paths with a common stroke. The caller owns a ref on the
+     * returned path range which must be balanced by a call to unref.
+     *
+     * @param PathGenerator class that generates SkPath objects for each path in the range.
+     * @param GrStrokeInfo   the common stroke applied to each path in the range.
+     * @return a new path range.
+     */
+    virtual GrPathRange* createPathRange(GrPathRange::PathGenerator*, const GrStrokeInfo&) = 0;
+>>>>>>> miniblink49
 
     /**
      * Creates a range of glyph paths, indexed by glyph id. The glyphs will have an
@@ -123,29 +180,50 @@ public:
      *                     including with the stroke information baked directly into
      *                     the outlines.
      *
+<<<<<<< HEAD
      * @param GrStyle      Common style that the GPU will apply to every path. Note that
      *                     if the glyph outlines contain baked-in styles from the font
      *                     descriptor, the GPU style will be applied on top of those
+=======
+     * @param GrStrokeInfo Common stroke that the GPU will apply to every path. Note that
+     *                     if the glyph outlines contain baked-in strokes from the font
+     *                     descriptor, the GPU stroke will be applied on top of those
+>>>>>>> miniblink49
      *                     outlines.
      *
      * @return a new path range populated with glyphs.
      */
+<<<<<<< HEAD
     GrPathRange* createGlyphs(const SkTypeface*, const SkScalerContextEffects&,
         const SkDescriptor*, const GrStyle&);
+=======
+    GrPathRange* createGlyphs(const SkTypeface*, const SkDescriptor*, const GrStrokeInfo&);
+>>>>>>> miniblink49
 
     /** None of these params are optional, pointers used just to avoid making copies. */
     struct StencilPathArgs {
         StencilPathArgs(bool useHWAA,
+<<<<<<< HEAD
             GrRenderTarget* renderTarget,
             const SkMatrix* viewMatrix,
             const GrScissorState* scissor,
             const GrStencilSettings* stencil)
+=======
+                        GrRenderTarget* renderTarget,
+                        const SkMatrix* viewMatrix,
+                        const GrScissorState* scissor,
+                        const GrStencilSettings* stencil)
+>>>>>>> miniblink49
             : fUseHWAA(useHWAA)
             , fRenderTarget(renderTarget)
             , fViewMatrix(viewMatrix)
             , fScissor(scissor)
+<<<<<<< HEAD
             , fStencil(stencil)
         {
+=======
+            , fStencil(stencil) {
+>>>>>>> miniblink49
         }
         bool fUseHWAA;
         GrRenderTarget* fRenderTarget;
@@ -154,12 +232,17 @@ public:
         const GrStencilSettings* fStencil;
     };
 
+<<<<<<< HEAD
     void stencilPath(const StencilPathArgs& args, const GrPath* path)
     {
+=======
+    void stencilPath(const StencilPathArgs& args, const GrPath* path) {
+>>>>>>> miniblink49
         fGpu->handleDirtyContext();
         this->onStencilPath(args, path);
     }
 
+<<<<<<< HEAD
     void drawPath(const GrPipeline& pipeline,
         const GrPrimitiveProcessor& primProc,
         const GrStencilSettings& stencilPassSettings, // Cover pass settings in pipeline.
@@ -217,6 +300,44 @@ protected:
 
     GrGpu* fGpu;
 
+=======
+    struct DrawPathArgs : public GrGpu::DrawArgs {
+        DrawPathArgs(const GrPrimitiveProcessor* primProc,
+                     const GrPipeline* pipeline,
+                     const GrProgramDesc* desc,
+                     const GrBatchTracker* batchTracker,
+                     const GrStencilSettings* stencil)
+            : DrawArgs(primProc, pipeline, desc, batchTracker)
+            , fStencil(stencil) {
+        }
+
+        const GrStencilSettings* fStencil;
+    };
+
+    void drawPath(const DrawPathArgs& args, const GrPath* path) {
+        fGpu->handleDirtyContext();
+        this->onDrawPath(args, path);
+    }
+
+    void drawPaths(const DrawPathArgs& args, const GrPathRange* pathRange, const void* indices,
+                   PathIndexType indexType, const float transformValues[],
+                   PathTransformType transformType, int count) {
+        fGpu->handleDirtyContext();
+        pathRange->willDrawPaths(indices, indexType, count);
+        this->onDrawPaths(args, pathRange, indices, indexType, transformValues, transformType,
+                          count);
+    }
+protected:
+    GrPathRendering(GrGpu* gpu)
+        : fGpu(gpu) {
+    }
+    virtual void onStencilPath(const StencilPathArgs&, const GrPath*) = 0;
+    virtual void onDrawPath(const DrawPathArgs&, const GrPath*) = 0;
+    virtual void onDrawPaths(const DrawPathArgs&, const GrPathRange*, const void*, PathIndexType,
+                             const float[], PathTransformType, int) = 0;
+
+    GrGpu* fGpu;
+>>>>>>> miniblink49
 private:
     GrPathRendering& operator=(const GrPathRendering&);
 };

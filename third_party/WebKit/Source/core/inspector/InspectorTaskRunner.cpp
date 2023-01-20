@@ -2,17 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/inspector/InspectorTaskRunner.h"
+
+#include "wtf/Deque.h"
+#include "wtf/ThreadingPrimitives.h"
+#include <v8.h>
 
 namespace blink {
 
-InspectorTaskRunner::IgnoreInterruptsScope::IgnoreInterruptsScope(
-    InspectorTaskRunner* taskRunner)
+InspectorTaskRunner::IgnoreInterruptsScope::IgnoreInterruptsScope(InspectorTaskRunner* taskRunner)
     : m_wasIgnoring(taskRunner->m_ignoreInterrupts)
     , m_taskRunner(taskRunner)
 {
-    // There may be nested scopes e.g. when tasks are being executed on XHR
-    // breakpoint.
+    // There may be nested scopes e.g. when tasks are being executed on XHR breakpoint.
     m_taskRunner->m_ignoreInterrupts = true;
 }
 
@@ -21,62 +24,52 @@ InspectorTaskRunner::IgnoreInterruptsScope::~IgnoreInterruptsScope()
     m_taskRunner->m_ignoreInterrupts = m_wasIgnoring;
 }
 
-InspectorTaskRunner::InspectorTaskRunner()
-    : m_ignoreInterrupts(false)
-    , m_killed(false)
+class InspectorTaskRunner::ThreadSafeTaskQueue {
+    WTF_MAKE_NONCOPYABLE(ThreadSafeTaskQueue);
+public:
+    ThreadSafeTaskQueue() { }
+    PassOwnPtr<Task> tryTake()
+    {
+        MutexLocker lock(m_mutex);
+        if (m_queue.isEmpty())
+            return nullptr;
+        return m_queue.takeFirst();
+    }
+    void append(PassOwnPtr<Task> task)
+    {
+        MutexLocker lock(m_mutex);
+        m_queue.append(task);
+    }
+private:
+    Mutex m_mutex;
+    Deque<OwnPtr<Task>> m_queue;
+};
+
+
+InspectorTaskRunner::InspectorTaskRunner(v8::Isolate* isolate)
+    : m_isolate(isolate)
+    , m_taskQueue(adoptPtr(new ThreadSafeTaskQueue))
+    , m_ignoreInterrupts(false)
 {
 }
 
-InspectorTaskRunner::~InspectorTaskRunner() { }
-
-void InspectorTaskRunner::appendTask(std::unique_ptr<Task> task)
+InspectorTaskRunner::~InspectorTaskRunner()
 {
-    MutexLocker lock(m_mutex);
-    if (m_killed)
-        return;
-    m_queue.append(std::move(task));
-    m_condition.signal();
 }
 
-std::unique_ptr<InspectorTaskRunner::Task> InspectorTaskRunner::takeNextTask(
-    InspectorTaskRunner::WaitMode waitMode)
+void InspectorTaskRunner::interruptAndRun(PassOwnPtr<Task> task)
 {
-    MutexLocker lock(m_mutex);
-    bool timedOut = false;
-
-    static double infiniteTime = std::numeric_limits<double>::max();
-    double absoluteTime = waitMode == WaitForTask ? infiniteTime : 0.0;
-    while (!m_killed && !timedOut && m_queue.isEmpty())
-        timedOut = !m_condition.timedWait(m_mutex, absoluteTime);
-    ASSERT(!timedOut || absoluteTime != infiniteTime);
-
-    if (m_killed || timedOut)
-        return nullptr;
-
-    SECURITY_DCHECK(!m_queue.isEmpty());
-    return m_queue.takeFirst();
+    m_taskQueue->append(task);
+    m_isolate->RequestInterrupt(&v8InterruptCallback, this);
 }
 
-void InspectorTaskRunner::kill()
-{
-    MutexLocker lock(m_mutex);
-    m_killed = true;
-    m_condition.broadcast();
-}
-
-void InspectorTaskRunner::interruptAndRunAllTasksDontWait(
-    v8::Isolate* isolate)
-{
-    isolate->RequestInterrupt(&v8InterruptCallback, this);
-}
-
-void InspectorTaskRunner::runAllTasksDontWait()
+void InspectorTaskRunner::runPendingTasks()
 {
     while (true) {
-        std::unique_ptr<Task> task = takeNextTask(DontWaitForTask);
+        OwnPtr<Task> task = m_taskQueue->tryTake();
         if (!task)
             return;
-        (*task)();
+        task->run();
     }
 }
 
@@ -85,7 +78,7 @@ void InspectorTaskRunner::v8InterruptCallback(v8::Isolate*, void* data)
     InspectorTaskRunner* runner = static_cast<InspectorTaskRunner*>(data);
     if (runner->m_ignoreInterrupts)
         return;
-    runner->runAllTasksDontWait();
+    runner->runPendingTasks();
 }
 
-} // namespace blink
+}

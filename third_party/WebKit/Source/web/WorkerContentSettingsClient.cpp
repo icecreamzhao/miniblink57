@@ -28,11 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/WorkerContentSettingsClient.h"
 
 #include "core/workers/WorkerGlobalScope.h"
 #include "public/platform/WebString.h"
 #include "public/web/WebWorkerContentSettingsClientProxy.h"
+<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -44,6 +49,20 @@ WorkerContentSettingsClient* WorkerContentSettingsClient::create(
 }
 
 WorkerContentSettingsClient::~WorkerContentSettingsClient() { }
+=======
+#include "wtf/PassOwnPtr.h"
+
+namespace blink {
+
+PassOwnPtrWillBeRawPtr<WorkerContentSettingsClient> WorkerContentSettingsClient::create(PassOwnPtr<WebWorkerContentSettingsClientProxy> proxy)
+{
+    return adoptPtrWillBeNoop(new WorkerContentSettingsClient(proxy));
+}
+
+WorkerContentSettingsClient::~WorkerContentSettingsClient()
+{
+}
+>>>>>>> miniblink49
 
 bool WorkerContentSettingsClient::requestFileSystemAccessSync()
 {
@@ -64,6 +83,7 @@ const char* WorkerContentSettingsClient::supplementName()
     return "WorkerContentSettingsClient";
 }
 
+<<<<<<< HEAD
 WorkerContentSettingsClient* WorkerContentSettingsClient::from(
     ExecutionContext& context)
 {
@@ -87,6 +107,24 @@ void provideContentSettingsClientToWorker(
     WorkerContentSettingsClient::provideTo(
         *clients, WorkerContentSettingsClient::supplementName(),
         WorkerContentSettingsClient::create(std::move(proxy)));
+=======
+WorkerContentSettingsClient* WorkerContentSettingsClient::from(ExecutionContext& context)
+{
+    WorkerClients* clients = toWorkerGlobalScope(context).clients();
+    ASSERT(clients);
+    return static_cast<WorkerContentSettingsClient*>(WillBeHeapSupplement<WorkerClients>::from(*clients, supplementName()));
+}
+
+WorkerContentSettingsClient::WorkerContentSettingsClient(PassOwnPtr<WebWorkerContentSettingsClientProxy> proxy)
+    : m_proxy(proxy)
+{
+}
+
+void provideContentSettingsClientToWorker(WorkerClients* clients, PassOwnPtr<WebWorkerContentSettingsClientProxy> proxy)
+{
+    ASSERT(clients);
+    WorkerContentSettingsClient::provideTo(*clients, WorkerContentSettingsClient::supplementName(), WorkerContentSettingsClient::create(proxy));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -35,16 +35,16 @@
 #include "core/svg/SVGElement.h"
 #include "core/svg/properties/SVGProperty.h"
 #include "platform/heap/Handle.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
-class ExceptionState;
+enum PropertyIsAnimValType {
+    PropertyIsNotAnimVal,
+    PropertyIsAnimVal
+};
 
-enum PropertyIsAnimValType { PropertyIsNotAnimVal,
-    PropertyIsAnimVal };
-
-class SVGPropertyTearOffBase
-    : public GarbageCollectedFinalized<SVGPropertyTearOffBase> {
+class SVGPropertyTearOffBase : public RefCountedWillBeGarbageCollectedFinalized<SVGPropertyTearOffBase> {
 public:
     virtual ~SVGPropertyTearOffBase() { }
 
@@ -53,17 +53,39 @@ public:
         return m_propertyIsAnimVal;
     }
 
-    bool isAnimVal() const { return m_propertyIsAnimVal == PropertyIsAnimVal; }
-    bool isImmutable() const { return isAnimVal(); }
+    bool isAnimVal() const
+    {
+        return m_propertyIsAnimVal == PropertyIsAnimVal;
+    }
+
+    bool isReadOnlyProperty() const
+    {
+        return m_isReadOnlyProperty;
+    }
+
+    void setIsReadOnlyProperty()
+    {
+        m_isReadOnlyProperty = true;
+    }
+
+    bool isImmutable() const
+    {
+        return isReadOnlyProperty() || isAnimVal();
+    }
 
     virtual void commitChange();
 
-    SVGElement* contextElement() const { return m_contextElement; }
+    SVGElement* contextElement()
+    {
+        return m_contextElement;
+    }
 
-    const QualifiedName& attributeName() { return m_attributeName; }
+    const QualifiedName& attributeName()
+    {
+        return m_attributeName;
+    }
 
-    void attachToSVGElementAttribute(SVGElement* contextElement,
-        const QualifiedName& attributeName)
+    void attachToSVGElementAttribute(SVGElement* contextElement, const QualifiedName& attributeName)
     {
         ASSERT(!isImmutable());
         ASSERT(contextElement);
@@ -74,28 +96,26 @@ public:
 
     virtual AnimatedPropertyType type() const = 0;
 
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
-
-    static void throwReadOnly(ExceptionState&);
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_contextElement);
+    }
 
 protected:
-    SVGPropertyTearOffBase(
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
+    SVGPropertyTearOffBase(SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
         : m_contextElement(contextElement)
         , m_propertyIsAnimVal(propertyIsAnimVal)
+        , m_isReadOnlyProperty(false)
         , m_attributeName(attributeName)
     {
     }
 
 private:
-    // This raw pointer is safe since the SVG element is guaranteed to be kept
-    // alive by a V8 wrapper.
-    // See http://crbug.com/528275 for the detail.
-    UntracedMember<SVGElement> m_contextElement;
+    // These references are kept alive from V8 wrapper to prevent reference cycles
+    RawPtrWillBeMember<SVGElement> m_contextElement;
 
     PropertyIsAnimValType m_propertyIsAnimVal;
+    bool m_isReadOnlyProperty;
     QualifiedName m_attributeName;
 };
 
@@ -104,15 +124,18 @@ class SVGPropertyTearOff : public SVGPropertyTearOffBase {
 public:
     Property* target()
     {
-        if (isAnimVal())
-            contextElement()->ensureAttributeAnimValUpdated();
-
         return m_target.get();
     }
 
-    void setTarget(Property* target) { m_target = target; }
+    void setTarget(PassRefPtrWillBeRawPtr<Property> target)
+    {
+        m_target = target;
+    }
 
-    AnimatedPropertyType type() const override { return Property::classType(); }
+    AnimatedPropertyType type() const override
+    {
+        return Property::classType();
+    }
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
@@ -121,22 +144,17 @@ public:
     }
 
 protected:
-    SVGPropertyTearOff(Property* target,
-        SVGElement* contextElement,
-        PropertyIsAnimValType propertyIsAnimVal,
-        const QualifiedName& attributeName = QualifiedName::null())
-        : SVGPropertyTearOffBase(contextElement,
-            propertyIsAnimVal,
-            attributeName)
+    SVGPropertyTearOff(PassRefPtrWillBeRawPtr<Property> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
+        : SVGPropertyTearOffBase(contextElement, propertyIsAnimVal, attributeName)
         , m_target(target)
     {
         ASSERT(m_target);
     }
 
 private:
-    Member<Property> m_target;
+    RefPtrWillBeMember<Property> m_target;
 };
 
-} // namespace blink
+}
 
 #endif // SVGPropertyTearOff_h

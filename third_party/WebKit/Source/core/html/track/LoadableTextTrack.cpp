@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/track/LoadableTextTrack.h"
 
 #include "core/dom/ElementTraversal.h"
@@ -32,48 +33,67 @@
 namespace blink {
 
 LoadableTextTrack::LoadableTextTrack(HTMLTrackElement* track)
-    : TextTrack(subtitlesKeyword(),
-        emptyAtom,
-        emptyAtom,
-        emptyAtom,
-        TrackElement)
+    : TextTrack(emptyAtom, emptyAtom, emptyAtom, emptyAtom, TrackElement)
     , m_trackElement(track)
 {
-    DCHECK(m_trackElement);
 }
 
-LoadableTextTrack::~LoadableTextTrack() { }
+LoadableTextTrack::~LoadableTextTrack()
+{
+#if !ENABLE(OILPAN)
+    ASSERT(!m_trackElement);
+#endif
+}
+
+#if !ENABLE(OILPAN)
+void LoadableTextTrack::clearTrackElement()
+{
+    m_trackElement = nullptr;
+}
+#endif
 
 bool LoadableTextTrack::isDefault() const
 {
+    ASSERT(m_trackElement);
     return m_trackElement->fastHasAttribute(HTMLNames::defaultAttr);
 }
 
 void LoadableTextTrack::setMode(const AtomicString& mode)
 {
     TextTrack::setMode(mode);
-    if (m_trackElement->getReadyState() == HTMLTrackElement::kNone)
+#if !ENABLE(OILPAN)
+    if (!m_trackElement)
+        return;
+#endif
+
+    if (m_trackElement->readyState() == HTMLTrackElement::NONE)
         m_trackElement->scheduleLoad();
 }
 
-void LoadableTextTrack::addRegions(
-    const HeapVector<Member<VTTRegion>>& newRegions)
+void LoadableTextTrack::addRegions(const WillBeHeapVector<RefPtrWillBeMember<VTTRegion>>& newRegions)
 {
-    for (const auto& region : newRegions) {
-        region->setTrack(this);
-        regions()->add(region);
+    for (size_t i = 0; i < newRegions.size(); ++i) {
+        newRegions[i]->setTrack(this);
+        regions()->add(newRegions[i]);
     }
 }
 
-size_t LoadableTextTrack::trackElementIndex() const
+size_t LoadableTextTrack::trackElementIndex()
 {
-    // Count the number of preceding <track> elements (== the index.)
-    size_t index = 0;
-    for (const HTMLTrackElement* track = Traversal<HTMLTrackElement>::previousSibling(*m_trackElement);
-         track; track = Traversal<HTMLTrackElement>::previousSibling(*track))
-        ++index;
+    ASSERT(m_trackElement);
+    ASSERT(m_trackElement->parentNode());
 
-    return index;
+    size_t index = 0;
+    for (HTMLTrackElement* track = Traversal<HTMLTrackElement>::firstChild(*m_trackElement->parentNode()); track; track = Traversal<HTMLTrackElement>::nextSibling(*track)) {
+        if (!track->parentNode())
+            continue;
+        if (track == m_trackElement)
+            return index;
+        ++index;
+    }
+    ASSERT_NOT_REACHED();
+
+    return 0;
 }
 
 DEFINE_TRACE(LoadableTextTrack)

@@ -23,13 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/speech/SpeechRecognitionResult.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 SpeechRecognitionResult* SpeechRecognitionResult::create(
     const HeapVector<Member<SpeechRecognitionAlternative>>& alternatives,
     bool final)
+=======
+SpeechRecognitionResult* SpeechRecognitionResult::create(const HeapVector<Member<SpeechRecognitionAlternative>>& alternatives, bool final)
+>>>>>>> miniblink49
 {
     return new SpeechRecognitionResult(alternatives, final);
 }
@@ -42,9 +51,13 @@ SpeechRecognitionAlternative* SpeechRecognitionResult::item(unsigned index)
     return m_alternatives[index];
 }
 
+<<<<<<< HEAD
 SpeechRecognitionResult::SpeechRecognitionResult(
     const HeapVector<Member<SpeechRecognitionAlternative>>& alternatives,
     bool final)
+=======
+SpeechRecognitionResult::SpeechRecognitionResult(const HeapVector<Member<SpeechRecognitionAlternative>>& alternatives, bool final)
+>>>>>>> miniblink49
     : m_final(final)
     , m_alternatives(alternatives)
 {

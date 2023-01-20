@@ -34,6 +34,7 @@
 namespace blink {
 
 class WebFormControlElement;
+<<<<<<< HEAD
 class WebInputElement;
 class WebKeyboardEvent;
 
@@ -44,6 +45,24 @@ public:
     virtual void textFieldDidChange(const WebFormControlElement&) { }
     virtual void textFieldDidReceiveKeyDown(const WebInputElement&,
         const WebKeyboardEvent&) { }
+=======
+class WebFormElement;
+class WebInputElement;
+class WebKeyboardEvent;
+class WebNode;
+
+template <typename T> class WebVector;
+
+class WebAutofillClient {
+public:
+    // Informs the browser an interactive autocomplete has been requested.
+    virtual void didRequestAutocomplete(const WebFormElement&) { }
+
+    // These methods are called when the users edits a text-field.
+    virtual void textFieldDidEndEditing(const WebInputElement&) { }
+    virtual void textFieldDidChange(const WebFormControlElement&) { }
+    virtual void textFieldDidReceiveKeyDown(const WebInputElement&, const WebKeyboardEvent&) { }
+>>>>>>> miniblink49
     // This is called when a datalist indicator is clicked.
     virtual void openTextDataListChooser(const WebInputElement&) { }
     // This is called when the datalist for an input has changed.
@@ -51,7 +70,15 @@ public:
     // Called the first time the user interacts with the page after a load.
     virtual void firstUserGestureObserved() { }
 
+<<<<<<< HEAD
     virtual void didAssociateFormControlsDynamically() { }
+=======
+    // Informs the client whether or not any subsequent text changes should be ignored.
+    virtual void setIgnoreTextChanges(bool ignore) { }
+
+    virtual void didAssociateFormControls(const WebVector<WebNode>&) { }
+    virtual void xhrSucceeded() { }
+>>>>>>> miniblink49
     virtual void ajaxSucceeded() { }
 
 protected:

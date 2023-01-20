@@ -25,11 +25,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLEntityParser.h"
 
 #include "core/html/parser/HTMLEntitySearch.h"
 #include "core/html/parser/HTMLEntityTable.h"
 #include "wtf/text/StringBuilder.h"
+
+#include "unicode/uchar.h"
 
 using namespace WTF;
 
@@ -58,7 +61,7 @@ static void appendLegalEntityFor(UChar32 c, DecodedHTMLEntity& decodedEntity)
 {
     // FIXME: A number of specific entity values generate parse errors.
     if (c <= 0 || c > 0x10FFFF || (c >= 0xD800 && c <= 0xDFFF)) {
-        decodedEntity.append((UChar)(0xFFFD));
+        decodedEntity.append((UChar)0xFFFD);
         return;
     }
     if (U_IS_BMP(c)) {
@@ -78,35 +81,29 @@ static bool isHexDigit(UChar cc)
 static UChar asHexDigit(UChar cc)
 {
     if (cc >= '0' && cc <= '9')
-        return cc - '0';
+      return cc - '0';
     if (cc >= 'a' && cc <= 'z')
-        return 10 + cc - 'a';
+      return 10 + cc - 'a';
     if (cc >= 'A' && cc <= 'Z')
-        return 10 + cc - 'A';
+      return 10 + cc - 'A';
     ASSERT_NOT_REACHED();
     return 0;
 }
 
 typedef Vector<UChar, 64> ConsumedCharacterBuffer;
 
-static void unconsumeCharacters(SegmentedString& source,
-    ConsumedCharacterBuffer& consumedCharacters)
+static void unconsumeCharacters(SegmentedString& source, ConsumedCharacterBuffer& consumedCharacters)
 {
     if (consumedCharacters.size() == 1)
         source.push(consumedCharacters[0]);
     else if (consumedCharacters.size() == 2) {
-        source.push(consumedCharacters[1]);
         source.push(consumedCharacters[0]);
+        source.push(consumedCharacters[1]);
     } else
-        source.prepend(SegmentedString(String(consumedCharacters)),
-            SegmentedString::PrependType::Unconsume);
+        source.prepend(SegmentedString(String(consumedCharacters)));
 }
 
-static bool consumeNamedEntity(SegmentedString& source,
-    DecodedHTMLEntity& decodedEntity,
-    bool& notEnoughCharacters,
-    UChar additionalAllowedCharacter,
-    UChar& cc)
+static bool consumeNamedEntity(SegmentedString& source, DecodedHTMLEntity& decodedEntity, bool& notEnoughCharacters, UChar additionalAllowedCharacter, UChar& cc)
 {
     ConsumedCharacterBuffer consumedCharacters;
     HTMLEntitySearch entitySearch;
@@ -115,7 +112,7 @@ static bool consumeNamedEntity(SegmentedString& source,
         entitySearch.advance(cc);
         if (!entitySearch.isEntityPrefix())
             break;
-        consumedCharacters.push_back(cc);
+        consumedCharacters.append(cc);
         source.advanceAndASSERT(cc);
     }
     notEnoughCharacters = source.isEmpty();
@@ -140,14 +137,16 @@ static bool consumeNamedEntity(SegmentedString& source,
         const LChar* reference = HTMLEntityTable::entityString(*mostRecent);
         for (int i = 0; i < length; ++i) {
             cc = source.currentChar();
-            DCHECK_EQ(cc, static_cast<UChar>(*reference++));
-            consumedCharacters.push_back(cc);
+            ASSERT_UNUSED(reference, cc == static_cast<UChar>(*reference++));
+            consumedCharacters.append(cc);
             source.advanceAndASSERT(cc);
             ASSERT(!source.isEmpty());
         }
         cc = source.currentChar();
     }
-    if (entitySearch.mostRecentMatch()->lastCharacter() == ';' || !additionalAllowedCharacter || !(isAlphaNumeric(cc) || cc == '=')) {
+    if (entitySearch.mostRecentMatch()->lastCharacter() == ';'
+        || !additionalAllowedCharacter
+        || !(isAlphaNumeric(cc) || cc == '=')) {
         decodedEntity.append(entitySearch.mostRecentMatch()->firstValue);
         if (UChar32 second = entitySearch.mostRecentMatch()->secondValue)
             decodedEntity.append(second);
@@ -157,10 +156,7 @@ static bool consumeNamedEntity(SegmentedString& source,
     return false;
 }
 
-bool consumeHTMLEntity(SegmentedString& source,
-    DecodedHTMLEntity& decodedEntity,
-    bool& notEnoughCharacters,
-    UChar additionalAllowedCharacter)
+bool consumeHTMLEntity(SegmentedString& source, DecodedHTMLEntity& decodedEntity, bool& notEnoughCharacters, UChar additionalAllowedCharacter)
 {
     ASSERT(!additionalAllowedCharacter || additionalAllowedCharacter == '"' || additionalAllowedCharacter == '\'' || additionalAllowedCharacter == '>');
     ASSERT(!notEnoughCharacters);
@@ -218,8 +214,8 @@ bool consumeHTMLEntity(SegmentedString& source,
                 entityState = Hex;
                 continue;
             }
-            source.push('x');
             source.push('#');
+            source.push('x');
             return false;
         }
         case MaybeHexUpperCaseX: {
@@ -227,8 +223,8 @@ bool consumeHTMLEntity(SegmentedString& source,
                 entityState = Hex;
                 continue;
             }
-            source.push('X');
             source.push('#');
+            source.push('X');
             return false;
         }
         case Hex: {
@@ -260,15 +256,14 @@ bool consumeHTMLEntity(SegmentedString& source,
             break;
         }
         case Named: {
-            return consumeNamedEntity(source, decodedEntity, notEnoughCharacters,
-                additionalAllowedCharacter, cc);
+            return consumeNamedEntity(source, decodedEntity, notEnoughCharacters, additionalAllowedCharacter, cc);
         }
         }
 
-        if (result > /*UCHAR_MAX_VALUE*/ 0x10ffff)
+        if (result > UCHAR_MAX_VALUE)
             result = kInvalidUnicode;
 
-        consumedCharacters.push_back(cc);
+        consumedCharacters.append(cc);
         source.advanceAndASSERT(cc);
     }
     ASSERT(source.isEmpty());

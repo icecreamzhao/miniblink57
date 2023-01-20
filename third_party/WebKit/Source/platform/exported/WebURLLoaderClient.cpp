@@ -2,9 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "public/platform/WebURLLoaderClient.h"
 
 // This WebURLLoaderClient.cpp, which includes only
+=======
+#include "config.h"
+#include "public/platform/WebURLLoaderClient.h"
+
+// This WebURLLoaderClient.cpp, which includes only config.h and
+>>>>>>> miniblink49
 // WebURLLoaderClient.h, should be in Source/platform/exported,
 // because WebURLLoaderClient is not compiled without this cpp.
 // So if we don't have this cpp, we will see unresolved symbol error

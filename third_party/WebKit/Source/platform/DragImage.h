@@ -26,18 +26,25 @@
 #ifndef DragImage_h
 #define DragImage_h
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatSize.h"
+=======
+>>>>>>> miniblink49
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/GraphicsTypes.h"
 #include "platform/graphics/ImageOrientation.h"
 #include "platform/graphics/paint/DisplayItemClient.h"
 #include "third_party/skia/include/core/SkBitmap.h"
+<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include <memory>
 
 class SkImage;
+=======
+#include "wtf/Forward.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -46,6 +53,7 @@ class Image;
 class KURL;
 
 class PLATFORM_EXPORT DragImage {
+<<<<<<< HEAD
     USING_FAST_MALLOC(DragImage);
     WTF_MAKE_NONCOPYABLE(DragImage);
 
@@ -68,10 +76,18 @@ public:
         const IntSize&,
         const IntSize& maxSize);
 
+=======
+public:
+    static PassOwnPtr<DragImage> create(Image*, RespectImageOrientationEnum = DoNotRespectImageOrientation, float deviceScaleFactor = 1, InterpolationQuality = InterpolationHigh);
+    static PassOwnPtr<DragImage> create(const KURL&, const String& label, const FontDescription& systemFont, float deviceScaleFactor);
+    ~DragImage();
+
+>>>>>>> miniblink49
     const SkBitmap& bitmap() { return m_bitmap; }
     float resolutionScale() const { return m_resolutionScale; }
     IntSize size() const { return IntSize(m_bitmap.width(), m_bitmap.height()); }
 
+<<<<<<< HEAD
     void scale(float scaleX, float scaleY);
 
     static sk_sp<SkImage> resizeAndOrientImage(
@@ -80,15 +96,29 @@ public:
         FloatSize imageScale = FloatSize(1, 1),
         float opacity = 1.0,
         InterpolationQuality = InterpolationNone);
+=======
+    void fitToMaxSize(const IntSize& srcSize, const IntSize& maxSize);
+    void scale(float scaleX, float scaleY);
+    void dissolveToFraction(float fraction);
+>>>>>>> miniblink49
 
 private:
     DragImage(const SkBitmap&, float resolutionScale, InterpolationQuality);
 
+<<<<<<< HEAD
+=======
+    DisplayItemClient displayItemClient() const { return toDisplayItemClient(this); }
+
+>>>>>>> miniblink49
     SkBitmap m_bitmap;
     float m_resolutionScale;
     InterpolationQuality m_interpolationQuality;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif // DragImage_h

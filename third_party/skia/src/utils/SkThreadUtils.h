@@ -14,7 +14,11 @@ class SkThread : SkNoncopyable {
 public:
     typedef void (*entryPointProc)(void*);
 
+<<<<<<< HEAD
     SkThread(entryPointProc entryPoint, void* data = nullptr);
+=======
+    SkThread(entryPointProc entryPoint, void* data = NULL);
+>>>>>>> miniblink49
 
     /**
      * Non-virtual, do not subclass.
@@ -32,6 +36,16 @@ public:
      */
     void join();
 
+<<<<<<< HEAD
+=======
+    /**
+     * SkThreads with an affinity for the same processor will attempt to run cache
+     * locally with each other. SkThreads with an affinity for different processors
+     * will attempt to run on different cores. Returns false if the request failed.
+     */
+    bool setProcessorAffinity(unsigned int processor);
+
+>>>>>>> miniblink49
 private:
     void* fData;
 };

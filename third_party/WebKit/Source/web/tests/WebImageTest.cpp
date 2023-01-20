@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/platform/WebImage.h"
 
 #include "platform/SharedBuffer.h"
@@ -35,16 +36,35 @@
 #include "public/platform/WebData.h"
 #include "public/platform/WebSize.h"
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+#include "public/platform/WebImage.h"
+
+#include "platform/SharedBuffer.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebData.h"
+#include "public/platform/WebSize.h"
+#include "public/platform/WebUnitTestSupport.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
 static PassRefPtr<SharedBuffer> readFile(const char* fileName)
 {
+<<<<<<< HEAD
     String filePath = testing::blinkRootDir();
     filePath.append("/Source/web/tests/data/");
     filePath.append(fileName);
 
     return testing::readFromFile(filePath);
+=======
+    String filePath = Platform::current()->unitTestSupport()->webKitRootDir();
+    filePath.append("/Source/web/tests/data/");
+    filePath.append(fileName);
+
+    return Platform::current()->unitTestSupport()->readFromFile(filePath);
+>>>>>>> miniblink49
 }
 
 TEST(WebImageTest, PNGImage)
@@ -55,8 +75,12 @@ TEST(WebImageTest, PNGImage)
     WebImage image = WebImage::fromData(WebData(data), WebSize());
     EXPECT_TRUE(image.size() == WebSize(1, 1));
     SkAutoLockPixels autoLock(image.getSkBitmap());
+<<<<<<< HEAD
     EXPECT_EQ(SkColorSetARGB(255, 255, 255, 255),
         image.getSkBitmap().getColor(0, 0));
+=======
+    EXPECT_EQ(SkColorSetARGB(255, 255, 255, 255), image.getSkBitmap().getColor(0, 0));
+>>>>>>> miniblink49
 }
 
 TEST(WebImageTest, ICOImage)
@@ -69,11 +93,17 @@ TEST(WebImageTest, ICOImage)
     EXPECT_TRUE(images[0].size() == WebSize(2, 2));
     EXPECT_TRUE(images[1].size() == WebSize(1, 1));
     SkAutoLockPixels autoLock1(images[0].getSkBitmap());
+<<<<<<< HEAD
     EXPECT_EQ(SkColorSetARGB(255, 255, 255, 255),
         images[0].getSkBitmap().getColor(0, 0));
     SkAutoLockPixels autoLock2(images[1].getSkBitmap());
     EXPECT_EQ(SkColorSetARGB(255, 0, 0, 0),
         images[1].getSkBitmap().getColor(0, 0));
+=======
+    EXPECT_EQ(SkColorSetARGB(255, 255, 255, 255), images[0].getSkBitmap().getColor(0, 0));
+    SkAutoLockPixels autoLock2(images[1].getSkBitmap());
+    EXPECT_EQ(SkColorSetARGB(255, 0, 0, 0), images[1].getSkBitmap().getColor(0, 0));
+>>>>>>> miniblink49
 }
 
 TEST(WebImageTest, ICOValidHeaderMissingBitmap)

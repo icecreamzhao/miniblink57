@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include 'src/builtins/builtins-regexp-gen.h'
 
 namespace regexp_replace {
@@ -105,6 +106,14 @@ namespace regexp_replace {
       }
     }
   }
+=======
+namespace regexp_replace {
+
+  extern transitioning builtin
+  RegExpReplace(implicit context: Context)(JSRegExp, String, Object): Object;
+  extern transitioning runtime
+  RegExpReplaceRT(Context, JSReceiver, String, Object): String;
+>>>>>>> miniblink49
 
   transitioning javascript builtin RegExpPrototypeReplace(
       context: Context, receiver: Object, ...arguments): Object {
@@ -140,11 +149,17 @@ namespace regexp_replace {
     const s = ToString_Inline(context, string);
 
     // Fast-path checks: 1. Is the {receiver} an unmodified JSRegExp instance?
+<<<<<<< HEAD
     try {
       const fastRx: FastJSRegExp = Cast<FastJSRegExp>(rx) otherwise Runtime;
       return RegExpReplace(fastRx, s, replaceValue);
     }
     label Runtime deferred {
+=======
+    if (regexp::BranchIfFastRegExp(context, rx)) {
+      return RegExpReplace(UnsafeCast<JSRegExp>(rx), s, replaceValue);
+    } else {
+>>>>>>> miniblink49
       return RegExpReplaceRT(context, rx, s, replaceValue);
     }
   }

@@ -27,7 +27,6 @@
 #define DocumentFullscreen_h
 
 #include "core/events/EventTarget.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -35,8 +34,6 @@ class Document;
 class Element;
 
 class DocumentFullscreen {
-    STATIC_ONLY(DocumentFullscreen);
-
 public:
     static bool fullscreenEnabled(Document&);
     static Element* fullscreenElement(Document&);
@@ -46,7 +43,7 @@ public:
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(fullscreenerror);
 
     // Mozilla version
-    static Element* currentFullScreenElement(Document&);
+    static Element* webkitCurrentFullScreenElement(Document&);
 
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(webkitfullscreenchange);
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(webkitfullscreenerror);

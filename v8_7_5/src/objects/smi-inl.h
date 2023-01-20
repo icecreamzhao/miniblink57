@@ -13,6 +13,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     CAST_ACCESSOR(Smi)
 
     int Smi::ToInt(const Object object) { return Smi::cast(object)->value(); }
@@ -23,3 +24,15 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_SMI_INL_H_
+=======
+CAST_ACCESSOR(Smi)
+
+int Smi::ToInt(const Object object) { return Smi::cast(object)->value(); }
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_SMI_INL_H_
+>>>>>>> miniblink49

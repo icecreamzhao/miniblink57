@@ -27,17 +27,14 @@
 #define HTMLToken_h
 
 #include "core/dom/Attribute.h"
-#include "core/html/parser/HTMLParserIdioms.h"
-#include "wtf/Forward.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class DoctypeData {
-    USING_FAST_MALLOC(DoctypeData);
     WTF_MAKE_NONCOPYABLE(DoctypeData);
-
 public:
     DoctypeData()
         : m_hasPublicIdentifier(false)
@@ -53,8 +50,7 @@ public:
     bool m_forceQuirks;
 };
 
-static inline Attribute* findAttributeInVector(Vector<Attribute>& attributes,
-    const QualifiedName& name)
+static inline Attribute* findAttributeInVector(Vector<Attribute>& attributes, const QualifiedName& name)
 {
     for (unsigned i = 0; i < attributes.size(); ++i) {
         if (attributes.at(i).name().matches(name))
@@ -65,10 +61,9 @@ static inline Attribute* findAttributeInVector(Vector<Attribute>& attributes,
 
 class HTMLToken {
     WTF_MAKE_NONCOPYABLE(HTMLToken);
-    USING_FAST_MALLOC(HTMLToken);
-
+    WTF_MAKE_FAST_ALLOCATED(HTMLToken);
 public:
-    enum TokenType {
+    enum Type {
         Uninitialized,
         DOCTYPE,
         StartTag,
@@ -79,79 +74,24 @@ public:
     };
 
     class Attribute {
-        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
     public:
         class Range {
-            DISALLOW_NEW();
-
         public:
-            static const int kInvalidOffset = -1;
-
-            inline void clear()
-            {
-#if DCHECK_IS_ON()
-                start = kInvalidOffset;
-                end = kInvalidOffset;
-#endif
-            }
-
-            // Check Range instance that is actively being parsed.
-            inline void checkValidStart() const
-            {
-                DCHECK_NE(start, kInvalidOffset);
-                DCHECK_GE(start, 0);
-            }
-
-            // Check Range instance which finished parse.
-            inline void checkValid() const
-            {
-                checkValidStart();
-                DCHECK_NE(end, kInvalidOffset);
-                DCHECK_GE(end, 0);
-                DCHECK_LE(start, end);
-            }
-
             int start;
             int end;
         };
 
-        AtomicString name() const { return AtomicString(m_name); }
-        String nameAttemptStaticStringCreation() const
-        {
-            return attemptStaticStringCreation(m_name, Likely8Bit);
-        }
-        const Vector<UChar, 32>& nameAsVector() const { return m_name; }
-
-        void appendToName(UChar c) { m_name.push_back(c); }
-
-        PassRefPtr<StringImpl> value8BitIfNecessary() const
-        {
-            return StringImpl::create8BitIfPossible(m_value);
-        }
-        String value() const { return String(m_value); }
-
-        void appendToValue(UChar c) { m_value.push_back(c); }
-        void appendToValue(const String& value) { value.appendTo(m_value); }
-        void clearValue() { m_value.clear(); }
-
-        const Range& nameRange() const { return m_nameRange; }
-        const Range& valueRange() const { return m_valueRange; }
-        Range& mutableNameRange() { return m_nameRange; }
-        Range& mutableValueRange() { return m_valueRange; }
-
-    private:
-        Vector<UChar, 32> m_name;
-        Vector<UChar, 32> m_value;
-        Range m_nameRange;
-        Range m_valueRange;
+        Range nameRange;
+        Range valueRange;
+        Vector<UChar, 32> name;
+        Vector<UChar, 32> value;
     };
 
     typedef Vector<Attribute, 10> AttributeList;
 
-    // By using an inline capacity of 256, we avoid spilling over into an malloced
-    // buffer approximately 99% of the time based on a non-scientific browse
-    // around a number of popular web sites on 23 May 2013.
+    // By using an inline capacity of 256, we avoid spilling over into an malloced buffer
+    // approximately 99% of the time based on a non-scientific browse around a number of
+    // popular web sites on 23 May 2013.
     typedef Vector<UChar, 256> DataVector;
 
     HTMLToken() { clear(); }
@@ -159,8 +99,8 @@ public:
     void clear()
     {
         m_type = Uninitialized;
-        m_range.clear();
         m_range.start = 0;
+        m_range.end = 0;
         m_baseOffset = 0;
         // Don't call Vector::clear() as that would destroy the
         // alloced VectorBuffer. If the innerHTML'd content has
@@ -172,7 +112,7 @@ public:
     }
 
     bool isUninitialized() { return m_type == Uninitialized; }
-    TokenType type() const { return m_type; }
+    Type type() const { return m_type; }
 
     void makeEndOfFile()
     {
@@ -180,14 +120,19 @@ public:
         m_type = EndOfFile;
     }
 
-    // Range and offset methods exposed for HTMLSourceTracker and
-    // HTMLViewSourceParser.
+    /* Range and offset methods exposed for HTMLSourceTracker and HTMLViewSourceParser */
     int startIndex() const { return m_range.start; }
     int endIndex() const { return m_range.end; }
 
-    void setBaseOffset(int offset) { m_baseOffset = offset; }
+    void setBaseOffset(int offset)
+    {
+        m_baseOffset = offset;
+    }
 
-    void end(int endOffset) { m_range.end = endOffset - m_baseOffset; }
+    void end(int endOffset)
+    {
+        m_range.end = endOffset - m_baseOffset;
+    }
 
     const DataVector& data() const
     {
@@ -195,7 +140,10 @@ public:
         return m_data;
     }
 
-    bool isAll8BitData() const { return (m_orAllData <= 0xff); }
+    bool isAll8BitData() const
+    {
+        return (m_orAllData <= 0xff);
+    }
 
     const DataVector& name() const
     {
@@ -207,7 +155,7 @@ public:
     {
         ASSERT(m_type == StartTag || m_type == EndTag || m_type == DOCTYPE);
         ASSERT(character);
-        m_data.push_back(character);
+        m_data.append(character);
         m_orAllData |= character;
     }
 
@@ -229,14 +177,14 @@ public:
     {
         ASSERT(m_type == Uninitialized);
         m_type = DOCTYPE;
-        m_doctypeData = WTF::wrapUnique(new DoctypeData);
+        m_doctypeData = adoptPtr(new DoctypeData);
     }
 
     void beginDOCTYPE(UChar character)
     {
         ASSERT(character);
         beginDOCTYPE();
-        m_data.push_back(character);
+        m_data.append(character);
         m_orAllData |= character;
     }
 
@@ -273,7 +221,7 @@ public:
         ASSERT(character);
         ASSERT(m_type == DOCTYPE);
         ASSERT(m_doctypeData->m_hasPublicIdentifier);
-        m_doctypeData->m_publicIdentifier.push_back(character);
+        m_doctypeData->m_publicIdentifier.append(character);
     }
 
     void appendToSystemIdentifier(UChar character)
@@ -281,12 +229,12 @@ public:
         ASSERT(character);
         ASSERT(m_type == DOCTYPE);
         ASSERT(m_doctypeData->m_hasSystemIdentifier);
-        m_doctypeData->m_systemIdentifier.push_back(character);
+        m_doctypeData->m_systemIdentifier.append(character);
     }
 
-    std::unique_ptr<DoctypeData> releaseDoctypeData()
+    PassOwnPtr<DoctypeData> releaseDoctypeData()
     {
-        return std::move(m_doctypeData);
+        return m_doctypeData.release();
     }
 
     /* Start/End Tag Tokens */
@@ -312,7 +260,7 @@ public:
         m_currentAttribute = 0;
         m_attributes.clear();
 
-        m_data.push_back(character);
+        m_data.append(character);
         m_orAllData |= character;
     }
 
@@ -324,7 +272,7 @@ public:
         m_currentAttribute = 0;
         m_attributes.clear();
 
-        m_data.push_back(character);
+        m_data.append(character);
     }
 
     void beginEndTag(const Vector<LChar, 32>& characters)
@@ -342,60 +290,62 @@ public:
     {
         ASSERT(m_type == StartTag || m_type == EndTag);
         m_attributes.grow(m_attributes.size() + 1);
-        m_currentAttribute = &m_attributes.back();
-        m_currentAttribute->mutableNameRange().clear();
-        m_currentAttribute->mutableValueRange().clear();
+        m_currentAttribute = &m_attributes.last();
+#if ENABLE(ASSERT)
+        m_currentAttribute->nameRange.start = 0;
+        m_currentAttribute->nameRange.end = 0;
+        m_currentAttribute->valueRange.start = 0;
+        m_currentAttribute->valueRange.end = 0;
+#endif
     }
 
     void beginAttributeName(int offset)
     {
-        m_currentAttribute->mutableNameRange().start = offset - m_baseOffset;
-        m_currentAttribute->nameRange().checkValidStart();
+        m_currentAttribute->nameRange.start = offset - m_baseOffset;
     }
 
     void endAttributeName(int offset)
     {
         int index = offset - m_baseOffset;
-        m_currentAttribute->mutableNameRange().end = index;
-        m_currentAttribute->nameRange().checkValid();
-        m_currentAttribute->mutableValueRange().start = index;
-        m_currentAttribute->mutableValueRange().end = index;
+        m_currentAttribute->nameRange.end = index;
+        m_currentAttribute->valueRange.start = index;
+        m_currentAttribute->valueRange.end = index;
     }
 
     void beginAttributeValue(int offset)
     {
-        m_currentAttribute->mutableValueRange().clear();
-        m_currentAttribute->mutableValueRange().start = offset - m_baseOffset;
-        m_currentAttribute->valueRange().checkValidStart();
+        m_currentAttribute->valueRange.start = offset - m_baseOffset;
+#if ENABLE(ASSERT)
+        m_currentAttribute->valueRange.end = 0;
+#endif
     }
 
     void endAttributeValue(int offset)
     {
-        m_currentAttribute->mutableValueRange().end = offset - m_baseOffset;
-        m_currentAttribute->valueRange().checkValid();
+        m_currentAttribute->valueRange.end = offset - m_baseOffset;
     }
 
     void appendToAttributeName(UChar character)
     {
         ASSERT(character);
         ASSERT(m_type == StartTag || m_type == EndTag);
-        m_currentAttribute->nameRange().checkValidStart();
-        m_currentAttribute->appendToName(character);
+        ASSERT(m_currentAttribute->nameRange.start);
+        m_currentAttribute->name.append(character);
     }
 
     void appendToAttributeValue(UChar character)
     {
         ASSERT(character);
         ASSERT(m_type == StartTag || m_type == EndTag);
-        m_currentAttribute->valueRange().checkValidStart();
-        m_currentAttribute->appendToValue(character);
+        ASSERT(m_currentAttribute->valueRange.start);
+        m_currentAttribute->value.append(character);
     }
 
     void appendToAttributeValue(size_t i, const String& value)
     {
         ASSERT(!value.isEmpty());
         ASSERT(m_type == StartTag || m_type == EndTag);
-        m_attributes[i].appendToValue(value);
+        append(m_attributes[i].value, value);
     }
 
     const AttributeList& attributes() const
@@ -407,7 +357,7 @@ public:
     const Attribute* getAttributeItem(const QualifiedName& name) const
     {
         for (unsigned i = 0; i < m_attributes.size(); ++i) {
-            if (m_attributes.at(i).name() == name.localName())
+            if (AtomicString(m_attributes.at(i).name) == name.localName())
                 return &m_attributes.at(i);
         }
         return 0;
@@ -417,7 +367,7 @@ public:
     void eraseValueOfAttribute(size_t i)
     {
         ASSERT(m_type == StartTag || m_type == EndTag);
-        m_attributes[i].clearValue();
+        m_attributes[i].value.clear();
     }
 
     /* Character Tokens */
@@ -439,13 +389,13 @@ public:
     void appendToCharacter(char character)
     {
         ASSERT(m_type == Character);
-        m_data.push_back(character);
+        m_data.append(character);
     }
 
     void appendToCharacter(UChar character)
     {
         ASSERT(m_type == Character);
-        m_data.push_back(character);
+        m_data.append(character);
         m_orAllData |= character;
     }
 
@@ -473,7 +423,7 @@ public:
     {
         ASSERT(character);
         ASSERT(m_type == Comment);
-        m_data.push_back(character);
+        m_data.append(character);
         m_orAllData |= character;
     }
 
@@ -486,7 +436,7 @@ public:
     }
 
 private:
-    TokenType m_type;
+    Type m_type;
     Attribute::Range m_range; // Always starts at zero.
     int m_baseOffset;
     DataVector m_data;
@@ -500,13 +450,9 @@ private:
     Attribute* m_currentAttribute;
 
     // For DOCTYPE
-    std::unique_ptr<DoctypeData> m_doctypeData;
+    OwnPtr<DoctypeData> m_doctypeData;
 };
 
-#ifndef NDEBUG
-const char* toString(HTMLToken::TokenType);
-#endif
-
-} // namespace blink
+}
 
 #endif

@@ -31,11 +31,15 @@
 #ifndef InternalsVibration_h
 #define InternalsVibration_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Vector.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class Internals;
 class Navigator;
 
@@ -45,6 +49,15 @@ class InternalsVibration {
 public:
     static bool isVibrating(Internals&, Navigator*);
     static Vector<unsigned> pendingVibrationPattern(Internals&, Navigator*);
+=======
+class Document;
+class Internals;
+
+class InternalsVibration {
+public:
+    static bool isVibrating(Internals&, Document*);
+    static Vector<unsigned> pendingVibrationPattern(Internals&, Document*);
+>>>>>>> miniblink49
 };
 
 } // namespace blink

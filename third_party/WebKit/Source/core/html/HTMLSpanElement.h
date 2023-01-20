@@ -26,14 +26,12 @@
 #ifndef HTMLSpanElement_h
 #define HTMLSpanElement_h
 
-#include "core/CoreExport.h"
 #include "core/html/HTMLElement.h"
 
 namespace blink {
 
-class CORE_EXPORT HTMLSpanElement : public HTMLElement {
+class HTMLSpanElement : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(HTMLSpanElement);
 

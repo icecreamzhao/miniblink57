@@ -23,13 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/DocumentParser.h"
 
 #include "core/dom/Document.h"
 #include "core/dom/DocumentParserClient.h"
 #include "core/html/parser/TextResourceDecoder.h"
 #include "wtf/Assertions.h"
-#include <memory>
 
 namespace blink {
 
@@ -38,20 +38,30 @@ DocumentParser::DocumentParser(Document* document)
     , m_documentWasLoadedAsPartOfNavigation(false)
     , m_document(document)
 {
-    DCHECK(document);
+    ASSERT(document);
 }
 
-DocumentParser::~DocumentParser() { }
+DocumentParser::~DocumentParser()
+{
+#if !ENABLE(OILPAN)
+    // Document is expected to call detach() before releasing its ref.
+    // This ASSERT is slightly awkward for parsers with a fragment case
+    // as there is no Document to release the ref.
+    ASSERT(!m_document);
+#endif
+}
 
 DEFINE_TRACE(DocumentParser)
 {
     visitor->trace(m_document);
+#if ENABLE(OILPAN)
     visitor->trace(m_clients);
+#endif
 }
 
-void DocumentParser::setDecoder(std::unique_ptr<TextResourceDecoder>)
+void DocumentParser::setDecoder(PassOwnPtr<TextResourceDecoder>)
 {
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
 }
 
 TextResourceDecoder* DocumentParser::decoder()
@@ -61,7 +71,7 @@ TextResourceDecoder* DocumentParser::decoder()
 
 void DocumentParser::prepareToStopParsing()
 {
-    DCHECK_EQ(m_state, ParsingState);
+    ASSERT(m_state == ParsingState);
     m_state = StoppingState;
 }
 
@@ -70,7 +80,7 @@ void DocumentParser::stopParsing()
     m_state = StoppedState;
 
     // Clients may be removed while in the loop. Make a snapshot for iteration.
-    HeapVector<Member<DocumentParserClient>> clientsSnapshot;
+    WillBeHeapVector<RawPtrWillBeMember<DocumentParserClient>> clientsSnapshot;
     copyToVector(m_clients, clientsSnapshot);
 
     for (DocumentParserClient* client : clientsSnapshot) {
@@ -87,9 +97,13 @@ void DocumentParser::detach()
     m_document = nullptr;
 }
 
-void DocumentParser::suspendScheduledTasks() { }
+void DocumentParser::suspendScheduledTasks()
+{
+}
 
-void DocumentParser::resumeScheduledTasks() { }
+void DocumentParser::resumeScheduledTasks()
+{
+}
 
 void DocumentParser::addClient(DocumentParserClient* client)
 {
@@ -101,4 +115,5 @@ void DocumentParser::removeClient(DocumentParserClient* client)
     m_clients.remove(client);
 }
 
-} // namespace blink
+};
+

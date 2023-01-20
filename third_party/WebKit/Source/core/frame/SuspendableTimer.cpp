@@ -24,27 +24,34 @@
  *
  */
 
+#include "config.h"
 #include "core/frame/SuspendableTimer.h"
-
-#include "core/dom/TaskRunnerHelper.h"
 
 namespace blink {
 
 namespace {
-    // The lowest value returned by TimerBase::nextUnalignedFireInterval is 0.0
-    const double kNextFireIntervalInvalid = -1.0;
+// The lowest value returned by TimerBase::nextUnalignedFireInterval is 0.0
+const double kNextFireIntervalInvalid = -1.0;
 }
 
-SuspendableTimer::SuspendableTimer(ExecutionContext* context, TaskType taskType)
-    : TimerBase(TaskRunnerHelper::get(taskType, context))
-    , SuspendableObject(context)
+SuspendableTimer::SuspendableTimer(ExecutionContext* context)
+    : ActiveDOMObject(context)
     , m_nextFireInterval(kNextFireIntervalInvalid)
     , m_repeatInterval(0)
+#if ENABLE(ASSERT)
+    , m_suspended(false)
+#endif
 {
-    DCHECK(context);
 }
 
-SuspendableTimer::~SuspendableTimer() { }
+SuspendableTimer::~SuspendableTimer()
+{
+}
+
+bool SuspendableTimer::hasPendingActivity() const
+{
+    return isActive();
+}
 
 void SuspendableTimer::stop()
 {
@@ -52,19 +59,14 @@ void SuspendableTimer::stop()
     TimerBase::stop();
 }
 
-void SuspendableTimer::contextDestroyed(ExecutionContext*)
-{
-    stop();
-}
-
 void SuspendableTimer::suspend()
 {
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     ASSERT(!m_suspended);
     m_suspended = true;
 #endif
     if (isActive()) {
-        m_nextFireInterval = nextFireInterval();
+        m_nextFireInterval = nextUnalignedFireInterval();
         ASSERT(m_nextFireInterval >= 0.0);
         m_repeatInterval = repeatInterval();
         TimerBase::stop();
@@ -73,7 +75,7 @@ void SuspendableTimer::suspend()
 
 void SuspendableTimer::resume()
 {
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     ASSERT(m_suspended);
     m_suspended = false;
 #endif

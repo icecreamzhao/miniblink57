@@ -23,11 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://html.spec.whatwg.org/multipage/infrastructure.html#domstringlist
+// https://dom.spec.whatwg.org/#domstringlist
 
-[Exposed=(Window,Worker)]
-interface DOMStringList {
+// FIXME: DOMStringList has been removed from the spec. crbug.com/460726
+[
+    WillBeGarbageCollected,
+] interface DOMStringList {
     readonly attribute unsigned long length;
-    getter DOMString? item(unsigned long index);
-    boolean contains(DOMString string);
+    getter DOMString? (unsigned long index);
+
+    [CallWith=ExecutionContext] DOMString? item(unsigned long index);
+    [CallWith=ExecutionContext,MeasureAs=DOMStringListContains] boolean contains(DOMString string);
 };

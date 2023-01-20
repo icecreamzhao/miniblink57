@@ -34,6 +34,7 @@
 
 #include "platform/mediastream/MediaStreamComponent.h"
 #include "platform/mediastream/MediaStreamSource.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
@@ -43,12 +44,22 @@ namespace blink {
 
 class PLATFORM_EXPORT MediaStreamDescriptorClient
     : public GarbageCollectedMixin {
+=======
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/Vector.h"
+
+namespace blink {
+
+class PLATFORM_EXPORT MediaStreamDescriptorClient {
+>>>>>>> miniblink49
 public:
     virtual ~MediaStreamDescriptorClient() { }
 
     virtual void streamEnded() = 0;
     virtual void addRemoteTrack(MediaStreamComponent*) = 0;
     virtual void removeRemoteTrack(MediaStreamComponent*) = 0;
+<<<<<<< HEAD
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
@@ -58,11 +69,19 @@ public:
     class ExtraData {
         USING_FAST_MALLOC(ExtraData);
 
+=======
+};
+
+class PLATFORM_EXPORT MediaStreamDescriptor final : public RefCounted<MediaStreamDescriptor> {
+public:
+    class ExtraData {
+>>>>>>> miniblink49
     public:
         virtual ~ExtraData() { }
     };
 
     // Only used for AudioDestinationNode.
+<<<<<<< HEAD
     static MediaStreamDescriptor* create(
         const MediaStreamSourceVector& audioSources,
         const MediaStreamSourceVector& videoSources);
@@ -75,6 +94,13 @@ public:
         const String& id,
         const MediaStreamComponentVector& audioComponents,
         const MediaStreamComponentVector& videoComponents);
+=======
+    static PassRefPtr<MediaStreamDescriptor> create(const MediaStreamSourceVector& audioSources, const MediaStreamSourceVector& videoSources);
+
+    static PassRefPtr<MediaStreamDescriptor> create(const MediaStreamComponentVector& audioComponents, const MediaStreamComponentVector& videoComponents);
+
+    static PassRefPtr<MediaStreamDescriptor> create(const String& id, const MediaStreamComponentVector& audioComponents, const MediaStreamComponentVector& videoComponents);
+>>>>>>> miniblink49
 
     MediaStreamDescriptorClient* client() const { return m_client; }
     void setClient(MediaStreamDescriptorClient* client) { m_client = client; }
@@ -82,6 +108,7 @@ public:
     String id() const { return m_id; }
 
     unsigned numberOfAudioComponents() const { return m_audioComponents.size(); }
+<<<<<<< HEAD
     MediaStreamComponent* audioComponent(unsigned index) const
     {
         return m_audioComponents[index].get();
@@ -95,6 +122,15 @@ public:
 
     void addComponent(MediaStreamComponent*);
     void removeComponent(MediaStreamComponent*);
+=======
+    MediaStreamComponent* audioComponent(unsigned index) const { return m_audioComponents[index].get(); }
+
+    unsigned numberOfVideoComponents() const { return m_videoComponents.size(); }
+    MediaStreamComponent* videoComponent(unsigned index) const { return m_videoComponents[index].get(); }
+
+    void addComponent(PassRefPtr<MediaStreamComponent>);
+    void removeComponent(PassRefPtr<MediaStreamComponent>);
+>>>>>>> miniblink49
 
     void addRemoteTrack(MediaStreamComponent*);
     void removeRemoteTrack(MediaStreamComponent*);
@@ -102,6 +138,7 @@ public:
     bool active() const { return m_active; }
     void setActive(bool active) { m_active = active; }
 
+<<<<<<< HEAD
     ExtraData* getExtraData() const { return m_extraData.get(); }
     void setExtraData(std::unique_ptr<ExtraData> extraData)
     {
@@ -132,6 +169,29 @@ private:
 };
 
 typedef HeapVector<Member<MediaStreamDescriptor>> MediaStreamDescriptorVector;
+=======
+    bool ended() const { return m_ended; }
+    void setEnded() { m_ended = true; }
+
+    ExtraData* extraData() const { return m_extraData.get(); }
+    void setExtraData(PassOwnPtr<ExtraData> extraData) { m_extraData = extraData; }
+
+private:
+    MediaStreamDescriptor(const String& id, const MediaStreamSourceVector& audioSources, const MediaStreamSourceVector& videoSources);
+    MediaStreamDescriptor(const String& id, const MediaStreamComponentVector& audioComponents, const MediaStreamComponentVector& videoComponents);
+
+    MediaStreamDescriptorClient* m_client;
+    String m_id;
+    Vector<RefPtr<MediaStreamComponent>> m_audioComponents;
+    Vector<RefPtr<MediaStreamComponent>> m_videoComponents;
+    bool m_active;
+    bool m_ended;
+
+    OwnPtr<ExtraData> m_extraData;
+};
+
+typedef Vector<RefPtr<MediaStreamDescriptor>> MediaStreamDescriptorVector;
+>>>>>>> miniblink49
 
 } // namespace blink
 

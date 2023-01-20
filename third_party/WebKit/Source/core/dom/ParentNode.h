@@ -40,7 +40,7 @@ namespace blink {
 
 class ParentNode {
 public:
-    static HTMLCollection* children(ContainerNode& node)
+    static PassRefPtrWillBeRawPtr<HTMLCollection> children(ContainerNode& node)
     {
         return node.children();
     }
@@ -58,36 +58,27 @@ public:
     static unsigned childElementCount(ContainerNode& node)
     {
         unsigned count = 0;
-        for (Element* child = ElementTraversal::firstChild(node); child;
-             child = ElementTraversal::nextSibling(*child))
+        for (Element* child = ElementTraversal::firstChild(node); child; child = ElementTraversal::nextSibling(*child))
             ++count;
         return count;
     }
 
-    static void prepend(Node& node,
-        const HeapVector<NodeOrString>& nodes,
-        ExceptionState& exceptionState)
+    static void prepend(Node& node, const HeapVector<NodeOrString>& nodes, ExceptionState& exceptionState)
     {
         return node.prepend(nodes, exceptionState);
     }
 
-    static void append(Node& node,
-        const HeapVector<NodeOrString>& nodes,
-        ExceptionState& exceptionState)
+    static void append(Node& node, const HeapVector<NodeOrString>& nodes, ExceptionState& exceptionState)
     {
         return node.append(nodes, exceptionState);
     }
 
-    static Element* querySelector(ContainerNode& node,
-        const AtomicString& selectors,
-        ExceptionState& exceptionState)
+    static PassRefPtrWillBeRawPtr<Element> querySelector(ContainerNode& node, const AtomicString& selectors, ExceptionState& exceptionState)
     {
         return node.querySelector(selectors, exceptionState);
     }
 
-    static StaticElementList* querySelectorAll(ContainerNode& node,
-        const AtomicString& selectors,
-        ExceptionState& exceptionState)
+    static PassRefPtrWillBeRawPtr<StaticElementList> querySelectorAll(ContainerNode& node, const AtomicString& selectors, ExceptionState& exceptionState)
     {
         return node.querySelectorAll(selectors, exceptionState);
     }

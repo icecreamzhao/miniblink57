@@ -37,38 +37,33 @@ namespace blink {
 
 class AnimatableLengthPoint3D final : public AnimatableValue {
 public:
-    ~AnimatableLengthPoint3D() override { }
-    static PassRefPtr<AnimatableLengthPoint3D> create(
-        PassRefPtr<AnimatableValue> x,
-        PassRefPtr<AnimatableValue> y,
-        PassRefPtr<AnimatableValue> z)
+    virtual ~AnimatableLengthPoint3D() { }
+    static PassRefPtrWillBeRawPtr<AnimatableLengthPoint3D> create(PassRefPtrWillBeRawPtr<AnimatableValue> x, PassRefPtrWillBeRawPtr<AnimatableValue> y, PassRefPtrWillBeRawPtr<AnimatableValue> z)
     {
-        return adoptRef(
-            new AnimatableLengthPoint3D(std::move(x), std::move(y), std::move(z)));
+        return adoptRefWillBeNoop(new AnimatableLengthPoint3D(x, y, z));
     }
     const AnimatableValue* x() const { return m_x.get(); }
     const AnimatableValue* y() const { return m_y.get(); }
     const AnimatableValue* z() const { return m_z.get(); }
 
+    DECLARE_VIRTUAL_TRACE();
+
 protected:
-    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
-        double fraction) const override;
+    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
 
 private:
-    AnimatableLengthPoint3D(PassRefPtr<AnimatableValue> x,
-        PassRefPtr<AnimatableValue> y,
-        PassRefPtr<AnimatableValue> z)
+    AnimatableLengthPoint3D(PassRefPtrWillBeRawPtr<AnimatableValue> x, PassRefPtrWillBeRawPtr<AnimatableValue> y, PassRefPtrWillBeRawPtr<AnimatableValue> z)
         : m_x(x)
         , m_y(y)
         , m_z(z)
     {
     }
-    AnimatableType type() const override { return TypeLengthPoint3D; }
-    bool equalTo(const AnimatableValue*) const override;
+    virtual AnimatableType type() const override { return TypeLengthPoint3D; }
+    virtual bool equalTo(const AnimatableValue*) const override;
 
-    RefPtr<AnimatableValue> m_x;
-    RefPtr<AnimatableValue> m_y;
-    RefPtr<AnimatableValue> m_z;
+    RefPtrWillBeMember<AnimatableValue> m_x;
+    RefPtrWillBeMember<AnimatableValue> m_y;
+    RefPtrWillBeMember<AnimatableValue> m_z;
 };
 
 DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableLengthPoint3D, isLengthPoint3D());

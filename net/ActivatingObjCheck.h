@@ -3,7 +3,6 @@
 
 #include <set>
 #include <windows.h>
-#include <stdint.h>
 
 namespace net {
 
@@ -20,8 +19,6 @@ public:
     void add(intptr_t obj);
     void remove(intptr_t obj);
     bool isActivating(intptr_t obj);
-    bool isActivatingLocked(intptr_t obj);
-    void unlock();
 
     void doGarbageCollected(bool forceGC);
 
@@ -32,7 +29,7 @@ public:
 private:
     std::set<intptr_t>* m_activatingObjs;
     CRITICAL_SECTION m_mutex;
-    long m_newestId;
+    int m_newestId;
 
     static ActivatingObjCheck* m_inst;
 };

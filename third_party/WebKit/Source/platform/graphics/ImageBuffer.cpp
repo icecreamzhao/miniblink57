@@ -30,6 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/graphics/ImageBuffer.h"
 
 #include "gpu/command_buffer/client/gles2_interface.h"
@@ -42,10 +43,23 @@
 #include "platform/graphics/ImageBufferClient.h"
 #include "platform/graphics/RecordingImageBufferSurface.h"
 #include "platform/graphics/StaticBitmapImage.h"
+=======
+#include "config.h"
+#include "platform/graphics/ImageBuffer.h"
+
+//#include "GrContext.h"
+#include "platform/MIMETypeRegistry.h"
+#include "platform/geometry/IntRect.h"
+#include "platform/graphics/BitmapImage.h"
+#include "platform/graphics/GraphicsContext.h"
+#include "platform/graphics/GraphicsTypes3D.h"
+#include "platform/graphics/ImageBufferClient.h"
+>>>>>>> miniblink49
 #include "platform/graphics/UnacceleratedImageBufferSurface.h"
 #include "platform/graphics/gpu/DrawingBuffer.h"
 #include "platform/graphics/gpu/Extensions3DUtil.h"
 #include "platform/graphics/skia/SkiaUtils.h"
+<<<<<<< HEAD
 #include "platform/image-encoders/JPEGImageEncoder.h"
 #include "platform/image-encoders/PNGImageEncoder.h"
 // #include "platform/image-encoders/WEBPImageEncoder.h"
@@ -125,10 +139,53 @@ bool ImageBuffer::canCreateImageBuffer(const IntSize& size)
     if (size.width() > kMaxSkiaDim || size.height() > kMaxSkiaDim)
         return false;
     return true;
+=======
+#include "platform/image-encoders/skia/JPEGImageEncoder.h"
+#include "platform/image-encoders/skia/PNGImageEncoder.h"
+#include "platform/image-encoders/gdiplus/GDIPlusImageEncoder.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebExternalTextureMailbox.h"
+#include "public/platform/WebGraphicsContext3D.h"
+#include "public/platform/WebGraphicsContext3DProvider.h"
+#include "third_party/skia/include/core/SkPicture.h"
+#include "wtf/ArrayBufferContents.h"
+#include "wtf/MathExtras.h"
+#include "wtf/Vector.h"
+#include "wtf/text/Base64.h"
+#include "wtf/text/WTFString.h"
+
+namespace blink {
+
+PassOwnPtr<ImageBuffer> ImageBuffer::create(PassOwnPtr<ImageBufferSurface> surface)
+{
+    if (!surface->isValid())
+        return nullptr;
+    return adoptPtr(new ImageBuffer(surface));
+}
+
+PassOwnPtr<ImageBuffer> ImageBuffer::create(const IntSize& size, OpacityMode opacityMode)
+{
+    OwnPtr<ImageBufferSurface> surface(adoptPtr(new UnacceleratedImageBufferSurface(size, opacityMode)));
+    if (!surface->isValid())
+        return nullptr;
+    return adoptPtr(new ImageBuffer(surface.release()));
+}
+
+ImageBuffer::ImageBuffer(PassOwnPtr<ImageBufferSurface> surface)
+    : m_surface(surface)
+    , m_client(0)
+{
+    m_surface->setImageBuffer(this);
+}
+
+ImageBuffer::~ImageBuffer()
+{
+>>>>>>> miniblink49
 }
 
 SkCanvas* ImageBuffer::canvas() const
 {
+<<<<<<< HEAD
     return m_surface->canvas();
 }
 
@@ -144,6 +201,16 @@ bool ImageBuffer::writePixels(const SkImageInfo& info,
     int y)
 {
     return m_surface->writePixels(info, pixels, rowBytes, x, y);
+=======
+    if (!isSurfaceValid())
+        return nullptr;
+    return m_surface->canvas();
+}
+
+const SkBitmap& ImageBuffer::bitmap() const
+{
+    return m_surface->bitmap();
+>>>>>>> miniblink49
 }
 
 bool ImageBuffer::isSurfaceValid() const
@@ -162,7 +229,11 @@ void ImageBuffer::didFinalizeFrame()
         m_client->didFinalizeFrame();
 }
 
+<<<<<<< HEAD
 void ImageBuffer::finalizeFrame(const FloatRect& dirtyRect)
+=======
+void ImageBuffer::finalizeFrame(const FloatRect &dirtyRect)
+>>>>>>> miniblink49
 {
     m_surface->finalizeFrame(dirtyRect);
     didFinalizeFrame();
@@ -179,6 +250,7 @@ void ImageBuffer::notifySurfaceInvalid()
         m_client->notifySurfaceInvalid();
 }
 
+<<<<<<< HEAD
 void ImageBuffer::resetCanvas(SkCanvas* canvas) const
 {
     if (m_client)
@@ -210,6 +282,40 @@ void ImageBuffer::didDraw(const FloatRect& rect) const
     if (m_snapshotState == DidAcquireSnapshot)
         m_snapshotState = DrawnToAfterSnapshot;
     m_surface->didDraw(rect);
+=======
+void ImageBuffer::resetCanvas(SkCanvas* canvas)
+{
+    if (m_client)
+        m_client->restoreCanvasMatrixClipStack();
+}
+
+PassRefPtr<SkImage> ImageBuffer::newImageSnapshot() const
+{
+    return m_surface->newImageSnapshot();
+}
+
+static SkBitmap deepSkBitmapCopy(const SkBitmap& bitmap)
+{
+    SkBitmap tmp;
+    if (!bitmap.deepCopyTo(&tmp))
+        bitmap.copyTo(&tmp, bitmap.colorType());
+
+    return tmp;
+}
+
+PassRefPtr<Image> ImageBuffer::copyImage(BackingStoreCopy copyBehavior, ScaleBehavior) const
+{
+    if (!isSurfaceValid())
+        return BitmapImage::create(SkBitmap());
+
+    const SkBitmap& bitmap = m_surface->bitmap();
+    return BitmapImage::create(copyBehavior == CopyBackingStore ? deepSkBitmapCopy(bitmap) : bitmap);
+}
+
+BackingStoreCopy ImageBuffer::fastCopyImageMode()
+{
+    return DontCopyBackingStore;
+>>>>>>> miniblink49
 }
 
 WebLayer* ImageBuffer::platformLayer() const
@@ -217,6 +323,7 @@ WebLayer* ImageBuffer::platformLayer() const
     return m_surface->layer();
 }
 
+<<<<<<< HEAD
 bool ImageBuffer::copyToPlatformTexture(SnapshotReason reason,
     gpu::gles2::GLES2Interface* gl,
     GLuint texture,
@@ -335,10 +442,92 @@ void ImageBuffer::draw(GraphicsContext& context,
     const FloatRect& destRect,
     const FloatRect* srcPtr,
     SkBlendMode op)
+=======
+bool ImageBuffer::copyToPlatformTexture(WebGraphicsContext3D* context, Platform3DObject texture, GLenum internalFormat, GLenum destType, GLint level, bool premultiplyAlpha, bool flipY)
+{
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    if (!m_surface->isAccelerated() || !isSurfaceValid())
+        return false;
+
+    if (!Extensions3DUtil::canUseCopyTextureCHROMIUM(GL_TEXTURE_2D, internalFormat, destType, level))
+        return false;
+
+    RefPtr<const SkImage> textureImage = m_surface->newImageSnapshot();
+    if (!textureImage)
+        return false;
+
+    ASSERT(textureImage->isTextureBacked()); // isAccelerated() check above should guarantee this
+    // Get the texture ID, flushing pending operations if needed.
+    Platform3DObject textureId = textureImage->getTextureHandle(true);
+    if (!textureId)
+        return false;
+
+    OwnPtr<WebGraphicsContext3DProvider> provider = adoptPtr(Platform::current()->createSharedOffscreenGraphicsContext3DProvider());
+    if (!provider)
+        return false;
+    WebGraphicsContext3D* sharedContext = provider->context3d();
+    if (!sharedContext)
+        return false;
+
+    OwnPtr<WebExternalTextureMailbox> mailbox = adoptPtr(new WebExternalTextureMailbox);
+
+    // Contexts may be in a different share group. We must transfer the texture through a mailbox first
+    sharedContext->genMailboxCHROMIUM(mailbox->name);
+    sharedContext->produceTextureDirectCHROMIUM(textureId, GL_TEXTURE_2D, mailbox->name);
+    sharedContext->flush();
+
+    mailbox->syncPoint = sharedContext->insertSyncPoint();
+
+    context->waitSyncPoint(mailbox->syncPoint);
+    Platform3DObject sourceTexture = context->createAndConsumeTextureCHROMIUM(GL_TEXTURE_2D, mailbox->name);
+
+    // The canvas is stored in a premultiplied format, so unpremultiply if necessary.
+    // The canvas is stored in an inverted position, so the flip semantics are reversed.
+    context->copyTextureCHROMIUM(GL_TEXTURE_2D, sourceTexture, texture, internalFormat, destType, flipY ? GL_FALSE : GL_TRUE, GL_FALSE, premultiplyAlpha ? GL_FALSE : GL_TRUE);
+
+    context->deleteTexture(sourceTexture);
+
+    context->flush();
+    sharedContext->waitSyncPoint(context->insertSyncPoint());
+
+    // Undo grContext texture binding changes introduced in this function
+    provider->grContext()->resetContext(kTextureBinding_GrGLBackendState);
+#endif // MINIBLINK_NOT_IMPLEMENTED
+	notImplemented();
+    return true;
+}
+
+bool ImageBuffer::copyRenderingResultsFromDrawingBuffer(DrawingBuffer* drawingBuffer, SourceDrawingBuffer sourceBuffer)
+{
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+    if (!drawingBuffer || !m_surface->isAccelerated())
+        return false;
+    OwnPtr<WebGraphicsContext3DProvider> provider = adoptPtr(Platform::current()->createSharedOffscreenGraphicsContext3DProvider());
+    if (!provider)
+        return false;
+    WebGraphicsContext3D* context3D = provider->context3d();
+    if (!context3D)
+        return false;
+    Platform3DObject textureId = m_surface->getBackingTextureHandleForOverwrite();
+    if (!textureId)
+        return false;
+
+    context3D->flush();
+
+    return drawingBuffer->copyToPlatformTexture(context3D, textureId, GL_RGBA,
+        GL_UNSIGNED_BYTE, 0, true, false, sourceBuffer);
+#endif // MINIBLINK_NOT_IMPLEMENTED
+	notImplemented();
+	return false;
+}
+
+void ImageBuffer::draw(GraphicsContext* context, const FloatRect& destRect, const FloatRect* srcPtr, SkXfermode::Mode op)
+>>>>>>> miniblink49
 {
     if (!isSurfaceValid())
         return;
 
+<<<<<<< HEAD
     FloatRect srcRect = srcPtr ? *srcPtr : FloatRect(FloatPoint(), FloatSize(size()));
     m_surface->draw(context, destRect, srcRect, op);
 }
@@ -376,10 +565,34 @@ bool ImageBuffer::getImageData(Multiply multiplied,
             return false;
         WTF::ArrayBufferContents result(data, allocSizeInBytes,
             WTF::ArrayBufferContents::NotShared);
+=======
+    FloatRect srcRect = srcPtr ? *srcPtr : FloatRect(FloatPoint(), size());
+    m_surface->draw(context, destRect, srcRect, op);
+}
+
+void ImageBuffer::flush()
+{
+    if (m_surface->canvas()) {
+        m_surface->canvas()->flush();
+    }
+}
+
+bool ImageBuffer::getImageData(Multiply multiplied, const IntRect& rect, WTF::ArrayBufferContents& contents) const
+{
+    Checked<int, RecordOverflow> dataSize = 4;
+    dataSize *= rect.width();
+    dataSize *= rect.height();
+    if (dataSize.hasOverflowed())
+        return false;
+
+    if (!isSurfaceValid()) {
+        WTF::ArrayBufferContents result(rect.width() * rect.height(), 4, WTF::ArrayBufferContents::NotShared, WTF::ArrayBufferContents::ZeroInitialize);
+>>>>>>> miniblink49
         result.transfer(contents);
         return true;
     }
 
+<<<<<<< HEAD
     DCHECK(canvas());
 
     if (ExpensiveCanvasHeuristicParameters::GetImageDataForcesNoAcceleration && !RuntimeEnabledFeatures::canvas2dFixedRenderingModeEnabled()) {
@@ -440,19 +653,44 @@ bool ImageBuffer::getImageData(Multiply multiplied,
         }
     }
 
+=======
+    const bool hasStrayArea =
+        rect.x() < 0
+        || rect.y() < 0
+        || rect.maxX() > m_surface->size().width()
+        || rect.maxY() > m_surface->size().height();
+    WTF::ArrayBufferContents result(
+        rect.width() * rect.height(), 4,
+        WTF::ArrayBufferContents::NotShared,
+        hasStrayArea
+        ? WTF::ArrayBufferContents::ZeroInitialize
+        : WTF::ArrayBufferContents::DontInitialize);
+
+    SkAlphaType alphaType = (multiplied == Premultiplied) ? kPremul_SkAlphaType : kUnpremul_SkAlphaType;
+    SkImageInfo info = SkImageInfo::Make(rect.width(), rect.height(), kRGBA_8888_SkColorType, alphaType);
+
+    m_surface->willAccessPixels();
+    ASSERT(canvas());
+    canvas()->readPixels(info, result.data(), 4 * rect.width(), rect.x(), rect.y());
+>>>>>>> miniblink49
     result.transfer(contents);
     return true;
 }
 
+<<<<<<< HEAD
 void ImageBuffer::putByteArray(Multiply multiplied,
     const unsigned char* source,
     const IntSize& sourceSize,
     const IntRect& sourceRect,
     const IntPoint& destPoint)
+=======
+void ImageBuffer::putByteArray(Multiply multiplied, const unsigned char* source, const IntSize& sourceSize, const IntRect& sourceRect, const IntPoint& destPoint)
+>>>>>>> miniblink49
 {
     if (!isSurfaceValid())
         return;
 
+<<<<<<< HEAD
     DCHECK_GT(sourceRect.width(), 0);
     DCHECK_GT(sourceRect.height(), 0);
 
@@ -594,6 +832,90 @@ String ImageDataBuffer::toDataURL(const String& mimeType,
         return "data:,";
 
     return "data:" + mimeType + ";base64," + base64Encode(result);
+=======
+    ASSERT(sourceRect.width() > 0);
+    ASSERT(sourceRect.height() > 0);
+
+    int originX = sourceRect.x();
+    int destX = destPoint.x() + sourceRect.x();
+    ASSERT(destX >= 0);
+    ASSERT(destX < m_surface->size().width());
+    ASSERT(originX >= 0);
+    ASSERT(originX < sourceRect.maxX());
+
+    int originY = sourceRect.y();
+    int destY = destPoint.y() + sourceRect.y();
+    ASSERT(destY >= 0);
+    ASSERT(destY < m_surface->size().height());
+    ASSERT(originY >= 0);
+    ASSERT(originY < sourceRect.maxY());
+
+    const size_t srcBytesPerRow = 4 * sourceSize.width();
+    const void* srcAddr = source + originY * srcBytesPerRow + originX * 4;
+    SkAlphaType alphaType = (multiplied == Premultiplied) ? kPremul_SkAlphaType : kUnpremul_SkAlphaType;
+    SkImageInfo info = SkImageInfo::Make(sourceRect.width(), sourceRect.height(), kRGBA_8888_SkColorType, alphaType);
+
+    m_surface->willAccessPixels();
+
+    canvas()->writePixels(info, srcAddr, srcBytesPerRow, destX, destY);
+}
+
+template <typename T>
+static bool encodeImage(T& source, const String& mimeType, const double* quality, Vector<char>* output)
+{
+    Vector<unsigned char>* encodedImage = reinterpret_cast<Vector<unsigned char>*>(output);
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
+    if (mimeType == "image/jpeg") {
+        int compressionQuality = JPEGImageEncoder::DefaultCompressionQuality;
+        if (quality && *quality >= 0.0 && *quality <= 1.0)
+            compressionQuality = static_cast<int>(*quality * 100 + 0.5);
+        if (!JPEGImageEncoder::encode(source, compressionQuality, encodedImage))
+            return false;
+
+    } else if (mimeType == "image/webp") {
+//         int compressionQuality = WEBPImageEncoder::DefaultCompressionQuality;
+//         if (quality && *quality >= 0.0 && *quality <= 1.0)
+//             compressionQuality = static_cast<int>(*quality * 100 + 0.5);
+//         if (!WEBPImageEncoder::encode(source, compressionQuality, encodedImage))
+            return false;
+    } else {
+        if (!PNGImageEncoder::encode(source, encodedImage))
+            return false;
+        ASSERT(mimeType == "image/png");
+    }
+#else // MINIBLINK_NOT_IMPLEMENTED
+    if (mimeType == "image/jpeg") {
+        return GDIPlusImageEncoder::encode(source, GDIPlusImageEncoder::JPG, encodedImage);
+    } else if (mimeType == "image/png") {
+        return GDIPlusImageEncoder::encode(source, GDIPlusImageEncoder::PNG, encodedImage);
+    } else
+        return false;
+#endif // MINIBLINK_NOT_IMPLEMENTED
+
+    return true;
+}
+
+String ImageBuffer::toDataURL(const String& mimeType, const double* quality) const
+{
+    ASSERT(MIMETypeRegistry::isSupportedImageMIMETypeForEncoding(mimeType));
+
+    Vector<char> encodedImage;
+    if (!isSurfaceValid() || !encodeImage(m_surface->bitmap(), mimeType, quality, &encodedImage))
+        return "data:,";
+
+    return "data:" + mimeType + ";base64," + base64Encode(encodedImage);
+}
+
+String ImageDataBuffer::toDataURL(const String& mimeType, const double* quality) const
+{
+    ASSERT(MIMETypeRegistry::isSupportedImageMIMETypeForEncoding(mimeType));
+
+    Vector<char> encodedImage;
+    if (!encodeImage(*this, mimeType, quality, &encodedImage))
+        return "data:,";
+
+    return "data:" + mimeType + ";base64," + base64Encode(encodedImage);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

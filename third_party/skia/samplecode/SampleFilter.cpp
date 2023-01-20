@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
+<<<<<<< HEAD
 #include "Sk1DPathEffect.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
@@ -23,14 +28,38 @@
 
 static void make_bm(SkBitmap* bm)
 {
+=======
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkGradientShader.h"
+#include "SkPath.h"
+#include "SkRegion.h"
+#include "SkShader.h"
+#include "SkUtils.h"
+#include "Sk1DPathEffect.h"
+#include "SkCornerPathEffect.h"
+#include "SkPathMeasure.h"
+#include "SkRandom.h"
+#include "SkColorPriv.h"
+#include "SkColorFilter.h"
+#include "SkDither.h"
+#include "sk_tool_utils.h"
+
+static void make_bm(SkBitmap* bm) {
+>>>>>>> miniblink49
     const SkPMColor colors[] = {
         SkPreMultiplyColor(SK_ColorRED), SkPreMultiplyColor(SK_ColorGREEN),
         SkPreMultiplyColor(SK_ColorBLUE), SkPreMultiplyColor(SK_ColorWHITE)
     };
     SkColorTable* ctable = new SkColorTable(colors, 4);
     bm->allocPixels(SkImageInfo::Make(2, 2, kIndex_8_SkColorType,
+<<<<<<< HEAD
                         kOpaque_SkAlphaType),
         nullptr, ctable);
+=======
+                                      kOpaque_SkAlphaType),
+                    NULL, ctable);
+>>>>>>> miniblink49
     ctable->unref();
 
     *bm->getAddr8(0, 0) = 0;
@@ -40,6 +69,7 @@ static void make_bm(SkBitmap* bm)
 }
 
 static SkScalar draw_bm(SkCanvas* canvas, const SkBitmap& bm,
+<<<<<<< HEAD
     SkScalar x, SkScalar y, SkPaint* paint)
 {
     canvas->drawBitmap(bm, x, y, paint);
@@ -48,6 +78,14 @@ static SkScalar draw_bm(SkCanvas* canvas, const SkBitmap& bm,
 
 static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x, SkPaint* p)
 {
+=======
+                        SkScalar x, SkScalar y, SkPaint* paint) {
+    canvas->drawBitmap(bm, x, y, paint);
+    return SkIntToScalar(bm.width()) * 5/4;
+}
+
+static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x, SkPaint* p) {
+>>>>>>> miniblink49
     x += draw_bm(c, bm, x, 0, p);
     p->setFilterQuality(kLow_SkFilterQuality);
     x += draw_bm(c, bm, x, 0, p);
@@ -55,8 +93,12 @@ static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x, SkPaint* p
     return x + draw_bm(c, bm, x, 0, p);
 }
 
+<<<<<<< HEAD
 static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm)
 {
+=======
+static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
+>>>>>>> miniblink49
     SkAutoCanvasRestore acr(canvas, true);
 
     SkPaint paint;
@@ -65,8 +107,13 @@ static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm)
 
     paint.setAntiAlias(true);
     const char* name = sk_tool_utils::colortype_name(bm.colorType());
+<<<<<<< HEAD
     canvas->drawText(name, strlen(name), x, SkIntToScalar(bm.height()) * scale * 5 / 8,
         paint);
+=======
+    canvas->drawText(name, strlen(name), x, SkIntToScalar(bm.height())*scale*5/8,
+                     paint);
+>>>>>>> miniblink49
     canvas->translate(SkIntToScalar(48), 0);
 
     canvas->scale(SkIntToScalar(scale), SkIntToScalar(scale));
@@ -80,10 +127,16 @@ static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm)
 
 class FilterView : public SampleView {
 public:
+<<<<<<< HEAD
     SkBitmap fBM8, fBM4444, fBM16, fBM32;
 
     FilterView()
     {
+=======
+    SkBitmap    fBM8, fBM4444, fBM16, fBM32;
+
+    FilterView() {
+>>>>>>> miniblink49
         make_bm(&fBM8);
         fBM8.copyTo(&fBM4444, kARGB_4444_SkColorType);
         fBM8.copyTo(&fBM16, kRGB_565_SkColorType);
@@ -94,8 +147,12 @@ public:
 
 protected:
     // overrides from SkEventSink
+<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
+=======
+    virtual bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Filter");
             return true;
@@ -103,8 +160,12 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
+=======
+    virtual void onDrawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkScalar x = SkIntToScalar(10);
         SkScalar y = SkIntToScalar(10);
 

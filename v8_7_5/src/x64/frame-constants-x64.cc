@@ -9,6 +9,7 @@
 #include "src/frame-constants.h"
 #include "src/x64/assembler-x64-inl.h"
 
+<<<<<<< HEAD
 namespace v8 {
 namespace internal {
 
@@ -31,3 +32,26 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_TARGET_ARCH_X64
+=======
+
+namespace v8 {
+namespace internal {
+
+Register JavaScriptFrame::fp_register() { return rbp; }
+Register JavaScriptFrame::context_register() { return rsi; }
+Register JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
+
+int InterpreterFrameConstants::RegisterStackSlotCount(int register_count) {
+  return register_count;
+}
+
+int BuiltinContinuationFrameConstants::PaddingSlotCount(int register_count) {
+  USE(register_count);
+  return 0;
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_TARGET_ARCH_X64
+>>>>>>> miniblink49

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2010 Google Inc.
  *
@@ -5,4 +9,9 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> miniblink49
 #include "SkGrTexturePixelRef.h"

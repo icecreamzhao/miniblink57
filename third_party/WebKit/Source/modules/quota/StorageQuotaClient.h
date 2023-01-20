@@ -47,13 +47,19 @@ class ScriptState;
 class StorageErrorCallback;
 class StorageQuotaCallback;
 
+<<<<<<< HEAD
 class StorageQuotaClient : public Supplement<Page> {
     WTF_MAKE_NONCOPYABLE(StorageQuotaClient);
 
+=======
+class StorageQuotaClient : public WillBeHeapSupplement<Page> {
+    WTF_MAKE_NONCOPYABLE(StorageQuotaClient);
+>>>>>>> miniblink49
 public:
     StorageQuotaClient() { }
     virtual ~StorageQuotaClient() { }
 
+<<<<<<< HEAD
     virtual void requestQuota(ExecutionContext*,
         WebStorageQuotaType,
         unsigned long long newQuotaInBytes,
@@ -64,12 +70,20 @@ public:
         ScriptState*,
         unsigned long long newQuotaInBytes)
         = 0;
+=======
+    virtual void requestQuota(ExecutionContext*, WebStorageQuotaType, unsigned long long newQuotaInBytes, StorageQuotaCallback*, StorageErrorCallback*) = 0;
+    virtual ScriptPromise requestPersistentQuota(ScriptState*, unsigned long long newQuotaInBytes) = 0;
+>>>>>>> miniblink49
 
     static const char* supplementName();
     static StorageQuotaClient* from(ExecutionContext*);
 };
 
+<<<<<<< HEAD
 MODULES_EXPORT void provideStorageQuotaClientTo(Page&, StorageQuotaClient*);
+=======
+MODULES_EXPORT void provideStorageQuotaClientTo(Page&, PassOwnPtrWillBeRawPtr<StorageQuotaClient>);
+>>>>>>> miniblink49
 
 } // namespace blink
 

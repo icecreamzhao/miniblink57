@@ -7,6 +7,7 @@
 
 #include "SkUtils.h"
 
+<<<<<<< HEAD
 // declare functions externally to suppress warnings.
 void MAKENAME(_nofilter_DXDY)(const SkBitmapProcState& s,
     const uint32_t* SK_RESTRICT xy,
@@ -31,6 +32,48 @@ void MAKENAME(_nofilter_DXDY)(const SkBitmapProcState& s,
 
 #ifdef PREAMBLE
         PREAMBLE(s);
+=======
+#if DSTSIZE==32
+    #define DSTTYPE SkPMColor
+#elif DSTSIZE==16
+    #define DSTTYPE uint16_t
+#else
+    #error "need DSTSIZE to be 32 or 16"
+#endif
+
+#if (DSTSIZE == 32)
+    #define BITMAPPROC_MEMSET(ptr, value, n) sk_memset32(ptr, value, n)
+#elif (DSTSIZE == 16)
+    #define BITMAPPROC_MEMSET(ptr, value, n) sk_memset16(ptr, value, n)
+#else
+    #error "unsupported DSTSIZE"
+#endif
+
+
+// declare functions externally to suppress warnings.
+void MAKENAME(_nofilter_DXDY)(const SkBitmapProcState& s,
+                              const uint32_t* SK_RESTRICT xy,
+                              int count, DSTTYPE* SK_RESTRICT colors);
+void MAKENAME(_nofilter_DX)(const SkBitmapProcState& s,
+                            const uint32_t* SK_RESTRICT xy,
+                            int count, DSTTYPE* SK_RESTRICT colors);
+void MAKENAME(_filter_DX)(const SkBitmapProcState& s,
+                          const uint32_t* SK_RESTRICT xy,
+                           int count, DSTTYPE* SK_RESTRICT colors);
+void MAKENAME(_filter_DXDY)(const SkBitmapProcState& s,
+                            const uint32_t* SK_RESTRICT xy,
+                            int count, DSTTYPE* SK_RESTRICT colors);
+
+void MAKENAME(_nofilter_DXDY)(const SkBitmapProcState& s,
+                              const uint32_t* SK_RESTRICT xy,
+                              int count, DSTTYPE* SK_RESTRICT colors) {
+    SkASSERT(count > 0 && colors != NULL);
+    SkASSERT(kNone_SkFilterQuality == s.fFilterLevel);
+    SkDEBUGCODE(CHECKSTATE(s);)
+
+#ifdef PREAMBLE
+    PREAMBLE(s);
+>>>>>>> miniblink49
 #endif
     const char* SK_RESTRICT srcAddr = (const char*)s.fPixmap.addr();
     size_t rb = s.fPixmap.rowBytes();
@@ -40,18 +83,33 @@ void MAKENAME(_nofilter_DXDY)(const SkBitmapProcState& s,
 
     for (int i = (count >> 1); i > 0; --i) {
         XY = *xy++;
+<<<<<<< HEAD
         SkASSERT((XY >> 16) < (unsigned)s.fPixmap.height() && (XY & 0xFFFF) < (unsigned)s.fPixmap.width());
+=======
+        SkASSERT((XY >> 16) < (unsigned)s.fPixmap.height() &&
+                 (XY & 0xFFFF) < (unsigned)s.fPixmap.width());
+>>>>>>> miniblink49
         src = ((const SRCTYPE*)(srcAddr + (XY >> 16) * rb))[XY & 0xFFFF];
         *colors++ = RETURNDST(src);
 
         XY = *xy++;
+<<<<<<< HEAD
         SkASSERT((XY >> 16) < (unsigned)s.fPixmap.height() && (XY & 0xFFFF) < (unsigned)s.fPixmap.width());
+=======
+        SkASSERT((XY >> 16) < (unsigned)s.fPixmap.height() &&
+                 (XY & 0xFFFF) < (unsigned)s.fPixmap.width());
+>>>>>>> miniblink49
         src = ((const SRCTYPE*)(srcAddr + (XY >> 16) * rb))[XY & 0xFFFF];
         *colors++ = RETURNDST(src);
     }
     if (count & 1) {
         XY = *xy++;
+<<<<<<< HEAD
         SkASSERT((XY >> 16) < (unsigned)s.fPixmap.height() && (XY & 0xFFFF) < (unsigned)s.fPixmap.width());
+=======
+        SkASSERT((XY >> 16) < (unsigned)s.fPixmap.height() &&
+                 (XY & 0xFFFF) < (unsigned)s.fPixmap.width());
+>>>>>>> miniblink49
         src = ((const SRCTYPE*)(srcAddr + (XY >> 16) * rb))[XY & 0xFFFF];
         *colors++ = RETURNDST(src);
     }
@@ -62,6 +120,7 @@ void MAKENAME(_nofilter_DXDY)(const SkBitmapProcState& s,
 }
 
 void MAKENAME(_nofilter_DX)(const SkBitmapProcState& s,
+<<<<<<< HEAD
     const uint32_t* SK_RESTRICT xy,
     int count, SkPMColor* SK_RESTRICT colors)
 {
@@ -72,21 +131,42 @@ void MAKENAME(_nofilter_DX)(const SkBitmapProcState& s,
 
 #ifdef PREAMBLE
         PREAMBLE(s);
+=======
+                            const uint32_t* SK_RESTRICT xy,
+                            int count, DSTTYPE* SK_RESTRICT colors) {
+    SkASSERT(count > 0 && colors != NULL);
+    SkASSERT(s.fInvType <= (SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask));
+    SkASSERT(kNone_SkFilterQuality == s.fFilterLevel);
+    SkDEBUGCODE(CHECKSTATE(s);)
+
+#ifdef PREAMBLE
+    PREAMBLE(s);
+>>>>>>> miniblink49
 #endif
     const SRCTYPE* SK_RESTRICT srcAddr = (const SRCTYPE*)s.fPixmap.addr();
 
     // buffer is y32, x16, x16, x16, x16, x16
     // bump srcAddr to the proper row, since we're told Y never changes
     SkASSERT((unsigned)xy[0] < (unsigned)s.fPixmap.height());
+<<<<<<< HEAD
     srcAddr = (const SRCTYPE*)((const char*)srcAddr + xy[0] * s.fPixmap.rowBytes());
+=======
+    srcAddr = (const SRCTYPE*)((const char*)srcAddr +
+                                                xy[0] * s.fPixmap.rowBytes());
+>>>>>>> miniblink49
     xy += 1;
 
     SRCTYPE src;
 
     if (1 == s.fPixmap.width()) {
         src = srcAddr[0];
+<<<<<<< HEAD
         SkPMColor dstValue = RETURNDST(src);
         sk_memset32(colors, dstValue, count);
+=======
+        DSTTYPE dstValue = RETURNDST(src);
+        BITMAPPROC_MEMSET(colors, dstValue, count);
+>>>>>>> miniblink49
     } else {
         int i;
         for (i = (count >> 2); i > 0; --i) {
@@ -105,8 +185,12 @@ void MAKENAME(_nofilter_DX)(const SkBitmapProcState& s,
         const uint16_t* SK_RESTRICT xx = (const uint16_t*)(xy);
         for (i = (count & 3); i > 0; --i) {
             SkASSERT(*xx < (unsigned)s.fPixmap.width());
+<<<<<<< HEAD
             src = srcAddr[*xx++];
             *colors++ = RETURNDST(src);
+=======
+            src = srcAddr[*xx++]; *colors++ = RETURNDST(src);
+>>>>>>> miniblink49
         }
     }
 
@@ -118,6 +202,7 @@ void MAKENAME(_nofilter_DX)(const SkBitmapProcState& s,
 ///////////////////////////////////////////////////////////////////////////////
 
 void MAKENAME(_filter_DX)(const SkBitmapProcState& s,
+<<<<<<< HEAD
     const uint32_t* SK_RESTRICT xy,
     int count, SkPMColor* SK_RESTRICT colors)
 {
@@ -127,6 +212,16 @@ void MAKENAME(_filter_DX)(const SkBitmapProcState& s,
 
 #ifdef PREAMBLE
         PREAMBLE(s);
+=======
+                          const uint32_t* SK_RESTRICT xy,
+                           int count, DSTTYPE* SK_RESTRICT colors) {
+    SkASSERT(count > 0 && colors != NULL);
+    SkASSERT(s.fFilterLevel != kNone_SkFilterQuality);
+    SkDEBUGCODE(CHECKSTATE(s);)
+
+#ifdef PREAMBLE
+    PREAMBLE(s);
+>>>>>>> miniblink49
 #endif
     const char* SK_RESTRICT srcAddr = (const char*)s.fPixmap.addr();
     size_t rb = s.fPixmap.rowBytes();
@@ -144,18 +239,30 @@ void MAKENAME(_filter_DX)(const SkBitmapProcState& s,
     }
 
     do {
+<<<<<<< HEAD
         uint32_t XX = *xy++; // x0:14 | 4 | x1:14
+=======
+        uint32_t XX = *xy++;    // x0:14 | 4 | x1:14
+>>>>>>> miniblink49
         unsigned x0 = XX >> 14;
         unsigned x1 = XX & 0x3FFF;
         unsigned subX = x0 & 0xF;
         x0 >>= 4;
 
         FILTER_PROC(subX, subY,
+<<<<<<< HEAD
             SRC_TO_FILTER(row0[x0]),
             SRC_TO_FILTER(row0[x1]),
             SRC_TO_FILTER(row1[x0]),
             SRC_TO_FILTER(row1[x1]),
             colors);
+=======
+                    SRC_TO_FILTER(row0[x0]),
+                    SRC_TO_FILTER(row0[x1]),
+                    SRC_TO_FILTER(row1[x0]),
+                    SRC_TO_FILTER(row1[x1]),
+                    colors);
+>>>>>>> miniblink49
         colors += 1;
 
     } while (--count != 0);
@@ -165,11 +272,18 @@ void MAKENAME(_filter_DX)(const SkBitmapProcState& s,
 #endif
 }
 void MAKENAME(_filter_DXDY)(const SkBitmapProcState& s,
+<<<<<<< HEAD
     const uint32_t* SK_RESTRICT xy,
     int count, SkPMColor* SK_RESTRICT colors)
 {
     SkASSERT(count > 0 && colors != nullptr);
     SkASSERT(s.fFilterQuality != kNone_SkFilterQuality);
+=======
+                            const uint32_t* SK_RESTRICT xy,
+                            int count, DSTTYPE* SK_RESTRICT colors) {
+    SkASSERT(count > 0 && colors != NULL);
+    SkASSERT(s.fFilterLevel != kNone_SkFilterQuality);
+>>>>>>> miniblink49
     SkDEBUGCODE(CHECKSTATE(s);)
 
 #ifdef PREAMBLE
@@ -195,11 +309,19 @@ void MAKENAME(_filter_DXDY)(const SkBitmapProcState& s,
         const SRCTYPE* SK_RESTRICT row1 = (const SRCTYPE*)(srcAddr + y1 * rb);
 
         FILTER_PROC(subX, subY,
+<<<<<<< HEAD
             SRC_TO_FILTER(row0[x0]),
             SRC_TO_FILTER(row0[x1]),
             SRC_TO_FILTER(row1[x0]),
             SRC_TO_FILTER(row1[x1]),
             colors);
+=======
+                    SRC_TO_FILTER(row0[x0]),
+                    SRC_TO_FILTER(row0[x1]),
+                    SRC_TO_FILTER(row1[x0]),
+                    SRC_TO_FILTER(row1[x1]),
+                    colors);
+>>>>>>> miniblink49
         colors += 1;
     } while (--count != 0);
 
@@ -209,6 +331,11 @@ void MAKENAME(_filter_DXDY)(const SkBitmapProcState& s,
 }
 
 #undef MAKENAME
+<<<<<<< HEAD
+=======
+#undef DSTSIZE
+#undef DSTTYPE
+>>>>>>> miniblink49
 #undef SRCTYPE
 #undef CHECKSTATE
 #undef RETURNDST
@@ -216,10 +343,17 @@ void MAKENAME(_filter_DXDY)(const SkBitmapProcState& s,
 #undef FILTER_TO_DST
 
 #ifdef PREAMBLE
+<<<<<<< HEAD
 #undef PREAMBLE
 #endif
 #ifdef POSTAMBLE
 #undef POSTAMBLE
+=======
+    #undef PREAMBLE
+#endif
+#ifdef POSTAMBLE
+    #undef POSTAMBLE
+>>>>>>> miniblink49
 #endif
 
 #undef FILTER_PROC_TYPE
@@ -227,3 +361,7 @@ void MAKENAME(_filter_DXDY)(const SkBitmapProcState& s,
 #undef GET_FILTER_ROW
 #undef GET_FILTER_ROW_PROC
 #undef GET_FILTER_PROC
+<<<<<<< HEAD
+=======
+#undef BITMAPPROC_MEMSET
+>>>>>>> miniblink49

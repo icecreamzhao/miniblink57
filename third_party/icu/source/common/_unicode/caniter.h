@@ -12,14 +12,23 @@
 
 #if !UCONFIG_NO_NORMALIZATION
 
+<<<<<<< HEAD
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
+=======
+#include "unicode/uobject.h"
+#include "unicode/unistr.h"
+>>>>>>> miniblink49
 
 /**
  * \file
  * \brief C++ API: Canonical Iterator
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 /** Should permutation skip characters with combining class zero
  *  Should be either TRUE or FALSE. This is a compile time option
  *  @stable ICU 2.4
@@ -77,7 +86,11 @@ public:
      * @param status    Fill-in parameter which receives the status of this operation.
      * @stable ICU 2.4
      */
+<<<<<<< HEAD
     CanonicalIterator(const UnicodeString& source, UErrorCode& status);
+=======
+    CanonicalIterator(const UnicodeString &source, UErrorCode &status);
+>>>>>>> miniblink49
 
     /** Destructor
      *  Cleans pieces
@@ -114,7 +127,11 @@ public:
      * @param status        Fill-in parameter which receives the status of this operation.
      * @stable ICU 2.4
      */
+<<<<<<< HEAD
     void setSource(const UnicodeString& newSource, UErrorCode& status);
+=======
+    void setSource(const UnicodeString &newSource, UErrorCode &status);
+>>>>>>> miniblink49
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -126,8 +143,13 @@ public:
      * @param status       Fill-in parameter which receives the status of this operation.
      * @internal
      */
+<<<<<<< HEAD
     static void U_EXPORT2 permute(UnicodeString& source, UBool skipZeros, Hashtable* result, UErrorCode& status);
 #endif /* U_HIDE_INTERNAL_API */
+=======
+    static void U_EXPORT2 permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -148,6 +170,10 @@ private:
     // private default constructor
     CanonicalIterator();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * Copy constructor. Private for now.
      * @internal
@@ -166,17 +192,27 @@ private:
 
     // 2 dimensional array holds the pieces of the string with
     // their different canonically equivalent representations
+<<<<<<< HEAD
     UnicodeString** pieces;
     int32_t pieces_length;
     int32_t* pieces_lengths;
 
     // current is used in iterating to combine pieces
     int32_t* current;
+=======
+    UnicodeString **pieces;
+    int32_t pieces_length;
+    int32_t *pieces_lengths;
+
+    // current is used in iterating to combine pieces
+    int32_t *current;
+>>>>>>> miniblink49
     int32_t current_length;
 
     // transient fields
     UnicodeString buffer;
 
+<<<<<<< HEAD
     const Normalizer2& nfd;
     const Normalizer2Impl& nfcImpl;
 
@@ -185,6 +221,16 @@ private:
 
     //Set getEquivalents2(String segment);
     Hashtable* getEquivalents2(Hashtable* fillinResult, const UChar* segment, int32_t segLen, UErrorCode& status);
+=======
+    const Normalizer2 &nfd;
+    const Normalizer2Impl &nfcImpl;
+
+    // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
+    UnicodeString *getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status); //private String[] getEquivalents(String segment)
+
+    //Set getEquivalents2(String segment);
+    Hashtable *getEquivalents2(Hashtable *fillinResult, const UChar *segment, int32_t segLen, UErrorCode &status);
+>>>>>>> miniblink49
     //Hashtable *getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status);
 
     /**
@@ -193,10 +239,18 @@ private:
      * If so, take the remainder, and return the equivalents
      */
     //Set extract(int comp, String segment, int segmentPos, StringBuffer buffer);
+<<<<<<< HEAD
     Hashtable* extract(Hashtable* fillinResult, UChar32 comp, const UChar* segment, int32_t segLen, int32_t segmentPos, UErrorCode& status);
     //Hashtable *extract(UChar32 comp, const UnicodeString &segment, int32_t segLen, int32_t segmentPos, UErrorCode &status);
 
     void cleanPieces();
+=======
+    Hashtable *extract(Hashtable *fillinResult, UChar32 comp, const UChar *segment, int32_t segLen, int32_t segmentPos, UErrorCode &status);
+    //Hashtable *extract(UChar32 comp, const UnicodeString &segment, int32_t segLen, int32_t segmentPos, UErrorCode &status);
+
+    void cleanPieces();
+
+>>>>>>> miniblink49
 };
 
 U_NAMESPACE_END

@@ -24,53 +24,49 @@
 #ifndef SVGPathParser_h
 #define SVGPathParser_h
 
-#include "core/CoreExport.h"
-#include "core/svg/SVGPathData.h"
+#include "core/svg/SVGPathSeg.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
+enum PathParsingMode {
+    NormalizedParsing,
+    UnalteredParsing
+};
+
 class SVGPathConsumer;
+class SVGPathSource;
 
-namespace SVGPathParser {
-
-    template <typename SourceType, typename ConsumerType>
-    inline bool parsePath(SourceType& source, ConsumerType& consumer)
-    {
-        while (source.hasMoreData()) {
-            PathSegmentData segment = source.parseSegment();
-            if (segment.command == PathSegUnknown)
-                return false;
-
-            consumer.emitSegment(segment);
-        }
-        return true;
-    }
-
-} // namespace SVGPathParser
-
-class SVGPathNormalizer {
+class SVGPathParser final {
+    WTF_MAKE_NONCOPYABLE(SVGPathParser);
     STACK_ALLOCATED();
-
 public:
-    SVGPathNormalizer(SVGPathConsumer* consumer)
-        : m_consumer(consumer)
-        , m_lastCommand(PathSegUnknown)
+    SVGPathParser(SVGPathSource* source, SVGPathConsumer* consumer)
+        : m_source(source)
+        , m_consumer(consumer)
     {
+        ASSERT(m_source);
         ASSERT(m_consumer);
     }
 
-    void emitSegment(const PathSegmentData&);
+    bool parsePathDataFromSource(PathParsingMode pathParsingMode, bool checkForInitialMoveTo = true)
+    {
+        ASSERT(m_source);
+        ASSERT(m_consumer);
+        if (checkForInitialMoveTo && !initialCommandIsMoveTo())
+            return false;
+        if (pathParsingMode == NormalizedParsing)
+            return parseAndNormalizePath();
+        return parsePath();
+    }
 
 private:
-    bool decomposeArcToCubic(const FloatPoint& currentPoint,
-        const PathSegmentData&);
+    bool initialCommandIsMoveTo();
+    bool parsePath();
+    bool parseAndNormalizePath();
 
+    SVGPathSource* m_source;
     SVGPathConsumer* m_consumer;
-    FloatPoint m_controlPoint;
-    FloatPoint m_currentPoint;
-    FloatPoint m_subPathPoint;
-    SVGPathSegType m_lastCommand;
 };
 
 } // namespace blink

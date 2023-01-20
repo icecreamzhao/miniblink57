@@ -21,15 +21,16 @@
 #ifndef SVGSymbolElement_h
 #define SVGSymbolElement_h
 
+#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGElement.h"
 #include "core/svg/SVGFitToViewBox.h"
 
 namespace blink {
 
-class SVGSymbolElement final : public SVGElement, public SVGFitToViewBox {
+class SVGSymbolElement final : public SVGElement,
+                               public SVGFitToViewBox {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(SVGSymbolElement);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGSymbolElement);
 public:
     DECLARE_NODE_FACTORY(SVGSymbolElement);
 

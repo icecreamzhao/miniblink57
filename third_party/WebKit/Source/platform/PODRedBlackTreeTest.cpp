@@ -25,13 +25,24 @@
 
 // Tests for the red-black tree class.
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/PODRedBlackTree.h"
 
 #include "platform/testing/ArenaTestHelpers.h"
 #include "platform/testing/TreeTestHelpers.h"
+<<<<<<< HEAD
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/Vector.h"
 
+=======
+#include "wtf/Vector.h"
+
+#include <gtest/gtest.h>
+
+>>>>>>> miniblink49
 namespace blink {
 
 using ArenaTestHelpers::TrackedAllocator;
@@ -168,6 +179,7 @@ TEST(PODRedBlackTreeTest, FailingInsertionRegressionTest1)
 }
 
 namespace {
+<<<<<<< HEAD
     void InsertionAndDeletionTest(const int32_t seed, const int treeSize)
     {
         initRandom(seed);
@@ -196,6 +208,36 @@ namespace {
             ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
         }
     }
+=======
+void InsertionAndDeletionTest(const int32_t seed, const int treeSize)
+{
+    initRandom(seed);
+    const int maximumValue = treeSize;
+    // Build the tree.
+    PODRedBlackTree<int> tree;
+    Vector<int> values;
+    for (int i = 0; i < treeSize; i++) {
+        int value = nextRandom(maximumValue);
+        tree.add(value);
+        ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
+        values.append(value);
+    }
+    // Churn the tree's contents.
+    for (int i = 0; i < treeSize; i++) {
+        // Pick a random value to remove.
+        int index = nextRandom(treeSize);
+        int value = values[index];
+        // Remove this value.
+        tree.remove(value);
+        ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
+        // Replace it with a new one.
+        value = nextRandom(maximumValue);
+        values[index] = value;
+        tree.add(value);
+        ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
+    }
+}
+>>>>>>> miniblink49
 } // anonymous namespace
 
 TEST(PODRedBlackTreeTest, RandomDeletionAndInsertionRegressionTest1)

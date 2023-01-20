@@ -45,6 +45,7 @@
  * The dynamic analysis tools can intercept these functions and replace them
  * with their own implementations.
  *
+<<<<<<< HEAD
  * See http://code.google.com/p/data-race-test/wiki/DynamicAnnotations for more
  * information.
  */
@@ -60,6 +61,17 @@
 #define WTF_ANNOTATE_BENIGN_RACE(pointer, description)                          \
     WTFAnnotateBenignRaceSized(__FILE__, __LINE__, pointer, sizeof(*(pointer)), \
         description)
+=======
+ * See http://code.google.com/p/data-race-test/wiki/DynamicAnnotations for more information.
+ */
+
+#include "wtf/WTFExport.h"
+
+#if USE(DYNAMIC_ANNOTATIONS)
+/* Tell data race detector that we're not interested in reports on the given address range. */
+#define WTF_ANNOTATE_BENIGN_RACE_SIZED(address, size, description) WTFAnnotateBenignRaceSized(__FILE__, __LINE__, address, size, description)
+#define WTF_ANNOTATE_BENIGN_RACE(pointer, description) WTFAnnotateBenignRaceSized(__FILE__, __LINE__, pointer, sizeof(*(pointer)), description)
+>>>>>>> miniblink49
 
 /* Annotations for user-defined synchronization mechanisms.
  * These annotations can be used to define happens-before arcs in user-defined
@@ -78,15 +90,21 @@
  *     return false;
  * }
  */
+<<<<<<< HEAD
 #define WTF_ANNOTATE_HAPPENS_BEFORE(address) \
     WTFAnnotateHappensBefore(__FILE__, __LINE__, address)
 #define WTF_ANNOTATE_HAPPENS_AFTER(address) \
     WTFAnnotateHappensAfter(__FILE__, __LINE__, address)
+=======
+#define WTF_ANNOTATE_HAPPENS_BEFORE(address) WTFAnnotateHappensBefore(__FILE__, __LINE__, address)
+#define WTF_ANNOTATE_HAPPENS_AFTER(address) WTFAnnotateHappensAfter(__FILE__, __LINE__, address)
+>>>>>>> miniblink49
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 /* Don't use these directly, use the above macros instead. */
+<<<<<<< HEAD
 WTF_EXPORT void WTFAnnotateBenignRaceSized(const char* file,
     int line,
     const volatile void* memory,
@@ -98,6 +116,11 @@ WTF_EXPORT void WTFAnnotateHappensBefore(const char* file,
 WTF_EXPORT void WTFAnnotateHappensAfter(const char* file,
     int line,
     const volatile void* address);
+=======
+WTF_EXPORT void WTFAnnotateBenignRaceSized(const char* file, int line, const volatile void* memory, long size, const char* description);
+WTF_EXPORT void WTFAnnotateHappensBefore(const char* file, int line, const volatile void* address);
+WTF_EXPORT void WTFAnnotateHappensAfter(const char* file, int line, const volatile void* address);
+>>>>>>> miniblink49
 #ifdef __cplusplus
 } // extern "C"
 #endif

@@ -12,7 +12,10 @@ namespace blink {
 class DOMWindowDeviceOrientation {
 public:
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(deviceorientation);
+<<<<<<< HEAD
     DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(deviceorientationabsolute);
+=======
+>>>>>>> miniblink49
 };
 
 } // namespace blink

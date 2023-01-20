@@ -36,8 +36,7 @@ namespace blink {
 
 template <typename T>
 class ShapeInterval {
-    USING_FAST_MALLOC(ShapeInterval);
-
+    WTF_MAKE_FAST_ALLOCATED(ShapeInterval);
 public:
     ShapeInterval()
         : m_x1(-1)
@@ -82,14 +81,8 @@ public:
         return x1() <= interval.x1() && x2() >= interval.x2();
     }
 
-    bool operator==(const ShapeInterval<T>& other) const
-    {
-        return x1() == other.x1() && x2() == other.x2();
-    }
-    bool operator!=(const ShapeInterval<T>& other) const
-    {
-        return !operator==(other);
-    }
+    bool operator==(const ShapeInterval<T>& other) const { return x1() == other.x1() && x2() == other.x2(); }
+    bool operator!=(const ShapeInterval<T>& other) const { return !operator==(other); }
 
     void unite(const ShapeInterval<T>& interval)
     {

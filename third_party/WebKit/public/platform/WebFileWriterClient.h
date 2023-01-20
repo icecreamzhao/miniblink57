@@ -45,9 +45,13 @@ public:
     // Called once when the truncate completes successfully.
     virtual void didTruncate() = 0;
 
+<<<<<<< HEAD
     // Called if the write or truncate fails, or if it is cancelled before the
     // write or truncate completes. Completion of an operation will be signalled
     // exactly once, either by didFail, didTruncate, or didWrite(..., true).
+=======
+    // Called if the write or truncate fails, or if it is cancelled before the write or truncate completes. Completion of an operation will be signalled exactly once, either by didFail, didTruncate, or didWrite(..., true).
+>>>>>>> miniblink49
     virtual void didFail(WebFileError) = 0;
 
 protected:

@@ -5,147 +5,109 @@
 #ifndef PrimitiveInterpolation_h
 #define PrimitiveInterpolation_h
 
-#include "core/animation/TypedInterpolationValue.h"
-#include "platform/animation/AnimationUtilities.h"
+#include "core/animation/InterpolationValue.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PtrUtil.h"
 #include "wtf/Vector.h"
 #include <cmath>
-#include <memory>
 
 namespace blink {
 
-// Represents an animation's effect between an adjacent pair of
-// PropertySpecificKeyframes after converting the keyframes to an internal
-// format with respect to the animation environment and underlying values.
-class PrimitiveInterpolation {
-    USING_FAST_MALLOC(PrimitiveInterpolation);
-    WTF_MAKE_NONCOPYABLE(PrimitiveInterpolation);
+class StyleResolverState;
 
+// Represents a conversion from a pair of keyframes to something compatible with interpolation.
+// This is agnostic to whether the keyframes are compatible with each other or not.
+class PrimitiveInterpolation : public NoBaseWillBeGarbageCollectedFinalized<PrimitiveInterpolation> {
 public:
     virtual ~PrimitiveInterpolation() { }
 
-    virtual void interpolateValue(
-        double fraction,
-        std::unique_ptr<TypedInterpolationValue>& result) const = 0;
-    virtual double interpolateUnderlyingFraction(double start,
-        double end,
-        double fraction) const = 0;
-    virtual bool isFlip() const { return false; }
+    virtual void interpolate(double fraction, OwnPtrWillBeMember<InterpolationValue>& result) const = 0;
 
-protected:
-    PrimitiveInterpolation() { }
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
-// Represents a pair of keyframes that are compatible for "smooth" interpolation
-// eg. "0px" and "100px".
+// Represents a pair of keyframes that are compatible for "smooth" interpolation eg. "0px" and "100px".
 class PairwisePrimitiveInterpolation : public PrimitiveInterpolation {
 public:
-    ~PairwisePrimitiveInterpolation() override { }
+    virtual ~PairwisePrimitiveInterpolation() { }
 
-    static std::unique_ptr<PairwisePrimitiveInterpolation> create(
-        const InterpolationType& type,
-        std::unique_ptr<InterpolableValue> start,
-        std::unique_ptr<InterpolableValue> end,
-        PassRefPtr<NonInterpolableValue> nonInterpolableValue)
+    static PassOwnPtrWillBeRawPtr<PairwisePrimitiveInterpolation> create(const InterpolationType& type, PassOwnPtrWillBeRawPtr<InterpolableValue> start, PassOwnPtrWillBeRawPtr<InterpolableValue> end, PassRefPtrWillBeRawPtr<NonInterpolableValue> nonInterpolableValue)
     {
-        return WTF::wrapUnique(new PairwisePrimitiveInterpolation(
-            type, std::move(start), std::move(end),
-            std::move(nonInterpolableValue)));
+        return adoptPtrWillBeNoop(new PairwisePrimitiveInterpolation(type, start, end, nonInterpolableValue));
     }
 
-    const InterpolationType& type() const { return m_type; }
-
-    std::unique_ptr<TypedInterpolationValue> initialValue() const
+    PassOwnPtrWillBeRawPtr<InterpolationValue> initialValue() const
     {
-        return TypedInterpolationValue::create(m_type, m_start->clone(),
-            m_nonInterpolableValue);
+        return InterpolationValue::create(m_type, m_start->clone(), m_nonInterpolableValue);
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_start);
+        visitor->trace(m_end);
+        visitor->trace(m_nonInterpolableValue);
+        PrimitiveInterpolation::trace(visitor);
     }
 
 private:
-    PairwisePrimitiveInterpolation(
-        const InterpolationType& type,
-        std::unique_ptr<InterpolableValue> start,
-        std::unique_ptr<InterpolableValue> end,
-        PassRefPtr<NonInterpolableValue> nonInterpolableValue)
+    PairwisePrimitiveInterpolation(const InterpolationType& type, PassOwnPtrWillBeRawPtr<InterpolableValue> start, PassOwnPtrWillBeRawPtr<InterpolableValue> end, PassRefPtrWillBeRawPtr<NonInterpolableValue> nonInterpolableValue)
         : m_type(type)
-        , m_start(std::move(start))
-        , m_end(std::move(end))
+        , m_start(start)
+        , m_end(end)
         , m_nonInterpolableValue(nonInterpolableValue)
-    {
-        DCHECK(m_start);
-        DCHECK(m_end);
-    }
+    { }
 
-    void interpolateValue(
-        double fraction,
-        std::unique_ptr<TypedInterpolationValue>& result) const final
+    virtual void interpolate(double fraction, OwnPtrWillBeMember<InterpolationValue>& result) const override final
     {
-        DCHECK(result);
-        DCHECK_EQ(&result->type(), &m_type);
-        DCHECK_EQ(result->getNonInterpolableValue(), m_nonInterpolableValue.get());
-        m_start->interpolate(*m_end, fraction,
-            *result->mutableValue().interpolableValue);
-    }
-
-    double interpolateUnderlyingFraction(double start,
-        double end,
-        double fraction) const final
-    {
-        return blend(start, end, fraction);
+        ASSERT(result);
+        ASSERT(&result->type() == &m_type);
+        ASSERT(result->nonInterpolableValue() == m_nonInterpolableValue.get());
+        m_start->interpolate(*m_end, fraction, result->interpolableValue());
     }
 
     const InterpolationType& m_type;
-    std::unique_ptr<InterpolableValue> m_start;
-    std::unique_ptr<InterpolableValue> m_end;
-    RefPtr<NonInterpolableValue> m_nonInterpolableValue;
+    OwnPtrWillBeMember<InterpolableValue> m_start;
+    OwnPtrWillBeMember<InterpolableValue> m_end;
+    RefPtrWillBeMember<NonInterpolableValue> m_nonInterpolableValue;
 };
 
-// Represents a pair of incompatible keyframes that fall back to 50% flip
-// behaviour eg. "auto" and "0px".
+// Represents a pair of incompatible keyframes that fall back to 50% flip behaviour eg. "auto" and "0px".
 class FlipPrimitiveInterpolation : public PrimitiveInterpolation {
 public:
-    ~FlipPrimitiveInterpolation() override { }
+    virtual ~FlipPrimitiveInterpolation() { }
 
-    static std::unique_ptr<FlipPrimitiveInterpolation> create(
-        std::unique_ptr<TypedInterpolationValue> start,
-        std::unique_ptr<TypedInterpolationValue> end)
+    static PassOwnPtrWillBeRawPtr<FlipPrimitiveInterpolation> create(PassOwnPtrWillBeRawPtr<InterpolationValue> start, PassOwnPtrWillBeRawPtr<InterpolationValue> end)
     {
-        return WTF::wrapUnique(
-            new FlipPrimitiveInterpolation(std::move(start), std::move(end)));
+        return adoptPtrWillBeNoop(new FlipPrimitiveInterpolation(start, end));
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_start);
+        visitor->trace(m_end);
+        PrimitiveInterpolation::trace(visitor);
     }
 
 private:
-    FlipPrimitiveInterpolation(std::unique_ptr<TypedInterpolationValue> start,
-        std::unique_ptr<TypedInterpolationValue> end)
-        : m_start(std::move(start))
-        , m_end(std::move(end))
+    FlipPrimitiveInterpolation(PassOwnPtrWillBeRawPtr<InterpolationValue> start, PassOwnPtrWillBeRawPtr<InterpolationValue> end)
+        : m_start(start)
+        , m_end(end)
         , m_lastFraction(std::numeric_limits<double>::quiet_NaN())
     {
+        ASSERT(m_start);
+        ASSERT(m_end);
     }
 
-    void interpolateValue(
-        double fraction,
-        std::unique_ptr<TypedInterpolationValue>& result) const final
+    virtual void interpolate(double fraction, OwnPtrWillBeMember<InterpolationValue>& result) const override final
     {
-        if (!std_isnan(m_lastFraction) && (fraction < 0.5) == (m_lastFraction < 0.5))
+        // TODO(alancutter): Remove this optimisation once Oilpan is default.
+        if (!std::isnan(m_lastFraction) && (fraction < 0.5) == (m_lastFraction < 0.5))
             return;
-        const TypedInterpolationValue* side = ((fraction < 0.5) ? m_start : m_end).get();
-        result = side ? side->clone() : nullptr;
+        result = ((fraction < 0.5) ? m_start : m_end)->clone();
         m_lastFraction = fraction;
     }
 
-    double interpolateUnderlyingFraction(double start,
-        double end,
-        double fraction) const final
-    {
-        return fraction < 0.5 ? start : end;
-    }
-
-    bool isFlip() const final { return true; }
-
-    std::unique_ptr<TypedInterpolationValue> m_start;
-    std::unique_ptr<TypedInterpolationValue> m_end;
+    OwnPtrWillBeMember<InterpolationValue> m_start;
+    OwnPtrWillBeMember<InterpolationValue> m_end;
     mutable double m_lastFraction;
 };
 

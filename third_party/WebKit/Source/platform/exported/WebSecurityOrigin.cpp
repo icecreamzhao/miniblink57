@@ -28,8 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/platform/WebSecurityOrigin.h"
 
+=======
+#include "config.h"
+#include "public/platform/WebSecurityOrigin.h"
+
+#include "platform/weborigin/DatabaseIdentifier.h"
+>>>>>>> miniblink49
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/WebString.h"
@@ -41,6 +48,14 @@ namespace blink {
 class WebSecurityOriginPrivate : public SecurityOrigin {
 };
 
+<<<<<<< HEAD
+=======
+WebSecurityOrigin WebSecurityOrigin::createFromDatabaseIdentifier(const WebString& databaseIdentifier)
+{
+    return WebSecurityOrigin(createSecurityOriginFromDatabaseIdentifier(databaseIdentifier));
+}
+
+>>>>>>> miniblink49
 WebSecurityOrigin WebSecurityOrigin::createFromString(const WebString& origin)
 {
     return WebSecurityOrigin(SecurityOrigin::createFromString(origin));
@@ -51,6 +66,7 @@ WebSecurityOrigin WebSecurityOrigin::create(const WebURL& url)
     return WebSecurityOrigin(SecurityOrigin::create(url));
 }
 
+<<<<<<< HEAD
 WebSecurityOrigin WebSecurityOrigin::createFromTupleWithSuborigin(
     const WebString& protocol,
     const WebString& host,
@@ -66,6 +82,8 @@ WebSecurityOrigin WebSecurityOrigin::createUnique()
     return WebSecurityOrigin(SecurityOrigin::createUnique());
 }
 
+=======
+>>>>>>> miniblink49
 void WebSecurityOrigin::reset()
 {
     assign(0);
@@ -81,18 +99,27 @@ void WebSecurityOrigin::assign(const WebSecurityOrigin& other)
 
 WebString WebSecurityOrigin::protocol() const
 {
+<<<<<<< HEAD
     DCHECK(m_private);
+=======
+    ASSERT(m_private);
+>>>>>>> miniblink49
     return m_private->protocol();
 }
 
 WebString WebSecurityOrigin::host() const
 {
+<<<<<<< HEAD
     DCHECK(m_private);
+=======
+    ASSERT(m_private);
+>>>>>>> miniblink49
     return m_private->host();
 }
 
 unsigned short WebSecurityOrigin::port() const
 {
+<<<<<<< HEAD
     DCHECK(m_private);
     return m_private->port();
 }
@@ -113,18 +140,33 @@ WebString WebSecurityOrigin::suborigin() const
 bool WebSecurityOrigin::isUnique() const
 {
     DCHECK(m_private);
+=======
+    ASSERT(m_private);
+    return m_private->port();
+}
+
+bool WebSecurityOrigin::isUnique() const
+{
+    ASSERT(m_private);
+>>>>>>> miniblink49
     return m_private->isUnique();
 }
 
 bool WebSecurityOrigin::canAccess(const WebSecurityOrigin& other) const
 {
+<<<<<<< HEAD
     DCHECK(m_private);
     DCHECK(other.m_private);
+=======
+    ASSERT(m_private);
+    ASSERT(other.m_private);
+>>>>>>> miniblink49
     return m_private->canAccess(other.m_private);
 }
 
 bool WebSecurityOrigin::canRequest(const WebURL& url) const
 {
+<<<<<<< HEAD
     DCHECK(m_private);
     return m_private->canRequest(url);
 }
@@ -133,10 +175,24 @@ bool WebSecurityOrigin::isPotentiallyTrustworthy() const
 {
     DCHECK(m_private);
     return m_private->isPotentiallyTrustworthy();
+=======
+    ASSERT(m_private);
+    return m_private->canRequest(url);
+}
+
+bool WebSecurityOrigin::isPotentiallyTrustworthy(WebString& errorMessage) const
+{
+    ASSERT(m_private);
+    WTF::String message(errorMessage);
+    bool result = m_private->isPotentiallyTrustworthy(message);
+    errorMessage = message;
+    return result;
+>>>>>>> miniblink49
 }
 
 WebString WebSecurityOrigin::toString() const
 {
+<<<<<<< HEAD
     DCHECK(m_private);
     return m_private->toString();
 }
@@ -148,12 +204,35 @@ bool WebSecurityOrigin::canAccessPasswordManager() const
 }
 
 WebSecurityOrigin::WebSecurityOrigin(WTF::PassRefPtr<SecurityOrigin> origin)
+=======
+    ASSERT(m_private);
+    return m_private->toString();
+}
+
+WebString WebSecurityOrigin::databaseIdentifier() const
+{
+    ASSERT(m_private);
+    return createDatabaseIdentifierFromSecurityOrigin(m_private);
+}
+
+bool WebSecurityOrigin::canAccessPasswordManager() const
+{
+    ASSERT(m_private);
+    return m_private->canAccessPasswordManager();
+}
+
+WebSecurityOrigin::WebSecurityOrigin(const WTF::PassRefPtr<SecurityOrigin>& origin)
+>>>>>>> miniblink49
     : m_private(static_cast<WebSecurityOriginPrivate*>(origin.leakRef()))
 {
 }
 
+<<<<<<< HEAD
 WebSecurityOrigin& WebSecurityOrigin::operator=(
     WTF::PassRefPtr<SecurityOrigin> origin)
+=======
+WebSecurityOrigin& WebSecurityOrigin::operator=(const WTF::PassRefPtr<SecurityOrigin>& origin)
+>>>>>>> miniblink49
 {
     assign(static_cast<WebSecurityOriginPrivate*>(origin.leakRef()));
     return *this;
@@ -161,8 +240,12 @@ WebSecurityOrigin& WebSecurityOrigin::operator=(
 
 WebSecurityOrigin::operator WTF::PassRefPtr<SecurityOrigin>() const
 {
+<<<<<<< HEAD
     return PassRefPtr<SecurityOrigin>(
         const_cast<WebSecurityOriginPrivate*>(m_private));
+=======
+    return PassRefPtr<SecurityOrigin>(const_cast<WebSecurityOriginPrivate*>(m_private));
+>>>>>>> miniblink49
 }
 
 SecurityOrigin* WebSecurityOrigin::get() const

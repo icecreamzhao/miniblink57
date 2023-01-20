@@ -21,19 +21,14 @@
 #ifndef StepRange_h
 #define StepRange_h
 
-#include "core/CoreExport.h"
 #include "platform/Decimal.h"
-#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 
 namespace blink {
 
-enum AnyStepHandling { RejectAny,
-    AnyIsDefaultStep };
+enum AnyStepHandling { RejectAny, AnyIsDefaultStep };
 
-class CORE_EXPORT StepRange {
-    DISALLOW_NEW();
-
+class StepRange {
 public:
     enum StepValueShouldBe {
         StepValueShouldBeReal,
@@ -42,18 +37,14 @@ public:
     };
 
     struct StepDescription {
-        USING_FAST_MALLOC(StepDescription);
-
+        WTF_MAKE_FAST_ALLOCATED(StepDescription);
     public:
         int defaultStep;
         int defaultStepBase;
         int stepScaleFactor;
         StepValueShouldBe stepValueShouldBe;
 
-        StepDescription(int defaultStep,
-            int defaultStepBase,
-            int stepScaleFactor,
-            StepValueShouldBe stepValueShouldBe = StepValueShouldBeReal)
+        StepDescription(int defaultStep, int defaultStepBase, int stepScaleFactor, StepValueShouldBe stepValueShouldBe = StepValueShouldBeReal)
             : defaultStep(defaultStep)
             , defaultStepBase(defaultStepBase)
             , stepScaleFactor(stepScaleFactor)
@@ -69,35 +60,24 @@ public:
         {
         }
 
-        Decimal defaultValue() const { return defaultStep * stepScaleFactor; }
+        Decimal defaultValue() const
+        {
+            return defaultStep * stepScaleFactor;
+        }
     };
 
     StepRange();
     StepRange(const StepRange&);
-    StepRange(const Decimal& stepBase,
-        const Decimal& minimum,
-        const Decimal& maximum,
-        bool hasRangeLimitations,
-        const Decimal& step,
-        const StepDescription&);
-
-    Decimal alignValueForStep(const Decimal& currentValue,
-        const Decimal& newValue) const;
+    StepRange(const Decimal& stepBase, const Decimal& minimum, const Decimal& maximum, const Decimal& step, const StepDescription&);
+    Decimal alignValueForStep(const Decimal& currentValue, const Decimal& newValue) const;
     Decimal clampValue(const Decimal& value) const;
     bool hasStep() const { return m_hasStep; }
     Decimal maximum() const { return m_maximum; }
     Decimal minimum() const { return m_minimum; }
-    // https://html.spec.whatwg.org/multipage/forms.html#have-range-limitations
-    bool hasRangeLimitations() const { return m_hasRangeLimitations; }
-    static Decimal parseStep(AnyStepHandling,
-        const StepDescription&,
-        const String&);
+    static Decimal parseStep(AnyStepHandling, const StepDescription&, const String&);
     Decimal step() const { return m_step; }
     Decimal stepBase() const { return m_stepBase; }
     bool stepMismatch(const Decimal&) const;
-    // Returns the maximum step-matched value between minimum() and
-    // maximum(). If there's no such value, this returns Decimal::nan().
-    Decimal stepSnappedMaximum() const;
 
     // Clamp the middle value according to the step
     Decimal defaultValue() const
@@ -121,7 +101,7 @@ public:
     }
 
 private:
-    StepRange& operator=(const StepRange&) = delete;
+    StepRange& operator =(const StepRange&);
     Decimal acceptableError() const;
     Decimal roundByStep(const Decimal& value, const Decimal& base) const;
 
@@ -131,9 +111,8 @@ private:
     const Decimal m_stepBase;
     const StepDescription m_stepDescription;
     const bool m_hasStep;
-    const bool m_hasRangeLimitations;
 };
 
-} // namespace blink
+}
 
 #endif // StepRange_h

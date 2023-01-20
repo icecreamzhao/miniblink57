@@ -22,13 +22,13 @@
 // https://html.spec.whatwg.org/#the-col-element
 
 interface HTMLTableColElement : HTMLElement {
-    [CEReactions] attribute unsigned long span;
+    attribute unsigned long span;
 
     // obsolete attributes
     // https://html.spec.whatwg.org/#HTMLTableColElement-partial
-    [CEReactions, Reflect] attribute DOMString align;
-    [CEReactions, Reflect=char] attribute DOMString ch;
-    [CEReactions, Reflect=charoff] attribute DOMString chOff;
-    [CEReactions, Reflect] attribute DOMString vAlign;
-    [CEReactions, Reflect] attribute DOMString width;
+    [Reflect] attribute DOMString align;
+    [Reflect=char] attribute DOMString ch;
+    [Reflect=charoff] attribute DOMString chOff;
+    [Reflect] attribute DOMString vAlign;
+    [Reflect] attribute DOMString width;
 };

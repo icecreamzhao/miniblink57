@@ -45,27 +45,19 @@ class LocalFrame;
 class ExecutionContext;
 class WorkerGlobalScope;
 
-class ScheduledAction final
-    : public GarbageCollectedFinalized<ScheduledAction> {
+class ScheduledAction final : public NoBaseWillBeGarbageCollectedFinalized<ScheduledAction> {
     WTF_MAKE_NONCOPYABLE(ScheduledAction);
-
 public:
-    static ScheduledAction* create(ScriptState*,
-        const ScriptValue& handler,
-        const Vector<ScriptValue>& arguments);
-    static ScheduledAction* create(ScriptState*, const String& handler);
+    static PassOwnPtrWillBeRawPtr<ScheduledAction> create(ScriptState*, const ScriptValue& handler, const Vector<ScriptValue>& arguments);
+    static PassOwnPtrWillBeRawPtr<ScheduledAction> create(ScriptState*, const String& handler);
 
     ~ScheduledAction();
-    void dispose();
-
     DECLARE_TRACE();
 
     void execute(ExecutionContext*);
 
 private:
-    ScheduledAction(ScriptState*,
-        const ScriptValue& handler,
-        const Vector<ScriptValue>& arguments);
+    ScheduledAction(ScriptState*, const ScriptValue& handler, const Vector<ScriptValue>& arguments);
     ScheduledAction(ScriptState*, const String& handler);
 
     void execute(LocalFrame*);

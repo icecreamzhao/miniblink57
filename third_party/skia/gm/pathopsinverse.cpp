@@ -5,16 +5,24 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+#include "gm.h"
+>>>>>>> miniblink49
 #include "SkBitmap.h"
 #include "SkPath.h"
 #include "SkPathOps.h"
 #include "SkRect.h"
+<<<<<<< HEAD
 #include "gm.h"
+=======
+>>>>>>> miniblink49
 
 namespace skiagm {
 
 class PathOpsInverseGM : public GM {
 public:
+<<<<<<< HEAD
     PathOpsInverseGM()
     {
     }
@@ -23,37 +31,63 @@ protected:
     void onOnceBeforeDraw() override
     {
         const unsigned oneColor = sk_tool_utils::color_to_565(0xFF8080FF);
+=======
+    PathOpsInverseGM() {
+    }
+
+protected:
+    void onOnceBeforeDraw() override {
+        const unsigned oneColor = 0xFF8080FF;
+>>>>>>> miniblink49
         const unsigned twoColor = 0x807F1f1f;
         SkColor blendColor = blend(oneColor, twoColor);
         makePaint(&fOnePaint, oneColor);
         makePaint(&fTwoPaint, twoColor);
         makePaint(&fOpPaint[kDifference_SkPathOp], oneColor);
         makePaint(&fOpPaint[kIntersect_SkPathOp], blendColor);
+<<<<<<< HEAD
         makePaint(&fOpPaint[kUnion_SkPathOp], sk_tool_utils::color_to_565(0xFFc0FFc0));
         makePaint(&fOpPaint[kReverseDifference_SkPathOp], twoColor);
         makePaint(&fOpPaint[kXOR_SkPathOp], sk_tool_utils::color_to_565(0xFFa0FFe0));
+=======
+        makePaint(&fOpPaint[kUnion_SkPathOp], 0xFFc0FFc0);
+        makePaint(&fOpPaint[kReverseDifference_SkPathOp], twoColor);
+        makePaint(&fOpPaint[kXOR_SkPathOp], 0xFFa0FFe0);
+>>>>>>> miniblink49
         makePaint(&fOutlinePaint, 0xFF000000);
         fOutlinePaint.setStyle(SkPaint::kStroke_Style);
     }
 
+<<<<<<< HEAD
     SkColor blend(SkColor one, SkColor two)
     {
+=======
+    SkColor blend(SkColor one, SkColor two) {
+>>>>>>> miniblink49
         SkBitmap temp;
         temp.allocN32Pixels(1, 1);
         SkCanvas canvas(temp);
         canvas.drawColor(one);
         canvas.drawColor(two);
         void* pixels = temp.getPixels();
+<<<<<<< HEAD
         return *(SkColor*)pixels;
     }
 
     void makePaint(SkPaint* paint, SkColor color)
     {
+=======
+        return *(SkColor*) pixels;
+    }
+
+    void makePaint(SkPaint* paint, SkColor color) {
+>>>>>>> miniblink49
         paint->setAntiAlias(true);
         paint->setStyle(SkPaint::kFill_Style);
         paint->setColor(color);
     }
 
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("pathopsinverse");
@@ -66,14 +100,32 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    SkString onShortName() override {
+        return SkString("pathopsinverse");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(1200, 900);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         SkPath one, two;
         int yPos = 0;
         for (int oneFill = 0; oneFill <= 1; ++oneFill) {
             SkPath::FillType oneF = oneFill ? SkPath::kInverseEvenOdd_FillType
+<<<<<<< HEAD
                                             : SkPath::kEvenOdd_FillType;
             for (int twoFill = 0; twoFill <= 1; ++twoFill) {
                 SkPath::FillType twoF = twoFill ? SkPath::kInverseEvenOdd_FillType
                                                 : SkPath::kEvenOdd_FillType;
+=======
+                    : SkPath::kEvenOdd_FillType;
+            for (int twoFill = 0; twoFill <= 1; ++twoFill) {
+                SkPath::FillType twoF = twoFill ? SkPath::kInverseEvenOdd_FillType
+                        : SkPath::kEvenOdd_FillType;
+>>>>>>> miniblink49
                 one.reset();
                 one.setFillType(oneF);
                 one.addRect(10, 10, 70, 70);
@@ -91,7 +143,11 @@ protected:
                 int xPos = 150;
                 for (int op = kDifference_SkPathOp; op <= kReverseDifference_SkPathOp; ++op) {
                     SkPath result;
+<<<<<<< HEAD
                     Op(one, two, (SkPathOp)op, &result);
+=======
+                    Op(one, two, (SkPathOp) op, &result);
+>>>>>>> miniblink49
                     canvas->save();
                     canvas->translate(SkIntToScalar(xPos), SkIntToScalar(yPos));
                     canvas->clipRect(SkRect::MakeWH(110, 110), SkRegion::kIntersect_Op, true);

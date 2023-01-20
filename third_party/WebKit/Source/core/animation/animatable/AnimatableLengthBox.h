@@ -37,44 +37,36 @@ namespace blink {
 
 class AnimatableLengthBox final : public AnimatableValue {
 public:
-    ~AnimatableLengthBox() override { }
-    static PassRefPtr<AnimatableLengthBox> create(
-        PassRefPtr<AnimatableValue> left,
-        PassRefPtr<AnimatableValue> right,
-        PassRefPtr<AnimatableValue> top,
-        PassRefPtr<AnimatableValue> bottom)
+    virtual ~AnimatableLengthBox() { }
+    static PassRefPtrWillBeRawPtr<AnimatableLengthBox> create(PassRefPtrWillBeRawPtr<AnimatableValue> left, PassRefPtrWillBeRawPtr<AnimatableValue> right, PassRefPtrWillBeRawPtr<AnimatableValue> top, PassRefPtrWillBeRawPtr<AnimatableValue> bottom)
     {
-        return adoptRef(new AnimatableLengthBox(std::move(left), std::move(right),
-            std::move(top), std::move(bottom)));
+        return adoptRefWillBeNoop(new AnimatableLengthBox(left, right, top, bottom));
     }
     const AnimatableValue* left() const { return m_left.get(); }
     const AnimatableValue* right() const { return m_right.get(); }
     const AnimatableValue* top() const { return m_top.get(); }
     const AnimatableValue* bottom() const { return m_bottom.get(); }
 
+    DECLARE_VIRTUAL_TRACE();
+
 protected:
-    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
-        double fraction) const override;
-    bool usesDefaultInterpolationWith(const AnimatableValue*) const final;
+    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
 
 private:
-    AnimatableLengthBox(PassRefPtr<AnimatableValue> left,
-        PassRefPtr<AnimatableValue> right,
-        PassRefPtr<AnimatableValue> top,
-        PassRefPtr<AnimatableValue> bottom)
+    AnimatableLengthBox(PassRefPtrWillBeRawPtr<AnimatableValue> left, PassRefPtrWillBeRawPtr<AnimatableValue> right, PassRefPtrWillBeRawPtr<AnimatableValue> top, PassRefPtrWillBeRawPtr<AnimatableValue> bottom)
         : m_left(left)
         , m_right(right)
         , m_top(top)
         , m_bottom(bottom)
     {
     }
-    AnimatableType type() const override { return TypeLengthBox; }
-    bool equalTo(const AnimatableValue*) const override;
+    virtual AnimatableType type() const override { return TypeLengthBox; }
+    virtual bool equalTo(const AnimatableValue*) const override;
 
-    RefPtr<AnimatableValue> m_left;
-    RefPtr<AnimatableValue> m_right;
-    RefPtr<AnimatableValue> m_top;
-    RefPtr<AnimatableValue> m_bottom;
+    RefPtrWillBeMember<AnimatableValue> m_left;
+    RefPtrWillBeMember<AnimatableValue> m_right;
+    RefPtrWillBeMember<AnimatableValue> m_top;
+    RefPtrWillBeMember<AnimatableValue> m_bottom;
 };
 
 DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableLengthBox, isLengthBox());

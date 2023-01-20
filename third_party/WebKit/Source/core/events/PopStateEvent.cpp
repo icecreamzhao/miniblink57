@@ -24,6 +24,7 @@
  *
  */
 
+#include "config.h"
 #include "core/events/PopStateEvent.h"
 
 #include "bindings/core/v8/SerializedScriptValue.h"
@@ -38,8 +39,7 @@ PopStateEvent::PopStateEvent()
 {
 }
 
-PopStateEvent::PopStateEvent(const AtomicString& type,
-    const PopStateEventInit& initializer)
+PopStateEvent::PopStateEvent(const AtomicString& type, const PopStateEventInit& initializer)
     : Event(type, initializer)
     , m_history(nullptr)
 {
@@ -47,32 +47,30 @@ PopStateEvent::PopStateEvent(const AtomicString& type,
         m_state = initializer.state();
 }
 
-PopStateEvent::PopStateEvent(PassRefPtr<SerializedScriptValue> serializedState,
-    History* history)
+PopStateEvent::PopStateEvent(PassRefPtr<SerializedScriptValue> serializedState, History* history)
     : Event(EventTypeNames::popstate, false, true)
     , m_serializedState(serializedState)
     , m_history(history)
 {
 }
 
-PopStateEvent::~PopStateEvent() { }
-
-PopStateEvent* PopStateEvent::create()
+PopStateEvent::~PopStateEvent()
 {
-    return new PopStateEvent;
 }
 
-PopStateEvent* PopStateEvent::create(
-    PassRefPtr<SerializedScriptValue> serializedState,
-    History* history)
+PassRefPtrWillBeRawPtr<PopStateEvent> PopStateEvent::create()
 {
-    return new PopStateEvent(std::move(serializedState), history);
+    return adoptRefWillBeNoop(new PopStateEvent);
 }
 
-PopStateEvent* PopStateEvent::create(const AtomicString& type,
-    const PopStateEventInit& initializer)
+PassRefPtrWillBeRawPtr<PopStateEvent> PopStateEvent::create(PassRefPtr<SerializedScriptValue> serializedState, History* history)
 {
-    return new PopStateEvent(type, initializer);
+    return adoptRefWillBeNoop(new PopStateEvent(serializedState, history));
+}
+
+PassRefPtrWillBeRawPtr<PopStateEvent> PopStateEvent::create(const AtomicString& type, const PopStateEventInit& initializer)
+{
+    return adoptRefWillBeNoop(new PopStateEvent(type, initializer));
 }
 
 const AtomicString& PopStateEvent::interfaceName() const

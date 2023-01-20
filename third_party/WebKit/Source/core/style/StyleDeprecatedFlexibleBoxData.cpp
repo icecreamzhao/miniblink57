@@ -19,6 +19,7 @@
  *
  */
 
+#include "config.h"
 #include "core/style/StyleDeprecatedFlexibleBoxData.h"
 
 #include "core/style/ComputedStyle.h"
@@ -36,8 +37,7 @@ StyleDeprecatedFlexibleBoxData::StyleDeprecatedFlexibleBoxData()
 {
 }
 
-StyleDeprecatedFlexibleBoxData::StyleDeprecatedFlexibleBoxData(
-    const StyleDeprecatedFlexibleBoxData& o)
+StyleDeprecatedFlexibleBoxData::StyleDeprecatedFlexibleBoxData(const StyleDeprecatedFlexibleBoxData& o)
     : RefCounted<StyleDeprecatedFlexibleBoxData>()
     , flex(o.flex)
     , flexGroup(o.flexGroup)
@@ -49,8 +49,7 @@ StyleDeprecatedFlexibleBoxData::StyleDeprecatedFlexibleBoxData(
 {
 }
 
-bool StyleDeprecatedFlexibleBoxData::operator==(
-    const StyleDeprecatedFlexibleBoxData& o) const
+bool StyleDeprecatedFlexibleBoxData::operator==(const StyleDeprecatedFlexibleBoxData& o) const
 {
     return flex == o.flex && flexGroup == o.flexGroup && ordinalGroup == o.ordinalGroup && align == o.align && pack == o.pack && orient == o.orient && lines == o.lines;
 }

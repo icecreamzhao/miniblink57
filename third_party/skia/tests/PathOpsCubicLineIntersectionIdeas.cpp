@@ -20,6 +20,7 @@ static struct CubicLineFailures {
     double t;
     SkDPoint p;
 } cubicLineFailures[] = {
+<<<<<<< HEAD
     { { { { -164.3726806640625, 36.826904296875 }, { -189.045166015625, -953.2220458984375 },
           { 926.505859375, -897.36175537109375 }, { -139.33489990234375, 204.40771484375 } } },
         0.37329583, { 107.54935269006289, -632.13736293162208 } },
@@ -61,6 +62,28 @@ double measuredSteps[] = {
     0.027875185,
     0.0351329803,
     0.103964925,
+=======
+    {{{{-164.3726806640625, 36.826904296875}, {-189.045166015625, -953.2220458984375},
+        {926.505859375, -897.36175537109375}, {-139.33489990234375, 204.40771484375}}},
+        0.37329583, {107.54935269006289, -632.13736293162208}},
+    {{{{784.056884765625, -554.8350830078125}, {67.5489501953125, 509.0224609375},
+        {-447.713134765625, 751.375}, {415.7784423828125, 172.22265625}}},
+        0.660005242, {-32.973148967736151, 478.01341797403569}},
+    {{{{-580.6834716796875, -127.044921875}, {-872.8983154296875, -945.54302978515625},
+        {260.8092041015625, -909.34991455078125}, {-976.2125244140625, -18.46551513671875}}},
+        0.578826774, {-390.17910153915489, -687.21144412296007}},
+};
+
+int cubicLineFailuresCount = (int) SK_ARRAY_COUNT(cubicLineFailures);
+
+double measuredSteps[] = {
+    9.15910731e-007, 8.6600277e-007, 7.4122059e-007, 6.92087618e-007, 8.35290245e-007,
+    3.29763199e-007, 5.07547773e-007, 4.41294224e-007, 0, 0,
+    3.76879167e-006, 1.06126249e-006, 2.36873967e-006, 1.62421134e-005, 3.09103599e-005,
+    4.38917976e-005, 0.000112348938, 0.000243149242, 0.000433174114, 0.00170880232,
+    0.00272619724, 0.00518844604, 0.000352621078, 0.00175960064, 0.027875185,
+    0.0351329803, 0.103964925,
+>>>>>>> miniblink49
 };
 
 /* last output : errors=3121
@@ -73,8 +96,12 @@ double measuredSteps[] = {
 */
 
 static double binary_search(const SkDCubic& cubic, double step, const SkDPoint& pt, double t,
+<<<<<<< HEAD
     int* iters)
 {
+=======
+        int* iters) {
+>>>>>>> miniblink49
     double firstStep = step;
     do {
         *iters += 1;
@@ -155,6 +182,7 @@ static bool r2check(double A, double B, double C, double D, double* R2MinusQ3Ptr
 /* What is the relationship between the accuracy of the root in range and the magnitude of all
    roots? To find out, create a bunch of cubics, and measure */
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsCubicLineRoots, reporter)
 {
     if (!gPathOpsCubicLineIntersectionIdeasVerbose) { // slow; exclude it by default
@@ -162,16 +190,33 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
     }
     SkRandom ran;
     double worstStep[256] = { 0 };
+=======
+DEF_TEST(PathOpsCubicLineRoots, reporter) {
+    if (!gPathOpsCubicLineIntersectionIdeasVerbose) {  // slow; exclude it by default
+        return;
+    }
+    SkRandom ran;
+    double worstStep[256] = {0};
+>>>>>>> miniblink49
     int errors = 0;
     int iters = 0;
     double smallestR2 = 0;
     double largestR2 = 0;
     for (int index = 0; index < 1000000000; ++index) {
+<<<<<<< HEAD
         SkDPoint origin = { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) };
         SkDCubic cubic = { { origin,
             { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) },
             { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) },
             { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) } } };
+=======
+        SkDPoint origin = {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)};
+        SkDCubic cubic = {{origin,
+                {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)},
+                {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)},
+                {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)}
+        }};
+>>>>>>> miniblink49
         // construct a line at a known intersection
         double t = ran.nextRangeF(0, 1);
         SkDPoint pt = cubic.ptAtT(t);
@@ -180,7 +225,11 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
         double A, B, C, D;
         SkDCubic::Coefficients(&cubic[0].fY, &A, &B, &C, &D);
         D -= pt.fY;
+<<<<<<< HEAD
         double allRoots[3] = { 0 }, validRoots[3] = { 0 };
+=======
+        double allRoots[3] = {0}, validRoots[3] = {0};
+>>>>>>> miniblink49
         int realRoots = SkDCubic::RootsReal(A, B, C, D, allRoots);
         int valid = SkDQuad::AddValidTs(allRoots, realRoots, validRoots);
         if (valid != 1) {
@@ -216,6 +265,7 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
             if (realRoots == 3) {
                 smallest = SkTMin(smallest, allRoots[2]);
             }
+<<<<<<< HEAD
             SkASSERT_RELEASE(smallest < 0);
             SkASSERT_RELEASE(smallest >= -1);
             largeBits = 0;
@@ -223,6 +273,15 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
             frexp(largest, &largeBits);
             SkASSERT_RELEASE(largeBits >= 0);
             SkASSERT_RELEASE(largeBits < 256);
+=======
+            SK_ALWAYSBREAK(smallest < 0);
+            SK_ALWAYSBREAK(smallest >= -1);
+            largeBits = 0;
+        } else {
+            frexp(largest, &largeBits);
+            SK_ALWAYSBREAK(largeBits >= 0);
+            SK_ALWAYSBREAK(largeBits < 256);
+>>>>>>> miniblink49
         }
         double step = 1e-6;
         if (largeBits > 21) {
@@ -244,7 +303,11 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
                 break;
             }
             step *= 1.5;
+<<<<<<< HEAD
             SkASSERT_RELEASE(step < 1);
+=======
+            SK_ALWAYSBREAK(step < 1);
+>>>>>>> miniblink49
         } while (true);
         worstStep[largeBits] = SkTMax(worstStep[largeBits], diff);
 #if 0
@@ -258,11 +321,18 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
 #endif
         ++errors;
     }
+<<<<<<< HEAD
     SkDebugf("errors=%d avgIter=%1.9g", errors, (double)iters / errors);
     SkDebugf(" steps: ");
     int worstLimit = SK_ARRAY_COUNT(worstStep);
     while (worstStep[--worstLimit] == 0)
         ;
+=======
+    SkDebugf("errors=%d avgIter=%1.9g", errors, (double) iters / errors);
+    SkDebugf(" steps: ");
+    int worstLimit = SK_ARRAY_COUNT(worstStep);
+    while (worstStep[--worstLimit] == 0) ;
+>>>>>>> miniblink49
     for (int idx2 = 0; idx2 <= worstLimit; ++idx2) {
         SkDebugf("%1.9g ", worstStep[idx2]);
     }
@@ -270,13 +340,18 @@ DEF_TEST(PathOpsCubicLineRoots, reporter)
     SkDebugf("smallestR2=%1.9g largestR2=%1.9g\n", smallestR2, largestR2);
 }
 
+<<<<<<< HEAD
 static double testOneFailure(const CubicLineFailures& failure)
 {
+=======
+static double testOneFailure(const CubicLineFailures& failure) {
+>>>>>>> miniblink49
     const SkDCubic& cubic = failure.c;
     const SkDPoint& pt = failure.p;
     double A, B, C, D;
     SkDCubic::Coefficients(&cubic[0].fY, &A, &B, &C, &D);
     D -= pt.fY;
+<<<<<<< HEAD
     double allRoots[3] = { 0 }, validRoots[3] = { 0 };
     int realRoots = SkDCubic::RootsReal(A, B, C, D, allRoots);
     int valid = SkDQuad::AddValidTs(allRoots, realRoots, validRoots);
@@ -285,11 +360,22 @@ static double testOneFailure(const CubicLineFailures& failure)
     double t = validRoots[0];
     SkDPoint calcPt = cubic.ptAtT(t);
     SkASSERT_RELEASE(!calcPt.approximatelyEqual(pt));
+=======
+    double allRoots[3] = {0}, validRoots[3] = {0};
+    int realRoots = SkDCubic::RootsReal(A, B, C, D, allRoots);
+    int valid = SkDQuad::AddValidTs(allRoots, realRoots, validRoots);
+    SK_ALWAYSBREAK(valid == 1);
+    SK_ALWAYSBREAK(realRoots != 1);
+    double t = validRoots[0];
+    SkDPoint calcPt = cubic.ptAtT(t);
+    SK_ALWAYSBREAK(!calcPt.approximatelyEqual(pt));
+>>>>>>> miniblink49
     int iters = 0;
     double newT = binary_search(cubic, 0.1, pt, t, &iters);
     return newT;
 }
 
+<<<<<<< HEAD
 DEF_TEST(PathOpsCubicLineFailures, reporter)
 {
     return; // disable for now
@@ -306,4 +392,20 @@ DEF_TEST(PathOpsCubicLineOneFailure, reporter)
     const CubicLineFailures& failure = cubicLineFailures[1];
     double newT = testOneFailure(failure);
     SkASSERT_RELEASE(newT >= 0);
+=======
+DEF_TEST(PathOpsCubicLineFailures, reporter) {
+    return;  // disable for now
+    for (int index = 0; index < cubicLineFailuresCount; ++index) {
+        const CubicLineFailures& failure = cubicLineFailures[index];
+        double newT = testOneFailure(failure);
+        SK_ALWAYSBREAK(newT >= 0);
+    }
+}
+
+DEF_TEST(PathOpsCubicLineOneFailure, reporter) {
+    return;  // disable for now
+    const CubicLineFailures& failure = cubicLineFailures[1];
+    double newT = testOneFailure(failure);
+    SK_ALWAYSBREAK(newT >= 0);
+>>>>>>> miniblink49
 }

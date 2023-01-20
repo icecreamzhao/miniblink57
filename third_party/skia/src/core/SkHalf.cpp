@@ -8,6 +8,7 @@
 #include "SkHalf.h"
 #include "SkFloatBits.h"
 
+<<<<<<< HEAD
 uint16_t halfMantissa(SkHalf h)
 {
     return h & 0x03ff;
@@ -20,24 +21,45 @@ uint16_t halfExponent(SkHalf h)
 
 uint16_t halfSign(SkHalf h)
 {
+=======
+uint16_t halfMantissa(SkHalf h) {
+    return h & 0x03ff;
+}
+
+uint16_t halfExponent(SkHalf h) {
+    return (h >> 10) & 0x001f;
+}
+
+uint16_t halfSign(SkHalf h) {
+>>>>>>> miniblink49
     return h >> 15;
 }
 
 union FloatUIntUnion {
+<<<<<<< HEAD
     uint32_t fUInt; // this must come first for the initializations below to work
     float fFloat;
+=======
+    uint32_t fUInt;    // this must come first for the initializations below to work
+    float    fFloat;
+>>>>>>> miniblink49
 };
 
 // based on Fabien Giesen's float_to_half_fast3()
 // see https://gist.github.com/rygorous/2156668
+<<<<<<< HEAD
 SkHalf SkFloatToHalf(float f)
 {
+=======
+SkHalf SkFloatToHalf(float f) {
+>>>>>>> miniblink49
     static const uint32_t f32infty = { 255 << 23 };
     static const uint32_t f16infty = { 31 << 23 };
     static const FloatUIntUnion magic = { 15 << 23 };
     static const uint32_t sign_mask = 0x80000000u;
     static const uint32_t round_mask = ~0xfffu;
     SkHalf o = 0;
+<<<<<<< HEAD
 
     FloatUIntUnion floatUnion;
     floatUnion.fFloat = f;
@@ -45,11 +67,24 @@ SkHalf SkFloatToHalf(float f)
     uint32_t sign = floatUnion.fUInt & sign_mask;
     floatUnion.fUInt ^= sign;
 
+=======
+    
+    FloatUIntUnion floatUnion;
+    floatUnion.fFloat = f;
+    
+    uint32_t sign = floatUnion.fUInt & sign_mask;
+    floatUnion.fUInt ^= sign;
+    
+>>>>>>> miniblink49
     // NOTE all the integer compares in this function can be safely
     // compiled into signed compares since all operands are below
     // 0x80000000. Important if you want fast straight SSE2 code
     // (since there's no unsigned PCMPGTD).
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     // Inf or NaN (all exponent bits set)
     if (floatUnion.fUInt >= f32infty)
         // NaN->qNaN and Inf->Inf
@@ -63,16 +98,24 @@ SkHalf SkFloatToHalf(float f)
         if (floatUnion.fUInt > f16infty) {
             floatUnion.fUInt = f16infty;
         }
+<<<<<<< HEAD
 
         o = floatUnion.fUInt >> 13; // Take the bits!
     }
 
+=======
+        
+        o = floatUnion.fUInt >> 13; // Take the bits!
+    }
+    
+>>>>>>> miniblink49
     o |= sign >> 16;
     return o;
 }
 
 // based on Fabien Giesen's half_to_float_fast2()
 // see https://fgiesen.wordpress.com/2012/03/28/half-to-float-done-quic/
+<<<<<<< HEAD
 float SkHalfToFloat(SkHalf h)
 {
     static const FloatUIntUnion magic = { 126 << 23 };
@@ -83,6 +126,20 @@ float SkHalfToFloat(SkHalf h)
         o.fUInt = magic.fUInt + halfMantissa(h);
         o.fFloat -= magic.fFloat;
     } else {
+=======
+float SkHalfToFloat(SkHalf h) {
+    static const FloatUIntUnion magic = { 126 << 23 };
+    FloatUIntUnion o;
+    
+    if (halfExponent(h) == 0)
+    {
+        // Zero / Denormal
+        o.fUInt = magic.fUInt + halfMantissa(h);
+        o.fFloat -= magic.fFloat;
+    }
+    else
+    {
+>>>>>>> miniblink49
         // Set mantissa
         o.fUInt = halfMantissa(h) << 13;
         // Set exponent
@@ -92,7 +149,11 @@ float SkHalfToFloat(SkHalf h)
         else
             o.fUInt |= ((127 - 15 + halfExponent(h)) << 23);
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> miniblink49
     // Set sign
     o.fUInt |= (halfSign(h) << 31);
     return o.fFloat;

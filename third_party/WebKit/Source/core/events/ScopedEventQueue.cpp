@@ -28,18 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/events/ScopedEventQueue.h"
 
 #include "core/events/Event.h"
 #include "core/events/EventDispatchMediator.h"
 #include "core/events/EventDispatcher.h"
 #include "core/events/EventTarget.h"
-#include "wtf/PtrUtil.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
 
 namespace blink {
 
-ScopedEventQueue* ScopedEventQueue::s_instance = nullptr;
+ScopedEventQueue* ScopedEventQueue::s_instance = 0;
 
 ScopedEventQueue::ScopedEventQueue()
     : m_scopingLevel(0)
@@ -48,38 +48,37 @@ ScopedEventQueue::ScopedEventQueue()
 
 ScopedEventQueue::~ScopedEventQueue()
 {
-    DCHECK(!m_scopingLevel);
-    DCHECK(!m_queuedEventDispatchMediators.size());
+    ASSERT(!m_scopingLevel);
+    ASSERT(!m_queuedEventDispatchMediators.size());
 }
 
 void ScopedEventQueue::initialize()
 {
-    DCHECK(!s_instance);
-    std::unique_ptr<ScopedEventQueue> instance = WTF::wrapUnique(new ScopedEventQueue);
-    s_instance = instance.release();
+    ASSERT(!s_instance);
+    OwnPtr<ScopedEventQueue> instance = adoptPtr(new ScopedEventQueue);
+    s_instance = instance.leakPtr();
 }
 
-void ScopedEventQueue::enqueueEventDispatchMediator(
-    EventDispatchMediator* mediator)
+void ScopedEventQueue::enqueueEventDispatchMediator(PassRefPtrWillBeRawPtr<EventDispatchMediator> mediator)
 {
-    if (shouldQueueEvents())
-        m_queuedEventDispatchMediators.push_back(mediator);
+    if (m_scopingLevel)
+        m_queuedEventDispatchMediators.append(mediator);
     else
         dispatchEvent(mediator);
 }
 
 void ScopedEventQueue::dispatchAllEvents()
 {
-    HeapVector<Member<EventDispatchMediator>> queuedEventDispatchMediators;
+    WillBeHeapVector<RefPtrWillBeMember<EventDispatchMediator>> queuedEventDispatchMediators;
     queuedEventDispatchMediators.swap(m_queuedEventDispatchMediators);
 
-    for (auto& mediator : queuedEventDispatchMediators)
-        dispatchEvent(mediator.release());
+    for (size_t i = 0; i < queuedEventDispatchMediators.size(); i++)
+        dispatchEvent(queuedEventDispatchMediators[i].release());
 }
 
-void ScopedEventQueue::dispatchEvent(EventDispatchMediator* mediator) const
+void ScopedEventQueue::dispatchEvent(PassRefPtrWillBeRawPtr<EventDispatchMediator> mediator) const
 {
-    DCHECK(mediator->event().target());
+    ASSERT(mediator->event().target());
     Node* node = mediator->event().target()->toNode();
     EventDispatcher::dispatchEvent(*node, mediator);
 }
@@ -99,10 +98,10 @@ void ScopedEventQueue::incrementScopingLevel()
 
 void ScopedEventQueue::decrementScopingLevel()
 {
-    DCHECK(m_scopingLevel);
+    ASSERT(m_scopingLevel);
     m_scopingLevel--;
     if (!m_scopingLevel)
         dispatchAllEvents();
 }
 
-} // namespace blink
+}

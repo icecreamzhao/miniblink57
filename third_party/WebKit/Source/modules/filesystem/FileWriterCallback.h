@@ -37,14 +37,22 @@ namespace blink {
 
 class FileWriter;
 
+<<<<<<< HEAD
 class FileWriterCallback
     : public GarbageCollectedFinalized<FileWriterCallback> {
+=======
+class FileWriterCallback : public GarbageCollectedFinalized<FileWriterCallback> {
+>>>>>>> miniblink49
 public:
     virtual ~FileWriterCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
     virtual void handleEvent(FileWriter*) = 0;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+} // namespace
+>>>>>>> miniblink49
 
 #endif // FileWriterCallback_h

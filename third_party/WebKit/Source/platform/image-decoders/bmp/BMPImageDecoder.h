@@ -32,11 +32,16 @@
 #define BMPImageDecoder_h
 
 #include "platform/image-decoders/bmp/BMPImageReader.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 // This class decodes the BMP image format.
+<<<<<<< HEAD
 class PLATFORM_EXPORT BMPImageDecoder final : public ImageDecoder {
 public:
     BMPImageDecoder(AlphaOption, const ColorBehavior&, size_t maxDecodedBytes);
@@ -44,6 +49,15 @@ public:
     // ImageDecoder:
     String filenameExtension() const override { return "bmp"; }
     void onSetData(SegmentReader*) override;
+=======
+class PLATFORM_EXPORT BMPImageDecoder : public ImageDecoder {
+public:
+    BMPImageDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedBytes);
+
+    // ImageDecoder:
+    String filenameExtension() const override { return "bmp"; }
+    void setData(SharedBuffer*, bool allDataReceived) override;
+>>>>>>> miniblink49
     // CAUTION: setFailed() deletes |m_reader|.  Be careful to avoid
     // accessing deleted memory, especially when calling this from inside
     // BMPImageReader!
@@ -54,6 +68,14 @@ private:
     void decodeSize() override { decode(true); }
     void decode(size_t) override { decode(false); }
 
+<<<<<<< HEAD
+=======
+    inline uint32_t readUint32(int offset) const
+    {
+        return BMPImageReader::readUint32(m_data.get(), m_decodedOffset + offset);
+    }
+
+>>>>>>> miniblink49
     // Decodes the image.  If |onlySize| is true, stops decoding after
     // calculating the image size. If decoding fails but there is no more
     // data coming, sets the "decode failure" flag.
@@ -74,7 +96,11 @@ private:
     size_t m_decodedOffset;
 
     // The reader used to do most of the BMP decoding.
+<<<<<<< HEAD
     std::unique_ptr<BMPImageReader> m_reader;
+=======
+    OwnPtr<BMPImageReader> m_reader;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

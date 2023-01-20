@@ -27,6 +27,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/track/TextTrackContainer.h"
 
 #include "core/html/HTMLVideoElement.h"
@@ -40,12 +41,11 @@ TextTrackContainer::TextTrackContainer(Document& document)
 {
 }
 
-TextTrackContainer* TextTrackContainer::create(Document& document)
+PassRefPtrWillBeRawPtr<TextTrackContainer> TextTrackContainer::create(Document& document)
 {
-    TextTrackContainer* element = new TextTrackContainer(document);
-    element->setShadowPseudoId(
-        AtomicString("-webkit-media-text-track-container"));
-    return element;
+    RefPtrWillBeRawPtr<TextTrackContainer> element = adoptRefWillBeNoop(new TextTrackContainer(document));
+    element->setShadowPseudoId(AtomicString("-webkit-media-text-track-container", AtomicString::ConstructFromLiteral));
+    return element.release();
 }
 
 LayoutObject* TextTrackContainer::createLayoutObject(const ComputedStyle&)
@@ -53,10 +53,9 @@ LayoutObject* TextTrackContainer::createLayoutObject(const ComputedStyle&)
     return new LayoutTextTrackContainer(this);
 }
 
-void TextTrackContainer::updateDisplay(HTMLMediaElement& mediaElement,
-    ExposingControls exposingControls)
+void TextTrackContainer::updateDisplay(HTMLMediaElement& mediaElement, ExposingControls exposingControls)
 {
-    if (!mediaElement.textTracksVisible()) {
+    if (!mediaElement.closedCaptionsVisible()) {
         removeChildren();
         return;
     }
@@ -114,10 +113,10 @@ void TextTrackContainer::updateDisplay(HTMLMediaElement& mediaElement,
     // corresponding CSS boxes added to output, in text track cue order, run the
     // following substeps:
     double movieTime = video.currentTime();
-    for (const auto& activeCue : activeCues) {
-        TextTrackCue* cue = activeCue.data();
+    for (size_t i = 0; i < activeCues.size(); ++i) {
+        TextTrackCue* cue = activeCues[i].data();
 
-        DCHECK(cue->isActive());
+        ASSERT(cue->isActive());
         if (!cue->track() || !cue->track()->isRendered() || !cue->isActive())
             continue;
 

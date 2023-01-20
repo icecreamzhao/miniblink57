@@ -31,9 +31,14 @@
 #ifndef DOMWebSocket_h
 #define DOMWebSocket_h
 
+<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/dom/SuspendableObject.h"
+=======
+#include "bindings/core/v8/ScriptWrappable.h"
+#include "core/dom/ActiveDOMObject.h"
+>>>>>>> miniblink49
 #include "core/events/EventListener.h"
 #include "core/events/EventTarget.h"
 #include "modules/EventTargetModules.h"
@@ -48,8 +53,11 @@
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 #include "wtf/text/WTFString.h"
+<<<<<<< HEAD
 #include <memory>
 #include <stddef.h>
+=======
+>>>>>>> miniblink49
 #include <stdint.h>
 
 namespace blink {
@@ -61,6 +69,7 @@ class ExceptionState;
 class ExecutionContext;
 class StringOrStringSequence;
 
+<<<<<<< HEAD
 class MODULES_EXPORT DOMWebSocket : public EventTargetWithInlineData,
                                     public ActiveScriptWrappable<DOMWebSocket>,
                                     public SuspendableObject,
@@ -68,11 +77,18 @@ class MODULES_EXPORT DOMWebSocket : public EventTargetWithInlineData,
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(DOMWebSocket);
 
+=======
+class MODULES_EXPORT DOMWebSocket : public RefCountedGarbageCollectedEventTargetWithInlineData<DOMWebSocket>, public ActiveDOMObject, public WebSocketChannelClient {
+    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(DOMWebSocket);
+    DEFINE_WRAPPERTYPEINFO();
+    USING_GARBAGE_COLLECTED_MIXIN(DOMWebSocket);
+>>>>>>> miniblink49
 public:
     static const char* subprotocolSeperator();
     // DOMWebSocket instances must be used with a wrapper since this class's
     // lifetime management is designed assuming the V8 holds a ref on it while
     // hasPendingActivity() returns true.
+<<<<<<< HEAD
     static DOMWebSocket* create(ExecutionContext*,
         const String& url,
         ExceptionState&);
@@ -90,6 +106,20 @@ public:
     void connect(const String& url,
         const Vector<String>& protocols,
         ExceptionState&);
+=======
+    static DOMWebSocket* create(ExecutionContext*, const String& url, ExceptionState&);
+    static DOMWebSocket* create(ExecutionContext*, const String& url, const StringOrStringSequence& protocols, ExceptionState&);
+    ~DOMWebSocket() override;
+
+    enum State {
+        CONNECTING = 0,
+        OPEN = 1,
+        CLOSING = 2,
+        CLOSED = 3
+    };
+
+    void connect(const String& url, const Vector<String>& protocols, ExceptionState&);
+>>>>>>> miniblink49
 
     void send(const String& message, ExceptionState&);
     void send(DOMArrayBuffer*, ExceptionState&);
@@ -122,6 +152,7 @@ public:
 
     // EventTarget functions.
     const AtomicString& interfaceName() const override;
+<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const override;
 
     // SuspendableObject functions.
@@ -133,10 +164,23 @@ public:
     // Prevent this instance from being collected while it's not in CLOSED
     // state.
     bool hasPendingActivity() const final;
+=======
+    ExecutionContext* executionContext() const override;
+
+    // ActiveDOMObject functions.
+    void contextDestroyed() override;
+    // Prevent this instance from being collected while it's not in CLOSED
+    // state.
+    bool hasPendingActivity() const override;
+    void suspend() override;
+    void resume() override;
+    void stop() override;
+>>>>>>> miniblink49
 
     // WebSocketChannelClient functions.
     void didConnect(const String& subprotocol, const String& extensions) override;
     void didReceiveTextMessage(const String& message) override;
+<<<<<<< HEAD
     void didReceiveBinaryMessage(std::unique_ptr<Vector<char>>) override;
     void didError() override;
     void didConsumeBufferedAmount(uint64_t) override;
@@ -144,6 +188,13 @@ public:
     void didClose(ClosingHandshakeCompletionStatus,
         unsigned short code,
         const String& reason) override;
+=======
+    void didReceiveBinaryMessage(PassOwnPtr<Vector<char>>) override;
+    void didError() override;
+    void didConsumeBufferedAmount(uint64_t) override;
+    void didStartClosingHandshake() override;
+    void didClose(ClosingHandshakeCompletionStatus, unsigned short code, const String& reason) override;
+>>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -165,13 +216,21 @@ private:
         // Dispatches the event if this queue is active.
         // Queues the event if this queue is suspended.
         // Does nothing otherwise.
+<<<<<<< HEAD
         void dispatch(Event* /* event */);
+=======
+        void dispatch(PassRefPtrWillBeRawPtr<Event> /* event */);
+>>>>>>> miniblink49
 
         bool isEmpty() const;
 
         void suspend();
         void resume();
+<<<<<<< HEAD
         void contextDestroyed();
+=======
+        void stop();
+>>>>>>> miniblink49
 
         DECLARE_TRACE();
 
@@ -187,11 +246,19 @@ private:
         // Dispatches queued events if this queue is active.
         // Does nothing otherwise.
         void dispatchQueuedEvents();
+<<<<<<< HEAD
         void resumeTimerFired(TimerBase*);
 
         State m_state;
         Member<EventTarget> m_target;
         HeapDeque<Member<Event>> m_events;
+=======
+        void resumeTimerFired(Timer<EventQueue>*);
+
+        State m_state;
+        RawPtrWillBeMember<EventTarget> m_target;
+        WillBeHeapDeque<RefPtrWillBeMember<Event>> m_events;
+>>>>>>> miniblink49
         Timer<EventQueue> m_resumeTimer;
     };
 
@@ -210,6 +277,7 @@ private:
         WebSocketReceiveTypeMax,
     };
 
+<<<<<<< HEAD
     enum BinaryType { BinaryTypeBlob,
         BinaryTypeArrayBuffer };
 
@@ -217,6 +285,11 @@ private:
     // FIXME: Move WebSocketChannel::create here.
     virtual WebSocketChannel* createChannel(ExecutionContext* context,
         WebSocketChannelClient* client)
+=======
+    // This function is virtual for unittests.
+    // FIXME: Move WebSocketChannel::create here.
+    virtual WebSocketChannel* createChannel(ExecutionContext* context, WebSocketChannelClient* client)
+>>>>>>> miniblink49
     {
         return WebSocketChannel::create(context, client);
     }
@@ -232,6 +305,7 @@ private:
     // Updates m_bufferedAmountAfterClose given the amount of data passed to
     // send() method after the state changed to CLOSING or CLOSED.
     void updateBufferedAmountAfterClose(uint64_t);
+<<<<<<< HEAD
     void reflectBufferedAmountConsumption(TimerBase*);
 
     void releaseChannel();
@@ -242,6 +316,16 @@ private:
 
     void setBinaryTypeInternal(BinaryType);
     void logBinaryTypeChangesAfterOpen();
+=======
+    void reflectBufferedAmountConsumption(Timer<DOMWebSocket>*);
+
+    void releaseChannel();
+
+    enum BinaryType {
+        BinaryTypeBlob,
+        BinaryTypeArrayBuffer
+    };
+>>>>>>> miniblink49
 
     Member<WebSocketChannel> m_channel;
 
@@ -253,7 +337,10 @@ private:
     uint64_t m_consumedBufferedAmount;
     uint64_t m_bufferedAmountAfterClose;
     BinaryType m_binaryType;
+<<<<<<< HEAD
     int m_binaryTypeChangesAfterOpen;
+=======
+>>>>>>> miniblink49
     // The subprotocol the server selected.
     String m_subprotocol;
     String m_extensions;

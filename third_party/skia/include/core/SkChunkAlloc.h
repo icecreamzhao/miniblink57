@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkChunkAlloc_DEFINED
 #define SkChunkAlloc_DEFINED
 
@@ -32,6 +36,7 @@ public:
         kThrow_AllocFailType
     };
 
+<<<<<<< HEAD
     /**
      *  Allocates a memory block of size bytes.
      *  On success: returns a pointer to beginning of memory block that is
@@ -46,6 +51,10 @@ public:
      */
     void* allocThrow(size_t bytes)
     {
+=======
+    void* alloc(size_t bytes, AllocFailType);
+    void* allocThrow(size_t bytes) {
+>>>>>>> miniblink49
         return this->alloc(bytes, kThrow_AllocFailType);
     }
 
@@ -60,18 +69,29 @@ public:
     size_t totalCapacity() const { return fTotalCapacity; }
     size_t totalUsed() const { return fTotalUsed; }
     SkDEBUGCODE(int blockCount() const { return fBlockCount; })
+<<<<<<< HEAD
         SkDEBUGCODE(size_t totalLost() const { return fTotalLost; })
 
         /**
+=======
+    SkDEBUGCODE(size_t totalLost() const { return fTotalLost; })
+
+    /**
+>>>>>>> miniblink49
      *  Returns true if the specified address is within one of the chunks, and
      *  has at least 1-byte following the address (i.e. if addr points to the
      *  end of a chunk, then contains() will return false).
      */
+<<<<<<< HEAD
         bool contains(const void* addr) const;
+=======
+    bool contains(const void* addr) const;
+>>>>>>> miniblink49
 
 private:
     struct Block;
 
+<<<<<<< HEAD
     Block* fBlock;
     size_t fMinSize;
     size_t fChunkSize;
@@ -81,6 +101,17 @@ private:
         SkDEBUGCODE(size_t fTotalLost;) // will be <= fTotalCapacity
 
         Block* newBlock(size_t bytes, AllocFailType ftype);
+=======
+    Block*  fBlock;
+    size_t  fMinSize;
+    size_t  fChunkSize;
+    size_t  fTotalCapacity;
+    size_t  fTotalUsed;     // will be <= fTotalCapacity
+    SkDEBUGCODE(int     fBlockCount;)
+    SkDEBUGCODE(size_t  fTotalLost;)     // will be <= fTotalCapacity
+
+    Block* newBlock(size_t bytes, AllocFailType ftype);
+>>>>>>> miniblink49
     Block* addBlockIfNecessary(size_t bytes, AllocFailType ftype);
 
     SkDEBUGCODE(void validate();)

@@ -38,18 +38,32 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class StorageQuota final : public GarbageCollected<StorageQuota>,
                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
 public:
     static StorageQuota* create() { return new StorageQuota(); }
+=======
+class StorageQuota final : public GarbageCollected<StorageQuota>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static StorageQuota* create()
+    {
+        return new StorageQuota();
+    }
+>>>>>>> miniblink49
 
     Vector<String> supportedTypes() const;
 
     ScriptPromise queryInfo(ScriptState*, String type);
+<<<<<<< HEAD
     ScriptPromise requestPersistentQuota(ScriptState*,
         unsigned long long newQuota);
+=======
+    ScriptPromise requestPersistentQuota(ScriptState*, unsigned long long newQuota);
+>>>>>>> miniblink49
 
     DEFINE_INLINE_TRACE() { }
 

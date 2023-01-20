@@ -39,12 +39,15 @@ enum WebContentSecurityPolicyType {
     WebContentSecurityPolicyTypeLast = WebContentSecurityPolicyTypeEnforce
 };
 
+<<<<<<< HEAD
 enum WebContentSecurityPolicySource {
     WebContentSecurityPolicySourceHTTP,
     WebContentSecurityPolicySourceMeta,
     WebContentSecurityPolicySourceLast = WebContentSecurityPolicySourceMeta
 };
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif

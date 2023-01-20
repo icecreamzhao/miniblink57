@@ -29,9 +29,6 @@ enum SimulatedClickMouseEventOptions {
     SendMouseOverUpDownEvents
 };
 
-enum class SimulatedClickCreationScope { FromScript,
-    FromUserAgent };
-
 } // namespace blink
 
 #endif // SimulatedClickOptions_h

@@ -10,7 +10,6 @@
 #include <windows.h>
 #include <ShellAPI.h>
 #endif
-#include "base/command_line.h"
 
 namespace atom {
 
@@ -23,8 +22,7 @@ std::vector<std::wstring> AtomCommandLine::wargv_;
 #endif
 
 // static
-void AtomCommandLine::init(int argc, const char* const* argv)
-{
+void AtomCommandLine::init(int argc, const char* const* argv) {
     // Hack around with the argv pointer. Used for process.title = "blah"
     char** new_argv = uv_setup_args(argc, const_cast<char**>(argv));
     for (int i = 0; i < argc; ++i) {
@@ -34,8 +32,7 @@ void AtomCommandLine::init(int argc, const char* const* argv)
 
 #if defined(OS_WIN)
 // static
-void AtomCommandLine::initW(int argc, const wchar_t* const* argv)
-{
+void AtomCommandLine::initW(int argc, const wchar_t* const* argv) {
     for (int i = 0; i < argc; ++i) {
         std::wstring arg = argv[i];
         if (arg.length() > 0 && arg[0] >= L'a' && arg[0] <= L'z')
@@ -45,8 +42,7 @@ void AtomCommandLine::initW(int argc, const wchar_t* const* argv)
     }
 }
 
-void AtomCommandLine::initAW()
-{
+void AtomCommandLine::initAW() {
     int argc = 0;
     wchar_t** argvW = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
 
@@ -84,10 +80,9 @@ void AtomCommandLine::initAW()
 
 #if defined(OS_LINUX)
 // static
-void AtomCommandLine::initializeFromCommandLine()
-{
+void AtomCommandLine::initializeFromCommandLine() {
     argv_ = base::CommandLine::ForCurrentProcess()->argv();
 }
 #endif
 
-} // namespace atom
+}  // namespace atom

@@ -23,11 +23,21 @@
  * SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/text/DateTimeFormat.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuilder.h"
+=======
+#include "config.h"
+#include "platform/text/DateTimeFormat.h"
+
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+#include "wtf/text/CString.h"
+#include "wtf/text/StringBuilder.h"
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -86,6 +96,7 @@ public:
         {
         }
 
+<<<<<<< HEAD
         explicit Tokens(const String& string) { m_tokens.push_back(Token(string)); }
 
         explicit Tokens(Token token1) { m_tokens.push_back(token1); }
@@ -94,17 +105,40 @@ public:
         {
             m_tokens.push_back(token1);
             m_tokens.push_back(token2);
+=======
+        explicit Tokens(const String& string)
+        {
+            m_tokens.append(Token(string));
+        }
+
+        explicit Tokens(Token token1)
+        {
+            m_tokens.append(token1);
+        }
+
+        Tokens(Token token1, Token token2)
+        {
+            m_tokens.append(token1);
+            m_tokens.append(token2);
+>>>>>>> miniblink49
         }
 
         Tokens(Token token1, Token token2, Token token3)
         {
+<<<<<<< HEAD
             m_tokens.push_back(token1);
             m_tokens.push_back(token2);
             m_tokens.push_back(token3);
+=======
+            m_tokens.append(token1);
+            m_tokens.append(token2);
+            m_tokens.append(token3);
+>>>>>>> miniblink49
         }
 
         Tokens(Token token1, Token token2, Token token3, Token token4)
         {
+<<<<<<< HEAD
             m_tokens.push_back(token1);
             m_tokens.push_back(token2);
             m_tokens.push_back(token3);
@@ -137,6 +171,31 @@ public:
             m_tokens.push_back(token4);
             m_tokens.push_back(token5);
             m_tokens.push_back(token6);
+=======
+            m_tokens.append(token1);
+            m_tokens.append(token2);
+            m_tokens.append(token3);
+            m_tokens.append(token4);
+        }
+
+        Tokens(Token token1, Token token2, Token token3, Token token4, Token token5)
+        {
+            m_tokens.append(token1);
+            m_tokens.append(token2);
+            m_tokens.append(token3);
+            m_tokens.append(token4);
+            m_tokens.append(token5);
+        }
+
+        Tokens(Token token1, Token token2, Token token3, Token token4, Token token5, Token token6)
+        {
+            m_tokens.append(token1);
+            m_tokens.append(token2);
+            m_tokens.append(token3);
+            m_tokens.append(token4);
+            m_tokens.append(token5);
+            m_tokens.append(token6);
+>>>>>>> miniblink49
         }
 
         bool operator==(const Tokens& other) const
@@ -150,10 +209,17 @@ public:
             builder.append("Tokens(");
             for (unsigned index = 0; index < m_tokens.size(); ++index) {
                 if (index)
+<<<<<<< HEAD
                     builder.append(',');
                 builder.append(m_tokens[index].toString());
             }
             builder.append(')');
+=======
+                    builder.append(",");
+                builder.append(m_tokens[index].toString());
+            }
+            builder.append(")");
+>>>>>>> miniblink49
             return builder.toString();
         }
 
@@ -167,7 +233,11 @@ protected:
         TokenHandler handler;
         if (!DateTimeFormat::parse(formatString, handler))
             return Tokens(Token("*failed*"));
+<<<<<<< HEAD
         return handler.getTokens();
+=======
+        return handler.tokens();
+>>>>>>> miniblink49
     }
 
     FieldType single(const char ch)
@@ -178,7 +248,11 @@ protected:
         TokenHandler handler;
         if (!DateTimeFormat::parse(formatString, handler))
             return DateTimeFormat::FieldTypeInvalid;
+<<<<<<< HEAD
         return handler.getFieldType(0);
+=======
+        return handler.fieldType(0);
+>>>>>>> miniblink49
     }
 
 private:
@@ -186,6 +260,7 @@ private:
     public:
         ~TokenHandler() override { }
 
+<<<<<<< HEAD
         FieldType getFieldType(int index) const
         {
             return index >= 0 && index < static_cast<int>(m_tokens.size())
@@ -194,24 +269,44 @@ private:
         }
 
         Tokens getTokens() const { return Tokens(m_tokens); }
+=======
+        FieldType fieldType(int index) const
+        {
+            return index >=0 && index < static_cast<int>(m_tokens.size()) ? m_tokens[index].fieldType : DateTimeFormat::FieldTypeInvalid;
+        }
+
+        Tokens tokens() const { return Tokens(m_tokens); }
+>>>>>>> miniblink49
 
     private:
         void visitField(FieldType fieldType, int count) override
         {
+<<<<<<< HEAD
             m_tokens.push_back(Token(fieldType, count));
+=======
+            m_tokens.append(Token(fieldType, count));
+>>>>>>> miniblink49
         }
 
         void visitLiteral(const String& string) override
         {
+<<<<<<< HEAD
             m_tokens.push_back(Token(string));
+=======
+            m_tokens.append(Token(string));
+>>>>>>> miniblink49
         }
 
         Vector<Token> m_tokens;
     };
 };
 
+<<<<<<< HEAD
 std::ostream& operator<<(std::ostream& os,
     const DateTimeFormatTest::Tokens& tokens)
+=======
+std::ostream& operator<<(std::ostream& os, const DateTimeFormatTest::Tokens& tokens)
+>>>>>>> miniblink49
 {
     return os << tokens.toString().ascii().data();
 }
@@ -220,6 +315,7 @@ TEST_F(DateTimeFormatTest, CommonPattern)
 {
     EXPECT_EQ(Tokens(), parse(""));
 
+<<<<<<< HEAD
     EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeYear, 4), Token("-"),
                   Token(DateTimeFormat::FieldTypeMonth, 2), Token("-"),
                   Token(DateTimeFormat::FieldTypeDayOfMonth, 2)),
@@ -238,6 +334,34 @@ TEST_F(DateTimeFormatTest, CommonPattern)
     EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeYear), Token("Nen "),
                   Token(DateTimeFormat::FieldTypeMonth), Token("Getsu "),
                   Token(DateTimeFormat::FieldTypeDayOfMonth), Token("Nichi")),
+=======
+    EXPECT_EQ(
+        Tokens(
+            Token(DateTimeFormat::FieldTypeYear, 4), Token("-"),
+            Token(DateTimeFormat::FieldTypeMonth, 2), Token("-"),
+            Token(DateTimeFormat::FieldTypeDayOfMonth, 2)),
+        parse("yyyy-MM-dd"));
+
+    EXPECT_EQ(
+        Tokens(
+            Token(DateTimeFormat::FieldTypeHour24, 2), Token(":"),
+            Token(DateTimeFormat::FieldTypeMinute, 2), Token(":"),
+            Token(DateTimeFormat::FieldTypeSecond, 2)),
+        parse("kk:mm:ss"));
+
+    EXPECT_EQ(
+        Tokens(
+            Token(DateTimeFormat::FieldTypeHour12), Token(":"),
+            Token(DateTimeFormat::FieldTypeMinute), Token(" "),
+            Token(DateTimeFormat::FieldTypePeriod)),
+        parse("h:m a"));
+
+    EXPECT_EQ(
+        Tokens(
+            Token(DateTimeFormat::FieldTypeYear), Token("Nen "),
+            Token(DateTimeFormat::FieldTypeMonth), Token("Getsu "),
+            Token(DateTimeFormat::FieldTypeDayOfMonth), Token("Nichi")),
+>>>>>>> miniblink49
         parse("y'Nen' M'Getsu' d'Nichi'"));
 }
 
@@ -254,10 +378,18 @@ TEST_F(DateTimeFormatTest, Quote)
     EXPECT_EQ(Tokens("'"), parse("''"));
     EXPECT_EQ(Tokens("'-'"), parse("''-''"));
     EXPECT_EQ(Tokens("Foo'Bar"), parse("'Foo''Bar'"));
+<<<<<<< HEAD
     EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'s")),
         parse("G'''s'"));
     EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'"),
                   Token(DateTimeFormat::FieldTypeSecond)),
+=======
+    EXPECT_EQ(
+        Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'s")),
+        parse("G'''s'"));
+    EXPECT_EQ(
+        Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'"), Token(DateTimeFormat::FieldTypeSecond)),
+>>>>>>> miniblink49
         parse("G''s"));
 }
 
@@ -330,3 +462,8 @@ TEST_F(DateTimeFormatTest, SingleUpperCaseInvalid)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif
+>>>>>>> miniblink49

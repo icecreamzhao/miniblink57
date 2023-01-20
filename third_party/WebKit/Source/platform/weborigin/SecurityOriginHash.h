@@ -31,19 +31,30 @@
 
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/SecurityOrigin.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 struct SecurityOriginHash {
+<<<<<<< HEAD
     STATIC_ONLY(SecurityOriginHash);
+=======
+>>>>>>> miniblink49
     static unsigned hash(SecurityOrigin* origin)
     {
         unsigned hashCodes[4] = {
             origin->protocol().impl() ? origin->protocol().impl()->hash() : 0,
             origin->host().impl() ? origin->host().impl()->hash() : 0,
+<<<<<<< HEAD
             origin->port(), (origin->suborigin()->name().impl()) ? origin->suborigin()->name().impl()->hash() : 0
+=======
+            origin->port(),
+            origin->suboriginName().impl() ? origin->suboriginName().impl()->hash() : 0
+>>>>>>> miniblink49
         };
         return StringHasher::hashMemory<sizeof(hashCodes)>(hashCodes);
     }
@@ -79,8 +90,12 @@ struct SecurityOriginHash {
     {
         return equal(a.get(), b);
     }
+<<<<<<< HEAD
     static bool equal(const RefPtr<SecurityOrigin>& a,
         const RefPtr<SecurityOrigin>& b)
+=======
+    static bool equal(const RefPtr<SecurityOrigin>& a, const RefPtr<SecurityOrigin>& b)
+>>>>>>> miniblink49
     {
         return equal(a.get(), b.get());
     }
@@ -92,8 +107,12 @@ struct SecurityOriginHash {
 
 namespace WTF {
 
+<<<<<<< HEAD
 template <>
 struct DefaultHash<RefPtr<blink::SecurityOrigin>> {
+=======
+template<> struct DefaultHash<RefPtr<blink::SecurityOrigin>> {
+>>>>>>> miniblink49
     typedef blink::SecurityOriginHash Hash;
 };
 

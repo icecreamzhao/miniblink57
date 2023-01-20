@@ -12,6 +12,7 @@
 namespace ots {
 
 struct OpenTypeVORGMetrics {
+<<<<<<< HEAD
     uint16_t glyph_index;
     int16_t vert_origin_y;
 };
@@ -26,3 +27,19 @@ struct OpenTypeVORG {
 } // namespace ots
 
 #endif // OTS_VORG_H_
+=======
+  uint16_t glyph_index;
+  int16_t vert_origin_y;
+};
+
+struct OpenTypeVORG {
+  uint16_t major_version;
+  uint16_t minor_version;
+  int16_t default_vert_origin_y;
+  std::vector<OpenTypeVORGMetrics> metrics;
+};
+
+}  // namespace ots
+
+#endif  // OTS_VORG_H_
+>>>>>>> miniblink49

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
@@ -5,10 +9,16 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
 #include "SkPath.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkBlurMask.h"
+#include "SkBlurMaskFilter.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
@@ -18,12 +28,17 @@ namespace skiagm {
 // middle.
 class BigBlursGM : public GM {
 public:
+<<<<<<< HEAD
     BigBlursGM()
     {
+=======
+    BigBlursGM() {
+>>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("bigblurs");
@@ -36,6 +51,17 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    SkString onShortName() override {
+        return SkString("bigblurs");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(kWidth, kHeight);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+>>>>>>> miniblink49
         static const int kBig = 65536;
         static const SkScalar kSigma = SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(4));
 
@@ -50,6 +76,7 @@ protected:
 
         // The blur extends 3*kSigma out from the big rect.
         // Offset the close-up windows so we get the entire blur
+<<<<<<< HEAD
         static const SkScalar kLeftTopPad = 3 * kSigma; // use on left & up of big rect
         static const SkScalar kRightBotPad = kCloseUpSize - 3 * kSigma; // use on right and bot sides
 
@@ -60,6 +87,18 @@ protected:
             { kBig - kRightBotPad, kBig - kRightBotPad }, // LR
             { -kLeftTopPad, kBig - kRightBotPad }, // LL
             { kBig / 2 - kCloseUpSize / 2, kBig / 2 - kCloseUpSize / 2 }, // center
+=======
+        static const SkScalar kLeftTopPad  = 3*kSigma;   // use on left & up of big rect
+        static const SkScalar kRightBotPad = kCloseUpSize-3*kSigma; // use on right and bot sides
+
+        // UL hand corners of the rendered closeups
+        const SkPoint origins[] = {
+            { -kLeftTopPad,          -kLeftTopPad           }, // UL
+            {  kBig-kRightBotPad,    -kLeftTopPad           }, // UR
+            {  kBig-kRightBotPad,     kBig-kRightBotPad     }, // LR
+            { -kLeftTopPad,           kBig-kRightBotPad     }, // LL
+            {  kBig/2-kCloseUpSize/2, kBig/2-kCloseUpSize/2 }, // center
+>>>>>>> miniblink49
         };
 
         SkPaint outlinePaint;
@@ -74,12 +113,18 @@ protected:
 
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j <= kLastEnum_SkBlurStyle; ++j) {
+<<<<<<< HEAD
                 blurPaint.setMaskFilter(SkBlurMaskFilter::Make((SkBlurStyle)j, kSigma));
+=======
+                SkMaskFilter* mf = SkBlurMaskFilter::Create((SkBlurStyle)j, kSigma);
+                blurPaint.setMaskFilter(mf)->unref();
+>>>>>>> miniblink49
 
                 for (int k = 0; k < (int)SK_ARRAY_COUNT(origins); ++k) {
                     canvas->save();
 
                     SkRect clipRect = SkRect::MakeXYWH(SkIntToScalar(desiredX),
+<<<<<<< HEAD
                         SkIntToScalar(desiredY),
                         SkIntToScalar(kCloseUpSize),
                         SkIntToScalar(kCloseUpSize));
@@ -88,6 +133,16 @@ protected:
 
                     canvas->translate(desiredX - origins[k].fX,
                         desiredY - origins[k].fY);
+=======
+                                                       SkIntToScalar(desiredY),
+                                                       SkIntToScalar(kCloseUpSize),
+                                                       SkIntToScalar(kCloseUpSize));
+
+                    canvas->clipRect(clipRect, SkRegion::kReplace_Op, false);
+
+                    canvas->translate(desiredX-origins[k].fX,
+                                      desiredY-origins[k].fY);
+>>>>>>> miniblink49
 
                     if (0 == i) {
                         canvas->drawRect(bigRect, blurPaint);
@@ -114,5 +169,10 @@ private:
     typedef GM INHERITED;
 };
 
+<<<<<<< HEAD
 DEF_GM(return new BigBlursGM;)
+=======
+DEF_GM( return SkNEW(BigBlursGM); )
+
+>>>>>>> miniblink49
 }

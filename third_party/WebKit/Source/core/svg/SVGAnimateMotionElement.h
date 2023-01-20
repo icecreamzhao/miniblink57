@@ -28,7 +28,6 @@ namespace blink {
 
 class SVGAnimateMotionElement final : public SVGAnimationElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     ~SVGAnimateMotionElement() override;
 
@@ -38,38 +37,32 @@ public:
 private:
     explicit SVGAnimateMotionElement(Document&);
 
-    bool hasValidTarget() override;
+    bool hasValidAttributeType() override;
+    bool hasValidAttributeName() override;
 
-    void parseAttribute(const AttributeModificationParams&) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
 
     void resetAnimatedType() override;
     void clearAnimatedType() override;
-    bool calculateToAtEndOfDurationValue(
-        const String& toAtEndOfDurationString) override;
-    bool calculateFromAndToValues(const String& fromString,
-        const String& toString) override;
-    bool calculateFromAndByValues(const String& fromString,
-        const String& byString) override;
-    void calculateAnimatedValue(float percentage,
-        unsigned repeatCount,
-        SVGSMILElement* resultElement) override;
+    bool calculateToAtEndOfDurationValue(const String& toAtEndOfDurationString) override;
+    bool calculateFromAndToValues(const String& fromString, const String& toString) override;
+    bool calculateFromAndByValues(const String& fromString, const String& byString) override;
+    void calculateAnimatedValue(float percentage, unsigned repeatCount, SVGSMILElement* resultElement) override;
     void applyResultsToTarget() override;
-    float calculateDistance(const String& fromString,
-        const String& toString) override;
+    float calculateDistance(const String& fromString, const String& toString) override;
 
-    enum RotateMode { RotateAngle,
+    enum RotateMode {
+        RotateAngle,
         RotateAuto,
-        RotateAutoReverse };
-    RotateMode getRotateMode() const;
+        RotateAutoReverse
+    };
+    RotateMode rotateMode() const;
 
     bool m_hasToPointAtEndOfDuration;
 
     void updateAnimationMode() override;
 
-    void invalidateForAnimateMotionTransformChange(LayoutObject& target);
-
-    // Note: we do not support percentage values for to/from coords as the spec
-    // implies we should (opera doesn't either)
+    // Note: we do not support percentage values for to/from coords as the spec implies we should (opera doesn't either)
     FloatPoint m_fromPoint;
     FloatPoint m_toPoint;
     FloatPoint m_toPointAtEndOfDuration;

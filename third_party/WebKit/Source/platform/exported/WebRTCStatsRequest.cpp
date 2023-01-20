@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/platform/WebRTCStatsRequest.h"
 
 #include "platform/peerconnection/RTCStatsRequest.h"
@@ -35,6 +36,18 @@
 #include "public/platform/WebMediaStream.h"
 #include "public/platform/WebMediaStreamTrack.h"
 #include "public/platform/WebRTCStatsResponse.h"
+=======
+#include "config.h"
+
+#include "public/platform/WebRTCStatsRequest.h"
+
+#include "platform/mediastream/RTCStatsRequest.h"
+#include "platform/mediastream/RTCStatsResponseBase.h"
+#include "public/platform/WebMediaStream.h"
+#include "public/platform/WebMediaStreamTrack.h"
+#include "public/platform/WebRTCStatsResponse.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -68,8 +81,12 @@ const WebMediaStreamTrack WebRTCStatsRequest::component() const
     return WebMediaStreamTrack(m_private->component());
 }
 
+<<<<<<< HEAD
 void WebRTCStatsRequest::requestSucceeded(
     const WebRTCStatsResponse& response) const
+=======
+void WebRTCStatsRequest::requestSucceeded(const WebRTCStatsResponse& response) const
+>>>>>>> miniblink49
 {
     m_private->requestSucceeded(response);
 }

@@ -28,18 +28,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/TextInputType.h"
 
 #include "core/InputTypeNames.h"
 #include "core/html/HTMLInputElement.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-InputType* TextInputType::create(HTMLInputElement& element)
+PassRefPtrWillBeRawPtr<InputType> TextInputType::create(HTMLInputElement& element)
 {
-    return new TextInputType(element);
+    return adoptRefWillBeNoop(new TextInputType(element));
 }
 
 void TextInputType::countUsage()
@@ -66,7 +68,7 @@ bool TextInputType::supportsInputModeAttribute() const
 
 const AtomicString& TextInputType::defaultAutocapitalize() const
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, sentences, ("sentences"));
+    DEFINE_STATIC_LOCAL(const AtomicString, sentences, ("sentences", AtomicString::ConstructFromLiteral));
     return sentences;
 }
 

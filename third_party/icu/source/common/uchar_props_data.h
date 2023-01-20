@@ -8,7 +8,11 @@
 */
 
 #ifndef INCLUDED_FROM_UCHAR_C
+<<<<<<< HEAD
 #error This file must be #included from uchar.c only.
+=======
+#   error This file must be #included from uchar.c only.
+>>>>>>> miniblink49
 #endif
 
 static const uint16_t propsTrie_index[19268] = {
@@ -2872,6 +2876,7 @@ static const uint16_t propsVectorsTrie_index[26188] = {
     0x157b, 0x157b, 0x157b, 0x157b, 0x157b, 0x157b, 0x157b, 0x157b, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581,
     0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581,
     0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0x1581, 0, 0, 0, 0
+<<<<<<< HEAD
 };
 
 
@@ -3251,3 +3256,6 @@ static const UTrie2 propsVectorsTrie = {
     0x6648,
     NULL, 0, FALSE, FALSE, 0, NULL
 };
+=======
+};
+>>>>>>> miniblink49

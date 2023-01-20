@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkAnimateProperties_DEFINED
 #define SkAnimateProperties_DEFINED
 

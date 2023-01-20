@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -13,8 +17,13 @@
 #include "SkRandom.h"
 #include "SkView.h"
 
+<<<<<<< HEAD
 static void test_huge_stroke(SkCanvas* canvas)
 {
+=======
+
+static void test_huge_stroke(SkCanvas* canvas) {
+>>>>>>> miniblink49
     SkRect srcR = { 0, 0, 72000, 54000 };
     SkRect dstR = { 0, 0, 640, 480 };
 
@@ -74,8 +83,12 @@ static void test_blur() {
 }
 #endif
 
+<<<<<<< HEAD
 static void scale_to_width(SkPath* path, SkScalar dstWidth)
 {
+=======
+static void scale_to_width(SkPath* path, SkScalar dstWidth) {
+>>>>>>> miniblink49
     const SkRect& bounds = path->getBounds();
     SkScalar scale = dstWidth / bounds.width();
     SkMatrix matrix;
@@ -85,6 +98,7 @@ static void scale_to_width(SkPath* path, SkScalar dstWidth)
 }
 
 static const struct {
+<<<<<<< HEAD
     SkPaint::Style fStyle;
     SkPaint::Join fJoin;
     int fStrokeWidth;
@@ -103,6 +117,24 @@ protected:
     void onOnceBeforeDraw() override
     {
         //        test_blur();
+=======
+    SkPaint::Style  fStyle;
+    SkPaint::Join   fJoin;
+    int             fStrokeWidth;
+} gRec[] = {
+    { SkPaint::kFill_Style,             SkPaint::kMiter_Join,   0 },
+    { SkPaint::kStroke_Style,           SkPaint::kMiter_Join,   0 },
+    { SkPaint::kStroke_Style,           SkPaint::kMiter_Join,   10 },
+    { SkPaint::kStrokeAndFill_Style,    SkPaint::kMiter_Join,   10 },
+};
+
+class StrokePathView : public SampleView {
+    SkScalar    fWidth;
+    SkPath      fPath;
+protected:
+    void onOnceBeforeDraw() override {
+//        test_blur();
+>>>>>>> miniblink49
         fWidth = SkIntToScalar(120);
 
 #if 0
@@ -125,8 +157,12 @@ protected:
     }
 
     // overrides from SkEventSink
+<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
+=======
+    bool onQuery(SkEvent* evt) override {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "StrokePath");
             return true;
@@ -136,8 +172,12 @@ protected:
 
     SkRandom rand;
 
+<<<<<<< HEAD
     void drawSet(SkCanvas* canvas, SkPaint* paint)
     {
+=======
+    void drawSet(SkCanvas* canvas, SkPaint* paint) {
+>>>>>>> miniblink49
         SkAutoCanvasRestore acr(canvas, true);
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); i++) {
@@ -149,10 +189,15 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
         test_huge_stroke(canvas);
         return;
+=======
+    void onDrawContent(SkCanvas* canvas) override {
+        test_huge_stroke(canvas); return;
+>>>>>>> miniblink49
         canvas->translate(SkIntToScalar(10), SkIntToScalar(10));
 
         SkPaint paint;
@@ -172,6 +217,7 @@ protected:
                 kSolid_SkBlurStyle,
             };
             for (int x = 0; x < 5; x++) {
+<<<<<<< HEAD
                 SkScalar sigma = SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(4));
                 for (int y = 0; y < 10; y++) {
                     if (x) {
@@ -180,6 +226,19 @@ protected:
                     canvas->drawText("Title Bar", 9, x * SkIntToScalar(100), y * SkIntToScalar(30), paint);
                     sigma *= 0.75f;
                 }
+=======
+                SkMaskFilter* mf;
+                SkScalar sigma = SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(4));
+                for (int y = 0; y < 10; y++) {
+                    if (x) {
+                        mf = SkBlurMaskFilter::Create(gStyle[x - 1], sigma);
+                        paint.setMaskFilter(mf)->unref();
+                    }
+                    canvas->drawText("Title Bar", 9, x*SkIntToScalar(100), y*SkIntToScalar(30), paint);
+                    sigma *= 0.75f;
+                }
+
+>>>>>>> miniblink49
             }
             return;
         }
@@ -195,8 +254,13 @@ protected:
         p.cubicTo(x-75*r, y+75*r, x-40*r, y+125*r, x, y+85*r);
         p.cubicTo(x+40*r, y+125*r, x+75*r, y+75*r, x, y);
 #else
+<<<<<<< HEAD
         p.cubicTo(x + 75 * r, y + 75 * r, x + 40 * r, y + 125 * r, x, y + 85 * r);
         p.cubicTo(x - 40 * r, y + 125 * r, x - 75 * r, y + 75 * r, x, y);
+=======
+        p.cubicTo(x+75*r, y+75*r, x+40*r, y+125*r, x, y+85*r);
+        p.cubicTo(x-40*r, y+125*r, x-75*r, y+75*r, x, y);
+>>>>>>> miniblink49
 #endif
         p.close();
         fPath = p;
@@ -212,12 +276,19 @@ protected:
     }
 
     virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y,
+<<<<<<< HEAD
         unsigned modi) override
     {
         this->inval(nullptr);
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 
+=======
+                                              unsigned modi) override {
+        this->inval(NULL);
+        return this->INHERITED::onFindClickHandler(x, y, modi);
+    }
+>>>>>>> miniblink49
 private:
     typedef SampleView INHERITED;
 };

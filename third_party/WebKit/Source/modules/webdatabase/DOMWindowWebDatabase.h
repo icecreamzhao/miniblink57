@@ -38,6 +38,7 @@ class DatabaseCallback;
 class ExceptionState;
 
 class DOMWindowWebDatabase {
+<<<<<<< HEAD
     STATIC_ONLY(DOMWindowWebDatabase);
 
 public:
@@ -48,6 +49,14 @@ public:
         unsigned estimatedSize,
         DatabaseCallback* creationCallback,
         ExceptionState&);
+=======
+public:
+    static Database* openDatabase(DOMWindow&, const String& name, const String& version, const String& displayName, unsigned long estimatedSize, DatabaseCallback* creationCallback, ExceptionState&);
+
+private:
+    DOMWindowWebDatabase() { }
+    ~DOMWindowWebDatabase() { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

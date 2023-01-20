@@ -35,58 +35,37 @@
 
 namespace blink {
 
-template <typename Enum>
+template<typename Enum>
 class SVGAnimatedEnumeration : public SVGAnimatedEnumerationBase {
 public:
-    static SVGAnimatedEnumeration<Enum>* create(
-        SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        Enum initialValue)
+    static PassRefPtrWillBeRawPtr<SVGAnimatedEnumeration<Enum>> create(SVGElement* contextElement, const QualifiedName& attributeName, Enum initialValue)
     {
-        return new SVGAnimatedEnumeration(
-            contextElement, attributeName,
-            SVGEnumeration<Enum>::create(initialValue));
+        return adoptRefWillBeNoop(new SVGAnimatedEnumeration(contextElement, attributeName, SVGEnumeration<Enum>::create(initialValue)));
     }
 
-    static SVGAnimatedEnumeration<Enum>* create(
-        SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        SVGEnumeration<Enum>* initialValue)
+    static PassRefPtrWillBeRawPtr<SVGAnimatedEnumeration<Enum>> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGEnumeration<Enum>> initialValue)
     {
-        return new SVGAnimatedEnumeration(contextElement, attributeName,
-            initialValue);
+        return adoptRefWillBeNoop(new SVGAnimatedEnumeration(contextElement, attributeName, initialValue));
     }
 
     SVGEnumeration<Enum>* baseValue()
     {
-        return static_cast<SVGEnumeration<Enum>*>(
-            SVGAnimatedEnumerationBase::baseValue());
+        return static_cast<SVGEnumeration<Enum>*>(SVGAnimatedEnumerationBase::baseValue());
     }
 
     SVGEnumeration<Enum>* currentValue()
     {
-        return static_cast<SVGEnumeration<Enum>*>(
-            SVGAnimatedEnumerationBase::currentValue());
+        return static_cast<SVGEnumeration<Enum>*>(SVGAnimatedEnumerationBase::currentValue());
     }
 
     const SVGEnumeration<Enum>* currentValue() const
     {
-        return static_cast<const SVGEnumeration<Enum>*>(
-            SVGAnimatedEnumerationBase::currentValue());
-    }
-
-    DEFINE_INLINE_VIRTUAL_TRACE_WRAPPERS()
-    {
-        visitor->traceWrappers(contextElement());
+        return static_cast<const SVGEnumeration<Enum>*>(SVGAnimatedEnumerationBase::currentValue());
     }
 
 protected:
-    SVGAnimatedEnumeration(SVGElement* contextElement,
-        const QualifiedName& attributeName,
-        SVGEnumeration<Enum>* initialValue)
-        : SVGAnimatedEnumerationBase(contextElement,
-            attributeName,
-            initialValue)
+    SVGAnimatedEnumeration(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGEnumeration<Enum>> initialValue)
+        : SVGAnimatedEnumerationBase(contextElement, attributeName, initialValue)
     {
     }
 };

@@ -24,15 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/FloatRect.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace blink {
 
+<<<<<<< HEAD
 FloatRect::FloatRect(const CGRect& r)
     : m_location(r.origin)
     , m_size(r.size)
+=======
+FloatRect::FloatRect(const CGRect& r) : m_location(r.origin), m_size(r.size)
+>>>>>>> miniblink49
 {
 }
 
@@ -41,4 +49,8 @@ FloatRect::operator CGRect() const
     return CGRectMake(x(), y(), width(), height());
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGTSpanElement.h"
 
 #include "core/SVGNames.h"
@@ -39,10 +41,14 @@ LayoutObject* SVGTSpanElement::createLayoutObject(const ComputedStyle&)
 
 bool SVGTSpanElement::layoutObjectIsNeeded(const ComputedStyle& style)
 {
-    if (parentNode() && (isSVGAElement(*parentNode()) || isSVGTextElement(*parentNode()) || isSVGTextPathElement(*parentNode()) || isSVGTSpanElement(*parentNode())))
+    if (parentNode()
+        && (isSVGAElement(*parentNode())
+            || isSVGTextElement(*parentNode())
+            || isSVGTextPathElement(*parentNode())
+            || isSVGTSpanElement(*parentNode())))
         return Element::layoutObjectIsNeeded(style);
 
     return false;
 }
 
-} // namespace blink
+}

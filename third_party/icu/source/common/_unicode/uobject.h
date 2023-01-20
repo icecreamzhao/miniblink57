@@ -109,11 +109,20 @@ U_NAMESPACE_BEGIN
  */
 class U_COMMON_API UMemory {
 public:
+<<<<<<< HEAD
 /* test versions for debugging shaper heap memory problems */
 #ifdef SHAPER_MEMORY_DEBUG
     static void* NewArray(int size, int count);
     static void* GrowArray(void* array, int newSize);
     static void FreeArray(void* array);
+=======
+
+/* test versions for debugging shaper heap memory problems */
+#ifdef SHAPER_MEMORY_DEBUG  
+    static void * NewArray(int size, int count);
+    static void * GrowArray(void * array, int newSize );
+    static void   FreeArray(void * array );
+>>>>>>> miniblink49
 #endif
 
 #if U_OVERRIDE_CXX_ALLOCATION
@@ -125,14 +134,22 @@ public:
      * for ICU4C C++ classes
      * @stable ICU 2.4
      */
+<<<<<<< HEAD
     static void* U_EXPORT2 operator new(size_t size) U_NO_THROW;
+=======
+    static void * U_EXPORT2 operator new(size_t size) U_NO_THROW;
+>>>>>>> miniblink49
 
     /**
      * Override for ICU4C C++ memory management.
      * See new().
      * @stable ICU 2.4
      */
+<<<<<<< HEAD
     static void* U_EXPORT2 operator new[](size_t size) U_NO_THROW;
+=======
+    static void * U_EXPORT2 operator new[](size_t size) U_NO_THROW;
+>>>>>>> miniblink49
 
     /**
      * Override for ICU4C C++ memory management.
@@ -142,14 +159,22 @@ public:
      * for ICU4C C++ classes
      * @stable ICU 2.4
      */
+<<<<<<< HEAD
     static void U_EXPORT2 operator delete(void* p)U_NO_THROW;
+=======
+    static void U_EXPORT2 operator delete(void *p) U_NO_THROW;
+>>>>>>> miniblink49
 
     /**
      * Override for ICU4C C++ memory management.
      * See delete().
      * @stable ICU 2.4
      */
+<<<<<<< HEAD
     static void U_EXPORT2 operator delete[](void* p) U_NO_THROW;
+=======
+    static void U_EXPORT2 operator delete[](void *p) U_NO_THROW;
+>>>>>>> miniblink49
 
 #if U_HAVE_PLACEMENT_NEW
     /**
@@ -157,14 +182,22 @@ public:
      * See new().
      * @stable ICU 2.6
      */
+<<<<<<< HEAD
     static inline void* U_EXPORT2 operator new(size_t, void* ptr) U_NO_THROW { return ptr; }
+=======
+    static inline void * U_EXPORT2 operator new(size_t, void *ptr) U_NO_THROW { return ptr; }
+>>>>>>> miniblink49
 
     /**
      * Override for ICU4C C++ memory management for STL.
      * See delete().
      * @stable ICU 2.6
      */
+<<<<<<< HEAD
     static inline void U_EXPORT2 operator delete(void*, void*)U_NO_THROW { }
+=======
+    static inline void U_EXPORT2 operator delete(void *, void *) U_NO_THROW {}
+>>>>>>> miniblink49
 #endif /* U_HAVE_PLACEMENT_NEW */
 #if U_HAVE_DEBUG_LOCATION_NEW
     /**
@@ -173,16 +206,26 @@ public:
       * @param size   The requested memory size
       * @param file   The file where the allocation was requested
       * @param line   The line where the allocation was requested 
+<<<<<<< HEAD
       */
     static void* U_EXPORT2 operator new(size_t size, const char* file, int line) U_NO_THROW;
+=======
+      */ 
+    static void * U_EXPORT2 operator new(size_t size, const char* file, int line) U_NO_THROW;
+>>>>>>> miniblink49
     /**
       * This method provides a matching delete for the MFC debug new
       * 
       * @param p      The pointer to the allocated memory
       * @param file   The file where the allocation was requested
       * @param line   The line where the allocation was requested 
+<<<<<<< HEAD
       */
     static void U_EXPORT2 operator delete(void* p, const char* file, int line)U_NO_THROW;
+=======
+      */ 
+    static void U_EXPORT2 operator delete(void* p, const char* file, int line) U_NO_THROW;
+>>>>>>> miniblink49
 #endif /* U_HAVE_DEBUG_LOCATION_NEW */
 #endif /* U_OVERRIDE_CXX_ALLOCATION */
 
@@ -290,6 +333,7 @@ protected:
  * @internal
  */
 #define UOBJECT_DEFINE_RTTI_IMPLEMENTATION(myClass) \
+<<<<<<< HEAD
     UClassID U_EXPORT2 myClass::getStaticClassID()  \
     {                                               \
         static char classID = 0;                    \
@@ -299,6 +343,15 @@ protected:
     {                                               \
         return myClass::getStaticClassID();         \
     }
+=======
+    UClassID U_EXPORT2 myClass::getStaticClassID() { \
+        static char classID = 0; \
+        return (UClassID)&classID; \
+    } \
+    UClassID myClass::getDynamicClassID() const \
+    { return myClass::getStaticClassID(); }
+
+>>>>>>> miniblink49
 
 /**
  * This macro adds ICU RTTI to an ICU abstract class implementation.
@@ -309,6 +362,7 @@ protected:
  * @internal
  */
 #define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass) \
+<<<<<<< HEAD
     UClassID U_EXPORT2 myClass::getStaticClassID()           \
     {                                                        \
         static char classID = 0;                             \
@@ -316,6 +370,14 @@ protected:
     }
 
 #endif /* U_HIDE_INTERNAL_API */
+=======
+    UClassID U_EXPORT2 myClass::getStaticClassID() { \
+        static char classID = 0; \
+        return (UClassID)&classID; \
+    }
+
+#endif  /* U_HIDE_INTERNAL_API */
+>>>>>>> miniblink49
 
 U_NAMESPACE_END
 

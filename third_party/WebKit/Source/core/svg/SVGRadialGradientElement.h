@@ -32,7 +32,6 @@ struct RadialGradientAttributes;
 
 class SVGRadialGradientElement final : public SVGGradientElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     DECLARE_NODE_FACTORY(SVGRadialGradientElement);
 
@@ -56,12 +55,12 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    Member<SVGAnimatedLength> m_cx;
-    Member<SVGAnimatedLength> m_cy;
-    Member<SVGAnimatedLength> m_r;
-    Member<SVGAnimatedLength> m_fx;
-    Member<SVGAnimatedLength> m_fy;
-    Member<SVGAnimatedLength> m_fr;
+    RefPtrWillBeMember<SVGAnimatedLength> m_cx;
+    RefPtrWillBeMember<SVGAnimatedLength> m_cy;
+    RefPtrWillBeMember<SVGAnimatedLength> m_r;
+    RefPtrWillBeMember<SVGAnimatedLength> m_fx;
+    RefPtrWillBeMember<SVGAnimatedLength> m_fy;
+    RefPtrWillBeMember<SVGAnimatedLength> m_fr;
 };
 
 } // namespace blink

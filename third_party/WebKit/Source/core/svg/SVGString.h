@@ -31,61 +31,67 @@
 #ifndef SVGString_h
 #define SVGString_h
 
-#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGProperty.h"
 
 namespace blink {
 
-class SVGString final : public SVGPropertyBase {
+class ExceptionState;
+
+class SVGString : public SVGPropertyBase {
 public:
     // SVGString does not have a tear-off type.
     typedef void TearOffType;
     typedef String PrimitiveType;
 
-    static SVGString* create() { return new SVGString(); }
+    static PassRefPtrWillBeRawPtr<SVGString> create()
+    {
+        return adoptRefWillBeNoop(new SVGString());
+    }
 
-    static SVGString* create(const String& value) { return new SVGString(value); }
+    static PassRefPtrWillBeRawPtr<SVGString> create(const String& value)
+    {
+        return adoptRefWillBeNoop(new SVGString(value));
+    }
 
-    SVGString* clone() const { return create(m_value); }
-    SVGPropertyBase* cloneForAnimation(const String& value) const override
+    PassRefPtrWillBeRawPtr<SVGString> clone() const { return create(m_value); }
+    PassRefPtrWillBeRawPtr<SVGPropertyBase> cloneForAnimation(const String& value) const override
     {
         return create(value);
     }
 
     String valueAsString() const override { return m_value; }
-    SVGParsingError setValueAsString(const String& value)
-    {
-        m_value = value;
-        return SVGParseStatus::NoError;
-    }
+    void setValueAsString(const String& value, ExceptionState&) { m_value = value; }
 
-    void add(SVGPropertyBase*, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*,
-        float percentage,
-        unsigned repeatCount,
-        SVGPropertyBase* from,
-        SVGPropertyBase* to,
-        SVGPropertyBase* toAtEndOfDurationValue,
-        SVGElement*) override;
-    float calculateDistance(SVGPropertyBase* to, SVGElement*) override;
+    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) override;
+    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) override;
 
     const String& value() const { return m_value; }
     void setValue(const String& value) { m_value = value; }
 
     static AnimatedPropertyType classType() { return AnimatedString; }
-    AnimatedPropertyType type() const override { return classType(); }
 
 private:
-    SVGString() { }
+    SVGString()
+        : SVGPropertyBase(classType())
+    {
+    }
+
     explicit SVGString(const String& value)
-        : m_value(value)
+        : SVGPropertyBase(classType())
+        , m_value(value)
     {
     }
 
     String m_value;
 };
 
-DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGString);
+inline PassRefPtrWillBeRawPtr<SVGString> toSVGString(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGString::classType());
+    return static_pointer_cast<SVGString>(base.release());
+}
 
 } // namespace blink
 

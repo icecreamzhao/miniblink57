@@ -33,7 +33,6 @@
 
 #include "core/CoreExport.h"
 #include "platform/text/SegmentedString.h"
-#include "wtf/Allocator.h"
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
@@ -45,20 +44,16 @@ namespace blink {
 // to 'REPLACEMENT CHARACTER' (U+FFFD) and does not return the linebreaks as
 // part of the result.
 class CORE_EXPORT BufferedLineReader {
-    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(BufferedLineReader);
-
 public:
     BufferedLineReader()
         : m_endOfStream(false)
-        , m_maybeSkipLF(false)
-    {
-    }
+        , m_maybeSkipLF(false) { }
 
     // Append data to the internal buffer.
     void append(const String& data)
     {
-        DCHECK(!m_endOfStream);
+        ASSERT(!m_endOfStream);
         m_buffer.append(SegmentedString(data));
     }
 
@@ -78,7 +73,7 @@ private:
     // Consume the next character the buffer if it is the character |c|.
     void scanCharacter(UChar c)
     {
-        DCHECK(!m_buffer.isEmpty());
+        ASSERT(!m_buffer.isEmpty());
         if (m_buffer.currentChar() == c)
             m_buffer.advance();
     }

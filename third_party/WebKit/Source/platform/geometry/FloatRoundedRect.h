@@ -33,14 +33,18 @@
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/FloatSize.h"
 #include "third_party/skia/include/core/SkRRect.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include <iosfwd>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class FloatQuad;
 
 class PLATFORM_EXPORT FloatRoundedRect {
+<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -53,6 +57,13 @@ public:
             const FloatSize& topRight,
             const FloatSize& bottomLeft,
             const FloatSize& bottomRight)
+=======
+public:
+    class PLATFORM_EXPORT Radii {
+    public:
+        Radii() { }
+        Radii(const FloatSize& topLeft, const FloatSize& topRight, const FloatSize& bottomLeft, const FloatSize& bottomRight)
+>>>>>>> miniblink49
             : m_topLeft(topLeft)
             , m_topRight(topRight)
             , m_bottomLeft(bottomLeft)
@@ -80,6 +91,7 @@ public:
         bool isZero() const;
 
         void scale(float factor);
+<<<<<<< HEAD
         // Multiply all radii by |factor| and floor the result to the nearest
         // integer.
         void scaleAndFloor(float factor);
@@ -102,6 +114,23 @@ public:
             bool includeLogicalRightEdge);
 
         String toString() const;
+=======
+        // Multiply all radii by |factor| and floor the result to the nearest integer.
+        void scaleAndFloor(float factor);
+
+        void expand(float topWidth, float bottomWidth, float leftWidth, float rightWidth);
+        void expand(float size) { expand(size, size, size, size); }
+
+        void shrink(float topWidth, float bottomWidth, float leftWidth, float rightWidth);
+        void shrink(float size) { shrink(size, size, size, size); }
+
+        void includeLogicalEdges(const Radii& edges, bool isHorizontal, bool includeLogicalLeftEdge, bool includeLogicalRightEdge);
+
+#ifndef NDEBUG
+        // Prints debugging information.
+        void show();
+#endif
+>>>>>>> miniblink49
 
     private:
         FloatSize m_topLeft;
@@ -113,6 +142,7 @@ public:
     FloatRoundedRect() { }
     explicit FloatRoundedRect(const FloatRect&, const Radii& = Radii());
     FloatRoundedRect(float x, float y, float width, float height);
+<<<<<<< HEAD
     FloatRoundedRect(const FloatRect&,
         const FloatSize& topLeft,
         const FloatSize& topRight,
@@ -121,6 +151,12 @@ public:
 
     const FloatRect& rect() const { return m_rect; }
     const Radii& getRadii() const { return m_radii; }
+=======
+    FloatRoundedRect(const FloatRect&, const FloatSize& topLeft, const FloatSize& topRight, const FloatSize& bottomLeft, const FloatSize& bottomRight);
+
+    const FloatRect& rect() const { return m_rect; }
+    const Radii& radii() const { return m_radii; }
+>>>>>>> miniblink49
     bool isRounded() const { return !m_radii.isZero(); }
     bool isEmpty() const { return m_rect.isEmpty(); }
 
@@ -131,10 +167,16 @@ public:
     void inflateWithRadii(int size);
     void inflate(float size) { m_rect.inflate(size); }
 
+<<<<<<< HEAD
     // expandRadii() does not have any effect on corner radii which have zero
     // width or height. This is because the process of expanding the radius of a
     // corner is not allowed to make sharp corners non-sharp. This applies when
     // "spreading" a shadow or a box shape.
+=======
+    // expandRadii() does not have any effect on corner radii which have zero width or height. This is because the process of expanding
+    // the radius of a corner is not allowed to make sharp corners non-sharp. This applies when "spreading" a shadow or
+    // a box shape.
+>>>>>>> miniblink49
     void expandRadii(float size) { m_radii.expand(size); }
     void shrinkRadii(float size) { m_radii.shrink(size); }
 
@@ -143,6 +185,7 @@ public:
 
     FloatRect topLeftCorner() const
     {
+<<<<<<< HEAD
         return FloatRect(m_rect.x(), m_rect.y(), m_radii.topLeft().width(),
             m_radii.topLeft().height());
     }
@@ -173,6 +216,26 @@ public:
         bool isHorizontal,
         bool includeLogicalLeftEdge,
         bool includeLogicalRightEdge);
+=======
+        return FloatRect(m_rect.x(), m_rect.y(), m_radii.topLeft().width(), m_radii.topLeft().height());
+    }
+    FloatRect topRightCorner() const
+    {
+        return FloatRect(m_rect.maxX() - m_radii.topRight().width(), m_rect.y(), m_radii.topRight().width(), m_radii.topRight().height());
+    }
+    FloatRect bottomLeftCorner() const
+    {
+        return FloatRect(m_rect.x(), m_rect.maxY() - m_radii.bottomLeft().height(), m_radii.bottomLeft().width(), m_radii.bottomLeft().height());
+    }
+    FloatRect bottomRightCorner() const
+    {
+        return FloatRect(m_rect.maxX() - m_radii.bottomRight().width(), m_rect.maxY() - m_radii.bottomRight().height(), m_radii.bottomRight().width(), m_radii.bottomRight().height());
+    }
+
+    bool xInterceptsAtY(float y, float& minXIntercept, float& maxXIntercept) const;
+
+    void includeLogicalEdges(const Radii& edges, bool isHorizontal, bool includeLogicalLeftEdge, bool includeLogicalRightEdge);
+>>>>>>> miniblink49
 
     // Tests whether the quad intersects any part of this rounded rectangle.
     // This only works for convex quads.
@@ -181,6 +244,7 @@ public:
     void adjustRadii();
     bool isRenderable() const;
 
+<<<<<<< HEAD
     // Constrains the radii to be no more than the size of rect(); radii outside
     // of this range are not defined.  In addition, the radii of the corners are
     // floored to the nearest integer.
@@ -188,12 +252,27 @@ public:
     // background bleed in some cases.
     // FIXME: this code is almost the same as adjustRadii()/isRenderable(). Get
     // rid of one of them.
+=======
+#ifndef NDEBUG
+    // Prints debugging information.
+    void show();
+#endif
+
+    // Constrains the radii to be no more than the size of rect(); radii outside of this range are not
+    // defined.
+    // In addition, the radii of the corners are floored to the nearest integer.
+    // FIXME: the flooring should not be necessary. At the moment it causes background bleed in some cases.
+    // FIXME: this code is almost the same as adjustRadii()/isRenderable(). Get rid of one of them.
+>>>>>>> miniblink49
     void constrainRadii();
 
     operator SkRRect() const;
 
+<<<<<<< HEAD
     String toString() const;
 
+=======
+>>>>>>> miniblink49
 private:
     FloatRect m_rect;
     Radii m_radii;
@@ -205,6 +284,7 @@ inline FloatRoundedRect::operator SkRRect() const
 
     if (isRounded()) {
         SkVector radii[4];
+<<<<<<< HEAD
         radii[SkRRect::kUpperLeft_Corner].set(topLeftCorner().width(),
             topLeftCorner().height());
         radii[SkRRect::kUpperRight_Corner].set(topRightCorner().width(),
@@ -213,6 +293,12 @@ inline FloatRoundedRect::operator SkRRect() const
             bottomRightCorner().height());
         radii[SkRRect::kLowerLeft_Corner].set(bottomLeftCorner().width(),
             bottomLeftCorner().height());
+=======
+        radii[SkRRect::kUpperLeft_Corner].set(topLeftCorner().width(), topLeftCorner().height());
+        radii[SkRRect::kUpperRight_Corner].set(topRightCorner().width(), topRightCorner().height());
+        radii[SkRRect::kLowerRight_Corner].set(bottomRightCorner().width(), bottomRightCorner().height());
+        radii[SkRRect::kLowerLeft_Corner].set(bottomLeftCorner().width(), bottomLeftCorner().height());
+>>>>>>> miniblink49
 
         rrect.setRectRadii(rect(), radii);
     } else {
@@ -222,18 +308,28 @@ inline FloatRoundedRect::operator SkRRect() const
     return rrect;
 }
 
+<<<<<<< HEAD
 inline bool operator==(const FloatRoundedRect::Radii& a,
     const FloatRoundedRect::Radii& b)
+=======
+inline bool operator==(const FloatRoundedRect::Radii& a, const FloatRoundedRect::Radii& b)
+>>>>>>> miniblink49
 {
     return a.topLeft() == b.topLeft() && a.topRight() == b.topRight() && a.bottomLeft() == b.bottomLeft() && a.bottomRight() == b.bottomRight();
 }
 
+<<<<<<< HEAD
 inline bool operator!=(const FloatRoundedRect::Radii& a,
     const FloatRoundedRect::Radii& b)
+=======
+
+inline bool operator!=(const FloatRoundedRect::Radii& a, const FloatRoundedRect::Radii& b)
+>>>>>>> miniblink49
 {
     return !(a == b);
 }
 
+<<<<<<< HEAD
 inline bool operator==(const FloatRoundedRect& a, const FloatRoundedRect& b)
 {
     return a.rect() == b.rect() && a.getRadii() == b.getRadii();
@@ -244,6 +340,14 @@ inline bool operator==(const FloatRoundedRect& a, const FloatRoundedRect& b)
 void PrintTo(const FloatRoundedRect&, std::ostream*);
 void PrintTo(const FloatRoundedRect::Radii&, std::ostream*);
 
+=======
+
+inline bool operator==(const FloatRoundedRect& a, const FloatRoundedRect& b)
+{
+    return a.rect() == b.rect() && a.radii() == b.radii();
+}
+
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif // FloatRoundedRect_h

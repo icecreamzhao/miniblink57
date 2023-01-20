@@ -32,25 +32,24 @@ class FlexBoxIterator;
 class LayoutDeprecatedFlexibleBox final : public LayoutBlock {
 public:
     LayoutDeprecatedFlexibleBox(Element&);
-    ~LayoutDeprecatedFlexibleBox() override;
+    virtual ~LayoutDeprecatedFlexibleBox();
 
-    const char* name() const override { return "LayoutDeprecatedFlexibleBox"; }
+    virtual const char* name() const override { return "LayoutDeprecatedFlexibleBox"; }
 
-    void styleWillChange(StyleDifference, const ComputedStyle& newStyle) override;
+    virtual void styleWillChange(StyleDifference, const ComputedStyle& newStyle) override;
 
-    void layoutBlock(bool relayoutChildren) override;
+    virtual void layoutBlock(bool relayoutChildren) override;
     void layoutHorizontalBox(bool relayoutChildren);
     void layoutVerticalBox(bool relayoutChildren);
 
-    bool isDeprecatedFlexibleBox() const override { return true; }
+    virtual bool isDeprecatedFlexibleBox() const override { return true; }
     bool isStretchingChildren() const { return m_stretchingChildren; }
+    virtual bool canCollapseAnonymousBlockChild() const override { return false; }
 
     void placeChild(LayoutBox* child, const LayoutPoint& location);
 
 private:
-    void computeIntrinsicLogicalWidths(
-        LayoutUnit& minLogicalWidth,
-        LayoutUnit& maxLogicalWidth) const override;
+    virtual void computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const override;
 
     LayoutUnit allowedChildFlex(LayoutBox* child, bool expanding, unsigned group);
 
@@ -64,8 +63,7 @@ private:
     bool m_stretchingChildren;
 };
 
-DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutDeprecatedFlexibleBox,
-    isDeprecatedFlexibleBox());
+DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutDeprecatedFlexibleBox, isDeprecatedFlexibleBox());
 
 } // namespace blink
 

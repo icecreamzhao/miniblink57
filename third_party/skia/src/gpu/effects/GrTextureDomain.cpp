@@ -9,6 +9,7 @@
 #include "GrInvariantOutput.h"
 #include "GrSimpleTextureEffect.h"
 #include "SkFloatingPoint.h"
+<<<<<<< HEAD
 #include "glsl/GrGLSLFragmentProcessor.h"
 #include "glsl/GrGLSLFragmentShaderBuilder.h"
 #include "glsl/GrGLSLProgramDataManager.h"
@@ -21,6 +22,15 @@ GrTextureDomain::GrTextureDomain(const SkRect& domain, Mode mode, int index)
 {
 
     static const SkRect kFullRect = { 0, 0, SK_Scalar1, SK_Scalar1 };
+=======
+#include "gl/GrGLProcessor.h"
+#include "gl/builders/GrGLProgramBuilder.h"
+
+GrTextureDomain::GrTextureDomain(const SkRect& domain, Mode mode, int index)
+    : fIndex(index) {
+
+    static const SkRect kFullRect = {0, 0, SK_Scalar1, SK_Scalar1};
+>>>>>>> miniblink49
     if (domain.contains(kFullRect) && kClamp_Mode == mode) {
         fMode = kIgnore_Mode;
     } else {
@@ -44,6 +54,7 @@ GrTextureDomain::GrTextureDomain(const SkRect& domain, Mode mode, int index)
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 void GrTextureDomain::GLDomain::sampleTexture(GrGLSLShaderBuilder* builder,
     GrGLSLUniformHandler* uniformHandler,
     const GrGLSLCaps* glslCaps,
@@ -58,18 +69,39 @@ void GrTextureDomain::GLDomain::sampleTexture(GrGLSLShaderBuilder* builder,
 
         if (textureDomain.mode() != kIgnore_Mode && !fDomainUni.isValid())
     {
+=======
+void GrTextureDomain::GLDomain::sampleTexture(GrGLShaderBuilder* builder,
+                                              const GrTextureDomain& textureDomain,
+                                              const char* outColor,
+                                              const SkString& inCoords,
+                                              const GrGLProcessor::TextureSampler sampler,
+                                              const char* inModulateColor) {
+    SkASSERT((Mode)-1 == fMode || textureDomain.mode() == fMode);
+    SkDEBUGCODE(fMode = textureDomain.mode();)
+
+    GrGLProgramBuilder* program = builder->getProgramBuilder();
+
+    if (textureDomain.mode() != kIgnore_Mode && !fDomainUni.isValid()) {
+>>>>>>> miniblink49
         const char* name;
         SkString uniName("TexDom");
         if (textureDomain.fIndex >= 0) {
             uniName.appendS32(textureDomain.fIndex);
         }
+<<<<<<< HEAD
         fDomainUni = uniformHandler->addUniform(kFragment_GrShaderFlag,
             kVec4f_GrSLType, kDefault_GrSLPrecision,
             uniName.c_str(), &name);
+=======
+        fDomainUni = program->addUniform(GrGLProgramBuilder::kFragment_Visibility,
+                                         kVec4f_GrSLType, kDefault_GrSLPrecision,
+                                         uniName.c_str(), &name);
+>>>>>>> miniblink49
         fDomainName = name;
     }
 
     switch (textureDomain.mode()) {
+<<<<<<< HEAD
     case kIgnore_Mode: {
         builder->codeAppendf("%s = ", outColor);
         builder->appendTextureLookupAndModulate(inModulateColor, sampler,
@@ -153,6 +185,87 @@ void GrTextureDomain::GLDomain::setData(const GrGLSLProgramDataManager& pdman,
     SkASSERT(textureDomain.mode() == fMode);
     if (kIgnore_Mode != textureDomain.mode()) {
         float values[kPrevDomainCount] = {
+=======
+        case kIgnore_Mode: {
+            builder->codeAppendf("\t%s = ", outColor);
+            builder->appendTextureLookupAndModulate(inModulateColor, sampler,
+                                                      inCoords.c_str());
+            builder->codeAppend(";\n");
+            break;
+        }
+        case kClamp_Mode: {
+            SkString clampedCoords;
+            clampedCoords.appendf("\tclamp(%s, %s.xy, %s.zw)",
+                                  inCoords.c_str(), fDomainName.c_str(), fDomainName.c_str());
+
+            builder->codeAppendf("\t%s = ", outColor);
+            builder->appendTextureLookupAndModulate(inModulateColor, sampler,
+                                                      clampedCoords.c_str());
+            builder->codeAppend(";\n");
+            break;
+        }
+        case kDecal_Mode: {
+            // Add a block since we're going to declare variables.
+            GrGLShaderBuilder::ShaderBlock block(builder);
+
+            const char* domain = fDomainName.c_str();
+            if (kImagination_GrGLVendor == program->ctxInfo().vendor()) {
+                // On the NexusS and GalaxyNexus, the other path (with the 'any'
+                // call) causes the compilation error "Calls to any function that
+                // may require a gradient calculation inside a conditional block
+                // may return undefined results". This appears to be an issue with
+                // the 'any' call since even the simple "result=black; if (any())
+                // result=white;" code fails to compile.
+                builder->codeAppend("\tvec4 outside = vec4(0.0, 0.0, 0.0, 0.0);\n");
+                builder->codeAppend("\tvec4 inside = ");
+                builder->appendTextureLookupAndModulate(inModulateColor, sampler,
+                                                          inCoords.c_str());
+                builder->codeAppend(";\n");
+                builder->codeAppendf("\tfloat x = (%s).x;\n", inCoords.c_str());
+                builder->codeAppendf("\tfloat y = (%s).y;\n", inCoords.c_str());
+
+                builder->codeAppendf("\tx = abs(2.0*(x - %s.x)/(%s.z - %s.x) - 1.0);\n",
+                                       domain, domain, domain);
+                builder->codeAppendf("\ty = abs(2.0*(y - %s.y)/(%s.w - %s.y) - 1.0);\n",
+                                       domain, domain, domain);
+                builder->codeAppend("\tfloat blend = step(1.0, max(x, y));\n");
+                builder->codeAppendf("\t%s = mix(inside, outside, blend);\n", outColor);
+            } else {
+                builder->codeAppend("\tbvec4 outside;\n");
+                builder->codeAppendf("\toutside.xy = lessThan(%s, %s.xy);\n", inCoords.c_str(),
+                                       domain);
+                builder->codeAppendf("\toutside.zw = greaterThan(%s, %s.zw);\n", inCoords.c_str(),
+                                       domain);
+                builder->codeAppendf("\t%s = any(outside) ? vec4(0.0, 0.0, 0.0, 0.0) : ",
+                                       outColor);
+                builder->appendTextureLookupAndModulate(inModulateColor, sampler,
+                                                          inCoords.c_str());
+                builder->codeAppend(";\n");
+            }
+            break;
+        }
+        case kRepeat_Mode: {
+            SkString clampedCoords;
+            clampedCoords.printf("\tmod(%s - %s.xy, %s.zw - %s.xy) + %s.xy",
+                                 inCoords.c_str(), fDomainName.c_str(), fDomainName.c_str(),
+                                 fDomainName.c_str(), fDomainName.c_str());
+
+            builder->codeAppendf("\t%s = ", outColor);
+            builder->appendTextureLookupAndModulate(inModulateColor, sampler,
+                                                      clampedCoords.c_str());
+            builder->codeAppend(";\n");
+            break;
+        }
+    }
+}
+
+void GrTextureDomain::GLDomain::setData(const GrGLProgramDataManager& pdman,
+                                        const GrTextureDomain& textureDomain,
+                                        GrSurfaceOrigin textureOrigin) {
+    SkASSERT(textureDomain.mode() == fMode);
+    if (kIgnore_Mode != textureDomain.mode()) {
+        GrGLfloat values[4] = {
+>>>>>>> miniblink49
             SkScalarToFloat(textureDomain.domain().left()),
             SkScalarToFloat(textureDomain.domain().top()),
             SkScalarToFloat(textureDomain.domain().right()),
@@ -166,13 +279,20 @@ void GrTextureDomain::GLDomain::setData(const GrGLSLProgramDataManager& pdman,
             // of elements so that values = (l, t, r, b).
             SkTSwap(values[1], values[3]);
         }
+<<<<<<< HEAD
         if (0 != memcmp(values, fPrevDomain, kPrevDomainCount * sizeof(float))) {
             pdman.set4fv(fDomainUni, 1, values);
             memcpy(fPrevDomain, values, kPrevDomainCount * sizeof(float));
+=======
+        if (0 != memcmp(values, fPrevDomain, 4 * sizeof(GrGLfloat))) {
+            pdman.set4fv(fDomainUni, 1, values);
+            memcpy(fPrevDomain, values, 4 * sizeof(GrGLfloat));
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 //////////////////////////////////////////////////////////////////////////////
 
 class GrGLTextureDomainEffect : public GrGLSLFragmentProcessor {
@@ -209,18 +329,67 @@ void GrGLTextureDomainEffect::emitCode(EmitArgs& args)
 void GrGLTextureDomainEffect::onSetData(const GrGLSLProgramDataManager& pdman,
     const GrProcessor& processor)
 {
+=======
+
+//////////////////////////////////////////////////////////////////////////////
+
+class GrGLTextureDomainEffect : public GrGLFragmentProcessor {
+public:
+    GrGLTextureDomainEffect(const GrProcessor&);
+
+    virtual void emitCode(GrGLFPBuilder*,
+                          const GrFragmentProcessor&,
+                          const char* outputColor,
+                          const char* inputColor,
+                          const TransformedCoordsArray&,
+                          const TextureSamplerArray&) override;
+
+    void setData(const GrGLProgramDataManager&, const GrProcessor&) override;
+
+    static inline void GenKey(const GrProcessor&, const GrGLSLCaps&, GrProcessorKeyBuilder*);
+
+private:
+    GrTextureDomain::GLDomain         fGLDomain;
+    typedef GrGLFragmentProcessor INHERITED;
+};
+
+GrGLTextureDomainEffect::GrGLTextureDomainEffect(const GrProcessor&) {
+}
+
+void GrGLTextureDomainEffect::emitCode(GrGLFPBuilder* builder,
+                                       const GrFragmentProcessor& fp,
+                                       const char* outputColor,
+                                       const char* inputColor,
+                                       const TransformedCoordsArray& coords,
+                                       const TextureSamplerArray& samplers) {
+    const GrTextureDomainEffect& textureDomainEffect = fp.cast<GrTextureDomainEffect>();
+    const GrTextureDomain& domain = textureDomainEffect.textureDomain();
+
+    GrGLFragmentBuilder* fsBuilder = builder->getFragmentShaderBuilder();
+    SkString coords2D = fsBuilder->ensureFSCoords2D(coords, 0);
+    fGLDomain.sampleTexture(fsBuilder, domain, outputColor, coords2D, samplers[0], inputColor);
+}
+
+void GrGLTextureDomainEffect::setData(const GrGLProgramDataManager& pdman,
+                                      const GrProcessor& processor) {
+>>>>>>> miniblink49
     const GrTextureDomainEffect& textureDomainEffect = processor.cast<GrTextureDomainEffect>();
     const GrTextureDomain& domain = textureDomainEffect.textureDomain();
     fGLDomain.setData(pdman, domain, processor.texture(0)->origin());
 }
 
 void GrGLTextureDomainEffect::GenKey(const GrProcessor& processor, const GrGLSLCaps&,
+<<<<<<< HEAD
     GrProcessorKeyBuilder* b)
 {
+=======
+                                     GrProcessorKeyBuilder* b) {
+>>>>>>> miniblink49
     const GrTextureDomain& domain = processor.cast<GrTextureDomainEffect>().textureDomain();
     b->add32(GrTextureDomain::GLDomain::DomainKey(domain));
 }
 
+<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////
 
 sk_sp<GrFragmentProcessor> GrTextureDomainEffect::Make(GrTexture* texture,
@@ -267,12 +436,72 @@ GrGLSLFragmentProcessor* GrTextureDomainEffect::onCreateGLSLInstance() const
 
 bool GrTextureDomainEffect::onIsEqual(const GrFragmentProcessor& sBase) const
 {
+=======
+
+///////////////////////////////////////////////////////////////////////////////
+
+GrFragmentProcessor* GrTextureDomainEffect::Create(GrProcessorDataManager* procDataManager,
+                                                   GrTexture* texture,
+                                                   const SkMatrix& matrix,
+                                                   const SkRect& domain,
+                                                   GrTextureDomain::Mode mode,
+                                                   GrTextureParams::FilterMode filterMode,
+                                                   GrCoordSet coordSet) {
+    static const SkRect kFullRect = {0, 0, SK_Scalar1, SK_Scalar1};
+    if (GrTextureDomain::kIgnore_Mode == mode ||
+        (GrTextureDomain::kClamp_Mode == mode && domain.contains(kFullRect))) {
+        return GrSimpleTextureEffect::Create(procDataManager, texture, matrix, filterMode);
+    } else {
+
+        return SkNEW_ARGS(GrTextureDomainEffect, (procDataManager,
+                                                  texture,
+                                                  matrix,
+                                                  domain,
+                                                  mode,
+                                                  filterMode,
+                                                  coordSet));
+    }
+}
+
+GrTextureDomainEffect::GrTextureDomainEffect(GrProcessorDataManager* procDataManager,
+                                             GrTexture* texture,
+                                             const SkMatrix& matrix,
+                                             const SkRect& domain,
+                                             GrTextureDomain::Mode mode,
+                                             GrTextureParams::FilterMode filterMode,
+                                             GrCoordSet coordSet)
+    : GrSingleTextureEffect(procDataManager, texture, matrix, filterMode, coordSet)
+    , fTextureDomain(domain, mode) {
+    SkASSERT(mode != GrTextureDomain::kRepeat_Mode ||
+            filterMode == GrTextureParams::kNone_FilterMode);
+    this->initClassID<GrTextureDomainEffect>();
+}
+
+GrTextureDomainEffect::~GrTextureDomainEffect() {
+
+}
+
+void GrTextureDomainEffect::getGLProcessorKey(const GrGLSLCaps& caps,
+                                              GrProcessorKeyBuilder* b) const {
+    GrGLTextureDomainEffect::GenKey(*this, caps, b);
+}
+
+GrGLFragmentProcessor* GrTextureDomainEffect::createGLInstance() const  {
+    return SkNEW_ARGS(GrGLTextureDomainEffect, (*this));
+}
+
+bool GrTextureDomainEffect::onIsEqual(const GrFragmentProcessor& sBase) const {
+>>>>>>> miniblink49
     const GrTextureDomainEffect& s = sBase.cast<GrTextureDomainEffect>();
     return this->fTextureDomain == s.fTextureDomain;
 }
 
+<<<<<<< HEAD
 void GrTextureDomainEffect::onComputeInvariantOutput(GrInvariantOutput* inout) const
 {
+=======
+void GrTextureDomainEffect::onComputeInvariantOutput(GrInvariantOutput* inout) const {
+>>>>>>> miniblink49
     if (GrTextureDomain::kDecal_Mode == fTextureDomain.mode()) { // TODO: helper
         if (GrPixelConfigIsAlphaOnly(this->texture(0)->config())) {
             inout->mulByUnknownSingleComponent();
@@ -288,14 +517,21 @@ void GrTextureDomainEffect::onComputeInvariantOutput(GrInvariantOutput* inout) c
 
 GR_DEFINE_FRAGMENT_PROCESSOR_TEST(GrTextureDomainEffect);
 
+<<<<<<< HEAD
 sk_sp<GrFragmentProcessor> GrTextureDomainEffect::TestCreate(GrProcessorTestData* d)
 {
     int texIdx = d->fRandom->nextBool() ? GrProcessorUnitTest::kSkiaPMTextureIdx : GrProcessorUnitTest::kAlphaTextureIdx;
+=======
+GrFragmentProcessor* GrTextureDomainEffect::TestCreate(GrProcessorTestData* d) {
+    int texIdx = d->fRandom->nextBool() ? GrProcessorUnitTest::kSkiaPMTextureIdx :
+                                          GrProcessorUnitTest::kAlphaTextureIdx;
+>>>>>>> miniblink49
     SkRect domain;
     domain.fLeft = d->fRandom->nextUScalar1();
     domain.fRight = d->fRandom->nextRangeScalar(domain.fLeft, SK_Scalar1);
     domain.fTop = d->fRandom->nextUScalar1();
     domain.fBottom = d->fRandom->nextRangeScalar(domain.fTop, SK_Scalar1);
+<<<<<<< HEAD
     GrTextureDomain::Mode mode = (GrTextureDomain::Mode)d->fRandom->nextULessThan(GrTextureDomain::kModeCount);
     const SkMatrix& matrix = GrTest::TestMatrix(d->fRandom);
     bool bilerp = mode != GrTextureDomain::kRepeat_Mode ? d->fRandom->nextBool() : false;
@@ -307,4 +543,18 @@ sk_sp<GrFragmentProcessor> GrTextureDomainEffect::TestCreate(GrProcessorTestData
         mode,
         bilerp ? GrTextureParams::kBilerp_FilterMode : GrTextureParams::kNone_FilterMode,
         coords);
+=======
+    GrTextureDomain::Mode mode =
+        (GrTextureDomain::Mode) d->fRandom->nextULessThan(GrTextureDomain::kModeCount);
+    const SkMatrix& matrix = GrTest::TestMatrix(d->fRandom);
+    bool bilerp = mode != GrTextureDomain::kRepeat_Mode ? d->fRandom->nextBool() : false;
+    GrCoordSet coords = d->fRandom->nextBool() ? kLocal_GrCoordSet : kDevice_GrCoordSet;
+    return GrTextureDomainEffect::Create(d->fProcDataManager,
+                                         d->fTextures[texIdx],
+                                         matrix,
+                                         domain,
+                                         mode,
+                                         bilerp ? GrTextureParams::kBilerp_FilterMode : GrTextureParams::kNone_FilterMode,
+                                         coords);
+>>>>>>> miniblink49
 }

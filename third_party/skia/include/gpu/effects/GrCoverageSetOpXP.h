@@ -21,15 +21,28 @@ class GrProcOptInfo;
  */
 class GrCoverageSetOpXPFactory : public GrXPFactory {
 public:
+<<<<<<< HEAD
     static sk_sp<GrXPFactory> Make(SkRegion::Op regionOp, bool invertCoverage = false);
 
     void getInvariantBlendedColor(const GrProcOptInfo& colorPOI,
         GrXPFactory::InvariantBlendedColor*) const override;
+=======
+    static GrXPFactory* Create(SkRegion::Op regionOp, bool invertCoverage = false);
+
+    bool supportsRGBCoverage(GrColor /*knownColor*/,
+                             uint32_t /*knownColorFlags*/) const override {
+        return true;
+    }
+
+    void getInvariantBlendedColor(const GrProcOptInfo& colorPOI,
+                                  GrXPFactory::InvariantBlendedColor*) const override;
+>>>>>>> miniblink49
 
 private:
     GrCoverageSetOpXPFactory(SkRegion::Op regionOp, bool invertCoverage);
 
     GrXferProcessor* onCreateXferProcessor(const GrCaps& caps,
+<<<<<<< HEAD
         const GrPipelineOptimizations& optimizations,
         bool hasMixedSamples,
         const DstTexture*) const override;
@@ -41,6 +54,21 @@ private:
 
     bool onIsEqual(const GrXPFactory& xpfBase) const override
     {
+=======
+                                           const GrProcOptInfo& colorPOI,
+                                           const GrProcOptInfo& coveragePOI,
+                                           bool hasMixedSamples,
+                                           const DstTexture*) const override;
+
+    bool willReadDstColor(const GrCaps& /*caps*/,
+                          const GrProcOptInfo& /*colorPOI*/,
+                          const GrProcOptInfo& /*coveragePOI*/,
+                          bool /*hasMixedSamples*/) const override {
+        return false;
+    }
+
+    bool onIsEqual(const GrXPFactory& xpfBase) const override {
+>>>>>>> miniblink49
         const GrCoverageSetOpXPFactory& xpf = xpfBase.cast<GrCoverageSetOpXPFactory>();
         return fRegionOp == xpf.fRegionOp;
     }
@@ -48,8 +76,16 @@ private:
     GR_DECLARE_XP_FACTORY_TEST;
 
     SkRegion::Op fRegionOp;
+<<<<<<< HEAD
     bool fInvertCoverage;
+=======
+    bool         fInvertCoverage;
+>>>>>>> miniblink49
 
     typedef GrXPFactory INHERITED;
 };
 #endif
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

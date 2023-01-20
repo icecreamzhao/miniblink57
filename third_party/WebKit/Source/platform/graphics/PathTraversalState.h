@@ -28,6 +28,7 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/geometry/FloatPoint.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
 namespace blink {
@@ -36,6 +37,12 @@ class PLATFORM_EXPORT PathTraversalState final {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(PathTraversalState);
 
+=======
+
+namespace blink {
+
+class PLATFORM_EXPORT PathTraversalState {
+>>>>>>> miniblink49
 public:
     enum PathTraversalAction {
         TraversalTotalLength,
@@ -49,9 +56,13 @@ public:
     float closeSubpath();
     float moveTo(const FloatPoint&);
     float lineTo(const FloatPoint&);
+<<<<<<< HEAD
     float cubicBezierTo(const FloatPoint& newControl1,
         const FloatPoint& newControl2,
         const FloatPoint& newEnd);
+=======
+    float cubicBezierTo(const FloatPoint& newControl1, const FloatPoint& newControl2, const FloatPoint& newEnd);
+>>>>>>> miniblink49
 
     void processSegment();
 

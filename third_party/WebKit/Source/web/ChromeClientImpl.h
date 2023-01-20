@@ -35,8 +35,12 @@
 #include "core/page/ChromeClient.h"
 #include "core/page/WindowFeatures.h"
 #include "public/web/WebNavigationPolicy.h"
+<<<<<<< HEAD
 #include "web/WebExport.h"
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -46,22 +50,34 @@ class WebViewImpl;
 struct WebCursorInfo;
 
 // Handles window-level notifications from core on behalf of a WebView.
+<<<<<<< HEAD
 class WEB_EXPORT ChromeClientImpl final : public ChromeClient {
 public:
     static ChromeClientImpl* create(WebViewImpl*);
+=======
+class ChromeClientImpl final : public ChromeClient {
+public:
+    explicit ChromeClientImpl(WebViewImpl*);
+>>>>>>> miniblink49
     ~ChromeClientImpl() override;
 
     void* webView() const override;
 
     // ChromeClient methods:
     void chromeDestroyed() override;
+<<<<<<< HEAD
     void setWindowRect(const IntRect&, LocalFrame&) override;
     IntRect rootWindowRect() override;
+=======
+    void setWindowRect(const IntRect&) override;
+    IntRect windowRect() override;
+>>>>>>> miniblink49
     IntRect pageRect() override;
     void focus() override;
     bool canTakeFocus(WebFocusType) override;
     void takeFocus(WebFocusType) override;
     void focusedNodeChanged(Node* fromNode, Node* toNode) override;
+<<<<<<< HEAD
     void beginLifecycleUpdates() override;
     bool hadFormInteraction() const override;
     void startDragging(LocalFrame*,
@@ -79,6 +95,13 @@ public:
         const FloatSize& accumulatedOverscroll,
         const FloatPoint& positionInViewport,
         const FloatSize& velocityInViewport) override;
+=======
+    void focusedFrameChanged(LocalFrame*) override;
+    Page* createWindow(
+        LocalFrame*, const FrameLoadRequest&, const WindowFeatures&, NavigationPolicy, ShouldSendReferrer) override;
+    void show(NavigationPolicy) override;
+    void didOverscroll(const FloatSize&, const FloatSize&, const FloatPoint&, const FloatSize&) override;
+>>>>>>> miniblink49
     void setToolbarsVisible(bool) override;
     bool toolbarsVisible() override;
     void setStatusbarVisible(bool) override;
@@ -88,6 +111,7 @@ public:
     void setMenubarVisible(bool) override;
     bool menubarVisible() override;
     void setResizable(bool) override;
+<<<<<<< HEAD
     bool shouldReportDetailedMessageForSource(LocalFrame&,
         const String&) override;
     void addMessageToConsole(LocalFrame*,
@@ -174,10 +198,76 @@ public:
 
     bool hasOpenedPopup() const override;
     PopupMenu* openPopupMenu(LocalFrame&, HTMLSelectElement&) override;
+=======
+    bool shouldReportDetailedMessageForSource(LocalFrame&, const String&) override;
+    void addMessageToConsole(
+        LocalFrame*, MessageSource, MessageLevel,
+        const String& message, unsigned lineNumber,
+        const String& sourceID, const String& stackTrace) override;
+    bool canOpenBeforeUnloadConfirmPanel() override;
+    bool openBeforeUnloadConfirmPanelDelegate(LocalFrame*, const String&) override;
+    void closeWindowSoon() override;
+    bool openJavaScriptAlertDelegate(LocalFrame*, const String&) override;
+    bool openJavaScriptConfirmDelegate(LocalFrame*, const String&) override;
+    bool openJavaScriptPromptDelegate(
+        LocalFrame*, const String& message,
+        const String& defaultValue, String& result) override;
+    void setStatusbarText(const String& message) override;
+    bool tabsToLinks() override;
+    IntRect windowResizerRect() const override;
+    void invalidateRect(const IntRect&) override;
+    void scheduleAnimation() override;
+    void scheduleAnimationForFrame(LocalFrame* localRoot) override;
+    IntRect viewportToScreen(const IntRect&) const override;
+    WebScreenInfo screenInfo() const override;
+    void contentsSizeChanged(LocalFrame*, const IntSize&) const override;
+    void pageScaleFactorChanged() const override;
+    float clampPageScaleFactorToLimits(float scale) const override;
+    void layoutUpdated(LocalFrame*) const override;
+    void showMouseOverURL(const HitTestResult&) override;
+    void setToolTip(const String& tooltipText, TextDirection) override;
+    void dispatchViewportPropertiesDidChange(const ViewportDescription&) const override;
+    void printDelegate(LocalFrame*) override;
+    void annotatedRegionsChanged() override;
+    PassOwnPtrWillBeRawPtr<ColorChooser> openColorChooser(LocalFrame*, ColorChooserClient*, const Color&) override;
+    PassRefPtr<DateTimeChooser> openDateTimeChooser(DateTimeChooserClient*, const DateTimeChooserParameters&) override;
+    void openFileChooser(LocalFrame*, PassRefPtr<FileChooser>) override;
+    void enumerateChosenDirectory(FileChooser*) override;
+    void setCursor(const Cursor&) override;
+    Cursor lastSetCursorForTesting() const override;
+    void needTouchEvents(bool needTouchEvents) override;
+    void setTouchAction(TouchAction) override;
+
+    GraphicsLayerFactory* graphicsLayerFactory() const override;
+
+    // Pass 0 as the GraphicsLayer to detatch the root layer.
+    void attachRootGraphicsLayer(GraphicsLayer*, LocalFrame* localRoot) override;
+
+    void attachCompositorAnimationTimeline(WebCompositorAnimationTimeline*, LocalFrame* localRoot) override;
+    void detachCompositorAnimationTimeline(WebCompositorAnimationTimeline*, LocalFrame* localRoot) override;
+
+    void enterFullScreenForElement(Element*) override;
+    void exitFullScreenForElement(Element*) override;
+
+    void clearCompositedSelection() override;
+    void updateCompositedSelection(const CompositedSelection&) override;
+
+    // ChromeClient methods:
+    void postAccessibilityNotification(AXObject*, AXObjectCache::AXNotification) override;
+    String acceptLanguages() override;
+
+    // ChromeClientImpl:
+    void setCursorForPlugin(const WebCursorInfo&);
+    void setNewWindowNavigationPolicy(WebNavigationPolicy);
+
+    bool hasOpenedPopup() const override;
+    PassRefPtrWillBeRawPtr<PopupMenu> openPopupMenu(LocalFrame&, PopupMenuClient*) override;
+>>>>>>> miniblink49
     PagePopup* openPagePopup(PagePopupClient*);
     void closePagePopup(PagePopup*);
     DOMWindow* pagePopupWindowForTesting() const override;
 
+<<<<<<< HEAD
     bool shouldOpenModalDialogDuringPageDismissal(
         LocalFrame&,
         DialogType,
@@ -191,20 +281,41 @@ public:
     void didAssociateFormControlsAfterLoad(LocalFrame*) override;
     void handleKeyboardEventOnTextField(HTMLInputElement&,
         KeyboardEvent&) override;
+=======
+    bool shouldOpenModalDialogDuringPageDismissal(const DialogType&, const String& dialogMessage, Document::PageDismissalType) const override;
+
+    bool requestPointerLock() override;
+    void requestPointerUnlock() override;
+
+    // AutofillClient pass throughs:
+    void didAssociateFormControls(const WillBeHeapVector<RefPtrWillBeMember<Element>>&, LocalFrame*) override;
+    void handleKeyboardEventOnTextField(HTMLInputElement&, KeyboardEvent&) override;
+>>>>>>> miniblink49
     void didChangeValueInTextField(HTMLFormControlElement&) override;
     void didEndEditingOnTextField(HTMLInputElement&) override;
     void openTextDataListChooser(HTMLInputElement&) override;
     void textFieldDataListChanged(HTMLInputElement&) override;
+<<<<<<< HEAD
     void ajaxSucceeded(LocalFrame*) override;
 
     void didCancelCompositionOnSelectionChange() override;
     void resetInputMethod() override;
     void showVirtualKeyboard() override;
+=======
+    void xhrSucceeded(LocalFrame*) override;
+    void ajaxSucceeded(LocalFrame*) override;
+
+    void didCancelCompositionOnSelectionChange() override;
+    void willSetInputMethodState() override;
+    void didUpdateTextOfFocusedElementByNonUserInput() override;
+    void showImeIfNeeded() override;
+>>>>>>> miniblink49
 
     void registerViewportLayers() const override;
 
     void showUnhandledTapUIIfNeeded(IntPoint, Node*, bool) override;
     void onMouseDown(Node*) override;
+<<<<<<< HEAD
     void didUpdateBrowserControls() const override;
 
     CompositorProxyClient* createCompositorProxyClient(LocalFrame*) override;
@@ -224,16 +335,29 @@ public:
 private:
     explicit ChromeClientImpl(WebViewImpl*);
 
+=======
+    void didUpdateTopControls() const override;
+
+    FloatSize elasticOverscroll() const override;
+
+private:
+>>>>>>> miniblink49
     bool isChromeClientImpl() const override { return true; }
     void registerPopupOpeningObserver(PopupOpeningObserver*) override;
     void unregisterPopupOpeningObserver(PopupOpeningObserver*) override;
 
+<<<<<<< HEAD
     void setCursor(const WebCursorInfo&, LocalFrame*);
+=======
+    void notifyPopupOpeningObservers() const;
+    void setCursor(const WebCursorInfo&);
+>>>>>>> miniblink49
 
     WebViewImpl* m_webView; // Weak pointer.
     WindowFeatures m_windowFeatures;
     Vector<PopupOpeningObserver*> m_popupOpeningObservers;
     Cursor m_lastSetMouseCursorForTesting;
+<<<<<<< HEAD
     bool m_cursorOverridden;
     bool m_didRequestNonEmptyToolTip;
 };
@@ -243,6 +367,11 @@ DEFINE_TYPE_CASTS(ChromeClientImpl,
     client,
     client->isChromeClientImpl(),
     client.isChromeClientImpl());
+=======
+};
+
+DEFINE_TYPE_CASTS(ChromeClientImpl, ChromeClient, client, client->isChromeClientImpl(), client.isChromeClientImpl());
+>>>>>>> miniblink49
 
 } // namespace blink
 

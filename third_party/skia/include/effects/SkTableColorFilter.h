@@ -23,7 +23,11 @@ public:
      *  colors are premultiplied, they are temporarily unpremultiplied, then
      *  the table is applied, and then the result is remultiplied.
      */
+<<<<<<< HEAD
     static sk_sp<SkColorFilter> Make(const uint8_t table[256]);
+=======
+    static SkColorFilter* Create(const uint8_t table[256]);
+>>>>>>> miniblink49
 
     /**
      *  Create a table colorfilter, with a different table for each
@@ -31,6 +35,7 @@ public:
      *  treated as identity, with the component left unchanged. If a table
      *  is not null, then its contents are copied into the filter.
      */
+<<<<<<< HEAD
     static sk_sp<SkColorFilter> MakeARGB(const uint8_t tableA[256],
         const uint8_t tableR[256],
         const uint8_t tableG[256],
@@ -49,6 +54,12 @@ public:
         return MakeARGB(tableA, tableR, tableG, tableB).release();
     }
 #endif
+=======
+    static SkColorFilter* CreateARGB(const uint8_t tableA[256],
+                                     const uint8_t tableR[256],
+                                     const uint8_t tableG[256],
+                                     const uint8_t tableB[256]);
+>>>>>>> miniblink49
 
     SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP()
 };

@@ -36,12 +36,17 @@
 namespace blink {
 
 #ifndef NDEBUG
+<<<<<<< HEAD
 template <class T>
+=======
+template<class T>
+>>>>>>> miniblink49
 struct ValueToString;
 #endif
 
 template <class T, class UserData = void*>
 class PODIntervalSearchAdapter {
+<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
@@ -50,6 +55,12 @@ public:
     PODIntervalSearchAdapter(Vector<IntervalType>& result,
         const T& lowValue,
         const T& highValue)
+=======
+public:
+    typedef PODInterval<T, UserData> IntervalType;
+
+    PODIntervalSearchAdapter(Vector<IntervalType>& result, const T& lowValue, const T& highValue)
+>>>>>>> miniblink49
         : m_result(result)
         , m_lowValue(lowValue)
         , m_highValue(highValue)
@@ -61,7 +72,11 @@ public:
     void collectIfNeeded(const IntervalType& data) const
     {
         if (data.overlaps(m_lowValue, m_highValue))
+<<<<<<< HEAD
             m_result.push_back(data);
+=======
+            m_result.append(data);
+>>>>>>> miniblink49
     }
 
 private:
@@ -73,10 +88,16 @@ private:
 // An interval tree, which is a form of augmented red-black tree. It
 // supports efficient (O(lg n)) insertion, removal and querying of
 // intervals in the tree.
+<<<<<<< HEAD
 template <class T, class UserData = void*>
 class PODIntervalTree final : public PODRedBlackTree<PODInterval<T, UserData>> {
     WTF_MAKE_NONCOPYABLE(PODIntervalTree);
 
+=======
+template<class T, class UserData = void*>
+class PODIntervalTree final : public PODRedBlackTree<PODInterval<T, UserData>> {
+    WTF_MAKE_NONCOPYABLE(PODIntervalTree);
+>>>>>>> miniblink49
 public:
     // Typedef to reduce typing when declaring intervals to be stored in
     // this tree.
@@ -114,8 +135,12 @@ public:
     // Returns all intervals in the tree which overlap the given query
     // interval. The returned intervals are sorted by increasing low
     // endpoint.
+<<<<<<< HEAD
     void allOverlaps(const IntervalType& interval,
         Vector<IntervalType>& result) const
+=======
+    void allOverlaps(const IntervalType& interval, Vector<IntervalType>& result) const
+>>>>>>> miniblink49
     {
         // Explicit dereference of "this" required because of
         // inheritance rules in template classes.
@@ -132,9 +157,13 @@ public:
     }
 
     // Helper to create interval objects.
+<<<<<<< HEAD
     static IntervalType createInterval(const T& low,
         const T& high,
         const UserData data = nullptr)
+=======
+    static IntervalType createInterval(const T& low, const T& high, const UserData data = 0)
+>>>>>>> miniblink49
     {
         return IntervalType(low, high, data);
     }
@@ -163,8 +192,12 @@ private:
     // interval to the result vector. The intervals are sorted by
     // increasing low endpoint.
     template <class AdapterType>
+<<<<<<< HEAD
     DISABLE_CFI_PERF void searchForOverlapsFrom(IntervalNode* node,
         AdapterType& adapter) const
+=======
+    void searchForOverlapsFrom(IntervalNode* node, AdapterType& adapter) const
+>>>>>>> miniblink49
     {
         if (!node)
             return;
@@ -248,10 +281,16 @@ private:
             localMaxValue = node->data().high();
         if (!(localMaxValue == node->data().maxHigh())) {
 #ifndef NDEBUG
+<<<<<<< HEAD
             String localMaxValueString = ValueToString<T>::toString(localMaxValue);
             DLOG(ERROR) << "PODIntervalTree verification failed at node " << node
                         << ": localMaxValue=" << localMaxValueString
                         << " and data=" << node->data().toString();
+=======
+            String localMaxValueString = ValueToString<T>::string(localMaxValue);
+            WTF_LOG_ERROR("PODIntervalTree verification failed at node 0x%p: localMaxValue=%s and data=%s",
+                node, localMaxValueString.utf8().data(), node->data().toString().utf8().data());
+>>>>>>> miniblink49
 #endif
             return false;
         }
@@ -263,9 +302,15 @@ private:
 
 #ifndef NDEBUG
 // Support for printing PODIntervals at the PODRedBlackTree level.
+<<<<<<< HEAD
 template <class T, class UserData>
 struct ValueToString<PODInterval<T, UserData>> {
     static String toString(const PODInterval<T, UserData>& interval)
+=======
+template<class T, class UserData>
+struct ValueToString<PODInterval<T, UserData>> {
+    static String string(const PODInterval<T, UserData>& interval)
+>>>>>>> miniblink49
     {
         return interval.toString();
     }

@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkAnimatorScript_DEFINED
 #define SkAnimatorScript_DEFINED
 
@@ -23,6 +27,7 @@ struct SkDisplayEnumMap {
 
 class SkAnimatorScript : public SkScriptEngine {
 public:
+<<<<<<< HEAD
     SkAnimatorScript(SkAnimateMaker&, SkDisplayable*, SkDisplayTypes type);
     ~SkAnimatorScript();
     bool evaluate(const char* script, SkScriptValue*, SkDisplayTypes type);
@@ -61,11 +66,51 @@ protected:
         void* callBack, SkScriptValue*);
     static bool NaN(const char* token, size_t len, void* callBack, SkScriptValue*);
     static bool Unbox(void*, SkScriptValue* scriptValue);
+=======
+    SkAnimatorScript(SkAnimateMaker& , SkDisplayable* , SkDisplayTypes type);
+    ~SkAnimatorScript();
+    bool evaluate(const char* script, SkScriptValue* , SkDisplayTypes type);
+    void track(SkDisplayable* displayable) {
+        SkASSERT(fTrackDisplayable.find(displayable) < 0);
+        *fTrackDisplayable.append() = displayable; }
+    static bool EvaluateDisplayable(SkAnimateMaker& , SkDisplayable* , const char* script, SkDisplayable** );
+    static bool EvaluateFloat(SkAnimateMaker& , SkDisplayable* , const char* script, SkScalar* );
+    static bool EvaluateInt(SkAnimateMaker& , SkDisplayable* , const char* script, int32_t* );
+    static bool EvaluateString(SkAnimateMaker& , SkDisplayable* , const char* script, SkString* );
+    static bool EvaluateString(SkAnimateMaker& , SkDisplayable* , SkDisplayable* parent, const char* script, SkString* );
+    static bool MapEnums(const char* ptr, const char* match, size_t len, int* value);
+protected:
+    static bool Box(void* user, SkScriptValue* );
+    static bool Eval(const char* function, size_t len, SkTDArray<SkScriptValue>& params,
+        void* callBack, SkScriptValue* );
+    static bool EvalEnum(const char* token, size_t len, void* callBack, SkScriptValue* );
+    static bool EvalID(const char* token, size_t len, void* callBack, SkScriptValue* );
+    static bool EvalMember(const char* member, size_t len, void* object, void* eng,
+        SkScriptValue* value);
+    static bool EvalMemberCommon(SkScriptEngine* , const SkMemberInfo* info,
+        SkDisplayable* displayable, SkScriptValue* value);
+    static bool EvalMemberFunction(const char* member, size_t len, void* object,
+        SkTDArray<SkScriptValue>& params, void* user, SkScriptValue* value);
+    static bool EvalNamedColor(const char* token, size_t len, void* callBack, SkScriptValue* );
+    static bool EvalRGB(const char* function, size_t len, SkTDArray<SkScriptValue>& params,
+        void* callBack, SkScriptValue* );
+    static const SkDisplayEnumMap& GetEnumValues(SkDisplayTypes type);
+    static bool Infinity(const char* token, size_t len, void* callBack, SkScriptValue* );
+    static bool IsFinite(const char* function, size_t len, SkTDArray<SkScriptValue>& params,
+        void* callBack, SkScriptValue* );
+    static bool IsNaN(const char* function, size_t len, SkTDArray<SkScriptValue>& params,
+        void* callBack, SkScriptValue* );
+    static bool NaN(const char* token, size_t len, void* callBack, SkScriptValue* );
+    static bool Unbox(void* , SkScriptValue* scriptValue);
+>>>>>>> miniblink49
     SkTDDisplayableArray fTrackDisplayable;
     SkAnimateMaker& fMaker;
     SkDisplayable* fParent;
     SkDisplayable* fWorking;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     friend class SkDump;
     friend struct SkScriptNAnswer;

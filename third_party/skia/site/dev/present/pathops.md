@@ -3,6 +3,7 @@ Path Ops
 
 View the PathOps presentations with speaker notes enabled for full content. 
 
+<<<<<<< HEAD
 2013 Path Ops Presentation
 ------------
 <iframe
@@ -11,12 +12,16 @@ frameborder="0" width="480" height="299" allowfullscreen="true"
 mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
 2014 Update
+=======
+2014 Updates
+>>>>>>> miniblink49
 ------------
 <iframe
 src="https://docs.google.com/presentation/d/1NbmG5W6VW9h5HtjpCVLx4h6SXW0qW7HIwmSfiwzFbrI/embed?start=false&loop=false&delayms=3000"
 frameborder="0" width="480" height="299" allowfullscreen="true"
 mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
+<<<<<<< HEAD
 2015 Update
 ------------
 <iframe
@@ -25,3 +30,6 @@ frameborder="0" width="480" height="299" allowfullscreen="true"
 mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
 ## [Path Ops Inverse Fill Illustration](https://drive.google.com/file/d/0BwoLUwz9PYkHLWpsaXd0UDdaN00/view?usp=sharing)
+=======
+
+>>>>>>> miniblink49

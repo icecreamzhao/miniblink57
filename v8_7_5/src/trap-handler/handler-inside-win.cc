@@ -32,6 +32,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace trap_handler {
 
         // The below struct needed to access the offset in the Thread Environment Block
@@ -123,3 +124,48 @@ namespace internal {
     } // namespace trap_handler
 } // namespace internal
 } // namespace v8
+=======
+namespace trap_handler {
+
+bool TryHandleWasmTrap(EXCEPTION_POINTERS* exception) {
+  // Ensure the faulting thread was actually running Wasm code.
+  if (!IsThreadInWasm()) {
+    return false;
+  }
+
+  // Clear g_thread_in_wasm_code, primarily to protect against nested faults.
+  g_thread_in_wasm_code = false;
+
+  const EXCEPTION_RECORD* record = exception->ExceptionRecord;
+
+  if (record->ExceptionCode != EXCEPTION_ACCESS_VIOLATION) {
+    return false;
+  }
+
+  uintptr_t fault_addr = reinterpret_cast<uintptr_t>(record->ExceptionAddress);
+  uintptr_t landing_pad = 0;
+
+  if (TryFindLandingPad(fault_addr, &landing_pad)) {
+    exception->ContextRecord->Rip = landing_pad;
+    // We will return to wasm code, so restore the g_thread_in_wasm_code flag.
+    g_thread_in_wasm_code = true;
+    return true;
+  }
+
+  // If we get here, it's not a recoverable wasm fault, so we go to the next
+  // handler. Leave the g_thread_in_wasm_code flag unset since we do not return
+  // to wasm code.
+  return false;
+}
+
+LONG HandleWasmTrap(EXCEPTION_POINTERS* exception) {
+  if (TryHandleWasmTrap(exception)) {
+    return EXCEPTION_CONTINUE_EXECUTION;
+  }
+  return EXCEPTION_CONTINUE_SEARCH;
+}
+
+}  // namespace trap_handler
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

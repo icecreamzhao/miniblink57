@@ -31,16 +31,25 @@
 #ifndef ScrollbarThemeAura_h
 #define ScrollbarThemeAura_h
 
+<<<<<<< HEAD
 #include "base/gtest_prod_util.h"
 #include "platform/scroll/ScrollbarTheme.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT ScrollbarThemeAura : public ScrollbarTheme {
+=======
+#include "platform/scroll/ScrollbarThemeNonMacCommon.h"
+
+namespace blink {
+
+class PLATFORM_EXPORT ScrollbarThemeAura : public ScrollbarThemeNonMacCommon {
+>>>>>>> miniblink49
 public:
     int scrollbarThickness(ScrollbarControlSize) override;
 
 protected:
+<<<<<<< HEAD
     bool hasButtons(const ScrollbarThemeClient&) override { return true; }
     bool hasThumb(const ScrollbarThemeClient&) override;
 
@@ -80,6 +89,13 @@ private:
 
     virtual bool hasScrollbarButtons(ScrollbarOrientation) const;
     IntSize buttonSize(const ScrollbarThemeClient&);
+=======
+    void paintTrackPiece(GraphicsContext*, ScrollbarThemeClient*, const IntRect&, ScrollbarPart) override;
+    void paintButton(GraphicsContext*, ScrollbarThemeClient*, const IntRect&, ScrollbarPart) override;
+    void paintThumb(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) override;
+    IntSize buttonSize(ScrollbarThemeClient*) override;
+    int minimumThumbLength(ScrollbarThemeClient*) override;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -7,6 +7,7 @@
 
 #include "SkMatrix.h"
 #include "SkOpEdgeBuilder.h"
+<<<<<<< HEAD
 #include "SkPathOps.h"
 #include "SkPathOpsCommon.h"
 #include "SkPathPriv.h"
@@ -18,6 +19,18 @@ static bool one_contour(const SkPath& path)
     uint8_t* verbs = (uint8_t*)allocator.alloc(sizeof(uint8_t) * verbCount,
         SkChunkAlloc::kThrow_AllocFailType);
     (void)path.getVerbs(verbs, verbCount);
+=======
+#include "SkPathPriv.h"
+#include "SkPathOps.h"
+#include "SkPathOpsCommon.h"
+
+static bool one_contour(const SkPath& path) {
+    SkChunkAlloc allocator(256);
+    int verbCount = path.countVerbs();
+    uint8_t* verbs = (uint8_t*) allocator.alloc(sizeof(uint8_t) * verbCount,
+            SkChunkAlloc::kThrow_AllocFailType);
+    (void) path.getVerbs(verbs, verbCount);
+>>>>>>> miniblink49
     for (int index = 1; index < verbCount; ++index) {
         if (verbs[index] == SkPath::kMove_Verb) {
             return false;
@@ -26,8 +39,12 @@ static bool one_contour(const SkPath& path)
     return true;
 }
 
+<<<<<<< HEAD
 bool FixWinding(SkPath* path)
 {
+=======
+void FixWinding(SkPath* path) {
+>>>>>>> miniblink49
     SkPath::FillType fillType = path->getFillType();
     if (fillType == SkPath::kInverseEvenOdd_FillType) {
         fillType = SkPath::kInverseWinding_FillType;
@@ -42,6 +59,7 @@ bool FixWinding(SkPath* path)
             *path = temp;
         }
         path->setFillType(fillType);
+<<<<<<< HEAD
         return true;
     }
     SkChunkAlloc allocator(4096);
@@ -52,6 +70,16 @@ bool FixWinding(SkPath* path)
     if (!contourHead.next()) {
         return false;
     }
+=======
+        return;
+    }
+    SkChunkAlloc allocator(4096);
+    SkOpContourHead contourHead;
+    SkOpGlobalState globalState(NULL, &contourHead);
+    SkOpEdgeBuilder builder(*path, &contourHead, &allocator, &globalState);
+    builder.finish(&allocator);
+    SkASSERT(contourHead.next());
+>>>>>>> miniblink49
     contourHead.resetReverse();
     bool writePath = false;
     SkOpSpan* topSpan;
@@ -61,8 +89,13 @@ bool FixWinding(SkPath* path)
         SkOpContour* topContour = topSegment->contour();
         SkASSERT(topContour->isCcw() >= 0);
 #if DEBUG_WINDING
+<<<<<<< HEAD
         SkDebugf("%s id=%d nested=%d ccw=%d\n", __FUNCTION__,
             topSegment->debugID(), globalState.nested(), topContour->isCcw());
+=======
+        SkDebugf("%s id=%d nested=%d ccw=%d\n",  __FUNCTION__,
+                topSegment->debugID(), globalState.nested(), topContour->isCcw());
+>>>>>>> miniblink49
 #endif
         if ((globalState.nested() & 1) != SkToBool(topContour->isCcw())) {
             topContour->setReverse();
@@ -73,7 +106,11 @@ bool FixWinding(SkPath* path)
     }
     if (!writePath) {
         path->setFillType(fillType);
+<<<<<<< HEAD
         return true;
+=======
+        return;
+>>>>>>> miniblink49
     }
     SkPath empty;
     SkPathWriter woundPath(empty);
@@ -87,11 +124,17 @@ bool FixWinding(SkPath* path)
     } while ((test = test->next()));
     *path = *woundPath.nativePath();
     path->setFillType(fillType);
+<<<<<<< HEAD
     return true;
 }
 
 void SkOpBuilder::add(const SkPath& path, SkPathOp op)
 {
+=======
+}
+
+void SkOpBuilder::add(const SkPath& path, SkPathOp op) {
+>>>>>>> miniblink49
     if (0 == fOps.count() && op != kUnion_SkPathOp) {
         fPathRefs.push_back() = SkPath();
         *fOps.append() = kUnion_SkPathOp;
@@ -100,8 +143,12 @@ void SkOpBuilder::add(const SkPath& path, SkPathOp op)
     *fOps.append() = op;
 }
 
+<<<<<<< HEAD
 void SkOpBuilder::reset()
 {
+=======
+void SkOpBuilder::reset() {
+>>>>>>> miniblink49
     fPathRefs.reset();
     fOps.reset();
 }
@@ -109,8 +156,12 @@ void SkOpBuilder::reset()
 /* OPTIMIZATION: Union doesn't need to be all-or-nothing. A run of three or more convex
    paths with union ops could be locally resolved and still improve over doing the
    ops one at a time. */
+<<<<<<< HEAD
 bool SkOpBuilder::resolve(SkPath* result)
 {
+=======
+bool SkOpBuilder::resolve(SkPath* result) {
+>>>>>>> miniblink49
     SkPath original = *result;
     int count = fOps.count();
     bool allUnion = true;
@@ -168,10 +219,14 @@ bool SkOpBuilder::resolve(SkPath* result)
         }
         if (!fPathRefs[index].isEmpty()) {
             // convert the even odd result back to winding form before accumulating it
+<<<<<<< HEAD
             if (!FixWinding(&fPathRefs[index])) {
                 *result = original;
                 return false;
             }
+=======
+            FixWinding(&fPathRefs[index]);
+>>>>>>> miniblink49
             sum.addPath(fPathRefs[index]);
         }
     }

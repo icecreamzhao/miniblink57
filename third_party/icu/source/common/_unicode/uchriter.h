@@ -8,14 +8,23 @@
 #ifndef UCHRITER_H
 #define UCHRITER_H
 
+<<<<<<< HEAD
 #include "unicode/chariter.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/chariter.h"
+>>>>>>> miniblink49
 
 /**
  * \file 
  * \brief C++ API: UChar Character Iterator
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 /**
@@ -32,7 +41,11 @@ U_NAMESPACE_BEGIN
  */
 class U_COMMON_API UCharCharacterIterator : public CharacterIterator {
 public:
+<<<<<<< HEAD
     /**
+=======
+  /**
+>>>>>>> miniblink49
    * Create an iterator over the UChar array referred to by "textPtr".
    * The iteration range is 0 to <code>length-1</code>.
    * text is only aliased, not adopted (the
@@ -41,9 +54,15 @@ public:
    * @param length The length of the UChar array
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UCharCharacterIterator(const UChar* textPtr, int32_t length);
 
     /**
+=======
+  UCharCharacterIterator(const UChar* textPtr, int32_t length);
+
+  /**
+>>>>>>> miniblink49
    * Create an iterator over the UChar array referred to by "textPtr".
    * The iteration range is 0 to <code>length-1</code>.
    * text is only aliased, not adopted (the
@@ -56,10 +75,17 @@ public:
    * @param position The starting position of the iteration
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UCharCharacterIterator(const UChar* textPtr, int32_t length,
         int32_t position);
 
     /**
+=======
+  UCharCharacterIterator(const UChar* textPtr, int32_t length,
+                         int32_t position);
+
+  /**
+>>>>>>> miniblink49
    * Create an iterator over the UChar array referred to by "textPtr".
    * The iteration range is 0 to <code>end-1</code>.
    * text is only aliased, not adopted (the
@@ -75,18 +101,28 @@ public:
    * @param position    The starting position of the iteration
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UCharCharacterIterator(const UChar* textPtr, int32_t length,
         int32_t textBegin,
         int32_t textEnd,
         int32_t position);
 
     /**
+=======
+  UCharCharacterIterator(const UChar* textPtr, int32_t length,
+                         int32_t textBegin,
+                         int32_t textEnd,
+                         int32_t position);
+
+  /**
+>>>>>>> miniblink49
    * Copy constructor.  The new iterator iterates over the same range
    * of the same string as "that", and its initial position is the
    * same as "that"'s current position.
    * @param that The UCharCharacterIterator to be copied
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UCharCharacterIterator(const UCharCharacterIterator& that);
 
     /**
@@ -96,6 +132,17 @@ public:
     virtual ~UCharCharacterIterator();
 
     /**
+=======
+  UCharCharacterIterator(const UCharCharacterIterator&  that);
+
+  /**
+   * Destructor.
+   * @stable ICU 2.0
+   */
+  virtual ~UCharCharacterIterator();
+
+  /**
+>>>>>>> miniblink49
    * Assignment operator.  *this is altered to iterate over the sane
    * range of the same string as "that", and refers to the same
    * character within that string as "that" does.
@@ -103,10 +150,17 @@ public:
    * @return the newly created object
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     UCharCharacterIterator&
     operator=(const UCharCharacterIterator& that);
 
     /**
+=======
+  UCharCharacterIterator&
+  operator=(const UCharCharacterIterator&    that);
+
+  /**
+>>>>>>> miniblink49
    * Returns true if the iterators iterate over the same range of the
    * same string and are pointing at the same character.
    * @param that The ForwardCharacterIterator used to be compared for equality
@@ -114,34 +168,58 @@ public:
    * same string and are pointing at the same character.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UBool operator==(const ForwardCharacterIterator& that) const;
 
     /**
+=======
+  virtual UBool          operator==(const ForwardCharacterIterator& that) const;
+
+  /**
+>>>>>>> miniblink49
    * Generates a hash code for this iterator.
    * @return the hash code.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual int32_t hashCode(void) const;
 
     /**
+=======
+  virtual int32_t         hashCode(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Returns a new UCharCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.
    * @return the CharacterIterator newly created
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual CharacterIterator* clone(void) const;
 
     /**
+=======
+  virtual CharacterIterator* clone(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the first code unit in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with next().
    * @return the first code unit in its iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar first(void);
 
     /**
+=======
+  virtual UChar         first(void);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the first code unit in its
    * iteration range, returns that code unit, and moves the position
    * to the second code unit. This is an alternative to setToStart()
@@ -149,9 +227,15 @@ public:
    * @return the first code unit in its iteration range
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar firstPostInc(void);
 
     /**
+=======
+  virtual UChar         firstPostInc(void);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the first code point in its
    * iteration range, and returns that code unit,
    * This can be used to begin an iteration with next32().
@@ -160,9 +244,15 @@ public:
    * @return the first code point in its iteration range
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 first32(void);
 
     /**
+=======
+  virtual UChar32       first32(void);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the first code point in its
    * iteration range, returns that code point, and moves the position
    * to the second code point. This is an alternative to setToStart()
@@ -170,27 +260,45 @@ public:
    * @return the first code point in its iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 first32PostInc(void);
 
     /**
+=======
+  virtual UChar32       first32PostInc(void);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the last code unit in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous().
    * @return the last code unit in its iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar last(void);
 
     /**
+=======
+  virtual UChar         last(void);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the last code point in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous32().
    * @return the last code point in its iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 last32(void);
 
     /**
+=======
+  virtual UChar32       last32(void);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the "position"-th code unit
    * in the text-storage object the iterator refers to, and
    * returns that code unit.
@@ -198,9 +306,15 @@ public:
    * @return the code unit
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar setIndex(int32_t position);
 
     /**
+=======
+  virtual UChar         setIndex(int32_t position);
+
+  /**
+>>>>>>> miniblink49
    * Sets the iterator to refer to the beginning of the code point
    * that contains the "position"-th code unit
    * in the text-storage object the iterator refers to, and
@@ -211,32 +325,56 @@ public:
    * @return the code unit
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 setIndex32(int32_t position);
 
     /**
+=======
+  virtual UChar32       setIndex32(int32_t position);
+
+  /**
+>>>>>>> miniblink49
    * Returns the code unit the iterator currently refers to.
    * @return the code unit the iterator currently refers to.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar current(void) const;
 
     /**
+=======
+  virtual UChar         current(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Returns the code point the iterator currently refers to.
    * @return the code point the iterator currently refers to.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 current32(void) const;
 
     /**
+=======
+  virtual UChar32       current32(void) const;
+
+  /**
+>>>>>>> miniblink49
    * Advances to the next code unit in the iteration range (toward
    * endIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE.
    * @return the next code unit in the iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar next(void);
 
     /**
+=======
+  virtual UChar         next(void);
+
+  /**
+>>>>>>> miniblink49
    * Gets the current code unit for returning and advances to the next code unit
    * in the iteration range
    * (toward endIndex()).  If there are
@@ -244,9 +382,15 @@ public:
    * @return the current code unit.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar nextPostInc(void);
 
     /**
+=======
+  virtual UChar         nextPostInc(void);
+
+  /**
+>>>>>>> miniblink49
    * Advances to the next code point in the iteration range (toward
    * endIndex()), and returns that code point.  If there are no more
    * code points to return, returns DONE.
@@ -256,9 +400,15 @@ public:
    * @return the next code point in the iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 next32(void);
 
     /**
+=======
+  virtual UChar32       next32(void);
+
+  /**
+>>>>>>> miniblink49
    * Gets the current code point for returning and advances to the next code point
    * in the iteration range
    * (toward endIndex()).  If there are
@@ -266,9 +416,15 @@ public:
    * @return the current point.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 next32PostInc(void);
 
     /**
+=======
+  virtual UChar32       next32PostInc(void);
+
+  /**
+>>>>>>> miniblink49
    * Returns FALSE if there are no more code units or code points
    * at or after the current position in the iteration range.
    * This is used with nextPostInc() or next32PostInc() in forward
@@ -277,27 +433,45 @@ public:
    * at or after the current position in the iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UBool hasNext();
 
     /**
+=======
+  virtual UBool        hasNext();
+
+  /**
+>>>>>>> miniblink49
    * Advances to the previous code unit in the iteration range (toward
    * startIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE.
    * @return the previous code unit in the iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar previous(void);
 
     /**
+=======
+  virtual UChar         previous(void);
+
+  /**
+>>>>>>> miniblink49
    * Advances to the previous code point in the iteration range (toward
    * startIndex()), and returns that code point.  If there are no more
    * code points to return, returns DONE.
    * @return the previous code point in the iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UChar32 previous32(void);
 
     /**
+=======
+  virtual UChar32       previous32(void);
+
+  /**
+>>>>>>> miniblink49
    * Returns FALSE if there are no more code units or code points
    * before the current position in the iteration range.
    * This is used with previous() or previous32() in backward
@@ -306,9 +480,15 @@ public:
    * before the current position in the iteration range.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UBool hasPrevious();
 
     /**
+=======
+  virtual UBool        hasPrevious();
+
+  /**
+>>>>>>> miniblink49
    * Moves the current position relative to the start or end of the
    * iteration range, or relative to the current position itself.
    * The movement is expressed in numbers of code units forward
@@ -319,9 +499,15 @@ public:
    * @return the new position
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual int32_t move(int32_t delta, EOrigin origin);
 
     /**
+=======
+  virtual int32_t      move(int32_t delta, EOrigin origin);
+
+  /**
+>>>>>>> miniblink49
    * Moves the current position relative to the start or end of the
    * iteration range, or relative to the current position itself.
    * The movement is expressed in numbers of code points forward
@@ -332,6 +518,7 @@ public:
    * @return the new position
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual int32_t move32(int32_t delta, EOrigin origin);
 
     /**
@@ -341,26 +528,50 @@ public:
     void setText(const UChar* newText, int32_t newTextLength);
 
     /**
+=======
+  virtual int32_t      move32(int32_t delta, EOrigin origin);
+
+  /**
+   * Sets the iterator to iterate over a new range of text
+   * @stable ICU 2.0
+   */
+  void setText(const UChar* newText, int32_t newTextLength);
+
+  /**
+>>>>>>> miniblink49
    * Copies the UChar array under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.
    * @param result Receives a copy of the text under iteration.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual void getText(UnicodeString& result);
 
     /**
+=======
+  virtual void            getText(UnicodeString& result);
+
+  /**
+>>>>>>> miniblink49
    * Return a class ID for this class (not really public)
    * @return a class ID for this class
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     static UClassID U_EXPORT2 getStaticClassID(void);
 
     /**
+=======
+  static UClassID         U_EXPORT2 getStaticClassID(void);
+
+  /**
+>>>>>>> miniblink49
    * Return a class ID for this object (not really public)
    * @return a class ID for this object.
    * @stable ICU 2.0
    */
+<<<<<<< HEAD
     virtual UClassID getDynamicClassID(void) const;
 
 protected:
@@ -374,6 +585,22 @@ protected:
    * @stable ICU 2.0
    */
     const UChar* text;
+=======
+  virtual UClassID        getDynamicClassID(void) const;
+
+protected:
+  /**
+   * Protected constructor
+   * @stable ICU 2.0
+   */
+  UCharCharacterIterator();
+  /**
+   * Protected member text
+   * @stable ICU 2.0
+   */
+  const UChar*            text;
+
+>>>>>>> miniblink49
 };
 
 U_NAMESPACE_END

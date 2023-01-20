@@ -26,22 +26,17 @@
 #ifndef CSSFontFaceSource_h
 #define CSSFontFaceSource_h
 
-#include "core/CoreExport.h"
-#include "platform/fonts/FontCacheKey.h"
 #include "platform/heap/Handle.h"
-#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 
 namespace blink {
 
+class FontResource;
 class CSSFontFace;
 class FontDescription;
 class SimpleFontData;
 
-class CORE_EXPORT CSSFontFaceSource
-    : public GarbageCollectedFinalized<CSSFontFaceSource> {
-    WTF_MAKE_NONCOPYABLE(CSSFontFaceSource);
-
+class CSSFontFaceSource : public NoBaseWillBeGarbageCollectedFinalized<CSSFontFaceSource> {
 public:
     virtual ~CSSFontFaceSource();
 
@@ -50,14 +45,13 @@ public:
     virtual bool isLoaded() const { return true; }
     virtual bool isValid() const { return true; }
 
+    virtual FontResource* resource() { return nullptr; }
     void setFontFace(CSSFontFace* face) { m_face = face; }
 
     PassRefPtr<SimpleFontData> getFontData(const FontDescription&);
 
     virtual bool isLocalFontAvailable(const FontDescription&) { return false; }
     virtual void beginLoadIfNeeded() { }
-
-    virtual bool isBlank() { return false; }
 
     // For UMA reporting
     virtual bool hadBlankText() { return false; }
@@ -68,15 +62,12 @@ protected:
     CSSFontFaceSource();
     virtual PassRefPtr<SimpleFontData> createFontData(const FontDescription&) = 0;
 
-    using FontDataTable = HashMap<FontCacheKey,
-        RefPtr<SimpleFontData>,
-        FontCacheKeyHash,
-        FontCacheKeyTraits>;
+    typedef HashMap<unsigned, RefPtr<SimpleFontData>> FontDataTable; // The hash key is composed of size synthetic styles.
 
-    Member<CSSFontFace> m_face; // Our owning font face.
+    RawPtrWillBeMember<CSSFontFace> m_face; // Our owning font face.
     FontDataTable m_fontDataTable;
 };
 
-} // namespace blink
+}
 
 #endif

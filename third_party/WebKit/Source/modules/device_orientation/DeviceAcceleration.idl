@@ -23,9 +23,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://w3c.github.io/deviceorientation/spec-source-orientation.html#devicemotion
 
 [
+=======
+[
+    GarbageCollected,
+>>>>>>> miniblink49
     NoInterfaceObject
 ] interface DeviceAcceleration {
     readonly attribute double? x;

@@ -19,21 +19,32 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "ThreadSpecific.h"
 
 #if OS(WIN)
 
 #include "StdLibExtras.h"
 #include "ThreadingPrimitives.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/DoublyLinkedList.h"
 
 namespace WTF {
 
 static DoublyLinkedList<PlatformThreadSpecificKey>& destructorsList()
 {
+<<<<<<< HEAD
     DEFINE_STATIC_LOCAL(DoublyLinkedList<PlatformThreadSpecificKey>, staticList,
         ());
+=======
+    DEFINE_STATIC_LOCAL(DoublyLinkedList<PlatformThreadSpecificKey>, staticList, ());
+>>>>>>> miniblink49
     return staticList;
 }
 
@@ -43,6 +54,7 @@ static Mutex& destructorsMutex()
     return staticMutex;
 }
 
+<<<<<<< HEAD
 class PlatformThreadSpecificKey
     : public DoublyLinkedListNode<PlatformThreadSpecificKey> {
     USING_FAST_MALLOC(PlatformThreadSpecificKey);
@@ -52,6 +64,13 @@ public:
     friend class DoublyLinkedListNode<PlatformThreadSpecificKey>;
 
     PlatformThreadSpecificKey(void (*destructor)(void*))
+=======
+class PlatformThreadSpecificKey : public DoublyLinkedListNode<PlatformThreadSpecificKey> {
+public:
+    friend class DoublyLinkedListNode<PlatformThreadSpecificKey>;
+
+    PlatformThreadSpecificKey(void (*destructor)(void *))
+>>>>>>> miniblink49
         : m_destructor(destructor)
     {
         m_tlsKey = TlsAlloc();
@@ -59,19 +78,34 @@ public:
             CRASH();
     }
 
+<<<<<<< HEAD
     ~PlatformThreadSpecificKey() { TlsFree(m_tlsKey); }
+=======
+    ~PlatformThreadSpecificKey()
+    {
+        TlsFree(m_tlsKey);
+    }
+>>>>>>> miniblink49
 
     void setValue(void* data) { TlsSetValue(m_tlsKey, data); }
     void* value() { return TlsGetValue(m_tlsKey); }
 
     void callDestructor()
     {
+<<<<<<< HEAD
         if (void* data = value())
+=======
+       if (void* data = value())
+>>>>>>> miniblink49
             m_destructor(data);
     }
 
 private:
+<<<<<<< HEAD
     void (*m_destructor)(void*);
+=======
+    void (*m_destructor)(void *);
+>>>>>>> miniblink49
     DWORD m_tlsKey;
     PlatformThreadSpecificKey* m_prev;
     PlatformThreadSpecificKey* m_next;
@@ -89,8 +123,12 @@ DWORD* tlsKeys()
     return keys;
 }
 
+<<<<<<< HEAD
 void threadSpecificKeyCreate(ThreadSpecificKey* key,
     void (*destructor)(void*))
+=======
+void threadSpecificKeyCreate(ThreadSpecificKey* key, void (*destructor)(void *))
+>>>>>>> miniblink49
 {
     *key = new PlatformThreadSpecificKey(destructor);
 
@@ -118,9 +156,13 @@ void* threadSpecificGet(ThreadSpecificKey key)
 void ThreadSpecificThreadExit()
 {
     for (long i = 0; i < tlsKeyCount(); i++) {
+<<<<<<< HEAD
         // The layout of ThreadSpecific<T>::Data does not depend on T. So we are
         // safe to do the static cast to ThreadSpecific<int> in order to access its
         // data member.
+=======
+        // The layout of ThreadSpecific<T>::Data does not depend on T. So we are safe to do the static cast to ThreadSpecific<int> in order to access its data member.
+>>>>>>> miniblink49
         ThreadSpecific<int>::Data* data = static_cast<ThreadSpecific<int>::Data*>(TlsGetValue(tlsKeys()[i]));
         if (data)
             data->destructor(data);

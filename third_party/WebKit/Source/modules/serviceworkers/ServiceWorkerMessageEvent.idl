@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#serviceworkermessage-event-interface
 
 [
@@ -10,11 +11,21 @@
     // Constructor should be:
     // Constructor(DOMString type, optional ServiceWorkerMessageEventInit eventInitDict),
     CustomConstructor,
+=======
+// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#serviceworkermessage-event-interface
+
+[
+    Constructor(DOMString type, optional ServiceWorkerMessageEventInit eventInitDict),
+>>>>>>> miniblink49
     Exposed=(Window, Worker),
 ] interface ServiceWorkerMessageEvent : Event {
     [Custom=Getter] readonly attribute any data;
     readonly attribute DOMString origin;
     readonly attribute DOMString lastEventId;
     readonly attribute (ServiceWorker or MessagePort)? source;
+<<<<<<< HEAD
     readonly attribute FrozenArray<MessagePort>? ports;
+=======
+    readonly attribute MessagePort[]? ports;
+>>>>>>> miniblink49
 };

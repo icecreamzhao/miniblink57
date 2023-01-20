@@ -23,11 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/storage/StorageNamespace.h"
 
 #include "modules/storage/StorageArea.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/Platform.h"
+<<<<<<< HEAD
 #include "public/platform/WebSecurityOrigin.h"
 #include "public/platform/WebStorageArea.h"
 #include "public/platform/WebStorageNamespace.h"
@@ -43,10 +48,27 @@ StorageNamespace::StorageNamespace(
 }
 
 StorageNamespace::~StorageNamespace() { }
+=======
+#include "public/platform/WebStorageArea.h"
+#include "public/platform/WebStorageNamespace.h"
+#include "wtf/MainThread.h"
+
+namespace blink {
+
+StorageNamespace::StorageNamespace(PassOwnPtr<WebStorageNamespace> webStorageNamespace)
+    : m_webStorageNamespace(webStorageNamespace)
+{
+}
+
+StorageNamespace::~StorageNamespace()
+{
+}
+>>>>>>> miniblink49
 
 StorageArea* StorageNamespace::localStorageArea(SecurityOrigin* origin)
 {
     ASSERT(isMainThread());
+<<<<<<< HEAD
 #ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
     RELEASE_ASSERT(false);
     return nullptr;
@@ -56,10 +78,17 @@ StorageArea* StorageNamespace::localStorageArea(SecurityOrigin* origin)
         localStorageNamespace = Platform::current()->createLocalStorageNamespace();
     return StorageArea::create(WTF::wrapUnique(localStorageNamespace->createStorageArea(WebSecurityOrigin(origin))), LocalStorage);
 #endif
+=======
+    static WebStorageNamespace* localStorageNamespace = nullptr;
+    if (!localStorageNamespace)
+        localStorageNamespace = Platform::current()->createLocalStorageNamespace();
+    return StorageArea::create(adoptPtr(localStorageNamespace->createStorageArea(origin->toString())), LocalStorage);
+>>>>>>> miniblink49
 }
 
 StorageArea* StorageNamespace::storageArea(SecurityOrigin* origin)
 {
+<<<<<<< HEAD
     return StorageArea::create(
         WTF::wrapUnique(
             m_webStorageNamespace->createStorageArea(WebSecurityOrigin(origin))),
@@ -68,6 +97,12 @@ StorageArea* StorageNamespace::storageArea(SecurityOrigin* origin)
 
 bool StorageNamespace::isSameNamespace(
     const WebStorageNamespace& sessionNamespace) const
+=======
+    return StorageArea::create(adoptPtr(m_webStorageNamespace->createStorageArea(origin->toString())), SessionStorage);
+}
+
+bool StorageNamespace::isSameNamespace(const WebStorageNamespace& sessionNamespace) const
+>>>>>>> miniblink49
 {
     return m_webStorageNamespace && m_webStorageNamespace->isSameNamespace(sessionNamespace);
 }

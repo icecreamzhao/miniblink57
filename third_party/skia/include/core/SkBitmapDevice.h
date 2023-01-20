@@ -9,6 +9,7 @@
 #ifndef SkBitmapDevice_DEFINED
 #define SkBitmapDevice_DEFINED
 
+<<<<<<< HEAD
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkColor.h"
@@ -31,6 +32,9 @@ class SkRRect;
 class SkSurface;
 class SkXfermode;
 struct SkPoint;
+=======
+#include "SkDevice.h"
+>>>>>>> miniblink49
 
 ///////////////////////////////////////////////////////////////////////////////
 class SK_API SkBitmapDevice : public SkBaseDevice {
@@ -70,6 +74,7 @@ protected:
      */
     void drawPaint(const SkDraw&, const SkPaint& paint) override;
     virtual void drawPoints(const SkDraw&, SkCanvas::PointMode mode, size_t count,
+<<<<<<< HEAD
         const SkPoint[], const SkPaint& paint) override;
     virtual void drawRect(const SkDraw&, const SkRect& r,
         const SkPaint& paint) override;
@@ -77,6 +82,15 @@ protected:
         const SkPaint& paint) override;
     virtual void drawRRect(const SkDraw&, const SkRRect& rr,
         const SkPaint& paint) override;
+=======
+                            const SkPoint[], const SkPaint& paint) override;
+    virtual void drawRect(const SkDraw&, const SkRect& r,
+                          const SkPaint& paint) override;
+    virtual void drawOval(const SkDraw&, const SkRect& oval,
+                          const SkPaint& paint) override;
+    virtual void drawRRect(const SkDraw&, const SkRRect& rr,
+                           const SkPaint& paint) override;
+>>>>>>> miniblink49
 
     /**
      *  If pathIsMutable, then the implementation is allowed to cast path to a
@@ -90,6 +104,7 @@ protected:
      *  pre-concated with the current matrix.
      */
     virtual void drawPath(const SkDraw&, const SkPath& path,
+<<<<<<< HEAD
         const SkPaint& paint,
         const SkMatrix* prePathMatrix = NULL,
         bool pathIsMutable = false) override;
@@ -97,19 +112,36 @@ protected:
         const SkMatrix& matrix, const SkPaint& paint) override;
     virtual void drawSprite(const SkDraw&, const SkBitmap& bitmap,
         int x, int y, const SkPaint& paint) override;
+=======
+                          const SkPaint& paint,
+                          const SkMatrix* prePathMatrix = NULL,
+                          bool pathIsMutable = false) override;
+    virtual void drawBitmap(const SkDraw&, const SkBitmap& bitmap,
+                            const SkMatrix& matrix, const SkPaint& paint) override;
+    virtual void drawSprite(const SkDraw&, const SkBitmap& bitmap,
+                            int x, int y, const SkPaint& paint) override;
+>>>>>>> miniblink49
 
     /**
      *  The default impl. will create a bitmap-shader from the bitmap,
      *  and call drawRect with it.
      */
+<<<<<<< HEAD
     void drawBitmapRect(const SkDraw&, const SkBitmap&, const SkRect*, const SkRect&,
         const SkPaint&, SkCanvas::SrcRectConstraint) override;
+=======
+    virtual void drawBitmapRect(const SkDraw&, const SkBitmap&,
+                                const SkRect* srcOrNull, const SkRect& dst,
+                                const SkPaint& paint,
+                                SkCanvas::DrawBitmapRectFlags flags) override;
+>>>>>>> miniblink49
 
     /**
      *  Does not handle text decoration.
      *  Decorations (underline and stike-thru) will be handled by SkCanvas.
      */
     virtual void drawText(const SkDraw&, const void* text, size_t len,
+<<<<<<< HEAD
         SkScalar x, SkScalar y, const SkPaint& paint) override;
     virtual void drawPosText(const SkDraw&, const void* text, size_t len,
         const SkScalar pos[], int scalarsPerPos,
@@ -119,6 +151,17 @@ protected:
         const SkColor colors[], SkXfermode* xmode,
         const uint16_t indices[], int indexCount,
         const SkPaint& paint) override;
+=======
+                          SkScalar x, SkScalar y, const SkPaint& paint) override;
+    virtual void drawPosText(const SkDraw&, const void* text, size_t len,
+                             const SkScalar pos[], int scalarsPerPos,
+                             const SkPoint& offset, const SkPaint& paint) override;
+    virtual void drawVertices(const SkDraw&, SkCanvas::VertexMode, int vertexCount,
+                              const SkPoint verts[], const SkPoint texs[],
+                              const SkColor colors[], SkXfermode* xmode,
+                              const uint16_t indices[], int indexCount,
+                              const SkPaint& paint) override;
+>>>>>>> miniblink49
     virtual void drawDevice(const SkDraw&, SkBaseDevice*, int x, int y, const SkPaint&) override;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -132,8 +175,12 @@ protected:
 
     SkPixelRef* getPixelRef() const { return fBitmap.pixelRef(); }
     // just for subclasses, to assign a custom pixelref
+<<<<<<< HEAD
     SkPixelRef* setPixelRef(SkPixelRef* pr)
     {
+=======
+    SkPixelRef* setPixelRef(SkPixelRef* pr) {
+>>>>>>> miniblink49
         fBitmap.setPixelRef(pr);
         return pr;
     }
@@ -161,6 +208,7 @@ private:
 
     SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*) override;
 
+<<<<<<< HEAD
     sk_sp<SkSurface> makeSurface(const SkImageInfo&, const SkSurfaceProps&) override;
 
     SkImageFilterCache* getImageFilterCache() override;
@@ -168,6 +216,15 @@ private:
     SkBitmap fBitmap;
 
     void setNewSize(const SkISize&); // Used by SkCanvas for resetForNextPicture().
+=======
+    SkSurface* newSurface(const SkImageInfo&, const SkSurfaceProps&) override;
+
+    SkImageFilter::Cache* getImageFilterCache() override;
+
+    SkBitmap    fBitmap;
+
+    void setNewSize(const SkISize&);  // Used by SkCanvas for resetForNextPicture().
+>>>>>>> miniblink49
 
     typedef SkBaseDevice INHERITED;
 };

@@ -7,7 +7,6 @@ namespace content {
 enum WebPageState {
     pageUninited,
     pageInited,
-    pagePreDestroy,
     pageDestroying,
     pageDestroyed
 };

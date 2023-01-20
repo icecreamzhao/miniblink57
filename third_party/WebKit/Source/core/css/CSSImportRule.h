@@ -32,17 +32,16 @@ class StyleRuleImport;
 
 class CSSImportRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static CSSImportRule* create(StyleRuleImport* rule, CSSStyleSheet* sheet)
+    static PassRefPtrWillBeRawPtr<CSSImportRule> create(StyleRuleImport* rule, CSSStyleSheet* sheet)
     {
-        return new CSSImportRule(rule, sheet);
+        return adoptRefWillBeNoop(new CSSImportRule(rule, sheet));
     }
 
-    ~CSSImportRule() override;
+    virtual ~CSSImportRule();
 
-    String cssText() const override;
-    void reattach(StyleRuleBase*) override;
+    virtual String cssText() const override;
+    virtual void reattach(StyleRuleBase*) override;
 
     String href() const;
     MediaList* media() const;
@@ -53,14 +52,14 @@ public:
 private:
     CSSImportRule(StyleRuleImport*, CSSStyleSheet*);
 
-    CSSRule::Type type() const override { return kImportRule; }
+    virtual CSSRule::Type type() const override { return IMPORT_RULE; }
 
-    Member<StyleRuleImport> m_importRule;
-    mutable Member<MediaList> m_mediaCSSOMWrapper;
-    mutable Member<CSSStyleSheet> m_styleSheetCSSOMWrapper;
+    RefPtrWillBeMember<StyleRuleImport> m_importRule;
+    mutable RefPtrWillBeMember<MediaList> m_mediaCSSOMWrapper;
+    mutable RefPtrWillBeMember<CSSStyleSheet> m_styleSheetCSSOMWrapper;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSImportRule, kImportRule);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSImportRule, IMPORT_RULE);
 
 } // namespace blink
 

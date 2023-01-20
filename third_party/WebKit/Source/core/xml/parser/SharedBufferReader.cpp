@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/xml/parser/SharedBufferReader.h"
 
 #include "platform/SharedBuffer.h"
@@ -39,26 +40,28 @@
 
 namespace blink {
 
-SharedBufferReader::SharedBufferReader(PassRefPtr<const SharedBuffer> buffer)
+SharedBufferReader::SharedBufferReader(PassRefPtr<SharedBuffer> buffer)
     : m_buffer(buffer)
     , m_currentOffset(0)
 {
 }
 
-SharedBufferReader::~SharedBufferReader() { }
+SharedBufferReader::~SharedBufferReader()
+{
+}
 
-int SharedBufferReader::readData(char* outputBuffer, int askedToRead)
+int SharedBufferReader::readData(char* outputBuffer, unsigned askedToRead)
 {
     if (!m_buffer || m_currentOffset > m_buffer->size())
         return 0;
 
-    size_t bytesCopied = 0;
-    size_t bytesLeft = m_buffer->size() - m_currentOffset;
-    size_t lenToCopy = std::min(safeCast<size_t>(askedToRead), bytesLeft);
+    unsigned bytesCopied = 0;
+    unsigned bytesLeft = m_buffer->size() - m_currentOffset;
+    unsigned lenToCopy = std::min(askedToRead, bytesLeft);
 
     while (bytesCopied < lenToCopy) {
         const char* data;
-        size_t segmentSize = m_buffer->getSomeData(data, m_currentOffset);
+        unsigned segmentSize = m_buffer->getSomeData(data, m_currentOffset);
         if (!segmentSize)
             break;
 
@@ -68,7 +71,7 @@ int SharedBufferReader::readData(char* outputBuffer, int askedToRead)
         m_currentOffset += segmentSize;
     }
 
-    return safeCast<int>(bytesCopied);
+    return bytesCopied;
 }
 
 } // namespace blink

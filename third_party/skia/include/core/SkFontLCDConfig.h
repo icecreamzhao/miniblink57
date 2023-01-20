@@ -10,7 +10,11 @@
 
 #include "SkTypes.h"
 
+<<<<<<< HEAD
 class SK_API SkFontLCDConfig {
+=======
+class SkFontLCDConfig {
+>>>>>>> miniblink49
 public:
     /** LCDs either have their color elements arranged horizontally or
         vertically. When rendering subpixel glyphs we need to know which way
@@ -22,8 +26,13 @@ public:
         @deprecated use SkPixelGeometry instead.
     */
     enum LCDOrientation {
+<<<<<<< HEAD
         kHorizontal_LCDOrientation = 0, //!< this is the default
         kVertical_LCDOrientation = 1
+=======
+        kHorizontal_LCDOrientation = 0,    //!< this is the default
+        kVertical_LCDOrientation   = 1
+>>>>>>> miniblink49
     };
 
     /** @deprecated set on Device creation. */
@@ -44,7 +53,11 @@ public:
         @deprecated use SkPixelGeometry instead.
      */
     enum LCDOrder {
+<<<<<<< HEAD
         kRGB_LCDOrder = 0, //!< this is the default
+=======
+        kRGB_LCDOrder = 0,    //!< this is the default
+>>>>>>> miniblink49
         kBGR_LCDOrder = 1,
         kNONE_LCDOrder = 2
     };

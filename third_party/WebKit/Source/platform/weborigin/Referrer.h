@@ -31,14 +31,19 @@
 #ifndef Referrer_h
 #define Referrer_h
 
+<<<<<<< HEAD
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/ReferrerPolicy.h"
 #include "wtf/Allocator.h"
+=======
+#include "platform/weborigin/ReferrerPolicy.h"
+>>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 struct Referrer {
+<<<<<<< HEAD
     DISALLOW_NEW();
     Referrer(const String& referrer, ReferrerPolicy referrerPolicy)
         : referrer(referrer)
@@ -51,11 +56,19 @@ struct Referrer {
     {
     }
     static String noReferrer() { return String(); }
+=======
+    Referrer(const String& referrer, ReferrerPolicy referrerPolicy) : referrer(referrer), referrerPolicy(referrerPolicy) { }
+    Referrer() : referrerPolicy(ReferrerPolicyDefault) { }
+>>>>>>> miniblink49
 
     AtomicString referrer;
     ReferrerPolicy referrerPolicy;
 };
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif // Referrer_h

@@ -42,6 +42,7 @@ public:
         @param  count   Must be >=2. The number of colors (and pos if not NULL) entries.
         @param  mode    The tiling mode
     */
+<<<<<<< HEAD
     static sk_sp<SkShader> MakeLinear(const SkPoint pts[2],
         const SkColor colors[], const SkScalar pos[], int count,
         SkShader::TileMode mode,
@@ -51,6 +52,17 @@ public:
         SkShader::TileMode mode)
     {
         return MakeLinear(pts, colors, pos, count, mode, 0, NULL);
+=======
+    static SkShader* CreateLinear(const SkPoint pts[2],
+                                  const SkColor colors[], const SkScalar pos[], int count,
+                                  SkShader::TileMode mode,
+                                  uint32_t flags, const SkMatrix* localMatrix);
+
+    static SkShader* CreateLinear(const SkPoint pts[2],
+                                  const SkColor colors[], const SkScalar pos[], int count,
+                                  SkShader::TileMode mode) {
+        return CreateLinear(pts, colors, pos, count, mode, 0, NULL);
+>>>>>>> miniblink49
     }
 
     /** Returns a shader that generates a radial gradient given the center and radius.
@@ -69,6 +81,7 @@ public:
         @param  count   Must be >= 2. The number of colors (and pos if not NULL) entries
         @param  mode    The tiling mode
     */
+<<<<<<< HEAD
     static sk_sp<SkShader> MakeRadial(const SkPoint& center, SkScalar radius,
         const SkColor colors[], const SkScalar pos[], int count,
         SkShader::TileMode mode,
@@ -78,6 +91,17 @@ public:
         SkShader::TileMode mode)
     {
         return MakeRadial(center, radius, colors, pos, count, mode, 0, NULL);
+=======
+    static SkShader* CreateRadial(const SkPoint& center, SkScalar radius,
+                                  const SkColor colors[], const SkScalar pos[], int count,
+                                  SkShader::TileMode mode,
+                                  uint32_t flags, const SkMatrix* localMatrix);
+
+    static SkShader* CreateRadial(const SkPoint& center, SkScalar radius,
+                                  const SkColor colors[], const SkScalar pos[], int count,
+                                  SkShader::TileMode mode) {
+        return CreateRadial(center, radius, colors, pos, count, mode, 0, NULL);
+>>>>>>> miniblink49
     }
 
     /**
@@ -86,6 +110,7 @@ public:
      *  two circles according to the following HTML spec.
      *  http://dev.w3.org/html5/2dcontext/#dom-context-2d-createradialgradient
      */
+<<<<<<< HEAD
     static sk_sp<SkShader> MakeTwoPointConical(const SkPoint& start, SkScalar startRadius,
         const SkPoint& end, SkScalar endRadius,
         const SkColor colors[], const SkScalar pos[],
@@ -98,6 +123,20 @@ public:
     {
         return MakeTwoPointConical(start, startRadius, end, endRadius, colors, pos, count, mode,
             0, NULL);
+=======
+    static SkShader* CreateTwoPointConical(const SkPoint& start, SkScalar startRadius,
+                                           const SkPoint& end, SkScalar endRadius,
+                                           const SkColor colors[], const SkScalar pos[], int count,
+                                           SkShader::TileMode mode,
+                                           uint32_t flags, const SkMatrix* localMatrix);
+
+    static SkShader* CreateTwoPointConical(const SkPoint& start, SkScalar startRadius,
+                                           const SkPoint& end, SkScalar endRadius,
+                                           const SkColor colors[], const SkScalar pos[], int count,
+                                           SkShader::TileMode mode) {
+        return CreateTwoPointConical(start, startRadius, end, endRadius, colors, pos, count, mode,
+                                     0, NULL);
+>>>>>>> miniblink49
     }
 
     /** Returns a shader that generates a sweep gradient given a center.
@@ -115,6 +154,7 @@ public:
                         intermediate values must be strictly increasing.
         @param  count   Must be >= 2. The number of colors (and pos if not NULL) entries
     */
+<<<<<<< HEAD
     static sk_sp<SkShader> MakeSweep(SkScalar cx, SkScalar cy,
         const SkColor colors[], const SkScalar pos[], int count,
         uint32_t flags, const SkMatrix* localMatrix);
@@ -185,6 +225,16 @@ public:
         return CreateSweep(cx, cy, colors, pos, count, 0, NULL);
     }
 #endif
+=======
+    static SkShader* CreateSweep(SkScalar cx, SkScalar cy,
+                                 const SkColor colors[], const SkScalar pos[], int count,
+                                 uint32_t flags, const SkMatrix* localMatrix);
+
+    static SkShader* CreateSweep(SkScalar cx, SkScalar cy,
+                                 const SkColor colors[], const SkScalar pos[], int count) {
+        return CreateSweep(cx, cy, colors, pos, count, 0, NULL);
+    }
+>>>>>>> miniblink49
 
     SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP()
 };

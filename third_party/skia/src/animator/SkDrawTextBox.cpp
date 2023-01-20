@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkDrawTextBox.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -17,6 +21,10 @@ enum SkDrawTextBox_Properties {
     SK_PROPERTY(mode)
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkDrawTextBox::fInfo[] = {
@@ -34,10 +42,17 @@ DEFINE_GET_MEMBER(SkDrawTextBox);
 
 SkDrawTextBox::SkDrawTextBox()
 {
+<<<<<<< HEAD
     fSpacingMul = SK_Scalar1;
     fSpacingAdd = 0;
     spacingAlign = SkTextBox::kStart_SpacingAlign;
     mode = SkTextBox::kLineBreak_Mode;
+=======
+    fSpacingMul     = SK_Scalar1;
+    fSpacingAdd     = 0;
+    spacingAlign    = SkTextBox::kStart_SpacingAlign;
+    mode            = SkTextBox::kLineBreak_Mode;
+>>>>>>> miniblink49
 }
 
 #ifdef SK_DUMP_ENABLED
@@ -67,9 +82,15 @@ bool SkDrawTextBox::setProperty(int index, SkScriptValue& scriptValue)
 
 bool SkDrawTextBox::draw(SkAnimateMaker& maker)
 {
+<<<<<<< HEAD
     SkTextBox box;
     box.setMode((SkTextBox::Mode)mode);
     box.setSpacingAlign((SkTextBox::SpacingAlign)spacingAlign);
+=======
+    SkTextBox   box;
+    box.setMode((SkTextBox::Mode) mode);
+    box.setSpacingAlign((SkTextBox::SpacingAlign) spacingAlign);
+>>>>>>> miniblink49
     box.setBox(fRect);
     box.setSpacing(fSpacingMul, fSpacingAdd);
     SkBoundableAuto boundable(this, maker);

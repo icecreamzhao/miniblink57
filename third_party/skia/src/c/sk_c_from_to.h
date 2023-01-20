@@ -5,8 +5,12 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 static bool find_sk(CType from, SKType* to)
 {
+=======
+static bool find_sk(CType from, SKType* to) {
+>>>>>>> miniblink49
     for (size_t i = 0; i < SK_ARRAY_COUNT(CTypeSkTypeMap); ++i) {
         if (CTypeSkTypeMap[i].fC == from) {
             if (to) {
@@ -18,8 +22,12 @@ static bool find_sk(CType from, SKType* to)
     return false;
 }
 
+<<<<<<< HEAD
 static bool find_c(SKType from, CType* to)
 {
+=======
+static bool find_c(SKType from, CType* to) {
+>>>>>>> miniblink49
     for (size_t i = 0; i < SK_ARRAY_COUNT(CTypeSkTypeMap); ++i) {
         if (CTypeSkTypeMap[i].fSK == from) {
             if (to) {

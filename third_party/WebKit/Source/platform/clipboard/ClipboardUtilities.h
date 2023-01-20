@@ -33,7 +33,10 @@
 
 #include "platform/PlatformExport.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
 #include "wtf/build_config.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 

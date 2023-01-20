@@ -34,6 +34,7 @@
 #include "modules/canvas2d/CanvasPathMethods.h"
 #include "platform/heap/Handle.h"
 #include "platform/transforms/AffineTransform.h"
+<<<<<<< HEAD
 
 namespace blink {
 
@@ -43,6 +44,16 @@ class MODULES_EXPORT Path2D final : public GarbageCollectedFinalized<Path2D>,
     DEFINE_WRAPPERTYPEINFO();
     WTF_MAKE_NONCOPYABLE(Path2D);
 
+=======
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+
+namespace blink {
+
+class Path2D final : public GarbageCollectedFinalized<Path2D>, public CanvasPathMethods, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+    WTF_MAKE_NONCOPYABLE(Path2D);
+>>>>>>> miniblink49
 public:
     static Path2D* create() { return new Path2D; }
     static Path2D* create(const String& pathData) { return new Path2D(pathData); }
@@ -51,7 +62,14 @@ public:
 
     const Path& path() const { return m_path; }
 
+<<<<<<< HEAD
     void addPath(Path2D* path) { addPath(path, 0); }
+=======
+    void addPath(Path2D* path)
+    {
+        addPath(path, 0);
+    }
+>>>>>>> miniblink49
 
     void addPath(Path2D* path, SVGMatrixTearOff* transform)
     {
@@ -63,6 +81,7 @@ public:
     DEFINE_INLINE_TRACE() { }
 
 private:
+<<<<<<< HEAD
     Path2D()
         : CanvasPathMethods()
     {
@@ -77,6 +96,15 @@ private:
         : CanvasPathMethods(path->path())
     {
     }
+=======
+    Path2D() : CanvasPathMethods() { }
+
+    Path2D(const Path& path)
+        : CanvasPathMethods(path) { }
+
+    Path2D(Path2D* path)
+        : CanvasPathMethods(path->path()) { }
+>>>>>>> miniblink49
 
     Path2D(const String& pathData)
         : CanvasPathMethods()

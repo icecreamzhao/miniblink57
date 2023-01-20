@@ -34,10 +34,18 @@
 namespace blink {
 
 enum TextDecorationType {
+<<<<<<< HEAD
     TextDecorationTypeSpelling = 1 << 1,
     TextDecorationTypeGrammar = 1 << 2,
     TextDecorationTypeInvisibleSpellcheck = 1 << 3,
 };
+=======
+    TextDecorationTypeSpelling            = 1 << 1,
+    TextDecorationTypeGrammar             = 1 << 2,
+    TextDecorationTypeInvisibleSpellcheck = 1 << 3,
+};
+
+>>>>>>> miniblink49
 }
 
 #endif // TextDecoration_h

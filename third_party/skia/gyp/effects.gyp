@@ -20,8 +20,11 @@
       ],
       'include_dirs': [
         '../include/effects',
+<<<<<<< HEAD
         '../include/client/android',
         '../include/private',
+=======
+>>>>>>> miniblink49
         '../src/effects',
         '../src/opts',
         '../src/core',
@@ -29,7 +32,10 @@
       'direct_dependent_settings': {
         'include_dirs': [
           '../include/effects',
+<<<<<<< HEAD
           '../include/client/android',
+=======
+>>>>>>> miniblink49
         ],
       },
       'sources': [

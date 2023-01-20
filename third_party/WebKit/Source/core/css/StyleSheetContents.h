@@ -1,7 +1,6 @@
 /*
  * (C) 1999-2003 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2004, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,10 +23,11 @@
 
 #include "core/CoreExport.h"
 #include "core/css/RuleSet.h"
-#include "core/css/parser/CSSParserContext.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
 #include "wtf/HashMap.h"
+#include "wtf/ListHashSet.h"
+#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/AtomicStringHash.h"
 #include "wtf/text/StringHash.h"
@@ -43,41 +43,33 @@ class SecurityOrigin;
 class StyleRuleBase;
 class StyleRuleFontFace;
 class StyleRuleImport;
-class StyleRuleNamespace;
 
-class CORE_EXPORT StyleSheetContents
-    : public GarbageCollectedFinalized<StyleSheetContents> {
+class CORE_EXPORT StyleSheetContents : public RefCountedWillBeGarbageCollectedFinalized<StyleSheetContents> {
 public:
-    static StyleSheetContents* create(const CSSParserContext* context)
+    static PassRefPtrWillBeRawPtr<StyleSheetContents> create(const CSSParserContext& context)
     {
-        return new StyleSheetContents(0, String(), context);
+        return adoptRefWillBeNoop(new StyleSheetContents(0, String(), context));
     }
-    static StyleSheetContents* create(const String& originalURL,
-        const CSSParserContext* context)
+    static PassRefPtrWillBeRawPtr<StyleSheetContents> create(const String& originalURL, const CSSParserContext& context)
     {
-        return new StyleSheetContents(0, originalURL, context);
+        return adoptRefWillBeNoop(new StyleSheetContents(0, originalURL, context));
     }
-    static StyleSheetContents* create(StyleRuleImport* ownerRule,
-        const String& originalURL,
-        const CSSParserContext* context)
+    static PassRefPtrWillBeRawPtr<StyleSheetContents> create(StyleRuleImport* ownerRule, const String& originalURL, const CSSParserContext& context)
     {
-        return new StyleSheetContents(ownerRule, originalURL, context);
+        return adoptRefWillBeNoop(new StyleSheetContents(ownerRule, originalURL, context));
     }
 
     ~StyleSheetContents();
 
-    const CSSParserContext* parserContext() const { return m_parserContext; }
+    const CSSParserContext& parserContext() const { return m_parserContext; }
 
-    const AtomicString& defaultNamespace() { return m_defaultNamespace; }
-    const AtomicString& namespaceURIFromPrefix(const AtomicString& prefix);
+    const AtomicString& determineNamespace(const AtomicString& prefix);
 
-    void parseAuthorStyleSheet(const CSSStyleSheetResource*,
-        const SecurityOrigin*);
+    void parseAuthorStyleSheet(const CSSStyleSheetResource*, const SecurityOrigin*);
     void parseString(const String&);
     void parseStringAtPosition(const String&, const TextPosition&);
 
-    bool isCacheableForResource() const;
-    bool isCacheableForStyleElement() const;
+    bool isCacheable() const;
 
     bool isLoading() const;
 
@@ -88,49 +80,28 @@ public:
     bool hasSingleOwnerNode() const;
     Node* singleOwnerNode() const;
     Document* singleOwnerDocument() const;
-    bool hasSingleOwnerDocument() const { return m_hasSingleOwnerDocument; }
 
-    // Gets the first owner document in the list of registered clients, or nullptr
-    // if there are none.
-    Document* anyOwnerDocument() const;
-
-    const String& charset() const { return m_parserContext->charset(); }
+    const String& charset() const { return m_parserContext.charset(); }
 
     bool loadCompleted() const;
     bool hasFailedOrCanceledSubresources() const;
 
     void setHasSyntacticallyValidCSSHeader(bool isValidCss);
-    bool hasSyntacticallyValidCSSHeader() const
-    {
-        return m_hasSyntacticallyValidCSSHeader;
-    }
+    bool hasSyntacticallyValidCSSHeader() const { return m_hasSyntacticallyValidCSSHeader; }
 
-    void setHasFontFaceRule() { m_hasFontFaceRule = true; }
+    void setHasFontFaceRule(bool b) { m_hasFontFaceRule = b; }
     bool hasFontFaceRule() const { return m_hasFontFaceRule; }
-    void findFontFaceRules(
-        HeapVector<Member<const StyleRuleFontFace>>& fontFaceRules);
-
-    void setHasViewportRule() { m_hasViewportRule = true; }
-    bool hasViewportRule() const { return m_hasViewportRule; }
+    void findFontFaceRules(WillBeHeapVector<RawPtrWillBeMember<const StyleRuleFontFace>>& fontFaceRules);
 
     void parserAddNamespace(const AtomicString& prefix, const AtomicString& uri);
-    void parserAppendRule(StyleRuleBase*);
+    void parserAppendRule(PassRefPtrWillBeRawPtr<StyleRuleBase>);
+    void parserSetUsesRemUnits(bool b) { m_usesRemUnits = b; }
 
     void clearRules();
 
     // Rules other than @import.
-    const HeapVector<Member<StyleRuleBase>>& childRules() const
-    {
-        return m_childRules;
-    }
-    const HeapVector<Member<StyleRuleImport>>& importRules() const
-    {
-        return m_importRules;
-    }
-    const HeapVector<Member<StyleRuleNamespace>>& namespaceRules() const
-    {
-        return m_namespaceRules;
-    }
+    const WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>>& childRules() const { return m_childRules; }
+    const WillBeHeapVector<RefPtrWillBeMember<StyleRuleImport>>& importRules() const { return m_importRules; }
 
     void notifyLoadedSheet(const CSSStyleSheetResource*);
 
@@ -142,24 +113,26 @@ public:
     // this style sheet. This property probably isn't useful for much except
     // the JavaScript binding (which needs to use this value for security).
     String originalURL() const { return m_originalURL; }
-    const KURL& baseURL() const { return m_parserContext->baseURL(); }
+    const KURL& baseURL() const { return m_parserContext.baseURL(); }
 
     unsigned ruleCount() const;
     StyleRuleBase* ruleAt(unsigned index) const;
 
+    bool usesRemUnits() const { return m_usesRemUnits; }
+
     unsigned estimatedSizeInBytes() const;
 
-    bool wrapperInsertRule(StyleRuleBase*, unsigned index);
-    bool wrapperDeleteRule(unsigned index);
+    bool wrapperInsertRule(PassRefPtrWillBeRawPtr<StyleRuleBase>, unsigned index);
+    void wrapperDeleteRule(unsigned index);
 
-    StyleSheetContents* copy() const { return new StyleSheetContents(*this); }
+    PassRefPtrWillBeRawPtr<StyleSheetContents> copy() const
+    {
+        return adoptRefWillBeNoop(new StyleSheetContents(*this));
+    }
 
     void registerClient(CSSStyleSheet*);
     void unregisterClient(CSSStyleSheet*);
-    size_t clientSize() const
-    {
-        return m_loadingClients.size() + m_completedClients.size();
-    }
+    size_t clientSize() const { return m_loadingClients.size() + m_completedClients.size(); }
     bool hasOneClient() { return clientSize() == 1; }
     void clientLoadCompleted(CSSStyleSheet*);
     void clientLoadStarted(CSSStyleSheet*);
@@ -167,23 +140,18 @@ public:
     bool isMutable() const { return m_isMutable; }
     void setMutable() { m_isMutable = true; }
 
-    bool isUsedFromTextCache() const { return m_isUsedFromTextCache; }
-    void setIsUsedFromTextCache() { m_isUsedFromTextCache = true; }
+    void removeSheetFromCache(Document*);
 
-    bool isReferencedFromResource() const { return m_referencedFromResource; }
-    void setReferencedFromResource(CSSStyleSheetResource*);
-    void clearReferencedFromResource();
+    bool isInMemoryCache() const { return m_isInMemoryCache; }
+    void addedToMemoryCache();
+    void removedFromMemoryCache();
 
     void setHasMediaQueries();
     bool hasMediaQueries() const { return m_hasMediaQueries; }
 
     bool didLoadErrorOccur() const { return m_didLoadErrorOccur; }
 
-    RuleSet& ruleSet()
-    {
-        ASSERT(m_ruleSet);
-        return *m_ruleSet.get();
-    }
+    RuleSet& ruleSet() { ASSERT(m_ruleSet); return *m_ruleSet.get(); }
     RuleSet& ensureRuleSet(const MediaQueryEvaluator&, AddRuleFlags);
     void clearRuleSet();
 
@@ -192,47 +160,41 @@ public:
     DECLARE_TRACE();
 
 private:
-    StyleSheetContents(StyleRuleImport* ownerRule,
-        const String& originalURL,
-        const CSSParserContext*);
+    StyleSheetContents(StyleRuleImport* ownerRule, const String& originalURL, const CSSParserContext&);
     StyleSheetContents(const StyleSheetContents&);
     StyleSheetContents() = delete;
     StyleSheetContents& operator=(const StyleSheetContents&) = delete;
     void notifyRemoveFontFaceRule(const StyleRuleFontFace*);
 
     Document* clientSingleOwnerDocument() const;
-    Document* clientAnyOwnerDocument() const;
 
-    Member<StyleRuleImport> m_ownerRule;
+    RawPtrWillBeMember<StyleRuleImport> m_ownerRule;
 
     String m_originalURL;
 
-    HeapVector<Member<StyleRuleImport>> m_importRules;
-    HeapVector<Member<StyleRuleNamespace>> m_namespaceRules;
-    HeapVector<Member<StyleRuleBase>> m_childRules;
-    using PrefixNamespaceURIMap = HashMap<AtomicString, AtomicString>;
+    WillBeHeapVector<RefPtrWillBeMember<StyleRuleImport>> m_importRules;
+    WillBeHeapVector<RefPtrWillBeMember<StyleRuleBase>> m_childRules;
+    typedef HashMap<AtomicString, AtomicString> PrefixNamespaceURIMap;
     PrefixNamespaceURIMap m_namespaces;
-    AtomicString m_defaultNamespace;
-    WeakMember<CSSStyleSheetResource> m_referencedFromResource;
 
     bool m_hasSyntacticallyValidCSSHeader : 1;
     bool m_didLoadErrorOccur : 1;
+    bool m_usesRemUnits : 1;
     bool m_isMutable : 1;
+    bool m_isInMemoryCache : 1;
     bool m_hasFontFaceRule : 1;
-    bool m_hasViewportRule : 1;
     bool m_hasMediaQueries : 1;
     bool m_hasSingleOwnerDocument : 1;
-    bool m_isUsedFromTextCache : 1;
 
-    Member<const CSSParserContext> m_parserContext;
+    CSSParserContext m_parserContext;
 
-    HeapHashSet<WeakMember<CSSStyleSheet>> m_loadingClients;
-    HeapHashSet<WeakMember<CSSStyleSheet>> m_completedClients;
+    WillBeHeapHashSet<RawPtrWillBeWeakMember<CSSStyleSheet>> m_loadingClients;
+    WillBeHeapHashSet<RawPtrWillBeWeakMember<CSSStyleSheet>> m_completedClients;
 
-    Member<RuleSet> m_ruleSet;
+    OwnPtrWillBeMember<RuleSet> m_ruleSet;
     String m_sourceMapURL;
 };
 
-} // namespace blink
+} // namespace
 
 #endif

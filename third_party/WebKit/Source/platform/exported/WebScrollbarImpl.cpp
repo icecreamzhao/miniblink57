@@ -10,6 +10,7 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -22,6 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "platform/exported/WebScrollbarImpl.h"
 
 #include "platform/geometry/IntRect.h"
@@ -34,6 +51,13 @@ WebScrollbarImpl::WebScrollbarImpl(Scrollbar* scrollbar)
 {
 }
 
+<<<<<<< HEAD
+=======
+WebScrollbarImpl::~WebScrollbarImpl()
+{ 
+}
+
+>>>>>>> miniblink49
 bool WebScrollbarImpl::isOverlay() const
 {
     return m_scrollbar->isOverlayScrollbar();
@@ -88,8 +112,12 @@ void WebScrollbarImpl::getTickmarks(WebVector<WebRect>& webTickmarks) const
 
 WebScrollbar::ScrollbarControlSize WebScrollbarImpl::controlSize() const
 {
+<<<<<<< HEAD
     return static_cast<WebScrollbar::ScrollbarControlSize>(
         m_scrollbar->controlSize());
+=======
+    return static_cast<WebScrollbar::ScrollbarControlSize>(m_scrollbar->controlSize());
+>>>>>>> miniblink49
 }
 
 WebScrollbar::ScrollbarPart WebScrollbarImpl::pressedPart() const
@@ -102,11 +130,17 @@ WebScrollbar::ScrollbarPart WebScrollbarImpl::hoveredPart() const
     return static_cast<WebScrollbar::ScrollbarPart>(m_scrollbar->hoveredPart());
 }
 
+<<<<<<< HEAD
 WebScrollbarOverlayColorTheme WebScrollbarImpl::scrollbarOverlayColorTheme()
     const
 {
     return static_cast<WebScrollbarOverlayColorTheme>(
         m_scrollbar->getScrollbarOverlayColorTheme());
+=======
+WebScrollbar::ScrollbarOverlayStyle WebScrollbarImpl::scrollbarOverlayStyle() const
+{
+    return static_cast<WebScrollbar::ScrollbarOverlayStyle>(m_scrollbar->scrollbarOverlayStyle());
+>>>>>>> miniblink49
 }
 
 WebScrollbar::Orientation WebScrollbarImpl::orientation() const
@@ -124,6 +158,19 @@ bool WebScrollbarImpl::isCustomScrollbar() const
     return m_scrollbar->isCustomScrollbar();
 }
 
+<<<<<<< HEAD
+=======
+bool WebScrollbarImpl::isAlphaLocked() const
+{
+    return m_scrollbar->isAlphaLocked();
+}
+
+void WebScrollbarImpl::setIsAlphaLocked(bool flag)
+{
+    m_scrollbar->setIsAlphaLocked(flag);
+}
+
+>>>>>>> miniblink49
 float WebScrollbarImpl::elasticOverscroll() const
 {
     return m_scrollbar->elasticOverscroll();

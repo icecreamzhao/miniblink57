@@ -29,9 +29,15 @@
 
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
+<<<<<<< HEAD
 #include "wtf/text/Unicode.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
+=======
+#include "wtf/PassOwnPtr.h"
+#include "wtf/text/Unicode.h"
+#include "wtf/text/WTFString.h"
+>>>>>>> miniblink49
 
 namespace WTF {
 
@@ -50,11 +56,15 @@ enum UnencodableHandling {
     // Encodes the character as en entity as above, but escaped
     // non-alphanumeric characters. This is used in URLs.
     // For example, U+6DE would be "%26%231758%3B".
+<<<<<<< HEAD
     URLEncodedEntitiesForUnencodables,
 
     // Encodes the character as a CSS entity.  For example U+06DE
     // would be \06de.  See: https://www.w3.org/TR/css-syntax-3/#escaping
     CSSEncodedEntitiesForUnencodables,
+=======
+    URLEncodedEntitiesForUnencodables
+>>>>>>> miniblink49
 };
 
 typedef char UnencodableReplacementArray[32];
@@ -63,8 +73,12 @@ enum FlushBehavior {
     // More bytes are coming, don't flush the codec.
     DoNotFlush = 0,
 
+<<<<<<< HEAD
     // A fetch has hit EOF. Some codecs handle fetches differently, for compat
     // reasons.
+=======
+    // A fetch has hit EOF. Some codecs handle fetches differently, for compat reasons.
+>>>>>>> miniblink49
     FetchEOF,
 
     // Do a full flush of the codec.
@@ -75,46 +89,69 @@ static_assert(!DoNotFlush, "DoNotFlush should be falsy");
 static_assert(FetchEOF, "FetchEOF should be truthy");
 static_assert(DataEOF, "DataEOF should be truthy");
 
+<<<<<<< HEAD
 class WTF_EXPORT TextCodec {
     WTF_MAKE_NONCOPYABLE(TextCodec);
     USING_FAST_MALLOC(TextCodec);
 
+=======
+
+class TextCodec {
+    WTF_MAKE_NONCOPYABLE(TextCodec); WTF_MAKE_FAST_ALLOCATED(TextCodec);
+>>>>>>> miniblink49
 public:
     TextCodec() { }
     virtual ~TextCodec();
 
+<<<<<<< HEAD
     String decode(const char* str,
         size_t length,
         FlushBehavior flush = DoNotFlush)
+=======
+    String decode(const char* str, size_t length, FlushBehavior flush = DoNotFlush)
+>>>>>>> miniblink49
     {
         bool ignored;
         return decode(str, length, flush, false, ignored);
     }
 
+<<<<<<< HEAD
     virtual String decode(const char*,
         size_t length,
         FlushBehavior,
         bool stopOnError,
         bool& sawError)
         = 0;
+=======
+    virtual String decode(const char*, size_t length, FlushBehavior, bool stopOnError, bool& sawError) = 0;
+>>>>>>> miniblink49
     virtual CString encode(const UChar*, size_t length, UnencodableHandling) = 0;
     virtual CString encode(const LChar*, size_t length, UnencodableHandling) = 0;
 
     // Fills a null-terminated string representation of the given
     // unencodable character into the given replacement buffer.
     // The length of the string (not including the null) will be returned.
+<<<<<<< HEAD
     static int getUnencodableReplacement(unsigned codePoint,
         UnencodableHandling,
         UnencodableReplacementArray);
+=======
+    static int getUnencodableReplacement(unsigned codePoint, UnencodableHandling, UnencodableReplacementArray);
+>>>>>>> miniblink49
 };
 
 typedef void (*EncodingNameRegistrar)(const char* alias, const char* name);
 
+<<<<<<< HEAD
 typedef std::unique_ptr<TextCodec> (
     *NewTextCodecFunction)(const TextEncoding&, const void* additionalData);
 typedef void (*TextCodecRegistrar)(const char* name,
     NewTextCodecFunction,
     const void* additionalData);
+=======
+typedef PassOwnPtr<TextCodec> (*NewTextCodecFunction)(const TextEncoding&, const void* additionalData);
+typedef void (*TextCodecRegistrar)(const char* name, NewTextCodecFunction, const void* additionalData);
+>>>>>>> miniblink49
 
 } // namespace WTF
 

@@ -24,6 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "web/EditorClientImpl.h"
 
 #include "core/editing/SelectionType.h"
@@ -40,10 +44,18 @@ EditorClientImpl::EditorClientImpl(WebViewImpl* webview)
 {
 }
 
+<<<<<<< HEAD
 EditorClientImpl::~EditorClientImpl() { }
 
 void EditorClientImpl::respondToChangedSelection(LocalFrame* frame,
     SelectionType selectionType)
+=======
+EditorClientImpl::~EditorClientImpl()
+{
+}
+
+void EditorClientImpl::respondToChangedSelection(LocalFrame* frame, SelectionType selectionType)
+>>>>>>> miniblink49
 {
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
     if (webFrame->client())
@@ -69,6 +81,7 @@ bool EditorClientImpl::canPaste(LocalFrame* frame, bool defaultValue) const
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
     if (!webFrame->contentSettingsClient())
         return defaultValue;
+<<<<<<< HEAD
     return webFrame->contentSettingsClient()->allowReadFromClipboard(
         defaultValue);
 }
@@ -77,6 +90,14 @@ bool EditorClientImpl::handleKeyboardEvent(LocalFrame* frame)
 {
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
     return webFrame->client()->handleCurrentKeyboardEvent();
+=======
+    return webFrame->contentSettingsClient()->allowReadFromClipboard(defaultValue);
+}
+
+bool EditorClientImpl::handleKeyboardEvent()
+{
+    return m_webView->client() && m_webView->client()->handleCurrentKeyboardEvent();
+>>>>>>> miniblink49
 }
 
 } // namespace blink

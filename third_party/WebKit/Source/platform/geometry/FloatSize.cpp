@@ -24,12 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatSize.h"
 
 #include "platform/geometry/IntSize.h"
 #include "platform/geometry/LayoutSize.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/WTFString.h"
+=======
+#include "config.h"
+#include "platform/geometry/FloatSize.h"
+
+#include "platform/FloatConversion.h"
+#include "platform/geometry/IntSize.h"
+#include "platform/geometry/LayoutSize.h"
+>>>>>>> miniblink49
 #include <limits>
 #include <math.h>
 
@@ -58,6 +67,7 @@ bool FloatSize::isExpressibleAsIntSize() const
 
 FloatSize FloatSize::narrowPrecision(double width, double height)
 {
+<<<<<<< HEAD
     return FloatSize(clampTo<float>(width), clampTo<float>(height));
 }
 
@@ -67,3 +77,9 @@ String FloatSize::toString() const
 }
 
 } // namespace blink
+=======
+    return FloatSize(narrowPrecisionToFloat(width), narrowPrecisionToFloat(height));
+}
+
+}
+>>>>>>> miniblink49

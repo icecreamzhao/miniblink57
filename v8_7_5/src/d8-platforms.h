@@ -24,6 +24,12 @@ std::unique_ptr<Platform> MakePredictablePlatform(
 std::unique_ptr<Platform> MakeDelayedTasksPlatform(
     std::unique_ptr<Platform> platform, int64_t random_seed);
 
+<<<<<<< HEAD
 } // namespace v8
 
 #endif // V8_D8_PLATFORMS_H_
+=======
+}  // namespace v8
+
+#endif  // V8_D8_PLATFORMS_H_
+>>>>>>> miniblink49

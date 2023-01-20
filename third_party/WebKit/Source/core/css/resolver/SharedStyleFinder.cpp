@@ -2,12 +2,10 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 2004-2005 Allan Sandfeld Jensen (kde@carewolf.com)
  * Copyright (C) 2006, 2007 Nicholas Shanks (webkit@nickshanks.com)
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Apple Inc. All rights reserved.
  * Copyright (C) 2007 Alexey Proskuryakov <ap@webkit.org>
  * Copyright (C) 2007, 2008 Eric Seidel <eric@webkit.org>
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
- * (http://www.torchmobile.com/)
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  * Copyright (C) Research In Motion Limited 2011. All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
@@ -28,6 +26,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/resolver/SharedStyleFinder.h"
 
 #include "core/HTMLNames.h"
@@ -41,7 +40,6 @@
 #include "core/dom/NodeComputedStyle.h"
 #include "core/dom/QualifiedName.h"
 #include "core/dom/SpaceSplitString.h"
-#include "core/dom/StyleEngine.h"
 #include "core/dom/shadow/ElementShadow.h"
 #include "core/dom/shadow/InsertionPoint.h"
 #include "core/html/HTMLElement.h"
@@ -50,7 +48,7 @@
 #include "core/html/HTMLOptionElement.h"
 #include "core/style/ComputedStyle.h"
 #include "core/svg/SVGElement.h"
-#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/TraceEvent.h"
 #include "wtf/HashSet.h"
 #include "wtf/text/AtomicString.h"
 
@@ -78,7 +76,7 @@ bool SharedStyleFinder::canShareStyleWithControl(Element& candidate) const
     if (candidate.isDisabledFormControl() != element().isDisabledFormControl())
         return false;
 
-    if (candidate.matchesDefaultPseudoClass() != element().matchesDefaultPseudoClass())
+    if (candidate.isDefaultButtonForForm() != element().isDefaultButtonForForm())
         return false;
 
     if (document().containsValidityStyleRules()) {
@@ -97,14 +95,10 @@ bool SharedStyleFinder::canShareStyleWithControl(Element& candidate) const
             return false;
     }
 
-    if (candidateInput.isPlaceholderVisible() != thisInput.isPlaceholderVisible())
-        return false;
-
     return true;
 }
 
-bool SharedStyleFinder::classNamesAffectedByRules(
-    const SpaceSplitString& classNames) const
+bool SharedStyleFinder::classNamesAffectedByRules(const SpaceSplitString& classNames) const
 {
     unsigned count = classNames.size();
     for (unsigned i = 0; i < count; ++i) {
@@ -117,12 +111,10 @@ bool SharedStyleFinder::classNamesAffectedByRules(
 static inline const AtomicString& typeAttributeValue(const Element& element)
 {
     // type is animatable in SVG so we need to go down the slow path here.
-    return element.isSVGElement() ? element.getAttribute(typeAttr)
-                                  : element.fastGetAttribute(typeAttr);
+    return element.isSVGElement() ? element.getAttribute(typeAttr) : element.fastGetAttribute(typeAttr);
 }
 
-bool SharedStyleFinder::sharingCandidateHasIdenticalStyleAffectingAttributes(
-    Element& candidate) const
+bool SharedStyleFinder::sharingCandidateHasIdenticalStyleAffectingAttributes(Element& candidate) const
 {
     if (element().sharesSameElementData(candidate))
         return true;
@@ -131,9 +123,8 @@ bool SharedStyleFinder::sharingCandidateHasIdenticalStyleAffectingAttributes(
     if (element().fastGetAttribute(langAttr) != candidate.fastGetAttribute(langAttr))
         return false;
 
-    // These two checks must be here since RuleSet has a special case to allow
-    // style sharing between elements with type and readonly attributes whereas
-    // other attribute selectors prevent sharing.
+    // These two checks must be here since RuleSet has a special case to allow style sharing between elements
+    // with type and readonly attributes whereas other attribute selectors prevent sharing.
     if (typeAttributeValue(element()) != typeAttributeValue(candidate))
         return false;
     if (element().fastGetAttribute(readonlyAttr) != candidate.fastGetAttribute(readonlyAttr))
@@ -143,8 +134,7 @@ bool SharedStyleFinder::sharingCandidateHasIdenticalStyleAffectingAttributes(
         if (candidate.hasClass() && classNamesAffectedByRules(candidate.classNames()))
             return false;
     } else if (candidate.hasClass()) {
-        // SVG elements require a (slow!) getAttribute comparision because "class"
-        // is an animatable attribute for SVG.
+        // SVG elements require a (slow!) getAttribute comparision because "class" is an animatable attribute for SVG.
         if (element().isSVGElement()) {
             if (element().getAttribute(classAttr) != candidate.getAttribute(classAttr))
                 return false;
@@ -158,9 +148,9 @@ bool SharedStyleFinder::sharingCandidateHasIdenticalStyleAffectingAttributes(
     if (element().presentationAttributeStyle() != candidate.presentationAttributeStyle())
         return false;
 
-    // FIXME: Consider removing this, it's unlikely we'll have so many progress
-    // elements that sharing the style makes sense. Instead we should just not
-    // support style sharing for them.
+    // FIXME: Consider removing this, it's unlikely we'll have so many progress elements
+    // that sharing the style makes sense. Instead we should just not support style sharing
+    // for them.
     if (isHTMLProgressElement(element())) {
         if (element().shouldAppearIndeterminate() != candidate.shouldAppearIndeterminate())
             return false;
@@ -176,8 +166,7 @@ bool SharedStyleFinder::sharingCandidateHasIdenticalStyleAffectingAttributes(
     return true;
 }
 
-bool SharedStyleFinder::sharingCandidateCanShareHostStyles(
-    Element& candidate) const
+bool SharedStyleFinder::sharingCandidateCanShareHostStyles(Element& candidate) const
 {
     const ElementShadow* elementShadow = element().shadow();
     const ElementShadow* candidateShadow = candidate.shadow();
@@ -188,24 +177,12 @@ bool SharedStyleFinder::sharingCandidateCanShareHostStyles(
     if (static_cast<bool>(elementShadow) != static_cast<bool>(candidateShadow))
         return false;
 
-    return elementShadow->hasSameStyles(*candidateShadow);
+    return elementShadow->hasSameStyles(candidateShadow);
 }
 
-bool SharedStyleFinder::sharingCandidateAssignedToSameSlot(
-    Element& candidate) const
+bool SharedStyleFinder::sharingCandidateDistributedToSameInsertionPoint(Element& candidate) const
 {
-    HTMLSlotElement* elementSlot = element().assignedSlot();
-    HTMLSlotElement* candidateSlot = candidate.assignedSlot();
-    if (!elementSlot && !candidateSlot)
-        return true;
-    return elementSlot == candidateSlot;
-}
-
-bool SharedStyleFinder::sharingCandidateDistributedToSameInsertionPoint(
-    Element& candidate) const
-{
-    HeapVector<Member<InsertionPoint>, 8> insertionPoints,
-        candidateInsertionPoints;
+    WillBeHeapVector<RawPtrWillBeMember<InsertionPoint>, 8> insertionPoints, candidateInsertionPoints;
     collectDestinationInsertionPoints(element(), insertionPoints);
     collectDestinationInsertionPoints(candidate, candidateInsertionPoints);
     if (insertionPoints.size() != candidateInsertionPoints.size())
@@ -217,7 +194,6 @@ bool SharedStyleFinder::sharingCandidateDistributedToSameInsertionPoint(
     return true;
 }
 
-DISABLE_CFI_PERF
 bool SharedStyleFinder::canShareStyleWithElement(Element& candidate) const
 {
     if (element() == candidate)
@@ -252,10 +228,6 @@ bool SharedStyleFinder::canShareStyleWithElement(Element& candidate) const
         return false;
     if (!sharingCandidateCanShareHostStyles(candidate))
         return false;
-    // For Shadow DOM V1
-    if (!sharingCandidateAssignedToSameSlot(candidate))
-        return false;
-    // For Shadow DOM V0
     if (!sharingCandidateDistributedToSameInsertionPoint(candidate))
         return false;
     if (candidate.isInTopLayer() != element().isInTopLayer())
@@ -266,18 +238,19 @@ bool SharedStyleFinder::canShareStyleWithElement(Element& candidate) const
     if (isControl && !canShareStyleWithControl(candidate))
         return false;
 
-    if (isHTMLOptionElement(candidate) && isHTMLOptionElement(element()) && (toHTMLOptionElement(candidate).selected() != toHTMLOptionElement(element()).selected() || toHTMLOptionElement(candidate).spatialNavigationFocused() != toHTMLOptionElement(element()).spatialNavigationFocused()))
+    if (isHTMLOptionElement(candidate) && isHTMLOptionElement(element())
+        && (toHTMLOptionElement(candidate).selected() != toHTMLOptionElement(element()).selected()
+        || toHTMLOptionElement(candidate).spatialNavigationFocused() != toHTMLOptionElement(element()).spatialNavigationFocused()))
         return false;
 
-    // FIXME: This line is surprisingly hot, we may wish to inline
-    // hasDirectionAuto into StyleResolver.
+    // FIXME: This line is surprisingly hot, we may wish to inline hasDirectionAuto into StyleResolver.
     if (candidate.isHTMLElement() && toHTMLElement(candidate).hasDirectionAuto())
         return false;
 
     if (candidate.isLink() && m_context.elementLinkState() != style->insideLink())
         return false;
 
-    if (candidate.isUnresolvedV0CustomElement() != element().isUnresolvedV0CustomElement())
+    if (candidate.isUnresolvedCustomElement() != element().isUnresolvedCustomElement())
         return false;
 
     if (element().parentOrShadowHostElement() != parent) {
@@ -293,11 +266,6 @@ bool SharedStyleFinder::canShareStyleWithElement(Element& candidate) const
             return false;
     }
 
-    ShadowRoot* root1 = element().containingShadowRoot();
-    ShadowRoot* root2 = candidate.containingShadowRoot();
-    if (root1 && root2 && root1->type() != root2->type())
-        return false;
-
     if (document().containsValidityStyleRules()) {
         if (candidate.isValidElement() != element().isValidElement())
             return false;
@@ -308,8 +276,7 @@ bool SharedStyleFinder::canShareStyleWithElement(Element& candidate) const
 
 bool SharedStyleFinder::documentContainsValidCandidate() const
 {
-    for (Element& element :
-        ElementTraversal::startsAt(document().documentElement())) {
+    for (Element& element : ElementTraversal::startsAt(document().documentElement())) {
         if (element.supportsStyleSharing() && canShareStyleWithElement(element))
             return true;
     }
@@ -318,9 +285,8 @@ bool SharedStyleFinder::documentContainsValidCandidate() const
 
 inline Element* SharedStyleFinder::findElementForStyleSharing() const
 {
-    StyleSharingList& styleSharingList = m_styleResolver->styleSharingList();
-    for (StyleSharingList::iterator it = styleSharingList.begin();
-         it != styleSharingList.end(); ++it) {
+    StyleSharingList& styleSharingList = m_styleResolver.styleSharingList();
+    for (StyleSharingList::iterator it = styleSharingList.begin(); it != styleSharingList.end(); ++it) {
         Element& candidate = **it;
         if (!canShareStyleWithElement(candidate))
             continue;
@@ -331,25 +297,24 @@ inline Element* SharedStyleFinder::findElementForStyleSharing() const
         }
         return &candidate;
     }
-    m_styleResolver->addToStyleSharingList(element());
-    return nullptr;
+    m_styleResolver.addToStyleSharingList(element());
+    return 0;
 }
 
 bool SharedStyleFinder::matchesRuleSet(RuleSet* ruleSet)
 {
     if (!ruleSet)
         return false;
-    ElementRuleCollector collector(m_context, m_styleResolver->selectorFilter());
+    ElementRuleCollector collector(m_context, m_styleResolver.selectorFilter());
     return collector.hasAnyMatchingRules(ruleSet);
 }
 
 ComputedStyle* SharedStyleFinder::findSharedStyle()
 {
-    INCREMENT_STYLE_STATS_COUNTER(document().styleEngine(), sharedStyleLookups,
-        1);
+    INCREMENT_STYLE_STATS_COUNTER(m_styleResolver, sharedStyleLookups, 1);
 
     if (!element().supportsStyleSharing())
-        return nullptr;
+        return 0;
 
     // Cache whether context.element() is affected by any known class selectors.
     m_elementAffectedByClassRules = element().hasClass() && classNamesAffectedByRules(element().classNames());
@@ -357,36 +322,30 @@ ComputedStyle* SharedStyleFinder::findSharedStyle()
     Element* shareElement = findElementForStyleSharing();
 
     if (!shareElement) {
-        if (document().styleEngine().stats() && document().styleEngine().stats()->allCountersEnabled() && documentContainsValidCandidate())
-            INCREMENT_STYLE_STATS_COUNTER(document().styleEngine(), sharedStyleMissed,
-                1);
-        return nullptr;
+        if (m_styleResolver.stats() && m_styleResolver.stats()->allCountersEnabled() && documentContainsValidCandidate())
+            INCREMENT_STYLE_STATS_COUNTER(m_styleResolver, sharedStyleMissed, 1);
+        return 0;
     }
 
-    INCREMENT_STYLE_STATS_COUNTER(document().styleEngine(), sharedStyleFound, 1);
+    INCREMENT_STYLE_STATS_COUNTER(m_styleResolver, sharedStyleFound, 1);
 
     if (matchesRuleSet(m_siblingRuleSet)) {
-        INCREMENT_STYLE_STATS_COUNTER(document().styleEngine(),
-            sharedStyleRejectedBySiblingRules, 1);
-        return nullptr;
+        INCREMENT_STYLE_STATS_COUNTER(m_styleResolver, sharedStyleRejectedBySiblingRules, 1);
+        return 0;
     }
 
     if (matchesRuleSet(m_uncommonAttributeRuleSet)) {
-        INCREMENT_STYLE_STATS_COUNTER(document().styleEngine(),
-            sharedStyleRejectedByUncommonAttributeRules,
-            1);
-        return nullptr;
+        INCREMENT_STYLE_STATS_COUNTER(m_styleResolver, sharedStyleRejectedByUncommonAttributeRules, 1);
+        return 0;
     }
 
-    // Tracking child index requires unique style for each node. This may get set
-    // by the sibling rule match above.
+    // Tracking child index requires unique style for each node. This may get set by the sibling rule match above.
     if (!element().parentElementOrShadowRoot()->childrenSupportStyleSharing()) {
-        INCREMENT_STYLE_STATS_COUNTER(document().styleEngine(),
-            sharedStyleRejectedByParent, 1);
-        return nullptr;
+        INCREMENT_STYLE_STATS_COUNTER(m_styleResolver, sharedStyleRejectedByParent, 1);
+        return 0;
     }
 
     return shareElement->mutableComputedStyle();
 }
 
-} // namespace blink
+}

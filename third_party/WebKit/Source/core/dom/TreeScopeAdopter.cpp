@@ -2,11 +2,9 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All
- * rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
- * Copyright (C) 2009 Torch Mobile Inc. All rights reserved.
- * (http://www.torchmobile.com/)
+ * Copyright (C) 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  * Copyright (C) 2011 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,40 +22,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "config.h"
 #include "core/dom/TreeScopeAdopter.h"
 
 #include "core/dom/Attr.h"
-#include "core/dom/Node.h"
 #include "core/dom/NodeRareData.h"
 #include "core/dom/NodeTraversal.h"
-#include "core/dom/custom/CustomElement.h"
 #include "core/dom/shadow/ElementShadow.h"
 #include "core/dom/shadow/ShadowRoot.h"
 
 namespace blink {
 
-void TreeScopeAdopter::execute() const
-{
-    moveTreeToNewScope(*m_toAdopt);
-    Document& oldDocument = oldScope().document();
-    if (oldDocument == newScope().document())
-        return;
-    oldDocument.didMoveTreeToNewDocument(*m_toAdopt);
-}
-
 void TreeScopeAdopter::moveTreeToNewScope(Node& root) const
 {
-    DCHECK(needsScopeChange());
+    ASSERT(needsScopeChange());
 
-    // If an element is moved from a document and then eventually back again the
-    // collection cache for that element may contain stale data as changes made to
-    // it will have updated the DOMTreeVersion of the document it was moved to. By
-    // increasing the DOMTreeVersion of the donating document here we ensure that
-    // the collection cache will be invalidated as needed when the element is
-    // moved back.
+#if !ENABLE(OILPAN)
+    oldScope().guardRef();
+#endif
+
+    // If an element is moved from a document and then eventually back again the collection cache for
+    // that element may contain stale data as changes made to it will have updated the DOMTreeVersion
+    // of the document it was moved to. By increasing the DOMTreeVersion of the donating document here
+    // we ensure that the collection cache will be invalidated as needed when the element is moved back.
     Document& oldDocument = oldScope().document();
     Document& newDocument = newScope().document();
     bool willMoveToNewDocument = oldDocument != newDocument;
+    if (willMoveToNewDocument)
+        oldDocument.incDOMTreeVersion();
 
     for (Node& node : NodeTraversal::inclusiveDescendantsOf(root)) {
         updateTreeScope(node);
@@ -74,25 +66,26 @@ void TreeScopeAdopter::moveTreeToNewScope(Node& root) const
             continue;
         Element& element = toElement(node);
 
-        if (HeapVector<Member<Attr>>* attrs = element.attrNodeList()) {
+        if (WillBeHeapVector<RefPtrWillBeMember<Attr>>* attrs = element.attrNodeList()) {
             for (const auto& attr : *attrs)
                 moveTreeToNewScope(*attr);
         }
 
-        for (ShadowRoot* shadow = element.youngestShadowRoot(); shadow;
-             shadow = shadow->olderShadowRoot()) {
+        for (ShadowRoot* shadow = element.youngestShadowRoot(); shadow; shadow = shadow->olderShadowRoot()) {
             shadow->setParentTreeScope(newScope());
             if (willMoveToNewDocument)
                 moveTreeToNewDocument(*shadow, oldDocument, newDocument);
         }
     }
+
+#if !ENABLE(OILPAN)
+    oldScope().guardDeref();
+#endif
 }
 
-void TreeScopeAdopter::moveTreeToNewDocument(Node& root,
-    Document& oldDocument,
-    Document& newDocument) const
+void TreeScopeAdopter::moveTreeToNewDocument(Node& root, Document& oldDocument, Document& newDocument) const
 {
-    DCHECK_NE(oldDocument, newDocument);
+    ASSERT(oldDocument != newDocument);
     for (Node& node : NodeTraversal::inclusiveDescendantsOf(root)) {
         moveNodeToNewDocument(node, oldDocument, newDocument);
 
@@ -100,45 +93,42 @@ void TreeScopeAdopter::moveTreeToNewDocument(Node& root,
             continue;
         Element& element = toElement(node);
 
-        if (HeapVector<Member<Attr>>* attrs = element.attrNodeList()) {
+        if (WillBeHeapVector<RefPtrWillBeMember<Attr>>* attrs = element.attrNodeList()) {
             for (const auto& attr : *attrs)
                 moveTreeToNewDocument(*attr, oldDocument, newDocument);
         }
 
-        for (ShadowRoot* shadow = element.youngestShadowRoot(); shadow;
-             shadow = shadow->olderShadowRoot())
+        for (ShadowRoot* shadow = element.youngestShadowRoot(); shadow; shadow = shadow->olderShadowRoot())
             moveTreeToNewDocument(*shadow, oldDocument, newDocument);
     }
 }
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
 static bool didMoveToNewDocumentWasCalled = false;
 static Document* oldDocumentDidMoveToNewDocumentWasCalledWith = 0;
 
-void TreeScopeAdopter::ensureDidMoveToNewDocumentWasCalled(
-    Document& oldDocument)
+void TreeScopeAdopter::ensureDidMoveToNewDocumentWasCalled(Document& oldDocument)
 {
-    DCHECK(!didMoveToNewDocumentWasCalled);
-    DCHECK_EQ(oldDocument, oldDocumentDidMoveToNewDocumentWasCalledWith);
+    ASSERT(!didMoveToNewDocumentWasCalled);
+    ASSERT_UNUSED(oldDocument, oldDocument == oldDocumentDidMoveToNewDocumentWasCalledWith);
     didMoveToNewDocumentWasCalled = true;
 }
 #endif
 
 inline void TreeScopeAdopter::updateTreeScope(Node& node) const
 {
-    DCHECK(!node.isTreeScope());
-    DCHECK(node.treeScope() == oldScope());
+    ASSERT(!node.isTreeScope());
+    ASSERT(node.treeScope() == oldScope());
+#if !ENABLE(OILPAN)
+    newScope().guardRef();
+    oldScope().guardDeref();
+#endif
     node.setTreeScope(m_newScope);
 }
 
-inline void TreeScopeAdopter::moveNodeToNewDocument(
-    Node& node,
-    Document& oldDocument,
-    Document& newDocument) const
+inline void TreeScopeAdopter::moveNodeToNewDocument(Node& node, Document& oldDocument, Document& newDocument) const
 {
-    DCHECK_NE(oldDocument, newDocument);
-    // Note: at the start of this function, node.document() may already have
-    // changed to match |newDocument|, which is why |oldDocument| is passed in.
+    ASSERT(oldDocument != newDocument);
 
     if (node.hasRareData()) {
         NodeRareData* rareData = node.rareData();
@@ -146,26 +136,18 @@ inline void TreeScopeAdopter::moveNodeToNewDocument(
             rareData->nodeLists()->adoptDocument(oldDocument, newDocument);
     }
 
-    node.willMoveToNewDocument(oldDocument, newDocument);
     oldDocument.moveNodeIteratorsToNewDocument(node, newDocument);
-
-    if (node.getCustomElementState() == CustomElementState::Custom) {
-        Element& element = toElement(node);
-        CustomElement::enqueueAdoptedCallback(&element, &oldDocument, &newDocument);
-    }
 
     if (node.isShadowRoot())
         toShadowRoot(node).setDocument(newDocument);
 
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     didMoveToNewDocumentWasCalled = false;
     oldDocumentDidMoveToNewDocumentWasCalledWith = &oldDocument;
 #endif
 
     node.didMoveToNewDocument(oldDocument);
-#if DCHECK_IS_ON()
-    DCHECK(didMoveToNewDocumentWasCalled);
-#endif
+    ASSERT(didMoveToNewDocumentWasCalled);
 }
 
-} // namespace blink
+}

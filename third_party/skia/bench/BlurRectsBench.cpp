@@ -15,13 +15,18 @@
 
 class BlurRectsBench : public Benchmark {
 public:
+<<<<<<< HEAD
     BlurRectsBench(SkRect outer, SkRect inner, SkScalar radius)
     {
+=======
+    BlurRectsBench(SkRect outer, SkRect inner, SkScalar radius) {
+>>>>>>> miniblink49
         fRadius = radius;
         fOuter = outer;
         fInner = inner;
     }
 
+<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -36,6 +41,19 @@ public:
     {
         SkPaint paint;
         paint.setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle, fRadius));
+=======
+    const char* onGetName() override {
+        return fName.c_str();
+    }
+
+    void setName(const SkString& name) {
+        fName = name;
+    }
+
+    void onDraw(const int loops, SkCanvas* canvas) override {
+        SkPaint paint;
+        paint.setMaskFilter(SkBlurMaskFilter::Create(kNormal_SkBlurStyle, fRadius))->unref();
+>>>>>>> miniblink49
 
         SkPath path;
         path.addRect(fOuter, SkPath::kCW_Direction);
@@ -47,6 +65,7 @@ public:
     }
 
 private:
+<<<<<<< HEAD
     SkString fName;
     SkRect fOuter;
     SkRect fInner;
@@ -63,10 +82,27 @@ public:
         this->setName(SkString("blurrectsninepatch"));
     }
 
+=======
+    SkString    fName;
+    SkRect      fOuter;
+    SkRect      fInner;
+    SkScalar    fRadius;
+
+    typedef     Benchmark INHERITED;
+};
+
+class BlurRectsNinePatchBench: public BlurRectsBench {
+public:
+    BlurRectsNinePatchBench(SkRect outer, SkRect inner, SkScalar radius)
+        : INHERITED(outer, inner, radius) {
+        this->setName(SkString("blurrectsninepatch"));
+    }
+>>>>>>> miniblink49
 private:
     typedef BlurRectsBench INHERITED;
 };
 
+<<<<<<< HEAD
 class BlurRectsNonNinePatchBench : public BlurRectsBench {
 public:
     BlurRectsNonNinePatchBench(SkRect outer, SkRect inner, SkScalar radius)
@@ -76,13 +112,30 @@ public:
         this->setName(SkString("blurrectsnonninepatch"));
     }
 
+=======
+class BlurRectsNonNinePatchBench: public BlurRectsBench {
+public:
+    BlurRectsNonNinePatchBench(SkRect outer, SkRect inner, SkScalar radius)
+        : INHERITED(outer, inner, radius) {
+        SkString name;
+        this->setName(SkString("blurrectsnonninepatch"));
+    }
+>>>>>>> miniblink49
 private:
     typedef BlurRectsBench INHERITED;
 };
 
 DEF_BENCH(return new BlurRectsNinePatchBench(SkRect::MakeXYWH(10, 10, 100, 100),
+<<<<<<< HEAD
     SkRect::MakeXYWH(20, 20, 60, 60),
     2.3f);)
 DEF_BENCH(return new BlurRectsNonNinePatchBench(SkRect::MakeXYWH(10, 10, 100, 100),
     SkRect::MakeXYWH(50, 50, 10, 10),
     4.3f);)
+=======
+                                             SkRect::MakeXYWH(20, 20, 60, 60),
+                                             2.3f);)
+DEF_BENCH(return new BlurRectsNonNinePatchBench(SkRect::MakeXYWH(10, 10, 100, 100),
+                                                SkRect::MakeXYWH(50, 50, 10, 10),
+                                                4.3f);)
+>>>>>>> miniblink49

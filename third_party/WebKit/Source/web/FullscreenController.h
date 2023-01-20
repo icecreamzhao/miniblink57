@@ -31,9 +31,18 @@
 #ifndef FullscreenController_h
 #define FullscreenController_h
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/IntSize.h"
 #include <memory>
+=======
+#include "core/layout/LayoutFullScreen.h"
+#include "platform/geometry/FloatPoint.h"
+#include "platform/geometry/IntSize.h"
+#include "platform/heap/Handle.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/RefPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -41,6 +50,7 @@ class Element;
 class LocalFrame;
 class WebViewImpl;
 
+<<<<<<< HEAD
 class FullscreenController {
 public:
     static std::unique_ptr<FullscreenController> create(WebViewImpl*);
@@ -65,12 +75,32 @@ public:
     void updateSize();
 
     void didUpdateLayout();
+=======
+class FullscreenController final : public NoBaseWillBeGarbageCollected<FullscreenController> {
+public:
+    static PassOwnPtrWillBeRawPtr<FullscreenController> create(WebViewImpl*);
+
+    void didEnterFullScreen();
+    void didExitFullScreen();
+
+    void enterFullScreenForElement(Element*);
+    void exitFullScreenForElement(Element*);
+#ifndef IMPLEMENTED_NEWEST_BLINK
+    bool isFullscreen() { return m_fullScreenFrame; }
+#else
+    bool isFullscreen() { return false; }
+#endif // IMPLEMENTED_NEWEST_BLINK
+    void updateSize();
+
+    DECLARE_TRACE();
+>>>>>>> miniblink49
 
 protected:
     explicit FullscreenController(WebViewImpl*);
 
 private:
     void updatePageScaleConstraints(bool removeConstraints);
+<<<<<<< HEAD
 
     WebViewImpl* m_webViewImpl;
 
@@ -94,6 +124,23 @@ private:
     float m_initialPageScaleFactor = 0.0f;
     IntSize m_initialScrollOffset;
     FloatPoint m_initialVisualViewportOffset;
+=======
+#ifndef IMPLEMENTED_NEWEST_BLINK
+    WebViewImpl* m_webViewImpl;
+
+    float m_exitFullscreenPageScaleFactor;
+    IntSize m_exitFullscreenScrollOffset;
+    FloatPoint m_exitFullscreenPinchViewportOffset;
+
+    // If set, the WebView is transitioning to fullscreen for this element.
+    RefPtrWillBeMember<Element> m_provisionalFullScreenElement;
+
+    // If set, the WebView is in fullscreen mode for an element in this frame.
+    RefPtrWillBeMember<LocalFrame> m_fullScreenFrame;
+
+    bool m_isCancelingFullScreen;
+#endif // IMPLEMENTED_NEWEST_BLINK
+>>>>>>> miniblink49
 };
 
 } // namespace blink

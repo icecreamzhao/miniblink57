@@ -36,16 +36,25 @@
 namespace blink {
 
 class WebStorageArea;
+<<<<<<< HEAD
 class WebSecurityOrigin;
 
 // WebStorageNamespace represents a collection of StorageAreas. Typically,
 // you'll have multiple StorageNamespaces to represent the SessionStorage for
 // each tab and a single StorageNamespace to represent LocalStorage for the
 // entire browser.
+=======
+class WebString;
+
+// WebStorageNamespace represents a collection of StorageAreas. Typically, you'll have
+// multiple StorageNamespaces to represent the SessionStorage for each tab and a single
+// StorageNamespace to represent LocalStorage for the entire browser.
+>>>>>>> miniblink49
 class WebStorageNamespace {
 public:
     virtual ~WebStorageNamespace() { }
 
+<<<<<<< HEAD
     // Create a new WebStorageArea object. Two subsequent calls with the same
     // origin will return two different WebStorageArea objects that share the same
     // backing store.  You should call delete on the returned object when you're
@@ -57,6 +66,15 @@ public:
     {
         return false;
     }
+=======
+    // Create a new WebStorageArea object. Two subsequent calls with the same origin
+    // will return two different WebStorageArea objects that share the same backing store.
+    // You should call delete on the returned object when you're finished.
+    virtual WebStorageArea* createStorageArea(const WebString& origin) = 0;
+
+    // Returns true of the two instances represent the same storage namespace.
+    virtual bool isSameNamespace(const WebStorageNamespace&) const { return false; }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

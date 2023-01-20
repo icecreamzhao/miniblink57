@@ -22,6 +22,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/LabelableElement.h"
 
 #include "core/dom/NodeRareData.h"
@@ -29,15 +30,16 @@
 
 namespace blink {
 
-LabelableElement::LabelableElement(const QualifiedName& tagName,
-    Document& document)
+LabelableElement::LabelableElement(const QualifiedName& tagName, Document& document)
     : HTMLElement(tagName, document)
 {
 }
 
-LabelableElement::~LabelableElement() { }
+LabelableElement::~LabelableElement()
+{
+}
 
-LabelsNodeList* LabelableElement::labels()
+PassRefPtrWillBeRawPtr<LabelsNodeList> LabelableElement::labels()
 {
     if (!supportLabels())
         return nullptr;

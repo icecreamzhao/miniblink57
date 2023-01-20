@@ -27,11 +27,16 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#import "config.h"
+>>>>>>> miniblink49
 #import "platform/fonts/mac/FontFamilyMatcherMac.h"
 
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <math.h>
+<<<<<<< HEAD
 #include "platform/fonts/FontTraits.h"
 #include "platform/LayoutTestSupport.h"
 #include "platform/mac/VersionUtilMac.h"
@@ -62,6 +67,10 @@
      return *weight;
  }
  }
+=======
+#import <wtf/HashSet.h>
+#import <wtf/text/AtomicStringHash.h>
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -128,6 +137,7 @@ static BOOL betterChoice(NSFontTraitMask desiredTraits, int desiredWeight,
 // Family name is somewhat of a misnomer here.  We first attempt to find an exact match
 // comparing the desiredFamily to the PostScript name of the installed fonts.  If that fails
 // we then do a search based on the family names of the installed fonts.
+<<<<<<< HEAD
 NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits, FontWeight desiredWeight, float size)
 {
     if ([desiredFamily isEqualToString:@"BlinkMacSystemFont"]) {
@@ -163,6 +173,10 @@ NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits
         return font;
     }
 
+=======
+NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits, int desiredWeight, float size)
+{
+>>>>>>> miniblink49
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
 
     // Do a simple case insensitive search for a matching font family.
@@ -175,13 +189,20 @@ NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits
             break;
     }
 
+<<<<<<< HEAD
     int appKitFontWeight = toAppKitFontWeight(desiredWeight);
+=======
+>>>>>>> miniblink49
     if (!availableFamily) {
         // Match by PostScript name.
         NSEnumerator *availableFonts = [[fontManager availableFonts] objectEnumerator];
         NSString *availableFont;
         NSFont *nameMatchedFont = nil;
+<<<<<<< HEAD
         NSFontTraitMask desiredTraitsForNameMatch = desiredTraits | (appKitFontWeight >= 7 ? NSBoldFontMask : 0);
+=======
+        NSFontTraitMask desiredTraitsForNameMatch = desiredTraits | (desiredWeight >= 7 ? NSBoldFontMask : 0);
+>>>>>>> miniblink49
         while ((availableFont = [availableFonts nextObject])) {
             if ([desiredFamily caseInsensitiveCompare:availableFont] == NSOrderedSame) {
                 nameMatchedFont = [NSFont fontWithName:availableFont size:size];
@@ -223,7 +244,11 @@ NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits
         if (!choseFont)
             newWinner = acceptableChoice(desiredTraits, fontTraits);
         else
+<<<<<<< HEAD
             newWinner = betterChoice(desiredTraits, appKitFontWeight, chosenTraits, chosenWeight, fontTraits, fontWeight);
+=======
+            newWinner = betterChoice(desiredTraits, desiredWeight, chosenTraits, chosenWeight, fontTraits, fontWeight);
+>>>>>>> miniblink49
 
         if (newWinner) {
             choseFont = YES;
@@ -231,7 +256,11 @@ NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits
             chosenTraits = fontTraits;
             chosenFullName = fontFullName;
 
+<<<<<<< HEAD
             if (chosenWeight == appKitFontWeight && (chosenTraits & IMPORTANT_FONT_TRAITS) == (desiredTraits & IMPORTANT_FONT_TRAITS))
+=======
+            if (chosenWeight == desiredWeight && (chosenTraits & IMPORTANT_FONT_TRAITS) == (desiredTraits & IMPORTANT_FONT_TRAITS))
+>>>>>>> miniblink49
                 break;
         }
     }
@@ -249,7 +278,11 @@ NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits
         actualTraits = [fontManager traitsOfFont:font];
     int actualWeight = [fontManager weightOfFont:font];
 
+<<<<<<< HEAD
     bool syntheticBold = appKitFontWeight >= 7 && actualWeight < 7;
+=======
+    bool syntheticBold = desiredWeight >= 7 && actualWeight < 7;
+>>>>>>> miniblink49
     bool syntheticItalic = (desiredTraits & NSFontItalicTrait) && !(actualTraits & NSFontItalicTrait);
 
     // There are some malformed fonts that will be correctly returned by -fontWithFamily:traits:weight:size: as a match for a particular trait,
@@ -274,6 +307,7 @@ NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits
     return font;
 }
 
+<<<<<<< HEAD
 int toAppKitFontWeight(FontWeight fontWeight)
 {
     static int appKitFontWeights[] = {
@@ -290,4 +324,6 @@ int toAppKitFontWeight(FontWeight fontWeight)
     return appKitFontWeights[fontWeight];
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

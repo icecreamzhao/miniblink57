@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Copyright 2016 Google Inc.
  *
@@ -5,6 +6,8 @@
  * found in the LICENSE file.
  */
 
+=======
+>>>>>>> miniblink49
 #import <UIKit/UIKit.h>
 #include "SkCanvas.h"
 #include "SkGraphics.h"
@@ -59,14 +62,21 @@ void SkOSWindow::onUpdateMenu(SkOSMenu* menu) {
 
 bool SkOSWindow::attach(SkBackEndTypes /* attachType */,
                         int /* msaaSampleCount */,
+<<<<<<< HEAD
                         bool /* deepColor */,
+=======
+>>>>>>> miniblink49
                         AttachmentInfo* info) {
     [(SkUIView*)fHWND getAttachmentInfo:info];
     bool success = true;
     return success;
 }
 
+<<<<<<< HEAD
 void SkOSWindow::release() {}
+=======
+void SkOSWindow::detach() {}
+>>>>>>> miniblink49
 
 void SkOSWindow::present() {
 }

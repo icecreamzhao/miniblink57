@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2010 The Android Open Source Project
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkPDFGraphicState_DEFINED
 #define SkPDFGraphicState_DEFINED
 
@@ -12,6 +17,17 @@
 #include "SkPDFStream.h"
 
 class SkPaint;
+=======
+
+#ifndef SkPDFGraphicState_DEFINED
+#define SkPDFGraphicState_DEFINED
+
+#include "SkPaint.h"
+#include "SkPDFTypes.h"
+#include "SkTemplates.h"
+#include "SkChecksum.h"
+
+>>>>>>> miniblink49
 class SkPDFCanon;
 class SkPDFFormXObject;
 
@@ -20,8 +36,13 @@ class SkPDFFormXObject;
     be installed. So that a given dictionary is only output to the pdf file
     once, we want to canonicalize them.
 */
+<<<<<<< HEAD
 class SkPDFGraphicState final : public SkPDFObject {
 
+=======
+class SkPDFGraphicState : public SkPDFObject {
+    
+>>>>>>> miniblink49
 public:
     enum SkPDFSMaskMode {
         kAlpha_SMaskMode,
@@ -30,9 +51,15 @@ public:
 
     // Override emitObject so that we can populate the dictionary on
     // demand.
+<<<<<<< HEAD
     void emitObject(SkWStream* stream,
         const SkPDFObjNumMap& objNumMap,
         const SkPDFSubstituteMap& substitutes) const override;
+=======
+    virtual void emitObject(SkWStream* stream,
+                            const SkPDFObjNumMap& objNumMap,
+                            const SkPDFSubstituteMap& substitutes);
+>>>>>>> miniblink49
 
     /** Get the graphic state for the passed SkPaint. The reference count of
      *  the object is incremented and it is the caller's responsibility to
@@ -42,15 +69,24 @@ public:
      *  @param paint  The SkPaint to emulate.
      */
     static SkPDFGraphicState* GetGraphicStateForPaint(SkPDFCanon* canon,
+<<<<<<< HEAD
         const SkPaint& paint);
 
     /** Make a graphic state that only sets the passed soft mask.
+=======
+                                                      const SkPaint& paint);
+
+    /** Make a graphic state that only sets the passed soft mask. The
+     *  reference count of the object is incremented and it is the caller's
+     *  responsibility to unreference it when done.
+>>>>>>> miniblink49
      *  @param sMask     The form xobject to use as a soft mask.
      *  @param invert    Indicates if the alpha of the sMask should be inverted.
      *  @param sMaskMode Whether to use alpha or luminosity for the sMask.
      *
      *  These are not de-duped.
      */
+<<<<<<< HEAD
     static sk_sp<SkPDFDict> GetSMaskGraphicState(SkPDFFormXObject* sMask,
         bool invert,
         SkPDFSMaskMode sMaskMode,
@@ -62,6 +98,23 @@ public:
 
     bool operator==(const SkPDFGraphicState& rhs) const
     {
+=======
+    static SkPDFDict* GetSMaskGraphicState(SkPDFFormXObject* sMask,
+                                           bool invert,
+                                           SkPDFSMaskMode sMaskMode);
+
+    /** Get a graphic state that only unsets the soft mask. The reference
+     *  count of the object is incremented and it is the caller's responsibility
+     *  to unreference it when done. This is needed to accommodate the weak
+     *  reference pattern used when the returned object is new and has no
+     *  other references.
+     *
+     *  The returned object is a singleton.
+     */
+    static SkPDFDict* GetNoSMaskGraphicState();
+
+    bool operator==(const SkPDFGraphicState& rhs) const {
+>>>>>>> miniblink49
         return 0 == memcmp(&fStrokeWidth, &rhs.fStrokeWidth, 12);
     }
     uint32_t hash() const { return SkChecksum::Murmur3(&fStrokeWidth, 12); }
@@ -70,9 +123,15 @@ private:
     const SkScalar fStrokeWidth;
     const SkScalar fStrokeMiter;
     const uint8_t fAlpha;
+<<<<<<< HEAD
     const uint8_t fStrokeCap; // SkPaint::Cap
     const uint8_t fStrokeJoin; // SkPaint::Join
     const uint8_t fMode; // SkXfermode::Mode
+=======
+    const uint8_t fStrokeCap;   // SkPaint::Cap
+    const uint8_t fStrokeJoin;  // SkPaint::Join
+    const uint8_t fMode;        // SkXfermode::Mode
+>>>>>>> miniblink49
 
     SkPDFGraphicState(const SkPaint&);
 

@@ -31,40 +31,35 @@
 #ifndef WeekInputType_h
 #define WeekInputType_h
 
-#include "core/html/forms/BaseTemporalInputType.h"
+#include "core/html/forms/BaseChooserOnlyDateAndTimeInputType.h"
+#include "core/html/forms/BaseMultipleFieldsDateAndTimeInputType.h"
 
 namespace blink {
 
-class WeekInputType final : public BaseTemporalInputType {
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+using BaseWeekInputType = BaseMultipleFieldsDateAndTimeInputType;
+#else
+using BaseWeekInputType = BaseChooserOnlyDateAndTimeInputType;
+#endif
+
+class WeekInputType final : public BaseWeekInputType {
 public:
-    static InputType* create(HTMLInputElement&);
+    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
 
 private:
-    explicit WeekInputType(HTMLInputElement& element)
-        : BaseTemporalInputType(element)
-    {
-    }
-
+    WeekInputType(HTMLInputElement& element) : BaseWeekInputType(element) { }
     void countUsage() override;
     const AtomicString& formControlType() const override;
     StepRange createStepRange(AnyStepHandling) const override;
-    bool parseToDateComponentsInternal(const String&,
-        DateComponents*) const override;
+    bool parseToDateComponentsInternal(const String&, DateComponents*) const override;
     bool setMillisecondToDateComponents(double, DateComponents*) const override;
-    void warnIfValueIsInvalid(const String&) const override;
 
-    // BaseTemporalInputType functions
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+    // BaseMultipleFieldsDateAndTimeInputType functions
     String formatDateTimeFieldsState(const DateTimeFieldsState&) const override;
-    void setupLayoutParameters(DateTimeEditElement::LayoutParameters&,
-        const DateComponents&) const override;
-    bool isValidFormat(bool hasYear,
-        bool hasMonth,
-        bool hasWeek,
-        bool hasDay,
-        bool hasAMPM,
-        bool hasHour,
-        bool hasMinute,
-        bool hasSecond) const override;
+    void setupLayoutParameters(DateTimeEditElement::LayoutParameters&, const DateComponents&) const override;
+    bool isValidFormat(bool hasYear, bool hasMonth, bool hasWeek, bool hasDay, bool hasAMPM, bool hasHour, bool hasMinute, bool hasSecond) const override;
+#endif
 };
 
 } // namespace blink

@@ -27,7 +27,11 @@
 #define HWndDC_h
 
 #include <windows.h>
+<<<<<<< HEAD
 #include "wtf/Noncopyable.h"
+=======
+#include "wtf/NonCopyable.h"
+>>>>>>> miniblink49
 
 namespace blink {
 

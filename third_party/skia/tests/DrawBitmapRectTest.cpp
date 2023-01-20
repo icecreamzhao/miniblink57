@@ -12,13 +12,17 @@
 #include "SkImageGeneratorPriv.h"
 #include "SkMatrixUtils.h"
 #include "SkPaint.h"
+<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkPixelRef.h"
+=======
+>>>>>>> miniblink49
 #include "SkRandom.h"
 #include "SkShader.h"
 #include "SkSurface.h"
 #include "Test.h"
 
+<<<<<<< HEAD
 class FailurePixelRef : public SkPixelRef {
 public:
     FailurePixelRef(const SkImageInfo& info)
@@ -29,11 +33,20 @@ public:
 protected:
     bool onNewLockPixels(LockRec*) override { return false; }
     void onUnlockPixels() override { }
+=======
+// A BitmapFactory that always fails when asked to return pixels.
+class FailureImageGenerator : public SkImageGenerator {
+public:
+    FailureImageGenerator() : SkImageGenerator(SkImageInfo::MakeN32Premul(100, 100)) {}
+protected:
+    // default onGetPixels() returns kUnimplemented, which is what we want.
+>>>>>>> miniblink49
 };
 
 // crbug.com/295895
 // Crashing in skia when a pixelref fails in lockPixels
 //
+<<<<<<< HEAD
 static void test_faulty_pixelref(skiatest::Reporter* reporter)
 {
     // need a cache, but don't expect to use it, so the budget is not critical
@@ -47,6 +60,18 @@ static void test_faulty_pixelref(skiatest::Reporter* reporter)
     // now our bitmap has a pixelref, but we know it will fail to lock
 
     auto surface(SkSurface::MakeRasterN32Premul(200, 200));
+=======
+static void test_faulty_pixelref(skiatest::Reporter* reporter) {
+    // need a cache, but don't expect to use it, so the budget is not critical
+    SkAutoTUnref<SkDiscardableMemoryPool> pool(
+        SkDiscardableMemoryPool::Create(10 * 1000, NULL));
+    SkBitmap bm;
+    bool success = SkInstallDiscardablePixelRef(SkNEW(FailureImageGenerator), NULL, &bm, pool);
+    REPORTER_ASSERT(reporter, success);
+    // now our bitmap has a pixelref, but we know it will fail to lock
+
+    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(200, 200));
+>>>>>>> miniblink49
     SkCanvas* canvas = surface->getCanvas();
 
     const SkFilterQuality levels[] = {
@@ -57,7 +82,11 @@ static void test_faulty_pixelref(skiatest::Reporter* reporter)
     };
 
     SkPaint paint;
+<<<<<<< HEAD
     canvas->scale(2, 2); // need a scale, otherwise we may ignore filtering
+=======
+    canvas->scale(2, 2);    // need a scale, otherwise we may ignore filtering
+>>>>>>> miniblink49
     for (size_t i = 0; i < SK_ARRAY_COUNT(levels); ++i) {
         paint.setFilterQuality(levels[i]);
         canvas->drawBitmap(bm, 0, 0, &paint);
@@ -66,8 +95,12 @@ static void test_faulty_pixelref(skiatest::Reporter* reporter)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static void rand_matrix(SkMatrix* mat, SkRandom& rand, unsigned mask)
 {
+=======
+static void rand_matrix(SkMatrix* mat, SkRandom& rand, unsigned mask) {
+>>>>>>> miniblink49
     mat->setIdentity();
     if (mask & SkMatrix::kTranslate_Mask) {
         mat->postTranslate(rand.nextSScalar1(), rand.nextSScalar1());
@@ -84,6 +117,7 @@ static void rand_matrix(SkMatrix* mat, SkRandom& rand, unsigned mask)
     }
 }
 
+<<<<<<< HEAD
 static void rand_size(SkISize* size, SkRandom& rand)
 {
     size->set(rand.nextU() & 0xFFFF, rand.nextU() & 0xFFFF);
@@ -101,11 +135,34 @@ static void test_treatAsSprite(skiatest::Reporter* reporter)
     aaPaint.setAntiAlias(true);
 
     // assert: translate-only no-aa can always be treated as sprite
+=======
+static void rand_size(SkISize* size, SkRandom& rand) {
+    size->set(rand.nextU() & 0xFFFF, rand.nextU() & 0xFFFF);
+}
+
+static bool treat_as_sprite(const SkMatrix& mat, const SkISize& size,
+                            unsigned bits) {
+    return SkTreatAsSprite(mat, size.width(), size.height(), bits);
+}
+
+static void test_treatAsSprite(skiatest::Reporter* reporter) {
+    const unsigned bilerBits = kSkSubPixelBitsForBilerp;
+
+    SkMatrix mat;
+    SkISize  size;
+    SkRandom rand;
+
+    // assert: translate-only no-filter can always be treated as sprite
+>>>>>>> miniblink49
     for (int i = 0; i < 1000; ++i) {
         rand_matrix(&mat, rand, SkMatrix::kTranslate_Mask);
         for (int j = 0; j < 1000; ++j) {
             rand_size(&size, rand);
+<<<<<<< HEAD
             REPORTER_ASSERT(reporter, SkTreatAsSprite(mat, size, noaaPaint));
+=======
+            REPORTER_ASSERT(reporter, treat_as_sprite(mat, size, 0));
+>>>>>>> miniblink49
         }
     }
 
@@ -114,8 +171,13 @@ static void test_treatAsSprite(skiatest::Reporter* reporter)
         rand_matrix(&mat, rand, SkMatrix::kAffine_Mask | SkMatrix::kPerspective_Mask);
         for (int j = 0; j < 1000; ++j) {
             rand_size(&size, rand);
+<<<<<<< HEAD
             REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, noaaPaint));
             REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, aaPaint));
+=======
+            REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, 0));
+            REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, bilerBits));
+>>>>>>> miniblink49
         }
     }
 
@@ -123,6 +185,7 @@ static void test_treatAsSprite(skiatest::Reporter* reporter)
 
     const SkScalar tooMuchSubpixel = 100.1f;
     mat.setTranslate(tooMuchSubpixel, 0);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, aaPaint));
     mat.setTranslate(0, tooMuchSubpixel);
     REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, aaPaint));
@@ -132,22 +195,44 @@ static void test_treatAsSprite(skiatest::Reporter* reporter)
     REPORTER_ASSERT(reporter, SkTreatAsSprite(mat, size, aaPaint));
     mat.setTranslate(0, tinySubPixel);
     REPORTER_ASSERT(reporter, SkTreatAsSprite(mat, size, aaPaint));
+=======
+    REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, bilerBits));
+    mat.setTranslate(0, tooMuchSubpixel);
+    REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, bilerBits));
+
+    const SkScalar tinySubPixel = 100.02f;
+    mat.setTranslate(tinySubPixel, 0);
+    REPORTER_ASSERT(reporter, treat_as_sprite(mat, size, bilerBits));
+    mat.setTranslate(0, tinySubPixel);
+    REPORTER_ASSERT(reporter, treat_as_sprite(mat, size, bilerBits));
+>>>>>>> miniblink49
 
     const SkScalar twoThirds = SK_Scalar1 * 2 / 3;
     const SkScalar bigScale = (size.width() + twoThirds) / size.width();
     mat.setScale(bigScale, bigScale);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, noaaPaint));
     REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, aaPaint));
+=======
+    REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, false));
+    REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, bilerBits));
+>>>>>>> miniblink49
 
     const SkScalar oneThird = SK_Scalar1 / 3;
     const SkScalar smallScale = (size.width() + oneThird) / size.width();
     mat.setScale(smallScale, smallScale);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, SkTreatAsSprite(mat, size, noaaPaint));
     REPORTER_ASSERT(reporter, !SkTreatAsSprite(mat, size, aaPaint));
+=======
+    REPORTER_ASSERT(reporter, treat_as_sprite(mat, size, false));
+    REPORTER_ASSERT(reporter, !treat_as_sprite(mat, size, bilerBits));
+>>>>>>> miniblink49
 
     const SkScalar oneFortyth = SK_Scalar1 / 40;
     const SkScalar tinyScale = (size.width() + oneFortyth) / size.width();
     mat.setScale(tinyScale, tinyScale);
+<<<<<<< HEAD
     REPORTER_ASSERT(reporter, SkTreatAsSprite(mat, size, noaaPaint));
     REPORTER_ASSERT(reporter, SkTreatAsSprite(mat, size, aaPaint));
 }
@@ -155,6 +240,14 @@ static void test_treatAsSprite(skiatest::Reporter* reporter)
 static void assert_ifDrawnTo(skiatest::Reporter* reporter,
     const SkBitmap& bm, bool shouldBeDrawn)
 {
+=======
+    REPORTER_ASSERT(reporter, treat_as_sprite(mat, size, false));
+    REPORTER_ASSERT(reporter, treat_as_sprite(mat, size, bilerBits));
+}
+
+static void assert_ifDrawnTo(skiatest::Reporter* reporter,
+                             const SkBitmap& bm, bool shouldBeDrawn) {
+>>>>>>> miniblink49
     for (int y = 0; y < bm.height(); ++y) {
         for (int x = 0; x < bm.width(); ++x) {
             if (shouldBeDrawn) {
@@ -174,22 +267,38 @@ static void assert_ifDrawnTo(skiatest::Reporter* reporter,
 }
 
 static void test_wacky_bitmapshader(skiatest::Reporter* reporter,
+<<<<<<< HEAD
     int width, int height, bool shouldBeDrawn)
 {
     SkBitmap dev;
     dev.allocN32Pixels(0x56F, 0x4f6);
     dev.eraseColor(SK_ColorTRANSPARENT); // necessary, so we know if we draw to it
+=======
+                                    int width, int height, bool shouldBeDrawn) {
+    SkBitmap dev;
+    dev.allocN32Pixels(0x56F, 0x4f6);
+    dev.eraseColor(SK_ColorTRANSPARENT);  // necessary, so we know if we draw to it
+>>>>>>> miniblink49
 
     SkMatrix matrix;
 
     SkCanvas c(dev);
     matrix.setAll(-119.34097f,
+<<<<<<< HEAD
         -43.436558f,
         93489.945f,
         43.436558f,
         -119.34097f,
         123.98426f,
         0, 0, SK_Scalar1);
+=======
+                  -43.436558f,
+                  93489.945f,
+                  43.436558f,
+                  -119.34097f,
+                  123.98426f,
+                  0, 0, SK_Scalar1);
+>>>>>>> miniblink49
     c.concat(matrix);
 
     SkBitmap bm;
@@ -199,6 +308,7 @@ static void test_wacky_bitmapshader(skiatest::Reporter* reporter,
     bm.eraseColor(SK_ColorRED);
 
     matrix.setAll(0.0078740157f,
+<<<<<<< HEAD
         0,
         SkIntToScalar(249),
         0,
@@ -208,6 +318,19 @@ static void test_wacky_bitmapshader(skiatest::Reporter* reporter,
     SkPaint paint;
     paint.setShader(SkShader::MakeBitmapShader(bm, SkShader::kRepeat_TileMode,
         SkShader::kRepeat_TileMode, &matrix));
+=======
+                  0,
+                  SkIntToScalar(249),
+                  0,
+                  0.0078740157f,
+                  SkIntToScalar(239),
+                  0, 0, SK_Scalar1);
+    SkShader* s = SkShader::CreateBitmapShader(bm, SkShader::kRepeat_TileMode,
+                                               SkShader::kRepeat_TileMode, &matrix);
+
+    SkPaint paint;
+    paint.setShader(s)->unref();
+>>>>>>> miniblink49
 
     SkRect r = SkRect::MakeXYWH(681, 239, 695, 253);
     c.drawRect(r, paint);
@@ -233,30 +356,50 @@ static void test_wacky_bitmapshader(skiatest::Reporter* reporter,
  *  in fact, handle bitmaps at 64K-1 (assuming we don't exceed the total
  *  memory allocation limit).
  */
+<<<<<<< HEAD
 static void test_giantrepeat_crbug118018(skiatest::Reporter* reporter)
 {
+=======
+static void test_giantrepeat_crbug118018(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
     static const struct {
         int fWidth;
         int fHeight;
         bool fExpectedToDraw;
     } gTests[] = {
+<<<<<<< HEAD
         { 0x1b294, 0x7f, false }, // crbug 118018 (width exceeds 64K)
         { 0xFFFF, 0x7f, true }, // should draw, test max width
         { 0x7f, 0xFFFF, true }, // should draw, test max height
         { 0xFFFF, 0xFFFF, false }, // allocation fails (too much RAM)
+=======
+        { 0x1b294, 0x7f,  false },   // crbug 118018 (width exceeds 64K)
+        { 0xFFFF, 0x7f,    true },   // should draw, test max width
+        { 0x7f, 0xFFFF,    true },   // should draw, test max height
+        { 0xFFFF, 0xFFFF, false },   // allocation fails (too much RAM)
+>>>>>>> miniblink49
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gTests); ++i) {
         test_wacky_bitmapshader(reporter,
+<<<<<<< HEAD
             gTests[i].fWidth, gTests[i].fHeight,
             gTests[i].fExpectedToDraw);
+=======
+                                gTests[i].fWidth, gTests[i].fHeight,
+                                gTests[i].fExpectedToDraw);
+>>>>>>> miniblink49
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 static void test_nan_antihair()
 {
+=======
+static void test_nan_antihair() {
+>>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(20, 20);
 
@@ -277,8 +420,12 @@ static void test_nan_antihair()
     canvas.drawPath(path, paint);
 }
 
+<<<<<<< HEAD
 static bool check_for_all_zeros(const SkBitmap& bm)
 {
+=======
+static bool check_for_all_zeros(const SkBitmap& bm) {
+>>>>>>> miniblink49
     SkAutoLockPixels alp(bm);
 
     size_t count = bm.width() * bm.bytesPerPixel();
@@ -296,14 +443,22 @@ static bool check_for_all_zeros(const SkBitmap& bm)
 static const int gWidth = 256;
 static const int gHeight = 256;
 
+<<<<<<< HEAD
 static void create(SkBitmap* bm, SkColor color)
 {
+=======
+static void create(SkBitmap* bm, SkColor color) {
+>>>>>>> miniblink49
     bm->allocN32Pixels(gWidth, gHeight);
     bm->eraseColor(color);
 }
 
+<<<<<<< HEAD
 DEF_TEST(DrawBitmapRect, reporter)
 {
+=======
+DEF_TEST(DrawBitmapRect, reporter) {
+>>>>>>> miniblink49
     SkBitmap src, dst;
 
     create(&src, 0xFFFFFFFF);
@@ -312,9 +467,15 @@ DEF_TEST(DrawBitmapRect, reporter)
     SkCanvas canvas(dst);
 
     SkIRect srcR = { gWidth, 0, gWidth + 16, 16 };
+<<<<<<< HEAD
     SkRect dstR = { 0, 0, SkIntToScalar(16), SkIntToScalar(16) };
 
     canvas.drawBitmapRect(src, srcR, dstR, nullptr);
+=======
+    SkRect  dstR = { 0, 0, SkIntToScalar(16), SkIntToScalar(16) };
+
+    canvas.drawBitmapRect(src, &srcR, dstR, NULL);
+>>>>>>> miniblink49
 
     // ensure that we draw nothing if srcR does not intersect the bitmap
     REPORTER_ASSERT(reporter, check_for_all_zeros(dst));

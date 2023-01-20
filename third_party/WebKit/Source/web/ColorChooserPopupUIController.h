@@ -28,6 +28,10 @@
 
 #include "core/page/PagePopupClient.h"
 #include "web/ColorChooserUIController.h"
+<<<<<<< HEAD
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -35,6 +39,7 @@ class ChromeClientImpl;
 class ColorChooserClient;
 class PagePopup;
 
+<<<<<<< HEAD
 class ColorChooserPopupUIController final : public ColorChooserUIController,
                                             public PagePopupClient {
     USING_PRE_FINALIZER(ColorChooserPopupUIController, dispose);
@@ -49,6 +54,17 @@ public:
 
     ~ColorChooserPopupUIController() override;
     DECLARE_VIRTUAL_TRACE();
+=======
+class ColorChooserPopupUIController final : public ColorChooserUIController, public PagePopupClient  {
+
+public:
+    static PassOwnPtrWillBeRawPtr<ColorChooserPopupUIController> create(LocalFrame* frame, ChromeClientImpl* chromeClient, ColorChooserClient* client)
+    {
+        return adoptPtrWillBeNoop(new ColorChooserPopupUIController(frame, chromeClient, client));
+    }
+
+    ~ColorChooserPopupUIController() override;
+>>>>>>> miniblink49
 
     // ColorChooserUIController functions:
     void openUI() override;
@@ -58,6 +74,10 @@ public:
     AXObject* rootAXObject() override;
 
     // PagePopupClient functions:
+<<<<<<< HEAD
+=======
+    IntSize contentSize() override;
+>>>>>>> miniblink49
     void writeDocument(SharedBuffer*) override;
     void selectFontsFromOwnerDocument(Document&) override { }
     Locale& locale() override;
@@ -68,6 +88,7 @@ public:
     void didClosePopup() override;
 
 private:
+<<<<<<< HEAD
     ColorChooserPopupUIController(LocalFrame*,
         ChromeClientImpl*,
         ColorChooserClient*);
@@ -76,6 +97,13 @@ private:
     void dispose();
 
     Member<ChromeClientImpl> m_chromeClient;
+=======
+    ColorChooserPopupUIController(LocalFrame*, ChromeClientImpl*, ColorChooserClient*);
+
+    void openPopup();
+
+    ChromeClientImpl* m_chromeClient;
+>>>>>>> miniblink49
     PagePopup* m_popup;
     Locale& m_locale;
 };

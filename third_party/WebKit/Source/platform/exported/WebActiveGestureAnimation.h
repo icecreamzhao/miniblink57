@@ -27,15 +27,22 @@
 #define WebActiveGestureAnimation_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include <memory>
+=======
+#include "wtf/Noncopyable.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WebGestureCurve;
 class WebGestureCurveTarget;
 
+<<<<<<< HEAD
 // Implements a gesture animation (fling scroll, etc.) using a curve with a
 // generic interface to define the animation parameters as a function of time,
 // and applies the animation to a target, again via a generic interface. It is
@@ -53,12 +60,24 @@ public:
         std::unique_ptr<WebGestureCurve>,
         WebGestureCurveTarget*,
         double startTime);
+=======
+// Implements a gesture animation (fling scroll, etc.) using a curve with a generic interface
+// to define the animation parameters as a function of time, and applies the animation
+// to a target, again via a generic interface. It is assumed that animate() is called
+// on a more-or-less regular basis by the owner.
+class PLATFORM_EXPORT WebActiveGestureAnimation {
+    WTF_MAKE_NONCOPYABLE(WebActiveGestureAnimation);
+public:
+    static PassOwnPtr<WebActiveGestureAnimation> createAtAnimationStart(PassOwnPtr<WebGestureCurve>, WebGestureCurveTarget*);
+    static PassOwnPtr<WebActiveGestureAnimation> createWithTimeOffset(PassOwnPtr<WebGestureCurve>, WebGestureCurveTarget*, double startTime);
+>>>>>>> miniblink49
     ~WebActiveGestureAnimation();
 
     bool animate(double time);
 
 private:
     // Assumes a valid WebGestureCurveTarget that outlives the animation.
+<<<<<<< HEAD
     WebActiveGestureAnimation(std::unique_ptr<WebGestureCurve>,
         WebGestureCurveTarget*,
         double startTime,
@@ -67,6 +86,13 @@ private:
     double m_startTime;
     bool m_waitingForFirstTick;
     std::unique_ptr<WebGestureCurve> m_curve;
+=======
+    WebActiveGestureAnimation(PassOwnPtr<WebGestureCurve>, WebGestureCurveTarget*, double startTime, bool waitingForFirstTick);
+
+    double m_startTime;
+    bool m_waitingForFirstTick;
+    OwnPtr<WebGestureCurve> m_curve;
+>>>>>>> miniblink49
     WebGestureCurveTarget* m_target;
 };
 

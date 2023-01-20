@@ -28,12 +28,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "public/web/linux/WebFontRendering.h"
 
 #include "core/layout/LayoutThemeFontProvider.h"
 #include "platform/fonts/FontCache.h"
 #include "platform/fonts/FontDescription.h"
 #include "platform/fonts/linux/FontRenderStyle.h"
+=======
+#include "config.h"
+#include "public/web/linux/WebFontRendering.h"
+
+#include "core/layout/LayoutThemeFontProvider.h"
+#include "platform/fonts/FontDescription.h"
+#include "platform/fonts/FontPlatformData.h"
+>>>>>>> miniblink49
 
 using blink::FontDescription;
 using blink::FontPlatformData;
@@ -41,6 +50,7 @@ using blink::FontPlatformData;
 namespace blink {
 
 // static
+<<<<<<< HEAD
 void WebFontRendering::setSkiaFontManager(sk_sp<SkFontMgr> fontMgr)
 {
     FontCache::setFontManager(std::move(fontMgr));
@@ -50,30 +60,51 @@ void WebFontRendering::setSkiaFontManager(sk_sp<SkFontMgr> fontMgr)
 void WebFontRendering::setHinting(SkPaint::Hinting hinting)
 {
     FontRenderStyle::setHinting(hinting);
+=======
+void WebFontRendering::setHinting(SkPaint::Hinting hinting)
+{
+    FontPlatformData::setHinting(hinting);
+>>>>>>> miniblink49
 }
 
 // static
 void WebFontRendering::setAutoHint(bool useAutoHint)
 {
+<<<<<<< HEAD
     FontRenderStyle::setAutoHint(useAutoHint);
+=======
+    FontPlatformData::setAutoHint(useAutoHint);
+>>>>>>> miniblink49
 }
 
 // static
 void WebFontRendering::setUseBitmaps(bool useBitmaps)
 {
+<<<<<<< HEAD
     FontRenderStyle::setUseBitmaps(useBitmaps);
+=======
+    FontPlatformData::setUseBitmaps(useBitmaps);
+>>>>>>> miniblink49
 }
 
 // static
 void WebFontRendering::setAntiAlias(bool useAntiAlias)
 {
+<<<<<<< HEAD
     FontRenderStyle::setAntiAlias(useAntiAlias);
+=======
+    FontPlatformData::setAntiAlias(useAntiAlias);
+>>>>>>> miniblink49
 }
 
 // static
 void WebFontRendering::setSubpixelRendering(bool useSubpixelRendering)
 {
+<<<<<<< HEAD
     FontRenderStyle::setSubpixelRendering(useSubpixelRendering);
+=======
+    FontPlatformData::setSubpixelRendering(useSubpixelRendering);
+>>>>>>> miniblink49
 }
 
 // static
@@ -83,15 +114,33 @@ void WebFontRendering::setSubpixelPositioning(bool useSubpixelPositioning)
 }
 
 // static
+<<<<<<< HEAD
+=======
+void WebFontRendering::setLCDOrder(SkFontHost::LCDOrder order)
+{
+    SkFontHost::SetSubpixelOrder(order);
+}
+
+// static
+void WebFontRendering::setLCDOrientation(SkFontHost::LCDOrientation orientation)
+{
+    SkFontHost::SetSubpixelOrientation(orientation);
+}
+
+// static
+>>>>>>> miniblink49
 void WebFontRendering::setDefaultFontSize(int size)
 {
     LayoutThemeFontProvider::setDefaultFontSize(size);
 }
 
+<<<<<<< HEAD
 // static
 void WebFontRendering::setSystemFontFamily(const WebString& name)
 {
     FontCache::setSystemFontFamily(name);
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

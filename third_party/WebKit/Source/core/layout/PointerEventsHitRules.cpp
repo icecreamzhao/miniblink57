@@ -17,6 +17,7 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "config.h"
 #include "core/layout/PointerEventsHitRules.h"
 
 #include "wtf/Assertions.h"
@@ -27,12 +28,9 @@ struct SameSizeAsPointerEventsHitRules {
     unsigned bitfields;
 };
 
-static_assert(sizeof(PointerEventsHitRules) <= sizeof(SameSizeAsPointerEventsHitRules),
-    "PointerEventsHitRules should stay small");
+static_assert(sizeof(PointerEventsHitRules) <= sizeof(SameSizeAsPointerEventsHitRules), "PointerEventsHitRules should stay small");
 
-PointerEventsHitRules::PointerEventsHitRules(EHitTesting hitTesting,
-    const HitTestRequest& request,
-    EPointerEvents pointerEvents)
+PointerEventsHitRules::PointerEventsHitRules(EHitTesting hitTesting, const HitTestRequest& request, EPointerEvents pointerEvents)
     : requireVisible(false)
     , requireFill(false)
     , requireStroke(false)
@@ -41,88 +39,86 @@ PointerEventsHitRules::PointerEventsHitRules(EHitTesting hitTesting,
     , canHitBoundingBox(false)
 {
     if (request.svgClipContent())
-        pointerEvents = EPointerEvents::kFill;
+        pointerEvents = PE_FILL;
 
     if (hitTesting == SVG_GEOMETRY_HITTESTING) {
         switch (pointerEvents) {
-        case EPointerEvents::kBoundingBox:
+        case PE_BOUNDINGBOX:
             canHitBoundingBox = true;
             break;
-        case EPointerEvents::kVisiblePainted:
-        case EPointerEvents::kAuto: // "auto" is like "visiblePainted" when in
-            // SVG content
+        case PE_VISIBLE_PAINTED:
+        case PE_AUTO: // "auto" is like "visiblePainted" when in SVG content
             requireFill = true;
             requireStroke = true;
-        case EPointerEvents::kVisible:
+        case PE_VISIBLE:
             requireVisible = true;
             canHitFill = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kVisibleFill:
+        case PE_VISIBLE_FILL:
             requireVisible = true;
             canHitFill = true;
             break;
-        case EPointerEvents::kVisibleStroke:
+        case PE_VISIBLE_STROKE:
             requireVisible = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kPainted:
+        case PE_PAINTED:
             requireFill = true;
             requireStroke = true;
-        case EPointerEvents::kAll:
+        case PE_ALL:
             canHitFill = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kFill:
+        case PE_FILL:
             canHitFill = true;
             break;
-        case EPointerEvents::kStroke:
+        case PE_STROKE:
             canHitStroke = true;
             break;
-        case EPointerEvents::kNone:
+        case PE_NONE:
             // nothing to do here, defaults are all false.
             break;
         }
     } else {
         switch (pointerEvents) {
-        case EPointerEvents::kBoundingBox:
+        case PE_BOUNDINGBOX:
             canHitBoundingBox = true;
             break;
-        case EPointerEvents::kVisiblePainted:
-        case EPointerEvents::kAuto: // "auto" is like "visiblePainted" when in
-            // SVG content
+        case PE_VISIBLE_PAINTED:
+        case PE_AUTO: // "auto" is like "visiblePainted" when in SVG content
             requireVisible = true;
             requireFill = true;
             requireStroke = true;
             canHitFill = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kVisibleFill:
-        case EPointerEvents::kVisibleStroke:
-        case EPointerEvents::kVisible:
+        case PE_VISIBLE_FILL:
+        case PE_VISIBLE_STROKE:
+        case PE_VISIBLE:
             requireVisible = true;
             canHitFill = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kPainted:
+        case PE_PAINTED:
             requireFill = true;
             requireStroke = true;
             canHitFill = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kFill:
-        case EPointerEvents::kStroke:
-        case EPointerEvents::kAll:
+        case PE_FILL:
+        case PE_STROKE:
+        case PE_ALL:
             canHitFill = true;
             canHitStroke = true;
             break;
-        case EPointerEvents::kNone:
+        case PE_NONE:
             // nothing to do here, defaults are all false.
             break;
         }
     }
 }
 
-} // namespace blink
+}
 
 // vim:ts=4:noet

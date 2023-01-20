@@ -23,6 +23,7 @@ public:
     Path2D(SkPath* path);
     virtual ~Path2D();
 
+<<<<<<< HEAD
     static void AddToGlobal(Global* global)
     {
         gGlobal = global;
@@ -35,6 +36,17 @@ public:
 
     SkPath* path()
     {
+=======
+    static void AddToGlobal(Global* global) {
+        gGlobal = global;
+    }
+
+    v8::Persistent<v8::Object>& persistent() {
+        return handle_;
+    }
+
+    SkPath* path() {
+>>>>>>> miniblink49
         return path_;
     }
 

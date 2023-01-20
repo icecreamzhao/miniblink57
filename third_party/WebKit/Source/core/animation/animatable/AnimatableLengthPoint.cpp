@@ -28,20 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableLengthPoint.h"
 
 namespace blink {
 
-bool AnimatableLengthPoint::usesDefaultInterpolationWith(
-    const AnimatableValue* value) const
-{
-    const AnimatableLengthPoint* other = toAnimatableLengthPoint(value);
-    return this->x()->isUnknown() || other->x()->isUnknown();
-}
-
-PassRefPtr<AnimatableValue> AnimatableLengthPoint::interpolateTo(
-    const AnimatableValue* value,
-    double fraction) const
+PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableLengthPoint::interpolateTo(const AnimatableValue* value, double fraction) const
 {
     const AnimatableLengthPoint* lengthPoint = toAnimatableLengthPoint(value);
     return AnimatableLengthPoint::create(
@@ -55,4 +47,11 @@ bool AnimatableLengthPoint::equalTo(const AnimatableValue* value) const
     return x()->equals(lengthPoint->x()) && y()->equals(lengthPoint->y());
 }
 
-} // namespace blink
+DEFINE_TRACE(AnimatableLengthPoint)
+{
+    visitor->trace(m_x);
+    visitor->trace(m_y);
+    AnimatableValue::trace(visitor);
+}
+
+}

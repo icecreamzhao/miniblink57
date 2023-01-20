@@ -12,16 +12,26 @@
 #include "SkString.h"
 #include "SkTime.h"
 
+<<<<<<< HEAD
 DEFINE_string2(tmpDir, t, nullptr, "Temp directory to use.");
 
 void skiatest::Reporter::bumpTestCount() { }
+=======
+DEFINE_string2(tmpDir, t, NULL, "Temp directory to use.");
+
+void skiatest::Reporter::bumpTestCount() {}
+>>>>>>> miniblink49
 
 bool skiatest::Reporter::allowExtendedTest() const { return false; }
 
 bool skiatest::Reporter::verbose() const { return false; }
 
+<<<<<<< HEAD
 SkString skiatest::Failure::toString() const
 {
+=======
+SkString skiatest::Failure::toString() const {
+>>>>>>> miniblink49
     SkString result = SkStringPrintf("%s:%d\t", this->fileName, this->lineNo);
     if (!this->message.isEmpty()) {
         result.append(this->message);
@@ -33,6 +43,7 @@ SkString skiatest::Failure::toString() const
     return result;
 }
 
+<<<<<<< HEAD
 SkString skiatest::GetTmpDir()
 {
     const char* tmpDir = FLAGS_tmpDir.isEmpty() ? nullptr : FLAGS_tmpDir[0];
@@ -57,3 +68,9 @@ SkMSec skiatest::Timer::elapsedMsInt() const
     SkASSERT(SK_MSecMax >= elapsedMs);
     return static_cast<SkMSec>(elapsedMs);
 }
+=======
+SkString skiatest::GetTmpDir() {
+    const char* tmpDir = FLAGS_tmpDir.isEmpty() ? NULL : FLAGS_tmpDir[0];
+    return SkString(tmpDir);
+}
+>>>>>>> miniblink49

@@ -28,10 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/css/CSSAnimatableValueFactory.h"
 
 #include "core/CSSValueKeywords.h"
-#include "core/animation/LengthPropertyFunctions.h"
 #include "core/animation/animatable/AnimatableClipPathOperation.h"
 #include "core/animation/animatable/AnimatableColor.h"
 #include "core/animation/animatable/AnimatableDouble.h"
@@ -44,7 +44,6 @@
 #include "core/animation/animatable/AnimatableLengthPoint.h"
 #include "core/animation/animatable/AnimatableLengthPoint3D.h"
 #include "core/animation/animatable/AnimatableLengthSize.h"
-#include "core/animation/animatable/AnimatablePath.h"
 #include "core/animation/animatable/AnimatableRepeatable.h"
 #include "core/animation/animatable/AnimatableSVGPaint.h"
 #include "core/animation/animatable/AnimatableShadow.h"
@@ -54,7 +53,6 @@
 #include "core/animation/animatable/AnimatableUnknown.h"
 #include "core/animation/animatable/AnimatableVisibility.h"
 #include "core/css/CSSCalculationValue.h"
-#include "core/css/CSSIdentifierValue.h"
 #include "core/css/CSSPrimitiveValue.h"
 #include "core/css/CSSPrimitiveValueMappings.h"
 #include "core/css/CSSPropertyMetadata.h"
@@ -65,9 +63,7 @@
 
 namespace blink {
 
-static PassRefPtr<AnimatableValue> createFromLengthWithZoom(
-    const Length& length,
-    float zoom)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLengthWithZoom(const Length& length, float zoom)
 {
     switch (length.type()) {
     case Fixed:
@@ -75,49 +71,36 @@ static PassRefPtr<AnimatableValue> createFromLengthWithZoom(
     case Calculated:
         return AnimatableLength::create(length, zoom);
     case Auto:
+    case Intrinsic:
+    case MinIntrinsic:
     case MinContent:
     case MaxContent:
     case FillAvailable:
     case FitContent:
-        return AnimatableUnknown::create(CSSValue::create(length, 1));
+        return AnimatableUnknown::create(CSSPrimitiveValue::create(length, 1));
     case MaxSizeNone:
         return AnimatableUnknown::create(CSSValueNone);
     case ExtendToZoom: // Does not apply to elements.
     case DeviceWidth:
     case DeviceHeight:
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return nullptr;
     }
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return nullptr;
 }
 
-static PassRefPtr<AnimatableValue> createFromLength(
-    const Length& length,
-    const ComputedStyle& style)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLength(const Length& length, const ComputedStyle& style)
 {
     return createFromLengthWithZoom(length, style.effectiveZoom());
 }
 
-static PassRefPtr<AnimatableValue> createFromPropertyLength(
-    CSSPropertyID property,
-    const ComputedStyle& style)
-{
-    Length length;
-    bool success = LengthPropertyFunctions::getLength(property, style, length);
-    DCHECK(success);
-    return createFromLength(length, style);
-}
-
-static PassRefPtr<AnimatableValue> createFromUnzoomedLength(
-    const UnzoomedLength& unzoomedLength)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromUnzoomedLength(const UnzoomedLength& unzoomedLength)
 {
     return createFromLengthWithZoom(unzoomedLength.length(), 1);
 }
 
-static PassRefPtr<AnimatableValue> createFromLineHeight(
-    const Length& length,
-    const ComputedStyle& style)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLineHeight(const Length& length, const ComputedStyle& style)
 {
     if (length.type() == Percent) {
         double value = length.value();
@@ -129,14 +112,12 @@ static PassRefPtr<AnimatableValue> createFromLineHeight(
     return createFromLength(length, style);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromDouble(double value)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromDouble(double value, AnimatableDouble::Constraint constraint = AnimatableDouble::Unconstrained)
 {
-    return AnimatableDouble::create(value);
+    return AnimatableDouble::create(value, constraint);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromLengthBox(
-    const LengthBox& lengthBox,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLengthBox(const LengthBox& lengthBox, const ComputedStyle& style)
 {
     return AnimatableLengthBox::create(
         createFromLength(lengthBox.left(), style),
@@ -145,18 +126,14 @@ inline static PassRefPtr<AnimatableValue> createFromLengthBox(
         createFromLength(lengthBox.bottom(), style));
 }
 
-static PassRefPtr<AnimatableValue> createFromBorderImageLength(
-    const BorderImageLength& borderImageLength,
-    const ComputedStyle& style)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromBorderImageLength(const BorderImageLength& borderImageLength, const ComputedStyle& style)
 {
     if (borderImageLength.isNumber())
         return createFromDouble(borderImageLength.number());
     return createFromLength(borderImageLength.length(), style);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromBorderImageLengthBox(
-    const BorderImageLengthBox& borderImageLengthBox,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromBorderImageLengthBox(const BorderImageLengthBox& borderImageLengthBox, const ComputedStyle& style)
 {
     return AnimatableLengthBox::create(
         createFromBorderImageLength(borderImageLengthBox.left(), style),
@@ -165,64 +142,50 @@ inline static PassRefPtr<AnimatableValue> createFromBorderImageLengthBox(
         createFromBorderImageLength(borderImageLengthBox.bottom(), style));
 }
 
-inline static PassRefPtr<AnimatableValue> createFromLengthBoxAndBool(
-    const LengthBox lengthBox,
-    const bool flag,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLengthBoxAndBool(const LengthBox lengthBox, const bool flag, const ComputedStyle& style)
 {
     return AnimatableLengthBoxAndBool::create(
-        createFromLengthBox(lengthBox, style), flag);
+        createFromLengthBox(lengthBox, style),
+        flag);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromDoubleAndBool(
-    double number,
-    const bool flag,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromDoubleAndBool(double number, const bool flag, const ComputedStyle& style)
 {
     return AnimatableDoubleAndBool::create(number, flag);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromLengthPoint(
-    const LengthPoint& lengthPoint,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLengthPoint(const LengthPoint& lengthPoint, const ComputedStyle& style)
 {
     return AnimatableLengthPoint::create(
         createFromLength(lengthPoint.x(), style),
         createFromLength(lengthPoint.y(), style));
 }
 
-inline static PassRefPtr<AnimatableValue> createFromTransformOrigin(
-    const TransformOrigin& transformOrigin,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromTransformOrigin(const TransformOrigin& transformOrigin, const ComputedStyle& style)
 {
     return AnimatableLengthPoint3D::create(
         createFromLength(transformOrigin.x(), style),
         createFromLength(transformOrigin.y(), style),
-        createFromLength(Length(transformOrigin.z(), Fixed), style));
+        createFromDouble(transformOrigin.z()));
 }
 
-inline static PassRefPtr<AnimatableValue> createFromLengthSize(
-    const LengthSize& lengthSize,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromLengthSize(const LengthSize& lengthSize, const ComputedStyle& style)
 {
     return AnimatableLengthSize::create(
         createFromLength(lengthSize.width(), style),
         createFromLength(lengthSize.height(), style));
 }
 
-inline static PassRefPtr<AnimatableValue> createFromStyleImage(
-    StyleImage* image)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromStyleImage(StyleImage* image)
 {
     if (image) {
-        if (CSSValue* cssValue = image->cssValue())
-            return AnimatableImage::create(cssValue);
+        if (RefPtrWillBeRawPtr<CSSValue> cssValue = image->cssValue())
+            return AnimatableImage::create(cssValue.release());
     }
     return AnimatableUnknown::create(CSSValueNone);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromFillSize(
-    const FillSize& fillSize,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromFillSize(const FillSize& fillSize, const ComputedStyle& style)
 {
     switch (fillSize.type) {
     case SizeLength:
@@ -230,80 +193,60 @@ inline static PassRefPtr<AnimatableValue> createFromFillSize(
     case Contain:
     case Cover:
     case SizeNone:
-        return AnimatableUnknown::create(
-            CSSIdentifierValue::create(fillSize.type));
+        return AnimatableUnknown::create(CSSPrimitiveValue::create(fillSize.type));
     default:
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return nullptr;
     }
 }
 
-inline static PassRefPtr<AnimatableValue> createFromBackgroundPosition(
-    const Length& length,
-    bool originIsSet,
-    BackgroundEdgeOrigin origin,
-    const ComputedStyle& style)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromBackgroundPosition(const Length& length, bool originIsSet, BackgroundEdgeOrigin origin, const ComputedStyle& style)
 {
     if (!originIsSet || origin == LeftEdge || origin == TopEdge)
         return createFromLength(length, style);
     return createFromLength(length.subtractFromOneHundredPercent(), style);
 }
 
-template <CSSPropertyID property>
-inline static PassRefPtr<AnimatableValue> createFromFillLayers(
-    const FillLayer& fillLayers,
-    const ComputedStyle& style)
+template<CSSPropertyID property>
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromFillLayers(const FillLayer& fillLayers, const ComputedStyle& style)
 {
-    Vector<RefPtr<AnimatableValue>> values;
-    for (const FillLayer* fillLayer = &fillLayers; fillLayer;
-         fillLayer = fillLayer->next()) {
+    WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>> values;
+    for (const FillLayer* fillLayer = &fillLayers; fillLayer; fillLayer = fillLayer->next()) {
         if (property == CSSPropertyBackgroundImage || property == CSSPropertyWebkitMaskImage) {
             if (!fillLayer->isImageSet())
                 break;
-            values.push_back(createFromStyleImage(fillLayer->image()));
+            values.append(createFromStyleImage(fillLayer->image()));
         } else if (property == CSSPropertyBackgroundPositionX || property == CSSPropertyWebkitMaskPositionX) {
             if (!fillLayer->isXPositionSet())
                 break;
-            values.push_back(createFromBackgroundPosition(
-                fillLayer->xPosition(), fillLayer->isBackgroundXOriginSet(),
-                fillLayer->backgroundXOrigin(), style));
+            values.append(createFromBackgroundPosition(fillLayer->xPosition(), fillLayer->isBackgroundXOriginSet(), fillLayer->backgroundXOrigin(), style));
         } else if (property == CSSPropertyBackgroundPositionY || property == CSSPropertyWebkitMaskPositionY) {
             if (!fillLayer->isYPositionSet())
                 break;
-            values.push_back(createFromBackgroundPosition(
-                fillLayer->yPosition(), fillLayer->isBackgroundYOriginSet(),
-                fillLayer->backgroundYOrigin(), style));
+            values.append(createFromBackgroundPosition(fillLayer->yPosition(), fillLayer->isBackgroundYOriginSet(), fillLayer->backgroundYOrigin(), style));
         } else if (property == CSSPropertyBackgroundSize || property == CSSPropertyWebkitMaskSize) {
             if (!fillLayer->isSizeSet())
                 break;
-            values.push_back(createFromFillSize(fillLayer->size(), style));
+            values.append(createFromFillSize(fillLayer->size(), style));
         } else {
-            NOTREACHED();
+            ASSERT_NOT_REACHED();
         }
     }
     return AnimatableRepeatable::create(values);
 }
 
-PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::createFromColor(
-    CSSPropertyID property,
-    const ComputedStyle& style)
+PassRefPtrWillBeRawPtr<AnimatableValue> CSSAnimatableValueFactory::createFromColor(CSSPropertyID property, const ComputedStyle& style)
 {
     Color color = style.colorIncludingFallback(property, false);
     Color visitedLinkColor = style.colorIncludingFallback(property, true);
     return AnimatableColor::create(color, visitedLinkColor);
 }
 
-inline static PassRefPtr<AnimatableValue> createFromShapeValue(
-    ShapeValue* value)
+inline static PassRefPtrWillBeRawPtr<AnimatableValue> createFromShapeValue(ShapeValue* value)
 {
     if (value)
         return AnimatableShapeValue::create(value);
     return AnimatableUnknown::create(CSSValueNone);
-}
-
-static PassRefPtr<AnimatableValue> createFromPath(StylePath* path)
-{
-    return AnimatablePath::create(path);
 }
 
 static double fontStretchToDouble(FontStretch fontStretch)
@@ -311,20 +254,16 @@ static double fontStretchToDouble(FontStretch fontStretch)
     return static_cast<unsigned>(fontStretch);
 }
 
-static PassRefPtr<AnimatableValue> createFromFontStretch(
-    FontStretch fontStretch)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromFontStretch(FontStretch fontStretch)
 {
     return createFromDouble(fontStretchToDouble(fontStretch));
 }
 
-static PassRefPtr<AnimatableValue> createFromTransformProperties(
-    PassRefPtr<TransformOperation> transform,
-    double zoom,
-    PassRefPtr<TransformOperation> initialTransform)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromTransformProperties(PassRefPtr<TransformOperation> transform, PassRefPtr<TransformOperation> initialTransform)
 {
     TransformOperations operation;
-    operation.operations().push_back(transform ? transform : initialTransform);
-    return AnimatableTransform::create(operation, transform ? zoom : 1);
+    operation.operations().append(transform ? transform : initialTransform);
+    return AnimatableTransform::create(operation);
 }
 
 static double fontWeightToDouble(FontWeight fontWeight)
@@ -350,11 +289,11 @@ static double fontWeightToDouble(FontWeight fontWeight)
         return 900;
     }
 
-    NOTREACHED();
+    ASSERT_NOT_REACHED();
     return 400;
 }
 
-static PassRefPtr<AnimatableValue> createFromFontWeight(FontWeight fontWeight)
+static PassRefPtrWillBeRawPtr<AnimatableValue> createFromFontWeight(FontWeight fontWeight)
 {
     return createFromDouble(fontWeightToDouble(fontWeight));
 }
@@ -363,38 +302,30 @@ static SVGPaintType normalizeSVGPaintType(SVGPaintType paintType)
 {
     // If the <paint> is 'currentColor', then create an AnimatableSVGPaint with
     // a <rgbcolor> type. This is similar in vein to the handling of colors.
-    return paintType == SVG_PAINTTYPE_CURRENTCOLOR ? SVG_PAINTTYPE_RGBCOLOR
-                                                   : paintType;
+    return paintType == SVG_PAINTTYPE_CURRENTCOLOR ? SVG_PAINTTYPE_RGBCOLOR : paintType;
 }
 
-PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
-    CSSPropertyID property,
-    const ComputedStyle& style)
+// FIXME: Generate this function.
+PassRefPtrWillBeRawPtr<AnimatableValue> CSSAnimatableValueFactory::create(CSSPropertyID property, const ComputedStyle& style)
 {
-    DCHECK(CSSPropertyMetadata::isInterpolableProperty(property));
+    ASSERT(CSSPropertyMetadata::isInterpolableProperty(property));
     switch (property) {
     case CSSPropertyBackgroundColor:
         return createFromColor(property, style);
     case CSSPropertyBackgroundImage:
-        return createFromFillLayers<CSSPropertyBackgroundImage>(
-            style.backgroundLayers(), style);
+        return createFromFillLayers<CSSPropertyBackgroundImage>(style.backgroundLayers(), style);
     case CSSPropertyBackgroundPositionX:
-        return createFromFillLayers<CSSPropertyBackgroundPositionX>(
-            style.backgroundLayers(), style);
+        return createFromFillLayers<CSSPropertyBackgroundPositionX>(style.backgroundLayers(), style);
     case CSSPropertyBackgroundPositionY:
-        return createFromFillLayers<CSSPropertyBackgroundPositionY>(
-            style.backgroundLayers(), style);
+        return createFromFillLayers<CSSPropertyBackgroundPositionY>(style.backgroundLayers(), style);
     case CSSPropertyBackgroundSize:
-        return createFromFillLayers<CSSPropertyBackgroundSize>(
-            style.backgroundLayers(), style);
+        return createFromFillLayers<CSSPropertyBackgroundSize>(style.backgroundLayers(), style);
     case CSSPropertyBaselineShift:
         switch (style.svgStyle().baselineShift()) {
         case BS_SUPER:
-            return AnimatableUnknown::create(
-                CSSIdentifierValue::create(CSSValueSuper));
+            return AnimatableUnknown::create(CSSPrimitiveValue::createIdentifier(CSSValueSuper));
         case BS_SUB:
-            return AnimatableUnknown::create(
-                CSSIdentifierValue::create(CSSValueSub));
+            return AnimatableUnknown::create(CSSPrimitiveValue::createIdentifier(CSSValueSub));
         default:
             return createFromLength(style.baselineShiftValue(), style);
         }
@@ -405,12 +336,11 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyBorderBottomRightRadius:
         return createFromLengthSize(style.borderBottomRightRadius(), style);
     case CSSPropertyBorderBottomWidth:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.borderBottomWidth());
     case CSSPropertyBorderImageOutset:
         return createFromBorderImageLengthBox(style.borderImageOutset(), style);
     case CSSPropertyBorderImageSlice:
-        return createFromLengthBoxAndBool(style.borderImageSlices(),
-            style.borderImageSlicesFill(), style);
+        return createFromLengthBoxAndBool(style.borderImageSlices(), style.borderImageSlicesFill(), style);
     case CSSPropertyBorderImageSource:
         return createFromStyleImage(style.borderImageSource());
     case CSSPropertyBorderImageWidth:
@@ -418,11 +348,11 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyBorderLeftColor:
         return createFromColor(property, style);
     case CSSPropertyBorderLeftWidth:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.borderLeftWidth());
     case CSSPropertyBorderRightColor:
         return createFromColor(property, style);
     case CSSPropertyBorderRightWidth:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.borderRightWidth());
     case CSSPropertyBorderTopColor:
         return createFromColor(property, style);
     case CSSPropertyBorderTopLeftRadius:
@@ -430,39 +360,28 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyBorderTopRightRadius:
         return createFromLengthSize(style.borderTopRightRadius(), style);
     case CSSPropertyBorderTopWidth:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.borderTopWidth());
     case CSSPropertyBottom:
         return createFromLength(style.bottom(), style);
     case CSSPropertyBoxShadow:
         return AnimatableShadow::create(style.boxShadow(), style.color());
     case CSSPropertyClip:
-        if (style.hasAutoClip()) {
-            return AnimatableUnknown::create(
-                CSSIdentifierValue::create(CSSValueAuto));
-        }
+        if (style.hasAutoClip())
+            return AnimatableUnknown::create(CSSPrimitiveValue::create(CSSValueAuto));
         return createFromLengthBox(style.clip(), style);
-    case CSSPropertyCaretColor:
-        if (style.caretColor().isAutoColor()) {
-            return AnimatableUnknown::create(
-                CSSIdentifierValue::create(CSSValueAuto));
-        }
-        return createFromColor(property, style);
     case CSSPropertyColor:
         return createFromColor(property, style);
     case CSSPropertyFillOpacity:
         return createFromDouble(style.fillOpacity());
     case CSSPropertyFill:
         return AnimatableSVGPaint::create(
-            normalizeSVGPaintType(style.svgStyle().fillPaintType()),
-            normalizeSVGPaintType(style.svgStyle().visitedLinkFillPaintType()),
-            style.svgStyle().fillPaintColor(),
-            style.svgStyle().visitedLinkFillPaintColor(),
-            style.svgStyle().fillPaintUri(),
-            style.svgStyle().visitedLinkFillPaintUri());
+            normalizeSVGPaintType(style.svgStyle().fillPaintType()), normalizeSVGPaintType(style.svgStyle().visitedLinkFillPaintType()),
+            style.svgStyle().fillPaintColor(), style.svgStyle().visitedLinkFillPaintColor(),
+            style.svgStyle().fillPaintUri(), style.svgStyle().visitedLinkFillPaintUri());
     case CSSPropertyFlexGrow:
-        return createFromDouble(style.flexGrow());
+        return createFromDouble(style.flexGrow(), AnimatableDouble::InterpolationIsNonContinuousWithZero);
     case CSSPropertyFlexShrink:
-        return createFromDouble(style.flexShrink());
+        return createFromDouble(style.flexShrink(), AnimatableDouble::InterpolationIsNonContinuousWithZero);
     case CSSPropertyFlexBasis:
         return createFromLength(style.flexBasis(), style);
     case CSSPropertyFloodColor:
@@ -470,17 +389,13 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyFloodOpacity:
         return createFromDouble(style.floodOpacity());
     case CSSPropertyFontSize:
-        // Must pass a specified size to setFontSize if Text Autosizing is
-        // enabled, but a computed size if text zoom is enabled (if neither is
-        // enabled it's irrelevant as they're probably the same).
-        // FIXME: Should we introduce an option to pass the computed font size
-        // here, allowing consumers to enable text zoom rather than Text
-        // Autosizing? See http://crbug.com/227545.
+        // Must pass a specified size to setFontSize if Text Autosizing is enabled, but a computed size
+        // if text zoom is enabled (if neither is enabled it's irrelevant as they're probably the same).
+        // FIXME: Should we introduce an option to pass the computed font size here, allowing consumers to
+        // enable text zoom rather than Text Autosizing? See http://crbug.com/227545.
         return createFromDouble(style.specifiedFontSize());
     case CSSPropertyFontSizeAdjust:
-        return style.hasFontSizeAdjust()
-            ? createFromDouble(style.fontSizeAdjust())
-            : AnimatableUnknown::create(CSSValueNone);
+        return style.hasFontSizeAdjust() ? createFromDouble(style.fontSizeAdjust()) : AnimatableUnknown::create(CSSValueNone);
     case CSSPropertyFontStretch:
         return createFromFontStretch(style.fontStretch());
     case CSSPropertyFontWeight:
@@ -494,7 +409,7 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyLeft:
         return createFromLength(style.left(), style);
     case CSSPropertyLetterSpacing:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.letterSpacing());
     case CSSPropertyLineHeight:
         return createFromLineHeight(style.specifiedLineHeight(), style);
     case CSSPropertyMarginBottom:
@@ -522,9 +437,9 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyOutlineColor:
         return createFromColor(property, style);
     case CSSPropertyOutlineOffset:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.outlineOffset());
     case CSSPropertyOutlineWidth:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.outlineWidth());
     case CSSPropertyPaddingBottom:
         return createFromLength(style.paddingBottom(), style);
     case CSSPropertyPaddingLeft:
@@ -542,8 +457,7 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyStopOpacity:
         return createFromDouble(style.stopOpacity());
     case CSSPropertyStrokeDasharray:
-        return AnimatableStrokeDasharrayList::create(style.strokeDashArray(),
-            style.effectiveZoom());
+        return AnimatableStrokeDasharrayList::create(style.strokeDashArray(), style.effectiveZoom());
     case CSSPropertyStrokeDashoffset:
         return createFromLength(style.strokeDashOffset(), style);
     case CSSPropertyStrokeMiterlimit:
@@ -552,12 +466,9 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
         return createFromDouble(style.strokeOpacity());
     case CSSPropertyStroke:
         return AnimatableSVGPaint::create(
-            normalizeSVGPaintType(style.svgStyle().strokePaintType()),
-            normalizeSVGPaintType(style.svgStyle().visitedLinkStrokePaintType()),
-            style.svgStyle().strokePaintColor(),
-            style.svgStyle().visitedLinkStrokePaintColor(),
-            style.svgStyle().strokePaintUri(),
-            style.svgStyle().visitedLinkStrokePaintUri());
+            normalizeSVGPaintType(style.svgStyle().strokePaintType()), normalizeSVGPaintType(style.svgStyle().visitedLinkStrokePaintType()),
+            style.svgStyle().strokePaintColor(), style.svgStyle().visitedLinkStrokePaintColor(),
+            style.svgStyle().strokePaintUri(), style.svgStyle().visitedLinkStrokePaintUri());
     case CSSPropertyTextDecorationColor:
         return createFromColor(property, style);
     case CSSPropertyTextIndent:
@@ -567,58 +478,47 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyTop:
         return createFromLength(style.top(), style);
     case CSSPropertyWebkitBorderHorizontalSpacing:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.horizontalBorderSpacing());
     case CSSPropertyWebkitBorderVerticalSpacing:
-        return createFromPropertyLength(property, style);
-    case CSSPropertyClipPath:
+        return createFromDouble(style.verticalBorderSpacing());
+    case CSSPropertyWebkitClipPath:
         if (ClipPathOperation* operation = style.clipPath())
             return AnimatableClipPathOperation::create(operation);
         return AnimatableUnknown::create(CSSValueNone);
-    case CSSPropertyColumnCount:
+    case CSSPropertyWebkitColumnCount:
         if (style.hasAutoColumnCount())
             return AnimatableUnknown::create(CSSValueAuto);
         return createFromDouble(style.columnCount());
-    case CSSPropertyColumnGap:
-        return createFromPropertyLength(property, style);
-    case CSSPropertyColumnRuleColor:
+    case CSSPropertyWebkitColumnGap:
+        return createFromDouble(style.columnGap());
+    case CSSPropertyWebkitColumnRuleColor:
         return createFromColor(property, style);
-    case CSSPropertyColumnRuleWidth:
-        return createFromPropertyLength(property, style);
-    case CSSPropertyColumnWidth:
+    case CSSPropertyWebkitColumnRuleWidth:
+        return createFromDouble(style.columnRuleWidth());
+    case CSSPropertyWebkitColumnWidth:
         if (style.hasAutoColumnWidth())
             return AnimatableUnknown::create(CSSValueAuto);
-        return createFromPropertyLength(property, style);
-    case CSSPropertyFilter:
+        return createFromDouble(style.columnWidth());
+    case CSSPropertyWebkitFilter:
         return AnimatableFilterOperations::create(style.filter());
-    case CSSPropertyBackdropFilter:
-        return AnimatableFilterOperations::create(style.backdropFilter());
     case CSSPropertyWebkitMaskBoxImageOutset:
         return createFromBorderImageLengthBox(style.maskBoxImageOutset(), style);
     case CSSPropertyWebkitMaskBoxImageSlice:
-        return createFromLengthBoxAndBool(style.maskBoxImageSlices(),
-            style.maskBoxImageSlicesFill(), style);
+        return createFromLengthBoxAndBool(style.maskBoxImageSlices(), style.maskBoxImageSlicesFill(), style);
     case CSSPropertyWebkitMaskBoxImageSource:
         return createFromStyleImage(style.maskBoxImageSource());
     case CSSPropertyWebkitMaskBoxImageWidth:
         return createFromBorderImageLengthBox(style.maskBoxImageWidth(), style);
     case CSSPropertyWebkitMaskImage:
-        return createFromFillLayers<CSSPropertyWebkitMaskImage>(
-            style.maskLayers(), style);
+        return createFromFillLayers<CSSPropertyWebkitMaskImage>(style.maskLayers(), style);
     case CSSPropertyWebkitMaskPositionX:
-        return createFromFillLayers<CSSPropertyWebkitMaskPositionX>(
-            style.maskLayers(), style);
+        return createFromFillLayers<CSSPropertyWebkitMaskPositionX>(style.maskLayers(), style);
     case CSSPropertyWebkitMaskPositionY:
-        return createFromFillLayers<CSSPropertyWebkitMaskPositionY>(
-            style.maskLayers(), style);
+        return createFromFillLayers<CSSPropertyWebkitMaskPositionY>(style.maskLayers(), style);
     case CSSPropertyWebkitMaskSize:
-        return createFromFillLayers<CSSPropertyWebkitMaskSize>(style.maskLayers(),
-            style);
+        return createFromFillLayers<CSSPropertyWebkitMaskSize>(style.maskLayers(), style);
     case CSSPropertyPerspective:
-        if (style.perspective() == 0) {
-            return AnimatableUnknown::create(
-                CSSIdentifierValue::create(CSSValueNone));
-        }
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.perspective(), AnimatableDouble::InterpolationIsNonContinuousWithZero);
     case CSSPropertyPerspectiveOrigin:
         return createFromLengthPoint(style.perspectiveOrigin(), style);
     case CSSPropertyShapeOutside:
@@ -630,43 +530,25 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyWebkitTextStrokeColor:
         return createFromColor(property, style);
     case CSSPropertyTransform:
-        return AnimatableTransform::create(style.transform(),
-            style.effectiveZoom());
+        return AnimatableTransform::create(style.transform());
     case CSSPropertyTranslate: {
-        DEFINE_STATIC_REF(TranslateTransformOperation, initialTranslate,
-            TranslateTransformOperation::create(
-                Length(0, Fixed), Length(0, Fixed), 0,
-                TransformOperation::Translate3D));
-        return createFromTransformProperties(
-            style.translate(), style.effectiveZoom(), initialTranslate);
+        DEFINE_STATIC_REF(TranslateTransformOperation, initialTranslate, TranslateTransformOperation::create(Length(0, Fixed), Length(0, Fixed), 0, TransformOperation::Translate3D));
+        return createFromTransformProperties(style.translate(), initialTranslate);
     }
     case CSSPropertyRotate: {
-        DEFINE_STATIC_REF(RotateTransformOperation, initialRotate,
-            RotateTransformOperation::create(
-                0, 0, 1, 0, TransformOperation::Rotate3D));
-        return createFromTransformProperties(
-            style.rotate(), style.effectiveZoom(), initialRotate);
+        DEFINE_STATIC_REF(RotateTransformOperation, initialRotate, RotateTransformOperation::create(0, 0, 1, 0, TransformOperation::Rotate3D));
+        return createFromTransformProperties(style.rotate(), initialRotate);
     }
     case CSSPropertyScale: {
-        DEFINE_STATIC_REF(ScaleTransformOperation, initialScale,
-            ScaleTransformOperation::create(
-                1, 1, 1, TransformOperation::Scale3D));
-        return createFromTransformProperties(style.scale(), style.effectiveZoom(),
-            initialScale);
+        DEFINE_STATIC_REF(ScaleTransformOperation, initialScale, ScaleTransformOperation::create(1, 1, 1, TransformOperation::Scale3D));
+        return createFromTransformProperties(style.scale(), initialScale);
     }
-    case CSSPropertyOffsetAnchor:
-        return createFromLengthPoint(style.offsetAnchor(), style);
-    case CSSPropertyOffsetDistance:
-        return createFromLength(style.offsetDistance(), style);
-    case CSSPropertyOffsetPosition:
-        return createFromLengthPoint(style.offsetPosition(), style);
-    case CSSPropertyOffsetRotate:
-    case CSSPropertyOffsetRotation:
-        return createFromDoubleAndBool(
-            style.offsetRotation().angle,
-            style.offsetRotation().type == OffsetRotationAuto, style);
     case CSSPropertyTransformOrigin:
         return createFromTransformOrigin(style.transformOrigin(), style);
+    case CSSPropertyMotionOffset:
+        return createFromLength(style.motionOffset(), style);
+    case CSSPropertyMotionRotation:
+        return createFromDoubleAndBool(style.motionRotation(), style.motionRotationType() == MotionRotationAuto, style);
     case CSSPropertyWebkitPerspectiveOriginX:
         return createFromLength(style.perspectiveOriginX(), style);
     case CSSPropertyWebkitPerspectiveOriginY:
@@ -676,22 +558,19 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
     case CSSPropertyWebkitTransformOriginY:
         return createFromLength(style.transformOriginY(), style);
     case CSSPropertyWebkitTransformOriginZ:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.transformOriginZ());
     case CSSPropertyWidows:
         return createFromDouble(style.widows());
     case CSSPropertyWidth:
         return createFromLength(style.width(), style);
     case CSSPropertyWordSpacing:
-        return createFromPropertyLength(property, style);
+        return createFromDouble(style.wordSpacing());
     case CSSPropertyVerticalAlign:
-        if (style.verticalAlign() == EVerticalAlign::Length)
-            return createFromLength(style.getVerticalAlignLength(), style);
-        return AnimatableUnknown::create(
-            CSSIdentifierValue::create(style.verticalAlign()));
+        if (style.verticalAlign() == LENGTH)
+            return createFromLength(style.verticalAlignLength(), style);
+        return AnimatableUnknown::create(CSSPrimitiveValue::create(style.verticalAlign()));
     case CSSPropertyVisibility:
         return AnimatableVisibility::create(style.visibility());
-    case CSSPropertyD:
-        return createFromPath(style.svgStyle().d());
     case CSSPropertyCx:
         return createFromLength(style.svgStyle().cx(), style);
     case CSSPropertyCy:
@@ -711,7 +590,7 @@ PassRefPtr<AnimatableValue> CSSAnimatableValueFactory::create(
             return AnimatableUnknown::create(CSSValueAuto);
         return createFromDouble(style.zIndex());
     default:
-        NOTREACHED();
+        ASSERT_NOT_REACHED();
         return nullptr;
     }
 }

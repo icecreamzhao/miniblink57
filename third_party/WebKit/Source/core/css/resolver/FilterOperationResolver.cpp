@@ -2,12 +2,10 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 2004-2005 Allan Sandfeld Jensen (kde@carewolf.com)
  * Copyright (C) 2006, 2007 Nicholas Shanks (webkit@nickshanks.com)
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013 Apple Inc. All rights reserved.
  * Copyright (C) 2007 Alexey Proskuryakov <ap@webkit.org>
  * Copyright (C) 2007, 2008 Eric Seidel <eric@webkit.org>
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
- * (http://www.torchmobile.com/)
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
  * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  * Copyright (C) Research In Motion Limited 2011. All rights reserved.
  * Copyright (C) 2012 Google Inc. All rights reserved.
@@ -28,21 +26,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/css/resolver/FilterOperationResolver.h"
 
 #include "core/css/CSSFunctionValue.h"
 #include "core/css/CSSPrimitiveValueMappings.h"
-#include "core/css/CSSURIValue.h"
-#include "core/css/resolver/StyleBuilderConverter.h"
-#include "core/css/resolver/StyleResolverState.h"
-#include "core/frame/UseCounter.h"
+#include "core/css/CSSShadowValue.h"
+#include "core/css/resolver/TransformBuilder.h"
+#include "core/layout/svg/ReferenceFilterBuilder.h"
+#include "core/svg/SVGElement.h"
+#include "core/svg/SVGURIReference.h"
 
 namespace blink {
 
-FilterOperation::OperationType FilterOperationResolver::filterOperationForType(
-    CSSValueID type)
+static FilterOperation::OperationType filterOperationForType(CSSValueID type)
 {
     switch (type) {
+    case CSSValueUrl:
+        return FilterOperation::REFERENCE;
     case CSSValueGrayscale:
         return FilterOperation::GRAYSCALE;
     case CSSValueSepia:
@@ -70,85 +71,64 @@ FilterOperation::OperationType FilterOperationResolver::filterOperationForType(
     }
 }
 
-static void countFilterUse(FilterOperation::OperationType operationType,
-    const Document& document)
+bool FilterOperationResolver::createFilterOperations(CSSValue* inValue, const CSSToLengthConversionData& conversionData, FilterOperations& outOperations, StyleResolverState& state)
 {
-    // This variable is always reassigned, but MSVC thinks it might be left
-    // uninitialized.
-    UseCounter::Feature feature = UseCounter::NumberOfFeatures;
-    switch (operationType) {
-    case FilterOperation::NONE:
-    case FilterOperation::BOX_REFLECT:
-        ASSERT_NOT_REACHED();
-        return;
-    case FilterOperation::REFERENCE:
-        feature = UseCounter::CSSFilterReference;
-        break;
-    case FilterOperation::GRAYSCALE:
-        feature = UseCounter::CSSFilterGrayscale;
-        break;
-    case FilterOperation::SEPIA:
-        feature = UseCounter::CSSFilterSepia;
-        break;
-    case FilterOperation::SATURATE:
-        feature = UseCounter::CSSFilterSaturate;
-        break;
-    case FilterOperation::HUE_ROTATE:
-        feature = UseCounter::CSSFilterHueRotate;
-        break;
-    case FilterOperation::INVERT:
-        feature = UseCounter::CSSFilterInvert;
-        break;
-    case FilterOperation::OPACITY:
-        feature = UseCounter::CSSFilterOpacity;
-        break;
-    case FilterOperation::BRIGHTNESS:
-        feature = UseCounter::CSSFilterBrightness;
-        break;
-    case FilterOperation::CONTRAST:
-        feature = UseCounter::CSSFilterContrast;
-        break;
-    case FilterOperation::BLUR:
-        feature = UseCounter::CSSFilterBlur;
-        break;
-    case FilterOperation::DROP_SHADOW:
-        feature = UseCounter::CSSFilterDropShadow;
-        break;
-    };
-    UseCounter::count(document, feature);
-}
+    ASSERT(outOperations.isEmpty());
 
-FilterOperations FilterOperationResolver::createFilterOperations(
-    StyleResolverState& state,
-    const CSSValue& inValue)
-{
-    FilterOperations operations;
+    if (!inValue)
+        return false;
 
-    if (inValue.isIdentifierValue()) {
-        DCHECK_EQ(toCSSIdentifierValue(inValue).getValueID(), CSSValueNone);
-        return operations;
+    if (inValue->isPrimitiveValue()) {
+        CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(inValue);
+        if (primitiveValue->getValueID() == CSSValueNone)
+            return true;
     }
 
-    const CSSToLengthConversionData& conversionData = state.cssToLengthConversionData();
-    for (auto& currValue : toCSSValueList(inValue)) {
-        if (currValue->isURIValue()) {
-            countFilterUse(FilterOperation::REFERENCE, state.document());
+    if (!inValue->isValueList())
+        return false;
 
-            const CSSURIValue& urlValue = toCSSURIValue(*currValue);
-            SVGElementProxy& elementProxy = state.elementStyleResources().cachedOrPendingFromValue(urlValue);
-            operations.operations().push_back(
-                ReferenceFilterOperation::create(urlValue.value(), elementProxy));
+    FilterOperations operations;
+    for (auto& currValue : toCSSValueList(*inValue)) {
+        CSSFunctionValue* filterValue = toCSSFunctionValue(currValue.get());
+        FilterOperation::OperationType operationType = filterOperationForType(filterValue->functionType());
+
+        if (operationType == FilterOperation::REFERENCE) {
+            if (filterValue->length() != 1)
+                continue;
+            CSSValue* argument = filterValue->item(0);
+
+            if (!argument->isSVGDocumentValue())
+                continue;
+
+            CSSSVGDocumentValue* svgDocumentValue = toCSSSVGDocumentValue(argument);
+            KURL url = state.document().completeURL(svgDocumentValue->url());
+
+            RefPtrWillBeRawPtr<ReferenceFilterOperation> operation = ReferenceFilterOperation::create(svgDocumentValue->url(), AtomicString(url.fragmentIdentifier()));
+            if (SVGURIReference::isExternalURIReference(svgDocumentValue->url(), state.document())) {
+                if (!svgDocumentValue->loadRequested())
+                    state.elementStyleResources().addPendingSVGDocument(operation.get(), svgDocumentValue);
+                else if (svgDocumentValue->cachedSVGDocument())
+                    ReferenceFilterBuilder::setDocumentResourceReference(operation.get(), adoptPtr(new DocumentResourceReference(svgDocumentValue->cachedSVGDocument())));
+            }
+            operations.operations().append(operation);
             continue;
         }
 
-        const CSSFunctionValue* filterValue = toCSSFunctionValue(currValue.get());
-        FilterOperation::OperationType operationType = filterOperationForType(filterValue->functionType());
-        countFilterUse(operationType, state.document());
-        DCHECK_LE(filterValue->length(), 1u);
+        // Check that all parameters are primitive values, with the
+        // exception of drop shadow which has a CSSShadowValue parameter.
+        if (operationType != FilterOperation::DROP_SHADOW) {
+            bool haveNonPrimitiveValue = false;
+            for (unsigned j = 0; j < filterValue->length(); ++j) {
+                if (!filterValue->item(j)->isPrimitiveValue()) {
+                    haveNonPrimitiveValue = true;
+                    break;
+                }
+            }
+            if (haveNonPrimitiveValue)
+                continue;
+        }
 
-        const CSSPrimitiveValue* firstValue = filterValue->length() && filterValue->item(0).isPrimitiveValue()
-            ? &toCSSPrimitiveValue(filterValue->item(0))
-            : nullptr;
+        CSSPrimitiveValue* firstValue = filterValue->length() && filterValue->item(0)->isPrimitiveValue() ? toCSSPrimitiveValue(filterValue->item(0)) : 0;
         switch (filterValue->functionType()) {
         case CSSValueGrayscale:
         case CSSValueSepia:
@@ -160,8 +140,7 @@ FilterOperations FilterOperationResolver::createFilterOperations(
                     amount /= 100;
             }
 
-            operations.operations().push_back(
-                BasicColorMatrixFilterOperation::create(amount, operationType));
+            operations.operations().append(BasicColorMatrixFilterOperation::create(amount, operationType));
             break;
         }
         case CSSValueHueRotate: {
@@ -169,8 +148,7 @@ FilterOperations FilterOperationResolver::createFilterOperations(
             if (filterValue->length() == 1)
                 angle = firstValue->computeDegrees();
 
-            operations.operations().push_back(
-                BasicColorMatrixFilterOperation::create(angle, operationType));
+            operations.operations().append(BasicColorMatrixFilterOperation::create(angle, operationType));
             break;
         }
         case CSSValueInvert:
@@ -184,26 +162,32 @@ FilterOperations FilterOperationResolver::createFilterOperations(
                     amount /= 100;
             }
 
-            operations.operations().push_back(
-                BasicComponentTransferFilterOperation::create(amount,
-                    operationType));
+            operations.operations().append(BasicComponentTransferFilterOperation::create(amount, operationType));
             break;
         }
         case CSSValueBlur: {
             Length stdDeviation = Length(0, Fixed);
             if (filterValue->length() >= 1)
                 stdDeviation = firstValue->convertToLength(conversionData);
-            operations.operations().push_back(
-                BlurFilterOperation::create(stdDeviation));
+            operations.operations().append(BlurFilterOperation::create(stdDeviation));
             break;
         }
         case CSSValueDropShadow: {
-            ShadowData shadow = StyleBuilderConverter::convertShadow(state, filterValue->item(0));
-            // TODO(fs): Resolve 'currentcolor' when constructing the filter chain.
-            if (shadow.color().isCurrentColor())
-                shadow.overrideColor(state.style()->color());
-            operations.operations().push_back(
-                DropShadowFilterOperation::create(shadow));
+            if (filterValue->length() != 1)
+                return false;
+
+            CSSValue* cssValue = filterValue->item(0);
+            if (!cssValue->isShadowValue())
+                continue;
+
+            CSSShadowValue* item = toCSSShadowValue(cssValue);
+            IntPoint location(item->x->computeLength<int>(conversionData), item->y->computeLength<int>(conversionData));
+            int blur = item->blur ? item->blur->computeLength<int>(conversionData) : 0;
+            Color shadowColor = Color::black;
+            if (item->color)
+                shadowColor = state.document().textLinkColors().colorFromPrimitiveValue(item->color.get(), state.style()->color());
+
+            operations.operations().append(DropShadowFilterOperation::create(location, blur, shadowColor));
             break;
         }
         default:
@@ -212,7 +196,8 @@ FilterOperations FilterOperationResolver::createFilterOperations(
         }
     }
 
-    return operations;
+    outOperations = operations;
+    return true;
 }
 
 } // namespace blink

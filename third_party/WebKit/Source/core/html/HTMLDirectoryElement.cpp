@@ -20,6 +20,7 @@
  *
  */
 
+#include "config.h"
 #include "core/html/HTMLDirectoryElement.h"
 
 #include "core/HTMLNames.h"
@@ -35,4 +36,4 @@ inline HTMLDirectoryElement::HTMLDirectoryElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLDirectoryElement)
 
-} // namespace blink
+}

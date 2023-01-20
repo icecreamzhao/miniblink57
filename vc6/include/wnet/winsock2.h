@@ -153,13 +153,19 @@ extern int PASCAL FAR __WSAFDIsSet(SOCKET, fd_set FAR *);
 /*
  * Structure used in select() call, taken from the BSD file sys/time.h.
  */
+<<<<<<< HEAD
 #ifndef HAVE_STRUCT_TIMEVAL_VC6
 #define HAVE_STRUCT_TIMEVAL_VC6
+=======
+>>>>>>> miniblink49
 struct timeval {
         long    tv_sec;         /* seconds */
         long    tv_usec;        /* and microseconds */
 };
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> miniblink49
 
 /*
  * Operations on timevals.
@@ -3867,6 +3873,7 @@ typedef struct _TRANSMIT_FILE_BUFFERS {
     PVOID Tail;
     DWORD TailLength;
 } TRANSMIT_FILE_BUFFERS, *PTRANSMIT_FILE_BUFFERS, *LPTRANSMIT_FILE_BUFFERS;
+<<<<<<< HEAD
 
 #ifndef HAVE_STRUCT_TIMEVAL_VC6
 #define HAVE_STRUCT_TIMEVAL_VC6
@@ -3875,6 +3882,8 @@ struct timeval {
     long tv_usec;
 };
 #endif
+=======
+>>>>>>> miniblink49
 
 #endif  /* _WINSOCK2API_ */
 

@@ -40,7 +40,7 @@ namespace blink {
 
 class Element;
 
-class ColorChooserClient : public GarbageCollectedMixin {
+class ColorChooserClient : public WillBeGarbageCollectedMixin {
 public:
     virtual ~ColorChooserClient();
     DEFINE_INLINE_VIRTUAL_TRACE() { }

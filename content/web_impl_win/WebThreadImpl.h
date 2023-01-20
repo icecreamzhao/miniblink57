@@ -10,6 +10,7 @@
 
 namespace blink {
 
+class WebTraceLocation;
 class Task;
 
 } // blink
@@ -17,10 +18,6 @@ class Task;
 namespace WTF {
 class Mutex;
 } // WTF
-
-namespace base {
-class WaitableEvent;
-}
 
 namespace content {
 
@@ -50,20 +47,16 @@ public:
 
     // Returns the scheduler associated with the thread.
     virtual blink::WebScheduler* scheduler() const override;
-    virtual blink::WebTaskRunner* getWebTaskRunner() override;
 
     void willExit();
 
     void startTriggerTasks();
     void schedulerTasks();
-    bool hasImmediatelyTimer();
 
     void fire();
     
     void suspendTimerQueue();
     void resumeTimerQueue();
-
-    void cancelTimerTask(WebThread::Task* task);
 
     void disableScheduler();
     void enableScheduler();
@@ -97,7 +90,7 @@ private:
     void postDelayedTaskImpl(
         const blink::WebTraceLocation& location, blink::WebThread::Task* task, long long delayMs, double* createTimeOnOtherThread, int priority, unsigned* heapInsertionOrder);
     
-    static DWORD __stdcall WebThreadImplThreadEntryPoint(void* param);
+    static unsigned __stdcall WebThreadImplThreadEntryPoint(void* param);
     void threadEntryPoint();
     void deleteUnusedTimers();
     void deleteTimersOnExit();
@@ -107,7 +100,7 @@ private:
     void didProcessTasks();
     void clearEmptyObservers();
 
-    base::WaitableEvent* m_hEvent;
+    HANDLE m_hEvent;
     blink::PlatformThreadId m_threadId;
     bool m_willExit;
     bool m_threadClosed;
@@ -115,7 +108,7 @@ private:
     int m_firingTimers; // Reentrancy guard.
     WebSchedulerImpl* m_webSchedulerImpl;
 
-    // ²»ÄÜÓÃwtfµÄº¯Êý£¬·ñÔòÍË³öºówtf±»¹Ø±ÕÁË£¬¾Í²»ÄÜ·ÃÎÊÁË
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wtfï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½wtfï¿½ï¿½ï¿½Ø±ï¿½ï¿½Ë£ï¿½ï¿½Í²ï¿½ï¿½Ü·ï¿½ï¿½ï¿½ï¿½ï¿½
     std::vector<WebTimerBase*> m_timerHeap;
     std::vector<WebTimerBase*> m_unusedTimersToDelete;
     std::vector<TaskPair*> m_taskPairsToPost;
@@ -130,7 +123,7 @@ private:
     bool m_hadThreadInit;
     HANDLE m_threadHandle;
 
-    double m_currentFrameCreateTime; // µ±Ç°Ö¡È«²¿Ê¹ÓÃÕâ¸ö´´½¨Ê±¼ä
+    double m_currentFrameCreateTime; // ï¿½ï¿½Ç°Ö¡È«ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     static unsigned m_currentHeapInsertionOrder;
 
     bool m_isMainThread;

@@ -23,80 +23,87 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/HTMLResourcePreloader.h"
 
 #include "core/dom/Document.h"
-#include "core/fetch/Resource.h"
+#include "core/fetch/FetchInitiatorInfo.h"
 #include "core/fetch/ResourceFetcher.h"
-#include "core/frame/Deprecation.h"
-#include "core/frame/Settings.h"
 #include "core/loader/DocumentLoader.h"
-#include "core/loader/resource/CSSStyleSheetResource.h"
-#include "platform/Histogram.h"
+#include "platform/network/NetworkHints.h"
 #include "public/platform/Platform.h"
-#include <memory>
 
 namespace blink {
 
-HTMLResourcePreloader::HTMLResourcePreloader(Document& document)
+inline HTMLResourcePreloader::HTMLResourcePreloader(Document& document)
     : m_document(document)
 {
 }
 
-HTMLResourcePreloader* HTMLResourcePreloader::create(Document& document)
+PassOwnPtrWillBeRawPtr<HTMLResourcePreloader> HTMLResourcePreloader::create(Document& document)
 {
-    return new HTMLResourcePreloader(document);
+    return adoptPtrWillBeNoop(new HTMLResourcePreloader(document));
 }
 
 DEFINE_TRACE(HTMLResourcePreloader)
 {
     visitor->trace(m_document);
-    visitor->trace(m_cssPreloaders);
 }
 
-int HTMLResourcePreloader::countPreloads()
-{
-    if (m_document->loader())
-        return m_document->loader()->fetcher()->countPreloads();
-    return 0;
-}
-
-static void preconnectHost(PreloadRequest* request,
-    const NetworkHintsInterface& networkHintsInterface)
+static void preconnectHost(PreloadRequest* request)
 {
     ASSERT(request);
     ASSERT(request->isPreconnect());
     KURL host(request->baseURL(), request->resourceURL());
     if (!host.isValid() || !host.protocolIsInHTTPFamily())
         return;
-    networkHintsInterface.preconnectHost(host, request->crossOrigin());
+    CrossOriginAttributeValue crossOrigin = CrossOriginAttributeNotSet;
+    if (request->isCORS()) {
+        if (request->isAllowCredentials())
+            crossOrigin = CrossOriginAttributeUseCredentials;
+        else
+            crossOrigin = CrossOriginAttributeAnonymous;
+    }
+    preconnect(host, crossOrigin);
 }
 
-void HTMLResourcePreloader::preload(
-    std::unique_ptr<PreloadRequest> preload,
-    const NetworkHintsInterface& networkHintsInterface)
+// some ali url is use GBK by mistake
+// TODO ScriptLoader::prepareScript
+bool isBlacklistWebsiteToUseUtf8(const String& url)
+{
+    if (WTF::kNotFound != url.find("g.alicdn.com/kissy/k/1.4.4/seed.js") ||
+        WTF::kNotFound != url.find("g.alicdn.com/kg/??select") ||
+        WTF::kNotFound != url.find("g.alicdn.com/kg/??slide")
+        )
+        return true;
+    return false;
+}
+
+void HTMLResourcePreloader::preload(PassOwnPtr<PreloadRequest> preload)
 {
     if (preload->isPreconnect()) {
-        preconnectHost(preload.get(), networkHintsInterface);
+        preconnectHost(preload.get());
         return;
     }
     // TODO(yoichio): Should preload if document is imported.
     if (!m_document->loader())
         return;
-
-    int duration = static_cast<int>(
-        1000 * (monotonicallyIncreasingTime() - preload->discoveryTime()));
-    DEFINE_STATIC_LOCAL(CustomCountHistogram, preloadDelayHistogram,
-        ("WebCore.PreloadDelayMs", 0, 2000, 20));
-    preloadDelayHistogram.count(duration);
-
-    Resource* resource = preload->start(m_document);
-
-    if (resource && !resource->isLoaded() && preload->resourceType() == Resource::CSSStyleSheet) {
-        Settings* settings = m_document->settings();
-        if (settings && (settings->getCSSExternalScannerNoPreload() || settings->getCSSExternalScannerPreload()))
-            m_cssPreloaders.add(new CSSPreloaderResourceClient(resource, this));
+    FetchRequest request = preload->resourceRequest(m_document);
+    // TODO(dgozman): This check should go to HTMLPreloadScanner, but this requires
+    // making Document::completeURLWithOverride logic to be statically accessible.
+    if (request.url().protocolIsData())
+        return;
+    if (preload->resourceType() == Resource::Script || preload->resourceType() == Resource::CSSStyleSheet || preload->resourceType() == Resource::ImportResource) {
+        String charset = preload->charset().isEmpty() ? m_document->charset().string() : preload->charset();
+#ifndef MINIBLINK_NO_CHANGE
+        if (preload->resourceType() == Resource::Script && isBlacklistWebsiteToUseUtf8(preload->resourceURL()))
+            charset = "UTF-8";
+#endif
+        request.setCharset(charset);
     }
+    request.setForPreload(true);
+    Platform::current()->histogramCustomCounts("WebCore.PreloadDelayMs", static_cast<int>(1000 * (monotonicallyIncreasingTime() - preload->discoveryTime())), 0, 2000, 20);
+    m_document->loader()->startPreload(preload->resourceType(), request);
 }
 
 } // namespace blink

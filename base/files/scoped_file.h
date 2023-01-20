@@ -7,11 +7,13 @@
 
 #include <stdio.h>
 
-#include <memory>
-
 #include "base/base_export.h"
 #include "base/logging.h"
-#include "base/scoped_generic.h"
+#if USING_CHROMIUM_BASE == 1
+#include "base/memory/scoped_ptr.h"
+#else
+#include "cef/include/base/cef_scoped_ptr.h"
+#endif
 #include "build/build_config.h"
 
 namespace base {
@@ -19,25 +21,23 @@ namespace base {
 namespace internal {
 
 #if defined(OS_POSIX)
-    struct BASE_EXPORT ScopedFDCloseTraits {
-        static int InvalidValue()
-        {
-            return -1;
-        }
-        static void Free(int fd);
-    };
+struct BASE_EXPORT ScopedFDCloseTraits {
+  static int InvalidValue() {
+    return -1;
+  }
+  static void Free(int fd);
+};
 #endif
 
-    // Functor for |ScopedFILE| (below).
-    struct ScopedFILECloser {
-        inline void operator()(FILE* x) const
-        {
-            if (x)
-                fclose(x);
-        }
-    };
+// Functor for |ScopedFILE| (below).
+struct ScopedFILECloser {
+  inline void operator()(FILE* x) const {
+    if (x)
+      fclose(x);
+  }
+};
 
-} // namespace internal
+}  // namespace internal
 
 // -----------------------------------------------------------------------------
 
@@ -57,8 +57,8 @@ typedef ScopedGeneric<int, internal::ScopedFDCloseTraits> ScopedFD;
 #endif
 
 // Automatically closes |FILE*|s.
-typedef std::unique_ptr<FILE, internal::ScopedFILECloser> ScopedFILE;
+typedef scoped_ptr<FILE, internal::ScopedFILECloser> ScopedFILE;
 
-} // namespace base
+}  // namespace base
 
-#endif // BASE_FILES_SCOPED_FILE_H_
+#endif  // BASE_FILES_SCOPED_FILE_H_

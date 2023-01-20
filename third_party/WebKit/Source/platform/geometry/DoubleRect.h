@@ -7,8 +7,11 @@
 
 #include "platform/geometry/DoublePoint.h"
 #include "platform/geometry/DoubleSize.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -17,6 +20,7 @@ class IntRect;
 class LayoutRect;
 
 class PLATFORM_EXPORT DoubleRect {
+<<<<<<< HEAD
     STACK_ALLOCATED();
 
 public:
@@ -31,6 +35,14 @@ public:
         , m_size(DoubleSize(width, height))
     {
     }
+=======
+public:
+    DoubleRect() { }
+    DoubleRect(const DoublePoint& location, const DoubleSize& size)
+        : m_location(location), m_size(size) { }
+    DoubleRect(double x, double y, double width, double height)
+        : m_location(DoublePoint(x, y)), m_size(DoubleSize(width, height)) { }
+>>>>>>> miniblink49
     DoubleRect(const IntRect&);
     DoubleRect(const FloatRect&);
     DoubleRect(const LayoutRect&);
@@ -58,6 +70,7 @@ public:
 
     void move(const DoubleSize& delta) { m_location += delta; }
     void move(double dx, double dy) { m_location.move(dx, dy); }
+<<<<<<< HEAD
     void moveBy(const DoublePoint& delta)
     {
         m_location.move(delta.x(), delta.y());
@@ -86,6 +99,17 @@ public:
 
     String toString() const;
 
+=======
+    void moveBy(const DoublePoint& delta) { m_location.move(delta.x(), delta.y()); }
+
+    DoublePoint minXMinYCorner() const { return m_location; } // typically topLeft
+    DoublePoint maxXMinYCorner() const { return DoublePoint(m_location.x() + m_size.width(), m_location.y()); } // typically topRight
+    DoublePoint minXMaxYCorner() const { return DoublePoint(m_location.x(), m_location.y() + m_size.height()); } // typically bottomLeft
+    DoublePoint maxXMaxYCorner() const { return DoublePoint(m_location.x() + m_size.width(), m_location.y() + m_size.height()); } // typically bottomRight
+
+    void scale(float s) { scale(s, s); }
+    void scale(float sx, float sy);
+>>>>>>> miniblink49
 private:
     DoublePoint m_location;
     DoubleSize m_size;
@@ -98,10 +122,14 @@ PLATFORM_EXPORT IntRect enclosedIntRect(const DoubleRect&);
 
 PLATFORM_EXPORT IntRect roundedIntRect(const DoubleRect&);
 
+<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const DoubleRect&, std::ostream*);
 
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49
 
 #endif

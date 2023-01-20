@@ -32,6 +32,7 @@
 #define AudioDSPKernel_h
 
 #include "platform/audio/AudioDSPKernelProcessor.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
 namespace blink {
@@ -42,6 +43,14 @@ namespace blink {
 class PLATFORM_EXPORT AudioDSPKernel {
     USING_FAST_MALLOC(AudioDSPKernel);
 
+=======
+
+namespace blink {
+
+// AudioDSPKernel does the processing for one channel of an AudioDSPKernelProcessor.
+
+class PLATFORM_EXPORT AudioDSPKernel {
+>>>>>>> miniblink49
 public:
     AudioDSPKernel(AudioDSPKernelProcessor* kernelProcessor)
         : m_kernelProcessor(kernelProcessor)
@@ -57,6 +66,7 @@ public:
 
     virtual ~AudioDSPKernel();
 
+<<<<<<< HEAD
     // Subclasses must override process() to do the processing and reset() to
     // reset DSP state.
     virtual void process(const float* source,
@@ -66,6 +76,10 @@ public:
     // Subclasses that have AudioParams must override this to process the
     // AudioParams.
     virtual void processOnlyAudioParams(size_t framesToProcess) {};
+=======
+    // Subclasses must override process() to do the processing and reset() to reset DSP state.
+    virtual void process(const float* source, float* destination, size_t framesToProcess) = 0;
+>>>>>>> miniblink49
     virtual void reset() = 0;
 
     float sampleRate() const { return m_sampleRate; }

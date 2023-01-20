@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -21,8 +25,12 @@ enum FontQuality {
     kLCD,
 };
 
+<<<<<<< HEAD
 static const char* fontQualityName(const SkPaint& paint)
 {
+=======
+static const char* fontQualityName(const SkPaint& paint) {
+>>>>>>> miniblink49
     if (!paint.isAntiAlias()) {
         return "BW";
     }
@@ -42,6 +50,7 @@ static const char* fontQualityName(const SkPaint& paint)
         text -vs- postext - pathtext
  */
 class TextBench : public Benchmark {
+<<<<<<< HEAD
     SkPaint fPaint;
     SkString fText;
     SkString fName;
@@ -54,29 +63,57 @@ class TextBench : public Benchmark {
 public:
     TextBench(const char text[], int ps,
         SkColor color, FontQuality fq, bool doColorEmoji = false, bool doPos = false)
+=======
+    SkPaint     fPaint;
+    SkString    fText;
+    SkString    fName;
+    FontQuality fFQ;
+    bool        fDoPos;
+    bool        fDoColorEmoji;
+    SkAutoTUnref<SkTypeface> fColorEmojiTypeface;
+    SkPoint*    fPos;
+public:
+    TextBench(const char text[], int ps,
+              SkColor color, FontQuality fq, bool doColorEmoji = false, bool doPos = false)
+>>>>>>> miniblink49
         : fText(text)
         , fFQ(fq)
         , fDoPos(doPos)
         , fDoColorEmoji(doColorEmoji)
+<<<<<<< HEAD
         , fPos(nullptr)
     {
+=======
+        , fPos(NULL) {
+>>>>>>> miniblink49
         fPaint.setAntiAlias(kBW != fq);
         fPaint.setLCDRenderText(kLCD == fq);
         fPaint.setTextSize(SkIntToScalar(ps));
         fPaint.setColor(color);
     }
 
+<<<<<<< HEAD
     virtual ~TextBench()
     {
+=======
+    virtual ~TextBench() {
+>>>>>>> miniblink49
         delete[] fPos;
     }
 
 protected:
+<<<<<<< HEAD
     void onDelayedSetup() override
     {
         if (fDoColorEmoji) {
             SkASSERT(kBW == fFQ);
             fColorEmojiTypeface = MakeResourceAsTypeface("/fonts/Funkster.ttf");
+=======
+    void onPreDraw() override {
+        if (fDoColorEmoji) {
+            SkASSERT(kBW == fFQ);
+            fColorEmojiTypeface.reset(GetResourceAsTypeface("/fonts/Funkster.ttf"));
+>>>>>>> miniblink49
         }
 
         if (fDoPos) {
@@ -93,19 +130,31 @@ protected:
         }
     }
 
+<<<<<<< HEAD
     const char* onGetName() override
     {
+=======
+
+    virtual const char* onGetName() {
+>>>>>>> miniblink49
         fName.printf("text_%g", SkScalarToFloat(fPaint.getTextSize()));
         if (fDoPos) {
             fName.append("_pos");
         }
         fName.appendf("_%s", fontQualityName(fPaint));
+<<<<<<< HEAD
         if (SK_ColorBLACK == fPaint.getColor()) {
             fName.append("_BK");
         } else if (SK_ColorWHITE == fPaint.getColor()) {
             fName.append("_WT");
         } else {
             fName.appendf("_%02X", fPaint.getAlpha());
+=======
+        if (SK_ColorBLACK != fPaint.getColor()) {
+            fName.appendf("_%02X", fPaint.getAlpha());
+        } else {
+            fName.append("_BK");
+>>>>>>> miniblink49
         }
 
         if (fDoColorEmoji) {
@@ -115,8 +164,12 @@ protected:
         return fName.c_str();
     }
 
+<<<<<<< HEAD
     void onDraw(int loops, SkCanvas* canvas) override
     {
+=======
+    virtual void onDraw(const int loops, SkCanvas* canvas) {
+>>>>>>> miniblink49
         const SkIPoint dim = this->getSize();
         SkRandom rand;
 
@@ -157,6 +210,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 #define STR "Hamburgefons"
 
 DEF_BENCH(return new TextBench(STR, 16, 0xFFFFFFFF, kBW);)
@@ -181,3 +235,25 @@ DEF_BENCH(return new TextBench(STR, 16, 0x88FF0000, kBW, true);)
 
 DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kBW, true, true);)
 DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kAA, false, true);)
+=======
+#define STR     "Hamburgefons"
+
+DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kBW); )
+DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kBW); )
+DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kBW); )
+
+DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kAA); )
+DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kAA); )
+DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kAA); )
+
+DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kLCD); )
+DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kLCD); )
+DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kLCD); )
+
+DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kBW, true); )
+DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kBW, true); )
+DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kBW, true); )
+
+DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kBW, true, true); )
+DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kAA, false, true); )
+>>>>>>> miniblink49

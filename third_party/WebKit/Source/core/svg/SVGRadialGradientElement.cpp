@@ -21,6 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGRadialGradientElement.h"
 
 #include "core/layout/svg/LayoutSVGResourceRadialGradient.h"
@@ -30,33 +31,19 @@ namespace blink {
 
 inline SVGRadialGradientElement::SVGRadialGradientElement(Document& document)
     : SVGGradientElement(SVGNames::radialGradientTag, document)
-    , m_cx(SVGAnimatedLength::create(this,
-          SVGNames::cxAttr,
-          SVGLength::create(SVGLengthMode::Width)))
-    , m_cy(SVGAnimatedLength::create(this,
-          SVGNames::cyAttr,
-          SVGLength::create(SVGLengthMode::Height)))
-    , m_r(SVGAnimatedLength::create(this,
-          SVGNames::rAttr,
-          SVGLength::create(SVGLengthMode::Other)))
-    , m_fx(SVGAnimatedLength::create(this,
-          SVGNames::fxAttr,
-          SVGLength::create(SVGLengthMode::Width)))
-    , m_fy(SVGAnimatedLength::create(this,
-          SVGNames::fyAttr,
-          SVGLength::create(SVGLengthMode::Height)))
-    , m_fr(SVGAnimatedLength::create(this,
-          SVGNames::frAttr,
-          SVGLength::create(SVGLengthMode::Other)))
+    , m_cx(SVGAnimatedLength::create(this, SVGNames::cxAttr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
+    , m_cy(SVGAnimatedLength::create(this, SVGNames::cyAttr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
+    , m_r(SVGAnimatedLength::create(this, SVGNames::rAttr, SVGLength::create(SVGLengthMode::Other), ForbidNegativeLengths))
+    , m_fx(SVGAnimatedLength::create(this, SVGNames::fxAttr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
+    , m_fy(SVGAnimatedLength::create(this, SVGNames::fyAttr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
+    , m_fr(SVGAnimatedLength::create(this, SVGNames::frAttr, SVGLength::create(SVGLengthMode::Other), ForbidNegativeLengths))
 {
-    // Spec: If the cx/cy/r attribute is not specified, the effect is as if a
-    // value of "50%" were specified.
+    // Spec: If the cx/cy/r attribute is not specified, the effect is as if a value of "50%" were specified.
     m_cx->setDefaultValueAsString("50%");
     m_cy->setDefaultValueAsString("50%");
     m_r->setDefaultValueAsString("50%");
 
-    // SVG2-Draft Spec: If the fr attributed is not specified, the effect is as if
-    // a value of "0%" were specified.
+    // SVG2-Draft Spec: If the fr attributed is not specified, the effect is as if a value of "0%" were specified.
     m_fr->setDefaultValueAsString("0%");
 
     addToPropertyMap(m_cx);
@@ -80,10 +67,11 @@ DEFINE_TRACE(SVGRadialGradientElement)
 
 DEFINE_NODE_FACTORY(SVGRadialGradientElement)
 
-void SVGRadialGradientElement::svgAttributeChanged(
-    const QualifiedName& attrName)
+void SVGRadialGradientElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    if (attrName == SVGNames::cxAttr || attrName == SVGNames::cyAttr || attrName == SVGNames::fxAttr || attrName == SVGNames::fyAttr || attrName == SVGNames::rAttr || attrName == SVGNames::frAttr) {
+    if (attrName == SVGNames::cxAttr || attrName == SVGNames::cyAttr
+        || attrName == SVGNames::fxAttr || attrName == SVGNames::fyAttr
+        || attrName == SVGNames::rAttr || attrName == SVGNames::frAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
 
         updateRelativeLengthsInformation();
@@ -98,27 +86,23 @@ void SVGRadialGradientElement::svgAttributeChanged(
     SVGGradientElement::svgAttributeChanged(attrName);
 }
 
-LayoutObject* SVGRadialGradientElement::createLayoutObject(
-    const ComputedStyle&)
+LayoutObject* SVGRadialGradientElement::createLayoutObject(const ComputedStyle&)
 {
     return new LayoutSVGResourceRadialGradient(this);
 }
 
-static void setGradientAttributes(SVGGradientElement* element,
-    RadialGradientAttributes& attributes,
-    bool isRadial = true)
+static void setGradientAttributes(SVGGradientElement* element, RadialGradientAttributes& attributes, bool isRadial = true)
 {
     if (!attributes.hasSpreadMethod() && element->spreadMethod()->isSpecified())
-        attributes.setSpreadMethod(
-            element->spreadMethod()->currentValue()->enumValue());
+        attributes.setSpreadMethod(element->spreadMethod()->currentValue()->enumValue());
 
     if (!attributes.hasGradientUnits() && element->gradientUnits()->isSpecified())
-        attributes.setGradientUnits(
-            element->gradientUnits()->currentValue()->enumValue());
+        attributes.setGradientUnits(element->gradientUnits()->currentValue()->enumValue());
 
-    if (!attributes.hasGradientTransform() && element->hasTransform(SVGElement::ExcludeMotionTransform)) {
-        attributes.setGradientTransform(
-            element->calculateTransform(SVGElement::ExcludeMotionTransform));
+    if (!attributes.hasGradientTransform() && element->gradientTransform()->isSpecified()) {
+        AffineTransform transform;
+        element->gradientTransform()->currentValue()->concatenate(transform);
+        attributes.setGradientTransform(transform);
     }
 
     if (!attributes.hasStops()) {
@@ -150,13 +134,12 @@ static void setGradientAttributes(SVGGradientElement* element,
     }
 }
 
-bool SVGRadialGradientElement::collectGradientAttributes(
-    RadialGradientAttributes& attributes)
+bool SVGRadialGradientElement::collectGradientAttributes(RadialGradientAttributes& attributes)
 {
     if (!layoutObject())
         return false;
 
-    HeapHashSet<Member<SVGGradientElement>> processedGradients;
+    WillBeHeapHashSet<RawPtrWillBeMember<SVGGradientElement>> processedGradients;
     SVGGradientElement* current = this;
 
     setGradientAttributes(current, attributes);
@@ -164,8 +147,7 @@ bool SVGRadialGradientElement::collectGradientAttributes(
 
     while (true) {
         // Respect xlink:href, take attributes from referenced element
-        Node* refNode = SVGURIReference::targetElementFromIRIString(
-            current->href()->currentValue()->value(), treeScope());
+        Node* refNode = SVGURIReference::targetElementFromIRIString(current->href()->currentValue()->value(), treeScope());
         if (refNode && isSVGGradientElement(*refNode)) {
             current = toSVGGradientElement(refNode);
 
@@ -176,8 +158,7 @@ bool SVGRadialGradientElement::collectGradientAttributes(
             if (!current->layoutObject())
                 return false;
 
-            setGradientAttributes(current, attributes,
-                isSVGRadialGradientElement(*current));
+            setGradientAttributes(current, attributes, isSVGRadialGradientElement(*current));
             processedGradients.add(current);
         } else {
             break;
@@ -196,7 +177,12 @@ bool SVGRadialGradientElement::collectGradientAttributes(
 
 bool SVGRadialGradientElement::selfHasRelativeLengths() const
 {
-    return m_cx->currentValue()->isRelative() || m_cy->currentValue()->isRelative() || m_r->currentValue()->isRelative() || m_fx->currentValue()->isRelative() || m_fy->currentValue()->isRelative() || m_fr->currentValue()->isRelative();
+    return m_cx->currentValue()->isRelative()
+        || m_cy->currentValue()->isRelative()
+        || m_r->currentValue()->isRelative()
+        || m_fx->currentValue()->isRelative()
+        || m_fy->currentValue()->isRelative()
+        || m_fr->currentValue()->isRelative();
 }
 
 } // namespace blink

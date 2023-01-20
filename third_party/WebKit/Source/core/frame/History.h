@@ -26,11 +26,10 @@
 #ifndef History_h
 #define History_h
 
-#include "base/gtest_prod_util.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "bindings/core/v8/SerializedScriptValue.h"
-#include "core/dom/ContextLifecycleObserver.h"
 #include "core/loader/FrameLoaderTypes.h"
+#include "core/frame/DOMWindowProperty.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 
@@ -38,74 +37,50 @@ namespace blink {
 
 class LocalFrame;
 class KURL;
+class ExecutionContext;
 class ExceptionState;
-class SecurityOrigin;
-class ScriptState;
+class StateOptions;
 
-// This class corresponds to the History interface.
-class CORE_EXPORT History final : public GarbageCollectedFinalized<History>,
-                                  public ScriptWrappable,
-                                  public DOMWindowClient {
+class History final : public GarbageCollectedFinalized<History>, public ScriptWrappable, public DOMWindowProperty {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(History);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(History);
 public:
-    static History* create(LocalFrame* frame) { return new History(frame); }
+    static History* create(LocalFrame* frame)
+    {
+        return new History(frame);
+    }
 
     unsigned length() const;
     SerializedScriptValue* state();
+    void options(StateOptions&);
 
-    void back(ScriptState*);
-    void forward(ScriptState*);
-    void go(ScriptState*, int delta);
+    void back(ExecutionContext*);
+    void forward(ExecutionContext*);
+    void go(ExecutionContext*, int delta);
 
-    void pushState(PassRefPtr<SerializedScriptValue> data,
-        const String& title,
-        const String& url,
-        ExceptionState& exceptionState)
+    void pushState(PassRefPtr<SerializedScriptValue> data, const String& title, const String& url, const StateOptions& options, ExceptionState& exceptionState)
     {
-        stateObjectAdded(std::move(data), title, url, scrollRestorationInternal(),
-            FrameLoadTypeStandard, exceptionState);
+        stateObjectAdded(data, title, url, options, FrameLoadTypeStandard, exceptionState);
     }
 
-    void replaceState(PassRefPtr<SerializedScriptValue> data,
-        const String& title,
-        const String& url,
-        ExceptionState& exceptionState)
+    void replaceState(PassRefPtr<SerializedScriptValue> data, const String& title, const String& url, const StateOptions& options, ExceptionState& exceptionState)
     {
-        stateObjectAdded(std::move(data), title, url, scrollRestorationInternal(),
-            FrameLoadTypeReplaceCurrentItem, exceptionState);
+        stateObjectAdded(data, title, url, options, FrameLoadTypeRedirectWithLockedBackForwardList, exceptionState);
     }
-
-    void setScrollRestoration(const String& value);
-    String scrollRestoration();
 
     bool stateChanged() const;
     bool isSameAsCurrentState(SerializedScriptValue*) const;
 
+    void stateObjectAdded(PassRefPtr<SerializedScriptValue>, const String& title, const String& url, const StateOptions&, FrameLoadType, ExceptionState&);
+
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    FRIEND_TEST_ALL_PREFIXES(HistoryTest, CanChangeToURL);
-    FRIEND_TEST_ALL_PREFIXES(HistoryTest, CanChangeToURLInFileOrigin);
-    FRIEND_TEST_ALL_PREFIXES(HistoryTest, CanChangeToURLInUniqueOrigin);
-
     explicit History(LocalFrame*);
-
-    static bool canChangeToUrl(const KURL&,
-        SecurityOrigin*,
-        const KURL& documentURL);
 
     KURL urlForState(const String& url);
 
-    void stateObjectAdded(PassRefPtr<SerializedScriptValue>,
-        const String& title,
-        const String& url,
-        HistoryScrollRestorationType,
-        FrameLoadType,
-        ExceptionState&);
     SerializedScriptValue* stateInternal() const;
-    HistoryScrollRestorationType scrollRestorationInternal() const;
 
     RefPtr<SerializedScriptValue> m_lastStateObjectRequested;
 };

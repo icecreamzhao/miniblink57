@@ -31,13 +31,17 @@
 #define DecodeEscapeSequences_h
 
 #include "wtf/ASCIICType.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Assertions.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/TextEncoding.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 // See
 // <http://en.wikipedia.org/wiki/Percent-encoding#Non-standard_implementations>.
 struct Unicode16BitEscapeSequence {
@@ -53,11 +57,24 @@ struct Unicode16BitEscapeSequence {
     {
         size_t runEnd = startPosition;
         while (endPosition - runEnd >= sequenceSize && string[runEnd] == '%' && string[runEnd + 1] == 'u' && isASCIIHexDigit(string[runEnd + 2]) && isASCIIHexDigit(string[runEnd + 3]) && isASCIIHexDigit(string[runEnd + 4]) && isASCIIHexDigit(string[runEnd + 5])) {
+=======
+// See <http://en.wikipedia.org/wiki/Percent-encoding#Non-standard_implementations>.
+struct Unicode16BitEscapeSequence {
+    enum { sequenceSize = 6 }; // e.g. %u26C4
+    static size_t findInString(const String& string, size_t startPosition) { return string.find("%u", startPosition); }
+    static size_t findEndOfRun(const String& string, size_t startPosition, size_t endPosition)
+    {
+        size_t runEnd = startPosition;
+        while (endPosition - runEnd >= sequenceSize && string[runEnd] == '%' && string[runEnd + 1] == 'u'
+               && isASCIIHexDigit(string[runEnd + 2]) && isASCIIHexDigit(string[runEnd + 3])
+               && isASCIIHexDigit(string[runEnd + 4]) && isASCIIHexDigit(string[runEnd + 5])) {
+>>>>>>> miniblink49
             runEnd += sequenceSize;
         }
         return runEnd;
     }
 
+<<<<<<< HEAD
     template <typename CharType>
     static String decodeRun(const CharType* run,
         size_t runLength,
@@ -68,6 +85,15 @@ struct Unicode16BitEscapeSequence {
         // For 16-bit escape sequences, we know that findEndOfRun() has given us a
         // contiguous run of sequences without any intervening characters, so decode
         // the run without additional checks.
+=======
+    template<typename CharType>
+    static String decodeRun(const CharType* run, size_t runLength, const WTF::TextEncoding&)
+    {
+        // Each %u-escape sequence represents a UTF-16 code unit.
+        // See <http://www.w3.org/International/iri-edit/draft-duerst-iri.html#anchor29>.
+        // For 16-bit escape sequences, we know that findEndOfRun() has given us a contiguous run of sequences
+        // without any intervening characters, so decode the run without additional checks.
+>>>>>>> miniblink49
         size_t numberOfSequences = runLength / sequenceSize;
         StringBuilder builder;
         builder.reserveCapacity(numberOfSequences);
@@ -82,6 +108,7 @@ struct Unicode16BitEscapeSequence {
 
 struct URLEscapeSequence {
     enum { sequenceSize = 3 }; // e.g. %41
+<<<<<<< HEAD
     static size_t findInString(const String& string, size_t startPosition)
     {
         return string.find('%', startPosition);
@@ -96,6 +123,16 @@ struct URLEscapeSequence {
         // the run. In other words, we end the run at the first value outside of the
         // 0x40 - 0x7F range, after two values in this range, or at a %-sign that
         // does not introduce a valid escape sequence.
+=======
+    static size_t findInString(const String& string, size_t startPosition) { return string.find('%', startPosition); }
+    static size_t findEndOfRun(const String& string, size_t startPosition, size_t endPosition)
+    {
+        // Make the simplifying assumption that supported encodings may have up to two unescaped characters
+        // in the range 0x40 - 0x7F as the trailing bytes of their sequences which need to be passed into the
+        // decoder as part of the run. In other words, we end the run at the first value outside of the
+        // 0x40 - 0x7F range, after two values in this range, or at a %-sign that does not introduce a valid
+        // escape sequence.
+>>>>>>> miniblink49
         size_t runEnd = startPosition;
         int numberOfTrailingCharacters = 0;
         while (runEnd < endPosition) {
@@ -114,6 +151,7 @@ struct URLEscapeSequence {
         return runEnd;
     }
 
+<<<<<<< HEAD
     template <typename CharType>
     static String decodeRun(const CharType* run,
         size_t runLength,
@@ -125,6 +163,15 @@ struct URLEscapeSequence {
         Vector<char, 512> buffer;
         buffer.resize(
             runLength); // Unescaping hex sequences only makes the length smaller.
+=======
+    template<typename CharType>
+    static String decodeRun(const CharType* run, size_t runLength, const WTF::TextEncoding& encoding)
+    {
+        // For URL escape sequences, we know that findEndOfRun() has given us a run where every %-sign introduces
+        // a valid escape sequence, but there may be characters between the sequences.
+        Vector<char, 512> buffer;
+        buffer.resize(runLength); // Unescaping hex sequences only makes the length smaller.
+>>>>>>> miniblink49
         char* p = buffer.data();
         const CharType* runEnd = run + runLength;
         while (run < runEnd) {
@@ -136,6 +183,7 @@ struct URLEscapeSequence {
                 run += 1;
             }
         }
+<<<<<<< HEAD
         ASSERT(
             buffer.size() >= static_cast<size_t>(p - buffer.data())); // Prove buffer not overrun.
         return (encoding.isValid() ? encoding : UTF8Encoding())
@@ -146,15 +194,28 @@ struct URLEscapeSequence {
 template <typename EscapeSequence>
 String decodeEscapeSequences(const String& string,
     const WTF::TextEncoding& encoding)
+=======
+        ASSERT(buffer.size() >= static_cast<size_t>(p - buffer.data())); // Prove buffer not overrun.
+        return (encoding.isValid() ? encoding : UTF8Encoding()).decode(buffer.data(), p - buffer.data());
+    }
+};
+
+template<typename EscapeSequence>
+String decodeEscapeSequences(const String& string, const WTF::TextEncoding& encoding)
+>>>>>>> miniblink49
 {
     StringBuilder result;
     size_t length = string.length();
     size_t decodedPosition = 0;
     size_t searchPosition = 0;
     size_t encodedRunPosition;
+<<<<<<< HEAD
     while ((encodedRunPosition = EscapeSequence::findInString(
                 string, searchPosition))
         != kNotFound) {
+=======
+    while ((encodedRunPosition = EscapeSequence::findInString(string, searchPosition)) != kNotFound) {
+>>>>>>> miniblink49
         size_t encodedRunEnd = EscapeSequence::findEndOfRun(string, encodedRunPosition, length);
         searchPosition = encodedRunEnd;
         if (encodedRunEnd == encodedRunPosition) {
@@ -162,6 +223,7 @@ String decodeEscapeSequences(const String& string,
             continue;
         }
 
+<<<<<<< HEAD
         String decoded = string.is8Bit()
             ? EscapeSequence::decodeRun(
                 string.characters8() + encodedRunPosition,
@@ -169,12 +231,21 @@ String decodeEscapeSequences(const String& string,
             : EscapeSequence::decodeRun(
                 string.characters16() + encodedRunPosition,
                 encodedRunEnd - encodedRunPosition, encoding);
+=======
+        String decoded = string.is8Bit() ?
+            EscapeSequence::decodeRun(string.characters8() + encodedRunPosition, encodedRunEnd - encodedRunPosition, encoding) :
+            EscapeSequence::decodeRun(string.characters16() + encodedRunPosition, encodedRunEnd - encodedRunPosition, encoding);
+>>>>>>> miniblink49
 
         if (decoded.isEmpty())
             continue;
 
+<<<<<<< HEAD
         result.append(string, decodedPosition,
             encodedRunPosition - decodedPosition);
+=======
+        result.append(string, decodedPosition, encodedRunPosition - decodedPosition);
+>>>>>>> miniblink49
         result.append(decoded);
         decodedPosition = encodedRunEnd;
     }

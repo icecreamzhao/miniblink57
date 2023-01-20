@@ -26,6 +26,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+#if ENABLE(WEB_AUDIO)
+
+>>>>>>> miniblink49
 #include "platform/audio/ReverbInputBuffer.h"
 
 namespace blink {
@@ -44,8 +51,12 @@ void ReverbInputBuffer::write(const float* sourceP, size_t numberOfFrames)
     if (!isCopySafe)
         return;
 
+<<<<<<< HEAD
     memcpy(m_buffer.data() + m_writeIndex, sourceP,
         sizeof(float) * numberOfFrames);
+=======
+    memcpy(m_buffer.data() + m_writeIndex, sourceP, sizeof(float) * numberOfFrames);
+>>>>>>> miniblink49
 
     m_writeIndex += numberOfFrames;
     ASSERT(m_writeIndex <= bufferLength);
@@ -54,15 +65,23 @@ void ReverbInputBuffer::write(const float* sourceP, size_t numberOfFrames)
         m_writeIndex = 0;
 }
 
+<<<<<<< HEAD
 float* ReverbInputBuffer::directReadFrom(int* readIndex,
     size_t numberOfFrames)
+=======
+float* ReverbInputBuffer::directReadFrom(int* readIndex, size_t numberOfFrames)
+>>>>>>> miniblink49
 {
     size_t bufferLength = m_buffer.size();
     bool isPointerGood = readIndex && *readIndex >= 0 && *readIndex + numberOfFrames <= bufferLength;
     ASSERT(isPointerGood);
     if (!isPointerGood) {
+<<<<<<< HEAD
         // Should never happen in practice but return pointer to start of buffer
         // (avoid crash)
+=======
+        // Should never happen in practice but return pointer to start of buffer (avoid crash)
+>>>>>>> miniblink49
         if (readIndex)
             *readIndex = 0;
         return m_buffer.data();
@@ -84,3 +103,8 @@ void ReverbInputBuffer::reset()
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

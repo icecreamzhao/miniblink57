@@ -6,6 +6,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkADrawable.h"
 
 bool SkADrawable::doEvent(SkDisplayEvent::Kind, SkEventState*)
@@ -24,4 +25,21 @@ void SkADrawable::initialize()
 
 void SkADrawable::setSteps(int steps)
 {
+=======
+
+#include "SkADrawable.h"
+
+bool SkADrawable::doEvent(SkDisplayEvent::Kind , SkEventState* ) {
+    return false;
+}
+
+bool SkADrawable::isDrawable() const {
+    return true;
+}
+
+void SkADrawable::initialize() {
+}
+
+void SkADrawable::setSteps(int steps) {
+>>>>>>> miniblink49
 }

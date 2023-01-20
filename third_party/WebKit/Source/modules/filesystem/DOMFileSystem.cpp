@@ -28,12 +28,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/filesystem/DOMFileSystem.h"
 
 #include "core/fileapi/BlobCallback.h"
 #include "core/inspector/InspectorInstrumentation.h"
 #include "modules/filesystem/DOMFilePath.h"
 #include "modules/filesystem/DirectoryEntry.h"
+=======
+#include "config.h"
+#include "modules/filesystem/DOMFileSystem.h"
+
+#include "modules/filesystem/DOMFilePath.h"
+#include "modules/filesystem/DirectoryEntry.h"
+#include "modules/filesystem/ErrorCallback.h"
+#include "modules/filesystem/FileCallback.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/FileEntry.h"
 #include "modules/filesystem/FileSystemCallbacks.h"
 #include "modules/filesystem/FileWriter.h"
@@ -41,6 +51,7 @@
 #include "modules/filesystem/FileWriterCallback.h"
 #include "modules/filesystem/MetadataCallback.h"
 #include "platform/FileMetadata.h"
+<<<<<<< HEAD
 #include "platform/WebTaskRunner.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/Platform.h"
@@ -80,11 +91,33 @@ DOMFileSystem* DOMFileSystem::create(ExecutionContext* context,
 DOMFileSystem* DOMFileSystem::createIsolatedFileSystem(
     ExecutionContext* context,
     const String& filesystemId)
+=======
+#include "platform/weborigin/DatabaseIdentifier.h"
+#include "platform/weborigin/SecurityOrigin.h"
+#include "public/platform/WebFileSystem.h"
+#include "public/platform/WebFileSystemCallbacks.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/text/StringBuilder.h"
+#include "wtf/text/WTFString.h"
+
+namespace blink {
+
+// static
+DOMFileSystem* DOMFileSystem::create(ExecutionContext* context, const String& name, FileSystemType type, const KURL& rootURL)
+{
+    DOMFileSystem* fileSystem(new DOMFileSystem(context, name, type, rootURL));
+    fileSystem->suspendIfNeeded();
+    return fileSystem;
+}
+
+DOMFileSystem* DOMFileSystem::createIsolatedFileSystem(ExecutionContext* context, const String& filesystemId)
+>>>>>>> miniblink49
 {
     if (filesystemId.isEmpty())
         return 0;
 
     StringBuilder filesystemName;
+<<<<<<< HEAD
     filesystemName.append(Platform::current()->fileSystemCreateOriginIdentifier(
         WebSecurityOrigin(context->getSecurityOrigin())));
     filesystemName.append(":Isolated_");
@@ -95,12 +128,24 @@ DOMFileSystem* DOMFileSystem::createIsolatedFileSystem(
     StringBuilder rootURL;
     rootURL.append("filesystem:");
     rootURL.append(context->getSecurityOrigin()->toString());
+=======
+    filesystemName.append(createDatabaseIdentifierFromSecurityOrigin(context->securityOrigin()));
+    filesystemName.appendLiteral(":Isolated_");
+    filesystemName.append(filesystemId);
+
+    // The rootURL created here is going to be attached to each filesystem request and
+    // is to be validated each time the request is being handled.
+    StringBuilder rootURL;
+    rootURL.appendLiteral("filesystem:");
+    rootURL.append(context->securityOrigin()->toString());
+>>>>>>> miniblink49
     rootURL.append('/');
     rootURL.append(isolatedPathPrefix);
     rootURL.append('/');
     rootURL.append(filesystemId);
     rootURL.append('/');
 
+<<<<<<< HEAD
     return DOMFileSystem::create(context, filesystemName.toString(),
         FileSystemTypeIsolated,
         KURL(ParsedURLString, rootURL.toString()));
@@ -112,6 +157,14 @@ DOMFileSystem::DOMFileSystem(ExecutionContext* context,
     const KURL& rootURL)
     : DOMFileSystemBase(context, name, type, rootURL)
     , ContextLifecycleObserver(context)
+=======
+    return DOMFileSystem::create(context, filesystemName.toString(), FileSystemTypeIsolated, KURL(ParsedURLString, rootURL.toString()));
+}
+
+DOMFileSystem::DOMFileSystem(ExecutionContext* context, const String& name, FileSystemType type, const KURL& rootURL)
+    : DOMFileSystemBase(context, name, type, rootURL)
+    , ActiveDOMObject(context)
+>>>>>>> miniblink49
     , m_numberOfPendingCallbacks(0)
     , m_rootEntry(DirectoryEntry::create(this, DOMFilePath::root))
 {
@@ -139,6 +192,7 @@ bool DOMFileSystem::hasPendingActivity() const
     return m_numberOfPendingCallbacks;
 }
 
+<<<<<<< HEAD
 void DOMFileSystem::reportError(ErrorCallbackBase* errorCallback,
     FileError::ErrorCode fileError)
 {
@@ -154,10 +208,16 @@ void DOMFileSystem::reportError(ExecutionContext* executionContext,
     scheduleCallback(executionContext,
         WTF::bind(&ErrorCallbackBase::invoke,
             wrapPersistent(errorCallback), fileError));
+=======
+void DOMFileSystem::reportError(ErrorCallback* errorCallback, FileError* fileError)
+{
+    scheduleCallback(errorCallback, fileError);
+>>>>>>> miniblink49
 }
 
 namespace {
 
+<<<<<<< HEAD
     class ConvertToFileWriterCallback : public FileWriterBaseCallback {
     public:
         static ConvertToFileWriterCallback* create(FileWriterCallback* callback)
@@ -189,10 +249,41 @@ namespace {
 void DOMFileSystem::createWriter(const FileEntry* fileEntry,
     FileWriterCallback* successCallback,
     ErrorCallbackBase* errorCallback)
+=======
+class ConvertToFileWriterCallback : public FileWriterBaseCallback {
+public:
+    static ConvertToFileWriterCallback* create(FileWriterCallback* callback)
+    {
+        return new ConvertToFileWriterCallback(callback);
+    }
+
+    DEFINE_INLINE_TRACE()
+    {
+        visitor->trace(m_callback);
+        FileWriterBaseCallback::trace(visitor);
+    }
+
+    void handleEvent(FileWriterBase* fileWriterBase)
+    {
+        m_callback->handleEvent(static_cast<FileWriter*>(fileWriterBase));
+    }
+private:
+    explicit ConvertToFileWriterCallback(FileWriterCallback* callback)
+        : m_callback(callback)
+    {
+    }
+    Member<FileWriterCallback> m_callback;
+};
+
+}
+
+void DOMFileSystem::createWriter(const FileEntry* fileEntry, FileWriterCallback* successCallback, ErrorCallback* errorCallback)
+>>>>>>> miniblink49
 {
     ASSERT(fileEntry);
 
     if (!fileSystem()) {
+<<<<<<< HEAD
         reportError(errorCallback, FileError::kAbortErr);
         return;
     }
@@ -231,12 +322,37 @@ void DOMFileSystem::scheduleCallback(ExecutionContext* executionContext,
         ->postTask(BLINK_FROM_HERE,
             WTF::bind(&runCallback, wrapWeakPersistent(executionContext),
                 WTF::passed(std::move(task))));
+=======
+        reportError(errorCallback, FileError::create(FileError::ABORT_ERR));
+        return;
+    }
+
+    FileWriter* fileWriter = FileWriter::create(executionContext());
+    FileWriterBaseCallback* conversionCallback = ConvertToFileWriterCallback::create(successCallback);
+    OwnPtr<AsyncFileSystemCallbacks> callbacks = FileWriterBaseCallbacks::create(fileWriter, conversionCallback, errorCallback, m_context);
+    fileSystem()->createFileWriter(createFileSystemURL(fileEntry), fileWriter, callbacks.release());
+}
+
+void DOMFileSystem::createFile(const FileEntry* fileEntry, FileCallback* successCallback, ErrorCallback* errorCallback)
+{
+    KURL fileSystemURL = createFileSystemURL(fileEntry);
+    if (!fileSystem()) {
+        reportError(errorCallback, FileError::create(FileError::ABORT_ERR));
+        return;
+    }
+
+    fileSystem()->createSnapshotFileAndReadMetadata(fileSystemURL, SnapshotFileCallback::create(this, fileEntry->name(), fileSystemURL, successCallback, errorCallback, m_context));
+>>>>>>> miniblink49
 }
 
 DEFINE_TRACE(DOMFileSystem)
 {
     DOMFileSystemBase::trace(visitor);
+<<<<<<< HEAD
     ContextLifecycleObserver::trace(visitor);
+=======
+    ActiveDOMObject::trace(visitor);
+>>>>>>> miniblink49
     visitor->trace(m_rootEntry);
 }
 

@@ -10,6 +10,7 @@
 namespace ots {
 
 struct OpenTypeCVT {
+<<<<<<< HEAD
     const uint8_t* data;
     uint32_t length;
 };
@@ -17,3 +18,12 @@ struct OpenTypeCVT {
 } // namespace ots
 
 #endif // OTS_CVT_H_
+=======
+  const uint8_t *data;
+  uint32_t length;
+};
+
+}  // namespace ots
+
+#endif  // OTS_CVT_H_
+>>>>>>> miniblink49

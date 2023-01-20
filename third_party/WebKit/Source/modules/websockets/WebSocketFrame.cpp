@@ -20,14 +20,23 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> miniblink49
 #include "modules/websockets/WebSocketFrame.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebSocketFrame::WebSocketFrame(OpCode opCode,
     const char* payload,
     size_t payloadLength,
     Flags flags)
+=======
+WebSocketFrame::WebSocketFrame(OpCode opCode, const char* payload, size_t payloadLength, Flags flags)
+>>>>>>> miniblink49
     : opCode(opCode)
     , final(flags & Final)
     , compress(flags & Compress)

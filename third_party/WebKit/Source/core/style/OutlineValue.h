@@ -26,14 +26,11 @@
 #define OutlineValue_h
 
 #include "core/style/BorderValue.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
-class OutlineValue final : public BorderValue {
-    DISALLOW_NEW();
-    friend class ComputedStyle;
-
+class OutlineValue : public BorderValue {
+friend class ComputedStyle;
 public:
     OutlineValue()
         : m_offset(0)
@@ -45,11 +42,14 @@ public:
         return BorderValue::operator==(o) && m_offset == o.m_offset && m_isAuto == o.m_isAuto;
     }
 
-    bool operator!=(const OutlineValue& o) const { return !(*this == o); }
+    bool operator!=(const OutlineValue& o) const
+    {
+        return !(*this == o);
+    }
 
     bool visuallyEqual(const OutlineValue& o) const
     {
-        if (m_style == BorderStyleNone && o.m_style == BorderStyleNone)
+        if (m_style == BNONE && o.m_style == BNONE)
             return true;
         return *this == o;
     }

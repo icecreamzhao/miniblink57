@@ -24,7 +24,10 @@ import dm_flags
 import nanobench_flags
 
 
+<<<<<<< HEAD
 CONFIG_COVERAGE = 'Coverage'
+=======
+>>>>>>> miniblink49
 CONFIG_DEBUG = 'Debug'
 CONFIG_RELEASE = 'Release'
 
@@ -42,7 +45,11 @@ cov_start = lineno()+1   # We care about coverage starting just past this def.
 def gyp_defines(builder_dict):
   gyp_defs = {}
 
+<<<<<<< HEAD
   # skia_arch_type.
+=======
+  # skia_arch_width.
+>>>>>>> miniblink49
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_BUILD:
     arch = builder_dict['target_arch']
   elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
@@ -50,6 +57,7 @@ def gyp_defines(builder_dict):
   else:
     arch = builder_dict['arch']
 
+<<<<<<< HEAD
   arch_types = {
     'x86':      'x86',
     'x86_64':   'x86_64',
@@ -61,6 +69,22 @@ def gyp_defines(builder_dict):
   }
   if arch in arch_types:
     gyp_defs['skia_arch_type']  = arch_types[arch]
+=======
+  #TODO(scroggo + mtklein): when safe, only set skia_arch_type.
+  arch_widths_and_types = {
+    'x86':      ('32', 'x86'),
+    'x86_64':   ('64', 'x86_64'),
+    'Arm7':     ('32', 'arm'),
+    'Arm64':    ('64', 'arm64'),
+    'Mips':     ('32', 'mips'),
+    'Mips64':   ('64', 'mips'),
+    'MipsDSP2': ('32', 'mips'),
+  }
+  if arch in arch_widths_and_types:
+    skia_arch_width, skia_arch_type = arch_widths_and_types[arch]
+    gyp_defs['skia_arch_width'] = skia_arch_width
+    gyp_defs['skia_arch_type']  = skia_arch_type
+>>>>>>> miniblink49
 
   # housekeeper: build shared lib.
   if builder_dict['role'] == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
@@ -80,9 +104,12 @@ def gyp_defines(builder_dict):
     elif ('Mac' in builder_dict.get('os', '') and
           'Android' in builder_dict.get('extra_config', '')):
       werr = False
+<<<<<<< HEAD
     elif 'Fast' in builder_dict.get('extra_config', ''):
       # See https://bugs.chromium.org/p/skia/issues/detail?id=5257
       werr = False
+=======
+>>>>>>> miniblink49
     else:
       werr = True
   gyp_defs['skia_warnings_as_errors'] = str(int(werr))  # True/False -> '1'/'0'
@@ -101,9 +128,12 @@ def gyp_defines(builder_dict):
   # ANGLE.
   if builder_dict.get('extra_config') == 'ANGLE':
     gyp_defs['skia_angle'] = '1'
+<<<<<<< HEAD
     if builder_dict.get('os', '') in ('Ubuntu', 'Linux'):
       gyp_defs['use_x11'] = '1'
       gyp_defs['chromeos'] = '0'
+=======
+>>>>>>> miniblink49
 
   # GDI.
   if builder_dict.get('extra_config') == 'GDI':
@@ -123,10 +153,13 @@ def gyp_defines(builder_dict):
   if builder_dict.get('extra_config') == 'Shared':
     gyp_defs['skia_shared_lib'] = '1'
 
+<<<<<<< HEAD
   # Build fastest Skia possible.
   if builder_dict.get('extra_config') == 'Fast':
     gyp_defs['skia_fast'] = '1'
 
+=======
+>>>>>>> miniblink49
   # PDF viewer in GM.
   if (builder_dict.get('os') == 'Mac10.8' and
       builder_dict.get('arch') == 'x86_64' and
@@ -151,14 +184,21 @@ def gyp_defines(builder_dict):
       builder_dict.get('cpu_or_gpu_value') == 'Mesa'):
     gyp_defs['skia_mesa'] = '1'
 
+<<<<<<< HEAD
   # VisualBench
   if builder_dict.get('extra_config') == 'VisualBench':
     gyp_defs['skia_use_sdl'] = '1'
+=======
+  # SKNX_NO_SIMD
+  if builder_dict.get('extra_config') == 'SKNX_NO_SIMD':
+    gyp_defs['sknx_no_simd'] = '1'
+>>>>>>> miniblink49
 
   # skia_use_android_framework_defines.
   if builder_dict.get('extra_config') == 'Android_FrameworkDefs':
     gyp_defs['skia_use_android_framework_defines'] = '1'
 
+<<<<<<< HEAD
   # Skia dump stats for perf tests and gpu
   if (builder_dict.get('cpu_or_gpu') == 'GPU' and
       builder_dict.get('role') == 'Perf'):
@@ -172,13 +212,19 @@ def gyp_defines(builder_dict):
   if builder_dict.get('extra_config') == 'Vulkan':
     gyp_defs['skia_vulkan'] = '1'
 
+=======
+>>>>>>> miniblink49
   return gyp_defs
 
 
 cov_skip.extend([lineno(), lineno() + 1])
 def get_extra_env_vars(builder_dict):
   env = {}
+<<<<<<< HEAD
   if builder_dict.get('configuration') == CONFIG_COVERAGE:
+=======
+  if builder_dict.get('configuration') == 'Coverage':
+>>>>>>> miniblink49
     # We have to use Clang 3.6 because earlier versions do not support the
     # compile flags we use and 3.7 and 3.8 hit asserts during compilation.
     env['CC'] = '/usr/bin/clang-3.6'
@@ -186,16 +232,20 @@ def get_extra_env_vars(builder_dict):
   elif builder_dict.get('compiler') == 'Clang':
     env['CC'] = '/usr/bin/clang'
     env['CXX'] = '/usr/bin/clang++'
+<<<<<<< HEAD
 
   # SKNX_NO_SIMD, SK_USE_DISCARDABLE_SCALEDIMAGECACHE, etc.
   extra_config = builder_dict.get('extra_config', '')
   if extra_config.startswith('SK') and extra_config.isupper():
     env['CPPFLAGS'] = '-D' + extra_config
 
+=======
+>>>>>>> miniblink49
   return env
 
 
 cov_skip.extend([lineno(), lineno() + 1])
+<<<<<<< HEAD
 def build_targets_from_builder_dict(builder_dict, do_test_steps, do_perf_steps):
   """Return a list of targets to build, depending on the builder type."""
   if builder_dict['role'] in ('Test', 'Perf') and builder_dict['os'] == 'iOS':
@@ -214,6 +264,19 @@ def build_targets_from_builder_dict(builder_dict, do_test_steps, do_perf_steps):
     t.append('nanobench')
   if t:
     return t
+=======
+def build_targets_from_builder_dict(builder_dict):
+  """Return a list of targets to build, depending on the builder type."""
+  if builder_dict['role'] in ('Test', 'Perf') and builder_dict['os'] == 'iOS':
+    return ['iOSShell']
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_TEST:
+    t = ['dm']
+    if builder_dict.get('configuration') == 'Debug':
+      t.append('nanobench')
+    return t
+  elif builder_dict['role'] == builder_name_schema.BUILDER_ROLE_PERF:
+    return ['nanobench']
+>>>>>>> miniblink49
   else:
     return ['most']
 
@@ -234,6 +297,7 @@ def device_cfg(builder_dict):
     }.get(builder_dict['target_arch'], 'arm_v7_neon')
   elif builder_dict.get('os') == 'Android':
     return {
+<<<<<<< HEAD
       'AndroidOne':    'arm_v7_neon',
       'GalaxyS3':      'arm_v7_neon',
       'GalaxyS4':      'arm_v7_neon',
@@ -251,12 +315,36 @@ def device_cfg(builder_dict):
   if 'iOS' in builder_dict.get('os', ''):
     return {
       'iPad4': 'iPad4,1',
+=======
+      'GalaxyS3': 'arm_v7_neon',
+      'GalaxyS4': 'arm_v7_neon',
+      'Nexus5': 'arm_v7', # This'd be 'nexus_5', but we simulate no-NEON Clank.
+      'Nexus6': 'arm_v7_neon',
+      'Nexus7': 'nexus_7',
+      'Nexus9': 'nexus_9',
+      'Nexus10': 'nexus_10',
+      'NexusPlayer': 'x86',
+      'NVIDIA_Shield': 'arm64',
+    }[builder_dict['model']]
+
+  # ChromeOS.
+  if 'CrOS' in builder_dict.get('extra_config', ''):
+    if 'Link' in builder_dict['extra_config']:
+      return 'link'
+    if 'Daisy' in builder_dict['extra_config']:
+      return 'daisy'
+  elif builder_dict.get('os') == 'ChromeOS':
+    return {
+      'Link': 'link',
+      'Daisy': 'daisy',
+>>>>>>> miniblink49
     }[builder_dict['model']]
 
   return None
 
 
 cov_skip.extend([lineno(), lineno() + 1])
+<<<<<<< HEAD
 def product_board(builder_dict):
   if 'Android' in builder_dict.get('os', ''):
     return {
@@ -276,6 +364,8 @@ def product_board(builder_dict):
 
 
 cov_skip.extend([lineno(), lineno() + 1])
+=======
+>>>>>>> miniblink49
 def get_builder_spec(builder_name):
   builder_dict = builder_name_schema.DictForBuilderName(builder_name)
   env = get_extra_env_vars(builder_dict)
@@ -284,6 +374,10 @@ def get_builder_spec(builder_name):
   gyp_defs_list.sort()
   env['GYP_DEFINES'] = ' '.join(gyp_defs_list)
   rv = {
+<<<<<<< HEAD
+=======
+    'build_targets': build_targets_from_builder_dict(builder_dict),
+>>>>>>> miniblink49
     'builder_cfg': builder_dict,
     'dm_flags': dm_flags.get_args(builder_name),
     'env': env,
@@ -292,9 +386,12 @@ def get_builder_spec(builder_name):
   device = device_cfg(builder_dict)
   if device:
     rv['device_cfg'] = device
+<<<<<<< HEAD
   board = product_board(builder_dict)
   if board:
     rv['product.board'] = board
+=======
+>>>>>>> miniblink49
 
   role = builder_dict['role']
   if role == builder_name_schema.BUILDER_ROLE_HOUSEKEEPER:
@@ -306,6 +403,7 @@ def get_builder_spec(builder_name):
   if ('Win' in builder_dict.get('os', '') and arch == 'x86_64'):
     configuration += '_x64'
   rv['configuration'] = configuration
+<<<<<<< HEAD
   if configuration == CONFIG_COVERAGE:
     rv['do_compile_steps'] = False
   rv['do_test_steps'] = role == builder_name_schema.BUILDER_ROLE_TEST
@@ -319,6 +417,13 @@ def get_builder_spec(builder_name):
 
   rv['build_targets'] = build_targets_from_builder_dict(
         builder_dict, rv['do_test_steps'], rv['do_perf_steps'])
+=======
+  rv['do_test_steps'] = role == builder_name_schema.BUILDER_ROLE_TEST
+  rv['do_perf_steps'] = (role == builder_name_schema.BUILDER_ROLE_PERF or
+                         (role == builder_name_schema.BUILDER_ROLE_TEST and
+                          configuration == CONFIG_DEBUG) or
+                         'Valgrind' in builder_name)
+>>>>>>> miniblink49
 
   # Do we upload perf results?
   upload_perf_results = False
@@ -330,7 +435,10 @@ def get_builder_spec(builder_name):
   skip_upload_bots = [
     'ASAN',
     'Coverage',
+<<<<<<< HEAD
     'MSAN',
+=======
+>>>>>>> miniblink49
     'TSAN',
     'UBSAN',
     'Valgrind',
@@ -358,6 +466,7 @@ def self_test():
         'Build-Win-MSVC-x86-Debug-Exceptions',
         'Build-Ubuntu-GCC-Arm7-Debug-Android_FrameworkDefs',
         'Build-Ubuntu-GCC-Arm7-Debug-Android_NoNeon',
+<<<<<<< HEAD
         'Build-Ubuntu-GCC-x86_64-Release-ANGLE',
         'Build-Ubuntu-GCC-x64_64-Release-Fast',
         'Build-Ubuntu-GCC-x86_64-Release-Mesa',
@@ -379,6 +488,21 @@ def self_test():
         'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
         'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
         'Test-Win10-MSVC-ShuttleA-GPU-GTX660-x86_64-Debug-Vulkan',
+=======
+        'Build-Ubuntu-GCC-Arm7-Debug-CrOS_Daisy',
+        'Build-Ubuntu-GCC-x86_64-Debug-CrOS_Link',
+        'Build-Ubuntu-GCC-x86_64-Release-Mesa',
+        'Housekeeper-PerCommit',
+        'Perf-Win8-MSVC-ShuttleB-GPU-HD4600-x86_64-Release-Trybot',
+        'Test-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Debug',
+        'Test-ChromeOS-GCC-Link-CPU-AVX-x86_64-Debug',
+        'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
+        'Test-Mac10.8-Clang-MacMini4.1-GPU-GeForce320M-x86_64-Release',
+        'Test-Ubuntu-Clang-GCE-CPU-AVX2-x86_64-Coverage',
+        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-SKNX_NO_SIMD',
+        'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Release-Shared',
+        'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
+>>>>>>> miniblink49
         'Test-Win8-MSVC-ShuttleB-GPU-HD4600-x86-Release-ANGLE',
         'Test-Win8-MSVC-ShuttleA-CPU-AVX-x86_64-Debug',
   ]

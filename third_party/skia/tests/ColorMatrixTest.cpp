@@ -16,16 +16,24 @@
 #include <stdlib.h>
 
 static inline void assert_color(skiatest::Reporter* reporter,
+<<<<<<< HEAD
     SkColor expected, SkColor actual, int tolerance)
 {
+=======
+                                SkColor expected, SkColor actual, int tolerance) {
+>>>>>>> miniblink49
     REPORTER_ASSERT(reporter, abs((int)(SkColorGetA(expected) - SkColorGetA(actual))) <= tolerance);
     REPORTER_ASSERT(reporter, abs((int)(SkColorGetR(expected) - SkColorGetR(actual))) <= tolerance);
     REPORTER_ASSERT(reporter, abs((int)(SkColorGetG(expected) - SkColorGetG(actual))) <= tolerance);
     REPORTER_ASSERT(reporter, abs((int)(SkColorGetB(expected) - SkColorGetB(actual))) <= tolerance);
 }
 
+<<<<<<< HEAD
 static inline void assert_color(skiatest::Reporter* reporter, SkColor expected, SkColor actual)
 {
+=======
+static inline void assert_color(skiatest::Reporter* reporter, SkColor expected, SkColor actual) {
+>>>>>>> miniblink49
     const int TOLERANCE = 1;
     assert_color(reporter, expected, actual, TOLERANCE);
 }
@@ -34,22 +42,37 @@ static inline void assert_color(skiatest::Reporter* reporter, SkColor expected, 
  * This test case is a mirror of the Android CTS tests for MatrixColorFilter
  * found in the android.graphics.ColorMatrixColorFilterTest class.
  */
+<<<<<<< HEAD
 static inline void test_colorMatrixCTS(skiatest::Reporter* reporter)
 {
 
     SkBitmap bitmap;
     bitmap.allocN32Pixels(1, 1);
+=======
+static inline void test_colorMatrixCTS(skiatest::Reporter* reporter) {
+
+    SkBitmap bitmap;
+    bitmap.allocN32Pixels(1,1);
+>>>>>>> miniblink49
 
     SkCanvas canvas(bitmap);
     SkPaint paint;
 
     SkScalar blueToCyan[20] = {
+<<<<<<< HEAD
         1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 1.0f, 0.0f
     };
     paint.setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(blueToCyan));
+=======
+            1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f, 0.0f };
+    paint.setColorFilter(SkColorMatrixFilter::Create(blueToCyan))->unref();
+>>>>>>> miniblink49
 
     paint.setColor(SK_ColorBLUE);
     canvas.drawPoint(0, 0, paint);
@@ -69,12 +92,21 @@ static inline void test_colorMatrixCTS(skiatest::Reporter* reporter)
     assert_color(reporter, SK_ColorWHITE, bitmap.getColor(0, 0));
 
     SkScalar transparentRedAddBlue[20] = {
+<<<<<<< HEAD
         1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f, 64.0f,
         -0.5f, 0.0f, 0.0f, 1.0f, 0.0f
     };
     paint.setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(transparentRedAddBlue));
+=======
+            1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f, 64.0f,
+           -0.5f, 0.0f, 0.0f, 1.0f, 0.0f
+    };
+    paint.setColorFilter(SkColorMatrixFilter::Create(transparentRedAddBlue))->unref();
+>>>>>>> miniblink49
     bitmap.eraseColor(SK_ColorTRANSPARENT);
 
     paint.setColor(SK_ColorRED);
@@ -95,12 +127,20 @@ static inline void test_colorMatrixCTS(skiatest::Reporter* reporter)
     assert_color(reporter, SK_ColorCYAN, bitmap.getColor(0, 0));
 
     // create a new filter with the changed matrix
+<<<<<<< HEAD
     paint.setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(transparentRedAddBlue));
+=======
+    paint.setColorFilter(SkColorMatrixFilter::Create(transparentRedAddBlue))->unref();
+>>>>>>> miniblink49
     canvas.drawPoint(0, 0, paint);
     assert_color(reporter, SK_ColorBLUE, bitmap.getColor(0, 0));
 }
 
+<<<<<<< HEAD
 DEF_TEST(ColorMatrix, reporter)
 {
+=======
+DEF_TEST(ColorMatrix, reporter) {
+>>>>>>> miniblink49
     test_colorMatrixCTS(reporter);
 }

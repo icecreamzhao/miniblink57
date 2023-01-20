@@ -28,13 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/serviceworkers/ExtendableEvent.h"
+=======
+#include "config.h"
+#include "ExtendableEvent.h"
+>>>>>>> miniblink49
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "modules/serviceworkers/WaitUntilObserver.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 ExtendableEvent* ExtendableEvent::create(const AtomicString& type,
     const ExtendableEventInit& eventInit)
 {
@@ -60,13 +66,49 @@ void ExtendableEvent::waitUntil(ScriptState* scriptState,
 
 ExtendableEvent::ExtendableEvent(const AtomicString& type,
     const ExtendableEventInit& initializer)
+=======
+PassRefPtrWillBeRawPtr<ExtendableEvent> ExtendableEvent::create()
+{
+    return adoptRefWillBeNoop(new ExtendableEvent());
+}
+
+PassRefPtrWillBeRawPtr<ExtendableEvent> ExtendableEvent::create(const AtomicString& type, const ExtendableEventInit& eventInit)
+{
+    return adoptRefWillBeNoop(new ExtendableEvent(type, eventInit));
+}
+
+PassRefPtrWillBeRawPtr<ExtendableEvent> ExtendableEvent::create(const AtomicString& type, const ExtendableEventInit& eventInit, WaitUntilObserver* observer)
+{
+    return adoptRefWillBeNoop(new ExtendableEvent(type, eventInit, observer));
+}
+
+ExtendableEvent::~ExtendableEvent()
+{
+}
+
+void ExtendableEvent::waitUntil(ScriptState* scriptState, const ScriptValue& value, ExceptionState& exceptionState)
+{
+    if (m_observer)
+        m_observer->waitUntil(scriptState, value, exceptionState);
+}
+
+ExtendableEvent::ExtendableEvent()
+{
+}
+
+ExtendableEvent::ExtendableEvent(const AtomicString& type, const ExtendableEventInit& initializer)
+>>>>>>> miniblink49
     : Event(type, initializer)
 {
 }
 
+<<<<<<< HEAD
 ExtendableEvent::ExtendableEvent(const AtomicString& type,
     const ExtendableEventInit& initializer,
     WaitUntilObserver* observer)
+=======
+ExtendableEvent::ExtendableEvent(const AtomicString& type, const ExtendableEventInit& initializer, WaitUntilObserver* observer)
+>>>>>>> miniblink49
     : Event(type, initializer)
     , m_observer(observer)
 {

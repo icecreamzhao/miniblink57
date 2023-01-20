@@ -6,7 +6,6 @@
 #define RoundedInnerRectClipper_h
 
 #include "platform/graphics/paint/DisplayItem.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -15,24 +14,20 @@ class LayoutRect;
 class LayoutObject;
 struct PaintInfo;
 
-enum RoundedInnerRectClipperBehavior { ApplyToDisplayList,
-    ApplyToContext };
+enum RoundedInnerRectClipperBehavior {
+    ApplyToDisplayListIfEnabled,
+    ApplyToContext
+};
 
 class RoundedInnerRectClipper {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
 public:
-    RoundedInnerRectClipper(const LayoutObject&,
-        const PaintInfo&,
-        const LayoutRect&,
-        const FloatRoundedRect& clipRect,
-        RoundedInnerRectClipperBehavior);
+    RoundedInnerRectClipper(LayoutObject&, const PaintInfo&, const LayoutRect&, const FloatRoundedRect& clipRect, RoundedInnerRectClipperBehavior);
     ~RoundedInnerRectClipper();
 
 private:
-    const LayoutObject& m_layoutObject;
+    LayoutObject& m_layoutObject;
     const PaintInfo& m_paintInfo;
-    bool m_usePaintController;
+    bool m_useDisplayItemList;
     DisplayItem::Type m_clipType;
 };
 

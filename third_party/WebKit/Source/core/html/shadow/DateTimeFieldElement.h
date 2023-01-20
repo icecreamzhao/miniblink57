@@ -26,6 +26,7 @@
 #ifndef DateTimeFieldElement_h
 #define DateTimeFieldElement_h
 
+#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/HTMLDivElement.h"
 #include "core/html/HTMLSpanElement.h"
 
@@ -33,6 +34,7 @@ namespace blink {
 
 class DateComponents;
 class DateTimeFieldsState;
+class Font;
 
 // DateTimeFieldElement is base class of date time field element.
 class DateTimeFieldElement : public HTMLSpanElement {
@@ -46,7 +48,7 @@ public:
 
     // FieldOwner implementer must call removeEventHandler when
     // it doesn't handle event, e.g. at destruction.
-    class FieldOwner : public GarbageCollectedMixin {
+    class FieldOwner : public WillBeGarbageCollectedMixin {
     public:
         virtual ~FieldOwner();
         virtual void didBlurFromField() = 0;
@@ -63,7 +65,7 @@ public:
     void defaultEventHandler(Event*) override;
     virtual bool hasValue() const = 0;
     bool isDisabled() const;
-    virtual float maximumWidth(const ComputedStyle&);
+    virtual float maximumWidth(const Font&);
     virtual void populateDateTimeFieldsState(DateTimeFieldsState&) = 0;
     void removeEventHandler() { m_fieldOwner = nullptr; }
     void setDisabled();
@@ -77,16 +79,11 @@ public:
     virtual String visibleValue() const = 0;
     DECLARE_VIRTUAL_TRACE();
 
-    static float computeTextWidth(const ComputedStyle&, const String&);
-
 protected:
     DateTimeFieldElement(Document&, FieldOwner&);
     void focusOnNextField();
     virtual void handleKeyboardEvent(KeyboardEvent*) = 0;
-    void initialize(const AtomicString& pseudo,
-        const String& axHelpText,
-        int axMinimum,
-        int axMaximum);
+    void initialize(const AtomicString& pseudo, const String& axHelpText, int axMinimum, int axMaximum);
     Locale& localeForOwner() const;
     AtomicString localeIdentifier() const;
     void updateVisibleValue(EventBehavior);
@@ -94,7 +91,7 @@ protected:
     virtual int valueForARIAValueNow() const;
 
     // Node functions.
-    void setFocused(bool) override;
+    void setFocus(bool) override;
 
 private:
     void defaultKeyboardEventHandler(KeyboardEvent*);
@@ -103,9 +100,10 @@ private:
     bool isFieldOwnerReadOnly() const;
     bool supportsFocus() const final;
 
-    Member<FieldOwner> m_fieldOwner;
+    RawPtrWillBeMember<FieldOwner> m_fieldOwner;
 };
 
 } // namespace blink
 
+#endif
 #endif

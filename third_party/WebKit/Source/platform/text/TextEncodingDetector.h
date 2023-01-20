@@ -32,7 +32,10 @@
 #define TextEncodingDetector_h
 
 #include "platform/PlatformExport.h"
+<<<<<<< HEAD
 #include <cstddef>
+=======
+>>>>>>> miniblink49
 
 namespace WTF {
 class TextEncoding;
@@ -44,6 +47,7 @@ namespace blink {
 // hintEncodingName, detect the most likely character encoding.
 // The way hintEncodingName is used is up to an implementation.
 // Currently, the only caller sets it to the parent frame encoding.
+<<<<<<< HEAD
 // |hintUrl| is optional. You can pass nullptr.
 // |hintUserLanguage| is an optional language code like "fr", and can be
 // |nullptr.
@@ -53,6 +57,10 @@ PLATFORM_EXPORT bool detectTextEncoding(const char* data,
     const char* hintUrl,
     const char* hintUserLanguage,
     WTF::TextEncoding* detectedEncoding);
+=======
+PLATFORM_EXPORT bool detectTextEncoding(const char* data, size_t length,
+    const char* hintEncodingName, WTF::TextEncoding* detectedEncoding);
+>>>>>>> miniblink49
 
 } // namespace blink
 

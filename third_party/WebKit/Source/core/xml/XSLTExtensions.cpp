@@ -24,14 +24,15 @@
  * ings in this Software without prior written authorization from him.
  */
 
+#include "config.h"
 #include "core/xml/XSLTExtensions.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/Assertions.h"
 #include <libxml/xpathInternals.h>
-#include <third_party/libxslt/libxslt/extensions.h>
-#include <third_party/libxslt/libxslt/extra.h>
-#include <third_party/libxslt/libxslt/xsltutils.h>
+#include "third_party/libxslt/libxslt/extensions.h"
+#include "third_party/libxslt/libxslt/extra.h"
+#include "third_party/libxslt/libxslt/xsltutils.h"
 
 namespace blink {
 
@@ -53,21 +54,14 @@ static void exsltNodeSetFunction(xmlXPathParserContextPtr ctxt, int nargs)
         return;
     }
 
-    // node-set can also take a string and turn it into a singleton node
-    // set with one text node. This may null-deref if allocating the
-    // document, text node, etc. fails; that behavior is expected.
-
-    // Create a document to hold the text node result.
-    xsltTransformContextPtr tctxt = xsltXPathGetTransformContext(ctxt);
-    xmlDocPtr fragment = xsltCreateRVT(tctxt);
-    xsltRegisterLocalRVT(tctxt, fragment);
-
-    // Create the text node and wrap it in a result set.
     strval = xmlXPathPopString(ctxt);
-    retNode = xmlNewDocText(fragment, strval);
-    xmlAddChild(reinterpret_cast<xmlNodePtr>(fragment), retNode);
-    ret = xmlXPathNewNodeSet(retNode);
-    CHECK(ret);
+    retNode = xmlNewDocText(0, strval);
+    ret = xmlXPathNewValueTree(retNode);
+
+    // FIXME: It might be helpful to push any errors from xmlXPathNewValueTree
+    // up to the Javascript Console.
+    if (ret)
+        ret->type = XPATH_NODESET;
 
     if (strval)
         xmlFree(strval);
@@ -77,10 +71,8 @@ static void exsltNodeSetFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 void registerXSLTExtensions(xsltTransformContextPtr ctxt)
 {
-    DCHECK(RuntimeEnabledFeatures::xsltEnabled());
-    xsltRegisterExtFunction(ctxt, (const xmlChar*)"node-set",
-        (const xmlChar*)"http://exslt.org/common",
-        exsltNodeSetFunction);
+    ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+    xsltRegisterExtFunction(ctxt, (const xmlChar*)"node-set", (const xmlChar*)"http://exslt.org/common", exsltNodeSetFunction);
 }
 
 } // namespace blink

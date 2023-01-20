@@ -5,35 +5,28 @@
 #ifndef IndexedDBNames_h
 #define IndexedDBNames_h
 
-#include "platform/PlatformExport.h"
 #include "wtf/text/AtomicString.h"
+#include "platform/PlatformExport.h"
 
 // Generated from:
-// - ../../third_party/WebKit/Source/modules/indexeddb/IndexedDBNames.in
+// - indexeddb/IndexedDBNames.in
 
 namespace blink {
 namespace IndexedDBNames {
 
-    extern const WTF::AtomicString& IndexedDB;
-    extern const WTF::AtomicString& add;
-    extern const WTF::AtomicString& clear;
-    extern const WTF::AtomicString& done;
-    extern const WTF::AtomicString& next;
-    extern const WTF::AtomicString& nextunique;
-    extern const WTF::AtomicString& none;
-    extern const WTF::AtomicString& pending;
-    extern const WTF::AtomicString& prev;
-    extern const WTF::AtomicString& prevunique;
-    extern const WTF::AtomicString& put;
-    extern const WTF::AtomicString& readonly;
-    extern const WTF::AtomicString& readwrite;
-    extern const WTF::AtomicString& total;
-    extern const WTF::AtomicString& versionchange;
-    extern const WTF::AtomicString& kDelete;
+extern const WTF::AtomicString& done;
+extern const WTF::AtomicString& next;
+extern const WTF::AtomicString& nextunique;
+extern const WTF::AtomicString& none;
+extern const WTF::AtomicString& pending;
+extern const WTF::AtomicString& prev;
+extern const WTF::AtomicString& prevunique;
+extern const WTF::AtomicString& readonly;
+extern const WTF::AtomicString& readwrite;
+extern const WTF::AtomicString& total;
+extern const WTF::AtomicString& versionchange;
 
-    const unsigned IndexedDBNamesCount = 16;
-
-    void init();
+void init();
 
 } // IndexedDBNames
 } // namespace blink

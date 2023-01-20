@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,18 +9,30 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkScan.h"
 #include "SkBlitter.h"
 #include "SkRasterClip.h"
 
+<<<<<<< HEAD
 static inline void blitrect(SkBlitter* blitter, const SkIRect& r)
 {
+=======
+static inline void blitrect(SkBlitter* blitter, const SkIRect& r) {
+>>>>>>> miniblink49
     blitter->blitRect(r.fLeft, r.fTop, r.width(), r.height());
 }
 
 void SkScan::FillIRect(const SkIRect& r, const SkRegion* clip,
+<<<<<<< HEAD
     SkBlitter* blitter)
 {
+=======
+                       SkBlitter* blitter) {
+>>>>>>> miniblink49
     if (!r.isEmpty()) {
         if (clip) {
             if (clip->isRect()) {
@@ -31,8 +47,13 @@ void SkScan::FillIRect(const SkIRect& r, const SkRegion* clip,
                     }
                 }
             } else {
+<<<<<<< HEAD
                 SkRegion::Cliperator cliper(*clip, r);
                 const SkIRect& rr = cliper.rect();
+=======
+                SkRegion::Cliperator    cliper(*clip, r);
+                const SkIRect&          rr = cliper.rect();
+>>>>>>> miniblink49
 
                 while (!cliper.done()) {
                     blitrect(blitter, rr);
@@ -46,8 +67,12 @@ void SkScan::FillIRect(const SkIRect& r, const SkRegion* clip,
 }
 
 void SkScan::FillXRect(const SkXRect& xr, const SkRegion* clip,
+<<<<<<< HEAD
     SkBlitter* blitter)
 {
+=======
+                       SkBlitter* blitter) {
+>>>>>>> miniblink49
     SkIRect r;
 
     XRect_round(xr, &r);
@@ -55,8 +80,12 @@ void SkScan::FillXRect(const SkXRect& xr, const SkRegion* clip,
 }
 
 void SkScan::FillRect(const SkRect& r, const SkRegion* clip,
+<<<<<<< HEAD
     SkBlitter* blitter)
 {
+=======
+                       SkBlitter* blitter) {
+>>>>>>> miniblink49
     SkIRect ir;
 
     r.round(&ir);
@@ -66,8 +95,12 @@ void SkScan::FillRect(const SkRect& r, const SkRegion* clip,
 ///////////////////////////////////////////////////////////////////////////////
 
 void SkScan::FillIRect(const SkIRect& r, const SkRasterClip& clip,
+<<<<<<< HEAD
     SkBlitter* blitter)
 {
+=======
+                       SkBlitter* blitter) {
+>>>>>>> miniblink49
     if (clip.isEmpty() || r.isEmpty()) {
         return;
     }
@@ -82,8 +115,12 @@ void SkScan::FillIRect(const SkIRect& r, const SkRasterClip& clip,
 }
 
 void SkScan::FillXRect(const SkXRect& xr, const SkRasterClip& clip,
+<<<<<<< HEAD
     SkBlitter* blitter)
 {
+=======
+                       SkBlitter* blitter) {
+>>>>>>> miniblink49
     if (clip.isEmpty() || xr.isEmpty()) {
         return;
     }
@@ -98,8 +135,12 @@ void SkScan::FillXRect(const SkXRect& xr, const SkRasterClip& clip,
 }
 
 void SkScan::FillRect(const SkRect& r, const SkRasterClip& clip,
+<<<<<<< HEAD
     SkBlitter* blitter)
 {
+=======
+                      SkBlitter* blitter) {
+>>>>>>> miniblink49
     if (clip.isEmpty() || r.isEmpty()) {
         return;
     }

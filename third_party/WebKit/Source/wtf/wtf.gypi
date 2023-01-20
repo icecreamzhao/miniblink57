@@ -2,6 +2,7 @@
 {
     'variables': {
         'wtf_files': [
+<<<<<<< HEAD
             'ASCIICType.cpp',
             'ASCIICType.h',
             'AddressSanitizer.h',
@@ -10,6 +11,27 @@
             'Assertions.cpp',
             'Assertions.h',
             'Atomics.h',
+=======
+            'ASCIICType.h',
+            'AddressSanitizer.h',
+            'AddressSpaceRandomization.cpp',
+            'AddressSpaceRandomization.h',
+            'Alignment.h',
+            'ArrayBuffer.cpp',
+            'ArrayBuffer.h',
+            'ArrayBufferBuilder.cpp',
+            'ArrayBufferBuilder.h',
+            'ArrayBufferContents.cpp',
+            'ArrayBufferContents.h',
+            'ArrayBufferView.cpp',
+            'ArrayBufferView.h',
+            'ArrayPiece.cpp',
+            'ArrayPiece.h',
+            'Assertions.cpp',
+            'Assertions.h',
+            'Atomics.h',
+            'BitArray.h',
+>>>>>>> miniblink49
             'BitVector.cpp',
             'BitVector.h',
             'BitwiseOperations.h',
@@ -17,7 +39,11 @@
             'ByteOrder.h',
             'ByteSwap.h',
             'CPU.h',
+<<<<<<< HEAD
             'CheckedNumeric.h',
+=======
+            'CheckedArithmetic.h',
+>>>>>>> miniblink49
             'Compiler.h',
             'ConditionalDestructor.h',
             'ContainerAnnotations.h',
@@ -29,12 +55,27 @@
             'DataLog.h',
             'DateMath.cpp',
             'DateMath.h',
+<<<<<<< HEAD
+=======
+            'DefaultAllocator.cpp',
+            'DefaultAllocator.h',
+>>>>>>> miniblink49
             'Deque.h',
             'DoublyLinkedList.h',
             'DynamicAnnotations.cpp',
             'DynamicAnnotations.h',
+<<<<<<< HEAD
             'FilePrintStream.cpp',
             'FilePrintStream.h',
+=======
+            'FastAllocBase.h',
+            'FastMalloc.cpp',
+            'FastMalloc.h',
+            'FilePrintStream.cpp',
+            'FilePrintStream.h',
+            'Float32Array.h',
+            'Float64Array.h',
+>>>>>>> miniblink49
             'Forward.h',
             'Functional.h',
             'GetPtr.h',
@@ -50,10 +91,18 @@
             'HexNumber.h',
             'InstanceCounter.cpp',
             'InstanceCounter.h',
+<<<<<<< HEAD
+=======
+            'Int16Array.h',
+            'Int32Array.h',
+            'Int8Array.h',
+            'IntegralTypedArrayBase.h',
+>>>>>>> miniblink49
             'LeakAnnotations.h',
             'LinkedStack.h',
             'ListHashSet.h',
             'Locker.h',
+<<<<<<< HEAD
             'MathExtras.h',
             'NonCopyingSort.h',
             'Noncopyable.h',
@@ -64,11 +113,41 @@
             'PrintStream.h',
             'PtrUtil.h',
             'RefCounted.h',
+=======
+            'MainThread.cpp',
+            'MainThread.h',
+            'MathExtras.h',
+            'MessageQueue.h',
+            'NonCopyingSort.h',
+            'Noncopyable.h',
+            'NotFound.h',
+            'NullPtr.h',
+            'Optional.h',
+            'OwnPtr.h',
+            'OwnPtrCommon.h',
+            'PageAllocator.cpp',
+            'PageAllocator.h',
+            'PartitionAlloc.cpp',
+            'PartitionAlloc.h',
+            'Partitions.cpp',
+            'Partitions.h',
+            'PassOwnPtr.h',
+            'PassRefPtr.h',
+            'PassTraits.h',
+            'PrintStream.cpp',
+            'PrintStream.h',
+            'RefCounted.h',
+            'RefCountedLeakCounter.cpp',
+            'RefCountedLeakCounter.h',
+>>>>>>> miniblink49
             'RefPtr.h',
             'RetainPtr.h',
             'SaturatedArithmetic.h',
             'SizeLimits.cpp',
+<<<<<<< HEAD
             'SpinLock.cpp',
+=======
+>>>>>>> miniblink49
             'SpinLock.h',
             'StaticConstructors.h',
             'StdLibExtras.h',
@@ -84,7 +163,17 @@
             'ThreadingPthreads.cpp',
             'ThreadingWin.cpp',
             'TreeNode.h',
+<<<<<<< HEAD
             'TypeTraits.h',
+=======
+            'TypeTraits.cpp',
+            'TypeTraits.h',
+            'TypedArrayBase.h',
+            'Uint16Array.h',
+            'Uint32Array.h',
+            'Uint8Array.h',
+            'Utility.h',
+>>>>>>> miniblink49
             'Vector.h',
             'VectorTraits.h',
             'WTF.cpp',
@@ -93,6 +182,7 @@
             'WTFThreadData.cpp',
             'WTFThreadData.h',
             'WeakPtr.h',
+<<<<<<< HEAD
             'allocator/AddressSpaceRandomization.cpp',
             'allocator/AddressSpaceRandomization.h',
             'allocator/PageAllocator.cpp',
@@ -106,6 +196,9 @@
             'asm/SaturatedArithmeticARM.h',
             'build_config.h',
             'debug/CrashLogging.h',
+=======
+            'asm/SaturatedArithmeticARM.h',
+>>>>>>> miniblink49
             'dtoa.cpp',
             'dtoa.h',
             'dtoa/bignum-dtoa.cc',
@@ -131,8 +224,11 @@
             'text/AtomicString.h',
             'text/AtomicStringCF.cpp',
             'text/AtomicStringHash.h',
+<<<<<<< HEAD
             'text/AtomicStringTable.cpp',
             'text/AtomicStringTable.h',
+=======
+>>>>>>> miniblink49
             'text/Base64.cpp',
             'text/Base64.h',
             'text/CString.cpp',
@@ -143,6 +239,10 @@
             'text/StringBuffer.h',
             'text/StringBuilder.cpp',
             'text/StringBuilder.h',
+<<<<<<< HEAD
+=======
+            'text/StringCF.cpp',
+>>>>>>> miniblink49
             'text/StringConcatenate.cpp',
             'text/StringConcatenate.h',
             'text/StringHash.h',
@@ -153,12 +253,17 @@
             'text/StringMac.mm',
             'text/StringOperators.h',
             'text/StringStatics.cpp',
+<<<<<<< HEAD
             'text/StringToNumber.cpp',
             'text/StringToNumber.h',
             'text/StringUTF8Adaptor.h',
             'text/StringView.h',
             'text/StringView.cpp',
             'text/TextCodec.h',
+=======
+            'text/StringUTF8Adaptor.h',
+            'text/StringView.h',
+>>>>>>> miniblink49
             'text/TextCodec.cpp',
             'text/TextCodecASCIIFastPath.h',
             'text/TextCodecICU.cpp',
@@ -180,6 +285,7 @@
             'text/WTFString.h',
             'text/icu/CollatorICU.cpp',
             'text/icu/UnicodeIcu.h',
+<<<<<<< HEAD
             'typed_arrays/ArrayBuffer.cpp',
             'typed_arrays/ArrayBuffer.h',
             'typed_arrays/ArrayBufferBuilder.cpp',
@@ -204,6 +310,13 @@
         'wtf_unittest_files': [
             'ASCIICTypeTest.cpp',
             'AssertionsTest.cpp',
+=======
+        ],
+        'wtf_unittest_files': [
+            'ASCIICTypeTest.cpp',
+            'ArrayBufferBuilderTest.cpp',
+            'CheckedArithmeticTest.cpp',
+>>>>>>> miniblink49
             'DequeTest.cpp',
             'FunctionalTest.cpp',
             'HashMapTest.cpp',
@@ -211,28 +324,48 @@
             'ListHashSetTest.cpp',
             'MathExtrasTest.cpp',
             'OptionalTest.cpp',
+<<<<<<< HEAD
+=======
+            'PartitionAllocTest.cpp',
+>>>>>>> miniblink49
             'RefPtrTest.cpp',
             'SaturatedArithmeticTest.cpp',
             'StringExtrasTest.cpp',
             'StringHasherTest.cpp',
             'TemporaryChangeTest.cpp',
             'TreeNodeTest.cpp',
+<<<<<<< HEAD
             'TypeTraitsTest.cpp',
             'VectorTest.cpp',
             'allocator/PartitionAllocTest.cpp',
             'dtoa_test.cpp',
+=======
+            'VectorTest.cpp',
+            'testing/WTFTestHelpersTest.cpp',
+>>>>>>> miniblink49
             'text/AtomicStringTest.cpp',
             'text/CStringTest.cpp',
             'text/StringBufferTest.cpp',
             'text/StringBuilderTest.cpp',
             'text/StringImplTest.cpp',
             'text/StringOperatorsTest.cpp',
+<<<<<<< HEAD
             'text/StringViewTest.cpp',
             'text/TextCodecTest.cpp',
             'text/TextCodecReplacementTest.cpp',
             'text/TextCodecUTF8Test.cpp',
             'text/WTFStringTest.cpp',
             'typed_arrays/ArrayBufferBuilderTest.cpp',
+=======
+            'text/TextCodecReplacementTest.cpp',
+            'text/TextCodecUTF8Test.cpp',
+            'text/WTFStringTest.cpp',
+        ],
+        'wtf_unittest_helper_files': [
+            'testing/WTFTestHelpers.cpp',
+            'testing/WTFTestHelpers.h',
+            'testing/WTFUnitTestHelpersExport.h',
+>>>>>>> miniblink49
         ],
     },
 }

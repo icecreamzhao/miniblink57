@@ -32,6 +32,7 @@
 #define WebKit_h
 
 #include "../platform/Platform.h"
+<<<<<<< HEAD
 #include <v8.h>
 
 namespace blink {
@@ -44,6 +45,27 @@ namespace blink {
 // non-null and must remain valid until the current thread calls shutdown.
 BLINK_EXPORT void initialize(Platform*);
 
+=======
+
+namespace v8 {
+class Isolate;
+}
+
+namespace blink {
+
+// Must be called on the thread that will be the main WebKit thread before
+// using any other WebKit APIs. The provided Platform; must be
+// non-null and must remain valid until the current thread calls shutdown.
+BLINK_EXPORT void initialize(Platform*);
+
+// Must be called on the thread that will be the main WebKit thread before
+// using any other WebKit APIs. The provided Platform must be
+// non-null and must remain valid until the current thread calls shutdown.
+//
+// This is a special variant of initialize that does not intitialize V8.
+BLINK_EXPORT void initializeWithoutV8(Platform*);
+
+>>>>>>> miniblink49
 // Get the V8 Isolate for the main thread.
 // initialize must have been called first.
 BLINK_EXPORT v8::Isolate* mainThreadIsolate();
@@ -54,18 +76,39 @@ BLINK_EXPORT v8::Isolate* mainThreadIsolate();
 // terminated by the time this function returns.
 BLINK_EXPORT void shutdown();
 
+<<<<<<< HEAD
+=======
+// Once shutdown, the Platform passed to initializeWithoutV8 will no longer
+// be accessed. No other WebKit objects should be in use when this function is
+// called. Any background threads created by WebKit are promised to be
+// terminated by the time this function returns.
+//
+// If initializeWithoutV8() was used to initialize WebKit, shutdownWithoutV8
+// must be called to shut it down again.
+BLINK_EXPORT void shutdownWithoutV8();
+
+>>>>>>> miniblink49
 // Alters the rendering of content to conform to a fixed set of rules.
 BLINK_EXPORT void setLayoutTestMode(bool);
 BLINK_EXPORT bool layoutTestMode();
 
+<<<<<<< HEAD
 // Enables or disables the use of the mock theme for layout tests. This function
 // must be called only if setLayoutTestMode(true).
 BLINK_EXPORT void setMockThemeEnabledForTest(bool);
 
+=======
+>>>>>>> miniblink49
 // Alters the rendering of fonts for layout tests.
 BLINK_EXPORT void setFontAntialiasingEnabledForTest(bool);
 BLINK_EXPORT bool fontAntialiasingEnabledForTest();
 
+<<<<<<< HEAD
+=======
+// Enables the named log channel. See WebCore/platform/Logging.h for details.
+BLINK_EXPORT void enableLogChannel(const char*);
+
+>>>>>>> miniblink49
 // Purge the plugin list cache. If |reloadPages| is true, any pages
 // containing plugins will be reloaded after refreshing the plugin list.
 BLINK_EXPORT void resetPluginCache(bool reloadPages = false);
@@ -74,6 +117,7 @@ BLINK_EXPORT void resetPluginCache(bool reloadPages = false);
 // performance and memory usage.
 BLINK_EXPORT void decommitFreeableMemory();
 
+<<<<<<< HEAD
 // Send memory pressure notification to worker thread isolate.
 BLINK_EXPORT void MemoryPressureNotificationToWorkerThreadIsolates(
     v8::MemoryPressureLevel);
@@ -81,6 +125,8 @@ BLINK_EXPORT void MemoryPressureNotificationToWorkerThreadIsolates(
 // Set the RAIL performance mode on all worker thread isolates.
 BLINK_EXPORT void setRAILModeOnWorkerThreadIsolates(v8::RAILMode);
 
+=======
+>>>>>>> miniblink49
 } // namespace blink
 
 #endif

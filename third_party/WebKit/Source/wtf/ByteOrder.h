@@ -39,6 +39,7 @@
 
 #include "wtf/ByteSwap.h"
 #include "wtf/CPU.h"
+<<<<<<< HEAD
 
 #if CPU(BIG_ENDIAN)
 inline uint16_t ntohs(uint16_t x)
@@ -92,6 +93,28 @@ inline uint32_t myhtonl(uint32_t x)
     return WTF::bswap32(x);
 }
 #endif
+=======
+#include "winsock.h"
+
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if CPU(BIG_ENDIAN)
+inline uint16_t ntohs(uint16_t x) { return x; }
+inline uint16_t htons(uint16_t x) { return x; }
+inline uint32_t ntohl(uint32_t x) { return x; }
+inline uint32_t htonl(uint32_t x) { return x; }
+#elif CPU(MIDDLE_ENDIAN)
+inline uint16_t ntohs(uint16_t x) { return x; }
+inline uint16_t htons(uint16_t x) { return x; }
+inline uint32_t ntohl(uint32_t x) { return WTF::wswap32(x); }
+inline uint32_t htonl(uint32_t x) { return WTF::wswap32(x); }
+#else
+inline uint16_t ntohs(uint16_t x) { return WTF::bswap16(x); }
+inline uint16_t htons(uint16_t x) { return WTF::bswap16(x); }
+inline uint32_t ntohl(uint32_t x) { return WTF::bswap32(x); }
+inline uint32_t htonl(uint32_t x) { return WTF::bswap32(x); }
+#endif
+#endif // MINIBLINK_NOT_IMPLEMENTED
+>>>>>>> miniblink49
 
 #endif // OS(WIN)
 

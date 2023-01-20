@@ -10,6 +10,7 @@
 #include "SkChunkAlloc.h"
 
 // T is SkOpAngle2, SkOpSpan2, or SkOpSegment2
+<<<<<<< HEAD
 template <typename T>
 class SkOpTAllocator {
 public:
@@ -29,6 +30,24 @@ public:
 
     static T* New(SkChunkAlloc* allocator)
     {
+=======
+template<typename T>
+class SkOpTAllocator {
+public:
+    static T* Allocate(SkChunkAlloc* allocator) {
+        void* ptr = allocator->allocThrow(sizeof(T));
+        T* record = (T*) ptr;
+        return record;
+    }
+
+    static T* AllocateArray(SkChunkAlloc* allocator, int count) {
+        void* ptr = allocator->allocThrow(sizeof(T) * count);
+        T* record = (T*) ptr;
+        return record;
+    }
+
+    static T* New(SkChunkAlloc* allocator) {
+>>>>>>> miniblink49
         return new (Allocate(allocator)) T();
     }
 };

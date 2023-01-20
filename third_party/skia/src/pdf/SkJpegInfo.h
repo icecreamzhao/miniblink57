@@ -7,20 +7,33 @@
 #ifndef SkJpegInfo_DEFINED
 #define SkJpegInfo_DEFINED
 
+<<<<<<< HEAD
 #include "SkSize.h"
 
 class SkData;
 
 struct SkJFIFInfo {
     SkISize fSize;
+=======
+class SkData;
+
+struct SkJFIFInfo {
+    int fWidth;
+    int fHeight;
+>>>>>>> miniblink49
     enum Type {
         kGrayscale,
         kYCbCr,
     } fType;
 };
 
+<<<<<<< HEAD
 /** Returns true iff the data seems to be a valid JFIF JPEG image.
     If so and if info is not nullptr, populate info.
+=======
+/** Returns true iff the data seems to be a valid JFIF JPEG image.  
+    If so and if info is not NULL, populate info.
+>>>>>>> miniblink49
 
     JPEG/JFIF References:
         http://www.w3.org/Graphics/JPEG/itu-t81.pdf
@@ -28,4 +41,8 @@ struct SkJFIFInfo {
 */
 bool SkIsJFIF(const SkData* skdata, SkJFIFInfo* info);
 
+<<<<<<< HEAD
 #endif // SkJpegInfo_DEFINED
+=======
+#endif  // SkJpegInfo_DEFINED
+>>>>>>> miniblink49

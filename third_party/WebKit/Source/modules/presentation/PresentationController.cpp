@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 #include "modules/presentation/PresentationController.h"
 
 #include "core/dom/Document.h"
@@ -19,6 +20,19 @@ PresentationController::PresentationController(LocalFrame& frame,
     WebPresentationClient* client)
     : Supplement<LocalFrame>(frame)
     , ContextLifecycleObserver(frame.document())
+=======
+#include "config.h"
+#include "modules/presentation/PresentationController.h"
+
+#include "core/frame/LocalFrame.h"
+#include "modules/presentation/PresentationSession.h"
+#include "public/platform/modules/presentation/WebPresentationClient.h"
+
+namespace blink {
+
+PresentationController::PresentationController(LocalFrame& frame, WebPresentationClient* client)
+    : LocalFrameLifecycleObserver(&frame)
+>>>>>>> miniblink49
     , m_client(client)
 {
     if (m_client)
@@ -32,11 +46,17 @@ PresentationController::~PresentationController()
 }
 
 // static
+<<<<<<< HEAD
 PresentationController* PresentationController::create(
     LocalFrame& frame,
     WebPresentationClient* client)
 {
     return new PresentationController(frame, client);
+=======
+PassOwnPtrWillBeRawPtr<PresentationController> PresentationController::create(LocalFrame& frame, WebPresentationClient* client)
+{
+    return adoptPtrWillBeNoop(new PresentationController(frame, client));
+>>>>>>> miniblink49
 }
 
 // static
@@ -48,6 +68,7 @@ const char* PresentationController::supplementName()
 // static
 PresentationController* PresentationController::from(LocalFrame& frame)
 {
+<<<<<<< HEAD
     return static_cast<PresentationController*>(
         Supplement<LocalFrame>::from(frame, supplementName()));
 }
@@ -59,6 +80,15 @@ void PresentationController::provideTo(LocalFrame& frame,
     Supplement<LocalFrame>::provideTo(
         frame, PresentationController::supplementName(),
         PresentationController::create(frame, client));
+=======
+    return static_cast<PresentationController*>(WillBeHeapSupplement<LocalFrame>::from(frame, supplementName()));
+}
+
+// static
+void PresentationController::provideTo(LocalFrame& frame, WebPresentationClient* client)
+{
+    WillBeHeapSupplement<LocalFrame>::provideTo(frame, PresentationController::supplementName(), PresentationController::create(frame, client));
+>>>>>>> miniblink49
 }
 
 WebPresentationClient* PresentationController::client()
@@ -69,6 +99,7 @@ WebPresentationClient* PresentationController::client()
 DEFINE_TRACE(PresentationController)
 {
     visitor->trace(m_presentation);
+<<<<<<< HEAD
     visitor->trace(m_connections);
     Supplement<LocalFrame>::trace(visitor);
     ContextLifecycleObserver::trace(visitor);
@@ -123,6 +154,51 @@ void PresentationController::didReceiveSessionBinaryMessage(
     if (!connection)
         return;
     connection->didReceiveBinaryMessage(data, length);
+=======
+    WillBeHeapSupplement<LocalFrame>::trace(visitor);
+    LocalFrameLifecycleObserver::trace(visitor);
+}
+
+void PresentationController::didStartDefaultSession(WebPresentationSessionClient* sessionClient)
+{
+    if (!m_presentation) {
+        delete sessionClient;
+        return;
+    }
+
+    PresentationSession* session = PresentationSession::take(sessionClient, m_presentation);
+    m_presentation->didStartDefaultSession(session);
+}
+
+void PresentationController::didChangeSessionState(WebPresentationSessionClient* sessionClient, WebPresentationSessionState state)
+{
+    if (!m_presentation) {
+        delete sessionClient;
+        return;
+    }
+
+    m_presentation->didChangeSessionState(sessionClient, state);
+}
+
+void PresentationController::didReceiveSessionTextMessage(WebPresentationSessionClient* sessionClient, const WebString& message)
+{
+    if (!m_presentation) {
+        delete sessionClient;
+        return;
+    }
+
+    m_presentation->didReceiveSessionTextMessage(sessionClient, message);
+}
+
+void PresentationController::didReceiveSessionBinaryMessage(WebPresentationSessionClient* sessionClient, const uint8_t* data, size_t length)
+{
+    if (!m_presentation) {
+        delete sessionClient;
+        return;
+    }
+
+    m_presentation->didReceiveSessionBinaryMessage(sessionClient, data, length);
+>>>>>>> miniblink49
 }
 
 void PresentationController::setPresentation(Presentation* presentation)
@@ -130,6 +206,7 @@ void PresentationController::setPresentation(Presentation* presentation)
     m_presentation = presentation;
 }
 
+<<<<<<< HEAD
 void PresentationController::setDefaultRequestUrl(
     const WTF::Vector<KURL>& urls)
 {
@@ -152,6 +229,9 @@ void PresentationController::registerConnection(
 }
 
 void PresentationController::contextDestroyed(ExecutionContext*)
+=======
+void PresentationController::willDetachFrameHost()
+>>>>>>> miniblink49
 {
     if (m_client) {
         m_client->setController(nullptr);
@@ -159,6 +239,7 @@ void PresentationController::contextDestroyed(ExecutionContext*)
     }
 }
 
+<<<<<<< HEAD
 PresentationConnection* PresentationController::findExistingConnection(
     const blink::WebVector<blink::WebURL>& presentationUrls,
     const blink::WebString& presentationId)
@@ -184,4 +265,6 @@ PresentationConnection* PresentationController::findConnection(
     return nullptr;
 }
 
+=======
+>>>>>>> miniblink49
 } // namespace blink

@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/FileEntrySync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -36,8 +40,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 FileEntrySync::FileEntrySync(DOMFileSystemBase* fileSystem,
     const String& fullPath)
+=======
+FileEntrySync::FileEntrySync(DOMFileSystemBase* fileSystem, const String& fullPath)
+>>>>>>> miniblink49
     : EntrySync(fileSystem, fullPath)
 {
 }
@@ -57,4 +65,8 @@ DEFINE_TRACE(FileEntrySync)
     EntrySync::trace(visitor);
 }
 
+<<<<<<< HEAD
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

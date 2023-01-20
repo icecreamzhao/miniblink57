@@ -28,10 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "InternalsSpeechSynthesis.h"
 
 #include "core/dom/Document.h"
 #include "core/frame/DOMWindow.h"
+=======
+#include "config.h"
+#include "InternalsSpeechSynthesis.h"
+
+#include "core/dom/Document.h"
+>>>>>>> miniblink49
 #include "core/testing/Internals.h"
 #include "modules/speech/DOMWindowSpeechSynthesis.h"
 #include "modules/speech/SpeechSynthesis.h"
@@ -39,6 +46,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 void InternalsSpeechSynthesis::enableMockSpeechSynthesizer(
     ScriptState* scriptState,
     Internals&,
@@ -50,6 +58,17 @@ void InternalsSpeechSynthesis::enableMockSpeechSynthesizer(
 
     synthesis->setPlatformSynthesizer(
         PlatformSpeechSynthesizerMock::create(synthesis));
+=======
+void InternalsSpeechSynthesis::enableMockSpeechSynthesizer(Internals&, Document* document)
+{
+    ASSERT(document && document->domWindow());
+
+    SpeechSynthesis* synthesis = DOMWindowSpeechSynthesis::speechSynthesis(*document->domWindow());
+    if (!synthesis)
+        return;
+
+    synthesis->setPlatformSynthesizer(PlatformSpeechSynthesizerMock::create(synthesis));
+>>>>>>> miniblink49
 }
 
 } // namespace blink

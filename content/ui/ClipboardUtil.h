@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include <shlobj.h>
+#include <ShlObj.h>
 
 #define kMimeTypeText "text/plain"
 #define kMimeTypeURIList "text/uri-list"
@@ -41,7 +41,6 @@ public:
     static FORMATETC* urlWFormat();
     static FORMATETC* urlFormat();
     static FORMATETC* getCustomTextsType();
-    static FORMATETC* htmlFormat();
 
     static bool getWebLocData(IDataObject* dataObject, std::string& url, std::string* title);
 
@@ -58,7 +57,7 @@ public:
         if (str.size() == 0)
             return nullptr;
 
-        HGLOBAL data = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, ((str.size() + 1) * sizeof(charT)));
+        HGLOBAL data = ::GlobalAlloc(GMEM_MOVEABLE, ((str.size() + 1) * sizeof(charT)));
         if (data) {
             charT* rawData = static_cast<charT*>(::GlobalLock(data));
             memcpy(rawData, &str[0], str.size() * sizeof(charT));

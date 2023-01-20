@@ -13,6 +13,7 @@ namespace blink {
 
 class GamepadEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static GamepadEvent* create(const AtomicString& type,
@@ -30,12 +31,31 @@ public:
     ~GamepadEvent() override;
 
     Gamepad* getGamepad() const { return m_gamepad.get(); }
+=======
+public:
+    static PassRefPtrWillBeRawPtr<GamepadEvent> create()
+    {
+        return adoptRefWillBeNoop(new GamepadEvent);
+    }
+    static PassRefPtrWillBeRawPtr<GamepadEvent> create(const AtomicString& type, bool canBubble, bool cancelable, Gamepad* gamepad)
+    {
+        return adoptRefWillBeNoop(new GamepadEvent(type, canBubble, cancelable, gamepad));
+    }
+    static PassRefPtrWillBeRawPtr<GamepadEvent> create(const AtomicString& type, const GamepadEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new GamepadEvent(type, initializer));
+    }
+    ~GamepadEvent() override;
+
+    Gamepad* gamepad() const { return m_gamepad.get(); }
+>>>>>>> miniblink49
 
     const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
+<<<<<<< HEAD
     GamepadEvent(const AtomicString& type,
         bool canBubble,
         bool cancelable,
@@ -43,6 +63,13 @@ private:
     GamepadEvent(const AtomicString&, const GamepadEventInit&);
 
     Member<Gamepad> m_gamepad;
+=======
+    GamepadEvent();
+    GamepadEvent(const AtomicString& type, bool canBubble, bool cancelable, Gamepad*);
+    GamepadEvent(const AtomicString&, const GamepadEventInit&);
+
+    PersistentWillBeMember<Gamepad> m_gamepad;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -21,6 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/dom/ChildNodeList.h"
 
 #include "core/dom/Element.h"
@@ -38,32 +39,27 @@ Node* ChildNodeList::virtualOwnerNode() const
     return &ownerNode();
 }
 
-ChildNodeList::~ChildNodeList() { }
-
-Node* ChildNodeList::traverseForwardToOffset(unsigned offset,
-    Node& currentNode,
-    unsigned& currentOffset) const
+ChildNodeList::~ChildNodeList()
 {
-    DCHECK_LT(currentOffset, offset);
-    DCHECK_EQ(ownerNode().childNodes(), this);
-    DCHECK_EQ(&ownerNode(), currentNode.parentNode());
-    for (Node* next = currentNode.nextSibling(); next;
-         next = next->nextSibling()) {
+#if !ENABLE(OILPAN)
+    m_parent->nodeLists()->removeChildNodeList(this);
+#endif
+}
+
+Node* ChildNodeList::traverseForwardToOffset(unsigned offset, Node& currentNode, unsigned& currentOffset) const
+{
+    ASSERT(currentOffset < offset);
+    for (Node* next = currentNode.nextSibling(); next; next = next->nextSibling()) {
         if (++currentOffset == offset)
             return next;
     }
     return 0;
 }
 
-Node* ChildNodeList::traverseBackwardToOffset(unsigned offset,
-    Node& currentNode,
-    unsigned& currentOffset) const
+Node* ChildNodeList::traverseBackwardToOffset(unsigned offset, Node& currentNode, unsigned& currentOffset) const
 {
-    DCHECK_GT(currentOffset, offset);
-    DCHECK_EQ(ownerNode().childNodes(), this);
-    DCHECK_EQ(&ownerNode(), currentNode.parentNode());
-    for (Node* previous = currentNode.previousSibling(); previous;
-         previous = previous->previousSibling()) {
+    ASSERT(currentOffset > offset);
+    for (Node* previous = currentNode.previousSibling(); previous; previous = previous->previousSibling()) {
         if (--currentOffset == offset)
             return previous;
     }

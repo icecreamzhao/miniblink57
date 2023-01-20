@@ -36,35 +36,26 @@ class ExceptionState;
 class XPathExpression;
 class XPathResult;
 
-class DocumentXPathEvaluator final
-    : public GarbageCollected<DocumentXPathEvaluator>,
-      public Supplement<Document> {
-    USING_GARBAGE_COLLECTED_MIXIN(DocumentXPathEvaluator);
-
+class DocumentXPathEvaluator final : public NoBaseWillBeGarbageCollected<DocumentXPathEvaluator>, public WillBeHeapSupplement<Document> {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DocumentXPathEvaluator);
 public:
-    static DocumentXPathEvaluator& from(Document&);
+    static DocumentXPathEvaluator& from(WillBeHeapSupplementable<Document>&);
 
-    static XPathExpression* createExpression(Document&,
-        const String& expression,
-        XPathNSResolver*,
-        ExceptionState&);
-    static XPathNSResolver* createNSResolver(Document&, Node* nodeResolver);
-    static XPathResult* evaluate(Document&,
-        const String& expression,
-        Node* contextNode,
-        XPathNSResolver*,
-        unsigned short type,
-        const ScriptValue&,
-        ExceptionState&);
+    static XPathExpression* createExpression(WillBeHeapSupplementable<Document>&,
+        const String& expression, XPathNSResolver*, ExceptionState&);
+    static XPathNSResolver* createNSResolver(WillBeHeapSupplementable<Document>&, Node* nodeResolver);
+    static XPathResult* evaluate(WillBeHeapSupplementable<Document>&,
+        const String& expression, Node* contextNode, XPathNSResolver*,
+        unsigned short type, const ScriptValue&, ExceptionState&);
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    explicit DocumentXPathEvaluator(Document&);
+    DocumentXPathEvaluator();
 
     static const char* supplementName() { return "DocumentXPathEvaluator"; }
 
-    Member<XPathEvaluator> m_xpathEvaluator;
+    PersistentWillBeMember<XPathEvaluator> m_xpathEvaluator;
 };
 
 } // namespace blink

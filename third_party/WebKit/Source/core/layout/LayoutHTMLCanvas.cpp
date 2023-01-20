@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/layout/LayoutHTMLCanvas.h"
 
 #include "core/frame/FrameView.h"
@@ -30,7 +31,6 @@
 #include "core/html/HTMLCanvasElement.h"
 #include "core/layout/LayoutView.h"
 #include "core/page/Page.h"
-#include "core/paint/HTMLCanvasPaintInvalidator.h"
 #include "core/paint/HTMLCanvasPainter.h"
 
 namespace blink {
@@ -43,13 +43,12 @@ LayoutHTMLCanvas::LayoutHTMLCanvas(HTMLCanvasElement* element)
     view()->frameView()->setIsVisuallyNonEmpty();
 }
 
-PaintLayerType LayoutHTMLCanvas::layerTypeRequired() const
+DeprecatedPaintLayerType LayoutHTMLCanvas::layerTypeRequired() const
 {
-    return NormalPaintLayer;
+    return NormalDeprecatedPaintLayer;
 }
 
-void LayoutHTMLCanvas::paintReplaced(const PaintInfo& paintInfo,
-    const LayoutPoint& paintOffset) const
+void LayoutHTMLCanvas::paintReplaced(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
     HTMLCanvasPainter(*this).paintReplaced(paintInfo, paintOffset);
 }
@@ -57,8 +56,7 @@ void LayoutHTMLCanvas::paintReplaced(const PaintInfo& paintInfo,
 void LayoutHTMLCanvas::canvasSizeChanged()
 {
     IntSize canvasSize = toHTMLCanvasElement(node())->size();
-    LayoutSize zoomedSize(canvasSize.width() * style()->effectiveZoom(),
-        canvasSize.height() * style()->effectiveZoom());
+    LayoutSize zoomedSize(canvasSize.width() * style()->effectiveZoom(), canvasSize.height() * style()->effectiveZoom());
 
     if (zoomedSize == intrinsicSize())
         return;
@@ -74,22 +72,23 @@ void LayoutHTMLCanvas::canvasSizeChanged()
     LayoutSize oldSize = size();
     updateLogicalWidth();
     updateLogicalHeight();
-    if (oldSize == size() && !hasOverrideLogicalContentWidth() && !hasOverrideLogicalContentHeight()) {
-        // If we have an override size, then we're probably a flex item, and the
-        // check above is insufficient because updateLogical{Width,Height} just
-        // used the override size. We actually have to mark ourselves as needing
-        // layout so the flex algorithm can run and compute our size correctly.
+    if (oldSize == size())
         return;
-    }
 
     if (!selfNeedsLayout())
         setNeedsLayout(LayoutInvalidationReason::SizeChanged);
 }
 
-PaintInvalidationReason LayoutHTMLCanvas::invalidatePaintIfNeeded(
-    const PaintInvalidatorContext& context) const
+PaintInvalidationReason LayoutHTMLCanvas::invalidatePaintIfNeeded(PaintInvalidationState& paintInvalidationState, const LayoutBoxModelObject& paintInvalidationContainer)
 {
-    return HTMLCanvasPaintInvalidator(*this, context).invalidatePaintIfNeeded();
+    PaintInvalidationReason reason = LayoutBox::invalidatePaintIfNeeded(paintInvalidationState, paintInvalidationContainer);
+    HTMLCanvasElement* element = toHTMLCanvasElement(node());
+    if (element->isDirty()) {
+        element->doDeferredPaintInvalidation();
+        if (reason < PaintInvalidationRectangle)
+            reason = PaintInvalidationRectangle;
+    }
+    return reason;
 }
 
 CompositingReasons LayoutHTMLCanvas::additionalCompositingReasons() const
@@ -97,13 +96,6 @@ CompositingReasons LayoutHTMLCanvas::additionalCompositingReasons() const
     if (toHTMLCanvasElement(node())->shouldBeDirectComposited())
         return CompositingReasonCanvas;
     return CompositingReasonNone;
-}
-
-void LayoutHTMLCanvas::styleDidChange(StyleDifference diff,
-    const ComputedStyle* oldStyle)
-{
-    LayoutReplaced::styleDidChange(diff, oldStyle);
-    toHTMLCanvasElement(node())->styleDidChange(oldStyle, styleRef());
 }
 
 } // namespace blink

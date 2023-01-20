@@ -14,11 +14,13 @@ dictionary TestDictionary {
     TestInterface? testInterfaceOrNullMember;
     TestInterfaceGarbageCollected testInterfaceGarbageCollectedMember;
     TestInterfaceGarbageCollected? testInterfaceGarbageCollectedOrNullMember;
+    TestInterfaceWillBeGarbageCollected testInterfaceWillBeGarbageCollectedMember;
+    TestInterfaceWillBeGarbageCollected? testInterfaceWillBeGarbageCollectedOrNullMember;
     DOMString[] stringArrayMember;
     sequence<DOMString> stringSequenceMember = [];
     sequence<TestInterface> testInterfaceSequenceMember = [];
-    sequence<TestObject> testObjectSequenceMember;
     sequence<TestInterfaceGarbageCollected> testInterfaceGarbageCollectedSequenceMember = [];
+    sequence<TestInterfaceWillBeGarbageCollected> testInterfaceWillBeGarbageCollectedSequenceMember = [];
     TestEnum enumMember = "foo";
     sequence<TestEnum> enumSequenceMember;
     Element? elementOrNullMember;
@@ -34,7 +36,4 @@ dictionary TestDictionary {
     Uint8Array uint8ArrayMember;
     EventTarget eventTargetMember;
     any anyMember = null;
-    Dictionary dictionaryMember;
-    [RuntimeEnabled=runtimeFeature] boolean runtimeMember;
-    [PrefixGet] object prefixGetMember;
 };

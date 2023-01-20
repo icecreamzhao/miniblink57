@@ -31,35 +31,52 @@
 #ifndef MIDIAccessor_h
 #define MIDIAccessor_h
 
+<<<<<<< HEAD
 #include "media/midi/midi_service.mojom-blink.h"
 #include "public/platform/modules/webmidi/WebMIDIAccessor.h"
 #include "public/platform/modules/webmidi/WebMIDIAccessorClient.h"
 #include "wtf/Allocator.h"
 #include <memory>
+=======
+#include "public/platform/WebMIDIAccessor.h"
+#include "public/platform/WebMIDIAccessorClient.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class MIDIAccessorClient;
 
 class MIDIAccessor final : public WebMIDIAccessorClient {
+<<<<<<< HEAD
     USING_FAST_MALLOC(MIDIAccessor);
 
 public:
     static std::unique_ptr<MIDIAccessor> create(MIDIAccessorClient*);
+=======
+public:
+    static PassOwnPtr<MIDIAccessor> create(MIDIAccessorClient*);
+>>>>>>> miniblink49
 
     ~MIDIAccessor() override { }
 
     void startSession();
+<<<<<<< HEAD
     void sendMIDIData(unsigned portIndex,
         const unsigned char* data,
         size_t length,
         double timeStamp);
+=======
+    void sendMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp);
+>>>>>>> miniblink49
     // MIDIAccessInitializer and MIDIAccess are both MIDIAccessClient.
     // MIDIAccessInitializer is the first client and MIDIAccess takes over it
     // once the initialization successfully finishes.
     void setClient(MIDIAccessorClient* client) { m_client = client; }
 
     // WebMIDIAccessorClient
+<<<<<<< HEAD
     void didAddInputPort(const WebString& id,
         const WebString& manufacturer,
         const WebString& name,
@@ -79,12 +96,24 @@ public:
         const unsigned char* data,
         size_t length,
         double timeStamp) override;
+=======
+    void didAddInputPort(const WebString& id, const WebString& manufacturer, const WebString& name, const WebString& version, MIDIPortState) override;
+    void didAddOutputPort(const WebString& id, const WebString& manufacturer, const WebString& name, const WebString& version, MIDIPortState) override;
+    void didSetInputPortState(unsigned portIndex, MIDIPortState) override;
+    void didSetOutputPortState(unsigned portIndex, MIDIPortState) override;
+    void didStartSession(bool success, const WebString& error, const WebString& message) override;
+    void didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp) override;
+>>>>>>> miniblink49
 
 private:
     explicit MIDIAccessor(MIDIAccessorClient*);
 
     MIDIAccessorClient* m_client;
+<<<<<<< HEAD
     std::unique_ptr<WebMIDIAccessor> m_accessor;
+=======
+    OwnPtr<WebMIDIAccessor> m_accessor;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

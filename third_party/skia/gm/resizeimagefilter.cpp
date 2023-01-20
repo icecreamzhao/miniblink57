@@ -5,33 +5,55 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkColor.h"
 #include "SkImageSource.h"
 #include "SkRefCnt.h"
 #include "SkSurface.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkBitmapSource.h"
+#include "SkColor.h"
+#include "SkRefCnt.h"
+>>>>>>> miniblink49
 
 namespace skiagm {
 
 class ResizeGM : public GM {
 public:
+<<<<<<< HEAD
     ResizeGM()
     {
+=======
+    ResizeGM() {
+>>>>>>> miniblink49
         this->setBGColor(0x00000000);
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
+=======
+    virtual SkString onShortName() {
+>>>>>>> miniblink49
         return SkString("resizeimagefilter");
     }
 
     void draw(SkCanvas* canvas,
+<<<<<<< HEAD
         const SkRect& rect,
         const SkSize& deviceSize,
         SkFilterQuality filterQuality,
         sk_sp<SkImageFilter> input)
     {
+=======
+              const SkRect& rect,
+              const SkSize& deviceSize,
+              SkFilterQuality filterQuality,
+              SkImageFilter* input = NULL) {
+>>>>>>> miniblink49
         SkRect dstRect;
         canvas->getTotalMatrix().mapRect(&dstRect, rect);
         canvas->save();
@@ -41,12 +63,21 @@ protected:
         canvas->scale(deviceScaleX, deviceScaleY);
         canvas->translate(-rect.x(), -rect.y());
         SkMatrix matrix;
+<<<<<<< HEAD
         matrix.setScale(SkScalarInvert(deviceScaleX), SkScalarInvert(deviceScaleY));
         sk_sp<SkImageFilter> filter(SkImageFilter::MakeMatrixFilter(matrix,
             filterQuality,
             std::move(input)));
         SkPaint filteredPaint;
         filteredPaint.setImageFilter(std::move(filter));
+=======
+        matrix.setScale(SkScalarInvert(deviceScaleX),
+                        SkScalarInvert(deviceScaleY));
+        SkAutoTUnref<SkImageFilter> imageFilter(
+            SkImageFilter::CreateMatrixFilter(matrix, filterQuality, input));
+        SkPaint filteredPaint;
+        filteredPaint.setImageFilter(imageFilter.get());
+>>>>>>> miniblink49
         canvas->saveLayer(&rect, &filteredPaint);
         SkPaint paint;
         paint.setColor(0xFF00FF00);
@@ -57,6 +88,7 @@ protected:
         canvas->restore();
     }
 
+<<<<<<< HEAD
     SkISize onISize() override
     {
         return SkISize::Make(520, 100);
@@ -64,11 +96,19 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+    virtual SkISize onISize() {
+        return SkISize::Make(520, 100);
+    }
+
+    virtual void onDraw(SkCanvas* canvas) {
+>>>>>>> miniblink49
         canvas->clear(SK_ColorBLACK);
 
         SkRect srcRect = SkRect::MakeWH(96, 96);
 
         SkSize deviceSize = SkSize::Make(16, 16);
+<<<<<<< HEAD
         this->draw(canvas,
             srcRect,
             deviceSize,
@@ -117,6 +157,51 @@ protected:
             deviceSize,
             kHigh_SkFilterQuality,
             std::move(source));
+=======
+        draw(canvas,
+             srcRect,
+             deviceSize,
+             kNone_SkFilterQuality);
+
+        canvas->translate(srcRect.width() + SkIntToScalar(10), 0);
+        draw(canvas,
+             srcRect,
+             deviceSize,
+             kLow_SkFilterQuality);
+
+        canvas->translate(srcRect.width() + SkIntToScalar(10), 0);
+        draw(canvas,
+             srcRect,
+             deviceSize,
+             kMedium_SkFilterQuality);
+
+        canvas->translate(srcRect.width() + SkIntToScalar(10), 0);
+        draw(canvas,
+             srcRect,
+             deviceSize,
+             kHigh_SkFilterQuality);
+
+        SkBitmap bitmap;
+        bitmap.allocN32Pixels(16, 16);
+        bitmap.eraseARGB(0x00, 0x00, 0x00, 0x00);
+        {
+            SkCanvas bitmapCanvas(bitmap);
+            SkPaint paint;
+            paint.setColor(0xFF00FF00);
+            SkRect ovalRect = SkRect::MakeWH(16, 16);
+            ovalRect.inset(SkIntToScalar(2)/3, SkIntToScalar(2)/3);
+            bitmapCanvas.drawOval(ovalRect, paint);
+        }
+        SkRect inRect = SkRect::MakeXYWH(-4, -4, 20, 20);
+        SkRect outRect = SkRect::MakeXYWH(-24, -24, 120, 120);
+        SkAutoTUnref<SkBitmapSource> source(SkBitmapSource::Create(bitmap, inRect, outRect));
+        canvas->translate(srcRect.width() + SkIntToScalar(10), 0);
+        draw(canvas,
+             srcRect,
+             deviceSize,
+             kHigh_SkFilterQuality,
+             source.get());
+>>>>>>> miniblink49
     }
 
 private:
@@ -125,6 +210,11 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new ResizeGM;)
+=======
+static GM* MyFactory(void*) { return new ResizeGM; }
+static GMRegistry reg(MyFactory);
+>>>>>>> miniblink49
 
 }

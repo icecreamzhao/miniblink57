@@ -6,11 +6,19 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+#include <ctype.h>
+>>>>>>> miniblink49
 #include "SkDrawPath.h"
 #include "SkParse.h"
 #include "SkPoint.h"
 #include "SkUtils.h"
+<<<<<<< HEAD
 #include <ctype.h>
+=======
+>>>>>>> miniblink49
 #define QUADRATIC_APPROXIMATION 1
 
 #if QUADRATIC_APPROXIMATION
@@ -19,6 +27,7 @@
 
 //      midPt sets the first argument to be the midpoint of the other two
 //      it is used by quadApprox
+<<<<<<< HEAD
 static inline void midPt(SkPoint& dest, const SkPoint& a, const SkPoint& b)
 {
     dest.set(SkScalarAve(a.fX, b.fX), SkScalarAve(a.fY, b.fY));
@@ -29,6 +38,18 @@ static void quadApprox(SkPath& fPath, const SkPoint& p0, const SkPoint& p1, cons
     //divide the cubic up into two cubics, then convert them into quadratics
     //define our points
     SkPoint c, j, k, l, m, n, o, p, q, mid;
+=======
+static inline void midPt(SkPoint& dest,const SkPoint& a,const SkPoint& b)
+{
+    dest.set(SkScalarAve(a.fX, b.fX),SkScalarAve(a.fY, b.fY));
+}
+//      quadApprox - makes an approximation, which we hope is faster
+static void quadApprox(SkPath &fPath, const SkPoint &p0, const SkPoint &p1, const SkPoint &p2)
+{
+    //divide the cubic up into two cubics, then convert them into quadratics
+    //define our points
+    SkPoint c,j,k,l,m,n,o,p,q, mid;
+>>>>>>> miniblink49
     fPath.getLastPt(&c);
     midPt(j, p0, c);
     midPt(k, p0, p1);
@@ -37,6 +58,7 @@ static void quadApprox(SkPath& fPath, const SkPoint& p0, const SkPoint& p1, cons
     midPt(p, k, l);
     midPt(q, o, p);
     //compute the first half
+<<<<<<< HEAD
     m.set(SkScalarHalf(3 * j.fX - c.fX), SkScalarHalf(3 * j.fY - c.fY));
     n.set(SkScalarHalf(3 * o.fX - q.fX), SkScalarHalf(3 * o.fY - q.fY));
     midPt(mid, m, n);
@@ -50,6 +72,22 @@ static void quadApprox(SkPath& fPath, const SkPoint& p0, const SkPoint& p1, cons
 }
 #endif
 
+=======
+    m.set(SkScalarHalf(3*j.fX - c.fX), SkScalarHalf(3*j.fY - c.fY));
+    n.set(SkScalarHalf(3*o.fX -q.fX), SkScalarHalf(3*o.fY - q.fY));
+    midPt(mid,m,n);
+    fPath.quadTo(mid,q);
+    c = q;
+    //compute the second half
+    m.set(SkScalarHalf(3*p.fX - c.fX), SkScalarHalf(3*p.fY - c.fY));
+    n.set(SkScalarHalf(3*l.fX -p2.fX),SkScalarHalf(3*l.fY -p2.fY));
+    midPt(mid,m,n);
+    fPath.quadTo(mid,p2);
+}
+#endif
+
+
+>>>>>>> miniblink49
 static inline bool is_between(int c, int min, int max)
 {
     return (unsigned)(c - min) <= (unsigned)(max - min);
@@ -87,7 +125,11 @@ static const char* skip_sep(const char str[])
 }
 
 static const char* find_points(const char str[], SkPoint value[], int count,
+<<<<<<< HEAD
     bool isRelative, SkPoint* relative)
+=======
+     bool isRelative, SkPoint* relative)
+>>>>>>> miniblink49
 {
     str = SkParse::FindScalars(str, &value[0].fX, count * 2);
     if (isRelative) {
@@ -108,6 +150,7 @@ static const char* find_scalar(const char str[], SkScalar* value,
     return str;
 }
 
+<<<<<<< HEAD
 void SkDrawPath::parseSVG()
 {
     fPath.reset();
@@ -115,6 +158,14 @@ void SkDrawPath::parseSVG()
     SkPoint f = { 0, 0 };
     SkPoint c = { 0, 0 };
     SkPoint lastc = { 0, 0 };
+=======
+void SkDrawPath::parseSVG() {
+    fPath.reset();
+    const char* data = d.c_str();
+    SkPoint f = {0, 0};
+    SkPoint c = {0, 0};
+    SkPoint lastc = {0, 0};
+>>>>>>> miniblink49
     SkPoint points[3];
     char op = '\0';
     char previousOp = '\0';
@@ -127,17 +178,27 @@ void SkDrawPath::parseSVG()
         if (is_digit(ch) || ch == '-' || ch == '+') {
             if (op == '\0')
                 return;
+<<<<<<< HEAD
         } else {
             op = ch;
             relative = false;
             if (islower(op)) {
                 op = (char)toupper(op);
+=======
+        }
+        else {
+            op = ch;
+            relative = false;
+            if (islower(op)) {
+                op = (char) toupper(op);
+>>>>>>> miniblink49
                 relative = true;
             }
             data++;
             data = skip_sep(data);
         }
         switch (op) {
+<<<<<<< HEAD
         case 'M':
             data = find_points(data, points, 1, relative, &c);
             fPath.moveTo(points[0]);
@@ -202,6 +263,74 @@ void SkDrawPath::parseSVG()
         case 'Z':
             fPath.close();
 #if 0 // !!! still a bug?
+=======
+            case 'M':
+                data = find_points(data, points, 1, relative, &c);
+                fPath.moveTo(points[0]);
+                op = 'L';
+                c = points[0];
+                break;
+            case 'L':
+                data = find_points(data, points, 1, relative, &c);
+                fPath.lineTo(points[0]);
+                c = points[0];
+                break;
+            case 'H': {
+                SkScalar x;
+                data = find_scalar(data, &x, relative, c.fX);
+                fPath.lineTo(x, c.fY);
+                c.fX = x;
+            }
+                break;
+            case 'V': {
+                SkScalar y;
+                data = find_scalar(data, &y, relative, c.fY);
+                fPath.lineTo(c.fX, y);
+                c.fY = y;
+            }
+                break;
+            case 'C':
+                data = find_points(data, points, 3, relative, &c);
+                goto cubicCommon;
+            case 'S':
+                data = find_points(data, &points[1], 2, relative, &c);
+                points[0] = c;
+                if (previousOp == 'C' || previousOp == 'S') {
+                    points[0].fX -= lastc.fX - c.fX;
+                    points[0].fY -= lastc.fY - c.fY;
+                }
+            cubicCommon:
+    //          if (data[0] == '\0')
+    //              return;
+#if QUADRATIC_APPROXIMATION
+                    quadApprox(fPath, points[0], points[1], points[2]);
+#else   //this way just does a boring, slow old cubic
+                    fPath.cubicTo(points[0], points[1], points[2]);
+#endif
+        //if we are using the quadApprox, lastc is what it would have been if we had used
+        //cubicTo
+                    lastc = points[1];
+                    c = points[2];
+                break;
+            case 'Q':  // Quadratic Bezier Curve
+                data = find_points(data, points, 2, relative, &c);
+                goto quadraticCommon;
+            case 'T':
+                data = find_points(data, &points[1], 1, relative, &c);
+                points[0] = points[1];
+                if (previousOp == 'Q' || previousOp == 'T') {
+                    points[0].fX = c.fX * 2 - lastc.fX;
+                    points[0].fY = c.fY * 2 - lastc.fY;
+                }
+            quadraticCommon:
+                fPath.quadTo(points[0], points[1]);
+                lastc = points[0];
+                c = points[1];
+                break;
+            case 'Z':
+                fPath.close();
+#if 0   // !!! still a bug?
+>>>>>>> miniblink49
                 if (fPath.isEmpty() && (f.fX != 0 || f.fY != 0)) {
                     c.fX -= SkScalar.Epsilon;   // !!! enough?
                     fPath.moveTo(c);
@@ -209,6 +338,7 @@ void SkDrawPath::parseSVG()
                     fPath.close();
                 }
 #endif
+<<<<<<< HEAD
             c = f;
             op = '\0';
             break;
@@ -221,6 +351,21 @@ void SkDrawPath::parseSVG()
         default:
             SkASSERT(0);
             return;
+=======
+                c = f;
+                op = '\0';
+                break;
+            case '~': {
+                SkPoint args[2];
+                data = find_points(data, args, 2, false, NULL);
+                fPath.moveTo(args[0].fX, args[0].fY);
+                fPath.lineTo(args[1].fX, args[1].fY);
+            }
+                break;
+            default:
+                SkASSERT(0);
+                return;
+>>>>>>> miniblink49
         }
         if (previousOp == 0)
             f = c;

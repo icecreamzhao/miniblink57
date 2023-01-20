@@ -30,7 +30,11 @@
 
 /* This file should be included before uvernum.h. */
 #if defined(UVERNUM_H)
+<<<<<<< HEAD
 #error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
+=======
+# error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -38,15 +42,24 @@
  * @internal
  */
 #ifndef UCLN_NO_AUTO_CLEANUP
+<<<<<<< HEAD
 #define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP @
+=======
+#define UCLN_NO_AUTO_CLEANUP @UCLN_NO_AUTO_CLEANUP@
+>>>>>>> miniblink49
 #endif
 
 /* Need platform.h when using CYGWINMSVC to get definitions above. Ignore everything else. */
 #ifndef CYGWINMSVC
 
 /** Define the platform we're on. */
+<<<<<<< HEAD
 #ifndef @platform @
 #define @platform @
+=======
+#ifndef @platform@
+#define @platform@
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -55,12 +68,20 @@
  * @internal
  */
 #ifndef U_HAVE_DIRENT_H
+<<<<<<< HEAD
 #define U_HAVE_DIRENT_H @U_HAVE_DIRENT_H @
+=======
+#define U_HAVE_DIRENT_H @U_HAVE_DIRENT_H@
+>>>>>>> miniblink49
 #endif
 
 /** Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
+<<<<<<< HEAD
 #define U_HAVE_INTTYPES_H @U_HAVE_INTTYPES_H @
+=======
+#define U_HAVE_INTTYPES_H @U_HAVE_INTTYPES_H@
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -78,7 +99,11 @@
  */
 
 #ifndef U_IOSTREAM_SOURCE
+<<<<<<< HEAD
 #define U_IOSTREAM_SOURCE @U_IOSTREAM_SOURCE @
+=======
+#define U_IOSTREAM_SOURCE @U_IOSTREAM_SOURCE@
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -90,11 +115,16 @@
  * @internal
  */
 #ifndef U_HAVE_STD_STRING
+<<<<<<< HEAD
 #define U_HAVE_STD_STRING @U_HAVE_STD_STRING @
+=======
+#define U_HAVE_STD_STRING @U_HAVE_STD_STRING@
+>>>>>>> miniblink49
 #endif
 
 /** @{ Determines whether specific types are available */
 #ifndef U_HAVE_INT8_T
+<<<<<<< HEAD
 #define U_HAVE_INT8_T @HAVE_INT8_T @
 #endif
 
@@ -124,6 +154,37 @@
 
 #ifndef U_HAVE_UINT64_T
 #define U_HAVE_UINT64_T @HAVE_UINT64_T @
+=======
+#define U_HAVE_INT8_T @HAVE_INT8_T@
+#endif
+
+#ifndef U_HAVE_UINT8_T
+#define U_HAVE_UINT8_T @HAVE_UINT8_T@
+#endif
+
+#ifndef U_HAVE_INT16_T
+#define U_HAVE_INT16_T @HAVE_INT16_T@
+#endif
+
+#ifndef U_HAVE_UINT16_T
+#define U_HAVE_UINT16_T @HAVE_UINT16_T@
+#endif
+
+#ifndef U_HAVE_INT32_T
+#define U_HAVE_INT32_T @HAVE_INT32_T@
+#endif
+
+#ifndef U_HAVE_UINT32_T
+#define U_HAVE_UINT32_T @HAVE_UINT32_T@
+#endif
+
+#ifndef U_HAVE_INT64_T
+#define U_HAVE_INT64_T @HAVE_INT64_T@
+#endif
+
+#ifndef U_HAVE_UINT64_T
+#define U_HAVE_UINT64_T @HAVE_UINT64_T@
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -134,7 +195,11 @@
 
 /* Define whether namespace is supported */
 #ifndef U_HAVE_NAMESPACE
+<<<<<<< HEAD
 #define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE @
+=======
+#define U_HAVE_NAMESPACE @U_HAVE_NAMESPACE@
+>>>>>>> miniblink49
 #endif
 
 /* Determines the endianness of the platform
@@ -143,12 +208,21 @@
 #if defined(BYTE_ORDER) && defined(BIG_ENDIAN)
 #define U_IS_BIG_ENDIAN (BYTE_ORDER == BIG_ENDIAN)
 #else
+<<<<<<< HEAD
 #define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN @
 #endif
 
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #ifndef ICU_USE_THREADS
 #define ICU_USE_THREADS @ICU_USE_THREADS @
+=======
+#define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
+#endif
+
+/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+#ifndef ICU_USE_THREADS 
+#define ICU_USE_THREADS @ICU_USE_THREADS@
+>>>>>>> miniblink49
 #endif
 
 /* On strong memory model CPUs (e.g. x86 CPUs), we use a safe & quick double check lock. */
@@ -157,31 +231,55 @@
 #endif
 
 #ifndef U_DEBUG
+<<<<<<< HEAD
 #define U_DEBUG @ENABLE_DEBUG @
 #endif
 
 #ifndef U_RELEASE
 #define U_RELEASE @ENABLE_RELEASE @
+=======
+#define U_DEBUG @ENABLE_DEBUG@
+#endif
+
+#ifndef U_RELEASE
+#define U_RELEASE @ENABLE_RELEASE@
+>>>>>>> miniblink49
 #endif
 
 /* Determine whether to disable renaming or not. This overrides the
    setting in umachine.h which is for all platforms. */
 #ifndef U_DISABLE_RENAMING
+<<<<<<< HEAD
 #define U_DISABLE_RENAMING @U_DISABLE_RENAMING @
+=======
+#define U_DISABLE_RENAMING @U_DISABLE_RENAMING@
+>>>>>>> miniblink49
 #endif
 
 /* Determine whether to override new and delete. */
 #ifndef U_OVERRIDE_CXX_ALLOCATION
+<<<<<<< HEAD
 #define U_OVERRIDE_CXX_ALLOCATION @U_OVERRIDE_CXX_ALLOCATION @
 #endif
 /* Determine whether to override placement new and delete for STL. */
 #ifndef U_HAVE_PLACEMENT_NEW
 #define U_HAVE_PLACEMENT_NEW @U_HAVE_PLACEMENT_NEW @
+=======
+#define U_OVERRIDE_CXX_ALLOCATION @U_OVERRIDE_CXX_ALLOCATION@
+#endif
+/* Determine whether to override placement new and delete for STL. */
+#ifndef U_HAVE_PLACEMENT_NEW
+#define U_HAVE_PLACEMENT_NEW @U_HAVE_PLACEMENT_NEW@
+>>>>>>> miniblink49
 #endif
 
 /* Determine whether to enable tracing. */
 #ifndef U_ENABLE_TRACING
+<<<<<<< HEAD
 #define U_ENABLE_TRACING @U_ENABLE_TRACING @
+=======
+#define U_ENABLE_TRACING @U_ENABLE_TRACING@
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -189,7 +287,11 @@
  * @internal
  */
 #ifndef U_ENABLE_DYLOAD
+<<<<<<< HEAD
 #define U_ENABLE_DYLOAD @U_ENABLE_DYLOAD @
+=======
+#define U_ENABLE_DYLOAD @U_ENABLE_DYLOAD@
+>>>>>>> miniblink49
 #endif
 
 /**
@@ -197,12 +299,22 @@
  * @internal
  */
 #ifndef U_CHECK_DYLOAD
+<<<<<<< HEAD
 #define U_CHECK_DYLOAD @U_CHECK_DYLOAD @
 #endif
 
 /** Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
 #define U_DEFAULT_SHOW_DRAFT @U_DEFAULT_SHOW_DRAFT @
+=======
+#define U_CHECK_DYLOAD @U_CHECK_DYLOAD@
+#endif
+
+
+/** Do we allow ICU users to use the draft APIs by default? */
+#ifndef U_DEFAULT_SHOW_DRAFT
+#define U_DEFAULT_SHOW_DRAFT @U_DEFAULT_SHOW_DRAFT@
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -212,7 +324,11 @@
 /*===========================================================================*/
 
 #if ((defined(OS390) && (!defined(__CHARSET_LIB) || !__CHARSET_LIB))) || defined(OS400)
+<<<<<<< HEAD
 #define U_CHARSET_FAMILY 1
+=======
+#   define U_CHARSET_FAMILY 1
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -222,6 +338,7 @@
 /*===========================================================================*/
 
 #ifndef U_HAVE_WCHAR_H
+<<<<<<< HEAD
 #define U_HAVE_WCHAR_H @U_HAVE_WCHAR_H @
 #endif
 
@@ -231,6 +348,17 @@
 
 #ifndef U_HAVE_WCSCPY
 #define U_HAVE_WCSCPY @U_HAVE_WCSCPY @
+=======
+#define U_HAVE_WCHAR_H      @U_HAVE_WCHAR_H@
+#endif
+
+#ifndef U_SIZEOF_WCHAR_T
+#define U_SIZEOF_WCHAR_T    @U_SIZEOF_WCHAR_T@
+#endif
+
+#ifndef U_HAVE_WCSCPY
+#define U_HAVE_WCSCPY       @U_HAVE_WCSCPY@
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -246,6 +374,7 @@
  * @internal
  */
 #ifndef U_GNUC_UTF16_STRING
+<<<<<<< HEAD
 #define U_GNUC_UTF16_STRING @U_CHECK_GNUC_UTF16_STRING @
 #endif
 #if @U_CHECK_UTF16_STRING @ || defined(U_CHECK_UTF16_STRING)
@@ -261,6 +390,23 @@
 #elif U_SIZEOF_WCHAR_T == 2 \
     && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
 #define U_DECLARE_UTF16(string) L##string
+=======
+#define U_GNUC_UTF16_STRING @U_CHECK_GNUC_UTF16_STRING@
+#endif
+#if @U_CHECK_UTF16_STRING@ || defined(U_CHECK_UTF16_STRING)
+#if (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
+    || (defined(__HP_aCC) && __HP_aCC >= 035000) \
+    || (defined(__HP_cc) && __HP_cc >= 111106) \
+    || U_GNUC_UTF16_STRING
+#define U_DECLARE_UTF16(string) u ## string
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
+/* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
+/* Sun's C compiler has issues with this notation, and it's unreliable. */
+#define U_DECLARE_UTF16(string) U ## string
+#elif U_SIZEOF_WCHAR_T == 2 \
+    && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
+#define U_DECLARE_UTF16(string) L ## string
+>>>>>>> miniblink49
 #endif
 #endif
 
@@ -271,6 +417,7 @@
 /*===========================================================================*/
 
 #ifndef U_HAVE_NL_LANGINFO_CODESET
+<<<<<<< HEAD
 #define U_HAVE_NL_LANGINFO_CODESET @U_HAVE_NL_LANGINFO_CODESET @
 #endif
 
@@ -290,6 +437,27 @@
 
 #define U_HAVE_MMAP @HAVE_MMAP @
 #define U_HAVE_POPEN @U_HAVE_POPEN @
+=======
+#define U_HAVE_NL_LANGINFO_CODESET  @U_HAVE_NL_LANGINFO_CODESET@
+#endif
+
+#ifndef U_NL_LANGINFO_CODESET
+#define U_NL_LANGINFO_CODESET       @U_NL_LANGINFO_CODESET@
+#endif
+
+#if @U_HAVE_TZSET@
+#define U_TZSET         @U_TZSET@
+#endif
+#if @U_HAVE_TIMEZONE@
+#define U_TIMEZONE      @U_TIMEZONE@
+#endif
+#if @U_HAVE_TZNAME@
+#define U_TZNAME        @U_TZNAME@
+#endif
+
+#define U_HAVE_MMAP     @HAVE_MMAP@
+#define U_HAVE_POPEN    @U_HAVE_POPEN@
+>>>>>>> miniblink49
 
 /** @} */
 
@@ -299,10 +467,17 @@
 
 #ifdef U_STATIC_IMPLEMENTATION
 #define U_EXPORT
+<<<<<<< HEAD
 #elif @U_USE_GCC_VISIBILITY_ATTRIBUTE @
 #define U_EXPORT __attribute__((visibility("default")))
 #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
     || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550)
+=======
+#elif @U_USE_GCC_VISIBILITY_ATTRIBUTE@
+#define U_EXPORT __attribute__((visibility("default")))
+#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
+   || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
+>>>>>>> miniblink49
 #define U_EXPORT __global
 /*#elif defined(__HP_aCC) || defined(__HP_cc)
 #define U_EXPORT __declspec(dllexport)*/
@@ -317,7 +492,11 @@
 #if defined(U_CYGWIN) && !defined(__GNUC__)
 #define U_IMPORT __declspec(dllimport)
 #else
+<<<<<<< HEAD
 #define U_IMPORT
+=======
+#define U_IMPORT 
+>>>>>>> miniblink49
 #endif
 
 /* @} */
@@ -327,6 +506,7 @@
 /*===========================================================================*/
 
 #ifndef U_INLINE
+<<<<<<< HEAD
 #ifdef __cplusplus
 #define U_INLINE inline
 #else
@@ -336,6 +516,17 @@
 
 #ifndef U_ALIGN_CODE
 #define U_ALIGN_CODE(n)
+=======
+#   ifdef __cplusplus
+#       define U_INLINE inline
+#   else
+#       define U_INLINE @U_INLINE@
+#   endif
+#endif
+
+#ifndef U_ALIGN_CODE
+#define U_ALIGN_CODE(n) 
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -349,7 +540,11 @@
  * @internal
  */
 #ifndef U_HAVE_GCC_ATOMICS
+<<<<<<< HEAD
 #define U_HAVE_GCC_ATOMICS @U_HAVE_GCC_ATOMICS @
+=======
+#define U_HAVE_GCC_ATOMICS @U_HAVE_GCC_ATOMICS@
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -363,7 +558,11 @@
  * What program to execute to run 'make'
  */
 #ifndef U_MAKE
+<<<<<<< HEAD
 #define U_MAKE "@U_MAKE@"
+=======
+#define U_MAKE  "@U_MAKE@"
+>>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -378,16 +577,25 @@
  * Define the library suffix with C syntax.
  * @internal
  */
+<<<<<<< HEAD
 #define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME @
+=======
+# define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
+>>>>>>> miniblink49
 /**
  * Define the library suffix as a string with C syntax
  * @internal
  */
+<<<<<<< HEAD
 #define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
+=======
+# define U_LIB_SUFFIX_C_NAME_STRING "@ICULIBSUFFIXCNAME@"
+>>>>>>> miniblink49
 /**
  * 1 if a custom library suffix is set
  * @internal
  */
+<<<<<<< HEAD
 #define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX @
 
 #if U_HAVE_LIB_SUFFIX
@@ -397,6 +605,17 @@
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##@ICULIBSUFFIXCNAME @##major##minor##_dat
 
 #endif
+=======
+# define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
+
+#if U_HAVE_LIB_SUFFIX
+# ifndef U_ICU_ENTRY_POINT_RENAME
+/* Renaming pattern:    u_strcpy_41_suffix */
+#  define U_ICU_ENTRY_POINT_RENAME(x)    x ## _ ## @LIB_VERSION_MAJOR@ ## @ICULIBSUFFIXCNAME@
+#  define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##@ICULIBSUFFIXCNAME@##major##minor##_dat
+
+# endif
+>>>>>>> miniblink49
 #endif
 
 #endif

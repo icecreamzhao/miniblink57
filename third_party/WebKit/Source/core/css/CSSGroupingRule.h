@@ -34,11 +34,10 @@ class CSSRuleList;
 
 class CSSGroupingRule : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    ~CSSGroupingRule() override;
+    virtual ~CSSGroupingRule();
 
-    void reattach(StyleRuleBase*) override;
+    virtual void reattach(StyleRuleBase*) override;
 
     CSSRuleList* cssRules() const override;
 
@@ -56,9 +55,9 @@ protected:
 
     void appendCSSTextForItems(StringBuilder&) const;
 
-    Member<StyleRuleGroup> m_groupRule;
-    mutable HeapVector<Member<CSSRule>> m_childRuleCSSOMWrappers;
-    mutable Member<CSSRuleList> m_ruleListCSSOMWrapper;
+    RefPtrWillBeMember<StyleRuleGroup> m_groupRule;
+    mutable WillBeHeapVector<RefPtrWillBeMember<CSSRule>> m_childRuleCSSOMWrappers;
+    mutable OwnPtrWillBeMember<CSSRuleList> m_ruleListCSSOMWrapper;
 };
 
 } // namespace blink

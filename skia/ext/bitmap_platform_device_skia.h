@@ -5,16 +5,11 @@
 #ifndef SKIA_EXT_BITMAP_PLATFORM_DEVICE_SKIA_H_
 #define SKIA_EXT_BITMAP_PLATFORM_DEVICE_SKIA_H_
 
-#include <stdint.h>
-
 #include "base/compiler_specific.h"
-#include "base/macros.h"
-#include "base/memory/ref_counted.h"
+//#include "base/memory/ref_counted.h"
 #include "skia/ext/platform_device.h"
 
 namespace skia {
-
-class ScopedPlatformPaint;
 
 // -----------------------------------------------------------------------------
 // For now we just use SkBitmap for SkBitmapDevice
@@ -24,38 +19,41 @@ class ScopedPlatformPaint;
 // case we'll probably create the buffer from a precreated region of memory.
 // -----------------------------------------------------------------------------
 class BitmapPlatformDevice : public SkBitmapDevice, public PlatformDevice {
-public:
-    // Construct a BitmapPlatformDevice. |is_opaque| should be set if the caller
-    // knows the bitmap will be completely opaque and allows some optimizations.
-    // The bitmap is not initialized.
-    static BitmapPlatformDevice* Create(int width, int height, bool is_opaque);
+ public:
+  // Construct a BitmapPlatformDevice. |is_opaque| should be set if the caller
+  // knows the bitmap will be completely opaque and allows some optimizations.
+  // The bitmap is not initialized.
+  static BitmapPlatformDevice* Create(int width, int height, bool is_opaque);
 
-    // This doesn't take ownership of |data|. If |data| is null, the bitmap
-    // is not initialized to 0.
-    static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,
-        uint8_t* data);
+  // Construct a BitmapPlatformDevice, as above.
+  // If |is_opaque| is false, the bitmap is initialized to 0.
+  static BitmapPlatformDevice* CreateAndClear(int width, int height,
+                                              bool is_opaque);
 
-    // Create a BitmapPlatformDevice from an already constructed bitmap;
-    // you should probably be using Create(). This may become private later if
-    // we ever have to share state between some native drawing UI and Skia, like
-    // the Windows and Mac versions of this class do.
-    explicit BitmapPlatformDevice(const SkBitmap& other);
-    ~BitmapPlatformDevice() override;
+  // This doesn't take ownership of |data|. If |data| is null, the bitmap
+  // is not initialized to 0.
+  static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,
+                                      uint8_t* data);
 
-    virtual PlatformSurface BeginPlatformPaint(void* hWnd);
-    virtual void EndPlatformPaint();
+  // Create a BitmapPlatformDevice from an already constructed bitmap;
+  // you should probably be using Create(). This may become private later if
+  // we ever have to share state between some native drawing UI and Skia, like
+  // the Windows and Mac versions of this class do.
+  explicit BitmapPlatformDevice(const SkBitmap& other);
+  virtual ~BitmapPlatformDevice();
 
-protected:
-    SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*) override;
+  virtual PlatformSurface BeginPlatformPaint() OVERRIDE;
+  virtual void DrawToNativeContext(PlatformSurface surface, int x, int y,
+                                   const PlatformRect* src_rect) OVERRIDE;
 
-private:
-    PlatformSurface BeginPlatformPaint(const SkMatrix& transform, const SkIRect& clip_bounds) override;
+ protected:
+  virtual SkBaseDevice* onCreateDevice(const SkImageInfo& info,
+                                       Usage usage) OVERRIDE;
 
-    DISALLOW_COPY_AND_ASSIGN(BitmapPlatformDevice);
-
-    friend class ScopedPlatformPaint;
+ private:
+  DISALLOW_COPY_AND_ASSIGN(BitmapPlatformDevice);
 };
 
-} // namespace skia
+}  // namespace skia
 
-#endif // SKIA_EXT_BITMAP_PLATFORM_DEVICE_SKIA_H_
+#endif  // SKIA_EXT_BITMAP_PLATFORM_DEVICE_SKIA_H_

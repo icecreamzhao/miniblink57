@@ -8,6 +8,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace compiler {
 
         NodeMarkerBase::NodeMarkerBase(Graph* graph, uint32_t num_states)
@@ -21,3 +22,16 @@ namespace internal {
     } // namespace compiler
 } // namespace internal
 } // namespace v8
+=======
+namespace compiler {
+
+NodeMarkerBase::NodeMarkerBase(Graph* graph, uint32_t num_states)
+    : mark_min_(graph->mark_max_), mark_max_(graph->mark_max_ += num_states) {
+  DCHECK_NE(0u, num_states);        // user error!
+  DCHECK_LT(mark_min_, mark_max_);  // check for wraparound.
+}
+
+}  // namespace compiler
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

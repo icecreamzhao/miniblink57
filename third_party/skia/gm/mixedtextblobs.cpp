@@ -17,8 +17,12 @@
 namespace skiagm {
 
 static void draw_blob(SkCanvas* canvas, const SkTextBlob* blob, const SkPaint& skPaint,
+<<<<<<< HEAD
     const SkRect& clipRect)
 {
+=======
+                      const SkRect& clipRect) {
+>>>>>>> miniblink49
     SkPaint clipHairline;
     clipHairline.setColor(SK_ColorWHITE);
     clipHairline.setStyle(SkPaint::kStroke_Style);
@@ -39,11 +43,24 @@ public:
     MixedTextBlobsGM() { }
 
 protected:
+<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
         fEmojiTypeface = sk_tool_utils::emoji_typeface();
         fEmojiText = sk_tool_utils::emoji_sample_text();
         fReallyBigATypeface = MakeResourceAsTypeface("/fonts/ReallyBigA.ttf");
+=======
+    void onOnceBeforeDraw() override {
+#ifndef SK_BUILD_FOR_MAC
+        fEmojiTypeface.reset(GetResourceAsTypeface("/fonts/Funkster.ttf"));
+        fEmojiText = "Emoji!!!";
+#else
+        fEmojiTypeface.reset(SkTypeface::CreateFromName("Apple Color Emoji", SkTypeface::kNormal));
+        fEmojiText = "\xF0\x9F\x92\xB0" "\xF0\x9F\x8F\xA1" "\xF0\x9F\x8E\x85" // 💰🏡🎅
+                     "\xF0\x9F\x8D\xAA" "\xF0\x9F\x8D\x95" "\xF0\x9F\x9A\x80"; // 🍪🍕🚀
+#endif
+        fReallyBigATypeface.reset(GetResourceAsTypeface("/fonts/ReallyBigA.ttf"));
+>>>>>>> miniblink49
 
         SkTextBlobBuilder builder;
 
@@ -71,11 +88,15 @@ protected:
         // LCD
         paint.setTextSize(32);
         text = "LCD!!!!!";
+<<<<<<< HEAD
         paint.setAntiAlias(true);
+=======
+>>>>>>> miniblink49
         paint.setSubpixelText(true);
         paint.setLCDRenderText(true);
         paint.measureText(text, strlen(text), &bounds);
         sk_tool_utils::add_to_text_blob(&builder, text, paint, xOffset - bounds.width() * 0.25f,
+<<<<<<< HEAD
             yOffset - bounds.height() * 0.5f);
         yOffset += bounds.height();
 
@@ -90,6 +111,19 @@ protected:
             sk_tool_utils::add_to_text_blob(&builder, text, paint, xOffset - bounds.width() * 0.3f,
                 yOffset);
         }
+=======
+                                        yOffset - bounds.height() * 0.5f);
+        yOffset += bounds.height();
+
+        // color emoji
+        paint.setSubpixelText(false);
+        paint.setLCDRenderText(false);
+        paint.setTypeface(fEmojiTypeface);
+        text = fEmojiText;
+        paint.measureText(text, strlen(text), &bounds);
+        sk_tool_utils::add_to_text_blob(&builder, text, paint, xOffset - bounds.width() * 0.3f,
+                                        yOffset);
+>>>>>>> miniblink49
 
         // Corrupted font
         paint.setTextSize(12);
@@ -99,6 +133,7 @@ protected:
         fBlob.reset(builder.build());
     }
 
+<<<<<<< HEAD
     SkString onShortName() override
     {
         SkString name("mixedtextblobs");
@@ -115,6 +150,19 @@ protected:
     {
 
         canvas->drawColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
+=======
+    SkString onShortName() override {
+        return SkString("mixedtextblobs");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(kWidth, kHeight);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+
+        canvas->drawColor(SK_ColorGRAY);
+>>>>>>> miniblink49
 
         SkPaint paint;
 
@@ -133,6 +181,7 @@ protected:
         const SkScalar boundsQuarterHeight = boundsHalfHeight * SK_ScalarHalf;
 
         SkRect upperLeftClip = SkRect::MakeXYWH(bounds.left(), bounds.top(),
+<<<<<<< HEAD
             boundsHalfWidth, boundsHalfHeight);
         SkRect lowerRightClip = SkRect::MakeXYWH(bounds.centerX(), bounds.centerY(),
             boundsHalfWidth, boundsHalfHeight);
@@ -140,13 +189,27 @@ protected:
         interiorClip.inset(boundsQuarterWidth, boundsQuarterHeight);
 
         const SkRect clipRects[] = { bounds, upperLeftClip, lowerRightClip, interiorClip };
+=======
+                                                boundsHalfWidth, boundsHalfHeight);
+        SkRect lowerRightClip = SkRect::MakeXYWH(bounds.centerX(), bounds.centerY(),
+                                                 boundsHalfWidth, boundsHalfHeight);
+        SkRect interiorClip = bounds;
+        interiorClip.inset(boundsQuarterWidth, boundsQuarterHeight);
+
+        const SkRect clipRects[] = { bounds, upperLeftClip, lowerRightClip, interiorClip};
+>>>>>>> miniblink49
 
         size_t count = sizeof(clipRects) / sizeof(SkRect);
         for (size_t x = 0; x < count; ++x) {
             draw_blob(canvas, fBlob, paint, clipRects[x]);
             if (x == (count >> 1) - 1) {
                 canvas->translate(SkScalarFloorToScalar(bounds.width() + SkIntToScalar(25)),
+<<<<<<< HEAD
                     -(x * SkScalarFloorToScalar(bounds.height() + SkIntToScalar(25))));
+=======
+                                  -(x * SkScalarFloorToScalar(bounds.height() +
+                                    SkIntToScalar(25))));
+>>>>>>> miniblink49
             } else {
                 canvas->translate(0, SkScalarFloorToScalar(bounds.height() + SkIntToScalar(25)));
             }
@@ -154,8 +217,13 @@ protected:
     }
 
 private:
+<<<<<<< HEAD
     sk_sp<SkTypeface> fEmojiTypeface;
     sk_sp<SkTypeface> fReallyBigATypeface;
+=======
+    SkAutoTUnref<SkTypeface> fEmojiTypeface;
+    SkAutoTUnref<SkTypeface> fReallyBigATypeface;
+>>>>>>> miniblink49
     const char* fEmojiText;
     SkAutoTUnref<const SkTextBlob> fBlob;
 
@@ -167,5 +235,9 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new MixedTextBlobsGM;)
+=======
+DEF_GM( return SkNEW(MixedTextBlobsGM); )
+>>>>>>> miniblink49
 }

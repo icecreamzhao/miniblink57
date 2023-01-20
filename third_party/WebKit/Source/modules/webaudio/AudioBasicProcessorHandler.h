@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,6 +22,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef AudioBasicProcessorHandler_h
@@ -29,7 +42,10 @@
 #include "modules/ModulesExport.h"
 #include "modules/webaudio/AudioNode.h"
 #include "wtf/Forward.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -40,22 +56,33 @@ class AudioProcessor;
 // where the input and output have the same number of channels.
 class MODULES_EXPORT AudioBasicProcessorHandler : public AudioHandler {
 public:
+<<<<<<< HEAD
     static PassRefPtr<AudioBasicProcessorHandler> create(
         NodeType,
         AudioNode&,
         float sampleRate,
         std::unique_ptr<AudioProcessor>);
+=======
+    static PassRefPtr<AudioBasicProcessorHandler> create(NodeType, AudioNode&, float sampleRate, PassOwnPtr<AudioProcessor>);
+>>>>>>> miniblink49
     ~AudioBasicProcessorHandler() override;
 
     // AudioHandler
     void process(size_t framesToProcess) final;
+<<<<<<< HEAD
     void processOnlyAudioParams(size_t framesToProcess) final;
+=======
+>>>>>>> miniblink49
     void pullInputs(size_t framesToProcess) final;
     void initialize() final;
     void uninitialize() final;
 
+<<<<<<< HEAD
     // Called in the main thread when the number of channels for the input may
     // have changed.
+=======
+    // Called in the main thread when the number of channels for the input may have changed.
+>>>>>>> miniblink49
     void checkNumberOfChannelsForInput(AudioNodeInput*) final;
 
     // Returns the number of channels for both the input and the output.
@@ -63,6 +90,7 @@ public:
     AudioProcessor* processor() { return m_processor.get(); }
 
 private:
+<<<<<<< HEAD
     AudioBasicProcessorHandler(NodeType,
         AudioNode&,
         float sampleRate,
@@ -71,6 +99,13 @@ private:
     double latencyTime() const final;
 
     std::unique_ptr<AudioProcessor> m_processor;
+=======
+    AudioBasicProcessorHandler(NodeType, AudioNode&, float sampleRate, PassOwnPtr<AudioProcessor>);
+    double tailTime() const final;
+    double latencyTime() const final;
+
+    OwnPtr<AudioProcessor> m_processor;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

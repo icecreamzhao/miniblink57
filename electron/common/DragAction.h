@@ -16,8 +16,7 @@ namespace atom {
 
 class DragAction : public IDropTarget {
 public:
-    DragAction(wkeWebView webview, HWND viewWindow, int id)
-    {
+    DragAction(wkeWebView webview, HWND viewWindow, int id) {
         m_id = id;
         m_refCount = 0;
         m_lastDropEffect = 0;
@@ -26,20 +25,17 @@ public:
         m_viewWindow = viewWindow;
     }
 
-    static FORMATETC* getPlainTextWFormatType()
-    {
+    static FORMATETC* getPlainTextWFormatType() {
         static FORMATETC textFormat = { CF_UNICODETEXT, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
         return &textFormat;
     }
 
-    static FORMATETC* getPlainTextFormatType()
-    {
+    static FORMATETC* getPlainTextFormatType() {
         static FORMATETC textFormat = { CF_UNICODETEXT, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
         return &textFormat;
     }
 
-    static wkeMemBuf* getPlainText(IDataObject* dataObject)
-    {
+    static wkeMemBuf* getPlainText(IDataObject* dataObject) {
         STGMEDIUM store;
 
         wkeMemBuf* text = nullptr;
@@ -55,8 +51,8 @@ public:
         } else if (SUCCEEDED(dataObject->GetData(getPlainTextFormatType(), &store))) {
             // ASCII text
             char* data = static_cast<char*>(GlobalLock(store.hGlobal));
-            //             text = wkeCreateStringW(L"", 0);
-            //             wkeSetString(text, data, strlen(data));
+//             text = wkeCreateStringW(L"", 0);
+//             wkeSetString(text, data, strlen(data));
             text = wkeCreateMemBuf(nullptr, (void*)data, strlen(data));
             ::GlobalUnlock(store.hGlobal);
             ReleaseStgMedium(&store);
@@ -69,8 +65,7 @@ public:
         return text;
     }
 
-    static bool containsPlainText(IDataObject* pDataObject)
-    {
+    static bool containsPlainText(IDataObject* pDataObject) {
         if (pDataObject) {
             HRESULT hr1 = pDataObject->QueryGetData(getPlainTextWFormatType());
             HRESULT hr2 = pDataObject->QueryGetData(getPlainTextFormatType());
@@ -80,15 +75,13 @@ public:
         return false;
     }
 
-    static FORMATETC* cfHDropFormat()
-    {
+    static FORMATETC* cfHDropFormat() {
         static FORMATETC urlFormat = { CF_HDROP, 0, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
         return &urlFormat;
     }
 
-    static bool containsFiles(IDataObject* pDataObject)
-    {
+    static bool containsFiles(IDataObject* pDataObject) {
         if (pDataObject) {
 
             HRESULT hr = pDataObject->QueryGetData(cfHDropFormat());
@@ -97,8 +90,7 @@ public:
         return false;
     }
 
-    static DWORD dragOperationToDragCursor(wkeWebDragOperation op)
-    {
+    static DWORD dragOperationToDragCursor(wkeWebDragOperation op) {
         DWORD res = DROPEFFECT_NONE;
 
         if (op & wkeWebDragOperationCopy)
@@ -112,8 +104,8 @@ public:
         return res;
     }
 
-    static void initWkeWebDragDataItem(wkeWebDragData::Item* item)
-    {
+
+    static void initWkeWebDragDataItem(wkeWebDragData::Item* item) {
         item->storageType = wkeWebDragData::Item::StorageTypeString;
         item->stringType = nullptr; // wkeCreateStringW(L"", 0);
         item->stringData = nullptr; // wkeCreateStringW(L"", 0);
@@ -126,8 +118,7 @@ public:
         item->baseURL = nullptr; // wkeCreateStringW(L"", 0);
     }
 
-    static void releaseWkeWebDragData(wkeWebDragData* data)
-    {
+    static void releaseWkeWebDragData(wkeWebDragData* data) {
         wkeFreeMemBuf(data->m_filesystemId);
         for (int i = 0; i < data->m_itemListLength; ++i) {
             wkeWebDragData::Item* item = &data->m_itemList[i];
@@ -149,8 +140,8 @@ public:
         const wkeWebDragData* wkeDragData,
         wkeWebDragOperationsMask mask,
         const void* image,
-        const wkePoint* dragImageOffset)
-    {
+        const wkePoint* dragImageOffset
+        ) {
         HRESULT hr = E_NOTIMPL;
         DWORD okEffect = draggingSourceOperationMaskToDragCursors(mask);
         DWORD effect = DROPEFFECT_NONE;
@@ -188,7 +179,7 @@ public:
         POINT* screenPoint = new POINT();
         ::GetCursorPos(screenPoint);
 
-        POINT* clientPoint = new POINT();
+        POINT* clientPoint = new POINT(); 
         *clientPoint = *screenPoint;
         ::ScreenToClient(m_viewWindow, clientPoint);
 
@@ -207,15 +198,14 @@ public:
         ThreadCall::callBlinkThreadSync([id, webview, screenPoint, clientPoint, operation] {
             if (IdLiveDetect::get()->isLive(id))
                 wkeDragTargetEnd(webview, clientPoint, screenPoint, operation);
-
+            
             delete screenPoint;
             delete clientPoint;
         });
         hr = S_OK;
     }
 
-    static wkeWebDragData* dropDataToWebDragData(IDataObject* pDataObject)
-    {
+    static wkeWebDragData* dropDataToWebDragData(IDataObject* pDataObject) {
         wkeWebDragData* result = new wkeWebDragData();
 
         result->m_filesystemId = nullptr;
@@ -261,8 +251,7 @@ public:
         return result;
     }
 
-    static DWORD draggingSourceOperationMaskToDragCursors(wkeWebDragOperationsMask op)
-    {
+    static DWORD draggingSourceOperationMaskToDragCursors(wkeWebDragOperationsMask op) {
 
         DWORD result = DROPEFFECT_NONE;
         if (op == wkeWebDragOperationEvery)
@@ -278,10 +267,9 @@ public:
         return result;
     }
 
-    static wkeWebDragOperation keyStateToDragOperation(DWORD grfKeyState)
-    {
-        // Conforms to Microsoft's key combinations as documented for
-        // IDropTarget::DragOver. Note, grfKeyState is the current
+    static wkeWebDragOperation keyStateToDragOperation(DWORD grfKeyState) {
+        // Conforms to Microsoft's key combinations as documented for 
+        // IDropTarget::DragOver. Note, grfKeyState is the current 
         // state of the keyboard modifier keys on the keyboard. See:
         // <http://msdn.microsoft.com/en-us/library/ms680129(VS.85).aspx>.
         wkeWebDragOperation operation = wkeWebDragOperationNone; // m_page->dragController().sourceDragOperation();
@@ -297,8 +285,7 @@ public:
     }
 
     // IDropTarget impl
-    HRESULT __stdcall DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
-    {
+    HRESULT __stdcall DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) {
         if (!m_webview)
             return S_OK;
 
@@ -343,8 +330,7 @@ public:
         return S_OK;
     }
 
-    HRESULT __stdcall DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
-    {
+    HRESULT __stdcall DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) {
         if (!m_webview)
             return S_OK;
 
@@ -372,7 +358,7 @@ public:
                 delete clientPoint;
             });
 
-            *pdwEffect = DROPEFFECT_MOVE;
+            *pdwEffect = DROPEFFECT_MOVE; 
             //dragOperationToDragCursor(op);
         } else
             *pdwEffect = DROPEFFECT_NONE;
@@ -381,8 +367,7 @@ public:
         return S_OK;
     }
 
-    HRESULT __stdcall DragLeave()
-    {
+    HRESULT __stdcall DragLeave() {
         if (m_dropTargetHelper)
             m_dropTargetHelper->DragLeave();
 
@@ -399,8 +384,7 @@ public:
         return S_OK;
     }
 
-    HRESULT __stdcall Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
-    {
+    HRESULT __stdcall Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) {
         OutputDebugStringA("Drop\n");
         if (!m_webview)
             return S_OK;
@@ -432,8 +416,7 @@ public:
         return S_OK;
     }
 
-    HRESULT __stdcall QueryInterface(REFIID riid, void** ppvObject)
-    {
+    HRESULT __stdcall QueryInterface(REFIID riid, void** ppvObject) {
         if (!ppvObject)
             return E_POINTER;
         *ppvObject = nullptr;
@@ -447,18 +430,15 @@ public:
         return S_OK;
     }
 
-    ULONG __stdcall AddRef()
-    {
+    ULONG __stdcall AddRef() {
         return ++m_refCount;
     }
 
-    ULONG __stdcall Release()
-    {
+    ULONG __stdcall Release() {
         return --m_refCount;
     }
 
-    ULONG getRefCount() const
-    {
+    ULONG getRefCount() const {
         return m_refCount;
     }
 

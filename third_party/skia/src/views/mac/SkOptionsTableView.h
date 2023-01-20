@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,10 +9,17 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #import "SkEvent.h"
 #import "SkNSView.h"
 #import "SkOSMenu.h"
 #import <Cocoa/Cocoa.h>
+=======
+#import <Cocoa/Cocoa.h>
+#import "SkNSView.h"
+#import "SkOSMenu.h"
+#import "SkEvent.h"
+>>>>>>> miniblink49
 @interface SkOptionItem : NSObject {
     NSCell* fCell;
     const SkOSMenu::Item* fItem;

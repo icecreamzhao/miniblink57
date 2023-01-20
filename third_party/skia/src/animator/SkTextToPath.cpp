@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkTextToPath.h"
 #include "SkAnimateMaker.h"
 #include "SkDrawPaint.h"
@@ -25,6 +29,7 @@ const SkMemberInfo SkTextToPath::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkTextToPath);
 
+<<<<<<< HEAD
 SkTextToPath::SkTextToPath()
     : paint(nullptr)
     , path(nullptr)
@@ -34,13 +39,24 @@ SkTextToPath::SkTextToPath()
 
 bool SkTextToPath::draw(SkAnimateMaker& maker)
 {
+=======
+SkTextToPath::SkTextToPath() : paint(NULL), path(NULL), text(NULL) {
+}
+
+bool SkTextToPath::draw(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     path->draw(maker);
     return false;
 }
 
+<<<<<<< HEAD
 void SkTextToPath::onEndElement(SkAnimateMaker& maker)
 {
     if (paint == nullptr || path == nullptr || text == nullptr) {
+=======
+void SkTextToPath::onEndElement(SkAnimateMaker& maker) {
+    if (paint == NULL || path == NULL || text == NULL) {
+>>>>>>> miniblink49
         // !!! add error message here
         maker.setErrorCode(SkDisplayXMLParserError::kErrorInAttributeValue);
         return;

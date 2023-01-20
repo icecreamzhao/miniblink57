@@ -27,6 +27,10 @@
  */
 
 [
+<<<<<<< HEAD
+=======
+    GarbageCollected,
+>>>>>>> miniblink49
     NoInterfaceObject
 ] interface Database {
     readonly attribute DOMString version;
@@ -34,3 +38,7 @@
     void transaction(SQLTransactionCallback callback, optional SQLTransactionErrorCallback errorCallback, optional VoidCallback successCallback);
     void readTransaction(SQLTransactionCallback callback, optional SQLTransactionErrorCallback errorCallback, optional VoidCallback successCallback);
 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49

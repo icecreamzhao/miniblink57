@@ -31,6 +31,7 @@
 #ifndef LocaleICU_h
 #define LocaleICU_h
 
+<<<<<<< HEAD
 #include "platform/DateComponents.h"
 #include "platform/text/PlatformLocale.h"
 #include "wtf/Forward.h"
@@ -47,6 +48,24 @@ namespace blink {
 class PLATFORM_EXPORT LocaleICU : public Locale {
 public:
     static std::unique_ptr<LocaleICU> create(const char* localeString);
+=======
+#include <unicode/udat.h>
+#include <unicode/unum.h>
+#include "platform/DateComponents.h"
+#include "platform/text/PlatformLocale.h"
+#include "wtf/Forward.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/text/CString.h"
+#include "wtf/text/WTFString.h"
+
+namespace blink {
+
+// We should use this class only for LocalizedNumberICU.cpp, LocalizedDateICU.cpp,
+// and LocalizedNumberICUTest.cpp.
+class PLATFORM_EXPORT LocaleICU : public Locale {
+public:
+    static PassOwnPtr<LocaleICU> create(const char* localeString);
+>>>>>>> miniblink49
     ~LocaleICU() override;
 
     const Vector<String>& weekDayShortLabels() override;
@@ -71,6 +90,7 @@ private:
     String decimalTextAttribute(UNumberFormatTextAttribute);
     void initializeLocaleData() override;
 
+<<<<<<< HEAD
     bool detectSignAndGetDigitRange(const String& input,
         bool& isNegative,
         unsigned& startIndex,
@@ -80,14 +100,25 @@ private:
     bool initializeShortDateFormat();
     UDateFormat* openDateFormat(UDateFormatStyle timeStyle,
         UDateFormatStyle dateStyle) const;
+=======
+    bool detectSignAndGetDigitRange(const String& input, bool& isNegative, unsigned& startIndex, unsigned& endIndex);
+    unsigned matchedDecimalSymbolIndex(const String& input, unsigned& position);
+
+    bool initializeShortDateFormat();
+    UDateFormat* openDateFormat(UDateFormatStyle timeStyle, UDateFormatStyle dateStyle) const;
+>>>>>>> miniblink49
     UDateFormat* openDateFormatForStandAloneMonthLabels(bool isShort) const;
 
     void initializeCalendar();
 
+<<<<<<< HEAD
     std::unique_ptr<Vector<String>> createLabelVector(const UDateFormat*,
         UDateFormatSymbolType,
         int32_t startIndex,
         int32_t size);
+=======
+    PassOwnPtr<Vector<String>> createLabelVector(const UDateFormat*, UDateFormatSymbolType, int32_t startIndex, int32_t size);
+>>>>>>> miniblink49
     void initializeDateTimeFormat();
 
     CString m_locale;
@@ -96,9 +127,15 @@ private:
     bool m_didCreateDecimalFormat;
     bool m_didCreateShortDateFormat;
 
+<<<<<<< HEAD
     std::unique_ptr<Vector<String>> m_weekDayShortLabels;
     unsigned m_firstDayOfWeek;
     std::unique_ptr<Vector<String>> m_monthLabels;
+=======
+    OwnPtr<Vector<String>> m_weekDayShortLabels;
+    unsigned m_firstDayOfWeek;
+    OwnPtr<Vector<String>> m_monthLabels;
+>>>>>>> miniblink49
     String m_dateFormat;
     String m_monthFormat;
     String m_shortMonthFormat;

@@ -420,6 +420,7 @@ static bool bad_domain(const char *domain)
   return !strchr(domain, '.') && !strcasecompare(domain, "localhost");
 }
 
+<<<<<<< HEAD
 
 bool domainIsContain(char* oldDomain, char* newDomain)
 {
@@ -455,6 +456,43 @@ bool checkIsBadCookie(struct Cookie* oldCo, struct Cookie* newCo)
 
     return FALSE;
 }
+=======
+
+bool domainIsContain(char* oldDomain, char* newDomain)
+{
+  int oldDomainLength = strlen(oldDomain);
+  int newDomainLength = strlen(newDomain);
+
+  if (oldDomainLength < newDomainLength && NULL != strstr(newDomain, oldDomain) ||
+    oldDomainLength >= newDomainLength && NULL != strstr(oldDomain, newDomain))
+    return TRUE;
+
+  return FALSE;
+}
+
+bool checkNeedReplace(struct Cookie* oldCo, struct Cookie* newCo)
+{
+  if (oldCo->value && oldCo->value[0] != '\0')
+    return FALSE;
+
+  if (!newCo->value || newCo->value[0] == '\0')
+    return FALSE;
+
+  return domainIsContain(oldCo->domain, newCo->domain);
+}
+
+// X_HTTP_TOKEN="xxx", y.x.com -> X_HTTP_TOKEN="", x.com
+bool checkIsBadCookie(struct Cookie* oldCo, struct Cookie* newCo)
+{
+  if (!domainIsContain(oldCo->domain, newCo->domain))
+    return FALSE;
+
+  if (oldCo->value && oldCo->value[0] != '\0' && (!newCo->value || newCo->value[0] == '\0'))
+    return TRUE;
+
+    return FALSE;
+}
+>>>>>>> miniblink49
 
 
 /****************************************************************************
@@ -966,11 +1004,19 @@ Curl_cookie_add(struct Curl_easy *data,
           (clist->tailmatch == co->tailmatch))
           /* The domains are identical */
           replace_old = TRUE;
+<<<<<<< HEAD
         else if (checkNeedReplace(clist, co))
             replace_old = TRUE;
         else if (checkIsBadCookie(clist, co)) {
             freecookie(co);
             return NULL;
+=======
+        else if (checkNeedReplace(clist, co))
+            replace_old = TRUE;
+        else if (checkIsBadCookie(clist, co)) {
+            freecookie(co);
+            return NULL;
+>>>>>>> miniblink49
         }
       }
       else if(!clist->domain && !co->domain)
@@ -1084,7 +1130,10 @@ static char *get_line(char *buf, int len, FILE *input)
   return NULL;
 }
 
+<<<<<<< HEAD
 FILE* fopen_wrap(/*_In_z_*/ const char* _Filename, /*_In_*/ const char* _OpenFlag);
+=======
+>>>>>>> miniblink49
 
 /*****************************************************************************
  *
@@ -1131,7 +1180,11 @@ struct CookieInfo *Curl_cookie_init(struct Curl_easy *data,
     fp = NULL;
   }
   else
+<<<<<<< HEAD
     fp = file ? fopen_wrap(file, FOPEN_READTEXT) : NULL;
+=======
+    fp = file?fopen(file, FOPEN_READTEXT):NULL;
+>>>>>>> miniblink49
 
   c->newsession = newsession; /* new session? */
 
@@ -1180,7 +1233,11 @@ fail:
 }
 
 /* sort this so that the longest path gets before the shorter path */
+<<<<<<< HEAD
 static int __cdecl cookie_sort(const void *p1, const void *p2)
+=======
+static int cookie_sort(const void *p1, const void *p2)
+>>>>>>> miniblink49
 {
   struct Cookie *c1 = *(struct Cookie **)p1;
   struct Cookie *c2 = *(struct Cookie **)p2;
@@ -1212,7 +1269,11 @@ static int __cdecl cookie_sort(const void *p1, const void *p2)
 }
 
 /* sort cookies only according to creation time */
+<<<<<<< HEAD
 static int __cdecl cookie_sort_ct(const void *p1, const void *p2)
+=======
+static int cookie_sort_ct(const void *p1, const void *p2)
+>>>>>>> miniblink49
 {
   struct Cookie *c1 = *(struct Cookie **)p1;
   struct Cookie *c2 = *(struct Cookie **)p2;
@@ -1536,7 +1597,11 @@ static int cookie_output(struct CookieInfo *c, const char *dumphere)
     use_stdout = TRUE;
   }
   else {
+<<<<<<< HEAD
     out = fopen_wrap(dumphere, FOPEN_WRITETEXT);
+=======
+    out = fopen(dumphere, FOPEN_WRITETEXT);
+>>>>>>> miniblink49
     if(!out) {
       free(array);
       return 1; /* failure */

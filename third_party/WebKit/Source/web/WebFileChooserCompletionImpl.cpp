@@ -28,19 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "web/WebFileChooserCompletionImpl.h"
 
+=======
+#include "config.h"
+#include "web/WebFileChooserCompletionImpl.h"
+>>>>>>> miniblink49
 #include "platform/FileMetadata.h"
 #include "wtf/DateMath.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebFileChooserCompletionImpl::WebFileChooserCompletionImpl(
     PassRefPtr<FileChooser> chooser)
+=======
+WebFileChooserCompletionImpl::WebFileChooserCompletionImpl(PassRefPtr<FileChooser> chooser)
+>>>>>>> miniblink49
     : m_fileChooser(chooser)
 {
 }
 
+<<<<<<< HEAD
 WebFileChooserCompletionImpl::~WebFileChooserCompletionImpl() { }
 
 void WebFileChooserCompletionImpl::didChooseFile(
@@ -49,26 +59,50 @@ void WebFileChooserCompletionImpl::didChooseFile(
     Vector<FileChooserFileInfo> fileInfo;
     for (size_t i = 0; i < fileNames.size(); ++i)
         fileInfo.push_back(FileChooserFileInfo(fileNames[i]));
+=======
+WebFileChooserCompletionImpl::~WebFileChooserCompletionImpl()
+{
+}
+
+void WebFileChooserCompletionImpl::didChooseFile(const WebVector<WebString>& fileNames)
+{
+    Vector<FileChooserFileInfo> fileInfo;
+    for (size_t i = 0; i < fileNames.size(); ++i)
+        fileInfo.append(FileChooserFileInfo(fileNames[i]));
+>>>>>>> miniblink49
     m_fileChooser->chooseFiles(fileInfo);
     // This object is no longer needed.
     delete this;
 }
 
+<<<<<<< HEAD
 void WebFileChooserCompletionImpl::didChooseFile(
     const WebVector<SelectedFileInfo>& files)
+=======
+void WebFileChooserCompletionImpl::didChooseFile(const WebVector<SelectedFileInfo>& files)
+>>>>>>> miniblink49
 {
     Vector<FileChooserFileInfo> fileInfo;
     for (size_t i = 0; i < files.size(); ++i) {
         if (files[i].fileSystemURL.isEmpty()) {
+<<<<<<< HEAD
             fileInfo.push_back(
                 FileChooserFileInfo(files[i].path, files[i].displayName));
+=======
+            fileInfo.append(FileChooserFileInfo(files[i].path, files[i].displayName));
+>>>>>>> miniblink49
         } else {
             FileMetadata metadata;
             metadata.modificationTime = files[i].modificationTime * msPerSecond;
             metadata.length = files[i].length;
+<<<<<<< HEAD
             metadata.type = files[i].isDirectory ? FileMetadata::TypeDirectory
                                                  : FileMetadata::TypeFile;
             fileInfo.push_back(FileChooserFileInfo(files[i].fileSystemURL, metadata));
+=======
+            metadata.type = files[i].isDirectory ? FileMetadata::TypeDirectory : FileMetadata::TypeFile;
+            fileInfo.append(FileChooserFileInfo(files[i].fileSystemURL, metadata));
+>>>>>>> miniblink49
         }
     }
     m_fileChooser->chooseFiles(fileInfo);

@@ -34,24 +34,25 @@ namespace blink {
 
 class VideoTrackOrAudioTrackOrTextTrack;
 
-class CORE_EXPORT TrackEvent final : public Event {
+class TrackEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     ~TrackEvent() override;
 
-    static TrackEvent* create() { return new TrackEvent; }
-
-    static TrackEvent* create(const AtomicString& type,
-        const TrackEventInit& initializer)
+    static PassRefPtrWillBeRawPtr<TrackEvent> create()
     {
-        return new TrackEvent(type, initializer);
+        return adoptRefWillBeNoop(new TrackEvent);
+    }
+
+    static PassRefPtrWillBeRawPtr<TrackEvent> create(const AtomicString& type, const TrackEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new TrackEvent(type, initializer));
     }
 
     template <typename T>
-    static TrackEvent* create(const AtomicString& type, T* track)
+    static PassRefPtrWillBeRawPtr<TrackEvent> create(const AtomicString& type, PassRefPtrWillBeRawPtr<T> track)
     {
-        return new TrackEvent(type, track);
+        return adoptRefWillBeNoop(new TrackEvent(type, track));
     }
 
     const AtomicString& interfaceName() const override;
@@ -64,13 +65,13 @@ private:
     TrackEvent();
     TrackEvent(const AtomicString& type, const TrackEventInit& initializer);
     template <typename T>
-    TrackEvent(const AtomicString& type, T* track)
+    TrackEvent(const AtomicString& type, PassRefPtrWillBeRawPtr<T> track)
         : Event(type, false, false)
         , m_track(track)
     {
     }
 
-    Member<TrackBase> m_track;
+    RefPtrWillBeMember<TrackBase> m_track;
 };
 
 } // namespace blink

@@ -14,6 +14,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(PropertyDescriptorObject, FixedArray)
     CAST_ACCESSOR(PropertyDescriptorObject)
 }
@@ -22,3 +23,13 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_PROPERTY_DESCRIPTOR_OBJECT_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(PropertyDescriptorObject, FixedArray)
+CAST_ACCESSOR(PropertyDescriptorObject)
+}
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_PROPERTY_DESCRIPTOR_OBJECT_INL_H_
+>>>>>>> miniblink49

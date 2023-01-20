@@ -29,59 +29,49 @@
 #include "core/fetch/RawResource.h"
 #include "core/fetch/ResourceOwner.h"
 #include "core/html/track/vtt/VTTParser.h"
-#include "platform/CrossOriginAttributeValue.h"
 #include "platform/Timer.h"
 #include "platform/heap/Handle.h"
+#include "wtf/OwnPtr.h"
 
 namespace blink {
 
 class Document;
 class TextTrackLoader;
 
-class TextTrackLoaderClient : public GarbageCollectedMixin {
+class TextTrackLoaderClient : public ResourceOwner<RawResource> {
 public:
-    virtual ~TextTrackLoaderClient() { }
+    ~TextTrackLoaderClient() override {}
 
     virtual void newCuesAvailable(TextTrackLoader*) = 0;
     virtual void cueLoadingCompleted(TextTrackLoader*, bool loadingFailed) = 0;
     virtual void newRegionsAvailable(TextTrackLoader*) = 0;
 };
 
-class TextTrackLoader final : public GarbageCollectedFinalized<TextTrackLoader>,
-                              public ResourceOwner<RawResource>,
-                              private VTTParserClient {
-    USING_GARBAGE_COLLECTED_MIXIN(TextTrackLoader);
-
+class TextTrackLoader final : public NoBaseWillBeGarbageCollectedFinalized<TextTrackLoader>, public ResourceOwner<RawResource>, private VTTParserClient {
+    WTF_MAKE_NONCOPYABLE(TextTrackLoader);
+    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(TextTrackLoader);
 public:
-    static TextTrackLoader* create(TextTrackLoaderClient& client,
-        Document& document)
+    static PassOwnPtrWillBeRawPtr<TextTrackLoader> create(TextTrackLoaderClient& client, Document& document)
     {
-        return new TextTrackLoader(client, document);
+        return adoptPtrWillBeNoop(new TextTrackLoader(client, document));
     }
     ~TextTrackLoader() override;
 
-    bool load(const KURL&, CrossOriginAttributeValue);
+    bool load(const KURL&, const AtomicString& crossOriginMode);
     void cancelLoad();
 
-    enum State { Idle,
-        Loading,
-        Finished,
-        Failed };
+    enum State { Idle, Loading, Finished, Failed };
     State loadState() { return m_state; }
 
-    void getNewCues(HeapVector<Member<TextTrackCue>>& outputCues);
-    void getNewRegions(HeapVector<Member<VTTRegion>>& outputRegions);
+    void getNewCues(WillBeHeapVector<RefPtrWillBeMember<TextTrackCue>>& outputCues);
+    void getNewRegions(WillBeHeapVector<RefPtrWillBeMember<VTTRegion>>& outputRegions);
 
     DECLARE_TRACE();
 
 private:
     // RawResourceClient
-    bool redirectReceived(Resource*,
-        const ResourceRequest&,
-        const ResourceResponse&) override;
-    void dataReceived(Resource*, const char* data, size_t length) override;
+    void dataReceived(Resource*, const char* data, unsigned length) override;
     void notifyFinished(Resource*) override;
-    String debugName() const override { return "TextTrackLoader"; }
 
     // VTTParserClient
     void newCuesParsed() override;
@@ -90,15 +80,15 @@ private:
 
     TextTrackLoader(TextTrackLoaderClient&, Document&);
 
-    void cueLoadTimerFired(TimerBase*);
+    void cueLoadTimerFired(Timer<TextTrackLoader>*);
     void corsPolicyPreventedLoad(SecurityOrigin*, const KURL&);
 
     Document& document() const { return *m_document; }
 
-    Member<TextTrackLoaderClient> m_client;
-    Member<VTTParser> m_cueParser;
+    TextTrackLoaderClient& m_client;
+    OwnPtrWillBeMember<VTTParser> m_cueParser;
     // FIXME: Remove this pointer and get the Document from m_client.
-    Member<Document> m_document;
+    RawPtrWillBeMember<Document> m_document;
     Timer<TextTrackLoader> m_cueLoadTimer;
     State m_state;
     bool m_newCuesAvailable;

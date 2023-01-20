@@ -11,12 +11,18 @@
 namespace blink {
 
 class SafePointScope final {
+<<<<<<< HEAD
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SafePointScope);
 
 public:
     explicit SafePointScope(BlinkGC::StackState stackState,
         ThreadState* state = ThreadState::current())
+=======
+    WTF_MAKE_NONCOPYABLE(SafePointScope);
+public:
+    explicit SafePointScope(ThreadState::StackState stackState, ThreadState* state = ThreadState::current())
+>>>>>>> miniblink49
         : m_state(state)
     {
         if (m_state) {
@@ -36,6 +42,7 @@ private:
 };
 
 // The SafePointAwareMutexLocker is used to enter a safepoint while waiting for
+<<<<<<< HEAD
 // a mutex lock. It also ensures that the lock is not held while waiting for a
 // GC to complete in the leaveSafePoint method, by releasing the lock if the
 // leaveSafePoint method cannot complete without blocking, see
@@ -48,6 +55,16 @@ public:
     explicit SafePointAwareMutexLocker(
         MutexBase& mutex,
         BlinkGC::StackState stackState = BlinkGC::HeapPointersOnStack)
+=======
+// a mutex lock. It also ensures that the lock is not held while waiting for a GC
+// to complete in the leaveSafePoint method, by releasing the lock if the
+// leaveSafePoint method cannot complete without blocking, see
+// SafePointBarrier::checkAndPark.
+class SafePointAwareMutexLocker final {
+    WTF_MAKE_NONCOPYABLE(SafePointAwareMutexLocker);
+public:
+    explicit SafePointAwareMutexLocker(MutexBase& mutex, ThreadState::StackState stackState = ThreadState::HeapPointersOnStack)
+>>>>>>> miniblink49
         : m_mutex(mutex)
         , m_locked(false)
     {
@@ -95,9 +112,13 @@ private:
 };
 
 class SafePointBarrier final {
+<<<<<<< HEAD
     USING_FAST_MALLOC(SafePointBarrier);
     WTF_MAKE_NONCOPYABLE(SafePointBarrier);
 
+=======
+    WTF_MAKE_NONCOPYABLE(SafePointBarrier);
+>>>>>>> miniblink49
 public:
     SafePointBarrier();
     ~SafePointBarrier();
@@ -119,20 +140,29 @@ public:
 
 private:
     void doPark(ThreadState*, intptr_t* stackEnd);
+<<<<<<< HEAD
     static void parkAfterPushRegisters(SafePointBarrier* barrier,
         ThreadState* state,
         intptr_t* stackEnd)
+=======
+    static void parkAfterPushRegisters(SafePointBarrier* barrier, ThreadState* state, intptr_t* stackEnd)
+>>>>>>> miniblink49
     {
         barrier->doPark(state, stackEnd);
     }
     void doEnterSafePoint(ThreadState*, intptr_t* stackEnd);
+<<<<<<< HEAD
     static void enterSafePointAfterPushRegisters(SafePointBarrier* barrier,
         ThreadState* state,
         intptr_t* stackEnd)
+=======
+    static void enterSafePointAfterPushRegisters(SafePointBarrier* barrier, ThreadState* state, intptr_t* stackEnd)
+>>>>>>> miniblink49
     {
         barrier->doEnterSafePoint(state, stackEnd);
     }
 
+<<<<<<< HEAD
     // |m_unparkedThreadCount| tracks amount of unparked threads. It is
     // positive if and only if a thread has requested the other threads
     // to park themselves at safe-points in preparation for a GC.
@@ -161,6 +191,11 @@ private:
 
     Mutex m_mutex;
 
+=======
+    volatile int m_canResume;
+    volatile int m_unparkedThreadCount;
+    Mutex m_mutex;
+>>>>>>> miniblink49
     ThreadCondition m_parked;
     ThreadCondition m_resume;
 };

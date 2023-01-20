@@ -18,23 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
+
 #include "core/svg/SVGFEGaussianBlurElement.h"
 
 #include "core/SVGNames.h"
+#include "platform/graphics/filters/FilterEffect.h"
+#include "core/svg/SVGParserUtilities.h"
 #include "core/svg/graphics/filters/SVGFilterBuilder.h"
-#include "platform/graphics/filters/FEGaussianBlur.h"
 
 namespace blink {
 
 inline SVGFEGaussianBlurElement::SVGFEGaussianBlurElement(Document& document)
-    : SVGFilterPrimitiveStandardAttributes(SVGNames::feGaussianBlurTag,
-        document)
-    , m_stdDeviation(
-          SVGAnimatedNumberOptionalNumber::create(this,
-              SVGNames::stdDeviationAttr,
-              0,
-              0))
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
+    : SVGFilterPrimitiveStandardAttributes(SVGNames::feGaussianBlurTag, document)
+    , m_stdDeviation(SVGAnimatedNumberOptionalNumber::create(this, SVGNames::stdDeviationAttr, 0, 0))
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
 {
     addToPropertyMap(m_stdDeviation);
     addToPropertyMap(m_in1);
@@ -56,8 +54,7 @@ void SVGFEGaussianBlurElement::setStdDeviation(float x, float y)
     invalidate();
 }
 
-void SVGFEGaussianBlurElement::svgAttributeChanged(
-    const QualifiedName& attrName)
+void SVGFEGaussianBlurElement::svgAttributeChanged(const QualifiedName& attrName)
 {
     if (attrName == SVGNames::inAttr || attrName == SVGNames::stdDeviationAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
@@ -68,23 +65,19 @@ void SVGFEGaussianBlurElement::svgAttributeChanged(
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-FilterEffect* SVGFEGaussianBlurElement::build(SVGFilterBuilder* filterBuilder,
-    Filter* filter)
+PassRefPtrWillBeRawPtr<FilterEffect> SVGFEGaussianBlurElement::build(SVGFilterBuilder* filterBuilder, Filter* filter)
 {
-    FilterEffect* input1 = filterBuilder->getEffectById(
-        AtomicString(m_in1->currentValue()->value()));
-    ASSERT(input1);
+    FilterEffect* input1 = filterBuilder->getEffectById(AtomicString(m_in1->currentValue()->value()));
 
-    // "A negative value or a value of zero disables the effect of the given
-    // filter primitive (i.e., the result is the filter input image)."
-    // (https://drafts.fxtf.org/filters/#element-attrdef-fegaussianblur-stddeviation)
-    //
-    // => Clamp to non-negative.
-    float stdDevX = std::max(0.0f, stdDeviationX()->currentValue()->value());
-    float stdDevY = std::max(0.0f, stdDeviationY()->currentValue()->value());
-    FilterEffect* effect = FEGaussianBlur::create(filter, stdDevX, stdDevY);
-    effect->inputEffects().push_back(input1);
-    return effect;
+    if (!input1)
+        return nullptr;
+
+    if (stdDeviationX()->currentValue()->value() < 0 || stdDeviationY()->currentValue()->value() < 0)
+        return nullptr;
+
+    RefPtrWillBeRawPtr<FilterEffect> effect = FEGaussianBlur::create(filter, stdDeviationX()->currentValue()->value(), stdDeviationY()->currentValue()->value());
+    effect->inputEffects().append(input1);
+    return effect.release();
 }
 
 } // namespace blink

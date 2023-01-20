@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,6 +43,35 @@ GainHandler::GainHandler(AudioNode& node,
           AudioUtilities::kRenderQuantumFrames) // FIXME: can probably
     // share temp buffer
     // in context
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+#if ENABLE(WEB_AUDIO)
+#include "modules/webaudio/GainNode.h"
+
+#include "modules/webaudio/AudioNodeInput.h"
+#include "modules/webaudio/AudioNodeOutput.h"
+#include "platform/audio/AudioBus.h"
+
+namespace blink {
+
+GainHandler::GainHandler(AudioNode& node, float sampleRate, AudioParamHandler& gain)
+    : AudioHandler(NodeTypeGain, node, sampleRate)
+    , m_lastGain(1.0)
+    , m_gain(gain)
+    , m_sampleAccurateGainValues(ProcessingSizeInFrames) // FIXME: can probably share temp buffer in context
+>>>>>>> miniblink49
 {
     addInput();
     addOutput(1);
@@ -49,21 +79,34 @@ GainHandler::GainHandler(AudioNode& node,
     initialize();
 }
 
+<<<<<<< HEAD
 PassRefPtr<GainHandler> GainHandler::create(AudioNode& node,
     float sampleRate,
     AudioParamHandler& gain)
+=======
+PassRefPtr<GainHandler> GainHandler::create(AudioNode& node, float sampleRate, AudioParamHandler& gain)
+>>>>>>> miniblink49
 {
     return adoptRef(new GainHandler(node, sampleRate, gain));
 }
 
 void GainHandler::process(size_t framesToProcess)
 {
+<<<<<<< HEAD
     // FIXME: for some cases there is a nice optimization to avoid processing
     // here, and let the gain change happen in the summing junction input of the
     // AudioNode we're connected to.  Then we can avoid all of the following:
 
     AudioBus* outputBus = output(0).bus();
     DCHECK(outputBus);
+=======
+    // FIXME: for some cases there is a nice optimization to avoid processing here, and let the gain change
+    // happen in the summing junction input of the AudioNode we're connected to.
+    // Then we can avoid all of the following:
+
+    AudioBus* outputBus = output(0).bus();
+    ASSERT(outputBus);
+>>>>>>> miniblink49
 
     if (!isInitialized() || !input(0).isConnected()) {
         outputBus->zero();
@@ -71,6 +114,7 @@ void GainHandler::process(size_t framesToProcess)
         AudioBus* inputBus = input(0).bus();
 
         if (m_gain->hasSampleAccurateValues()) {
+<<<<<<< HEAD
             // Apply sample-accurate gain scaling for precise envelopes, grain
             // windows, etc.
             DCHECK_LE(framesToProcess, m_sampleAccurateGainValues.size());
@@ -94,10 +138,23 @@ void GainHandler::process(size_t framesToProcess)
             } else {
                 outputBus->copyWithGainFrom(*inputBus, &m_lastGain, m_gain->value());
             }
+=======
+            // Apply sample-accurate gain scaling for precise envelopes, grain windows, etc.
+            ASSERT(framesToProcess <= m_sampleAccurateGainValues.size());
+            if (framesToProcess <= m_sampleAccurateGainValues.size()) {
+                float* gainValues = m_sampleAccurateGainValues.data();
+                m_gain->calculateSampleAccurateValues(gainValues, framesToProcess);
+                outputBus->copyWithSampleAccurateGainValuesFrom(*inputBus, gainValues, framesToProcess);
+            }
+        } else {
+            // Apply the gain with de-zippering into the output bus.
+            outputBus->copyWithGainFrom(*inputBus, &m_lastGain, m_gain->value());
+>>>>>>> miniblink49
         }
     }
 }
 
+<<<<<<< HEAD
 void GainHandler::processOnlyAudioParams(size_t framesToProcess)
 {
     DCHECK(context()->isAudioThread());
@@ -122,6 +179,20 @@ void GainHandler::checkNumberOfChannelsForInput(AudioNodeInput* input)
 
     DCHECK(input);
     DCHECK_EQ(input, &this->input(0));
+=======
+// FIXME: this can go away when we do mixing with gain directly in summing junction of AudioNodeInput
+//
+// As soon as we know the channel count of our input, we can lazily initialize.
+// Sometimes this may be called more than once with different channel counts, in which case we must safely
+// uninitialize and then re-initialize with the new channel count.
+void GainHandler::checkNumberOfChannelsForInput(AudioNodeInput* input)
+{
+    ASSERT(context()->isAudioThread());
+    ASSERT(context()->isGraphOwner());
+
+    ASSERT(input);
+    ASSERT(input == &this->input(0));
+>>>>>>> miniblink49
     if (input != &this->input(0))
         return;
 
@@ -133,8 +204,12 @@ void GainHandler::checkNumberOfChannelsForInput(AudioNodeInput* input)
     }
 
     if (!isInitialized()) {
+<<<<<<< HEAD
         // This will propagate the channel count to any nodes connected further
         // downstream in the graph.
+=======
+        // This will propagate the channel count to any nodes connected further downstream in the graph.
+>>>>>>> miniblink49
         output(0).setNumberOfChannels(numberOfChannels);
         initialize();
     }
@@ -144,6 +219,7 @@ void GainHandler::checkNumberOfChannelsForInput(AudioNodeInput* input)
 
 // ----------------------------------------------------------------
 
+<<<<<<< HEAD
 GainNode::GainNode(BaseAudioContext& context)
     : AudioNode(context)
     , m_gain(AudioParam::create(context, ParamTypeGainGain, 1.0))
@@ -180,6 +256,18 @@ GainNode* GainNode::create(BaseAudioContext* context,
         node->gain()->setValue(options.gain());
 
     return node;
+=======
+GainNode::GainNode(AudioContext& context, float sampleRate)
+    : AudioNode(context)
+    , m_gain(AudioParam::create(context, 1.0))
+{
+    setHandler(GainHandler::create(*this, sampleRate, m_gain->handler()));
+}
+
+GainNode* GainNode::create(AudioContext& context, float sampleRate)
+{
+    return new GainNode(context, sampleRate);
+>>>>>>> miniblink49
 }
 
 AudioParam* GainNode::gain() const
@@ -194,3 +282,8 @@ DEFINE_TRACE(GainNode)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

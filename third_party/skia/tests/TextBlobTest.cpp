@@ -7,21 +7,37 @@
 
 #include "SkPaint.h"
 #include "SkPoint.h"
+<<<<<<< HEAD
 #include "SkTextBlobRunIterator.h"
 #include "SkTypeface.h"
 
 #include "Test.h"
 
+=======
+#include "SkTextBlob.h"
+
+#include "Test.h"
+
+
+>>>>>>> miniblink49
 class TextBlobTester {
 public:
     // This unit test feeds an SkTextBlobBuilder various runs then checks to see if
     // the result contains the provided data and merges runs when appropriate.
+<<<<<<< HEAD
     static void TestBuilder(skiatest::Reporter* reporter)
     {
         SkTextBlobBuilder builder;
 
         // empty run set
         RunBuilderTest(reporter, builder, nullptr, 0, nullptr, 0);
+=======
+    static void TestBuilder(skiatest::Reporter* reporter) {
+        SkTextBlobBuilder builder;
+
+        // empty run set
+        RunBuilderTest(reporter, builder, NULL, 0, NULL, 0);
+>>>>>>> miniblink49
 
         RunDef set1[] = {
             { 128, SkTextBlob::kDefault_Positioning, 100, 100 },
@@ -55,7 +71,11 @@ public:
             { 128, SkTextBlob::kHorizontal_Positioning, 0, 250 },
         };
         RunBuilderTest(reporter, builder, set5, SK_ARRAY_COUNT(set5), mergedSet5,
+<<<<<<< HEAD
             SK_ARRAY_COUNT(mergedSet5));
+=======
+                       SK_ARRAY_COUNT(mergedSet5));
+>>>>>>> miniblink49
 
         RunDef set6[] = {
             { 128, SkTextBlob::kFull_Positioning, 100, 100 },
@@ -66,7 +86,11 @@ public:
             { 384, SkTextBlob::kFull_Positioning, 0, 0 },
         };
         RunBuilderTest(reporter, builder, set6, SK_ARRAY_COUNT(set6), mergedSet6,
+<<<<<<< HEAD
             SK_ARRAY_COUNT(mergedSet6));
+=======
+                       SK_ARRAY_COUNT(mergedSet6));
+>>>>>>> miniblink49
 
         RunDef set7[] = {
             { 128, SkTextBlob::kDefault_Positioning, 100, 150 },
@@ -94,12 +118,20 @@ public:
             { 256, SkTextBlob::kFull_Positioning, 0, 0 },
         };
         RunBuilderTest(reporter, builder, set7, SK_ARRAY_COUNT(set7), mergedSet7,
+<<<<<<< HEAD
             SK_ARRAY_COUNT(mergedSet7));
     }
 
     // This unit test verifies blob bounds computation.
     static void TestBounds(skiatest::Reporter* reporter)
     {
+=======
+                       SK_ARRAY_COUNT(mergedSet7));
+    }
+
+    // This unit test verifies blob bounds computation.
+    static void TestBounds(skiatest::Reporter* reporter) {
+>>>>>>> miniblink49
         SkTextBlobBuilder builder;
         SkPaint font;
         font.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
@@ -151,6 +183,7 @@ public:
         }
 
         // Implicit bounds
+<<<<<<< HEAD
 
         {
             // Exercise the empty bounds path, and ensure that RunRecord-aligned pos buffers
@@ -254,10 +287,14 @@ public:
 
             it.next();
         }
+=======
+        // FIXME: not supported yet.
+>>>>>>> miniblink49
     }
 
 private:
     struct RunDef {
+<<<<<<< HEAD
         unsigned count;
         SkTextBlob::GlyphPositioning pos;
         SkScalar x, y;
@@ -267,6 +304,16 @@ private:
         const RunDef in[], unsigned inCount,
         const RunDef out[], unsigned outCount)
     {
+=======
+        unsigned                     count;
+        SkTextBlob::GlyphPositioning pos;
+        SkScalar                     x, y;
+    };
+
+    static void RunBuilderTest(skiatest::Reporter* reporter, SkTextBlobBuilder& builder,
+                               const RunDef in[], unsigned inCount,
+                               const RunDef out[], unsigned outCount) {
+>>>>>>> miniblink49
         SkPaint font;
         font.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
 
@@ -281,7 +328,11 @@ private:
 
         SkAutoTUnref<const SkTextBlob> blob(builder.build());
 
+<<<<<<< HEAD
         SkTextBlobRunIterator it(blob);
+=======
+        SkTextBlob::RunIterator it(blob);
+>>>>>>> miniblink49
         for (unsigned i = 0; i < outCount; ++i) {
             REPORTER_ASSERT(reporter, !it.done());
             REPORTER_ASSERT(reporter, out[i].pos == it.positioning());
@@ -310,6 +361,7 @@ private:
     }
 
     static void AddRun(const SkPaint& font, int count, SkTextBlob::GlyphPositioning pos,
+<<<<<<< HEAD
         const SkPoint& offset, SkTextBlobBuilder& builder,
         const SkRect* bounds = nullptr)
     {
@@ -317,13 +369,25 @@ private:
         case SkTextBlob::kDefault_Positioning: {
             const SkTextBlobBuilder::RunBuffer& rb = builder.allocRun(font, count, offset.x(),
                 offset.y(), bounds);
+=======
+                       const SkPoint& offset, SkTextBlobBuilder& builder,
+                       const SkRect* bounds = NULL) {
+        switch (pos) {
+        case SkTextBlob::kDefault_Positioning: {
+            const SkTextBlobBuilder::RunBuffer& rb = builder.allocRun(font, count, offset.x(),
+                                                                      offset.y(), bounds);
+>>>>>>> miniblink49
             for (int i = 0; i < count; ++i) {
                 rb.glyphs[i] = i;
             }
         } break;
         case SkTextBlob::kHorizontal_Positioning: {
             const SkTextBlobBuilder::RunBuffer& rb = builder.allocRunPosH(font, count, offset.y(),
+<<<<<<< HEAD
                 bounds);
+=======
+                                                                          bounds);
+>>>>>>> miniblink49
             for (int i = 0; i < count; ++i) {
                 rb.glyphs[i] = i;
                 rb.pos[i] = SkIntToScalar(i);
@@ -343,6 +407,7 @@ private:
     }
 };
 
+<<<<<<< HEAD
 DEF_TEST(TextBlob_builder, reporter)
 {
     TextBlobTester::TestBuilder(reporter);
@@ -353,3 +418,9 @@ DEF_TEST(TextBlob_paint, reporter)
 {
     TextBlobTester::TestPaintProps(reporter);
 }
+=======
+DEF_TEST(TextBlob_builder, reporter) {
+    TextBlobTester::TestBuilder(reporter);
+    TextBlobTester::TestBounds(reporter);
+}
+>>>>>>> miniblink49

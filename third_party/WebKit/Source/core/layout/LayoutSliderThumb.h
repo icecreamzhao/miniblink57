@@ -45,10 +45,7 @@ public:
     void updateAppearance(const ComputedStyle& parentStyle);
 
 private:
-    bool isOfType(LayoutObjectType type) const override
-    {
-        return type == LayoutObjectSliderThumb || LayoutBlockFlow::isOfType(type);
-    }
+    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSliderThumb || LayoutBlockFlow::isOfType(type); }
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutSliderThumb, isSliderThumb());

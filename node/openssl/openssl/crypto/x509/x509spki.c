@@ -1,3 +1,4 @@
+/* x509spki.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -52,13 +53,12 @@
  *
  * This product includes cryptographic software written by Eric Young
  * (eay@cryptsoft.com).  This product includes software written by Tim
- * Hudson (tjh@cryptsoft.com). */
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
-#include <string.h>
-
-#include <openssl/base64.h>
-#include <openssl/err.h>
-#include <openssl/mem.h>
+#include <stdio.h>
+#include "cryptlib.h"
 #include <openssl/x509.h>
 
 int NETSCAPE_SPKI_set_pubkey(NETSCAPE_SPKI *x, EVP_PKEY *pkey)
@@ -81,21 +81,17 @@ NETSCAPE_SPKI *NETSCAPE_SPKI_b64_decode(const char *str, int len)
 {
     unsigned char *spki_der;
     const unsigned char *p;
-    size_t spki_len;
+    int spki_len;
     NETSCAPE_SPKI *spki;
     if (len <= 0)
         len = strlen(str);
-    if (!EVP_DecodedLength(&spki_len, len)) {
-        OPENSSL_PUT_ERROR(X509, X509_R_BASE64_DECODE_ERROR);
+    if (!(spki_der = OPENSSL_malloc(len + 1))) {
+        X509err(X509_F_NETSCAPE_SPKI_B64_DECODE, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
-    if (!(spki_der = OPENSSL_malloc(spki_len))) {
-        OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
-        return NULL;
-    }
-    if (!EVP_DecodeBase64
-        (spki_der, &spki_len, spki_len, (const uint8_t *)str, len)) {
-        OPENSSL_PUT_ERROR(X509, X509_R_BASE64_DECODE_ERROR);
+    spki_len = EVP_DecodeBlock(spki_der, (const unsigned char *)str, len);
+    if (spki_len < 0) {
+        X509err(X509_F_NETSCAPE_SPKI_B64_DECODE, X509_R_BASE64_DECODE_ERROR);
         OPENSSL_free(spki_der);
         return NULL;
     }
@@ -111,22 +107,12 @@ char *NETSCAPE_SPKI_b64_encode(NETSCAPE_SPKI *spki)
 {
     unsigned char *der_spki, *p;
     char *b64_str;
-    size_t b64_len;
     int der_len;
     der_len = i2d_NETSCAPE_SPKI(spki, NULL);
-    if (!EVP_EncodedLength(&b64_len, der_len)) {
-        OPENSSL_PUT_ERROR(X509, ERR_R_OVERFLOW);
-        return NULL;
-    }
     der_spki = OPENSSL_malloc(der_len);
-    if (der_spki == NULL) {
-        OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
-        return NULL;
-    }
-    b64_str = OPENSSL_malloc(b64_len);
-    if (b64_str == NULL) {
-        OPENSSL_free(der_spki);
-        OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
+    b64_str = OPENSSL_malloc(der_len * 2);
+    if (!der_spki || !b64_str) {
+        X509err(X509_F_NETSCAPE_SPKI_B64_ENCODE, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
     p = der_spki;

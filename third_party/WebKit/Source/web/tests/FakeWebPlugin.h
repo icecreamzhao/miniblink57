@@ -39,6 +39,10 @@ class WebDragData;
 class WebFrame;
 class WebInputEvent;
 class WebPluginContainer;
+<<<<<<< HEAD
+=======
+class WebURL;
+>>>>>>> miniblink49
 class WebURLResponse;
 struct WebPluginParams;
 
@@ -49,6 +53,7 @@ public:
     // WebPlugin methods:
     bool initialize(WebPluginContainer*) override;
     void destroy() override;
+<<<<<<< HEAD
     bool canProcessDrag() const override { return false; }
     void updateAllLifecyclePhases() override { }
     void paint(WebCanvas*, const WebRect&) override { }
@@ -72,10 +77,27 @@ public:
     {
         return false;
     }
+=======
+    NPObject* scriptableObject() override { return 0; }
+    bool canProcessDrag() const override { return false; }
+    void layoutIfNeeded() override { }
+    void paint(WebCanvas*, const WebRect&) override { }
+    void updateGeometry(const WebRect& clientRect, const WebRect& clipRect, const WebRect& windowClipRect, const WebVector<WebRect>& cutOutsRects, bool isVisible) override { }
+    void updateFocus(bool, WebFocusType) override { }
+    void updateVisibility(bool) override { }
+    bool acceptsInputEvents() override { return true; }
+    bool handleInputEvent(const WebInputEvent&, WebCursorInfo&) override { return false; }
+    bool handleDragStatusUpdate(WebDragStatus, const WebDragData&, WebDragOperationsMask, const WebPoint& position, const WebPoint& screenPosition) override { return false; }
+>>>>>>> miniblink49
     void didReceiveResponse(const WebURLResponse&) override { }
     void didReceiveData(const char* data, int dataLength) override { }
     void didFinishLoading() override { }
     void didFailLoading(const WebURLError&) override { }
+<<<<<<< HEAD
+=======
+    void didFinishLoadingFrameRequest(const WebURL&, void* notifyData) override { }
+    void didFailLoadingFrameRequest(const WebURL&, void* notifyData, const WebURLError&) override { }
+>>>>>>> miniblink49
     bool isPlaceholder() override { return false; }
 
 protected:

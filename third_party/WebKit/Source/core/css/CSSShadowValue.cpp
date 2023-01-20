@@ -17,9 +17,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "config.h"
 #include "core/css/CSSShadowValue.h"
 
-#include "core/css/CSSIdentifierValue.h"
 #include "core/css/CSSPrimitiveValue.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
@@ -27,12 +27,12 @@
 namespace blink {
 
 // Used for text-shadow and box-shadow
-CSSShadowValue::CSSShadowValue(CSSPrimitiveValue* x,
-    CSSPrimitiveValue* y,
-    CSSPrimitiveValue* blur,
-    CSSPrimitiveValue* spread,
-    CSSIdentifierValue* style,
-    CSSValue* color)
+CSSShadowValue::CSSShadowValue(PassRefPtrWillBeRawPtr<CSSPrimitiveValue> x,
+    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> y,
+    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> blur,
+    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> spread,
+    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> style,
+    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> color)
     : CSSValue(ShadowClass)
     , x(x)
     , y(y)
@@ -80,7 +80,12 @@ String CSSShadowValue::customCSSText() const
 
 bool CSSShadowValue::equals(const CSSShadowValue& other) const
 {
-    return compareCSSValuePtr(color, other.color) && compareCSSValuePtr(x, other.x) && compareCSSValuePtr(y, other.y) && compareCSSValuePtr(blur, other.blur) && compareCSSValuePtr(spread, other.spread) && compareCSSValuePtr(style, other.style);
+    return compareCSSValuePtr(color, other.color)
+        && compareCSSValuePtr(x, other.x)
+        && compareCSSValuePtr(y, other.y)
+        && compareCSSValuePtr(blur, other.blur)
+        && compareCSSValuePtr(spread, other.spread)
+        && compareCSSValuePtr(style, other.style);
 }
 
 DEFINE_TRACE_AFTER_DISPATCH(CSSShadowValue)
@@ -94,4 +99,4 @@ DEFINE_TRACE_AFTER_DISPATCH(CSSShadowValue)
     CSSValue::traceAfterDispatch(visitor);
 }
 
-} // namespace blink
+}

@@ -1,19 +1,31 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+<<<<<<< HEAD
 #include "SkTypes.h"
 #if defined(SK_BUILD_FOR_MAC)
 
 #include "gl/GrGLAssembleInterface.h"
 #include "gl/GrGLInterface.h"
+=======
+
+
+#include "gl/GrGLInterface.h"
+#include "gl/GrGLAssembleInterface.h"
+>>>>>>> miniblink49
 
 #include <dlfcn.h>
 
 class GLLoader {
 public:
+<<<<<<< HEAD
     GLLoader()
     {
         fLibrary = dlopen(
@@ -23,14 +35,28 @@ public:
 
     ~GLLoader()
     {
+=======
+    GLLoader() {
+        fLibrary = dlopen(
+                    "/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib",
+                    RTLD_LAZY);
+    }
+
+    ~GLLoader() {
+>>>>>>> miniblink49
         if (fLibrary) {
             dlclose(fLibrary);
         }
     }
 
+<<<<<<< HEAD
     void* handle() const
     {
         return nullptr == fLibrary ? RTLD_DEFAULT : fLibrary;
+=======
+    void* handle() const {
+        return NULL == fLibrary ? RTLD_DEFAULT : fLibrary;
+>>>>>>> miniblink49
     }
 
 private:
@@ -39,17 +65,25 @@ private:
 
 class GLProcGetter {
 public:
+<<<<<<< HEAD
     GLProcGetter() { }
 
     GrGLFuncPtr getProc(const char name[]) const
     {
         return (GrGLFuncPtr)dlsym(fLoader.handle(), name);
+=======
+    GLProcGetter() {}
+
+    GrGLFuncPtr getProc(const char name[]) const {
+        return (GrGLFuncPtr) dlsym(fLoader.handle(), name);
+>>>>>>> miniblink49
     }
 
 private:
     GLLoader fLoader;
 };
 
+<<<<<<< HEAD
 static GrGLFuncPtr mac_get_gl_proc(void* ctx, const char name[])
 {
     SkASSERT(ctx);
@@ -64,3 +98,15 @@ const GrGLInterface* GrGLCreateNativeInterface()
 }
 
 #endif //defined(SK_BUILD_FOR_MAC)
+=======
+static GrGLFuncPtr mac_get_gl_proc(void* ctx, const char name[]) {
+    SkASSERT(ctx);
+    const GLProcGetter* getter = (const GLProcGetter*) ctx;
+    return getter->getProc(name);
+}
+
+const GrGLInterface* GrGLCreateNativeInterface() {
+    GLProcGetter getter;
+    return GrGLAssembleGLInterface(&getter, mac_get_gl_proc);
+}
+>>>>>>> miniblink49

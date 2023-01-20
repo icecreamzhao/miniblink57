@@ -38,8 +38,7 @@ inline NinePiece& operator++(NinePiece& piece)
     return piece;
 }
 
-// The NinePieceImageGrid class is responsible for computing drawing information
-// for the nine piece image.
+// The NinePieceImageGrid class is responsible for computing drawing information for the nine piece image.
 //
 // http://dev.w3.org/csswg/css-backgrounds-3/#border-image-process
 //
@@ -63,30 +62,25 @@ class CORE_EXPORT NinePieceImageGrid {
     STACK_ALLOCATED();
 
 public:
-    NinePieceImageGrid(const NinePieceImage&,
-        IntSize imageSize,
-        IntRect borderImageArea,
+    NinePieceImageGrid(const NinePieceImage&, IntSize imageSize, IntRect borderImageArea,
         const IntRectOutsets& borderWidths);
 
     struct CORE_EXPORT NinePieceDrawInfo {
-        STACK_ALLOCATED();
         bool isDrawable;
         bool isCornerPiece;
         FloatRect destination;
         FloatRect source;
 
-        // tileScale and tileRule are only useful for non-corners, i.e. edge and
-        // center pieces.
+        // tileScale and tileRule are only useful for non-corners, i.e. edge and center pieces.
         FloatSize tileScale;
         struct {
             Image::TileRule horizontal;
             Image::TileRule vertical;
         } tileRule;
     };
-    NinePieceDrawInfo getNinePieceDrawInfo(NinePiece, float) const;
+    NinePieceDrawInfo getNinePieceDrawInfo(NinePiece) const;
 
     struct Edge {
-        DISALLOW_NEW();
         bool isDrawable() const { return slice > 0 && width > 0; }
         float scale() const { return isDrawable() ? (float)width / slice : 1; }
         int slice;

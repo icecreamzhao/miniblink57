@@ -32,18 +32,16 @@
 #define SettingsDelegate_h
 
 #include "core/CoreExport.h"
-#include "wtf/Allocator.h"
-#include <memory>
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 class Settings;
 
 class CORE_EXPORT SettingsDelegate {
-    DISALLOW_NEW();
-
 public:
-    explicit SettingsDelegate(std::unique_ptr<Settings>);
+    explicit SettingsDelegate(PassOwnPtr<Settings>);
     virtual ~SettingsDelegate();
 
     Settings* settings() const { return m_settings.get(); }
@@ -55,6 +53,7 @@ public:
         ViewportDescriptionChange,
         ViewportRuleChange,
         DNSPrefetchingChange,
+        MultisamplingChange,
         ImageLoadingChange,
         TextAutosizingChange,
         FontFamilyChange,
@@ -62,13 +61,12 @@ public:
         MediaQueryChange,
         AccessibilityStateChange,
         TextTrackKindUserPreferenceChange,
-        DOMWorldsChange,
     };
 
     virtual void settingsChanged(ChangeType) = 0;
 
 protected:
-    std::unique_ptr<Settings> const m_settings;
+    OwnPtr<Settings> const m_settings;
 };
 
 } // namespace blink

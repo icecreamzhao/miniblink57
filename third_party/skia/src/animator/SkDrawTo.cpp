@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #include "SkDrawTo.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -22,11 +26,15 @@ const SkMemberInfo SkDrawTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawTo);
 
+<<<<<<< HEAD
 SkDrawTo::SkDrawTo()
     : drawOnce(false)
     , use(nullptr)
     , fDrawnOnce(false)
 {
+=======
+SkDrawTo::SkDrawTo() : drawOnce(false), use(NULL), fDrawnOnce(false) {
+>>>>>>> miniblink49
 }
 
 #if 0
@@ -35,8 +43,12 @@ SkDrawTo::~SkDrawTo() {
 }
 #endif
 
+<<<<<<< HEAD
 bool SkDrawTo::draw(SkAnimateMaker& maker)
 {
+=======
+bool SkDrawTo::draw(SkAnimateMaker& maker) {
+>>>>>>> miniblink49
     if (fDrawnOnce)
         return false;
     SkCanvas canvas(use->fBitmap);
@@ -49,8 +61,12 @@ bool SkDrawTo::draw(SkAnimateMaker& maker)
 }
 
 #ifdef SK_DUMP_ENABLED
+<<<<<<< HEAD
 void SkDrawTo::dump(SkAnimateMaker* maker)
 {
+=======
+void SkDrawTo::dump(SkAnimateMaker* maker) {
+>>>>>>> miniblink49
     dumpBase(maker);
     dumpAttrs(maker);
     if (use)

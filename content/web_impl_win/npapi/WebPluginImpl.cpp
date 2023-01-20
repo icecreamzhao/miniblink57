@@ -32,7 +32,6 @@
 #include "content/web_impl_win/npapi/PluginPackage.h"
 #include "content/web_impl_win/npapi/PluginMainThreadScheduler.h"
 #include "content/web_impl_win/npapi/PluginMessageThrottlerWin.h"
-#include "content/web_impl_win/npapi/WebPluginImeWin.h"
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/Source/web/WebLocalFrameImpl.h"
 #include "third_party/WebKit/Source/web/WebPluginContainerImpl.h"
@@ -45,15 +44,13 @@
 #include "third_party/WebKit/Source/core/page/ChromeClient.h"
 #include "third_party/WebKit/Source/core/frame/FrameView.h"
 #include "third_party/WebKit/Source/bindings/core/v8/ScriptController.h"
-//#include "third_party/WebKit/Source/bindings/core/v8/npruntime_impl.h"
+#include "third_party/WebKit/Source/bindings/core/v8/npruntime_impl.h"
 #include "third_party/WebKit/Source/bindings/core/v8/ScriptSourceCode.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/public/web/WebPluginContainer.h"
 #include "third_party/WebKit/public/web/WebElement.h"
 #include "third_party/WebKit/public/web/WebViewClient.h"
 #include "third_party/WebKit/Source/wtf/ASCIICType.h"
-#include "third_party/WebKit/Source/wtf/OwnPtr.h"
-#include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 #include "third_party/WebKit/Source/wtf/text/WTFString.h"
 #include "third_party/WebKit/Source/wtf/RefCountedLeakCounter.h"
 #include "third_party/npapi/bindings/npapi.h"
@@ -61,7 +58,6 @@
 #include "wtf/text/WTFStringUtil.h"
 #include "wke/wkeWebView.h"
 #include "net/cookies/WebCookieJarCurlImpl.h"
-#include "third_party/WebKit/Source/bindings/core/v8/npruntime_impl.h"
 
 using std::min;
 
@@ -149,10 +145,7 @@ WebPluginImpl::WebPluginImpl(WebLocalFrame* parentFrame, const blink::WebPluginP
     , m_isJavaScriptPaused(false)
     , m_haveCalledSetWindow(false)
     , m_memoryCanvas(nullptr)
-    , m_memoryPixels(nullptr)
     , m_wkeWebview(nullptr)
-    , m_cutOutsRectsDirty(true)
-    , m_pluginIme(nullptr)
 {
 #ifndef NDEBUG
     webPluginImplCount.increment();
@@ -209,12 +202,9 @@ WebPluginImpl::~WebPluginImpl()
 #ifndef NDEBUG
     webPluginImplCount.decrement();
 #endif
-
-    if (m_pluginIme)
-        delete m_pluginIme;
 }
 
-void WebPluginImpl::popPopupsStateTimerFired(blink::TimerBase*)
+void WebPluginImpl::popPopupsStateTimerFired(blink::Timer<WebPluginImpl>*)
 {
     popPopupsEnabledState();
 }
@@ -272,9 +262,6 @@ bool WebPluginImpl::start()
 
     ASSERT(m_plugin);
     ASSERT(m_plugin->pluginFuncs()->newp);
-
-    if (m_plugin->quirks().contains(PluginQuirkEmulateIme))
-        WebPluginIMEWin::hookGetProcAddress(m_plugin->module());
 
     NPError npErr;
     {
@@ -399,7 +386,7 @@ void WebPluginImpl::stop()
         disconnectStream(stream);
     }
 
-    ASSERT(m_streams.empty());
+    ASSERT(m_streams.isEmpty());
 
     m_isStarted = false;
     
@@ -424,7 +411,7 @@ void WebPluginImpl::stop()
 
     PluginMainThreadScheduler::scheduler().unregisterPlugin(m_instance);
 
-    // ÕâÀïµ÷ÓÃdestroy»áÓÐÎÊÌâ£¬Èç¹ûÊÇÔÚ_NPN_Evaluate×ßµ½ÕâÀïµÄ»°¡£Àý×Ó£ºhttp://music.yule.sohu.com/20170926/n514522612.shtml
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½destroyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_NPN_Evaluateï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½http://music.yule.sohu.com/20170926/n514522612.shtml
     blink::Platform::current()->currentThread()->addTaskObserver(new DestroyNpTask(m_plugin->pluginFuncs()->destroy, m_instance));
 }
 
@@ -442,7 +429,7 @@ static char* createUTF8String(const String& str)
 {
     Vector<char> cstr = WTF::ensureStringToUTF8(str, false);
     const size_t cstrLength = cstr.size();
-    char* result = reinterpret_cast<char*>(malloc(cstrLength + 1));
+    char* result = reinterpret_cast<char*>(fastMalloc(cstrLength + 1));
 
     memcpy(result, cstr.data(), cstrLength);
     result[cstrLength] = '\0';
@@ -466,14 +453,14 @@ void WebPluginImpl::performRequest(PluginRequest* request)
 
     Vector<char> requestUrlBuf = ensureStringToUTF8(requestURL.string(), true);
     
-    //UserGestureIndicator gestureIndicator(request->shouldAllowPopups() ? DefinitelyProcessingUserGesture : PossiblyProcessingUserGesture);
+    UserGestureIndicator gestureIndicator(request->shouldAllowPopups() ? DefinitelyProcessingUserGesture : PossiblyProcessingUserGesture);
 
     if (jsString.isNull()) {
         // if this is not a targeted request, create a stream for it. otherwise,
         // just pass it off to the loader
         if (targetFrameName.isEmpty()) {
             PluginStream* stream = PluginStream::create(this, m_parentFrame, request->frameLoadRequest().resourceRequest(), request->sendNotification(), request->notifyData(), plugin()->pluginFuncs(), instance(), m_plugin->quirks());            
-            m_streams.insert(stream);
+            m_streams.add((stream));
             stream->start();
         } else {
             // If the target frame is our frame, we could destroy the
@@ -523,12 +510,12 @@ void WebPluginImpl::performRequest(PluginRequest* request)
         }
 
         PluginStream* stream = PluginStream::create(this, m_parentFrame, request->frameLoadRequest().resourceRequest(), request->sendNotification(), request->notifyData(), plugin()->pluginFuncs(), instance(), m_plugin->quirks());
-        m_streams.insert(stream);
+        m_streams.add(stream);
         stream->sendJavaScriptStream(requestURL, cstr);
     }
 }
 
-void WebPluginImpl::requestTimerFired(blink::TimerBase*)
+void WebPluginImpl::requestTimerFired(blink::Timer<WebPluginImpl>*)
 {
     ASSERT(!m_requests.isEmpty());
     ASSERT(!m_isJavaScriptPaused);
@@ -577,7 +564,7 @@ NPError WebPluginImpl::load(const FrameLoadRequest& frameLoadRequest, bool sendN
         // For security reasons, only allow JS requests to be made on the frame that contains the plug-in.
         if (!targetFrameName.isNull() && m_parentFrame->tree().find(targetFrameName) != m_parentFrame)
             return NPERR_INVALID_PARAM;
-    } else if (!m_parentFrame->document()->getSecurityOrigin()->canDisplay(url))
+    } else if (!m_parentFrame->document()->securityOrigin()->canDisplay(url))
         return NPERR_GENERIC_ERROR;
 
     scheduleRequest(adoptPtr<PluginRequest>(new PluginRequest(frameLoadRequest, sendNotification, notifyData, arePopupsAllowed())));
@@ -590,8 +577,8 @@ static KURL makeURL(const KURL& baseURL, const char* relativeURLString)
     String urlString = relativeURLString;
 
     // Strip return characters.
-    urlString.replace('\n', "");
-    urlString.replace('\r', ""); // replaceWithLiteral
+    urlString.replaceWithLiteral('\n', "");
+    urlString.replaceWithLiteral('\r', "");
 
     return KURL(baseURL, urlString);
 }
@@ -665,6 +652,8 @@ NPError WebPluginImpl::setValue(NPPVariable variable, void* value)
     switch (variable) {
     case NPPVpluginWindowBool:
         m_isWindowed = value;
+        //m_isWindowed = false; // weolar
+
         return NPERR_NO_ERROR;
     case NPPVpluginTransparentBool:
         m_isTransparent = value;
@@ -675,7 +664,7 @@ NPError WebPluginImpl::setValue(NPPVariable variable, void* value)
     }
 }
 
-void WebPluginImpl::invalidateTimerFired(blink::TimerBase*)
+void WebPluginImpl::invalidateTimerFired(blink::Timer<WebPluginImpl>*)
 {
     for (unsigned i = 0; i < m_invalidRects.size(); i++)
         invalidateRect(m_invalidRects[i]);
@@ -689,13 +678,13 @@ void WebPluginImpl::pushPopupsEnabledState(bool state)
  
 void WebPluginImpl::popPopupsEnabledState()
 {
-    m_popupStateStack.pop_back();
+    m_popupStateStack.removeLast();
 }
 
 bool WebPluginImpl::arePopupsAllowed() const
 {
     if (!m_popupStateStack.isEmpty())
-        return m_popupStateStack.back();
+        return m_popupStateStack.last();
 
     return false;
 }
@@ -767,14 +756,9 @@ NPObject* WebPluginImpl::npObject()
 
 void WebPluginImpl::disconnectStream(PluginStream* stream)
 {
-//     ASSERT(m_streams.contains(stream));
-//     m_streams.remove(stream);
-    HashSetStreams::iterator it = m_streams.find(stream);
-    if (it == m_streams.end()) {
-        ASSERT(false);
-        return;
-    }
-    m_streams.erase(it);
+    ASSERT(m_streams.contains(stream));
+
+    m_streams.remove(stream);
 }
 
 void WebPluginImpl::setParameters(const WebVector<WebString>& paramNames, const WebVector<WebString>& paramValues)
@@ -784,8 +768,8 @@ void WebPluginImpl::setParameters(const WebVector<WebString>& paramNames, const 
     unsigned size = paramNames.size();
     unsigned paramCount = 0;
 
-    m_paramNames = reinterpret_cast<char**>(malloc(sizeof(char*) * size));
-    m_paramValues = reinterpret_cast<char**>(malloc(sizeof(char*) * size));
+    m_paramNames = reinterpret_cast<char**>(fastMalloc(sizeof(char*) * size));
+    m_paramValues = reinterpret_cast<char**>(fastMalloc(sizeof(char*) * size));
 
     for (unsigned i = 0; i < size; i++) {
         if (m_plugin->quirks().contains(PluginQuirkRemoveWindowlessVideoParam) && equalIgnoringCase(String(paramNames[i]), "windowlessvideo"))
@@ -835,9 +819,9 @@ void WebPluginImpl::freeStringArray(char** stringArray, int length)
         return;
 
     for (int i = 0; i < length; i++)
-        free(stringArray[i]);
+        fastFree(stringArray[i]);
 
-    free(stringArray);
+    fastFree(stringArray);
 }
 
 static inline bool startsWithBlankLine(const Vector<char>& buffer)
@@ -1044,7 +1028,7 @@ NPError WebPluginImpl::handlePost(const char* url, const char* target, uint32_t 
     frameLoadRequest.resourceRequest().setHTTPMethod("POST");
     frameLoadRequest.resourceRequest().setURL(makeURL(m_parentFrame->document()->baseURL(), url));
     frameLoadRequest.resourceRequest().addHTTPHeaderFields(headerFields);
-    frameLoadRequest.resourceRequest().setHTTPBody(blink::EncodedFormData::create(postData, postDataLength));
+    frameLoadRequest.resourceRequest().setHTTPBody(FormData::create(postData, postDataLength));
     frameLoadRequest.setFrameName(target);
 
     return load(frameLoadRequest, sendNotification, notifyData);
@@ -1074,7 +1058,7 @@ void WebPluginImpl::paintMissingPluginIcon(blink::WebCanvas* canvas, const IntRe
     WebPluginContainerImpl* container = (WebPluginContainerImpl*)m_pluginContainer;
     if (!container)
         return;
-    //OwnPtr<GraphicsContext> context = GraphicsContext::CreateWithCanvas(canvas, GraphicsContext::NothingDisabled);
+    OwnPtr<GraphicsContext> context = GraphicsContext::deprecatedCreateWithCanvas(canvas, GraphicsContext::NothingDisabled);
 
     IntRect imageRect(container->frameRect().x(), container->frameRect().y(), s_nullPluginImage->width(), s_nullPluginImage->height());
 
@@ -1086,17 +1070,10 @@ void WebPluginImpl::paintMissingPluginIcon(blink::WebCanvas* canvas, const IntRe
     if (!rect.intersects(imageRect))
         return;
 
-//     context->save();
-//     context->clip(toFrameView(container->parent())->windowClipRect());
-//     context->drawImage(s_nullPluginImage.get(), imageRect);
-//     context->restore();
-
-    canvas->save();
-
-    sk_sp<SkImage> skImage = s_nullPluginImage->imageForCurrentFrame(ColorBehavior::ignore());
-    canvas->drawImage(skImage, imageRect.x(), imageRect.y());
-
-    canvas->restore();
+    context->save();
+    context->clip(toFrameView(container->parent())->windowClipRect());
+    context->drawImage(s_nullPluginImage.get(), imageRect);
+    context->restore();
 }
 
 static const char* MozillaUserAgent = "Mozilla/5.0 ("
@@ -1113,9 +1090,8 @@ const char* WebPluginImpl::userAgent()
         return MozillaUserAgent;
     else if (m_plugin->quirks().contains(PluginQuirkWantsChromeUserAgent))
         return ChromeUserAgent;
-
     if (m_userAgent.isNull())
-        m_userAgent = m_parentFrame->loader().userAgent().utf8();
+        m_userAgent = m_parentFrame->loader().userAgent(m_url).utf8();
 
     return m_userAgent.data();
 }
@@ -1125,7 +1101,7 @@ const char* WebPluginImpl::userAgentStatic()
     return MozillaUserAgent;
 }
 
-void WebPluginImpl::lifeSupportTimerFired(blink::TimerBase*)
+void WebPluginImpl::lifeSupportTimerFired(blink::Timer<WebPluginImpl>*)
 {
     deref();
 }
@@ -1166,8 +1142,7 @@ NPError WebPluginImpl::getValueStatic(NPNVariable variable, void* value)
 
 NPError WebPluginImpl::getValue(NPNVariable variable, void* value)
 {
-//     DebugBreak();
-//     return NPERR_GENERIC_ERROR;
+    // LOG(Plugins, "WebPluginImpl::getValue(%s)", prettyNameForNPNVariable(variable).data());
 
     NPError result;
     if (platformGetValue(variable, value, &result))
@@ -1220,7 +1195,7 @@ NPError WebPluginImpl::getValue(NPNVariable variable, void* value)
         if (!page)
             return NPERR_GENERIC_ERROR;
         //*((NPBool*)value) = page->usesEphemeralSession();
-        *((NPBool*)value) = false; // ÊÇ·ñ´¦ÓÚË½ÈËÄ£Ê½
+        *((NPBool*)value) = false; // ï¿½Ç·ï¿½ï¿½ï¿½Ë½ï¿½ï¿½Ä£Ê½
         return NPERR_NO_ERROR;
     }
 
@@ -1387,9 +1362,8 @@ struct _NPP* WebPluginImpl::pluginNPP()
 
 v8::Local<v8::Object> WebPluginImpl::v8ScriptableObject(v8::Isolate*) 
 {
-    return v8::Local<v8::Object>();
 //     if (!m_pluginContainer)
-//         return v8::Local<v8::Object>();
+         return v8::Local<v8::Object>();
 // 
 //     return m_pluginContainer->v8ObjectForElement();
 }
@@ -1401,53 +1375,49 @@ bool WebPluginImpl::getFormValue(WebString&)
 
 void WebPluginImpl::didReceiveResponse(const WebURLResponse& response)
 {
-    DebugBreak();
-//     if (m_status != PluginStatusLoadedSuccessfully)
-//         return;
-// 
-//     ASSERT(m_loadManually);
-//     ASSERT(!m_manualStream);
-// 
-//     m_manualStream = PluginStream::create(this, m_parentFrame, m_parentFrame->loader().documentLoader()->request(), false, 0, plugin()->pluginFuncs(), instance(), m_plugin->quirks());
-//     m_manualStream->setLoadManually(true);
-// 
-//     m_manualStream->didReceiveResponse(0, response);
+    if (m_status != PluginStatusLoadedSuccessfully)
+        return;
+
+    ASSERT(m_loadManually);
+    ASSERT(!m_manualStream);
+
+    m_manualStream = PluginStream::create(this, m_parentFrame, m_parentFrame->loader().documentLoader()->request(), false, 0, plugin()->pluginFuncs(), instance(), m_plugin->quirks());
+    m_manualStream->setLoadManually(true);
+
+    m_manualStream->didReceiveResponse(0, response);
 }
 
 void WebPluginImpl::didReceiveData(const char* data, int length)
 {
-    DebugBreak();
-//     if (m_status != PluginStatusLoadedSuccessfully)
-//         return;
-// 
-//     ASSERT(m_loadManually);
-//     ASSERT(m_manualStream);
-// 
-//     m_manualStream->didReceiveData(0, data, length, 0);
+    if (m_status != PluginStatusLoadedSuccessfully)
+        return;
+
+    ASSERT(m_loadManually);
+    ASSERT(m_manualStream);
+
+    m_manualStream->didReceiveData(0, data, length, 0);
 }
 
 void WebPluginImpl::didFinishLoading()
 {
-    DebugBreak();
-//     if (m_status != PluginStatusLoadedSuccessfully)
-//         return;
-// 
-//     ASSERT(m_loadManually);
-//     ASSERT(m_manualStream);
-// 
-//     m_manualStream->didFinishLoading(0, 0, 0);
+    if (m_status != PluginStatusLoadedSuccessfully)
+        return;
+
+    ASSERT(m_loadManually);
+    ASSERT(m_manualStream);
+
+    m_manualStream->didFinishLoading(0, 0, 0);
 }
 
 void WebPluginImpl::didFailLoading(const WebURLError& error)
 {
-    DebugBreak();
-//     if (m_status != PluginStatusLoadedSuccessfully)
-//         return;
-// 
-//     ASSERT(m_loadManually);
-// 
-//     if (m_manualStream)
-//         m_manualStream->didFail(nullptr, error);
+    if (m_status != PluginStatusLoadedSuccessfully)
+        return;
+
+    ASSERT(m_loadManually);
+
+    if (m_manualStream)
+        m_manualStream->didFail(nullptr, error);
 }
 
 void WebPluginImpl::didFinishLoadingFrameRequest(const WebURL&, void* notifyData)

@@ -28,20 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/animation/animatable/AnimatableLengthSize.h"
 
 namespace blink {
 
-PassRefPtr<AnimatableValue> AnimatableLengthSize::interpolateTo(
-    const AnimatableValue* value,
-    double fraction) const
+PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableLengthSize::interpolateTo(const AnimatableValue* value, double fraction) const
 {
     const AnimatableLengthSize* lengthSize = toAnimatableLengthSize(value);
     return AnimatableLengthSize::create(
-        AnimatableValue::interpolate(this->width(), lengthSize->width(),
-            fraction),
-        AnimatableValue::interpolate(this->height(), lengthSize->height(),
-            fraction));
+        AnimatableValue::interpolate(this->width(), lengthSize->width(), fraction),
+        AnimatableValue::interpolate(this->height(), lengthSize->height(), fraction));
 }
 
 bool AnimatableLengthSize::equalTo(const AnimatableValue* value) const
@@ -50,11 +47,11 @@ bool AnimatableLengthSize::equalTo(const AnimatableValue* value) const
     return width()->equals(lengthSize->width()) && height()->equals(lengthSize->height());
 }
 
-bool AnimatableLengthSize::usesDefaultInterpolationWith(
-    const AnimatableValue* other) const
+DEFINE_TRACE(AnimatableLengthSize)
 {
-    const AnimatableLengthSize* lengthSize = toAnimatableLengthSize(other);
-    return usesDefaultInterpolation(width(), lengthSize->width()) || usesDefaultInterpolation(height(), lengthSize->height());
+    visitor->trace(m_width);
+    visitor->trace(m_height);
+    AnimatableValue::trace(visitor);
 }
 
-} // namespace blink
+}

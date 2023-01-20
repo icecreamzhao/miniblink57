@@ -10,15 +10,24 @@
 #ifndef SYMTABLE_H
 #define SYMTABLE_H
 
+<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
+=======
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+>>>>>>> miniblink49
 
 /**
  * \file 
  * \brief C++ API: An interface that defines both lookup protocol and parsing of
  * symbolic names.
  */
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 class ParsePosition;
@@ -53,6 +62,10 @@ class UnicodeString;
  */
 class U_COMMON_API SymbolTable /* not : public UObject because this is an interface/mixin class */ {
 public:
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
     /**
      * The character preceding a symbol reference name.
      * @stable ICU 2.8
@@ -104,7 +117,11 @@ public:
      * @stable ICU 2.8
      */
     virtual UnicodeString parseReference(const UnicodeString& text,
+<<<<<<< HEAD
         ParsePosition& pos, int32_t limit) const = 0;
+=======
+                                         ParsePosition& pos, int32_t limit) const = 0;
+>>>>>>> miniblink49
 };
 U_NAMESPACE_END
 

@@ -379,6 +379,7 @@
         defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__) || \
         (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 8) || \
         (defined(__LONG_MAX__) && __LONG_MAX__ == 9223372036854775807L)
+<<<<<<< HEAD
 
 # if defined(__LP64__)
 //#error "111"
@@ -388,6 +389,8 @@
 #error "222"
 #endif
 
+=======
+>>>>>>> miniblink49
 #    define CURL_TYPEOF_CURL_OFF_T     long
 #    define CURL_FORMAT_CURL_OFF_T     "ld"
 #    define CURL_FORMAT_CURL_OFF_TU    "lu"

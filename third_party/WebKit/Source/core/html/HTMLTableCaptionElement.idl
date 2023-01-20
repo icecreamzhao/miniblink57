@@ -23,5 +23,5 @@
 interface HTMLTableCaptionElement : HTMLElement {
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLTableCaptionElement-partial
-    [CEReactions, Reflect] attribute DOMString align;
+    [Reflect] attribute DOMString align;
 };

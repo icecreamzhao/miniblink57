@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/fonts/shaping/CachingWordShaper.h"
 
 #include "platform/fonts/CharacterRange.h"
@@ -31,15 +32,53 @@
 #include "platform/fonts/shaping/HarfBuzzShaper.h"
 #include "platform/fonts/shaping/ShapeCache.h"
 #include "platform/fonts/shaping/ShapeResultBuffer.h"
+=======
+#ifndef MINIBLINK_NO_HARFBUZZ
+#include "config.h"
+#include "platform/fonts/shaping/CachingWordShaper.h"
+
+#include "platform/fonts/SimpleFontData.h"
+#ifndef MINIBLINK_NO_HARFBUZZ
+#include "platform/fonts/shaping/CachingWordShapeIterator.h"
+#include "platform/fonts/shaping/HarfBuzzShaper.h"
+#include "platform/fonts/shaping/ShapeCache.h"
+#endif
+>>>>>>> miniblink49
 #include "wtf/text/CharacterNames.h"
 
 namespace blink {
 
+<<<<<<< HEAD
+=======
+CachingWordShaper::CachingWordShaper()
+{
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    m_shapeCache = new ShapeCache();
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+}
+
+CachingWordShaper::~CachingWordShaper()
+{
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    delete m_shapeCache;
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+}
+
+void CachingWordShaper::clear()
+{
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    if (m_shapeCache)
+        m_shapeCache->clear();
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+}
+
+>>>>>>> miniblink49
 float CachingWordShaper::width(const Font* font, const TextRun& run,
     HashSet<const SimpleFontData*>* fallbackFonts,
     FloatRect* glyphBounds)
 {
     float width = 0;
+<<<<<<< HEAD
     RefPtr<const ShapeResult> wordResult;
     CachingWordShapeIterator iterator(m_shapeCache, run, font);
     while (iterator.next(&wordResult)) {
@@ -73,10 +112,40 @@ static inline float shapeResultsForRun(ShapeCache* shapeCache, const Font* font,
             if (fallbackFonts)
                 wordResult->fallbackFonts(fallbackFonts, font->primaryFont());
             resultsBuffer->appendResult(wordResult.release());
+=======
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    RefPtr<ShapeResult> wordResult;
+    CachingWordShapeIterator iterator(m_shapeCache, run, font, fallbackFonts);
+    while (iterator.next(&wordResult)) {
+        if (wordResult) {
+            width += wordResult->width();
+            if (glyphBounds)
+                glyphBounds->unite(wordResult->bounds());
+        }
+    }
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+//     notImplemented();
+    return width;
+}
+
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+static inline float shapeResultsForRun(ShapeCache* shapeCache, const Font* font,
+    const TextRun& run, HashSet<const SimpleFontData*>* fallbackFonts,
+    Vector<RefPtr<ShapeResult>>* results)
+{
+    CachingWordShapeIterator iterator(shapeCache, run, font, fallbackFonts);
+    RefPtr<ShapeResult> wordResult;
+    float totalWidth = 0;
+    while (iterator.next(&wordResult)) {
+        if (wordResult) {
+            results->append(wordResult);
+            totalWidth += wordResult->width();
+>>>>>>> miniblink49
         }
     }
     return totalWidth;
 }
+<<<<<<< HEAD
 
 int CachingWordShaper::offsetForPosition(const Font* font, const TextRun& run, float targetX, bool includePartialGlyphs)
 {
@@ -85,21 +154,36 @@ int CachingWordShaper::offsetForPosition(const Font* font, const TextRun& run, f
 
     return buffer.offsetForPosition(run, targetX, includePartialGlyphs);
 }
+=======
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+>>>>>>> miniblink49
 
 float CachingWordShaper::fillGlyphBuffer(const Font* font, const TextRun& run,
     HashSet<const SimpleFontData*>* fallbackFonts,
     GlyphBuffer* glyphBuffer, unsigned from, unsigned to)
 {
+<<<<<<< HEAD
     ShapeResultBuffer buffer;
     shapeResultsForRun(m_shapeCache, font, run, fallbackFonts, &buffer);
 
     return buffer.fillGlyphBuffer(glyphBuffer, run, from, to);
+=======
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    Vector<RefPtr<ShapeResult>> results;
+    shapeResultsForRun(m_shapeCache, font, run, fallbackFonts, &results);
+
+    return ShapeResult::fillGlyphBuffer(results, glyphBuffer, run, from, to);
+// #endif // MINIBLINK_NOT_IMPLEMENTED
+//     notImplemented();
+//     return 0;
+>>>>>>> miniblink49
 }
 
 float CachingWordShaper::fillGlyphBufferForTextEmphasis(const Font* font,
     const TextRun& run, const GlyphData* emphasisData, GlyphBuffer* glyphBuffer,
     unsigned from, unsigned to)
 {
+<<<<<<< HEAD
     ShapeResultBuffer buffer;
     shapeResultsForRun(m_shapeCache, font, run, nullptr, &buffer);
 
@@ -130,3 +214,34 @@ Vector<CharacterRange> CachingWordShaper::individualCharacterRanges(const Font* 
 }
 
 }; // namespace blink
+=======
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    Vector<RefPtr<ShapeResult>> results;
+    shapeResultsForRun(m_shapeCache, font, run, nullptr, &results);
+
+    return ShapeResult::fillGlyphBufferForTextEmphasis(results, glyphBuffer,
+        run, emphasisData, from, to);
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+//     notImplemented();
+//     return 0;
+}
+
+FloatRect CachingWordShaper::selectionRect(const Font* font, const TextRun& run,
+    const FloatPoint& point, int height, unsigned from, unsigned to)
+{
+//#ifdef MINIBLINK_NOT_IMPLEMENTED
+    Vector<RefPtr<ShapeResult>> results;
+    float totalWidth = shapeResultsForRun(m_shapeCache, font, run, nullptr,
+        &results);
+
+    return ShapeResult::selectionRect(results, run.direction(), totalWidth,
+        point, height, from, to);
+//#endif // MINIBLINK_NOT_IMPLEMENTED
+//     notImplemented();
+//     return FloatRect();
+}
+
+}; // namespace blink
+
+#endif
+>>>>>>> miniblink49

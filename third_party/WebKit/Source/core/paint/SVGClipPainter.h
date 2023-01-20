@@ -7,7 +7,6 @@
 
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/paint/DisplayItemClient.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -16,33 +15,29 @@ class GraphicsContext;
 class LayoutObject;
 class LayoutSVGResourceClipper;
 
-enum class ClipperState;
-
 class SVGClipPainter {
-    STACK_ALLOCATED();
-
 public:
-    SVGClipPainter(LayoutSVGResourceClipper& clip)
-        : m_clip(clip)
-    {
-    }
+    enum ClipperState {
+        ClipperNotApplied,
+        ClipperAppliedPath,
+        ClipperAppliedMask
+    };
 
-    bool prepareEffect(const LayoutObject&,
-        const FloatRect&,
-        const FloatRect&,
-        const FloatPoint&,
-        GraphicsContext&,
-        ClipperState&);
-    void finishEffect(const LayoutObject&, GraphicsContext&, ClipperState&);
+    SVGClipPainter(LayoutSVGResourceClipper& clip) : m_clip(clip) { }
+
+    // FIXME: Filters are also stateful resources that could benefit from having their state managed
+    //        on the caller stack instead of the current hashmap. We should look at refactoring these
+    //        into a general interface that can be shared.
+    bool applyStatefulResource(const LayoutObject&, GraphicsContext*, ClipperState&);
+    void postApplyStatefulResource(const LayoutObject&, GraphicsContext*, ClipperState&);
+
+    // clipPath can be clipped too, but don't have a boundingBox or paintInvalidationRect. So we can't call
+    // applyResource directly and use the rects from the object, since they are empty for LayoutSVGResources
+    // FIXME: We made applyClippingToContext public because we cannot call applyResource on HTML elements (it asserts on LayoutObject::objectBoundingBox)
+    bool applyClippingToContext(const LayoutObject&, const FloatRect&, const FloatRect&, GraphicsContext*, ClipperState&);
 
 private:
-    // Return false if there is a problem drawing the mask.
-    bool drawClipAsMask(GraphicsContext&,
-        const LayoutObject&,
-        const FloatRect& targetBoundingBox,
-        const FloatRect& targetVisualRect,
-        const AffineTransform&,
-        const FloatPoint&);
+    void drawClipMaskContent(GraphicsContext*, const LayoutObject&, const FloatRect& targetBoundingBox, const FloatRect& targetPaintInvalidationRect);
 
     LayoutSVGResourceClipper& m_clip;
 };

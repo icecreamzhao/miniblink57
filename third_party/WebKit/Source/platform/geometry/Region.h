@@ -28,14 +28,20 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/geometry/IntRect.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT Region {
+<<<<<<< HEAD
     DISALLOW_NEW();
 
+=======
+>>>>>>> miniblink49
 public:
     Region();
     Region(const IntRect&);
@@ -66,10 +72,15 @@ public:
 
 private:
     struct Span {
+<<<<<<< HEAD
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         Span(int y, size_t segmentIndex)
             : y(y)
             , segmentIndex(segmentIndex)
+=======
+        Span(int y, size_t segmentIndex)
+            : y(y), segmentIndex(segmentIndex)
+>>>>>>> miniblink49
         {
         }
 
@@ -78,8 +89,11 @@ private:
     };
 
     class Shape {
+<<<<<<< HEAD
         DISALLOW_NEW();
 
+=======
+>>>>>>> miniblink49
     public:
         Shape();
         Shape(const IntRect&);
@@ -87,10 +101,14 @@ private:
 
         IntRect bounds() const;
         bool isEmpty() const { return m_spans.isEmpty(); }
+<<<<<<< HEAD
         bool isRect() const
         {
             return m_spans.size() <= 2 && m_segments.size() <= 2;
         }
+=======
+        bool isRect() const { return m_spans.size() <= 2 && m_segments.size() <= 2; }
+>>>>>>> miniblink49
 
         typedef const Span* SpanIterator;
         SpanIterator spansBegin() const;
@@ -112,7 +130,11 @@ private:
         struct CompareContainsOperation;
         struct CompareIntersectsOperation;
 
+<<<<<<< HEAD
         template <typename CompareOperation>
+=======
+        template<typename CompareOperation>
+>>>>>>> miniblink49
         static bool compareShapes(const Shape& shape1, const Shape& shape2);
         void trimCapacities();
 
@@ -125,7 +147,11 @@ private:
         struct IntersectOperation;
         struct SubtractOperation;
 
+<<<<<<< HEAD
         template <typename Operation>
+=======
+        template<typename Operation>
+>>>>>>> miniblink49
         static Shape shapeOperation(const Shape& shape1, const Shape& shape2);
 
         void appendSegment(int x);

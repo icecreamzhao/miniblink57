@@ -31,7 +31,6 @@
 #ifndef ScopedEventQueue_h
 #define ScopedEventQueue_h
 
-#include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/PassRefPtr.h"
@@ -42,28 +41,24 @@ namespace blink {
 
 class EventDispatchMediator;
 
-class CORE_EXPORT ScopedEventQueue {
-    WTF_MAKE_NONCOPYABLE(ScopedEventQueue);
-    USING_FAST_MALLOC(ScopedEventQueue);
-
+class ScopedEventQueue {
+    WTF_MAKE_NONCOPYABLE(ScopedEventQueue); WTF_MAKE_FAST_ALLOCATED(ScopedEventQueue);
 public:
     ~ScopedEventQueue();
 
-    void enqueueEventDispatchMediator(EventDispatchMediator*);
+    void enqueueEventDispatchMediator(PassRefPtrWillBeRawPtr<EventDispatchMediator>);
     void dispatchAllEvents();
     static ScopedEventQueue* instance();
 
     void incrementScopingLevel();
     void decrementScopingLevel();
-    bool shouldQueueEvents() const { return m_scopingLevel > 0; }
 
 private:
     ScopedEventQueue();
     static void initialize();
-    void dispatchEvent(EventDispatchMediator*) const;
+    void dispatchEvent(PassRefPtrWillBeRawPtr<EventDispatchMediator>) const;
 
-    PersistentHeapVector<Member<EventDispatchMediator>>
-        m_queuedEventDispatchMediators;
+    WillBePersistentHeapVector<RefPtrWillBeMember<EventDispatchMediator>> m_queuedEventDispatchMediators;
     unsigned m_scopingLevel;
 
     static ScopedEventQueue* s_instance;
@@ -71,13 +66,12 @@ private:
 
 class EventQueueScope {
     WTF_MAKE_NONCOPYABLE(EventQueueScope);
-    STACK_ALLOCATED();
 
 public:
     EventQueueScope() { ScopedEventQueue::instance()->incrementScopingLevel(); }
     ~EventQueueScope() { ScopedEventQueue::instance()->decrementScopingLevel(); }
 };
 
-} // namespace blink
+}
 
 #endif // ScopedEventQueue_h

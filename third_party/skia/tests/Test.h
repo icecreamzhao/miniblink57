@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -11,6 +15,7 @@
 #include "SkTRegistry.h"
 #include "SkTypes.h"
 
+<<<<<<< HEAD
 #if SK_SUPPORT_GPU
 #include "GrContextFactory.h"
 #else
@@ -21,6 +26,9 @@ class GLTestContext;
 } // namespace sk_gpu_test
 class GrContext;
 #endif
+=======
+class GrContextFactory;
+>>>>>>> miniblink49
 
 namespace skiatest {
 
@@ -28,12 +36,16 @@ SkString GetTmpDir();
 
 struct Failure {
     Failure(const char* f, int l, const char* c, const SkString& m)
+<<<<<<< HEAD
         : fileName(f)
         , lineNo(l)
         , condition(c)
         , message(m)
     {
     }
+=======
+        : fileName(f), lineNo(l), condition(c), message(m) {}
+>>>>>>> miniblink49
     const char* fileName;
     int lineNo;
     const char* condition;
@@ -43,7 +55,11 @@ struct Failure {
 
 class Reporter : SkNoncopyable {
 public:
+<<<<<<< HEAD
     virtual ~Reporter() { }
+=======
+    virtual ~Reporter() {}
+>>>>>>> miniblink49
     virtual void bumpTestCount();
     virtual void reportFailed(const skiatest::Failure&) = 0;
     virtual bool allowExtendedTest() const;
@@ -53,6 +69,7 @@ public:
 #define REPORT_FAILURE(reporter, cond, message) \
     reporter->reportFailed(skiatest::Failure(__FILE__, __LINE__, cond, message))
 
+<<<<<<< HEAD
 typedef void (*TestProc)(skiatest::Reporter*, sk_gpu_test::GrContextFactory*);
 
 struct Test {
@@ -62,6 +79,12 @@ struct Test {
         , proc(p)
     {
     }
+=======
+typedef void (*TestProc)(skiatest::Reporter*, GrContextFactory*);
+
+struct Test {
+    Test(const char* n, bool g, TestProc p) : name(n), needsGpu(g), proc(p) {}
+>>>>>>> miniblink49
     const char* name;
     bool needsGpu;
     TestProc proc;
@@ -87,6 +110,7 @@ typedef SkTRegistry<Test> TestRegistry;
         ...
     }
 */
+<<<<<<< HEAD
 
 #if SK_SUPPORT_GPU
 using GrContextFactoryContextType = sk_gpu_test::GrContextFactory::ContextType;
@@ -127,6 +151,9 @@ private:
 };
 
 } // namespace skiatest
+=======
+}  // namespace skiatest
+>>>>>>> miniblink49
 
 #define REPORTER_ASSERT(r, cond)                  \
     do {                                          \
@@ -147,6 +174,7 @@ private:
         REPORT_FAILURE(r, "", SkStringPrintf(__VA_ARGS__)); \
     } while (0)
 
+<<<<<<< HEAD
 #define INFOF(REPORTER, ...)         \
     do {                             \
         if ((REPORTER)->verbose()) { \
@@ -202,5 +230,18 @@ private:
             return;                                                        \
         }                                                                  \
     } while (false)
+=======
+#define DEF_TEST(name, reporter)                                     \
+    static void test_##name(skiatest::Reporter*, GrContextFactory*); \
+    skiatest::TestRegistry name##TestRegistry(                       \
+            skiatest::Test(#name, false, test_##name));              \
+    void test_##name(skiatest::Reporter* reporter, GrContextFactory*)
+
+#define DEF_GPUTEST(name, reporter, factory)                         \
+    static void test_##name(skiatest::Reporter*, GrContextFactory*); \
+    skiatest::TestRegistry name##TestRegistry(                       \
+            skiatest::Test(#name, true, test_##name));               \
+    void test_##name(skiatest::Reporter* reporter, GrContextFactory* factory)
+>>>>>>> miniblink49
 
 #endif

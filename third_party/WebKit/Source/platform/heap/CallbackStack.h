@@ -5,15 +5,20 @@
 #ifndef CallbackStack_h
 #define CallbackStack_h
 
+<<<<<<< HEAD
 #include "platform/heap/BlinkGC.h"
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Threading.h"
 #include "wtf/ThreadingPrimitives.h"
+=======
+#include "platform/heap/ThreadState.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 // The CallbackStack contains all the visitor callbacks used to trace and mark
+<<<<<<< HEAD
 // objects. A specific CallbackStack instance contains at most bufferSize
 // elements.
 // If more space is needed a new CallbackStack instance is created and chained
@@ -26,6 +31,15 @@ public:
     class Item {
         DISALLOW_NEW();
 
+=======
+// objects. A specific CallbackStack instance contains at most bufferSize elements.
+// If more space is needed a new CallbackStack instance is created and chained
+// together with the former instance. I.e. a logical CallbackStack can be made of
+// multiple chained CallbackStack object instances.
+class CallbackStack {
+public:
+    class Item {
+>>>>>>> miniblink49
     public:
         Item() { }
         Item(void* object, VisitorCallback callback)
@@ -42,11 +56,18 @@ public:
         VisitorCallback m_callback;
     };
 
+<<<<<<< HEAD
     static std::unique_ptr<CallbackStack> create();
     ~CallbackStack();
 
     void commit();
     void decommit();
+=======
+    CallbackStack();
+    ~CallbackStack();
+
+    void clear();
+>>>>>>> miniblink49
 
     Item* allocateEntry();
     Item* pop();
@@ -55,6 +76,7 @@ public:
 
     void invokeEphemeronCallbacks(Visitor*);
 
+<<<<<<< HEAD
 #if DCHECK_IS_ON()
     bool hasCallbackForObject(const void*);
 #endif
@@ -83,45 +105,110 @@ private:
         bool isEmptyBlock() const { return m_current == &(m_buffer[0]); }
 
         size_t blockSize() const { return m_blockSize; }
+=======
+#if ENABLE(ASSERT)
+    bool hasCallbackForObject(const void*);
+#endif
+
+    static const size_t blockSize = 8192;
+
+private:
+    class Block {
+    public:
+        explicit Block(Block* next)
+            : m_limit(&(m_buffer[blockSize]))
+            , m_current(&(m_buffer[0]))
+            , m_next(next)
+        {
+            clearUnused();
+        }
+
+        ~Block()
+        {
+            clearUnused();
+        }
+
+        void clear();
+
+        Block* next() const { return m_next; }
+        void setNext(Block* next) { m_next = next; }
+
+        bool isEmptyBlock() const
+        {
+            return m_current == &(m_buffer[0]);
+        }
+
+        size_t size() const
+        {
+            return blockSize - (m_limit - m_current);
+        }
+>>>>>>> miniblink49
 
         Item* allocateEntry()
         {
             if (LIKELY(m_current < m_limit))
                 return m_current++;
+<<<<<<< HEAD
             return nullptr;
+=======
+            return 0;
+>>>>>>> miniblink49
         }
 
         Item* pop()
         {
             if (UNLIKELY(isEmptyBlock()))
+<<<<<<< HEAD
                 return nullptr;
+=======
+                return 0;
+>>>>>>> miniblink49
             return --m_current;
         }
 
         void invokeEphemeronCallbacks(Visitor*);
+<<<<<<< HEAD
 
 #if DCHECK_IS_ON()
+=======
+#if ENABLE(ASSERT)
+>>>>>>> miniblink49
         bool hasCallbackForObject(const void*);
 #endif
 
     private:
+<<<<<<< HEAD
         size_t m_blockSize;
 
         Item* m_buffer;
+=======
+        void clearUnused();
+
+        Item m_buffer[blockSize];
+>>>>>>> miniblink49
         Item* m_limit;
         Item* m_current;
         Block* m_next;
     };
 
+<<<<<<< HEAD
     CallbackStack();
     Item* popSlow();
     Item* allocateEntrySlow();
     void invokeOldestCallbacks(Block*, Block*, Visitor*);
+=======
+    Item* popSlow();
+    Item* allocateEntrySlow();
+    void invokeOldestCallbacks(Block*, Block*, Visitor*);
+    bool hasJustOneBlock() const;
+    void swap(CallbackStack* other);
+>>>>>>> miniblink49
 
     Block* m_first;
     Block* m_last;
 };
 
+<<<<<<< HEAD
 class CallbackStackMemoryPool final {
     USING_FAST_MALLOC(CallbackStackMemoryPool);
 
@@ -149,6 +236,10 @@ private:
 ALWAYS_INLINE CallbackStack::Item* CallbackStack::allocateEntry()
 {
     DCHECK(m_first);
+=======
+ALWAYS_INLINE CallbackStack::Item* CallbackStack::allocateEntry()
+{
+>>>>>>> miniblink49
     Item* item = m_first->allocateEntry();
     if (LIKELY(!!item))
         return item;

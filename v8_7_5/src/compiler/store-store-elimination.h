@@ -11,6 +11,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace compiler {
 
         class StoreStoreElimination final {
@@ -23,3 +24,17 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_COMPILER_STORE_STORE_ELIMINATION_H_
+=======
+namespace compiler {
+
+class StoreStoreElimination final {
+ public:
+  static void Run(JSGraph* js_graph, Zone* temp_zone);
+};
+
+}  // namespace compiler
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_COMPILER_STORE_STORE_ELIMINATION_H_
+>>>>>>> miniblink49

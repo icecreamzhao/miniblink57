@@ -28,22 +28,20 @@
 #define StyleMedia_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/frame/DOMWindowProperty.h"
 #include "platform/heap/Handle.h"
+#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class LocalFrame;
 
-class StyleMedia final : public GarbageCollected<StyleMedia>,
-                         public ContextClient,
-                         public ScriptWrappable {
+class StyleMedia final : public RefCountedWillBeGarbageCollected<StyleMedia>, public DOMWindowProperty, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(StyleMedia);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(StyleMedia);
 public:
-    static StyleMedia* create(LocalFrame* frame) { return new StyleMedia(frame); }
+    static PassRefPtrWillBeRawPtr<StyleMedia> create(LocalFrame* frame) { return adoptRefWillBeNoop(new StyleMedia(frame));}
 
     AtomicString type() const;
     bool matchMedium(const String&) const;

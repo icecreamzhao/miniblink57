@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class ConstructorBuiltinsAssembler : public CodeStubAssembler {
     public:
         explicit ConstructorBuiltinsAssembler(compiler::CodeAssemblerState* state)
@@ -43,3 +44,36 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_BUILTINS_BUILTINS_CONSTRUCTOR_GEN_H_
+=======
+class ConstructorBuiltinsAssembler : public CodeStubAssembler {
+ public:
+  explicit ConstructorBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : CodeStubAssembler(state) {}
+
+  Node* EmitFastNewFunctionContext(Node* closure, Node* slots, Node* context,
+                                   ScopeType scope_type);
+
+  Node* EmitCreateRegExpLiteral(Node* feedback_vector, Node* slot,
+                                Node* pattern, Node* flags, Node* context);
+  Node* EmitCreateShallowArrayLiteral(Node* feedback_vector, Node* slot,
+                                      Node* context, Label* call_runtime,
+                                      AllocationSiteMode allocation_site_mode);
+
+  Node* EmitCreateEmptyArrayLiteral(Node* feedback_vector, Node* slot,
+                                    Node* context);
+
+  Node* EmitCreateShallowObjectLiteral(Node* feedback_vector, Node* slot,
+                                       Label* call_runtime);
+  Node* EmitCreateEmptyObjectLiteral(Node* context);
+
+  Node* EmitFastNewObject(Node* context, Node* target, Node* new_target);
+
+  Node* EmitFastNewObject(Node* context, Node* target, Node* new_target,
+                          Label* call_runtime);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_BUILTINS_BUILTINS_CONSTRUCTOR_GEN_H_
+>>>>>>> miniblink49

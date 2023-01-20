@@ -8,14 +8,22 @@
 #ifndef GrLayerCache_DEFINED
 #define GrLayerCache_DEFINED
 
+<<<<<<< HEAD
 #include "GrLayerAtlas.h"
 #include "GrRect.h"
 #include "GrTexture.h"
+=======
+#include "GrAtlas.h"
+#include "GrRect.h"
+>>>>>>> miniblink49
 
 #include "SkChecksum.h"
 #include "SkImageFilter.h"
 #include "SkMessageBus.h"
+<<<<<<< HEAD
 #include "SkPaint.h"
+=======
+>>>>>>> miniblink49
 #include "SkPicture.h"
 #include "SkTDynamicHash.h"
 
@@ -33,38 +41,60 @@ public:
     static uint32_t Hash(const uint32_t& key) { return SkChecksum::Mix(key); }
 
     // GrPictureInfo proper
+<<<<<<< HEAD
     GrPictureInfo(uint32_t pictureID)
         : fPictureID(pictureID)
         , fPlotUsage(kNumPlots)
     {
 #if !GR_CACHE_HOISTED_LAYERS
         memset(fPlotUses, 0, sizeof(fPlotUses));
+=======
+    GrPictureInfo(uint32_t pictureID) : fPictureID(pictureID) { 
+#if !GR_CACHE_HOISTED_LAYERS
+        memset(fPlotUses, 0, sizeof(fPlotUses)); 
+>>>>>>> miniblink49
 #endif
     }
 
 #if !GR_CACHE_HOISTED_LAYERS
+<<<<<<< HEAD
     void incPlotUsage(int plotID)
     {
+=======
+    void incPlotUsage(int plotID) {
+>>>>>>> miniblink49
         SkASSERT(plotID < kNumPlots);
         fPlotUses[plotID]++;
     }
 
+<<<<<<< HEAD
     void decPlotUsage(int plotID)
     {
+=======
+    void decPlotUsage(int plotID) {
+>>>>>>> miniblink49
         SkASSERT(plotID < kNumPlots);
         SkASSERT(fPlotUses[plotID] > 0);
         fPlotUses[plotID]--;
     }
 
+<<<<<<< HEAD
     int plotUsage(int plotID) const
     {
+=======
+    int plotUsage(int plotID) const { 
+>>>>>>> miniblink49
         SkASSERT(plotID < kNumPlots);
         return fPlotUses[plotID];
     }
 #endif
 
     const uint32_t fPictureID;
+<<<<<<< HEAD
     GrLayerAtlas::ClientPlotUsage fPlotUsage;
+=======
+    GrAtlas::ClientPlotUsage  fPlotUsage;
+>>>>>>> miniblink49
 
 #if !GR_CACHE_HOISTED_LAYERS
 private:
@@ -75,7 +105,11 @@ private:
 // GrCachedLayer encapsulates the caching information for a single saveLayer.
 //
 // Atlased layers get a ref to the backing GrTexture while non-atlased layers
+<<<<<<< HEAD
 // get a ref to the GrTexture in which they reside. In both cases 'fRect'
+=======
+// get a ref to the GrTexture in which they reside. In both cases 'fRect' 
+>>>>>>> miniblink49
 // contains the layer's extent in its texture.
 // Atlased layers also get a pointer to the plot in which they reside.
 // For non-atlased layers, the lock field just corresponds to locking in
@@ -85,24 +119,37 @@ struct GrCachedLayer {
 public:
     // For SkTDynamicHash
     struct Key {
+<<<<<<< HEAD
         Key(uint32_t pictureID, const SkMatrix& initialMat,
             const int* key, int keySize, bool copyKey = false)
             : fKeySize(keySize)
             , fFreeKey(copyKey)
         {
+=======
+        Key(uint32_t pictureID, const SkMatrix& initialMat, 
+            const unsigned* key, int keySize, bool copyKey = false)
+        : fKeySize(keySize) 
+        , fFreeKey(copyKey) {
+>>>>>>> miniblink49
             fIDMatrix.fPictureID = pictureID;
             fIDMatrix.fInitialMat = initialMat;
             fIDMatrix.fInitialMat.getType(); // force initialization of type so hashes match
 
             if (copyKey) {
+<<<<<<< HEAD
                 int* tempKey = new int[keySize];
                 memcpy(tempKey, key, keySize * sizeof(int));
+=======
+                unsigned* tempKey = SkNEW_ARRAY(unsigned, keySize);
+                memcpy(tempKey, key, keySize*sizeof(unsigned));
+>>>>>>> miniblink49
                 fKey = tempKey;
             } else {
                 fKey = key;
             }
 
             // The pictureID/matrix portion needs to be tightly packed.
+<<<<<<< HEAD
             GR_STATIC_ASSERT(sizeof(IDMatrix) == sizeof(uint32_t) + // pictureID
                     9 * sizeof(SkScalar) + sizeof(uint32_t)); // matrix
         }
@@ -120,11 +167,31 @@ public:
                 return false;
             }
             return fIDMatrix.fPictureID == other.fIDMatrix.fPictureID && fIDMatrix.fInitialMat.cheapEqualTo(other.fIDMatrix.fInitialMat) && !memcmp(fKey, other.fKey, fKeySize * sizeof(int));
+=======
+            GR_STATIC_ASSERT(sizeof(IDMatrix) == sizeof(uint32_t)+                     // pictureID
+                                             9 * sizeof(SkScalar) + sizeof(uint32_t)); // matrix
+        }
+
+        ~Key() {
+            if (fFreeKey) {
+                SkDELETE_ARRAY(fKey);
+            }
+        }
+
+        bool operator==(const Key& other) const {
+            if (fKeySize != other.fKeySize) {
+                return false;
+            }
+            return fIDMatrix.fPictureID == other.fIDMatrix.fPictureID &&
+                   fIDMatrix.fInitialMat.cheapEqualTo(other.fIDMatrix.fInitialMat) &&
+                   !memcmp(fKey, other.fKey, fKeySize * sizeof(int));
+>>>>>>> miniblink49
         }
 
         uint32_t pictureID() const { return fIDMatrix.fPictureID; }
 
         // TODO: remove these when GrCachedLayer & ReplacementInfo fuse
+<<<<<<< HEAD
         const int* key() const
         {
             SkASSERT(fFreeKey);
@@ -142,6 +209,16 @@ public:
                 fKeySize * sizeof(int));
             return SkChecksum::Murmur3(reinterpret_cast<const uint32_t*>(&fIDMatrix),
                 sizeof(IDMatrix), hash);
+=======
+        const unsigned* key() const { SkASSERT(fFreeKey);  return fKey; }
+        int keySize() const { SkASSERT(fFreeKey); return fKeySize; }
+
+        uint32_t hash() const {
+            uint32_t hash = SkChecksum::Murmur3(reinterpret_cast<const uint32_t*>(fKey),
+                                                fKeySize * sizeof(int));
+            return SkChecksum::Murmur3(reinterpret_cast<const uint32_t*>(&fIDMatrix), 
+                                       sizeof(IDMatrix), hash);
+>>>>>>> miniblink49
         }
 
     private:
@@ -150,17 +227,26 @@ public:
             uint32_t fPictureID;
             // The initial matrix passed into drawPicture
             SkMatrix fInitialMat;
+<<<<<<< HEAD
         } fIDMatrix;
 
         const int* fKey;
         const int fKeySize;
         bool fFreeKey;
+=======
+        }              fIDMatrix;
+
+        const unsigned* fKey;
+        const int       fKeySize;
+        bool            fFreeKey;
+>>>>>>> miniblink49
     };
 
     static const Key& GetKey(const GrCachedLayer& layer) { return layer.fKey; }
     static uint32_t Hash(const Key& key) { return key.hash(); }
 
     // GrCachedLayer proper
+<<<<<<< HEAD
     GrCachedLayer(uint32_t pictureID,
         int start,
         int stop,
@@ -170,12 +256,20 @@ public:
         const int* key,
         int keySize,
         const SkPaint* paint)
+=======
+    GrCachedLayer(uint32_t pictureID, unsigned start, unsigned stop,
+                  const SkIRect& srcIR, const SkIRect& dstIR,
+                  const SkMatrix& ctm,
+                  const unsigned* key, int keySize,
+                  const SkPaint* paint)
+>>>>>>> miniblink49
         : fKey(pictureID, ctm, key, keySize, true)
         , fStart(start)
         , fStop(stop)
         , fSrcIR(srcIR)
         , fDstIR(dstIR)
         , fOffset(SkIPoint::Make(0, 0))
+<<<<<<< HEAD
         , fPaint(paint ? new SkPaint(*paint) : nullptr)
         , fFilter(nullptr)
         , fTexture(nullptr)
@@ -185,16 +279,30 @@ public:
         , fUses(0)
         , fLocked(false)
     {
+=======
+        , fPaint(paint ? SkNEW_ARGS(SkPaint, (*paint)) : NULL)
+        , fFilter(NULL)
+        , fTexture(NULL)
+        , fRect(SkIRect::MakeEmpty())
+        , fPlot(NULL)
+        , fUses(0)
+        , fLocked(false) {
+>>>>>>> miniblink49
         SkASSERT(SK_InvalidGenID != pictureID);
 
         if (fPaint) {
             if (fPaint->getImageFilter()) {
                 fFilter = SkSafeRef(fPaint->getImageFilter());
+<<<<<<< HEAD
                 fPaint->setImageFilter(nullptr);
+=======
+                fPaint->setImageFilter(NULL);
+>>>>>>> miniblink49
             }
         }
     }
 
+<<<<<<< HEAD
     ~GrCachedLayer()
     {
         if (!fAtlased) {
@@ -202,10 +310,17 @@ public:
         }
         SkSafeUnref(fFilter);
         delete fPaint;
+=======
+    ~GrCachedLayer() {
+        SkSafeUnref(fTexture);
+        SkSafeUnref(fFilter);
+        SkDELETE(fPaint);
+>>>>>>> miniblink49
     }
 
     uint32_t pictureID() const { return fKey.pictureID(); }
     // TODO: remove these when GrCachedLayer & ReplacementInfo fuse
+<<<<<<< HEAD
     const int* key() const { return fKey.key(); }
     int keySize() const { return fKey.keySize(); }
 
@@ -224,6 +339,18 @@ public:
         }
         fTexture = texture;
         fAtlased = atlased;
+=======
+    const unsigned* key() const { return fKey.key(); }
+    int keySize() const { return fKey.keySize(); }
+
+    unsigned start() const { return fStart; }
+    // TODO: make bound debug only
+    const SkIRect& srcIR() const { return fSrcIR; }
+    const SkIRect& dstIR() const { return fDstIR; }
+    unsigned stop() const { return fStop; }
+    void setTexture(GrTexture* texture, const SkIRect& rect) {
+        SkRefCnt_SafeAssign(fTexture, texture);
+>>>>>>> miniblink49
         fRect = rect;
         if (!fTexture) {
             fLocked = false;
@@ -237,6 +364,7 @@ public:
     void setOffset(const SkIPoint& offset) { fOffset = offset; }
     const SkIPoint& offset() const { return fOffset; }
 
+<<<<<<< HEAD
     void setPlot(GrLayerAtlas::Plot* plot)
     {
         SkASSERT(nullptr == plot || nullptr == fPlot);
@@ -249,10 +377,20 @@ public:
         SkASSERT(fAtlased == SkToBool(fPlot));
         return fAtlased;
     }
+=======
+    void setPlot(GrPlot* plot) {
+        SkASSERT(NULL == plot || NULL == fPlot);
+        fPlot = plot;
+    }
+    GrPlot* plot() { return fPlot; }
+
+    bool isAtlased() const { return SkToBool(fPlot); }
+>>>>>>> miniblink49
 
     void setLocked(bool locked) { fLocked = locked; }
     bool locked() const { return fLocked; }
 
+<<<<<<< HEAD
     SkDEBUGCODE(const GrLayerAtlas::Plot* plot() const { return fPlot; })
         SkDEBUGCODE(void validate(const GrTexture* backingTexture) const;)
 
@@ -274,6 +412,30 @@ public:
     // The paint used when dropping the layer down into the owning canvas.
     // Can be nullptr. This class makes a copy for itself.
     SkPaint* fPaint;
+=======
+    SkDEBUGCODE(const GrPlot* plot() const { return fPlot; })
+    SkDEBUGCODE(void validate(const GrTexture* backingTexture) const;)
+
+private:
+    const Key       fKey;
+
+    // The "saveLayer" operation index of the cached layer
+    const unsigned  fStart;
+    // The final "restore" operation index of the cached layer
+    const unsigned  fStop;
+
+    // The layer's src rect (i.e., the portion of the source scene required
+    // for filtering).
+    const SkIRect   fSrcIR;
+    // The layer's dest rect (i.e., where it will land in device space)
+    const SkIRect   fDstIR;
+    // Offset sometimes required by image filters
+    SkIPoint        fOffset;
+
+    // The paint used when dropping the layer down into the owning canvas.
+    // Can be NULL. This class makes a copy for itself.
+    SkPaint*  fPaint;
+>>>>>>> miniblink49
 
     // The imagefilter that needs to be applied to the layer prior to it being
     // composited with the rest of the scene.
@@ -281,6 +443,7 @@ public:
 
     // fTexture is a ref on the atlasing texture for atlased layers and a
     // ref on a GrTexture for non-atlased textures.
+<<<<<<< HEAD
     GrTexture* fTexture;
 
     // true if this layer is in the atlas (and 'fTexture' doesn't carry a ref)
@@ -295,11 +458,27 @@ public:
     // For atlased layers, fPlot stores the atlas plot in which the layer rests.
     // It is always nullptr for non-atlased layers.
     GrLayerAtlas::Plot* fPlot;
+=======
+    GrTexture*      fTexture;
+
+    // For both atlased and non-atlased layers 'fRect' contains the  bound of
+    // the layer in whichever texture it resides. It is empty when 'fTexture'
+    // is NULL.
+    SkIRect         fRect;
+
+    // For atlased layers, fPlot stores the atlas plot in which the layer rests.
+    // It is always NULL for non-atlased layers.
+    GrPlot*         fPlot;
+>>>>>>> miniblink49
 
     // The number of actively hoisted layers using this cached image (e.g.,
     // extant GrHoistedLayers pointing at this object). This object will
     // be unlocked when the use count reaches 0.
+<<<<<<< HEAD
     int fUses;
+=======
+    int             fUses;
+>>>>>>> miniblink49
 
     // For non-atlased layers 'fLocked' should always match "fTexture".
     // (i.e., if there is a texture it is locked).
@@ -307,6 +486,7 @@ public:
     // actively required for rendering. If the layer is in a plot but not
     // actively required for rendering, then 'fLocked' is false. If the
     // layer isn't in a plot then is can never be locked.
+<<<<<<< HEAD
     bool fLocked;
 
     void addUse() { ++fUses; }
@@ -318,15 +498,31 @@ public:
     int uses() const { return fUses; }
 
     friend class GrLayerCache; // for access to usage methods
+=======
+    bool            fLocked;
+
+    void addUse()     { ++fUses; }
+    void removeUse()  { SkASSERT(fUses > 0); --fUses; }
+    int uses() const { return fUses; }
+
+    friend class GrLayerCache;  // for access to usage methods
+>>>>>>> miniblink49
     friend class TestingAccess; // for testing
 };
 
 // The GrLayerCache caches pre-computed saveLayers for later rendering.
 // Non-atlased layers are stored in their own GrTexture while the atlased
 // layers share a single GrTexture.
+<<<<<<< HEAD
 // Unlike the GrFontCache, the GrLayerCache only has one atlas (for 8888).
 // As such, the GrLayerCache roughly combines the functionality of the
 // GrFontCache and GrTextStrike classes.
+=======
+// Unlike the GrFontCache, the GrTexture atlas only has one GrAtlas (for 8888)
+// and one GrPlot (for the entire atlas). As such, the GrLayerCache
+// roughly combines the functionality of the GrFontCache and GrTextStrike
+// classes.
+>>>>>>> miniblink49
 class GrLayerCache {
 public:
     GrLayerCache(GrContext*);
@@ -337,6 +533,7 @@ public:
     void freeAll();
 
     GrCachedLayer* findLayer(uint32_t pictureID, const SkMatrix& ctm,
+<<<<<<< HEAD
         const int* key, int keySize);
     GrCachedLayer* findLayerOrCreate(uint32_t pictureID,
         int start, int stop,
@@ -345,6 +542,16 @@ public:
         const SkMatrix& initialMat,
         const int* key, int keySize,
         const SkPaint* paint);
+=======
+                             const unsigned* key, int keySize);
+    GrCachedLayer* findLayerOrCreate(uint32_t pictureID,
+                                     int start, int stop, 
+                                     const SkIRect& srcIR,
+                                     const SkIRect& dstIR,
+                                     const SkMatrix& initialMat,
+                                     const unsigned* key, int keySize,
+                                     const SkPaint* paint);
+>>>>>>> miniblink49
 
     // Attempt to place 'layer' in the atlas. Return true on success; false on failure.
     // When true is returned, 'needsRendering' will indicate if the layer must be (re)drawn.
@@ -363,8 +570,12 @@ public:
 
     // addUse is just here to keep the API symmetric
     void addUse(GrCachedLayer* layer) { layer->addUse(); }
+<<<<<<< HEAD
     void removeUse(GrCachedLayer* layer)
     {
+=======
+    void removeUse(GrCachedLayer* layer) {
+>>>>>>> miniblink49
         layer->removeUse();
         if (layer->uses() == 0) {
             // If no one cares about the layer allow it to be recycled.
@@ -377,6 +588,7 @@ public:
 
     SkDEBUGCODE(void validate() const;)
 
+<<<<<<< HEAD
 #ifdef SK_DEBUG
         void writeLayersToDisk(const SkString& dirName);
 #endif
@@ -389,6 +601,16 @@ public:
     void begin();
     void end();
 
+=======
+#ifdef SK_DEVELOPER
+    void writeLayersToDisk(const SkString& dirName);
+#endif
+
+    static bool PlausiblyAtlasable(int width, int height) {
+        return width <= kPlotWidth && height <= kPlotHeight;
+    }
+
+>>>>>>> miniblink49
 #if !GR_CACHE_HOISTED_LAYERS
     void purgeAll();
 #endif
@@ -403,12 +625,21 @@ private:
     static const int kPlotWidth = kAtlasTextureWidth / kNumPlotsX;
     static const int kPlotHeight = kAtlasTextureHeight / kNumPlotsY;
 
+<<<<<<< HEAD
     GrContext* fContext; // pointer back to owning context
     SkAutoTDelete<GrLayerAtlas> fAtlas; // lazily allocated
 
     // We cache this information here (rather then, say, on the owning picture)
     // because we want to be able to clean it up as needed (e.g., if a picture
     // is leaked and never cleans itself up we still want to be able to
+=======
+    GrContext*                fContext;  // pointer back to owning context
+    SkAutoTDelete<GrAtlas>    fAtlas;    // TODO: could lazily allocate
+
+    // We cache this information here (rather then, say, on the owning picture)
+    // because we want to be able to clean it up as needed (e.g., if a picture
+    // is leaked and never cleans itself up we still want to be able to 
+>>>>>>> miniblink49
     // remove the GrPictureInfo once its layers are purged from all the atlas
     // plots).
     SkTDynamicHash<GrPictureInfo, uint32_t> fPictureHash;
@@ -430,14 +661,22 @@ private:
 
     void initAtlas();
     GrCachedLayer* createLayer(uint32_t pictureID, int start, int stop,
+<<<<<<< HEAD
         const SkIRect& srcIR, const SkIRect& dstIR,
         const SkMatrix& initialMat,
         const int* key, int keySize,
         const SkPaint* paint);
+=======
+                               const SkIRect& srcIR, const SkIRect& dstIR,
+                               const SkMatrix& initialMat,
+                               const unsigned* key, int keySize,
+                               const SkPaint* paint);
+>>>>>>> miniblink49
 
     // Remove all the layers (and unlock any resources) associated with 'pictureID'
     void purge(uint32_t pictureID);
 
+<<<<<<< HEAD
     void purgePlot(GrLayerAtlas::Plot* plot);
 
     // Either purge all un-locked plots or just one. Return true if >= 1 plot
@@ -447,6 +686,16 @@ private:
     void incPlotLock(int plotIdx) { ++fPlotLocks[plotIdx]; }
     void decPlotLock(int plotIdx)
     {
+=======
+    void purgePlot(GrPlot* plot);
+
+    // Try to find a purgeable plot and clear it out. Return true if a plot
+    // was purged; false otherwise.
+    bool purgePlot();
+
+    void incPlotLock(int plotIdx) { ++fPlotLocks[plotIdx]; }
+    void decPlotLock(int plotIdx) {
+>>>>>>> miniblink49
         SkASSERT(fPlotLocks[plotIdx] > 0);
         --fPlotLocks[plotIdx];
     }

@@ -7,7 +7,11 @@
 
 #include "src/objects/js-promise.h"
 
+<<<<<<< HEAD
 #include "src/objects-inl.h" // Needed for write barriers
+=======
+#include "src/objects-inl.h"  // Needed for write barriers
+>>>>>>> miniblink49
 #include "src/objects.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -16,6 +20,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(JSPromise, JSObject)
     CAST_ACCESSOR(JSPromise)
 
@@ -42,3 +47,29 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_JS_PROMISE_INL_H_
+=======
+OBJECT_CONSTRUCTORS_IMPL(JSPromise, JSObject)
+CAST_ACCESSOR(JSPromise)
+
+ACCESSORS(JSPromise, reactions_or_result, Object, kReactionsOrResultOffset)
+SMI_ACCESSORS(JSPromise, flags, kFlagsOffset)
+BOOL_ACCESSORS(JSPromise, flags, has_handler, kHasHandlerBit)
+BOOL_ACCESSORS(JSPromise, flags, handled_hint, kHandledHintBit)
+
+Object JSPromise::result() const {
+  DCHECK_NE(Promise::kPending, status());
+  return reactions_or_result();
+}
+
+Object JSPromise::reactions() const {
+  DCHECK_EQ(Promise::kPending, status());
+  return reactions_or_result();
+}
+
+}  // namespace internal
+}  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
+
+#endif  // V8_OBJECTS_JS_PROMISE_INL_H_
+>>>>>>> miniblink49

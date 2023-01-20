@@ -27,22 +27,16 @@
 #define V8Initializer_h
 
 #include "core/CoreExport.h"
-#include "wtf/Allocator.h"
 #include <v8.h>
 
 namespace blink {
 
 class CORE_EXPORT V8Initializer {
-    STATIC_ONLY(V8Initializer);
-
 public:
-    static void initializeMainThread();
-    static void shutdownMainThread();
+    static void initializeMainThreadIfNeeded();
     static void initializeWorker(v8::Isolate*);
 
     static void reportRejectedPromisesOnMainThread();
-    static void messageHandlerInMainThread(v8::Local<v8::Message>,
-        v8::Local<v8::Value>);
 };
 
 } // namespace blink

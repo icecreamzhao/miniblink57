@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIMessageEventInit
 
 dictionary MIDIMessageEventInit : EventInit {
@@ -9,4 +10,11 @@ dictionary MIDIMessageEventInit : EventInit {
     // https://crbug.com/647693
     // https://github.com/WebAudio/web-midi-api/issues/168
     Uint8Array? data;
+=======
+// http://webaudio.github.io/web-midi-api/#idl-def-MIDIMessageEventInit
+
+dictionary MIDIMessageEventInit : EventInit {
+    double receivedTime;
+    Uint8Array data;
+>>>>>>> miniblink49
 };

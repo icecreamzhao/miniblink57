@@ -30,10 +30,17 @@
 // load, while a real global could be referenced directly by absolute or
 // relative addressing.
 
+<<<<<<< HEAD
 // Use an array of pointers instead of an array of char in case there is some
 // alignment issue.
 #define DEFINE_GLOBAL(type, name, ...)                                       \
     void* name##Storage[(sizeof(type) + sizeof(void*) - 1) / sizeof(void*)]; \
     const type& name = *reinterpret_cast<type*>(&name##Storage)
+=======
+// Use an array of pointers instead of an array of char in case there is some alignment issue.
+#define DEFINE_GLOBAL(type, name, ...) \
+    void* name##Storage[(sizeof(type) + sizeof(void *) - 1) / sizeof(void *)]; \
+    const type& name = *reinterpret_cast<type*>(&name##Storage);
+>>>>>>> miniblink49
 
 #endif // StaticConstructors_h

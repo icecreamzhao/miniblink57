@@ -8,10 +8,17 @@
 #ifndef GrCaps_DEFINED
 #define GrCaps_DEFINED
 
+<<<<<<< HEAD
 #include "GrBlend.h"
 #include "GrShaderVar.h"
 #include "GrTypes.h"
 #include "GrTypesPriv.h"
+=======
+#include "GrTypes.h"
+#include "GrTypesPriv.h"
+#include "GrBlend.h"
+#include "GrShaderVar.h"
+>>>>>>> miniblink49
 #include "SkRefCnt.h"
 #include "SkString.h"
 
@@ -23,8 +30,12 @@ public:
         is relevant to a float (or vecNf) variable declared with a GrSLPrecision
         in a given GrShaderType. The info here is hoisted from the OpenGL spec. */
     struct PrecisionInfo {
+<<<<<<< HEAD
         PrecisionInfo()
         {
+=======
+        PrecisionInfo() {
+>>>>>>> miniblink49
             fLogRangeLow = 0;
             fLogRangeHigh = 0;
             fBits = 0;
@@ -33,9 +44,15 @@ public:
         /** Is this precision level allowed in the shader stage? */
         bool supported() const { return 0 != fBits; }
 
+<<<<<<< HEAD
         bool operator==(const PrecisionInfo& that) const
         {
             return fLogRangeLow == that.fLogRangeLow && fLogRangeHigh == that.fLogRangeHigh && fBits == that.fBits;
+=======
+        bool operator==(const PrecisionInfo& that) const {
+            return fLogRangeLow == that.fLogRangeLow && fLogRangeHigh == that.fLogRangeHigh &&
+                   fBits == that.fBits;
+>>>>>>> miniblink49
         }
         bool operator!=(const PrecisionInfo& that) const { return !(*this == that); }
 
@@ -63,8 +80,12 @@ public:
     bool pathRenderingSupport() const { return fPathRenderingSupport; }
     bool dstReadInShaderSupport() const { return fDstReadInShaderSupport; }
     bool dualSourceBlendingSupport() const { return fDualSourceBlendingSupport; }
+<<<<<<< HEAD
     bool integerSupport() const { return fIntegerSupport; }
     bool texelBufferSupport() const { return fTexelBufferSupport; }
+=======
+    bool mixedSamplesSupport() const { return fMixedSamplesSupport; }
+>>>>>>> miniblink49
 
     /**
     * Get the precision info for a variable of type kFloat_GrSLType, kVec2f_GrSLType, etc in a
@@ -73,8 +94,12 @@ public:
     * called.
     */
     const PrecisionInfo& getFloatShaderPrecisionInfo(GrShaderType shaderType,
+<<<<<<< HEAD
         GrSLPrecision precision) const
     {
+=======
+        GrSLPrecision precision) const {
+>>>>>>> miniblink49
         return fFloatPrecisions[shaderType][precision];
     };
 
@@ -85,6 +110,7 @@ public:
     */
     bool floatPrecisionVaries() const { return fShaderPrecisionVaries; }
 
+<<<<<<< HEAD
     /**
      * PLS storage size in bytes (0 when not supported). The PLS spec defines a minimum size of 16 
      * bytes whenever PLS is supported.
@@ -104,6 +130,8 @@ public:
 #endif
     }
 
+=======
+>>>>>>> miniblink49
 protected:
     /** Subclasses must call this after initialization in order to apply caps overrides requested by
         the client. Note that overrides will only reduce the caps never expand them. */
@@ -114,6 +142,7 @@ protected:
     bool fPathRenderingSupport : 1;
     bool fDstReadInShaderSupport : 1;
     bool fDualSourceBlendingSupport : 1;
+<<<<<<< HEAD
     bool fIntegerSupport : 1;
     bool fTexelBufferSupport : 1;
 
@@ -124,6 +153,14 @@ protected:
 
 private:
     virtual void onApplyOptionsOverrides(const GrContextOptions&) {};
+=======
+    bool fMixedSamplesSupport : 1;
+
+    bool fShaderPrecisionVaries;
+    PrecisionInfo fFloatPrecisions[kGrShaderTypeCount][kGrSLPrecisionCount];
+
+private:
+>>>>>>> miniblink49
     typedef SkRefCnt INHERITED;
 };
 
@@ -132,6 +169,11 @@ private:
  */
 class GrCaps : public SkRefCnt {
 public:
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> miniblink49
     GrCaps(const GrContextOptions&);
 
     virtual SkString dump() const;
@@ -142,6 +184,7 @@ public:
     /** To avoid as-yet-unnecessary complexity we don't allow any partial support of MIP Maps (e.g.
         only for POT textures) */
     bool mipMapSupport() const { return fMipMapSupport; }
+<<<<<<< HEAD
 
     /**
      * Skia convention is that a device only has sRGB support if it supports sRGB formats for both
@@ -177,22 +220,51 @@ public:
 
     bool preferVRAMUseOverFlushes() const { return fPreferVRAMUseOverFlushes; }
 
+=======
+    bool twoSidedStencilSupport() const { return fTwoSidedStencilSupport; }
+    bool stencilWrapOpsSupport() const { return  fStencilWrapOpsSupport; }
+    bool discardRenderTargetSupport() const { return fDiscardRenderTargetSupport; }
+#if GR_FORCE_GPU_TRACE_DEBUGGING
+    bool gpuTracingSupport() const { return true; }
+#else
+    bool gpuTracingSupport() const { return fGpuTracingSupport; }
+#endif
+    bool compressedTexSubImageSupport() const { return fCompressedTexSubImageSupport; }
+    bool oversizedStencilSupport() const { return fOversizedStencilSupport; }
+    bool textureBarrierSupport() const { return fTextureBarrierSupport; }
+
+    bool useDrawInsteadOfClear() const { return fUseDrawInsteadOfClear; }
+    bool useDrawInsteadOfPartialRenderTargetWrite() const {
+        return fUseDrawInsteadOfPartialRenderTargetWrite;
+    }
+
+>>>>>>> miniblink49
     /**
      * Indicates the capabilities of the fixed function blend unit.
      */
     enum BlendEquationSupport {
+<<<<<<< HEAD
         kBasic_BlendEquationSupport, //<! Support to select the operator that
         //   combines src and dst terms.
         kAdvanced_BlendEquationSupport, //<! Additional fixed function support for specific
         //   SVG/PDF blend modes. Requires blend barriers.
         kAdvancedCoherent_BlendEquationSupport, //<! Advanced blend equation support that does not
         //   require blend barriers, and permits overlap.
+=======
+        kBasic_BlendEquationSupport,             //<! Support to select the operator that
+                                                 //   combines src and dst terms.
+        kAdvanced_BlendEquationSupport,          //<! Additional fixed function support for specific
+                                                 //   SVG/PDF blend modes. Requires blend barriers.
+        kAdvancedCoherent_BlendEquationSupport,  //<! Advanced blend equation support that does not
+                                                 //   require blend barriers, and permits overlap.
+>>>>>>> miniblink49
 
         kLast_BlendEquationSupport = kAdvancedCoherent_BlendEquationSupport
     };
 
     BlendEquationSupport blendEquationSupport() const { return fBlendEquationSupport; }
 
+<<<<<<< HEAD
     bool advancedBlendEquationSupport() const
     {
         return fBlendEquationSupport >= kAdvanced_BlendEquationSupport;
@@ -205,6 +277,17 @@ public:
 
     bool canUseAdvancedBlendEquation(GrBlendEquation equation) const
     {
+=======
+    bool advancedBlendEquationSupport() const {
+        return fBlendEquationSupport >= kAdvanced_BlendEquationSupport;
+    }
+
+    bool advancedCoherentBlendEquationSupport() const {
+        return kAdvancedCoherent_BlendEquationSupport == fBlendEquationSupport;
+    }
+
+    bool canUseAdvancedBlendEquation(GrBlendEquation equation) const {
+>>>>>>> miniblink49
         SkASSERT(GrBlendEquationIsAdvanced(equation));
         return SkToBool(fAdvBlendEqBlacklist & (1 << equation));
     }
@@ -214,11 +297,19 @@ public:
      * textures allows partial mappings or full mappings.
      */
     enum MapFlags {
+<<<<<<< HEAD
         kNone_MapFlags = 0x0, //<! Cannot map the resource.
 
         kCanMap_MapFlag = 0x1, //<! The resource can be mapped. Must be set for any of
         //   the other flags to have meaning.k
         kSubset_MapFlag = 0x2, //<! The resource can be partially mapped.
+=======
+        kNone_MapFlags   = 0x0,       //<! Cannot map the resource.
+
+        kCanMap_MapFlag  = 0x1,       //<! The resource can be mapped. Must be set for any of
+                                      //   the other flags to have meaning.k
+        kSubset_MapFlag  = 0x2,       //<! The resource can be partially mapped.
+>>>>>>> miniblink49
     };
 
     uint32_t mapBufferFlags() const { return fMapBufferFlags; }
@@ -230,6 +321,7 @@ public:
     bool reuseScratchTextures() const { return fReuseScratchTextures; }
     bool reuseScratchBuffers() const { return fReuseScratchBuffers; }
 
+<<<<<<< HEAD
     /// maximum number of attribute values per vertex
     int maxVertexAttributes() const { return fMaxVertexAttributes; }
 
@@ -287,12 +379,48 @@ public:
 
     bool sampleShadingSupport() const { return fSampleShadingSupport; }
 
+=======
+    int maxRenderTargetSize() const { return fMaxRenderTargetSize; }
+    int maxTextureSize() const { return fMaxTextureSize; }
+    /** 0 unless GPU has problems with small textures */
+    int minTextureSize() const { return fMinTextureSize; }
+
+    // Will be 0 if MSAA is not supported
+    int maxSampleCount() const { return fMaxSampleCount; }
+
+    bool isConfigRenderable(GrPixelConfig config, bool withMSAA) const {
+        SkASSERT(kGrPixelConfigCnt > config);
+        return fConfigRenderSupport[config][withMSAA];
+    }
+
+    bool isConfigTexturable(GrPixelConfig config) const {
+        SkASSERT(kGrPixelConfigCnt > config);
+        return fConfigTextureSupport[config];
+    }
+
+    bool suppressPrints() const { return fSupressPrints; }
+
+    bool drawPathMasksToCompressedTexturesSupport() const {
+        return fDrawPathMasksToCompressedTextureSupport;
+    }
+
+    size_t geometryBufferMapThreshold() const {
+        SkASSERT(fGeometryBufferMapThreshold >= 0);
+        return fGeometryBufferMapThreshold;
+    }
+
+    bool supportsInstancedDraws() const {
+        return fSupportsInstancedDraws;
+    }
+
+>>>>>>> miniblink49
 protected:
     /** Subclasses must call this at the end of their constructors in order to apply caps
         overrides requested by the client. Note that overrides will only reduce the caps never
         expand them. */
     void applyOptionsOverrides(const GrContextOptions& options);
 
+<<<<<<< HEAD
     SkAutoTUnref<GrShaderCaps> fShaderCaps;
 
     bool fNPOTTextureTileSupport : 1;
@@ -324,12 +452,33 @@ protected:
     bool fPreferVRAMUseOverFlushes : 1;
 
     bool fSampleShadingSupport : 1;
+=======
+    SkAutoTUnref<GrShaderCaps>    fShaderCaps;
+
+    bool fNPOTTextureTileSupport                     : 1;
+    bool fMipMapSupport                              : 1;
+    bool fTwoSidedStencilSupport                     : 1;
+    bool fStencilWrapOpsSupport                      : 1;
+    bool fDiscardRenderTargetSupport                 : 1;
+    bool fReuseScratchTextures                       : 1;
+    bool fReuseScratchBuffers                        : 1;
+    bool fGpuTracingSupport                          : 1;
+    bool fCompressedTexSubImageSupport               : 1;
+    bool fOversizedStencilSupport                    : 1;
+    bool fTextureBarrierSupport                      : 1;
+    bool fSupportsInstancedDraws                     : 1;
+
+    // Driver workaround
+    bool fUseDrawInsteadOfClear                      : 1;
+    bool fUseDrawInsteadOfPartialRenderTargetWrite   : 1;
+>>>>>>> miniblink49
 
     BlendEquationSupport fBlendEquationSupport;
     uint32_t fAdvBlendEqBlacklist;
     GR_STATIC_ASSERT(kLast_GrBlendEquation < 32);
 
     uint32_t fMapBufferFlags;
+<<<<<<< HEAD
     int fBufferMapThreshold;
 
     int fMaxRenderTargetSize;
@@ -345,6 +494,22 @@ private:
 
     bool fSuppressPrints : 1;
     bool fImmediateFlush : 1;
+=======
+    int fGeometryBufferMapThreshold;
+
+    int fMaxRenderTargetSize;
+    int fMaxTextureSize;
+    int fMinTextureSize;
+    int fMaxSampleCount;
+
+    // The first entry for each config is without msaa and the second is with.
+    bool fConfigRenderSupport[kGrPixelConfigCnt][2];
+    bool fConfigTextureSupport[kGrPixelConfigCnt];
+
+private:
+    bool fSupressPrints : 1;
+    bool fDrawPathMasksToCompressedTextureSupport : 1;
+>>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };

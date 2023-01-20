@@ -3,6 +3,7 @@
 namespace wke {
 
 bool g_isSetDragEnable = true;
+<<<<<<< HEAD
 bool g_isSetDragDropEnable = false;
 
 const char* kUndefineStrValue = "__mb_undefine__";
@@ -11,12 +12,21 @@ WTF::OwnPtr<std::string> s_versionString;
 bool wkeIsInit = false;
 
 unsigned long g_kWakeMinInterval = 8;
+=======
+bool g_isSetDragDropEnable = true;
+
+std::string* s_versionString = nullptr;
+bool wkeIsInit = false;
+
+unsigned long g_kWakeMinInterval = 5;
+>>>>>>> miniblink49
 double g_kDrawMinInterval = 0.003;
 bool g_isDecodeUrlRequest = false;
 void* g_tipPaintCallback = nullptr;
 float g_contentScale = 1;
 bool g_rendererAntiAlias = false;
 bool g_diskCacheEnable = false;
+<<<<<<< HEAD
 bool g_smootTextEnable = true;
 bool g_consoleOutputEnable = true;
 bool g_cutOutsNpapiRectsEnable = false;
@@ -62,12 +72,22 @@ void* g_wkePluginFindCallbackParam = nullptr;
 
 wkeImageBufferToDataURL g_wkeImageBufferToDataUrlCallback = nullptr;
 void* g_wkeImageBufferToDataUrlCallbackParam = nullptr;
+=======
+bool g_smootTextEnable = false;
+bool g_consoleOutputEnable = true;
+>>>>>>> miniblink49
 
 wkeUiThreadPostTaskCallback g_wkeUiThreadPostTaskCallback = nullptr;
 
 wkeWillMediaLoadCallback g_wkeWillMediaLoadCallback = nullptr;
 void* g_wkeWillMediaLoadCallbackCallbackParam = nullptr;
 
+<<<<<<< HEAD
+=======
+wkeOnPluginFindCallback g_wkePluginFindcallback = nullptr;
+void* g_wkePluginFindcallbackParam = nullptr;
+
+>>>>>>> miniblink49
 wkeMediaPlayerFactory g_wkeMediaPlayerFactory = nullptr;
 wkeOnIsMediaPlayerSupportsMIMEType g_onIsMediaPlayerSupportsMIMETypeCallback = nullptr;
 
@@ -75,6 +95,7 @@ wkeTempCallbackInfo g_wkeTempCallbackInfo;
 
 std::set<wkeWebView> g_liveWebViews;
 
+<<<<<<< HEAD
 DWORD g_contextMenuItemMask = kWkeMenuSelectedAllId | kWkeMenuSelectedTextId | kWkeMenuUndoId | kWkeMenuCopyImageId | kWkeMenuSaveImageId | kWkeMenuInspectElementAtId |
     kWkeMenuCutId | kWkeMenuPasteId;
 
@@ -95,6 +116,10 @@ void releaseGlobalVar()
     g_DNS.clear();
 }
 
+=======
+DWORD g_contextMenuItemMask = kWkeMenuSelectedAllId | kWkeMenuSelectedTextId | kWkeMenuUndoId | kWkeMenuCopyImageId | kWkeMenuInspectElementAtId |
+    kWkeMenuCutId | kWkeMenuPasteId;
+>>>>>>> miniblink49
 }
 
 WKE_FILE_OPEN g_pfnOpen;

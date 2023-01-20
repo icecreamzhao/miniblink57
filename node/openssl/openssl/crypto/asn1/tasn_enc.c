@@ -1,69 +1,68 @@
-/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
- * All rights reserved.
- *
- * This package is an SSL implementation written
- * by Eric Young (eay@cryptsoft.com).
- * The implementation was written so as to conform with Netscapes SSL.
- *
- * This library is free for commercial and non-commercial use as long as
- * the following conditions are aheared to.  The following conditions
- * apply to all code found in this distribution, be it the RC4, RSA,
- * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
- * included with this distribution is covered by the same copyright terms
- * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- *
- * Copyright remains Eric Young's, and as such any Copyright notices in
- * the code are not to be removed.
- * If this package is used in a product, Eric Young should be given attribution
- * as the author of the parts of the library used.
- * This can be in the form of a textual message at program startup or
- * in documentation (online or textual) provided with the package.
+/* tasn_enc.c */
+/*
+ * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
+ * 2000.
+ */
+/* ====================================================================
+ * Copyright (c) 2000-2004 The OpenSSL Project.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 1. Redistributions of source code must retain the copyright
+ *
+ * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
+ *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *    "This product includes cryptographic software written by
- *     Eric Young (eay@cryptsoft.com)"
- *    The word 'cryptographic' can be left out if the rouines from the library
- *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from
- *    the apps directory (application code) you must include an acknowledgement:
- *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
+ * 3. All advertising materials mentioning features or use of this
+ *    software must display the following acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit. (http://www.OpenSSL.org/)"
  *
- * The licence and distribution terms for any publically available version or
- * derivative of this code cannot be changed.  i.e. this code cannot simply be
- * copied and put under another distribution licence
- * [including the GNU Public Licence.] */
+ * 4. The names "OpenSSL Toolkit" and "OpenSSL Project" must not be used to
+ *    endorse or promote products derived from this software without
+ *    prior written permission. For written permission, please contact
+ *    licensing@OpenSSL.org.
+ *
+ * 5. Products derived from this software may not be called "OpenSSL"
+ *    nor may "OpenSSL" appear in their names without prior written
+ *    permission of the OpenSSL Project.
+ *
+ * 6. Redistributions of any form whatsoever must retain the following
+ *    acknowledgment:
+ *    "This product includes software developed by the OpenSSL Project
+ *    for use in the OpenSSL Toolkit (http://www.OpenSSL.org/)"
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE OpenSSL PROJECT ``AS IS'' AND ANY
+ * EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OpenSSL PROJECT OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This product includes cryptographic software written by Eric Young
+ * (eay@cryptsoft.com).  This product includes software written by Tim
+ * Hudson (tjh@cryptsoft.com).
+ *
+ */
 
-#include <openssl/asn1.h>
-
-#include <limits.h>
+#include <stddef.h>
 #include <string.h>
-
+#include "cryptlib.h"
+#include <openssl/asn1.h>
 #include <openssl/asn1t.h>
-#include <openssl/mem.h>
-
-#include "../internal.h"
-
+#include <openssl/objects.h>
 
 static int asn1_i2d_ex_primitive(ASN1_VALUE **pval, unsigned char **out,
                                  const ASN1_ITEM *it, int tag, int aclass);
@@ -217,19 +216,17 @@ int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
         for (i = 0, tt = it->templates; i < it->tcount; tt++, i++) {
             const ASN1_TEMPLATE *seqtt;
             ASN1_VALUE **pseqval;
-            int tmplen;
             seqtt = asn1_do_adb(pval, tt, 1);
             if (!seqtt)
                 return 0;
             pseqval = asn1_get_field_ptr(pval, seqtt);
-            tmplen = asn1_template_ex_i2d(pseqval, NULL, seqtt, -1, aclass);
-            if (tmplen == -1 || (tmplen > INT_MAX - seqcontlen))
-                return -1;
-            seqcontlen += tmplen;
+            /* FIXME: check for errors in enhanced version */
+            seqcontlen += asn1_template_ex_i2d(pseqval, NULL, seqtt,
+                                               -1, aclass);
         }
 
         seqlen = ASN1_object_size(ndef, seqcontlen, tag);
-        if (!out || seqlen == -1)
+        if (!out)
             return seqlen;
         /* Output SEQUENCE header */
         ASN1_put_object(out, ndef, seqcontlen, tag, aclass);
@@ -256,11 +253,16 @@ int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
     return 0;
 }
 
+int ASN1_template_i2d(ASN1_VALUE **pval, unsigned char **out,
+                      const ASN1_TEMPLATE *tt)
+{
+    return asn1_template_ex_i2d(pval, out, tt, -1, 0);
+}
+
 static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
                                 const ASN1_TEMPLATE *tt, int tag, int iclass)
 {
     int i, ret, flags, ttag, tclass, ndef;
-    size_t j;
     flags = tt->flags;
     /*
      * Work out tag and class to use: tagging may come either from the
@@ -336,25 +338,20 @@ static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
 
         /* Determine total length of items */
         skcontlen = 0;
-        for (j = 0; j < sk_ASN1_VALUE_num(sk); j++) {
-            int tmplen;
-            skitem = sk_ASN1_VALUE_value(sk, j);
-            tmplen = ASN1_item_ex_i2d(&skitem, NULL, ASN1_ITEM_ptr(tt->item),
-                                      -1, iclass);
-            if (tmplen == -1 || (skcontlen > INT_MAX - tmplen))
-                return -1;
-            skcontlen += tmplen;
+        for (i = 0; i < sk_ASN1_VALUE_num(sk); i++) {
+            skitem = sk_ASN1_VALUE_value(sk, i);
+            skcontlen += ASN1_item_ex_i2d(&skitem, NULL,
+                                          ASN1_ITEM_ptr(tt->item),
+                                          -1, iclass);
         }
         sklen = ASN1_object_size(ndef, skcontlen, sktag);
-        if (sklen == -1)
-            return -1;
         /* If EXPLICIT need length of surrounding tag */
         if (flags & ASN1_TFLG_EXPTAG)
             ret = ASN1_object_size(ndef, sklen, ttag);
         else
             ret = sklen;
 
-        if (!out || ret == -1)
+        if (!out)
             return ret;
 
         /* Now encode this lot... */
@@ -383,7 +380,7 @@ static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
             return 0;
         /* Find length of EXPLICIT tag */
         ret = ASN1_object_size(ndef, i, ttag);
-        if (out && ret != -1) {
+        if (out) {
             /* Output tag and item */
             ASN1_put_object(out, ndef, i, ttag, tclass);
             ASN1_item_ex_i2d(pval, out, ASN1_ITEM_ptr(tt->item), -1, iclass);
@@ -407,12 +404,12 @@ typedef struct {
     ASN1_VALUE *field;
 } DER_ENC;
 
-static int __cdecl der_cmp(const void *a, const void *b)
+static int der_cmp(const void *a, const void *b)
 {
     const DER_ENC *d1 = a, *d2 = b;
     int cmplen, i;
     cmplen = (d1->length < d2->length) ? d1->length : d2->length;
-    i = OPENSSL_memcmp(d1->data, d2->data, cmplen);
+    i = memcmp(d1->data, d2->data, cmplen);
     if (i)
         return i;
     return d1->length - d2->length;
@@ -424,7 +421,7 @@ static int asn1_set_seq_out(STACK_OF(ASN1_VALUE) *sk, unsigned char **out,
                             int skcontlen, const ASN1_ITEM *item,
                             int do_sort, int iclass)
 {
-    size_t i;
+    int i;
     ASN1_VALUE *skitem;
     unsigned char *tmpdat = NULL, *p = NULL;
     DER_ENC *derlst = NULL, *tder;
@@ -467,7 +464,7 @@ static int asn1_set_seq_out(STACK_OF(ASN1_VALUE) *sk, unsigned char **out,
     /* Output sorted DER encoding */
     p = *out;
     for (i = 0, tder = derlst; i < sk_ASN1_VALUE_num(sk); i++, tder++) {
-        OPENSSL_memcpy(p, tder->data, tder->length);
+        memcpy(p, tder->data, tder->length);
         p += tder->length;
     }
     *out = p;
@@ -583,8 +580,6 @@ int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cout, int *putype,
         otmp = (ASN1_OBJECT *)*pval;
         cont = otmp->data;
         len = otmp->length;
-        if (cont == NULL || len == 0)
-            return -1;
         break;
 
     case V_ASN1_NULL:
@@ -659,6 +654,6 @@ int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cout, int *putype,
 
     }
     if (cout && len)
-        OPENSSL_memcpy(cout, cont, len);
+        memcpy(cout, cont, len);
     return len;
 }

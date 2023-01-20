@@ -10,6 +10,7 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
     class LazyBuiltinsAssembler : public CodeStubAssembler {
     public:
         typedef JSTrampolineDescriptor Descriptor;
@@ -37,3 +38,30 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_BUILTINS_BUILTINS_LAZY_GEN_H_
+=======
+class LazyBuiltinsAssembler : public CodeStubAssembler {
+ public:
+  typedef JSTrampolineDescriptor Descriptor;
+
+  explicit LazyBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : CodeStubAssembler(state) {}
+
+  void GenerateTailCallToJSCode(TNode<Code> code, TNode<JSFunction> function);
+
+  void GenerateTailCallToReturnedCode(Runtime::FunctionId function_id,
+                                      TNode<JSFunction> function);
+  void TailCallRuntimeIfMarkerEquals(TNode<Smi> marker,
+                                     OptimizationMarker expected_marker,
+                                     Runtime::FunctionId function_id,
+                                     TNode<JSFunction> function);
+
+  void MaybeTailCallOptimizedCodeSlot(TNode<JSFunction> function,
+                                      TNode<FeedbackVector> feedback_vector);
+  void CompileLazy(TNode<JSFunction> function);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_BUILTINS_BUILTINS_LAZY_GEN_H_
+>>>>>>> miniblink49

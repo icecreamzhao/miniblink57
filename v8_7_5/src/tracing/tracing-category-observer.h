@@ -10,6 +10,7 @@
 namespace v8 {
 namespace tracing {
 
+<<<<<<< HEAD
     class TracingCategoryObserver : public TracingController::TraceStateObserver {
     public:
         enum Mode {
@@ -33,3 +34,28 @@ namespace tracing {
 } // namespace v8
 
 #endif // V8_TRACING_TRACING_CATEGORY_OBSERVER_H_
+=======
+class TracingCategoryObserver : public TracingController::TraceStateObserver {
+ public:
+  enum Mode {
+    ENABLED_BY_NATIVE = 1 << 0,
+    ENABLED_BY_TRACING = 1 << 1,
+    ENABLED_BY_SAMPLING = 1 << 2,
+  };
+
+  static void SetUp();
+  static void TearDown();
+
+  // v8::TracingController::TraceStateObserver
+  void OnTraceEnabled() final;
+  void OnTraceDisabled() final;
+
+ private:
+  static TracingCategoryObserver* instance_;
+};
+
+}  // namespace tracing
+}  // namespace v8
+
+#endif  // V8_TRACING_TRACING_CATEGORY_OBSERVER_H_
+>>>>>>> miniblink49

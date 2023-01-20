@@ -1,8 +1,7 @@
 /*
  *  Copyright (C) 2000 Harri Porten (porten@kde.org)
  *  Copyright (C) 2006 Jon Shier (jshier@iastate.edu)
- *  Copyright (C) 2003, 2004, 2005, 2006, 2007, 2010 Apple Inc. All rights
- * reseved.
+ *  Copyright (C) 2003, 2004, 2005, 2006, 2007, 2010 Apple Inc. All rights reseved.
  *  Copyright (C) 2006 Alexey Proskuryakov (ap@webkit.org)
  *
  *  This library is free software; you can redistribute it and/or
@@ -21,6 +20,7 @@
  *  USA
  */
 
+#include "config.h"
 #include "core/page/WindowFeatures.h"
 
 #include "platform/geometry/IntRect.h"
@@ -30,8 +30,7 @@
 
 namespace blink {
 
-// Though isspace() considers \t and \v to be whitespace, Win IE doesn't when
-// parsing window features.
+// Though isspace() considers \t and \v to be whitespace, Win IE doesn't when parsing window features.
 static bool isWindowFeaturesSeparator(UChar c)
 {
     return c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '=' || c == ',' || c == '\0';
@@ -49,12 +48,11 @@ WindowFeatures::WindowFeatures(const String& features)
     , resizable(true)
     , fullscreen(false)
     , dialog(false)
-    , noopener(false)
 {
     /*
-     The IE rule is: all features except for channelmode and fullscreen default
-     to YES, but if the user specifies a feature string, all features default to
-     NO. (There is no public standard that applies to this method.)
+     The IE rule is: all features except for channelmode and fullscreen default to YES, but
+     if the user specifies a feature string, all features default to NO. (There is no public
+     standard that applies to this method.)
 
      <http://msdn.microsoft.com/workshop/author/dhtml/reference/methods/open_0.asp>
      We always allow a window to be resized, which is consistent with Firefox.
@@ -75,14 +73,13 @@ WindowFeatures::WindowFeatures(const String& features)
     locationBarVisible = false;
     scrollbarsVisible = false;
 
-    // Tread lightly in this code -- it was specifically designed to mimic Win
-    // IE's parsing behavior.
+    // Tread lightly in this code -- it was specifically designed to mimic Win IE's parsing behavior.
     unsigned keyBegin, keyEnd;
     unsigned valueBegin, valueEnd;
 
     String buffer = features.lower();
     unsigned length = buffer.length();
-    for (unsigned i = 0; i < length;) {
+    for (unsigned i = 0; i < length; ) {
         // skip to first non-separator, but don't skip past the end of the string
         while (i < length && isWindowFeaturesSeparator(buffer[i]))
             i++;
@@ -93,7 +90,7 @@ WindowFeatures::WindowFeatures(const String& features)
             i++;
         keyEnd = i;
 
-        SECURITY_DCHECK(i <= length);
+        ASSERT_WITH_SECURITY_IMPLICATION(i <= length);
 
         // skip to first '=', but don't skip past a ',' or the end of the string
         while (i < length && buffer[i] != '=') {
@@ -102,10 +99,9 @@ WindowFeatures::WindowFeatures(const String& features)
             i++;
         }
 
-        SECURITY_DCHECK(i <= length);
+        ASSERT_WITH_SECURITY_IMPLICATION(i <= length);
 
-        // Skip to first non-separator, but don't skip past a ',' or the end of the
-        // string.
+        // skip to first non-separator, but don't skip past a ',' or the end of the string
         while (i < length && isWindowFeaturesSeparator(buffer[i])) {
             if (buffer[i] == ',')
                 break;
@@ -113,24 +109,22 @@ WindowFeatures::WindowFeatures(const String& features)
         }
         valueBegin = i;
 
-        SECURITY_DCHECK(i <= length);
+        ASSERT_WITH_SECURITY_IMPLICATION(i <= length);
 
         // skip to first separator
         while (i < length && !isWindowFeaturesSeparator(buffer[i]))
             i++;
         valueEnd = i;
 
-        SECURITY_DCHECK(i <= length);
+        ASSERT_WITH_SECURITY_IMPLICATION(i <= length);
 
         String keyString(buffer.substring(keyBegin, keyEnd - keyBegin));
         String valueString(buffer.substring(valueBegin, valueEnd - valueBegin));
-
         setWindowFeature(keyString, valueString);
     }
 }
 
-void WindowFeatures::setWindowFeature(const String& keyString,
-    const String& valueString)
+void WindowFeatures::setWindowFeature(const String& keyString, const String& valueString)
 {
     int value;
 
@@ -140,9 +134,8 @@ void WindowFeatures::setWindowFeature(const String& keyString,
     else
         value = valueString.toInt();
 
-    // We treat keyString of "resizable" here as an additional feature rather than
-    // setting resizeable to true.  This is consistent with Firefox, but could
-    // also be handled at another level.
+    // We treat keyString of "resizable" here as an additional feature rather than setting resizeable to true.
+    // This is consistent with Firefox, but could also be handled at another level.
 
     if (keyString == "left" || keyString == "screenx") {
         xSet = true;
@@ -156,27 +149,23 @@ void WindowFeatures::setWindowFeature(const String& keyString,
     } else if (keyString == "height" || keyString == "innerheight") {
         heightSet = true;
         height = value;
-    } else if (keyString == "menubar") {
+    } else if (keyString == "menubar")
         menuBarVisible = value;
-    } else if (keyString == "toolbar") {
+    else if (keyString == "toolbar")
         toolBarVisible = value;
-    } else if (keyString == "location") {
+    else if (keyString == "location")
         locationBarVisible = value;
-    } else if (keyString == "status") {
+    else if (keyString == "status")
         statusBarVisible = value;
-    } else if (keyString == "fullscreen") {
+    else if (keyString == "fullscreen")
         fullscreen = value;
-    } else if (keyString == "scrollbars") {
+    else if (keyString == "scrollbars")
         scrollbarsVisible = value;
-    } else if (keyString == "noopener") {
-        noopener = true;
-    } else if (value == 1) {
-        additionalFeatures.push_back(keyString);
-    }
+    else if (value == 1)
+        additionalFeatures.append(keyString);
 }
 
-WindowFeatures::WindowFeatures(const String& dialogFeaturesString,
-    const IntRect& screenAvailableRect)
+WindowFeatures::WindowFeatures(const String& dialogFeaturesString, const IntRect& screenAvailableRect)
     : widthSet(true)
     , heightSet(true)
     , menuBarVisible(false)
@@ -184,7 +173,6 @@ WindowFeatures::WindowFeatures(const String& dialogFeaturesString,
     , locationBarVisible(false)
     , fullscreen(false)
     , dialog(true)
-    , noopener(false)
 {
     DialogFeaturesMap features;
     parseDialogFeatures(dialogFeaturesString, features);
@@ -195,24 +183,16 @@ WindowFeatures::WindowFeatures(const String& dialogFeaturesString,
     // - default font settings
     // - width, height, left, and top specified in units other than "px"
     // - edge (sunken or raised, default is raised)
-    // - dialogHide: trusted && boolFeature(features, "dialoghide"), makes dialog
-    //               hide when you print
-    // - help: boolFeature(features, "help", true), makes help icon appear in
-    //         dialog (what does it do on Windows?)
+    // - dialogHide: trusted && boolFeature(features, "dialoghide"), makes dialog hide when you print
+    // - help: boolFeature(features, "help", true), makes help icon appear in dialog (what does it do on Windows?)
     // - unadorned: trusted && boolFeature(features, "unadorned");
 
-    // default here came from frame size of dialog in MacIE
-    width = intFeature(features, "dialogwidth", 100, screenAvailableRect.width(),
-        620);
-    // default here came from frame size of dialog in MacIE
-    height = intFeature(features, "dialogheight", 100,
-        screenAvailableRect.height(), 450);
+    width = intFeature(features, "dialogwidth", 100, screenAvailableRect.width(), 620); // default here came from frame size of dialog in MacIE
+    height = intFeature(features, "dialogheight", 100, screenAvailableRect.height(), 450); // default here came from frame size of dialog in MacIE
 
-    x = intFeature(features, "dialogleft", screenAvailableRect.x(),
-        screenAvailableRect.maxX() - width, -1);
+    x = intFeature(features, "dialogleft", screenAvailableRect.x(), screenAvailableRect.maxX() - width, -1);
     xSet = x > 0;
-    y = intFeature(features, "dialogtop", screenAvailableRect.y(),
-        screenAvailableRect.maxY() - height, -1);
+    y = intFeature(features, "dialogtop", screenAvailableRect.y(), screenAvailableRect.maxY() - height, -1);
     ySet = y > 0;
 
     if (boolFeature(features, "center", true)) {
@@ -231,9 +211,7 @@ WindowFeatures::WindowFeatures(const String& dialogFeaturesString,
     statusBarVisible = boolFeature(features, "status", !trusted);
 }
 
-bool WindowFeatures::boolFeature(const DialogFeaturesMap& features,
-    const char* key,
-    bool defaultValue)
+bool WindowFeatures::boolFeature(const DialogFeaturesMap& features, const char* key, bool defaultValue)
 {
     DialogFeaturesMap::const_iterator it = features.find(key);
     if (it == features.end())
@@ -242,11 +220,7 @@ bool WindowFeatures::boolFeature(const DialogFeaturesMap& features,
     return value.isNull() || value == "1" || value == "yes" || value == "on";
 }
 
-int WindowFeatures::intFeature(const DialogFeaturesMap& features,
-    const char* key,
-    int min,
-    int max,
-    int defaultValue)
+int WindowFeatures::intFeature(const DialogFeaturesMap& features, const char* key, int min, int max, int defaultValue)
 {
     DialogFeaturesMap::const_iterator it = features.find(key);
     if (it == features.end())
@@ -262,8 +236,7 @@ int WindowFeatures::intFeature(const DialogFeaturesMap& features,
     return parsedNumber;
 }
 
-void WindowFeatures::parseDialogFeatures(const String& string,
-    DialogFeaturesMap& map)
+void WindowFeatures::parseDialogFeatures(const String& string, DialogFeaturesMap& map)
 {
     Vector<String> vector;
     string.split(';', vector);
@@ -283,9 +256,7 @@ void WindowFeatures::parseDialogFeatures(const String& string,
         // Null string for value indicates key without value.
         String value;
         if (separatorPosition != kNotFound) {
-            value = featureString.substring(separatorPosition + 1)
-                        .stripWhiteSpace()
-                        .lower();
+            value = featureString.substring(separatorPosition + 1).stripWhiteSpace().lower();
             value = value.left(value.find(' '));
         }
 

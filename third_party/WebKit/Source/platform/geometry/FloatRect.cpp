@@ -24,6 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/geometry/FloatRect.h"
 
 #include "platform/geometry/IntRect.h"
@@ -50,6 +51,28 @@ FloatRect::FloatRect(const LayoutRect& r)
 FloatRect::FloatRect(const SkRect& r)
     : m_location(r.fLeft, r.fTop)
     , m_size(r.width(), r.height())
+=======
+#include "config.h"
+#include "platform/geometry/FloatRect.h"
+
+#include "platform/FloatConversion.h"
+#include "platform/geometry/IntRect.h"
+#include "platform/geometry/LayoutRect.h"
+#include "third_party/skia/include/core/SkRect.h"
+#include "wtf/MathExtras.h"
+
+namespace blink {
+
+FloatRect::FloatRect(const IntRect& r) : m_location(r.location()), m_size(r.size())
+{
+}
+
+FloatRect::FloatRect(const LayoutRect& r) : m_location(r.location()), m_size(r.size())
+{
+}
+
+FloatRect::FloatRect(const SkRect& r) : m_location(r.fLeft, r.fTop), m_size(r.width(), r.height())
+>>>>>>> miniblink49
 {
 }
 
@@ -63,6 +86,7 @@ void FloatRect::move(const IntSize& delta)
     m_location.move(delta.width(), delta.height());
 }
 
+<<<<<<< HEAD
 FloatRect FloatRect::narrowPrecision(double x,
     double y,
     double width,
@@ -83,21 +107,47 @@ bool FloatRect::mayNotHaveExactIntRectRepresentation() const
 bool FloatRect::isExpressibleAsIntRect() const
 {
     return isWithinIntRange(x()) && isWithinIntRange(y()) && isWithinIntRange(width()) && isWithinIntRange(height()) && isWithinIntRange(maxX()) && isWithinIntRange(maxY());
+=======
+FloatRect FloatRect::narrowPrecision(double x, double y, double width, double height)
+{
+    return FloatRect(narrowPrecisionToFloat(x), narrowPrecisionToFloat(y), narrowPrecisionToFloat(width), narrowPrecisionToFloat(height));
+}
+
+bool FloatRect::isExpressibleAsIntRect() const
+{
+    return isWithinIntRange(x()) && isWithinIntRange(y())
+        && isWithinIntRange(width()) && isWithinIntRange(height())
+        && isWithinIntRange(maxX()) && isWithinIntRange(maxY());
+>>>>>>> miniblink49
 }
 
 bool FloatRect::intersects(const FloatRect& other) const
 {
     // Checking emptiness handles negative widths as well as zero.
+<<<<<<< HEAD
     return !isEmpty() && !other.isEmpty() && x() < other.maxX() && other.x() < maxX() && y() < other.maxY() && other.y() < maxY();
+=======
+    return !isEmpty() && !other.isEmpty()
+        && x() < other.maxX() && other.x() < maxX()
+        && y() < other.maxY() && other.y() < maxY();
+>>>>>>> miniblink49
 }
 
 bool FloatRect::contains(const FloatRect& other) const
 {
+<<<<<<< HEAD
     return x() <= other.x() && maxX() >= other.maxX() && y() <= other.y() && maxY() >= other.maxY();
 }
 
 bool FloatRect::contains(const FloatPoint& point,
     ContainsMode containsMode) const
+=======
+    return x() <= other.x() && maxX() >= other.maxX()
+        && y() <= other.y() && maxY() >= other.maxY();
+}
+
+bool FloatRect::contains(const FloatPoint& point, ContainsMode containsMode) const
+>>>>>>> miniblink49
 {
     if (containsMode == InsideOrOnStroke)
         return contains(point.x(), point.y());
@@ -176,6 +226,7 @@ void FloatRect::scale(float sx, float sy)
     m_size.setHeight(height() * sy);
 }
 
+<<<<<<< HEAD
 float FloatRect::squaredDistanceTo(const FloatPoint& point) const
 {
     FloatPoint closestPoint;
@@ -189,6 +240,8 @@ FloatRect::operator gfx::RectF() const
     return gfx::RectF(x(), y(), width(), height());
 }
 
+=======
+>>>>>>> miniblink49
 FloatRect unionRect(const Vector<FloatRect>& rects)
 {
     FloatRect result;
@@ -200,6 +253,24 @@ FloatRect unionRect(const Vector<FloatRect>& rects)
     return result;
 }
 
+<<<<<<< HEAD
+=======
+#ifndef NDEBUG
+void FloatRect::show() const
+{
+    LayoutRect(*this).show();
+}
+#endif
+
+IntRect enclosingIntRect(const FloatRect& rect)
+{
+    IntPoint location = flooredIntPoint(rect.minXMinYCorner());
+    IntPoint maxPoint = ceiledIntPoint(rect.maxXMaxYCorner());
+
+    return IntRect(location, maxPoint - location);
+}
+
+>>>>>>> miniblink49
 IntRect enclosedIntRect(const FloatRect& rect)
 {
     IntPoint location = ceiledIntPoint(rect.minXMinYCorner());
@@ -215,9 +286,13 @@ IntRect roundedIntRect(const FloatRect& rect)
     return IntRect(roundedIntPoint(rect.location()), roundedIntSize(rect.size()));
 }
 
+<<<<<<< HEAD
 FloatRect mapRect(const FloatRect& r,
     const FloatRect& srcRect,
     const FloatRect& destRect)
+=======
+FloatRect mapRect(const FloatRect& r, const FloatRect& srcRect, const FloatRect& destRect)
+>>>>>>> miniblink49
 {
     if (!srcRect.width() || !srcRect.height())
         return FloatRect();
@@ -229,6 +304,7 @@ FloatRect mapRect(const FloatRect& r,
         r.width() * widthScale, r.height() * heightScale);
 }
 
+<<<<<<< HEAD
 String FloatRect::toString() const
 {
     return String::format("%s %s", location().toString().ascii().data(),
@@ -236,3 +312,6 @@ String FloatRect::toString() const
 }
 
 } // namespace blink
+=======
+}
+>>>>>>> miniblink49

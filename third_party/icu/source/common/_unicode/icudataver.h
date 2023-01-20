@@ -7,6 +7,10 @@
 ******************************************************************************
 */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /**
  * \file
  * \brief C API: access to ICU Data Version number
@@ -35,6 +39,10 @@
  * 
  * @stable ICU 49
  */
+<<<<<<< HEAD
 U_STABLE void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode* status);
+=======
+U_STABLE void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status);
+>>>>>>> miniblink49
 
 #endif

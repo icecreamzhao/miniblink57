@@ -24,11 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://drafts.fxtf.org/css-masking-1/#InterfaceSVGClipPathElement
+// http://www.w3.org/TR/css-masking/#InterfaceSVGClipPathElement
 
-// TODO(foolip): SVGClipPathElement should inherit from SVGElement and
+// TODO(philipj): SVGClipPathElement should inherit from SVGElement and
 // implement SVGUnitTypes. The transform attribute (which is on
 // SVGGraphicsElement) should also be on SVGClipPathElement.
 interface SVGClipPathElement : SVGGraphicsElement {
-    [Measure] readonly attribute SVGAnimatedEnumeration clipPathUnits;
+    [RuntimeEnabled=SVG1DOM, MeasureAs=SVG1DOM] readonly attribute SVGAnimatedEnumeration clipPathUnits;
 };

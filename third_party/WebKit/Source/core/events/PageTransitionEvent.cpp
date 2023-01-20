@@ -23,6 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/events/PageTransitionEvent.h"
 
 namespace blink {
@@ -32,16 +33,13 @@ PageTransitionEvent::PageTransitionEvent()
 {
 }
 
-PageTransitionEvent::PageTransitionEvent(const AtomicString& type,
-    bool persisted)
+PageTransitionEvent::PageTransitionEvent(const AtomicString& type, bool persisted)
     : Event(type, true, true)
     , m_persisted(persisted)
 {
 }
 
-PageTransitionEvent::PageTransitionEvent(
-    const AtomicString& type,
-    const PageTransitionEventInit& initializer)
+PageTransitionEvent::PageTransitionEvent(const AtomicString& type, const PageTransitionEventInit& initializer)
     : Event(type, initializer)
     , m_persisted(false)
 {
@@ -49,7 +47,9 @@ PageTransitionEvent::PageTransitionEvent(
         m_persisted = initializer.persisted();
 }
 
-PageTransitionEvent::~PageTransitionEvent() { }
+PageTransitionEvent::~PageTransitionEvent()
+{
+}
 
 const AtomicString& PageTransitionEvent::interfaceName() const
 {

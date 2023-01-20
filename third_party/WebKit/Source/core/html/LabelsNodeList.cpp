@@ -21,27 +21,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/LabelsNodeList.h"
 
 #include "core/HTMLNames.h"
 #include "core/dom/Element.h"
 #include "core/dom/NodeRareData.h"
 #include "core/html/HTMLLabelElement.h"
-#include "core/html/LabelableElement.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
 LabelsNodeList::LabelsNodeList(ContainerNode& ownerNode)
-    : LiveNodeList(ownerNode,
-        LabelsNodeListType,
-        InvalidateOnForAttrChange,
-        NodeListRootType::TreeScope)
+    : LiveNodeList(ownerNode, LabelsNodeListType, InvalidateOnForAttrChange, NodeListIsRootedAtDocument)
 {
 }
 
-LabelsNodeList::~LabelsNodeList() { }
+LabelsNodeList::~LabelsNodeList()
+{
+#if !ENABLE(OILPAN)
+    ownerNode().nodeLists()->removeCache(this, LabelsNodeListType);
+#endif
+}
 
 bool LabelsNodeList::elementMatches(const Element& element) const
 {

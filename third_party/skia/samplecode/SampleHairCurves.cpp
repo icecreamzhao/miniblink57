@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
+<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkRandom.h"
@@ -14,12 +19,26 @@ class HairCurvesView : public SampleView {
 public:
     HairCurvesView()
     {
+=======
+#include "SkView.h"
+#include "SkCanvas.h"
+#include "SkPath.h"
+#include "SkRandom.h"
+
+class HairCurvesView : public SampleView {
+public:
+    HairCurvesView() {
+>>>>>>> miniblink49
     }
 
 protected:
     // overrides from SkEventSink
+<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
+=======
+    virtual bool onQuery(SkEvent* evt) {
+>>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "HairCurves");
             return true;
@@ -27,8 +46,13 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
+<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
+=======
+
+    virtual void onDrawContent(SkCanvas* canvas) {
+>>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);
@@ -49,8 +73,13 @@ protected:
             };
             curves.moveTo(pts[0], pts[1]);
             curves.cubicTo(pts[2], pts[3],
+<<<<<<< HEAD
                 pts[4], pts[5],
                 pts[6], pts[7]);
+=======
+                         pts[4], pts[5],
+                         pts[6], pts[7]);
+>>>>>>> miniblink49
 
             hulls.moveTo(pts[0], pts[1]);
             hulls.lineTo(pts[2], pts[3]);
@@ -64,6 +93,7 @@ protected:
         }
         for (int i = 0; i < 100; ++i) {
             SkScalar pts[] = {
+<<<<<<< HEAD
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
@@ -74,6 +104,15 @@ protected:
             curves.moveTo(pts[0], pts[1]);
             curves.quadTo(pts[2], pts[3],
                 pts[4], pts[5]);
+=======
+                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(), rand.nextUScalar1(),
+            };
+            curves.moveTo(pts[0], pts[1]);
+            curves.quadTo(pts[2], pts[3],
+                          pts[4], pts[5]);
+>>>>>>> miniblink49
 
             hulls.moveTo(pts[0], pts[1]);
             hulls.lineTo(pts[2], pts[3]);
@@ -85,19 +124,30 @@ protected:
         }
         for (int i = 0; i < 100; ++i) {
             SkScalar pts[] = {
+<<<<<<< HEAD
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
+=======
+                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(), rand.nextUScalar1(),
+>>>>>>> miniblink49
             };
             SkScalar weight = randW.nextUScalar1() * 2.0f;
 
             curves.moveTo(pts[0], pts[1]);
             curves.conicTo(pts[2], pts[3],
+<<<<<<< HEAD
                 pts[4], pts[5],
                 weight);
+=======
+                          pts[4], pts[5],
+                          weight);
+>>>>>>> miniblink49
 
             hulls.moveTo(pts[0], pts[1]);
             hulls.lineTo(pts[2], pts[3]);
@@ -109,10 +159,15 @@ protected:
         }
         for (int i = 0; i < 100; ++i) {
             SkScalar pts[] = {
+<<<<<<< HEAD
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
                 rand.nextUScalar1(),
+=======
+                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(), rand.nextUScalar1(),
+>>>>>>> miniblink49
             };
             curves.moveTo(pts[0], pts[1]);
             curves.lineTo(pts[2], pts[3]);

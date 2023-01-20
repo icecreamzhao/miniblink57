@@ -23,6 +23,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/UserGestureIndicator.h"
 
 #include "platform/Histogram.h"
@@ -31,12 +32,26 @@
 
 namespace blink {
 
+=======
+#include "config.h"
+#include "platform/UserGestureIndicator.h"
+
+#include "wtf/Assertions.h"
+#include "wtf/CurrentTime.h"
+#include "wtf/MainThread.h"
+
+namespace blink {
+
+namespace {
+
+>>>>>>> miniblink49
 // User gestures timeout in 1 second.
 const double userGestureTimeout = 1.0;
 
 // For out of process tokens we allow a 10 second delay.
 const double userGestureOutOfProcessTimeout = 10.0;
 
+<<<<<<< HEAD
 UserGestureToken::UserGestureToken(Status status)
     : m_consumableGestures(0)
     , m_timestamp(WTF::currentTime())
@@ -143,10 +158,142 @@ UserGestureIndicator::UserGestureIndicator(PassRefPtr<UserGestureToken> token)
         m_token->transferGestureTo(s_rootToken);
     }
     m_token->resetTimestamp();
+=======
+class GestureToken : public UserGestureToken {
+public:
+    static PassRefPtr<UserGestureToken> create() { return adoptRef(new GestureToken); }
+
+    ~GestureToken() override {}
+    bool hasGestures() const override
+    {
+        // Do not enforce timeouts for gestures which spawned javascript prompts.
+        if (m_consumableGestures < 1 || (WTF::currentTime() - m_timestamp > (m_outOfProcess ? userGestureOutOfProcessTimeout : userGestureTimeout) && !m_javascriptPrompt))
+            return false;
+        return true;
+    }
+
+    void addGesture()
+    {
+        m_consumableGestures++;
+        m_timestamp = WTF::currentTime();
+    }
+
+    void resetTimestamp()
+    {
+        m_timestamp = WTF::currentTime();
+    }
+
+    bool consumeGesture()
+    {
+        if (!m_consumableGestures)
+            return false;
+        m_consumableGestures--;
+        return true;
+    }
+
+    void setOutOfProcess() override
+    {
+        if (WTF::currentTime() - m_timestamp > userGestureTimeout)
+            return;
+        if (hasGestures())
+            m_outOfProcess = true;
+    }
+
+    void setJavascriptPrompt() override
+    {
+        if (WTF::currentTime() - m_timestamp > userGestureTimeout)
+            return;
+        if (hasGestures())
+            m_javascriptPrompt = true;
+    }
+
+private:
+    GestureToken()
+        : m_consumableGestures(0)
+        , m_timestamp(0)
+        , m_outOfProcess(false)
+        , m_javascriptPrompt(false)
+    {
+    }
+
+    size_t m_consumableGestures;
+    double m_timestamp;
+    bool m_outOfProcess;
+    bool m_javascriptPrompt;
+};
+
+}
+
+static bool isDefinite(ProcessingUserGestureState state)
+{
+    return state == DefinitelyProcessingNewUserGesture || state == DefinitelyProcessingUserGesture || state == DefinitelyNotProcessingUserGesture;
+}
+
+ProcessingUserGestureState UserGestureIndicator::s_state = DefinitelyNotProcessingUserGesture;
+UserGestureIndicator* UserGestureIndicator::s_topmostIndicator = 0;
+bool UserGestureIndicator::s_processedUserGestureSinceLoad = false;
+
+UserGestureIndicator::UserGestureIndicator(ProcessingUserGestureState state)
+    : m_previousState(DefinitelyNotProcessingUserGesture)
+{
+    // Silently ignore UserGestureIndicators on non-main threads.
+    if (!isMainThread())
+        return;
+
+    m_previousState = s_state;
+
+    // We overwrite s_state only if the caller is definite about the gesture state.
+    if (isDefinite(state)) {
+        if (!s_topmostIndicator) {
+            s_topmostIndicator = this;
+            m_token = GestureToken::create();
+        } else {
+            m_token = s_topmostIndicator->currentToken();
+        }
+        s_state = state;
+    }
+
+    if (state == DefinitelyProcessingNewUserGesture) {
+        static_cast<GestureToken*>(m_token.get())->addGesture();
+        s_processedUserGestureSinceLoad = true;
+    } else if (state == DefinitelyProcessingUserGesture && s_topmostIndicator == this) {
+        static_cast<GestureToken*>(m_token.get())->addGesture();
+        s_processedUserGestureSinceLoad = true;
+    }
+    ASSERT(isDefinite(s_state));
+}
+
+UserGestureIndicator::UserGestureIndicator(PassRefPtr<UserGestureToken> token)
+    : m_previousState(DefinitelyNotProcessingUserGesture)
+{
+    // Silently ignore UserGestureIndicators on non-main threads.
+    if (!isMainThread())
+        return;
+
+    m_previousState = s_state;
+
+    if (token) {
+        static_cast<GestureToken*>(token.get())->resetTimestamp();
+        if (!s_topmostIndicator) {
+            s_topmostIndicator = this;
+            m_token = token;
+        } else {
+            m_token = s_topmostIndicator->currentToken();
+            if (static_cast<GestureToken*>(token.get())->hasGestures()) {
+                static_cast<GestureToken*>(m_token.get())->addGesture();
+                static_cast<GestureToken*>(token.get())->consumeGesture();
+            }
+        }
+        s_state = DefinitelyProcessingUserGesture;
+    }
+
+    ASSERT(isDefinite(s_state));
+>>>>>>> miniblink49
 }
 
 UserGestureIndicator::~UserGestureIndicator()
 {
+<<<<<<< HEAD
     if (isMainThread() && m_token && m_token == s_rootToken) {
         s_rootToken->setUserGestureUtilizedCallback(nullptr);
         s_rootToken = nullptr;
@@ -161,10 +308,19 @@ bool UserGestureIndicator::utilizeUserGesture()
         return true;
     }
     return false;
+=======
+    if (!isMainThread())
+        return;
+    s_state = m_previousState;
+    if (s_topmostIndicator == this)
+        s_topmostIndicator = 0;
+    ASSERT(isDefinite(s_state));
+>>>>>>> miniblink49
 }
 
 bool UserGestureIndicator::processingUserGesture()
 {
+<<<<<<< HEAD
     if (auto* token = currentToken())
         return token->hasGestures();
     return false;
@@ -190,10 +346,23 @@ bool UserGestureIndicator::consumeUserGesture()
 bool UserGestureIndicator::consumeUserGestureThreadSafe()
 {
     return isMainThread() && consumeUserGesture();
+=======
+    if (!isMainThread())
+        return false;
+    return s_topmostIndicator && static_cast<GestureToken*>(s_topmostIndicator->currentToken())->hasGestures() && (s_state == DefinitelyProcessingNewUserGesture || s_state == DefinitelyProcessingUserGesture);
+}
+
+bool UserGestureIndicator::consumeUserGesture()
+{
+    if (!isMainThread() || !s_topmostIndicator)
+        return false;
+    return static_cast<GestureToken*>(s_topmostIndicator->currentToken())->consumeGesture();
+>>>>>>> miniblink49
 }
 
 UserGestureToken* UserGestureIndicator::currentToken()
 {
+<<<<<<< HEAD
     DCHECK(isMainThread());
     return s_rootToken;
 }
@@ -204,3 +373,24 @@ UserGestureToken* UserGestureIndicator::currentTokenThreadSafe()
 }
 
 } // namespace blink
+=======
+    if (!isMainThread() || !s_topmostIndicator)
+        return 0;
+    return s_topmostIndicator->m_token.get();
+}
+
+void UserGestureIndicator::clearProcessedUserGestureSinceLoad()
+{
+    if (isMainThread())
+        s_processedUserGestureSinceLoad = false;
+}
+
+bool UserGestureIndicator::processedUserGestureSinceLoad()
+{
+    if (!isMainThread())
+        return false;
+    return s_processedUserGestureSinceLoad;
+}
+
+}
+>>>>>>> miniblink49

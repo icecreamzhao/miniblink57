@@ -75,6 +75,7 @@ typedef interface IEnumSTATPROPSETSTG IEnumSTATPROPSETSTG;
 extern "C"{
 #endif 
 
+<<<<<<< HEAD
 #ifndef PROPERTYKEY_DEFINED
 #define PROPERTYKEY_DEFINED
 
@@ -85,6 +86,8 @@ typedef struct _tagpropertykey {
 
 #endif
 
+=======
+>>>>>>> miniblink49
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
@@ -144,8 +147,11 @@ typedef struct tag_inner_PROPVARIANT PROPVARIANT;
 // This is the standard C layout of the PROPVARIANT.
 typedef struct tagPROPVARIANT PROPVARIANT;
 #endif
+<<<<<<< HEAD
 typedef const PROPVARIANT *REFPROPVARIANT;
 
+=======
+>>>>>>> miniblink49
 typedef struct tagCAC
     {
     ULONG cElems;

@@ -14,13 +14,18 @@ class SkOSWindow : public SkWindow {
 public:
     SkOSWindow(void* hwnd);
     ~SkOSWindow();
+<<<<<<< HEAD
     void* getHWND() const { return fHWND; }
+=======
+    void*   getHWND() const { return fHWND; }
+>>>>>>> miniblink49
 
     enum SkBackEndTypes {
         kNone_BackEndType,
         kNativeGL_BackEndType,
     };
 
+<<<<<<< HEAD
     void release();
     bool attach(SkBackEndTypes attachType, int msaaSampleCount, bool deepColor,
         AttachmentInfo*);
@@ -33,6 +38,15 @@ public:
     void setVsync(bool)
     { /* Can't turn off vsync? */
     }
+=======
+    void    detach();
+    bool    attach(SkBackEndTypes attachType, int msaaSampleCount, AttachmentInfo*);
+    void    present();
+
+    bool makeFullscreen() { return true; }
+    void closeWindow() { /* Not impl yet */ }
+    void setVsync(bool) { /* Can't turn off vsync? */ }
+>>>>>>> miniblink49
 
 protected:
     // overrides from SkEventSink
@@ -45,9 +59,15 @@ protected:
     virtual void onSetTitle(const char[]);
 
 private:
+<<<<<<< HEAD
     void* fHWND;
     bool fInvalEventIsPending;
     void* fNotifier;
+=======
+    void*   fHWND;
+    bool    fInvalEventIsPending;
+    void*   fNotifier;
+>>>>>>> miniblink49
     typedef SkWindow INHERITED;
 };
 

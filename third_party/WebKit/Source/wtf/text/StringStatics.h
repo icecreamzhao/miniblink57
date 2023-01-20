@@ -31,17 +31,30 @@
 #ifndef StringStatics_h
 #define StringStatics_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+>>>>>>> miniblink49
 #include "wtf/WTFExport.h"
 
 namespace WTF {
 
 class StringStatics {
+<<<<<<< HEAD
     STATIC_ONLY(StringStatics);
 
 public:
     WTF_EXPORT static void init();
 };
+=======
+public:
+    WTF_EXPORT static void init();
+
+private:
+    StringStatics();
+};
+
+>>>>>>> miniblink49
 }
 
 #endif

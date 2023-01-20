@@ -6,6 +6,7 @@
 #define WebScheduler_h
 
 #include "WebCommon.h"
+<<<<<<< HEAD
 #include "WebString.h"
 #include "public/platform/WebThread.h"
 #include "public/platform/WebTraceLocation.h"
@@ -31,16 +32,37 @@ public:
         virtual void ReportIntervention(const WebString& message) = 0;
     };
 
+=======
+#include "public/platform/WebThread.h"
+
+namespace blink {
+
+class WebTraceLocation;
+
+// This class is used to submit tasks and pass other information from Blink to
+// the platform's scheduler.
+class BLINK_PLATFORM_EXPORT WebScheduler {
+public:
+>>>>>>> miniblink49
     virtual ~WebScheduler() { }
 
     // Called to prevent any more pending tasks from running. Must be called on
     // the associated WebThread.
+<<<<<<< HEAD
     virtual void shutdown() = 0;
 
     // Returns true if there is high priority work pending on the associated
     // WebThread and the caller should yield to let the scheduler service that
     // work.  Must be called on the associated WebThread.
     virtual bool shouldYieldForHighPriorityWork() = 0;
+=======
+    virtual void shutdown() { }
+
+    // Returns true if there is high priority work pending on the associated WebThread
+    // and the caller should yield to let the scheduler service that work.
+    // Must be called on the associated WebThread.
+    virtual bool shouldYieldForHighPriorityWork() { return false; }
+>>>>>>> miniblink49
 
     // Returns true if a currently running idle task could exceed its deadline
     // without impacting user experience too much. This should only be used if
@@ -50,19 +72,28 @@ public:
     // its deadline has expired - post a new idle task for the continuation of
     // the work in this case.
     // Must be called from the associated WebThread.
+<<<<<<< HEAD
     virtual bool canExceedIdleDeadlineIfRequired() = 0;
+=======
+    virtual bool canExceedIdleDeadlineIfRequired() { return false; }
+>>>>>>> miniblink49
 
     // Schedule an idle task to run the associated WebThread. For non-critical
     // tasks which may be reordered relative to other task types and may be
     // starved for an arbitrarily long time if no idle time is available.
     // Takes ownership of |IdleTask|. Can be called from any thread.
+<<<<<<< HEAD
     virtual void postIdleTask(const WebTraceLocation&, WebThread::IdleTask*) = 0;
+=======
+    virtual void postIdleTask(const WebTraceLocation&, WebThread::IdleTask*) { }
+>>>>>>> miniblink49
 
     // Like postIdleTask but guarantees that the posted task will not run
     // nested within an already-running task. Posting an idle task as
     // non-nestable may not affect when the task gets run, or it could
     // make it run later than it normally would, but it won't make it
     // run earlier than it normally would.
+<<<<<<< HEAD
     virtual void postNonNestableIdleTask(const WebTraceLocation&, WebThread::IdleTask*) = 0;
 
     // Returns a WebTaskRunner for loading tasks. Can be called from any thread.
@@ -94,13 +125,58 @@ public:
 
     // Tells the scheduler that a navigation task is no longer pending.
     virtual void removePendingNavigation(NavigatingFrameType) = 0;
+=======
+    virtual void postNonNestableIdleTask(const WebTraceLocation&, WebThread::IdleTask*) { }
+
+    // Like postIdleTask but does not run the idle task until after some other
+    // task has run. This enables posting of a task which won't stop the Blink
+    // main thread from sleeping, but will start running after it wakes up.
+    // Takes ownership of |IdleTask|. Can be called from any thread.
+    virtual void postIdleTaskAfterWakeup(const WebTraceLocation&, WebThread::IdleTask*) { }
+
+    // Schedule a loading task to be run on the the associated WebThread. Loading
+    // tasks usually have the default priority, but may be deprioritised
+    // when the user is interacting with the device.
+    // Takes ownership of |WebThread::Task|. Can be called from any thread.
+    virtual void postLoadingTask(const WebTraceLocation&, WebThread::Task*) { }
+
+    // Schedule a timer task to be run on the the associated WebThread. Timer Tasks
+    // tasks usually have the default priority, but may be delayed
+    // when the user is interacting with the device.
+    // Takes ownership of |WebThread::Task|. Can be called from any thread.
+    virtual void postTimerTask(const WebTraceLocation&, WebThread::Task*, long long delayMs) {}
+
+    // Schedule a timer task to be run on the the associated WebThread. Timer Tasks
+    // tasks usually have the default priority, but may be delayed
+    // when the user is interacting with the device.
+    // |monotonicTime| is in the timebase of WTF::monotonicallyIncreasingTime().
+    // Takes ownership of |WebThread::Task|. Can be called from any thread.
+    virtual void postTimerTaskAt(const WebTraceLocation&, WebThread::Task*, double monotonicTime) {}
+
+    // Suspends the timer queue and increments the timer queue suspension count.
+    // May only be called from the main thread.
+    virtual void suspendTimerQueue() { }
+
+    // Decrements the timer queue suspension count and re-enables the timer queue
+    // if the suspension count is zero and the current scheduler policy allows it.
+    virtual void resumeTimerQueue() { }
+>>>>>>> miniblink49
 
 #ifdef INSIDE_BLINK
     // Helpers for posting bound functions as tasks.
     typedef Function<void(double deadlineSeconds)> IdleTask;
+<<<<<<< HEAD
 
     void postIdleTask(const WebTraceLocation&, std::unique_ptr<IdleTask>);
     void postNonNestableIdleTask(const WebTraceLocation&, std::unique_ptr<IdleTask>);
+=======
+    typedef Function<void()> Task;
+
+    void postIdleTask(const WebTraceLocation&, PassOwnPtr<IdleTask>);
+    void postNonNestableIdleTask(const WebTraceLocation&, PassOwnPtr<IdleTask>);
+    void postIdleTaskAfterWakeup(const WebTraceLocation&, PassOwnPtr<IdleTask>);
+    void postLoadingTask(const WebTraceLocation&, PassOwnPtr<Task>);
+>>>>>>> miniblink49
 #endif
 };
 

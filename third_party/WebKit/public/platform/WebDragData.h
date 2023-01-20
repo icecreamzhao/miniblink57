@@ -39,8 +39,12 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 template <typename T>
 class WebVector;
+=======
+template <typename T> class WebVector;
+>>>>>>> miniblink49
 
 // Holds data that may be exchanged through a drag-n-drop operation. It is
 // inexpensive to copy a WebDragData object.
@@ -48,6 +52,7 @@ class WebDragData {
 public:
     struct Item {
         enum StorageType {
+<<<<<<< HEAD
             // String data with an associated MIME type. Depending on the MIME type,
             // there may be optional metadata attributes as well.
             StorageTypeString,
@@ -55,6 +60,15 @@ public:
             StorageTypeFilename,
             // An image being dragged out of the renderer. Contains a buffer holding
             // the image data as well as the suggested name for saving the image to.
+=======
+            // String data with an associated MIME type. Depending on the MIME type, there may be
+            // optional metadata attributes as well.
+            StorageTypeString,
+            // Stores the name of one file being dragged into the renderer.
+            StorageTypeFilename,
+            // An image being dragged out of the renderer. Contains a buffer holding the image data
+            // as well as the suggested name for saving the image to.
+>>>>>>> miniblink49
             StorageTypeBinaryData,
             // Stores the filesystem URL of one file being dragged into the renderer.
             StorageTypeFileSystemFile,
@@ -80,7 +94,10 @@ public:
         // Only valid when storageType == StorageTypeFileSystemFile.
         WebURL fileSystemURL;
         long long fileSystemFileSize;
+<<<<<<< HEAD
         WebString fileSystemId;
+=======
+>>>>>>> miniblink49
 
         // Only valid when stringType == "text/html".
         WebURL baseURL;
@@ -89,16 +106,24 @@ public:
     WebDragData()
         : m_valid(false)
         , m_modifierKeyState(0)
+<<<<<<< HEAD
     {
     }
+=======
+    { }
+>>>>>>> miniblink49
 
     WebDragData(const WebDragData& object)
         : m_valid(object.m_valid)
         , m_itemList(object.m_itemList)
         , m_modifierKeyState(object.m_modifierKeyState)
         , m_filesystemId(object.m_filesystemId)
+<<<<<<< HEAD
     {
     }
+=======
+    { }
+>>>>>>> miniblink49
 
     WebDragData& operator=(const WebDragData& object)
     {
@@ -111,11 +136,19 @@ public:
 
     ~WebDragData() { }
 
+<<<<<<< HEAD
     WebVector<Item> items() const { return m_itemList; }
+=======
+    WebVector<Item> items() const
+    {
+        return m_itemList;
+    }
+>>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT void setItems(WebVector<Item> itemList);
     // FIXME: setItems is slow because setItems copies WebVector.
     // Instead, use swapItems.
+<<<<<<< HEAD
     void swapItems(WebVector<Item>& itemList) { m_itemList.swap(itemList); }
 
     void initialize() { m_valid = true; }
@@ -129,6 +162,23 @@ public:
     BLINK_PLATFORM_EXPORT void addItem(const Item&);
 
     WebString filesystemId() const { return m_filesystemId; }
+=======
+    void swapItems(WebVector<Item>& itemList)
+    {
+        m_itemList.swap(itemList);
+    }
+
+    void initialize() { m_valid = true; }
+    bool isNull() const { return !m_valid; }
+    void reset() { m_itemList = WebVector<Item>(); m_valid = false; }
+
+    BLINK_PLATFORM_EXPORT void addItem(const Item&);
+
+    WebString filesystemId() const
+    {
+        return m_filesystemId;
+    }
+>>>>>>> miniblink49
 
     void setFilesystemId(const WebString& filesystemId)
     {
@@ -136,10 +186,13 @@ public:
         m_filesystemId = filesystemId;
     }
 
+<<<<<<< HEAD
     int modifierKeyState() const { return m_modifierKeyState; }
 
     void setModifierKeyState(int state) { m_modifierKeyState = state; }
 
+=======
+>>>>>>> miniblink49
 private:
     bool m_valid;
     WebVector<Item> m_itemList;

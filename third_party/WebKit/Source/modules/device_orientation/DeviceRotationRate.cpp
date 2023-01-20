@@ -23,12 +23,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/device_orientation/DeviceRotationRate.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 DeviceRotationRate::DeviceRotationRate(
     DeviceMotionData::RotationRate* rotationRate)
+=======
+DeviceRotationRate::DeviceRotationRate(DeviceMotionData::RotationRate* rotationRate)
+>>>>>>> miniblink49
     : m_rotationRate(rotationRate)
 {
 }

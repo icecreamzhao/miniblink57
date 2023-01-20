@@ -18,6 +18,7 @@ class SK_API SkNoSaveLayerCanvas : public SkCanvas {
 public:
     SkNoSaveLayerCanvas(SkBaseDevice* device)
         : INHERITED(device, kConservativeRasterClip_InitFlag)
+<<<<<<< HEAD
     {
     }
 
@@ -25,6 +26,14 @@ protected:
     SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec& rec) override
     {
         (void)this->INHERITED::getSaveLayerStrategy(rec);
+=======
+    {}
+
+protected:
+    virtual SaveLayerStrategy willSaveLayer(const SkRect* bounds, const SkPaint* paint,
+                                            SaveFlags flags) override {
+        this->INHERITED::willSaveLayer(bounds, paint, flags);
+>>>>>>> miniblink49
         return kNoLayer_SaveLayerStrategy;
     }
 

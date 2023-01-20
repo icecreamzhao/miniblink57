@@ -6,10 +6,15 @@
 #define WebRTCOfferOptions_h
 
 #include "WebCommon.h"
+<<<<<<< HEAD
+=======
+#include "WebNonCopyable.h"
+>>>>>>> miniblink49
 #include "WebPrivatePtr.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 class RTCOfferOptionsPlatform;
 
 class BLINK_PLATFORM_EXPORT WebRTCOfferOptions {
@@ -18,6 +23,13 @@ public:
         int32_t offerToReceiveVideo,
         bool voiceActivityDetection,
         bool iceRestart);
+=======
+class RTCOfferOptions;
+
+class WebRTCOfferOptions {
+public:
+    WebRTCOfferOptions() { }
+>>>>>>> miniblink49
     WebRTCOfferOptions(const WebRTCOfferOptions& other) { assign(other); }
     ~WebRTCOfferOptions() { reset(); }
 
@@ -27,6 +39,7 @@ public:
         return *this;
     }
 
+<<<<<<< HEAD
     void assign(const WebRTCOfferOptions&);
 
     void reset();
@@ -43,6 +56,24 @@ public:
 
 private:
     WebPrivatePtr<RTCOfferOptionsPlatform> m_private;
+=======
+    BLINK_PLATFORM_EXPORT void assign(const WebRTCOfferOptions&);
+
+    BLINK_PLATFORM_EXPORT void reset();
+    bool isNull() const { return m_private.isNull(); }
+
+    BLINK_PLATFORM_EXPORT int32_t offerToReceiveVideo() const;
+    BLINK_PLATFORM_EXPORT int32_t offerToReceiveAudio() const;
+    BLINK_PLATFORM_EXPORT bool voiceActivityDetection() const;
+    BLINK_PLATFORM_EXPORT bool iceRestart() const;
+
+#if INSIDE_BLINK
+    BLINK_PLATFORM_EXPORT WebRTCOfferOptions(RTCOfferOptions*);
+#endif
+
+private:
+    WebPrivatePtr<RTCOfferOptions> m_private;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

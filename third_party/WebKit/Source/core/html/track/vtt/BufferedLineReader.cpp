@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/track/vtt/BufferedLineReader.h"
 
 #include "wtf/text/CharacterNames.h"
@@ -96,7 +97,7 @@ bool BufferedLineReader::getLine(String& line)
         return true;
     }
 
-    DCHECK(m_buffer.isEmpty());
+    ASSERT(m_buffer.isEmpty());
     return false;
 }
 

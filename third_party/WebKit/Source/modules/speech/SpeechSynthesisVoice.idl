@@ -23,9 +23,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#tts-section
 
 [
+=======
+[
+    GarbageCollected,
+>>>>>>> miniblink49
     NoInterfaceObject
 ] interface SpeechSynthesisVoice {
     readonly attribute DOMString voiceURI;

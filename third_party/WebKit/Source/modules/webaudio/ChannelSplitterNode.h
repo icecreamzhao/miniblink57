@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,6 +22,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef ChannelSplitterNode_h
@@ -31,6 +44,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class BaseAudioContext;
 class ChannelSplitterOptions;
 
@@ -49,10 +63,24 @@ private:
     ChannelSplitterHandler(AudioNode&,
         float sampleRate,
         unsigned numberOfOutputs);
+=======
+class AudioContext;
+
+class ChannelSplitterHandler final : public AudioHandler {
+public:
+    static PassRefPtr<ChannelSplitterHandler> create(AudioNode&, float sampleRate, unsigned numberOfOutputs);
+
+    // AudioHandler
+    void process(size_t framesToProcess) override;
+
+private:
+    ChannelSplitterHandler(AudioNode&, float sampleRate, unsigned numberOfOutputs);
+>>>>>>> miniblink49
 };
 
 class ChannelSplitterNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
+<<<<<<< HEAD
 
 public:
     static ChannelSplitterNode* create(BaseAudioContext&, ExceptionState&);
@@ -65,6 +93,13 @@ public:
 
 private:
     ChannelSplitterNode(BaseAudioContext&, unsigned numberOfOutputs);
+=======
+public:
+    static ChannelSplitterNode* create(AudioContext&, float sampleRate, unsigned numberOfOutputs);
+
+private:
+    ChannelSplitterNode(AudioContext&, float sampleRate, unsigned numberOfOutputs);
+>>>>>>> miniblink49
 };
 
 } // namespace blink

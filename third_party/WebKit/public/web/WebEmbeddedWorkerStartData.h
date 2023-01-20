@@ -32,7 +32,10 @@
 #define WebEmbeddedWorkerStartData_h
 
 #include "WebContentSecurityPolicy.h"
+<<<<<<< HEAD
 #include "public/platform/WebAddressSpace.h"
+=======
+>>>>>>> miniblink49
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 #include "public/web/WebSettings.h"
@@ -44,25 +47,39 @@ struct WebEmbeddedWorkerStartData {
         DontPauseAfterDownload,
         PauseAfterDownload,
     };
+<<<<<<< HEAD
     enum WaitForDebuggerMode { DontWaitForDebugger,
         WaitForDebugger };
+=======
+    enum WaitForDebuggerMode {
+        DontWaitForDebugger,
+        WaitForDebugger
+    };
+>>>>>>> miniblink49
 
     WebURL scriptURL;
     WebString userAgent;
     PauseAfterDownloadMode pauseAfterDownloadMode;
     WaitForDebuggerMode waitForDebuggerMode;
     WebSettings::V8CacheOptions v8CacheOptions;
+<<<<<<< HEAD
     bool dataSaverEnabled;
 
     WebAddressSpace addressSpace;
+=======
+>>>>>>> miniblink49
 
     WebEmbeddedWorkerStartData()
         : pauseAfterDownloadMode(DontPauseAfterDownload)
         , waitForDebuggerMode(DontWaitForDebugger)
+<<<<<<< HEAD
         , v8CacheOptions(WebSettings::V8CacheOptionsDefault)
         , dataSaverEnabled(false)
     {
     }
+=======
+        , v8CacheOptions(WebSettings::V8CacheOptionsDefault) { }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

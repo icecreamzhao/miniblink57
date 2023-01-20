@@ -26,6 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "platform/audio/Panner.h"
 #include "platform/audio/EqualPowerPanner.h"
 #include "platform/audio/HRTFPanner.h"
@@ -47,8 +48,35 @@ std::unique_ptr<Panner> Panner::create(PanningModel model,
 
     default:
         NOTREACHED();
+=======
+#include "config.h"
+#if ENABLE(WEB_AUDIO)
+#include "platform/audio/Panner.h"
+
+#include "platform/audio/EqualPowerPanner.h"
+#include "platform/audio/HRTFPanner.h"
+
+namespace blink {
+
+PassOwnPtr<Panner> Panner::create(PanningModel model, float sampleRate, HRTFDatabaseLoader* databaseLoader)
+{
+    switch (model) {
+    case PanningModelEqualPower:
+        return adoptPtr(new EqualPowerPanner(sampleRate));
+
+    case PanningModelHRTF:
+        return adoptPtr(new HRTFPanner(sampleRate, databaseLoader));
+
+    default:
+        ASSERT_NOT_REACHED();
+>>>>>>> miniblink49
         return nullptr;
     }
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

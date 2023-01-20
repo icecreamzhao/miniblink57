@@ -29,6 +29,7 @@
 #ifndef AtomicStringHash_h
 #define AtomicStringHash_h
 
+<<<<<<< HEAD
 #include "wtf/HashTraits.h"
 #include "wtf/text/AtomicString.h"
 
@@ -63,6 +64,40 @@ struct HashTraits<AtomicString> : SimpleClassHashTraits<AtomicString> {
 };
 
 } // namespace WTF
+=======
+#include "wtf/text/AtomicString.h"
+#include "wtf/HashTraits.h"
+
+namespace WTF {
+
+    struct AtomicStringHash {
+        static unsigned hash(const AtomicString& key)
+        {
+            return key.impl()->existingHash();
+        }
+
+        static bool equal(const AtomicString& a, const AtomicString& b)
+        {
+            return a == b;
+        }
+
+        static const bool safeToCompareToEmptyOrDeleted = false;
+    };
+
+    // AtomicStringHash is the default hash for AtomicString
+    template<> struct HashTraits<AtomicString> : SimpleClassHashTraits<AtomicString> {
+        // Unlike other types, we can return a const reference for AtomicString's empty value (nullAtom).
+        typedef const AtomicString& PeekOutType;
+
+        static const AtomicString& emptyValue() { return nullAtom; }
+        static PeekOutType peek(const AtomicString& value) { return value; }
+
+        static const bool hasIsEmptyValueFunction = true;
+        static bool isEmptyValue(const AtomicString& value) { return value.isNull(); }
+    };
+
+}
+>>>>>>> miniblink49
 
 using WTF::AtomicStringHash;
 

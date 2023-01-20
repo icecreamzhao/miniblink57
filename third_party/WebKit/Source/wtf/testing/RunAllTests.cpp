@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/CryptographicallyRandomNumber.h"
 #include "wtf/CurrentTime.h"
 #include "wtf/WTF.h"
@@ -36,14 +37,38 @@
 #include <string.h>
 
 static double dummyCurrentTime()
+=======
+#include "config.h"
+
+#include "wtf/CryptographicallyRandomNumber.h"
+#include "wtf/MainThread.h"
+#include "wtf/WTF.h"
+#include <base/test/test_suite.h>
+#include <string.h>
+
+static double CurrentTime()
+>>>>>>> miniblink49
 {
     return 0.0;
 }
 
+<<<<<<< HEAD
 int main(int argc, char** argv)
 {
     WTF::Partitions::initialize(nullptr);
     WTF::setTimeFunctionsForTesting(dummyCurrentTime);
     WTF::initialize(nullptr);
+=======
+static void AlwaysZeroNumberSource(unsigned char* buf, size_t len)
+{
+    memset(buf, '\0', len);
+}
+
+int main(int argc, char** argv)
+{
+    WTF::setRandomSource(AlwaysZeroNumberSource);
+    WTF::initialize(CurrentTime, nullptr, nullptr, nullptr, nullptr);
+    WTF::initializeMainThread(0);
+>>>>>>> miniblink49
     return base::RunUnitTestsUsingBaseTestSuite(argc, argv);
 }

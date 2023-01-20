@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,6 +22,18 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+>>>>>>> miniblink49
  */
 
 #ifndef WaveShaperDSPKernel_h
@@ -31,29 +44,45 @@
 #include "platform/audio/AudioDSPKernel.h"
 #include "platform/audio/DownSampler.h"
 #include "platform/audio/UpSampler.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+#include "wtf/OwnPtr.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WaveShaperProcessor;
 
+<<<<<<< HEAD
 // WaveShaperDSPKernel is an AudioDSPKernel and is responsible for non-linear
 // distortion on one channel.
+=======
+// WaveShaperDSPKernel is an AudioDSPKernel and is responsible for non-linear distortion on one channel.
+>>>>>>> miniblink49
 
 class WaveShaperDSPKernel final : public AudioDSPKernel {
 public:
     explicit WaveShaperDSPKernel(WaveShaperProcessor*);
 
     // AudioDSPKernel
+<<<<<<< HEAD
     void process(const float* source,
         float* dest,
         size_t framesToProcess) override;
+=======
+    void process(const float* source, float* dest, size_t framesToProcess) override;
+>>>>>>> miniblink49
     void reset() override;
     double tailTime() const override { return 0; }
     double latencyTime() const override;
 
+<<<<<<< HEAD
     // Oversampling requires more resources, so let's only allocate them if
     // needed.
+=======
+    // Oversampling requires more resources, so let's only allocate them if needed.
+>>>>>>> miniblink49
     void lazyInitializeOversampling();
 
 protected:
@@ -64,6 +93,7 @@ protected:
     void processCurve2x(const float* source, float* dest, size_t framesToProcess);
     void processCurve4x(const float* source, float* dest, size_t framesToProcess);
 
+<<<<<<< HEAD
     WaveShaperProcessor* getWaveShaperProcessor()
     {
         return static_cast<WaveShaperProcessor*>(processor());
@@ -76,6 +106,17 @@ protected:
     std::unique_ptr<DownSampler> m_downSampler;
     std::unique_ptr<UpSampler> m_upSampler2;
     std::unique_ptr<DownSampler> m_downSampler2;
+=======
+    WaveShaperProcessor* waveShaperProcessor() { return static_cast<WaveShaperProcessor*>(processor()); }
+
+    // Oversampling.
+    OwnPtr<AudioFloatArray> m_tempBuffer;
+    OwnPtr<AudioFloatArray> m_tempBuffer2;
+    OwnPtr<UpSampler> m_upSampler;
+    OwnPtr<DownSampler> m_downSampler;
+    OwnPtr<UpSampler> m_upSampler2;
+    OwnPtr<DownSampler> m_downSampler2;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

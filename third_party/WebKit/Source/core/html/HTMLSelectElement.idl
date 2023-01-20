@@ -22,27 +22,28 @@
 // https://html.spec.whatwg.org/#the-select-element
 
 interface HTMLSelectElement : HTMLElement {
-    // TODO(foolip): attribute DOMString autocomplete;
-    [CEReactions, Reflect] attribute boolean autofocus;
-    [CEReactions, Reflect] attribute boolean disabled;
+    // TODO(philipj): attribute DOMString autocomplete;
+    [Reflect] attribute boolean autofocus;
+    [Reflect] attribute boolean disabled;
     [ImplementedAs=formOwner] readonly attribute HTMLFormElement? form;
-    [CEReactions, Reflect] attribute boolean multiple;
-    [CEReactions, Reflect] attribute DOMString name;
-    [CEReactions, Reflect] attribute boolean required;
-    [CEReactions] attribute unsigned long size;
+    attribute boolean multiple;
+    [Reflect] attribute DOMString name;
+    [Reflect] attribute boolean required;
+    attribute unsigned long size;
 
     readonly attribute DOMString type;
 
     readonly attribute HTMLOptionsCollection options;
-    // TODO(foolip): The length setter should never throw.
-    [CEReactions, RaisesException=Setter] attribute unsigned long length;
+    // TODO(philipj): The length setter should never throw.
+    [RaisesException=Setter] attribute unsigned long length;
     getter Element? item(unsigned long index);
-    HTMLOptionElement? namedItem(DOMString name);
-    [CEReactions, RaisesException] void add((HTMLOptionElement or HTMLOptGroupElement) element,
-                               optional (HTMLElement or long)? before = null);
-    [CEReactions, RaisesException] void remove(); // ChildNode overload
-    [CEReactions] void remove(long index);
-    [CEReactions, RaisesException] setter void (unsigned long index, HTMLOptionElement? option);
+    // TODO(philipj): The name argument should not be optional.
+    HTMLOptionElement? namedItem([Default=Undefined] optional DOMString name);
+    [RaisesException, TypeChecking=Interface] void add((HTMLOptionElement or HTMLOptGroupElement) element,
+                                                       optional (HTMLElement or long)? before = null);
+    [RaisesException] void remove(); // ChildNode overload
+    void remove(long index);
+    [RaisesException, TypeChecking=Interface] setter void (unsigned long index, HTMLOptionElement? option);
 
     readonly attribute HTMLCollection selectedOptions;
     attribute long selectedIndex;

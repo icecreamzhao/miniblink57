@@ -38,6 +38,7 @@ class WebSpeechGrammar;
 
 class WebSpeechRecognitionParams {
 public:
+<<<<<<< HEAD
     WebSpeechRecognitionParams(const WebVector<WebSpeechGrammar>& grammars,
         const WebString& language,
         bool continuous,
@@ -47,6 +48,12 @@ public:
         const WebSecurityOrigin& origin)
         : m_grammars(grammars)
         , m_language(language)
+=======
+    WebSpeechRecognitionParams(const WebVector<WebSpeechGrammar>& grammars, const WebString& language, const WebString& serviceURI, bool continuous, bool interimResults, unsigned long maxAlternatives, const WebMediaStreamTrack& audioTrack, const WebSecurityOrigin& origin)
+        : m_grammars(grammars)
+        , m_language(language)
+        , m_serviceURI(serviceURI)
+>>>>>>> miniblink49
         , m_continuous(continuous)
         , m_interimResults(interimResults)
         , m_maxAlternatives(maxAlternatives)
@@ -57,6 +64,10 @@ public:
 
     const WebVector<WebSpeechGrammar>& grammars() const { return m_grammars; }
     const WebString& language() const { return m_language; }
+<<<<<<< HEAD
+=======
+    const WebString& serviceURI() const { return m_serviceURI; }
+>>>>>>> miniblink49
     bool continuous() const { return m_continuous; }
     bool interimResults() const { return m_interimResults; }
     unsigned long maxAlternatives() const { return m_maxAlternatives; }
@@ -66,6 +77,10 @@ public:
 private:
     WebVector<WebSpeechGrammar> m_grammars;
     WebString m_language;
+<<<<<<< HEAD
+=======
+    WebString m_serviceURI;
+>>>>>>> miniblink49
     bool m_continuous;
     bool m_interimResults;
     unsigned long m_maxAlternatives;

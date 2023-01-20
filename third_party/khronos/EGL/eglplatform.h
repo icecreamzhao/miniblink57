@@ -51,7 +51,11 @@
 #endif
 
 #ifndef EGLAPIENTRY
+<<<<<<< HEAD
 #define EGLAPIENTRY KHRONOS_APIENTRY
+=======
+#define EGLAPIENTRY  KHRONOS_APIENTRY
+>>>>>>> miniblink49
 #endif
 #define EGLAPIENTRYP EGLAPIENTRY*
 
@@ -73,6 +77,7 @@
 #endif
 #include <windows.h>
 
+<<<<<<< HEAD
 typedef HDC EGLNativeDisplayType;
 typedef HBITMAP EGLNativePixmapType;
 typedef HWND EGLNativeWindowType;
@@ -82,6 +87,17 @@ typedef HWND EGLNativeWindowType;
 typedef int EGLNativeDisplayType;
 typedef void* EGLNativeWindowType;
 typedef void* EGLNativePixmapType;
+=======
+typedef HDC     EGLNativeDisplayType;
+typedef HBITMAP EGLNativePixmapType;
+typedef HWND    EGLNativeWindowType;
+
+#elif defined(__WINSCW__) || defined(__SYMBIAN32__)  /* Symbian */
+
+typedef int   EGLNativeDisplayType;
+typedef void *EGLNativeWindowType;
+typedef void *EGLNativePixmapType;
+>>>>>>> miniblink49
 
 // From Android NDK.
 #elif defined(__ANDROID__) || defined(ANDROID)
@@ -90,9 +106,15 @@ typedef void* EGLNativePixmapType;
 
 struct egl_native_pixmap_t;
 
+<<<<<<< HEAD
 typedef struct ANativeWindow* EGLNativeWindowType;
 typedef struct egl_native_pixmap_t* EGLNativePixmapType;
 typedef void* EGLNativeDisplayType;
+=======
+typedef struct ANativeWindow*           EGLNativeWindowType;
+typedef struct egl_native_pixmap_t*     EGLNativePixmapType;
+typedef void*                           EGLNativeDisplayType;
+>>>>>>> miniblink49
 
 #elif defined(USE_OZONE)
 
@@ -106,13 +128,20 @@ typedef intptr_t EGLNativePixmapType;
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+<<<<<<< HEAD
 typedef Display* EGLNativeDisplayType;
 typedef Pixmap EGLNativePixmapType;
 typedef Window EGLNativeWindowType;
+=======
+typedef Display *EGLNativeDisplayType;
+typedef Pixmap   EGLNativePixmapType;
+typedef Window   EGLNativeWindowType;
+>>>>>>> miniblink49
 
 #elif defined(__APPLE__)
 
 // TODO(gman): these are place holders.
+<<<<<<< HEAD
 typedef void* EGLNativeDisplayType;
 typedef int EGLNativePixmapType;
 #ifdef __OBJC__
@@ -122,6 +151,17 @@ typedef NSView* EGLNativeWindowType;
 struct NSView;
 typedef struct NSView* EGLNativeWindowType;
 #endif // __OBJC__
+=======
+typedef void          *EGLNativeDisplayType;
+typedef int            EGLNativePixmapType;
+#ifdef __OBJC__
+@class NSView;
+typedef NSView *EGLNativeWindowType;
+#else
+struct NSView;
+typedef struct NSView *EGLNativeWindowType;
+#endif  // __OBJC__
+>>>>>>> miniblink49
 
 #else
 #error "Platform not recognized"
@@ -129,8 +169,14 @@ typedef struct NSView* EGLNativeWindowType;
 
 /* EGL 1.2 types, renamed for consistency in EGL 1.3 */
 typedef EGLNativeDisplayType NativeDisplayType;
+<<<<<<< HEAD
 typedef EGLNativePixmapType NativePixmapType;
 typedef EGLNativeWindowType NativeWindowType;
+=======
+typedef EGLNativePixmapType  NativePixmapType;
+typedef EGLNativeWindowType  NativeWindowType;
+
+>>>>>>> miniblink49
 
 /* Define EGLint. This must be a signed integral type large enough to contain
  * all legal attribute names and values passed into and out of EGL, whether

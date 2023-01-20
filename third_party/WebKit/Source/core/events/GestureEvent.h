@@ -28,28 +28,47 @@
 
 #include "core/CoreExport.h"
 #include "core/events/EventDispatcher.h"
-#include "core/events/UIEventWithKeyState.h"
-#include "public/platform/WebGestureEvent.h"
+#include "core/events/MouseRelatedEvent.h"
+#include "platform/PlatformGestureEvent.h"
 
 namespace blink {
 
-class CORE_EXPORT GestureEvent final : public UIEventWithKeyState {
+class CORE_EXPORT GestureEvent final : public MouseRelatedEvent {
 public:
-    static GestureEvent* create(AbstractView*, const WebGestureEvent&);
-    ~GestureEvent() override { }
+    virtual ~GestureEvent() { }
 
-    bool isGestureEvent() const override;
+    static PassRefPtrWillBeRawPtr<GestureEvent> create(PassRefPtrWillBeRawPtr<AbstractView>, const PlatformGestureEvent&);
 
-    const AtomicString& interfaceName() const override;
+    virtual bool isGestureEvent() const override;
 
-    const WebGestureEvent& nativeEvent() const { return m_nativeEvent; }
+    virtual const AtomicString& interfaceName() const override;
+
+    float deltaX() const { return m_deltaX; }
+    float deltaY() const { return m_deltaY; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    GestureEvent(const AtomicString&, AbstractView*, const WebGestureEvent&);
+    GestureEvent();
+    GestureEvent(const AtomicString& type, PassRefPtrWillBeRawPtr<AbstractView>, int screenX, int screenY, int clientX, int clientY, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, float deltaX, float deltaY, double uiTimeStamp);
 
-    WebGestureEvent m_nativeEvent;
+    float m_deltaX;
+    float m_deltaY;
+};
+
+class GestureEventDispatchMediator final : public EventDispatchMediator {
+public:
+    static PassRefPtrWillBeRawPtr<GestureEventDispatchMediator> create(PassRefPtrWillBeRawPtr<GestureEvent> gestureEvent)
+    {
+        return adoptRefWillBeNoop(new GestureEventDispatchMediator(gestureEvent));
+    }
+
+private:
+    explicit GestureEventDispatchMediator(PassRefPtrWillBeRawPtr<GestureEvent>);
+
+    GestureEvent& event() const;
+
+    virtual bool dispatchEvent(EventDispatcher&) const override;
 };
 
 DEFINE_EVENT_TYPE_CASTS(GestureEvent);

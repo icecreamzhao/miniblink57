@@ -5,14 +5,21 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkAlphaThresholdFilter.h"
 #include "SkRandom.h"
 #include "SkSurface.h"
 #include "gm.h"
+=======
+#include "gm.h"
+#include "SkAlphaThresholdFilter.h"
+#include "SkRandom.h"
+>>>>>>> miniblink49
 
 #define WIDTH 500
 #define HEIGHT 500
 
+<<<<<<< HEAD
 namespace {
 
 void draw_rects(SkCanvas* canvas)
@@ -43,17 +50,24 @@ SkPaint create_filter_paint(SkImageFilter::CropRect* cropRect = nullptr)
 
 };
 
+=======
+>>>>>>> miniblink49
 namespace skiagm {
 
 class ImageAlphaThresholdGM : public GM {
 public:
+<<<<<<< HEAD
     ImageAlphaThresholdGM(bool useCropRect)
         : fUseCropRect(true)
     {
+=======
+    ImageAlphaThresholdGM() {
+>>>>>>> miniblink49
         this->setBGColor(0xFFFFFFFF);
     }
 
 protected:
+<<<<<<< HEAD
     SkString onShortName() override
     {
         if (fUseCropRect) {
@@ -70,6 +84,24 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
+=======
+
+    SkString onShortName() override {
+        return SkString("imagealphathreshold");
+    }
+
+    SkISize onISize() override {
+        return SkISize::Make(WIDTH, HEIGHT);
+    }
+
+    void onDraw(SkCanvas* canvas) override {
+        SkIRect rects[2];
+        rects[0] = SkIRect::MakeXYWH(0, 150, WIDTH, HEIGHT - 300);
+        rects[1] = SkIRect::MakeXYWH(150, 0, WIDTH - 300, HEIGHT);
+        SkRegion region;
+        region.setRects(rects, 2);
+
+>>>>>>> miniblink49
         SkMatrix matrix;
         matrix.reset();
         matrix.setTranslate(WIDTH * .1f, HEIGHT * .1f);
@@ -77,17 +109,40 @@ protected:
 
         canvas->concat(matrix);
 
+<<<<<<< HEAD
         SkRect r = SkRect::MakeLTRB(100, 100, WIDTH - 100, HEIGHT - 100);
         SkImageFilter::CropRect cropRect(r);
 
         SkPaint paint = create_filter_paint(fUseCropRect ? &cropRect : nullptr);
         canvas->saveLayer(nullptr, &paint);
         draw_rects(canvas);
+=======
+        SkPaint paint;
+        paint.setImageFilter(
+            SkAlphaThresholdFilter::Create(region, 0.2f, 0.7f))->unref();
+        canvas->saveLayer(NULL, &paint);
+        paint.setAntiAlias(true);
+
+        SkPaint rect_paint;
+        rect_paint.setColor(0xFF0000FF);
+        canvas->drawRect(SkRect::MakeXYWH(0, 0, WIDTH / 2, HEIGHT / 2),
+                         rect_paint);
+        rect_paint.setColor(0xBFFF0000);
+        canvas->drawRect(SkRect::MakeXYWH(WIDTH / 2, 0, WIDTH / 2, HEIGHT / 2),
+                         rect_paint);
+        rect_paint.setColor(0x3F00FF00);
+        canvas->drawRect(SkRect::MakeXYWH(0, HEIGHT / 2, WIDTH / 2, HEIGHT / 2),
+                         rect_paint);
+        rect_paint.setColor(0x00000000);
+        canvas->drawRect(SkRect::MakeXYWH(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2),
+                         rect_paint);
+>>>>>>> miniblink49
 
         canvas->restore();
     }
 
 private:
+<<<<<<< HEAD
     bool fUseCropRect;
 
     typedef GM INHERITED;
@@ -127,13 +182,20 @@ protected:
     }
 
 private:
+=======
+>>>>>>> miniblink49
     typedef GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 DEF_GM(return new ImageAlphaThresholdGM(true);)
 DEF_GM(return new ImageAlphaThresholdGM(false);)
 DEF_GM(return new ImageAlphaThresholdSurfaceGM();)
+=======
+static GM* MyFactory(void*) { return new ImageAlphaThresholdGM; }
+static GMRegistry reg(MyFactory);
+>>>>>>> miniblink49
 
 }

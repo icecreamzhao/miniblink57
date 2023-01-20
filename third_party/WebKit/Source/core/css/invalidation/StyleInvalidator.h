@@ -5,36 +5,28 @@
 #ifndef StyleInvalidator_h
 #define StyleInvalidator_h
 
-#include "core/css/invalidation/PendingInvalidations.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
-#include <memory>
 
 namespace blink {
 
-class ContainerNode;
+class DescendantInvalidationSet;
 class Document;
 class Element;
-class HTMLSlotElement;
-class InvalidationSet;
 
 class StyleInvalidator {
-    DISALLOW_NEW();
+    DISALLOW_ALLOCATION();
     WTF_MAKE_NONCOPYABLE(StyleInvalidator);
-
 public:
     StyleInvalidator();
     ~StyleInvalidator();
     void invalidate(Document&);
-    void scheduleInvalidationSetsForNode(const InvalidationLists&,
-        ContainerNode&);
-    void scheduleSiblingInvalidationsAsDescendants(
-        const InvalidationLists&,
-        ContainerNode& schedulingParent);
-    void rescheduleSiblingInvalidationsAsDescendants(Element&);
-    void clearInvalidation(ContainerNode&);
+    void scheduleInvalidation(PassRefPtrWillBeRawPtr<DescendantInvalidationSet>, Element&);
+    void clearInvalidation(Element&);
 
-    DEFINE_INLINE_TRACE() { visitor->trace(m_pendingInvalidationMap); }
+    void clearPendingInvalidations();
+
+    DECLARE_TRACE();
 
 private:
     struct RecursionData {
@@ -43,79 +35,29 @@ private:
             , m_wholeSubtreeInvalid(false)
             , m_treeBoundaryCrossing(false)
             , m_insertionPointCrossing(false)
-            , m_invalidatesSlotted(false)
-        {
-        }
+        { }
 
-        void pushInvalidationSet(const InvalidationSet&);
-        bool matchesCurrentInvalidationSets(Element&) const;
-        bool matchesCurrentInvalidationSetsAsSlotted(Element&) const;
-
-        bool hasInvalidationSets() const
-        {
-            return !wholeSubtreeInvalid() && m_invalidationSets.size();
-        }
+        void pushInvalidationSet(const DescendantInvalidationSet&);
+        bool matchesCurrentInvalidationSets(Element&);
+        bool hasInvalidationSets() const { return !wholeSubtreeInvalid() && m_invalidationSets.size(); }
 
         bool wholeSubtreeInvalid() const { return m_wholeSubtreeInvalid; }
         void setWholeSubtreeInvalid() { m_wholeSubtreeInvalid = true; }
 
         bool treeBoundaryCrossing() const { return m_treeBoundaryCrossing; }
         bool insertionPointCrossing() const { return m_insertionPointCrossing; }
-        bool invalidatesSlotted() const { return m_invalidatesSlotted; }
 
-        using DescendantInvalidationSets = Vector<const InvalidationSet*, 16>;
-        DescendantInvalidationSets m_invalidationSets;
+        using InvalidationSets = Vector<const DescendantInvalidationSet*, 16>;
+        InvalidationSets m_invalidationSets;
         bool m_invalidateCustomPseudo;
         bool m_wholeSubtreeInvalid;
         bool m_treeBoundaryCrossing;
         bool m_insertionPointCrossing;
-        bool m_invalidatesSlotted;
     };
 
-    class SiblingData {
-        STACK_ALLOCATED();
-
-    public:
-        SiblingData()
-            : m_elementIndex(0)
-        {
-        }
-
-        void pushInvalidationSet(const SiblingInvalidationSet&);
-        bool matchCurrentInvalidationSets(Element&, RecursionData&);
-
-        bool isEmpty() const { return m_invalidationEntries.isEmpty(); }
-        void advance() { m_elementIndex++; }
-
-    private:
-        struct Entry {
-            DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-            Entry(const SiblingInvalidationSet* invalidationSet,
-                unsigned invalidationLimit)
-                : m_invalidationSet(invalidationSet)
-                , m_invalidationLimit(invalidationLimit)
-            {
-            }
-
-            const SiblingInvalidationSet* m_invalidationSet;
-            unsigned m_invalidationLimit;
-        };
-
-        Vector<Entry, 16> m_invalidationEntries;
-        unsigned m_elementIndex;
-    };
-
-    bool invalidate(Element&, RecursionData&, SiblingData&);
-    bool invalidateShadowRootChildren(Element&, RecursionData&);
+    bool invalidate(Element&, RecursionData&);
     bool invalidateChildren(Element&, RecursionData&);
-    void invalidateSlotDistributedElements(HTMLSlotElement&,
-        const RecursionData&) const;
-    bool checkInvalidationSetsAgainstElement(Element&,
-        RecursionData&,
-        SiblingData&);
-    void pushInvalidationSetsForContainerNode(ContainerNode&,
-        RecursionData&,
-        SiblingData&);
+    bool checkInvalidationSetsAgainstElement(Element&, RecursionData&);
 
     class RecursionCheckpoint {
     public:
@@ -125,20 +67,15 @@ private:
             , m_prevWholeSubtreeInvalid(data->m_wholeSubtreeInvalid)
             , m_treeBoundaryCrossing(data->m_treeBoundaryCrossing)
             , m_insertionPointCrossing(data->m_insertionPointCrossing)
-            , m_invalidatesSlotted(data->m_invalidatesSlotted)
             , m_data(data)
-        {
-        }
+        { }
         ~RecursionCheckpoint()
         {
-            m_data->m_invalidationSets.remove(
-                m_prevInvalidationSetsSize,
-                m_data->m_invalidationSets.size() - m_prevInvalidationSetsSize);
+            m_data->m_invalidationSets.remove(m_prevInvalidationSetsSize, m_data->m_invalidationSets.size() - m_prevInvalidationSetsSize);
             m_data->m_invalidateCustomPseudo = m_prevInvalidateCustomPseudo;
             m_data->m_wholeSubtreeInvalid = m_prevWholeSubtreeInvalid;
             m_data->m_treeBoundaryCrossing = m_treeBoundaryCrossing;
             m_data->m_insertionPointCrossing = m_insertionPointCrossing;
-            m_data->m_invalidatesSlotted = m_invalidatesSlotted;
         }
 
     private:
@@ -147,13 +84,13 @@ private:
         bool m_prevWholeSubtreeInvalid;
         bool m_treeBoundaryCrossing;
         bool m_insertionPointCrossing;
-        bool m_invalidatesSlotted;
         RecursionData* m_data;
     };
 
-    using PendingInvalidationMap = HeapHashMap<Member<ContainerNode>, std::unique_ptr<PendingInvalidations>>;
+    using InvalidationList = WillBeHeapVector<RefPtrWillBeMember<DescendantInvalidationSet>>;
+    using PendingInvalidationMap = WillBeHeapHashMap<RawPtrWillBeMember<Element>, OwnPtrWillBeMember<InvalidationList>>;
 
-    PendingInvalidations& ensurePendingInvalidations(ContainerNode&);
+    InvalidationList& ensurePendingInvalidationList(Element&);
 
     PendingInvalidationMap m_pendingInvalidationMap;
 };

@@ -23,14 +23,22 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "wtf/StringHasher.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
+=======
+#include "config.h"
+#include "wtf/StringHasher.h"
+
+#include <gtest/gtest.h>
+>>>>>>> miniblink49
 
 namespace WTF {
 
 namespace {
 
+<<<<<<< HEAD
     const LChar nullLChars[2] = { 0, 0 };
     const UChar nullUChars[2] = { 0, 0 };
 
@@ -52,6 +60,29 @@ namespace {
     const unsigned testBHash3 = 0x59EB1B2C;
     const unsigned testBHash4 = 0xA7BCCC0A;
     const unsigned testBHash5 = 0x79201649;
+=======
+const LChar nullLChars[2] = { 0, 0 };
+const UChar nullUChars[2] = { 0, 0 };
+
+const unsigned emptyStringHash = 0x4EC889EU;
+const unsigned singleNullCharacterHash = 0x3D3ABF44U;
+
+const LChar testALChars[6] = { 0x41, 0x95, 0xFF, 0x50, 0x01, 0 };
+const UChar testAUChars[6] = { 0x41, 0x95, 0xFF, 0x50, 0x01, 0 };
+const UChar testBUChars[6] = { 0x41, 0x95, 0xFFFF, 0x1080, 0x01, 0 };
+
+const unsigned testAHash1 = 0xEA32B004;
+const unsigned testAHash2 = 0x93F0F71E;
+const unsigned testAHash3 = 0xCB609EB1;
+const unsigned testAHash4 = 0x7984A706;
+const unsigned testAHash5 = 0x0427561F;
+
+const unsigned testBHash1 = 0xEA32B004;
+const unsigned testBHash2 = 0x93F0F71E;
+const unsigned testBHash3 = 0x59EB1B2C;
+const unsigned testBHash4 = 0xA7BCCC0A;
+const unsigned testBHash5 = 0x79201649;
+>>>>>>> miniblink49
 
 } // anonymous namespace
 
@@ -72,11 +103,17 @@ TEST(StringHasherTest, StringHasher_addCharacter)
     hasher = StringHasher();
     hasher.addCharacter(0);
     EXPECT_EQ(singleNullCharacterHash, hasher.hash());
+<<<<<<< HEAD
     EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF,
         hasher.hashWithTop8BitsMasked());
 
     // Hashing five characters, checking the intermediate state after each is
     // added.
+=======
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, hasher.hashWithTop8BitsMasked());
+
+    // Hashing five characters, checking the intermediate state after each is added.
+>>>>>>> miniblink49
     hasher = StringHasher();
     hasher.addCharacter(testAUChars[0]);
     EXPECT_EQ(testAHash1, hasher.hash());
@@ -139,6 +176,7 @@ TEST(StringHasherTest, StringHasher_addCharacters)
     hasher = StringHasher();
     hasher.addCharacters(nullLChars, 1);
     EXPECT_EQ(singleNullCharacterHash, hasher.hash());
+<<<<<<< HEAD
     EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF,
         hasher.hashWithTop8BitsMasked());
     hasher = StringHasher();
@@ -146,6 +184,13 @@ TEST(StringHasherTest, StringHasher_addCharacters)
     EXPECT_EQ(singleNullCharacterHash, hasher.hash());
     EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF,
         hasher.hashWithTop8BitsMasked());
+=======
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, hasher.hashWithTop8BitsMasked());
+    hasher = StringHasher();
+    hasher.addCharacters(nullUChars, 1);
+    EXPECT_EQ(singleNullCharacterHash, hasher.hash());
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, hasher.hashWithTop8BitsMasked());
+>>>>>>> miniblink49
 
     // Hashing five characters, all at once.
     hasher = StringHasher();
@@ -280,6 +325,7 @@ TEST(StringHasherTest, StringHasher_addCharactersAssumingAligned)
     hasher = StringHasher();
     hasher.addCharactersAssumingAligned(nullLChars, 1);
     EXPECT_EQ(singleNullCharacterHash, hasher.hash());
+<<<<<<< HEAD
     EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF,
         hasher.hashWithTop8BitsMasked());
     hasher = StringHasher();
@@ -287,6 +333,13 @@ TEST(StringHasherTest, StringHasher_addCharactersAssumingAligned)
     EXPECT_EQ(singleNullCharacterHash, hasher.hash());
     EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF,
         hasher.hashWithTop8BitsMasked());
+=======
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, hasher.hashWithTop8BitsMasked());
+    hasher = StringHasher();
+    hasher.addCharactersAssumingAligned(nullUChars, 1);
+    EXPECT_EQ(singleNullCharacterHash, hasher.hash());
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, hasher.hashWithTop8BitsMasked());
+>>>>>>> miniblink49
 
     // Hashing five characters, all at once.
     hasher = StringHasher();
@@ -371,11 +424,17 @@ TEST(StringHasherTest, StringHasher_addCharactersAssumingAligned)
 
 TEST(StringHasherTest, StringHasher_computeHash)
 {
+<<<<<<< HEAD
     EXPECT_EQ(emptyStringHash,
         StringHasher::computeHash(static_cast<LChar*>(0), 0));
     EXPECT_EQ(emptyStringHash, StringHasher::computeHash(nullLChars, 0));
     EXPECT_EQ(emptyStringHash,
         StringHasher::computeHash(static_cast<UChar*>(0), 0));
+=======
+    EXPECT_EQ(emptyStringHash, StringHasher::computeHash(static_cast<LChar*>(0), 0));
+    EXPECT_EQ(emptyStringHash, StringHasher::computeHash(nullLChars, 0));
+    EXPECT_EQ(emptyStringHash, StringHasher::computeHash(static_cast<UChar*>(0), 0));
+>>>>>>> miniblink49
     EXPECT_EQ(emptyStringHash, StringHasher::computeHash(nullUChars, 0));
 
     EXPECT_EQ(singleNullCharacterHash, StringHasher::computeHash(nullLChars, 1));
@@ -388,6 +447,7 @@ TEST(StringHasherTest, StringHasher_computeHash)
 
 TEST(StringHasherTest, StringHasher_computeHashAndMaskTop8Bits)
 {
+<<<<<<< HEAD
     EXPECT_EQ(
         emptyStringHash & 0xFFFFFF,
         StringHasher::computeHashAndMaskTop8Bits(static_cast<LChar*>(0), 0));
@@ -410,11 +470,25 @@ TEST(StringHasherTest, StringHasher_computeHashAndMaskTop8Bits)
         StringHasher::computeHashAndMaskTop8Bits(testAUChars, 5));
     EXPECT_EQ(testBHash5 & 0xFFFFFF,
         StringHasher::computeHashAndMaskTop8Bits(testBUChars, 5));
+=======
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(static_cast<LChar*>(0), 0));
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(nullLChars, 0));
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(static_cast<UChar*>(0), 0));
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(nullUChars, 0));
+
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(nullLChars, 1));
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(nullUChars, 1));
+
+    EXPECT_EQ(testAHash5 & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(testALChars, 5));
+    EXPECT_EQ(testAHash5 & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(testAUChars, 5));
+    EXPECT_EQ(testBHash5 & 0xFFFFFF, StringHasher::computeHashAndMaskTop8Bits(testBUChars, 5));
+>>>>>>> miniblink49
 }
 
 TEST(StringHasherTest, StringHasher_hashMemory)
 {
     EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::hashMemory(0, 0));
+<<<<<<< HEAD
     EXPECT_EQ(emptyStringHash & 0xFFFFFF,
         StringHasher::hashMemory(nullUChars, 0));
     EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::hashMemory<0>(0));
@@ -425,6 +499,14 @@ TEST(StringHasherTest, StringHasher_hashMemory)
         StringHasher::hashMemory(nullUChars, 2));
     EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF,
         StringHasher::hashMemory<2>(nullUChars));
+=======
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::hashMemory(nullUChars, 0));
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::hashMemory<0>(0));
+    EXPECT_EQ(emptyStringHash & 0xFFFFFF, StringHasher::hashMemory<0>(nullUChars));
+
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, StringHasher::hashMemory(nullUChars, 2));
+    EXPECT_EQ(singleNullCharacterHash & 0xFFFFFF, StringHasher::hashMemory<2>(nullUChars));
+>>>>>>> miniblink49
 
     EXPECT_EQ(testAHash5 & 0xFFFFFF, StringHasher::hashMemory(testAUChars, 10));
     EXPECT_EQ(testAHash5 & 0xFFFFFF, StringHasher::hashMemory<10>(testAUChars));

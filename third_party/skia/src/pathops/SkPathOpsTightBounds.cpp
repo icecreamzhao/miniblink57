@@ -7,12 +7,20 @@
 #include "SkOpEdgeBuilder.h"
 #include "SkPathOpsCommon.h"
 
+<<<<<<< HEAD
 bool TightBounds(const SkPath& path, SkRect* result)
 {
     SkChunkAlloc allocator(4096); // FIXME: constant-ize, tune
     SkOpContour contour;
     SkOpContourHead* contourList = static_cast<SkOpContourHead*>(&contour);
     SkOpGlobalState globalState(nullptr, contourList SkDEBUGPARAMS(false) SkDEBUGPARAMS(nullptr));
+=======
+bool TightBounds(const SkPath& path, SkRect* result) {
+    SkChunkAlloc allocator(4096);  // FIXME: constant-ize, tune
+    SkOpContour contour;
+    SkOpContourHead* contourList = static_cast<SkOpContourHead*>(&contour);
+    SkOpGlobalState globalState(NULL, contourList);
+>>>>>>> miniblink49
     // turn path into list of segments
     SkOpEdgeBuilder builder(path, &contour, &allocator, &globalState);
     if (!builder.finish(&allocator)) {

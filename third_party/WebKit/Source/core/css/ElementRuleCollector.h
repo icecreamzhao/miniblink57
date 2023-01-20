@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
- * All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +27,6 @@
 #include "core/css/resolver/ElementResolveContext.h"
 #include "core/css/resolver/MatchRequest.h"
 #include "core/css/resolver/MatchResult.h"
-#include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
@@ -40,23 +38,15 @@ class RuleData;
 class RuleSet;
 class SelectorFilter;
 class StaticCSSRuleList;
-class StyleRuleUsageTracker;
 
-// TODO(kochi): CascadeOrder is used only for Shadow DOM V0 bug-compatible
-// cascading order. Once Shadow DOM V0 implementation is gone, remove this
-// completely.
-using CascadeOrder = unsigned;
+typedef unsigned CascadeOrder;
+
 const CascadeOrder ignoreCascadeOrder = 0;
 
 class MatchedRule {
-    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-
+    ALLOW_ONLY_INLINE_ALLOCATION();
 public:
-    MatchedRule(const RuleData* ruleData,
-        unsigned specificity,
-        CascadeOrder cascadeOrder,
-        unsigned styleSheetIndex,
-        const CSSStyleSheet* parentStyleSheet)
+    MatchedRule(const RuleData* ruleData, unsigned specificity, CascadeOrder cascadeOrder, unsigned styleSheetIndex, const CSSStyleSheet* parentStyleSheet)
         : m_ruleData(ruleData)
         , m_specificity(specificity)
         , m_parentStyleSheet(parentStyleSheet)
@@ -64,29 +54,27 @@ public:
         ASSERT(m_ruleData);
         static const unsigned BitsForPositionInRuleData = 18;
         static const unsigned BitsForStyleSheetIndex = 32;
-        m_position = ((uint64_t)cascadeOrder
-                         << (BitsForStyleSheetIndex + BitsForPositionInRuleData))
-            + ((uint64_t)styleSheetIndex << BitsForPositionInRuleData) + m_ruleData->position();
+        m_position = ((uint64_t)cascadeOrder << (BitsForStyleSheetIndex + BitsForPositionInRuleData)) + ((uint64_t)styleSheetIndex << BitsForPositionInRuleData)+ m_ruleData->position();
     }
 
     const RuleData* ruleData() const { return m_ruleData; }
     uint64_t position() const { return m_position; }
-    unsigned specificity() const
-    {
-        return ruleData()->specificity() + m_specificity;
-    }
+    unsigned specificity() const { return ruleData()->specificity() + m_specificity; }
     const CSSStyleSheet* parentStyleSheet() const { return m_parentStyleSheet; }
-    DEFINE_INLINE_TRACE() { visitor->trace(m_parentStyleSheet); }
+    DEFINE_INLINE_TRACE()
+    {
+        visitor->trace(m_parentStyleSheet);
+    }
 
 private:
-    // TODO(Oilpan): RuleData is in the oilpan heap and this pointer
+    // FIXME: Oilpan: RuleData is in the oilpan heap and this pointer
     // really should be traced. However, RuleData objects are
     // allocated inside larger TerminatedArray objects and we cannot
     // trace a raw rule data pointer at this point.
     const RuleData* m_ruleData;
     unsigned m_specificity;
     uint64_t m_position;
-    Member<const CSSStyleSheet> m_parentStyleSheet;
+    RawPtrWillBeMember<const CSSStyleSheet> m_parentStyleSheet;
 };
 
 } // namespace blink
@@ -95,7 +83,20 @@ WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::MatchedRule);
 
 namespace blink {
 
+#if ENABLE(OILPAN)
 using StyleRuleList = HeapVector<Member<StyleRule>>;
+#else
+class StyleRuleList final : public RefCounted<StyleRuleList> {
+public:
+    static PassRefPtr<StyleRuleList> create() { return adoptRef(new StyleRuleList()); }
+
+    void append(StyleRule* rule) { m_list.append(rule); }
+    StyleRule* at(size_t index) const { return m_list[index]; }
+    size_t size() const { return m_list.size(); }
+
+    Vector<StyleRule*> m_list;
+};
+#endif
 
 // ElementRuleCollector is designed to be used as a stack object.
 // Create one, ask what rules the ElementResolveContext matches
@@ -104,65 +105,36 @@ using StyleRuleList = HeapVector<Member<StyleRule>>;
 class ElementRuleCollector {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(ElementRuleCollector);
-
 public:
-    ElementRuleCollector(const ElementResolveContext&,
-        const SelectorFilter&,
-        ComputedStyle* = 0);
+    ElementRuleCollector(const ElementResolveContext&, const SelectorFilter&, ComputedStyle* = 0);
     ~ElementRuleCollector();
 
     void setMode(SelectorChecker::Mode mode) { m_mode = mode; }
-    void setPseudoStyleRequest(const PseudoStyleRequest& request)
-    {
-        m_pseudoStyleRequest = request;
-    }
+    void setPseudoStyleRequest(const PseudoStyleRequest& request) { m_pseudoStyleRequest = request; }
     void setSameOriginOnly(bool f) { m_sameOriginOnly = f; }
 
-    void setMatchingUARules(bool matchingUARules)
-    {
-        m_matchingUARules = matchingUARules;
-    }
+    void setMatchingUARules(bool matchingUARules) { m_matchingUARules = matchingUARules; }
+    void setScopeContainsLastMatchedElement(bool scopeContainsLastMatchedElement) { m_scopeContainsLastMatchedElement = scopeContainsLastMatchedElement; }
+    bool scopeContainsLastMatchedElement() const { return m_scopeContainsLastMatchedElement; }
     bool hasAnyMatchingRules(RuleSet*);
 
     const MatchResult& matchedResult() const;
-    StyleRuleList* matchedStyleRuleList();
-    CSSRuleList* matchedCSSRuleList();
+    PassRefPtrWillBeRawPtr<StyleRuleList> matchedStyleRuleList();
+    PassRefPtrWillBeRawPtr<CSSRuleList> matchedCSSRuleList();
 
-    void collectMatchingRules(const MatchRequest&,
-        CascadeOrder = ignoreCascadeOrder,
-        bool matchingTreeBoundaryRules = false);
-    void collectMatchingShadowHostRules(const MatchRequest&,
-        CascadeOrder = ignoreCascadeOrder);
+    void collectMatchingRules(const MatchRequest&, CascadeOrder = ignoreCascadeOrder, bool matchingTreeBoundaryRules = false);
+    void collectMatchingShadowHostRules(const MatchRequest&, CascadeOrder = ignoreCascadeOrder, bool matchingTreeBoundaryRules = false);
     void sortAndTransferMatchedRules();
     void clearMatchedRules();
-    void addElementStyleProperties(const StylePropertySet*,
-        bool isCacheable = true);
-    void finishAddingUARules() { m_result.finishAddingUARules(); }
-    void finishAddingAuthorRulesForTreeScope()
-    {
-        m_result.finishAddingAuthorRulesForTreeScope();
-    }
-    void setIncludeEmptyRules(bool include) { m_includeEmptyRules = include; }
-    bool includeEmptyRules() const { return m_includeEmptyRules; }
-    bool isCollectingForPseudoElement() const
-    {
-        return m_pseudoStyleRequest.pseudoId != PseudoIdNone;
-    }
-
-    void addMatchedRulesToTracker(StyleRuleUsageTracker*) const;
+    void addElementStyleProperties(const StylePropertySet*, bool isCacheable = true);
 
 private:
-    template <typename RuleDataListType>
-    void collectMatchingRulesForList(const RuleDataListType*,
-        CascadeOrder,
-        const MatchRequest&);
+    template<typename RuleDataListType>
+    void collectMatchingRulesForList(const RuleDataListType*, CascadeOrder, const MatchRequest&);
 
-    void didMatchRule(const RuleData&,
-        const SelectorChecker::MatchResult&,
-        CascadeOrder,
-        const MatchRequest&);
+    void didMatchRule(const RuleData&, const SelectorChecker::MatchResult&, CascadeOrder, const MatchRequest&);
 
-    template <class CSSRuleCollection>
+    template<class CSSRuleCollection>
     CSSRule* findStyleRule(CSSRuleCollection*, StyleRule*);
     void appendCSSOMWrapperForRule(CSSStyleSheet*, StyleRule*);
 
@@ -181,13 +153,13 @@ private:
     bool m_canUseFastReject;
     bool m_sameOriginOnly;
     bool m_matchingUARules;
-    bool m_includeEmptyRules;
+    bool m_scopeContainsLastMatchedElement;
 
-    HeapVector<MatchedRule, 32> m_matchedRules;
+    WillBeHeapVector<MatchedRule, 32> m_matchedRules;
 
     // Output.
-    Member<StaticCSSRuleList> m_cssRuleList;
-    Member<StyleRuleList> m_styleRuleList;
+    RefPtrWillBeMember<StaticCSSRuleList> m_cssRuleList;
+    RefPtrWillBeMember<StyleRuleList> m_styleRuleList;
     MatchResult m_result;
 };
 

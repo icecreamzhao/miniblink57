@@ -51,6 +51,7 @@ namespace double_conversion {
     // This method only works for some parameters. If it can't handle the input it
     // returns false. The output is null-terminated when the function succeeds.
     bool FastFixedDtoa(double v, int fractional_count,
+<<<<<<< HEAD
         Vector<char> buffer, int* length, int* decimal_point);
 
 } // namespace double_conversion
@@ -58,3 +59,12 @@ namespace double_conversion {
 } // namespace WTF
 
 #endif // DOUBLE_CONVERSION_FIXED_DTOA_H_
+=======
+                       Vector<char> buffer, int* length, int* decimal_point);
+
+}  // namespace double_conversion
+
+} // namespace WTF
+
+#endif  // DOUBLE_CONVERSION_FIXED_DTOA_H_
+>>>>>>> miniblink49

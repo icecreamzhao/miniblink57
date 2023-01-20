@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,6 +18,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+<<<<<<< HEAD
 GrTraceMarkerSet::GrTraceMarkerSet(const GrTraceMarkerSet& other)
 {
     this->addSet(other);
@@ -26,18 +31,34 @@ void GrTraceMarkerSet::add(const GrGpuTraceMarker& marker)
 
 void GrTraceMarkerSet::addSet(const GrTraceMarkerSet& markerSet)
 {
+=======
+GrTraceMarkerSet::GrTraceMarkerSet(const GrTraceMarkerSet& other) {
+   this->addSet(other);
+}
+
+void GrTraceMarkerSet::add(const GrGpuTraceMarker& marker) {
+    this->fMarkerArray.push(marker);
+}
+
+void GrTraceMarkerSet::addSet(const GrTraceMarkerSet& markerSet) {
+>>>>>>> miniblink49
     for (Iter iter = markerSet.begin(); iter != markerSet.end(); ++iter) {
         this->add(*iter);
     }
 }
 
+<<<<<<< HEAD
 void GrTraceMarkerSet::remove(const GrGpuTraceMarker& marker)
 {
+=======
+void GrTraceMarkerSet::remove(const GrGpuTraceMarker& marker) {
+>>>>>>> miniblink49
     SkASSERT(-1 != fMarkerArray.find(marker));
     int index = this->fMarkerArray.find(marker);
     this->fMarkerArray.remove(index);
 }
 
+<<<<<<< HEAD
 int GrTraceMarkerSet::count() const
 {
     return this->fMarkerArray.count();
@@ -45,6 +66,13 @@ int GrTraceMarkerSet::count() const
 
 SkString GrTraceMarkerSet::toStringLast() const
 {
+=======
+int GrTraceMarkerSet::count() const {
+    return this->fMarkerArray.count();
+}
+
+SkString GrTraceMarkerSet::toStringLast() const {
+>>>>>>> miniblink49
     const int numMarkers = this->fMarkerArray.count();
     SkString marker_string;
     if (numMarkers > 0) {
@@ -59,8 +87,12 @@ SkString GrTraceMarkerSet::toStringLast() const
     return marker_string;
 }
 
+<<<<<<< HEAD
 SkString GrTraceMarkerSet::toString() const
 {
+=======
+SkString GrTraceMarkerSet::toString() const {
+>>>>>>> miniblink49
     SkTQSort<GrGpuTraceMarker>(this->fMarkerArray.begin(), this->fMarkerArray.end() - 1);
     SkString marker_string;
     const char* prevMarkerName = "";
@@ -74,7 +106,11 @@ SkString GrTraceMarkerSet::toString() const
         return marker_string;
     }
 
+<<<<<<< HEAD
     for (int i = 0; i < numMarkers; ++i) {
+=======
+    for (int i = 0; i < numMarkers; ++i ) {
+>>>>>>> miniblink49
         GrGpuTraceMarker& currMarker = this->fMarkerArray[i];
         const char* currCmd = currMarker.fMarker;
         if (currCmd != prevMarkerName) {
@@ -100,6 +136,7 @@ SkString GrTraceMarkerSet::toString() const
     return marker_string;
 }
 
+<<<<<<< HEAD
 GrTraceMarkerSet::Iter GrTraceMarkerSet::begin() const
 {
     return Iter(this, 0);
@@ -109,3 +146,13 @@ GrTraceMarkerSet::Iter GrTraceMarkerSet::end() const
 {
     return Iter(this, this->fMarkerArray.count());
 }
+=======
+GrTraceMarkerSet::Iter GrTraceMarkerSet::begin() const {
+    return Iter(this, 0);
+}
+
+GrTraceMarkerSet::Iter GrTraceMarkerSet::end() const {
+    return Iter(this, this->fMarkerArray.count());
+}
+
+>>>>>>> miniblink49

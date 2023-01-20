@@ -26,7 +26,11 @@
 #ifndef SQLiteTransaction_h
 #define SQLiteTransaction_h
 
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
+=======
+#include "wtf/FastAllocBase.h"
+>>>>>>> miniblink49
 #include "wtf/Noncopyable.h"
 
 namespace blink {
@@ -34,9 +38,13 @@ namespace blink {
 class SQLiteDatabase;
 
 class SQLiteTransaction {
+<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(SQLiteTransaction);
     USING_FAST_MALLOC(SQLiteTransaction);
 
+=======
+    WTF_MAKE_NONCOPYABLE(SQLiteTransaction); WTF_MAKE_FAST_ALLOCATED(SQLiteTransaction);
+>>>>>>> miniblink49
 public:
     SQLiteTransaction(SQLiteDatabase& db, bool readOnly = false);
     ~SQLiteTransaction();
@@ -48,7 +56,10 @@ public:
 
     bool inProgress() const { return m_inProgress; }
     bool wasRolledBackBySqlite() const;
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     SQLiteDatabase& m_db;
     bool m_inProgress;

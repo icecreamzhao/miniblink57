@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkXfermode_DEFINED
 #define SkXfermode_DEFINED
 
@@ -12,13 +17,27 @@
 #include "SkFlattenable.h"
 
 class GrFragmentProcessor;
+=======
+
+#ifndef SkXfermode_DEFINED
+#define SkXfermode_DEFINED
+
+#include "SkFlattenable.h"
+#include "SkColor.h"
+
+class GrFragmentProcessor;
+class GrProcessorDataManager;
+>>>>>>> miniblink49
 class GrTexture;
 class GrXPFactory;
 class SkString;
 
+<<<<<<< HEAD
 struct SkPM4f;
 typedef SkPM4f (*SkXfermodeProc4f)(const SkPM4f& src, const SkPM4f& dst);
 
+=======
+>>>>>>> miniblink49
 /** \class SkXfermode
  *
  *  SkXfermode is the base class for objects that are called to implement custom
@@ -33,15 +52,24 @@ typedef SkPM4f (*SkXfermodeProc4f)(const SkPM4f& src, const SkPM4f& dst);
 class SK_API SkXfermode : public SkFlattenable {
 public:
     virtual void xfer32(SkPMColor dst[], const SkPMColor src[], int count,
+<<<<<<< HEAD
         const SkAlpha aa[]) const;
     virtual void xfer16(uint16_t dst[], const SkPMColor src[], int count,
         const SkAlpha aa[]) const;
     virtual void xferA8(SkAlpha dst[], const SkPMColor src[], int count,
         const SkAlpha aa[]) const;
+=======
+                        const SkAlpha aa[]) const;
+    virtual void xfer16(uint16_t dst[], const SkPMColor src[], int count,
+                        const SkAlpha aa[]) const;
+    virtual void xferA8(SkAlpha dst[], const SkPMColor src[], int count,
+                        const SkAlpha aa[]) const;
+>>>>>>> miniblink49
 
     /** Enum of possible coefficients to describe some xfermodes
      */
     enum Coeff {
+<<<<<<< HEAD
         kZero_Coeff, /** 0 */
         kOne_Coeff, /** 1 */
         kSC_Coeff, /** src color */
@@ -52,6 +80,18 @@ public:
         kISA_Coeff, /** inverse src alpha (i.e. 1 - sa) */
         kDA_Coeff, /** dst alpha */
         kIDA_Coeff, /** inverse dst alpha (i.e. 1 - da) */
+=======
+        kZero_Coeff,    /** 0 */
+        kOne_Coeff,     /** 1 */
+        kSC_Coeff,      /** src color */
+        kISC_Coeff,     /** inverse src color (i.e. 1 - sc) */
+        kDC_Coeff,      /** dst color */
+        kIDC_Coeff,     /** inverse dst color (i.e. 1 - dc) */
+        kSA_Coeff,      /** src alpha */
+        kISA_Coeff,     /** inverse src alpha (i.e. 1 - sa) */
+        kDA_Coeff,      /** dst alpha */
+        kIDA_Coeff,     /** inverse dst alpha (i.e. 1 - da) */
+>>>>>>> miniblink49
 
         kCoeffCount
     };
@@ -68,6 +108,7 @@ public:
         those that are not separable.
      */
     enum Mode {
+<<<<<<< HEAD
         kClear_Mode, //!< [0, 0]
         kSrc_Mode, //!< [Sa, Sc]
         kDst_Mode, //!< [Da, Dc]
@@ -81,13 +122,31 @@ public:
         kDstATop_Mode, //!< [Sa, Dc * Sa + Sc * (1 - Da)]
         kXor_Mode, //!< [Sa + Da - 2 * Sa * Da, Sc * (1 - Da) + Dc * (1 - Sa)]
         kPlus_Mode, //!< [Sa + Da, Sc + Dc]
+=======
+        kClear_Mode,    //!< [0, 0]
+        kSrc_Mode,      //!< [Sa, Sc]
+        kDst_Mode,      //!< [Da, Dc]
+        kSrcOver_Mode,  //!< [Sa + Da - Sa*Da, Rc = Sc + (1 - Sa)*Dc]
+        kDstOver_Mode,  //!< [Sa + Da - Sa*Da, Rc = Dc + (1 - Da)*Sc]
+        kSrcIn_Mode,    //!< [Sa * Da, Sc * Da]
+        kDstIn_Mode,    //!< [Sa * Da, Sa * Dc]
+        kSrcOut_Mode,   //!< [Sa * (1 - Da), Sc * (1 - Da)]
+        kDstOut_Mode,   //!< [Da * (1 - Sa), Dc * (1 - Sa)]
+        kSrcATop_Mode,  //!< [Da, Sc * Da + (1 - Sa) * Dc]
+        kDstATop_Mode,  //!< [Sa, Sa * Dc + Sc * (1 - Da)]
+        kXor_Mode,      //!< [Sa + Da - 2 * Sa * Da, Sc * (1 - Da) + (1 - Sa) * Dc]
+        kPlus_Mode,     //!< [Sa + Da, Sc + Dc]
+>>>>>>> miniblink49
         kModulate_Mode, // multiplies all components (= alpha and color)
 
         // Following blend modes are defined in the CSS Compositing standard:
         // https://dvcs.w3.org/hg/FXTF/rawfile/tip/compositing/index.html#blending
         kScreen_Mode,
         kLastCoeffMode = kScreen_Mode,
+<<<<<<< HEAD
         kLastCoeffMode_Mode = kScreen_Mode, // weolar
+=======
+>>>>>>> miniblink49
 
         kOverlay_Mode,
         kDarken_Mode,
@@ -100,14 +159,21 @@ public:
         kExclusion_Mode,
         kMultiply_Mode,
         kLastSeparableMode = kMultiply_Mode,
+<<<<<<< HEAD
         kLastSeparableMode_Mode = kMultiply_Mode, // weolar
+=======
+>>>>>>> miniblink49
 
         kHue_Mode,
         kSaturation_Mode,
         kColor_Mode,
         kLuminosity_Mode,
+<<<<<<< HEAD
         kLastMode = kLuminosity_Mode,
         kLastMode_Mode = kLuminosity_Mode // weolar
+=======
+        kLastMode = kLuminosity_Mode
+>>>>>>> miniblink49
     };
 
     /**
@@ -127,10 +193,13 @@ public:
      *  if the xfermode is NULL, and if so, treats it as kSrcOver_Mode.
      */
     static bool AsMode(const SkXfermode*, Mode* mode);
+<<<<<<< HEAD
     static bool AsMode(const sk_sp<SkXfermode>& xfer, Mode* mode)
     {
         return AsMode(xfer.get(), mode);
     }
+=======
+>>>>>>> miniblink49
 
     /**
      *  Returns true if the xfermode claims to be the specified Mode. This works
@@ -143,6 +212,7 @@ public:
      *  }
      */
     static bool IsMode(const SkXfermode* xfer, Mode mode);
+<<<<<<< HEAD
     static bool IsMode(const sk_sp<SkXfermode>& xfer, Mode mode)
     {
         return IsMode(xfer.get(), mode);
@@ -272,14 +342,30 @@ public:
         return AsMode(xfer, mode);
     }
 #endif
+=======
+
+    /** Return an SkXfermode object for the specified mode.
+     */
+    static SkXfermode* Create(Mode mode);
+>>>>>>> miniblink49
 
     /** Return a function pointer to a routine that applies the specified
         porter-duff transfer mode.
      */
     static SkXfermodeProc GetProc(Mode mode);
+<<<<<<< HEAD
     static SkXfermodeProc4f GetProc4f(Mode);
 
     virtual SkXfermodeProc4f getProc4f() const;
+=======
+
+    /** Return a function pointer to a routine that applies the specified
+        porter-duff transfer mode and srcColor to a 16bit device color. Note,
+        if the mode+srcColor might return a non-opaque color, then there is not
+        16bit proc, and this will return NULL.
+      */
+    static SkXfermodeProc16 GetProc16(Mode mode, SkColor srcColor);
+>>>>>>> miniblink49
 
     /**
      *  If the specified mode can be represented by a pair of Coeff, then return
@@ -289,6 +375,14 @@ public:
      */
     static bool ModeAsCoeff(Mode mode, Coeff* src, Coeff* dst);
 
+<<<<<<< HEAD
+=======
+    SK_ATTR_DEPRECATED("use AsMode(...)")
+    static bool IsMode(const SkXfermode* xfer, Mode* mode) {
+        return AsMode(xfer, mode);
+    }
+
+>>>>>>> miniblink49
     /**
      * Returns whether or not the xfer mode can support treating coverage as alpha
      */
@@ -299,10 +393,13 @@ public:
      *  the xfermode is NULL, and if so, treats it as kSrcOver_Mode.
      */
     static bool SupportsCoverageAsAlpha(const SkXfermode* xfer);
+<<<<<<< HEAD
     static bool SupportsCoverageAsAlpha(const sk_sp<SkXfermode>& xfer)
     {
         return SupportsCoverageAsAlpha(xfer.get());
     }
+=======
+>>>>>>> miniblink49
 
     enum SrcColorOpacity {
         // The src color is known to be opaque (alpha == 255)
@@ -327,6 +424,7 @@ public:
      *  the xfermode is NULL, and if so, treats it as kSrcOver_Mode.
      */
     static bool IsOpaque(const SkXfermode* xfer, SrcColorOpacity opacityType);
+<<<<<<< HEAD
     static bool IsOpaque(const sk_sp<SkXfermode>& xfer, SrcColorOpacity opacityType)
     {
         return IsOpaque(xfer.get(), opacityType);
@@ -348,11 +446,38 @@ public:
       */
     virtual sk_sp<GrXPFactory> asXPFactory() const;
 #endif
+=======
+
+    /** Implemented by a subclass to support use as an image filter in the GPU backend. When used as
+        an image filter the xfer mode blends the source color against a background texture rather
+        than the destination. It is implemented as a fragment processor. This can be called with
+        both params set to NULL to query whether it would succeed. Otherwise, both params are
+        required. Upon success the function returns true and the caller owns a ref to the fragment
+        parameter. Upon failure false is returned and the processor param is not written to.
+     */
+    virtual bool asFragmentProcessor(GrFragmentProcessor**, GrProcessorDataManager*,
+                                     GrTexture* background) const;
+
+    /** A subclass may implement this factory function to work with the GPU backend. It is legal
+        to call this with xpf NULL to simply test the return value. If xpf is non-NULL then the
+        xfermode may optionally allocate a factory to return to the caller as *xpf. The caller
+        will install it and own a ref to it. Since the xfermode may or may not assign *xpf, the
+        caller should set *xpf to NULL beforehand. XferProcessors cannot use a background texture.
+     */
+    virtual bool asXPFactory(GrXPFactory** xpf) const;
+
+    /** Returns true if the xfermode can be expressed as an xfer processor factory (xpFactory).
+        This helper calls the asXPFactory() virtual. If the xfermode is NULL, it is treated as
+        kSrcOver_Mode. It is legal to call this with xpf param NULL to simply test the return value.
+     */
+    static bool AsXPFactory(SkXfermode*, GrXPFactory**);
+>>>>>>> miniblink49
 
     SK_TO_STRING_PUREVIRT()
     SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP()
     SK_DEFINE_FLATTENABLE_TYPE(SkXfermode)
 
+<<<<<<< HEAD
     enum D32Flags {
         kSrcIsOpaque_D32Flag = 1 << 0,
         kSrcIsSingle_D32Flag = 1 << 1,
@@ -393,6 +518,13 @@ protected:
     /** The default implementation of xfer32/xfer16/xferA8 in turn call this
         method, 1 color at a time (upscaled to a SkPMColor). The default
         implementation of this method just returns dst. If performance is
+=======
+protected:
+    SkXfermode() {}
+    /** The default implementation of xfer32/xfer16/xferA8 in turn call this
+        method, 1 color at a time (upscaled to a SkPMColor). The default
+        implmentation of this method just returns dst. If performance is
+>>>>>>> miniblink49
         important, your subclass should override xfer32/xfer16/xferA8 directly.
 
         This method will not be called directly by the client, so it need not
@@ -400,9 +532,12 @@ protected:
     */
     virtual SkPMColor xferColor(SkPMColor src, SkPMColor dst) const;
 
+<<<<<<< HEAD
     virtual D32Proc onGetD32Proc(uint32_t flags) const;
     virtual F16Proc onGetF16Proc(uint32_t flags) const;
 
+=======
+>>>>>>> miniblink49
 private:
     enum {
         kModeCount = kLastMode + 1

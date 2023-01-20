@@ -33,35 +33,32 @@ namespace blink {
 
 class AnimationEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static AnimationEvent* create() { return new AnimationEvent; }
-    static AnimationEvent* create(const AtomicString& type,
-        const String& animationName,
-        double elapsedTime)
+    static PassRefPtrWillBeRawPtr<AnimationEvent> create()
     {
-        return new AnimationEvent(type, animationName, elapsedTime);
+        return adoptRefWillBeNoop(new AnimationEvent);
     }
-    static AnimationEvent* create(const AtomicString& type,
-        const AnimationEventInit& initializer)
+    static PassRefPtrWillBeRawPtr<AnimationEvent> create(const AtomicString& type, const String& animationName, double elapsedTime)
     {
-        return new AnimationEvent(type, initializer);
+        return adoptRefWillBeNoop(new AnimationEvent(type, animationName, elapsedTime));
+    }
+    static PassRefPtrWillBeRawPtr<AnimationEvent> create(const AtomicString& type, const AnimationEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new AnimationEvent(type, initializer));
     }
 
-    ~AnimationEvent() override;
+    virtual ~AnimationEvent();
 
     const String& animationName() const;
     double elapsedTime() const;
 
-    const AtomicString& interfaceName() const override;
+    virtual const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     AnimationEvent();
-    AnimationEvent(const AtomicString& type,
-        const String& animationName,
-        double elapsedTime);
+    AnimationEvent(const AtomicString& type, const String& animationName, double elapsedTime);
     AnimationEvent(const AtomicString&, const AnimationEventInit&);
 
     String m_animationName;

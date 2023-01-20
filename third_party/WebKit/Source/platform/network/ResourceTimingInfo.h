@@ -34,18 +34,23 @@
 #include "platform/CrossThreadCopier.h"
 #include "platform/network/ResourceRequest.h"
 #include "platform/network/ResourceResponse.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Functional.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/PtrUtil.h"
 #include "wtf/text/AtomicString.h"
 #include <memory>
+=======
+#include "wtf/text/AtomicString.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 struct CrossThreadResourceTimingInfoData;
 
 class PLATFORM_EXPORT ResourceTimingInfo {
+<<<<<<< HEAD
     USING_FAST_MALLOC(ResourceTimingInfo);
     WTF_MAKE_NONCOPYABLE(ResourceTimingInfo);
 
@@ -61,6 +66,17 @@ public:
 
     // Gets a copy of the data suitable for passing to another thread.
     std::unique_ptr<CrossThreadResourceTimingInfoData> copyData() const;
+=======
+public:
+    static PassOwnPtr<ResourceTimingInfo> create(const AtomicString& type, const double time, bool isMainResource)
+    {
+        return adoptPtr(new ResourceTimingInfo(type, time, isMainResource));
+    }
+    static PassOwnPtr<ResourceTimingInfo> adopt(PassOwnPtr<CrossThreadResourceTimingInfoData>);
+
+    // Gets a copy of the data suitable for passing to another thread.
+    PassOwnPtr<CrossThreadResourceTimingInfoData> copyData() const;
+>>>>>>> miniblink49
 
     double initialTime() const { return m_initialTime; }
     bool isMainResource() const { return m_isMainResource; }
@@ -68,6 +84,7 @@ public:
     void setInitiatorType(const AtomicString& type) { m_type = type; }
     const AtomicString& initiatorType() const { return m_type; }
 
+<<<<<<< HEAD
     void setOriginalTimingAllowOrigin(
         const AtomicString& originalTimingAllowOrigin)
     {
@@ -77,10 +94,15 @@ public:
     {
         return m_originalTimingAllowOrigin;
     }
+=======
+    void setOriginalTimingAllowOrigin(const AtomicString& originalTimingAllowOrigin) { m_originalTimingAllowOrigin = originalTimingAllowOrigin; }
+    const AtomicString& originalTimingAllowOrigin() const { return m_originalTimingAllowOrigin; }
+>>>>>>> miniblink49
 
     void setLoadFinishTime(double time) { m_loadFinishTime = time; }
     double loadFinishTime() const { return m_loadFinishTime; }
 
+<<<<<<< HEAD
     void setInitialURL(const KURL& url) { m_initialURL = url; }
     const KURL& initialURL() const { return m_initialURL; }
 
@@ -101,6 +123,16 @@ public:
         m_transferSize += encodedDataLength;
     }
     long long transferSize() const { return m_transferSize; }
+=======
+    void setInitialRequest(const ResourceRequest& request) { m_initialRequest = request; }
+    const ResourceRequest& initialRequest() const { return m_initialRequest; }
+
+    void setFinalResponse(const ResourceResponse& response) { m_finalResponse = response; }
+    const ResourceResponse& finalResponse() const { return m_finalResponse; }
+
+    void addRedirect(const ResourceResponse& redirectResponse) { m_redirectChain.append(redirectResponse); }
+    const Vector<ResourceResponse>& redirectChain() const { return m_redirectChain; }
+>>>>>>> miniblink49
 
     void clearLoadTimings()
     {
@@ -110,6 +142,7 @@ public:
     }
 
 private:
+<<<<<<< HEAD
     ResourceTimingInfo(const AtomicString& type,
         const double time,
         bool isMainResource)
@@ -118,6 +151,12 @@ private:
         , m_transferSize(0)
         , m_isMainResource(isMainResource)
         , m_hasCrossOriginRedirect(false)
+=======
+    ResourceTimingInfo(const AtomicString& type, const double time, bool isMainResource)
+        : m_type(type)
+        , m_initialTime(time)
+        , m_isMainResource(isMainResource)
+>>>>>>> miniblink49
     {
     }
 
@@ -125,25 +164,39 @@ private:
     AtomicString m_originalTimingAllowOrigin;
     double m_initialTime;
     double m_loadFinishTime;
+<<<<<<< HEAD
     KURL m_initialURL;
     ResourceResponse m_finalResponse;
     Vector<ResourceResponse> m_redirectChain;
     long long m_transferSize;
     bool m_isMainResource;
     bool m_hasCrossOriginRedirect;
+=======
+    ResourceRequest m_initialRequest;
+    ResourceResponse m_finalResponse;
+    Vector<ResourceResponse> m_redirectChain;
+    bool m_isMainResource;
+>>>>>>> miniblink49
 };
 
 struct CrossThreadResourceTimingInfoData {
     WTF_MAKE_NONCOPYABLE(CrossThreadResourceTimingInfoData);
+<<<<<<< HEAD
     USING_FAST_MALLOC(CrossThreadResourceTimingInfoData);
 
 public:
     CrossThreadResourceTimingInfoData() { }
+=======
+    WTF_MAKE_FAST_ALLOCATED(CrossThreadResourceTimingInfoData);
+public:
+    CrossThreadResourceTimingInfoData() {}
+>>>>>>> miniblink49
 
     String m_type;
     String m_originalTimingAllowOrigin;
     double m_initialTime;
     double m_loadFinishTime;
+<<<<<<< HEAD
     KURL m_initialURL;
     std::unique_ptr<CrossThreadResourceResponseData> m_finalResponse;
     Vector<std::unique_ptr<CrossThreadResourceResponseData>> m_redirectChain;
@@ -159,6 +212,17 @@ struct CrossThreadCopier<ResourceTimingInfo> {
     {
         return WTF::passed(info.copyData());
     }
+=======
+    OwnPtr<CrossThreadResourceRequestData> m_initialRequest;
+    OwnPtr<CrossThreadResourceResponseData> m_finalResponse;
+    Vector<OwnPtr<CrossThreadResourceResponseData>> m_redirectChain;
+    bool m_isMainResource;
+};
+
+template<> struct CrossThreadCopierBase<false, false, false, ResourceTimingInfo> {
+    typedef PassOwnPtr<CrossThreadResourceTimingInfoData> Type;
+    static Type copy(const ResourceTimingInfo& info) { return info.copyData(); }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -10,17 +10,16 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef SecurityPolicyViolationEvent_h
@@ -28,19 +27,20 @@
 
 #include "core/events/Event.h"
 #include "core/events/SecurityPolicyViolationEventInit.h"
-#include "platform/network/ContentSecurityPolicyParsers.h"
 
 namespace blink {
 
 class SecurityPolicyViolationEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static SecurityPolicyViolationEvent* create(
-        const AtomicString& type,
-        const SecurityPolicyViolationEventInit& initializer)
+    static PassRefPtrWillBeRawPtr<SecurityPolicyViolationEvent> create()
     {
-        return new SecurityPolicyViolationEvent(type, initializer);
+        return adoptRefWillBeNoop(new SecurityPolicyViolationEvent());
+    }
+
+    static PassRefPtrWillBeRawPtr<SecurityPolicyViolationEvent> create(const AtomicString& type, const SecurityPolicyViolationEventInit& initializer)
+    {
+        return adoptRefWillBeNoop(new SecurityPolicyViolationEvent(type, initializer));
     }
 
     const String& documentURI() const { return m_documentURI; }
@@ -49,23 +49,45 @@ public:
     const String& violatedDirective() const { return m_violatedDirective; }
     const String& effectiveDirective() const { return m_effectiveDirective; }
     const String& originalPolicy() const { return m_originalPolicy; }
-    const String& disposition() const;
     const String& sourceFile() const { return m_sourceFile; }
     int lineNumber() const { return m_lineNumber; }
     int columnNumber() const { return m_columnNumber; }
-    uint16_t statusCode() const { return m_statusCode; }
+    int statusCode() const { return m_statusCode; }
 
-    const AtomicString& interfaceName() const override
-    {
-        return EventNames::SecurityPolicyViolationEvent;
-    }
+    virtual const AtomicString& interfaceName() const override { return EventNames::SecurityPolicyViolationEvent; }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { Event::trace(visitor); }
 
 private:
-    SecurityPolicyViolationEvent(
-        const AtomicString& type,
-        const SecurityPolicyViolationEventInit& initializer);
+    SecurityPolicyViolationEvent() { }
+
+    SecurityPolicyViolationEvent(const AtomicString& type, const SecurityPolicyViolationEventInit& initializer)
+        : Event(type, initializer)
+        , m_lineNumber(0)
+        , m_columnNumber(0)
+        , m_statusCode(0)
+    {
+        if (initializer.hasDocumentURI())
+            m_documentURI = initializer.documentURI();
+        if (initializer.hasReferrer())
+            m_referrer = initializer.referrer();
+        if (initializer.hasBlockedURI())
+            m_blockedURI = initializer.blockedURI();
+        if (initializer.hasViolatedDirective())
+            m_violatedDirective = initializer.violatedDirective();
+        if (initializer.hasEffectiveDirective())
+            m_effectiveDirective = initializer.effectiveDirective();
+        if (initializer.hasOriginalPolicy())
+            m_originalPolicy = initializer.originalPolicy();
+        if (initializer.hasSourceFile())
+            m_sourceFile = initializer.sourceFile();
+        if (initializer.hasLineNumber())
+            m_lineNumber = initializer.lineNumber();
+        if (initializer.hasColumnNumber())
+            m_columnNumber = initializer.columnNumber();
+        if (initializer.hasStatusCode())
+            m_statusCode = initializer.statusCode();
+    }
 
     String m_documentURI;
     String m_referrer;
@@ -73,7 +95,6 @@ private:
     String m_violatedDirective;
     String m_effectiveDirective;
     String m_originalPolicy;
-    ContentSecurityPolicyHeaderType m_disposition;
     String m_sourceFile;
     int m_lineNumber;
     int m_columnNumber;

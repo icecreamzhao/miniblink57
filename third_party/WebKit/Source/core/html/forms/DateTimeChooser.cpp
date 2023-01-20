@@ -28,10 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/forms/DateTimeChooser.h"
 
 namespace blink {
 
-DateTimeChooser::~DateTimeChooser() { }
+DateTimeChooser::~DateTimeChooser()
+{
+}
 
 } // namespace blink

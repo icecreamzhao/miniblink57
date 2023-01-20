@@ -28,6 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/webmidi/NavigatorWebMIDI.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
@@ -36,20 +40,37 @@
 #include "core/dom/Document.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Navigator.h"
+<<<<<<< HEAD
 #include "core/frame/UseCounter.h"
+=======
+>>>>>>> miniblink49
 #include "modules/webmidi/MIDIAccessInitializer.h"
 #include "modules/webmidi/MIDIOptions.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 NavigatorWebMIDI::NavigatorWebMIDI(Navigator& navigator)
     : Supplement<Navigator>(navigator)
+=======
+NavigatorWebMIDI::NavigatorWebMIDI(LocalFrame* frame)
+    : DOMWindowProperty(frame)
+{
+}
+
+NavigatorWebMIDI::~NavigatorWebMIDI()
+>>>>>>> miniblink49
 {
 }
 
 DEFINE_TRACE(NavigatorWebMIDI)
 {
+<<<<<<< HEAD
     Supplement<Navigator>::trace(visitor);
+=======
+    HeapSupplement<Navigator>::trace(visitor);
+    DOMWindowProperty::trace(visitor);
+>>>>>>> miniblink49
 }
 
 const char* NavigatorWebMIDI::supplementName()
@@ -59,15 +80,22 @@ const char* NavigatorWebMIDI::supplementName()
 
 NavigatorWebMIDI& NavigatorWebMIDI::from(Navigator& navigator)
 {
+<<<<<<< HEAD
     NavigatorWebMIDI* supplement = static_cast<NavigatorWebMIDI*>(
         Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
         supplement = new NavigatorWebMIDI(navigator);
+=======
+    NavigatorWebMIDI* supplement = static_cast<NavigatorWebMIDI*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
+    if (!supplement) {
+        supplement = new NavigatorWebMIDI(navigator.frame());
+>>>>>>> miniblink49
         provideTo(navigator, supplementName(), supplement);
     }
     return *supplement;
 }
 
+<<<<<<< HEAD
 ScriptPromise NavigatorWebMIDI::requestMIDIAccess(ScriptState* scriptState,
     Navigator& navigator,
     const MIDIOptions& options)
@@ -88,6 +116,19 @@ ScriptPromise NavigatorWebMIDI::requestMIDIAccess(ScriptState* scriptState,
     UseCounter::countCrossOriginIframe(
         *toDocument(scriptState->getExecutionContext()),
         UseCounter::RequestMIDIAccessIframe);
+=======
+ScriptPromise NavigatorWebMIDI::requestMIDIAccess(ScriptState* scriptState, Navigator& navigator, const MIDIOptions& options)
+{
+    return NavigatorWebMIDI::from(navigator).requestMIDIAccess(scriptState, options);
+}
+
+ScriptPromise NavigatorWebMIDI::requestMIDIAccess(ScriptState* scriptState, const MIDIOptions& options)
+{
+    if (!frame() || frame()->document()->activeDOMObjectsAreStopped()) {
+        return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(AbortError, "The frame is not working."));
+    }
+
+>>>>>>> miniblink49
     return MIDIAccessInitializer::start(scriptState, options);
 }
 

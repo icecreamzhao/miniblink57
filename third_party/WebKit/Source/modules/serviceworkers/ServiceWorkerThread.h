@@ -33,7 +33,10 @@
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/workers/WorkerThread.h"
 #include "modules/ModulesExport.h"
+<<<<<<< HEAD
 #include <memory>
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
@@ -41,6 +44,7 @@ class WorkerThreadStartupData;
 
 class MODULES_EXPORT ServiceWorkerThread final : public WorkerThread {
 public:
+<<<<<<< HEAD
     static std::unique_ptr<ServiceWorkerThread> create(
         PassRefPtr<WorkerLoaderProxy>,
         WorkerReportingProxy&);
@@ -59,6 +63,19 @@ protected:
 private:
     ServiceWorkerThread(PassRefPtr<WorkerLoaderProxy>, WorkerReportingProxy&);
     std::unique_ptr<WorkerBackingThread> m_workerBackingThread;
+=======
+    static PassRefPtr<ServiceWorkerThread> create(PassRefPtr<WorkerLoaderProxy>, WorkerReportingProxy&);
+    ~ServiceWorkerThread() override;
+
+protected:
+    PassRefPtrWillBeRawPtr<WorkerGlobalScope> createWorkerGlobalScope(PassOwnPtr<WorkerThreadStartupData>) override;
+    WebThreadSupportingGC& backingThread() override;
+
+private:
+    ServiceWorkerThread(PassRefPtr<WorkerLoaderProxy>, WorkerReportingProxy&);
+
+    OwnPtr<WebThreadSupportingGC> m_thread;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

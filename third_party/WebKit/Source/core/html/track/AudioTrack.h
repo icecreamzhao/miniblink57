@@ -11,22 +11,13 @@
 
 namespace blink {
 
-class CORE_EXPORT AudioTrack final
-    : public GarbageCollectedFinalized<AudioTrack>,
-      public TrackBase,
-      public ScriptWrappable {
+class CORE_EXPORT AudioTrack final : public NoBaseWillBeGarbageCollectedFinalized<AudioTrack>, public TrackBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-    USING_GARBAGE_COLLECTED_MIXIN(AudioTrack);
-
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(AudioTrack);
 public:
-    static AudioTrack* create(const String& id,
-        const AtomicString& kind,
-        const AtomicString& label,
-        const AtomicString& language,
-        bool enabled)
+    static PassRefPtrWillBeRawPtr<AudioTrack> create(const String& id, const AtomicString& kind, const AtomicString& label, const AtomicString& language, bool enabled)
     {
-        return new AudioTrack(id, isValidKindKeyword(kind) ? kind : emptyAtom,
-            label, language, enabled);
+        return adoptRefWillBeNoop(new AudioTrack(id, kind, label, language, enabled));
     }
 
     ~AudioTrack() override;
@@ -46,16 +37,16 @@ public:
     static bool isValidKindKeyword(const String&);
 
 private:
-    AudioTrack(const String& id,
-        const AtomicString& kind,
-        const AtomicString& label,
-        const AtomicString& language,
-        bool enabled);
+    AudioTrack(const String& id, const AtomicString& kind, const AtomicString& label, const AtomicString& language, bool enabled);
+
+    // TrackBase
+    bool isValidKind(const AtomicString& kind) const override { return isValidKindKeyword(kind); }
+    AtomicString defaultKind() const override;
 
     bool m_enabled;
 };
 
-DEFINE_TRACK_TYPE_CASTS(AudioTrack, WebMediaPlayer::AudioTrack);
+DEFINE_TRACK_TYPE_CASTS(AudioTrack, TrackBase::AudioTrack);
 
 } // namespace blink
 

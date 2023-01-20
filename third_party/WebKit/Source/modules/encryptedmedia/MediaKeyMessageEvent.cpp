@@ -23,17 +23,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/encryptedmedia/MediaKeyMessageEvent.h"
 
 #include "core/dom/DOMArrayBuffer.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 MediaKeyMessageEvent::MediaKeyMessageEvent() { }
 
 MediaKeyMessageEvent::MediaKeyMessageEvent(
     const AtomicString& type,
     const MediaKeyMessageEventInit& initializer)
+=======
+MediaKeyMessageEvent::MediaKeyMessageEvent()
+{
+}
+
+MediaKeyMessageEvent::MediaKeyMessageEvent(const AtomicString& type, const MediaKeyMessageEventInit& initializer)
+>>>>>>> miniblink49
     : Event(type, initializer)
 {
     if (initializer.hasMessageType())
@@ -42,7 +54,13 @@ MediaKeyMessageEvent::MediaKeyMessageEvent(
         m_message = initializer.message();
 }
 
+<<<<<<< HEAD
 MediaKeyMessageEvent::~MediaKeyMessageEvent() { }
+=======
+MediaKeyMessageEvent::~MediaKeyMessageEvent()
+{
+}
+>>>>>>> miniblink49
 
 const AtomicString& MediaKeyMessageEvent::interfaceName() const
 {
@@ -51,7 +69,10 @@ const AtomicString& MediaKeyMessageEvent::interfaceName() const
 
 DEFINE_TRACE(MediaKeyMessageEvent)
 {
+<<<<<<< HEAD
     visitor->trace(m_message);
+=======
+>>>>>>> miniblink49
     Event::trace(visitor);
 }
 

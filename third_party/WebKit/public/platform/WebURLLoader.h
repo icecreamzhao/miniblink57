@@ -33,16 +33,23 @@
 
 #include "WebCommon.h"
 #include "WebURLRequest.h"
+<<<<<<< HEAD
 #include <stdint.h>
 
 namespace base {
 class SingleThreadTaskRunner;
 } // namespace base
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class WebData;
+<<<<<<< HEAD
 class WebTaskRunner;
+=======
+class WebThreadedDataReceiver;
+>>>>>>> miniblink49
 class WebURLLoaderClient;
 class WebURLResponse;
 struct WebURLError;
@@ -50,22 +57,35 @@ struct WebURLError;
 class WebURLLoader {
 public:
     // The WebURLLoader may be deleted in a call to its client.
+<<<<<<< HEAD
     virtual ~WebURLLoader() { }
+=======
+    virtual ~WebURLLoader() {}
+>>>>>>> miniblink49
 
     // Load the request synchronously, returning results directly to the
     // caller upon completion.  There is no mechanism to interrupt a
     // synchronous load!!
     virtual void loadSynchronously(const WebURLRequest&,
+<<<<<<< HEAD
         WebURLResponse&,
         WebURLError&,
         WebData&,
         int64_t& encodedDataLength,
         int64_t& encodedBodyLength) = 0;
+=======
+        WebURLResponse&, WebURLError&, WebData& data) = 0;
+>>>>>>> miniblink49
 
     // Load the request asynchronously, sending notifications to the given
     // client.  The client will receive no further notifications if the
     // loader is disposed before it completes its work.
+<<<<<<< HEAD
     virtual void loadAsynchronously(const WebURLRequest&, WebURLLoaderClient*) = 0;
+=======
+    virtual void loadAsynchronously(const WebURLRequest&,
+        WebURLLoaderClient*) = 0;
+>>>>>>> miniblink49
 
     // Cancels an asynchronous load.  This will appear as a load error to
     // the client.
@@ -78,6 +98,7 @@ public:
     // its previous value. For example, a preload request starts with low
     // priority, but may increase when the resource is needed for rendering.
     virtual void didChangePriority(WebURLRequest::Priority newPriority) { }
+<<<<<<< HEAD
     virtual void didChangePriority(WebURLRequest::Priority newPriority, int intraPriorityValue)
     {
         didChangePriority(newPriority);
@@ -88,6 +109,16 @@ public:
     // since we don't directly expose base to them.
     BLINK_PLATFORM_EXPORT void setLoadingTaskRunner(WebTaskRunner*);
     virtual void setLoadingTaskRunner(base::SingleThreadTaskRunner*) = 0;
+=======
+    virtual void didChangePriority(WebURLRequest::Priority newPriority, int intraPriorityValue) { didChangePriority(newPriority); }
+
+    // Try to attach the given data receiver which from this point will receive data
+    // on its thread (provided by WebThreadedDataReceiver::backgroundThread(),
+    // rather than the WebURLLoaderClient. If successful, ownership
+    // of the data receiver is assumed by the WebURLLoader and the receiver should
+    // be deleted on the main thread when no longer needed.
+    virtual bool attachThreadedDataReceiver(WebThreadedDataReceiver*) { return false; }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

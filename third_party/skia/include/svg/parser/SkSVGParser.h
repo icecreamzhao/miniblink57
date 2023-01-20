@@ -6,11 +6,21 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #ifndef SkSVGParser_DEFINED
 #define SkSVGParser_DEFINED
 
 #include "../private/SkTDict.h"
 #include "SkMatrix.h"
+=======
+
+#ifndef SkSVGParser_DEFINED
+#define SkSVGParser_DEFINED
+
+#include "SkMatrix.h"
+#include "SkTDict.h"
+#include "SkTDStack.h"
+>>>>>>> miniblink49
 #include "SkSVGPaintState.h"
 #include "SkSVGTypes.h"
 #include "SkStream.h"
@@ -25,6 +35,7 @@ class SkSVGParser : public SkXMLParser {
 public:
     SkSVGParser(SkXMLParserError* err = NULL);
     virtual ~SkSVGParser();
+<<<<<<< HEAD
     void _addAttribute(const char* attrName, const char* attrValue)
     {
         fXMLWriter.addAttribute(attrName, attrValue);
@@ -40,13 +51,29 @@ public:
     void _endElement() { fXMLWriter.endElement(); }
     int findAttribute(SkSVGBase*, const char* attrValue, size_t len, bool isPaint);
     //    const char* getFinal();
+=======
+    void _addAttribute(const char* attrName, const char* attrValue) {
+        fXMLWriter.addAttribute(attrName, attrValue); }
+    void _addAttribute(const char* attrName, SkString& attrValue) {
+        fXMLWriter.addAttribute(attrName, attrValue.c_str()); }
+    void _addAttributeLen(const char* attrName, const char* attrValue, size_t len) {
+        fXMLWriter.addAttributeLen(attrName, attrValue, len); }
+    void _endElement() { fXMLWriter.endElement(); }
+    int findAttribute(SkSVGBase* , const char* attrValue, size_t len, bool isPaint);
+//    const char* getFinal();
+>>>>>>> miniblink49
     SkTDict<SkSVGElement*>& getIDs() { return fIDs; }
     SkString& getPaintLast(SkSVGPaint::Field field);
     void _startElement(const char name[]) { fXMLWriter.startElement(name); }
     void translate(SkSVGElement*, bool isDef);
+<<<<<<< HEAD
     void translateMatrix(SkString&, SkString* id);
     static void ConvertToArray(SkString& vals);
 
+=======
+    void translateMatrix(SkString& , SkString* id);
+    static void ConvertToArray(SkString& vals);
+>>>>>>> miniblink49
 protected:
     virtual bool onAddAttribute(const char name[], const char value[]);
     bool onAddAttributeLen(const char name[], const char value[], size_t len);
@@ -54,7 +81,10 @@ protected:
     virtual bool onStartElement(const char elem[]);
     bool onStartElementLen(const char elem[], size_t len);
     virtual bool onText(const char text[], int len);
+<<<<<<< HEAD
 
+=======
+>>>>>>> miniblink49
 private:
     bool isStrokeAndFill(SkSVGPaint** stroke, SkSVGPaint** fill);
     static SkSVGElement* CreateElement(SkSVGTypes type, SkSVGElement* parent);
@@ -70,7 +100,11 @@ private:
     SkTDArray<SkSVGElement*> fParents;
     SkDynamicMemoryWStream fStream;
     SkXMLStreamWriter fXMLWriter;
+<<<<<<< HEAD
     SkSVGElement* fCurrElement;
+=======
+    SkSVGElement*   fCurrElement;
+>>>>>>> miniblink49
     SkBool8 fInSVG;
     SkBool8 fSuppressPaint;
     friend class SkSVGPaint;

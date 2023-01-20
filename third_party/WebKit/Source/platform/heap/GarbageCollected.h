@@ -6,12 +6,18 @@
 #define GarbageCollected_h
 
 #include "platform/heap/ThreadState.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
+=======
+#include "wtf/Assertions.h"
+#include "wtf/ListHashSet.h"
+>>>>>>> miniblink49
 #include "wtf/TypeTraits.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 template <typename T>
 class GarbageCollected;
 class InlinedGlobalMarkingVisitor;
@@ -31,6 +37,27 @@ class TraceWrapperBase;
 // Template to determine if a class is a GarbageCollectedMixin by checking if it
 // has IsGarbageCollectedMixinMarker
 template <typename T>
+=======
+template<typename T> class GarbageCollected;
+template<typename T, typename U, typename V, typename W, typename X> class HeapHashMap;
+template<typename T, typename U, typename V> class HeapHashSet;
+template<typename T, typename U, typename V> class HeapLinkedHashSet;
+template<typename T, size_t inlineCapacity, typename U> class HeapListHashSet;
+template<typename T, size_t inlineCapacity> class HeapVector;
+template<typename T, size_t inlineCapacity> class HeapDeque;
+template<typename T, typename U, typename V> class HeapHashCountedSet;
+template<typename T> class HeapTerminatedArray;
+template<typename T, typename Traits> class HeapVectorBacking;
+template<typename Table> class HeapHashTableBacking;
+template<typename ValueArg, size_t inlineCapacity> class HeapListHashSetAllocator;
+class InlinedGlobalMarkingVisitor;
+template<ThreadAffinity affinity> class ThreadLocalPersistents;
+template<typename T> class Persistent;
+
+// Template to determine if a class is a GarbageCollectedMixin by checking if it
+// has IsGarbageCollectedMixinMarker
+template<typename T>
+>>>>>>> miniblink49
 struct IsGarbageCollectedMixin {
 private:
     typedef char YesType;
@@ -38,15 +65,66 @@ private:
         char padding[8];
     };
 
+<<<<<<< HEAD
     template <typename U>
     static YesType checkMarker(typename U::IsGarbageCollectedMixinMarker*);
     template <typename U>
     static NoType checkMarker(...);
+=======
+    template <typename U> static YesType checkMarker(typename U::IsGarbageCollectedMixinMarker*);
+    template <typename U> static NoType checkMarker(...);
+>>>>>>> miniblink49
 
 public:
     static const bool value = sizeof(checkMarker<T>(nullptr)) == sizeof(YesType);
 };
 
+<<<<<<< HEAD
+=======
+template <typename T>
+struct IsGarbageCollectedType {
+    using TrueType = char;
+    struct FalseType {
+        char dummy[2];
+    };
+
+    using NonConstType = typename WTF::RemoveConst<T>::Type;
+    using GarbageCollectedSubclass = WTF::IsSubclassOfTemplate<NonConstType, GarbageCollected>;
+    using GarbageCollectedMixinSubclass = IsGarbageCollectedMixin<NonConstType>;
+    using HeapHashSetSubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapHashSet>;
+    using HeapLinkedHashSetSubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapLinkedHashSet>;
+    using HeapListHashSetSubclass = WTF::IsSubclassOfTemplateTypenameSizeTypename<NonConstType, HeapListHashSet>;
+    using HeapHashMapSubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapHashMap>;
+    using HeapVectorSubclass = WTF::IsSubclassOfTemplateTypenameSize<NonConstType, HeapVector>;
+    using HeapDequeSubclass = WTF::IsSubclassOfTemplateTypenameSize<NonConstType, HeapDeque>;
+    using HeapHashCountedSetSubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapHashCountedSet>;
+    using HeapTerminatedArraySubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapTerminatedArray>;
+    using HeapVectorBackingSubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapVectorBacking>;
+    using HeapHashTableBackingSubclass = WTF::IsSubclassOfTemplate<NonConstType, HeapHashTableBacking>;
+
+    template<typename U, size_t inlineCapacity> static TrueType listHashSetNodeIsHeapAllocated(WTF::ListHashSetNode<U, HeapListHashSetAllocator<U, inlineCapacity>>*);
+    static FalseType listHashSetNodeIsHeapAllocated(...);
+    static const bool isHeapAllocatedListHashSetNode = sizeof(TrueType) == sizeof(listHashSetNodeIsHeapAllocated(reinterpret_cast<NonConstType*>(0)));
+
+    static_assert(sizeof(T), "T must be fully defined");
+
+    static const bool value =
+        GarbageCollectedSubclass::value
+        || GarbageCollectedMixinSubclass::value
+        || HeapHashSetSubclass::value
+        || HeapLinkedHashSetSubclass::value
+        || HeapListHashSetSubclass::value
+        || HeapHashMapSubclass::value
+        || HeapVectorSubclass::value
+        || HeapDequeSubclass::value
+        || HeapHashCountedSetSubclass::value
+        || HeapTerminatedArraySubclass::value
+        || HeapVectorBackingSubclass::value
+        || HeapHashTableBackingSubclass::value
+        || isHeapAllocatedListHashSetNode;
+};
+
+>>>>>>> miniblink49
 // The GarbageCollectedMixin interface and helper macro
 // USING_GARBAGE_COLLECTED_MIXIN can be used to automatically define
 // TraceTrait/ObjectAliveTrait on non-leftmost deriving classes
@@ -60,14 +138,21 @@ public:
 // object header statically. This can be solved by using GarbageCollectedMixin:
 // class B : public GarbageCollectedMixin {};
 // class A : public GarbageCollected, public B {
+<<<<<<< HEAD
 //   USING_GARBAGE_COLLECTED_MIXIN(A);
+=======
+//   USING_GARBAGE_COLLECTED_MIXIN(A)
+>>>>>>> miniblink49
 // };
 //
 // With the helper, as long as we are using Member<B>, TypeTrait<B> will
 // dispatch adjustAndMark dynamically to find collect addr of the object header.
 // Note that this is only enabled for Member<B>. For Member<A> which we can
 // compute the object header addr statically, this dynamic dispatch is not used.
+<<<<<<< HEAD
 //
+=======
+>>>>>>> miniblink49
 class PLATFORM_EXPORT GarbageCollectedMixin {
 public:
     typedef int IsGarbageCollectedMixinMarker;
@@ -78,6 +163,7 @@ public:
     virtual bool isHeapObjectAlive() const = 0;
 };
 
+<<<<<<< HEAD
 #define DEFINE_GARBAGE_COLLECTED_MIXIN_METHODS(VISITOR, TYPE)                     \
 public:                                                                           \
     void adjustAndMark(VISITOR visitor) const override                            \
@@ -98,6 +184,22 @@ public:                                                                         
     }                                                                             \
                                                                                   \
 private:
+=======
+#define DEFINE_GARBAGE_COLLECTED_MIXIN_METHODS(VISITOR, TYPE)           \
+    public:                                                             \
+    void adjustAndMark(VISITOR visitor) const override                  \
+    {                                                                   \
+        typedef WTF::IsSubclassOfTemplate<typename WTF::RemoveConst<TYPE>::Type, blink::GarbageCollected> IsSubclassOfGarbageCollected; \
+        static_assert(IsSubclassOfGarbageCollected::value, "only garbage collected objects can have garbage collected mixins"); \
+        if (blink::TraceEagerlyTrait<TYPE>::value) {                           \
+            if (visitor->ensureMarked(static_cast<const TYPE*>(this)))  \
+                blink::TraceTrait<TYPE>::trace(visitor, const_cast<TYPE*>(this)); \
+            return;                                                     \
+        }                                                               \
+        visitor->mark(static_cast<const TYPE*>(this), &blink::TraceTrait<TYPE>::trace); \
+    }                                                                   \
+    private:
+>>>>>>> miniblink49
 
 // A C++ object's vptr will be initialized to its leftmost base's vtable after
 // the constructors of all its subclasses have run, so if a subclass constructor
@@ -118,6 +220,7 @@ private:
 //    GarbageCollectedMixinConstructorMarker's constructor takes care of
 //    this and the field is declared by way of USING_GARBAGE_COLLECTED_MIXIN().
 
+<<<<<<< HEAD
 #define DEFINE_GARBAGE_COLLECTED_MIXIN_CONSTRUCTOR_MARKER(TYPE)                         \
 public:                                                                                 \
     GC_PLUGIN_IGNORE("crbug.com/456823")                                                \
@@ -132,6 +235,20 @@ public:                                                                         
     blink::GarbageCollectedMixinConstructorMarker m_mixinConstructorMarker;             \
                                                                                         \
 private:
+=======
+#define DEFINE_GARBAGE_COLLECTED_MIXIN_CONSTRUCTOR_MARKER(TYPE)         \
+    public:                                                             \
+    GC_PLUGIN_IGNORE("crbug.com/456823") NO_SANITIZE_UNRELATED_CAST     \
+    void* operator new(size_t size)                                     \
+    {                                                                   \
+        void* object = TYPE::allocateObject(size, blink::IsEagerlyFinalizedType<TYPE>::value); \
+        blink::ThreadState* state = blink::ThreadStateFor<blink::ThreadingTrait<TYPE>::Affinity>::state();   \
+        state->enterGCForbiddenScopeIfNeeded(&(reinterpret_cast<TYPE*>(object)->m_mixinConstructorMarker)); \
+        return object;                                                  \
+    }                                                                   \
+    blink::GarbageCollectedMixinConstructorMarker m_mixinConstructorMarker;    \
+    private:
+>>>>>>> miniblink49
 
 // Mixins that wrap/nest others requires extra handling:
 //
@@ -152,6 +269,7 @@ private:
 // when the "operator new" for B runs, and leaving the forbidden GC scope
 // when the constructor of the recorded GarbageCollectedMixinConstructorMarker
 // runs.
+<<<<<<< HEAD
 #define USING_GARBAGE_COLLECTED_MIXIN(TYPE)                                    \
     IS_GARBAGE_COLLECTED_TYPE();                                               \
     DEFINE_GARBAGE_COLLECTED_MIXIN_METHODS(blink::Visitor*, TYPE)              \
@@ -174,6 +292,32 @@ private:
 // GarbageCollectedMixinConstructorMarker<> private field. By following Blink
 // convention of using the macro at the top of a class declaration, its
 // constructor will run first.
+=======
+#define USING_GARBAGE_COLLECTED_MIXIN(TYPE)                             \
+    DEFINE_GARBAGE_COLLECTED_MIXIN_METHODS(blink::Visitor*, TYPE)       \
+    DEFINE_GARBAGE_COLLECTED_MIXIN_METHODS(blink::InlinedGlobalMarkingVisitor, TYPE) \
+    DEFINE_GARBAGE_COLLECTED_MIXIN_CONSTRUCTOR_MARKER(TYPE)             \
+public:                                                                 \
+    bool isHeapObjectAlive() const override                             \
+    {                                                                   \
+        return blink::Heap::isHeapObjectAlive(this);                           \
+    }                                                                   \
+private:
+
+#if ENABLE(OILPAN)
+#define WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(TYPE) USING_GARBAGE_COLLECTED_MIXIN(TYPE)
+#else
+#define WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(TYPE)
+#endif
+
+// An empty class with a constructor that's arranged invoked when all derived constructors
+// of a mixin instance have completed and it is safe to allow GCs again. See
+// AllocateObjectTrait<> comment for more.
+//
+// USING_GARBAGE_COLLECTED_MIXIN() declares a GarbageCollectedMixinConstructorMarker<> private
+// field. By following Blink convention of using the macro at the top of a class declaration,
+// its constructor will run first.
+>>>>>>> miniblink49
 class GarbageCollectedMixinConstructorMarker {
 public:
     GarbageCollectedMixinConstructorMarker()
@@ -200,8 +344,12 @@ public:
 // any of its subclasses, GarbageCollectedFinalized should be used which
 // guarantees that the destructor is called on an instance when the garbage
 // collector determines that it is no longer reachable.
+<<<<<<< HEAD
 template <typename T>
 class GarbageCollected;
+=======
+template<typename T> class GarbageCollected;
+>>>>>>> miniblink49
 
 // Base class for objects allocated in the Blink garbage-collected heap.
 //
@@ -210,7 +358,11 @@ class GarbageCollected;
 //
 // Instances of GarbageCollectedFinalized will have their destructor called when
 // the garbage collector determines that the object is no longer reachable.
+<<<<<<< HEAD
 template <typename T>
+=======
+template<typename T>
+>>>>>>> miniblink49
 class GarbageCollectedFinalized : public GarbageCollected<T> {
     WTF_MAKE_NONCOPYABLE(GarbageCollectedFinalized);
 
@@ -221,11 +373,19 @@ protected:
     // calling the destructor of a subclass.  This is useful for objects without
     // vtables that require explicit dispatching.  The name is intentionally a
     // bit long to make name conflicts less likely.
+<<<<<<< HEAD
     void finalizeGarbageCollectedObject() { static_cast<T*>(this)->~T(); }
+=======
+    void finalizeGarbageCollectedObject()
+    {
+        static_cast<T*>(this)->~T();
+    }
+>>>>>>> miniblink49
 
     GarbageCollectedFinalized() { }
     ~GarbageCollectedFinalized() { }
 
+<<<<<<< HEAD
     template <typename U>
     friend struct HasFinalizer;
     template <typename U, bool>
@@ -276,17 +436,187 @@ public:
 
 // TODO(sof): migrate to wtf/TypeTraits.h
 template <typename T>
+=======
+    template<typename U> friend struct HasFinalizer;
+    template<typename U, bool> friend struct FinalizerTraitImpl;
+};
+
+// Base class for objects that are in the Blink garbage-collected heap
+// and are still reference counted.
+//
+// This class should be used sparingly and only to gradually move
+// objects from being reference counted to being managed by the blink
+// garbage collector.
+//
+// While the current reference counting keeps one of these objects
+// alive it will have a Persistent handle to itself allocated so we
+// will not reclaim the memory.  When the reference count reaches 0 the
+// persistent handle will be deleted.  When the garbage collector
+// determines that there are no other references to the object it will
+// be reclaimed and the destructor of the reclaimed object will be
+// called at that time.
+template<typename T>
+class RefCountedGarbageCollected : public GarbageCollectedFinalized<T> {
+    WTF_MAKE_NONCOPYABLE(RefCountedGarbageCollected);
+
+public:
+    RefCountedGarbageCollected()
+        : m_refCount(0)
+    {
+    }
+
+    // Implement method to increase reference count for use with RefPtrs.
+    //
+    // In contrast to the normal WTF::RefCounted, the reference count can reach
+    // 0 and increase again.  This happens in the following scenario:
+    //
+    // (1) The reference count becomes 0, but members, persistents, or
+    //     on-stack pointers keep references to the object.
+    //
+    // (2) The pointer is assigned to a RefPtr again and the reference
+    //     count becomes 1.
+    //
+    // In this case, we have to resurrect m_keepAlive.
+    void ref()
+    {
+        if (UNLIKELY(!m_refCount)) {
+            ASSERT(ThreadState::current()->findPageFromAddress(reinterpret_cast<Address>(this)));
+            makeKeepAlive();
+        }
+        ++m_refCount;
+    }
+
+    // Implement method to decrease reference count for use with RefPtrs.
+    //
+    // In contrast to the normal WTF::RefCounted implementation, the
+    // object itself is not deleted when the reference count reaches
+    // 0.  Instead, the keep-alive persistent handle is deallocated so
+    // that the object can be reclaimed when the garbage collector
+    // determines that there are no other references to the object.
+    void deref()
+    {
+        ASSERT(m_refCount > 0);
+        if (!--m_refCount) {
+            delete m_keepAlive;
+            m_keepAlive = 0;
+        }
+    }
+
+    bool hasOneRef()
+    {
+        return m_refCount == 1;
+    }
+
+protected:
+    ~RefCountedGarbageCollected() { }
+
+private:
+    void makeKeepAlive()
+    {
+        ASSERT(!m_keepAlive);
+        m_keepAlive = new Persistent<T>(static_cast<T*>(this));
+    }
+
+    int m_refCount;
+    Persistent<T>* m_keepAlive;
+};
+
+// Classes that contain heap references but aren't themselves heap allocated,
+// have some extra macros available which allows their use to be restricted to
+// cases where the garbage collector is able to discover their heap references.
+//
+// STACK_ALLOCATED(): Use if the object is only stack allocated.  Heap objects
+// should be in Members but you do not need the trace method as they are on the
+// stack.  (Down the line these might turn in to raw pointers, but for now
+// Members indicates that we have thought about them and explicitly taken care
+// of them.)
+//
+// DISALLOW_ALLOCATION(): Cannot be allocated with new operators but can be a
+// part object.  If it has Members you need a trace method and the containing
+// object needs to call that trace method.
+//
+// ALLOW_ONLY_INLINE_ALLOCATION(): Allows only placement new operator.  This
+// disallows general allocation of this object but allows to put the object as a
+// value object in collections.  If these have Members you need to have a trace
+// method. That trace method will be called automatically by the Heap
+// collections.
+//
+#define DISALLOW_ALLOCATION()                                   \
+    private:                                                    \
+        void* operator new(size_t) = delete;                    \
+        void* operator new(size_t, NotNullTag, void*) = delete; \
+        void* operator new(size_t, void*) = delete;
+
+#define ALLOW_ONLY_INLINE_ALLOCATION()                                              \
+    public:                                                                         \
+        void* operator new(size_t, NotNullTag, void* location) { return location; } \
+        void* operator new(size_t, void* location) { return location; }             \
+    private:                                                                        \
+        void* operator new(size_t) = delete;
+
+#define STATIC_ONLY(Type) \
+    private:              \
+        Type() = delete;
+
+// These macros insert annotations that the Blink GC plugin for clang uses for
+// verification.  STACK_ALLOCATED is used to declare that objects of this type
+// are always stack allocated.  GC_PLUGIN_IGNORE is used to make the plugin
+// ignore a particular class or field when checking for proper usage.  When
+// using GC_PLUGIN_IGNORE a bug-number should be provided as an argument where
+// the bug describes what needs to happen to remove the GC_PLUGIN_IGNORE again.
+#if COMPILER(CLANG)
+#define STACK_ALLOCATED()                                       \
+    private:                                                    \
+        __attribute__((annotate("blink_stack_allocated")))      \
+        void* operator new(size_t) = delete;                    \
+        void* operator new(size_t, NotNullTag, void*) = delete; \
+        void* operator new(size_t, void*) = delete;
+
+#define GC_PLUGIN_IGNORE(bug)                           \
+    __attribute__((annotate("blink_gc_plugin_ignore")))
+#else
+#define STACK_ALLOCATED() DISALLOW_ALLOCATION()
+#define GC_PLUGIN_IGNORE(bug)
+#endif
+
+template<typename T, bool = WTF::IsSubclassOfTemplate<typename WTF::RemoveConst<T>::Type, GarbageCollected>::value> class NeedsAdjustAndMark;
+
+template<typename T>
+class NeedsAdjustAndMark<T, true> {
+    static_assert(sizeof(T), "T must be fully defined");
+public:
+    static const bool value = false;
+};
+template <typename T> const bool NeedsAdjustAndMark<T, true>::value;
+
+template<typename T>
+class NeedsAdjustAndMark<T, false> {
+    static_assert(sizeof(T), "T must be fully defined");
+public:
+    static const bool value = IsGarbageCollectedMixin<typename WTF::RemoveConst<T>::Type>::value;
+};
+template <typename T> const bool NeedsAdjustAndMark<T, false>::value;
+
+// TODO(sof): migrate to wtf/TypeTraits.h
+template<typename T>
+>>>>>>> miniblink49
 class IsFullyDefined {
     using TrueType = char;
     struct FalseType {
         char dummy[2];
     };
 
+<<<<<<< HEAD
     template <typename U, size_t sz = sizeof(U)>
     static TrueType isSizeofKnown(U*);
     static FalseType isSizeofKnown(...);
     static T& t;
 
+=======
+    template<typename U, size_t sz = sizeof(U)> static TrueType isSizeofKnown(U*);
+    static FalseType isSizeofKnown(...);
+    static T& t;
+>>>>>>> miniblink49
 public:
     static const bool value = sizeof(TrueType) == sizeof(isSizeofKnown(&t));
 };

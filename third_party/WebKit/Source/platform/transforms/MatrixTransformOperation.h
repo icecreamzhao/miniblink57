@@ -30,6 +30,7 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 class PLATFORM_EXPORT MatrixTransformOperation final
     : public TransformOperation {
 public:
@@ -39,20 +40,33 @@ public:
         double d,
         double e,
         double f)
+=======
+class PLATFORM_EXPORT MatrixTransformOperation : public TransformOperation {
+public:
+    static PassRefPtr<MatrixTransformOperation> create(double a, double b, double c, double d, double e, double f)
+>>>>>>> miniblink49
     {
         return adoptRef(new MatrixTransformOperation(a, b, c, d, e, f));
     }
 
+<<<<<<< HEAD
     static PassRefPtr<MatrixTransformOperation> create(
         const TransformationMatrix& t)
+=======
+    static PassRefPtr<MatrixTransformOperation> create(const TransformationMatrix& t)
+>>>>>>> miniblink49
     {
         return adoptRef(new MatrixTransformOperation(t));
     }
 
+<<<<<<< HEAD
     TransformationMatrix matrix() const
     {
         return TransformationMatrix(m_a, m_b, m_c, m_d, m_e, m_f);
     }
+=======
+    TransformationMatrix matrix() const { return TransformationMatrix(m_a, m_b, m_c, m_d, m_e, m_f); }
+>>>>>>> miniblink49
 
     virtual bool canBlendWith(const TransformOperation& other) const
     {
@@ -77,6 +91,7 @@ private:
         transform.multiply(matrix);
     }
 
+<<<<<<< HEAD
     PassRefPtr<TransformOperation> blend(const TransformOperation* from,
         double progress,
         bool blendToIdentity = false) override;
@@ -88,6 +103,11 @@ private:
         double d,
         double e,
         double f)
+=======
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+
+    MatrixTransformOperation(double a, double b, double c, double d, double e, double f)
+>>>>>>> miniblink49
         : m_a(a)
         , m_b(b)
         , m_c(c)

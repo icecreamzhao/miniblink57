@@ -33,24 +33,34 @@
 
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/DirectConvolver.h"
+<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 // DownSampler down-samples the source stream by a factor of 2x.
 
 class PLATFORM_EXPORT DownSampler {
+<<<<<<< HEAD
     USING_FAST_MALLOC(DownSampler);
     WTF_MAKE_NONCOPYABLE(DownSampler);
 
+=======
+>>>>>>> miniblink49
 public:
     DownSampler(size_t inputBlockSize);
 
     // The destination buffer |destP| is of size sourceFramesToProcess / 2.
+<<<<<<< HEAD
     void process(const float* sourceP,
         float* destP,
         size_t sourceFramesToProcess);
+=======
+    void process(const float* sourceP, float* destP, size_t sourceFramesToProcess);
+>>>>>>> miniblink49
 
     void reset();
 
@@ -72,8 +82,12 @@ private:
 
     AudioFloatArray m_tempBuffer;
 
+<<<<<<< HEAD
     // Used as delay-line (FIR filter history) for the input samples to account
     // for the 0.5 term right in the middle of the kernel.
+=======
+    // Used as delay-line (FIR filter history) for the input samples to account for the 0.5 term right in the middle of the kernel.
+>>>>>>> miniblink49
     AudioFloatArray m_inputBuffer;
 };
 

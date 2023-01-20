@@ -6,4 +6,8 @@
 
 typedef SkReadBuffer SkOrderedReadBuffer;
 
+<<<<<<< HEAD
 #endif //SkOrderedReadBuffer_DEFINED
+=======
+#endif//SkOrderedReadBuffer_DEFINED
+>>>>>>> miniblink49

@@ -39,8 +39,6 @@
 namespace blink {
 
 class CORE_EXPORT SmartClipData {
-    STACK_ALLOCATED();
-
 public:
     SmartClipData()
         : m_isEmpty(true)
@@ -66,13 +64,12 @@ private:
 // SmartClip implements support for the copy operation
 // with an S-Pen on Samsung devices. The behavior of this
 // class is quirky and poorly tested. It's approximately
-// trying to do an implementation of columnar selection
-// followed by a copy operation.
+// trying to do a poor-mans implementation of columnar
+// selection followed by a copy operation.
 class CORE_EXPORT SmartClip {
     STACK_ALLOCATED();
-
 public:
-    explicit SmartClip(LocalFrame*);
+    explicit SmartClip(PassRefPtrWillBeRawPtr<LocalFrame>);
 
     SmartClipData dataForRect(const IntRect&);
 
@@ -82,13 +79,10 @@ private:
     Node* minNodeContainsNodes(Node* minNode, Node* newNode);
     Node* findBestOverlappingNode(Node*, const IntRect& cropRectInViewport);
     bool shouldSkipBackgroundImage(Node*);
-    void collectOverlappingChildNodes(
-        Node* parentNode,
-        const IntRect& cropRectInViewport,
-        HeapVector<Member<Node>>& overlappingNodeInfoTable);
+    void collectOverlappingChildNodes(Node* parentNode, const IntRect& cropRectInViewport, WillBeHeapVector<RawPtrWillBeMember<Node>>& overlappingNodeInfoTable);
     String extractTextFromNode(Node*);
 
-    Member<LocalFrame> m_frame;
+    RefPtrWillBeMember<LocalFrame> m_frame;
 };
 
 } // namespace blink

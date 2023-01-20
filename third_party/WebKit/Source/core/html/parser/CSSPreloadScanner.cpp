@@ -25,24 +25,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/html/parser/CSSPreloadScanner.h"
 
-#include "core/dom/Document.h"
 #include "core/fetch/FetchInitiatorTypeNames.h"
-#include "core/frame/Settings.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/html/parser/HTMLResourcePreloader.h"
-#include "core/loader/DocumentLoader.h"
-#include "core/loader/resource/CSSStyleSheetResource.h"
-#include "platform/Histogram.h"
 #include "platform/text/SegmentedString.h"
-#include <memory>
 
 namespace blink {
 
-CSSPreloadScanner::CSSPreloadScanner() { }
+CSSPreloadScanner::CSSPreloadScanner()
+    : m_state(Initial)
+    , m_requests(0)
+{
+}
 
-CSSPreloadScanner::~CSSPreloadScanner() { }
+CSSPreloadScanner::~CSSPreloadScanner()
+{
+}
 
 void CSSPreloadScanner::reset()
 {
@@ -51,56 +51,32 @@ void CSSPreloadScanner::reset()
     m_ruleValue.clear();
 }
 
-template <typename Char>
-void CSSPreloadScanner::scanCommon(const Char* begin,
-    const Char* end,
-    const SegmentedString& source,
-    PreloadRequestStream& requests,
-    const KURL& predictedBaseElementURL)
+template<typename Char>
+void CSSPreloadScanner::scanCommon(const Char* begin, const Char* end, const SegmentedString& source, PreloadRequestStream& requests)
 {
     m_requests = &requests;
-    m_predictedBaseElementURL = &predictedBaseElementURL;
-
-    for (const Char* it = begin; it != end && m_state != DoneParsingImportRules;
-         ++it)
+    for (const Char* it = begin; it != end && m_state != DoneParsingImportRules; ++it)
         tokenize(*it, source);
-
-    m_requests = nullptr;
-    m_predictedBaseElementURL = nullptr;
+    m_requests = 0;
 }
 
-void CSSPreloadScanner::scan(const HTMLToken::DataVector& data,
-    const SegmentedString& source,
-    PreloadRequestStream& requests,
-    const KURL& predictedBaseElementURL)
+void CSSPreloadScanner::scan(const HTMLToken::DataVector& data, const SegmentedString& source, PreloadRequestStream& requests)
 {
-    scanCommon(data.data(), data.data() + data.size(), source, requests,
-        predictedBaseElementURL);
+    scanCommon(data.data(), data.data() + data.size(), source, requests);
 }
 
-void CSSPreloadScanner::scan(const String& tagName,
-    const SegmentedString& source,
-    PreloadRequestStream& requests,
-    const KURL& predictedBaseElementURL)
+void CSSPreloadScanner::scan(const String& tagName,  const SegmentedString& source, PreloadRequestStream& requests)
 {
     if (tagName.is8Bit()) {
         const LChar* begin = tagName.characters8();
-        scanCommon(begin, begin + tagName.length(), source, requests,
-            predictedBaseElementURL);
+        scanCommon(begin, begin + tagName.length(), source, requests);
         return;
     }
     const UChar* begin = tagName.characters16();
-    scanCommon(begin, begin + tagName.length(), source, requests,
-        predictedBaseElementURL);
+    scanCommon(begin, begin + tagName.length(), source, requests);
 }
 
-void CSSPreloadScanner::setReferrerPolicy(const ReferrerPolicy policy)
-{
-    m_referrerPolicy = policy;
-}
-
-inline void CSSPreloadScanner::tokenize(UChar c,
-    const SegmentedString& source)
+inline void CSSPreloadScanner::tokenize(UChar c, const SegmentedString& source)
 {
     // We are just interested in @import rules, no need for real tokenization here
     // Searching for other types of resources is probably low payoff.
@@ -200,7 +176,12 @@ static String parseCSSStringOrURL(const String& string)
     while (reducedLength && isHTMLSpace<UChar>(string[offset + reducedLength - 1]))
         --reducedLength;
 
-    if (reducedLength >= 5 && (string[offset] == 'u' || string[offset] == 'U') && (string[offset + 1] == 'r' || string[offset + 1] == 'R') && (string[offset + 2] == 'l' || string[offset + 2] == 'L') && string[offset + 3] == '(' && string[offset + reducedLength - 1] == ')') {
+    if (reducedLength >= 5
+        && (string[offset] == 'u' || string[offset] == 'U')
+        && (string[offset + 1] == 'r' || string[offset + 1] == 'R')
+        && (string[offset + 2] == 'l' || string[offset + 2] == 'L')
+        && string[offset + 3] == '('
+        && string[offset + reducedLength - 1] == ')') {
         offset += 4;
         reducedLength -= 5;
     }
@@ -231,13 +212,12 @@ void CSSPreloadScanner::emitRule(const SegmentedString& source)
 {
     if (equalIgnoringCase(m_rule, "import")) {
         String url = parseCSSStringOrURL(m_ruleValue.toString());
-        TextPosition position = TextPosition(source.currentLine(), source.currentColumn());
-        auto request = PreloadRequest::createIfNeeded(
-            FetchInitiatorTypeNames::css, position, url, *m_predictedBaseElementURL,
-            Resource::CSSStyleSheet, m_referrerPolicy);
-        if (request) {
+        if (!url.isEmpty()) {
+            KURL baseElementURL; // FIXME: This should be passed in from the HTMLPreloadScaner via scan()!
+            TextPosition position = TextPosition(source.currentLine(), source.currentColumn());
+            OwnPtr<PreloadRequest> request = PreloadRequest::create(FetchInitiatorTypeNames::css, position, url, baseElementURL, Resource::CSSStyleSheet);
             // FIXME: Should this be including the charset in the preload request?
-            m_requests->push_back(std::move(request));
+            m_requests->append(request.release());
         }
         m_state = Initial;
     } else if (equalIgnoringCase(m_rule, "charset"))
@@ -248,108 +228,4 @@ void CSSPreloadScanner::emitRule(const SegmentedString& source)
     m_ruleValue.clear();
 }
 
-CSSPreloaderResourceClient::CSSPreloaderResourceClient(
-    Resource* resource,
-    HTMLResourcePreloader* preloader)
-    : m_policy(preloader->document()->settings()->getCSSExternalScannerPreload()
-            ? ScanAndPreload
-            : ScanOnly)
-    , m_preloader(preloader)
-    , m_resource(toCSSStyleSheetResource(resource))
-{
-    m_resource->addClient(this, Resource::DontMarkAsReferenced);
 }
-
-CSSPreloaderResourceClient::~CSSPreloaderResourceClient() { }
-
-void CSSPreloaderResourceClient::setCSSStyleSheet(
-    const String& href,
-    const KURL& baseURL,
-    const String& charset,
-    const CSSStyleSheetResource*)
-{
-    clearResource();
-}
-
-// Only attach for one appendData call, as that's where most imports will likely
-// be (according to spec).
-void CSSPreloaderResourceClient::didAppendFirstData(
-    const CSSStyleSheetResource* resource)
-{
-    if (m_preloader)
-        scanCSS(resource);
-    clearResource();
-}
-
-void CSSPreloaderResourceClient::scanCSS(
-    const CSSStyleSheetResource* resource)
-{
-    DCHECK(m_preloader);
-
-    // Early abort if there is no document loader. Do this early to ensure that
-    // scan histograms and preload histograms do not count different quantities.
-    if (!m_preloader->document()->loader())
-        return;
-
-    // Passing an empty SegmentedString here results in PreloadRequest with no
-    // file/line information.
-    // TODO(csharrison): If this becomes an issue the CSSPreloadScanner may be
-    // augmented to take care of this case without performing an additional
-    // copy.
-    double startTime = monotonicallyIncreasingTimeMS();
-    const String& chunk = resource->sheetText();
-    if (chunk.isNull())
-        return;
-    CSSPreloadScanner cssPreloadScanner;
-    PreloadRequestStream preloads;
-    cssPreloadScanner.scan(chunk, SegmentedString(), preloads,
-        resource->response().url());
-    DEFINE_STATIC_LOCAL(CustomCountHistogram, cssScanTimeHistogram,
-        ("PreloadScanner.ExternalCSS.ScanTime", 1, 1000000, 50));
-    cssScanTimeHistogram.count((monotonicallyIncreasingTimeMS() - startTime) * 1000);
-    fetchPreloads(preloads);
-}
-
-void CSSPreloaderResourceClient::fetchPreloads(PreloadRequestStream& preloads)
-{
-    if (preloads.size()) {
-        m_preloader->document()->loader()->didObserveLoadingBehavior(
-            WebLoadingBehaviorFlag::WebLoadingBehaviorCSSPreloadFound);
-    }
-
-    if (m_policy == ScanAndPreload) {
-        int currentPreloadCount = m_preloader->countPreloads();
-        m_preloader->takeAndPreload(preloads);
-        DEFINE_STATIC_LOCAL(
-            CustomCountHistogram, cssImportHistogram,
-            ("PreloadScanner.ExternalCSS.PreloadCount", 1, 100, 50));
-        cssImportHistogram.count(m_preloader->countPreloads() - currentPreloadCount);
-    }
-}
-
-void CSSPreloaderResourceClient::clearResource()
-{
-    // Do not remove the client for unused, speculative markup preloads. This will
-    // trigger cancellation of the request and potential removal from memory
-    // cache. Link preloads are an exception because they support dynamic removal
-    // cancelling the request (and have their own passive resource client).
-    // Note: Speculative preloads which remain unused for their lifetime will
-    // never have this client removed. This should be fine because we only hold
-    // weak references to the resource.
-    if (m_resource && m_resource->isUnusedPreload() && !m_resource->isLinkPreload()) {
-        return;
-    }
-
-    if (m_resource)
-        m_resource->removeClient(this);
-    m_resource.clear();
-}
-
-DEFINE_TRACE(CSSPreloaderResourceClient)
-{
-    visitor->trace(m_preloader);
-    visitor->trace(m_resource);
-    StyleSheetResourceClient::trace(visitor);
-}
-
-} // namespace blink

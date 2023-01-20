@@ -4,8 +4,7 @@
  * Copyright (C) 2000 Dirk Mueller <mueller@kde.org>
  * Copyright (C) 2006 Allan Sandfeld Jensen <kde@carewolf.com>
  * Copyright (C) 2006 Samuel Weinig <sam.weinig@gmail.com>
- * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009, 2010 Apple Inc.
- *               All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009, 2010 Apple Inc. All rights reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2010 Patrick Gansterer <paroga@paroga.com>
  *
@@ -26,15 +25,16 @@
  *
  */
 
+#include "config.h"
 #include "core/layout/LayoutImageResourceStyleImage.h"
 
-#include "core/layout/LayoutReplaced.h"
+#include "core/fetch/ImageResource.h"
+#include "core/layout/LayoutObject.h"
 #include "core/style/StyleFetchedImage.h"
 
 namespace blink {
 
-LayoutImageResourceStyleImage::LayoutImageResourceStyleImage(
-    StyleImage* styleImage)
+LayoutImageResourceStyleImage::LayoutImageResourceStyleImage(StyleImage* styleImage)
     : m_styleImage(styleImage)
 {
     ASSERT(m_styleImage);
@@ -42,7 +42,6 @@ LayoutImageResourceStyleImage::LayoutImageResourceStyleImage(
 
 LayoutImageResourceStyleImage::~LayoutImageResourceStyleImage()
 {
-    ASSERT(!m_cachedImage);
 }
 
 void LayoutImageResourceStyleImage::initialize(LayoutObject* layoutObject)
@@ -59,31 +58,21 @@ void LayoutImageResourceStyleImage::shutdown()
 {
     ASSERT(m_layoutObject);
     m_styleImage->removeClient(m_layoutObject);
-    m_cachedImage = nullptr;
+    m_cachedImage = 0;
 }
 
-PassRefPtr<Image> LayoutImageResourceStyleImage::image(const IntSize& size,
-    float zoom) const
+PassRefPtr<Image> LayoutImageResourceStyleImage::image(int width, int height) const
 {
-    // Generated content may trigger calls to image() while we're still pending,
-    // don't assert but gracefully exit.
+    // Generated content may trigger calls to image() while we're still pending, don't assert but gracefully exit.
     if (m_styleImage->isPendingImage())
         return nullptr;
-    return m_styleImage->image(*m_layoutObject, size, zoom);
+    return m_styleImage->image(m_layoutObject, IntSize(width, height));
 }
 
-LayoutSize LayoutImageResourceStyleImage::imageSize(float multiplier) const
+void LayoutImageResourceStyleImage::setContainerSizeForLayoutObject(const IntSize& size)
 {
-    // TODO(davve): Find out the correct default object size in this context.
-    return m_styleImage->imageSize(
-        *m_layoutObject, multiplier,
-        LayoutSize(LayoutReplaced::defaultWidth, LayoutReplaced::defaultHeight));
-}
-
-DEFINE_TRACE(LayoutImageResourceStyleImage)
-{
-    visitor->trace(m_styleImage);
-    LayoutImageResource::trace(visitor);
+    ASSERT(m_layoutObject);
+    m_styleImage->setContainerSizeForLayoutObject(m_layoutObject, size, m_layoutObject->style()->effectiveZoom());
 }
 
 } // namespace blink

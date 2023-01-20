@@ -35,11 +35,15 @@
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
+<<<<<<< HEAD
 #include "wtf/build_config.h"
+=======
+>>>>>>> miniblink49
 
 namespace blink {
 
 class AudioBus;
+<<<<<<< HEAD
 class AudioBufferOptions;
 class BaseAudioContext;
 class ExceptionState;
@@ -65,19 +69,36 @@ public:
         size_t dataSize,
         bool mixToMono,
         float sampleRate);
+=======
+class ExceptionState;
+
+class MODULES_EXPORT AudioBuffer : public GarbageCollectedFinalized<AudioBuffer>, public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
+public:
+    static AudioBuffer* create(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate);
+    static AudioBuffer* create(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate, ExceptionState&);
+
+    // Returns 0 if data is not a valid audio file.
+    static AudioBuffer* createFromAudioFileData(const void* data, size_t dataSize, bool mixToMono, float sampleRate);
+>>>>>>> miniblink49
 
     static AudioBuffer* createFromAudioBus(AudioBus*);
 
     // Format
     size_t length() const { return m_length; }
+<<<<<<< HEAD
     double duration() const
     {
         return length() / static_cast<double>(sampleRate());
     }
+=======
+    double duration() const { return length() / static_cast<double>(sampleRate()); }
+>>>>>>> miniblink49
     float sampleRate() const { return m_sampleRate; }
 
     // Channel data access
     unsigned numberOfChannels() const { return m_channels.size(); }
+<<<<<<< HEAD
     DOMFloat32Array* getChannelData(unsigned channelIndex, ExceptionState&);
     DOMFloat32Array* getChannelData(unsigned channelIndex);
     void copyFromChannel(DOMFloat32Array*, long channelNumber, ExceptionState&);
@@ -103,12 +124,35 @@ private:
     AudioBuffer(unsigned numberOfChannels,
         size_t numberOfFrames,
         float sampleRate);
+=======
+    PassRefPtr<DOMFloat32Array> getChannelData(unsigned channelIndex, ExceptionState&);
+    DOMFloat32Array* getChannelData(unsigned channelIndex);
+    void copyFromChannel(DOMFloat32Array*, long channelNumber, ExceptionState&);
+    void copyFromChannel(DOMFloat32Array*, long channelNumber, unsigned long startInChannel, ExceptionState&);
+    void copyToChannel(DOMFloat32Array*, long channelNumber, ExceptionState&);
+    void copyToChannel(DOMFloat32Array*, long channelNumber, unsigned long startInChannel, ExceptionState&);
+
+    void zero();
+
+    DEFINE_INLINE_TRACE() { }
+
+private:
+    static PassRefPtr<DOMFloat32Array> createFloat32ArrayOrNull(size_t length);
+
+protected:
+    AudioBuffer(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate);
+    explicit AudioBuffer(AudioBus*);
+>>>>>>> miniblink49
     bool createdSuccessfully(unsigned desiredNumberOfChannels) const;
 
     float m_sampleRate;
     size_t m_length;
 
+<<<<<<< HEAD
     HeapVector<Member<DOMFloat32Array>> m_channels;
+=======
+    Vector<RefPtr<DOMFloat32Array>> m_channels;
+>>>>>>> miniblink49
 };
 
 } // namespace blink

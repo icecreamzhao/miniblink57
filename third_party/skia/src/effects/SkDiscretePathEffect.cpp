@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -5,6 +9,7 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
 #include "SkDiscretePathEffect.h"
 #include "SkFixed.h"
 #include "SkPathMeasure.h"
@@ -26,6 +31,15 @@ sk_sp<SkPathEffect> SkDiscretePathEffect::Make(SkScalar segLength, SkScalar devi
 
 static void Perterb(SkPoint* p, const SkVector& tangent, SkScalar scale)
 {
+=======
+
+#include "SkDiscretePathEffect.h"
+#include "SkReadBuffer.h"
+#include "SkWriteBuffer.h"
+#include "SkPathMeasure.h"
+
+static void Perterb(SkPoint* p, const SkVector& tangent, SkScalar scale) {
+>>>>>>> miniblink49
     SkVector normal = tangent;
     normal.rotateCCW();
     normal.setLength(scale);
@@ -33,11 +47,17 @@ static void Perterb(SkPoint* p, const SkVector& tangent, SkScalar scale)
 }
 
 SkDiscretePathEffect::SkDiscretePathEffect(SkScalar segLength,
+<<<<<<< HEAD
     SkScalar deviation,
     uint32_t seedAssist)
     : fSegLength(segLength)
     , fPerterb(deviation)
     , fSeedAssist(seedAssist)
+=======
+                                           SkScalar deviation,
+                                           uint32_t seedAssist)
+    : fSegLength(segLength), fPerterb(deviation), fSeedAssist(seedAssist)
+>>>>>>> miniblink49
 {
 }
 
@@ -54,6 +74,7 @@ SkDiscretePathEffect::SkDiscretePathEffect(SkScalar segLength,
 
 class LCGRandom {
 public:
+<<<<<<< HEAD
     LCGRandom(uint32_t seed)
         : fSeed(seed)
     {
@@ -61,25 +82,39 @@ public:
 
     /** Return the next pseudo random number expressed as a SkScalar
         in the range [-SK_Scalar1..SK_Scalar1).
+=======
+    LCGRandom(uint32_t seed) : fSeed(seed) {}
+
+    /** Return the next pseudo random number expressed as a SkScalar
+        in the range (-SK_Scalar1..SK_Scalar1).
+>>>>>>> miniblink49
     */
     SkScalar nextSScalar1() { return SkFixedToScalar(this->nextSFixed1()); }
 
 private:
     /** Return the next pseudo random number as an unsigned 32bit value.
     */
+<<<<<<< HEAD
     uint32_t nextU()
     {
         uint32_t r = fSeed * kMul + kAdd;
         fSeed = r;
         return r;
     }
+=======
+    uint32_t nextU() { uint32_t r = fSeed * kMul + kAdd; fSeed = r; return r; }
+>>>>>>> miniblink49
 
     /** Return the next pseudo random number as a signed 32bit value.
      */
     int32_t nextS() { return (int32_t)this->nextU(); }
 
     /** Return the next pseudo random number expressed as a signed SkFixed
+<<<<<<< HEAD
      in the range [-SK_Fixed1..SK_Fixed1).
+=======
+     in the range (-SK_Fixed1..SK_Fixed1).
+>>>>>>> miniblink49
      */
     SkFixed nextSFixed1() { return this->nextS() >> 15; }
 
@@ -92,15 +127,23 @@ private:
 };
 
 bool SkDiscretePathEffect::filterPath(SkPath* dst, const SkPath& src,
+<<<<<<< HEAD
     SkStrokeRec* rec, const SkRect*) const
 {
     bool doFill = rec->isFillStyle();
 
     SkPathMeasure meas(src, doFill);
+=======
+                                      SkStrokeRec* rec, const SkRect*) const {
+    bool doFill = rec->isFillStyle();
+
+    SkPathMeasure   meas(src, doFill);
+>>>>>>> miniblink49
 
     /* Caller may supply their own seed assist, which by default is 0 */
     uint32_t seed = fSeedAssist ^ SkScalarRoundToInt(meas.getLength());
 
+<<<<<<< HEAD
     LCGRandom rand(seed ^ ((seed << 16) | (seed >> 16)));
     SkScalar scale = fPerterb;
     SkPoint p;
@@ -119,6 +162,26 @@ bool SkDiscretePathEffect::filterPath(SkPath* dst, const SkPath& src,
             if (meas.isClosed()) {
                 n -= 1;
                 distance += delta / 2;
+=======
+    LCGRandom   rand(seed ^ ((seed << 16) | (seed >> 16)));
+    SkScalar    scale = fPerterb;
+    SkPoint     p;
+    SkVector    v;
+
+    do {
+        SkScalar    length = meas.getLength();
+
+        if (fSegLength * (2 + doFill) > length) {
+            meas.getSegment(0, length, dst, true);  // to short for us to mangle
+        } else {
+            int         n = SkScalarRoundToInt(length / fSegLength);
+            SkScalar    delta = length / n;
+            SkScalar    distance = 0;
+
+            if (meas.isClosed()) {
+                n -= 1;
+                distance += delta/2;
+>>>>>>> miniblink49
             }
 
             if (meas.getPosTan(distance, &p, &v)) {
@@ -140,6 +203,7 @@ bool SkDiscretePathEffect::filterPath(SkPath* dst, const SkPath& src,
     return true;
 }
 
+<<<<<<< HEAD
 sk_sp<SkFlattenable> SkDiscretePathEffect::CreateProc(SkReadBuffer& buffer)
 {
     SkScalar segLength = buffer.readScalar();
@@ -150,14 +214,28 @@ sk_sp<SkFlattenable> SkDiscretePathEffect::CreateProc(SkReadBuffer& buffer)
 
 void SkDiscretePathEffect::flatten(SkWriteBuffer& buffer) const
 {
+=======
+SkFlattenable* SkDiscretePathEffect::CreateProc(SkReadBuffer& buffer) {
+    SkScalar segLength = buffer.readScalar();
+    SkScalar perterb = buffer.readScalar();
+    uint32_t seed = buffer.readUInt();
+    return Create(segLength, perterb, seed);
+}
+
+void SkDiscretePathEffect::flatten(SkWriteBuffer& buffer) const {
+>>>>>>> miniblink49
     buffer.writeScalar(fSegLength);
     buffer.writeScalar(fPerterb);
     buffer.writeUInt(fSeedAssist);
 }
 
 #ifndef SK_IGNORE_TO_STRING
+<<<<<<< HEAD
 void SkDiscretePathEffect::toString(SkString* str) const
 {
+=======
+void SkDiscretePathEffect::toString(SkString* str) const {
+>>>>>>> miniblink49
     str->appendf("SkDiscretePathEffect: (");
     str->appendf("segLength: %.2f deviation: %.2f seed %d", fSegLength, fPerterb, fSeedAssist);
     str->append(")");

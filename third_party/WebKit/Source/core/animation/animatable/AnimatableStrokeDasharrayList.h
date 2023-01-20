@@ -37,39 +37,35 @@
 
 namespace blink {
 
-class CORE_EXPORT AnimatableStrokeDasharrayList final
-    : public AnimatableRepeatable {
+class CORE_EXPORT AnimatableStrokeDasharrayList final : public AnimatableRepeatable {
 public:
-    ~AnimatableStrokeDasharrayList() override { }
+    virtual ~AnimatableStrokeDasharrayList() { }
 
-    static PassRefPtr<AnimatableStrokeDasharrayList> create(
-        PassRefPtr<SVGDashArray> lengths,
-        float zoom)
+    static PassRefPtrWillBeRawPtr<AnimatableStrokeDasharrayList> create(PassRefPtr<SVGDashArray> lengths, float zoom)
     {
-        return adoptRef(
-            new AnimatableStrokeDasharrayList(std::move(lengths), zoom));
+        return adoptRefWillBeNoop(new AnimatableStrokeDasharrayList(lengths, zoom));
     }
 
     PassRefPtr<SVGDashArray> toSVGDashArray(float zoom) const;
 
+    DECLARE_VIRTUAL_TRACE();
+
 protected:
-    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
-        double fraction) const override;
-    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
+    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
     AnimatableStrokeDasharrayList(PassRefPtr<SVGDashArray>, float zoom);
     // This will consume the vector passed into it.
-    AnimatableStrokeDasharrayList(Vector<RefPtr<AnimatableValue>>& values)
+    AnimatableStrokeDasharrayList(WillBeHeapVector<RefPtrWillBeMember<AnimatableValue>>& values)
         : AnimatableRepeatable(values)
     {
     }
 
-    AnimatableType type() const override { return TypeStrokeDasharrayList; }
+    virtual AnimatableType type() const override { return TypeStrokeDasharrayList; }
 };
 
-DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableStrokeDasharrayList,
-    isStrokeDasharrayList());
+DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableStrokeDasharrayList, isStrokeDasharrayList());
 
 } // namespace blink
 

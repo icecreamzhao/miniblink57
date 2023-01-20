@@ -41,12 +41,17 @@ public:
     ~WebSpeechRecognitionHandle() { reset(); }
     WebSpeechRecognitionHandle() { }
 
+<<<<<<< HEAD
     WebSpeechRecognitionHandle(const WebSpeechRecognitionHandle& other)
     {
         assign(other);
     }
     WebSpeechRecognitionHandle& operator=(
         const WebSpeechRecognitionHandle& other)
+=======
+    WebSpeechRecognitionHandle(const WebSpeechRecognitionHandle& other) { assign(other); }
+    WebSpeechRecognitionHandle& operator=(const WebSpeechRecognitionHandle& other)
+>>>>>>> miniblink49
     {
         assign(other);
         return *this;
@@ -55,8 +60,13 @@ public:
     BLINK_EXPORT void reset();
     BLINK_EXPORT void assign(const WebSpeechRecognitionHandle&);
 
+<<<<<<< HEAD
     // Comparison functions are provided so that WebSpeechRecognitionHandle
     // objects can be stored in a hash map.
+=======
+    // Comparison functions are provided so that WebSpeechRecognitionHandle objects
+    // can be stored in a hash map.
+>>>>>>> miniblink49
     BLINK_EXPORT bool equals(const WebSpeechRecognitionHandle&) const;
     BLINK_EXPORT bool lessThan(const WebSpeechRecognitionHandle&) const;
 
@@ -69,20 +79,32 @@ private:
     WebPrivatePtr<SpeechRecognition> m_private;
 };
 
+<<<<<<< HEAD
 inline bool operator==(const WebSpeechRecognitionHandle& a,
     const WebSpeechRecognitionHandle& b)
+=======
+inline bool operator==(const WebSpeechRecognitionHandle& a, const WebSpeechRecognitionHandle& b)
+>>>>>>> miniblink49
 {
     return a.equals(b);
 }
 
+<<<<<<< HEAD
 inline bool operator!=(const WebSpeechRecognitionHandle& a,
     const WebSpeechRecognitionHandle& b)
+=======
+inline bool operator!=(const WebSpeechRecognitionHandle& a, const WebSpeechRecognitionHandle& b)
+>>>>>>> miniblink49
 {
     return !(a == b);
 }
 
+<<<<<<< HEAD
 inline bool operator<(const WebSpeechRecognitionHandle& a,
     const WebSpeechRecognitionHandle& b)
+=======
+inline bool operator<(const WebSpeechRecognitionHandle& a, const WebSpeechRecognitionHandle& b)
+>>>>>>> miniblink49
 {
     return a.lessThan(b);
 }

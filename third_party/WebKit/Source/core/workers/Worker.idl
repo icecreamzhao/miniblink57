@@ -28,16 +28,15 @@
 // https://html.spec.whatwg.org/#dedicated-workers-and-the-worker-interface
 
 [
-    ActiveScriptWrappable,
-    DependentLifetime,
+    ActiveDOMObject,
     Constructor(DOMString scriptUrl),
     ConstructorCallWith=ExecutionContext,
-    // TODO(foolip): Exposed=(Window,Worker),
+    // TODO(philipj): Exposed=(Window,Worker),
     RaisesException=Constructor,
 ] interface Worker : EventTarget {
     void terminate();
 
-    // TODO(foolip): The SerializedScriptValue type should be any.
+    // TODO(philipj): The SerializedScriptValue type should be any.
     [PostMessage, RaisesException] void postMessage(SerializedScriptValue message, optional sequence<Transferable> transfer);
     attribute EventHandler onmessage;
 };

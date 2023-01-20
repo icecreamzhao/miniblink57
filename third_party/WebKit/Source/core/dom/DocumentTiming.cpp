@@ -2,89 +2,57 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "config.h"
 #include "core/dom/DocumentTiming.h"
 
-#include "core/dom/Document.h"
-#include "core/loader/DocumentLoader.h"
-#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/TraceEvent.h"
 
 namespace blink {
 
-DocumentTiming::DocumentTiming(Document& document)
-    : m_document(document)
+DocumentTiming::DocumentTiming()
+    : m_domLoading(0.0)
+    , m_domInteractive(0.0)
+    , m_domContentLoadedEventStart(0.0)
+    , m_domContentLoadedEventEnd(0.0)
+    , m_domComplete(0.0)
+    , m_firstLayout(0.0)
 {
 }
 
-DEFINE_TRACE(DocumentTiming)
+void DocumentTiming::setDomLoading(double domLoading)
 {
-    visitor->trace(m_document);
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "domLoading", domLoading);
+    m_domLoading = domLoading;
 }
 
-LocalFrame* DocumentTiming::frame() const
+void DocumentTiming::setDomInteractive(double domInteractive)
 {
-    return m_document ? m_document->frame() : nullptr;
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "domInteractive", domInteractive);
+    m_domInteractive = domInteractive;
 }
 
-void DocumentTiming::notifyDocumentTimingChanged()
+void DocumentTiming::setDomContentLoadedEventStart(double domContentLoadedEventStart)
 {
-    if (m_document && m_document->loader())
-        m_document->loader()->didChangePerformanceTiming();
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "domContentLoadedEventStart", domContentLoadedEventStart);
+    m_domContentLoadedEventStart = domContentLoadedEventStart;
 }
 
-void DocumentTiming::markDomLoading()
+void DocumentTiming::setDomContentLoadedEventEnd(double domContentLoadedEventEnd)
 {
-    m_domLoading = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing,rail", "domLoading",
-    //                                    TraceEvent::toTraceTimestamp(m_domLoading),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "domContentLoadedEventEnd", domContentLoadedEventEnd);
+    m_domContentLoadedEventEnd = domContentLoadedEventEnd;
 }
 
-void DocumentTiming::markDomInteractive()
+void DocumentTiming::setDomComplete(double domComplete)
 {
-    m_domInteractive = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing,rail", "domInteractive",
-    //       TraceEvent::toTraceTimestamp(m_domInteractive), "frame", frame());
-    notifyDocumentTimingChanged();
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "domComplete", domComplete);
+    m_domComplete = domComplete;
 }
 
-void DocumentTiming::markDomContentLoadedEventStart()
+void DocumentTiming::setFirstLayout(double firstLayout)
 {
-    m_domContentLoadedEventStart = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing,rail", "domContentLoadedEventStart",
-    //       TraceEvent::toTraceTimestamp(m_domContentLoadedEventStart), "frame",
-    //       frame());
-    notifyDocumentTimingChanged();
-}
-
-void DocumentTiming::markDomContentLoadedEventEnd()
-{
-    m_domContentLoadedEventEnd = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1(
-    //       "blink.user_timing,rail", "domContentLoadedEventEnd",
-    //       TraceEvent::toTraceTimestamp(m_domContentLoadedEventEnd), "frame",
-    //       frame());
-    notifyDocumentTimingChanged();
-}
-
-void DocumentTiming::markDomComplete()
-{
-    m_domComplete = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing,rail", "domComplete",
-    //                                    TraceEvent::toTraceTimestamp(m_domComplete),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
-}
-
-void DocumentTiming::markFirstLayout()
-{
-    m_firstLayout = monotonicallyIncreasingTime();
-    //   TRACE_EVENT_MARK_WITH_TIMESTAMP1("blink.user_timing,rail", "firstLayout",
-    //                                    TraceEvent::toTraceTimestamp(m_firstLayout),
-    //                                    "frame", frame());
-    notifyDocumentTimingChanged();
+    TRACE_EVENT_MARK_WITH_TIMESTAMP("blink.user_timing", "firstLayout", firstLayout);
+    m_firstLayout = firstLayout;
 }
 
 } // namespace blink

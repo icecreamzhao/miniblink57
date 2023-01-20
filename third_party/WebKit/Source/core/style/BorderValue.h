@@ -28,29 +28,34 @@
 #include "core/css/StyleColor.h"
 #include "core/style/ComputedStyleConstants.h"
 #include "platform/graphics/Color.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
 class BorderValue {
-    DISALLOW_NEW();
-    friend class ComputedStyle;
-
+friend class ComputedStyle;
 public:
     BorderValue()
         : m_color(0)
         , m_colorIsCurrentColor(true)
         , m_width(3)
-        , m_style(BorderStyleNone)
-        , m_isAuto(OutlineIsAutoOff)
+        , m_style(BNONE)
+        , m_isAuto(AUTO_OFF)
     {
     }
 
-    bool nonZero() const { return width() && (m_style != BorderStyleNone); }
+    bool nonZero(bool checkStyle = true) const
+    {
+        return width() && (!checkStyle || m_style != BNONE);
+    }
 
     bool isTransparent() const
     {
         return !m_colorIsCurrentColor && !m_color.alpha();
+    }
+
+    bool isVisible(bool checkStyle = true) const
+    {
+        return nonZero(checkStyle) && !isTransparent() && (!checkStyle || m_style != BHIDDEN);
     }
 
     bool operator==(const BorderValue& o) const
@@ -58,18 +63,20 @@ public:
         return m_width == o.m_width && m_style == o.m_style && m_color == o.m_color && m_colorIsCurrentColor == o.m_colorIsCurrentColor;
     }
 
-    // The default width is 3px, but if the style is none we compute a value of 0
-    // (in ComputedStyle itself)
+    // The default width is 3px, but if the style is none we compute a value of 0 (in ComputedStyle itself)
     bool visuallyEqual(const BorderValue& o) const
     {
-        if (m_style == BorderStyleNone && o.m_style == BorderStyleNone)
+        if (m_style == BNONE && o.m_style == BNONE)
             return true;
-        if (m_style == BorderStyleHidden && o.m_style == BorderStyleHidden)
+        if (m_style == BHIDDEN && o.m_style == BHIDDEN)
             return true;
         return *this == o;
     }
 
-    bool operator!=(const BorderValue& o) const { return !(*this == o); }
+    bool operator!=(const BorderValue& o) const
+    {
+        return !(*this == o);
+    }
 
     void setColor(const StyleColor& color)
     {
@@ -77,11 +84,7 @@ public:
         m_colorIsCurrentColor = color.isCurrentColor();
     }
 
-    StyleColor color() const
-    {
-        return m_colorIsCurrentColor ? StyleColor::currentColor()
-                                     : StyleColor(m_color);
-    }
+    StyleColor color() const { return m_colorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_color); }
 
     int width() const { return m_width; }
 

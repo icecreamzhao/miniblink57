@@ -32,12 +32,10 @@
 
 namespace blink {
 
-// Very similar to the TextIterator, except that the chunks of text returned are
-// "well behaved", meaning they never end split up a word.  This is useful for
-// spellcheck or (perhaps one day) searching.
+// Very similar to the TextIterator, except that the chunks of text returned are "well behaved",
+// meaning they never end split up a word.  This is useful for spellcheck or (perhaps one day) searching.
 class WordAwareIterator {
     STACK_ALLOCATED();
-
 public:
     explicit WordAwareIterator(const Position& start, const Position& end);
     ~WordAwareIterator();
@@ -50,7 +48,7 @@ public:
     int length() const;
 
 private:
-    ForwardsTextBuffer m_buffer;
+    Vector<UChar> m_buffer;
     // Did we have to look ahead in the textIterator to confirm the current chunk?
     bool m_didLookAhead;
     TextIterator m_textIterator;

@@ -43,11 +43,10 @@ public:
     {
     }
 
-    LayoutRect shapeMarginLogicalBoundingBox() const override;
-    bool isEmpty() const override { return m_bounds.isEmpty(); }
-    LineSegment getExcludedInterval(LayoutUnit logicalTop,
-        LayoutUnit logicalHeight) const override;
-    void buildDisplayPaths(DisplayPaths&) const override;
+    virtual LayoutRect shapeMarginLogicalBoundingBox() const override;
+    virtual bool isEmpty() const override { return m_bounds.isEmpty(); }
+    virtual LineSegment getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const override;
+    virtual void buildDisplayPaths(DisplayPaths&) const override;
 
 private:
     FloatRoundedRect shapeMarginBounds() const;

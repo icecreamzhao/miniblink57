@@ -30,9 +30,8 @@ namespace blink {
 
 class HTMLButtonElement final : public HTMLFormControlElement {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
-    static HTMLButtonElement* create(Document&);
+    static PassRefPtrWillBeRawPtr<HTMLButtonElement> create(Document&, HTMLFormElement*);
 
     void setType(const AtomicString&);
 
@@ -41,11 +40,9 @@ public:
     bool willRespondToMouseClickEvents() override;
 
 private:
-    explicit HTMLButtonElement(Document&);
+    HTMLButtonElement(Document&, HTMLFormElement*);
 
-    enum Type { SUBMIT,
-        RESET,
-        BUTTON };
+    enum Type { SUBMIT, RESET, BUTTON };
 
     const AtomicString& formControlType() const override;
 
@@ -55,17 +52,17 @@ private:
     bool alwaysCreateUserAgentShadowRoot() const override { return false; }
 
     Node::InsertionNotificationRequest insertedInto(ContainerNode*) override;
-    void parseAttribute(const AttributeModificationParams&) override;
+    void attributeWillChange(const QualifiedName&, const AtomicString& oldValue, const AtomicString& newValue) override;
+    void parseAttribute(const QualifiedName&, const AtomicString&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
     void defaultEventHandler(Event*) override;
 
-    void appendToFormData(FormData&) override;
+    bool appendFormData(FormDataList&, bool) override;
 
     bool isEnumeratable() const override { return true; }
     bool supportLabels() const override { return true; }
     bool isInteractiveContent() const override;
     bool supportsAutofocus() const override;
-    bool matchesDefaultPseudoClass() const override;
 
     bool canBeSuccessfulSubmitButton() const override;
     bool isActivatedSubmit() const override;

@@ -10,6 +10,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
+<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,19 +25,43 @@
  */
 
 #include "modules/webaudio/DelayNode.h"
+=======
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+#if ENABLE(WEB_AUDIO)
+#include "modules/webaudio/DelayNode.h"
+
+>>>>>>> miniblink49
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
 #include "modules/webaudio/AudioBasicProcessorHandler.h"
+<<<<<<< HEAD
 #include "modules/webaudio/DelayOptions.h"
 #include "modules/webaudio/DelayProcessor.h"
 #include "wtf/MathExtras.h"
 #include "wtf/PtrUtil.h"
+=======
+#include "modules/webaudio/DelayProcessor.h"
+#include "wtf/MathExtras.h"
+>>>>>>> miniblink49
 
 namespace blink {
 
 const double maximumAllowedDelayTime = 180;
 
+<<<<<<< HEAD
 DelayNode::DelayNode(BaseAudioContext& context, double maxDelayTime)
     : AudioNode(context)
     , m_delayTime(AudioParam::create(context,
@@ -74,10 +99,22 @@ DelayNode* DelayNode::create(BaseAudioContext& context,
         return nullptr;
     }
 
+=======
+DelayNode::DelayNode(AudioContext& context, float sampleRate, double maxDelayTime)
+    : AudioNode(context)
+    , m_delayTime(AudioParam::create(context, 0.0))
+{
+    setHandler(AudioBasicProcessorHandler::create(AudioHandler::NodeTypeDelay, *this, sampleRate, adoptPtr(new DelayProcessor(sampleRate, 1, m_delayTime->handler(), maxDelayTime))));
+}
+
+DelayNode* DelayNode::create(AudioContext& context, float sampleRate, double maxDelayTime, ExceptionState& exceptionState)
+{
+>>>>>>> miniblink49
     if (maxDelayTime <= 0 || maxDelayTime >= maximumAllowedDelayTime) {
         exceptionState.throwDOMException(
             NotSupportedError,
             ExceptionMessages::indexOutsideRange(
+<<<<<<< HEAD
                 "max delay time", maxDelayTime, 0.0,
                 ExceptionMessages::ExclusiveBound, maximumAllowedDelayTime,
                 ExceptionMessages::ExclusiveBound));
@@ -103,6 +140,17 @@ DelayNode* DelayNode::create(BaseAudioContext* context,
         node->delayTime()->setValue(options.delayTime());
 
     return node;
+=======
+                "max delay time",
+                maxDelayTime,
+                0.0,
+                ExceptionMessages::ExclusiveBound,
+                maximumAllowedDelayTime,
+                ExceptionMessages::ExclusiveBound));
+        return nullptr;
+    }
+    return new DelayNode(context, sampleRate, maxDelayTime);
+>>>>>>> miniblink49
 }
 
 AudioParam* DelayNode::delayTime()
@@ -117,3 +165,8 @@ DEFINE_TRACE(DelayNode)
 }
 
 } // namespace blink
+<<<<<<< HEAD
+=======
+
+#endif // ENABLE(WEB_AUDIO)
+>>>>>>> miniblink49

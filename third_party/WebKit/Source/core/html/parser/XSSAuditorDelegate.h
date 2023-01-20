@@ -28,28 +28,22 @@
 
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
-#include "wtf/PtrUtil.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/TextPosition.h"
 #include "wtf/text/WTFString.h"
-#include <memory>
 
 namespace blink {
 
 class Document;
-class EncodedFormData;
+class FormData;
 
 class XSSInfo {
-    USING_FAST_MALLOC(XSSInfo);
-    WTF_MAKE_NONCOPYABLE(XSSInfo);
-
 public:
-    static std::unique_ptr<XSSInfo> create(const String& originalURL,
-        bool didBlockEntirePage,
-        bool didSendXSSProtectionHeader)
+    static PassOwnPtr<XSSInfo> create(const String& originalURL, bool didBlockEntirePage, bool didSendXSSProtectionHeader, bool didSendCSPHeader)
     {
-        return WTF::wrapUnique(new XSSInfo(originalURL, didBlockEntirePage,
-            didSendXSSProtectionHeader));
+        return adoptPtr(new XSSInfo(originalURL, didBlockEntirePage, didSendXSSProtectionHeader, didSendCSPHeader));
     }
 
     String buildConsoleError() const;
@@ -58,23 +52,21 @@ public:
     String m_originalURL;
     bool m_didBlockEntirePage;
     bool m_didSendXSSProtectionHeader;
+    bool m_didSendCSPHeader;
     TextPosition m_textPosition;
 
 private:
-    XSSInfo(const String& originalURL,
-        bool didBlockEntirePage,
-        bool didSendXSSProtectionHeader)
+    XSSInfo(const String& originalURL, bool didBlockEntirePage, bool didSendXSSProtectionHeader, bool didSendCSPHeader)
         : m_originalURL(originalURL.isolatedCopy())
         , m_didBlockEntirePage(didBlockEntirePage)
         , m_didSendXSSProtectionHeader(didSendXSSProtectionHeader)
-    {
-    }
+        , m_didSendCSPHeader(didSendCSPHeader)
+    { }
 };
 
 class XSSAuditorDelegate final {
-    DISALLOW_NEW();
+    DISALLOW_ALLOCATION();
     WTF_MAKE_NONCOPYABLE(XSSAuditorDelegate);
-
 public:
     explicit XSSAuditorDelegate(Document*);
     DECLARE_TRACE();
@@ -83,15 +75,15 @@ public:
     void setReportURL(const KURL& url) { m_reportURL = url; }
 
 private:
-    PassRefPtr<EncodedFormData> generateViolationReport(const XSSInfo&);
+    PassRefPtr<FormData> generateViolationReport(const XSSInfo&);
 
-    Member<Document> m_document;
+    RawPtrWillBeMember<Document> m_document;
     bool m_didSendNotifications;
     KURL m_reportURL;
 };
 
-typedef Vector<std::unique_ptr<XSSInfo>> XSSInfoStream;
+typedef Vector<OwnPtr<XSSInfo>> XSSInfoStream;
 
-} // namespace blink
+}
 
 #endif

@@ -25,9 +25,9 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "config.h"
 #include "core/style/SVGComputedStyleDefs.h"
 
-#include "core/style/DataEquivalency.h"
 #include "core/style/SVGComputedStyle.h"
 
 namespace blink {
@@ -57,7 +57,13 @@ StyleFillData::StyleFillData(const StyleFillData& other)
 
 bool StyleFillData::operator==(const StyleFillData& other) const
 {
-    return opacity == other.opacity && paintType == other.paintType && paintColor == other.paintColor && paintUri == other.paintUri && visitedLinkPaintType == other.visitedLinkPaintType && visitedLinkPaintColor == other.visitedLinkPaintColor && visitedLinkPaintUri == other.visitedLinkPaintUri;
+    return opacity == other.opacity
+        && paintType == other.paintType
+        && paintColor == other.paintColor
+        && paintUri == other.paintUri
+        && visitedLinkPaintType == other.visitedLinkPaintType
+        && visitedLinkPaintColor == other.visitedLinkPaintColor
+        && visitedLinkPaintUri == other.visitedLinkPaintUri;
 }
 
 StyleStrokeData::StyleStrokeData()
@@ -93,7 +99,17 @@ StyleStrokeData::StyleStrokeData(const StyleStrokeData& other)
 
 bool StyleStrokeData::operator==(const StyleStrokeData& other) const
 {
-    return width == other.width && opacity == other.opacity && miterLimit == other.miterLimit && dashOffset == other.dashOffset && *dashArray == *other.dashArray && paintType == other.paintType && paintColor == other.paintColor && paintUri == other.paintUri && visitedLinkPaintType == other.visitedLinkPaintType && visitedLinkPaintColor == other.visitedLinkPaintColor && visitedLinkPaintUri == other.visitedLinkPaintUri;
+    return width == other.width
+        && opacity == other.opacity
+        && miterLimit == other.miterLimit
+        && dashOffset == other.dashOffset
+        && *dashArray == *other.dashArray
+        && paintType == other.paintType
+        && paintColor == other.paintColor
+        && paintUri == other.paintUri
+        && visitedLinkPaintType == other.visitedLinkPaintType
+        && visitedLinkPaintColor == other.visitedLinkPaintColor
+        && visitedLinkPaintUri == other.visitedLinkPaintUri;
 }
 
 StyleStopData::StyleStopData()
@@ -111,7 +127,8 @@ StyleStopData::StyleStopData(const StyleStopData& other)
 
 bool StyleStopData::operator==(const StyleStopData& other) const
 {
-    return color == other.color && opacity == other.opacity;
+    return color == other.color
+        && opacity == other.opacity;
 }
 
 StyleMiscData::StyleMiscData()
@@ -133,23 +150,32 @@ StyleMiscData::StyleMiscData(const StyleMiscData& other)
 
 bool StyleMiscData::operator==(const StyleMiscData& other) const
 {
-    return floodOpacity == other.floodOpacity && floodColor == other.floodColor && lightingColor == other.lightingColor && baselineShiftValue == other.baselineShiftValue;
+    return floodOpacity == other.floodOpacity
+        && floodColor == other.floodColor
+        && lightingColor == other.lightingColor
+        && baselineShiftValue == other.baselineShiftValue;
 }
 
 StyleResourceData::StyleResourceData()
-    : masker(SVGComputedStyle::initialMaskerResource())
+    : clipper(SVGComputedStyle::initialClipperResource())
+    , filter(SVGComputedStyle::initialFilterResource())
+    , masker(SVGComputedStyle::initialMaskerResource())
 {
 }
 
 StyleResourceData::StyleResourceData(const StyleResourceData& other)
     : RefCounted<StyleResourceData>()
+    , clipper(other.clipper)
+    , filter(other.filter)
     , masker(other.masker)
 {
 }
 
 bool StyleResourceData::operator==(const StyleResourceData& other) const
 {
-    return masker == other.masker;
+    return clipper == other.clipper
+        && filter == other.filter
+        && masker == other.masker;
 }
 
 StyleInheritedResourceData::StyleInheritedResourceData()
@@ -159,8 +185,7 @@ StyleInheritedResourceData::StyleInheritedResourceData()
 {
 }
 
-StyleInheritedResourceData::StyleInheritedResourceData(
-    const StyleInheritedResourceData& other)
+StyleInheritedResourceData::StyleInheritedResourceData(const StyleInheritedResourceData& other)
     : RefCounted<StyleInheritedResourceData>()
     , markerStart(other.markerStart)
     , markerMid(other.markerMid)
@@ -168,15 +193,15 @@ StyleInheritedResourceData::StyleInheritedResourceData(
 {
 }
 
-bool StyleInheritedResourceData::operator==(
-    const StyleInheritedResourceData& other) const
+bool StyleInheritedResourceData::operator==(const StyleInheritedResourceData& other) const
 {
-    return markerStart == other.markerStart && markerMid == other.markerMid && markerEnd == other.markerEnd;
+    return markerStart == other.markerStart
+        && markerMid == other.markerMid
+        && markerEnd == other.markerEnd;
 }
 
-StyleGeometryData::StyleGeometryData()
-    : d(SVGComputedStyle::initialD())
-    , cx(SVGComputedStyle::initialCx())
+StyleLayoutData::StyleLayoutData()
+    : cx(SVGComputedStyle::initialCx())
     , cy(SVGComputedStyle::initialCy())
     , x(SVGComputedStyle::initialX())
     , y(SVGComputedStyle::initialY())
@@ -186,9 +211,8 @@ StyleGeometryData::StyleGeometryData()
 {
 }
 
-inline StyleGeometryData::StyleGeometryData(const StyleGeometryData& other)
-    : RefCounted<StyleGeometryData>()
-    , d(other.d)
+inline StyleLayoutData::StyleLayoutData(const StyleLayoutData& other)
+    : RefCounted<StyleLayoutData>()
     , cx(other.cx)
     , cy(other.cy)
     , x(other.x)
@@ -199,14 +223,20 @@ inline StyleGeometryData::StyleGeometryData(const StyleGeometryData& other)
 {
 }
 
-PassRefPtr<StyleGeometryData> StyleGeometryData::copy() const
+PassRefPtr<StyleLayoutData> StyleLayoutData::copy() const
 {
-    return adoptRef(new StyleGeometryData(*this));
+    return adoptRef(new StyleLayoutData(*this));
 }
 
-bool StyleGeometryData::operator==(const StyleGeometryData& other) const
+bool StyleLayoutData::operator==(const StyleLayoutData& other) const
 {
-    return x == other.x && y == other.y && r == other.r && rx == other.rx && ry == other.ry && cx == other.cx && cy == other.cy && dataEquivalent(d, other.d);
+    return x == other.x
+        && y == other.y
+        && r == other.r
+        && rx == other.rx
+        && ry == other.ry
+        && cx == other.cx
+        && cy == other.cy;
 }
 
-} // namespace blink
+}

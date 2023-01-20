@@ -206,6 +206,7 @@
 // gives 1Mb bytes per page.
 const int kPageSizeBits = 19;
 
+<<<<<<< HEAD
 template <class _Ty>
 constexpr const _Ty& std_max(const _Ty& _Left, const _Ty& _Right)
 {
@@ -232,4 +233,6 @@ constexpr const _Ty& std_min(const _Ty& _Left, const _Ty& _Right)
 #define std_isnormal isnormal
 #endif
 
+=======
+>>>>>>> miniblink49
 #endif  // V8_BASE_BUILD_CONFIG_H_

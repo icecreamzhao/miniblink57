@@ -44,7 +44,11 @@ public:
     bool isEmpty() const { return fTail == fHead && !fHead->fLiveCount; }
 
     /**
+<<<<<<< HEAD
      * Returns the total allocated size of the GrMemoryPool minus any preallocated amount
+=======
+     * Returns the total allocated size of the GrMemoryPool
+>>>>>>> miniblink49
      */
     size_t size() const { return fSize; }
 
@@ -58,6 +62,7 @@ private:
     void validate();
 
     struct BlockHeader {
+<<<<<<< HEAD
 #ifdef SK_DEBUG
         uint32_t fBlockSentinal; ///< known value to check for bad back pointers to blocks
 #endif
@@ -79,10 +84,21 @@ private:
         uint32_t fSentinal; ///< known value to check for memory stomping (e.g., (CD)*)
 #endif
         BlockHeader* fHeader; ///< pointer back to the block header in which an alloc resides
+=======
+        BlockHeader* fNext;      ///< doubly-linked list of blocks.
+        BlockHeader* fPrev;
+        int          fLiveCount; ///< number of outstanding allocations in the
+                                 ///< block.
+        intptr_t     fCurrPtr;   ///< ptr to the start of blocks free space.
+        intptr_t     fPrevPtr;   ///< ptr to the last allocation made
+        size_t       fFreeSize;  ///< amount of free space left in the block.
+        size_t       fSize;      ///< total allocated size of the block
+>>>>>>> miniblink49
     };
 
     enum {
         // We assume this alignment is good enough for everybody.
+<<<<<<< HEAD
         kAlignment = 8,
         kHeaderSize = GR_CT_ALIGN_UP(sizeof(BlockHeader), kAlignment),
         kPerAllocPad = GR_CT_ALIGN_UP(sizeof(AllocHeader), kAlignment),
@@ -95,6 +111,20 @@ private:
 #ifdef SK_DEBUG
     int fAllocationCnt;
     int fAllocBlockCnt;
+=======
+        kAlignment    = 8,
+        kHeaderSize   = GR_CT_ALIGN_UP(sizeof(BlockHeader), kAlignment),
+        kPerAllocPad  = GR_CT_ALIGN_UP(sizeof(BlockHeader*), kAlignment),
+    };
+    size_t                            fSize;
+    size_t                            fPreallocSize;
+    size_t                            fMinAllocSize;
+    BlockHeader*                      fHead;
+    BlockHeader*                      fTail;
+#ifdef SK_DEBUG
+    int                               fAllocationCnt;
+    int                               fAllocBlockCnt;
+>>>>>>> miniblink49
 #endif
 };
 

@@ -24,7 +24,14 @@
 namespace v8 {
 namespace internal {
 
+<<<<<<< HEAD
 } // namespace internal
 } // namespace v8
 
 #endif // V8_TARGET_ARCH_PPC
+=======
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_TARGET_ARCH_PPC
+>>>>>>> miniblink49

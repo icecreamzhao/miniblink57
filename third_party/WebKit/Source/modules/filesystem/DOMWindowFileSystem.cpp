@@ -23,6 +23,10 @@
  * DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "modules/filesystem/DOMWindowFileSystem.h"
 
 #include "core/dom/Document.h"
@@ -41,12 +45,24 @@
 
 namespace blink {
 
+<<<<<<< HEAD
 void DOMWindowFileSystem::webkitRequestFileSystem(
     DOMWindow& windowArg,
     int type,
     long long size,
     FileSystemCallback* successCallback,
     ErrorCallback* errorCallback)
+=======
+DOMWindowFileSystem::DOMWindowFileSystem()
+{
+}
+
+DOMWindowFileSystem::~DOMWindowFileSystem()
+{
+}
+
+void DOMWindowFileSystem::webkitRequestFileSystem(DOMWindow& windowArg, int type, long long size, FileSystemCallback* successCallback, ErrorCallback* errorCallback)
+>>>>>>> miniblink49
 {
     LocalDOMWindow& window = toLocalDOMWindow(windowArg);
     if (!window.isCurrentlyDisplayedInFrame())
@@ -56,6 +72,7 @@ void DOMWindowFileSystem::webkitRequestFileSystem(
     if (!document)
         return;
 
+<<<<<<< HEAD
     if (SchemeRegistry::schemeShouldBypassContentSecurityPolicy(
             document->getSecurityOrigin()->protocol()))
         UseCounter::count(document, UseCounter::RequestFileSystemNonWebbyOrigin);
@@ -64,11 +81,19 @@ void DOMWindowFileSystem::webkitRequestFileSystem(
         DOMFileSystem::reportError(document,
             ScriptErrorCallback::wrap(errorCallback),
             FileError::kSecurityErr);
+=======
+    if (SchemeRegistry::schemeShouldBypassContentSecurityPolicy(document->securityOrigin()->protocol()))
+        UseCounter::count(document, UseCounter::RequestFileSystemNonWebbyOrigin);
+
+    if (!document->securityOrigin()->canAccessFileSystem()) {
+        DOMFileSystem::scheduleCallback(document, errorCallback, FileError::create(FileError::SECURITY_ERR));
+>>>>>>> miniblink49
         return;
     }
 
     FileSystemType fileSystemType = static_cast<FileSystemType>(type);
     if (!DOMFileSystemBase::isValidType(fileSystemType)) {
+<<<<<<< HEAD
         DOMFileSystem::reportError(document,
             ScriptErrorCallback::wrap(errorCallback),
             FileError::kInvalidModificationErr);
@@ -87,6 +112,16 @@ void DOMWindowFileSystem::webkitResolveLocalFileSystemURL(
     const String& url,
     EntryCallback* successCallback,
     ErrorCallback* errorCallback)
+=======
+        DOMFileSystem::scheduleCallback(document, errorCallback, FileError::create(FileError::INVALID_MODIFICATION_ERR));
+        return;
+    }
+
+    LocalFileSystem::from(*document)->requestFileSystem(document, fileSystemType, size, FileSystemCallbacks::create(successCallback, errorCallback, document, fileSystemType));
+}
+
+void DOMWindowFileSystem::webkitResolveLocalFileSystemURL(DOMWindow& windowArg, const String& url, EntryCallback* successCallback, ErrorCallback* errorCallback)
+>>>>>>> miniblink49
 {
     LocalDOMWindow& window = toLocalDOMWindow(windowArg);
     if (!window.isCurrentlyDisplayedInFrame())
@@ -96,16 +131,24 @@ void DOMWindowFileSystem::webkitResolveLocalFileSystemURL(
     if (!document)
         return;
 
+<<<<<<< HEAD
     SecurityOrigin* securityOrigin = document->getSecurityOrigin();
     KURL completedURL = document->completeURL(url);
     if (!securityOrigin->canAccessFileSystem() || !securityOrigin->canRequest(completedURL)) {
         DOMFileSystem::reportError(document,
             ScriptErrorCallback::wrap(errorCallback),
             FileError::kSecurityErr);
+=======
+    SecurityOrigin* securityOrigin = document->securityOrigin();
+    KURL completedURL = document->completeURL(url);
+    if (!securityOrigin->canAccessFileSystem() || !securityOrigin->canRequest(completedURL)) {
+        DOMFileSystem::scheduleCallback(document, errorCallback, FileError::create(FileError::SECURITY_ERR));
+>>>>>>> miniblink49
         return;
     }
 
     if (!completedURL.isValid()) {
+<<<<<<< HEAD
         DOMFileSystem::reportError(document,
             ScriptErrorCallback::wrap(errorCallback),
             FileError::kEncodingErr);
@@ -124,5 +167,16 @@ static_assert(
 static_assert(
     static_cast<int>(DOMWindowFileSystem::kPersistent) == static_cast<int>(FileSystemTypePersistent),
     "DOMWindowFileSystem::kPersistent should match FileSystemTypePersistent");
+=======
+        DOMFileSystem::scheduleCallback(document, errorCallback, FileError::create(FileError::ENCODING_ERR));
+        return;
+    }
+
+    LocalFileSystem::from(*document)->resolveURL(document, completedURL, ResolveURICallbacks::create(successCallback, errorCallback, document));
+}
+
+static_assert(static_cast<int>(DOMWindowFileSystem::TEMPORARY) == static_cast<int>(FileSystemTypeTemporary), "DOMWindowFileSystem::TEMPORARY should match FileSystemTypeTemporary");
+static_assert(static_cast<int>(DOMWindowFileSystem::PERSISTENT) == static_cast<int>(FileSystemTypePersistent), "DOMWindowFileSystem::PERSISTENT should match FileSystemTypePersistent");
+>>>>>>> miniblink49
 
 } // namespace blink

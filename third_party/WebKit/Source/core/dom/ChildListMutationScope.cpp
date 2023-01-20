@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "config.h"
 #include "core/dom/ChildListMutationScope.h"
 
 #include "core/dom/MutationObserverInterestGroup.h"
@@ -39,21 +40,18 @@
 namespace blink {
 
 // The accumulator map is used to make sure that there is only one mutation
-// accumulator for a given node even if there are multiple
-// ChildListMutationScopes on the stack. The map is always empty when there are
-// no ChildListMutationScopes on the stack.
-typedef HeapHashMap<Member<Node>, Member<ChildListMutationAccumulator>>
-    AccumulatorMap;
+// accumulator for a given node even if there are multiple ChildListMutationScopes
+// on the stack. The map is always empty when there are no ChildListMutationScopes
+// on the stack.
+typedef WillBeHeapHashMap<RawPtrWillBeMember<Node>, RawPtrWillBeMember<ChildListMutationAccumulator>> AccumulatorMap;
 
 static AccumulatorMap& accumulatorMap()
 {
-    DEFINE_STATIC_LOCAL(AccumulatorMap, map, (new AccumulatorMap));
-    return map;
+    DEFINE_STATIC_LOCAL(OwnPtrWillBePersistent<AccumulatorMap>, map, (adoptPtrWillBeNoop(new AccumulatorMap())));
+    return *map;
 }
 
-ChildListMutationAccumulator::ChildListMutationAccumulator(
-    Node* target,
-    MutationObserverInterestGroup* observers)
+ChildListMutationAccumulator::ChildListMutationAccumulator(PassRefPtrWillBeRawPtr<Node> target, PassOwnPtrWillBeRawPtr<MutationObserverInterestGroup> observers)
     : m_target(target)
     , m_lastAdded(nullptr)
     , m_observers(observers)
@@ -63,7 +61,7 @@ ChildListMutationAccumulator::ChildListMutationAccumulator(
 
 void ChildListMutationAccumulator::leaveMutationScope()
 {
-    DCHECK_GT(m_mutationScopes, 0u);
+    ASSERT(m_mutationScopes > 0);
     if (!--m_mutationScopes) {
         if (!isEmpty())
             enqueueMutationRecord();
@@ -71,20 +69,19 @@ void ChildListMutationAccumulator::leaveMutationScope()
     }
 }
 
-ChildListMutationAccumulator* ChildListMutationAccumulator::getOrCreate(
-    Node& target)
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(ChildListMutationAccumulator);
+
+PassRefPtrWillBeRawPtr<ChildListMutationAccumulator> ChildListMutationAccumulator::getOrCreate(Node& target)
 {
     AccumulatorMap::AddResult result = accumulatorMap().add(&target, nullptr);
-    ChildListMutationAccumulator* accumulator;
+    RefPtrWillBeRawPtr<ChildListMutationAccumulator> accumulator;
     if (!result.isNewEntry) {
         accumulator = result.storedValue->value;
     } else {
-        accumulator = new ChildListMutationAccumulator(
-            &target,
-            MutationObserverInterestGroup::createForChildListMutation(target));
-        result.storedValue->value = accumulator;
+        accumulator = adoptRefWillBeNoop(new ChildListMutationAccumulator(PassRefPtrWillBeRawPtr<Node>(target), MutationObserverInterestGroup::createForChildListMutation(target)));
+        result.storedValue->value = accumulator.get();
     }
-    return accumulator;
+    return accumulator.release();
 }
 
 inline bool ChildListMutationAccumulator::isAddedNodeInOrder(Node* child)
@@ -92,11 +89,13 @@ inline bool ChildListMutationAccumulator::isAddedNodeInOrder(Node* child)
     return isEmpty() || (m_lastAdded == child->previousSibling() && m_nextSibling == child->nextSibling());
 }
 
-void ChildListMutationAccumulator::childAdded(Node* child)
+void ChildListMutationAccumulator::childAdded(PassRefPtrWillBeRawPtr<Node> prpChild)
 {
-    DCHECK(hasObservers());
+    ASSERT(hasObservers());
 
-    if (!isAddedNodeInOrder(child))
+    RefPtrWillBeRawPtr<Node> child = prpChild;
+
+    if (!isAddedNodeInOrder(child.get()))
         enqueueMutationRecord();
 
     if (isEmpty()) {
@@ -104,8 +103,8 @@ void ChildListMutationAccumulator::childAdded(Node* child)
         m_nextSibling = child->nextSibling();
     }
 
-    m_lastAdded = child;
-    m_addedNodes.push_back(child);
+    m_lastAdded = child.get();
+    m_addedNodes.append(child.release());
 }
 
 inline bool ChildListMutationAccumulator::isRemovedNodeInOrder(Node* child)
@@ -113,11 +112,13 @@ inline bool ChildListMutationAccumulator::isRemovedNodeInOrder(Node* child)
     return isEmpty() || m_nextSibling == child;
 }
 
-void ChildListMutationAccumulator::willRemoveChild(Node* child)
+void ChildListMutationAccumulator::willRemoveChild(PassRefPtrWillBeRawPtr<Node> prpChild)
 {
-    DCHECK(hasObservers());
+    ASSERT(hasObservers());
 
-    if (!m_addedNodes.isEmpty() || !isRemovedNodeInOrder(child))
+    RefPtrWillBeRawPtr<Node> child = prpChild;
+
+    if (!m_addedNodes.isEmpty() || !isRemovedNodeInOrder(child.get()))
         enqueueMutationRecord();
 
     if (isEmpty()) {
@@ -128,32 +129,30 @@ void ChildListMutationAccumulator::willRemoveChild(Node* child)
         m_nextSibling = child->nextSibling();
     }
 
-    m_removedNodes.push_back(child);
+    m_removedNodes.append(child.release());
 }
 
 void ChildListMutationAccumulator::enqueueMutationRecord()
 {
-    DCHECK(hasObservers());
-    DCHECK(!isEmpty());
+    ASSERT(hasObservers());
+    ASSERT(!isEmpty());
 
-    StaticNodeList* addedNodes = StaticNodeList::adopt(m_addedNodes);
-    StaticNodeList* removedNodes = StaticNodeList::adopt(m_removedNodes);
-    MutationRecord* record = MutationRecord::createChildList(
-        m_target, addedNodes, removedNodes, m_previousSibling.release(),
-        m_nextSibling.release());
-    m_observers->enqueueMutationRecord(record);
+    RefPtrWillBeRawPtr<StaticNodeList> addedNodes = StaticNodeList::adopt(m_addedNodes);
+    RefPtrWillBeRawPtr<StaticNodeList> removedNodes = StaticNodeList::adopt(m_removedNodes);
+    RefPtrWillBeRawPtr<MutationRecord> record = MutationRecord::createChildList(m_target, addedNodes.release(), removedNodes.release(), m_previousSibling.release(), m_nextSibling.release());
+    m_observers->enqueueMutationRecord(record.release());
     m_lastAdded = nullptr;
-    DCHECK(isEmpty());
+    ASSERT(isEmpty());
 }
 
 bool ChildListMutationAccumulator::isEmpty()
 {
     bool result = m_removedNodes.isEmpty() && m_addedNodes.isEmpty();
-#if DCHECK_IS_ON()
+#if ENABLE(ASSERT)
     if (result) {
-        DCHECK(!m_previousSibling);
-        DCHECK(!m_nextSibling);
-        DCHECK(!m_lastAdded);
+        ASSERT(!m_previousSibling);
+        ASSERT(!m_nextSibling);
+        ASSERT(!m_lastAdded);
     }
 #endif
     return result;

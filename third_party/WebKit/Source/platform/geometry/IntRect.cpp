@@ -23,13 +23,20 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "platform/geometry/IntRect.h"
 
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/LayoutRect.h"
 #include "third_party/skia/include/core/SkRect.h"
+<<<<<<< HEAD
 #include "ui/gfx/geometry/rect.h"
 #include "wtf/text/WTFString.h"
+=======
+>>>>>>> miniblink49
 
 #include <algorithm>
 
@@ -42,20 +49,36 @@ IntRect::IntRect(const FloatRect& r)
 }
 
 IntRect::IntRect(const LayoutRect& r)
+<<<<<<< HEAD
     : m_location(r.x().toInt(), r.y().toInt())
     , m_size(r.width().toInt(), r.height().toInt())
+=======
+    : m_location(r.x(), r.y())
+    , m_size(r.width(), r.height())
+>>>>>>> miniblink49
 {
 }
 
 bool IntRect::intersects(const IntRect& other) const
 {
     // Checking emptiness handles negative widths as well as zero.
+<<<<<<< HEAD
     return !isEmpty() && !other.isEmpty() && x() < other.maxX() && other.x() < maxX() && y() < other.maxY() && other.y() < maxY();
+=======
+    return !isEmpty() && !other.isEmpty()
+        && x() < other.maxX() && other.x() < maxX()
+        && y() < other.maxY() && other.y() < maxY();
+>>>>>>> miniblink49
 }
 
 bool IntRect::contains(const IntRect& other) const
 {
+<<<<<<< HEAD
     return x() <= other.x() && maxX() >= other.maxX() && y() <= other.y() && maxY() >= other.maxY();
+=======
+    return x() <= other.x() && maxX() >= other.maxX()
+        && y() <= other.y() && maxY() >= other.maxY();
+>>>>>>> miniblink49
 }
 
 void IntRect::intersect(const IntRect& other)
@@ -89,7 +112,19 @@ void IntRect::unite(const IntRect& other)
         return;
     }
 
+<<<<<<< HEAD
     uniteEvenIfEmpty(other);
+=======
+    int left = std::min(x(), other.x());
+    int top = std::min(y(), other.y());
+    int right = std::max(maxX(), other.maxX());
+    int bottom = std::max(maxY(), other.maxY());
+
+    m_location.setX(left);
+    m_location.setY(top);
+    m_size.setWidth(right - left);
+    m_size.setHeight(bottom - top);
+>>>>>>> miniblink49
 }
 
 void IntRect::uniteIfNonZero(const IntRect& other)
@@ -102,11 +137,14 @@ void IntRect::uniteIfNonZero(const IntRect& other)
         return;
     }
 
+<<<<<<< HEAD
     uniteEvenIfEmpty(other);
 }
 
 void IntRect::uniteEvenIfEmpty(const IntRect& other)
 {
+=======
+>>>>>>> miniblink49
     int left = std::min(x(), other.x());
     int top = std::min(y(), other.y());
     int right = std::max(maxX(), other.maxX());
@@ -151,6 +189,7 @@ IntRect::operator SkIRect() const
 IntRect::operator SkRect() const
 {
     SkRect rect;
+<<<<<<< HEAD
     rect.set(SkIntToScalar(x()), SkIntToScalar(y()), SkIntToScalar(maxX()),
         SkIntToScalar(maxY()));
     return rect;
@@ -161,6 +200,12 @@ IntRect::operator gfx::Rect() const
     return gfx::Rect(x(), y(), width(), height());
 }
 
+=======
+    rect.set(SkIntToScalar(x()), SkIntToScalar(y()), SkIntToScalar(maxX()), SkIntToScalar(maxY()));
+    return rect;
+}
+
+>>>>>>> miniblink49
 IntRect unionRect(const Vector<IntRect>& rects)
 {
     IntRect result;
@@ -172,6 +217,7 @@ IntRect unionRect(const Vector<IntRect>& rects)
     return result;
 }
 
+<<<<<<< HEAD
 IntRect unionRectEvenIfEmpty(const Vector<IntRect>& rects)
 {
     size_t count = rects.size();
@@ -190,5 +236,14 @@ String IntRect::toString() const
     return String::format("%s %s", location().toString().ascii().data(),
         size().toString().ascii().data());
 }
+=======
+#ifndef NDEBUG
+    // Prints the rect to the screen.
+void IntRect::show() const
+{
+    LayoutRect(*this).show();
+}
+#endif
+>>>>>>> miniblink49
 
 } // namespace blink

@@ -23,22 +23,34 @@
  * SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
+=======
+#include "config.h"
+>>>>>>> miniblink49
 #include "public/web/WebDateTimeSuggestion.h"
 
 #include "core/html/forms/DateTimeChooser.h"
 
 namespace blink {
 
+<<<<<<< HEAD
 WebDateTimeSuggestion::WebDateTimeSuggestion(
     const DateTimeSuggestion& suggestion)
+=======
+WebDateTimeSuggestion::WebDateTimeSuggestion(const DateTimeSuggestion& suggestion)
+>>>>>>> miniblink49
     : value(suggestion.value)
     , localizedValue(suggestion.localizedValue)
     , label(suggestion.label)
 {
 }
 
+<<<<<<< HEAD
 WebDateTimeSuggestion& WebDateTimeSuggestion::operator=(
     const DateTimeSuggestion& suggestion)
+=======
+WebDateTimeSuggestion& WebDateTimeSuggestion::operator=(const DateTimeSuggestion& suggestion)
+>>>>>>> miniblink49
 {
     value = suggestion.value;
     localizedValue = suggestion.localizedValue;

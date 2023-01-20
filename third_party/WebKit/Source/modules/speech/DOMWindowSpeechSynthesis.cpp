@@ -28,9 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+<<<<<<< HEAD
 #include "modules/speech/DOMWindowSpeechSynthesis.h"
 
 #include "bindings/core/v8/ScriptState.h"
+=======
+#include "config.h"
+#include "modules/speech/DOMWindowSpeechSynthesis.h"
+
+>>>>>>> miniblink49
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/LocalFrame.h"
 #include "wtf/PassRefPtr.h"
@@ -38,16 +44,26 @@
 namespace blink {
 
 DOMWindowSpeechSynthesis::DOMWindowSpeechSynthesis(LocalDOMWindow& window)
+<<<<<<< HEAD
     : Supplement<LocalDOMWindow>(window)
 {
 }
 
+=======
+    : DOMWindowProperty(window.frame())
+{
+}
+
+DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowSpeechSynthesis);
+
+>>>>>>> miniblink49
 const char* DOMWindowSpeechSynthesis::supplementName()
 {
     return "DOMWindowSpeechSynthesis";
 }
 
 // static
+<<<<<<< HEAD
 DOMWindowSpeechSynthesis& DOMWindowSpeechSynthesis::from(
     LocalDOMWindow& window)
 {
@@ -56,11 +72,20 @@ DOMWindowSpeechSynthesis& DOMWindowSpeechSynthesis::from(
     if (!supplement) {
         supplement = new DOMWindowSpeechSynthesis(window);
         provideTo(window, supplementName(), supplement);
+=======
+DOMWindowSpeechSynthesis& DOMWindowSpeechSynthesis::from(LocalDOMWindow& window)
+{
+    DOMWindowSpeechSynthesis* supplement = static_cast<DOMWindowSpeechSynthesis*>(WillBeHeapSupplement<LocalDOMWindow>::from(window, supplementName()));
+    if (!supplement) {
+        supplement = new DOMWindowSpeechSynthesis(window);
+        provideTo(window, supplementName(), adoptPtrWillBeNoop(supplement));
+>>>>>>> miniblink49
     }
     return *supplement;
 }
 
 // static
+<<<<<<< HEAD
 SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis(
     ScriptState* scriptState,
     DOMWindow& window)
@@ -75,13 +100,29 @@ SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis(
     if (!m_speechSynthesis) {
         m_speechSynthesis = SpeechSynthesis::create(scriptState->getExecutionContext());
     }
+=======
+SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis(DOMWindow& window)
+{
+    return DOMWindowSpeechSynthesis::from(toLocalDOMWindow(window)).speechSynthesis();
+}
+
+SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis()
+{
+    if (!m_speechSynthesis && frame())
+        m_speechSynthesis = SpeechSynthesis::create(frame()->domWindow()->executionContext());
+>>>>>>> miniblink49
     return m_speechSynthesis;
 }
 
 DEFINE_TRACE(DOMWindowSpeechSynthesis)
 {
     visitor->trace(m_speechSynthesis);
+<<<<<<< HEAD
     Supplement<LocalDOMWindow>::trace(visitor);
+=======
+    WillBeHeapSupplement<LocalDOMWindow>::trace(visitor);
+    DOMWindowProperty::trace(visitor);
+>>>>>>> miniblink49
 }
 
 } // namespace blink

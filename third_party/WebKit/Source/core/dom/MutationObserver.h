@@ -31,18 +31,18 @@
 #ifndef MutationObserver_h
 #define MutationObserver_h
 
-#include "base/gtest_prod_util.h"
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashSet.h"
+#include "wtf/PassOwnPtr.h"
+#include "wtf/PassRefPtr.h"
+#include "wtf/RefCounted.h"
+#include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class Document;
 class ExceptionState;
-class HTMLSlotElement;
 class MutationCallback;
 class MutationObserver;
 class MutationObserverInit;
@@ -53,16 +53,13 @@ class Node;
 typedef unsigned char MutationObserverOptions;
 typedef unsigned char MutationRecordDeliveryOptions;
 
-using MutationObserverSet = HeapHashSet<Member<MutationObserver>>;
-using MutationObserverRegistrationSet = HeapHashSet<WeakMember<MutationObserverRegistration>>;
-using MutationObserverVector = HeapVector<Member<MutationObserver>>;
-using MutationRecordVector = HeapVector<Member<MutationRecord>>;
+using MutationObserverSet = WillBeHeapHashSet<RefPtrWillBeMember<MutationObserver>>;
+using MutationObserverRegistrationSet = WillBeHeapHashSet<RawPtrWillBeWeakMember<MutationObserverRegistration>>;
+using MutationObserverVector = WillBeHeapVector<RefPtrWillBeMember<MutationObserver>>;
+using MutationRecordVector = WillBeHeapVector<RefPtrWillBeMember<MutationRecord>>;
 
-class CORE_EXPORT MutationObserver final
-    : public GarbageCollectedFinalized<MutationObserver>,
-      public ScriptWrappable {
+class MutationObserver final : public RefCountedWillBeGarbageCollectedFinalized<MutationObserver>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-
 public:
     enum MutationType {
         ChildList = 1 << 0,
@@ -72,19 +69,19 @@ public:
         AllMutationTypes = ChildList | Attributes | CharacterData
     };
 
-    enum ObservationFlags { Subtree = 1 << 3,
-        AttributeFilter = 1 << 4 };
+    enum ObservationFlags  {
+        Subtree = 1 << 3,
+        AttributeFilter = 1 << 4
+    };
 
     enum DeliveryFlags {
         AttributeOldValue = 1 << 5,
         CharacterDataOldValue = 1 << 6,
     };
 
-    static MutationObserver* create(MutationCallback*);
+    static PassRefPtrWillBeRawPtr<MutationObserver> create(PassOwnPtrWillBeRawPtr<MutationCallback>);
     static void resumeSuspendedObservers();
     static void deliverMutations();
-    static void enqueueSlotChange(HTMLSlotElement&);
-    static void cleanSlotChangeList(Document&);
 
     ~MutationObserver();
 
@@ -93,10 +90,10 @@ public:
     void disconnect();
     void observationStarted(MutationObserverRegistration*);
     void observationEnded(MutationObserverRegistration*);
-    void enqueueMutationRecord(MutationRecord*);
+    void enqueueMutationRecord(PassRefPtrWillBeRawPtr<MutationRecord>);
     void setHasTransientRegistration();
 
-    HeapHashSet<Member<Node>> getObservedNodes() const;
+    WillBeHeapHashSet<RawPtrWillBeMember<Node>> getObservedNodes() const;
 
     // Eagerly finalized as destructor accesses heap object members.
     EAGERLY_FINALIZE();
@@ -105,17 +102,14 @@ public:
 private:
     struct ObserverLessThan;
 
-    explicit MutationObserver(MutationCallback*);
+    explicit MutationObserver(PassOwnPtrWillBeRawPtr<MutationCallback>);
     void deliver();
     bool shouldBeSuspended() const;
-    void cancelInspectorAsyncTasks();
 
-    Member<MutationCallback> m_callback;
+    OwnPtrWillBeMember<MutationCallback> m_callback;
     MutationRecordVector m_records;
     MutationObserverRegistrationSet m_registrations;
     unsigned m_priority;
-
-    FRIEND_TEST_ALL_PREFIXES(MutationObserverTest, DisconnectCrash);
 };
 
 } // namespace blink

@@ -6,6 +6,10 @@
  * found in the LICENSE file.
  */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 #ifndef SkDrawOval_DEFINED
 #define SkDrawOval_DEFINED
 
@@ -13,8 +17,12 @@
 
 class SkOval : public SkDrawRect {
     DECLARE_MEMBER_INFO(Oval);
+<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
 
+=======
+    bool draw(SkAnimateMaker& ) override;
+>>>>>>> miniblink49
 private:
     typedef SkDrawRect INHERITED;
 };

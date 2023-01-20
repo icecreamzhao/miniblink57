@@ -48,7 +48,6 @@
 
 #include "third_party/WebKit/Source/platform/weborigin/KURL.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
-#include "wtf/CurrentTime.h"
 #include "base/logging.h"
 
 namespace net {

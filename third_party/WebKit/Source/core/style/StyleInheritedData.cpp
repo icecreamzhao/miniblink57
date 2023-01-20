@@ -19,28 +19,42 @@
  *
  */
 
+#include "config.h"
 #include "core/style/StyleInheritedData.h"
 
 #include "core/style/ComputedStyle.h"
 
+#include "wtf/RefCountedLeakCounter.h"
+
 namespace blink {
 
+#ifndef NDEBUG
+DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, styleInheritedDataCounter, ("StyleInheritedDataCounter"));
+#endif
+
 StyleInheritedData::StyleInheritedData()
-    : horizontal_border_spacing(
-        ComputedStyle::initialHorizontalBorderSpacing())
+    : horizontal_border_spacing(ComputedStyle::initialHorizontalBorderSpacing())
     , vertical_border_spacing(ComputedStyle::initialVerticalBorderSpacing())
     , line_height(ComputedStyle::initialLineHeight())
     , color(ComputedStyle::initialColor())
     , visitedLinkColor(ComputedStyle::initialColor())
     , textAutosizingMultiplier(1)
-#ifdef TENCENT_FITSCREEN
-    , m_isFitScreenLayoutStyle(false)
-    , m_defaultMaxWidth(320)
-#endif
 {
+#ifndef NDEBUG
+    styleInheritedDataCounter.increment();
+//     WTF::String outstr = String::format("StyleInheritedData::StyleInheritedData: %p %p\n", this, &font);
+//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
+#endif
 }
 
-StyleInheritedData::~StyleInheritedData() { }
+StyleInheritedData::~StyleInheritedData()
+{
+#ifndef NDEBUG
+    styleInheritedDataCounter.decrement();
+//     WTF::String outstr = String::format("StyleInheritedData::~StyleInheritedData: %p\n", this);
+//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
+#endif
+}
 
 StyleInheritedData::StyleInheritedData(const StyleInheritedData& o)
     : RefCounted<StyleInheritedData>()
@@ -51,21 +65,23 @@ StyleInheritedData::StyleInheritedData(const StyleInheritedData& o)
     , color(o.color)
     , visitedLinkColor(o.visitedLinkColor)
     , textAutosizingMultiplier(o.textAutosizingMultiplier)
-#ifdef TENCENT_FITSCREEN
-    , m_isFitScreenLayoutStyle(o.m_isFitScreenLayoutStyle)
-    , m_defaultMaxWidth(o.m_defaultMaxWidth)
-#endif
 {
+#ifndef NDEBUG
+    styleInheritedDataCounter.increment();
+//     WTF::String outstr = String::format("StyleInheritedData::StyleInheritedData 2: %p %p\n", this, &font);
+//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
+#endif
 }
 
 bool StyleInheritedData::operator==(const StyleInheritedData& o) const
 {
-    return line_height == o.line_height && font == o.font && color == o.color && visitedLinkColor == o.visitedLinkColor && horizontal_border_spacing == o.horizontal_border_spacing && textAutosizingMultiplier == o.textAutosizingMultiplier && vertical_border_spacing == o.vertical_border_spacing
-#ifdef TENCENT_FITSCREEN
-        && m_isFitScreenLayoutStyle == o.m_isFitScreenLayoutStyle
-        && m_defaultMaxWidth == o.m_defaultMaxWidth
-#endif
-        ;
+    return line_height == o.line_height
+        && font == o.font
+        && color == o.color
+        && visitedLinkColor == o.visitedLinkColor
+        && horizontal_border_spacing == o.horizontal_border_spacing
+        && textAutosizingMultiplier == o.textAutosizingMultiplier
+        && vertical_border_spacing == o.vertical_border_spacing;
 }
 
 } // namespace blink

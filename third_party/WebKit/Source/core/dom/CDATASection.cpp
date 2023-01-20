@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/dom/CDATASection.h"
 
 #include "core/dom/Document.h"
@@ -30,9 +31,9 @@ inline CDATASection::CDATASection(Document& document, const String& data)
 {
 }
 
-CDATASection* CDATASection::create(Document& document, const String& data)
+PassRefPtrWillBeRawPtr<CDATASection> CDATASection::create(Document& document, const String& data)
 {
-    return new CDATASection(document, data);
+    return adoptRefWillBeNoop(new CDATASection(document, data));
 }
 
 String CDATASection::nodeName() const
@@ -40,12 +41,12 @@ String CDATASection::nodeName() const
     return "#cdata-section";
 }
 
-Node::NodeType CDATASection::getNodeType() const
+Node::NodeType CDATASection::nodeType() const
 {
-    return kCdataSectionNode;
+    return CDATA_SECTION_NODE;
 }
 
-Text* CDATASection::cloneWithData(const String& data)
+PassRefPtrWillBeRawPtr<Text> CDATASection::cloneWithData(const String& data)
 {
     return create(document(), data);
 }

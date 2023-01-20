@@ -7,23 +7,41 @@
 #ifndef SkPathOps_DEFINED
 #define SkPathOps_DEFINED
 
+<<<<<<< HEAD
 #include "../private/SkTArray.h"
 #include "../private/SkTDArray.h"
 #include "SkPreConfig.h"
+=======
+#include "SkPreConfig.h"
+#include "SkTArray.h"
+#include "SkTDArray.h"
+>>>>>>> miniblink49
 
 class SkPath;
 struct SkRect;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> miniblink49
 // FIXME: move everything below into the SkPath class
 /**
   *  The logical operations that can be performed when combining two paths.
   */
 enum SkPathOp {
+<<<<<<< HEAD
     kDifference_SkPathOp, //!< subtract the op path from the first path
     kIntersect_SkPathOp, //!< intersect the two paths
     kUnion_SkPathOp, //!< union (inclusive-or) the two paths
     kXOR_SkPathOp, //!< exclusive-or the two paths
     kReverseDifference_SkPathOp, //!< subtract the first path from the op path
+=======
+    kDifference_SkPathOp,         //!< subtract the op path from the first path
+    kIntersect_SkPathOp,          //!< intersect the two paths
+    kUnion_SkPathOp,              //!< union (inclusive-or) the two paths
+    kXOR_SkPathOp,                //!< exclusive-or the two paths
+    kReverseDifference_SkPathOp,  //!< subtract the first path from the op path
+>>>>>>> miniblink49
 };
 
 /** Set this path to the result of applying the Op to this path and the
@@ -75,7 +93,11 @@ public:
 
         @param path The second operand.
         @param _operator The operator to apply to the existing and supplied paths.
+<<<<<<< HEAD
      */
+=======
+     */ 
+>>>>>>> miniblink49
     void add(const SkPath& path, SkPathOp _operator);
 
     /** Computes the sum of all paths and operands, and resets the builder to its

@@ -6,6 +6,7 @@
 
 namespace v8 {
 namespace internal {
+<<<<<<< HEAD
     namespace torque {
 
         DEFINE_CONTEXTUAL_VARIABLE(CurrentSourceFile)
@@ -15,3 +16,14 @@ namespace internal {
     } // namespace torque
 } // namespace internal
 } // namespace v8
+=======
+namespace torque {
+
+DEFINE_CONTEXTUAL_VARIABLE(CurrentSourceFile)
+DEFINE_CONTEXTUAL_VARIABLE(CurrentSourcePosition)
+DEFINE_CONTEXTUAL_VARIABLE(SourceFileMap)
+
+}  // namespace torque
+}  // namespace internal
+}  // namespace v8
+>>>>>>> miniblink49

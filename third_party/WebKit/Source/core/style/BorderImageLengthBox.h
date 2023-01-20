@@ -32,7 +32,6 @@
 #define BorderImageLengthBox_h
 
 #include "core/style/BorderImageLength.h"
-#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -41,8 +40,6 @@ namespace blink {
 // http://www.w3.org/TR/css3-background/#border-image-width
 // http://www.w3.org/TR/css3-background/#border-image-outset
 class BorderImageLengthBox {
-    DISALLOW_NEW();
-
 public:
     BorderImageLengthBox(Length length)
         : m_left(length)
@@ -60,10 +57,8 @@ public:
     {
     }
 
-    BorderImageLengthBox(const BorderImageLength& top,
-        const BorderImageLength& right,
-        const BorderImageLength& bottom,
-        const BorderImageLength& left)
+    BorderImageLengthBox(const BorderImageLength& top, const BorderImageLength& right,
+        const BorderImageLength& bottom, const BorderImageLength& left)
         : m_left(left)
         , m_right(right)
         , m_top(top)
@@ -78,7 +73,8 @@ public:
 
     bool operator==(const BorderImageLengthBox& other) const
     {
-        return m_left == other.m_left && m_right == other.m_right && m_top == other.m_top && m_bottom == other.m_bottom;
+        return m_left == other.m_left && m_right == other.m_right
+            && m_top == other.m_top && m_bottom == other.m_bottom;
     }
 
     bool operator!=(const BorderImageLengthBox& other) const

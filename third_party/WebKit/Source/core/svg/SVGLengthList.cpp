@@ -18,33 +18,44 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/svg/SVGLengthList.h"
 
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/svg/SVGAnimationElement.h"
 #include "core/svg/SVGParserUtilities.h"
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
 
+inline PassRefPtrWillBeRawPtr<SVGLengthList> toSVGLengthList(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
+{
+    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
+    ASSERT(base->type() == SVGLengthList::classType());
+    return static_pointer_cast<SVGLengthList>(base.release());
+}
+
 SVGLengthList::SVGLengthList(SVGLengthMode mode)
     : m_mode(mode)
 {
 }
 
-SVGLengthList::~SVGLengthList() { }
-
-SVGLengthList* SVGLengthList::clone()
+SVGLengthList::~SVGLengthList()
 {
-    SVGLengthList* ret = SVGLengthList::create(m_mode);
-    ret->deepCopy(this);
-    return ret;
 }
 
-SVGPropertyBase* SVGLengthList::cloneForAnimation(const String& value) const
+PassRefPtrWillBeRawPtr<SVGLengthList> SVGLengthList::clone()
 {
-    SVGLengthList* ret = SVGLengthList::create(m_mode);
-    ret->setValueAsString(value);
-    return ret;
+    RefPtrWillBeRawPtr<SVGLengthList> ret = SVGLengthList::create(m_mode);
+    ret->deepCopy(this);
+    return ret.release();
+}
+
+PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGLengthList::cloneForAnimation(const String& value) const
+{
+    RefPtrWillBeRawPtr<SVGLengthList> ret = SVGLengthList::create(m_mode);
+    ret->setValueAsString(value, IGNORE_EXCEPTION);
+    return ret.release();
 }
 
 String SVGLengthList::valueAsString() const
@@ -67,79 +78,67 @@ String SVGLengthList::valueAsString() const
 }
 
 template <typename CharType>
-SVGParsingError SVGLengthList::parseInternal(const CharType*& ptr,
-    const CharType* end)
+void SVGLengthList::parseInternal(const CharType*& ptr, const CharType* end, ExceptionState& exceptionState)
 {
-    const CharType* listStart = ptr;
+    clear();
     while (ptr < end) {
         const CharType* start = ptr;
-        // TODO(shanmuga.m): Enable calc for SVGLengthList
         while (ptr < end && *ptr != ',' && !isHTMLSpace<CharType>(*ptr))
             ptr++;
         if (ptr == start)
             break;
+
+        RefPtrWillBeRawPtr<SVGLength> length = SVGLength::create(m_mode);
         String valueString(start, ptr - start);
         if (valueString.isEmpty())
-            break;
-
-        SVGLength* length = SVGLength::create(m_mode);
-        SVGParsingError lengthParseStatus = length->setValueAsString(valueString);
-        if (lengthParseStatus != SVGParseStatus::NoError)
-            return lengthParseStatus.offsetWith(start - listStart);
+            return;
+        length->setValueAsString(valueString, exceptionState);
+        if (exceptionState.hadException())
+            return;
         append(length);
         skipOptionalSVGSpacesOrDelimiter(ptr, end);
     }
-    return SVGParseStatus::NoError;
 }
 
-SVGParsingError SVGLengthList::setValueAsString(const String& value)
+void SVGLengthList::setValueAsString(const String& value, ExceptionState& exceptionState)
 {
-    clear();
-
-    if (value.isEmpty())
-        return SVGParseStatus::NoError;
-
+    if (value.isEmpty()) {
+        clear();
+        return;
+    }
     if (value.is8Bit()) {
         const LChar* ptr = value.characters8();
         const LChar* end = ptr + value.length();
-        return parseInternal(ptr, end);
+        parseInternal(ptr, end, exceptionState);
+    } else {
+        const UChar* ptr = value.characters16();
+        const UChar* end = ptr + value.length();
+        parseInternal(ptr, end, exceptionState);
     }
-    const UChar* ptr = value.characters16();
-    const UChar* end = ptr + value.length();
-    return parseInternal(ptr, end);
 }
 
-void SVGLengthList::add(SVGPropertyBase* other, SVGElement* contextElement)
+void SVGLengthList::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement* contextElement)
 {
-    SVGLengthList* otherList = toSVGLengthList(other);
+    RefPtrWillBeRawPtr<SVGLengthList> otherList = toSVGLengthList(other);
 
     if (length() != otherList->length())
         return;
 
     SVGLengthContext lengthContext(contextElement);
     for (size_t i = 0; i < length(); ++i)
-        at(i)->setValue(
-            at(i)->value(lengthContext) + otherList->at(i)->value(lengthContext),
-            lengthContext);
+        at(i)->setValue(at(i)->value(lengthContext) + otherList->at(i)->value(lengthContext), lengthContext);
 }
 
-SVGLength* SVGLengthList::createPaddingItem() const
+PassRefPtrWillBeRawPtr<SVGLength> SVGLengthList::createPaddingItem() const
 {
     return SVGLength::create(m_mode);
 }
 
-void SVGLengthList::calculateAnimatedValue(
-    SVGAnimationElement* animationElement,
-    float percentage,
-    unsigned repeatCount,
-    SVGPropertyBase* fromValue,
-    SVGPropertyBase* toValue,
-    SVGPropertyBase* toAtEndOfDurationValue,
-    SVGElement* contextElement)
+void SVGLengthList::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement)
 {
-    SVGLengthList* fromList = toSVGLengthList(fromValue);
-    SVGLengthList* toList = toSVGLengthList(toValue);
-    SVGLengthList* toAtEndOfDurationList = toSVGLengthList(toAtEndOfDurationValue);
+    RefPtrWillBeRawPtr<SVGLengthList> fromList = toSVGLengthList(fromValue);
+    RefPtrWillBeRawPtr<SVGLengthList> toList = toSVGLengthList(toValue);
+    RefPtrWillBeRawPtr<SVGLengthList> toAtEndOfDurationList = toSVGLengthList(toAtEndOfDurationValue);
 
     SVGLengthContext lengthContext(contextElement);
     ASSERT(m_mode == SVGLength::lengthModeForAnimatedLengthAttribute(animationElement->attributeName()));
@@ -148,37 +147,30 @@ void SVGLengthList::calculateAnimatedValue(
     size_t toLengthListSize = toList->length();
     size_t toAtEndOfDurationListSize = toAtEndOfDurationList->length();
 
-    if (!adjustFromToListValues(fromList, toList, percentage,
-            animationElement->getAnimationMode()))
+    if (!adjustFromToListValues(fromList, toList, percentage, animationElement->animationMode()))
         return;
 
     for (size_t i = 0; i < toLengthListSize; ++i) {
-        // TODO(shanmuga.m): Support calc for SVGLengthList animation
         float animatedNumber = at(i)->value(lengthContext);
-        CSSPrimitiveValue::UnitType unitType = toList->at(i)->typeWithCalcResolved();
+        SVGLengthType unitType = toList->at(i)->unitType();
         float effectiveFrom = 0;
         if (fromLengthListSize) {
             if (percentage < 0.5)
-                unitType = fromList->at(i)->typeWithCalcResolved();
+                unitType = fromList->at(i)->unitType();
             effectiveFrom = fromList->at(i)->value(lengthContext);
         }
         float effectiveTo = toList->at(i)->value(lengthContext);
-        float effectiveToAtEnd = i < toAtEndOfDurationListSize
-            ? toAtEndOfDurationList->at(i)->value(lengthContext)
-            : 0;
+        float effectiveToAtEnd = i < toAtEndOfDurationListSize ? toAtEndOfDurationList->at(i)->value(lengthContext) : 0;
 
-        animationElement->animateAdditiveNumber(percentage, repeatCount,
-            effectiveFrom, effectiveTo,
-            effectiveToAtEnd, animatedNumber);
+        animationElement->animateAdditiveNumber(percentage, repeatCount, effectiveFrom, effectiveTo, effectiveToAtEnd, animatedNumber);
         at(i)->setUnitType(unitType);
         at(i)->setValue(animatedNumber, lengthContext);
     }
 }
 
-float SVGLengthList::calculateDistance(SVGPropertyBase* to, SVGElement*)
+float SVGLengthList::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*)
 {
-    // FIXME: Distance calculation is not possible for SVGLengthList right now. We
-    // need the distance for every single value.
+    // FIXME: Distance calculation is not possible for SVGLengthList right now. We need the distance for every single value.
     return -1;
 }
-} // namespace blink
+}

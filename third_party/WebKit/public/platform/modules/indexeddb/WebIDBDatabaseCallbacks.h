@@ -27,6 +27,7 @@
 #define WebIDBDatabaseCallbacks_h
 
 #include "public/platform/WebCommon.h"
+<<<<<<< HEAD
 #include "public/platform/WebVector.h"
 #include "public/platform/modules/indexeddb/WebIDBDatabaseError.h"
 
@@ -38,10 +39,18 @@ namespace blink {
 
 struct WebIDBObservation;
 
+=======
+#include "public/platform/WebString.h"
+#include "public/platform/modules/indexeddb/WebIDBDatabaseError.h"
+
+namespace blink {
+
+>>>>>>> miniblink49
 class WebIDBDatabaseCallbacks {
 public:
     virtual ~WebIDBDatabaseCallbacks() { }
 
+<<<<<<< HEAD
     virtual void onForcedClose() = 0;
     virtual void onVersionChange(long long oldVersion, long long newVersion) = 0;
 
@@ -56,6 +65,13 @@ public:
             transactions)
         = 0;
     virtual void detach() = 0;
+=======
+    virtual void onForcedClose() { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onVersionChange(long long oldVersion, long long newVersion) { BLINK_ASSERT_NOT_REACHED(); }
+
+    virtual void onAbort(long long transactionId, const WebIDBDatabaseError&) { BLINK_ASSERT_NOT_REACHED(); }
+    virtual void onComplete(long long transactionId) { BLINK_ASSERT_NOT_REACHED(); }
+>>>>>>> miniblink49
 };
 
 } // namespace blink

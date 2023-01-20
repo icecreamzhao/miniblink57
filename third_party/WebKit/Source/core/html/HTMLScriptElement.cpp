@@ -2,8 +2,7 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights
- * reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,10 +20,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "config.h"
 #include "core/html/HTMLScriptElement.h"
 
-#include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "bindings/core/v8/ScriptEventListener.h"
+#include "bindings/core/v8/V8DOMActivityLogger.h"
 #include "core/HTMLNames.h"
 #include "core/dom/Attribute.h"
 #include "core/dom/Document.h"
@@ -33,31 +34,20 @@
 #include "core/dom/Text.h"
 #include "core/events/Event.h"
 #include "core/frame/UseCounter.h"
-#include "core/frame/csp/ContentSecurityPolicy.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLScriptElement::HTMLScriptElement(Document& document,
-    bool wasInsertedByParser,
-    bool alreadyStarted,
-    bool createdDuringDocumentWrite)
+inline HTMLScriptElement::HTMLScriptElement(Document& document, bool wasInsertedByParser, bool alreadyStarted)
     : HTMLElement(scriptTag, document)
-    , m_loader(ScriptLoader::create(this,
-          wasInsertedByParser,
-          alreadyStarted,
-          createdDuringDocumentWrite))
+    , m_loader(ScriptLoader::create(this, wasInsertedByParser, alreadyStarted))
 {
 }
 
-HTMLScriptElement* HTMLScriptElement::create(Document& document,
-    bool wasInsertedByParser,
-    bool alreadyStarted,
-    bool createdDuringDocumentWrite)
+PassRefPtrWillBeRawPtr<HTMLScriptElement> HTMLScriptElement::create(Document& document, bool wasInsertedByParser, bool alreadyStarted)
 {
-    return new HTMLScriptElement(document, wasInsertedByParser, alreadyStarted,
-        createdDuringDocumentWrite);
+    return adoptRefWillBeNoop(new HTMLScriptElement(document, wasInsertedByParser, alreadyStarted));
 }
 
 bool HTMLScriptElement::isURLAttribute(const Attribute& attribute) const
@@ -78,45 +68,56 @@ const QualifiedName& HTMLScriptElement::subResourceAttributeName() const
 void HTMLScriptElement::childrenChanged(const ChildrenChange& change)
 {
     HTMLElement::childrenChanged(change);
-    if (change.isChildInsertion())
-        m_loader->childrenChanged();
+    m_loader->childrenChanged();
 }
 
 void HTMLScriptElement::didMoveToNewDocument(Document& oldDocument)
 {
-    ScriptRunner::movePendingScript(oldDocument, document(), m_loader.get());
+    ScriptRunner::movePendingAsyncScript(oldDocument, document(), m_loader.get());
     HTMLElement::didMoveToNewDocument(oldDocument);
 }
 
-void HTMLScriptElement::parseAttribute(
-    const AttributeModificationParams& params)
+void HTMLScriptElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
 {
-    if (params.name == srcAttr) {
-        m_loader->handleSourceAttribute(params.newValue);
-        logUpdateAttributeIfIsolatedWorldAndInDocument("script", params);
-    } else if (params.name == asyncAttr) {
+    if (name == srcAttr)
+        m_loader->handleSourceAttribute(value);
+    else if (name == asyncAttr)
         m_loader->handleAsyncAttribute();
-    } else if (params.name == nonceAttr) {
-        if (params.newValue == ContentSecurityPolicy::getNonceReplacementString())
-            return;
-        m_nonce = params.newValue;
-        if (RuntimeEnabledFeatures::hideNonceContentAttributeEnabled()) {
-            setAttribute(nonceAttr,
-                ContentSecurityPolicy::getNonceReplacementString());
-        }
-    } else {
-        HTMLElement::parseAttribute(params);
-    }
+    else
+        HTMLElement::parseAttribute(name, value);
 }
 
-Node::InsertionNotificationRequest HTMLScriptElement::insertedInto(
-    ContainerNode* insertionPoint)
+void HTMLScriptElement::attributeWillChange(const QualifiedName& name, const AtomicString& oldValue, const AtomicString& newValue)
 {
-    if (insertionPoint->isConnected() && hasSourceAttribute() && !loader()->isScriptTypeSupported(ScriptLoader::DisallowLegacyTypeInTypeAttribute))
-        UseCounter::count(document(),
-            UseCounter::ScriptElementWithInvalidTypeHasSrc);
+    if (name == srcAttr && inDocument()) {
+        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
+        if (activityLogger) {
+            Vector<String> argv;
+            argv.append("script");
+            argv.append(srcAttr.toString());
+            argv.append(oldValue);
+            argv.append(newValue);
+            activityLogger->logEvent("blinkSetAttribute", argv.size(), argv.data());
+        }
+    }
+    HTMLElement::attributeWillChange(name, oldValue, newValue);
+}
+
+Node::InsertionNotificationRequest HTMLScriptElement::insertedInto(ContainerNode* insertionPoint)
+{
+    if (insertionPoint->inDocument()) {
+        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
+        if (activityLogger) {
+            Vector<String> argv;
+            argv.append("script");
+            argv.append(fastGetAttribute(srcAttr));
+            activityLogger->logEvent("blinkAddElement", argv.size(), argv.data());
+        }
+
+        if (hasSourceAttribute() && !loader()->isScriptTypeSupported(ScriptLoader::DisallowLegacyTypeInTypeAttribute))
+            UseCounter::count(document(), UseCounter::ScriptElementWithInvalidTypeHasSrc);
+    }
     HTMLElement::insertedInto(insertionPoint);
-    logAddElementIfIsolatedWorldAndInDocument("script", srcAttr);
     return InsertionShouldCallDidNotifySubtreeInsertions;
 }
 
@@ -125,9 +126,17 @@ void HTMLScriptElement::didNotifySubtreeInsertionsToDocument()
     m_loader->didNotifySubtreeInsertionsToDocument();
 }
 
-void HTMLScriptElement::setText(const String& value)
+void HTMLScriptElement::setText(const String &value)
 {
-    setTextContent(value);
+    RefPtrWillBeRawPtr<Node> protectFromMutationEvents(this);
+
+    if (hasOneTextChild()) {
+        toText(firstChild())->setData(value);
+        return;
+    }
+
+    removeChildren();
+    appendChild(document().createTextNode(value.impl()), IGNORE_EXCEPTION);
 }
 
 void HTMLScriptElement::setAsync(bool async)
@@ -148,32 +157,32 @@ KURL HTMLScriptElement::src() const
 
 String HTMLScriptElement::sourceAttributeValue() const
 {
-    return getAttribute(srcAttr).getString();
+    return getAttribute(srcAttr).string();
 }
 
 String HTMLScriptElement::charsetAttributeValue() const
 {
-    return getAttribute(charsetAttr).getString();
+    return getAttribute(charsetAttr).string();
 }
 
 String HTMLScriptElement::typeAttributeValue() const
 {
-    return getAttribute(typeAttr).getString();
+    return getAttribute(typeAttr).string();
 }
 
 String HTMLScriptElement::languageAttributeValue() const
 {
-    return getAttribute(languageAttr).getString();
+    return getAttribute(languageAttr).string();
 }
 
 String HTMLScriptElement::forAttributeValue() const
 {
-    return getAttribute(forAttr).getString();
+    return getAttribute(forAttr).string();
 }
 
 String HTMLScriptElement::eventAttributeValue() const
 {
-    return getAttribute(eventAttr).getString();
+    return getAttribute(eventAttr).string();
 }
 
 bool HTMLScriptElement::asyncAttributeValue() const
@@ -193,14 +202,13 @@ bool HTMLScriptElement::hasSourceAttribute() const
 
 void HTMLScriptElement::dispatchLoadEvent()
 {
-    DCHECK(!m_loader->haveFiredLoadEvent());
+    ASSERT(!m_loader->haveFiredLoadEvent());
     dispatchEvent(Event::create(EventTypeNames::load));
 }
 
-Element* HTMLScriptElement::cloneElementWithoutAttributesAndChildren()
+PassRefPtrWillBeRawPtr<Element> HTMLScriptElement::cloneElementWithoutAttributesAndChildren()
 {
-    return new HTMLScriptElement(document(), false, m_loader->alreadyStarted(),
-        false);
+    return adoptRefWillBeNoop(new HTMLScriptElement(document(), false, m_loader->alreadyStarted()));
 }
 
 DEFINE_TRACE(HTMLScriptElement)
@@ -209,4 +217,4 @@ DEFINE_TRACE(HTMLScriptElement)
     HTMLElement::trace(visitor);
 }
 
-} // namespace blink
+}
